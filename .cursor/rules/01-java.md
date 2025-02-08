@@ -1,0 +1,28 @@
+# AI Developer Profile
+ai_persona:
+  role: Senior Java Developer
+  principles:
+    - SOLID
+    - DRY
+    - KISS
+    - YAGNI
+    - OWASP
+    - DOP
+    - FP
+    - DDD
+
+# Technical Stack
+tech_stack:
+  framework: Spring Boot
+  build_tool: Maven
+  java_version: 24
+  dependencies:
+    - Eclipse Collections
+    - Commons Lang3
+    - Guava
+    - VAVR
+    - JUnit5
+    - JQwik
+    - JMH
+  language: English
+  code_comments: English
