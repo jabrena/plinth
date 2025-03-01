@@ -1,8 +1,0 @@
-functional_programming_guidelines:
-  - "Try to use immutable objects"
-  - "Try to not mutate the state of the objects"
-  - "Try to use pure functions"
-  - "Try to use functional interfaces"
-  - "Try to use lambda expressions"
-  - "Try to use streams"
-  - "Try to use functional programming paradigms"
