@@ -1,4 +1,11 @@
+---
+description: General java rules
+globs: .java
+alwaysApply: true
+---
+
 # AI Developer Profile
+
 ai_persona:
   role: Senior Java Developer
   principles:
@@ -12,6 +19,7 @@ ai_persona:
     - DDD
 
 # Technical Stack
+
 tech_stack:
   framework: Spring Boot
   build_tool: Maven

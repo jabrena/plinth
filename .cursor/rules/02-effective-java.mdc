@@ -1,3 +1,9 @@
+---
+description: Extension to java rules from the book Effective Java
+globs: .java
+alwaysApply: true
+---
+
 # Development Guidelines
 effective_java_notes:
   chapter_2:
