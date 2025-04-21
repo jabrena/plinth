@@ -2,7 +2,7 @@
 
 A collection of Cursor rules for Java space.
 
-![](./docs/cursor-settings.png)
+![](./cursor-settings.png)
 
 ## Rules
 
