@@ -1,7 +1,7 @@
 ---
 description: General java rules
 globs: .java
-alwaysApply: true
+alwaysApply: false
 ---
 # AI Developer Profile
 
