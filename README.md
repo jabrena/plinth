@@ -11,7 +11,7 @@ This collection of Cursor Rules for Java development, tries to enrich the develo
 ## Cursor Rules
 
 - [Build: Maven Best Practices](.cursor/rules/100-java-maven-best-practices.mdc)
-- [Build: Maven Plugins](.cursor/rules/101-java-maven-plugins.mdc)
+- [Build: Maven Dependencies & Plugins](.cursor/rules/101-java-maven-deps-and-plugins.mdc)
 - [Design: Object Oriented Design](.cursor/rules/111-java-object-oriented-design.mdc)
 - [Design: Type Design](.cursor/rules/112-java-type-design.mdc)
 - [Coding: General Java Guidelines](.cursor/rules/113-java-general-guidelines.mdc)
@@ -19,7 +19,7 @@ This collection of Cursor Rules for Java development, tries to enrich the develo
 - [Coding: Concurrency](.cursor/rules/115-java-concurrency.mdc)
 - [Coding: Logging Guidelines](.cursor/rules/116-java-logging.mdc)
 - [Testing: Unit Testing](.cursor/rules/121-java-unit-testing.mdc)
-- [Testing: Integration Testing](.cursor/rules/122-java-integration-testing.mdc)
+- [Testing: Integration Testing (If required)](.cursor/rules/122-java-integration-testing.mdc)
 - [Refactoring: Add Modern Java Features](.cursor/rules/131-java-refactoring-with-modern-features.mdc)
 - [Refactoring: Functional Programming](.cursor/rules/132-java-functional-programming.mdc)
 - [Refactoring: Data Oriented Programming](.cursor/rules/133-java-data-oriented-programming.mdc)
