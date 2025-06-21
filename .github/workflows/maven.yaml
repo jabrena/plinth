@@ -16,3 +16,16 @@ jobs:
           java-version: '24'
       - name: Maven build
         run: cd examples/maven-demo && ./mvnw --batch-mode --no-transfer-progress verify --file pom.xml
+      - name: Spring Boot build
+        run: cd examples/spring-boot-demo/implementation && ./mvnw --batch-mode --no-transfer-progress verify -Pjacoco --file pom.xml
+      - name: Spring Boot startup and API test
+        run: |
+          cd examples/spring-boot-demo/implementation
+          
+          # Make sure the test script is executable
+          chmod +x test-api.sh
+          
+          # Run the comprehensive API test script
+          # Uses 'local' profile and default port 8080
+          # Set CLEANUP_LOGS=true to remove log files after execution
+          CLEANUP_LOGS=true ./test-api.sh local 8080
