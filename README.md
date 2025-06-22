@@ -10,20 +10,22 @@ This collection of Cursor Rules for Java development, tries to enrich the develo
 
 ## Cursor Rules
 
-- [Build: Maven Best Practices](.cursor/rules/110-java-maven-best-practices.mdc)
-- [Build: Maven Dependencies & Plugins](.cursor/rules/111-java-maven-deps-and-plugins.mdc)
-- [Build: Maven Documentation](.cursor/rules/112-java-maven-documentation.mdc)
-- [Design: Object Oriented Design](.cursor/rules/121-java-object-oriented-design.mdc)
-- [Design: Type Design](.cursor/rules/122-java-type-design.mdc)
-- [Coding: General Java Guidelines](.cursor/rules/123-java-general-guidelines.mdc)
-- [Coding: Secure Java Coding](.cursor/rules/124-java-secure-coding.mdc)
-- [Coding: Concurrency](.cursor/rules/125-java-concurrency.mdc)
-- [Coding: Logging Guidelines](.cursor/rules/126-java-logging.mdc)
-- [Testing: Unit Testing](.cursor/rules/131-java-unit-testing.mdc)
-- [Refactoring: Add Modern Java Features](.cursor/rules/141-java-refactoring-with-modern-features.mdc)
-- [Refactoring: Functional Programming](.cursor/rules/142-java-functional-programming.mdc)
-- [Refactoring: Data Oriented Programming](.cursor/rules/143-java-data-oriented-programming.mdc)
-- [Database: SQL Guidelines](.cursor/rules/500-sql.mdc)
+| Phase | Cursor Rule | Description | Prompt | Notes |
+|-------|-------------|-------------|--------|-------|
+| Build | [110-java-maven-best-practices](.cursor/rules/110-java-maven-best-practices.mdc) | Maven Best Practices | `Help me to review the pom.xml following the best practices for dependency management and directory structure use the cursor rule @110-java-maven-best-practices` | Add in the context the `pom.xml` which you want to generate the documentation |
+| Build | [111-java-maven-deps-and-plugins](.cursor/rules/111-java-maven-deps-and-plugins.mdc) | Maven Dependencies & Plugins | `Can you improve the pom.xml using the cursor rule @111-java-maven-deps-and-plugins` | Add in the context the `pom.xml` which you want to generate the documentation. Conversational approach |
+| Build | [112-java-maven-documentation](.cursor/rules/112-java-maven-documentation.mdc) | Maven Documentation | `Generate developer documentation with essential Maven commands using @112-java-maven-documentation` | Add in the context the `pom.xml` which you want to generate the documentation |
+| Design | [121-java-object-oriented-design](.cursor/rules/121-java-object-oriented-design.mdc) | Object Oriented Design | `Review my code for object-oriented design using the cursor rule @121-java-object-oriented-design` | Add in the context a package to improve the design |
+| Design | [122-java-type-design](.cursor/rules/122-java-type-design.mdc) | Type Design | `Help me improve my type design using the cursor rule @122-java-type-design` | Add in the context a package to improve the design |
+| Coding | [123-java-general-guidelines](.cursor/rules/123-java-general-guidelines.mdc) | General Java Guidelines | `Review my code for general Java best practices using the cursor rule @123-java-general-guidelines` | |
+| Coding | [124-java-secure-coding](.cursor/rules/124-java-secure-coding.mdc) | Secure Java Coding | `Check my code for security issues using the cursor rule @124-java-secure-coding` | |
+| Coding | [125-java-concurrency](.cursor/rules/125-java-concurrency.mdc) | Concurrency | `Review my code for concurrency best practices using the cursor rule @125-java-concurrency` | |
+| Coding | [126-java-logging](.cursor/rules/126-java-logging.mdc) | Logging Guidelines | `Help me improve logging using the cursor rule @126-java-logging` | |
+| Testing | [131-java-unit-testing](.cursor/rules/131-java-unit-testing.mdc) | Unit Testing | `Can improve the unit tests using the cursor rule @131-java-unit-testing` | Add in the context a Test Class or the package |
+| Refactoring | [141-java-refactoring-with-modern-features](.cursor/rules/141-java-refactoring-with-modern-features.mdc) | Add Modern Java Features | `Refactor my code to use modern Java features using the cursor rule @141-java-refactoring-with-modern-features` | |
+| Refactoring | [142-java-functional-programming](.cursor/rules/142-java-functional-programming.mdc) | Functional Programming | `Refactor my code to use functional programming using the cursor rule @142-java-functional-programming` | |
+| Refactoring | [143-java-data-oriented-programming](.cursor/rules/143-java-data-oriented-programming.mdc) | Data Oriented Programming | `Refactor my code to use data oriented programming using the cursor rule @143-java-data-oriented-programming` | |
+| Database | [500-sql](.cursor/rules/500-sql.mdc) | SQL Guidelines | `Review my SQL code using the cursor rule @500-sql` | |
 
 ## Getting started
 
