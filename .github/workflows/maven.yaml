@@ -29,3 +29,7 @@ jobs:
           # Uses 'local' profile and default port 8080
           # Set CLEANUP_LOGS=true to remove log files after execution
           CLEANUP_LOGS=true ./test-api.sh local 8080
+      - name: AWS Lambda build
+        run: cd examples/aws-lambda-hello-world && ./mvnw --batch-mode --no-transfer-progress package --file pom.xml
+      - name: Azure Function build
+        run: cd examples/azure-function-hello-world && ./mvnw --batch-mode --no-transfer-progress package --file pom.xml

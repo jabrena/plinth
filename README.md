@@ -70,6 +70,15 @@ Type the following prompt in the cursor chat:
 Create an java development guide using the cursor rule @100-java-checklist-guide
 ```
 
+## Examples
+
+The rules was tested with:
+
+- [General: Maven Java project](./examples/maven-demo/README.md)
+- [Microservices: Spring Boot application](./examples/spring-boot-demo/implementation/README.md)
+- [Serverless: AWS Lambda](./examples/aws-lambda-hello-world/README.md)
+- [Serverless: Azure Function](./examples/azure-function-hello-world/README.md)
+
 ## Java JEPS from Java 8
 
 Java use JEPS as the vehicle to describe the new features to be added in the language. The repository review in a continuous way what JEPS could be improved any of the cursor rules present in this repository.
