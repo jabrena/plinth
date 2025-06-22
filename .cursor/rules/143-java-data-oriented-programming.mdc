@@ -1,6 +1,6 @@
 ---
 description: Java rules to apply data oriented programming style
-globs: 
+globs: **/*.java
 alwaysApply: false
 ---
 # Java rules to apply data oriented programming style

@@ -1,6 +1,6 @@
 ---
 description: Maven Best Practices
-globs: 
+globs: pom.xml
 alwaysApply: false
 ---
 # Maven Best Practices

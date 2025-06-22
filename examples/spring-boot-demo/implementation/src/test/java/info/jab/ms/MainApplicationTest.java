@@ -11,7 +11,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @EnableAutoConfiguration(exclude = {DataSourceAutoConfiguration.class})
 @DisplayName("Main Application Integration Tests")
-class MainApplicationTests {
+class MainApplicationTest {
 
     @Test
     void contextLoads() {

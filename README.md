@@ -20,7 +20,6 @@ This collection of Cursor Rules for Java development, tries to enrich the develo
 - [Coding: Concurrency](.cursor/rules/125-java-concurrency.mdc)
 - [Coding: Logging Guidelines](.cursor/rules/126-java-logging.mdc)
 - [Testing: Unit Testing](.cursor/rules/131-java-unit-testing.mdc)
-- [Testing: Integration Testing (If required)](.cursor/rules/132-java-integration-testing.mdc)
 - [Refactoring: Add Modern Java Features](.cursor/rules/141-java-refactoring-with-modern-features.mdc)
 - [Refactoring: Functional Programming](.cursor/rules/142-java-functional-programming.mdc)
 - [Refactoring: Data Oriented Programming](.cursor/rules/143-java-data-oriented-programming.mdc)

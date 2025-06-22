@@ -1,6 +1,6 @@
 ---
 description: Java Secure coding guidelines
-globs: 
+globs: **/*.java
 alwaysApply: false
 ---
 # Java Secure coding guidelines
