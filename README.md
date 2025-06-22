@@ -72,7 +72,7 @@ Create an java development guide using the cursor rule @100-java-checklist-guide
 
 ## Examples
 
-The rules was tested with:
+The rules was tested with the following examples:
 
 - [General: Maven Java project](./examples/maven-demo/README.md)
 - [Microservices: Spring Boot application](./examples/spring-boot-demo/implementation/README.md)

@@ -12,7 +12,7 @@
 
   <properties>
     <!-- Core properties -->
-    <java.version>24</java.version>
+    <java.version>21</java.version>
     <maven.version>3.9.10</maven.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -245,64 +245,14 @@
               </filters>
               <transformers>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                  <manifestEntries>
-                    <Main-Class>info.jab.lambda.Lambda</Main-Class>
-                  </manifestEntries>
                 </transformer>
                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/spring.handlers</resource>
-                </transformer>
-                <transformer implementation="org.apache.maven.plugins.shade.resource.AppendingTransformer">
-                  <resource>META-INF/spring.schemas</resource>
-                </transformer>
               </transformers>
             </configuration>
           </execution>
         </executions>
       </plugin>
-
-
     </plugins>
   </build>
 
-  <profiles>
-    <!-- Profile for native compilation with GraalVM -->
-    <profile>
-      <id>native</id>
-      <build>
-        <plugins>
-          <plugin>
-            <groupId>org.graalvm.buildtools</groupId>
-            <artifactId>native-maven-plugin</artifactId>
-            <version>${graalvm-buildtools.version}</version>
-            <extensions>true</extensions>
-            <configuration>
-              <imageName>aws-lambda-hello-world</imageName>
-              <mainClass>info.jab.lambda.Lambda</mainClass>
-              <buildArgs>
-                <buildArg>--no-fallback</buildArg>
-                <buildArg>--initialize-at-build-time=org.slf4j</buildArg>
-                <buildArg>--enable-url-protocols=https</buildArg>
-                <buildArg>--enable-http</buildArg>
-                <buildArg>--enable-https</buildArg>
-                <buildArg>-H:+AddAllCharsets</buildArg>
-                <buildArg>-H:+ReportExceptionStackTraces</buildArg>
-                <buildArg>--install-exit-handlers</buildArg>
-              </buildArgs>
-            </configuration>
-            <executions>
-              <execution>
-                <id>build-native</id>
-                <goals>
-                  <goal>compile-no-fork</goal>
-                </goals>
-                <phase>package</phase>
-              </execution>
-            </executions>
-          </plugin>
-        </plugins>
-      </build>
-    </profile>
-  </profiles>
 </project>
