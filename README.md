@@ -1,6 +1,5 @@
 # Cursor AI rules for Java
 
-## Stargazers over time
 [![Stargazers over time](https://starchart.cc/jabrena/cursor-rules-java.svg?variant=light)](https://starchart.cc/jabrena/cursor-rules-java)
 
 ## Motivation
