@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description: Maven Best Practices
+globs: pom.xml
 alwaysApply: false
 ---
 # Maven Best Practices
@@ -15,6 +15,7 @@ Effective Maven usage involves robust dependency management via `<dependencyMana
 - Rule 4: Use Build Profiles for Environment-Specific Configurations
 - Rule 5: Keep POMs Readable and Maintainable
 - Rule 6: Manage Repositories Explicitly
+- Rule 7: Centralize Version Management with Properties
 
 ## Rule 1: Effective Dependency Management
 
@@ -406,5 +407,158 @@ Description: Prefer dependencies from Maven Central. If custom repositories are 
            Relying on implicit configurations makes builds less portable. -->
     </dependency>
   </dependencies>
+</project>
+```
+
+## Rule 7: Centralize Version Management with Properties
+
+Title: Use Properties to Manage Dependency and Plugin Versions
+Description: Define all dependency and plugin versions in the `<properties>` section rather than hardcoding them throughout the POM. This centralizes version management, makes updates easier, reduces duplication, and helps maintain consistency across related dependencies. Use consistent property naming conventions: `maven-plugin-[name].version` for Maven plugins, simple names like `[library].version` for dependencies, and descriptive names for quality thresholds like `coverage.level`.
+
+**Good example:**
+
+```xml
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>my-app</artifactId>
+  <version>1.0.0</version>
+
+  <properties>
+    <!-- Core build properties -->
+    <java.version>17</java.version>
+    <maven.version>3.9.10</maven.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    
+    <!-- Dependency versions -->
+    <jackson.version>2.15.3</jackson.version>
+    <junit.version>5.10.1</junit.version>
+    <mockito.version>5.7.0</mockito.version>
+    <logback.version>1.4.11</logback.version>
+    
+    <!-- Maven plugin versions -->
+    <maven-plugin-compiler.version>3.14.0</maven-plugin-compiler.version>
+    <maven-plugin-surefire.version>3.5.3</maven-plugin-surefire.version>
+    <maven-plugin-failsafe.version>3.5.3</maven-plugin-failsafe.version>
+    <maven-plugin-enforcer.version>3.5.0</maven-plugin-enforcer.version>
+    
+    <!-- Third-party plugin versions -->
+    <maven-plugin-jacoco.version>0.8.13</maven-plugin-jacoco.version>
+    
+    <!-- Quality thresholds -->
+    <coverage.level>80</coverage.level>
+    <mutation.level>70</mutation.level>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-plugin-compiler.version}</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-plugin-surefire.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${maven-plugin-jacoco.version}</version>
+      </plugin>
+    </plugins>
+  </build>
+</project>
+```
+
+**Bad Example:**
+
+```xml
+<!-- Hardcoded versions scattered throughout the POM -->
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>my-app</artifactId>
+  <version>1.0.0</version>
+
+  <properties>
+    <java.version>17</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+  <dependencies>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.15.3</version> <!-- Hardcoded version -->
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>2.15.2</version> <!-- Different version of same library family! -->
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.10.1</version> <!-- Hardcoded version -->
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.9.3</version> <!-- Different JUnit version! -->
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.11.0</version> <!-- Hardcoded plugin version -->
+        <configuration>
+          <source>17</source> <!-- Hardcoded Java version instead of using property -->
+          <target>17</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.2.2</version> <!-- Hardcoded plugin version -->
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.10</version> <!-- Hardcoded and potentially outdated -->
+      </plugin>
+    </plugins>
+  </build>
 </project>
 ```

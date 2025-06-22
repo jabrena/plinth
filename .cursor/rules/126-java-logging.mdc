@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description: Java Logging Best Practices
+globs: **/*.java
 alwaysApply: false
 ---
 # Java Logging Best Practices

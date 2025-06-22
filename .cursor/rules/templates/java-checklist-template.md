@@ -33,7 +33,6 @@ Use the following process to improve the java development in some areas if requi
 | Activity | Done | Prompt | Notes |
 |----------|------|--------|-------|
 | Unit Testing | [ ] | `Can improve the unit tests using the cursor rule @131-java-unit-testing` | |
-| Integration Testing | [ ] | `Help me write integration tests using the cursor rule @132-java-integration-testing` | If required |
 
 ### Step 5: Refactoring
 
@@ -62,7 +61,6 @@ Use the following process to improve the java development in some areas if requi
 | Concurrency | @125-java-concurrency | Best practices for concurrency in Java |
 | Logging Guidelines | @126-java-logging | Logging best practices for Java applications |
 | Unit Testing | @131-java-unit-testing | Guidelines for writing unit tests in Java |
-| Integration Testing | @132-java-integration-testing | Guidelines for writing integration tests in Java |
 | Modern Java Features | @141-java-refactoring-with-modern-features | Refactoring with modern Java (Java 8+) features |
 | Functional Programming | @142-java-functional-programming | Applying functional programming in Java |
 | Data Oriented Programming | @143-java-data-oriented-programming | Data-oriented programming style in Java |

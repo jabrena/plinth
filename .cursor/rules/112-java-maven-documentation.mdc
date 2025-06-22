@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description: Create README-DEV.md with information about how to use the Maven project
+globs: pom.xml
 alwaysApply: false
 ---
 # Create README-DEV.md with information about how to use the Maven project

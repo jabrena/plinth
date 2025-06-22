@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description: Type Design Thinking in Java
+globs: **/*.java
 alwaysApply: false
 ---
 # Type Design Thinking in Java

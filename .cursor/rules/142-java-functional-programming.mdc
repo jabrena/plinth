@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description: Java Functional Programming rules
+globs: **/*.java
 alwaysApply: false
 ---
 # Java Functional Programming rules
