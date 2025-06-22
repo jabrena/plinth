@@ -109,7 +109,6 @@ If you have new ideas to improve any of the current Cursor rules or add a new on
 - https://github.com/jabrena/cursor-rules-spring-boot
 - https://github.com/jabrena/cursor-rules-examples
 - https://github.com/jabrena/cursor-rules-sandbox
-- https://github.com/jabrena/cursor-rules-scope-cli
 - https://github.com/jabrena/plantuml-to-png-cli
 - https://github.com/jabrena/setup-cli
 - https://github.com/jabrena/jbang-catalog
