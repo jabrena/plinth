@@ -10,6 +10,7 @@ Options:
 - Java Library (for publishing to Maven Central/Nexus)
 - Java CLI Application (command-line tool)  
 - Java Microservice (Web service/REST API/Modular monolith)
+- Serverless (AWS Lambdas, Azure Functions)
 - Other (specify)
 
 ## 2. Java Version
@@ -38,6 +39,7 @@ Options:
 - Security vulnerability scanning (OWASP)
 - Static code analysis (SpotBugs, PMD)
 - Sonar
+- Version management
 
 ## 4. Coverage Threshold
 
