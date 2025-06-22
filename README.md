@@ -1,12 +1,13 @@
 # Cursor AI rules for Java
 
+## Stargazers over time
+[![Stargazers over time](https://starchart.cc/jabrena/cursor-rules-java.svg?variant=light)](https://starchart.cc/jabrena/cursor-rules-java)
+
 ## Motivation
 
 Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agent model` behaves using reusable and scoped instructions. This repository offers a collection of such Cursor rules specifically for Java development.
 
 This collection of Cursor Rules for Java development, tries to enrich the developer experience when the Software engineer interact with LLMs daily.
-
-[![Stargazers over time](https://starchart.cc/jabrena/cursor-rules-java.svg?variant=light)](https://starchart.cc/jabrena/cursor-rules-java)
 
 ## Cursor Rules
 
