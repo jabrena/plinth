@@ -1,5 +1,5 @@
 ---
-description: 
+description: Java rules to apply data oriented programming style
 globs: 
 alwaysApply: false
 ---
