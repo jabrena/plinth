@@ -28,7 +28,7 @@
 ./mvnw site
 jwebserver -p 8005 -d "$(pwd)/target/site/"
 
-./mvnw clean package -Pgraalvm
+./mvnw clean package
 
 # Test in local
 brew tap azure/functions
