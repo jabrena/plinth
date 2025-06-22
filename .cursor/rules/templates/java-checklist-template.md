@@ -42,12 +42,6 @@ Use the following process to improve the java development in some areas if requi
 | Functional Programming | [ ] | `Refactor my code to use functional programming using the cursor rule @142-java-functional-programming` | |
 | Data Oriented Programming | [ ] | `Refactor my code to use data oriented programming using the cursor rule @143-java-data-oriented-programming` | |
 
-### Step 6: Database
-
-| Activity | Done | Prompt | Notes |
-|----------|------|--------|-------|
-| SQL Guidelines | [ ] | `Review my SQL code using the cursor rule @500-sql` | |
-
 ## Reference Table: Java Cursor Rules
 
 | Rule Name | Cursor Rule | Description |
