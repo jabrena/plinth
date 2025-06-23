@@ -42,6 +42,12 @@ Use the following process to improve the java development in some areas if requi
 | Functional Programming | [ ] | `Refactor my code to use functional programming using the cursor rule @142-java-functional-programming` | |
 | Data Oriented Programming | [ ] | `Refactor my code to use data oriented programming using the cursor rule @143-java-data-oriented-programming` | |
 
+### Step 6: Profiling
+
+| Activity | Done | Prompt | Notes |
+|----------|------|--------|-------|
+| Java Application Profiling | [ ] | `Help me profile my Java application using async-profiler. I want to detect running Java processes, download the profiler for my OS, and generate flamegraphs and put the profiler folder in YOUR-DEVELOPMENT/profiler with the cursor rule @151-java-profiling.mdc` | Replace YOUR-DEVELOPMENT with your actual development path |
+
 ## Reference Table: Java Cursor Rules
 
 | Rule Name | Cursor Rule | Description |
@@ -58,6 +64,7 @@ Use the following process to improve the java development in some areas if requi
 | Modern Java Features | @141-java-refactoring-with-modern-features | Refactoring with modern Java (Java 8+) features |
 | Functional Programming | @142-java-functional-programming | Applying functional programming in Java |
 | Data Oriented Programming | @143-java-data-oriented-programming | Data-oriented programming style in Java |
+| Java Profiling | @151-java-profiling | Java application profiling with async-profiler v4.0 |
 | SQL Guidelines | @500-sql | SQL development best practices |
 
 ## Tips & Best Practices

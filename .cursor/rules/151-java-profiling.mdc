@@ -1,0 +1,754 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Java Profiling with Async-Profiler v4.0
+
+This rule provides comprehensive Java application profiling using async-profiler v4.0, including automatic OS detection, profiler download, and flamegraph generation with the latest features.
+
+## Overview
+
+Java profiling helps identify performance bottlenecks, memory leaks, and CPU hotspots in Java applications. This rule automates the process of:
+1. Detecting running Java processes using `jps`
+2. Identifying the operating system and architecture
+3. Downloading the appropriate async-profiler v4.0 binary
+4. Attaching to a Java process and generating flamegraphs and heatmaps
+
+## New Features in v4.0
+
+Based on the [async-profiler v4.0 release](mdc:https:/github.com/async-profiler/async-profiler/releases/tag/v4.0), the latest version includes:
+
+### Major Features
+- **Interactive Heatmaps**: Visualize performance data over time
+- **Native Memory Leak Profiler**: Detect memory leaks in native code
+- **jfrconv Binary**: Enhanced JFR conversion capabilities
+- **Improved JDK 23+ Support**: Full compatibility with the latest JDK versions
+
+### Enhanced Profiling Capabilities
+- **Wall Clock Profiling Optimization**: Better performance for wall-clock profiling
+- **VMStructs-based Stack Walker**: More accurate stack traces with `--cstack vm/vmx`
+- **C API**: Access to thread-local profiling context
+- **Grain Option**: Coarsen flame graphs for better visualization
+- **Inverted Flame Graphs**: Flip flame graphs vertically with `--inverted`
+
+### Platform Support
+- **ARM64 Improvements**: Better support for ARM64 architecture
+- **Alpine Linux Compatibility**: Fixed crashes on Alpine Linux
+- **Container Support**: Enhanced profiling in containerized environments
+
+## Project Organization
+
+The profiling setup uses a clean folder structure with everything contained in the profiler directory:
+
+```
+your-project/
+└── profiler/               # ← All profiling-related files
+    ├── scripts/            # ← Profiling scripts and tools
+    │   └── java-profile.sh # ← Main profiling script
+    ├── results/            # ← Generated profiling output
+    │   ├── *.html          # ← Flamegraph files
+    │   └── *.jfr           # ← JFR recording files
+    ├── current/            # ← Symlink to current profiler version
+    └── async-profiler-*/   # ← Downloaded profiler binaries
+```
+
+**Usage:** Run `./profiler/scripts/java-profile.sh` from your project root directory.
+
+## Prerequisites
+
+- Java application running on the system
+- Internet connection for downloading async-profiler
+- Appropriate permissions to attach to Java processes
+- `jps` command available (part of JDK)
+
+## Step-by-Step Profiling Process
+
+### Step 1: Detect Running Java Processes
+
+First, list all running Java processes to identify the target PID:
+
+```bash
+# List all Java processes with PID and main class
+jps -l
+
+# List Java processes with JVM arguments (helpful for identification)
+jps -v
+
+# List Java processes with full command line
+jps -m
+```
+
+**Example output:**
+```
+12345 org.springframework.boot.loader.JarLauncher
+23456 org.apache.catalina.startup.Bootstrap
+34567 com.example.MyApplication
+```
+
+**Tip for Multiple Processes:** When multiple Java processes are running, use the automated script (see below) which provides an interactive menu to select the process you want to profile, rather than manually copying PIDs.
+
+### Step 2: OS Detection and Async-Profiler Download
+
+Detect the operating system and download the appropriate async-profiler binary:
+
+```bash
+#!/bin/bash
+
+# Function to detect OS and architecture for async-profiler v4.0
+detect_os_arch() {
+    OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+    ARCH=$(uname -m)
+    
+    case "$OS" in
+        linux*)
+            case "$ARCH" in
+                x86_64) PLATFORM="linux-x64" ;;
+                aarch64|arm64) PLATFORM="linux-arm64" ;;
+                *) echo "Unsupported architecture: $ARCH"; exit 1 ;;
+            esac
+            ;;
+        darwin*)
+            # Note: macOS v4.0 supports both Intel and ARM64 in single package
+            case "$ARCH" in
+                x86_64|arm64) PLATFORM="macos" ;;
+                *) echo "Unsupported architecture: $ARCH"; exit 1 ;;
+            esac
+            ;;
+        cygwin*|mingw*|msys*)
+            case "$ARCH" in
+                x86_64) PLATFORM="windows-x64" ;;
+                *) echo "Unsupported architecture: $ARCH"; exit 1 ;;
+            esac
+            ;;
+        *)
+            echo "Unsupported operating system: $OS"
+            echo "Supported platforms: Linux (x64, ARM64), macOS (Universal), Windows (x64)"
+            exit 1
+            ;;
+    esac
+    
+    echo "Detected platform: $PLATFORM"
+}
+
+# Function to download async-profiler
+download_async_profiler() {
+    local platform=$1
+    local profiler_dir=$2
+    local version="4.0"  # Latest stable version
+    local filename="async-profiler-$version-$platform.tar.gz"
+    local url="https://github.com/async-profiler/async-profiler/releases/download/v$version/$filename"
+    
+    echo "Downloading async-profiler for $platform..."
+    
+    # Create profiler directory if it doesn't exist
+    mkdir -p "$profiler_dir"
+    cd "$profiler_dir"
+    
+    # Download the profiler
+    if command -v curl >/dev/null 2>&1; then
+        curl -L -o "$filename" "$url"
+    elif command -v wget >/dev/null 2>&1; then
+        wget -O "$filename" "$url"
+    else
+        echo "Error: Neither curl nor wget is available for downloading"
+        exit 1
+    fi
+    
+    # Extract the archive
+    tar -xzf "$filename"
+    
+    # Create symlink for easier access
+    ln -sf "async-profiler-$version-$platform" current
+    
+    echo "Async-profiler downloaded and extracted to $profiler_dir/current/"
+    cd - > /dev/null
+}
+
+# Prompt for profiler directory
+read -p "Enter directory to download async-profiler (default: ./profiler): " PROFILER_DIR
+PROFILER_DIR=${PROFILER_DIR:-./profiler}
+
+# Resolve to absolute path
+PROFILER_DIR=$(realpath "$PROFILER_DIR" 2>/dev/null || echo "$(cd "$(dirname "$PROFILER_DIR")" && pwd)/$(basename "$PROFILER_DIR")")
+
+echo "Using profiler directory: $PROFILER_DIR"
+
+# Execute OS detection and download
+detect_os_arch
+download_async_profiler "$PLATFORM" "$PROFILER_DIR"
+```
+
+### Step 3: Profile Java Process and Generate Flamegraph
+
+Once you have the PID and async-profiler downloaded, use these commands to profile:
+
+#### Basic CPU Profiling (30 seconds)
+```bash
+# Replace <PID> with the actual process ID from jps output
+# Run from project root directory
+./profiler/current/bin/asprof -d 30 -f ./profiler/results/flamegraph.html <PID>
+```
+
+#### Memory Allocation Profiling
+```bash
+# Profile memory allocations (saves to profiler/results directory)
+./profiler/current/bin/asprof -e alloc -d 30 -f ./profiler/results/allocation-flamegraph.html <PID>
+```
+
+#### Lock Contention Profiling
+```bash
+# Profile lock contention (saves to profiler/results directory)
+./profiler/current/bin/asprof -e lock -d 30 -f ./profiler/results/lock-flamegraph.html <PID>
+```
+
+#### Wall Clock Profiling (includes sleeping threads)
+```bash
+# Profile wall clock time (saves to profiler/results directory)
+./profiler/current/bin/asprof -e wall -d 30 -f ./profiler/results/wall-flamegraph.html <PID>
+```
+
+### Step 4: Advanced Profiling Options
+
+#### Continuous Profiling with JFR Output
+```bash
+# Generate JFR file for detailed analysis (saves to profiler/results directory)
+./profiler/current/bin/asprof -d 60 -o jfr -f ./profiler/results/profile.jfr <PID>
+
+# Convert JFR to flamegraph (saves to profiler/results directory)
+./profiler/current/bin/jfr2flame ./profiler/results/profile.jfr ./profiler/results/flamegraph.html
+```
+
+#### Profile Specific Methods or Threads
+```bash
+# Profile only specific package (saves to profiler/results directory)
+./profiler/current/bin/asprof -d 30 -i 'com/example/*' -f ./profiler/results/filtered-flamegraph.html <PID>
+
+# Profile specific thread (saves to profiler/results directory)
+./profiler/current/bin/asprof -d 30 -t -f ./profiler/results/thread-flamegraph.html <PID>
+```
+
+#### Memory Leak Detection
+```bash
+# Profile heap allocations to detect memory leaks (saves to profiler/results directory)
+./profiler/current/bin/asprof -e alloc -d 300 --alloc 1m -f ./profiler/results/memory-leak.html <PID>
+```
+
+#### New v4.0 Features
+
+##### Interactive Heatmaps
+```bash
+# Generate heatmap to visualize performance over time (saves to profiler/results directory)
+# Step 1: Generate JFR recording
+./profiler/current/bin/asprof -d 60 -o jfr -f ./profiler/results/profile.jfr <PID>
+
+# Step 2: Convert JFR to heatmap using jfrconv
+./profiler/current/bin/jfrconv --cpu -o heatmap ./profiler/results/profile.jfr ./profiler/results/heatmap-cpu.html
+```
+
+##### Native Memory Profiling
+```bash
+# Profile native memory allocations (saves to profiler/results directory)
+./profiler/current/bin/asprof -e native -d 30 -f ./profiler/results/native-memory.html <PID>
+```
+
+##### Enhanced Stack Walking
+```bash
+# Use VMStructs-based stack walker for better native stack traces (saves to profiler/results directory)
+./profiler/current/bin/asprof -d 30 --cstack vm -f ./profiler/results/vmstruct-profile.html <PID>
+```
+
+##### Inverted Flame Graphs
+```bash
+# Generate inverted flame graph (saves to profiler/results directory)
+./profiler/current/bin/asprof -d 30 --inverted -f ./profiler/results/inverted-flamegraph.html <PID>
+```
+
+##### Coarsened Flame Graphs
+```bash
+# Generate coarsened flame graph for better visualization (saves to profiler/results directory)
+./profiler/current/bin/asprof -d 30 --grain 100ms -f ./profiler/results/coarse-flamegraph.html <PID>
+```
+
+##### JFR Conversion with jfrconv
+```bash
+# Generate JFR and convert using new jfrconv binary (saves to profiler/results directory)
+./profiler/current/bin/asprof -d 60 -o jfr -f ./profiler/results/profile.jfr <PID>
+./profiler/current/bin/jfrconv --flamegraph ./profiler/results/profile.jfr ./profiler/results/converted-flamegraph.html
+```
+
+## Automated Profiling Script
+
+Here's a complete script that combines all steps:
+
+```bash
+#!/bin/bash
+
+# java-profile.sh - Automated Java profiling script
+
+set -e
+
+# Colors for output
+RED='\033[0;31m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+BLUE='\033[0;34m'
+NC='\033[0m' # No Color
+
+echo -e "${GREEN}Java Application Profiler v4.0 - Interactive Mode${NC}"
+echo "================================================="
+
+# Step 1: List Java processes and handle selection
+echo -e "${YELLOW}Step 1: Available Java Processes${NC}"
+echo "-----------------------------------"
+
+# Get list of Java processes
+JAVA_PROCESSES=$(jps -l | grep -v "Jps$")
+
+if [ -z "$JAVA_PROCESSES" ]; then
+    echo -e "${RED}No Java processes found running on this system.${NC}"
+    echo "Please start your Java application first and try again."
+    exit 1
+fi
+
+# Count the number of processes
+PROCESS_COUNT=$(echo "$JAVA_PROCESSES" | wc -l | xargs)
+
+if [ "$PROCESS_COUNT" -eq 1 ]; then
+    # Only one process found, auto-select it
+    PID=$(echo "$JAVA_PROCESSES" | cut -d' ' -f1)
+    PROCESS_NAME=$(echo "$JAVA_PROCESSES" | cut -d' ' -f2-)
+    echo -e "${GREEN}Found single Java process:${NC}"
+    echo "  PID: $PID"
+    echo "  Name: $PROCESS_NAME"
+    echo ""
+    read -p "Do you want to profile this process? (y/N): " CONFIRM
+    if [[ ! "$CONFIRM" =~ ^[Yy]$ ]]; then
+        echo "Profiling cancelled by user."
+        exit 0
+    fi
+else
+    # Multiple processes found, provide selection menu
+    echo -e "${GREEN}Found $PROCESS_COUNT Java processes:${NC}"
+    echo ""
+    
+    # Create numbered list
+    i=1
+    declare -a PIDS
+    declare -a NAMES
+    
+    while IFS= read -r line; do
+        pid=$(echo "$line" | cut -d' ' -f1)
+        name=$(echo "$line" | cut -d' ' -f2-)
+        PIDS[$i]=$pid
+        NAMES[$i]=$name
+        echo "  $i) PID: $pid - $name"
+        ((i++))
+    done <<< "$JAVA_PROCESSES"
+    
+    echo ""
+    echo "0) Manual PID entry"
+    echo ""
+    
+    # Get user selection
+    while true; do
+        read -p "Select a process to profile (0-$PROCESS_COUNT): " SELECTION
+        
+        if [[ "$SELECTION" =~ ^[0-9]+$ ]]; then
+            if [ "$SELECTION" -eq 0 ]; then
+                # Manual PID entry
+                read -p "Enter the PID of the Java process to profile: " PID
+                break
+            elif [ "$SELECTION" -ge 1 ] && [ "$SELECTION" -le "$PROCESS_COUNT" ]; then
+                # Valid selection
+                PID=${PIDS[$SELECTION]}
+                PROCESS_NAME=${NAMES[$SELECTION]}
+                echo -e "${GREEN}Selected process:${NC}"
+                echo "  PID: $PID"
+                echo "  Name: $PROCESS_NAME"
+                break
+            else
+                echo -e "${RED}Invalid selection. Please choose a number between 0 and $PROCESS_COUNT.${NC}"
+            fi
+        else
+            echo -e "${RED}Invalid input. Please enter a number.${NC}"
+        fi
+    done
+fi
+
+# Validate PID
+if ! kill -0 "$PID" 2>/dev/null; then
+    echo -e "${RED}Error: Process $PID does not exist or is not accessible${NC}"
+    exit 1
+fi
+
+# Double-check if it's a Java process (for manual entries)
+if ! jps | grep -q "^$PID "; then
+    echo -e "${RED}Error: Process $PID is not a Java process${NC}"
+    exit 1
+fi
+
+echo -e "${GREEN}Ready to profile process $PID${NC}"
+
+# Step 2: Prompt for profiler directory
+echo -e "${YELLOW}Step 2: Profiler Directory Setup${NC}"
+echo "-----------------------------------"
+read -p "Enter directory to download async-profiler (default: ./profiler): " PROFILER_DIR
+PROFILER_DIR=${PROFILER_DIR:-./profiler}
+
+# Resolve to absolute path
+PROFILER_DIR=$(realpath "$PROFILER_DIR" 2>/dev/null || echo "$(cd "$(dirname "$PROFILER_DIR")" 2>/dev/null && pwd || echo "$(pwd)")/$(basename "$PROFILER_DIR")")
+
+echo -e "${GREEN}Using profiler directory: $PROFILER_DIR${NC}"
+
+# Step 3: Detect OS and download profiler
+echo -e "${YELLOW}Step 3: Setting up async-profiler${NC}"
+echo "-----------------------------------"
+
+detect_os_arch() {
+    OS=$(uname -s | tr '[:upper:]' '[:lower:]')
+    ARCH=$(uname -m)
+    
+    case "$OS" in
+        linux*)
+            case "$ARCH" in
+                x86_64) PLATFORM="linux-x64" ;;
+                aarch64|arm64) PLATFORM="linux-arm64" ;;
+                *) echo -e "${RED}Unsupported architecture: $ARCH${NC}"; exit 1 ;;
+            esac
+            ;;
+        darwin*)
+            case "$ARCH" in
+                x86_64) PLATFORM="macos" ;;
+                arm64) PLATFORM="macos-arm64" ;;
+                *) echo -e "${RED}Unsupported architecture: $ARCH${NC}"; exit 1 ;;
+            esac
+            ;;
+        *)
+            echo -e "${RED}Unsupported operating system: $OS${NC}"
+            exit 1
+            ;;
+    esac
+    
+    echo -e "${GREEN}Detected platform: $PLATFORM${NC}"
+}
+
+download_profiler() {
+    local platform=$1
+    local profiler_dir=$2
+    local version="4.0"
+    
+    # macOS uses .zip, others use .tar.gz
+    if [ "$platform" = "macos" ]; then
+        local filename="async-profiler-$version-$platform.zip"
+        local extract_cmd="unzip"
+    else
+        local filename="async-profiler-$version-$platform.tar.gz"
+        local extract_cmd="tar -xzf"
+    fi
+    
+    local url="https://github.com/async-profiler/async-profiler/releases/download/v$version/$filename"
+    
+    if [ ! -d "$profiler_dir/current" ]; then
+        echo "Downloading async-profiler..."
+        mkdir -p "$profiler_dir"
+        cd "$profiler_dir"
+        
+        if command -v curl >/dev/null 2>&1; then
+            curl -L -o "$filename" "$url"
+        elif command -v wget >/dev/null 2>&1; then
+            wget -O "$filename" "$url"
+        else
+            echo -e "${RED}Error: Neither curl nor wget is available${NC}"
+            exit 1
+        fi
+        
+        $extract_cmd "$filename"
+        ln -sf "async-profiler-$version-$platform" current
+        cd - > /dev/null
+        echo -e "${GREEN}Async-profiler downloaded successfully to $profiler_dir${NC}"
+    else
+        echo -e "${GREEN}Async-profiler already available at $profiler_dir${NC}"
+    fi
+}
+
+detect_os_arch
+download_profiler "$PLATFORM" "$PROFILER_DIR"
+
+# Create results directory if it doesn't exist (inside profiler directory)
+RESULTS_DIR="$PROFILER_DIR/results"
+mkdir -p "$RESULTS_DIR"
+
+# Function to show profiling menu
+show_profiling_menu() {
+    echo ""
+    echo -e "${BLUE}===========================================${NC}"
+    echo -e "${YELLOW}Profiling Options for PID: $PID${NC}"
+    echo -e "${YELLOW}Process: $PROCESS_NAME${NC}"
+    echo -e "${BLUE}===========================================${NC}"
+    echo "1. CPU Profiling (30s)"
+    echo "2. Memory Allocation Profiling (30s)"
+    echo "3. Lock Contention Profiling (30s)"
+    echo "4. Wall Clock Profiling (30s)"
+    echo "5. Interactive Heatmap (60s) - NEW in v4.0"
+    echo "6. Native Memory Profiling (30s) - NEW in v4.0"
+    echo "7. Inverted Flame Graph (30s) - NEW in v4.0"
+    echo "8. Custom Duration CPU Profiling"
+    echo "9. View recent results"
+    echo "0. Exit profiler"
+    echo -e "${BLUE}===========================================${NC}"
+}
+
+# Function to execute profiling
+execute_profiling() {
+    local option=$1
+    
+    case $option in
+        1)
+            echo -e "${GREEN}Starting CPU profiling for 30 seconds...${NC}"
+            "$PROFILER_DIR/current/bin/asprof" -d 30 -f "$RESULTS_DIR/cpu-flamegraph-$(date +%Y%m%d-%H%M%S).html" "$PID"
+            ;;
+        2)
+            echo -e "${GREEN}Starting memory allocation profiling for 30 seconds...${NC}"
+            "$PROFILER_DIR/current/bin/asprof" -e alloc -d 30 -f "$RESULTS_DIR/allocation-flamegraph-$(date +%Y%m%d-%H%M%S).html" "$PID"
+            ;;
+        3)
+            echo -e "${GREEN}Starting lock contention profiling for 30 seconds...${NC}"
+            "$PROFILER_DIR/current/bin/asprof" -e lock -d 30 -f "$RESULTS_DIR/lock-flamegraph-$(date +%Y%m%d-%H%M%S).html" "$PID"
+            ;;
+        4)
+            echo -e "${GREEN}Starting wall clock profiling for 30 seconds...${NC}"
+            "$PROFILER_DIR/current/bin/asprof" -e wall -d 30 -f "$RESULTS_DIR/wall-flamegraph-$(date +%Y%m%d-%H%M%S).html" "$PID"
+            ;;
+        5)
+            echo -e "${GREEN}Starting interactive heatmap profiling for 60 seconds...${NC}"
+            TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+            JFR_FILE="$RESULTS_DIR/profile-$TIMESTAMP.jfr"
+            HEATMAP_FILE="$RESULTS_DIR/heatmap-cpu-$TIMESTAMP.html"
+            
+            echo -e "${BLUE}Step 1: Generating JFR recording...${NC}"
+            "$PROFILER_DIR/current/bin/asprof" -d 60 -o jfr -f "$JFR_FILE" "$PID"
+            
+            echo -e "${BLUE}Step 2: Converting JFR to heatmap...${NC}"
+            "$PROFILER_DIR/current/bin/jfrconv" --cpu -o heatmap "$JFR_FILE" "$HEATMAP_FILE"
+            echo -e "${GREEN}Heatmap generated: $HEATMAP_FILE${NC}"
+            ;;
+        6)
+            echo -e "${GREEN}Starting native memory profiling for 30 seconds...${NC}"
+            "$PROFILER_DIR/current/bin/asprof" -e native -d 30 -f "$RESULTS_DIR/native-memory-$(date +%Y%m%d-%H%M%S).html" "$PID"
+            ;;
+        7)
+            echo -e "${GREEN}Starting inverted flame graph profiling for 30 seconds...${NC}"
+            "$PROFILER_DIR/current/bin/asprof" -d 30 --inverted -f "$RESULTS_DIR/inverted-flamegraph-$(date +%Y%m%d-%H%M%S).html" "$PID"
+            ;;
+        8)
+            read -p "Enter duration in seconds: " DURATION
+            echo -e "${GREEN}Starting CPU profiling for $DURATION seconds...${NC}"
+            "$PROFILER_DIR/current/bin/asprof" -d "$DURATION" -f "$RESULTS_DIR/cpu-flamegraph-$(date +%Y%m%d-%H%M%S).html" "$PID"
+            ;;
+        9)
+            echo -e "${YELLOW}Recent profiling results in $RESULTS_DIR:${NC}"
+            ls -lat "$RESULTS_DIR"/*.html "$RESULTS_DIR"/*.jfr 2>/dev/null | head -10 || echo "No profiling files found"
+            return
+            ;;
+        0)
+            echo -e "${GREEN}Exiting profiler. Goodbye!${NC}"
+            exit 0
+            ;;
+        *)
+            echo -e "${RED}Invalid option${NC}"
+            return
+            ;;
+    esac
+    
+    if [ $option -ne 9 ] && [ $option -ne 0 ]; then
+        echo -e "${GREEN}Profiling completed!${NC}"
+        echo -e "${YELLOW}Generated files in $RESULTS_DIR:${NC}"
+        ls -lat "$RESULTS_DIR"/*.html "$RESULTS_DIR"/*.jfr 2>/dev/null | head -5 || echo "No profiling files found"
+    fi
+}
+
+# Interactive profiling loop
+while true; do
+    # Verify process is still running
+    if ! kill -0 "$PID" 2>/dev/null; then
+        echo -e "${RED}Warning: Process $PID is no longer running!${NC}"
+        echo "The process may have been terminated or restarted."
+        
+        # Try to find the same process again
+        NEW_PID=$(jps -l | grep "$PROCESS_NAME" | head -1 | cut -d' ' -f1)
+        if [ ! -z "$NEW_PID" ] && [ "$NEW_PID" != "$PID" ]; then
+            echo -e "${YELLOW}Found similar process with new PID: $NEW_PID${NC}"
+            read -p "Switch to the new PID? (y/N): " SWITCH_CONFIRM
+            if [[ "$SWITCH_CONFIRM" =~ ^[Yy]$ ]]; then
+                PID=$NEW_PID
+                echo -e "${GREEN}Switched to PID: $PID${NC}"
+            else
+                echo "Please restart the profiler with the correct PID."
+                exit 1
+            fi
+        else
+            echo "Please restart the profiler when your application is running."
+            exit 1
+        fi
+    fi
+    
+    show_profiling_menu
+    read -p "Select profiling option (0-9): " PROFILE_TYPE
+    execute_profiling "$PROFILE_TYPE"
+    
+    echo ""
+    echo -e "${BLUE}Press Enter to continue or Ctrl+C to exit...${NC}"
+    read -p ""
+done
+```
+
+## Usage Examples
+
+### Quick CPU Profile
+```bash
+# One-liner for quick CPU profiling with process selection (saves to profiler/results directory)
+JAVA_PROCESSES=$(jps -l | grep -v "Jps$"); if [ $(echo "$JAVA_PROCESSES" | wc -l) -eq 1 ]; then PID=$(echo "$JAVA_PROCESSES" | cut -d' ' -f1); echo "Auto-selecting: $PID - $(echo "$JAVA_PROCESSES" | cut -d' ' -f2-)"; else echo "$JAVA_PROCESSES" | nl -nln; read -p "Select process number: " NUM; PID=$(echo "$JAVA_PROCESSES" | sed -n "${NUM}p" | cut -d' ' -f1); fi && mkdir -p "./profiler/results" && "./profiler/current/bin/asprof" -d 30 -f "./profiler/results/flamegraph.html" $PID
+```
+
+### Profile Spring Boot Application
+```bash
+# Find Spring Boot app and profile it (saves to profiler/results directory)
+mkdir -p "./profiler/results"
+SPRING_PID=$(jps -l | grep -i "spring\|boot" | head -1 | cut -d' ' -f1)
+if [ ! -z "$SPRING_PID" ]; then
+    "./profiler/current/bin/asprof" -d 60 -f "./profiler/results/spring-boot-profile.html" $SPRING_PID
+else
+    echo "No Spring Boot application found"
+fi
+```
+
+## Interpreting Flamegraphs
+
+### Reading Flamegraphs
+- **Width**: Represents the time spent in a method (wider = more time)
+- **Height**: Represents the call stack depth
+- **Color**: Randomly assigned for visibility (no special meaning)
+- **Search**: Use the search box to find specific methods
+- **Zoom**: Click on any frame to zoom in
+
+### Common Patterns to Look For
+- **Wide flames**: Methods consuming significant CPU time
+- **Tall stacks**: Deep call chains that might indicate recursion issues
+- **Flat profiles**: Even distribution might indicate I/O bound operations
+- **Spikes**: Hotspots that are good optimization candidates
+
+## Troubleshooting
+
+### Permission Issues
+```bash
+# If you get permission denied errors
+echo 1 | sudo tee /proc/sys/kernel/perf_event_paranoid
+echo 0 | sudo tee /proc/sys/kernel/kptr_restrict
+```
+
+### Container Profiling
+```bash
+# For containerized applications, you might need to run with specific capabilities
+docker run --cap-add SYS_ADMIN --cap-add SYS_PTRACE your-app
+
+# Or profile from the host using container PID
+docker exec -it container_name jps -l
+# Use the PID from host perspective
+```
+
+### JVM Flags for Better Profiling
+Add these JVM flags for more detailed profiling:
+```bash
+-XX:+UnlockDiagnosticVMOptions
+-XX:+DebugNonSafepoints
+-XX:+PreserveFramePointer  # Linux only
+```
+
+### New v4.0 Troubleshooting
+
+#### macOS Thread Filter Issues
+```bash
+# If you experience crashes when using thread filters on macOS (fixed in v4.0)
+./profiler/current/bin/asprof -d 30 --threads -f profile.html <PID>
+```
+
+#### Container Profiling with libpath
+```bash
+# Use --libpath option for containerized applications
+./profiler/current/bin/asprof --libpath /path/to/container/lib -d 30 -f profile.html <PID>
+```
+
+#### JDK 21+ Dynamic Attach Warnings
+```bash
+# v4.0 suppresses dynamic attach warnings on JDK 21+
+# No additional configuration needed
+```
+
+#### Alpine Linux Compatibility
+```bash
+# v4.0 has improved musl/glibc compatibility
+# Statically linked libstdc++ reduces compatibility issues
+```
+
+## Best Practices
+
+1. **Profile in production-like environments** for accurate results
+2. **Use appropriate duration**: 30-60 seconds for most cases
+3. **Profile under load** to see realistic performance characteristics
+4. **Compare before/after** when making optimizations
+5. **Focus on the widest flames** first for maximum impact
+6. **Use different event types** (cpu, alloc, lock) for comprehensive analysis
+7. **Regular profiling** to catch performance regressions early
+
+## Integration with Build Tools
+
+### Maven Integration
+Add profiling to your Maven workflow:
+
+```xml
+<profile>
+    <id>profile</id>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.1.0</version>
+                <configuration>
+                    <executable>bash</executable>
+                    <arguments>
+                        <argument>-c</argument>
+                        <argument>PROFILER_DIR=${async.profiler.dir:-./profiler}; java -jar target/myapp.jar &amp; PID=$!; sleep 5; "$PROFILER_DIR/current/bin/asprof" -d 30 -f profile.html $PID; kill $PID</argument>
+                    </arguments>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</profile>
+```
+
+**Usage with custom profiler directory:**
+```bash
+# Set profiler directory as Maven property
+mvn exec:exec -P profile -Dasync.profiler.dir=/path/to/your/profiler
+```
+
+## Resources
+
+- [Async-profiler v4.0 Release](mdc:https:/github.com/async-profiler/async-profiler/releases/tag/v4.0)
+- [Async-profiler GitHub Repository](mdc:https:/github.com/async-profiler/async-profiler)
+- [Async-profiler Documentation](mdc:https:/github.com/async-profiler/async-profiler/wiki)
+- [Java Flight Recorder Guide](mdc:https:/docs.oracle.com/javacomponents/jmc-5-4/jfr-runtime-guide/about.htm)
+- [Brendan Gregg's Flame Graph Resources](mdc:http:/www.brendangregg.com/flamegraphs.html)
+
+## Version History
+
+### v4.0 (Latest - April 2024)
+- Interactive Heatmaps
+- Native memory leak profiler
+- Enhanced JFR conversion with jfrconv binary
+- JDK 23+ support
+- Improved container profiling
+- Better ARM64 support
+- Alpine Linux compatibility fixes

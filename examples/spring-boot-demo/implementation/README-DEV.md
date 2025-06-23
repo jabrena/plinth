@@ -34,4 +34,7 @@ curl "http://localhost:8080/api/v1/films?startsWith=A"
 open http://localhost:8080/api/v1/swagger-ui.html
 
 docker compose up -d
+
+# Visualize profiling reports
+jwebserver -p 8005 -d "$(pwd)/examples/spring-boot-demo/profiler/results"
 ``` 
