@@ -35,7 +35,6 @@ open http://localhost:8080/api/v1/swagger-ui.html
 
 docker compose up -d
 
-Help me profile my Java application using async-profiler. I want to detect running Java processes, download the profiler for my OS, and generate flamegraphs and put the profiler folder in examples/spring-boot-demo/profiler with the cursor rule @151-java-profiling.mdc
-
+# Visualize profiling reports
 jwebserver -p 8005 -d "$(pwd)/examples/spring-boot-demo/profiler/results"
 ``` 
