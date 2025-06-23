@@ -38,6 +38,4 @@ http://localhost:8080/swagger-ui/index.html
 ./load-test.sh -e both -n 500000 -c 10
 
 jwebserver -p 8005 -d "$(pwd)/examples/spring-boot-memory-leak-demo/profiler/results"
-
-Given the following reports, can you identify potential issues in the profiling reports  in html located in @/results to fix the development located in @/src but not refactor any class.
 ``` 
