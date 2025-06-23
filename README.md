@@ -54,6 +54,8 @@ This collection of Cursor Rules for Java development, tries to enrich the develo
 | Activity | Description | Prompt | Notes |
 |----------|------|--------|-------|
 | [151-java-profiling](.cursor/rules/151-java-profiling.mdc) | Performance Profiling with async-profiler | `Help me profile my Java application using async-profiler. I want to detect running Java processes, download the profiler for my OS, and generate flamegraphs and put the profiler folder in YOUR-DEVELOPMENT/profiler with the cursor rule @151-java-profiling.mdc` | Replace YOUR-DEVELOPMENT with your actual development path |
+| | What reports to ask to detect Memory leaks| `Given the different options from the script, what option do you recommend how to detect a potential memory leak?` | Add in the context the options from `java-profile.sh` |
+| | Analyze profiling results | `Given the following reports, can you identify potential issues in the profiling reports  in html located in @/results to fix the development located in @/src but not refactor any class.` |  |
 
 ## Getting started
 
