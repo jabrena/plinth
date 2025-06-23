@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>3.5.3</version>
+		<relativePath/> <!-- lookup parent from repository -->
+	</parent>
+
+	<groupId>info.jab.ms</groupId>
+	<artifactId>spring-boot-memory-leak-demo</artifactId>
+	<version>0.1.0</version>
+	<name>spring-boot-memory-leak-demo</name>
+
+	<properties>
+		<java.version>24</java.version>
+		<maven.version>3.9.10</maven.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+		<!-- Springdoc versions -->
+		<springdoc.version>2.8.9</springdoc.version>
+
+		<!-- Maven plugin versions -->
+		<maven-plugin-compiler.version>3.14.0</maven-plugin-compiler.version>
+		<maven-plugin-surefire.version>3.5.3</maven-plugin-surefire.version>
+		<maven-plugin-failsafe.version>3.5.3</maven-plugin-failsafe.version>
+		<maven-plugin-enforcer.version>3.5.0</maven-plugin-enforcer.version>
+		<maven-plugin-spotless.version>2.44.5</maven-plugin-spotless.version>
+		<maven-plugin-versions.version>2.18.0</maven-plugin-versions.version>
+		<maven-plugin-openapi-generator.version>7.13.0</maven-plugin-openapi-generator.version>
+		<maven-plugin-jmeter.version>3.8.0</maven-plugin-jmeter.version>
+		<maven-plugin-exec.version>3.5.0</maven-plugin-exec.version>
+		<extra-enforcer-rules.version>1.10.0</extra-enforcer-rules.version>
+
+		<!-- JMeter default parameters -->
+		<jmeter.threadCount>10</jmeter.threadCount>
+		<jmeter.rampUp>30</jmeter.rampUp>
+		<jmeter.duration>60</jmeter.duration>
+		<jmeter.hostname>localhost</jmeter.hostname>
+		<jmeter.port>8080</jmeter.port>
+		<jmeter.openapi.url>http://localhost:8080/v3/api-docs</jmeter.openapi.url>
+	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-devtools</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		
+		<dependency>
+			<groupId>org.springdoc</groupId>
+			<artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
+			<version>${springdoc.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>${maven-plugin-compiler.version}</version>
+				<configuration>
+					<release>${java.version}</release>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-enforcer-plugin</artifactId>
+				<version>${maven-plugin-enforcer.version}</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.codehaus.mojo</groupId>
+						<artifactId>extra-enforcer-rules</artifactId>
+						<version>${extra-enforcer-rules.version}</version>
+					</dependency>
+				</dependencies>
+				<executions>
+					<execution>
+						<id>enforce</id>
+						<configuration>
+							<rules>
+								<banCircularDependencies/>
+								<dependencyConvergence />
+								<banDuplicatePomDependencyVersions />
+								<requireMavenVersion>
+									<version>${maven.version}</version>
+								</requireMavenVersion>
+								<requireJavaVersion>
+									<version>${java.version}</version>
+								</requireJavaVersion>
+								<bannedDependencies>
+									<excludes>
+										<exclude>org.projectlombok:lombok</exclude>
+									</excludes>
+								</bannedDependencies>
+							</rules>
+							<fail>true</fail>
+						</configuration>
+						<goals>
+							<goal>enforce</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>com.diffplug.spotless</groupId>
+				<artifactId>spotless-maven-plugin</artifactId>
+				<version>${maven-plugin-spotless.version}</version>
+				<configuration>
+					<encoding>UTF-8</encoding>
+					<java>
+						<removeUnusedImports />
+						<importOrder>
+							<order>,\#</order>
+						</importOrder>
+						<endWithNewline />
+						<trimTrailingWhitespace />
+						<indent>
+							<spaces>true</spaces>
+							<spacesPerTab>4</spacesPerTab>
+						</indent>
+					</java>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>check</goal>
+						</goals>
+						<phase>process-sources</phase>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${maven-plugin-surefire.version}</version>
+				<configuration>
+					<skipAfterFailureCount>1</skipAfterFailureCount>
+					<includes>
+						<include>**/*Test.java</include>
+					</includes>
+					<excludes>
+						<exclude>**/*IT.java</exclude>
+					</excludes>
+				</configuration>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>${maven-plugin-failsafe.version}</version>
+				<configuration>
+					<includes>
+						<include>**/*IT.java</include>
+					</includes>
+					<excludes>
+						<exclude>**/*Test.java</exclude>
+					</excludes>
+				</configuration>
+				<executions>
+					<execution>
+						<goals>
+							<goal>integration-test</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>versions-maven-plugin</artifactId>
+				<version>${maven-plugin-versions.version}</version>
+				<configuration>
+					<allowSnapshots>false</allowSnapshots>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<profiles>
+		<profile>
+			<id>jmeter-from-oas</id>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.openapitools</groupId>
+						<artifactId>openapi-generator-maven-plugin</artifactId>
+						<version>${maven-plugin-openapi-generator.version}</version>
+						<executions>
+							<execution>
+								<id>generate-jmeter-tests</id>
+								<phase>generate-test-sources</phase>
+								<goals>
+									<goal>generate</goal>
+								</goals>
+								<configuration>
+									<inputSpec>${jmeter.openapi.url}</inputSpec>
+									<generatorName>jmeter</generatorName>
+									<output>${project.build.directory}/jmeter-tests</output>
+									<configOptions>
+										<packageName>info.jab.ms.tests</packageName>
+										<testPackage>info.jab.ms.tests</testPackage>
+										<generateTestData>true</generateTestData>
+										<testDataFile>true</testDataFile>
+									</configOptions>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					
+					<plugin>
+						<groupId>com.lazerycode.jmeter</groupId>
+						<artifactId>jmeter-maven-plugin</artifactId>
+						<version>${maven-plugin-jmeter.version}</version>
+						<executions>
+							<execution>
+								<id>configuration</id>
+								<phase>test</phase>
+								<goals>
+									<goal>configure</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>jmeter-tests</id>
+								<phase>integration-test</phase>
+								<goals>
+									<goal>jmeter</goal>
+								</goals>
+							</execution>
+							<execution>
+								<id>jmeter-check-results</id>
+								<phase>verify</phase>
+								<goals>
+									<goal>results</goal>
+								</goals>
+							</execution>
+						</executions>
+						<configuration>
+							<testFilesDirectory>${project.build.directory}/jmeter-tests</testFilesDirectory>
+							<resultsDirectory>${project.build.directory}/jmeter/results</resultsDirectory>
+							<logsDirectory>${project.build.directory}/jmeter/logs</logsDirectory>
+							<propertiesUser>
+								<threads>10</threads>
+								<rampup>30</rampup>
+								<duration>300</duration>
+								<hostname>localhost</hostname>
+								<port>8080</port>
+								<testIterations>1</testIterations>
+								<protocol>http</protocol>
+							</propertiesUser>
+							<ignoreResultFailures>false</ignoreResultFailures>
+							<generateReports>true</generateReports>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+	</profiles>
+
+</project>

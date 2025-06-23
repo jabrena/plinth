@@ -33,3 +33,5 @@ jobs:
         run: cd examples/aws-lambda-hello-world && ./mvnw --batch-mode --no-transfer-progress package --file pom.xml
       - name: Azure Function build
         run: cd examples/azure-function-hello-world && ./mvnw --batch-mode --no-transfer-progress package --file pom.xml
+      - name: Spring Boot Memory Leak build
+        run: cd examples/spring-boot-memory-leak-demo && ./mvnw --batch-mode --no-transfer-progress package --file pom.xml
