@@ -49,6 +49,12 @@ This collection of Cursor Rules for Java development, tries to enrich the develo
 | [142-java-functional-programming](.cursor/rules/142-java-functional-programming.mdc) | Functional Programming | `Refactor my code to use functional programming using the cursor rule @142-java-functional-programming` | |
 | [143-java-data-oriented-programming](.cursor/rules/143-java-data-oriented-programming.mdc) | Data Oriented Programming | `Refactor my code to use data oriented programming using the cursor rule @143-java-data-oriented-programming` | |
 
+### Profiling rule
+
+| Activity | Description | Prompt | Notes |
+|----------|------|--------|-------|
+| [151-java-profiling](.cursor/rules/151-java-profiling.mdc) | Performance Profiling with async-profiler | `Help me profile my Java application using async-profiler. I want to detect running Java processes, download the profiler for my OS, and generate flamegraphs and put the profiler folder in YOUR-DEVELOPMENT/profiler with the cursor rule @151-java-profiling.mdc` | Replace YOUR-DEVELOPMENT with your actual development path |
+
 ## Getting started
 
 If you are interested in getting the benefits from these cursor rules, you can manually download this repository and copy the './cursor' folder and paste it into your repository, or delegate this task to a specific command-line tool based on **Jbang**:
