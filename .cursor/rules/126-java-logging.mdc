@@ -18,8 +18,8 @@ These guidelines are built upon the following core principles:
 
 1.  **Standardized Framework Selection**: Utilize a widely accepted logging facade (preferably SLF4J) and a robust underlying implementation (Logback or Log4j2). This promotes consistency, flexibility, and access to advanced logging features.
 2.  **Meaningful and Consistent Log Levels**: Employ logging levels (ERROR, WARN, INFO, DEBUG, TRACE) deliberately and consistently to categorize the severity and importance of messages. This allows for effective filtering, monitoring, and targeted issue diagnosis.
-3.  **Adherence to Core Logging Practices**: Follow fundamental best practices such as using parameterized logging (avoiding string concatenation for performance and clarity), always logging exceptions with their stack traces, never logging sensitive data directly (PII, credentials), and using correlation IDs (e.g., via MDC) for request tracing in distributed environments.
-4.  **Thoughtful and Flexible Configuration**: Manage logging configuration externally (e.g., `logback.xml`, `log4j2.xml`). Tailor configurations for different environments (dev, test, prod) with appropriate log levels for various packages, clear and informative output formats (including timestamps, levels, logger names, thread info, and MDC data), and robust log rotation and retention policies.
+3.  **Adherence to Core Logging Practices**: Follow fundamental best practices such as using parameterized logging (avoiding string concatenation for performance and clarity), always logging exceptions with their stack traces, never logging sensitive data directly (PII, credentials).
+4.  **Thoughtful and Flexible Configuration**: Manage logging configuration externally (e.g., `logback.xml`, `log4j2.xml`). Tailor configurations for different environments (dev, test, prod) with appropriate log levels for various packages, clear and informative output formats (including timestamps, levels, logger names, thread info), and robust log rotation and retention policies.
 5.  **Security-Conscious Logging**: Prioritize security in all logging activities. Actively mask or filter sensitive information, control access to log files and log management systems, use secure protocols for transmitting logs, and ensure compliance with relevant data protection regulations (e.g., GDPR, HIPAA).
 6.  **Proactive Log Monitoring and Alerting**: Implement centralized log aggregation systems (e.g., ELK Stack, Splunk, Grafana Loki). Establish automated alerts based on log patterns, error rates, or specific critical events to enable proactive issue detection and rapid response.
 7.  **Comprehensive Logging Validation Through Testing**: Integrate logging into the testing strategy. Assert that critical log messages (especially errors and warnings) are generated as expected under specific conditions, verify log formats, test log level filtering, and assess any performance impact of logging.
@@ -199,7 +199,6 @@ Follow these core practices to ensure logs are useful, maintainable, and perform
 - **Exception Handling**: Never catch and swallow exceptions without logging them appropriately (usually at ERROR or WARN level, including the stack trace).
 - **Sensitive Information**: Avoid logging sensitive data such as passwords, personal identifiable information (PII), security tokens, or financial details directly. If necessary, mask or tokenize such data.
 - **Parameterized Logging**: Use parameterized logging (`logger.info("User {} logged in", userId);`) instead of string concatenation (`logger.info("User " + userId + " logged in");`) for better performance and readability.
-- **Correlation IDs**: In distributed systems or microservices, include a correlation ID (e.g., via MDC - Mapped Diagnostic Context) in every log message to trace requests across different services.
 - **Log Rotation and Retention**: Configure appropriate log rotation (e.g., daily, by size) and retention policies to manage disk space and comply with data policies.
 
 **Sub-Rule 3.2: Performance Considerations**
@@ -212,26 +211,20 @@ Follow these core practices to ensure logs are useful, maintainable, and perform
 - **Format**: Consider using a structured logging format like JSON for machine-readable logs, especially if logs are centrally aggregated and analyzed.
 - **Consistent Metadata**: Include consistent metadata in log entries (e.g., application name, version, environment).
 - **Context Information**: Add contextual information like thread name, user ID (if available and safe), session ID (if applicable and safe).
-- **MDC for Request Tracking**: Use Mapped Diagnostic Context (MDC) to enrich log messages with request-specific information (like correlation ID, user ID) without passing it through every method call.
 
 **Good example:**
 (Illustrating several core practices)
 ```java
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import java.util.Objects;
 import java.util.UUID;
 
 class TransactionService {
-    // Rule 3.1: Logger Declaration
+
     private static final Logger logger = LoggerFactory.getLogger(TransactionService.class);
 
     public void processTransaction(String transactionId, String userId, String sensitiveData) {
-        // Rule 3.1 & 3.3: MDC for correlation ID and user context
-        MDC.put("correlationId", UUID.randomUUID().toString());
-        MDC.put("userId", userId); // Ensure userId is not PII or is masked if necessary
-
         logger.info("Processing transaction ID: {}", transactionId);
 
         try {
@@ -239,8 +232,6 @@ class TransactionService {
                 throw new IllegalArgumentException("Transaction ID cannot be null or empty.");
             }
 
-            // Rule 3.1: Avoid logging sensitive information directly
-            // Instead of: logger.debug("Sensitive data for tx {}: {}", transactionId, sensitiveData);
             logger.debug("Processing transaction {} with sensitive data (masked/omitted). Hash: {}", transactionId, sensitiveData.hashCode());
 
 
@@ -248,7 +239,6 @@ class TransactionService {
             performStep1(transactionId);
             performStep2(transactionId);
 
-            // Rule 3.2: Guard clause for expensive log message construction (if necessary)
             if (logger.isTraceEnabled()) {
                 logger.trace("Detailed trace for transaction {}: {}", transactionId, generateDetailedTrace());
             }
@@ -256,15 +246,11 @@ class TransactionService {
             logger.info("Transaction {} processed successfully.", transactionId);
 
         } catch (IllegalArgumentException iae) {
-            // Rule 3.1: Exception Logging with context and exception
             logger.warn("Invalid argument for transaction {}: {}", transactionId, iae.getMessage(), iae);
         } catch (Exception e) {
             // Rule 3.1: Exception Logging
             logger.error("Failed to process transaction {}", transactionId, e);
             // Potentially rethrow as a custom business exception
-        } finally {
-            // Rule 3.3: Clear MDC context
-            MDC.clear();
         }
     }
 
@@ -285,7 +271,6 @@ class TransactionService {
     
     public static void main(String args) {
         TransactionService service = new TransactionService();
-        // Logback config would typically set the pattern to include MDC values like %X{correlationId} %X{userId}
         service.processTransaction("TX123", "userA", "secret_credit_card_info");
         service.processTransaction(null, "userB", "some_other_data");
     }
@@ -342,8 +327,6 @@ Proper configuration is key to effective logging.
     - Add the log level (e.g., `%-5level`).
     - Include the logger name or source class (e.g., `%logger{36}`).
     - Add thread information (e.g., `%thread`).
-    - Include correlation ID if used (e.g., `%X{correlationId}`).
-    - Add other relevant contextual data from MDC.
     - **Example Pattern (for Logback/Log4j2)**: ` %d{yyyy-MM-dd HH:mm:ss.SSSXXX} %thread %-5level %logger{36} %X{correlationId} - %msg%n%ex `
       (Note: `%ex` is important for printing stack traces for exceptions passed as the last argument to logging methods)
 
@@ -351,7 +334,7 @@ Proper configuration is key to effective logging.
 (Conceptual Logback configuration snippet - `logback.xml`)
 ```xml
 <!-- This is an XML configuration example, not Java code -->
-<!-- <configuration>
+<configuration>
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%d{yyyy-MM-dd HH:mm:ss.SSSXXX} %thread %-5level %logger{36} %X{correlationId} - %msg%n%ex</pattern>
@@ -377,8 +360,10 @@ Proper configuration is key to effective logging.
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
     </root>
-</configuration> -->
+</configuration>
+```
 
+```java
 // Java code showing how logger names affect output based on the above config
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -413,9 +398,10 @@ public class ConfiguredLoggerExample {
 ```
 **Bad Example:**
 (Conceptual: A logging configuration that is too verbose or missing key information)
+
 ```xml
 <!-- This is an XML configuration example, not Java code -->
-<!-- <configuration>
+<configuration>
     <appender name="STDOUT_BAD" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
             <pattern>%msg%n</pattern> <!-- Bad: Missing timestamp, level, logger, thread -->
@@ -426,8 +412,10 @@ public class ConfiguredLoggerExample {
     <root level="TRACE"> 
         <appender-ref ref="STDOUT_BAD" />
     </root>
-</configuration> -->
+</configuration>
+```
 
+```java
 // Java code consequences
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -445,7 +433,6 @@ public class BadConfigConsequences {
         // Excessive TRACE level floods logs in production.
     }
 }
-
 ```
 
 ## Rule 5: Implement Secure Logging Practices
@@ -460,6 +447,7 @@ Logging can inadvertently expose sensitive information if not handled carefully.
 - **Compliance**: Comply with data protection regulations (e.g., GDPR, HIPAA, CCPA) regarding what can be logged and how long it can be retained.
 
 **Good example:**
+
 ```java
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -510,6 +498,7 @@ public class SecureLogger {
 ```
 
 **Bad Example:**
+
 ```java
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -556,10 +545,10 @@ Proactively use logs to understand application behavior and identify issues.
 
 **Good example:**
 (Conceptual - actual implementation involves external systems)
+
 ```java
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.slf4j.MDC;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -567,16 +556,12 @@ public class MonitoredService {
     private static final Logger logger = LoggerFactory.getLogger(MonitoredService.class);
 
     public void handleApiRequest(String endpoint, String payload) {
-        String correlationId = UUID.randomUUID().toString();
-        MDC.put("correlationId", correlationId);
-        MDC.put("endpoint", endpoint);
-
         try {
-            logger.info("API request received."); // This log, with MDC, goes to a central log aggregator.
+            logger.info("API request received."); 
             
             if (payload.contains("<script>")) {
                 // Log a security-sensitive event that monitoring tools can pick up for alerts.
-                logger.warn("Potential XSS attempt detected in payload for correlationId: {}", correlationId);
+                logger.warn("Potential XSS attempt detected in payload");
                 // Handle error, e.g., return 400 Bad Request
                 return;
             }
@@ -593,8 +578,6 @@ public class MonitoredService {
             // This ERROR log (especially with stack trace) would be a key candidate for alerting.
             logger.error("Unhandled exception during API request.", e); 
             // Respond with 500 Internal Server Error
-        } finally {
-            MDC.clear();
         }
     }
 
@@ -671,6 +654,7 @@ Ensure logging works as expected and doesn't negatively impact the application.
 
 **Good example:**
 (Conceptual example, actual testing might use libraries like Logback's `ListAppender` or dedicated testing utilities)
+
 ```java
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -707,7 +691,7 @@ class ImportantService {
 // import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class LoggingTestExample {
-    /*
+    
     private ListAppender<ILoggingEvent> listAppender;
     private ImportantService service;
 
@@ -763,7 +747,7 @@ public class LoggingTestExample {
         assertThat(logs.get(0).getLevel()).isEqualTo(Level.INFO);
         assertThat(logs.get(0).getFormattedMessage()).contains("Processing data for ID: valid_123");
     }
-    */
+    
     public static void main(String args) {
         System.out.println("This example is conceptual and best run within a JUnit/TestNG test environment.");
         System.out.println("To run, uncomment the JUnit parts and include relevant testing/logback dependencies.");
@@ -778,6 +762,7 @@ public class LoggingTestExample {
 ```
 
 **Bad Example:**
+
 ```java
 // Code that is hard to test for logging behavior
 import org.slf4j.Logger;
