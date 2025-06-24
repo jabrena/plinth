@@ -11,11 +11,11 @@ This collection of Cursor Rules for Java development, tries to enrich the develo
 
 ## How to use the Cursor rules?
 
-Use the Cursor rules is pretty easy, just `drag and drop` the cursor rule than you need into the chat textbox where you are typing the user prompt. Currently, the cursor rules are released with a [manual scope](https://docs.cursor.com/context/rules#rule-type) on purpose by desing to mitigate potential negative performance impact in the communications to Cursor.
+Using the Cursor rules is straightforward: simply `drag and drop` the cursor rule that you need into the chat textbox where you are typing your `User prompt`. Currently, the cursor rules are released with a [manual scope](https://docs.cursor.com/context/rules#rule-type) on purpose by design to mitigate potential negative performance impact in communications with Cursor platform.
 
 ## Cursor Rules
 
-### Build systems rules
+### Build system rules (Maven)
 
 | Cursor Rule | Description | Prompt | Notes |
 |-------------|-------------|--------|-------|
