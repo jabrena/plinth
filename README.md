@@ -9,6 +9,10 @@ Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agen
 
 This collection of Cursor Rules for Java development, tries to enrich the developer experience when the Software engineer interact with LLMs daily.
 
+## How to use the Cursor rules?
+
+Use the Cursor rules is pretty easy, just `drag and drop` the cursor rule than you need into the chat textbox where you are typing the user prompt. Currently, the cursor rules are released with a [manual scope](https://docs.cursor.com/context/rules#rule-type) on purpose by desing to mitigate potential negative performance impact in the communications to Cursor.
+
 ## Cursor Rules
 
 ### Build systems rules
