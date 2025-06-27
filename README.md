@@ -5,9 +5,20 @@
 
 ## Motivation
 
-Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agent model` behaves using reusable and scoped instructions. This repository offers a collection of such Cursor rules specifically for Java development.
+Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agent model` behaves using reusable and scoped instructions. You could see any Cursor rule as a System prompt and this repository provides a collection of Cursor rules designed for Java development.
 
-This collection of Cursor Rules for Java development, tries to enrich the developer experience when the Software engineer interact with LLMs daily.
+## What is a System prompt?
+
+A system prompt is a set of instructions given to an AI model that defines how it should behave, what role it should take on, and what guidelines it should follow when responding to users. Think of it as the "operating manual" that shapes the AI's personality, capabilities, and boundaries.
+
+System prompts typically include:
+
+- Behavioral guidelines - How the AI should communicate (formal vs casual, helpful vs neutral, etc.)
+- Role definition - What the AI is supposed to be (assistant, tutor, creative writer, etc.)
+- Capabilities and limitations - What the AI can and cannot do
+- Safety rules - What topics or requests to avoid
+- Response formatting - How to structure answers, when to use lists, etc.
+- Context and background - Any relevant information about the AI's purpose or the situation
 
 ## How to use the Cursor rules?
 
