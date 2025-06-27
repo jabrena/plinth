@@ -5,7 +5,7 @@
 
 ## Motivation
 
-Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agent model` behaves using reusable and scoped instructions. You could see any Cursor rule as a System prompt and this repository provides a collection of Cursor rules designed for Java development.
+Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agent model` behaves using reusable and scoped instructions. In cursor, the way to do it is named `Cursor rule` and you could see it as a `System prompt` if you use general term. This repository provides a collection of Cursor rules designed for Java development.
 
 ## What is a System prompt?
 
