@@ -6,47 +6,53 @@ Use the following process to improve the java development in some areas if requi
 
 ### Step 1: Review the build system (Maven)
 
-| Activity | Done | Prompt | Notes |
-|----------|------|--------|-------|
-| Review your pom.xml and Maven project | [ ] | `Help me to review the pom.xml  following the best practices for dependency management and directory structure use the cursor rule @110-java-maven-best-practices` | Add in the context the `pom.xml` which you want to generate the documentation |
-| Improve the Maven project with plugins & dependencies | [ ] | `Can you improve the pom.xml using the cursor rule @101-java-maven-deps-and-plugins.mdc` | Add in the context the `pom.xml` which you want to generate the documentation. Conversational approach |
-| Create documentation about Maven`s usage | [ ] | `Generate developer documentation with essential Maven commands using @112-java-maven-documentation.mdc` | Add in the context the `pom.xml` which you want to generate the documentation |
+| Cursor Rule | Description | Prompt | Notes |
+|-------------|-------------|--------|-------|
+| [110-java-maven-best-practices](.cursor/rules/110-java-maven-best-practices.mdc) | Maven Best Practices | `Help me to review the pom.xml following the best practices for dependency management and directory structure use the cursor rule @110-java-maven-best-practices` | Add in the context the `pom.xml` which you want to generate the documentation |
+| [111-java-maven-deps-and-plugins](.cursor/rules/111-java-maven-deps-and-plugins.mdc) | Maven Dependencies & Plugins | `Can you improve the pom.xml using the cursor rule @111-java-maven-deps-and-plugins` | Add in the context the `pom.xml` which you want to generate the documentation. Conversational approach |
+| [112-java-maven-documentation](.cursor/rules/112-java-maven-documentation.mdc) | Maven Documentation | `Generate developer documentation with essential Maven commands using @112-java-maven-documentation` | Add in the context the `pom.xml` which you want to generate the documentation |
 
 ### Step 2: Design Principles
 
-| Activity | Done | Prompt | Notes |
-|----------|------|--------|-------|
-| Object-Oriented Design Review | [ ] | `Review my code for object-oriented design using the cursor rule @121-java-object-oriented-design` | |
-| Type Design Review | [ ] | `Help me improve my type design using the cursor rule @122-java-type-design` | |
+| Cursor Rule | Description | Prompt | Notes |
+|-------------|-------------|--------|-------|
+| [123-java-general-guidelines](.cursor/rules/123-java-general-guidelines.mdc) | General Java Guidelines | `Review my code for general Java best practices using the cursor rule @123-java-general-guidelines` | |
+| [124-java-secure-coding](.cursor/rules/124-java-secure-coding.mdc) | Secure Java Coding | `Check my code for security issues using the cursor rule @124-java-secure-coding` | |
+| [125-java-concurrency](.cursor/rules/125-java-concurrency.mdc) | Concurrency | `Review my code for concurrency best practices using the cursor rule @125-java-concurrency` | |
+| [126-java-logging](.cursor/rules/126-java-logging.mdc) | Logging Guidelines | `Help me improve logging using the cursor rule @126-java-logging` | |
 
 ### Step 3: Coding Guidelines
 
-| Activity | Done | Prompt | Notes |
-|----------|------|--------|-------|
-| General Java Guidelines | [ ] | `Review my code for general Java best practices using the cursor rule @123-java-general-guidelines` | |
-| Secure Coding Review | [ ] | `Check my code for security issues using the cursor rule @124-java-secure-coding` | |
-| Concurrency Review | [ ] | `Review my code for concurrency best practices using the cursor rule @125-java-concurrency` | |
-| Logging Best Practices | [ ] | `Help me improve logging using the cursor rule @126-java-logging` | |
+| Cursor Rule | Description | Prompt | Notes |
+|-------------|-------------|--------|-------|
+| [123-java-general-guidelines](.cursor/rules/123-java-general-guidelines.mdc) | General Java Guidelines | `Review my code for general Java best practices using the cursor rule @123-java-general-guidelines` | |
+| [124-java-secure-coding](.cursor/rules/124-java-secure-coding.mdc) | Secure Java Coding | `Check my code for security issues using the cursor rule @124-java-secure-coding` | |
+| [125-java-concurrency](.cursor/rules/125-java-concurrency.mdc) | Concurrency | `Review my code for concurrency best practices using the cursor rule @125-java-concurrency` | |
+| [126-java-logging](.cursor/rules/126-java-logging.mdc) | Logging Guidelines | `Help me improve logging using the cursor rule @126-java-logging` | |
 
 ### Step 4: Testing
 
-| Activity | Done | Prompt | Notes |
-|----------|------|--------|-------|
-| Unit Testing | [ ] | `Can improve the unit tests using the cursor rule @131-java-unit-testing` | |
+| Cursor Rule | Description | Prompt | Notes |
+|-------------|-------------|--------|-------|
+| [131-java-unit-testing](.cursor/rules/131-java-unit-testing.mdc) | Unit Testing | `Can improve the unit tests using the cursor rule @131-java-unit-testing` | Add in the context a Test Class or the package |
+
 
 ### Step 5: Refactoring
 
-| Activity | Done | Prompt | Notes |
-|----------|------|--------|-------|
-| Add Modern Java Features | [ ] | `Refactor my code to use modern Java features using the cursor rule @141-java-refactoring-with-modern-features` | |
-| Functional Programming | [ ] | `Refactor my code to use functional programming using the cursor rule @142-java-functional-programming` | |
-| Data Oriented Programming | [ ] | `Refactor my code to use data oriented programming using the cursor rule @143-java-data-oriented-programming` | |
+| Cursor Rule | Description | Prompt | Notes |
+|-------------|-------------|--------|-------|
+| [141-java-refactoring-with-modern-features](.cursor/rules/141-java-refactoring-with-modern-features.mdc) | Add Modern Java Features | `Refactor my code to use modern Java features using the cursor rule @141-java-refactoring-with-modern-features` | |
+| [142-java-functional-programming](.cursor/rules/142-java-functional-programming.mdc) | Functional Programming | `Refactor my code to use functional programming using the cursor rule @142-java-functional-programming` | |
+| [143-java-data-oriented-programming](.cursor/rules/143-java-data-oriented-programming.mdc) | Data Oriented Programming | `Refactor my code to use data oriented programming using the cursor rule @143-java-data-oriented-programming` | |
 
 ### Step 6: Profiling
 
-| Activity | Done | Prompt | Notes |
+| Activity | Description | Prompt | Notes |
 |----------|------|--------|-------|
-| Java Application Profiling | [ ] | `Help me profile my Java application using async-profiler. I want to detect running Java processes, download the profiler for my OS, and generate flamegraphs and put the profiler folder in YOUR-DEVELOPMENT/profiler with the cursor rule @151-java-profiling.mdc` | Replace YOUR-DEVELOPMENT with your actual development path |
+| [151-java-profiling-detect](.cursor/rules/151-java-profiling-detect.mdc) | Measure problems | `My Java application has performance issues - help me set up comprehensive profiling process using @151-java-profiling-detect.mdc and use the location YOUR-DEVELOPMENT/profiler` | Replace YOUR-DEVELOPMENT with your actual development path. Example: examples/spring-boot-memory-leak-demo/profiler |
+| [152-java-profiling-analyze](.cursor/rules/152-java-profiling-analyze.mdc) | Analyze results | `Analyze the results located in YOUR-DEVELOPMENT/profiler and use the cursor rule @152-java-profiling-analyze` | Replace YOUR-DEVELOPMENT with your actual development path. Example: examples/spring-boot-memory-leak-demo/profiler |
+| - | Code Refactoring | `Can you apply the solutions from @profiling-solutions-yyyymmdd.md in @/info to mitigate bottlenecks` | Make a refactoring with the notes from the analysis |
+| [154-java-profiling-compare](.cursor/rules/152-java-profiling-compare.mdc) | Analyze results | `Review if the problems was solved with last refactoring using the reports located in @/results with the cursor rule 154-java-profiling-compare.mdc` | Put in the context the folder with the results |
 
 ## Reference Table: Java Cursor Rules
 
@@ -64,7 +70,9 @@ Use the following process to improve the java development in some areas if requi
 | Modern Java Features | @141-java-refactoring-with-modern-features | Refactoring with modern Java (Java 8+) features |
 | Functional Programming | @142-java-functional-programming | Applying functional programming in Java |
 | Data Oriented Programming | @143-java-data-oriented-programming | Data-oriented programming style in Java |
-| Java Profiling | @151-java-profiling | Java application profiling with async-profiler v4.0 |
+| Java Profiling | @151-java-profiling-detect | Generate profiling data |
+| Java Profiling | @152-java-profiling-analyze | Analyze profiling data |
+| Java Profiling | @154-java-profiling-compare | Compare results after refactoring |
 | SQL Guidelines | @500-sql | SQL development best practices |
 
 ## Tips & Best Practices

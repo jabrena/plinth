@@ -108,6 +108,7 @@ The rules was tested with the following examples:
 - [General: Maven Java project](./examples/maven-demo/README.md)
 - [Microservices: Spring Boot application](./examples/spring-boot-demo/implementation/README.md)
 - [Microservices: Spring Boot application with Memory leaks](./examples/spring-boot-memory-leak-demo/README.md)
+- [Microservices: Spring Boot application with Performance Bottleneck](./examples/spring-boot-performance-bottleneck-demo/README.md)
 - [Serverless: AWS Lambda](./examples/aws-lambda-hello-world/README.md)
 - [Serverless: Azure Function](./examples/azure-function-hello-world/README.md)
 
