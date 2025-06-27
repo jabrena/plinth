@@ -40,4 +40,6 @@ http://localhost:8080/swagger-ui/index.html
 
 
 jwebserver -p 8005 -d "$(pwd)/examples/spring-boot-memory-leak-demo/profiler/results"
+
+My Java application has performance issues - help me set up comprehensive profiling process using @151-java-profiling-detect.mdc and use the location examples/spring-boot-memory-leak-demo/profiler
 ``` 

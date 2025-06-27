@@ -1,3 +1,4 @@
+```bash
 #!/bin/bash
 
 # java-profile.sh - Automated Java profiling script
@@ -565,3 +566,4 @@ while true; do
     echo -e "${BLUE}Press Enter to continue or Ctrl+C to exit...${NC}"
     read -p ""
 done 
+```
