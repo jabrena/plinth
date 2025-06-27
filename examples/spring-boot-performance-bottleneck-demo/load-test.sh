@@ -7,10 +7,10 @@ set -e
 
 # Configuration
 BASE_URL="http://localhost:8080/api/search"
-COLLEAGUES_URL="$BASE_URL/bad/users-with-colleagues"
-PERMISSIONS_URL="$BASE_URL/bad/active-users-with-permissions"
-SIMILAR_URL="$BASE_URL/bad/similar-users"
-TEAM_URL="$BASE_URL/bad/team-formation"
+COLLEAGUES_URL="$BASE_URL/optimized/users-with-colleagues"
+PERMISSIONS_URL="$BASE_URL/optimized/active-users-with-permissions"
+SIMILAR_URL="$BASE_URL/optimized/similar-users"
+TEAM_URL="$BASE_URL/optimized/team-formation"
 TOTAL_REQUESTS=100
 CONCURRENT_REQUESTS=3
 OUTPUT_DIR="load_test_results"
