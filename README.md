@@ -64,7 +64,7 @@ Using the Cursor rules is straightforward: simply `drag and drop` the cursor rul
 | [142-java-functional-programming](.cursor/rules/142-java-functional-programming.mdc) | Functional Programming | `Refactor my code to use functional programming using the cursor rule @142-java-functional-programming` | |
 | [143-java-data-oriented-programming](.cursor/rules/143-java-data-oriented-programming.mdc) | Data Oriented Programming | `Refactor my code to use data oriented programming using the cursor rule @143-java-data-oriented-programming` | |
 
-### Profiling rule
+### Profiling rules
 
 | Activity | Description | Prompt | Notes |
 |----------|------|--------|-------|
