@@ -86,6 +86,10 @@ Type the following prompt in the cursor chat:
 Create an java development guide using the cursor rule @100-java-checklist-guide
 ```
 
+## Changelog
+
+- Review the [CHANGELOG](./CHANGELOG.md) for further details
+
 ## Examples
 
 The rules was tested with the following examples:
