@@ -1,0 +1,150 @@
+---
+description: 
+globs: 
+alwaysApply: false
+---
+# Run performance tests based on JMeter
+
+## ⚠️ CRITICAL INSTRUCTION FOR AI ASSISTANTS ⚠️
+
+**WHEN USING THE PERFORMANCE SCRIPT TEMPLATE:**
+- **COPY THE BASH SCRIPT EXACTLY** from `java-performance-script-template.md`
+- **NO MODIFICATIONS, INTERPRETATIONS, OR ENHANCEMENTS** allowed
+- **USE EVERY LINE VERBATIM** - do not change logic, structure, or features
+- **DO NOT CREATE YOUR OWN VERSION** - use the provided template only
+- The template script is complete, tested, and production-ready
+
+---
+
+## 📋 How to Copy the Performance Script Template
+
+### Step 1: Create the Script File
+When a user requests JMeter performance testing setup:
+
+1. **Copy the entire script** from `.cursor/rules/templates/java-performance-script-template.md`
+2. **Create the file** as `run-jmeter.sh` in the project root
+3. **Make it executable**: `chmod +x run-jmeter.sh`
+
+### Step 2: Template Location
+- **Source**: `.cursor/rules/templates/java-performance-script-template.md`
+- **Destination**: `run-jmeter.sh` (project root)
+- **Copy Method**: Exact verbatim copy - no changes allowed
+
+---
+
+## 🚀 Script Usage Instructions
+
+### Basic Usage
+```bash
+# Run with default settings (1000 loops, 1 thread, 1s ramp-up)
+./run-jmeter.sh
+
+# Custom configuration
+./run-jmeter.sh -l 500 -t 10 -r 30
+
+# Open JMeter GUI
+./run-jmeter.sh -g
+```
+
+### Available Options
+- `-l, --loops LOOPS`: Number of loops per thread (default: 1000)
+- `-t, --threads THREADS`: Number of concurrent threads (default: 1)
+- `-r, --ramp-up SECONDS`: Ramp-up period in seconds (default: 1)
+- `-g, --gui`: Open JMeter GUI instead of running in non-GUI mode
+- `-h, --help`: Show detailed help message
+
+### Environment Variables
+```bash
+# Override defaults using environment variables
+JMETER_LOOPS=500 JMETER_THREADS=5 ./run-jmeter.sh
+
+# Or export them
+export JMETER_LOOPS=1000
+export JMETER_THREADS=10
+export JMETER_RAMP_UP=30
+./run-jmeter.sh
+```
+
+### Example Scenarios
+```bash
+# Light load test
+./run-jmeter.sh -l 100 -t 1 -r 1
+
+# Medium load test
+./run-jmeter.sh -l 500 -t 5 -r 10
+
+# Heavy load test
+./run-jmeter.sh -l 1000 -t 20 -r 60
+
+# Quick GUI setup
+./run-jmeter.sh -g
+```
+
+---
+
+## 📁 Required Project Structure
+
+The script expects this structure:
+```
+project-root/
+├── run-jmeter.sh                          # The performance script
+├── src/test/resources/jmeter/
+│   └── load-test.jmx                      # JMeter test plan
+└── target/                                # Generated reports (auto-created)
+    ├── jmeter-results.jtl                 # Raw results
+    ├── jmeter-report/                     # HTML dashboard
+    │   └── index.html                     # Main report
+    └── jmeter.log                         # Execution log
+```
+
+---
+
+## 🔧 Prerequisites
+
+1. **JMeter Installation**: Must be installed and available in PATH
+2. **Test Plan**: Must exist at `src/test/resources/jmeter/load-test.jmx`
+3. **Executable Permissions**: Script must be executable (`chmod +x run-jmeter.sh`)
+
+---
+
+## 📊 Output Files
+
+After running the script, you'll get:
+
+1. **Raw Results**: `target/jmeter-results.jtl` (JTL format)
+2. **HTML Dashboard**: `target/jmeter-report/index.html` (automatically opens in browser)
+3. **Execution Log**: `jmeter.log` (debugging information)
+
+---
+
+## 💡 Best Practices
+
+### For Load Testing
+- Start with low thread counts and gradually increase
+- Monitor system resources during tests
+- Use realistic ramp-up periods (don't slam the server)
+
+### For Test Plan Development
+- Use GUI mode (`-g`) for initial test plan creation
+- Test with low load first (`-l 10 -t 1`)
+- Validate test plan logic before heavy load testing
+
+### For CI/CD Integration
+```bash
+# Example CI/CD usage
+./run-jmeter.sh -l 100 -t 5 -r 10
+# Check exit code for pass/fail status
+```
+
+---
+
+## 🚨 Important Notes
+
+- The script automatically cleans previous results
+- HTML reports open automatically in your default browser
+- All configuration is parameterized - no hardcoded values
+- The script provides colored output for better visibility
+- Comprehensive error handling and validation included
+
+---
+

@@ -57,7 +57,13 @@ Using the Cursor rules is straightforward: simply `drag and drop` the cursor rul
 | [142-java-functional-programming](.cursor/rules/142-java-functional-programming.mdc) | Functional Programming | `Refactor my code to use functional programming using the cursor rule @142-java-functional-programming` | |
 | [143-java-data-oriented-programming](.cursor/rules/143-java-data-oriented-programming.mdc) | Data Oriented Programming | `Refactor my code to use data oriented programming using the cursor rule @143-java-data-oriented-programming` | |
 
-### Profiling rules
+### Performance rule (Jmeter)
+
+| Activity | Description | Prompt | Notes |
+|----------|------|--------|-------|
+| [151-java-performance-jmeter](.cursor/rules/151-java-performance-jmeter.mdc) | Run a peformance test with Jmeter | `Add JMeter performance testing to this project using @151-java-performance-jmeter.mdc` | You could ask the model to create a JMeter based on a RestController/Resource |
+
+### Profiling rules (Async profiler)
 
 | Activity | Description | Prompt | Notes |
 |----------|------|--------|-------|

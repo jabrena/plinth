@@ -1,3 +1,4 @@
+```bash
 #!/bin/bash
 
 # JMeter Load Test Script
@@ -248,4 +249,5 @@ main() {
 }
 
 # Execute main function
-main "$@" 
+main "$@"
+```
