@@ -13,7 +13,9 @@ A system prompt is a set of instructions given to an AI model that defines how i
 
 ## How to use the Cursor rules?
 
-Using the Cursor rules is straightforward: simply `drag and drop` the cursor rule that you need into the chat textbox where you are typing your `User prompt`. Currently, the cursor rules are released with a [manual scope](https://docs.cursor.com/context/rules#rule-type) on purpose by design to mitigate potential negative performance impact in communications with Cursor platform.
+Using the Cursor rules is straightforward: simply `drag and drop` the cursor rule that you need into the chat textbox where you are typing your `User prompt`.
+
+⚠️ Currently, the cursor rules are released with the [manual scope](https://docs.cursor.com/context/rules#rule-type) on purpose by design to mitigate potential negative performance impact in communications with **The Cursor platform**.
 
 ## Cursor Rules
 
