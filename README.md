@@ -11,18 +11,11 @@ Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agen
 
 A system prompt is a set of instructions given to an AI model that defines how it should behave, what role it should take on, and what guidelines it should follow when responding to users. Think of it as the "operating manual" that shapes the AI's personality, capabilities, and boundaries.
 
-System prompts typically include:
-
-- Behavioral guidelines - How the AI should communicate (formal vs casual, helpful vs neutral, etc.)
-- Role definition - What the AI is supposed to be (assistant, tutor, creative writer, etc.)
-- Capabilities and limitations - What the AI can and cannot do
-- Safety rules - What topics or requests to avoid
-- Response formatting - How to structure answers, when to use lists, etc.
-- Context and background - Any relevant information about the AI's purpose or the situation
-
 ## How to use the Cursor rules?
 
-Using the Cursor rules is straightforward: simply `drag and drop` the cursor rule that you need into the chat textbox where you are typing your `User prompt`. Currently, the cursor rules are released with a [manual scope](https://docs.cursor.com/context/rules#rule-type) on purpose by design to mitigate potential negative performance impact in communications with Cursor platform.
+Using the Cursor rules is straightforward: simply `drag and drop` the cursor rule that you need into the chat textbox where you are typing your `User prompt`.
+
+⚠️ Currently, the cursor rules are released with the [manual scope](https://docs.cursor.com/context/rules#rule-type) on purpose by design to mitigate potential negative performance impact in communications with **The Cursor platform**.
 
 ## Cursor Rules
 

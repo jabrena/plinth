@@ -5,6 +5,27 @@ alwaysApply: false
 ---
 # Java Profiling Workflow / Step 4 / Compare results after refactoring
 
+## System prompt characterization
+
+Role definition: You are a Senior software engineer with extensive experience in Java software development
+
+## Description
+
+This cursor rule provides a comprehensive methodology for comparing Java profiling results before and after performance optimizations or refactoring efforts. It serves as the fourth step in the structured profiling workflow, focusing on quantifying the effectiveness of performance improvements and validating that optimizations achieved their intended goals.
+
+The rule establishes a rigorous comparison framework that ensures accurate measurement of performance changes by maintaining consistent testing conditions, measurement techniques, and analysis criteria. It provides systematic approaches for generating post-refactoring profiling data and comparing it against baseline measurements to quantify improvements.
+
+Key capabilities include:
+- **Baseline Validation**: Ensures proper baseline profiling data collection before implementing changes
+- **Controlled Re-testing**: Standardized process for generating comparable post-refactoring profiling data under identical conditions
+- **Quantitative Comparison**: Structured metrics for measuring performance improvements across CPU usage, memory allocation, GC pressure, and threading efficiency
+- **Visual Analysis Framework**: Systematic approach to comparing flamegraphs side-by-side to identify resolved hotspots and remaining issues
+- **Documentation Templates**: Standardized formats for documenting comparison results, including before/after metrics, visual evidence, and improvement validation
+- **Regression Detection**: Methods for identifying unintended performance regressions introduced during optimization efforts
+- **Success Validation**: Clear criteria for determining whether performance optimization goals were achieved
+
+The rule ensures that performance optimization efforts are properly validated through rigorous before/after comparison, providing quantifiable evidence of improvements and identifying areas that may require additional attention or follow-up optimization work.
+
 ## Project Organization
 
 The profiling setup uses a clean folder structure with everything contained in the profiler directory:
@@ -18,8 +39,8 @@ your-project/
     │   ├── *.html          # ← Flamegraph files
     │   └── *.jfr           # ← JFR recording files
     ├── docs/               # ← Analysis documentation
-    │   ├── profiling-comparison-analysis.md
-    │   └── profiling-final-results.md
+    │   ├── profiling-comparison-analysis-YYYYMMDD.md
+    │   └── profiling-final-results-YYYYMMDD.md
     ├── current/            # ← Symlink to current profiler version
     └── async-profiler-*/   # ← Downloaded profiler binaries
 ```
@@ -112,13 +133,16 @@ open profiler/results/memory-leak-*after*.html
 
 ### Phase 4: Documentation Creation
 
+**Note**: All documentation files are created with date suffixes (YYYYMMDD format) to enable tracking multiple profiling sessions and maintain historical analysis records.
+
 #### Step 1: Create Comparison Analysis Document
 ```bash
-# Create the comparison analysis document
-touch profiler/docs/profiling-comparison-analysis.md
+# Create the comparison analysis document with date suffix
+DATE_SUFFIX=$(date +%Y%m%d)
+touch profiler/docs/profiling-comparison-analysis-${DATE_SUFFIX}.md
 ```
 
-Template for `profiler/docs/profiling-comparison-analysis.md`:
+Template for `profiler/docs/profiling-comparison-analysis-YYYYMMDD.md`:
 ```markdown
 # Profiling Comparison Analysis - [Date]
 
@@ -161,7 +185,45 @@ Template for `profiler/docs/profiling-comparison-analysis.md`:
 
 #### Step 2: Create Final Results Summary
 ```bash
-touch profiler/docs/profiling-final-results.md
+# Create the final results summary document with date suffix
+DATE_SUFFIX=$(date +%Y%m%d)
+touch profiler/docs/profiling-final-results-${DATE_SUFFIX}.md
+```
+
+Template for `profiler/docs/profiling-final-results-YYYYMMDD.md`:
+```markdown
+# Profiling Final Results - [Date]
+
+## Summary
+- **Analysis Date**: [Date of analysis]
+- **Performance Objective**: [What was being optimized]
+- **Status**: [Complete/Ongoing/Failed]
+
+## Key Metrics Summary
+| Performance Area | Before | After | Improvement |
+|------------------|---------|-------|-------------|
+| Memory Usage | [value] | [value] | [%] |
+| CPU Usage | [value] | [value] | [%] |
+| Response Time | [value] | [value] | [%] |
+| Throughput | [value] | [value] | [%] |
+
+## Critical Issues Resolved
+1. **[Issue Name]**: [Description and resolution]
+2. **[Issue Name]**: [Description and resolution]
+
+## Production Readiness
+- [ ] Performance targets met
+- [ ] No regressions introduced
+- [ ] Load testing completed
+- [ ] Monitoring alerts configured
+
+## Next Steps
+1. [Action item 1]
+2. [Action item 2]
+
+## Related Documents
+- Analysis: `profiling-comparison-analysis-YYYYMMDD.md`
+- Reports: `../results/[report-files]`
 ```
 
 ### Phase 5: Troubleshooting Missing Reports
@@ -256,8 +318,8 @@ ls profiler/results/ | grep -E "(after|refactoring)" | wc -l  # Should be > 0
 - [ ] Visual evidence documented with specific file references
 
 ### Documentation Deliverables
-- [ ] `profiler/docs/profiling-comparison-analysis.md` created
-- [ ] `profiler/docs/profiling-final-results.md` created  
+- [ ] `profiler/docs/profiling-comparison-analysis-YYYYMMDD.md` created
+- [ ] `profiler/docs/profiling-final-results-YYYYMMDD.md` created  
 - [ ] Quantified performance improvements documented
 - [ ] Recommendations for production deployment provided
 - [ ] Ongoing monitoring strategy defined
@@ -268,8 +330,8 @@ ls profiler/results/ | grep -E "(after|refactoring)" | wc -l  # Should be > 0
 echo "=== COMPARISON READINESS CHECK ==="
 echo "Baseline reports: $(ls profiler/results/*baseline* 2>/dev/null | wc -l)"
 echo "After reports: $(ls profiler/results/*after* 2>/dev/null | wc -l)"  
-echo "Analysis docs: $(ls profiler/docs/profiling-*analysis* 2>/dev/null | wc -l)"
-echo "Final results: $(ls profiler/docs/profiling-final* 2>/dev/null | wc -l)"
+echo "Analysis docs: $(ls profiler/docs/profiling-comparison-analysis-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].md 2>/dev/null | wc -l)"
+echo "Final results: $(ls profiler/docs/profiling-final-results-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].md 2>/dev/null | wc -l)"
 ```
 
 ## Quick Start Commands

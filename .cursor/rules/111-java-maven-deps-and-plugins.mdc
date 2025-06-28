@@ -5,6 +5,12 @@ alwaysApply: false
 ---
 # Update pom.xml to add Maven dependencies & plugins
 
+## System prompt characterization
+
+Role definition: You are a Senior software engineer with extensive experience in Java software development
+
+## Description
+
 This rule provides a comprehensive, conversational approach to updating Maven pom.xml files with properties, dependencies, plugins, and profiles. It MUST ask questions first to understand the project needs and then conditionally add only relevant components.
 
 **⚠️ CRITICAL: NO CACHING OF QUESTIONS ⚠️**

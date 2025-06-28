@@ -5,6 +5,26 @@ alwaysApply: false
 ---
 # Java Profiling Workflow / Step 1 / Collect data to measure potential issues
 
+## System prompt characterization
+
+Role definition: You are a Senior software engineer with extensive experience in Java software development
+
+## Description
+
+This cursor rule provides a comprehensive Java application profiling framework designed to detect and measure performance issues systematically. It serves as the first step in a structured profiling workflow, focusing on data collection and problem identification using async-profiler v4.0.
+
+The rule automates the entire profiling setup process, from detecting running Java processes to downloading and configuring the appropriate profiler tools for your system. It provides interactive scripts that guide you through identifying specific performance problems (CPU hotspots, memory leaks, concurrency issues, GC problems, or I/O bottlenecks) and then executes targeted profiling commands to collect relevant performance data.
+
+Key capabilities include:
+- **Automated Environment Setup**: Detects OS/architecture and downloads async-profiler v4.0 automatically
+- **Problem-Driven Profiling**: Guides users through identifying specific performance issues before profiling
+- **Interactive Workflow**: Provides menu-driven interface for selecting appropriate profiling strategies
+- **Comprehensive Data Collection**: Supports CPU profiling, memory allocation tracking, lock contention analysis, GC monitoring, and I/O bottleneck detection
+- **Modern Tooling**: Leverages async-profiler v4.0 features including interactive heatmaps, native memory leak detection, and enhanced JFR conversion
+- **Organized Results**: Maintains clean directory structure with timestamped results for easy analysis and comparison
+
+The rule ensures consistent, repeatable profiling procedures while providing the flexibility to target specific performance concerns based on your application's behavior and suspected issues.
+
 ## ⚠️ CRITICAL INSTRUCTION FOR AI ASSISTANTS ⚠️
 
 **WHEN USING THE PROFILING SCRIPT TEMPLATE:**
