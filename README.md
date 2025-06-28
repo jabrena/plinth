@@ -57,14 +57,20 @@ Using the Cursor rules is straightforward: simply `drag and drop` the cursor rul
 | [142-java-functional-programming](.cursor/rules/142-java-functional-programming.mdc) | Functional Programming | `Refactor my code to use functional programming using the cursor rule @142-java-functional-programming` | |
 | [143-java-data-oriented-programming](.cursor/rules/143-java-data-oriented-programming.mdc) | Data Oriented Programming | `Refactor my code to use data oriented programming using the cursor rule @143-java-data-oriented-programming` | |
 
-### Profiling rules
+### Performance rule (Jmeter)
 
 | Activity | Description | Prompt | Notes |
 |----------|------|--------|-------|
-| [151-java-profiling-detect](.cursor/rules/151-java-profiling-detect.mdc) | Measure problems | `My Java application has performance issues - help me set up comprehensive profiling process using @151-java-profiling-detect.mdc and use the location YOUR-DEVELOPMENT/profiler` | Replace YOUR-DEVELOPMENT with your actual development path. Example: examples/spring-boot-memory-leak-demo/profiler |
-| [152-java-profiling-analyze](.cursor/rules/152-java-profiling-analyze.mdc) | Analyze results | `Analyze the results located in YOUR-DEVELOPMENT/profiler and use the cursor rule @152-java-profiling-analyze` | Replace YOUR-DEVELOPMENT with your actual development path. Example: examples/spring-boot-memory-leak-demo/profiler |
+| [151-java-performance-jmeter](.cursor/rules/151-java-performance-jmeter.mdc) | Run a peformance test with Jmeter | `Add JMeter performance testing to this project using @151-java-performance-jmeter.mdc` | You could ask the model to create a JMeter based on a RestController/Resource |
+
+### Profiling rules (Async profiler)
+
+| Activity | Description | Prompt | Notes |
+|----------|------|--------|-------|
+| [161-java-profiling-detect](.cursor/rules/161-java-profiling-detect.mdc) | Measure problems | `My Java application has performance issues - help me set up comprehensive profiling process using @161-java-profiling-detect.mdc and use the location YOUR-DEVELOPMENT/profiler` | Replace YOUR-DEVELOPMENT with your actual development path. Example: examples/spring-boot-memory-leak-demo/profiler |
+| [162-java-profiling-analyze](.cursor/rules/162-java-profiling-analyze.mdc) | Analyze results | `Analyze the results located in YOUR-DEVELOPMENT/profiler and use the cursor rule @162-java-profiling-analyze` | Replace YOUR-DEVELOPMENT with your actual development path. Example: examples/spring-boot-memory-leak-demo/profiler |
 | - | Code Refactoring | `Can you apply the solutions from @profiling-solutions-yyyymmdd.md in @/info to mitigate bottlenecks` | Make a refactoring with the notes from the analysis |
-| [154-java-profiling-compare](.cursor/rules/152-java-profiling-compare.mdc) | Analyze results | `Review if the problems was solved with last refactoring using the reports located in @/results with the cursor rule 154-java-profiling-compare.mdc` | Put in the context the folder with the results |
+| [164-java-profiling-compare](.cursor/rules/164-java-profiling-compare.mdc) | Analyze results | `Review if the problems was solved with last refactoring using the reports located in @/results with the cursor rule 154-java-profiling-compare.mdc` | Put in the context the folder with the results |
 
 ## Getting started
 
@@ -102,6 +108,7 @@ The rules was tested with the following examples:
 - [Microservices: Spring Boot application](./examples/spring-boot-demo/implementation/README.md)
 - [Microservices: Spring Boot application with Memory leaks](./examples/spring-boot-memory-leak-demo/README.md)
 - [Microservices: Spring Boot application with Performance Bottleneck](./examples/spring-boot-performance-bottleneck-demo/README.md)
+- [Microservices: Spring Boot application with JMeter Load Testing](./examples/spring-boot-jmeter-demo/README.md)
 - [Serverless: AWS Lambda](./examples/aws-lambda-hello-world/README.md)
 - [Serverless: Azure Function](./examples/azure-function-hello-world/README.md)
 
@@ -138,3 +145,5 @@ If you have new ideas to improve any of the current Cursor rules or add a new on
 - https://github.com/jabrena/plantuml-to-png-cli
 - https://github.com/jabrena/setup-cli
 - https://github.com/jabrena/jbang-catalog
+
+Powered by [Cursor](https://www.cursor.com/)

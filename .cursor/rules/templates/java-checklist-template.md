@@ -36,7 +36,6 @@ Use the following process to improve the java development in some areas if requi
 |-------------|-------------|--------|-------|
 | [131-java-unit-testing](.cursor/rules/131-java-unit-testing.mdc) | Unit Testing | `Can improve the unit tests using the cursor rule @131-java-unit-testing` | Add in the context a Test Class or the package |
 
-
 ### Step 5: Refactoring
 
 | Cursor Rule | Description | Prompt | Notes |
@@ -45,14 +44,20 @@ Use the following process to improve the java development in some areas if requi
 | [142-java-functional-programming](.cursor/rules/142-java-functional-programming.mdc) | Functional Programming | `Refactor my code to use functional programming using the cursor rule @142-java-functional-programming` | |
 | [143-java-data-oriented-programming](.cursor/rules/143-java-data-oriented-programming.mdc) | Data Oriented Programming | `Refactor my code to use data oriented programming using the cursor rule @143-java-data-oriented-programming` | |
 
-### Step 6: Profiling
+### Step 6: Performance (Jmeter)
 
 | Activity | Description | Prompt | Notes |
 |----------|------|--------|-------|
-| [151-java-profiling-detect](.cursor/rules/151-java-profiling-detect.mdc) | Measure problems | `My Java application has performance issues - help me set up comprehensive profiling process using @151-java-profiling-detect.mdc and use the location YOUR-DEVELOPMENT/profiler` | Replace YOUR-DEVELOPMENT with your actual development path. Example: examples/spring-boot-memory-leak-demo/profiler |
-| [152-java-profiling-analyze](.cursor/rules/152-java-profiling-analyze.mdc) | Analyze results | `Analyze the results located in YOUR-DEVELOPMENT/profiler and use the cursor rule @152-java-profiling-analyze` | Replace YOUR-DEVELOPMENT with your actual development path. Example: examples/spring-boot-memory-leak-demo/profiler |
+| [151-java-performance-jmeter](.cursor/rules/151-java-performance-jmeter.mdc) | Run a peformance test with Jmeter | `Add JMeter performance testing to this project using @151-java-performance-jmeter.mdc` | You could ask the model to create a JMeter based on a RestController/Resource |
+
+### Step 7: Profiling (Async profiler)
+
+| Activity | Description | Prompt | Notes |
+|----------|------|--------|-------|
+| [161-java-profiling-detect](.cursor/rules/161-java-profiling-detect.mdc) | Measure problems | `My Java application has performance issues - help me set up comprehensive profiling process using @151-java-profiling-detect.mdc and use the location YOUR-DEVELOPMENT/profiler` | Replace YOUR-DEVELOPMENT with your actual development path. Example: examples/spring-boot-memory-leak-demo/profiler |
+| [162-java-profiling-analyze](.cursor/rules/162-java-profiling-analyze.mdc) | Analyze results | `Analyze the results located in YOUR-DEVELOPMENT/profiler and use the cursor rule @152-java-profiling-analyze` | Replace YOUR-DEVELOPMENT with your actual development path. Example: examples/spring-boot-memory-leak-demo/profiler |
 | - | Code Refactoring | `Can you apply the solutions from @profiling-solutions-yyyymmdd.md in @/info to mitigate bottlenecks` | Make a refactoring with the notes from the analysis |
-| [154-java-profiling-compare](.cursor/rules/152-java-profiling-compare.mdc) | Analyze results | `Review if the problems was solved with last refactoring using the reports located in @/results with the cursor rule 154-java-profiling-compare.mdc` | Put in the context the folder with the results |
+| [164-java-profiling-compare](.cursor/rules/162-java-profiling-compare.mdc) | Analyze results | `Review if the problems was solved with last refactoring using the reports located in @/results with the cursor rule 154-java-profiling-compare.mdc` | Put in the context the folder with the results |
 
 ## Reference Table: Java Cursor Rules
 
@@ -70,10 +75,10 @@ Use the following process to improve the java development in some areas if requi
 | Modern Java Features | @141-java-refactoring-with-modern-features | Refactoring with modern Java (Java 8+) features |
 | Functional Programming | @142-java-functional-programming | Applying functional programming in Java |
 | Data Oriented Programming | @143-java-data-oriented-programming | Data-oriented programming style in Java |
-| Java Profiling | @151-java-profiling-detect | Generate profiling data |
-| Java Profiling | @152-java-profiling-analyze | Analyze profiling data |
-| Java Profiling | @154-java-profiling-compare | Compare results after refactoring |
-| SQL Guidelines | @500-sql | SQL development best practices |
+| Performance testing | @151-java-performance-jmeter | Run a Jmeter script |
+| Java Profiling | @161-java-profiling-detect | Generate profiling data |
+| Java Profiling | @162-java-profiling-analyze | Analyze profiling data |
+| Java Profiling | @164-java-profiling-compare | Compare results after refactoring |
 
 ## Tips & Best Practices
 
