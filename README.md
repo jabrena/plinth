@@ -5,9 +5,20 @@
 
 ## Motivation
 
-Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agent model` behaves using reusable and scoped instructions. This repository offers a collection of such Cursor rules specifically for Java development.
+Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agent model` behaves using reusable and scoped instructions. In cursor, the way to do it is named `Cursor rule` and you could see it as a `System prompt` if you use a generic term. This repository provides a collection of Cursor rules designed for Java development.
 
-This collection of Cursor Rules for Java development, tries to enrich the developer experience when the Software engineer interact with LLMs daily.
+## What is a System prompt?
+
+A system prompt is a set of instructions given to an AI model that defines how it should behave, what role it should take on, and what guidelines it should follow when responding to users. Think of it as the "operating manual" that shapes the AI's personality, capabilities, and boundaries.
+
+System prompts typically include:
+
+- Behavioral guidelines - How the AI should communicate (formal vs casual, helpful vs neutral, etc.)
+- Role definition - What the AI is supposed to be (assistant, tutor, creative writer, etc.)
+- Capabilities and limitations - What the AI can and cannot do
+- Safety rules - What topics or requests to avoid
+- Response formatting - How to structure answers, when to use lists, etc.
+- Context and background - Any relevant information about the AI's purpose or the situation
 
 ## How to use the Cursor rules?
 
@@ -53,13 +64,14 @@ Using the Cursor rules is straightforward: simply `drag and drop` the cursor rul
 | [142-java-functional-programming](.cursor/rules/142-java-functional-programming.mdc) | Functional Programming | `Refactor my code to use functional programming using the cursor rule @142-java-functional-programming` | |
 | [143-java-data-oriented-programming](.cursor/rules/143-java-data-oriented-programming.mdc) | Data Oriented Programming | `Refactor my code to use data oriented programming using the cursor rule @143-java-data-oriented-programming` | |
 
-### Profiling rule
+### Profiling rules
 
 | Activity | Description | Prompt | Notes |
 |----------|------|--------|-------|
-| [151-java-profiling](.cursor/rules/151-java-profiling.mdc) | Performance Profiling with async-profiler | `Help me profile my Java application using async-profiler. I want to detect running Java processes, download the profiler for my OS, and generate flamegraphs and put the profiler folder in YOUR-DEVELOPMENT/profiler with the cursor rule @151-java-profiling.mdc` | Replace YOUR-DEVELOPMENT with your actual development path |
-| | What reports to ask to detect Memory leaks| `Given the different options from the script, what option do you recommend how to detect a potential memory leak?` | Add in the context the options from `java-profile.sh` |
-| | Analyze profiling results | `Given the following reports, can you identify potential issues in the profiling reports  in html located in @/results to fix the development located in @/src but not refactor any class.` |  |
+| [151-java-profiling-detect](.cursor/rules/151-java-profiling-detect.mdc) | Measure problems | `My Java application has performance issues - help me set up comprehensive profiling process using @151-java-profiling-detect.mdc and use the location YOUR-DEVELOPMENT/profiler` | Replace YOUR-DEVELOPMENT with your actual development path. Example: examples/spring-boot-memory-leak-demo/profiler |
+| [152-java-profiling-analyze](.cursor/rules/152-java-profiling-analyze.mdc) | Analyze results | `Analyze the results located in YOUR-DEVELOPMENT/profiler and use the cursor rule @152-java-profiling-analyze` | Replace YOUR-DEVELOPMENT with your actual development path. Example: examples/spring-boot-memory-leak-demo/profiler |
+| - | Code Refactoring | `Can you apply the solutions from @profiling-solutions-yyyymmdd.md in @/info to mitigate bottlenecks` | Make a refactoring with the notes from the analysis |
+| [154-java-profiling-compare](.cursor/rules/152-java-profiling-compare.mdc) | Analyze results | `Review if the problems was solved with last refactoring using the reports located in @/results with the cursor rule 154-java-profiling-compare.mdc` | Put in the context the folder with the results |
 
 ## Getting started
 
@@ -85,6 +97,10 @@ Type the following prompt in the cursor chat:
 Create an java development guide using the cursor rule @100-java-checklist-guide
 ```
 
+## Changelog
+
+- Review the [CHANGELOG](./CHANGELOG.md) for further details
+
 ## Examples
 
 The rules was tested with the following examples:
@@ -92,6 +108,7 @@ The rules was tested with the following examples:
 - [General: Maven Java project](./examples/maven-demo/README.md)
 - [Microservices: Spring Boot application](./examples/spring-boot-demo/implementation/README.md)
 - [Microservices: Spring Boot application with Memory leaks](./examples/spring-boot-memory-leak-demo/README.md)
+- [Microservices: Spring Boot application with Performance Bottleneck](./examples/spring-boot-performance-bottleneck-demo/README.md)
 - [Serverless: AWS Lambda](./examples/aws-lambda-hello-world/README.md)
 - [Serverless: Azure Function](./examples/azure-function-hello-world/README.md)
 

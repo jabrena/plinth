@@ -35,3 +35,5 @@ jobs:
         run: cd examples/azure-function-hello-world && ./mvnw --batch-mode --no-transfer-progress package --file pom.xml
       - name: Spring Boot Memory Leak build
         run: cd examples/spring-boot-memory-leak-demo && ./mvnw --batch-mode --no-transfer-progress package --file pom.xml
+      - name: Spring Boot Performance Bottleneck build
+        run: cd examples/spring-boot-performance-bottleneck-demo && ./mvnw --batch-mode --no-transfer-progress package --file pom.xml
