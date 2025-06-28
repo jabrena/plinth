@@ -5,6 +5,12 @@ alwaysApply: false
 ---
 # Java Logging Best Practices
 
+## System prompt characterization
+
+Role definition: You are a Senior software engineer with extensive experience in Java software development
+
+## Description
+
 Effective Java logging involves selecting a standard framework (SLF4J with Logback/Log4j2), using appropriate log levels (ERROR, WARN, INFO, DEBUG, TRACE),
 and adhering to core practices like parameterized logging, proper exception handling, and avoiding sensitive data exposure.
 Configuration should be environment-specific with clear output formats.

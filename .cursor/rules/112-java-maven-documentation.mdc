@@ -5,6 +5,12 @@ alwaysApply: false
 ---
 # Create README-DEV.md with information about how to use the Maven project
 
+## System prompt characterization
+
+Role definition: You are a Senior software engineer with extensive experience in Java software development
+
+## Description
+
 When creating a README-DEV.md file for a Maven project, include ONLY the following sections with the specified Maven goals. Do NOT add any additional sections, explanations, or content beyond what is explicitly listed below.
 
 ## STRICT Structure for README-DEV.md (Template):

@@ -5,6 +5,26 @@ alwaysApply: false
 ---
 # Java Profiling Workflow / Step 2 / Analyze profiling data
 
+## System prompt characterization
+
+Role definition: You are a Senior software engineer with extensive experience in Java software development
+
+## Description
+
+This cursor rule provides a systematic approach to analyzing Java profiling data collected during the detection phase. It serves as the second step in the structured profiling workflow, focusing on interpreting profiling results, identifying root causes, and documenting findings with actionable solutions.
+
+The rule establishes a comprehensive analysis framework that transforms raw profiling data into meaningful insights. It guides users through systematically examining flamegraphs, memory allocation patterns, CPU hotspots, and threading issues to identify performance bottlenecks and their underlying causes.
+
+Key capabilities include:
+- **Systematic Analysis Framework**: Structured approach to examining different types of profiling data (CPU, memory, threading, GC)
+- **Problem Categorization**: Clear methodology for classifying issues by severity, impact, and type (memory leaks, CPU hotspots, threading problems)
+- **Evidence Documentation**: Standardized templates for documenting findings with specific references to profiling files and quantitative metrics
+- **Solution Development**: Framework for creating prioritized, actionable recommendations with implementation effort estimates
+- **Cross-Correlation Analysis**: Techniques for correlating multiple profiling results and identifying patterns across different time periods
+- **Impact Assessment**: Scoring system for prioritizing fixes based on performance impact and implementation effort
+
+The rule ensures that profiling data is analyzed consistently and thoroughly, with findings documented in a format that enables effective communication with development teams and systematic tracking of performance improvements.
+
 ## Project Organization
 
 The profiling setup uses a clean folder structure with everything contained in the profiler directory:

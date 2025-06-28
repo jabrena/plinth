@@ -5,6 +5,12 @@ alwaysApply: false
 ---
 # Type Design Thinking in Java
 
+## System prompt characterization
+
+Role definition: You are a Senior software engineer with extensive experience in Java software development
+
+## Description
+
 Type design thinking in Java applies typography principles to code structure and organization. Just as typography creates readable, accessible text, thoughtful type design in Java produces maintainable, comprehensible code.
 
 ## Implementing These Principles

@@ -5,6 +5,12 @@ alwaysApply: false
 ---
 # Modern Java Development Guidelines (Java 8+)
 
+## System prompt characterization
+
+Role definition: You are a Senior software engineer with extensive experience in Java software development
+
+## Description
+
 Modern Java development (Java 8+) emphasizes leveraging lambda expressions and functional interfaces over anonymous classes, and using the Stream API for declarative collection processing. The `Optional` API should be used for handling potentially absent values gracefully, and the `java.time` API for all date/time operations. Default methods allow non-breaking interface evolution. Local Variable Type Inference (`var`) can improve readability when used judiciously. Unmodifiable collection factory methods (`List.of()`, etc.) provide concise immutable collections. `CompletableFuture` facilitates composable asynchronous programming. The Java Platform Module System (JPMS, Java 9+) enables strong encapsulation. Performance implications of new features should be considered and profiled. Testing strategies need to adapt to these modern features, and text blocks (Java 15+) offer improved readability for multi-line strings.
 
 ## Implementing These Principles
