@@ -85,6 +85,12 @@ Using the Cursor rules is straightforward: simply `drag and drop` the cursor rul
 | [313-frameworks-spring-boot-local-testing](.cursor/rules/313-frameworks-spring-boot-local-testing.mdc) | Local Testing with Docker Compose | `Improve my local testing setup using the cursor rule @313-frameworks-spring-boot-local-testing` | Add in the context your docker-compose.yaml and test configuration |
 | [321-frameworks-spring-boot-native-compilation](.cursor/rules/321-frameworks-spring-boot-native-compilation.mdc) | Native Compilation | `Optimize my Spring Boot app for native compilation using the cursor rule @321-frameworks-spring-boot-native-compilation` | Add in the context your pom.xml and application configuration |
 
+### SQL rules
+
+| Cursor Rule | Description | Prompt | Notes |
+|-------------|-------------|--------|-------|
+| [500-sql](.cursor/rules/500-sql.mdc) | SQL Development Guidelines | `Review my SQL code and database design using the cursor rule @500-sql` | Add in the context your SQL files, database schema, or migration scripts |
+
 ## Getting started
 
 If you are interested in getting the benefits from these cursor rules, you can manually download this repository and copy the './cursor' folder and paste it into your repository, or delegate this task to a specific command-line tool based on **Jbang**:

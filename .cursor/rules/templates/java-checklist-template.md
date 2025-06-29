@@ -72,44 +72,11 @@ Use the following process to improve the java development in some areas if requi
 | [313-frameworks-spring-boot-local-testing](.cursor/rules/313-frameworks-spring-boot-local-testing.mdc) | Local Testing with Docker Compose | `Improve my local testing setup using the cursor rule @313-frameworks-spring-boot-local-testing` | Add in the context your docker-compose.yaml and test configuration |
 | [321-frameworks-spring-boot-native-compilation](.cursor/rules/321-frameworks-spring-boot-native-compilation.mdc) | Native Compilation | `Optimize my Spring Boot app for native compilation using the cursor rule @321-frameworks-spring-boot-native-compilation` | Add in the context your pom.xml and application configuration |
 
-## Reference Table: Java Cursor Rules
+### SQL rules
 
-| Rule Name | Cursor Rule | Description |
-|-----------|-------------|-------------|
-| Maven Best Practices | @110-java-maven-best-practices | Best practices for Maven dependency management and project structure |
-| Maven Dependencies & Plugins | @111-java-maven-deps-and-plugins | Improve pom.xml with recommended plugins and dependencies |
-| Object Oriented Design | @121-java-object-oriented-design | Object-oriented design principles and review |
-| Type Design | @122-java-type-design | Best practices for type design in Java |
-| General Java Guidelines | @123-java-general-guidelines | General Java coding best practices |
-| Secure Java Coding | @124-java-secure-coding | Secure coding practices for Java |
-| Concurrency | @125-java-concurrency | Best practices for concurrency in Java |
-| Logging Guidelines | @126-java-logging | Logging best practices for Java applications |
-| Unit Testing | @131-java-unit-testing | Guidelines for writing unit tests in Java |
-| Modern Java Features | @141-java-refactoring-with-modern-features | Refactoring with modern Java (Java 8+) features |
-| Functional Programming | @142-java-functional-programming | Applying functional programming in Java |
-| Data Oriented Programming | @143-java-data-oriented-programming | Data-oriented programming style in Java |
-| Performance testing | @151-java-performance-jmeter | Run a Jmeter script |
-| Java Profiling | @161-java-profiling-detect | Generate profiling data |
-| Java Profiling | @162-java-profiling-analyze | Analyze profiling data |
-| Java Profiling | @164-java-profiling-compare | Compare results after refactoring |
-
-## Tips & Best Practices
-
-- Use the checklists above to track your progress through each phase.
-- Use the provided prompts directly in Cursor or your LLM-enabled IDE for best results.
-- Review each rule's documentation for detailed examples and anti-patterns.
-- Regularly update your dependencies and plugins for security and performance.
-- Apply secure coding and logging practices throughout your codebase.
-- Use modern Java features and refactor legacy code incrementally.
-
-## Progress Tracking
-
-- [ ] Step 1: Build System (Maven)
-- [ ] Step 2: Design Principles
-- [ ] Step 3: Coding Guidelines
-- [ ] Step 4: Testing
-- [ ] Step 5: Refactoring
-- [ ] Step 6: Database
+| Cursor Rule | Description | Prompt | Notes |
+|-------------|-------------|--------|-------|
+| [500-sql](.cursor/rules/500-sql.mdc) | SQL Development Guidelines | `Review my SQL code and database design using the cursor rule @500-sql` | Add in the context your SQL files, database schema, or migration scripts |
 
 ---
 
