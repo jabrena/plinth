@@ -1,3 +1,4 @@
+```bash
 #!/bin/bash
 
 # Java Application Runner with Async-Profiler Support
@@ -8,7 +9,7 @@ set -e
 # Default values
 PROFILE_MODE="cpu"
 APP_JAR=""
-APP_CLASS="info.jab.info.MainApplication"
+APP_CLASS="info.jab.ms.MainApplication"
 HEAP_SIZE="512m"
 PROFILE_NAME="default"
 FRAMEWORK="auto"
@@ -48,7 +49,7 @@ OPTIONS:
     -m, --mode MODE         Profiling mode: cpu, alloc, wall, lock (default: cpu)
     -f, --framework FRAMEWORK   Framework: springboot, quarkus, auto (default: auto)
     -j, --jar PATH          Path to application JAR file
-    -c, --class CLASS       Main class to run (default: info.jab.info.MainApplication)
+    -c, --class CLASS       Main class to run (default: info.jab.ms.MainApplication)
     -h, --heap SIZE         Heap size (default: 512m)
     -p, --profile PROFILE   Profile to activate (default: default)
     --help                  Show this help message
@@ -251,14 +252,14 @@ get_app_args() {
         springboot)
             APP_ARGS=(
                 "--spring.profiles.active=$PROFILE_NAME"
-                "--logging.level.info.jab.info=DEBUG"
+                "--logging.level.info.jab.ms=DEBUG"
                 "--server.port=8080"
             )
             ;;
         quarkus)
             APP_ARGS=(
                 "-Dquarkus.profile=$PROFILE_NAME"
-                "-Dquarkus.log.category.\"info.jab.info\".level=DEBUG"
+                "-Dquarkus.log.category.\"info.jab.ms\".level=DEBUG"
                 "-Dquarkus.http.port=8080"
             )
             ;;
@@ -339,3 +340,4 @@ else
 fi
 
 log_success "Application completed!" 
+```

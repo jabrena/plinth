@@ -27,35 +27,22 @@ The rule ensures consistent, repeatable profiling procedures while providing the
 
 ## ⚠️ CRITICAL INSTRUCTION FOR AI ASSISTANTS ⚠️
 
-**WHEN USING THE PROFILING SCRIPT TEMPLATE:**
-- **COPY THE BASH SCRIPT EXACTLY** from `java-profiling-script-template.md`
+**WHEN USING THE PROFILING SCRIPT TEMPLATES:**
+- **COPY THE BASH SCRIPT EXACTLY** from `java-profiling-script-template.md` or `java-profiling-script-run-app-template.md`
 - **NO MODIFICATIONS, INTERPRETATIONS, OR ENHANCEMENTS** allowed
 - **USE EVERY LINE VERBATIM** - do not change logic, structure, or features
 - **DO NOT CREATE YOUR OWN VERSION** - use the provided template only
-- The template script is complete, tested, and production-ready
+- The template scripts are complete, tested, and production-ready
 
 ---
 
 This rule provides comprehensive Java application profiling using async-profiler v4.0, including automatic OS detection, profiler download, and flamegraph generation with the latest features.
 
-## Problem Identification
-
-Before starting the profiling process, identify what specific performance problem you're trying to solve. 
-
-**Reference the profiling questions template:** [java-profiling-questions-template.md](mdc:.cursor/rules/templates/java-profiling-questions-template.md)
-
-The template categorizes problems into:
-- **Performance Bottlenecks** (CPU hotspots, inefficient algorithms, unnecessary allocations, string operations)
-- **Memory-Related Problems** (memory leaks, heap usage, object retention, off-heap issues)
-- **Concurrency and Threading Issues** (lock contention, thread pool issues, deadlocks, context switching)
-- **Garbage Collection Problems** (GC pressure, long pauses, generational issues)
-- **I/O and Network Bottlenecks** (blocking operations, connection leaks, serialization issues)
-
 ## Overview
 
 Java profiling helps identify performance bottlenecks, memory leaks, and CPU hotspots in Java applications. This rule automates the process of:
 1. **Problem Identification**: Determine what specific performance issue you're investigating
-2. **Process Detection**: Detecting running Java processes using `jps`
+2. **Application Setup**: Configure your application to run with profiling-friendly JVM flags
 3. **Environment Setup**: Identifying the operating system and architecture
 4. **Tool Download**: Downloading the appropriate async-profiler v4.0 binary
 5. **Profile Execution**: Attaching to a Java process and generating flamegraphs and heatmaps
@@ -84,9 +71,10 @@ The profiling setup uses a clean folder structure with everything contained in t
 
 ```
 your-project/
+├── run-with-profiler.sh    # ← Step 1: Run main application with profiling JVM flags
 └── profiler/               # ← All profiling-related files
     ├── scripts/            # ← Profiling scripts and tools
-    │   └── java-profile.sh # ← Main profiling script
+    │   └── java-profile.sh # ← Step 2: Interactive profiling script
     ├── results/            # ← Generated profiling output
     │   ├── *.html          # ← Flamegraph files
     │   └── *.jfr           # ← JFR recording files
@@ -94,10 +82,47 @@ your-project/
     └── async-profiler-*/   # ← Downloaded profiler binaries
 ```
 
-**Usage:** 
-- Run `./profiler/scripts/java-profile.sh` for comprehensive interactive profiling
+## Step-by-Step Profiling Workflow
 
-## Automated Profiling Script
+Follow this workflow in order to set up profiling for your Java application:
+
+### Step 1: Setup Application Runner Script (`run-with-profiler.sh`)
+
+**IMPORTANT**: Use the exact bash script from the template without any modification or interpretation.
+
+The application runner script is available at: [java-profiling-script-run-app-template.md](mdc:.cursor/rules/templates/java-profiling-script-run-app-template.md)
+
+**CRITICAL INSTRUCTION FOR AI ASSISTANTS:**
+- **COPY THE BASH SCRIPT EXACTLY** from the template file
+- **DO NOT MODIFY, INTERPRET, OR ENHANCE** the script content
+- **DO NOT ADD NEW FEATURES** or change the logic
+- **USE THE SCRIPT VERBATIM** - every line, comment, and function exactly as provided
+- The script is already complete and tested - no improvements needed
+
+**Script Location:**
+```
+your-project/
+└── run-with-profiler.sh    # ← Run main application with the right JVM flags for profiling
+```
+
+**Setup Instructions:**
+1. Copy the **EXACT** bash script content from `java-profiling-script-run-app-template.md` 
+2. Save it as `run-with-profiler.sh` in your project root
+3. Make it executable: `chmod +x run-with-profiler.sh`
+4. **NO MODIFICATIONS** to the script content are needed or allowed
+
+**Purpose:**
+- Configures JVM with profiling-friendly flags
+- Ensures proper async-profiler compatibility
+- Starts your application ready for profiling
+
+**Usage:** 
+```bash
+# Start your application with profiling-ready JVM settings
+./run-with-profiler.sh
+```
+
+### Step 2: Setup Interactive Profiling Script (`java-profile.sh`)
 
 **IMPORTANT**: Use the exact bash script from the template without any modification or interpretation.
 
@@ -118,37 +143,39 @@ The complete interactive profiling script is available at: [java-profiling-scrip
 ```
 
 **Setup Instructions:**
-1. Copy the **EXACT** bash script content from `java-profiling-script-template.md` 
-2. Save it as `profiler/scripts/java-profile.sh`
-3. Make it executable: `chmod +x profiler/scripts/java-profile.sh`
-4. **NO MODIFICATIONS** to the script content are needed or allowed
+1. Create the profiler directory structure: `mkdir -p profiler/scripts profiler/results`
+2. Copy the **EXACT** bash script content from `java-profiling-script-template.md` 
+3. Save it as `profiler/scripts/java-profile.sh`
+4. Make it executable: `chmod +x profiler/scripts/java-profile.sh`
+5. **NO MODIFICATIONS** to the script content are needed or allowed
+
+**Purpose:**
+- Detects running Java processes automatically
+- Downloads and configures async-profiler v4.0
+- Provides interactive menu for different profiling scenarios
+- Generates flamegraphs and analysis reports
 
 ## Profiling Execution Workflow
 
-After setting up the profiling scripts, follow this execution workflow to profile your Java application and store results in the profiler/results directory:
+After setting up both scripts, follow this execution workflow:
 
-### Step 1: Create and Make Script Executable
+### Step 1: Start Your Application with Profiling Support
 
-**CRITICAL**: Use the exact script from the template without any changes:
+First, start your application using the profiling-ready runner:
 
 ```bash
-# Create the profiler directory structure
-mkdir -p profiler/scripts
-mkdir -p profiler/results
-
-# Copy the EXACT bash script from java-profiling-script-template.md
-# Save it as profiler/scripts/java-profile.sh
-# DO NOT MODIFY THE SCRIPT CONTENT - USE IT EXACTLY AS PROVIDED
-
-# Make the script executable
-chmod +x profiler/scripts/java-profile.sh
+# Start your application with JVM flags optimized for profiling
+./run-with-profiler.sh
 ```
 
-**REMINDER**: The script in `java-profiling-script-template.md` is complete and should be copied verbatim. No interpretation, enhancement, or modification is required or allowed.
+This script:
+- Applies JVM flags that make profiling more accurate
+- Ensures async-profiler can attach properly
+- Starts your application in profiling-ready mode
 
-### Step 2: Execute the Profiling Script
+### Step 2: Run Interactive Profiling
 
-Run the script from your project root directory:
+In a separate terminal, execute the interactive profiling script:
 
 ```bash
 # Execute the interactive profiling script
@@ -164,7 +191,7 @@ Run the script from your project root directory:
 
 ### Step 3: Problem-Specific Profiling Commands
 
-Based on the problem you identified, execute these specific profiling commands:
+Based on the problem you identified, the script will execute these specific profiling commands:
 
 #### For CPU Hotspots and Performance Bottlenecks
 ```bash

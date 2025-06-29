@@ -28,3 +28,5 @@ jobs:
         run: cd examples/spring-boot-performance-bottleneck-demo && ./mvnw --batch-mode --no-transfer-progress package --file pom.xml
       - name: Spring Boot JMeter build
         run: cd examples/spring-boot-jmeter-demo && ./mvnw --batch-mode --no-transfer-progress package --file pom.xml
+      - name: Quarkus build
+        run: cd examples/quarkus-demo && ./mvnw --batch-mode --no-transfer-progress package --file pom.xml
