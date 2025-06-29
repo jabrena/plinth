@@ -11,6 +11,8 @@ Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agen
 
 A system prompt is a set of instructions given to an AI model that defines how it should behave, what role it should take on, and what guidelines it should follow when responding to users. Think of it as the "operating manual" that shapes the AI's personality, capabilities, and boundaries.
 
+[Further information](./docs/cursor-interaction-sequence.png)
+
 ## How to use the Cursor rules?
 
 Using the Cursor rules is straightforward: simply `drag and drop` the cursor rule that you need into the chat textbox where you are typing your `User prompt`.
