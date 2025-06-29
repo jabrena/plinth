@@ -23,9 +23,9 @@ Using the Cursor rules is straightforward: simply `drag and drop` the cursor rul
 
 | Cursor Rule | Description | Prompt | Notes |
 |-------------|-------------|--------|-------|
-| [110-java-maven-best-practices](.cursor/rules/110-java-maven-best-practices.mdc) | Maven Best Practices | `Help me to review the pom.xml following the best practices for dependency management and directory structure use the cursor rule @110-java-maven-best-practices` | Add in the context the `pom.xml` which you want to generate the documentation |
-| [111-java-maven-deps-and-plugins](.cursor/rules/111-java-maven-deps-and-plugins.mdc) | Maven Dependencies & Plugins | `Can you improve the pom.xml using the cursor rule @111-java-maven-deps-and-plugins` | Add in the context the `pom.xml` which you want to generate the documentation. Conversational approach |
-| [112-java-maven-documentation](.cursor/rules/112-java-maven-documentation.mdc) | Maven Documentation | `Generate developer documentation with essential Maven commands using @112-java-maven-documentation` | Add in the context the `pom.xml` which you want to generate the documentation |
+| [110-java-maven-best-practices](.cursor/rules/110-java-maven-best-practices.mdc) | Analyze your `pom.xml` and apply Maven best practices | **Prompt:** `Help me to review the pom.xml following the best practices for dependency management and directory structure use the cursor rule @110-java-maven-best-practices` **Note:** Add in the context the `pom.xml` which you want to generate the documentation | This cursor rule is applied automatically without any interaction with the Software engineer |
+| [111-java-maven-deps-and-plugins](.cursor/rules/111-java-maven-deps-and-plugins.mdc) | Update your `pom.xml` with Maven Dependencies & Plugins | **Prompt:** `Can you improve the pom.xml using the cursor rule @111-java-maven-deps-and-plugins` **Note:** Add in the context the `pom.xml` which you want to generate the documentation. |  Using a Conversational approach, the Software engineer will interact with the cursor rule to update the `pom.xml` |
+| [112-java-maven-documentation](.cursor/rules/112-java-maven-documentation.mdc) | Create Maven Documentation in the file `README-DEV.md` | **Prompt:** `Generate developer documentation with essential Maven commands using @112-java-maven-documentation` **Note:** Add in the context the `pom.xml` which you want to generate the documentation | This cursor rule is applied automatically without any interaction with the Software engineer |
 
 ### Design rules
 
