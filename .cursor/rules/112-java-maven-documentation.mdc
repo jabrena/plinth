@@ -28,7 +28,10 @@ When creating a README-DEV.md file for a Maven project, include ONLY the followi
 ./mvnw dependency:resolve
 
 ./mvnw clean validate -U
+./mvnw buildplan:list-plugin
 ./mvnw buildplan:list-phase
+./mvnw help:all-profiles
+./mvnw help:active-profiles
 ./mvnw license:third-party-report
 
 # Clean the project
