@@ -2,7 +2,6 @@
 !define RECTANGLE class
 
 skinparam backgroundColor white
-skinparam handwritten false
 skinparam monochrome false
 skinparam shadowing false
 
