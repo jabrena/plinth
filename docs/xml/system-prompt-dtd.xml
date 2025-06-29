@@ -1,0 +1,263 @@
+<!DOCTYPE system-prompt [
+    <!-- Root element for a system prompt -->
+    <!ELEMENT system-prompt (metadata, header, system-characterization, description, principles?, table-of-contents?, content-sections+)>
+    <!ATTLIST system-prompt
+        id CDATA #REQUIRED
+        version CDATA #IMPLIED>
+
+    <!-- Metadata section (equivalent to frontmatter) -->
+    <!ELEMENT metadata (description, globs?, always-apply?, tags?)>
+    <!ELEMENT description (#PCDATA)>
+    <!ELEMENT globs (#PCDATA)>
+    <!ELEMENT always-apply (#PCDATA)>
+    <!ELEMENT tags (tag*)>
+    <!ELEMENT tag (#PCDATA)>
+
+    <!-- Header section -->
+    <!ELEMENT header (title, subtitle?)>
+    <!ELEMENT title (#PCDATA)>
+    <!ELEMENT subtitle (#PCDATA)>
+
+    <!-- System characterization -->
+    <!ELEMENT system-characterization (role-definition, expertise-area*)>
+    <!ELEMENT role-definition (#PCDATA)>
+    <!ELEMENT expertise-area (#PCDATA)>
+
+    <!-- Principles section -->
+    <!ELEMENT principles (principle*)>
+    <!ELEMENT principle (#PCDATA)>
+    <!ATTLIST principle number CDATA #IMPLIED>
+
+    <!-- Table of contents -->
+    <!ELEMENT table-of-contents (toc-item*)>
+    <!ELEMENT toc-item (#PCDATA)>
+    <!ATTLIST toc-item level CDATA #IMPLIED>
+
+    <!-- Content sections (the main body) -->
+    <!ELEMENT content-sections (rule-section | question-section | template-section | workflow-section | instruction-section | example-section | reference-section)*>
+
+    <!-- Rule section with guidelines -->
+    <!ELEMENT rule-section (rule-header, rule-description, code-examples?)>
+    <!ATTLIST rule-section
+        number CDATA #IMPLIED
+        id CDATA #IMPLIED>
+    <!ELEMENT rule-header (rule-title, rule-subtitle?)>
+    <!ELEMENT rule-title (#PCDATA)>
+    <!ELEMENT rule-subtitle (#PCDATA)>
+    <!ELEMENT rule-description (#PCDATA | emphasis | code-inline)*>
+
+    <!-- Code examples with good and bad patterns -->
+    <!ELEMENT code-examples (good-example*, bad-example*)>
+    <!ELEMENT good-example (code-block, explanation?)>
+    <!ELEMENT bad-example (code-block, explanation?)>
+    <!ELEMENT code-block (#PCDATA)>
+    <!ATTLIST code-block language CDATA #IMPLIED>
+    <!ELEMENT explanation (#PCDATA | emphasis | code-inline)*>
+
+    <!-- Interactive question section -->
+    <!ELEMENT question-section (question-header, question-description?, question-items+)>
+    <!ATTLIST question-section
+        type (single | multiple | conditional) #IMPLIED
+        dependency CDATA #IMPLIED>
+    <!ELEMENT question-header (question-title, question-subtitle?)>
+    <!ELEMENT question-title (#PCDATA)>
+    <!ELEMENT question-subtitle (#PCDATA)>
+    <!ELEMENT question-description (#PCDATA | emphasis | code-inline)*>
+    <!ELEMENT question-items (question-item*)>
+    <!ELEMENT question-item (option-text, option-description?)>
+    <!ELEMENT option-text (#PCDATA)>
+    <!ELEMENT option-description (#PCDATA)>
+
+    <!-- Template section for code/configuration templates -->
+    <!ELEMENT template-section (template-header, template-description?, template-content)>
+    <!ATTLIST template-section
+        type (code | configuration | script) #IMPLIED
+        language CDATA #IMPLIED>
+    <!ELEMENT template-header (template-title, template-subtitle?)>
+    <!ELEMENT template-title (#PCDATA)>
+    <!ELEMENT template-subtitle (#PCDATA)>
+    <!ELEMENT template-description (#PCDATA | emphasis | code-inline)*>
+    <!ELEMENT template-content (code-block | parameter-list | placeholder*)>
+    <!ELEMENT parameter-list (parameter*)>
+    <!ELEMENT parameter (param-name, param-description, param-default?)>
+    <!ELEMENT param-name (#PCDATA)>
+    <!ELEMENT param-description (#PCDATA)>
+    <!ELEMENT param-default (#PCDATA)>
+    <!ELEMENT placeholder (#PCDATA)>
+    <!ATTLIST placeholder name CDATA #REQUIRED>
+
+    <!-- Workflow section for step-by-step processes -->
+    <!ELEMENT workflow-section (workflow-header, workflow-description?, workflow-steps)>
+    <!ELEMENT workflow-header (workflow-title, workflow-subtitle?)>
+    <!ELEMENT workflow-title (#PCDATA)>
+    <!ELEMENT workflow-subtitle (#PCDATA)>
+    <!ELEMENT workflow-description (#PCDATA | emphasis | code-inline)*>
+    <!ELEMENT workflow-steps (workflow-step*)>
+    <!ELEMENT workflow-step (step-header, step-description, step-content?, prerequisites?, validation?)>
+    <!ATTLIST workflow-step
+        number CDATA #IMPLIED
+        type (mandatory | optional | conditional) #IMPLIED
+        dependency CDATA #IMPLIED>
+    <!ELEMENT step-header (step-title, step-subtitle?)>
+    <!ELEMENT step-title (#PCDATA)>
+    <!ELEMENT step-subtitle (#PCDATA)>
+    <!ELEMENT step-description (#PCDATA | emphasis | code-inline)*>
+    <!ELEMENT step-content (code-block | command-list | checklist)*>
+    <!ELEMENT prerequisites (prerequisite*)>
+    <!ELEMENT prerequisite (#PCDATA)>
+    <!ELEMENT validation (validation-criteria*)>
+    <!ELEMENT validation-criteria (#PCDATA)>
+
+    <!-- Instruction section for AI behavior -->
+    <!ELEMENT instruction-section (instruction-header, instruction-description?, instruction-rules)>
+    <!ELEMENT instruction-header (instruction-title, instruction-subtitle?)>
+    <!ELEMENT instruction-title (#PCDATA)>
+    <!ELEMENT instruction-subtitle (#PCDATA)>
+    <!ELEMENT instruction-description (#PCDATA | emphasis | code-inline)*>
+    <!ELEMENT instruction-rules (instruction-rule*)>
+    <!ELEMENT instruction-rule (#PCDATA | emphasis | code-inline)*>
+    <!ATTLIST instruction-rule
+        type (mandatory | optional | conditional) #IMPLIED
+        priority (high | medium | low) #IMPLIED>
+
+    <!-- Example section -->
+    <!ELEMENT example-section (example-header, example-description?, example-content)>
+    <!ATTLIST example-section type CDATA #IMPLIED>
+    <!ELEMENT example-header (example-title, example-subtitle?)>
+    <!ELEMENT example-title (#PCDATA)>
+    <!ELEMENT example-subtitle (#PCDATA)>
+    <!ELEMENT example-description (#PCDATA | emphasis | code-inline)*>
+    <!ELEMENT example-content (code-block | scenario | use-case)*>
+    <!ELEMENT scenario (scenario-description, scenario-steps)>
+    <!ELEMENT scenario-description (#PCDATA)>
+    <!ELEMENT scenario-steps (scenario-step*)>
+    <!ELEMENT scenario-step (#PCDATA)>
+    <!ELEMENT use-case (use-case-description, use-case-implementation)>
+    <!ELEMENT use-case-description (#PCDATA)>
+    <!ELEMENT use-case-implementation (code-block)>
+
+    <!-- Reference section -->
+    <!ELEMENT reference-section (reference-header, reference-description?, reference-links)>
+    <!ELEMENT reference-header (reference-title, reference-subtitle?)>
+    <!ELEMENT reference-title (#PCDATA)>
+    <!ELEMENT reference-subtitle (#PCDATA)>
+    <!ELEMENT reference-description (#PCDATA | emphasis | code-inline)*>
+    <!ELEMENT reference-links (reference-link*)>
+    <!ELEMENT reference-link (#PCDATA)>
+    <!ATTLIST reference-link
+        type (internal | external | template) #IMPLIED
+        href CDATA #IMPLIED>
+
+    <!-- Common utility elements -->
+    <!ELEMENT command-list (command*)>
+    <!ELEMENT command (#PCDATA)>
+    <!ATTLIST command shell CDATA #IMPLIED>
+
+    <!ELEMENT checklist (checklist-item*)>
+    <!ELEMENT checklist-item (#PCDATA)>
+    <!ATTLIST checklist-item checked (true | false) #IMPLIED>
+
+    <!-- Text formatting elements -->
+    <!ELEMENT emphasis (#PCDATA)>
+    <!ATTLIST emphasis type (bold | italic | code | warning | critical) #IMPLIED>
+
+    <!ELEMENT code-inline (#PCDATA)>
+]>
+
+<!-- Example system prompt structure -->
+<system-prompt id="java-maven-best-practices" version="1.0">
+    <metadata>
+        <description>Maven Best Practices for Java Development</description>
+        <globs>pom.xml</globs>
+        <always-apply>false</always-apply>
+        <tags>
+            <tag>maven</tag>
+            <tag>java</tag>
+            <tag>build-system</tag>
+        </tags>
+    </metadata>
+    
+    <header>
+        <title>Maven Best Practices</title>
+        <subtitle>Comprehensive guidelines for effective Maven usage</subtitle>
+    </header>
+    
+    <system-characterization>
+        <role-definition>You are a Senior software engineer with extensive experience in Java software development</role-definition>
+        <expertise-area>Maven build system</expertise-area>
+        <expertise-area>Java dependency management</expertise-area>
+    </system-characterization>
+    
+    <description>
+        Effective Maven usage involves robust dependency management via dependencyManagement and BOMs, 
+        adherence to the standard directory layout, and centralized plugin management.
+    </description>
+    
+    <principles>
+        <principle number="1">Effective Dependency Management</principle>
+        <principle number="2">Standard Directory Layout</principle>
+        <principle number="3">Plugin Management and Configuration</principle>
+    </principles>
+    
+    <table-of-contents>
+        <toc-item level="1">Rule 1: Effective Dependency Management</toc-item>
+        <toc-item level="1">Rule 2: Standard Directory Layout</toc-item>
+        <toc-item level="1">Rule 3: Plugin Management and Configuration</toc-item>
+    </table-of-contents>
+    
+    <content-sections>
+        <rule-section number="1" id="dependency-management">
+            <rule-header>
+                <rule-title>Effective Dependency Management</rule-title>
+                <rule-subtitle>Use dependencyManagement and BOMs</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Use the <code-inline>dependencyManagement</code-inline> section in parent POMs or import 
+                Bill of Materials (BOMs) to centralize and control dependency versions.
+            </rule-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="xml">
+&lt;dependencyManagement&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+            &lt;version&gt;${spring.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+    &lt;/dependencies&gt;
+&lt;/dependencyManagement&gt;
+                    </code-block>
+                    <explanation>Centralized version management using properties</explanation>
+                </good-example>
+                <bad-example>
+                    <code-block language="xml">
+&lt;dependency&gt;
+    &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+    &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+    &lt;version&gt;5.3.20&lt;/version&gt;
+&lt;/dependency&gt;
+                    </code-block>
+                    <explanation>Hardcoded version may differ from parent's intention</explanation>
+                </bad-example>
+            </code-examples>
+        </rule-section>
+        
+        <instruction-section>
+            <instruction-header>
+                <instruction-title>Implementation Guidelines</instruction-title>
+            </instruction-header>
+            <instruction-rules>
+                <instruction-rule type="mandatory" priority="high">
+                    <emphasis type="bold">ALWAYS</emphasis> use dependencyManagement in parent POMs
+                </instruction-rule>
+                <instruction-rule type="mandatory" priority="high">
+                    <emphasis type="critical">NEVER</emphasis> hardcode versions in child modules
+                </instruction-rule>
+                <instruction-rule type="optional" priority="medium">
+                    Consider using BOMs for complex dependency trees
+                </instruction-rule>
+            </instruction-rules>
+        </instruction-section>
+    </content-sections>
+</system-prompt>
