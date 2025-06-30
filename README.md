@@ -42,14 +42,14 @@ Using the Cursor rules is straightforward: simply `drag and drop` the cursor rul
 |-------------|-------------|--------|-------|
 | [123-java-general-guidelines](.cursor/rules/123-java-general-guidelines.mdc) | General Java Guidelines | **Prompt:** `Review my code for general Java best practices using the cursor rule @123-java-general-guidelines` **Note:** Add a package in the context | Non conversational cursor rule |
 | [124-java-secure-coding](.cursor/rules/124-java-secure-coding.mdc) | Secure Java Coding | **Prompt:** `Check my code for security issues using the cursor rule @124-java-secure-coding` **Note:** Add a package in the context | Non conversational cursor rule |
-| [125-java-concurrency](.cursor/rules/125-java-concurrency.mdc) | Concurrency | **Prompt:** `Review my code for concurrency best practices using the cursor rule @125-java-concurrency` **Note:** Add a class or package which consider that it could need some kind of Concurrency improvement. | Non conversational cursor rule |
-| [126-java-logging](.cursor/rules/126-java-logging.mdc) | Logging Guidelines | **Prompt:** `Help me improve logging using the cursor rule @126-java-logging` **Note:** Add a class or package which consider that it could need some kind of Logging improvement. | Non conversational cursor rule |
+| [125-java-concurrency](.cursor/rules/125-java-concurrency.mdc) | Concurrency | **Prompt:** `Review my code for concurrency best practices using the cursor rule @125-java-concurrency` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | Non conversational cursor rule |
+| [126-java-logging](.cursor/rules/126-java-logging.mdc) | Logging Guidelines | **Prompt:** `Help me improve logging using the cursor rule @126-java-logging` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | Non conversational cursor rule |
 
 ### Testing rules
 
 | Cursor Rule | Description | Prompt | Notes |
 |-------------|-------------|--------|-------|
-| [131-java-unit-testing](.cursor/rules/131-java-unit-testing.mdc) | Unit Testing | **Prompt:** `Can improve the unit tests using the cursor rule @131-java-unit-testing` **Note:** Add a package in the context | Non conversational cursor rule |
+| [131-java-unit-testing](.cursor/rules/131-java-unit-testing.mdc) | Unit Testing | **Prompt:** `Can improve the unit tests using the cursor rule @131-java-unit-testing` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | Non conversational cursor rule |
 
 ### Refactoring rules
 
