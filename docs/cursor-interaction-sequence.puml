@@ -1,0 +1,127 @@
+@startuml
+!define RECTANGLE class
+
+skinparam backgroundColor white
+skinparam monochrome false
+skinparam shadowing false
+
+title Cursor AI Assistant Interaction Flow (Enhanced)
+
+actor "Software Engineer" as SE
+participant "Cursor IDE" as Cursor
+participant "System Prompt\nProcessor" as SystemPrompt
+participant "Context Manager" as Context
+participant "Memory System" as Memory
+participant "AI Model\n(Claude/GPT-4/etc.)" as AI
+participant "Tool Executor" as Tools
+participant "Web Search" as Web
+participant "Git Integration" as Git
+participant "Linter/Error\nChecker" as Linter
+
+== Prompt Initiation ==
+SE -> Cursor: Enter prompt/query in chat
+activate Cursor
+
+== Context & Memory Gathering ==
+Cursor -> Context: Gather current context
+activate Context
+Context -> Context: Collect open files\ncursor position\nproject structure
+Context -> Context: Analyze recent edits\nand file history
+Context --> Cursor: Return context data
+deactivate Context
+
+Cursor -> Memory: Retrieve relevant memories
+activate Memory
+Memory -> Memory: Search for related\nconversation history
+Memory --> Cursor: Return memory context
+deactivate Memory
+
+== System Prompt Processing ==
+Cursor -> SystemPrompt: Process user query with context
+activate SystemPrompt
+SystemPrompt -> SystemPrompt: Apply workspace rules\nand coding guidelines
+SystemPrompt -> SystemPrompt: Format system instructions\n(tool usage, constraints)
+SystemPrompt -> SystemPrompt: Combine user query +\nsystem prompt + context + memories
+SystemPrompt --> Cursor: Return formatted prompt
+deactivate SystemPrompt
+
+== AI Model Selection & Interaction ==
+Cursor -> AI: Send complete prompt with:\n- System instructions\n- User query\n- Context data\n- Available tools\n- Memory context
+activate AI
+
+AI -> AI: Select appropriate model\n(Claude Sonnet, GPT-4, etc.)
+AI -> AI: Process prompt and determine\nrequired actions
+
+== Parallel Tool Execution ==
+alt Multiple Tools Required
+    AI -> Tools: Execute file operations\n(read_file, edit_file, etc.)
+    activate Tools
+    Tools --> AI: Return file results
+    deactivate Tools
+    
+    AI -> Web: Search for real-time info
+    activate Web
+    Web --> AI: Return search results
+    deactivate Web
+    
+    AI -> Git: Fetch PR/commit info
+    activate Git
+    Git --> AI: Return Git data
+    deactivate Git
+    
+    AI -> AI: Process all tool results\nand synthesize response
+end
+
+== Error Detection & Correction ==
+alt Code Changes Made
+    AI -> Linter: Check for linting errors
+    activate Linter
+    Linter --> AI: Return error status
+    deactivate Linter
+    
+    alt Errors Found
+        AI -> AI: Plan error corrections
+        AI -> Tools: Apply fixes (up to 3 iterations)
+        activate Tools
+        Tools --> AI: Confirm fixes applied
+        deactivate Tools
+    end
+end
+
+== Memory Management ==
+AI -> Memory: Update/create memories\nif new insights gained
+activate Memory
+Memory -> Memory: Store relevant information\nfor future conversations
+deactivate Memory
+
+AI --> Cursor: Return AI response with:\n- Code suggestions\n- Explanations\n- Next steps\n- Memory updates
+deactivate AI
+
+== Response Delivery ==
+Cursor -> Cursor: Format response for display
+Cursor -> SE: Display AI response in chat
+deactivate Cursor
+
+== Code Application & Iteration ==
+alt Code Changes Suggested
+    SE -> Cursor: Accept/Apply code changes
+    activate Cursor
+    Cursor -> Cursor: Apply edits to files
+    Cursor -> SE: Confirm changes applied
+    deactivate Cursor
+    
+    alt Further Clarification Needed
+        SE -> Cursor: Follow-up questions/refinements
+        note right: Multi-turn conversation continues\nwith maintained context and memory
+        activate Cursor
+        Cursor -> Context: Update context with new changes
+        Cursor -> AI: Process follow-up with updated context
+        note over AI: Iterative refinement cycle\ncan repeat multiple times
+        deactivate Cursor
+    end
+end
+
+== Background Processes ==
+note over Tools: Some operations can run\nin background (long-running tasks)
+
+@enduml 
