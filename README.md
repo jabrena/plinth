@@ -25,31 +25,31 @@ Using the Cursor rules is straightforward: simply `drag and drop` the cursor rul
 
 | Cursor Rule | Description | Prompt | Notes |
 |-------------|-------------|--------|-------|
-| [110-java-maven-best-practices](.cursor/rules/110-java-maven-best-practices.mdc) | Analyze your `pom.xml` and apply Maven best practices | **Prompt:** `Help me to review the pom.xml following the best practices for dependency management and directory structure use the cursor rule @110-java-maven-best-practices` **Note:** Add in the context the `pom.xml` which you want to generate the documentation | This cursor rule is applied automatically without any interaction with the Software engineer |
-| [111-java-maven-deps-and-plugins](.cursor/rules/111-java-maven-deps-and-plugins.mdc) | Update your `pom.xml` with Maven Dependencies & Plugins | **Prompt:** `Can you improve the pom.xml using the cursor rule @111-java-maven-deps-and-plugins` **Note:** Add in the context the `pom.xml` which you want to generate the documentation. |  Using a Conversational approach, the Software engineer will interact with the cursor rule to update the `pom.xml` |
-| [112-java-maven-documentation](.cursor/rules/112-java-maven-documentation.mdc) | Create Maven Documentation in the file `README-DEV.md` | **Prompt:** `Generate developer documentation with essential Maven commands using @112-java-maven-documentation` **Note:** Add in the context the `pom.xml` which you want to generate the documentation | This cursor rule is applied automatically without any interaction with the Software engineer |
+| [110-java-maven-best-practices](.cursor/rules/110-java-maven-best-practices.mdc) | Analyze your `pom.xml` and apply Maven best practices | **Prompt:** `Help me to review the pom.xml following the best practices for dependency management and directory structure use the cursor rule @110-java-maven-best-practices` **Note:** Add in the context the `pom.xml` which you want to generate the documentation. | This cursor rule is applied automatically without any interaction with the Software engineer. |
+| [111-java-maven-deps-and-plugins](.cursor/rules/111-java-maven-deps-and-plugins.mdc) | Update your `pom.xml` with Maven Dependencies & Plugins | **Prompt:** `Can you improve the pom.xml using the cursor rule @111-java-maven-deps-and-plugins` **Note:** Add in the context the `pom.xml` which you want to generate the documentation. |  Using a Conversational approach, the Software engineer will interact with the cursor rule to update the `pom.xml`. |
+| [112-java-maven-documentation](.cursor/rules/112-java-maven-documentation.mdc) | Create Maven Documentation in the file `README-DEV.md` | **Prompt:** `Generate developer documentation with essential Maven commands using @112-java-maven-documentation` **Note:** Add in the context the `pom.xml` which you want to generate the documentation. | This cursor rule is applied automatically without any interaction with the Software engineer. |
 
 ### Design rules
 
 | Cursor Rule | Description | Prompt | Notes |
 |-------------|-------------|--------|-------|
-| [121-java-object-oriented-design](.cursor/rules/121-java-object-oriented-design.mdc) | Cursor rule to review the Object Oriented Design of your development | **Prompt:** `Review my code for object-oriented design using the cursor rule @121-java-object-oriented-design` **Note:** Add in the context a package to improve the design | It is an interesting prompt to see what alternatives offer the model for your package |
-| [122-java-type-design](.cursor/rules/122-java-type-design.mdc) | Cursor rule to review the Type Design of your development | **Prompt:** `Help me improve my type design using the cursor rule @122-java-type-design` **Note:** Add in the context a package to improve the design | It is an interesting prompt to see what alternatives offer the model for your package |
+| [121-java-object-oriented-design](.cursor/rules/121-java-object-oriented-design.mdc) | Cursor rule to review the Object Oriented Design of your development | **Prompt:** `Review my code for object-oriented design using the cursor rule @121-java-object-oriented-design` **Note:** Add in the context a package to improve the design. | It is an interesting prompt to see what alternatives offer the model for your package. |
+| [122-java-type-design](.cursor/rules/122-java-type-design.mdc) | Cursor rule to review the Type Design of your development | **Prompt:** `Help me improve my type design using the cursor rule @122-java-type-design` **Note:** Add in the context a package to improve the design. | It is an interesting prompt to see what alternatives offer the model for your package. |
 
 ### Coding rules
 
 | Cursor Rule | Description | Prompt | Notes |
 |-------------|-------------|--------|-------|
-| [123-java-general-guidelines](.cursor/rules/123-java-general-guidelines.mdc) | General Java Guidelines | **Prompt:** `Review my code for general Java best practices using the cursor rule @123-java-general-guidelines` **Note:** Add a package in the context | Non conversational cursor rule |
-| [124-java-secure-coding](.cursor/rules/124-java-secure-coding.mdc) | Secure Java Coding | **Prompt:** `Check my code for security issues using the cursor rule @124-java-secure-coding` **Note:** Add a package in the context | Non conversational cursor rule |
-| [125-java-concurrency](.cursor/rules/125-java-concurrency.mdc) | Concurrency | **Prompt:** `Review my code for concurrency best practices using the cursor rule @125-java-concurrency` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | Non conversational cursor rule |
-| [126-java-logging](.cursor/rules/126-java-logging.mdc) | Logging Guidelines | **Prompt:** `Help me improve logging using the cursor rule @126-java-logging` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | Non conversational cursor rule |
+| [123-java-general-guidelines](.cursor/rules/123-java-general-guidelines.mdc) | General Java Guidelines | **Prompt:** `Review my code for general Java best practices using the cursor rule @123-java-general-guidelines` **Note:** Add a package in the context. | Non conversational cursor rule. |
+| [124-java-secure-coding](.cursor/rules/124-java-secure-coding.mdc) | Secure Java Coding | **Prompt:** `Check my code for security issues using the cursor rule @124-java-secure-coding` **Note:** Add a package in the context. | Non conversational cursor rule. |
+| [125-java-concurrency](.cursor/rules/125-java-concurrency.mdc) | Concurrency | **Prompt:** `Review my code for concurrency best practices using the cursor rule @125-java-concurrency` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | Non conversational cursor rule. |
+| [126-java-logging](.cursor/rules/126-java-logging.mdc) | Logging Guidelines | **Prompt:** `Help me improve logging using the cursor rule @126-java-logging` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | Non conversational cursor rule. |
 
 ### Testing rules
 
 | Cursor Rule | Description | Prompt | Notes |
 |-------------|-------------|--------|-------|
-| [131-java-unit-testing](.cursor/rules/131-java-unit-testing.mdc) | Unit Testing | **Prompt:** `Can improve the unit tests using the cursor rule @131-java-unit-testing` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | Non conversational cursor rule |
+| [131-java-unit-testing](.cursor/rules/131-java-unit-testing.mdc) | Unit Testing | **Prompt:** `Can improve the unit tests using the cursor rule @131-java-unit-testing` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | Non conversational cursor rule. |
 
 ### Refactoring rules
 
