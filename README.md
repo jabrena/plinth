@@ -34,22 +34,22 @@ Using the Cursor rules is straightforward: simply `drag and drop` the cursor rul
 | Cursor Rule | Description | Prompt | Notes |
 |-------------|-------------|--------|-------|
 | [121-java-object-oriented-design](.cursor/rules/121-java-object-oriented-design.mdc) | Cursor rule to review the Object Oriented Design of your development | **Prompt:** `Review my code for object-oriented design using the cursor rule @121-java-object-oriented-design` **Note:** Add in the context a package to improve the design | It is an interesting prompt to see what alternatives offer the model for your package |
-| [122-java-type-design](.cursor/rules/122-java-type-design.mdc) | Cursor rule to review Type Design | **Prompt:** `Help me improve my type design using the cursor rule @122-java-type-design` **Note:** Add in the context a package to improve the design | It is an interesting prompt to see what alternatives offer the model for your package |
+| [122-java-type-design](.cursor/rules/122-java-type-design.mdc) | Cursor rule to review the Type Design of your development | **Prompt:** `Help me improve my type design using the cursor rule @122-java-type-design` **Note:** Add in the context a package to improve the design | It is an interesting prompt to see what alternatives offer the model for your package |
 
 ### Coding rules
 
 | Cursor Rule | Description | Prompt | Notes |
 |-------------|-------------|--------|-------|
-| [123-java-general-guidelines](.cursor/rules/123-java-general-guidelines.mdc) | General Java Guidelines | `Review my code for general Java best practices using the cursor rule @123-java-general-guidelines` | |
-| [124-java-secure-coding](.cursor/rules/124-java-secure-coding.mdc) | Secure Java Coding | `Check my code for security issues using the cursor rule @124-java-secure-coding` | |
-| [125-java-concurrency](.cursor/rules/125-java-concurrency.mdc) | Concurrency | `Review my code for concurrency best practices using the cursor rule @125-java-concurrency` | |
-| [126-java-logging](.cursor/rules/126-java-logging.mdc) | Logging Guidelines | `Help me improve logging using the cursor rule @126-java-logging` | |
+| [123-java-general-guidelines](.cursor/rules/123-java-general-guidelines.mdc) | General Java Guidelines | **Prompt:** `Review my code for general Java best practices using the cursor rule @123-java-general-guidelines` **Note:** Add a package in the context | Non conversational cursor rule |
+| [124-java-secure-coding](.cursor/rules/124-java-secure-coding.mdc) | Secure Java Coding | **Prompt:** `Check my code for security issues using the cursor rule @124-java-secure-coding` **Note:** Add a package in the context | Non conversational cursor rule |
+| [125-java-concurrency](.cursor/rules/125-java-concurrency.mdc) | Concurrency | **Prompt:** `Review my code for concurrency best practices using the cursor rule @125-java-concurrency` **Note:** Add a class or package which consider that it could need some kind of Concurrency improvement. | Non conversational cursor rule |
+| [126-java-logging](.cursor/rules/126-java-logging.mdc) | Logging Guidelines | **Prompt:** `Help me improve logging using the cursor rule @126-java-logging` **Note:** Add a class or package which consider that it could need some kind of Logging improvement. | Non conversational cursor rule |
 
 ### Testing rules
 
 | Cursor Rule | Description | Prompt | Notes |
 |-------------|-------------|--------|-------|
-| [131-java-unit-testing](.cursor/rules/131-java-unit-testing.mdc) | Unit Testing | `Can improve the unit tests using the cursor rule @131-java-unit-testing` | Add in the context a Test Class or the package |
+| [131-java-unit-testing](.cursor/rules/131-java-unit-testing.mdc) | Unit Testing | **Prompt:** `Can improve the unit tests using the cursor rule @131-java-unit-testing` **Note:** Add a package in the context | Non conversational cursor rule |
 
 ### Refactoring rules
 
