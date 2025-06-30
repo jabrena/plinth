@@ -33,8 +33,8 @@ Using the Cursor rules is straightforward: simply `drag and drop` the cursor rul
 
 | Cursor Rule | Description | Prompt | Notes |
 |-------------|-------------|--------|-------|
-| [121-java-object-oriented-design](.cursor/rules/121-java-object-oriented-design.mdc) | Cursor rule to review the Object Oriented Design of your development | **Prompt:** `Review my code for object-oriented design using the cursor rule @121-java-object-oriented-design` **Note:** Add in the context a package to improve the design. | It is an interesting prompt to see what alternatives offer the model for your package. |
-| [122-java-type-design](.cursor/rules/122-java-type-design.mdc) | Cursor rule to review the Type Design of your development | **Prompt:** `Help me improve my type design using the cursor rule @122-java-type-design` **Note:** Add in the context a package to improve the design. | It is an interesting prompt to see what alternatives offer the model for your package. |
+| [121-java-object-oriented-design](.cursor/rules/121-java-object-oriented-design.mdc) | Cursor rule to review the Object Oriented Design of your development | **Prompt:** `Review my code for object-oriented design using the cursor rule @121-java-object-oriented-design` **Note:** Add in the context a package to improve the design. | This cursor rule is applied automatically without any interaction with the Software engineer. It is an interesting prompt to see what alternatives offer the model for your package. |
+| [122-java-type-design](.cursor/rules/122-java-type-design.mdc) | Cursor rule to review the Type Design of your development | **Prompt:** `Help me improve my type design using the cursor rule @122-java-type-design` **Note:** Add in the context a package to improve the design. | This cursor rule is applied automatically without any interaction with the Software engineer. It is an interesting prompt to see what alternatives offer the model for your package. |
 
 ### Coding rules
 
