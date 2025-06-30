@@ -43,27 +43,27 @@ Using the Cursor rules is straightforward: simply `drag and drop` the cursor rul
 | [123-java-general-guidelines](.cursor/rules/123-java-general-guidelines.mdc) | General Java Guidelines | **Prompt:** `Review my code for general Java best practices using the cursor rule @123-java-general-guidelines` **Note:** Add a package in the context. | Non conversational cursor rule. |
 | [124-java-secure-coding](.cursor/rules/124-java-secure-coding.mdc) | Secure Java Coding | **Prompt:** `Check my code for security issues using the cursor rule @124-java-secure-coding` **Note:** Add a package in the context. | Non conversational cursor rule. |
 | [125-java-concurrency](.cursor/rules/125-java-concurrency.mdc) | Concurrency | **Prompt:** `Review my code for concurrency best practices using the cursor rule @125-java-concurrency` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | Non conversational cursor rule. |
-| [126-java-logging](.cursor/rules/126-java-logging.mdc) | Logging Guidelines | **Prompt:** `Help me improve logging using the cursor rule @126-java-logging` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | Non conversational cursor rule. |
+| [126-java-logging](.cursor/rules/126-java-logging.mdc) | Logging Guidelines | **Prompt:** `Help me improve logging using the cursor rule @126-java-logging` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | This cursor rule is applied automatically without any interaction with the Software engineer. |
 
 ### Testing rules
 
 | Cursor Rule | Description | Prompt | Notes |
 |-------------|-------------|--------|-------|
-| [131-java-unit-testing](.cursor/rules/131-java-unit-testing.mdc) | Unit Testing | **Prompt:** `Can improve the unit tests using the cursor rule @131-java-unit-testing` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | Non conversational cursor rule. |
+| [131-java-unit-testing](.cursor/rules/131-java-unit-testing.mdc) | Unit Testing | **Prompt:** `Can improve the unit tests using the cursor rule @131-java-unit-testing` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | This cursor rule is applied automatically without any interaction with the Software engineer. |
 
 ### Refactoring rules
 
 | Cursor Rule | Description | Prompt | Notes |
 |-------------|-------------|--------|-------|
 | [141-java-refactoring-with-modern-features](.cursor/rules/141-java-refactoring-with-modern-features.mdc) | Add Modern Java Features | **Prompt:** `Refactor my code to use modern Java features using the cursor rule @141-java-refactoring-with-modern-features` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | Non conversational cursor rule. |
-| [142-java-functional-programming](.cursor/rules/142-java-functional-programming.mdc) | Functional Programming |  **Prompt:** `Refactor my code to use functional programming using the cursor rule @142-java-functional-programming` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | Non conversational cursor rule. |
-| [143-java-data-oriented-programming](.cursor/rules/143-java-data-oriented-programming.mdc) | Data Oriented Programming |  **Prompt:** `Refactor my code to use data oriented programming using the cursor rule @143-java-data-oriented-programming` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | Non conversational cursor rule. |
+| [142-java-functional-programming](.cursor/rules/142-java-functional-programming.mdc) | Functional Programming |  **Prompt:** `Refactor my code to use functional programming using the cursor rule @142-java-functional-programming` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | This cursor rule is applied automatically without any interaction with the Software engineer. |
+| [143-java-data-oriented-programming](.cursor/rules/143-java-data-oriented-programming.mdc) | Data Oriented Programming |  **Prompt:** `Refactor my code to use data oriented programming using the cursor rule @143-java-data-oriented-programming` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | This cursor rule is applied automatically without any interaction with the Software engineer. |
 
 ### Performance rule (Jmeter)
 
 | Activity | Description | Prompt | Notes |
 |----------|------|--------|-------|
-| [151-java-performance-jmeter](.cursor/rules/151-java-performance-jmeter.mdc) | Run a peformance test with Jmeter | **Prompt:** `Add JMeter performance testing to this project using @151-java-performance-jmeter.mdc` **Note:** You could ask the model to create a JMeter based on a RestController/Resource. Example: `Can you create a Jmeter file based on the restcontroller in the path src/test/resources/jmeter/load-test.jmx?` | Non conversational cursor rule. If you create a Jmeter file with the model, review the generation, sometimes it is necessary to hammer a bit. |
+| [151-java-performance-jmeter](.cursor/rules/151-java-performance-jmeter.mdc) | Run a peformance test with Jmeter | **Prompt:** `Add JMeter performance testing to this project using @151-java-performance-jmeter.mdc` **Note:** You could ask the model to create a JMeter based on a RestController/Resource. Example: `Can you create a Jmeter file based on the restcontroller in the path src/test/resources/jmeter/load-test.jmx?` | This cursor rule is applied automatically without any interaction with the Software engineer. If you create a Jmeter file with the model, review the generation, sometimes it is necessary to hammer a bit. |
 
 ### Profiling rules (Async profiler)
 
@@ -72,7 +72,7 @@ Using the Cursor rules is straightforward: simply `drag and drop` the cursor rul
 | [161-java-profiling-detect](.cursor/rules/161-java-profiling-detect.mdc) | Measure problems | **Prompt:** `My Java application has performance issues - help me set up comprehensive profiling process using @161-java-profiling-detect.mdc and use the location YOUR-DEVELOPMENT/profiler` **Note:** Replace YOUR-DEVELOPMENT with your actual development path. Example: examples/spring-boot-memory-leak-demo/profiler | Non conversational cursor rule. The Cursor rule will generate 2 scripts. One script designed to run your development with the right JVM flags for profiling and the second scripts will ask few questions about what problem do you want to solve/analyze over one particular PID.  |
 | [162-java-profiling-analyze](.cursor/rules/162-java-profiling-analyze.mdc) | Analyze results from previous step generating reports with the analysis.| **Prompt:** `Analyze the results located in YOUR-DEVELOPMENT/profiler and use the cursor rule @162-java-profiling-analyze` **Note:** Replace YOUR-DEVELOPMENT with your actual development path. Example: examples/spring-boot-memory-leak-demo/profiler | Non conversational cursor rule. |
 | - | Code Refactoring | `Can you apply the solutions from @profiling-solutions-yyyymmdd.md in @/info to mitigate bottlenecks` | Make a refactoring with the notes from the analysis |
-| [164-java-profiling-compare](.cursor/rules/164-java-profiling-compare.mdc) | Analyze results | **Prompt:** `Review if the problems was solved with last refactoring using the reports located in @/results with the cursor rule 154-java-profiling-compare.mdc` **Note:**  Put in the context the folder with the results | Non conversational cursor rule. |
+| [164-java-profiling-compare](.cursor/rules/164-java-profiling-compare.mdc) | Analyze results | **Prompt:** `Review if the problems was solved with last refactoring using the reports located in @/results with the cursor rule 154-java-profiling-compare.mdc` **Note:**  Put in the context the folder with the results | This cursor rule is applied automatically without any interaction with the Software engineer. |
 
 ## Getting started
 
