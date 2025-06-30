@@ -55,9 +55,9 @@ Using the Cursor rules is straightforward: simply `drag and drop` the cursor rul
 
 | Cursor Rule | Description | Prompt | Notes |
 |-------------|-------------|--------|-------|
-| [141-java-refactoring-with-modern-features](.cursor/rules/141-java-refactoring-with-modern-features.mdc) | Add Modern Java Features | `Refactor my code to use modern Java features using the cursor rule @141-java-refactoring-with-modern-features` | |
-| [142-java-functional-programming](.cursor/rules/142-java-functional-programming.mdc) | Functional Programming | `Refactor my code to use functional programming using the cursor rule @142-java-functional-programming` | |
-| [143-java-data-oriented-programming](.cursor/rules/143-java-data-oriented-programming.mdc) | Data Oriented Programming | `Refactor my code to use data oriented programming using the cursor rule @143-java-data-oriented-programming` | |
+| [141-java-refactoring-with-modern-features](.cursor/rules/141-java-refactoring-with-modern-features.mdc) | Add Modern Java Features | **Prompt:** `Refactor my code to use modern Java features using the cursor rule @141-java-refactoring-with-modern-features` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | Non conversational cursor rule. |
+| [142-java-functional-programming](.cursor/rules/142-java-functional-programming.mdc) | Functional Programming |  **Prompt:** `Refactor my code to use functional programming using the cursor rule @142-java-functional-programming` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | Non conversational cursor rule. |
+| [143-java-data-oriented-programming](.cursor/rules/143-java-data-oriented-programming.mdc) | Data Oriented Programming |  **Prompt:** `Refactor my code to use data oriented programming using the cursor rule @143-java-data-oriented-programming`**Note:** Add a class or package which consider that it could bye improved by the cursor rule. | Non conversational cursor rule. |
 
 ### Performance rule (Jmeter)
 
