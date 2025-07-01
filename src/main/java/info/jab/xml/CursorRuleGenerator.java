@@ -32,13 +32,18 @@ public class CursorRuleGenerator {
     }
 
     public String generate() {
+        // Use default files for backward compatibility
+        return generate("112-java-maven-documentation.xml", "cursor-rule-generator.xsl");
+    }
+
+    public String generate(String xmlFileName, String xslFileName) {
         try {
             // Load XML and XSLT from resources
-            InputStream xmlStream = getClass().getClassLoader().getResourceAsStream("112-java-maven-documentation.xml");
-            InputStream xslStream = getClass().getClassLoader().getResourceAsStream("cursor-rule-generator.xsl");
+            InputStream xmlStream = getClass().getClassLoader().getResourceAsStream(xmlFileName);
+            InputStream xslStream = getClass().getClassLoader().getResourceAsStream(xslFileName);
 
             if (Objects.isNull(xmlStream) || Objects.isNull(xslStream)) {
-                throw new RuntimeException("Could not load XML or XSLT resources");
+                throw new RuntimeException("Could not load XML or XSLT resources: " + xmlFileName + ", " + xslFileName);
             }
 
             //TODO not use deprecated methods

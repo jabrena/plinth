@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @DisplayName("Cursor Rule Generator Tests")
 class CursorRuleGeneratorTest {
@@ -95,6 +96,120 @@ class CursorRuleGeneratorTest {
                 .contains("# Create README-DEV.md")
                 .contains("## System prompt characterization")
                 .contains("Role definition: You are a Senior software engineer");
+        }
+    }
+
+    @Nested
+    @DisplayName("Parameterized Generate Method Tests")
+    class ParameterizedGenerateMethodTests {
+
+        @Test
+        @DisplayName("Should generate Maven best practices content when using correct parameters")
+        void should_generateMavenBestPracticesContent_when_usingCorrectParameters() {
+            // Given
+            CursorRuleGenerator generator = new CursorRuleGenerator();
+
+            // When
+            String actualResult = generator.generate("110-java-maven-best-practices.xml", "maven-best-practices-generator.xsl");
+
+            // Then
+            assertThat(actualResult)
+                .isNotNull()
+                .isNotEmpty()
+                .contains("# Maven Best Practices")
+                .contains("## System prompt characterization")
+                .contains("Role definition: You are a Senior software engineer")
+                .contains("## Description")
+                .contains("## Table of contents")
+                .contains("- Rule 1: Effective Dependency Management")
+                .contains("## Rule 1: Effective Dependency Management")
+                .contains("## Rule 7: Centralize Version Management with Properties")
+                .contains("**Good example:**")
+                .contains("**Bad Example:");
+        }
+
+        @Test
+        @DisplayName("Should generate Maven best practices with proper structure")
+        void should_generateMavenBestPracticesWithProperStructure_when_calledSuccessfully() {
+            // Given
+            CursorRuleGenerator generator = new CursorRuleGenerator();
+
+            // When
+            String result = generator.generate("110-java-maven-best-practices.xml", "maven-best-practices-generator.xsl");
+
+            // Then
+            assertThat(result)
+                .isNotNull()
+                .contains("# Maven Best Practices")
+                .contains("## System prompt characterization")
+                .contains("Role definition: You are a Senior software engineer")
+                .contains("## Description")
+                .contains("## Table of contents")
+                .contains("- Rule 1: Effective Dependency Management")
+                .contains("## Rule 1: Effective Dependency Management")
+                .contains("## Rule 7: Centralize Version Management with Properties")
+                .contains("**Good example:**")
+                .contains("**Bad Example:");
+        }
+
+        @Test
+        @DisplayName("Should throw exception when XML file does not exist")
+        void should_throwException_when_xmlFileDoesNotExist() {
+            // Given
+            CursorRuleGenerator generator = new CursorRuleGenerator();
+
+            // When & Then
+            assertThatThrownBy(() -> generator.generate("non-existent.xml", "cursor-rule-generator.xsl"))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("Error during XML transformation")
+                .hasCauseInstanceOf(RuntimeException.class);
+
+            // Verify the cause contains our expected message
+            try {
+                generator.generate("non-existent.xml", "cursor-rule-generator.xsl");
+            } catch (RuntimeException e) {
+                assertThat(e.getCause().getMessage())
+                    .contains("Could not load XML or XSLT resources")
+                    .contains("non-existent.xml");
+            }
+        }
+
+        @Test
+        @DisplayName("Should throw exception when XSLT file does not exist")
+        void should_throwException_when_xsltFileDoesNotExist() {
+            // Given
+            CursorRuleGenerator generator = new CursorRuleGenerator();
+
+            // When & Then
+            assertThatThrownBy(() -> generator.generate("112-java-maven-documentation.xml", "non-existent.xsl"))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("Error during XML transformation")
+                .hasCauseInstanceOf(RuntimeException.class);
+
+            // Verify the cause contains our expected message
+            try {
+                generator.generate("112-java-maven-documentation.xml", "non-existent.xsl");
+            } catch (RuntimeException e) {
+                assertThat(e.getCause().getMessage())
+                    .contains("Could not load XML or XSLT resources")
+                    .contains("non-existent.xsl");
+            }
+        }
+
+        @Test
+        @DisplayName("Should use default files when calling parameterless generate method")
+        void should_useDefaultFiles_when_callingParameterlessGenerateMethod() {
+            // Given
+            CursorRuleGenerator generator = new CursorRuleGenerator();
+
+            // When
+            String defaultResult = generator.generate();
+            String explicitResult = generator.generate("112-java-maven-documentation.xml", "cursor-rule-generator.xsl");
+
+            // Then
+            assertThat(defaultResult)
+                .isEqualTo(explicitResult)
+                .isNotEmpty();
         }
     }
 
