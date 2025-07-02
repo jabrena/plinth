@@ -26,14 +26,14 @@ class CursorRuleGeneratorTest {
             CursorRuleGenerator generator = new CursorRuleGenerator();
 
             // When & Then
-            assertThatThrownBy(() -> generator.generate("non-existent.xml", "cursor-rule-generator.xsl"))
+            assertThatThrownBy(() -> generator.generate("non-existent.xml", "unified-generator.xsl"))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Error during XML transformation")
                 .hasCauseInstanceOf(RuntimeException.class);
 
             // Verify the cause contains our expected message
             try {
-                generator.generate("non-existent.xml", "cursor-rule-generator.xsl");
+                generator.generate("non-existent.xml", "unified-generator.xsl");
             } catch (RuntimeException e) {
                 assertThat(e.getCause().getMessage())
                     .contains("Could not load XML or XSLT resources")
@@ -63,46 +63,6 @@ class CursorRuleGeneratorTest {
             }
         }
 
-        @Test
-        @DisplayName("Should generate exact content matching expected Maven best practices document")
-        void should_generateExactContentMatchingExpectedDocument_when_transformingMavenBestPracticesXml() throws IOException {
-            // Given
-            CursorRuleGenerator generator = new CursorRuleGenerator();
-            String expectedContent = loadExpectedContent("110-java-maven-best-practices.mdc");
-
-            // When
-            String actualResult = generator.generate("110-java-maven-best-practices.xml", "maven-best-practices-generator.xsl");
-
-            // Save generated content to target directory for manual comparison
-            saveGeneratedContentToTarget(actualResult, "110-java-maven-best-practices-generated.mdc");
-
-            // Then
-            assertThat(actualResult)
-                .isNotNull()
-                .isNotEmpty()
-                .isEqualTo(expectedContent);
-        }
-
-        @Test
-        @DisplayName("Should generate exact content matching expected Maven documentation document")
-        void should_generateExactContentMatchingExpectedDocument_when_transformingMavenDocumentationXml() throws IOException {
-            // Given
-            CursorRuleGenerator generator = new CursorRuleGenerator();
-            String expectedContent = loadExpectedContent("112-java-maven-documentation.mdc");
-
-            // When
-            String actualResult = generator.generate("112-java-maven-documentation.xml", "cursor-rule-generator.xsl");
-
-            // Save generated content to target directory for manual comparison
-            saveGeneratedContentToTarget(actualResult, "112-java-maven-documentation-generated.mdc");
-
-            // Then
-            assertThat(actualResult)
-                .isNotNull()
-                .isNotEmpty()
-                .isEqualTo(expectedContent);
-        }
-
         private String loadExpectedContent(String filename) throws IOException {
             try (var inputStream = getClass().getClassLoader().getResourceAsStream(filename)) {
                 if (Objects.isNull(inputStream)) {
@@ -128,49 +88,37 @@ class CursorRuleGeneratorTest {
     class UnifiedXsltGeneratorTests {
 
         @Test
-        @DisplayName("Should generate content for Maven best practices using unified XSLT")
-        void should_generateContent_when_transformingMavenBestPracticesWithUnifiedXslt() throws IOException {
+        @DisplayName("Should generate exact content matching original expected Maven best practices document using unified XSLT")
+        void should_generateExactContentMatchingOriginalExpected_when_transformingMavenBestPracticesWithUnifiedXslt() throws IOException {
             // Given
             CursorRuleGenerator generator = new CursorRuleGenerator();
+            String expectedContent = loadExpectedContent("110-java-maven-best-practices.mdc");
 
             // When
             String actualResult = generator.generate("110-java-maven-best-practices.xml", "unified-generator.xsl");
 
-            // Save generated content to target directory for comparison
-            saveGeneratedContentToTarget(actualResult, "110-maven-unified-generated.mdc");
-
-            // Then
+            // Then - Unified XSLT should produce identical output to specialized XSLT
             assertThat(actualResult)
                 .isNotNull()
                 .isNotEmpty()
-                .contains("# Maven Best Practices")
-                .contains("## Rule 1: Effective Dependency Management")
-                .contains("**Good example:**")
-                .contains("**Bad Example:**")
-                .contains("## Table of contents");
+                .isEqualTo(expectedContent);
         }
 
         @Test
-        @DisplayName("Should generate content for Maven documentation using unified XSLT")
-        void should_generateContent_when_transformingMavenDocumentationWithUnifiedXslt() throws IOException {
+        @DisplayName("Should generate exact content matching original expected Maven documentation document using unified XSLT")
+        void should_generateExactContentMatchingOriginalExpected_when_transformingMavenDocumentationWithUnifiedXslt() throws IOException {
             // Given
             CursorRuleGenerator generator = new CursorRuleGenerator();
+            String expectedContent = loadExpectedContent("112-java-maven-documentation.mdc");
 
             // When
             String actualResult = generator.generate("112-java-maven-documentation.xml", "unified-generator.xsl");
 
-            // Save generated content to target directory for comparison
-            saveGeneratedContentToTarget(actualResult, "112-maven-documentation-unified-generated.mdc");
-
-            // Then
+            // Then - Unified XSLT should produce identical output to specialized XSLT
             assertThat(actualResult)
                 .isNotNull()
                 .isNotEmpty()
-                .contains("# Create README-DEV.md with information about how to use the Maven project")
-                .contains("## STRICT Structure for README-DEV.md (Template):")
-                .contains("# Essential Maven Goals:")
-                .contains("./mvnw dependency:tree")
-                .contains("**END OF TEMPLATE");
+                .isEqualTo(expectedContent);
         }
 
         @Test
@@ -197,6 +145,15 @@ class CursorRuleGeneratorTest {
             // Save both for comparison
             saveGeneratedContentToTarget(bestPracticesResult, "unified-best-practices.mdc");
             saveGeneratedContentToTarget(documentationResult, "unified-documentation.mdc");
+        }
+
+        private String loadExpectedContent(String filename) throws IOException {
+            try (var inputStream = getClass().getClassLoader().getResourceAsStream(filename)) {
+                if (Objects.isNull(inputStream)) {
+                    throw new IOException("Resource not found: " + filename);
+                }
+                return new String(inputStream.readAllBytes()).trim();
+            }
         }
 
         private void saveGeneratedContentToTarget(String content, String filename) throws IOException {

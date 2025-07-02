@@ -88,6 +88,10 @@ Description: </xsl:text><xsl:value-of select="normalize-space(rule-description)"
             <xsl:text>
 ```</xsl:text>
         </xsl:if>
+        <xsl:if test="position() != last()">
+            <xsl:text>
+</xsl:text>
+        </xsl:if>
     </xsl:template>
 
     <!-- Template section template -->
