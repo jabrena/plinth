@@ -6,9 +6,15 @@
     <xsl:template match="/system-prompt">
         <!-- Common frontmatter and header -->
         <xsl:text>---
-description: </xsl:text><xsl:value-of select="normalize-space(metadata/description)"/>
+description:</xsl:text>
+        <xsl:if test="normalize-space(metadata/description)">
+            <xsl:text> </xsl:text><xsl:value-of select="normalize-space(metadata/description)"/>
+        </xsl:if>
         <xsl:text>
-globs: </xsl:text><xsl:value-of select="normalize-space(metadata/globs)"/>
+globs:</xsl:text>
+        <xsl:if test="normalize-space(metadata/globs)">
+            <xsl:text> </xsl:text><xsl:value-of select="normalize-space(metadata/globs)"/>
+        </xsl:if>
         <xsl:text>
 alwaysApply: </xsl:text><xsl:value-of select="normalize-space(metadata/always-apply)"/>
         <xsl:text>
@@ -188,9 +194,22 @@ Description: </xsl:text><xsl:value-of select="normalize-space(rule-description)"
 </xsl:text>
         <xsl:if test="instruction-description">
             <xsl:value-of select="normalize-space(instruction-description)"/>
-            <xsl:text>
+            <xsl:choose>
+                <xsl:when test="normalize-space(instruction-description) = '### Template Boundaries:'">
+                    <xsl:text>
 
 </xsl:text>
+                </xsl:when>
+                <xsl:when test="substring(normalize-space(instruction-description), string-length(normalize-space(instruction-description))) = ':'">
+                    <xsl:text>
+</xsl:text>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>
+
+</xsl:text>
+                </xsl:otherwise>
+            </xsl:choose>
         </xsl:if>
         <xsl:for-each select="instruction-rules/instruction-rule">
             <xsl:text>- </xsl:text><xsl:value-of select="normalize-space(.)"/>

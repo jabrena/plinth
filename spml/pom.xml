@@ -21,6 +21,10 @@
     <maven-plugin-versions.version>2.18.0</maven-plugin-versions.version>
     <extra-enforcer-rules.version>1.10.0</extra-enforcer-rules.version>
 
+    <!-- Logging dependency versions -->
+    <slf4j.version>2.0.15</slf4j.version>
+    <logback.version>1.5.12</logback.version>
+
     <!-- Test dependency versions -->
     <assertj.version>3.26.3</assertj.version>
   </properties>
@@ -38,6 +42,19 @@
   </dependencyManagement>
 
   <dependencies>
+    <!-- Logging dependencies -->
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-api</artifactId>
+      <version>${slf4j.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>ch.qos.logback</groupId>
+      <artifactId>logback-classic</artifactId>
+      <version>${logback.version}</version>
+    </dependency>
+
+    <!-- Test dependencies -->
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
