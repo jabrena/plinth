@@ -31,11 +31,6 @@ public class CursorRuleGenerator {
         }
     }
 
-    public String generate() {
-        // Use default files for backward compatibility
-        return generate("112-java-maven-documentation.xml", "cursor-rule-generator.xsl");
-    }
-
     public String generate(String xmlFileName, String xslFileName) {
         try {
             // Load XML and XSLT from resources

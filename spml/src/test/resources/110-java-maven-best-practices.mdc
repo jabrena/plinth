@@ -272,6 +272,7 @@ Description: Use Maven profiles to customize build settings for different enviro
   </profiles>
 </project>
 <!-- Activation: mvn clean install -P prod -->
+
 ```
 
 **Bad Example:**
@@ -436,22 +437,22 @@ Description: Define all dependency and plugin versions in the `<properties>` sec
     <maven.version>3.9.10</maven.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    
+
     <!-- Dependency versions -->
     <jackson.version>2.15.3</jackson.version>
     <junit.version>5.10.1</junit.version>
     <mockito.version>5.7.0</mockito.version>
     <logback.version>1.4.11</logback.version>
-    
+
     <!-- Maven plugin versions -->
     <maven-plugin-compiler.version>3.14.0</maven-plugin-compiler.version>
     <maven-plugin-surefire.version>3.5.3</maven-plugin-surefire.version>
     <maven-plugin-failsafe.version>3.5.3</maven-plugin-failsafe.version>
     <maven-plugin-enforcer.version>3.5.0</maven-plugin-enforcer.version>
-    
+
     <!-- Third-party plugin versions -->
     <maven-plugin-jacoco.version>0.8.13</maven-plugin-jacoco.version>
-    
+
     <!-- Quality thresholds -->
     <coverage.level>80</coverage.level>
     <mutation.level>70</mutation.level>

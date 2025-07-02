@@ -46,90 +46,90 @@
             </rule-description>
             <code-examples>
                 <good-example>
-                    <code-block language="xml">&lt;!-- Parent POM --&gt;
-&lt;project&gt;
-  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-  &lt;groupId&gt;com.example&lt;/groupId&gt;
-  &lt;artifactId&gt;my-parent&lt;/artifactId&gt;
-  &lt;version&gt;1.0.0&lt;/version&gt;
-  &lt;packaging&gt;pom&lt;/packaging&gt;
+                    <code-block language="xml"><![CDATA[<!-- Parent POM -->
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>my-parent</artifactId>
+  <version>1.0.0</version>
+  <packaging>pom</packaging>
 
-  &lt;properties&gt;
-    &lt;spring.version&gt;5.3.23&lt;/spring.version&gt;
-    &lt;junit.version&gt;5.9.0&lt;/junit.version&gt;
-  &lt;/properties&gt;
+  <properties>
+    <spring.version>5.3.23</spring.version>
+    <junit.version>5.9.0</junit.version>
+  </properties>
 
-  &lt;dependencyManagement&gt;
-    &lt;dependencies&gt;
-      &lt;dependency&gt;
-        &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-        &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
-        &lt;version&gt;${spring.version}&lt;/version&gt;
-      &lt;/dependency&gt;
-      &lt;dependency&gt;
-        &lt;groupId&gt;org.junit.jupiter&lt;/groupId&gt;
-        &lt;artifactId&gt;junit-jupiter-api&lt;/artifactId&gt;
-        &lt;version&gt;${junit.version}&lt;/version&gt;
-        &lt;scope&gt;test&lt;/scope&gt;
-      &lt;/dependency&gt;
-      &lt;!-- Import a BOM --&gt;
-      &lt;dependency&gt;
-          &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
-          &lt;artifactId&gt;spring-boot-dependencies&lt;/artifactId&gt;
-          &lt;version&gt;2.7.5&lt;/version&gt;
-          &lt;type&gt;pom&lt;/type&gt;
-          &lt;scope&gt;import&lt;/scope&gt;
-      &lt;/dependency&gt;
-    &lt;/dependencies&gt;
-  &lt;/dependencyManagement&gt;
-&lt;/project&gt;
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-context</artifactId>
+        <version>${spring.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter-api</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <!-- Import a BOM -->
+      <dependency>
+          <groupId>org.springframework.boot</groupId>
+          <artifactId>spring-boot-dependencies</artifactId>
+          <version>2.7.5</version>
+          <type>pom</type>
+          <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+</project>
 
-&lt;!-- Child POM --&gt;
-&lt;project&gt;
-  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-  &lt;parent&gt;
-    &lt;groupId&gt;com.example&lt;/groupId&gt;
-    &lt;artifactId&gt;my-parent&lt;/artifactId&gt;
-    &lt;version&gt;1.0.0&lt;/version&gt;
-  &lt;/parent&gt;
-  &lt;artifactId&gt;my-module&lt;/artifactId&gt;
+<!-- Child POM -->
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.example</groupId>
+    <artifactId>my-parent</artifactId>
+    <version>1.0.0</version>
+  </parent>
+  <artifactId>my-module</artifactId>
 
-  &lt;dependencies&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-      &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
-      &lt;!-- Version is inherited from parent's dependencyManagement --&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.junit.jupiter&lt;/groupId&gt;
-      &lt;artifactId&gt;junit-jupiter-api&lt;/artifactId&gt;
-      &lt;!-- Version and scope inherited --&gt;
-    &lt;/dependency&gt;
-  &lt;/dependencies&gt;
-&lt;/project&gt;</code-block>
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <!-- Version is inherited from parent's dependencyManagement -->
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <!-- Version and scope inherited -->
+    </dependency>
+  </dependencies>
+</project>]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block language="xml">&lt;!-- Child POM hardcoding versions --&gt;
-&lt;project&gt;
-  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-  &lt;groupId&gt;com.example&lt;/groupId&gt;
-  &lt;artifactId&gt;my-other-module&lt;/artifactId&gt;
-  &lt;version&gt;1.0.0&lt;/version&gt;
+                    <code-block language="xml"><![CDATA[<!-- Child POM hardcoding versions -->
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>my-other-module</artifactId>
+  <version>1.0.0</version>
 
-  &lt;dependencies&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.springframework&lt;/groupId&gt;
-      &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
-      &lt;version&gt;5.3.20&lt;/version&gt; &lt;!-- Hardcoded, may differ from parent's intention --&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.junit.jupiter&lt;/groupId&gt;
-      &lt;artifactId&gt;junit-jupiter-api&lt;/artifactId&gt;
-      &lt;version&gt;5.8.1&lt;/version&gt; &lt;!-- Different version, potential conflict --&gt;
-      &lt;scope&gt;test&lt;/scope&gt;
-    &lt;/dependency&gt;
-  &lt;/dependencies&gt;
-&lt;/project&gt;</code-block>
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>5.3.20</version> <!-- Hardcoded, may differ from parent's intention -->
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.8.1</version> <!-- Different version, potential conflict -->
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+</project>]]></code-block>
                 </bad-example>
             </code-examples>
         </rule-section>
@@ -182,58 +182,58 @@
             </rule-description>
             <code-examples>
                 <good-example>
-                    <code-block language="xml">&lt;!-- Parent POM --&gt;
-&lt;project&gt;
-  &lt;!-- ... --&gt;
-  &lt;build&gt;
-    &lt;pluginManagement&gt;
-      &lt;plugins&gt;
-        &lt;plugin&gt;
-          &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-          &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
-          &lt;version&gt;3.10.1&lt;/version&gt;
-          &lt;configuration&gt;
-            &lt;source&gt;17&lt;/source&gt;
-            &lt;target&gt;17&lt;/target&gt;
-          &lt;/configuration&gt;
-        &lt;/plugin&gt;
-      &lt;/plugins&gt;
-    &lt;/pluginManagement&gt;
-  &lt;/build&gt;
-&lt;/project&gt;
+                    <code-block language="xml"><![CDATA[<!-- Parent POM -->
+<project>
+  <!-- ... -->
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>3.10.1</version>
+          <configuration>
+            <source>17</source>
+            <target>17</target>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>
 
-&lt;!-- Child POM --&gt;
-&lt;project&gt;
-  &lt;!-- ... --&gt;
-  &lt;build&gt;
-    &lt;plugins&gt;
-      &lt;plugin&gt;
-        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-        &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
-        &lt;!-- Version and basic configuration inherited --&gt;
-      &lt;/plugin&gt;
-    &lt;/plugins&gt;
-  &lt;/build&gt;
-&lt;/project&gt;</code-block>
+<!-- Child POM -->
+<project>
+  <!-- ... -->
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <!-- Version and basic configuration inherited -->
+      </plugin>
+    </plugins>
+  </build>
+</project>]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block language="xml">&lt;!-- Child POM --&gt;
-&lt;project&gt;
-  &lt;!-- ... --&gt;
-  &lt;build&gt;
-    &lt;plugins&gt;
-      &lt;plugin&gt;
-        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-        &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
-        &lt;version&gt;3.8.1&lt;/version&gt; &lt;!-- Different version, potentially older/incompatible --&gt;
-        &lt;configuration&gt;
-          &lt;source&gt;11&lt;/source&gt;   &lt;!-- Different configuration --&gt;
-          &lt;target&gt;11&lt;/target&gt;
-        &lt;/configuration&gt;
-      &lt;/plugin&gt;
-    &lt;/plugins&gt;
-  &lt;/build&gt;
-&lt;/project&gt;</code-block>
+                    <code-block language="xml"><![CDATA[<!-- Child POM -->
+<project>
+  <!-- ... -->
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.1</version> <!-- Different version, potentially older/incompatible -->
+        <configuration>
+          <source>11</source>   <!-- Different configuration -->
+          <target>11</target>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>]]></code-block>
                 </bad-example>
             </code-examples>
         </rule-section>
@@ -248,58 +248,61 @@
             </rule-description>
             <code-examples>
                 <good-example>
-                    <code-block language="xml">&lt;project&gt;
-  &lt;!-- ... --&gt;
-  &lt;profiles&gt;
-    &lt;profile&gt;
-      &lt;id&gt;dev&lt;/id&gt;
-      &lt;activation&gt;
-        &lt;activeByDefault&gt;true&lt;/activeByDefault&gt;
-      &lt;/activation&gt;
-      &lt;properties&gt;
-        &lt;database.url&gt;jdbc:h2:mem:devdb&lt;/database.url&gt;
-      &lt;/properties&gt;
-    &lt;/profile&gt;
-    &lt;profile&gt;
-      &lt;id&gt;prod&lt;/id&gt;
-      &lt;properties&gt;
-        &lt;database.url&gt;jdbc:postgresql://prodserver/mydb&lt;/database.url&gt;
-      &lt;/properties&gt;
-      &lt;build&gt;
-        &lt;plugins&gt;
-          &lt;plugin&gt;
-            &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-            &lt;artifactId&gt;maven-antrun-plugin&lt;/artifactId&gt;
-            &lt;version&gt;3.1.0&lt;/version&gt;
-            &lt;executions&gt;
-              &lt;execution&gt;
-                &lt;phase&gt;package&lt;/phase&gt;
-                &lt;goals&gt;&lt;goal&gt;run&lt;/goal&gt;&lt;/goals&gt;
-                &lt;configuration&gt;
-                  &lt;target&gt;
-                    &lt;!-- Minify JS/CSS for prod --&gt;
-                    &lt;echo&gt;Simulating minification for prod&lt;/echo&gt;
-                  &lt;/target&gt;
-                &lt;/configuration&gt;
-              &lt;/execution&gt;
-            &lt;/executions&gt;
-          &lt;/plugin&gt;
-        &lt;/plugins&gt;
-      &lt;/build&gt;
-    &lt;/profile&gt;
-  &lt;/profiles&gt;
-&lt;/project&gt;
-&lt;!-- Activation: mvn clean install -P prod --&gt;</code-block>
+                    <code-block language="xml"><![CDATA[
+<project>
+  <!-- ... -->
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <activation>
+        <activeByDefault>true</activeByDefault>
+      </activation>
+      <properties>
+        <database.url>jdbc:h2:mem:devdb</database.url>
+      </properties>
+    </profile>
+    <profile>
+      <id>prod</id>
+      <properties>
+        <database.url>jdbc:postgresql://prodserver/mydb</database.url>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>3.1.0</version>
+            <executions>
+              <execution>
+                <phase>package</phase>
+                <goals><goal>run</goal></goals>
+                <configuration>
+                  <target>
+                    <!-- Minify JS/CSS for prod -->
+                    <echo>Simulating minification for prod</echo>
+                  </target>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>
+<!-- Activation: mvn clean install -P prod -->
+                ]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block language="xml">&lt;!-- Commented out sections for different environments --&gt;
-&lt;project&gt;
-  &lt;!-- ... --&gt;
-  &lt;properties&gt;
-    &lt;!-- &lt;database.url&gt;jdbc:h2:mem:devdb&lt;/database.url&gt; --&gt;
-    &lt;database.url&gt;jdbc:postgresql://prodserver/mydb&lt;/database.url&gt; &lt;!-- Manually switch by commenting/uncommenting --&gt;
-  &lt;/properties&gt;
-&lt;/project&gt;</code-block>
+                    <code-block language="xml"><![CDATA[
+<!-- Commented out sections for different environments -->
+<project>
+  <!-- ... -->
+  <properties>
+    <!-- <database.url>jdbc:h2:mem:devdb</database.url> -->
+    <database.url>jdbc:postgresql://prodserver/mydb</database.url> <!-- Manually switch by commenting/uncommenting -->
+  </properties>
+</project>]]></code-block>
                 </bad-example>
             </code-examples>
         </rule-section>
@@ -314,77 +317,79 @@
             </rule-description>
             <code-examples>
                 <good-example>
-                    <code-block language="xml">&lt;project xmlns="http://maven.apache.org/POM/4.0.0"
+                    <code-block language="xml"><![CDATA[
+<project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
-    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-    &lt;!-- Project Coordinates --&gt;
-    &lt;groupId&gt;com.example&lt;/groupId&gt;
-    &lt;artifactId&gt;my-app&lt;/artifactId&gt;
-    &lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt;
-    &lt;packaging&gt;jar&lt;/packaging&gt;
-    &lt;name&gt;My Application&lt;/name&gt;
-    &lt;description&gt;A sample application.&lt;/description&gt;
+    <!-- Project Coordinates -->
+    <groupId>com.example</groupId>
+    <artifactId>my-app</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>My Application</name>
+    <description>A sample application.</description>
 
-    &lt;!-- Parent (if any) --&gt;
-    &lt;!-- ... --&gt;
+    <!-- Parent (if any) -->
+    <!-- ... -->
 
-    &lt;!-- Properties --&gt;
-    &lt;properties&gt;
-        &lt;java.version&gt;17&lt;/java.version&gt;
-        &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
-        &lt;some.library.version&gt;2.5.1&lt;/some.library.version&gt;
-    &lt;/properties&gt;
+    <!-- Properties -->
+    <properties>
+        <java.version>17</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <some.library.version>2.5.1</some.library.version>
+    </properties>
 
-    &lt;!-- Dependency Management --&gt;
-    &lt;dependencyManagement&gt;
-        &lt;!-- ... --&gt;
-    &lt;/dependencyManagement&gt;
+    <!-- Dependency Management -->
+    <dependencyManagement>
+        <!-- ... -->
+    </dependencyManagement>
 
-    &lt;!-- Dependencies --&gt;
-    &lt;dependencies&gt;
-        &lt;dependency&gt;
-            &lt;groupId&gt;org.some.library&lt;/groupId&gt;
-            &lt;artifactId&gt;some-library-core&lt;/artifactId&gt;
-            &lt;version&gt;${some.library.version}&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;!-- ... --&gt;
-    &lt;/dependencies&gt;
+    <!-- Dependencies -->
+    <dependencies>
+        <dependency>
+            <groupId>org.some.library</groupId>
+            <artifactId>some-library-core</artifactId>
+            <version>${some.library.version}</version>
+        </dependency>
+        <!-- ... -->
+    </dependencies>
 
-    &lt;!-- Build Configuration --&gt;
-    &lt;build&gt;
-        &lt;!-- ... --&gt;
-    &lt;/build&gt;
+    <!-- Build Configuration -->
+    <build>
+        <!-- ... -->
+    </build>
 
-    &lt;!-- Profiles (if any) --&gt;
-    &lt;!-- ... --&gt;
+    <!-- Profiles (if any) -->
+    <!-- ... -->
 
-    &lt;!-- Repositories and Plugin Repositories (if needed) --&gt;
-    &lt;!-- ... --&gt;
-&lt;/project&gt;</code-block>
+    <!-- Repositories and Plugin Repositories (if needed) -->
+    <!-- ... -->
+</project>]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block language="xml">&lt;!-- Haphazard order, missing properties for versions --&gt;
-&lt;project&gt;
-  &lt;dependencies&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.some.library&lt;/groupId&gt;
-      &lt;artifactId&gt;some-library-core&lt;/artifactId&gt;
-      &lt;version&gt;2.5.1&lt;/version&gt; &lt;!-- Version hardcoded, repeated elsewhere --&gt;
-    &lt;/dependency&gt;
-  &lt;/dependencies&gt;
-  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-  &lt;build&gt;
-    &lt;!-- ... --&gt;
-  &lt;/build&gt;
-  &lt;groupId&gt;com.example&lt;/groupId&gt;
-  &lt;properties&gt;
-    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
-  &lt;/properties&gt;
-  &lt;artifactId&gt;my-app&lt;/artifactId&gt;
-  &lt;version&gt;1.0.0-SNAPSHOT&lt;/version&gt;
-&lt;/project&gt;</code-block>
+                    <code-block language="xml"><![CDATA[
+<!-- Haphazard order, missing properties for versions -->
+<project>
+  <dependencies>
+    <dependency>
+      <groupId>org.some.library</groupId>
+      <artifactId>some-library-core</artifactId>
+      <version>2.5.1</version> <!-- Version hardcoded, repeated elsewhere -->
+    </dependency>
+  </dependencies>
+  <modelVersion>4.0.0</modelVersion>
+  <build>
+    <!-- ... -->
+  </build>
+  <groupId>com.example</groupId>
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+  <artifactId>my-app</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+</project>]]></code-block>
                 </bad-example>
             </code-examples>
         </rule-section>
@@ -399,38 +404,40 @@
             </rule-description>
             <code-examples>
                 <good-example>
-                    <code-block language="xml">&lt;project&gt;
-  &lt;!-- ... --&gt;
-  &lt;repositories&gt;
-    &lt;repository&gt;
-      &lt;id&gt;my-internal-repo&lt;/id&gt;
-      &lt;url&gt;https://nexus.example.com/repository/maven-releases/&lt;/url&gt;
-    &lt;/repository&gt;
-  &lt;/repositories&gt;
-  &lt;pluginRepositories&gt;
-    &lt;pluginRepository&gt;
-      &lt;id&gt;my-internal-plugins&lt;/id&gt;
-      &lt;url&gt;https://nexus.example.com/repository/maven-plugins/&lt;/url&gt;
-    &lt;/pluginRepository&gt;
-  &lt;/pluginRepositories&gt;
-&lt;/project&gt;
-&lt;!-- Better: Configure these in settings.xml and use a repository manager --&gt;</code-block>
+                    <code-block language="xml"><![CDATA[
+<project>
+  <!-- ... -->
+  <repositories>
+    <repository>
+      <id>my-internal-repo</id>
+      <url>https://nexus.example.com/repository/maven-releases/</url>
+    </repository>
+  </repositories>
+  <pluginRepositories>
+    <pluginRepository>
+      <id>my-internal-plugins</id>
+      <url>https://nexus.example.com/repository/maven-plugins/</url>
+    </pluginRepository>
+  </pluginRepositories>
+</project>
+<!-- Better: Configure these in settings.xml and use a repository manager -->]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block language="xml">&lt;!-- No explicit repository for a non-central artifact, relying on developer's local settings or transitive ones --&gt;
-&lt;project&gt;
-  &lt;!-- ... --&gt;
-  &lt;dependencies&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;com.internal.stuff&lt;/groupId&gt;
-      &lt;artifactId&gt;internal-lib&lt;/artifactId&gt;
-      &lt;version&gt;1.0&lt;/version&gt;
-      &lt;!-- If this is not in Maven Central, the build will fail unless
+                    <code-block language="xml"><![CDATA[
+<!-- No explicit repository for a non-central artifact, relying on developer's local settings or transitive ones -->
+<project>
+  <!-- ... -->
+  <dependencies>
+    <dependency>
+      <groupId>com.internal.stuff</groupId>
+      <artifactId>internal-lib</artifactId>
+      <version>1.0</version>
+      <!-- If this is not in Maven Central, the build will fail unless
            the repository is configured in settings.xml or a parent POM.
-           Relying on implicit configurations makes builds less portable. --&gt;
-    &lt;/dependency&gt;
-  &lt;/dependencies&gt;
-&lt;/project&gt;</code-block>
+           Relying on implicit configurations makes builds less portable. -->
+    </dependency>
+  </dependencies>
+</project>]]></code-block>
                 </bad-example>
             </code-examples>
         </rule-section>
@@ -445,146 +452,147 @@
             </rule-description>
             <code-examples>
                 <good-example>
-                    <code-block language="xml">&lt;project&gt;
-  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-  &lt;groupId&gt;com.example&lt;/groupId&gt;
-  &lt;artifactId&gt;my-app&lt;/artifactId&gt;
-  &lt;version&gt;1.0.0&lt;/version&gt;
+                    <code-block language="xml"><![CDATA[
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>my-app</artifactId>
+  <version>1.0.0</version>
 
-  &lt;properties&gt;
-    &lt;!-- Core build properties --&gt;
-    &lt;java.version&gt;17&lt;/java.version&gt;
-    &lt;maven.version&gt;3.9.10&lt;/maven.version&gt;
-    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
-    &lt;project.reporting.outputEncoding&gt;UTF-8&lt;/project.reporting.outputEncoding&gt;
+  <properties>
+    <!-- Core build properties -->
+    <java.version>17</java.version>
+    <maven.version>3.9.10</maven.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    &lt;!-- Dependency versions --&gt;
-    &lt;jackson.version&gt;2.15.3&lt;/jackson.version&gt;
-    &lt;junit.version&gt;5.10.1&lt;/junit.version&gt;
-    &lt;mockito.version&gt;5.7.0&lt;/mockito.version&gt;
-    &lt;logback.version&gt;1.4.11&lt;/logback.version&gt;
+    <!-- Dependency versions -->
+    <jackson.version>2.15.3</jackson.version>
+    <junit.version>5.10.1</junit.version>
+    <mockito.version>5.7.0</mockito.version>
+    <logback.version>1.4.11</logback.version>
 
-    &lt;!-- Maven plugin versions --&gt;
-    &lt;maven-plugin-compiler.version&gt;3.14.0&lt;/maven-plugin-compiler.version&gt;
-    &lt;maven-plugin-surefire.version&gt;3.5.3&lt;/maven-plugin-surefire.version&gt;
-    &lt;maven-plugin-failsafe.version&gt;3.5.3&lt;/maven-plugin-failsafe.version&gt;
-    &lt;maven-plugin-enforcer.version&gt;3.5.0&lt;/maven-plugin-enforcer.version&gt;
+    <!-- Maven plugin versions -->
+    <maven-plugin-compiler.version>3.14.0</maven-plugin-compiler.version>
+    <maven-plugin-surefire.version>3.5.3</maven-plugin-surefire.version>
+    <maven-plugin-failsafe.version>3.5.3</maven-plugin-failsafe.version>
+    <maven-plugin-enforcer.version>3.5.0</maven-plugin-enforcer.version>
 
-    &lt;!-- Third-party plugin versions --&gt;
-    &lt;maven-plugin-jacoco.version&gt;0.8.13&lt;/maven-plugin-jacoco.version&gt;
+    <!-- Third-party plugin versions -->
+    <maven-plugin-jacoco.version>0.8.13</maven-plugin-jacoco.version>
 
-    &lt;!-- Quality thresholds --&gt;
-    &lt;coverage.level&gt;80&lt;/coverage.level&gt;
-    &lt;mutation.level&gt;70&lt;/mutation.level&gt;
-  &lt;/properties&gt;
+    <!-- Quality thresholds -->
+    <coverage.level>80</coverage.level>
+    <mutation.level>70</mutation.level>
+  </properties>
 
-  &lt;dependencies&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
-      &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;
-      &lt;version&gt;${jackson.version}&lt;/version&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.junit.jupiter&lt;/groupId&gt;
-      &lt;artifactId&gt;junit-jupiter-api&lt;/artifactId&gt;
-      &lt;version&gt;${junit.version}&lt;/version&gt;
-      &lt;scope&gt;test&lt;/scope&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.mockito&lt;/groupId&gt;
-      &lt;artifactId&gt;mockito-core&lt;/artifactId&gt;
-      &lt;version&gt;${mockito.version}&lt;/version&gt;
-      &lt;scope&gt;test&lt;/scope&gt;
-    &lt;/dependency&gt;
-  &lt;/dependencies&gt;
+  <dependencies>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>${jackson.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>${junit.version}</version>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.mockito</groupId>
+      <artifactId>mockito-core</artifactId>
+      <version>${mockito.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
-  &lt;build&gt;
-    &lt;plugins&gt;
-      &lt;plugin&gt;
-        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-        &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
-        &lt;version&gt;${maven-plugin-compiler.version}&lt;/version&gt;
-        &lt;configuration&gt;
-          &lt;source&gt;${java.version}&lt;/source&gt;
-          &lt;target&gt;${java.version}&lt;/target&gt;
-        &lt;/configuration&gt;
-      &lt;/plugin&gt;
-      &lt;plugin&gt;
-        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-        &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
-        &lt;version&gt;${maven-plugin-surefire.version}&lt;/version&gt;
-      &lt;/plugin&gt;
-      &lt;plugin&gt;
-        &lt;groupId&gt;org.jacoco&lt;/groupId&gt;
-        &lt;artifactId&gt;jacoco-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;${maven-plugin-jacoco.version}&lt;/version&gt;
-      &lt;/plugin&gt;
-    &lt;/plugins&gt;
-  &lt;/build&gt;
-&lt;/project&gt;</code-block>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-plugin-compiler.version}</version>
+        <configuration>
+          <source>${java.version}</source>
+          <target>${java.version}</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-plugin-surefire.version}</version>
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>${maven-plugin-jacoco.version}</version>
+      </plugin>
+    </plugins>
+  </build>
+</project>]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block language="xml">&lt;!-- Hardcoded versions scattered throughout the POM --&gt;
-&lt;project&gt;
-  &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
-  &lt;groupId&gt;com.example&lt;/groupId&gt;
-  &lt;artifactId&gt;my-app&lt;/artifactId&gt;
-  &lt;version&gt;1.0.0&lt;/version&gt;
+                    <code-block language="xml"><![CDATA[<!-- Hardcoded versions scattered throughout the POM -->
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>my-app</artifactId>
+  <version>1.0.0</version>
 
-  &lt;properties&gt;
-    &lt;java.version&gt;17&lt;/java.version&gt;
-    &lt;project.build.sourceEncoding&gt;UTF-8&lt;/project.build.sourceEncoding&gt;
-  &lt;/properties&gt;
+  <properties>
+    <java.version>17</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
 
-  &lt;dependencies&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
-      &lt;artifactId&gt;jackson-databind&lt;/artifactId&gt;
-      &lt;version&gt;2.15.3&lt;/version&gt; &lt;!-- Hardcoded version --&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;com.fasterxml.jackson.core&lt;/groupId&gt;
-      &lt;artifactId&gt;jackson-core&lt;/artifactId&gt;
-      &lt;version&gt;2.15.2&lt;/version&gt; &lt;!-- Different version of same library family! --&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.junit.jupiter&lt;/groupId&gt;
-      &lt;artifactId&gt;junit-jupiter-api&lt;/artifactId&gt;
-      &lt;version&gt;5.10.1&lt;/version&gt; &lt;!-- Hardcoded version --&gt;
-      &lt;scope&gt;test&lt;/scope&gt;
-    &lt;/dependency&gt;
-    &lt;dependency&gt;
-      &lt;groupId&gt;org.junit.jupiter&lt;/groupId&gt;
-      &lt;artifactId&gt;junit-jupiter-engine&lt;/artifactId&gt;
-      &lt;version&gt;5.9.3&lt;/version&gt; &lt;!-- Different JUnit version! --&gt;
-      &lt;scope&gt;test&lt;/scope&gt;
-    &lt;/dependency&gt;
-  &lt;/dependencies&gt;
+  <dependencies>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.15.3</version> <!-- Hardcoded version -->
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>2.15.2</version> <!-- Different version of same library family! -->
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-api</artifactId>
+      <version>5.10.1</version> <!-- Hardcoded version -->
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter-engine</artifactId>
+      <version>5.9.3</version> <!-- Different JUnit version! -->
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
-  &lt;build&gt;
-    &lt;plugins&gt;
-      &lt;plugin&gt;
-        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-        &lt;artifactId&gt;maven-compiler-plugin&lt;/artifactId&gt;
-        &lt;version&gt;3.11.0&lt;/version&gt; &lt;!-- Hardcoded plugin version --&gt;
-        &lt;configuration&gt;
-          &lt;source&gt;17&lt;/source&gt; &lt;!-- Hardcoded Java version instead of using property --&gt;
-          &lt;target&gt;17&lt;/target&gt;
-        &lt;/configuration&gt;
-      &lt;/plugin&gt;
-      &lt;plugin&gt;
-        &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
-        &lt;artifactId&gt;maven-surefire-plugin&lt;/artifactId&gt;
-        &lt;version&gt;3.2.2&lt;/version&gt; &lt;!-- Hardcoded plugin version --&gt;
-      &lt;/plugin&gt;
-      &lt;plugin&gt;
-        &lt;groupId&gt;org.jacoco&lt;/groupId&gt;
-        &lt;artifactId&gt;jacoco-maven-plugin&lt;/artifactId&gt;
-        &lt;version&gt;0.8.10&lt;/version&gt; &lt;!-- Hardcoded and potentially outdated --&gt;
-      &lt;/plugin&gt;
-    &lt;/plugins&gt;
-  &lt;/build&gt;
-&lt;/project&gt;</code-block>
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.11.0</version> <!-- Hardcoded plugin version -->
+        <configuration>
+          <source>17</source> <!-- Hardcoded Java version instead of using property -->
+          <target>17</target>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>3.2.2</version> <!-- Hardcoded plugin version -->
+      </plugin>
+      <plugin>
+        <groupId>org.jacoco</groupId>
+        <artifactId>jacoco-maven-plugin</artifactId>
+        <version>0.8.10</version> <!-- Hardcoded and potentially outdated -->
+      </plugin>
+    </plugins>
+  </build>
+</project>]]></code-block>
                 </bad-example>
             </code-examples>
         </rule-section>

@@ -2,8 +2,9 @@ package info.jab.xml;
 
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.Objects;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -14,143 +15,9 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DisplayName("Cursor Rule Generator Tests")
 class CursorRuleGeneratorTest {
 
-    private CursorRuleGenerator cursorRuleGenerator;
-
-    @BeforeEach
-    void setUp() {
-        cursorRuleGenerator = new CursorRuleGenerator();
-    }
-
-    @Nested
-    @DisplayName("Generate Method Tests")
-    class GenerateMethodTests {
-
-        @Test
-        @DisplayName("Should generate correct markdown content when XML and XSLT resources are available")
-        void should_generateCorrectMarkdownContent_when_xmlAndXsltResourcesAreAvailable() throws IOException {
-            // Given
-            String expectedContent = Files.readString(Paths.get("src/test/resources/112-java-maven-documentation.mdc"));
-
-            // When
-            String actualResult = cursorRuleGenerator.generate();
-
-            // Then
-            assertThat(actualResult)
-                .isNotNull()
-                .isNotEmpty()
-                .isEqualTo(expectedContent.trim());
-        }
-
-        @Test
-        @DisplayName("Should generate content with proper structure")
-        void should_generateContentWithProperStructure_when_calledSuccessfully() {
-            // Given
-            CursorRuleGenerator generator = new CursorRuleGenerator();
-
-            // When
-            String result = generator.generate();
-
-            // Then
-            assertThat(result)
-                .isNotNull()
-                .contains("# Create README-DEV.md")
-                .contains("## System prompt characterization")
-                .contains("Role definition: You are a Senior software engineer")
-                .contains("## Description")
-                .contains("# Essential Maven Goals:")
-                .contains("./mvnw dependency:tree")
-                .contains("./mvnw clean package")
-                .contains("**END OF TEMPLATE - DO NOT ADD ANYTHING BEYOND THIS POINT**");
-        }
-
-        @Test
-        @DisplayName("Should generate consistent output across multiple calls")
-        void should_generateConsistentOutput_when_calledMultipleTimes() {
-            // Given
-            CursorRuleGenerator generator = new CursorRuleGenerator();
-
-            // When
-            String firstResult = generator.generate();
-            String secondResult = generator.generate();
-
-            // Then
-            assertThat(firstResult)
-                .isEqualTo(secondResult)
-                .isNotEmpty();
-        }
-
-        @Test
-        @DisplayName("Should handle transformation correctly")
-        void should_handleTransformationCorrectly_when_validResourcesExist() {
-            // Given
-            CursorRuleGenerator generator = new CursorRuleGenerator();
-
-            // When
-            String result = generator.generate();
-
-            // Then
-            assertThat(result)
-                .isNotNull()
-                .doesNotContain("<?xml")
-                .doesNotContain("<xsl:")
-                .contains("# Create README-DEV.md")
-                .contains("## System prompt characterization")
-                .contains("Role definition: You are a Senior software engineer");
-        }
-    }
-
     @Nested
     @DisplayName("Parameterized Generate Method Tests")
     class ParameterizedGenerateMethodTests {
-
-        @Test
-        @DisplayName("Should generate Maven best practices content when using correct parameters")
-        void should_generateMavenBestPracticesContent_when_usingCorrectParameters() {
-            // Given
-            CursorRuleGenerator generator = new CursorRuleGenerator();
-
-            // When
-            String actualResult = generator.generate("110-java-maven-best-practices.xml", "maven-best-practices-generator.xsl");
-
-            // Then
-            assertThat(actualResult)
-                .isNotNull()
-                .isNotEmpty()
-                .contains("# Maven Best Practices")
-                .contains("## System prompt characterization")
-                .contains("Role definition: You are a Senior software engineer")
-                .contains("## Description")
-                .contains("## Table of contents")
-                .contains("- Rule 1: Effective Dependency Management")
-                .contains("## Rule 1: Effective Dependency Management")
-                .contains("## Rule 7: Centralize Version Management with Properties")
-                .contains("**Good example:**")
-                .contains("**Bad Example:");
-        }
-
-        @Test
-        @DisplayName("Should generate Maven best practices with proper structure")
-        void should_generateMavenBestPracticesWithProperStructure_when_calledSuccessfully() {
-            // Given
-            CursorRuleGenerator generator = new CursorRuleGenerator();
-
-            // When
-            String result = generator.generate("110-java-maven-best-practices.xml", "maven-best-practices-generator.xsl");
-
-            // Then
-            assertThat(result)
-                .isNotNull()
-                .contains("# Maven Best Practices")
-                .contains("## System prompt characterization")
-                .contains("Role definition: You are a Senior software engineer")
-                .contains("## Description")
-                .contains("## Table of contents")
-                .contains("- Rule 1: Effective Dependency Management")
-                .contains("## Rule 1: Effective Dependency Management")
-                .contains("## Rule 7: Centralize Version Management with Properties")
-                .contains("**Good example:**")
-                .contains("**Bad Example:");
-        }
 
         @Test
         @DisplayName("Should throw exception when XML file does not exist")
@@ -197,88 +64,150 @@ class CursorRuleGeneratorTest {
         }
 
         @Test
-        @DisplayName("Should use default files when calling parameterless generate method")
-        void should_useDefaultFiles_when_callingParameterlessGenerateMethod() {
+        @DisplayName("Should generate exact content matching expected Maven best practices document")
+        void should_generateExactContentMatchingExpectedDocument_when_transformingMavenBestPracticesXml() throws IOException {
             // Given
             CursorRuleGenerator generator = new CursorRuleGenerator();
+            String expectedContent = loadExpectedContent("110-java-maven-best-practices.mdc");
 
             // When
-            String defaultResult = generator.generate();
-            String explicitResult = generator.generate("112-java-maven-documentation.xml", "cursor-rule-generator.xsl");
+            String actualResult = generator.generate("110-java-maven-best-practices.xml", "maven-best-practices-generator.xsl");
+
+            // Save generated content to target directory for manual comparison
+            saveGeneratedContentToTarget(actualResult, "110-java-maven-best-practices-generated.mdc");
 
             // Then
-            assertThat(defaultResult)
-                .isEqualTo(explicitResult)
-                .isNotEmpty();
-        }
-    }
-
-    @Nested
-    @DisplayName("Error Handling Tests")
-    class ErrorHandlingTests {
-
-        @Test
-        @DisplayName("Should not throw exceptions during normal operation")
-        void should_notThrowExceptions_when_normalOperationIsPerformed() {
-            // Given
-            CursorRuleGenerator generator = new CursorRuleGenerator();
-
-            // When & Then
-            // Verify that normal operation doesn't throw unexpected exceptions
-            assertThat(generator.generate())
+            assertThat(actualResult)
                 .isNotNull()
-                .isNotEmpty();
+                .isNotEmpty()
+                .isEqualTo(expectedContent);
+        }
+
+        @Test
+        @DisplayName("Should generate exact content matching expected Maven documentation document")
+        void should_generateExactContentMatchingExpectedDocument_when_transformingMavenDocumentationXml() throws IOException {
+            // Given
+            CursorRuleGenerator generator = new CursorRuleGenerator();
+            String expectedContent = loadExpectedContent("112-java-maven-documentation.mdc");
+
+            // When
+            String actualResult = generator.generate("112-java-maven-documentation.xml", "cursor-rule-generator.xsl");
+
+            // Save generated content to target directory for manual comparison
+            saveGeneratedContentToTarget(actualResult, "112-java-maven-documentation-generated.mdc");
+
+            // Then
+            assertThat(actualResult)
+                .isNotNull()
+                .isNotEmpty()
+                .isEqualTo(expectedContent);
+        }
+
+        private String loadExpectedContent(String filename) throws IOException {
+            try (var inputStream = getClass().getClassLoader().getResourceAsStream(filename)) {
+                if (Objects.isNull(inputStream)) {
+                    throw new IOException("Resource not found: " + filename);
+                }
+                return new String(inputStream.readAllBytes()).trim();
+            }
+        }
+
+        private void saveGeneratedContentToTarget(String content, String filename) throws IOException {
+            Path targetDir = Paths.get("target");
+            if (!Files.exists(targetDir)) {
+                Files.createDirectories(targetDir);
+            }
+            Path outputPath = targetDir.resolve(filename);
+            Files.writeString(outputPath, content);
+            System.out.println("Generated content saved to: " + outputPath.toAbsolutePath());
         }
     }
 
     @Nested
-    @DisplayName("Edge Case Tests")
-    class EdgeCaseTests {
+    @DisplayName("Unified XSLT Generator Tests")
+    class UnifiedXsltGeneratorTests {
 
         @Test
-        @DisplayName("Should not return null result")
-        void should_notReturnNull_when_generateIsCalled() {
+        @DisplayName("Should generate content for Maven best practices using unified XSLT")
+        void should_generateContent_when_transformingMavenBestPracticesWithUnifiedXslt() throws IOException {
             // Given
             CursorRuleGenerator generator = new CursorRuleGenerator();
 
             // When
-            String result = generator.generate();
+            String actualResult = generator.generate("110-java-maven-best-practices.xml", "unified-generator.xsl");
+
+            // Save generated content to target directory for comparison
+            saveGeneratedContentToTarget(actualResult, "110-maven-unified-generated.mdc");
 
             // Then
-            assertThat(result).isNotNull();
+            assertThat(actualResult)
+                .isNotNull()
+                .isNotEmpty()
+                .contains("# Maven Best Practices")
+                .contains("## Rule 1: Effective Dependency Management")
+                .contains("**Good example:**")
+                .contains("**Bad Example:**")
+                .contains("## Table of contents");
         }
 
         @Test
-        @DisplayName("Should not return empty result")
-        void should_notReturnEmpty_when_generateIsCalled() {
+        @DisplayName("Should generate content for Maven documentation using unified XSLT")
+        void should_generateContent_when_transformingMavenDocumentationWithUnifiedXslt() throws IOException {
             // Given
             CursorRuleGenerator generator = new CursorRuleGenerator();
 
             // When
-            String result = generator.generate();
+            String actualResult = generator.generate("112-java-maven-documentation.xml", "unified-generator.xsl");
+
+            // Save generated content to target directory for comparison
+            saveGeneratedContentToTarget(actualResult, "112-maven-documentation-unified-generated.mdc");
 
             // Then
-            assertThat(result).isNotEmpty();
+            assertThat(actualResult)
+                .isNotNull()
+                .isNotEmpty()
+                .contains("# Create README-DEV.md with information about how to use the Maven project")
+                .contains("## STRICT Structure for README-DEV.md (Template):")
+                .contains("# Essential Maven Goals:")
+                .contains("./mvnw dependency:tree")
+                .contains("**END OF TEMPLATE");
         }
 
         @Test
-        @DisplayName("Should trim whitespace from result")
-        void should_trimWhitespace_when_generateIsCalled() {
+        @DisplayName("Should produce consistent content structure regardless of XML content type")
+        void should_produceConsistentStructure_when_processingDifferentXmlTypes() throws IOException {
             // Given
             CursorRuleGenerator generator = new CursorRuleGenerator();
 
             // When
-            String result = generator.generate();
+            String bestPracticesResult = generator.generate("110-java-maven-best-practices.xml", "unified-generator.xsl");
+            String documentationResult = generator.generate("112-java-maven-documentation.xml", "unified-generator.xsl");
 
-            // Then
-            assertThat(result)
-                .isEqualTo(result.trim())
-                .doesNotStartWith(" ")
-                .doesNotStartWith("\n")
-                .doesNotStartWith("\t")
-                .doesNotEndWith(" ")
-                .doesNotEndWith("\n")
-                .doesNotEndWith("\t");
+            // Then - Both should have consistent frontmatter and structure
+            assertThat(bestPracticesResult)
+                .startsWith("---\ndescription: Maven Best Practices")
+                .contains("## System prompt characterization")
+                .contains("Role definition: You are a Senior software engineer");
+
+            assertThat(documentationResult)
+                .startsWith("---\ndescription: Create README-DEV.md")
+                .contains("## System prompt characterization")
+                .contains("Role definition: You are a Senior software engineer");
+
+            // Save both for comparison
+            saveGeneratedContentToTarget(bestPracticesResult, "unified-best-practices.mdc");
+            saveGeneratedContentToTarget(documentationResult, "unified-documentation.mdc");
+        }
+
+        private void saveGeneratedContentToTarget(String content, String filename) throws IOException {
+            Path targetDir = Paths.get("target");
+            if (!Files.exists(targetDir)) {
+                Files.createDirectories(targetDir);
+            }
+            Path outputPath = targetDir.resolve(filename);
+            Files.writeString(outputPath, content);
+            System.out.println("Generated content saved to: " + outputPath.toAbsolutePath());
         }
     }
+
 }
