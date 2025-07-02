@@ -184,11 +184,19 @@ Description: </xsl:text><xsl:value-of select="normalize-space(rule-description)"
         </xsl:for-each>
     </xsl:template>
 
-    <!-- Instruction section template -->
+    <!-- Instruction section template - handles both complex and simple structures -->
     <xsl:template match="instruction-section">
         <xsl:text>
 
-## </xsl:text><xsl:value-of select="normalize-space(instruction-header/instruction-title)"/>
+## </xsl:text>
+        <xsl:choose>
+            <xsl:when test="instruction-header/instruction-title">
+                <xsl:value-of select="normalize-space(instruction-header/instruction-title)"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="normalize-space(instruction-title)"/>
+            </xsl:otherwise>
+        </xsl:choose>
         <xsl:text>
 
 </xsl:text>
@@ -213,6 +221,35 @@ Description: </xsl:text><xsl:value-of select="normalize-space(rule-description)"
         </xsl:if>
         <xsl:apply-templates select="restrictions"/>
         <xsl:for-each select="instruction-rules/instruction-rule">
+            <xsl:text>- </xsl:text><xsl:value-of select="normalize-space(.)"/>
+            <xsl:text>
+</xsl:text>
+        </xsl:for-each>
+    </xsl:template>
+
+    <!-- Output requirements section template - handles both complex and simple structures -->
+    <xsl:template match="output-requirements-section">
+        <xsl:text>
+
+## </xsl:text>
+        <xsl:choose>
+            <xsl:when test="output-requirements-header/output-requirements-title">
+                <xsl:value-of select="normalize-space(output-requirements-header/output-requirements-title)"/>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="normalize-space(output-requirements-title)"/>
+            </xsl:otherwise>
+        </xsl:choose>
+        <xsl:text>
+
+</xsl:text>
+        <xsl:if test="output-requirements-description">
+            <xsl:value-of select="normalize-space(output-requirements-description)"/>
+            <xsl:text>
+
+</xsl:text>
+        </xsl:if>
+        <xsl:for-each select="output-requirements-rules/output-requirements-rule">
             <xsl:text>- </xsl:text><xsl:value-of select="normalize-space(.)"/>
             <xsl:text>
 </xsl:text>

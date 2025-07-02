@@ -28,9 +28,7 @@
 
     <content-sections>
         <instruction-section>
-            <instruction-header>
-                <instruction-title>Instructions for AI</instruction-title>
-            </instruction-header>
+            <instruction-title>Instructions for AI</instruction-title>
             <instruction-description>Create a markdown file named `JAVA-DEVELOPMENT-GUIDE.md` with the following exact structure: [java-checklist-template.md](mdc:.cursor/rules/templates/java-checklist-template.md)</instruction-description>
             <restrictions>
                 <restrictions-description>**MANDATORY REQUIREMENT**: Follow the embedded template EXACTLY - do not add, remove, or modify any steps, sections, or cursor rules that are not explicitly shown in the template. ### What NOT to Include:</restrictions-description>
@@ -45,15 +43,13 @@
             </restrictions>
         </instruction-section>
 
-        <instruction-section>
-            <instruction-header>
-                <instruction-title>Output Requirements</instruction-title>
-            </instruction-header>
-            <instruction-rules>
-                <instruction-rule>Generate the complete markdown file following the embedded template exactly</instruction-rule>
-                <instruction-rule>Use proper markdown formatting with headers, code blocks, tables, and checklists</instruction-rule>
-                <instruction-rule>**VERIFY**: Final output contains ONLY what appears in the embedded template</instruction-rule>
-            </instruction-rules>
-        </instruction-section>
+        <output-requirements-section>
+            <output-requirements-title>Output Requirements</output-requirements-title>
+            <output-requirements-rules>
+                <output-requirements-rule>Generate the complete markdown file following the embedded template exactly</output-requirements-rule>
+                <output-requirements-rule>Use proper markdown formatting with headers, code blocks, tables, and checklists</output-requirements-rule>
+                <output-requirements-rule>**VERIFY**: Final output contains ONLY what appears in the embedded template</output-requirements-rule>
+            </output-requirements-rules>
+        </output-requirements-section>
     </content-sections>
 </system-prompt>

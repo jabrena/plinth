@@ -34,7 +34,7 @@
 <!ATTLIST toc-item level CDATA #IMPLIED>
 
 <!-- Content sections (the main body) -->
-<!ELEMENT content-sections (rule-section | question-section | template-section | workflow-section | instruction-section | example-section | reference-section)*>
+<!ELEMENT content-sections (rule-section | question-section | template-section | workflow-section | instruction-section | output-requirements-section | example-section | reference-section)*>
 
 <!-- Rule section with guidelines -->
 <!ELEMENT rule-section (rule-header, rule-description, code-examples?)>
@@ -108,8 +108,8 @@
 <!ELEMENT validation (validation-criteria*)>
 <!ELEMENT validation-criteria (#PCDATA)>
 
-<!-- Instruction section for AI behavior -->
-<!ELEMENT instruction-section (instruction-header, instruction-description?, instruction-rules?, restrictions?)>
+<!-- Simplified Instruction section for AI behavior - supports both complex and simple structures -->
+<!ELEMENT instruction-section ((instruction-header, instruction-description?, instruction-rules?, restrictions?) | (instruction-title, instruction-description?, instruction-rules?, restrictions?))>
 <!ELEMENT instruction-header (instruction-title, instruction-subtitle?)>
 <!ELEMENT instruction-title (#PCDATA)>
 <!ELEMENT instruction-subtitle (#PCDATA)>
@@ -126,6 +126,18 @@
 <!ELEMENT restriction-list (restriction*)>
 <!ELEMENT restriction (#PCDATA | emphasis | code-inline)*>
 <!ATTLIST restriction
+    type (mandatory | optional | conditional) #IMPLIED
+    priority (high | medium | low) #IMPLIED>
+
+<!-- Simplified Output requirements section - supports both complex and simple structures -->
+<!ELEMENT output-requirements-section ((output-requirements-header, output-requirements-description?, output-requirements-rules?) | (output-requirements-title, output-requirements-description?, output-requirements-rules?))>
+<!ELEMENT output-requirements-header (output-requirements-title, output-requirements-subtitle?)>
+<!ELEMENT output-requirements-title (#PCDATA)>
+<!ELEMENT output-requirements-subtitle (#PCDATA)>
+<!ELEMENT output-requirements-description (#PCDATA | emphasis | code-inline)*>
+<!ELEMENT output-requirements-rules (output-requirements-rule*)>
+<!ELEMENT output-requirements-rule (#PCDATA | emphasis | code-inline)*>
+<!ATTLIST output-requirements-rule
     type (mandatory | optional | conditional) #IMPLIED
     priority (high | medium | low) #IMPLIED>
 
