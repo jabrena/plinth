@@ -5,13 +5,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.7.0] - 2025-06-30
+## [0.7.0] 2025-06-30
 
 ### Added
 
 - **Java Profiling Support**: Added comprehensive profiling cursor rules (#81, #88, #91)
   - `@161-java-profiling-detect` for detecting performance issues
-  - `@162-java-profiling-analyze` for analyzing profiling results  
+  - `@162-java-profiling-analyze` for analyzing profiling results
   - `@164-java-profiling-compare` for comparing profiling data
 - **Java Checklist Guide**: Added `@100-java-checklist-guide` cursor rule to help developers use cursor rules effectively (#59)
 - **Maven Documentation**: Added `@112-java-maven-documentation` cursor rule to generate README-DEV.md from existing pom.xml files
