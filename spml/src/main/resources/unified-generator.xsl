@@ -211,7 +211,26 @@ Description: </xsl:text><xsl:value-of select="normalize-space(rule-description)"
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:if>
+        <xsl:apply-templates select="restrictions"/>
         <xsl:for-each select="instruction-rules/instruction-rule">
+            <xsl:text>- </xsl:text><xsl:value-of select="normalize-space(.)"/>
+            <xsl:text>
+</xsl:text>
+        </xsl:for-each>
+    </xsl:template>
+
+    <!-- Restrictions template -->
+    <xsl:template match="restrictions">
+        <xsl:text>### Restrictions
+
+</xsl:text>
+        <xsl:if test="restrictions-description">
+            <xsl:value-of select="normalize-space(restrictions-description)"/>
+            <xsl:text>
+
+</xsl:text>
+        </xsl:if>
+        <xsl:for-each select="restriction-list/restriction">
             <xsl:text>- </xsl:text><xsl:value-of select="normalize-space(.)"/>
             <xsl:text>
 </xsl:text>

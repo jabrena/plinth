@@ -5,12 +5,13 @@
     version CDATA #IMPLIED>
 
 <!-- Metadata section (equivalent to frontmatter) -->
-<!ELEMENT metadata (description, globs?, always-apply?, tags?)>
+<!ELEMENT metadata (description, globs?, always-apply?, tags?, version?)>
 <!ELEMENT description (#PCDATA)>
 <!ELEMENT globs (#PCDATA)>
 <!ELEMENT always-apply (#PCDATA)>
 <!ELEMENT tags (tag*)>
 <!ELEMENT tag (#PCDATA)>
+<!ELEMENT version (#PCDATA)>
 
 <!-- Header section -->
 <!ELEMENT header (title, subtitle?)>
@@ -108,7 +109,7 @@
 <!ELEMENT validation-criteria (#PCDATA)>
 
 <!-- Instruction section for AI behavior -->
-<!ELEMENT instruction-section (instruction-header, instruction-description?, instruction-rules)>
+<!ELEMENT instruction-section (instruction-header, instruction-description?, instruction-rules?, restrictions?)>
 <!ELEMENT instruction-header (instruction-title, instruction-subtitle?)>
 <!ELEMENT instruction-title (#PCDATA)>
 <!ELEMENT instruction-subtitle (#PCDATA)>
@@ -116,6 +117,15 @@
 <!ELEMENT instruction-rules (instruction-rule*)>
 <!ELEMENT instruction-rule (#PCDATA | emphasis | code-inline)*>
 <!ATTLIST instruction-rule
+    type (mandatory | optional | conditional) #IMPLIED
+    priority (high | medium | low) #IMPLIED>
+
+<!-- Restrictions block within instruction section -->
+<!ELEMENT restrictions (restrictions-description?, restriction-list)>
+<!ELEMENT restrictions-description (#PCDATA | emphasis | code-inline)*>
+<!ELEMENT restriction-list (restriction*)>
+<!ELEMENT restriction (#PCDATA | emphasis | code-inline)*>
+<!ATTLIST restriction
     type (mandatory | optional | conditional) #IMPLIED
     priority (high | medium | low) #IMPLIED>
 

@@ -11,6 +11,7 @@
             <tag>java</tag>
             <tag>documentation</tag>
         </tags>
+        <version>0.8.0</version>
     </metadata>
 
     <header>
