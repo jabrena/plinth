@@ -1,0 +1,886 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+           targetNamespace="http://jab.info/xml/system-prompt"
+           xmlns:tns="http://jab.info/xml/system-prompt"
+           elementFormDefault="qualified">
+
+    <!-- Root element for a system prompt -->
+    <xs:element name="system-prompt">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:metadata"/>
+                <xs:element ref="tns:header"/>
+                <xs:element ref="tns:system-characterization"/>
+                <xs:element ref="tns:description"/>
+                <xs:element ref="tns:principles" minOccurs="0"/>
+                <xs:element ref="tns:table-of-contents" minOccurs="0"/>
+                <xs:element ref="tns:content-sections" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+            <xs:attribute name="version" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Metadata section (equivalent to frontmatter) -->
+    <xs:element name="metadata">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:description"/>
+                <xs:element ref="tns:globs" minOccurs="0"/>
+                <xs:element ref="tns:always-apply" minOccurs="0"/>
+                <xs:element ref="tns:tags" minOccurs="0"/>
+                <xs:element ref="tns:version" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="description" type="xs:string"/>
+    <xs:element name="globs" type="xs:string"/>
+    <xs:element name="always-apply" type="xs:string"/>
+    <xs:element name="version" type="xs:string"/>
+
+    <xs:element name="tags">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:tag" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="tag" type="xs:string"/>
+
+    <!-- Header section -->
+    <xs:element name="header">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:title"/>
+                <xs:element ref="tns:subtitle" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="title" type="xs:string"/>
+    <xs:element name="subtitle" type="xs:string"/>
+
+    <!-- System characterization -->
+    <xs:element name="system-characterization">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:role-definition"/>
+                <xs:element ref="tns:expertise-area" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="role-definition" type="xs:string"/>
+    <xs:element name="expertise-area" type="xs:string"/>
+
+    <!-- Principles section -->
+    <xs:element name="principles">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:principle" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="principle">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="number" type="xs:string" use="optional"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Table of contents -->
+    <xs:element name="table-of-contents">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:toc-item" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="toc-item">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="level" type="xs:string" use="optional"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Content sections (the main body) -->
+    <xs:element name="content-sections">
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="tns:rule-section"/>
+                <xs:element ref="tns:question-section"/>
+                <xs:element ref="tns:template-section"/>
+                <xs:element ref="tns:workflow-section"/>
+                <xs:element ref="tns:instruction-section"/>
+                <xs:element ref="tns:output-requirements-section"/>
+                <xs:element ref="tns:example-section"/>
+                <xs:element ref="tns:reference-section"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Rule section with guidelines -->
+    <xs:element name="rule-section">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:rule-header"/>
+                <xs:element ref="tns:rule-description"/>
+                <xs:element ref="tns:code-examples" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="number" type="xs:string" use="optional"/>
+            <xs:attribute name="id" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="rule-header">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:rule-title"/>
+                <xs:element ref="tns:rule-subtitle" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="rule-title" type="xs:string"/>
+    <xs:element name="rule-subtitle" type="xs:string"/>
+
+    <xs:element name="rule-description">
+        <xs:complexType mixed="true">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="tns:emphasis"/>
+                <xs:element ref="tns:code-inline"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Code examples with good and bad patterns -->
+    <xs:element name="code-examples">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:good-example" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="tns:bad-example" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="good-example">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:code-block"/>
+                <xs:element ref="tns:explanation" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="bad-example">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:code-block"/>
+                <xs:element ref="tns:explanation" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="code-block">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="language" type="xs:string" use="optional"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="explanation">
+        <xs:complexType mixed="true">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="tns:emphasis"/>
+                <xs:element ref="tns:code-inline"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Interactive question section -->
+    <xs:element name="question-section">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:question-header"/>
+                <xs:element ref="tns:question-description" minOccurs="0"/>
+                <xs:element ref="tns:question-items" maxOccurs="unbounded"/>
+            </xs:sequence>
+            <xs:attribute name="type" use="optional">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="single"/>
+                        <xs:enumeration value="multiple"/>
+                        <xs:enumeration value="conditional"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="dependency" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="question-header">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:question-title"/>
+                <xs:element ref="tns:question-subtitle" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="question-title" type="xs:string"/>
+    <xs:element name="question-subtitle" type="xs:string"/>
+
+    <xs:element name="question-description">
+        <xs:complexType mixed="true">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="tns:emphasis"/>
+                <xs:element ref="tns:code-inline"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="question-items">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:question-item" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="question-item">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:option-text"/>
+                <xs:element ref="tns:option-description" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="option-text" type="xs:string"/>
+    <xs:element name="option-description" type="xs:string"/>
+
+    <!-- Template section for code/configuration templates -->
+    <xs:element name="template-section">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:template-header"/>
+                <xs:element ref="tns:template-description" minOccurs="0"/>
+                <xs:element ref="tns:template-content"/>
+            </xs:sequence>
+            <xs:attribute name="type" use="optional">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="code"/>
+                        <xs:enumeration value="configuration"/>
+                        <xs:enumeration value="script"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="language" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="template-header">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:template-title"/>
+                <xs:element ref="tns:template-subtitle" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="template-title" type="xs:string"/>
+    <xs:element name="template-subtitle" type="xs:string"/>
+
+    <xs:element name="template-description">
+        <xs:complexType mixed="true">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="tns:emphasis"/>
+                <xs:element ref="tns:code-inline"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="template-content">
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="tns:code-block"/>
+                <xs:element ref="tns:parameter-list"/>
+                <xs:element ref="tns:placeholder"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="parameter-list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:parameter" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="parameter">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:param-name"/>
+                <xs:element ref="tns:param-description"/>
+                <xs:element ref="tns:param-default" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="param-name" type="xs:string"/>
+    <xs:element name="param-description" type="xs:string"/>
+    <xs:element name="param-default" type="xs:string"/>
+
+    <xs:element name="placeholder">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="name" type="xs:string" use="required"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Workflow section for step-by-step processes -->
+    <xs:element name="workflow-section">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:workflow-header"/>
+                <xs:element ref="tns:workflow-description" minOccurs="0"/>
+                <xs:element ref="tns:workflow-steps"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="workflow-header">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:workflow-title"/>
+                <xs:element ref="tns:workflow-subtitle" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="workflow-title" type="xs:string"/>
+    <xs:element name="workflow-subtitle" type="xs:string"/>
+
+    <xs:element name="workflow-description">
+        <xs:complexType mixed="true">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="tns:emphasis"/>
+                <xs:element ref="tns:code-inline"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="workflow-steps">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:workflow-step" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="workflow-step">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:step-header"/>
+                <xs:element ref="tns:step-description"/>
+                <xs:element ref="tns:step-content" minOccurs="0"/>
+                <xs:element ref="tns:prerequisites" minOccurs="0"/>
+                <xs:element ref="tns:validation" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="number" type="xs:string" use="optional"/>
+            <xs:attribute name="type" use="optional">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="mandatory"/>
+                        <xs:enumeration value="optional"/>
+                        <xs:enumeration value="conditional"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="dependency" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="step-header">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:step-title"/>
+                <xs:element ref="tns:step-subtitle" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="step-title" type="xs:string"/>
+    <xs:element name="step-subtitle" type="xs:string"/>
+
+    <xs:element name="step-description">
+        <xs:complexType mixed="true">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="tns:emphasis"/>
+                <xs:element ref="tns:code-inline"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="step-content">
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="tns:code-block"/>
+                <xs:element ref="tns:command-list"/>
+                <xs:element ref="tns:checklist"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="prerequisites">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:prerequisite" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="prerequisite" type="xs:string"/>
+
+    <xs:element name="validation">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:validation-criteria" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="validation-criteria" type="xs:string"/>
+
+    <!-- Simplified Instruction section for AI behavior -->
+    <xs:element name="instruction-section">
+        <xs:complexType>
+            <xs:choice>
+                <xs:sequence>
+                    <xs:element ref="tns:instruction-header"/>
+                    <xs:element ref="tns:instruction-description" minOccurs="0"/>
+                    <xs:element ref="tns:instruction-rules" minOccurs="0"/>
+                    <xs:element ref="tns:restrictions" minOccurs="0"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="tns:instruction-title"/>
+                    <xs:element ref="tns:instruction-description" minOccurs="0"/>
+                    <xs:element ref="tns:instruction-rules" minOccurs="0"/>
+                    <xs:element ref="tns:restrictions" minOccurs="0"/>
+                </xs:sequence>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="instruction-header">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:instruction-title"/>
+                <xs:element ref="tns:instruction-subtitle" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="instruction-title" type="xs:string"/>
+    <xs:element name="instruction-subtitle" type="xs:string"/>
+
+    <xs:element name="instruction-description">
+        <xs:complexType mixed="true">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="tns:emphasis"/>
+                <xs:element ref="tns:code-inline"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="instruction-rules">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:instruction-rule" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="instruction-rule">
+        <xs:complexType mixed="true">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="tns:emphasis"/>
+                <xs:element ref="tns:code-inline"/>
+            </xs:choice>
+            <xs:attribute name="type" use="optional">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="mandatory"/>
+                        <xs:enumeration value="optional"/>
+                        <xs:enumeration value="conditional"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="priority" use="optional">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="high"/>
+                        <xs:enumeration value="medium"/>
+                        <xs:enumeration value="low"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Restrictions block within instruction section -->
+    <xs:element name="restrictions">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:restrictions-description" minOccurs="0"/>
+                <xs:element ref="tns:restriction-list"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="restrictions-description">
+        <xs:complexType mixed="true">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="tns:emphasis"/>
+                <xs:element ref="tns:code-inline"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="restriction-list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:restriction" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="restriction">
+        <xs:complexType mixed="true">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="tns:emphasis"/>
+                <xs:element ref="tns:code-inline"/>
+            </xs:choice>
+            <xs:attribute name="type" use="optional">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="mandatory"/>
+                        <xs:enumeration value="optional"/>
+                        <xs:enumeration value="conditional"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="priority" use="optional">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="high"/>
+                        <xs:enumeration value="medium"/>
+                        <xs:enumeration value="low"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Simplified Output requirements section -->
+    <xs:element name="output-requirements-section">
+        <xs:complexType>
+            <xs:choice>
+                <xs:sequence>
+                    <xs:element ref="tns:output-requirements-header"/>
+                    <xs:element ref="tns:output-requirements-description" minOccurs="0"/>
+                    <xs:element ref="tns:output-requirements-rules" minOccurs="0"/>
+                </xs:sequence>
+                <xs:sequence>
+                    <xs:element ref="tns:output-requirements-title"/>
+                    <xs:element ref="tns:output-requirements-description" minOccurs="0"/>
+                    <xs:element ref="tns:output-requirements-rules" minOccurs="0"/>
+                </xs:sequence>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="output-requirements-header">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:output-requirements-title"/>
+                <xs:element ref="tns:output-requirements-subtitle" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="output-requirements-title" type="xs:string"/>
+    <xs:element name="output-requirements-subtitle" type="xs:string"/>
+
+    <xs:element name="output-requirements-description">
+        <xs:complexType mixed="true">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="tns:emphasis"/>
+                <xs:element ref="tns:code-inline"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="output-requirements-rules">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:output-requirements-rule" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="output-requirements-rule">
+        <xs:complexType mixed="true">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="tns:emphasis"/>
+                <xs:element ref="tns:code-inline"/>
+            </xs:choice>
+            <xs:attribute name="type" use="optional">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="mandatory"/>
+                        <xs:enumeration value="optional"/>
+                        <xs:enumeration value="conditional"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="priority" use="optional">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="high"/>
+                        <xs:enumeration value="medium"/>
+                        <xs:enumeration value="low"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Example section -->
+    <xs:element name="example-section">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:example-header"/>
+                <xs:element ref="tns:example-description" minOccurs="0"/>
+                <xs:element ref="tns:example-content"/>
+            </xs:sequence>
+            <xs:attribute name="type" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="example-header">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:example-title"/>
+                <xs:element ref="tns:example-subtitle" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="example-title" type="xs:string"/>
+    <xs:element name="example-subtitle" type="xs:string"/>
+
+    <xs:element name="example-description">
+        <xs:complexType mixed="true">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="tns:emphasis"/>
+                <xs:element ref="tns:code-inline"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="example-content">
+        <xs:complexType>
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="tns:code-block"/>
+                <xs:element ref="tns:scenario"/>
+                <xs:element ref="tns:use-case"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="scenario">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:scenario-description"/>
+                <xs:element ref="tns:scenario-steps"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="scenario-description" type="xs:string"/>
+
+    <xs:element name="scenario-steps">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:scenario-step" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="scenario-step" type="xs:string"/>
+
+    <xs:element name="use-case">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:use-case-description"/>
+                <xs:element ref="tns:use-case-implementation"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="use-case-description" type="xs:string"/>
+
+    <xs:element name="use-case-implementation">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:code-block"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Reference section -->
+    <xs:element name="reference-section">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:reference-header"/>
+                <xs:element ref="tns:reference-description" minOccurs="0"/>
+                <xs:element ref="tns:reference-links"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="reference-header">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:reference-title"/>
+                <xs:element ref="tns:reference-subtitle" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="reference-title" type="xs:string"/>
+    <xs:element name="reference-subtitle" type="xs:string"/>
+
+    <xs:element name="reference-description">
+        <xs:complexType mixed="true">
+            <xs:choice minOccurs="0" maxOccurs="unbounded">
+                <xs:element ref="tns:emphasis"/>
+                <xs:element ref="tns:code-inline"/>
+            </xs:choice>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="reference-links">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:reference-link" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="reference-link">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="type" use="optional">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="internal"/>
+                                <xs:enumeration value="external"/>
+                                <xs:enumeration value="template"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                    <xs:attribute name="href" type="xs:string" use="optional"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Common utility elements -->
+    <xs:element name="command-list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:command" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="command">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="shell" type="xs:string" use="optional"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="checklist">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tns:checklist-item" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="checklist-item">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="checked" use="optional">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="true"/>
+                                <xs:enumeration value="false"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Text formatting elements -->
+    <xs:element name="emphasis">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="type" use="optional">
+                        <xs:simpleType>
+                            <xs:restriction base="xs:string">
+                                <xs:enumeration value="bold"/>
+                                <xs:enumeration value="italic"/>
+                                <xs:enumeration value="code"/>
+                                <xs:enumeration value="warning"/>
+                                <xs:enumeration value="critical"/>
+                            </xs:restriction>
+                        </xs:simpleType>
+                    </xs:attribute>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="code-inline" type="xs:string"/>
+
+</xs:schema>

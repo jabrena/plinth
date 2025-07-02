@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE system-prompt SYSTEM "system-prompt.dtd">
-
-<system-prompt id="100-java-checklist-guide" version="1.0">
+<system-prompt xmlns="http://jab.info/xml/system-prompt"
+               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://jab.info/xml/system-prompt system-prompt.xsd"
+               id="100-java-checklist-guide" version="1.0">
     <metadata>
         <description></description>
         <globs></globs>

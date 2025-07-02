@@ -8,7 +8,7 @@
   <version>0.1.0</version>
 
   <properties>
-    <java.version>24</java.version>
+    <java.version>21</java.version>
     <maven.version>3.9.10</maven.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -184,7 +184,7 @@
         </configuration>
       </plugin>
 
-      <!-- XML validation against DTD -->
+      <!-- XML validation against XSD -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>xml-maven-plugin</artifactId>
@@ -203,6 +203,7 @@
                     <include>*.xml</include>
                   </includes>
                   <validating>true</validating>
+                  <schemaLanguage>http://www.w3.org/2001/XMLSchema</schemaLanguage>
                 </validationSet>
               </validationSets>
             </configuration>
