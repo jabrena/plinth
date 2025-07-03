@@ -184,7 +184,7 @@
         </configuration>
       </plugin>
 
-      <!-- XML validation against DTD -->
+      <!-- XML validation against XSD -->
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>xml-maven-plugin</artifactId>
@@ -203,6 +203,7 @@
                     <include>*.xml</include>
                   </includes>
                   <validating>true</validating>
+                  <schemaLanguage>http://www.w3.org/2001/XMLSchema</schemaLanguage>
                 </validationSet>
               </validationSets>
             </configuration>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE system-prompt SYSTEM "system-prompt.dtd">
-
-<system-prompt id="110-java-maven-best-practices" version="1.0">
+<system-prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="system-prompt.xsd"
+               id="110-java-maven-best-practices" version="1.0">
     <metadata>
         <description>Maven Best Practices</description>
         <globs>pom.xml</globs>

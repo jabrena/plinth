@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE system-prompt SYSTEM "system-prompt.dtd">
-
-<system-prompt id="112-java-maven-documentation" version="1.0">
+<system-prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="system-prompt.xsd"
+               id="112-java-maven-documentation" version="1.0">
     <metadata>
         <description>Create README-DEV.md with information about how to use the Maven project</description>
         <globs>pom.xml</globs>
