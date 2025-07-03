@@ -131,7 +131,7 @@ class AssertJExampleTest {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 import org.junit.jupiter.api.Test;
@@ -191,7 +191,7 @@ class GivenWhenThenTest {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 import org.junit.jupiter.api.Test;
@@ -226,11 +226,7 @@ void should_throwException_when_divisorIsZero() {
     assertThatThrownBy(() -> calculator.divide(1, 0))
         .isInstanceOf(ArithmeticException.class);
 }
-```
 
-**Good example:**
-
-```java
 @Test
 @DisplayName("Should return the correct sum for positive numbers")
 void additionWithPositives() {
@@ -247,7 +243,7 @@ void additionWithPositives() {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 @Test
@@ -334,7 +330,7 @@ class IndependentTests {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 class DependentTests {
@@ -390,9 +386,9 @@ class ParameterizedCalculatorTest {
         assertThat(actualResult).isEqualTo(expectedResult);
     }
 }
- ```
+```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 import org.junit.jupiter.api.Test;
@@ -437,6 +433,7 @@ Description: Unit tests should focus solely on the logic of the class being test
 *   **`verify(mock).methodCall()`**: Verifies that a specific method was called on the mock object. You can also specify the number of times (`times(n)`), at least once (`atLeastOnce()`), etc.
 *   **`@Mock` Annotation**: Used with `@ExtendWith(MockitoExtension.class)` (JUnit 5) to automatically create mocks for fields.
 *   **`@InjectMocks` Annotation**: Creates an instance of the class under test and automatically injects fields annotated with `@Mock` into it.
+
 
 **Good example:**
 
@@ -516,12 +513,28 @@ class UserServiceTest {
 }
 ```
 
-**Why Mocking is Crucial:**
+**Bad example:**
 
-*   **Isolation:** Ensures the test focuses only on the `UserService` logic, not the actual database interaction.
-*   **Speed:** Mock operations are in-memory and extremely fast, unlike real I/O operations.
-*   **Determinism:** Mock behavior is explicitly defined, making tests predictable and reliable, regardless of external system state.
-*   **Control:** Allows simulating specific scenarios (e.g., user not found, database errors) that might be difficult to set up with real dependencies.
+```java
+import org.junit.jupiter.api.Test;
+
+class UserServiceTestBad {
+
+    @Test
+    void findUserById() {
+        // Bad: Using real dependencies instead of mocks
+        DatabaseConnection connection = new DatabaseConnection("localhost", 5432);
+        UserRepository userRepository = new PostgresUserRepository(connection);
+        UserService userService = new UserService(userRepository);
+
+        // This test depends on database availability and state
+        Optional<User> user = userService.findUserById("123");
+
+        // Test is slow, brittle, and doesn't isolate the unit under test
+        assertThat(user).isPresent();
+    }
+}
+```
 
 ## Rule 9: Consider Test Coverage, But Don't Obsess
 
@@ -530,46 +543,33 @@ Description: Tools like JaCoCo can measure which lines of code are executed by y
 
 ## Rule 10: Test Scopes
 
-### Test classes should be package-private
-
-Test classes should have package-private visibility. There is no need for them to be public.
-
-### Test methods should be package-private
-
-Test methods should have package-private visibility. There is no need for them to be public.
+Title: Test classes and methods should be package-private
+Description: Test classes should have package-private visibility. There is no need for them to be public. Test methods should have package-private visibility. There is no need for them to be public.
 
 ## Rule 11: Code Splitting Strategies
 
-- **Small Test Methods:** Keep test methods small and focused on testing a single behavior.
-- **Helper Methods:** Use helper methods to avoid code duplication in test setup and assertions.
-- **Parameterized Tests:** Utilize JUnit's parameterized tests to test the same logic with different input values.
+Title: Keep test methods focused and use proper organization
+Description: Small Test Methods: Keep test methods small and focused on testing a single behavior. Helper Methods: Use helper methods to avoid code duplication in test setup and assertions. Parameterized Tests: Utilize JUnit's parameterized tests to test the same logic with different input values.
 
 ## Rule 12: Anti-patterns and Code Smells
 
-- **Testing Implementation Details:** Avoid testing implementation details that might change, leading to brittle tests. Focus on testing behavior and outcomes.
-- **Hard-coded Values:** Avoid hard-coding values in tests. Use constants or test data to make tests more maintainable.
-- **Complex Test Logic:** Keep test logic simple and avoid complex calculations or conditional statements within tests.
-- **Ignoring Edge Cases:** Don't ignore edge cases or boundary conditions. Ensure tests cover a wide range of inputs, including invalid or unexpected values.
-- **Slow Tests:** Avoid slow tests that discourage developers from running them frequently.
-- **Over-reliance on Mocks:** Mock judiciously; too many mocks can obscure the actual behavior and make tests less reliable.
-- **Ignoring Test Failures:** Never ignore failing tests. Investigate and fix them promptly.
+Title: Avoid common testing anti-patterns
+Description: Testing Implementation Details: Avoid testing implementation details that might change, leading to brittle tests. Focus on testing behavior and outcomes. Hard-coded Values: Avoid hard-coding values in tests. Use constants or test data to make tests more maintainable. Complex Test Logic: Keep test logic simple and avoid complex calculations or conditional statements within tests. Ignoring Edge Cases: Don't ignore edge cases or boundary conditions. Ensure tests cover a wide range of inputs, including invalid or unexpected values. Slow Tests: Avoid slow tests that discourage developers from running them frequently. Over-reliance on Mocks: Mock judiciously; too many mocks can obscure the actual behavior and make tests less reliable. Ignoring Test Failures: Never ignore failing tests. Investigate and fix them promptly.
 
 ## Rule 13: State Management
 
-- **Isolated State:** Ensure each test has its own isolated state to avoid interference between tests. Use `@BeforeEach` to reset the state before each test.
-- **Immutable Objects:** Prefer immutable objects to simplify state management and avoid unexpected side effects.
-- **Stateless Components:** Design stateless components whenever possible to reduce the need for state management in tests.
+Title: Ensure proper state isolation between tests
+Description: - **Isolated State:** Ensure each test has its own isolated state to avoid interference between tests. Use `@BeforeEach` to reset the state before each test. - **Immutable Objects:** Prefer immutable objects to simplify state management and avoid unexpected side effects. - **Stateless Components:** Design stateless components whenever possible to reduce the need for state management in tests.
 
 ## Rule 14: Error Handling
 
-- **Expected Exceptions:** Use AssertJ's `assertThatThrownBy` to verify that a method throws the expected exception under specific conditions.
-- **Exception Messages:** Assert the exception message to ensure the correct error is being thrown with helpful context.
-- **Graceful Degradation:** Test how the application handles errors and gracefully degrades when dependencies are unavailable.
+Title: Test error conditions and exception handling
+Description: - **Expected Exceptions:** Use AssertJ's `assertThatThrownBy` to verify that a method throws the expected exception under specific conditions. - **Exception Messages:** Assert the exception message to ensure the correct error is being thrown with helpful context. - **Graceful Degradation:** Test how the application handles errors and gracefully degrades when dependencies are unavailable.
 
 ## Rule 15: Leverage JSpecify for Null Safety
 
-Title: Utilize JSpecify annotations for explicit nullness contracts.
-Description: Employ JSpecify annotations (`org.jspecify.annotations.*`) such as `@NullMarked`, `@Nullable`, and `@NonNull` to clearly define the nullness expectations of method parameters, return types, and fields within your tests and the code under test. This practice enhances code clarity, enables static analysis tools to catch potential `NullPointerExceptions` early, and improves the overall robustness of your tests and application code. In test code, this is particularly important for defining the expected behavior of mocks and verifying interactions with potentially null values.
+Title: Utilize JSpecify annotations for explicit nullness contracts
+Description: Employ JSpecify annotations (org.jspecify.annotations.*) such as @NullMarked, @Nullable, and @NonNull to clearly define the nullness expectations of method parameters, return types, and fields within your tests and the code under test. This practice enhances code clarity, enables static analysis tools to catch potential NullPointerExceptions early, and improves the overall robustness of your tests and application code. In test code, this is particularly important for defining the expected behavior of mocks and verifying interactions with potentially null values.
 
 **Good example:**
 
@@ -656,7 +656,7 @@ class MyProcessorTest {
 }
 ```
 
-**Bad Example (Lack of explicit nullness):**
+**Bad example:**
 
 ```java
 // No JSpecify annotations, nullness is ambiguous
@@ -792,7 +792,7 @@ public class CalculatorTest {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // Test only covers one simple case (violates "Thorough" from A-TRIP, and doesn't consider RIGHT-BICEP)
@@ -905,7 +905,7 @@ public class OrderProcessorTest {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // Violating A-TRIP principles
@@ -1058,7 +1058,7 @@ public class UserValidationTest {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // Only testing one happy path for age validation, ignoring boundaries.
@@ -1080,4 +1080,3 @@ public class UserValidationPoorTest {
     }
 }
 ```
-

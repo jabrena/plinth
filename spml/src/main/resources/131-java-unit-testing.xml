@@ -361,7 +361,7 @@ void testUserValidation() { // Tests multiple conditions at once
         <rule-section number="7" id="use-parameterized-tests">
             <rule-header>
                 <rule-title>Use Parameterized Tests for Data Variations</rule-title>
-                <rule-subtitle>Use @ParameterizedTest for testing the same logic with different inputs</rule-subtitle>
+                <rule-subtitle>Use `@ParameterizedTest` for testing the same logic with different inputs</rule-subtitle>
             </rule-header>
             <rule-description>
                 When testing a method's behavior across various input values or boundary conditions, leverage JUnit 5's parameterized tests (`@ParameterizedTest` with sources like `@ValueSource`, `@CsvSource`, `@MethodSource`). This avoids code duplication and clearly separates the test logic from the test data.
@@ -435,6 +435,29 @@ class RepetitiveCalculatorTest {
             <rule-description>
                 Unit tests should focus solely on the logic of the class being tested (System Under Test - SUT), not its dependencies (database, network services, other classes). Use mocking frameworks like Mockito to create mock objects that simulate the behavior of these dependencies. This ensures tests are fast, reliable, and truly test the unit in isolation.
             </rule-description>
+            <rule-notes>
+                <notes-title>Key Mockito Concepts:</notes-title>
+                <note-item>
+                    <note-term>`mock(Class&lt;T&gt; classToMock)`</note-term>
+                    <note-description>Creates a mock object of a given class or interface.</note-description>
+                </note-item>
+                <note-item>
+                    <note-term>`when(mock.methodCall()).thenReturn(value)`</note-term>
+                    <note-description>Defines the behavior of a mock object's method. When the specified method is called on the mock, it will return the defined `value`.</note-description>
+                </note-item>
+                <note-item>
+                    <note-term>`verify(mock).methodCall()`</note-term>
+                    <note-description>Verifies that a specific method was called on the mock object. You can also specify the number of times (`times(n)`), at least once (`atLeastOnce()`), etc.</note-description>
+                </note-item>
+                <note-item>
+                    <note-term>`@Mock` Annotation</note-term>
+                    <note-description>Used with `@ExtendWith(MockitoExtension.class)` (JUnit 5) to automatically create mocks for fields.</note-description>
+                </note-item>
+                <note-item>
+                    <note-term>`@InjectMocks` Annotation</note-term>
+                    <note-description>Creates an instance of the class under test and automatically injects fields annotated with `@Mock` into it.</note-description>
+                </note-item>
+            </rule-notes>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[import org.junit.jupiter.api.Test;
@@ -447,6 +470,8 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.*; // Import static methods
+
+// Assume classes: UserService, UserRepository, User
 
 @ExtendWith(MockitoExtension.class) // Integrate Mockito with JUnit 5
 class UserServiceTest {
@@ -473,6 +498,39 @@ class UserServiceTest {
         // Verify that findById("123") was called exactly once on the mock repository
         verify(userRepository, times(1)).findById("123");
         verifyNoMoreInteractions(userRepository); // Optional: ensure no other methods were called
+    }
+
+    @Test
+    @DisplayName("Should return empty optional when user not found")
+    void findUserById_NotFound() {
+        // Given
+        // Define mock behavior: when findById is called with any string, return empty
+        when(userRepository.findById(anyString())).thenReturn(Optional.empty());
+
+        // When
+        Optional<User> actualUser = userService.findUserById("unknownId");
+
+        // Then
+        assertThat(actualUser).isNotPresent();
+        verify(userRepository).findById("unknownId"); // Verify the specific call
+    }
+
+    @Test
+    @DisplayName("Should save user successfully")
+    void saveUser() {
+        // Given
+        User userToSave = new User(null, "Jane Doe"); // ID might be generated on save
+        User savedUser = new User("genId", "Jane Doe");
+        // Define behavior for save: return the user with an ID
+        when(userRepository.save(any(User.class))).thenReturn(savedUser);
+
+        // When
+        User result = userService.saveUser(userToSave);
+
+        // Then
+        assertThat(result).isEqualTo(savedUser);
+        // Verify that save was called with the correct user object (or use ArgumentCaptor for complex cases)
+        verify(userRepository).save(userToSave);
     }
 }]]></code-block>
                 </good-example>
@@ -505,7 +563,7 @@ class UserServiceTestBad {
                 <rule-subtitle>Use code coverage as a guide, not a definitive quality metric</rule-subtitle>
             </rule-header>
             <rule-description>
-                Tools like JaCoCo can measure which lines of code are executed by your tests (code coverage). Aiming for high coverage (e.g., &gt;80% line/branch coverage) is generally good practice, as it indicates most code paths are tested. However, 100% coverage doesn't guarantee bug-free code or high-quality tests. Focus on writing meaningful tests for critical logic and edge cases rather than solely chasing coverage numbers.
+                Tools like JaCoCo can measure which lines of code are executed by your tests (code coverage). Aiming for high coverage (e.g., &gt;80% line/branch coverage) is generally good practice, as it indicates most code paths are tested. However, 100% coverage doesn't guarantee bug-free code or high-quality tests. Focus on writing meaningful tests for critical logic and edge cases rather than solely chasing coverage numbers. A test might cover a line but not actually verify its correctness effectively.
             </rule-description>
         </rule-section>
 
@@ -535,7 +593,7 @@ class UserServiceTestBad {
                 <rule-subtitle>Avoid common testing anti-patterns</rule-subtitle>
             </rule-header>
             <rule-description>
-                Testing Implementation Details: Avoid testing implementation details that might change, leading to brittle tests. Focus on testing behavior and outcomes. Hard-coded Values: Avoid hard-coding values in tests. Use constants or test data to make tests more maintainable. Complex Test Logic: Keep test logic simple and avoid complex calculations or conditional statements within tests.
+                Testing Implementation Details: Avoid testing implementation details that might change, leading to brittle tests. Focus on testing behavior and outcomes. Hard-coded Values: Avoid hard-coding values in tests. Use constants or test data to make tests more maintainable. Complex Test Logic: Keep test logic simple and avoid complex calculations or conditional statements within tests. Ignoring Edge Cases: Don't ignore edge cases or boundary conditions. Ensure tests cover a wide range of inputs, including invalid or unexpected values. Slow Tests: Avoid slow tests that discourage developers from running them frequently. Over-reliance on Mocks: Mock judiciously; too many mocks can obscure the actual behavior and make tests less reliable. Ignoring Test Failures: Never ignore failing tests. Investigate and fix them promptly.
             </rule-description>
         </rule-section>
 
@@ -545,7 +603,9 @@ class UserServiceTestBad {
                 <rule-subtitle>Ensure proper state isolation between tests</rule-subtitle>
             </rule-header>
             <rule-description>
-                Isolated State: Ensure each test has its own isolated state to avoid interference between tests. Use @BeforeEach to reset the state before each test. Immutable Objects: Prefer immutable objects to simplify state management and avoid unexpected side effects. Stateless Components: Design stateless components whenever possible to reduce the need for state management in tests.
+                - **Isolated State:** Ensure each test has its own isolated state to avoid interference between tests. Use `@BeforeEach` to reset the state before each test.
+                - **Immutable Objects:** Prefer immutable objects to simplify state management and avoid unexpected side effects.
+                - **Stateless Components:** Design stateless components whenever possible to reduce the need for state management in tests.
             </rule-description>
         </rule-section>
 
@@ -555,7 +615,9 @@ class UserServiceTestBad {
                 <rule-subtitle>Test error conditions and exception handling</rule-subtitle>
             </rule-header>
             <rule-description>
-                Expected Exceptions: Use AssertJ's assertThatThrownBy to verify that a method throws the expected exception under specific conditions. Exception Messages: Assert the exception message to ensure the correct error is being thrown with helpful context. Graceful Degradation: Test how the application handles errors and gracefully degrades when dependencies are unavailable.
+                - **Expected Exceptions:** Use AssertJ's `assertThatThrownBy` to verify that a method throws the expected exception under specific conditions.
+                - **Exception Messages:** Assert the exception message to ensure the correct error is being thrown with helpful context.
+                - **Graceful Degradation:** Test how the application handles errors and gracefully degrades when dependencies are unavailable.
             </rule-description>
         </rule-section>
 
@@ -565,8 +627,133 @@ class UserServiceTestBad {
                 <rule-subtitle>Utilize JSpecify annotations for explicit nullness contracts</rule-subtitle>
             </rule-header>
             <rule-description>
-                Employ JSpecify annotations (org.jspecify.annotations.*) such as @NullMarked, @Nullable, and @NonNull to clearly define the nullness expectations of method parameters, return types, and fields within your tests and the code under test. This practice enhances code clarity, enables static analysis tools to catch potential NullPointerExceptions early, and improves the overall robustness of your tests and application code.
+                Employ JSpecify annotations (org.jspecify.annotations.*) such as @NullMarked, @Nullable, and @NonNull to clearly define the nullness expectations of method parameters, return types, and fields within your tests and the code under test. This practice enhances code clarity, enables static analysis tools to catch potential NullPointerExceptions early, and improves the overall robustness of your tests and application code. In test code, this is particularly important for defining the expected behavior of mocks and verifying interactions with potentially null values.
             </rule-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.jspecify.annotations.NullMarked;
+import org.jspecify.annotations.Nullable;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
+// Assume:
+// @NullMarked // Usually at package-info.java or a higher-level class
+// interface DataService {
+//     @Nullable String getData(String key);
+//     String processData(@Nullable String data);
+// }
+//
+// class MyProcessor {
+//     private final DataService dataService;
+//
+//     MyProcessor(DataService dataService) {
+//         this.dataService = dataService;
+//     }
+//
+//     String execute(String key) {
+//         @Nullable String rawData = dataService.getData(key);
+//         // rawData could be null here, static analysis would warn if not checked
+//         if (rawData == null) {
+//             return dataService.processData(null);
+//         }
+//         return dataService.processData(rawData.toUpperCase());
+//     }
+// }
+
+
+@NullMarked // Applies non-null by default to this test class
+@ExtendWith(MockitoExtension.class)
+class MyProcessorTest {
+
+    @Mock
+    private DataService mockDataService;
+
+    private MyProcessor myProcessor;
+
+    @Test
+    void should_handleNullData_when_serviceReturnsNull() {
+        // Given
+        myProcessor = new MyProcessor(mockDataService);
+        String key = "testKey";
+        // JSpecify helps clarify that getData can return null
+        when(mockDataService.getData(key)).thenReturn(null);
+        // JSpecify helps clarify that processData can accept null
+        when(mockDataService.processData(null)).thenReturn("processed:null");
+
+
+        // When
+        String result = myProcessor.execute(key);
+
+        // Then
+        assertThat(result).isEqualTo("processed:null");
+    }
+
+    @Test
+    void should_processNonNullData_when_serviceReturnsData() {
+        // Given
+        myProcessor = new MyProcessor(mockDataService);
+        String key = "testKey";
+        String serviceData = "someData"; // Effectively @NonNull due to @NullMarked context
+        // getData's return is @Nullable, but we are testing the non-null path
+        when(mockDataService.getData(key)).thenReturn(serviceData);
+        // processData's argument is @Nullable, here we pass a non-null value
+        when(mockDataService.processData("SOMEDATA")).thenReturn("processed:SOMEDATA");
+
+        // When
+        String result = myProcessor.execute(key);
+
+        // Then
+        assertThat(result).isEqualTo("processed:SOMEDATA");
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// No JSpecify annotations, nullness is ambiguous
+// class DataService {
+//     String getData(String key); // Is null return possible? Is key nullable?
+//     String processData(String data); // Can data be null?
+// }
+//
+// class MyProcessor {
+//     // ... constructor ...
+//     String execute(String key) {
+//         String rawData = dataService.getData(key);
+//         // Potential NPE here if getData can return null and it's not handled.
+//         // The contract is unclear without annotations.
+//         return dataService.processData(rawData.toUpperCase());
+//     }
+// }
+
+class MyProcessorTest {
+    // ... test setup ...
+
+    @Test
+    void testProcessing() {
+        // Given
+        MyProcessor myProcessor = new MyProcessor(mockDataService);
+        String key = "testKey";
+        // Ambiguity: if getData returns null, this test might pass or fail unexpectedly
+        // depending on mock setup, but the underlying contract isn't clear.
+        when(mockDataService.getData(key)).thenReturn("someData");
+        when(mockDataService.processData("SOMEDATA")).thenReturn("processed:SOMEDATA");
+        // If getData could return null and mockDataService.processData isn't
+        // prepared for mockDataService.processData(null), an NPE could occur
+        // in the code under test or the test itself, masking the real issue.
+
+        // When
+        String result = myProcessor.execute(key);
+
+        // Then
+        assertThat(result).isEqualTo("processed:SOMEDATA");
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
         </rule-section>
 
         <rule-section number="16" id="right-bicep-questions">

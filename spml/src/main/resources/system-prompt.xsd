@@ -136,6 +136,7 @@
             <xs:sequence>
                 <xs:element ref="rule-header"/>
                 <xs:element ref="rule-description"/>
+                <xs:element ref="rule-notes" minOccurs="0" maxOccurs="unbounded"/>
                 <xs:element ref="code-examples" minOccurs="0"/>
             </xs:sequence>
             <xs:attribute name="number" type="xs:string" use="optional"/>
@@ -163,6 +164,30 @@
             </xs:choice>
         </xs:complexType>
     </xs:element>
+
+    <!-- Rule notes for additional explanatory content -->
+    <xs:element name="rule-notes">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="notes-title" minOccurs="0"/>
+                <xs:element ref="note-item" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="notes-title" type="xs:string"/>
+
+    <xs:element name="note-item">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="note-term"/>
+                <xs:element ref="note-description"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="note-term" type="xs:string"/>
+    <xs:element name="note-description" type="xs:string"/>
 
     <!-- Code examples with good and bad patterns -->
     <xs:element name="code-examples">

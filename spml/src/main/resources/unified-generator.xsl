@@ -86,7 +86,25 @@ Role definition: </xsl:text><xsl:value-of select="normalize-space(system-charact
 
 Title: </xsl:text><xsl:value-of select="normalize-space(rule-header/rule-subtitle)"/>
         <xsl:text>
-Description: </xsl:text><xsl:value-of select="normalize-space(rule-description)"/>
+Description: </xsl:text>        <xsl:value-of select="normalize-space(rule-description)"/>
+
+        <xsl:for-each select="rule-notes">
+            <xsl:text>
+
+</xsl:text>
+            <xsl:if test="notes-title">
+                <xsl:text>**</xsl:text><xsl:value-of select="normalize-space(notes-title)"/>
+                <xsl:text>**
+
+</xsl:text>
+            </xsl:if>
+            <xsl:for-each select="note-item">
+                <xsl:text>*   **</xsl:text><xsl:value-of select="normalize-space(note-term)"/>
+                <xsl:text>**: </xsl:text><xsl:value-of select="normalize-space(note-description)"/>
+                <xsl:text>
+</xsl:text>
+            </xsl:for-each>
+        </xsl:for-each>
 
         <xsl:if test="code-examples/good-example">
             <xsl:text>
