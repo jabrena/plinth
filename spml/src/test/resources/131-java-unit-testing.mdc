@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: false
 ---
 # Java Unit testing guidelines
@@ -12,16 +12,6 @@ Role definition: You are a Senior software engineer with extensive experience in
 ## Description
 
 Effective Java unit testing involves using JUnit 5 annotations and AssertJ for fluent assertions. Tests should follow the Given-When-Then structure with descriptive names for clarity. Each test must have a single responsibility, be independent, and leverage parameterized tests for data variations. Mocking dependencies with frameworks like Mockito is crucial for isolating the unit under test. While code coverage is a useful guide, the focus should be on meaningful tests for critical logic and edge cases. Test classes and methods should typically be package-private. Strategies for code splitting include small test methods and helper functions. Anti-patterns like testing implementation details, hard-coded values, and ignoring failures should be avoided. Proper state management involves isolated state and immutable objects, and error handling should include testing for expected exceptions and their messages.
-
-## Implementing These Principles
-
-These guidelines are built upon the following core principles:
-
-1.  **Clarity and Readability**: Tests should be easy to understand. This is achieved through descriptive names (or `@DisplayName`), a clear Given-When-Then structure, and focused assertions. Readable tests serve as living documentation for the code under test.
-2.  **Isolation and Independence**: Each test must be self-contained, not relying on the state or outcome of other tests. Dependencies should be mocked to ensure the unit under test is validated in isolation. This leads to reliable and stable test suites.
-3.  **Comprehensive Validation**: Tests should thoroughly verify the behavior of the unit, including its responses to valid inputs, edge cases, boundary conditions, and error scenarios. This involves not just positive paths but also how the code handles failures and exceptions.
-4.  **Modern Tooling and Practices**: Leverage modern testing frameworks (JUnit 5), fluent assertion libraries (AssertJ), and mocking tools (Mockito) to write expressive, maintainable, and powerful tests. Utilize features like parameterized tests to reduce boilerplate and improve coverage of data variations.
-5.  **Maintainability and Focus**: Tests should be easy to maintain. This means avoiding tests that are too complex, test implementation details, or have multiple responsibilities. A well-written test makes it clear what is being tested and why, simplifying debugging and refactoring efforts.
 
 ## Table of contents
 
@@ -46,7 +36,7 @@ These guidelines are built upon the following core principles:
 
 ## Rule 1: Use JUnit 5 Annotations
 
-Title: Prefer JUnit 5 annotations over JUnit 4.
+Title: Prefer JUnit 5 annotations over JUnit 4
 Description: Utilize annotations from the `org.junit.jupiter.api` package (e.g., `@Test`, `@BeforeEach`, `@AfterEach`, `@DisplayName`, `@Nested`, `@Disabled`) instead of their JUnit 4 counterparts (`@org.junit.Test`, `@Before`, `@After`, `@Ignore`). This ensures consistency and allows leveraging the full capabilities of JUnit 5.
 
 **Good example:**
@@ -82,7 +72,7 @@ class MyServiceTest {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 import org.junit.Before; // JUnit 4
@@ -109,10 +99,10 @@ public class MyServiceTest {
 
 ## Rule 2: Use AssertJ for Assertions
 
-Title: Prefer AssertJ for assertions.
+Title: Prefer AssertJ for assertions
 Description: Employ AssertJ's fluent API (`org.assertj.core.api.Assertions.assertThat`) for more readable, expressive, and maintainable assertions compared to JUnit Jupiter's `Assertions` class or Hamcrest matchers.
 
-**Good Example:**
+**Good example:**
 
 ```java
 import org.junit.jupiter.api.Test;
@@ -173,7 +163,7 @@ class JUnitAssertionsExampleTest {
 
 ## Rule 3: Structure Tests with Given-When-Then
 
-Title: Structure test methods using the Given-When-Then pattern.
+Title: Structure test methods using the Given-When-Then pattern
 Description: Organize the logic within test methods into three distinct, clearly separated phases: **Given** (setup preconditions), **When** (execute the code under test), and **Then** (verify the outcome). Use comments or empty lines to visually separate these phases, enhancing readability and understanding of the test's purpose.
 
 **Good example:**
@@ -221,10 +211,10 @@ class UnstructuredTest {
 
 ## Rule 4: Use Descriptive Test Names
 
-Title: Write descriptive test method names or use `@DisplayName`.
+Title: Write descriptive test method names or use `@DisplayName`
 Description: Test names should clearly communicate the scenario being tested and the expected outcome. Use either descriptive method names (e.g., following the `should_ExpectedBehavior_when_StateUnderTest` pattern) or JUnit 5's `@DisplayName` annotation for more natural language descriptions. This makes test reports easier to understand.
 
-**Good Example (Method Name):**
+**Good example:**
 
 ```java
 @Test
@@ -238,7 +228,7 @@ void should_throwException_when_divisorIsZero() {
 }
 ```
 
-**Good Example (@DisplayName):**
+**Good example:**
 
 ```java
 @Test
@@ -273,10 +263,10 @@ void test1() { // Uninformative name
 
 ## Rule 5: Aim for Single Responsibility in Tests
 
-Title: Each test method should verify a single logical concept.
+Title: Each test method should verify a single logical concept
 Description: Avoid testing multiple unrelated things within a single test method. Each test should focus on one specific aspect of the unit's behavior or one particular scenario. This makes tests easier to understand, debug, and maintain. If a test fails, its specific focus makes pinpointing the cause simpler.
 
-**Good Example:**
+**Good example:**
 
 ```java
 // Separate tests for different validation aspects
@@ -309,10 +299,10 @@ void testUserValidation() { // Tests multiple conditions at once
 
 ## Rule 6: Ensure Tests are Independent
 
-Title: Tests must be independent and runnable in any order.
+Title: Tests must be independent and runnable in any order
 Description: Avoid creating tests that depend on the state left behind by previously executed tests. Each test should set up its own required preconditions (using `@BeforeEach` or within the test method itself) and should not rely on the execution order. This ensures test suite stability and reliability, preventing flickering tests.
 
-**Good Example:**
+**Good example:**
 
 ```java
 class IndependentTests {
@@ -369,10 +359,10 @@ class DependentTests {
 
 ## Rule 7: Use Parameterized Tests for Data Variations
 
-Title: Use `@ParameterizedTest` for testing the same logic with different inputs.
+Title: Use `@ParameterizedTest` for testing the same logic with different inputs
 Description: When testing a method's behavior across various input values or boundary conditions, leverage JUnit 5's parameterized tests (`@ParameterizedTest` with sources like `@ValueSource`, `@CsvSource`, `@MethodSource`). This avoids code duplication and clearly separates the test logic from the test data.
 
-**Good Example:**
+**Good example:**
 
 ```java
 import org.junit.jupiter.params.ParameterizedTest;
@@ -437,7 +427,7 @@ class RepetitiveCalculatorTest {
 
 ## Rule 8: Utilize Mocking for Dependencies (Mockito)
 
-Title: Isolate the unit under test using mocking frameworks like Mockito.
+Title: Isolate the unit under test using mocking frameworks like Mockito
 Description: Unit tests should focus solely on the logic of the class being tested (System Under Test - SUT), not its dependencies (database, network services, other classes). Use mocking frameworks like Mockito to create mock objects that simulate the behavior of these dependencies. This ensures tests are fast, reliable, and truly test the unit in isolation.
 
 **Key Mockito Concepts:**
@@ -448,7 +438,7 @@ Description: Unit tests should focus solely on the logic of the class being test
 *   **`@Mock` Annotation**: Used with `@ExtendWith(MockitoExtension.class)` (JUnit 5) to automatically create mocks for fields.
 *   **`@InjectMocks` Annotation**: Creates an instance of the class under test and automatically injects fields annotated with `@Mock` into it.
 
-**Good Example (using Mockito):**
+**Good example:**
 
 ```java
 import org.junit.jupiter.api.Test;
@@ -535,7 +525,7 @@ class UserServiceTest {
 
 ## Rule 9: Consider Test Coverage, But Don't Obsess
 
-Title: Use code coverage as a guide, not a definitive quality metric.
+Title: Use code coverage as a guide, not a definitive quality metric
 Description: Tools like JaCoCo can measure which lines of code are executed by your tests (code coverage). Aiming for high coverage (e.g., >80% line/branch coverage) is generally good practice, as it indicates most code paths are tested. However, 100% coverage doesn't guarantee bug-free code or high-quality tests. Focus on writing meaningful tests for critical logic and edge cases rather than solely chasing coverage numbers. A test might cover a line but not actually verify its correctness effectively.
 
 ## Rule 10: Test Scopes
@@ -581,7 +571,7 @@ Test methods should have package-private visibility. There is no need for them t
 Title: Utilize JSpecify annotations for explicit nullness contracts.
 Description: Employ JSpecify annotations (`org.jspecify.annotations.*`) such as `@NullMarked`, `@Nullable`, and `@NonNull` to clearly define the nullness expectations of method parameters, return types, and fields within your tests and the code under test. This practice enhances code clarity, enables static analysis tools to catch potential `NullPointerExceptions` early, and improves the overall robustness of your tests and application code. In test code, this is particularly important for defining the expected behavior of mocks and verifying interactions with potentially null values.
 
-**Good Example (Illustrating usage in a test context):**
+**Good example:**
 
 ```java
 import org.jspecify.annotations.NullMarked;
@@ -764,7 +754,7 @@ public class CalculatorTest {
     void add_positiveAndNegative_returnsCorrectSum() {
         assertThat(calculator.add(5, -4)).isEqualTo(1);
     }
-    
+
     @Test
     void add_nearMaxInteger_returnsCorrectSum() {
         assertThat(calculator.add(Integer.MAX_VALUE - 1, 1)).isEqualTo(Integer.MAX_VALUE);
@@ -786,7 +776,7 @@ public class CalculatorTest {
             .isInstanceOf(ArithmeticException.class)
             .hasMessageContaining("overflow");
     }
-    
+
     @Test
     void add_integerUnderflow_throwsArithmeticException() {
         assertThatThrownBy(() -> calculator.add(Integer.MIN_VALUE, -1))
@@ -894,7 +884,7 @@ public class OrderProcessorTest {
         assertThatThrownBy(() -> processor.addItem(null))
             .isInstanceOf(IllegalArgumentException.class);
     }
-    
+
     // Thorough: Testing another edge case (adding empty string).
     @Test
     void addItem_emptyItem_throwsIllegalArgumentException() {
@@ -980,12 +970,12 @@ public class UserValidation {
         // C - Conformance (simplified regex for demonstration)
         return email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
     }
-    
+
     // E - Existence
     public boolean processUsername(String username) {
         if (Objects.isNull(username) || username.trim().isEmpty()) {
             // Checks for existence (non-null, non-empty)
-            return false; 
+            return false;
         }
         // process username
         return true;
@@ -1011,7 +1001,7 @@ public class UserValidationTest {
     void isAgeValid_ageAtUpperBound_returnsTrue() {
         assertThat(validator.isAgeValid(120)).isTrue();
     }
-    
+
     @Test
     void isAgeValid_ageWithinBounds_returnsTrue() {
         assertThat(validator.isAgeValid(35)).isTrue();
@@ -1039,7 +1029,7 @@ public class UserValidationTest {
     void isValidEmailFormat_invalidEmails_returnsFalse(String email) {
         assertThat(validator.isValidEmailFormat(email)).isFalse();
     }
-    
+
     @Test
     void isValidEmailFormat_nullEmail_returnsFalse() {
         assertThat(validator.isValidEmailFormat(null)).isFalse();
@@ -1055,7 +1045,7 @@ public class UserValidationTest {
     void processUsername_nullUsername_returnsFalse() {
         assertThat(validator.processUsername(null)).isFalse();
     }
-    
+
     @Test
     void processUsername_emptyUsername_returnsFalse() {
         assertThat(validator.processUsername("")).isFalse();
@@ -1083,7 +1073,7 @@ public class UserValidationPoorTest {
         assertThat(validator.isAgeValid(25)).isTrue(); // Only one value tested.
                                                       // Min, max, below min, above max are not tested.
     }
-    
+
     @Test
     void isValidEmailFormat_typicalEmail_returnsTrue() {
         assertThat(validator.isValidEmailFormat("test@example.com")).isTrue(); // No invalid formats, no nulls.

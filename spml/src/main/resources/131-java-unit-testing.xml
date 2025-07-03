@@ -3,8 +3,8 @@
                xsi:noNamespaceSchemaLocation="system-prompt.xsd"
                id="131-java-unit-testing" version="1.0">
     <metadata>
-        <description>Java Unit testing guidelines</description>
-        <globs>*.java</globs>
+        <description></description>
+        <globs></globs>
         <always-apply>false</always-apply>
         <tags>
             <tag>java</tag>
@@ -214,7 +214,7 @@ class UnstructuredTest {
         <rule-section number="4" id="use-descriptive-test-names">
             <rule-header>
                 <rule-title>Use Descriptive Test Names</rule-title>
-                <rule-subtitle>Write descriptive test method names or use @DisplayName</rule-subtitle>
+                <rule-subtitle>Write descriptive test method names or use `@DisplayName`</rule-subtitle>
             </rule-header>
             <rule-description>
                 Test names should clearly communicate the scenario being tested and the expected outcome. Use either descriptive method names (e.g., following the `should_ExpectedBehavior_when_StateUnderTest` pattern) or JUnit 5's `@DisplayName` annotation for more natural language descriptions. This makes test reports easier to understand.
@@ -487,10 +487,10 @@ class UserServiceTestBad {
         DatabaseConnection connection = new DatabaseConnection("localhost", 5432);
         UserRepository userRepository = new PostgresUserRepository(connection);
         UserService userService = new UserService(userRepository);
-        
+
         // This test depends on database availability and state
         Optional<User> user = userService.findUserById("123");
-        
+
         // Test is slow, brittle, and doesn't isolate the unit under test
         assertThat(user).isPresent();
     }
@@ -598,7 +598,7 @@ public class CalculatorTest {
     void add_zeroAndNumber_returnsNumber() {
         assertThat(calculator.add(0, 5)).isEqualTo(5);
     }
-    
+
     @Test
     void add_numberAndZero_returnsNumber() {
         assertThat(calculator.add(5, 0)).isEqualTo(5);
@@ -608,7 +608,7 @@ public class CalculatorTest {
     void add_positiveAndNegative_returnsCorrectSum() {
         assertThat(calculator.add(5, -4)).isEqualTo(1);
     }
-    
+
     @Test
     void add_nearMaxInteger_returnsCorrectSum() {
         assertThat(calculator.add(Integer.MAX_VALUE - 1, 1)).isEqualTo(Integer.MAX_VALUE);
@@ -630,7 +630,7 @@ public class CalculatorTest {
             .isInstanceOf(ArithmeticException.class)
             .hasMessageContaining("overflow");
     }
-    
+
     @Test
     void add_integerUnderflow_throwsArithmeticException() {
         assertThatThrownBy(() -> calculator.add(Integer.MIN_VALUE, -1))
@@ -738,7 +738,7 @@ public class OrderProcessorTest {
         assertThatThrownBy(() -> processor.addItem(null))
             .isInstanceOf(IllegalArgumentException.class);
     }
-    
+
     // Thorough: Testing another edge case (adding empty string).
     @Test
     void addItem_emptyItem_throwsIllegalArgumentException() {
@@ -824,12 +824,12 @@ public class UserValidation {
         // C - Conformance (simplified regex for demonstration)
         return email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
     }
-    
+
     // E - Existence
     public boolean processUsername(String username) {
         if (Objects.isNull(username) || username.trim().isEmpty()) {
             // Checks for existence (non-null, non-empty)
-            return false; 
+            return false;
         }
         // process username
         return true;
@@ -855,7 +855,7 @@ public class UserValidationTest {
     void isAgeValid_ageAtUpperBound_returnsTrue() {
         assertThat(validator.isAgeValid(120)).isTrue();
     }
-    
+
     @Test
     void isAgeValid_ageWithinBounds_returnsTrue() {
         assertThat(validator.isAgeValid(35)).isTrue();
@@ -883,7 +883,7 @@ public class UserValidationTest {
     void isValidEmailFormat_invalidEmails_returnsFalse(String email) {
         assertThat(validator.isValidEmailFormat(email)).isFalse();
     }
-    
+
     @Test
     void isValidEmailFormat_nullEmail_returnsFalse() {
         assertThat(validator.isValidEmailFormat(null)).isFalse();
@@ -899,7 +899,7 @@ public class UserValidationTest {
     void processUsername_nullUsername_returnsFalse() {
         assertThat(validator.processUsername(null)).isFalse();
     }
-    
+
     @Test
     void processUsername_emptyUsername_returnsFalse() {
         assertThat(validator.processUsername("")).isFalse();
@@ -924,7 +924,7 @@ public class UserValidationPoorTest {
         assertThat(validator.isAgeValid(25)).isTrue(); // Only one value tested.
                                                       // Min, max, below min, above max are not tested.
     }
-    
+
     @Test
     void isValidEmailFormat_typicalEmail_returnsTrue() {
         assertThat(validator.isValidEmailFormat("test@example.com")).isTrue(); // No invalid formats, no nulls.

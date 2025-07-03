@@ -150,6 +150,15 @@ class CursorRuleGeneratorTest {
             String bestPracticesResult = generator.generate("110-java-maven-best-practices.xml", "unified-generator.xsl");
             String documentationResult = generator.generate("112-java-maven-documentation.xml", "unified-generator.xsl");
             String checklistGuideResult = generator.generate("100-java-checklist-guide.xml", "unified-generator.xsl");
+            String objectOrientedDesignResult = generator.generate("121-java-object-oriented-design.xml", "unified-generator.xsl");
+            String typeDesignResult = generator.generate("122-java-type-design.xml", "unified-generator.xsl");
+            String generalGuidelinesResult = generator.generate("123-java-general-guidelines.xml", "unified-generator.xsl");
+            String secureCodingResult = generator.generate("124-java-secure-coding.xml", "unified-generator.xsl");
+            String concurrencyResult = generator.generate("125-java-concurrency.xml", "unified-generator.xsl");
+            String loggingResult = generator.generate("126-java-logging.xml", "unified-generator.xsl");
+            String unitTestingResult = generator.generate("131-java-unit-testing.xml", "unified-generator.xsl");
+            String refactoringWithModernFeaturesResult = generator.generate("141-java-refactoring-with-modern-features.xml", "unified-generator.xsl");
+            String dataOrientedProgrammingResult = generator.generate("143-java-data-oriented-programming.xml", "unified-generator.xsl");
 
             // Then - All should have consistent frontmatter and structure
             assertThat(bestPracticesResult)
@@ -171,6 +180,15 @@ class CursorRuleGeneratorTest {
             saveGeneratedContentToTarget(bestPracticesResult, "unified-best-practices.mdc");
             saveGeneratedContentToTarget(documentationResult, "unified-documentation.mdc");
             saveGeneratedContentToTarget(checklistGuideResult, "unified-checklist-guide.mdc");
+            saveGeneratedContentToTarget(objectOrientedDesignResult, "unified-object-oriented-design.mdc");
+            saveGeneratedContentToTarget(typeDesignResult, "unified-type-design.mdc");
+            saveGeneratedContentToTarget(generalGuidelinesResult, "unified-general-guidelines.mdc");
+            saveGeneratedContentToTarget(secureCodingResult, "unified-secure-coding.mdc");
+            saveGeneratedContentToTarget(concurrencyResult, "unified-concurrency.mdc");
+            saveGeneratedContentToTarget(loggingResult, "unified-logging.mdc");
+            saveGeneratedContentToTarget(unitTestingResult, "unified-unit-testing.mdc");
+            saveGeneratedContentToTarget(refactoringWithModernFeaturesResult, "unified-refactoring-with-modern-features.mdc");
+            saveGeneratedContentToTarget(dataOrientedProgrammingResult, "unified-data-oriented-programming.mdc");
         }
 
         @Test
