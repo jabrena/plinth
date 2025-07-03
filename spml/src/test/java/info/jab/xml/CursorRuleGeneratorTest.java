@@ -236,18 +236,4 @@ class CursorRuleGeneratorTest {
             logger.info("Generated content saved to: {}", outputPath.toAbsolutePath());
         }
     }
-
-    /**
-     * Pure function to save generated content to target directory.
-     * Follows functional programming principles with clear input/output relationship.
-     */
-    private void saveGeneratedContentToTarget(String content, String filename) throws IOException {
-        Path targetDir = Paths.get("target");
-        if (!Files.exists(targetDir)) {
-            Files.createDirectories(targetDir);
-        }
-        Path outputPath = targetDir.resolve(filename);
-        Files.writeString(outputPath, content);
-        logger.info("Generated content saved to: {}", outputPath.toAbsolutePath());
-    }
 }
