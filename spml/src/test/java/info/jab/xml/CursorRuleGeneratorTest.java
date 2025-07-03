@@ -206,6 +206,74 @@ class CursorRuleGeneratorTest {
                 .isEqualTo(expectedContent);
         }
 
+        @Test
+        @DisplayName("Should generate exact content matching original expected Java General Guidelines document using unified XSLT")
+        void should_generateExactContentMatchingOriginalExpected_when_transformingJavaGeneralGuidelinesWithUnifiedXslt() throws IOException {
+            // Given
+            CursorRuleGenerator generator = new CursorRuleGenerator();
+            String expectedContent = loadExpectedContent("123-java-general-guidelines.mdc");
+
+            // When
+            String actualResult = generator.generate("123-java-general-guidelines.xml", "unified-generator.xsl");
+
+            // Then - Unified XSLT should produce identical output to expected
+            assertThat(actualResult)
+                .isNotNull()
+                .isNotEmpty()
+                .isEqualTo(expectedContent);
+        }
+
+        @Test
+        @DisplayName("Should generate exact content matching original expected Java Secure Coding document using unified XSLT")
+        void should_generateExactContentMatchingOriginalExpected_when_transformingJavaSecureCodingWithUnifiedXslt() throws IOException {
+            // Given
+            CursorRuleGenerator generator = new CursorRuleGenerator();
+            String expectedContent = loadExpectedContent("124-java-secure-coding.mdc");
+
+            // When
+            String actualResult = generator.generate("124-java-secure-coding.xml", "unified-generator.xsl");
+
+            // Then - Unified XSLT should produce identical output to expected
+            assertThat(actualResult)
+                .isNotNull()
+                .isNotEmpty()
+                .isEqualTo(expectedContent);
+        }
+
+        @Test
+        @DisplayName("Should generate exact content matching original expected Java Concurrency document using unified XSLT")
+        void should_generateExactContentMatchingOriginalExpected_when_transformingJavaConcurrencyWithUnifiedXslt() throws IOException {
+            // Given
+            CursorRuleGenerator generator = new CursorRuleGenerator();
+            String expectedContent = loadExpectedContent("125-java-concurrency.mdc");
+
+            // When
+            String actualResult = generator.generate("125-java-concurrency.xml", "unified-generator.xsl");
+
+            // Then - Unified XSLT should produce identical output to expected
+            assertThat(actualResult)
+                .isNotNull()
+                .isNotEmpty()
+                .isEqualTo(expectedContent);
+        }
+
+        @Test
+        @DisplayName("Should generate exact content matching original expected Java Logging document using unified XSLT")
+        void should_generateExactContentMatchingOriginalExpected_when_transformingJavaLoggingWithUnifiedXslt() throws IOException {
+            // Given
+            CursorRuleGenerator generator = new CursorRuleGenerator();
+            String expectedContent = loadExpectedContent("126-java-logging.mdc");
+
+            // When
+            String actualResult = generator.generate("126-java-logging.xml", "unified-generator.xsl");
+
+            // Then - Unified XSLT should produce identical output to expected
+            assertThat(actualResult)
+                .isNotNull()
+                .isNotEmpty()
+                .isEqualTo(expectedContent);
+        }
+
         /**
          * Pure function to load expected content from resources.
          * Uses Optional for null safety following functional programming principles.

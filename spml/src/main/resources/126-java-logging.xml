@@ -1,34 +1,49 @@
----
-description: Java Logging Best Practices
-globs: *.java
-alwaysApply: false
----
-# Java Logging Best Practices
+<?xml version="1.0" encoding="UTF-8"?>
+<system-prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="system-prompt.xsd"
+               id="126-java-logging" version="1.0">
+    <metadata>
+        <description>Java Logging Best Practices</description>
+        <globs>*.java</globs>
+        <always-apply>false</always-apply>
+        <tags>
+            <tag>java</tag>
+            <tag>logging</tag>
+            <tag>slf4j</tag>
+            <tag>logback</tag>
+            <tag>monitoring</tag>
+            <tag>security</tag>
+            <tag>performance</tag>
+        </tags>
+        <version>1.0.0</version>
+    </metadata>
 
-## System prompt characterization
+    <header>
+        <title>Java Logging Best Practices</title>
+    </header>
 
-Role definition: You are a Senior software engineer with extensive experience in Java software development
+    <system-characterization>
+        <role-definition>You are a Senior software engineer with extensive experience in Java software development</role-definition>
+    </system-characterization>
 
-## Description
+    <description>
+        Effective Java logging involves selecting a standard framework (SLF4J with Logback/Log4j2), using appropriate log levels (ERROR, WARN, INFO, DEBUG, TRACE), and adhering to core practices like parameterized logging, proper exception handling, and avoiding sensitive data exposure. Configuration should be environment-specific with clear output formats. Security is paramount: mask sensitive data, control log access, and ensure secure transmission. Implement centralized log aggregation, monitoring, and alerting for proactive issue detection. Finally, logging behavior and its impact should be validated through comprehensive testing.
+    </description>
 
-Effective Java logging involves selecting a standard framework (SLF4J with Logback/Log4j2), using appropriate log levels (ERROR, WARN, INFO, DEBUG, TRACE), and adhering to core practices like parameterized logging, proper exception handling, and avoiding sensitive data exposure. Configuration should be environment-specific with clear output formats. Security is paramount: mask sensitive data, control log access, and ensure secure transmission. Implement centralized log aggregation, monitoring, and alerting for proactive issue detection. Finally, logging behavior and its impact should be validated through comprehensive testing.
+    <toc auto-generate="true"/>
 
-## Table of contents
-
-- Rule 1: Choose an Appropriate Logging Framework
-- Rule 2: Understand and Use Logging Levels Correctly
-- Rule 3: Adhere to Core Logging Practices
-- Rule 4: Implement Secure Logging Practices
-
-## Rule 1: Choose an Appropriate Logging Framework
-
-Title: Select a Standard Logging Facade and Implementation
-Description: Using a standard logging facade like SLF4J allows for flexibility in choosing and switching an underlying logging implementation. The primary recommendation is SLF4J with Logback for its robustness and feature-richness.
-
-**Good example:**
-
-```java
-// GOOD: Using SLF4J facade with proper logger declaration
+    <content-sections>
+        <rule-section number="1" id="logging-framework-selection">
+            <rule-header>
+                <rule-title>Choose an Appropriate Logging Framework</rule-title>
+                <rule-subtitle>Select a Standard Logging Facade and Implementation</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Using a standard logging facade like SLF4J allows for flexibility in choosing and switching an underlying logging implementation. The primary recommendation is SLF4J with Logback for its robustness and feature-richness.
+            </rule-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Using SLF4J facade with proper logger declaration
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Objects;
@@ -40,12 +55,12 @@ public class UserService {
     public void performAction(String input) {
         // SLF4J parameterized logging - efficient and readable
         logger.info("Performing action with input: {}", input);
-
+        
         if (Objects.isNull(input) || input.isEmpty()) {
             logger.warn("Input is null or empty, using default behavior");
             input = "default";
         }
-
+        
         try {
             processInput(input);
             logger.debug("Action completed successfully for input: {}", input);
@@ -59,10 +74,10 @@ public class UserService {
         // Using MDC (Mapped Diagnostic Context) for contextual logging
         try (var mdcCloseable = org.slf4j.MDC.putCloseable("userId", userId)) {
             logger.info("Starting operation: {}", operation);
-
+            
             // All log statements in this block will include userId context
             performInternalSteps(operation);
-
+            
             logger.info("Operation completed successfully");
         } catch (Exception e) {
             logger.error("Operation failed", e);
@@ -90,24 +105,21 @@ public class UserService {
             super(message);
         }
     }
-}
-```
-
-**Bad Example:**
-
-```java
-// AVOID: Using System.out.println or direct logging implementation
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Using System.out.println or direct logging implementation
 public class BadLoggingService {
-
+    
     public void performAction(String input) {
         // BAD: Using System.out.println - no control, no levels, no formatting
         System.out.println("Starting action with: " + input);
-
+        
         if (input == null || input.isEmpty()) {
             // BAD: Using System.err - not integrated with logging framework
             System.err.println("Warning: Input is null or empty!");
         }
-
+        
         try {
             processInput(input);
             System.out.println("Action completed for: " + input);
@@ -119,16 +131,16 @@ public class BadLoggingService {
     }
 
     // BAD: Directly using concrete logging implementation
-    private java.util.logging.Logger julLogger =
+    private java.util.logging.Logger julLogger = 
         java.util.logging.Logger.getLogger(BadLoggingService.class.getName());
-
+    
     public void anotherMethod() {
         // BAD: Tied to specific implementation, less flexible
         julLogger.info("Using JUL directly");
     }
 
     // BAD: Multiple logging frameworks in same class
-    private org.apache.logging.log4j.Logger log4jLogger =
+    private org.apache.logging.log4j.Logger log4jLogger = 
         org.apache.logging.log4j.LogManager.getLogger(BadLoggingService.class);
 
     public void confusedLogging() {
@@ -137,18 +149,22 @@ public class BadLoggingService {
         System.out.println("Using System.out");
         // Inconsistent and confusing!
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </rule-section>
 
-## Rule 2: Understand and Use Logging Levels Correctly
-
-Title: Apply Appropriate Logging Levels for Messages
-Description: Use logging levels consistently to categorize the severity and importance of log messages. ERROR for critical issues, WARN for potentially harmful situations, INFO for important business events, DEBUG for detailed information, and TRACE for fine-grained debugging.
-
-**Good example:**
-
-```java
-// GOOD: Proper usage of logging levels
+        <rule-section number="2" id="logging-levels">
+            <rule-header>
+                <rule-title>Understand and Use Logging Levels Correctly</rule-title>
+                <rule-subtitle>Apply Appropriate Logging Levels for Messages</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Use logging levels consistently to categorize the severity and importance of log messages. ERROR for critical issues, WARN for potentially harmful situations, INFO for important business events, DEBUG for detailed information, and TRACE for fine-grained debugging.
+            </rule-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Proper usage of logging levels
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Objects;
@@ -158,10 +174,10 @@ public class OrderProcessor {
 
     public void processOrder(String orderId, String customerId) {
         logger.trace("Entering processOrder with orderId: {}, customerId: {}", orderId, customerId);
-
+        
         // INFO: Important business events
         logger.info("Processing order {} for customer {}", orderId, customerId);
-
+        
         try {
             // Validate inputs
             if (Objects.isNull(orderId) || orderId.trim().isEmpty()) {
@@ -173,47 +189,47 @@ public class OrderProcessor {
             // DEBUG: Detailed information for development/troubleshooting
             logger.debug("Validating order {} inventory", orderId);
             validateInventory(orderId);
-
+            
             logger.debug("Calculating pricing for order {}", orderId);
             calculatePricing(orderId);
-
+            
             logger.debug("Processing payment for order {}", orderId);
             processPayment(orderId);
-
+            
             // INFO: Successful completion of important business operation
             logger.info("Order {} processed successfully for customer {}", orderId, customerId);
-
+            
         } catch (InventoryException e) {
             // WARN: Expected business exception that can be handled
             logger.warn("Insufficient inventory for order {}. Will backorder.", orderId, e);
             handleBackorder(orderId);
-
+            
         } catch (PaymentException e) {
             // ERROR: Critical failure requiring immediate attention
-            logger.error("Payment processing failed for order {}. Customer: {}",
+            logger.error("Payment processing failed for order {}. Customer: {}", 
                         orderId, customerId, e);
             throw new OrderProcessingException("Payment failed", e);
-
+            
         } catch (Exception e) {
             // ERROR: Unexpected critical error
-            logger.error("Unexpected error processing order {} for customer {}",
+            logger.error("Unexpected error processing order {} for customer {}", 
                         orderId, customerId, e);
             throw new OrderProcessingException("Unexpected error", e);
         }
-
+        
         logger.trace("Exiting processOrder for orderId: {}", orderId);
     }
 
     public void performHealthCheck() {
         logger.debug("Starting health check");
-
+        
         try {
             checkDatabaseConnection();
             checkExternalServices();
-
+            
             // INFO: System status information
             logger.info("Health check passed - all systems operational");
-
+            
         } catch (HealthCheckException e) {
             // ERROR: System health issue requiring immediate attention
             logger.error("Health check failed - system may be degraded", e);
@@ -242,13 +258,10 @@ public class OrderProcessor {
     private static class HealthCheckException extends Exception {
         public HealthCheckException(String message) { super(message); }
     }
-}
-```
-
-**Bad Example:**
-
-```java
-// AVOID: Misusing logging levels
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Misusing logging levels
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -260,7 +273,7 @@ public class BadLevelUsage {
         logger.info("Method entry: processUser with parameter: " + userId);
         logger.info("Creating new StringBuilder object");
         logger.info("Checking if userId is null");
-
+        
         if (userId == null) {
             // BAD: Using ERROR for a normal business condition
             logger.error("User ID is null!"); // This might be expected/handled
@@ -269,19 +282,19 @@ public class BadLevelUsage {
 
         // BAD: Using WARN for normal flow information
         logger.warn("User ID is not null, proceeding with processing");
-
+        
         try {
             String result = processUserData(userId);
-
+            
             // BAD: Using ERROR for successful operations
             logger.error("Successfully processed user: " + userId + " with result: " + result);
-
+            
         } catch (Exception e) {
             // BAD: Using INFO for critical errors
             logger.info("An error occurred: " + e.getMessage());
             // Should be ERROR or WARN depending on severity
         }
-
+        
         // BAD: Overuse of TRACE for everything
         logger.trace("About to return from method");
         logger.trace("Setting return value to void");
@@ -292,11 +305,11 @@ public class BadLevelUsage {
     public void anotherBadExample(String data) {
         // BAD: String concatenation instead of parameterized logging
         logger.info("Processing data: " + data + " at time: " + System.currentTimeMillis());
-
+        
         // BAD: Using DEBUG for important business events
         logger.debug("Payment of $1000 processed for customer ABC123");
         // This should be INFO - it's an important business event
-
+        
         // BAD: Using same level for different severity issues
         logger.warn("Configuration file not found, using defaults");  // This is OK for WARN
         logger.warn("Database connection lost");  // This should be ERROR
@@ -306,18 +319,22 @@ public class BadLevelUsage {
     private String processUserData(String userId) {
         return "processed-" + userId;
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </rule-section>
 
-## Rule 3: Adhere to Core Logging Practices
-
-Title: Implement Fundamental Best Practices
-Description: Follow core practices including using parameterized logging, proper exception handling, avoiding sensitive data exposure, and implementing performance considerations for logging operations.
-
-**Good example:**
-
-```java
-// GOOD: Core logging best practices
+        <rule-section number="3" id="core-logging-practices">
+            <rule-header>
+                <rule-title>Adhere to Core Logging Practices</rule-title>
+                <rule-subtitle>Implement Fundamental Best Practices</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Follow core practices including using parameterized logging, proper exception handling, avoiding sensitive data exposure, and implementing performance considerations for logging operations.
+            </rule-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Core logging best practices
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -330,45 +347,45 @@ public class SecureTransactionService {
         // Set correlation ID for request tracing
         String correlationId = generateCorrelationId();
         MDC.put("correlationId", correlationId);
-
+        
         try {
             logger.info("Processing payment for user: {}, amount: {}", userId, amount);
-
+            
             // GOOD: Mask sensitive information before logging
             String maskedCard = maskCreditCard(cardNumber);
             logger.debug("Processing payment with card: {}", maskedCard);
-
+            
             validatePaymentRequest(userId, amount, cardNumber);
-
+            
             if (logger.isDebugEnabled()) {
                 // GOOD: Guard clause for expensive operations
                 String debugInfo = buildComplexDebugInfo(userId, amount);
                 logger.debug("Payment validation details: {}", debugInfo);
             }
-
+            
             processPaymentInternal(userId, amount, cardNumber);
-
-            logger.info("Payment processed successfully for user: {}, correlation: {}",
+            
+            logger.info("Payment processed successfully for user: {}, correlation: {}", 
                        userId, correlationId);
-
+            
         } catch (ValidationException e) {
             // GOOD: Log exception with context but don't expose sensitive data
-            logger.warn("Payment validation failed for user: {}, reason: {}, correlation: {}",
+            logger.warn("Payment validation failed for user: {}, reason: {}, correlation: {}", 
                        userId, e.getValidationError(), correlationId, e);
             throw e;
-
+            
         } catch (PaymentProcessingException e) {
             // GOOD: Log critical error with full context
-            logger.error("Payment processing failed for user: {}, amount: {}, correlation: {}",
+            logger.error("Payment processing failed for user: {}, amount: {}, correlation: {}", 
                         userId, amount, correlationId, e);
             throw e;
-
+            
         } catch (Exception e) {
             // GOOD: Catch unexpected exceptions and log with context
-            logger.error("Unexpected error during payment processing for user: {}, correlation: {}",
+            logger.error("Unexpected error during payment processing for user: {}, correlation: {}", 
                         userId, correlationId, e);
             throw new PaymentProcessingException("Unexpected error", e);
-
+            
         } finally {
             // GOOD: Clean up MDC to prevent memory leaks
             MDC.remove("correlationId");
@@ -377,24 +394,24 @@ public class SecureTransactionService {
 
     public void processLargeDataSet(List<String> dataItems) {
         logger.info("Processing {} data items", dataItems.size());
-
+        
         for (int i = 0; i < dataItems.size(); i++) {
             String item = dataItems.get(i);
-
+            
             try {
                 processDataItem(item);
-
+                
                 // GOOD: Log progress periodically, not for every item
                 if (i % 1000 == 0) {
                     logger.debug("Processed {} of {} items", i, dataItems.size());
                 }
-
+                
             } catch (Exception e) {
                 // GOOD: Log error but continue processing
                 logger.warn("Failed to process item at index {}: {}", i, item, e);
             }
         }
-
+        
         logger.info("Completed processing {} data items", dataItems.size());
     }
 
@@ -412,11 +429,11 @@ public class SecureTransactionService {
 
     private String buildComplexDebugInfo(String userId, String amount) {
         // Simulate expensive debug information building
-        return String.format("User: %s, Amount: %s, Timestamp: %d",
+        return String.format("User: %s, Amount: %s, Timestamp: %d", 
                            userId, amount, System.currentTimeMillis());
     }
 
-    private void validatePaymentRequest(String userId, String amount, String cardNumber)
+    private void validatePaymentRequest(String userId, String amount, String cardNumber) 
             throws ValidationException {
         if (Objects.isNull(userId) || userId.trim().isEmpty()) {
             throw new ValidationException("INVALID_USER_ID");
@@ -424,7 +441,7 @@ public class SecureTransactionService {
         // More validation...
     }
 
-    private void processPaymentInternal(String userId, String amount, String cardNumber)
+    private void processPaymentInternal(String userId, String amount, String cardNumber) 
             throws PaymentProcessingException {
         // Simulate payment processing
         if ("fail".equals(userId)) {
@@ -442,12 +459,12 @@ public class SecureTransactionService {
     // Exception classes
     private static class ValidationException extends Exception {
         private final String validationError;
-
+        
         public ValidationException(String validationError) {
             super("Validation failed: " + validationError);
             this.validationError = validationError;
         }
-
+        
         public String getValidationError() {
             return validationError;
         }
@@ -457,18 +474,15 @@ public class SecureTransactionService {
         public PaymentProcessingException(String message) {
             super(message);
         }
-
+        
         public PaymentProcessingException(String message, Throwable cause) {
             super(message, cause);
         }
     }
-}
-```
-
-**Bad Example:**
-
-```java
-// AVOID: Poor logging practices
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Poor logging practices
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -478,23 +492,23 @@ public class PoorLoggingPractices {
     public void processPayment(String userId, String amount, String cardNumber, String ssn) {
         // BAD: String concatenation instead of parameterized logging
         logger.info("Processing payment for user: " + userId + " amount: " + amount);
-
+        
         // BAD: Logging sensitive information directly
         logger.debug("Credit card: " + cardNumber + ", SSN: " + ssn);
-
+        
         try {
             validatePayment(userId, amount);
-
+            
             // BAD: Expensive operation without guard clause
             logger.debug("Payment details: " + buildExpensiveDebugString(userId, amount, cardNumber));
-
+            
             processPaymentTransaction(userId, amount, cardNumber);
-
+            
         } catch (Exception e) {
             // BAD: Swallowing exception without proper logging
             logger.info("Payment failed: " + e.getMessage());
             // Lost the stack trace and context!
-
+            
             // BAD: Logging sensitive data in error message
             logger.error("Payment failed for card: " + cardNumber + " and SSN: " + ssn);
         }
@@ -512,7 +526,7 @@ public class PoorLoggingPractices {
     public void handleUserLogin(String username, String password) {
         // BAD: Logging passwords - NEVER do this!
         logger.debug("User login attempt: username=" + username + ", password=" + password);
-
+        
         try {
             authenticateUser(username, password);
             // BAD: Inconsistent logging format
@@ -526,7 +540,7 @@ public class PoorLoggingPractices {
     public void performDatabaseOperation(String query, String connectionString) {
         // BAD: Logging database connection strings (may contain credentials)
         logger.debug("Executing query: " + query + " on connection: " + connectionString);
-
+        
         try {
             executeQuery(query);
         } catch (SQLException e) {
@@ -540,9 +554,9 @@ public class PoorLoggingPractices {
     public void badMDCUsage(String userId) {
         org.slf4j.MDC.put("userId", userId);
         logger.info("Processing for user");
-
+        
         // ... some processing ...
-
+        
         // BAD: Forgot to clear MDC - memory leak!
         // MDC.clear() or MDC.remove("userId") is missing
     }
@@ -591,18 +605,22 @@ public class PoorLoggingPractices {
     private static class SQLException extends Exception {
         public SQLException(String message) { super(message); }
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </rule-section>
 
-## Rule 4: Implement Secure Logging Practices
-
-Title: Ensure Logs Do Not Compromise Security
-Description: Actively mask or filter sensitive data, control access to log files, use secure transmission protocols, and comply with data protection regulations when logging information.
-
-**Good example:**
-
-```java
-// GOOD: Secure logging practices
+        <rule-section number="4" id="secure-logging-practices">
+            <rule-header>
+                <rule-title>Implement Secure Logging Practices</rule-title>
+                <rule-subtitle>Ensure Logs Do Not Compromise Security</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Actively mask or filter sensitive data, control access to log files, use secure transmission protocols, and comply with data protection regulations when logging information.
+            </rule-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Secure logging practices
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.regex.Pattern;
@@ -610,7 +628,7 @@ import java.util.Objects;
 
 public class SecureLoggingService {
     private static final Logger logger = LoggerFactory.getLogger(SecureLoggingService.class);
-
+    
     // Patterns for detecting sensitive data
     private static final Pattern CREDIT_CARD_PATTERN = Pattern.compile("\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}[\\s-]?\\d{4}");
     private static final Pattern SSN_PATTERN = Pattern.compile("\\d{3}-\\d{2}-\\d{4}");
@@ -629,63 +647,63 @@ public class SecureLoggingService {
         try {
             validateUserData(username, email, ssn, creditCard);
             createUserAccount(username, email);
-
+            
             // GOOD: Log successful operation without sensitive data
             logger.info("User registration completed successfully for: {}", sanitizedUsername);
-
+            
             // GOOD: Security event logging for audit trail
-            logger.info("SECURITY_EVENT: New user registration - username: {}, timestamp: {}",
+            logger.info("SECURITY_EVENT: New user registration - username: {}, timestamp: {}", 
                        sanitizedUsername, System.currentTimeMillis());
-
+            
         } catch (ValidationException e) {
             // GOOD: Log validation failure without exposing sensitive validation details
-            logger.warn("User registration failed validation for user: {}, error code: {}",
+            logger.warn("User registration failed validation for user: {}, error code: {}", 
                        sanitizedUsername, e.getErrorCode());
-
+            
         } catch (SecurityException e) {
             // GOOD: Security incidents logged with careful information control
-            logger.error("SECURITY_ALERT: Registration security violation for user: {}, violation type: {}",
+            logger.error("SECURITY_ALERT: Registration security violation for user: {}, violation type: {}", 
                         sanitizeForLogging(username), e.getViolationType());
             // Don't log the actual violation details that might help attackers
-
+            
         } catch (Exception e) {
             // GOOD: Generic error logging without sensitive context
-            logger.error("User registration failed for user: {} due to system error",
+            logger.error("User registration failed for user: {} due to system error", 
                         sanitizedUsername, e);
         }
     }
 
     public void processPayment(String userId, PaymentRequest request) {
         String correlationId = generateSecureCorrelationId();
-
+        
         try {
             // GOOD: Log business operation with masked sensitive data
-            logger.info("Processing payment - user: {}, amount: {}, correlation: {}",
+            logger.info("Processing payment - user: {}, amount: {}, correlation: {}", 
                        userId, request.getAmount(), correlationId);
-
+            
             // GOOD: Validate and log without exposing card details
             validatePaymentMethod(request.getPaymentMethod());
             logger.debug("Payment method validated for correlation: {}", correlationId);
-
+            
             ChargeResult result = processCharge(request);
-
+            
             // GOOD: Log success with minimal necessary information
-            logger.info("Payment processed successfully - correlation: {}, transaction: {}",
+            logger.info("Payment processed successfully - correlation: {}, transaction: {}", 
                        correlationId, result.getTransactionId());
-
+            
             // GOOD: Business intelligence logging (aggregated, non-sensitive)
-            logger.info("METRICS: Payment processed - amount: {}, merchant: {}, timestamp: {}",
+            logger.info("METRICS: Payment processed - amount: {}, merchant: {}, timestamp: {}", 
                        request.getAmount(), request.getMerchantId(), System.currentTimeMillis());
-
+            
         } catch (FraudDetectedException e) {
             // GOOD: Security event with controlled information
-            logger.error("SECURITY_ALERT: Fraud detected - correlation: {}, risk_score: {}, user: {}",
+            logger.error("SECURITY_ALERT: Fraud detected - correlation: {}, risk_score: {}, user: {}", 
                         correlationId, e.getRiskScore(), userId);
             // Don't log fraud detection details that could help bypass detection
-
+            
         } catch (PaymentException e) {
             // GOOD: Business error with safe context
-            logger.error("Payment failed - correlation: {}, error_type: {}",
+            logger.error("Payment failed - correlation: {}, error_type: {}", 
                         correlationId, e.getErrorType(), e);
         }
     }
@@ -693,16 +711,16 @@ public class SecureLoggingService {
     // Secure data masking utilities
     private String sanitizeForLogging(String input) {
         if (input == null) return "[null]";
-
+        
         // Remove potentially dangerous characters for log injection protection
         String sanitized = input.replaceAll("[\r\n\t]", "_")
                                .replaceAll("[<>\"'&]", "*");
-
+        
         // Limit length to prevent log flooding
         if (sanitized.length() > 100) {
             sanitized = sanitized.substring(0, 97) + "...";
         }
-
+        
         return sanitized;
     }
 
@@ -710,12 +728,12 @@ public class SecureLoggingService {
         if (email == null || !EMAIL_PATTERN.matcher(email).matches()) {
             return "[INVALID_EMAIL]";
         }
-
+        
         int atIndex = email.indexOf('@');
         if (atIndex < 2) {
             return "**@" + email.substring(atIndex + 1);
         }
-
+        
         return email.substring(0, 2) + "***@" + email.substring(atIndex + 1);
     }
 
@@ -723,30 +741,30 @@ public class SecureLoggingService {
         if (cardNumber == null || cardNumber.length() < 8) {
             return "[INVALID_CARD]";
         }
-
+        
         String digitsOnly = cardNumber.replaceAll("[^\\d]", "");
         if (digitsOnly.length() < 8) {
             return "[INVALID_CARD]";
         }
-
-        return digitsOnly.substring(0, 4) + "****" +
+        
+        return digitsOnly.substring(0, 4) + "****" + 
                digitsOnly.substring(digitsOnly.length() - 4);
     }
 
     private String hashSensitiveData(String data) {
         if (data == null) return "[null]";
-
+        
         // Use a secure hash for audit purposes (not for security)
         return "HASH_" + Math.abs(data.hashCode());
     }
 
     private String generateSecureCorrelationId() {
-        return "CORR_" + System.currentTimeMillis() + "_" +
+        return "CORR_" + System.currentTimeMillis() + "_" + 
                Thread.currentThread().getId();
     }
 
     // Mock classes and methods
-    private void validateUserData(String username, String email, String ssn, String creditCard)
+    private void validateUserData(String username, String email, String ssn, String creditCard) 
             throws ValidationException {
         if (username == null || username.trim().isEmpty()) {
             throw new ValidationException("INVALID_USERNAME");
@@ -771,7 +789,7 @@ public class SecureLoggingService {
         private String amount = "100.00";
         private String paymentMethod = "card";
         private String merchantId = "MERCHANT_123";
-
+        
         public String getAmount() { return amount; }
         public String getPaymentMethod() { return paymentMethod; }
         public String getMerchantId() { return merchantId; }
@@ -785,7 +803,7 @@ public class SecureLoggingService {
 
     private static class ValidationException extends Exception {
         private final String errorCode;
-        public ValidationException(String errorCode) {
+        public ValidationException(String errorCode) { 
             super("Validation failed: " + errorCode);
             this.errorCode = errorCode;
         }
@@ -818,67 +836,64 @@ public class SecureLoggingService {
         }
         public String getErrorType() { return errorType; }
     }
-}
-```
-
-**Bad Example:**
-
-```java
-// AVOID: Insecure logging practices
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Insecure logging practices
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 public class InsecureLoggingService {
     private static final Logger logger = LoggerFactory.getLogger(InsecureLoggingService.class);
 
-    public void processUserRegistration(String username, String password, String email,
+    public void processUserRegistration(String username, String password, String email, 
                                       String ssn, String creditCard) {
         // BAD: Logging passwords - NEVER do this!
-        logger.debug("User registration: username={}, password={}, email={}",
+        logger.debug("User registration: username={}, password={}, email={}", 
                     username, password, email);
-
+        
         // BAD: Logging full SSN and credit card numbers
         logger.info("Processing registration for SSN: {} with credit card: {}", ssn, creditCard);
-
+        
         try {
             validateUser(username, password, email, ssn, creditCard);
             createAccount(username, password);
-
+            
         } catch (ValidationException e) {
             // BAD: Exposing sensitive validation details
-            logger.error("Validation failed for user {} with password {} - details: {}",
+            logger.error("Validation failed for user {} with password {} - details: {}", 
                         username, password, e.getValidationDetails());
-
+            
         } catch (SecurityException e) {
             // BAD: Logging detailed security information that could help attackers
             logger.error("Security violation for user {}: attack vector: {}, payload: {}, " +
-                        "system_path: {}, internal_error: {}",
-                        username, e.getAttackVector(), e.getPayload(),
+                        "system_path: {}, internal_error: {}", 
+                        username, e.getAttackVector(), e.getPayload(), 
                         e.getSystemPath(), e.getInternalError());
         }
     }
 
     public void processPayment(String userId, String cardNumber, String cvv, String amount) {
         // BAD: Logging complete payment card information
-        logger.info("Processing payment: user={}, card={}, cvv={}, amount={}",
+        logger.info("Processing payment: user={}, card={}, cvv={}, amount={}", 
                    userId, cardNumber, cvv, amount);
-
+        
         try {
             validateCard(cardNumber, cvv);
-
+            
             // BAD: Logging sensitive database connection info
-            logger.debug("Connecting to payment DB with connection string: {}",
+            logger.debug("Connecting to payment DB with connection string: {}", 
                         getDatabaseConnectionString());
-
+            
             processTransaction(cardNumber, cvv, amount);
-
+            
         } catch (FraudException e) {
             // BAD: Exposing fraud detection algorithms and thresholds
             logger.error("Fraud detected for card {}: algorithm={}, threshold={}, " +
-                        "risk_factors={}, detection_rules={}",
-                        cardNumber, e.getAlgorithm(), e.getThreshold(),
+                        "risk_factors={}, detection_rules={}", 
+                        cardNumber, e.getAlgorithm(), e.getThreshold(), 
                         e.getRiskFactors(), e.getDetectionRules());
-
+            
         } catch (PaymentException e) {
             // BAD: Including full stack trace with sensitive system information
             logger.error("Payment failed for card {} with full system details", cardNumber, e);
@@ -888,37 +903,37 @@ public class InsecureLoggingService {
     public void handleSystemError(String operation, Exception e) {
         // BAD: Logging system internals that could help attackers
         logger.error("System error in operation {}: java_version={}, system_properties={}, " +
-                    "environment_variables={}, file_paths={}",
-                    operation, System.getProperty("java.version"),
-                    System.getProperties(), System.getenv(),
+                    "environment_variables={}, file_paths={}", 
+                    operation, System.getProperty("java.version"), 
+                    System.getProperties(), System.getenv(), 
                     System.getProperty("user.dir"));
-
+        
         // BAD: Full stack trace might expose sensitive system information
         e.printStackTrace(); // Goes to stderr, not controlled by logging config
     }
 
-    public void logUserActivity(String userId, String sessionId, String ipAddress,
+    public void logUserActivity(String userId, String sessionId, String ipAddress, 
                                String userAgent, String requestData) {
         // BAD: Logging PII and potentially sensitive request data
-        logger.info("User activity: user={}, session={}, ip={}, userAgent={}, request={}",
+        logger.info("User activity: user={}, session={}, ip={}, userAgent={}, request={}", 
                    userId, sessionId, ipAddress, userAgent, requestData);
-
+        
         // BAD: No data retention consideration
         // This could violate GDPR, CCPA, or other privacy regulations
     }
 
     public void authenticateUser(String username, String password, String loginToken) {
         // BAD: Logging authentication credentials
-        logger.debug("Authentication attempt: username={}, password={}, token={}",
+        logger.debug("Authentication attempt: username={}, password={}, token={}", 
                     username, password, loginToken);
-
+        
         try {
             boolean success = authenticate(username, password, loginToken);
             if (!success) {
                 // BAD: Detailed failure information that could help brute force attacks
                 logger.warn("Login failed for {} - password_attempts={}, last_success={}, " +
-                           "account_locked={}, failed_reasons={}",
-                           username, getPasswordAttempts(username),
+                           "account_locked={}, failed_reasons={}", 
+                           username, getPasswordAttempts(username), 
                            getLastSuccessfulLogin(username), isAccountLocked(username),
                            getFailureReasons(username));
             }
@@ -934,11 +949,11 @@ public class InsecureLoggingService {
         return "jdbc:mysql://prod-db:3306/payments?user=admin&password=secret123";
     }
 
-    private void validateUser(String username, String password, String email, String ssn, String creditCard)
+    private void validateUser(String username, String password, String email, String ssn, String creditCard) 
             throws ValidationException { /* ... */ }
     private void createAccount(String username, String password) { /* ... */ }
     private void validateCard(String cardNumber, String cvv) { /* ... */ }
-    private void processTransaction(String cardNumber, String cvv, String amount)
+    private void processTransaction(String cardNumber, String cvv, String amount) 
             throws PaymentException { /* ... */ }
     private boolean authenticate(String username, String password, String token) { return true; }
     private int getPasswordAttempts(String username) { return 3; }
@@ -949,8 +964,8 @@ public class InsecureLoggingService {
     // Exception classes with sensitive information exposure
     private static class ValidationException extends Exception {
         private final String validationDetails;
-        public ValidationException(String details) {
-            this.validationDetails = details;
+        public ValidationException(String details) { 
+            this.validationDetails = details; 
         }
         public String getValidationDetails() { return validationDetails; }
     }
@@ -986,5 +1001,9 @@ public class InsecureLoggingService {
     private static class PaymentException extends Exception {
         public PaymentException(String message) { super(message); }
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </rule-section>
+    </content-sections>
+</system-prompt>
