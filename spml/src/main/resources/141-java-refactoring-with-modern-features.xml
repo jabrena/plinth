@@ -511,5 +511,65 @@ public class VarAntiPattern {
                 </bad-example>
             </code-examples>
         </rule-section>
+
+        <rule-section number="7" id="collection-factory-methods">
+            <rule-header>
+                <rule-title>Collection Factory Methods</rule-title>
+                <rule-subtitle>Use unmodifiable collection factory methods for concise immutable collections</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Use collection factory methods like `List.of()`, `Set.of()`, `Map.of()` (introduced in Java 9) to create small immutable collections concisely. These methods are more convenient than traditional initialization patterns and provide better performance for small collections. The collections created are immutable and null-hostile, throwing exceptions if null values are provided.
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="8" id="completable-future">
+            <rule-header>
+                <rule-title>CompletableFuture for Asynchronous Programming</rule-title>
+                <rule-subtitle>Use CompletableFuture for composable asynchronous operations</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Use `CompletableFuture` for non-blocking asynchronous programming and building composable asynchronous pipelines. Chain operations using methods like `thenApply`, `thenCompose`, `thenCombine` for building complex workflows. Handle exceptions appropriately with `handle()` or `exceptionally()`. Use proper thread pools for CPU-bound vs IO-bound tasks to avoid blocking the common ForkJoinPool.
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="9" id="module-system">
+            <rule-header>
+                <rule-title>Module System (Java 9+)</rule-title>
+                <rule-subtitle>Use JPMS for strong encapsulation and clear module boundaries</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Employ the Java Platform Module System (JPMS) to create well-encapsulated, maintainable applications with clear module dependencies. Define module boundaries and dependencies explicitly in `module-info.java` files. Use strong encapsulation to hide implementation details and expose only necessary APIs. Consider modular design principles from the beginning of project architecture.
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="10" id="performance-considerations">
+            <rule-header>
+                <rule-title>Performance Considerations with Modern Features</rule-title>
+                <rule-subtitle>Be aware of performance implications of modern Java features</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                While modern Java features offer improved syntax and functionality, be mindful of their performance implications. Profile critical sections and measure performance before and after adopting new features. Consider the overhead of lambda expressions, autoboxing in streams, parallel stream coordination costs, and Optional object creation. Not all traditional loops should be replaced with streams, especially for simple operations on small collections.
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="11" id="testing-modern-code">
+            <rule-header>
+                <rule-title>Testing Modern Java Code</rule-title>
+                <rule-subtitle>Adapt testing strategies for modern Java features</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Adapt testing strategies to properly test modern Java features. Focus on testing behavior rather than implementation when testing lambda expressions and functional code. Use appropriate mocking strategies for functional interfaces and streams. Test asynchronous code with CompletableFuture properly, including timeout scenarios and exception handling. Ensure proper testing coverage of Optional usage patterns and edge cases.
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="12" id="text-blocks">
+            <rule-header>
+                <rule-title>Use Text Blocks for Readable Multi-line Strings</rule-title>
+                <rule-subtitle>Leverage text blocks for improved readability of multi-line strings</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Use text blocks (introduced in Java 15) for multi-line string literals such as JSON, SQL queries, HTML templates, or other formatted text. Text blocks preserve formatting and indentation while reducing the need for escape sequences. They significantly improve code readability and maintainability for strings with substantial formatting requirements. Use proper indentation within text blocks to control the final string formatting.
+            </rule-description>
+        </rule-section>
     </content-sections>
 </system-prompt>

@@ -213,5 +213,55 @@ class PriceCalculator {
                 </bad-example>
             </code-examples>
         </rule-section>
+
+        <rule-section number="4" id="keep-data-flat-denormalized">
+            <rule-header>
+                <rule-title>Keep Data Flat and Denormalized (When Appropriate)</rule-title>
+                <rule-subtitle>Prefer Flatter Data Structures with References</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Avoid excessively deep nesting of data objects, which can make data harder to access and manage. When representing relationships, consider using references (like IDs) instead of directly embedding complex objects within other objects, especially for many-to-many or one-to-many relationships. Store related but distinct entities in separate flat collections or maps, linked by these IDs. This approach can simplify querying, updating, and serializing data.
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="5" id="keep-data-generic-until-specific">
+            <rule-header>
+                <rule-title>Keep Data Generic Until Specific</rule-title>
+                <rule-subtitle>Start with Generic Data Structures, Convert to Specific Types When Needed</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                For highly dynamic or externally defined data, start with generic data structures like Map&lt;String, Object&gt; or JSON-like trees. This allows flexibility in handling varied or evolving data schemas. Convert to specific, strongly-typed objects (like records) only when the data needs to be processed in a type-safe manner or when specific business logic applies. Implement robust, type-safe converter functions or classes to perform this transformation.
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="6" id="data-integrity-validation">
+            <rule-header>
+                <rule-title>Data Integrity through Validation Functions</rule-title>
+                <rule-subtitle>Ensure Data Integrity through Pure Validation Functions</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Implement data validation using pure functions that check data integrity without modifying the data or producing side effects. Validation functions should return clear results (boolean, validation result objects, or throw specific exceptions) and be composable for complex validation scenarios. Separate validation logic from data structures and business logic to maintain clean separation of concerns.
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="7" id="flexible-generic-data-access">
+            <rule-header>
+                <rule-title>Flexible and Generic Data Access</rule-title>
+                <rule-subtitle>Create Flexible, Generic Data Access Layers</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Design data access layers that can work with various data types and storage mechanisms without being tightly coupled to specific schemas or storage technologies. Use generic interfaces and functional approaches that can be adapted to different data sources. This flexibility facilitates testing, migration between storage systems, and evolution of data structures over time.
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="8" id="explicit-traceable-transformation">
+            <rule-header>
+                <rule-title>Explicit and Traceable Data Transformation</rule-title>
+                <rule-subtitle>Make All Data Transformations Explicit and Traceable</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Ensure all data validation and transformation steps are explicit, composed of clear functional steps, and easily traceable. Avoid hidden or implicit logic within data objects. Each transformation should be a pure function that can be tested independently. Chain transformations in a way that makes the data flow clear and debuggable. Document the purpose and expected input/output of each transformation function.
+            </rule-description>
+        </rule-section>
     </content-sections>
 </system-prompt>

@@ -498,5 +498,105 @@ class UserServiceTestBad {
                 </bad-example>
             </code-examples>
         </rule-section>
+
+        <rule-section number="9" id="consider-test-coverage">
+            <rule-header>
+                <rule-title>Consider Test Coverage, But Don't Obsess</rule-title>
+                <rule-subtitle>Use code coverage as a guide, not a definitive quality metric</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Tools like JaCoCo can measure which lines of code are executed by your tests (code coverage). Aiming for high coverage (e.g., &gt;80% line/branch coverage) is generally good practice, as it indicates most code paths are tested. However, 100% coverage doesn't guarantee bug-free code or high-quality tests. Focus on writing meaningful tests for critical logic and edge cases rather than solely chasing coverage numbers.
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="10" id="test-scopes">
+            <rule-header>
+                <rule-title>Test Scopes</rule-title>
+                <rule-subtitle>Test classes and methods should be package-private</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Test classes should have package-private visibility. There is no need for them to be public. Test methods should have package-private visibility. There is no need for them to be public.
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="11" id="code-splitting-strategies">
+            <rule-header>
+                <rule-title>Code Splitting Strategies</rule-title>
+                <rule-subtitle>Keep test methods focused and use proper organization</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Small Test Methods: Keep test methods small and focused on testing a single behavior. Helper Methods: Use helper methods to avoid code duplication in test setup and assertions. Parameterized Tests: Utilize JUnit's parameterized tests to test the same logic with different input values.
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="12" id="anti-patterns-and-code-smells">
+            <rule-header>
+                <rule-title>Anti-patterns and Code Smells</rule-title>
+                <rule-subtitle>Avoid common testing anti-patterns</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Testing Implementation Details: Avoid testing implementation details that might change, leading to brittle tests. Focus on testing behavior and outcomes. Hard-coded Values: Avoid hard-coding values in tests. Use constants or test data to make tests more maintainable. Complex Test Logic: Keep test logic simple and avoid complex calculations or conditional statements within tests.
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="13" id="state-management">
+            <rule-header>
+                <rule-title>State Management</rule-title>
+                <rule-subtitle>Ensure proper state isolation between tests</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Isolated State: Ensure each test has its own isolated state to avoid interference between tests. Use @BeforeEach to reset the state before each test. Immutable Objects: Prefer immutable objects to simplify state management and avoid unexpected side effects. Stateless Components: Design stateless components whenever possible to reduce the need for state management in tests.
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="14" id="error-handling">
+            <rule-header>
+                <rule-title>Error Handling</rule-title>
+                <rule-subtitle>Test error conditions and exception handling</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Expected Exceptions: Use AssertJ's assertThatThrownBy to verify that a method throws the expected exception under specific conditions. Exception Messages: Assert the exception message to ensure the correct error is being thrown with helpful context. Graceful Degradation: Test how the application handles errors and gracefully degrades when dependencies are unavailable.
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="15" id="leverage-jspecify">
+            <rule-header>
+                <rule-title>Leverage JSpecify for Null Safety</rule-title>
+                <rule-subtitle>Utilize JSpecify annotations for explicit nullness contracts</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Employ JSpecify annotations (org.jspecify.annotations.*) such as @NullMarked, @Nullable, and @NonNull to clearly define the nullness expectations of method parameters, return types, and fields within your tests and the code under test. This practice enhances code clarity, enables static analysis tools to catch potential NullPointerExceptions early, and improves the overall robustness of your tests and application code.
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="16" id="right-bicep-questions">
+            <rule-header>
+                <rule-title>Key Questions to Guide Test Creation (RIGHT-BICEP)</rule-title>
+                <rule-subtitle>Use RIGHT-BICEP to guide comprehensive test creation</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                If the code ran correctly, how would I know? How am I going to test this? What else can go wrong? Could this same kind of problem happen anywhere else? What to Test: Use Your RIGHT-BICEP - Are the results Right? Are all the Boundary conditions CORRECT? Can you check Inverse relationships? Can you Cross-check results using other means? Can you force Error conditions to happen? Are Performance characteristics within bounds?
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="17" id="a-trip-characteristics">
+            <rule-header>
+                <rule-title>Characteristics of Good Tests (A-TRIP)</rule-title>
+                <rule-subtitle>Good tests are A-TRIP</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Good tests are A-TRIP: Automatic: Tests should run without human intervention. Thorough: Test everything that could break; cover edge cases. Repeatable: Tests should produce the same results every time, in any environment. Independent: Tests should not rely on each other or on the order of execution. Professional: Test code is real code; keep it clean, maintainable, and well-documented.
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="18" id="correct-boundary-conditions">
+            <rule-header>
+                <rule-title>Verifying CORRECT Boundary Conditions</rule-title>
+                <rule-subtitle>Ensure your tests check CORRECT boundary conditions</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Ensure your tests check the following boundary conditions (CORRECT): Conformance: Does the value conform to an expected format? (e.g., email format, date format) Ordering: Is the set of values ordered or unordered as appropriate? Range: Is the value within reasonable minimum and maximum values? Reference: Does the code reference anything external that isn't under direct control? Existence: Does the value exist? (e.g., is non-null, non-zero, present in a set) Cardinality: Are there exactly enough values? Time: Is everything happening in order? At the right time? In time?
+            </rule-description>
+        </rule-section>
     </content-sections>
 </system-prompt>
