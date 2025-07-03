@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system-prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="system-prompt.xsd"
+               id="143-java-data-oriented-programming" version="1.0">
+    <metadata>
+        <description>Java rules to apply data oriented programming style</description>
+        <globs>*.java</globs>
+        <always-apply>false</always-apply>
+        <tags>
+            <tag>java</tag>
+            <tag>data-oriented-programming</tag>
+            <tag>immutability</tag>
+            <tag>records</tag>
+            <tag>pure-functions</tag>
+            <tag>best-practices</tag>
+        </tags>
+        <version>1.0.0</version>
+    </metadata>
+
+    <header>
+        <title>Java rules to apply data oriented programming style</title>
+    </header>
+
+    <system-characterization>
+        <role-definition>You are a Senior software engineer with extensive experience in Java software development</role-definition>
+    </system-characterization>
+
+    <description>
+        Java Data-Oriented Programming emphasizes separating code (behavior) from data structures, which should ideally be immutable (e.g., using records). Data manipulation should occur via pure functions that transform data into new instances. It's often beneficial to keep data structures flat and denormalized (using IDs for references) where appropriate, and to start with generic data representations (like `Map&lt;String, Object&gt;`) converting to specific types only when necessary. Data integrity is ensured through pure validation functions. Flexible, generic data access layers facilitate working with various data types and storage mechanisms. All data transformations should be explicit, traceable, and composed of clear, pure functional steps.
+    </description>
+
+    <toc auto-generate="true"/>
+
+    <content-sections>
+        <rule-section number="1" id="separate-code-from-data">
+            <rule-header>
+                <rule-title>Separate Code from Data</rule-title>
+                <rule-subtitle>Decouple Behavior (Code) from Data Structures</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Use records or simple POJOs primarily for holding data. Place behavior (methods that operate on data) in separate utility classes or services. Avoid mixing state (fields) and complex behavior (methods with logic) within the same class intended as a data carrier. Prefer static methods in utility classes for operations on data objects. Design data structures to be self-contained and focused solely on representing state.
+            </rule-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// Data structure (record)
+record UserData(String name, int age) {}
+
+// Behavior in a separate utility class
+class UserActions {
+    public static void validateAge(UserData user) {
+        if (user.age() < 0) {
+            throw new IllegalArgumentException("Age cannot be negative: " + user.age());
+        }
+        System.out.println("Age for " + user.name() + " is valid.");
+    }
+
+    public static UserData activateUser(UserData user) {
+        // Example transformation logic
+        System.out.println("Activating user: " + user.name());
+        return new UserData(user.name().toUpperCase(), user.age()); // Returns new data
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Mixing code and data in one class
+class User {
+    private String name;
+    private int age;
+
+    public User(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    // Behavior mixed with data
+    public void validateAge() {
+        if (age < 0) {
+            throw new IllegalArgumentException("Age cannot be negative: " + age);
+        }
+        System.out.println("Age for " + name + " is valid.");
+    }
+
+    public String getName() { return name; }
+    public int getAge() { return age; }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </rule-section>
+
+        <rule-section number="2" id="data-should-be-immutable">
+            <rule-header>
+                <rule-title>Data Should Be Immutable</rule-title>
+                <rule-subtitle>Ensure Data Immutability</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Use records (which are inherently immutable) whenever possible for data carriers. Declare all fields as `final`. Do not provide setter methods for fields. When returning collections or other mutable types from getters, return defensive copies or unmodifiable views. For transformations, always create and return new instances with the modified data rather than altering existing instances.
+            </rule-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
+
+// Immutable data using record
+record ServerConfig(String host, int port, List<String> features) {
+    // For mutable collections in constructor, ensure immutability
+    public ServerConfig(String host, int port, List<String> features) {
+        this.host = host;
+        this.port = port;
+        this.features = List.copyOf(features); // Create an immutable copy
+    }
+
+    // Getter for list returns the immutable copy
+    @Override
+    public List<String> features() {
+        return this.features; // Already an immutable list from List.copyOf
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
+import java.util.ArrayList;
+
+// Mutable data class
+class MutableConfig {
+    private String host;
+    private int port;
+    private List<String> features; // Mutable list
+
+    public MutableConfig(String host, int port, List<String> features) {
+        this.host = host;
+        this.port = port;
+        this.features = new ArrayList<>(features); // Stores a mutable copy
+    }
+
+    public void setHost(String host) { this.host = host; }
+    public void setPort(int port) { this.port = port; }
+    public void addFeature(String feature) { this.features.add(feature); } // Modifies internal state
+
+    public List<String> getFeatures() {
+        return this.features; // Returns a reference to the internal mutable list
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </rule-section>
+
+        <rule-section number="3" id="use-pure-functions">
+            <rule-header>
+                <rule-title>Use Pure Functions to Manipulate Data</rule-title>
+                <rule-subtitle>Employ Pure Functions for Data Transformations</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Functions that manipulate data should depend solely on their input parameters, not on any instance or external state. They must not cause any side effects. Pure functions are inherently stateless: given the same input, they always produce the same output. Transformations should return new data instances rather than modifying the input data directly. Prefer static methods for such pure data transformation functions.
+            </rule-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
+import java.util.stream.Collectors;
+
+// Data (can be a record)
+record ItemPrice(String itemId, double price) {}
+
+// Pure functions for operations
+class PriceOperations {
+    // Calculates total price based only on inputs
+    public static double calculateTotalWithTax(double price, double taxRate) {
+        if (price < 0 || taxRate < 0) {
+            throw new IllegalArgumentException("Price and tax rate must be non-negative.");
+        }
+        return price * (1 + taxRate);
+    }
+
+    // Applies a discount and returns a new list of items with updated prices
+    public static List<ItemPrice> applyDiscountToItems(List<ItemPrice> items, double discountPercentage) {
+        if (discountPercentage < 0 || discountPercentage > 1) {
+            throw new IllegalArgumentException("Discount must be between 0 and 1.");
+        }
+        return items.stream()
+            .map(item -> new ItemPrice(item.itemId(), item.price() * (1 - discountPercentage)))
+            .collect(Collectors.toUnmodifiableList()); // Returns a new, immutable list
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
+import java.util.ArrayList;
+
+// Impure function with side effects and dependency on instance state
+class PriceCalculator {
+    private double taxRate; // Instance state
+    private List<Double> prices; // Modifies this list
+
+    public PriceCalculator(double taxRate, List<Double> initialPrices) {
+        this.taxRate = taxRate;
+        this.prices = new ArrayList<>(initialPrices); // Stores mutable state
+    }
+
+    // Depends on instance state (taxRate)
+    public double calculateTotalForItem(double price) {
+        return price * (1 + this.taxRate);
+    }
+
+    // Modifies instance state (this.prices) - a side effect
+    public void applyDiscountToAllItems(double discount) {
+        for (int i = 0; i < this.prices.size(); i++) {
+            this.prices.set(i, this.prices.get(i) * (1 - discount));
+        }
+    }
+
+    public List<Double> getPrices() {
+        return this.prices;
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </rule-section>
+    </content-sections>
+</system-prompt>
