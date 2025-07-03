@@ -141,7 +141,7 @@
                   <version>${maven.version}</version>
                 </requireMavenVersion>
                 <requireJavaVersion>
-                  <version>[${java.version},)</version>
+                  <version>${java.version}</version>
                 </requireJavaVersion>
                 <bannedDependencies>
                   <excludes>
