@@ -281,7 +281,7 @@ void should_reject_when_emailFormatIsInvalid() {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 @Test

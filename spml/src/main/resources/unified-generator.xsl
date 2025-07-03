@@ -109,7 +109,7 @@ Description: </xsl:text><xsl:value-of select="normalize-space(rule-description)"
         <xsl:if test="code-examples/bad-example">
             <xsl:text>
 
-**Bad Example:**
+**Bad example:**
 
 ```</xsl:text>
             <xsl:if test="code-examples/bad-example/code-block/@language">

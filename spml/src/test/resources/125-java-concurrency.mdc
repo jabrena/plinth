@@ -100,7 +100,7 @@ public class ThreadSafeCounter {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // AVOID: Poor thread safety practices
@@ -241,7 +241,7 @@ public class ThreadPoolManager {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // AVOID: Poor thread pool management
@@ -407,7 +407,7 @@ public class EventBus {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // AVOID: Poor concurrent pattern implementation
@@ -589,7 +589,7 @@ public class AsyncService {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // AVOID: Blocking operations and poor error handling
@@ -790,7 +790,7 @@ public class VirtualThreadExample {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // AVOID: Misusing virtual threads

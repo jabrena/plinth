@@ -77,7 +77,7 @@ public class SecureInputValidator {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // AVOID: No input validation
@@ -155,7 +155,7 @@ public class SecureDataAccess {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // AVOID: Vulnerable to SQL Injection
@@ -269,7 +269,7 @@ public interface AdminService extends UserService {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // AVOID: Excessive privileges and exposure
@@ -402,7 +402,7 @@ public class SecureCryptoUtils {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // AVOID: Weak cryptographic practices
@@ -567,7 +567,7 @@ public class SecureExceptionHandler {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // AVOID: Insecure exception handling

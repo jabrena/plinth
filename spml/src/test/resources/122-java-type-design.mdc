@@ -71,7 +71,7 @@ public class OrderManagement {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // AVOID: Flat structure with ambiguous names
@@ -133,7 +133,7 @@ class StandardShippingCalculator implements ShippingCalculator {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // AVOID: Inconsistent naming patterns
@@ -243,7 +243,7 @@ void processPayment(EmailAddress customerEmail, Money paymentAmount) {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // AVOID: Primitive obsession
@@ -321,7 +321,7 @@ Optional<Customer> customer = customerRepo.findById(1L);
 List<Product> products = productRepo.findAll();
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // AVOID: Multiple similar classes with duplicated logic
@@ -433,7 +433,7 @@ public class FinancialCalculator {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // AVOID: Using double for financial calculations - precision issues

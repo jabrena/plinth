@@ -57,7 +57,7 @@ class UserEmailer {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // Bad: User class with multiple responsibilities
@@ -133,7 +133,7 @@ class Car {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // Bad: Tight coupling, not programming to an interface
@@ -197,7 +197,7 @@ class BankAccount {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // Bad: Poor encapsulation - direct field access
@@ -262,7 +262,7 @@ class OrderValidator {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // Bad: God Class - doing too many things

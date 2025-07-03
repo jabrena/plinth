@@ -94,7 +94,7 @@ Description: Use the `<dependencyManagement>` section in parent POMs or import B
 </project>
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```xml
 <!-- Child POM hardcoding versions -->
@@ -143,7 +143,7 @@ my-app/
             └── test-data.xml
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```
 my-app/
@@ -200,7 +200,7 @@ Description: Use `<pluginManagement>` in a parent POM to define plugin versions 
 </project>
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```xml
 <!-- Child POM -->
@@ -275,7 +275,7 @@ Description: Use Maven profiles to customize build settings for different enviro
 
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```xml
 <!-- Commented out sections for different environments -->
@@ -347,7 +347,7 @@ Description: Organize your `pom.xml` sections in a consistent order (e.g., proje
 </project>
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```xml
 <!-- Haphazard order, missing properties for versions -->
@@ -398,7 +398,7 @@ Description: Prefer dependencies from Maven Central. If custom repositories are 
 <!-- Better: Configure these in settings.xml and use a repository manager -->
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```xml
 <!-- No explicit repository for a non-central artifact, relying on developer's local settings or transitive ones -->
@@ -504,7 +504,7 @@ Description: Define all dependency and plugin versions in the `<properties>` sec
 </project>
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```xml
 <!-- Hardcoded versions scattered throughout the POM -->

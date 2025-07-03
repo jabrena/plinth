@@ -93,7 +93,7 @@ public class UserService {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // AVOID: Using System.out.println or direct logging implementation
@@ -245,7 +245,7 @@ public class OrderProcessor {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // AVOID: Misusing logging levels
@@ -465,7 +465,7 @@ public class SecureTransactionService {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // AVOID: Poor logging practices
@@ -821,7 +821,7 @@ public class SecureLoggingService {
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
 // AVOID: Insecure logging practices
