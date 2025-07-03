@@ -173,68 +173,37 @@ class CursorRuleGeneratorTest {
         }
 
         @Test
-        @DisplayName("Should generate valid content for Java Object-Oriented Design XML using unified XSLT")
-        void should_generateValidContent_when_transformingJavaObjectOrientedDesignWithUnifiedXslt() throws IOException {
+        @DisplayName("Should generate exact content matching original expected Java Object-Oriented Design document using unified XSLT")
+        void should_generateExactContentMatchingOriginalExpected_when_transformingJavaObjectOrientedDesignWithUnifiedXslt() throws IOException {
             // Given
             CursorRuleGenerator generator = new CursorRuleGenerator();
+            String expectedContent = loadExpectedContent("121-java-object-oriented-design.mdc");
 
             // When
             String actualResult = generator.generate("121-java-object-oriented-design.xml", "unified-generator.xsl");
 
-            // Then - Should produce valid structured output
+            // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
                 .isNotNull()
                 .isNotEmpty()
-                .startsWith("---\ndescription: Java Object-Oriented Design Guidelines")
-                .contains("globs: *.java")
-                .contains("alwaysApply: false")
-                .contains("# Java Object-Oriented Design Guidelines")
-                .contains("## System prompt characterization")
-                .contains("Role definition: You are a Senior software engineer")
-                .contains("## Table of contents")
-                .contains("- Rule 1: Adhere to Core Design Principles (SOLID, DRY, YAGNI)")
-                .contains("- Rule 2: Follow Best Practices for Class and Interface Design")
-                .contains("- Rule 3: Master Encapsulation, Inheritance, and Polymorphism")
-                .contains("- Rule 4: Identify and Refactor Object-Oriented Design Code Smells")
-                .contains("## Rule 1: Adhere to Core Design Principles (SOLID, DRY, YAGNI)")
-                .contains("**Good example:**")
-                .contains("**Bad Example:**");
-
-            // Save for inspection
-            saveGeneratedContentToTarget(actualResult, "java-object-oriented-design.mdc");
+                .isEqualTo(expectedContent);
         }
 
         @Test
-        @DisplayName("Should generate valid content for Java Type Design XML using unified XSLT")
-        void should_generateValidContent_when_transformingJavaTypeDesignWithUnifiedXslt() throws IOException {
+        @DisplayName("Should generate exact content matching original expected Java Type Design document using unified XSLT")
+        void should_generateExactContentMatchingOriginalExpected_when_transformingJavaTypeDesignWithUnifiedXslt() throws IOException {
             // Given
             CursorRuleGenerator generator = new CursorRuleGenerator();
+            String expectedContent = loadExpectedContent("122-java-type-design.mdc");
 
             // When
             String actualResult = generator.generate("122-java-type-design.xml", "unified-generator.xsl");
 
-            // Then - Should produce valid structured output
+            // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
                 .isNotNull()
                 .isNotEmpty()
-                .startsWith("---\ndescription: Type Design Thinking in Java")
-                .contains("globs: *.java")
-                .contains("alwaysApply: false")
-                .contains("# Type Design Thinking in Java")
-                .contains("## System prompt characterization")
-                .contains("Role definition: You are a Senior software engineer")
-                .contains("## Table of contents")
-                .contains("- Rule 1: Establish a Clear Type Hierarchy")
-                .contains("- Rule 2: Use Consistent Naming Conventions")
-                .contains("- Rule 3: Create Type-Safe Wrappers")
-                .contains("- Rule 4: Leverage Generic Type Parameters")
-                .contains("- Rule 5: Use BigDecimal for Precision-Sensitive Calculations")
-                .contains("## Rule 1: Establish a Clear Type Hierarchy")
-                .contains("**Good example:**")
-                .contains("**Bad Example:**");
-
-            // Save for inspection
-            saveGeneratedContentToTarget(actualResult, "java-type-design.mdc");
+                .isEqualTo(expectedContent);
         }
 
         /**
