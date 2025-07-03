@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system-prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="system-prompt.xsd"
+               id="143-java-data-oriented-programming" version="1.0">
+    <metadata>
+        <description>Java rules to apply data oriented programming style</description>
+        <globs>*.java</globs>
+        <always-apply>false</always-apply>
+        <tags>
+            <tag>java</tag>
+            <tag>data-oriented-programming</tag>
+            <tag>immutability</tag>
+            <tag>records</tag>
+            <tag>pure-functions</tag>
+            <tag>best-practices</tag>
+        </tags>
+        <version>1.0.0</version>
+    </metadata>
+
+    <header>
+        <title>Java rules to apply data oriented programming style</title>
+    </header>
+
+    <system-characterization>
+        <role-definition>You are a Senior software engineer with extensive experience in Java software development</role-definition>
+    </system-characterization>
+
+    <description>
+        Java Data-Oriented Programming emphasizes separating code (behavior) from data structures, which should ideally be immutable (e.g., using records). Data manipulation should occur via pure functions that transform data into new instances. It's often beneficial to keep data structures flat and denormalized (using IDs for references) where appropriate, and to start with generic data representations (like `Map&lt;String, Object&gt;`) converting to specific types only when necessary. Data integrity is ensured through pure validation functions. Flexible, generic data access layers facilitate working with various data types and storage mechanisms. All data transformations should be explicit, traceable, and composed of clear, pure functional steps.
+    </description>
+
+    <toc auto-generate="true"/>
+
+    <content-sections>
+        <instruction-section>
+            <instruction-header>
+                <instruction-title>Implementing These Principles</instruction-title>
+            </instruction-header>
+            <instruction-description>These guidelines are built upon the following core principles:</instruction-description>
+            <instruction-rules>
+                <instruction-rule>**Separation of Concerns (Data vs. Code)**: Strictly decouple data structures (which should be simple carriers like records or POJOs) from the code (behavior) that operates on them. Behavior should reside in separate utility classes or services.</instruction-rule>
+                <instruction-rule>**Immutability**: Design data structures to be immutable. Use records or final fields, and ensure that any transformations on data produce new instances rather than modifying existing ones.</instruction-rule>
+                <instruction-rule>**Pure Data Transformations**: Manipulate data using pure functions that depend only on their inputs and produce no side effects. This makes transformations predictable, testable, and easier to reason about.</instruction-rule>
+                <instruction-rule>**Simplicity and Flexibility of Data Structures**: Prefer flat, denormalized data structures where appropriate, using IDs for references rather than deep nesting. Start with generic representations (like `Map&lt;String, Object&gt;`) if the schema is dynamic, converting to specific types only when necessary for processing.</instruction-rule>
+                <instruction-rule>**Explicit and Traceable Operations**: Ensure all data validation and transformation steps are explicit, composed of clear functional steps, and easily traceable. Avoid hidden or implicit logic within data objects.</instruction-rule>
+            </instruction-rules>
+        </instruction-section>
+        <rule-section number="1" id="separate-code-from-data">
+            <rule-header>
+                <rule-title>Separate Code from Data</rule-title>
+                <rule-subtitle>Decouple Behavior (Code) from Data Structures</rule-subtitle>
+            </rule-header>
+            <rule-description>
+- Use records or simple POJOs primarily for holding data.
+- Place behavior (methods that operate on data) in separate utility classes or services.
+- Avoid mixing state (fields) and complex behavior (methods with logic) within the same class intended as a data carrier.
+- Prefer static methods in utility classes for operations on data objects.
+- Design data structures to be self-contained and focused solely on representing state.
+            </rule-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// Data structure (record)
+record UserData(String name, int age) {}
+
+// Behavior in a separate utility class
+class UserActions {
+    public static void validateAge(UserData user) {
+        if (user.age() < 0) {
+            throw new IllegalArgumentException("Age cannot be negative: " + user.age());
+        }
+        System.out.println("Age for " + user.name() + " is valid.");
+    }
+
+    public static UserData activateUser(UserData user) {
+        // Example transformation logic
+        System.out.println("Activating user: " + user.name());
+        return new UserData(user.name().toUpperCase(), user.age()); // Returns new data
+    }
+}
+
+class SeparateCodeDataExample {
+    public static void main(String args) {
+        UserData user1 = new UserData("Alice", 30);
+        UserActions.validateAge(user1);
+        UserData activatedUser1 = UserActions.activateUser(user1);
+        System.out.println("Activated user: " + activatedUser1);
+
+        try {
+            UserData user2 = new UserData("Bob", -5);
+            UserActions.validateAge(user2); // This will throw
+        } catch (IllegalArgumentException e) {
+            System.err.println(e.getMessage());
+        }
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Mixing code and data in one class
+class User {
+    private String name;
+    private int age;
+
+    public User(String name, int age) {
+        this.name = name;
+        this.age = age;
+    }
+
+    // Behavior mixed with data
+    public void validateAge() {
+        if (age < 0) {
+            throw new IllegalArgumentException("Age cannot be negative: " + age);
+        }
+        System.out.println("Age for " + name + " is valid.");
+    }
+
+    public String getName() { return name; }
+    public int getAge() { return age; }
+
+    public static void main(String args) {
+        User user1 = new User("Alice", 30);
+        user1.validateAge();
+        // Problem: User object itself has methods, not just data.
+        // If User was a record, it couldn't have such instance methods beyond generated ones.
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </rule-section>
+
+        <rule-section number="2" id="data-should-be-immutable">
+            <rule-header>
+                <rule-title>Data Should Be Immutable</rule-title>
+                <rule-subtitle>Ensure Data Immutability</rule-subtitle>
+            </rule-header>
+            <rule-description>
+- Use records (which are inherently immutable) whenever possible for data carriers.
+- Declare all fields as `final`.
+- Do not provide setter methods for fields.
+- When returning collections or other mutable types from getters, return defensive copies or unmodifiable views (e.g., `List.copyOf()`, `Collections.unmodifiableList()`).
+- For transformations, always create and return new instances with the modified data rather than altering existing instances.
+            </rule-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
+import java.util.ArrayList;
+
+// Immutable data using record
+record ServerConfig(String host, int port, List<String> features) {
+    // Canonical constructor is implicitly final for fields
+    // Records provide public accessors (host(), port(), features())
+    // equals(), hashCode(), toString() are auto-generated
+
+    // For mutable collections in constructor, ensure immutability
+    public ServerConfig(String host, int port, List<String> features) {
+        this.host = host;
+        this.port = port;
+        this.features = List.copyOf(features); // Create an immutable copy
+    }
+
+    // Getter for list returns the immutable copy
+    @Override
+    public List<String> features() {
+        return this.features; // Already an immutable list from List.copyOf
+    }
+}
+
+class ImmutabilityExample {
+    public static void main(String args) {
+        List<String> initialFeatures = new ArrayList<>();
+        initialFeatures.add("FeatureA");
+
+        ServerConfig config1 = new ServerConfig("localhost", 8080, initialFeatures);
+        System.out.println("Config1: " + config1);
+
+        initialFeatures.add("FeatureB"); // Modify original list
+        System.out.println("Config1 after modifying original list: " + config1); // config1.features is unaffected
+
+        try {
+            config1.features().add("FeatureC"); // Should throw UnsupportedOperationException
+        } catch (UnsupportedOperationException e) {
+            System.out.println("Attempt to modify config1.features(): " + e.getMessage());
+        }
+
+        // Transformation creates a new instance
+        ServerConfig config2 = new ServerConfig(config1.host(), 9090, config1.features());
+        System.out.println("Config2 (new port): " + config2);
+        System.out.println("Config1 is unchanged: " + config1);
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
+import java.util.ArrayList;
+
+// Mutable data class
+class MutableConfig {
+    private String host;
+    private int port;
+    private List<String> features; // Mutable list
+
+    public MutableConfig(String host, int port, List<String> features) {
+        this.host = host;
+        this.port = port;
+        this.features = new ArrayList<>(features); // Stores a mutable copy
+    }
+
+    public void setHost(String host) { this.host = host; }
+    public void setPort(int port) { this.port = port; }
+    public void addFeature(String feature) { this.features.add(feature); } // Modifies internal state
+
+    public List<String> getFeatures() {
+        return this.features; // Returns a reference to the internal mutable list
+    }
+
+    @Override
+    public String toString() {
+        return "MutableConfig{host='" + host + "', port=" + port + ", features=" + features + "}";
+    }
+    
+    public static void main(String args) {
+        List<String> initialFeatures = new ArrayList<>();
+        initialFeatures.add("InitialFeature");
+        MutableConfig mConfig = new MutableConfig("server1", 80, initialFeatures);
+        System.out.println("mConfig: " + mConfig);
+
+        mConfig.setPort(8080); // State is mutated
+        mConfig.addFeature("NewFeature"); // State is mutated
+        System.out.println("mConfig mutated: " + mConfig);
+        
+        List<String> gotFeatures = mConfig.getFeatures();
+        gotFeatures.add("AnotherFeatureAddedExternally"); // External modification of internal state!
+        System.out.println("mConfig after external list modification: " + mConfig);
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </rule-section>
+
+        <rule-section number="3" id="use-pure-functions">
+            <rule-header>
+                <rule-title>Use Pure Functions to Manipulate Data</rule-title>
+                <rule-subtitle>Employ Pure Functions for Data Transformations</rule-subtitle>
+            </rule-header>
+            <rule-description>
+- Functions that manipulate data should depend solely on their input parameters, not on any instance or external state.
+- They must not cause any side effects (e.g., modifying input objects, global variables, I/O operations).
+- Pure functions are inherently stateless: given the same input, they always produce the same output.
+- Transformations should return new data instances rather than modifying the input data directly.
+- Prefer static methods for such pure data transformation functions.
+- Keep each function focused on a single, well-defined transformation.
+            </rule-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
+import java.util.stream.Collectors;
+import java.util.ArrayList;
+
+// Data (can be a record)
+record ItemPrice(String itemId, double price) {}
+
+// Pure functions for operations
+class PriceOperations {
+    // Calculates total price based only on inputs
+    public static double calculateTotalWithTax(double price, double taxRate) {
+        if (price < 0 || taxRate < 0) {
+            throw new IllegalArgumentException("Price and tax rate must be non-negative.");
+        }
+        return price * (1 + taxRate);
+    }
+
+    // Applies a discount and returns a new list of items with updated prices
+    public static List<ItemPrice> applyDiscountToItems(List<ItemPrice> items, double discountPercentage) {
+        if (discountPercentage < 0 || discountPercentage > 1) {
+            throw new IllegalArgumentException("Discount must be between 0 and 1.");
+        }
+        return items.stream()
+            .map(item -> new ItemPrice(item.itemId(), item.price() * (1 - discountPercentage)))
+            .collect(Collectors.toUnmodifiableList()); // Returns a new, immutable list
+    }
+}
+
+class PureFunctionExample {
+    public static void main(String args) {
+        double itemPrice = 100.0;
+        double tax = 0.07;
+        double total = PriceOperations.calculateTotalWithTax(itemPrice, tax);
+        System.out.println("Total for price " + itemPrice + " with tax " + tax + ": " + total);
+
+        List<ItemPrice> catalogue = List.of(
+            new ItemPrice("A001", 50.0),
+            new ItemPrice("B002", 120.0)
+        );
+        List<ItemPrice> discountedCatalogue = PriceOperations.applyDiscountToItems(catalogue, 0.10); // 10% discount
+        System.out.println("Original catalogue: " + catalogue);
+        System.out.println("Discounted catalogue: " + discountedCatalogue);
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
+import java.util.ArrayList;
+
+// Impure function with side effects and dependency on instance state
+class PriceCalculator {
+    private double taxRate; // Instance state
+    private List<Double> prices; // Modifies this list
+
+    public PriceCalculator(double taxRate, List<Double> initialPrices) {
+        this.taxRate = taxRate;
+        this.prices = new ArrayList<>(initialPrices); // Stores mutable state
+    }
+
+    // Depends on instance state (taxRate)
+    public double calculateTotalForItem(double price) {
+        return price * (1 + this.taxRate);
+    }
+
+    // Modifies instance state (this.prices) - a side effect
+    public void applyDiscountToAllItems(double discount) {
+        for (int i = 0; i < this.prices.size(); i++) {
+            this.prices.set(i, this.prices.get(i) * (1 - discount));
+        }
+    }
+
+    public List<Double> getPrices() {
+        return this.prices;
+    }
+
+    public static void main(String args) {
+        PriceCalculator calc = new PriceCalculator(0.05, List.of(10.0, 20.0));
+        System.out.println("Total for 10.0: " + calc.calculateTotalForItem(10.0)); // Depends on calc.taxRate
+        
+        System.out.println("Prices before discount: " + calc.getPrices());
+        calc.applyDiscountToAllItems(0.1);
+        System.out.println("Prices after discount (mutated): " + calc.getPrices()); // Original list inside calc is modified
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </rule-section>
+
+        <rule-section number="4" id="keep-data-flat-denormalized">
+            <rule-header>
+                <rule-title>Keep Data Flat and Denormalized (When Appropriate)</rule-title>
+                <rule-subtitle>Prefer Flatter Data Structures with References</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Avoid excessively deep nesting of data objects, which can make data harder to access and manage. When representing relationships, consider using references (like IDs) instead of directly embedding complex objects within other objects, especially for many-to-many or one-to-many relationships. Store related but distinct entities in separate flat collections or maps, linked by these IDs. This approach can simplify querying, updating, and serializing data.
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="5" id="keep-data-generic-until-specific">
+            <rule-header>
+                <rule-title>Keep Data Generic Until Specific</rule-title>
+                <rule-subtitle>Start with Generic Data Structures, Convert to Specific Types When Needed</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                For highly dynamic or externally defined data, start with generic data structures like Map&lt;String, Object&gt; or JSON-like trees. This allows flexibility in handling varied or evolving data schemas. Convert to specific, strongly-typed objects (like records) only when the data needs to be processed in a type-safe manner or when specific business logic applies. Implement robust, type-safe converter functions or classes to perform this transformation.
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="6" id="data-integrity-validation">
+            <rule-header>
+                <rule-title>Data Integrity through Validation Functions</rule-title>
+                <rule-subtitle>Ensure Data Integrity through Pure Validation Functions</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Implement data validation using pure functions that check data integrity without modifying the data or producing side effects. Validation functions should return clear results (boolean, validation result objects, or throw specific exceptions) and be composable for complex validation scenarios. Separate validation logic from data structures and business logic to maintain clean separation of concerns.
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="7" id="flexible-generic-data-access">
+            <rule-header>
+                <rule-title>Flexible and Generic Data Access</rule-title>
+                <rule-subtitle>Create Flexible, Generic Data Access Layers</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Design data access layers that can work with various data types and storage mechanisms without being tightly coupled to specific schemas or storage technologies. Use generic interfaces and functional approaches that can be adapted to different data sources. This flexibility facilitates testing, migration between storage systems, and evolution of data structures over time.
+            </rule-description>
+        </rule-section>
+
+        <rule-section number="8" id="explicit-traceable-transformation">
+            <rule-header>
+                <rule-title>Explicit and Traceable Data Transformation</rule-title>
+                <rule-subtitle>Make All Data Transformations Explicit and Traceable</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Ensure all data validation and transformation steps are explicit, composed of clear functional steps, and easily traceable. Avoid hidden or implicit logic within data objects. Each transformation should be a pure function that can be tested independently. Chain transformations in a way that makes the data flow clear and debuggable. Document the purpose and expected input/output of each transformation function.
+            </rule-description>
+        </rule-section>
+    </content-sections>
+</system-prompt>
