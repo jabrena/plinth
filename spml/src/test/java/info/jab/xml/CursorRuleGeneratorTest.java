@@ -172,6 +172,40 @@ class CursorRuleGeneratorTest {
             saveGeneratedContentToTarget(checklistGuideResult, "unified-checklist-guide.mdc");
         }
 
+        @Test
+        @DisplayName("Should generate exact content matching original expected Java Object-Oriented Design document using unified XSLT")
+        void should_generateExactContentMatchingOriginalExpected_when_transformingJavaObjectOrientedDesignWithUnifiedXslt() throws IOException {
+            // Given
+            CursorRuleGenerator generator = new CursorRuleGenerator();
+            String expectedContent = loadExpectedContent("121-java-object-oriented-design.mdc");
+
+            // When
+            String actualResult = generator.generate("121-java-object-oriented-design.xml", "unified-generator.xsl");
+
+            // Then - Unified XSLT should produce identical output to expected
+            assertThat(actualResult)
+                .isNotNull()
+                .isNotEmpty()
+                .isEqualTo(expectedContent);
+        }
+
+        @Test
+        @DisplayName("Should generate exact content matching original expected Java Type Design document using unified XSLT")
+        void should_generateExactContentMatchingOriginalExpected_when_transformingJavaTypeDesignWithUnifiedXslt() throws IOException {
+            // Given
+            CursorRuleGenerator generator = new CursorRuleGenerator();
+            String expectedContent = loadExpectedContent("122-java-type-design.mdc");
+
+            // When
+            String actualResult = generator.generate("122-java-type-design.xml", "unified-generator.xsl");
+
+            // Then - Unified XSLT should produce identical output to expected
+            assertThat(actualResult)
+                .isNotNull()
+                .isNotEmpty()
+                .isEqualTo(expectedContent);
+        }
+
         /**
          * Pure function to load expected content from resources.
          * Uses Optional for null safety following functional programming principles.
