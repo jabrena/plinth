@@ -11,7 +11,7 @@
                 <xs:element ref="system-characterization"/>
                 <xs:element ref="description"/>
                 <xs:element ref="principles" minOccurs="0"/>
-                <xs:element ref="table-of-contents" minOccurs="0"/>
+                <xs:element ref="toc" minOccurs="0"/>
                 <xs:element ref="content-sections" maxOccurs="unbounded"/>
             </xs:sequence>
             <xs:attribute name="id" type="xs:string" use="required"/>
@@ -92,22 +92,25 @@
         </xs:complexType>
     </xs:element>
 
-    <!-- Table of contents -->
-    <xs:element name="table-of-contents">
+    <!-- Table of contents (auto-generated) -->
+    <xs:element name="toc">
         <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="toc-item" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="toc-item">
-        <xs:complexType>
-            <xs:simpleContent>
-                <xs:extension base="xs:string">
-                    <xs:attribute name="level" type="xs:string" use="optional"/>
-                </xs:extension>
-            </xs:simpleContent>
+            <xs:attribute name="auto-generate" use="optional" default="true">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="true"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="source" type="xs:string" use="optional" default="rule-sections"/>
+            <xs:attribute name="include-subtitles" use="optional" default="false">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="true"/>
+                        <xs:enumeration value="false"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
         </xs:complexType>
     </xs:element>
 

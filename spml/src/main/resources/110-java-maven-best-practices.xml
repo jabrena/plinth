@@ -26,15 +26,7 @@
         Effective Maven usage involves robust dependency management via `&lt;dependencyManagement&gt;` and BOMs, adherence to the standard directory layout, and centralized plugin management. Build profiles should be used for environment-specific configurations. POMs must be kept readable and maintainable with logical structure and properties for versions. Custom repositories should be declared explicitly and their use minimized, preferably managed via a central repository manager.
     </description>
 
-    <table-of-contents>
-        <toc-item>Rule 1: Effective Dependency Management</toc-item>
-        <toc-item>Rule 2: Standard Directory Layout</toc-item>
-        <toc-item>Rule 3: Plugin Management and Configuration</toc-item>
-        <toc-item>Rule 4: Use Build Profiles for Environment-Specific Configurations</toc-item>
-        <toc-item>Rule 5: Keep POMs Readable and Maintainable</toc-item>
-        <toc-item>Rule 6: Manage Repositories Explicitly</toc-item>
-        <toc-item>Rule 7: Centralize Version Management with Properties</toc-item>
-    </table-of-contents>
+    <toc auto-generate="true"/>
 
     <content-sections>
         <rule-section number="1" id="effective-dependency-management">

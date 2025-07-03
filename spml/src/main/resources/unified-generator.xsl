@@ -32,18 +32,47 @@ Role definition: </xsl:text><xsl:value-of select="normalize-space(system-charact
 </xsl:text><xsl:value-of select="normalize-space(description)"/>
 
         <!-- Table of contents (if present) -->
-        <xsl:if test="table-of-contents/toc-item">
-            <xsl:text>
+        <xsl:choose>
+            <!-- Handle new toc element with auto-generation -->
+            <xsl:when test="toc[@auto-generate='true']">
+                <xsl:text>
 
 ## Table of contents
 
 </xsl:text>
-            <xsl:for-each select="table-of-contents/toc-item">
-                <xsl:text>- </xsl:text><xsl:value-of select="normalize-space(.)"/>
-                <xsl:text>
+                <xsl:for-each select="content-sections/rule-section">
+                    <xsl:text>- Rule </xsl:text><xsl:value-of select="@number"/><xsl:text>: </xsl:text><xsl:value-of select="normalize-space(rule-header/rule-title)"/>
+                    <xsl:text>
 </xsl:text>
-            </xsl:for-each>
-        </xsl:if>
+                </xsl:for-each>
+            </xsl:when>
+            <!-- Handle manual toc element -->
+            <xsl:when test="toc/toc-item">
+                <xsl:text>
+
+## Table of contents
+
+</xsl:text>
+                <xsl:for-each select="toc/toc-item">
+                    <xsl:text>- </xsl:text><xsl:value-of select="normalize-space(.)"/>
+                    <xsl:text>
+</xsl:text>
+                </xsl:for-each>
+            </xsl:when>
+            <!-- Handle legacy table-of-contents element -->
+            <xsl:when test="table-of-contents/toc-item">
+                <xsl:text>
+
+## Table of contents
+
+</xsl:text>
+                <xsl:for-each select="table-of-contents/toc-item">
+                    <xsl:text>- </xsl:text><xsl:value-of select="normalize-space(.)"/>
+                    <xsl:text>
+</xsl:text>
+                </xsl:for-each>
+            </xsl:when>
+        </xsl:choose>
 
         <!-- Process all content sections -->
         <xsl:apply-templates select="content-sections/*"/>
