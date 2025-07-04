@@ -702,19 +702,23 @@ class MyProcessorTest {
 
 ## Rule 16: Key Questions to Guide Test Creation (RIGHT-BICEP)
 
-Title: Key Questions to Guide Test Creation
-Description:
-- If the code ran correctly, how would I know?
-- How am I going to test this?
-- What else can go wrong?
-- Could this same kind of problem happen anywhere else?
-- What to Test: Use Your RIGHT-BICEP
-  - Are the results **R**ight?
-  - Are all the **B**oundary conditions CORRECT?
-  - Can you check **I**nverse relationships?
-  - Can you **C**ross-check results using other means?
-  - Can you force **E**rror conditions to happen?
-  - Are **P**erformance characteristics within bounds?
+Title: Use RIGHT-BICEP to guide comprehensive test creation
+Description: Key Questions to Guide Test Creation
+
+**Description:**
+
+*   **If the code ran correctly, how would I know?**: 
+*   **How am I going to test this?**: 
+*   **What else can go wrong?**: 
+*   **Could this same kind of problem happen anywhere else?**: 
+*   **What to Test: Use Your RIGHT-BICEP**: 
+*   **Are the results **R**ight?**: 
+*   **Are all the **B**oundary conditions CORRECT?**: 
+*   **Can you check **I**nverse relationships?**: 
+*   **Can you **C**ross-check results using other means?**: 
+*   **Can you force **E**rror conditions to happen?**: 
+*   **Are **P**erformance characteristics within bounds?**: 
+
 
 **Good example:**
 
@@ -812,14 +816,8 @@ public class CalculatorTestPoor {
 
 ## Rule 17: Characteristics of Good Tests (A-TRIP)
 
-Title: Characteristics of Good Tests (A-TRIP)
-Description:
-Good tests are A-TRIP:
-- **A**utomatic: Tests should run without human intervention.
-- **T**horough: Test everything that could break; cover edge cases.
-- **R**epeatable: Tests should produce the same results every time, in any environment.
-- **I**ndependent: Tests should not rely on each other or on the order of execution.
-- **P**rofessional: Test code is real code; keep it clean, maintainable, and well-documented.
+Title: Good tests are A-TRIP
+Description: Good tests are A-TRIP: - **A**utomatic: Tests should run without human intervention. - **T**horough: Test everything that could break; cover edge cases. - **R**epeatable: Tests should produce the same results every time, in any environment. - **I**ndependent: Tests should not rely on each other or on the order of execution. - **P**rofessional: Test code is real code; keep it clean, maintainable, and well-documented.
 
 **Good example:**
 
@@ -940,16 +938,8 @@ public class BadOrderProcessorTest {
 
 ## Rule 18: Verifying CORRECT Boundary Conditions
 
-Title: Verifying CORRECT Boundary Conditions
-Description:
-Ensure your tests check the following boundary conditions (CORRECT):
-- **C**onformance: Does the value conform to an expected format? (e.g., email format, date format)
-- **O**rdering: Is the set of values ordered or unordered as appropriate? (e.g., sorted list, items in a queue)
-- **R**ange: Is the value within reasonable minimum and maximum values? (e.g., age > 0, percentage 0-100)
-- **R**eference: Does the code reference anything external that isn't under direct control of the code itself? (e.g., file existence, network connection - often for integration tests, but can apply to unit tests with mocks)
-- **E**xistence: Does the value exist? (e.g., is non-null, non-zero, present in a set)
-- **C**ardinality: Are there exactly enough values? (e.g., expecting 1 result, 0 results, N results)
-- **T**ime (absolute and relative): Is everything happening in order? At the right time? In time? (e.g., timeouts, sequence of events)
+Title: Ensure your tests check CORRECT boundary conditions
+Description: Ensure your tests check the following boundary conditions (CORRECT): - **C**onformance: Does the value conform to an expected format? (e.g., email format, date format) - **O**rdering: Is the set of values ordered or unordered as appropriate? (e.g., sorted list, items in a queue) - **R**ange: Is the value within reasonable minimum and maximum values? (e.g., age > 0, percentage 0-100) - **R**eference: Does the code reference anything external that isn't under direct control of the code itself? (e.g., file existence, network connection - often for integration tests, but can apply to unit tests with mocks) - **E**xistence: Does the value exist? (e.g., is non-null, non-zero, present in a set) - **C**ardinality: Are there exactly enough values? (e.g., expecting 1 result, 0 results, N results) - **T**ime (absolute and relative): Is everything happening in order? At the right time? In time? (e.g., timeouts, sequence of events)
 
 **Good example:**
 

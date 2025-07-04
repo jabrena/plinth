@@ -762,30 +762,83 @@ class MyProcessorTest {
                 <rule-subtitle>Use RIGHT-BICEP to guide comprehensive test creation</rule-subtitle>
             </rule-header>
             <rule-description>
-If the code ran correctly, how would I know? How am I going to test this? What else can go wrong? Could this same kind of problem happen anywhere else? What to Test: Use Your RIGHT-BICEP - Are the results **R**ight? Are all the **B**oundary conditions CORRECT? Can you check **I**nverse relationships? Can you **C**ross-check results using other means? Can you force **E**rror conditions to happen? Are **P**erformance characteristics within bounds?
+                Key Questions to Guide Test Creation
             </rule-description>
+            <rule-notes>
+                <notes-title>Description:</notes-title>
+                <note-item>
+                    <note-term>If the code ran correctly, how would I know?</note-term>
+                    <note-description></note-description>
+                </note-item>
+                <note-item>
+                    <note-term>How am I going to test this?</note-term>
+                    <note-description></note-description>
+                </note-item>
+                <note-item>
+                    <note-term>What else can go wrong?</note-term>
+                    <note-description></note-description>
+                </note-item>
+                <note-item>
+                    <note-term>Could this same kind of problem happen anywhere else?</note-term>
+                    <note-description></note-description>
+                </note-item>
+                <note-item>
+                    <note-term>What to Test: Use Your RIGHT-BICEP</note-term>
+                    <note-description></note-description>
+                </note-item>
+                <note-item>
+                    <note-term>Are the results **R**ight?</note-term>
+                    <note-description></note-description>
+                </note-item>
+                <note-item>
+                    <note-term>Are all the **B**oundary conditions CORRECT?</note-term>
+                    <note-description></note-description>
+                </note-item>
+                <note-item>
+                    <note-term>Can you check **I**nverse relationships?</note-term>
+                    <note-description></note-description>
+                </note-item>
+                <note-item>
+                    <note-term>Can you **C**ross-check results using other means?</note-term>
+                    <note-description></note-description>
+                </note-item>
+                <note-item>
+                    <note-term>Can you force **E**rror conditions to happen?</note-term>
+                    <note-description></note-description>
+                </note-item>
+                <note-item>
+                    <note-term>Are **P**erformance characteristics within bounds?</note-term>
+                    <note-description></note-description>
+                </note-item>
+            </rule-notes>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[// Example: Testing a Calculator's add method using RIGHT-BICEP
+                    <code-block language="java"><![CDATA[// Testing a calculator's add method, considering RIGHT-BICEP
+public class Calculator {
+    public int add(int a, int b) {
+        if ((long)a + b > Integer.MAX_VALUE || (long)a + b < Integer.MIN_VALUE) {
+            throw new ArithmeticException("Integer overflow");
+        }
+        return a + b;
+    }
+}
+
+// Test class
 import org.junit.jupiter.api.Test;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 public class CalculatorTest {
+
     private final Calculator calculator = new Calculator();
 
-    // R - Right results (typical cases)
+    // R - Right results
     @Test
-    void add_twoPositiveNumbers_returnsCorrectSum() {
+    void add_simplePositiveNumbers_returnsCorrectSum() {
         assertThat(calculator.add(2, 3)).isEqualTo(5);
     }
 
-    // B - Boundary conditions (edge cases: zero, max values)
-    @Test
-    void add_zeroAndNumber_returnsNumber() {
-        assertThat(calculator.add(0, 5)).isEqualTo(5);
-    }
-
+    // B - Boundary conditions (e.g., with zero, negative numbers, max/min values)
     @Test
     void add_numberAndZero_returnsNumber() {
         assertThat(calculator.add(5, 0)).isEqualTo(5);

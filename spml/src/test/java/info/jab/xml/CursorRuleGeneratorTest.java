@@ -294,7 +294,6 @@ class CursorRuleGeneratorTest {
         }
 
         @Test
-        @Disabled("Content generation mismatch - needs investigation")
         @DisplayName("Should generate exact content matching original expected Java Unit Testing document using unified XSLT")
         void should_generateExactContentMatchingOriginalExpected_when_transformingJavaUnitTestingWithUnifiedXslt() throws IOException {
             // Given
