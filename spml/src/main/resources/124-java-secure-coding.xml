@@ -1,0 +1,652 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<system-prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:noNamespaceSchemaLocation="spml.xsd"
+               id="124-java-secure-coding" version="1.0">
+    <metadata>
+        <description>Java Secure coding guidelines</description>
+        <globs>*.java</globs>
+        <always-apply>false</always-apply>
+        <tags>
+            <tag>java</tag>
+            <tag>security</tag>
+            <tag>validation</tag>
+            <tag>injection</tag>
+            <tag>cryptography</tag>
+            <tag>exceptions</tag>
+            <tag>secure-practices</tag>
+        </tags>
+        <version>1.0.0</version>
+    </metadata>
+
+    <header>
+        <title>Java Secure coding guidelines</title>
+    </header>
+
+    <system-characterization>
+        <role-definition>You are a Senior software engineer with extensive experience in Java software development</role-definition>
+    </system-characterization>
+
+    <description>
+        This document provides essential Java secure coding guidelines, focusing on five key areas: validating all untrusted inputs to prevent attacks like injection and path traversal; protecting against injection attacks (e.g., SQL injection) by using parameterized queries or prepared statements; minimizing the attack surface by adhering to the principle of least privilege and reducing exposure; employing strong, current cryptographic algorithms for hashing, encryption, and digital signatures while avoiding deprecated ones; and handling exceptions securely by avoiding the exposure of sensitive information in error messages to users and logging detailed, non-sensitive diagnostic information for developers.
+    </description>
+
+    <toc auto-generate="true"/>
+
+    <content-sections>
+        <rule-section number="1" id="input-validation">
+            <rule-header>
+                <rule-title>Input Validation</rule-title>
+                <rule-subtitle>Validate All Untrusted Inputs</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Always validate and sanitize data received from untrusted sources (users, network, files, etc.) before processing. This helps prevent various attacks like injection, path traversal, and buffer overflows. Validation should check for type, length, format, and range.
+            </rule-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Comprehensive input validation
+import java.util.Objects;
+import java.util.regex.Pattern;
+
+public class SecureInputValidator {
+    private static final Pattern USERNAME_PATTERN = Pattern.compile("^[a-zA-Z0-9_]{3,16}$");
+    private static final int MAX_AGE = 120;
+    private static final int MIN_AGE = 0;
+
+    public void processUserData(String username, String ageString) {
+        // Validate username format
+        if (Objects.isNull(username) || !USERNAME_PATTERN.matcher(username).matches()) {
+            throw new IllegalArgumentException("Invalid username format. Must be 3-16 alphanumeric characters or underscores.");
+        }
+
+        // Validate and parse age
+        int age;
+        try {
+            age = Integer.parseInt(ageString);
+            if (age < MIN_AGE || age > MAX_AGE) {
+                throw new IllegalArgumentException("Age must be between " + MIN_AGE + " and " + MAX_AGE);
+            }
+        } catch (NumberFormatException e) {
+            throw new IllegalArgumentException("Invalid age format. Must be a valid integer.", e);
+        }
+
+        // Input is now validated and safe to process
+        System.out.println("Processing validated user: " + username + ", age: " + age);
+    }
+
+    public String sanitizeFilePath(String userPath) {
+        if (userPath == null) {
+            throw new IllegalArgumentException("File path cannot be null");
+        }
+
+        // Prevent path traversal attacks
+        String sanitized = userPath.replaceAll("\\.\\.", "").replaceAll("/", "");
+
+        // Additional validation
+        if (sanitized.length() > 255) {
+            throw new IllegalArgumentException("File path too long");
+        }
+
+        return sanitized;
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: No input validation
+public class UnsafeInputProcessor {
+    public void processUserData(String username, String ageString) {
+        // Directly using input without validation - DANGEROUS!
+        int age = Integer.parseInt(ageString); // Can throw NumberFormatException
+
+        // No checks for malicious username strings
+        System.out.println("Processing user: " + username + ", age: " + age);
+
+        // This could lead to issues if username contains scripts or ageString is not an integer
+    }
+
+    public String loadFile(String userPath) {
+        // VULNERABLE: No validation allows path traversal attacks
+        // User could pass "../../etc/passwd" to access sensitive files
+        return readFileContent(userPath);
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </rule-section>
+
+        <rule-section number="2" id="injection-protection">
+            <rule-header>
+                <rule-title>Protect Against Injection Attacks</rule-title>
+                <rule-subtitle>Use Parameterized Queries and Safe APIs</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                To prevent SQL Injection and other injection attacks, always use parameterized queries (PreparedStatements in JDBC) or an ORM that handles this automatically. Never concatenate user input directly into SQL queries, OS commands, or other executable statements.
+            </rule-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Using PreparedStatement to prevent SQL Injection
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class SecureDataAccess {
+    private static final String DB_URL = "jdbc:h2:mem:testdb";
+    private static final String USER = "sa";
+    private static final String PASS = "";
+
+    public List<Order> getOrdersByCustomerId(String customerId) throws SQLException {
+        // Safe parameterized query
+        String query = "SELECT order_id, customer_id, amount FROM orders WHERE customer_id = ?";
+        List<Order> orders = new ArrayList<>();
+
+        try (Connection con = DriverManager.getConnection(DB_URL, USER, PASS);
+             PreparedStatement pstmt = con.prepareStatement(query)) {
+
+            pstmt.setString(1, customerId); // Parameter is safely bound
+            ResultSet rs = pstmt.executeQuery();
+
+            while (rs.next()) {
+                Order order = new Order();
+                order.setOrderId(rs.getString("order_id"));
+                order.setCustomerId(rs.getString("customer_id"));
+                order.setAmount(rs.getBigDecimal("amount"));
+                orders.add(order);
+            }
+        }
+
+        return orders;
+    }
+
+    public void updateCustomerEmail(String customerId, String newEmail) throws SQLException {
+        String updateQuery = "UPDATE customers SET email = ? WHERE customer_id = ?";
+
+        try (Connection con = DriverManager.getConnection(DB_URL, USER, PASS);
+             PreparedStatement pstmt = con.prepareStatement(updateQuery)) {
+
+            pstmt.setString(1, newEmail);
+            pstmt.setString(2, customerId);
+            pstmt.executeUpdate();
+        }
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Vulnerable to SQL Injection
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+public class VulnerableDataAccess {
+    private static final String DB_URL = "jdbc:h2:mem:testdb";
+    private static final String USER = "sa";
+    private static final String PASS = "";
+
+    public List<Order> getOrdersByCustomerId(String customerId) throws SQLException {
+        // DANGEROUS: User input directly concatenated into SQL query
+        String query = "SELECT order_id, customer_id, amount FROM orders WHERE customer_id = '" + customerId + "'";
+        List<Order> orders = new ArrayList<>();
+
+        try (Connection con = DriverManager.getConnection(DB_URL, USER, PASS);
+             Statement stmt = con.createStatement()) {
+
+            // User could pass: "'; DROP TABLE orders; --" to execute malicious SQL
+            ResultSet rs = stmt.executeQuery(query);
+
+            while (rs.next()) {
+                // Process results...
+            }
+        }
+
+        return orders;
+    }
+
+    public void executeCommand(String userCommand) {
+        // EXTREMELY DANGEROUS: Command injection vulnerability
+        String command = "ls " + userCommand; // User could inject "; rm -rf /"
+        try {
+            Runtime.getRuntime().exec(command);
+        } catch (Exception e) {
+            // Handle exception
+        }
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </rule-section>
+
+        <rule-section number="3" id="minimize-attack-surface">
+            <rule-header>
+                <rule-title>Minimize Attack Surface</rule-title>
+                <rule-subtitle>Apply Principle of Least Privilege</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Grant only necessary permissions to code and users. Avoid running processes with excessive privileges. Expose only essential functionality and network ports. Regularly review and remove unused features, libraries, and accounts.
+            </rule-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Minimal privileges and controlled access
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.security.Principal;
+import java.util.Set;
+
+public class SecureFileManager {
+    private static final Set<String> ALLOWED_EXTENSIONS = Set.of(".txt", ".log", ".json");
+    private static final Path SAFE_DIRECTORY = Paths.get("/app/data/uploads");
+
+    public String readUserFile(String filename, Principal user) throws SecurityException, IOException {
+        // Check user permissions
+        if (!hasReadPermission(user, filename)) {
+            throw new SecurityException("User does not have permission to read this file");
+        }
+
+        // Validate file extension
+        String extension = getFileExtension(filename);
+        if (!ALLOWED_EXTENSIONS.contains(extension)) {
+            throw new SecurityException("File type not allowed: " + extension);
+        }
+
+        // Ensure file is within safe directory
+        Path filePath = SAFE_DIRECTORY.resolve(filename).normalize();
+        if (!filePath.startsWith(SAFE_DIRECTORY)) {
+            throw new SecurityException("File access outside allowed directory");
+        }
+
+        // Check file size limits
+        if (Files.size(filePath) > 1024 * 1024) { // 1MB limit
+            throw new SecurityException("File too large");
+        }
+
+        return Files.readString(filePath);
+    }
+
+    private boolean hasReadPermission(Principal user, String filename) {
+        // Implement proper authorization logic
+        return user != null && user.getName() != null;
+    }
+
+    private String getFileExtension(String filename) {
+        int lastDot = filename.lastIndexOf('.');
+        return lastDot > 0 ? filename.substring(lastDot) : "";
+    }
+}
+
+// Example of interface segregation - expose only necessary methods
+public interface UserService {
+    User findById(Long id);
+    void updateProfile(Long id, UserProfile profile);
+    // Don't expose administrative methods to regular users
+}
+
+public interface AdminService extends UserService {
+    void deleteUser(Long id);
+    List<User> getAllUsers();
+    void resetPassword(Long id);
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Excessive privileges and exposure
+import java.io.File;
+import java.nio.file.Files;
+
+public class UnsafeFileManager {
+
+    // BAD: No access controls or validations
+    public String readAnyFile(String filename) throws IOException {
+        // DANGEROUS: Can read any file on the system
+        File file = new File(filename);
+        return Files.readString(file.toPath());
+    }
+
+    // BAD: Exposing dangerous functionality
+    public void executeSystemCommand(String command) throws IOException {
+        // EXTREMELY DANGEROUS: Allows arbitrary command execution
+        Runtime.getRuntime().exec(command);
+    }
+
+    // BAD: Administrative functions mixed with user functions
+    public class UserController {
+        public void updateProfile(User user) { /* ... */ }
+        public void deleteAllUsers() { /* ... */ } // Should not be here
+        public void resetDatabase() { /* ... */ }  // Extremely dangerous
+        public void viewSystemLogs() { /* ... */ } // Sensitive operation
+    }
+}
+
+// BAD: Running with excessive privileges
+// Starting application as root/administrator user
+// Using database accounts with DBA privileges for regular operations
+// Exposing debug endpoints in production
+// Having default passwords or credentials]]></code-block>
+                </bad-example>
+            </code-examples>
+        </rule-section>
+
+        <rule-section number="4" id="strong-cryptography">
+            <rule-header>
+                <rule-title>Use Strong Cryptography</rule-title>
+                <rule-subtitle>Employ Current and Robust Cryptographic Algorithms</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Use well-vetted, industry-standard cryptographic libraries and algorithms for hashing, encryption, and digital signatures. Avoid deprecated or weak algorithms (e.g., MD5, SHA1 for passwords, DES). Keep cryptographic keys secure and manage them properly.
+            </rule-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Strong cryptographic practices
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
+import java.security.SecureRandom;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+public class SecureCryptoUtils {
+    private static final String AES_ALGORITHM = "AES";
+    private static final String AES_TRANSFORMATION = "AES/GCM/NoPadding";
+    private static final int GCM_TAG_LENGTH = 16;
+    private static final int GCM_IV_LENGTH = 12;
+
+    private final PasswordEncoder passwordEncoder;
+    private final SecureRandom secureRandom;
+
+    public SecureCryptoUtils() {
+        this.passwordEncoder = new BCryptPasswordEncoder(12); // Strong cost factor
+        this.secureRandom = new SecureRandom();
+    }
+
+    /**
+     * Generates a secure AES-256 key
+     */
+    public SecretKey generateAESKey() throws Exception {
+        KeyGenerator keyGen = KeyGenerator.getInstance(AES_ALGORITHM);
+        keyGen.init(256, secureRandom); // Use AES-256
+        return keyGen.generateKey();
+    }
+
+    /**
+     * Encrypts data using AES-GCM (authenticated encryption)
+     */
+    public EncryptedData encrypt(String plaintext, SecretKey key) throws Exception {
+        Cipher cipher = Cipher.getInstance(AES_TRANSFORMATION);
+
+        // Generate random IV
+        byte[] iv = new byte[GCM_IV_LENGTH];
+        secureRandom.nextBytes(iv);
+
+        GCMParameterSpec parameterSpec = new GCMParameterSpec(GCM_TAG_LENGTH * 8, iv);
+        cipher.init(Cipher.ENCRYPT_MODE, key, parameterSpec);
+
+        byte[] encryptedData = cipher.doFinal(plaintext.getBytes("UTF-8"));
+
+        return new EncryptedData(encryptedData, iv);
+    }
+
+    /**
+     * Hashes password using BCrypt with salt
+     */
+    public String hashPassword(String plainTextPassword) {
+        return passwordEncoder.encode(plainTextPassword);
+    }
+
+    /**
+     * Verifies password against BCrypt hash
+     */
+    public boolean verifyPassword(String plainTextPassword, String hashedPassword) {
+        return passwordEncoder.matches(plainTextPassword, hashedPassword);
+    }
+
+    /**
+     * Generates cryptographically secure random token
+     */
+    public String generateSecureToken(int length) {
+        byte[] tokenBytes = new byte[length];
+        secureRandom.nextBytes(tokenBytes);
+        return Base64.getEncoder().encodeToString(tokenBytes);
+    }
+
+    public static class EncryptedData {
+        private final byte[] ciphertext;
+        private final byte[] iv;
+
+        public EncryptedData(byte[] ciphertext, byte[] iv) {
+            this.ciphertext = ciphertext;
+            this.iv = iv;
+        }
+
+        // Getters...
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Weak cryptographic practices
+import java.security.MessageDigest;
+import javax.crypto.Cipher;
+import javax.crypto.spec.SecretKeySpec;
+import java.util.Random;
+
+public class WeakCryptoUtils {
+
+    /**
+     * BAD: Using MD5 for password hashing
+     */
+    public String hashPasswordMD5(String password) throws Exception {
+        MessageDigest md = MessageDigest.getInstance("MD5");
+        md.update(password.getBytes());
+        byte[] digest = md.digest();
+        return bytesToHex(digest);
+    }
+
+    /**
+     * BAD: Using SHA1 for password hashing (without salt)
+     */
+    public String hashPasswordSHA1(String password) throws Exception {
+        MessageDigest sha1 = MessageDigest.getInstance("SHA-1");
+        sha1.update(password.getBytes());
+        return bytesToHex(sha1.digest());
+    }
+
+    /**
+     * BAD: Using DES encryption (weak algorithm)
+     */
+    public byte[] encryptDES(String plaintext, String password) throws Exception {
+        SecretKeySpec key = new SecretKeySpec(password.getBytes(), "DES");
+        Cipher cipher = Cipher.getInstance("DES");
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+        return cipher.doFinal(plaintext.getBytes());
+    }
+
+    /**
+     * BAD: Hardcoded encryption key
+     */
+    private static final String HARDCODED_KEY = "mySecretKey123";
+
+    public byte[] encryptWithHardcodedKey(String data) throws Exception {
+        // TERRIBLE: Hardcoded key in source code
+        SecretKeySpec key = new SecretKeySpec(HARDCODED_KEY.getBytes(), "AES");
+        Cipher cipher = Cipher.getInstance("AES");
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+        return cipher.doFinal(data.getBytes());
+    }
+
+    /**
+     * BAD: Using weak random number generator
+     */
+    public String generateWeakToken() {
+        Random random = new Random(); // NOT cryptographically secure
+        return String.valueOf(random.nextLong());
+    }
+
+    private String bytesToHex(byte[] bytes) {
+        StringBuilder result = new StringBuilder();
+        for (byte b : bytes) {
+            result.append(String.format("%02x", b));
+        }
+        return result.toString();
+    }
+}
+
+// Additional bad practices:
+// - Storing passwords in plain text
+// - Using ECB mode for encryption
+// - Not using authenticated encryption
+// - Reusing IVs/nonces
+// - Using weak key derivation functions]]></code-block>
+                </bad-example>
+            </code-examples>
+        </rule-section>
+
+        <rule-section number="5" id="secure-exception-handling">
+            <rule-header>
+                <rule-title>Handle Exceptions Securely</rule-title>
+                <rule-subtitle>Avoid Exposing Sensitive Information</rule-subtitle>
+            </rule-header>
+            <rule-description>
+                Catch exceptions appropriately, but do not reveal sensitive system details or stack traces to users in production. Log detailed error information server-side for debugging, but provide generic error messages to the client.
+            </rule-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Secure exception handling
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+public class SecureExceptionHandler {
+    private static final Logger logger = LoggerFactory.getLogger(SecureExceptionHandler.class);
+
+    public void performSensitiveOperation(String userId, String sensitiveData)
+            throws ServiceException {
+        try {
+            validateUser(userId);
+            processData(sensitiveData);
+
+        } catch (ValidationException e) {
+            // Log detailed error for developers (no sensitive data)
+            logger.warn("Validation failed for user: {}. Error: {}",
+                       sanitizeForLogging(userId), e.getErrorCode());
+
+            // Provide generic error message to user
+            throw new ServiceException("Invalid input provided. Please check your data.", e);
+
+        } catch (DatabaseException e) {
+            // Log technical details for debugging
+            logger.error("Database error during operation for user: {}. Query: {}",
+                        sanitizeForLogging(userId), e.getQueryId(), e);
+
+            // Generic message to user - don't expose database details
+            throw new ServiceException("Service temporarily unavailable. Please try again later.", e);
+
+        } catch (SecurityException e) {
+            // Security incidents need special logging
+            logger.error("SECURITY: Unauthorized access attempt by user: {}. Details: {}",
+                        sanitizeForLogging(userId), e.getMessage());
+
+            // Don't give attackers information about what they're doing wrong
+            throw new ServiceException("Access denied.", e);
+
+        } catch (Exception e) {
+            // Catch-all for unexpected errors
+            logger.error("Unexpected error in sensitive operation for user: {}",
+                        sanitizeForLogging(userId), e);
+
+            throw new ServiceException("An unexpected error occurred. Please contact support.", e);
+        }
+    }
+
+    /**
+     * Sanitizes user input for safe logging
+     */
+    private String sanitizeForLogging(String input) {
+        if (input == null) return "null";
+
+        // Remove or mask potentially sensitive characters
+        return input.replaceAll("[^a-zA-Z0-9-_]", "*");
+    }
+
+    public void handleWebRequest(HttpServletResponse response, String userInput) {
+        try {
+            processUserInput(userInput);
+            response.setStatus(200);
+
+        } catch (ServiceException e) {
+            // Log the exception with context
+            logger.error("Service error processing request: {}", e.getMessage(), e);
+
+            try {
+                // Return generic error to client
+                response.setStatus(500);
+                response.getWriter().write("{\"error\":\"Internal server error\"}");
+            } catch (IOException ioException) {
+                logger.error("Failed to write error response", ioException);
+            }
+        }
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Insecure exception handling
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.sql.SQLException;
+
+public class InsecureExceptionHandler {
+
+    public void performSensitiveOperation(String userId, String creditCardNumber) {
+        try {
+            processPayment(userId, creditCardNumber);
+
+        } catch (SQLException e) {
+            // BAD: Exposing SQL error details to user
+            throw new RuntimeException("Database error: " + e.toString() +
+                                     " Query: " + e.getMessage());
+
+        } catch (SecurityException e) {
+            // BAD: Revealing security details to potential attacker
+            throw new RuntimeException("Security check failed: " + e.getMessage() +
+                                     " User role: admin required, current: " + getCurrentUserRole());
+
+        } catch (Exception e) {
+            // BAD: Generic catch that might expose stack traces
+            e.printStackTrace(); // Prints to stderr, might be visible to users
+            throw new RuntimeException("Error processing payment for card: " +
+                                     creditCardNumber, e); // Leaks sensitive data!
+        }
+    }
+
+    public void handleWebRequest(HttpServletResponse response, String userInput) {
+        try {
+            processUserInput(userInput);
+
+        } catch (Exception e) {
+            try {
+                // BAD: Exposing full stack trace to client
+                response.getWriter().println("Error: " + e.toString());
+                e.printStackTrace(response.getWriter()); // NEVER do this!
+
+                // BAD: Revealing internal paths and system information
+                response.getWriter().println("System details: " + System.getProperty("user.dir"));
+                response.getWriter().println("Java version: " + System.getProperty("java.version"));
+
+            } catch (IOException ioException) {
+                // More problems - nested exception handling
+                ioException.printStackTrace();
+            }
+        }
+    }
+
+    public void authenticateUser(String username, String password) {
+        try {
+            performAuthentication(username, password);
+        } catch (Exception e) {
+            // BAD: Logging sensitive information
+            System.out.println("Authentication failed for user: " + username +
+                              " with password: " + password + " Error: " + e.getMessage());
+        }
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </rule-section>
+    </content-sections>
+</system-prompt>

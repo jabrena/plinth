@@ -139,6 +139,7 @@ If you have new ideas to improve any of the current Cursor rules or add a new on
 ## Cursor rules ecosystem
 
 - https://github.com/jabrena/101-cursor
+- https://github.com/jabrena/spml
 - https://github.com/jabrena/cursor-rules-methodology
 - https://github.com/jabrena/cursor-rules-agile
 - https://github.com/jabrena/cursor-rules-java

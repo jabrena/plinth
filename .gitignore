@@ -1,4 +1,6 @@
 .DS_Store
-tmp
 target/
+.idea/
+.vscode/
 *.log
+.classpath
