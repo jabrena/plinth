@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <system-prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:noNamespaceSchemaLocation="system-prompt.xsd"
+               xsi:noNamespaceSchemaLocation="spml.xsd"
                id="122-java-type-design" version="1.0">
     <metadata>
         <description>Type Design Thinking in Java</description>
@@ -47,13 +47,13 @@ public class OrderManagement {
         private List<OrderItem> items;
         private Customer customer;
         private OrderStatus status;
-        
+
         public Order(Customer customer) {
             this.customer = customer;
             this.items = new ArrayList<>();
             this.status = OrderStatus.PENDING;
         }
-        
+
         public void addItem(OrderItem item) { items.add(item); }
         public List<OrderItem> getItems() { return Collections.unmodifiableList(items); }
         public Customer getCustomer() { return customer; }
@@ -64,19 +64,19 @@ public class OrderManagement {
         private Product product;
         private int quantity;
         private BigDecimal unitPrice;
-        
+
         public OrderItem(Product product, int quantity, BigDecimal unitPrice) {
             this.product = product;
             this.quantity = quantity;
             this.unitPrice = unitPrice;
         }
-        
+
         public Product getProduct() { return product; }
         public int getQuantity() { return quantity; }
         public BigDecimal getUnitPrice() { return unitPrice; }
         public BigDecimal getTotalPrice() { return unitPrice.multiply(BigDecimal.valueOf(quantity)); }
     }
-    
+
     public enum OrderStatus {
         PENDING, CONFIRMED, SHIPPED, DELIVERED, CANCELLED
     }
@@ -116,16 +116,16 @@ public class User { // Too generic - could be any type of user
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Consistent naming patterns
-interface PaymentProcessor { 
-    PaymentResult process(Payment payment); 
+interface PaymentProcessor {
+    PaymentResult process(Payment payment);
 }
 
-interface ShippingCalculator { 
-    BigDecimal calculate(ShippingRequest request); 
+interface ShippingCalculator {
+    BigDecimal calculate(ShippingRequest request);
 }
 
-interface TaxProvider { 
-    Tax calculateTax(TaxableItem item, Address address); 
+interface TaxProvider {
+    Tax calculateTax(TaxableItem item, Address address);
 }
 
 // Implementation classes follow consistent naming
@@ -147,7 +147,7 @@ class StandardShippingCalculator implements ShippingCalculator {
                 </good-example>
                 <bad-example>
                     <code-block language="java"><![CDATA[// AVOID: Inconsistent naming patterns
-interface PaymentProcessor { 
+interface PaymentProcessor {
     void handlePayment(Payment p); // Different method naming style
 }
 
@@ -203,11 +203,11 @@ public class EmailAddress {
     }
 
     private boolean isValid(String email) {
-        return email != null && 
+        return email != null &&
                email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$") &&
                email.length() <= 254; // RFC 5321 limit
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         if (this == obj) return true;
@@ -215,12 +215,12 @@ public class EmailAddress {
         EmailAddress that = (EmailAddress) obj;
         return Objects.equals(value, that.value);
     }
-    
+
     @Override
     public int hashCode() {
         return Objects.hash(value);
     }
-    
+
     @Override
     public String toString() {
         return value;
@@ -230,7 +230,7 @@ public class EmailAddress {
 public class Money {
     private final BigDecimal amount;
     private final Currency currency;
-    
+
     public Money(BigDecimal amount, Currency currency) {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Amount cannot be null or negative");
@@ -238,10 +238,10 @@ public class Money {
         this.amount = amount.setScale(currency.getDefaultFractionDigits(), RoundingMode.HALF_UP);
         this.currency = Objects.requireNonNull(currency, "Currency cannot be null");
     }
-    
+
     public BigDecimal getAmount() { return amount; }
     public Currency getCurrency() { return currency; }
-    
+
     public Money add(Money other) {
         if (!currency.equals(other.currency)) {
             throw new IllegalArgumentException("Cannot add different currencies");
@@ -269,7 +269,7 @@ void processPayment(String email, double amount, String currency) {
     if (currency == null || currency.length() != 3) {
         throw new IllegalArgumentException("Invalid currency code");
     }
-    
+
     // Still risky - what if someone passes parameters in wrong order?
     paymentService.charge(email, amount, currency);
 }
@@ -295,7 +295,7 @@ void processPayment(String email, double amount, String currency) {
 public class Repository<T extends Entity> {
     private final Class<T> entityClass;
     private final EntityManager entityManager;
-    
+
     public Repository(Class<T> entityClass, EntityManager entityManager) {
         this.entityClass = entityClass;
         this.entityManager = entityManager;
@@ -321,7 +321,7 @@ public class Repository<T extends Entity> {
             return entityManager.merge(entity);
         }
     }
-    
+
     public void delete(T entity) {
         entityManager.remove(entity);
     }
@@ -339,11 +339,11 @@ List<Product> products = productRepo.findAll();]]></code-block>
                     <code-block language="java"><![CDATA[// AVOID: Multiple similar classes with duplicated logic
 public class CustomerRepository {
     private final EntityManager entityManager;
-    
+
     public CustomerRepository(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
-    
+
     public Optional<Customer> findById(Long id) {
         Customer customer = entityManager.find(Customer.class, id);
         return Optional.ofNullable(customer);
@@ -371,16 +371,16 @@ public class CustomerRepository {
 public class ProductRepository {
     // Exact same code but for Product - massive duplication!
     private final EntityManager entityManager;
-    
+
     public ProductRepository(EntityManager entityManager) {
         this.entityManager = entityManager;
     }
-    
+
     public Optional<Product> findById(Long id) {
         Product product = entityManager.find(Product.class, id);
         return Optional.ofNullable(product);
     }
-    
+
     // ... more duplicated methods
 }]]></code-block>
                 </bad-example>
@@ -404,7 +404,7 @@ import java.math.RoundingMode;
 public class FinancialCalculator {
     private static final int CURRENCY_SCALE = 2;
     private static final RoundingMode ROUNDING_MODE = RoundingMode.HALF_UP;
-    
+
     public static BigDecimal calculateTotalPrice(BigDecimal itemPrice, BigDecimal taxRate, int quantity) {
         validateInputs(itemPrice, taxRate, quantity);
 
@@ -412,29 +412,29 @@ public class FinancialCalculator {
         BigDecimal subtotal = itemPrice.multiply(quantityDecimal);
         BigDecimal taxAmount = subtotal.multiply(taxRate)
                                       .setScale(CURRENCY_SCALE, ROUNDING_MODE);
-        
+
         return subtotal.add(taxAmount).setScale(CURRENCY_SCALE, ROUNDING_MODE);
     }
-    
-    public static BigDecimal calculateMonthlyPayment(BigDecimal principal, 
-                                                   BigDecimal annualRate, 
+
+    public static BigDecimal calculateMonthlyPayment(BigDecimal principal,
+                                                   BigDecimal annualRate,
                                                    int monthsTotal) {
         validateInputs(principal, annualRate, monthsTotal);
-        
+
         if (annualRate.compareTo(BigDecimal.ZERO) == 0) {
             return principal.divide(new BigDecimal(monthsTotal), CURRENCY_SCALE, ROUNDING_MODE);
         }
-        
+
         BigDecimal monthlyRate = annualRate.divide(new BigDecimal("12"), 10, ROUNDING_MODE);
         BigDecimal onePlusRate = BigDecimal.ONE.add(monthlyRate);
         BigDecimal powResult = onePlusRate.pow(monthsTotal);
-        
+
         BigDecimal numerator = principal.multiply(monthlyRate).multiply(powResult);
         BigDecimal denominator = powResult.subtract(BigDecimal.ONE);
-        
+
         return numerator.divide(denominator, CURRENCY_SCALE, ROUNDING_MODE);
     }
-    
+
     private static void validateInputs(BigDecimal amount, BigDecimal rate, int months) {
         if (amount == null || amount.compareTo(BigDecimal.ZERO) < 0) {
             throw new IllegalArgumentException("Amount must be non-negative");
@@ -455,38 +455,38 @@ public class InaccurateFinancialCalculator {
         if (itemPrice < 0 || taxRate < 0 || quantity <= 0) {
             throw new IllegalArgumentException("Invalid inputs");
         }
-        
+
         double subtotal = itemPrice * quantity;
         double taxAmount = subtotal * taxRate;
-        
+
         // Precision issues! 0.1 + 0.2 != 0.3 in floating point
         return subtotal + taxAmount;
     }
-    
+
     public static double calculateMonthlyPayment(double principal, double annualRate, int months) {
         if (principal < 0 || annualRate < 0 || months <= 0) {
             throw new IllegalArgumentException("Invalid inputs");
         }
-        
+
         if (annualRate == 0) {
             return principal / months;
         }
-        
+
         double monthlyRate = annualRate / 12;
         double factor = Math.pow(1 + monthlyRate, months);
-        
+
         // More precision issues with floating point arithmetic
         return (principal * monthlyRate * factor) / (factor - 1);
     }
-    
+
     public static void main(String[] args) {
         // This will demonstrate the precision problem
         double result1 = calculateTotalPrice(19.99, 0.075, 3);
         double result2 = calculateTotalPrice(29.99, 0.08, 2);
-        
+
         System.out.println("Result 1: " + result1); // May show unexpected decimals
         System.out.println("Result 2: " + result2); // May show unexpected decimals
-        
+
         // Rounding manually is error-prone and inconsistent
         System.out.println("Rounded 1: " + Math.round(result1 * 100.0) / 100.0);
         System.out.println("Rounded 2: " + Math.round(result2 * 100.0) / 100.0);

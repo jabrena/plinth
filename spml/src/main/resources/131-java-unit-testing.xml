@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <system-prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:noNamespaceSchemaLocation="system-prompt.xsd"
+               xsi:noNamespaceSchemaLocation="spml.xsd"
                id="131-java-unit-testing" version="1.0">
     <metadata>
         <description></description>

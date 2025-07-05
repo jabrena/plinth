@@ -25,7 +25,7 @@ import org.xml.sax.XMLReader;
  */
 public final class CursorRuleGenerator {
 
-    private static final String XSD_FILE_NAME = "system-prompt.xsd";
+    private static final String XSD_FILE_NAME = "spml.xsd";
 
     // ===============================================================
     // PUBLIC API - Entry point for cursor rule generation

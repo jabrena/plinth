@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <system-prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:noNamespaceSchemaLocation="system-prompt.xsd"
+               xsi:noNamespaceSchemaLocation="spml.xsd"
                id="121-java-object-oriented-design" version="1.0">
     <metadata>
         <description>Java Object-Oriented Design Guidelines</description>
@@ -44,12 +44,12 @@
 class UserData {
     private String name;
     private String email;
-    
-    public UserData(String name, String email) { 
-        this.name = name; 
-        this.email = email; 
+
+    public UserData(String name, String email) {
+        this.name = name;
+        this.email = email;
     }
-    
+
     public String getName() { return name; }
     public String getEmail() { return email; }
 }
@@ -141,7 +141,7 @@ class Car {
         System.out.print(modelName + ": ");
         engine.stop();
     }
-    
+
     public String getModelName() { return modelName; }
 }]]></code-block>
                 </good-example>
@@ -149,17 +149,17 @@ class Car {
                     <code-block language="java"><![CDATA[// Bad: Tight coupling, not programming to an interface
 class BadCar {
     private final BadPetrolEngine engine; // Direct dependency on concrete BadPetrolEngine
-    
+
     public BadCar() {
         this.engine = new BadPetrolEngine(); // Instantiates concrete class
     }
-    
+
     public void start() { engine.startPetrol(); }
     // If we want an electric car, this class needs significant changes or a new similar class.
 }
 
-class BadPetrolEngine { 
-    public void startPetrol() { System.out.println("Bad petrol engine starts."); } 
+class BadPetrolEngine {
+    public void startPetrol() { System.out.println("Bad petrol engine starts."); }
 }]]></code-block>
                 </bad-example>
             </code-examples>
@@ -220,7 +220,7 @@ class BadBankAccount {
         this.accountNumber = accountNumber;
         this.balance = initialBalance; // No validation
     }
-    
+
     // No methods to control access or validate operations
 }
 
@@ -270,7 +270,7 @@ class OrderCalculator {
 
 class OrderValidator {
     public boolean isValid(Order order) {
-        return !order.getItems().isEmpty() && 
+        return !order.getItems().isEmpty() &&
                order.getCustomer() != null &&
                order.getCustomer().hasValidPaymentMethod();
     }
@@ -300,7 +300,7 @@ class OrderManager {
     public void generateInvoice() { /* ... */ }
     public void trackShipment() { /* ... */ }
     // ... many more methods
-    
+
     // This class has too many responsibilities and reasons to change
 }]]></code-block>
                 </bad-example>

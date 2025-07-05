@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <system-prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:noNamespaceSchemaLocation="system-prompt.xsd"
+               xsi:noNamespaceSchemaLocation="spml.xsd"
                id="125-java-concurrency" version="1.0">
     <metadata>
         <description>Java rules for Concurrency objects</description>
@@ -67,7 +67,7 @@ public class ThreadSafeCounter {
     private final AtomicReference<String> status = new AtomicReference<>("INIT");
 
     // Thread-local storage
-    private static final ThreadLocal<String> userContext = 
+    private static final ThreadLocal<String> userContext =
         ThreadLocal.withInitial(() -> "default");
 
     // Using ReentrantLock for complex synchronization
@@ -124,7 +124,7 @@ public class UnsafeCounter {
     // BAD: Using non-thread-safe collections
     private Map<String, String> unsafeMap = new HashMap<>();
     private List<String> unsafeList = new ArrayList<>();
-    
+
     // BAD: Using plain int without synchronization
     private int counter = 0;
     private String status = "INIT";
@@ -139,14 +139,14 @@ public class UnsafeCounter {
     public synchronized void updateCounter(int value) {
         counter = value; // Synchronized
     }
-    
+
     public int getCounter() {
         return counter; // NOT synchronized - can read stale value
     }
 
     // BAD: Synchronizing on mutable object
     private String lockObject = "lock";
-    
+
     public void badSynchronization() {
         synchronized (lockObject) { // WRONG: string can be changed
             // Critical section
@@ -222,7 +222,7 @@ public class ThreadPoolManager {
             // Wait for existing tasks to terminate
             if (!executor.awaitTermination(60, TimeUnit.SECONDS)) {
                 executor.shutdownNow(); // Cancel currently executing tasks
-                
+
                 // Wait for tasks to respond to being cancelled
                 if (!executor.awaitTermination(60, TimeUnit.SECONDS)) {
                     System.err.println("Pool " + name + " did not terminate");
@@ -263,7 +263,7 @@ import java.util.concurrent.ExecutorService;
 public class PoorThreadPoolManager {
     // BAD: Unbounded thread pools can cause resource exhaustion
     private ExecutorService cachedPool = Executors.newCachedThreadPool();
-    
+
     // BAD: Single thread with unbounded queue
     private ExecutorService singleThread = Executors.newSingleThreadExecutor();
 
@@ -455,7 +455,7 @@ public class BadProducerConsumer {
                     task = tasks.remove(0); // BAD: Inefficient removal from front
                 }
             }
-            
+
             if (task != null) {
                 // BAD: Processing inside synchronized block would be even worse
                 processTask(task);
@@ -549,7 +549,7 @@ public class AsyncService {
         CompletableFuture<String> future1 = processDataAsync(input1);
         CompletableFuture<String> future2 = processDataAsync(input2);
 
-        return future1.thenCombine(future2, (result1, result2) -> 
+        return future1.thenCombine(future2, (result1, result2) ->
             "Combined: " + result1 + " + " + result2);
     }
 
@@ -567,7 +567,7 @@ public class AsyncService {
             throw new IllegalArgumentException("Input cannot be null or empty");
         }
         // Simulate validation work
-        try { Thread.sleep(100); } catch (InterruptedException e) { 
+        try { Thread.sleep(100); } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new RuntimeException(e);
         }
@@ -576,7 +576,7 @@ public class AsyncService {
 
     private String transformData(String input) {
         // Simulate transformation work
-        try { Thread.sleep(200); } catch (InterruptedException e) { 
+        try { Thread.sleep(200); } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
             throw new RuntimeException(e);
         }
@@ -612,13 +612,13 @@ import java.util.List;
 import java.util.ArrayList;
 
 public class BadAsyncService {
-    
+
     public String processDataBlocking(String input) {
         // BAD: Using CompletableFuture but blocking immediately
         CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
             return processInput(input);
         });
-        
+
         try {
             return future.get(); // BLOCKING! Defeats the purpose
         } catch (Exception e) {
@@ -628,12 +628,12 @@ public class BadAsyncService {
 
     public List<String> processMultipleBlocking(List<String> inputs) {
         List<String> results = new ArrayList<>();
-        
+
         // BAD: Sequential processing instead of parallel
         for (String input : inputs) {
-            CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> 
+            CompletableFuture<String> future = CompletableFuture.supplyAsync(() ->
                 processInput(input));
-            
+
             try {
                 results.add(future.get()); // BLOCKING in loop
             } catch (Exception e) {
@@ -641,7 +641,7 @@ public class BadAsyncService {
                 throw new RuntimeException("Processing failed", e);
             }
         }
-        
+
         return results;
     }
 
@@ -657,19 +657,19 @@ public class BadAsyncService {
 
     public void badChaining(String input) {
         // BAD: Not chaining properly, creating nested futures
-        CompletableFuture<CompletableFuture<String>> nestedFuture = 
+        CompletableFuture<CompletableFuture<String>> nestedFuture =
             CompletableFuture.supplyAsync(() -> {
                 return CompletableFuture.supplyAsync(() -> {
                     return processInput(input);
                 });
             });
-        
+
         // Now you have a nested CompletableFuture - hard to work with
     }
 
     // BAD: Resource leak - no executor shutdown
     private final ExecutorService executor = Executors.newFixedThreadPool(10);
-    
+
     public CompletableFuture<String> processWithLeakedExecutor(String input) {
         return CompletableFuture.supplyAsync(() -> processInput(input), executor);
         // BAD: Executor never gets shut down
@@ -704,7 +704,7 @@ import java.util.List;
 import java.util.stream.IntStream;
 
 public class VirtualThreadExample {
-    
+
     // Use virtual thread executor for I/O-bound tasks
     private final ExecutorService virtualExecutor = Executors.newVirtualThreadPerTaskExecutor();
 
@@ -754,14 +754,14 @@ public class VirtualThreadExample {
     }
 
     private void performTaskForUser(String userId, String task) {
-        System.out.println("Processing task " + task + " for user " + userId + 
+        System.out.println("Processing task " + task + " for user " + userId +
                           " on thread " + Thread.currentThread());
     }
 
     // Structured concurrency for managing related tasks
     public String fetchUserDataWithStructuredConcurrency(String userId) throws Exception {
         try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
-            
+
             Future<String> profile = scope.fork(() -> fetchUserProfile(userId));
             Future<String> preferences = scope.fork(() -> fetchUserPreferences(userId));
             Future<String> history = scope.fork(() -> fetchUserHistory(userId));
@@ -770,30 +770,30 @@ public class VirtualThreadExample {
             scope.throwIfFailed();  // Propagate any failures
 
             // All tasks completed successfully
-            return combineUserData(profile.resultNow(), 
-                                 preferences.resultNow(), 
+            return combineUserData(profile.resultNow(),
+                                 preferences.resultNow(),
                                  history.resultNow());
         }
     }
 
     private String fetchUserProfile(String userId) {
         // Simulate I/O operation
-        try { Thread.sleep(100); } catch (InterruptedException e) { 
-            Thread.currentThread().interrupt(); 
+        try { Thread.sleep(100); } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
         return "Profile for " + userId;
     }
 
     private String fetchUserPreferences(String userId) {
-        try { Thread.sleep(150); } catch (InterruptedException e) { 
-            Thread.currentThread().interrupt(); 
+        try { Thread.sleep(150); } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
         return "Preferences for " + userId;
     }
 
     private String fetchUserHistory(String userId) {
-        try { Thread.sleep(200); } catch (InterruptedException e) { 
-            Thread.currentThread().interrupt(); 
+        try { Thread.sleep(200); } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
         }
         return "History for " + userId;
     }
@@ -812,15 +812,15 @@ public class VirtualThreadExample {
 import java.util.concurrent.*;
 
 public class BadVirtualThreadUsage {
-    
+
     // BAD: Creating thread pools for virtual threads
-    private final ExecutorService virtualPool = Executors.newFixedThreadPool(100, 
+    private final ExecutorService virtualPool = Executors.newFixedThreadPool(100,
         Thread.ofVirtual().factory()); // Don't pool virtual threads!
 
     // BAD: Using virtual threads for CPU-intensive tasks
     public void performCPUIntensiveWork() {
         ExecutorService virtualExecutor = Executors.newVirtualThreadPerTaskExecutor();
-        
+
         for (int i = 0; i < 1000; i++) {
             virtualExecutor.submit(() -> {
                 // BAD: Virtual threads are not suitable for CPU-bound work
@@ -847,7 +847,7 @@ public class BadVirtualThreadUsage {
     // BAD: Blocking operations that shouldn't be used with virtual threads
     public void problematicBlocking() {
         ExecutorService virtualExecutor = Executors.newVirtualThreadPerTaskExecutor();
-        
+
         virtualExecutor.submit(() -> {
             try {
                 synchronized (this) { // BAD: Synchronized blocks can pin virtual threads
@@ -861,10 +861,10 @@ public class BadVirtualThreadUsage {
 
     // BAD: Using ThreadLocal instead of ScopedValue
     private static final ThreadLocal<String> USER_CONTEXT = new ThreadLocal<>();
-    
+
     public void badContextPropagation() {
         USER_CONTEXT.set("user123");
-        
+
         ExecutorService virtualExecutor = Executors.newVirtualThreadPerTaskExecutor();
         virtualExecutor.submit(() -> {
             // BAD: ThreadLocal values don't propagate to virtual threads properly

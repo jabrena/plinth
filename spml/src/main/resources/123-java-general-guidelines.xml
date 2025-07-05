@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <system-prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:noNamespaceSchemaLocation="system-prompt.xsd"
+               xsi:noNamespaceSchemaLocation="spml.xsd"
                id="123-java-general-guidelines" version="1.0">
     <metadata>
         <description>Java General Guidelines</description>
@@ -48,13 +48,13 @@ package com.example.project.module; // Lowercase, reverse domain notation
 
 public class UserProfileService { // PascalCase for classes
     public static final int MAX_LOGIN_ATTEMPTS = 3; // ALL_CAPS_SNAKE_CASE for constants
-    
+
     private final UserRepository userRepository; // camelCase for variables
-    
+
     public UserDTO getUserByUsername(String username) { // camelCase for methods
         // ... implementation
     }
-    
+
     private boolean isValid(String input) { // Boolean methods with 'is', 'has', 'can' prefix
         return input != null && !input.trim().isEmpty();
     }
@@ -71,9 +71,9 @@ package My_App_Services; // Uses underscores and wrong case
 
 public class userprofilesvc { // Not PascalCase
     public static final int defaultpagesize = 20; // Not ALL_CAPS_SNAKE_CASE
-    
+
     private UserRepository mUserRepository; // Hungarian notation (avoid)
-    
+
     public UserDTO GetUser(String Username) { // Wrong case for method and parameter
         // ... implementation
     }
@@ -95,13 +95,13 @@ public class userprofilesvc { // Not PascalCase
                     <code-block language="java"><![CDATA[// GOOD: Proper formatting
 public class FormattingExample {
     private static final int MAX_RETRY_COUNT = 3; // Proper spacing around operators
-    
+
     public void processData(String input) {
         if (input == null || input.isEmpty()) { // K&R brace style
             logger.warn("Input is null or empty");
             return;
         }
-        
+
         for (int i = 0; i < MAX_RETRY_COUNT; i++) { // Spaces after keywords and around operators
             try {
                 performOperation(input);
@@ -117,11 +117,11 @@ public class FormattingExample {
                     <code-block language="java"><![CDATA[// AVOID: Poor formatting
 public class BadFormattingExample{
     private static final int MAX_RETRY_COUNT=3;// No spaces
-    
+
     public void processData(String input){
         if(input==null||input.isEmpty())// No spaces, missing braces
           logger.warn("Input is null or empty");
-        
+
         for(int i=0;i<MAX_RETRY_COUNT;i++){
           try{
             performOperation(input);
@@ -200,7 +200,7 @@ public class UserService {
                     <code-block language="java"><![CDATA[// GOOD: Comprehensive documentation
 /**
  * Utility class for string manipulations and validation.
- * 
+ *
  * @since 1.0
  */
 public class StringUtil {
@@ -218,7 +218,7 @@ public class StringUtil {
         }
         return str == null || str.isEmpty();
     }
-    
+
     /**
      * Validates and sanitizes user input for safe processing.
      *
@@ -231,10 +231,10 @@ public class StringUtil {
         if (input == null) {
             throw new ValidationException("Input cannot be null");
         }
-        
+
         // Remove potentially dangerous characters
         String sanitized = input.replaceAll("[<>\"'&]", "");
-        
+
         return sanitized.trim();
     }
 }]]></code-block>
@@ -246,7 +246,7 @@ public class StringHelper {
     public boolean check(String s) {
         return s == null || s.length() == 0;
     }
-    
+
     // Unclear method name and no documentation
     public String fix(String s) {
         return s.replaceAll("[<>]", "");
@@ -281,9 +281,9 @@ public class SecureFileProcessor {
         if (filePath == null) {
             throw new IllegalArgumentException("File path cannot be null");
         }
-        
+
         StringBuilder content = new StringBuilder();
-        
+
         // try-with-resources ensures proper resource cleanup
         try (BufferedReader reader = Files.newBufferedReader(filePath, StandardCharsets.UTF_8)) {
             String line;
@@ -300,7 +300,7 @@ public class SecureFileProcessor {
             logger.error("IO error reading file: {}", filePath.getFileName(), e);
             throw new FileProcessingException("Failed to read file", e);
         }
-        
+
         return content.toString();
     }
 }]]></code-block>
@@ -308,7 +308,7 @@ public class SecureFileProcessor {
                 <bad-example>
                     <code-block language="java"><![CDATA[// AVOID: Poor error handling
 public class UnsafeFileProcessor {
-    
+
     public String readFile(String filePath) {
         BufferedReader reader = null;
         try {

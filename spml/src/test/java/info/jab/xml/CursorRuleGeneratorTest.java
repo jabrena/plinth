@@ -30,11 +30,11 @@ class CursorRuleGeneratorTest {
             CursorRuleGenerator generator = new CursorRuleGenerator();
 
             // When & Then - Updated for functional API exception handling
-            assertThatThrownBy(() -> generator.generate("non-existent.xml", "unified-generator.xsl"))
+            assertThatThrownBy(() -> generator.generate("non-existent.xml", "cursor-rule-generator.xsl"))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Failed to generate cursor rules for")
                 .hasMessageContaining("non-existent.xml")
-                .hasMessageContaining("unified-generator.xsl");
+                .hasMessageContaining("cursor-rule-generator.xsl");
         }
 
         @Test
@@ -94,7 +94,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("110-java-maven-best-practices.mdc");
 
             // When
-            String actualResult = generator.generate("110-java-maven-best-practices.xml", "unified-generator.xsl");
+            String actualResult = generator.generate("110-java-maven-best-practices.xml", "cursor-rule-generator.xsl");
 
             // Then - Unified XSLT should produce identical output to specialized XSLT
             assertThat(actualResult)
@@ -111,7 +111,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("112-java-maven-documentation.mdc");
 
             // When
-            String actualResult = generator.generate("112-java-maven-documentation.xml", "unified-generator.xsl");
+            String actualResult = generator.generate("112-java-maven-documentation.xml", "cursor-rule-generator.xsl");
 
             // Then - Unified XSLT should produce identical output to specialized XSLT
             assertThat(actualResult)
@@ -128,7 +128,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("100-java-checklist-guide.mdc");
 
             // When
-            String actualResult = generator.generate("100-java-checklist-guide.xml", "unified-generator.xsl");
+            String actualResult = generator.generate("100-java-checklist-guide.xml", "cursor-rule-generator.xsl");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -144,19 +144,19 @@ class CursorRuleGeneratorTest {
             CursorRuleGenerator generator = new CursorRuleGenerator();
 
             // When
-            String bestPracticesResult = generator.generate("110-java-maven-best-practices.xml", "unified-generator.xsl");
-            String documentationResult = generator.generate("112-java-maven-documentation.xml", "unified-generator.xsl");
-            String checklistGuideResult = generator.generate("100-java-checklist-guide.xml", "unified-generator.xsl");
-            String objectOrientedDesignResult = generator.generate("121-java-object-oriented-design.xml", "unified-generator.xsl");
-            String typeDesignResult = generator.generate("122-java-type-design.xml", "unified-generator.xsl");
-            String generalGuidelinesResult = generator.generate("123-java-general-guidelines.xml", "unified-generator.xsl");
-            String secureCodingResult = generator.generate("124-java-secure-coding.xml", "unified-generator.xsl");
-            String concurrencyResult = generator.generate("125-java-concurrency.xml", "unified-generator.xsl");
-            String loggingResult = generator.generate("126-java-logging.xml", "unified-generator.xsl");
-            String unitTestingResult = generator.generate("131-java-unit-testing.xml", "unified-generator.xsl");
-            String refactoringWithModernFeaturesResult = generator.generate("141-java-refactoring-with-modern-features.xml", "unified-generator.xsl");
-            String functionalProgrammingResult = generator.generate("142-java-functional-programming.xml", "unified-generator.xsl");
-            String dataOrientedProgrammingResult = generator.generate("143-java-data-oriented-programming.xml", "unified-generator.xsl");
+            String bestPracticesResult = generator.generate("110-java-maven-best-practices.xml", "cursor-rule-generator.xsl");
+            String documentationResult = generator.generate("112-java-maven-documentation.xml", "cursor-rule-generator.xsl");
+            String checklistGuideResult = generator.generate("100-java-checklist-guide.xml", "cursor-rule-generator.xsl");
+            String objectOrientedDesignResult = generator.generate("121-java-object-oriented-design.xml", "cursor-rule-generator.xsl");
+            String typeDesignResult = generator.generate("122-java-type-design.xml", "cursor-rule-generator.xsl");
+            String generalGuidelinesResult = generator.generate("123-java-general-guidelines.xml", "cursor-rule-generator.xsl");
+            String secureCodingResult = generator.generate("124-java-secure-coding.xml", "cursor-rule-generator.xsl");
+            String concurrencyResult = generator.generate("125-java-concurrency.xml", "cursor-rule-generator.xsl");
+            String loggingResult = generator.generate("126-java-logging.xml", "cursor-rule-generator.xsl");
+            String unitTestingResult = generator.generate("131-java-unit-testing.xml", "cursor-rule-generator.xsl");
+            String refactoringWithModernFeaturesResult = generator.generate("141-java-refactoring-with-modern-features.xml", "cursor-rule-generator.xsl");
+            String functionalProgrammingResult = generator.generate("142-java-functional-programming.xml", "cursor-rule-generator.xsl");
+            String dataOrientedProgrammingResult = generator.generate("143-java-data-oriented-programming.xml", "cursor-rule-generator.xsl");
 
             // Then - All should have consistent frontmatter and structure
             assertThat(bestPracticesResult)
@@ -198,7 +198,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("121-java-object-oriented-design.mdc");
 
             // When
-            String actualResult = generator.generate("121-java-object-oriented-design.xml", "unified-generator.xsl");
+            String actualResult = generator.generate("121-java-object-oriented-design.xml", "cursor-rule-generator.xsl");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -215,7 +215,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("122-java-type-design.mdc");
 
             // When
-            String actualResult = generator.generate("122-java-type-design.xml", "unified-generator.xsl");
+            String actualResult = generator.generate("122-java-type-design.xml", "cursor-rule-generator.xsl");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -232,7 +232,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("123-java-general-guidelines.mdc");
 
             // When
-            String actualResult = generator.generate("123-java-general-guidelines.xml", "unified-generator.xsl");
+            String actualResult = generator.generate("123-java-general-guidelines.xml", "cursor-rule-generator.xsl");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -249,7 +249,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("124-java-secure-coding.mdc");
 
             // When
-            String actualResult = generator.generate("124-java-secure-coding.xml", "unified-generator.xsl");
+            String actualResult = generator.generate("124-java-secure-coding.xml", "cursor-rule-generator.xsl");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -266,7 +266,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("125-java-concurrency.mdc");
 
             // When
-            String actualResult = generator.generate("125-java-concurrency.xml", "unified-generator.xsl");
+            String actualResult = generator.generate("125-java-concurrency.xml", "cursor-rule-generator.xsl");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -283,7 +283,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("126-java-logging.mdc");
 
             // When
-            String actualResult = generator.generate("126-java-logging.xml", "unified-generator.xsl");
+            String actualResult = generator.generate("126-java-logging.xml", "cursor-rule-generator.xsl");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -300,7 +300,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("131-java-unit-testing.mdc");
 
             // When
-            String actualResult = generator.generate("131-java-unit-testing.xml", "unified-generator.xsl");
+            String actualResult = generator.generate("131-java-unit-testing.xml", "cursor-rule-generator.xsl");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -317,7 +317,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("141-java-refactoring-with-modern-features.mdc");
 
             // When
-            String actualResult = generator.generate("141-java-refactoring-with-modern-features.xml", "unified-generator.xsl");
+            String actualResult = generator.generate("141-java-refactoring-with-modern-features.xml", "cursor-rule-generator.xsl");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -334,7 +334,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("143-java-data-oriented-programming.mdc");
 
             // When
-            String actualResult = generator.generate("143-java-data-oriented-programming.xml", "unified-generator.xsl");
+            String actualResult = generator.generate("143-java-data-oriented-programming.xml", "cursor-rule-generator.xsl");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -351,7 +351,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("142-java-functional-programming.mdc");
 
             // When
-            String actualResult = generator.generate("142-java-functional-programming.xml", "unified-generator.xsl");
+            String actualResult = generator.generate("142-java-functional-programming.xml", "cursor-rule-generator.xsl");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
