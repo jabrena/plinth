@@ -50,36 +50,6 @@ class CursorRuleGeneratorTest {
                 .hasMessageContaining("112-java-maven-documentation.xml")
                 .hasMessageContaining("non-existent.xsl");
         }
-
-        /**
-         * Pure function to load expected content from resources.
-         * Uses Optional for null safety following functional programming principles.
-         */
-        private String loadExpectedContent(String filename) throws IOException {
-            return Optional.ofNullable(getClass().getClassLoader().getResourceAsStream(filename))
-                .map(inputStream -> {
-                    try (inputStream) {
-                        return new String(inputStream.readAllBytes()).trim();
-                    } catch (IOException e) {
-                        throw new RuntimeException("Failed to read resource: " + filename, e);
-                    }
-                })
-                .orElseThrow(() -> new IOException("Resource not found: " + filename));
-        }
-
-        /**
-         * Pure function to save generated content to target directory.
-         * Follows functional programming principles with clear input/output relationship.
-         */
-        private void saveGeneratedContentToTarget(String content, String filename) throws IOException {
-            Path targetDir = Paths.get("target");
-            if (!Files.exists(targetDir)) {
-                Files.createDirectories(targetDir);
-            }
-            Path outputPath = targetDir.resolve(filename);
-            Files.writeString(outputPath, content);
-            logger.info("Generated content saved to: {}", outputPath.toAbsolutePath());
-        }
     }
 
     @Nested
@@ -93,8 +63,8 @@ class CursorRuleGeneratorTest {
             CursorRuleGenerator generator = new CursorRuleGenerator();
             String expectedContent = loadExpectedContent("110-java-maven-best-practices.mdc");
 
-            // When
-            String actualResult = generator.generate("110-java-maven-best-practices.xml", "cursor-rule-generator.xsl");
+            // When - explicitly specify the schema since this XML uses spml-1.1.xsd
+            String actualResult = generator.generate("110-java-maven-best-practices.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
 
             // Then - Unified XSLT should produce identical output to specialized XSLT
             assertThat(actualResult)
@@ -332,7 +302,7 @@ class CursorRuleGeneratorTest {
 
         // When
         String checklistGuideResult = generator.generate("100-java-checklist-guide.xml", "cursor-rule-generator.xsl");
-        String bestPracticesResult = generator.generate("110-java-maven-best-practices.xml", "cursor-rule-generator.xsl");
+        String bestPracticesResult = generator.generate("110-java-maven-best-practices.xml", "cursor-rule-generator.xsl", "spml-1.1.xsd");
         String documentationResult = generator.generate("112-java-maven-documentation.xml", "cursor-rule-generator.xsl");
         String objectOrientedDesignResult = generator.generate("121-java-object-oriented-design.xml", "cursor-rule-generator.xsl");
         String typeDesignResult = generator.generate("122-java-type-design.xml", "cursor-rule-generator.xsl");

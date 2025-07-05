@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <system-prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:noNamespaceSchemaLocation="spml.xsd"
-               id="110-java-maven-best-practices" version="1.0">
+    xsi:noNamespaceSchemaLocation="spml-1.1.xsd"
+    id="110-java-maven-best-practices" version="1.0">
     <metadata>
         <description>Maven Best Practices</description>
         <globs>pom.xml</globs>
@@ -28,27 +28,29 @@
         ]]>
     </description>
 
-    <toc auto-generate="true"/>
+    <toc auto-generate="true" />
 
-    <content-sections>
-        <instruction-section>
-            <instruction-title>Instructions for AI</instruction-title>
-            <instruction-description>Update the pom.xml based on the following rules about Maven best practices.</instruction-description>
-        </instruction-section>
+    <instruction-section>
+        <instruction-title>Instructions for AI</instruction-title>
+        <instruction-description>
+            Update the pom.xml based on the following rules about Maven best
+            practices.
+        </instruction-description>
+    </instruction-section>
 
-        <rule-section number="1" id="effective-dependency-management">
-            <rule-header>
-                <rule-title>Effective Dependency Management</rule-title>
-                <rule-subtitle>Manage Dependencies Effectively using `dependencyManagement` and BOMs</rule-subtitle>
-            </rule-header>
-            <rule-description>
+    <example-section number="1" id="effective-dependency-management">
+        <example-header>
+            <example-title>Effective Dependency Management</example-title>
+            <example-subtitle>Manage Dependencies Effectively using `dependencyManagement` and BOMs</example-subtitle>
+        </example-header>
+        <example-description>
                 <![CDATA[
                 Use the `<dependencyManagement>` section in parent POMs or import Bill of Materials (BOMs) to centralize and control dependency versions. This helps avoid version conflicts and ensures consistency across multi-module projects. Avoid hardcoding versions directly in `<dependencies>` when managed elsewhere.
                 ]]>
-            </rule-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="xml"><![CDATA[
+        </example-description>
+        <code-examples>
+            <good-example>
+                <code-block language="xml"><![CDATA[
 <!-- Parent POM -->
 <project>
   <modelVersion>4.0.0</modelVersion>
@@ -111,9 +113,9 @@
   </dependencies>
 </project>
                 ]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="xml"><![CDATA[
+            </good-example>
+            <bad-example>
+                <code-block language="xml"><![CDATA[
 <!-- Child POM hardcoding versions -->
 <project>
   <modelVersion>4.0.0</modelVersion>
@@ -136,23 +138,23 @@
   </dependencies>
 </project>
                 ]]></code-block>
-                </bad-example>
-            </code-examples>
-        </rule-section>
+            </bad-example>
+        </code-examples>
+    </example-section>
 
-        <rule-section number="2" id="standard-directory-layout">
-            <rule-header>
-                <rule-title>Standard Directory Layout</rule-title>
-                <rule-subtitle>Adhere to the Standard Directory Layout</rule-subtitle>
-            </rule-header>
-            <rule-description>
+    <example-section number="2" id="standard-directory-layout">
+        <example-header>
+            <example-title>Standard Directory Layout</example-title>
+            <example-subtitle>Adhere to the Standard Directory Layout</example-subtitle>
+        </example-header>
+        <example-description>
                 <![CDATA[
                 Follow Maven's convention for directory structure (`src/main/java`, `src/main/resources`, `src/test/java`, `src/test/resources`, etc.). This makes projects easier to understand and build, as Maven relies on these defaults.
                 ]]>
-            </rule-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="text"><![CDATA[
+            </example-description>
+        <code-examples>
+            <good-example>
+                <code-block language="text"><![CDATA[
 my-app/
 ├── pom.xml
 └── src/
@@ -167,9 +169,9 @@ my-app/
         └── resources/
             └── test-data.xml
                    ]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="text"><![CDATA[
+            </good-example>
+            <bad-example>
+                <code-block language="text"><![CDATA[
 my-app/
 ├── pom.xml
 ├── sources/  <!-- Non-standard -->
@@ -180,23 +182,23 @@ my-app/
     └── com/example/myapp/AppTest.java
 <!-- This would require explicit configuration in pom.xml to specify source/resource directories -->
                     ]]></code-block>
-                </bad-example>
-            </code-examples>
-        </rule-section>
+            </bad-example>
+        </code-examples>
+    </example-section>
 
-        <rule-section number="3" id="plugin-management">
-            <rule-header>
-                <rule-title>Plugin Management and Configuration</rule-title>
-                <rule-subtitle>Manage Plugin Versions and Configurations Centrally</rule-subtitle>
-            </rule-header>
-            <rule-description>
+    <example-section number="3" id="plugin-management">
+        <example-header>
+            <example-title>Plugin Management and Configuration</example-title>
+            <example-subtitle>Manage Plugin Versions and Configurations Centrally</example-subtitle>
+        </example-header>
+        <example-description>
                 <![CDATA[
                 Use `<pluginManagement>` in a parent POM to define plugin versions and common configurations. Child POMs can then use the plugins without specifying versions, ensuring consistency. Override configurations in child POMs only when necessary.
                 ]]>
-            </rule-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="xml"><![CDATA[
+            </example-description>
+        <code-examples>
+            <good-example>
+                <code-block language="xml"><![CDATA[
 <!-- Parent POM -->
 <project>
   <!-- ... -->
@@ -231,9 +233,9 @@ my-app/
   </build>
 </project>
                 ]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="xml"><![CDATA[
+            </good-example>
+            <bad-example>
+                <code-block language="xml"><![CDATA[
 <!-- Child POM -->
 <project>
   <!-- ... -->
@@ -252,23 +254,23 @@ my-app/
   </build>
 </project>
                 ]]></code-block>
-                </bad-example>
-            </code-examples>
-        </rule-section>
+            </bad-example>
+        </code-examples>
+    </example-section>
 
-        <rule-section number="4" id="build-profiles">
-            <rule-header>
-                <rule-title>Use Build Profiles for Environment-Specific Configurations</rule-title>
-                <rule-subtitle>Employ Build Profiles for Environment-Specific Settings</rule-subtitle>
-            </rule-header>
-            <rule-description>
+    <example-section number="4" id="build-profiles">
+        <example-header>
+            <example-title>Use Build Profiles for Environment-Specific Configurations</example-title>
+            <example-subtitle>Employ Build Profiles for Environment-Specific Settings</example-subtitle>
+        </example-header>
+        <example-description>
                 <![CDATA[
                 Use Maven profiles to customize build settings for different environments (e.g., dev, test, prod) or other conditional scenarios. This can include different dependencies, plugin configurations, or properties. Activate profiles via command line, OS, JDK, or file presence.
                 ]]>
-            </rule-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="xml"><![CDATA[
+            </example-description>
+        <code-examples>
+            <good-example>
+                <code-block language="xml"><![CDATA[
 <project>
   <!-- ... -->
   <profiles>
@@ -312,9 +314,9 @@ my-app/
 </project>
 <!-- Activation: mvn clean install -P prod -->
                 ]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="xml"><![CDATA[
+            </good-example>
+            <bad-example>
+                <code-block language="xml"><![CDATA[
 <!-- Commented out sections for different environments -->
 <project>
   <!-- ... -->
@@ -324,23 +326,23 @@ my-app/
   </properties>
 </project>
                 ]]></code-block>
-                </bad-example>
-            </code-examples>
-        </rule-section>
+            </bad-example>
+        </code-examples>
+    </example-section>
 
-        <rule-section number="5" id="readable-poms">
-            <rule-header>
-                <rule-title>Keep POMs Readable and Maintainable</rule-title>
-                <rule-subtitle>Structure POMs Logically for Readability</rule-subtitle>
-            </rule-header>
-            <rule-description>
+    <example-section number="5" id="readable-poms">
+        <example-header>
+            <example-title>Keep POMs Readable and Maintainable</example-title>
+            <example-subtitle>Structure POMs Logically for Readability</example-subtitle>
+        </example-header>
+        <example-description>
                 <![CDATA[
                 Organize your `pom.xml` sections in a consistent order (e.g., project coordinates, parent, properties, dependencyManagement, dependencies, build, profiles, repositories). Use properties for recurring versions or values. Add comments for complex configurations.
                 ]]>
-            </rule-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="xml"><![CDATA[
+            </example-description>
+        <code-examples>
+            <good-example>
+                <code-block language="xml"><![CDATA[
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -391,9 +393,9 @@ my-app/
     <!-- ... -->
 </project>
                 ]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="xml"><![CDATA[
+            </good-example>
+            <bad-example>
+                <code-block language="xml"><![CDATA[
 <!-- Haphazard order, missing properties for versions -->
 <project>
   <dependencies>
@@ -415,23 +417,23 @@ my-app/
   <version>1.0.0-SNAPSHOT</version>
 </project>
                 ]]></code-block>
-                </bad-example>
-            </code-examples>
-        </rule-section>
+            </bad-example>
+        </code-examples>
+    </example-section>
 
-        <rule-section number="6" id="manage-repositories">
-            <rule-header>
-                <rule-title>Manage Repositories Explicitly</rule-title>
-                <rule-subtitle>Declare Custom Repositories Explicitly and Minimize Their Use</rule-subtitle>
-            </rule-header>
-            <rule-description>
+    <example-section number="6" id="manage-repositories">
+        <example-header>
+            <example-title>Manage Repositories Explicitly</example-title>
+            <example-subtitle>Declare Custom Repositories Explicitly and Minimize Their Use</example-subtitle>
+        </example-header>
+        <example-description>
                 <![CDATA[
                 Prefer dependencies from Maven Central. If custom repositories are necessary, declare them in the `<repositories>` section and `<pluginRepositories>` for plugins. It's often better to manage these in a company-wide Nexus/Artifactory instance configured in `settings.xml` rather than per-project POMs. Avoid relying on transitive repositories.
                 ]]>
-            </rule-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="xml"><![CDATA[
+            </example-description>
+        <code-examples>
+            <good-example>
+                <code-block language="xml"><![CDATA[
 <project>
   <!-- ... -->
   <repositories>
@@ -449,9 +451,9 @@ my-app/
 </project>
 <!-- Better: Configure these in settings.xml and use a repository manager -->
                 ]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="xml"><![CDATA[
+            </good-example>
+            <bad-example>
+                <code-block language="xml"><![CDATA[
 <!-- No explicit repository for a non-central artifact, relying on developer's local settings or transitive ones -->
 <project>
   <!-- ... -->
@@ -467,23 +469,23 @@ my-app/
   </dependencies>
 </project>
                 ]]></code-block>
-                </bad-example>
-            </code-examples>
-        </rule-section>
+            </bad-example>
+        </code-examples>
+    </example-section>
 
-        <rule-section number="7" id="centralize-version-management">
-            <rule-header>
-                <rule-title>Centralize Version Management with Properties</rule-title>
-                <rule-subtitle>Use Properties to Manage Dependency and Plugin Versions</rule-subtitle>
-            </rule-header>
-            <rule-description>
+    <example-section number="7" id="centralize-version-management">
+        <example-header>
+            <example-title>Centralize Version Management with Properties</example-title>
+            <example-subtitle>Use Properties to Manage Dependency and Plugin Versions</example-subtitle>
+        </example-header>
+        <example-description>
                 <![CDATA[
                 Define all dependency and plugin versions in the `<properties>` section rather than hardcoding them throughout the POM. This centralizes version management, makes updates easier, reduces duplication, and helps maintain consistency across related dependencies. Use consistent property naming conventions: `maven-plugin-[name].version` for Maven plugins, simple names like `[library].version` for dependencies, and descriptive names for quality thresholds like `coverage.level`.
                 ]]>
-            </rule-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="xml"><![CDATA[
+            </example-description>
+        <code-examples>
+            <good-example>
+                <code-block language="xml"><![CDATA[
 <project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.example</groupId>
@@ -562,9 +564,9 @@ my-app/
   </build>
 </project>
                 ]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="xml"><![CDATA[
+            </good-example>
+            <bad-example>
+                <code-block language="xml"><![CDATA[
 <!-- Hardcoded versions scattered throughout the POM -->
 <project>
   <modelVersion>4.0.0</modelVersion>
@@ -627,16 +629,15 @@ my-app/
   </build>
 </project>
                 ]]></code-block>
-                </bad-example>
-            </code-examples>
-        </rule-section>
+            </bad-example>
+        </code-examples>
+    </example-section>
 
-        <output-requirements-section>
-            <output-requirements-title>Output Requirements</output-requirements-title>
-            <output-requirements-rules>
-                <output-requirements-rule>Update the file pom.xml if something is not correct</output-requirements-rule>
-                <output-requirements-rule>verify changes with the command: `mvn validate`</output-requirements-rule>
-            </output-requirements-rules>
-        </output-requirements-section>
-    </content-sections>
+    <output-requirements-section>
+        <output-requirements-title>Output Requirements</output-requirements-title>
+        <output-requirements-rules>
+            <output-requirements-rule>Update the file pom.xml if something is not correct</output-requirements-rule>
+            <output-requirements-rule>verify changes with the command: `mvn validate`</output-requirements-rule>
+        </output-requirements-rules>
+    </output-requirements-section>
 </system-prompt>

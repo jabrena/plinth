@@ -40,8 +40,8 @@ Role definition: </xsl:text><xsl:value-of select="normalize-space(system-charact
 ## Table of contents
 
 </xsl:text>
-                <xsl:for-each select="content-sections/rule-section | rule-section">
-                    <xsl:text>- Rule </xsl:text><xsl:value-of select="@number"/><xsl:text>: </xsl:text><xsl:value-of select="normalize-space(rule-header/rule-title)"/>
+                <xsl:for-each select="example-section">
+                    <xsl:text>- Rule </xsl:text><xsl:value-of select="@number"/><xsl:text>: </xsl:text><xsl:value-of select="normalize-space(example-header/example-title)"/>
                     <xsl:text>
 </xsl:text>
                 </xsl:for-each>
@@ -75,18 +75,18 @@ Role definition: </xsl:text><xsl:value-of select="normalize-space(system-charact
         </xsl:choose>
 
         <!-- Process all content sections -->
-        <xsl:apply-templates select="content-sections/* | instruction-section | rule-section | template-section | question-section | workflow-section | output-requirements-section"/>
+        <xsl:apply-templates select="instruction-section | example-section | template-section | question-section | workflow-section | output-requirements-section"/>
     </xsl:template>
 
-    <!-- Rule section template -->
-    <xsl:template match="rule-section">
+    <!-- Example section template -->
+    <xsl:template match="example-section">
         <xsl:text>
-## Rule </xsl:text><xsl:value-of select="@number"/><xsl:text>: </xsl:text><xsl:value-of select="normalize-space(rule-header/rule-title)"/>
+## Rule </xsl:text><xsl:value-of select="@number"/><xsl:text>: </xsl:text><xsl:value-of select="normalize-space(example-header/example-title)"/>
         <xsl:text>
 
-Title: </xsl:text><xsl:value-of select="normalize-space(rule-header/rule-subtitle)"/>
+Title: </xsl:text><xsl:value-of select="normalize-space(example-header/example-subtitle)"/>
         <xsl:text>
-Description: </xsl:text>        <xsl:value-of select="normalize-space(rule-description)"/>
+Description: </xsl:text>        <xsl:value-of select="normalize-space(example-description)"/>
 
         <xsl:for-each select="rule-notes">
             <xsl:text>

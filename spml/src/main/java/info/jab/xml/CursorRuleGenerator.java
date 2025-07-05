@@ -25,7 +25,8 @@ import org.xml.sax.XMLReader;
  */
 public final class CursorRuleGenerator {
 
-    private static final String XSD_FILE_NAME = "spml.xsd";
+    private static final String XSD_FILE_NAME_V1_1 = "spml-1.1.xsd";
+    private static final String XSD_FILE_NAME_V1_0 = "spml.xsd";
 
     // ===============================================================
     // PUBLIC API - Entry point for cursor rule generation
@@ -33,11 +34,19 @@ public final class CursorRuleGenerator {
 
     /**
      * Generates cursor rules by transforming XML with XSLT.
-     * Pure function that depends only on input parameters.
+     * Uses automatic schema detection with fallback.
      */
     public String generate(String xmlFileName, String xslFileName) {
+        return generate(xmlFileName, xslFileName, null);
+    }
+
+    /**
+     * Generates cursor rules by transforming XML with XSLT.
+     * Uses explicitly provided schema name.
+     */
+    public String generate(String xmlFileName, String xslFileName, String schemaFileName) {
         return loadTransformationSources(xmlFileName, xslFileName)
-            .map(this::createSaxSource)
+            .map(sources -> createSaxSource(sources, schemaFileName))
             .flatMap(saxSource -> performTransformation(saxSource, xslFileName))
             .orElseThrow(() -> new RuntimeException(
                 "Failed to generate cursor rules for: " + xmlFileName + ", " + xslFileName));
@@ -71,15 +80,18 @@ public final class CursorRuleGenerator {
      * Step 2: Creates SAXSource with XSD validation.
      * Pure function that creates immutable SAXSource with schema validation.
      */
-    private SAXSource createSaxSource(TransformationSources sources) {
+    private SAXSource createSaxSource(TransformationSources sources, String schemaFileName) {
         try {
             // Create SAX parser factory with namespace awareness and validation
             SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setNamespaceAware(true);
             factory.setValidating(false); // We'll use schema validation instead
 
-            // Load XSD schema
-            Optional<Schema> schema = loadXsdSchema();
+            // Load XSD schema - use explicit schema if provided, otherwise use fallback
+            Optional<Schema> schema = schemaFileName != null
+                ? loadXsdSchema(schemaFileName)
+                : loadXsdSchemaWithFallback();
+
             if (schema.isPresent()) {
                 factory.setSchema(schema.get());
             }
@@ -119,6 +131,8 @@ public final class CursorRuleGenerator {
             return Optional.of(stringWriter.toString().trim());
         } catch (TransformerException e) {
             // Log the exception in a real application
+            System.err.println("TransformerException in executeTransformation:");
+            e.printStackTrace();
             return Optional.empty();
         }
     }
@@ -140,19 +154,35 @@ public final class CursorRuleGenerator {
     }
 
     /**
-     * Loads XSD schema from classpath for validation.
-     * Returns Optional to handle missing schema gracefully.
+     * Loads XSD schema by explicit filename.
      */
-    private Optional<Schema> loadXsdSchema() {
-        return loadResource(XSD_FILE_NAME)
+    private Optional<Schema> loadXsdSchema(String schemaFileName) {
+        return loadResource(schemaFileName)
             .map(xsdStream -> {
                 try {
                     SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
                     return schemaFactory.newSchema(new StreamSource(xsdStream));
                 } catch (SAXException e) {
-                    throw new RuntimeException("Failed to load XSD schema: " + XSD_FILE_NAME, e);
+                    throw new RuntimeException("Failed to load XSD schema: " + schemaFileName, e);
                 }
             });
+    }
+
+    /**
+     * Loads XSD schema from classpath for validation with fallback.
+     * Returns Optional to handle missing schema gracefully.
+     * Tries v1.0 schema first, then v1.1 schema as fallback.
+     */
+    private Optional<Schema> loadXsdSchemaWithFallback() {
+        // Try v1.0 schema first (with content-sections wrapper)
+        Optional<Schema> schema = loadXsdSchema(XSD_FILE_NAME_V1_0);
+
+        // If v1.0 not found, try v1.1 schema (direct sections)
+        if (schema.isEmpty()) {
+            schema = loadXsdSchema(XSD_FILE_NAME_V1_1);
+        }
+
+        return schema;
     }
 
     /**
