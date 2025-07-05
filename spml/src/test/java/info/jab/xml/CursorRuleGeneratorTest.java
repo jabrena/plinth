@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -159,6 +158,7 @@ class CursorRuleGeneratorTest {
             String unitTestingResult = generator.generate("131-java-unit-testing.xml", "unified-generator.xsl");
             String refactoringWithModernFeaturesResult = generator.generate("141-java-refactoring-with-modern-features.xml", "unified-generator.xsl");
             String dataOrientedProgrammingResult = generator.generate("143-java-data-oriented-programming.xml", "unified-generator.xsl");
+            //String functionalProgrammingResult = generator.generate("144-java-functional-programming.xml", "unified-generator.xsl");
 
             // Then - All should have consistent frontmatter and structure
             assertThat(bestPracticesResult)
@@ -177,18 +177,19 @@ class CursorRuleGeneratorTest {
                 .contains("Role definition: You are a Senior software engineer");
 
             // Save all for comparison
-            saveGeneratedContentToTarget(bestPracticesResult, "unified-best-practices.mdc");
-            saveGeneratedContentToTarget(documentationResult, "unified-documentation.mdc");
-            saveGeneratedContentToTarget(checklistGuideResult, "unified-checklist-guide.mdc");
-            saveGeneratedContentToTarget(objectOrientedDesignResult, "unified-object-oriented-design.mdc");
-            saveGeneratedContentToTarget(typeDesignResult, "unified-type-design.mdc");
-            saveGeneratedContentToTarget(generalGuidelinesResult, "unified-general-guidelines.mdc");
-            saveGeneratedContentToTarget(secureCodingResult, "unified-secure-coding.mdc");
-            saveGeneratedContentToTarget(concurrencyResult, "unified-concurrency.mdc");
-            saveGeneratedContentToTarget(loggingResult, "unified-logging.mdc");
-            saveGeneratedContentToTarget(unitTestingResult, "unified-unit-testing.mdc");
-            saveGeneratedContentToTarget(refactoringWithModernFeaturesResult, "unified-refactoring-with-modern-features.mdc");
+            //saveGeneratedContentToTarget(bestPracticesResult, "unified-best-practices.mdc");
+            //saveGeneratedContentToTarget(documentationResult, "unified-documentation.mdc");
+            //saveGeneratedContentToTarget(checklistGuideResult, "unified-checklist-guide.mdc");
+            //saveGeneratedContentToTarget(objectOrientedDesignResult, "unified-object-oriented-design.mdc");
+            //saveGeneratedContentToTarget(typeDesignResult, "unified-type-design.mdc");
+            //saveGeneratedContentToTarget(generalGuidelinesResult, "unified-general-guidelines.mdc");
+            //saveGeneratedContentToTarget(secureCodingResult, "unified-secure-coding.mdc");
+            //saveGeneratedContentToTarget(concurrencyResult, "unified-concurrency.mdc");
+            //saveGeneratedContentToTarget(loggingResult, "unified-logging.mdc");
+            //saveGeneratedContentToTarget(unitTestingResult, "unified-unit-testing.mdc");
+            //saveGeneratedContentToTarget(refactoringWithModernFeaturesResult, "unified-refactoring-with-modern-features.mdc");
             saveGeneratedContentToTarget(dataOrientedProgrammingResult, "unified-data-oriented-programming.mdc");
+            //saveGeneratedContentToTarget(functionalProgrammingResult, "unified-functional-programming.mdc");
         }
 
         @Test
@@ -311,7 +312,6 @@ class CursorRuleGeneratorTest {
         }
 
         @Test
-        @Disabled("Content generation mismatch - needs investigation")
         @DisplayName("Should generate exact content matching original expected Java Refactoring with Modern Features document using unified XSLT")
         void should_generateExactContentMatchingOriginalExpected_when_transformingJavaRefactoringWithModernFeaturesWithUnifiedXslt() throws IOException {
             // Given
@@ -329,7 +329,6 @@ class CursorRuleGeneratorTest {
         }
 
         @Test
-        @Disabled("Content generation mismatch - needs investigation")
         @DisplayName("Should generate exact content matching original expected Java Data-Oriented Programming document using unified XSLT")
         void should_generateExactContentMatchingOriginalExpected_when_transformingJavaDataOrientedProgrammingWithUnifiedXslt() throws IOException {
             // Given
