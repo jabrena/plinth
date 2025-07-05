@@ -19,8 +19,6 @@ class CursorRuleGeneratorTest {
 
     private static final Logger logger = LoggerFactory.getLogger(CursorRuleGeneratorTest.class);
 
-
-
     @Nested
     @DisplayName("Parameterized Generate Method Tests")
     class ParameterizedGenerateMethodTests {
@@ -157,8 +155,8 @@ class CursorRuleGeneratorTest {
             String loggingResult = generator.generate("126-java-logging.xml", "unified-generator.xsl");
             String unitTestingResult = generator.generate("131-java-unit-testing.xml", "unified-generator.xsl");
             String refactoringWithModernFeaturesResult = generator.generate("141-java-refactoring-with-modern-features.xml", "unified-generator.xsl");
+            String functionalProgrammingResult = generator.generate("142-java-functional-programming.xml", "unified-generator.xsl");
             String dataOrientedProgrammingResult = generator.generate("143-java-data-oriented-programming.xml", "unified-generator.xsl");
-            //String functionalProgrammingResult = generator.generate("144-java-functional-programming.xml", "unified-generator.xsl");
 
             // Then - All should have consistent frontmatter and structure
             assertThat(bestPracticesResult)
@@ -189,7 +187,7 @@ class CursorRuleGeneratorTest {
             //saveGeneratedContentToTarget(unitTestingResult, "unified-unit-testing.mdc");
             //saveGeneratedContentToTarget(refactoringWithModernFeaturesResult, "unified-refactoring-with-modern-features.mdc");
             //saveGeneratedContentToTarget(dataOrientedProgrammingResult, "unified-data-oriented-programming.mdc");
-            //saveGeneratedContentToTarget(functionalProgrammingResult, "unified-functional-programming.mdc");
+            saveGeneratedContentToTarget(functionalProgrammingResult, "unified-functional-programming.mdc");
         }
 
         @Test
@@ -337,6 +335,23 @@ class CursorRuleGeneratorTest {
 
             // When
             String actualResult = generator.generate("143-java-data-oriented-programming.xml", "unified-generator.xsl");
+
+            // Then - Unified XSLT should produce identical output to expected
+            assertThat(actualResult)
+                .isNotNull()
+                .isNotEmpty()
+                .isEqualTo(expectedContent);
+        }
+
+        @Test
+        @DisplayName("Should generate exact content matching original expected Java Functional Programming document using unified XSLT")
+        void should_generateExactContentMatchingOriginalExpected_when_transformingJavaFunctionalProgrammingWithUnifiedXslt() throws IOException {
+            // Given
+            CursorRuleGenerator generator = new CursorRuleGenerator();
+            String expectedContent = loadExpectedContent("142-java-functional-programming.mdc");
+
+            // When
+            String actualResult = generator.generate("142-java-functional-programming.xml", "unified-generator.xsl");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
