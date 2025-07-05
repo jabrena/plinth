@@ -23,6 +23,12 @@ Effective Maven usage involves robust dependency management via `<dependencyMana
 - Rule 6: Manage Repositories Explicitly
 - Rule 7: Centralize Version Management with Properties
 
+
+## Instructions for AI
+
+Update the pom.xml based on the following rules about Maven best practices.
+
+
 ## Rule 1: Effective Dependency Management
 
 Title: Manage Dependencies Effectively using `dependencyManagement` and BOMs
@@ -582,3 +588,9 @@ Description: Define all dependency and plugin versions in the `<properties>` sec
 </project>
 
 ```
+
+
+## Output Requirements
+
+- Update the file pom.xml if something is not correct
+- verify changes with the command: `mvn validate`

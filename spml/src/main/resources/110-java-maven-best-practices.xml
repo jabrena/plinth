@@ -31,6 +31,11 @@
     <toc auto-generate="true"/>
 
     <content-sections>
+        <instruction-section>
+            <instruction-title>Instructions for AI</instruction-title>
+            <instruction-description>Update the pom.xml based on the following rules about Maven best practices.</instruction-description>
+        </instruction-section>
+
         <rule-section number="1" id="effective-dependency-management">
             <rule-header>
                 <rule-title>Effective Dependency Management</rule-title>
@@ -625,5 +630,13 @@ my-app/
                 </bad-example>
             </code-examples>
         </rule-section>
+
+        <output-requirements-section>
+            <output-requirements-title>Output Requirements</output-requirements-title>
+            <output-requirements-rules>
+                <output-requirements-rule>Update the file pom.xml if something is not correct</output-requirements-rule>
+                <output-requirements-rule>verify changes with the command: `mvn validate`</output-requirements-rule>
+            </output-requirements-rules>
+        </output-requirements-section>
     </content-sections>
 </system-prompt>
