@@ -43,7 +43,8 @@
             </rule-description>
             <code-examples>
                 <good-example>
-                    <code-block language="xml"><![CDATA[<!-- Parent POM -->
+                    <code-block language="xml"><![CDATA[
+<!-- Parent POM -->
 <project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.example</groupId>
@@ -103,10 +104,12 @@
       <!-- Version and scope inherited -->
     </dependency>
   </dependencies>
-</project>]]></code-block>
+</project>
+                ]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block language="xml"><![CDATA[<!-- Child POM hardcoding versions -->
+                    <code-block language="xml"><![CDATA[
+<!-- Child POM hardcoding versions -->
 <project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.example</groupId>
@@ -126,7 +129,8 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-</project>]]></code-block>
+</project>
+                ]]></code-block>
                 </bad-example>
             </code-examples>
         </rule-section>
@@ -137,7 +141,9 @@
                 <rule-subtitle>Adhere to the Standard Directory Layout</rule-subtitle>
             </rule-header>
             <rule-description>
-                <![CDATA[Follow Maven's convention for directory structure (`src/main/java`, `src/main/resources`, `src/test/java`, `src/test/resources`, etc.). This makes projects easier to understand and build, as Maven relies on these defaults.]]>
+                <![CDATA[
+                Follow Maven's convention for directory structure (`src/main/java`, `src/main/resources`, `src/test/java`, `src/test/resources`, etc.). This makes projects easier to understand and build, as Maven relies on these defaults.
+                ]]>
             </rule-description>
             <code-examples>
                 <good-example>
@@ -179,11 +185,14 @@ my-app/
                 <rule-subtitle>Manage Plugin Versions and Configurations Centrally</rule-subtitle>
             </rule-header>
             <rule-description>
-                <![CDATA[Use `<pluginManagement>` in a parent POM to define plugin versions and common configurations. Child POMs can then use the plugins without specifying versions, ensuring consistency. Override configurations in child POMs only when necessary.]]>
+                <![CDATA[
+                Use `<pluginManagement>` in a parent POM to define plugin versions and common configurations. Child POMs can then use the plugins without specifying versions, ensuring consistency. Override configurations in child POMs only when necessary.
+                ]]>
             </rule-description>
             <code-examples>
                 <good-example>
-                    <code-block language="xml"><![CDATA[<!-- Parent POM -->
+                    <code-block language="xml"><![CDATA[
+<!-- Parent POM -->
 <project>
   <!-- ... -->
   <build>
@@ -215,10 +224,12 @@ my-app/
       </plugin>
     </plugins>
   </build>
-</project>]]></code-block>
+</project>
+                ]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block language="xml"><![CDATA[<!-- Child POM -->
+                    <code-block language="xml"><![CDATA[
+<!-- Child POM -->
 <project>
   <!-- ... -->
   <build>
@@ -234,7 +245,8 @@ my-app/
       </plugin>
     </plugins>
   </build>
-</project>]]></code-block>
+</project>
+                ]]></code-block>
                 </bad-example>
             </code-examples>
         </rule-section>
@@ -245,7 +257,9 @@ my-app/
                 <rule-subtitle>Employ Build Profiles for Environment-Specific Settings</rule-subtitle>
             </rule-header>
             <rule-description>
-                <![CDATA[Use Maven profiles to customize build settings for different environments (e.g., dev, test, prod) or other conditional scenarios. This can include different dependencies, plugin configurations, or properties. Activate profiles via command line, OS, JDK, or file presence.]]>
+                <![CDATA[
+                Use Maven profiles to customize build settings for different environments (e.g., dev, test, prod) or other conditional scenarios. This can include different dependencies, plugin configurations, or properties. Activate profiles via command line, OS, JDK, or file presence.
+                ]]>
             </rule-description>
             <code-examples>
                 <good-example>
@@ -303,7 +317,8 @@ my-app/
     <!-- <database.url>jdbc:h2:mem:devdb</database.url> -->
     <database.url>jdbc:postgresql://prodserver/mydb</database.url> <!-- Manually switch by commenting/uncommenting -->
   </properties>
-</project>]]></code-block>
+</project>
+                ]]></code-block>
                 </bad-example>
             </code-examples>
         </rule-section>
@@ -314,7 +329,9 @@ my-app/
                 <rule-subtitle>Structure POMs Logically for Readability</rule-subtitle>
             </rule-header>
             <rule-description>
-                <![CDATA[Organize your `pom.xml` sections in a consistent order (e.g., project coordinates, parent, properties, dependencyManagement, dependencies, build, profiles, repositories). Use properties for recurring versions or values. Add comments for complex configurations.]]>
+                <![CDATA[
+                Organize your `pom.xml` sections in a consistent order (e.g., project coordinates, parent, properties, dependencyManagement, dependencies, build, profiles, repositories). Use properties for recurring versions or values. Add comments for complex configurations.
+                ]]>
             </rule-description>
             <code-examples>
                 <good-example>
@@ -367,7 +384,8 @@ my-app/
 
     <!-- Repositories and Plugin Repositories (if needed) -->
     <!-- ... -->
-</project>]]></code-block>
+</project>
+                ]]></code-block>
                 </good-example>
                 <bad-example>
                     <code-block language="xml"><![CDATA[
@@ -390,7 +408,8 @@ my-app/
   </properties>
   <artifactId>my-app</artifactId>
   <version>1.0.0-SNAPSHOT</version>
-</project>]]></code-block>
+</project>
+                ]]></code-block>
                 </bad-example>
             </code-examples>
         </rule-section>
@@ -401,7 +420,9 @@ my-app/
                 <rule-subtitle>Declare Custom Repositories Explicitly and Minimize Their Use</rule-subtitle>
             </rule-header>
             <rule-description>
-                <![CDATA[Prefer dependencies from Maven Central. If custom repositories are necessary, declare them in the `<repositories>` section and `<pluginRepositories>` for plugins. It's often better to manage these in a company-wide Nexus/Artifactory instance configured in `settings.xml` rather than per-project POMs. Avoid relying on transitive repositories.]]>
+                <![CDATA[
+                Prefer dependencies from Maven Central. If custom repositories are necessary, declare them in the `<repositories>` section and `<pluginRepositories>` for plugins. It's often better to manage these in a company-wide Nexus/Artifactory instance configured in `settings.xml` rather than per-project POMs. Avoid relying on transitive repositories.
+                ]]>
             </rule-description>
             <code-examples>
                 <good-example>
@@ -421,7 +442,8 @@ my-app/
     </pluginRepository>
   </pluginRepositories>
 </project>
-<!-- Better: Configure these in settings.xml and use a repository manager -->]]></code-block>
+<!-- Better: Configure these in settings.xml and use a repository manager -->
+                ]]></code-block>
                 </good-example>
                 <bad-example>
                     <code-block language="xml"><![CDATA[
@@ -438,7 +460,8 @@ my-app/
            Relying on implicit configurations makes builds less portable. -->
     </dependency>
   </dependencies>
-</project>]]></code-block>
+</project>
+                ]]></code-block>
                 </bad-example>
             </code-examples>
         </rule-section>
@@ -449,7 +472,9 @@ my-app/
                 <rule-subtitle>Use Properties to Manage Dependency and Plugin Versions</rule-subtitle>
             </rule-header>
             <rule-description>
-                <![CDATA[Define all dependency and plugin versions in the `<properties>` section rather than hardcoding them throughout the POM. This centralizes version management, makes updates easier, reduces duplication, and helps maintain consistency across related dependencies. Use consistent property naming conventions: `maven-plugin-[name].version` for Maven plugins, simple names like `[library].version` for dependencies, and descriptive names for quality thresholds like `coverage.level`.]]>
+                <![CDATA[
+                Define all dependency and plugin versions in the `<properties>` section rather than hardcoding them throughout the POM. This centralizes version management, makes updates easier, reduces duplication, and helps maintain consistency across related dependencies. Use consistent property naming conventions: `maven-plugin-[name].version` for Maven plugins, simple names like `[library].version` for dependencies, and descriptive names for quality thresholds like `coverage.level`.
+                ]]>
             </rule-description>
             <code-examples>
                 <good-example>
@@ -530,10 +555,12 @@ my-app/
       </plugin>
     </plugins>
   </build>
-</project>]]></code-block>
+</project>
+                ]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block language="xml"><![CDATA[<!-- Hardcoded versions scattered throughout the POM -->
+                    <code-block language="xml"><![CDATA[
+<!-- Hardcoded versions scattered throughout the POM -->
 <project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.example</groupId>
@@ -593,7 +620,8 @@ my-app/
       </plugin>
     </plugins>
   </build>
-</project>]]></code-block>
+</project>
+                ]]></code-block>
                 </bad-example>
             </code-examples>
         </rule-section>
