@@ -138,59 +138,6 @@ class CursorRuleGeneratorTest {
         }
 
         @Test
-        @DisplayName("Should produce consistent content structure regardless of XML content type")
-        void should_produceConsistentStructure_when_processingDifferentXmlTypes() throws IOException {
-            // Given
-            CursorRuleGenerator generator = new CursorRuleGenerator();
-
-            // When
-            String bestPracticesResult = generator.generate("110-java-maven-best-practices.xml", "cursor-rule-generator.xsl");
-            String documentationResult = generator.generate("112-java-maven-documentation.xml", "cursor-rule-generator.xsl");
-            String checklistGuideResult = generator.generate("100-java-checklist-guide.xml", "cursor-rule-generator.xsl");
-            String objectOrientedDesignResult = generator.generate("121-java-object-oriented-design.xml", "cursor-rule-generator.xsl");
-            String typeDesignResult = generator.generate("122-java-type-design.xml", "cursor-rule-generator.xsl");
-            String generalGuidelinesResult = generator.generate("123-java-general-guidelines.xml", "cursor-rule-generator.xsl");
-            String secureCodingResult = generator.generate("124-java-secure-coding.xml", "cursor-rule-generator.xsl");
-            String concurrencyResult = generator.generate("125-java-concurrency.xml", "cursor-rule-generator.xsl");
-            String loggingResult = generator.generate("126-java-logging.xml", "cursor-rule-generator.xsl");
-            String unitTestingResult = generator.generate("131-java-unit-testing.xml", "cursor-rule-generator.xsl");
-            String refactoringWithModernFeaturesResult = generator.generate("141-java-refactoring-with-modern-features.xml", "cursor-rule-generator.xsl");
-            String functionalProgrammingResult = generator.generate("142-java-functional-programming.xml", "cursor-rule-generator.xsl");
-            String dataOrientedProgrammingResult = generator.generate("143-java-data-oriented-programming.xml", "cursor-rule-generator.xsl");
-
-            // Then - All should have consistent frontmatter and structure
-            assertThat(bestPracticesResult)
-                .startsWith("---\ndescription: Maven Best Practices")
-                .contains("## System prompt characterization")
-                .contains("Role definition: You are a Senior software engineer");
-
-            assertThat(documentationResult)
-                .startsWith("---\ndescription: Create README-DEV.md")
-                .contains("## System prompt characterization")
-                .contains("Role definition: You are a Senior software engineer");
-
-            assertThat(checklistGuideResult)
-                .startsWith("---\ndescription:")
-                .contains("## System prompt characterization")
-                .contains("Role definition: You are a Senior software engineer");
-
-            // Save all for comparison
-            //saveGeneratedContentToTarget(bestPracticesResult, "unified-best-practices.mdc");
-            //saveGeneratedContentToTarget(documentationResult, "unified-documentation.mdc");
-            //saveGeneratedContentToTarget(checklistGuideResult, "unified-checklist-guide.mdc");
-            //saveGeneratedContentToTarget(objectOrientedDesignResult, "unified-object-oriented-design.mdc");
-            //saveGeneratedContentToTarget(typeDesignResult, "unified-type-design.mdc");
-            //saveGeneratedContentToTarget(generalGuidelinesResult, "unified-general-guidelines.mdc");
-            //saveGeneratedContentToTarget(secureCodingResult, "unified-secure-coding.mdc");
-            //saveGeneratedContentToTarget(concurrencyResult, "unified-concurrency.mdc");
-            //saveGeneratedContentToTarget(loggingResult, "unified-logging.mdc");
-            //saveGeneratedContentToTarget(unitTestingResult, "unified-unit-testing.mdc");
-            //saveGeneratedContentToTarget(refactoringWithModernFeaturesResult, "unified-refactoring-with-modern-features.mdc");
-            //saveGeneratedContentToTarget(dataOrientedProgrammingResult, "unified-data-oriented-programming.mdc");
-            saveGeneratedContentToTarget(functionalProgrammingResult, "unified-functional-programming.mdc");
-        }
-
-        @Test
         @DisplayName("Should generate exact content matching original expected Java Object-Oriented Design document using unified XSLT")
         void should_generateExactContentMatchingOriginalExpected_when_transformingJavaObjectOrientedDesignWithUnifiedXslt() throws IOException {
             // Given
@@ -375,19 +322,56 @@ class CursorRuleGeneratorTest {
                 })
                 .orElseThrow(() -> new IOException("Resource not found: " + filename));
         }
+    }
 
-        /**
-         * Pure function to save generated content to target directory.
-         * Follows functional programming principles with clear input/output relationship.
-         */
-        private void saveGeneratedContentToTarget(String content, String filename) throws IOException {
-            Path targetDir = Paths.get("target");
-            if (!Files.exists(targetDir)) {
-                Files.createDirectories(targetDir);
-            }
-            Path outputPath = targetDir.resolve(filename);
-            Files.writeString(outputPath, content);
-            logger.info("Generated content saved to: {}", outputPath.toAbsolutePath());
+    @Test
+    @DisplayName("Should produce consistent content structure regardless of XML content type")
+    void should_produceConsistentStructure_when_processingDifferentXmlTypes() throws IOException {
+        // Given
+        CursorRuleGenerator generator = new CursorRuleGenerator();
+
+        // When
+        String checklistGuideResult = generator.generate("100-java-checklist-guide.xml", "cursor-rule-generator.xsl");
+        String bestPracticesResult = generator.generate("110-java-maven-best-practices.xml", "cursor-rule-generator.xsl");
+        String documentationResult = generator.generate("112-java-maven-documentation.xml", "cursor-rule-generator.xsl");
+        String objectOrientedDesignResult = generator.generate("121-java-object-oriented-design.xml", "cursor-rule-generator.xsl");
+        String typeDesignResult = generator.generate("122-java-type-design.xml", "cursor-rule-generator.xsl");
+        String generalGuidelinesResult = generator.generate("123-java-general-guidelines.xml", "cursor-rule-generator.xsl");
+        String secureCodingResult = generator.generate("124-java-secure-coding.xml", "cursor-rule-generator.xsl");
+        String concurrencyResult = generator.generate("125-java-concurrency.xml", "cursor-rule-generator.xsl");
+        String loggingResult = generator.generate("126-java-logging.xml", "cursor-rule-generator.xsl");
+        String unitTestingResult = generator.generate("131-java-unit-testing.xml", "cursor-rule-generator.xsl");
+        String refactoringWithModernFeaturesResult = generator.generate("141-java-refactoring-with-modern-features.xml", "cursor-rule-generator.xsl");
+        String functionalProgrammingResult = generator.generate("142-java-functional-programming.xml", "cursor-rule-generator.xsl");
+        String dataOrientedProgrammingResult = generator.generate("143-java-data-oriented-programming.xml", "cursor-rule-generator.xsl");
+
+        // Save all for comparison
+        saveGeneratedContentToTarget(checklistGuideResult, "100-java-checklist-guide.mdc");
+        //saveGeneratedContentToTarget(bestPracticesResult, "unified-best-practices.mdc");
+        //saveGeneratedContentToTarget(documentationResult, "unified-documentation.mdc");
+        //saveGeneratedContentToTarget(objectOrientedDesignResult, "unified-object-oriented-design.mdc");
+        //saveGeneratedContentToTarget(typeDesignResult, "unified-type-design.mdc");
+        //saveGeneratedContentToTarget(generalGuidelinesResult, "unified-general-guidelines.mdc");
+        //saveGeneratedContentToTarget(secureCodingResult, "unified-secure-coding.mdc");
+        //saveGeneratedContentToTarget(concurrencyResult, "unified-concurrency.mdc");
+        //saveGeneratedContentToTarget(loggingResult, "unified-logging.mdc");
+        //saveGeneratedContentToTarget(unitTestingResult, "unified-unit-testing.mdc");
+        //saveGeneratedContentToTarget(refactoringWithModernFeaturesResult, "unified-refactoring-with-modern-features.mdc");
+        //saveGeneratedContentToTarget(dataOrientedProgrammingResult, "unified-data-oriented-programming.mdc");
+        //saveGeneratedContentToTarget(functionalProgrammingResult, "unified-functional-programming.mdc");
+    }
+
+    /**
+     * Pure function to save generated content to target directory.
+     * Follows functional programming principles with clear input/output relationship.
+     */
+    private void saveGeneratedContentToTarget(String content, String filename) throws IOException {
+        Path targetDir = Paths.get("target");
+        if (!Files.exists(targetDir)) {
+            Files.createDirectories(targetDir);
         }
+        Path outputPath = targetDir.resolve(filename);
+        Files.writeString(outputPath, content);
+        logger.info("Generated content saved to: {}", outputPath.toAbsolutePath());
     }
 }
