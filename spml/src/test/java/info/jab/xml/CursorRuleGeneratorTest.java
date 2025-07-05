@@ -188,7 +188,7 @@ class CursorRuleGeneratorTest {
             //saveGeneratedContentToTarget(loggingResult, "unified-logging.mdc");
             //saveGeneratedContentToTarget(unitTestingResult, "unified-unit-testing.mdc");
             //saveGeneratedContentToTarget(refactoringWithModernFeaturesResult, "unified-refactoring-with-modern-features.mdc");
-            saveGeneratedContentToTarget(dataOrientedProgrammingResult, "unified-data-oriented-programming.mdc");
+            //saveGeneratedContentToTarget(dataOrientedProgrammingResult, "unified-data-oriented-programming.mdc");
             //saveGeneratedContentToTarget(functionalProgrammingResult, "unified-functional-programming.mdc");
         }
 
