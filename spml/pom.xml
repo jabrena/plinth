@@ -230,6 +230,7 @@
                   <directory>${project.basedir}/src/test/resources</directory>
                   <includes>
                     <include>100-java-checklist-guide.mdc</include>
+                    <include>110-java-maven-best-practices.mdc</include>
                   </includes>
                 </resource>
               </resources>

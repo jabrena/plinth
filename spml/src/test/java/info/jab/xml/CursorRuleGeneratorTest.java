@@ -347,7 +347,7 @@ class CursorRuleGeneratorTest {
 
         // Save all for comparison
         saveGeneratedContentToTarget(checklistGuideResult, "100-java-checklist-guide.mdc");
-        //saveGeneratedContentToTarget(bestPracticesResult, "unified-best-practices.mdc");
+        saveGeneratedContentToTarget(bestPracticesResult, "110-java-maven-best-practices.mdc");
         //saveGeneratedContentToTarget(documentationResult, "unified-documentation.mdc");
         //saveGeneratedContentToTarget(objectOrientedDesignResult, "unified-object-oriented-design.mdc");
         //saveGeneratedContentToTarget(typeDesignResult, "unified-type-design.mdc");

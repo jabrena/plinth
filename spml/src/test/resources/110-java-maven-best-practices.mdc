@@ -127,7 +127,7 @@ Description: Follow Maven's convention for directory structure (`src/main/java`,
 
 **Good example:**
 
-```
+```text
 my-app/
 ├── pom.xml
 └── src/
@@ -141,11 +141,12 @@ my-app/
         │   └── com/example/myapp/AppTest.java
         └── resources/
             └── test-data.xml
+
 ```
 
 **Bad example:**
 
-```
+```text
 my-app/
 ├── pom.xml
 ├── sources/  <!-- Non-standard -->
@@ -155,6 +156,7 @@ my-app/
 └── tests/    <!-- Non-standard -->
     └── com/example/myapp/AppTest.java
 <!-- This would require explicit configuration in pom.xml to specify source/resource directories -->
+
 ```
 
 ## Rule 3: Plugin Management and Configuration

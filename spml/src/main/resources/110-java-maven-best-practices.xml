@@ -23,7 +23,9 @@
     </system-characterization>
 
     <description>
-        Effective Maven usage involves robust dependency management via `&lt;dependencyManagement&gt;` and BOMs, adherence to the standard directory layout, and centralized plugin management. Build profiles should be used for environment-specific configurations. POMs must be kept readable and maintainable with logical structure and properties for versions. Custom repositories should be declared explicitly and their use minimized, preferably managed via a central repository manager.
+        <![CDATA[
+        Effective Maven usage involves robust dependency management via `<dependencyManagement>` and BOMs, adherence to the standard directory layout, and centralized plugin management. Build profiles should be used for environment-specific configurations. POMs must be kept readable and maintainable with logical structure and properties for versions. Custom repositories should be declared explicitly and their use minimized, preferably managed via a central repository manager.
+        ]]>
     </description>
 
     <toc auto-generate="true"/>
@@ -35,7 +37,9 @@
                 <rule-subtitle>Manage Dependencies Effectively using `dependencyManagement` and BOMs</rule-subtitle>
             </rule-header>
             <rule-description>
-                Use the `&lt;dependencyManagement&gt;` section in parent POMs or import Bill of Materials (BOMs) to centralize and control dependency versions. This helps avoid version conflicts and ensures consistency across multi-module projects. Avoid hardcoding versions directly in `&lt;dependencies&gt;` when managed elsewhere.
+                <![CDATA[
+                Use the `<dependencyManagement>` section in parent POMs or import Bill of Materials (BOMs) to centralize and control dependency versions. This helps avoid version conflicts and ensures consistency across multi-module projects. Avoid hardcoding versions directly in `<dependencies>` when managed elsewhere.
+                ]]>
             </rule-description>
             <code-examples>
                 <good-example>
@@ -133,11 +137,12 @@
                 <rule-subtitle>Adhere to the Standard Directory Layout</rule-subtitle>
             </rule-header>
             <rule-description>
-                Follow Maven's convention for directory structure (`src/main/java`, `src/main/resources`, `src/test/java`, `src/test/resources`, etc.). This makes projects easier to understand and build, as Maven relies on these defaults.
+                <![CDATA[Follow Maven's convention for directory structure (`src/main/java`, `src/main/resources`, `src/test/java`, `src/test/resources`, etc.). This makes projects easier to understand and build, as Maven relies on these defaults.]]>
             </rule-description>
             <code-examples>
                 <good-example>
-                    <code-block>my-app/
+                    <code-block language="text"><![CDATA[
+my-app/
 ├── pom.xml
 └── src/
     ├── main/
@@ -149,18 +154,21 @@
         ├── java/
         │   └── com/example/myapp/AppTest.java
         └── resources/
-            └── test-data.xml</code-block>
+            └── test-data.xml
+                   ]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block>my-app/
+                    <code-block language="text"><![CDATA[
+my-app/
 ├── pom.xml
-├── sources/  &lt;!-- Non-standard --&gt;
+├── sources/  <!-- Non-standard -->
 │   └── com/example/myapp/App.java
-├── res/      &lt;!-- Non-standard --&gt;
+├── res/      <!-- Non-standard -->
 │   └── config.properties
-└── tests/    &lt;!-- Non-standard --&gt;
+└── tests/    <!-- Non-standard -->
     └── com/example/myapp/AppTest.java
-&lt;!-- This would require explicit configuration in pom.xml to specify source/resource directories --&gt;</code-block>
+<!-- This would require explicit configuration in pom.xml to specify source/resource directories -->
+                    ]]></code-block>
                 </bad-example>
             </code-examples>
         </rule-section>
@@ -171,7 +179,7 @@
                 <rule-subtitle>Manage Plugin Versions and Configurations Centrally</rule-subtitle>
             </rule-header>
             <rule-description>
-                Use `&lt;pluginManagement&gt;` in a parent POM to define plugin versions and common configurations. Child POMs can then use the plugins without specifying versions, ensuring consistency. Override configurations in child POMs only when necessary.
+                <![CDATA[Use `<pluginManagement>` in a parent POM to define plugin versions and common configurations. Child POMs can then use the plugins without specifying versions, ensuring consistency. Override configurations in child POMs only when necessary.]]>
             </rule-description>
             <code-examples>
                 <good-example>
@@ -237,7 +245,7 @@
                 <rule-subtitle>Employ Build Profiles for Environment-Specific Settings</rule-subtitle>
             </rule-header>
             <rule-description>
-                Use Maven profiles to customize build settings for different environments (e.g., dev, test, prod) or other conditional scenarios. This can include different dependencies, plugin configurations, or properties. Activate profiles via command line, OS, JDK, or file presence.
+                <![CDATA[Use Maven profiles to customize build settings for different environments (e.g., dev, test, prod) or other conditional scenarios. This can include different dependencies, plugin configurations, or properties. Activate profiles via command line, OS, JDK, or file presence.]]>
             </rule-description>
             <code-examples>
                 <good-example>
@@ -306,7 +314,7 @@
                 <rule-subtitle>Structure POMs Logically for Readability</rule-subtitle>
             </rule-header>
             <rule-description>
-                Organize your `pom.xml` sections in a consistent order (e.g., project coordinates, parent, properties, dependencyManagement, dependencies, build, profiles, repositories). Use properties for recurring versions or values. Add comments for complex configurations.
+                <![CDATA[Organize your `pom.xml` sections in a consistent order (e.g., project coordinates, parent, properties, dependencyManagement, dependencies, build, profiles, repositories). Use properties for recurring versions or values. Add comments for complex configurations.]]>
             </rule-description>
             <code-examples>
                 <good-example>
@@ -393,7 +401,7 @@
                 <rule-subtitle>Declare Custom Repositories Explicitly and Minimize Their Use</rule-subtitle>
             </rule-header>
             <rule-description>
-                Prefer dependencies from Maven Central. If custom repositories are necessary, declare them in the `&lt;repositories&gt;` section and `&lt;pluginRepositories&gt;` for plugins. It's often better to manage these in a company-wide Nexus/Artifactory instance configured in `settings.xml` rather than per-project POMs. Avoid relying on transitive repositories.
+                <![CDATA[Prefer dependencies from Maven Central. If custom repositories are necessary, declare them in the `<repositories>` section and `<pluginRepositories>` for plugins. It's often better to manage these in a company-wide Nexus/Artifactory instance configured in `settings.xml` rather than per-project POMs. Avoid relying on transitive repositories.]]>
             </rule-description>
             <code-examples>
                 <good-example>
@@ -441,7 +449,7 @@
                 <rule-subtitle>Use Properties to Manage Dependency and Plugin Versions</rule-subtitle>
             </rule-header>
             <rule-description>
-                Define all dependency and plugin versions in the `&lt;properties&gt;` section rather than hardcoding them throughout the POM. This centralizes version management, makes updates easier, reduces duplication, and helps maintain consistency across related dependencies. Use consistent property naming conventions: `maven-plugin-[name].version` for Maven plugins, simple names like `[library].version` for dependencies, and descriptive names for quality thresholds like `coverage.level`.
+                <![CDATA[Define all dependency and plugin versions in the `<properties>` section rather than hardcoding them throughout the POM. This centralizes version management, makes updates easier, reduces duplication, and helps maintain consistency across related dependencies. Use consistent property naming conventions: `maven-plugin-[name].version` for Maven plugins, simple names like `[library].version` for dependencies, and descriptive names for quality thresholds like `coverage.level`.]]>
             </rule-description>
             <code-examples>
                 <good-example>
