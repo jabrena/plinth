@@ -233,6 +233,7 @@
                     <include>110-java-maven-best-practices.mdc</include>
                     <include>112-java-maven-documentation.mdc</include>
                     <include>121-java-object-oriented-design.mdc</include>
+                    <include>122-java-type-design.mdc</include>
                   </includes>
                 </resource>
               </resources>

@@ -132,7 +132,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("122-java-type-design.mdc");
 
             // When
-            String actualResult = generator.generate("122-java-type-design.xml", "cursor-rule-generator.xsl");
+            String actualResult = generator.generate("122-java-type-design.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -305,7 +305,7 @@ class CursorRuleGeneratorTest {
         String bestPracticesResult = generator.generate("110-java-maven-best-practices.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String documentationResult = generator.generate("112-java-maven-documentation.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String objectOrientedDesignResult = generator.generate("121-java-object-oriented-design.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
-        String typeDesignResult = generator.generate("122-java-type-design.xml", "cursor-rule-generator.xsl");
+        String typeDesignResult = generator.generate("122-java-type-design.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String generalGuidelinesResult = generator.generate("123-java-general-guidelines.xml", "cursor-rule-generator.xsl");
         String secureCodingResult = generator.generate("124-java-secure-coding.xml", "cursor-rule-generator.xsl");
         String concurrencyResult = generator.generate("125-java-concurrency.xml", "cursor-rule-generator.xsl");

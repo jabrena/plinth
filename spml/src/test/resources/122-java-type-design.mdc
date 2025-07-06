@@ -5,23 +5,42 @@ alwaysApply: false
 ---
 # Type Design Thinking in Java
 
-## System prompt characterization
+## Role
 
-Role definition: You are a Senior software engineer with extensive experience in Java software development
+You are a Senior software engineer with extensive experience in Java software development
 
-## Description
+## Instructions for AI
 
-Type design thinking in Java applies typography principles to code structure and organization. Just as typography creates readable, accessible text, thoughtful type design in Java produces maintainable, comprehensible code. This document focuses on establishing clear type hierarchies, using consistent naming conventions, leveraging generics effectively, and creating type-safe wrappers that communicate intent clearly.
+Type design thinking in Java applies typography principles to code structure and organization. Just as typography creates readable, accessible text, thoughtful type design in Java produces maintainable, comprehensible code.
 
-## Table of contents
+### Implementing These Principles
 
-- Rule 1: Establish a Clear Type Hierarchy
-- Rule 2: Use Consistent Naming Conventions
-- Rule 3: Create Type-Safe Wrappers
-- Rule 4: Leverage Generic Type Parameters
-- Rule 5: Use BigDecimal for Precision-Sensitive Calculations
+1.  **Start with domain modeling**: Sketch your type system before coding.
+2.  **Create a type style guide**: Document naming conventions and patterns.
+3.  **Review for type consistency**: Periodically check for style adherence.
+4.  **Refactor toward clearer type expressions**: Improve existing code.
+5.  **Use tools to enforce style**: Configure linters and static analyzers.
 
-## Rule 1: Establish a Clear Type Hierarchy
+Remember, good type design in Java is about communication - making your code's intent clear both to the compiler and to other developers.
+
+## Examples
+
+### Table of contents
+
+- Example 1: Establish a Clear Type Hierarchy
+- Example 2: Use Consistent Naming Conventions
+- Example 3: Embrace Whitespace (Kerning and Leading)
+- Example 4: Create Type-Safe Wrappers
+- Example 5: Leverage Generic Type Parameters
+- Example 6: Create Domain-Specific Languages (Typography with Character)
+- Example 7: Use Consistent Type "Weights" (Bold, Regular, Light)
+- Example 8: Apply Type Contrast Through Interfaces
+- Example 9: Create Type Alignment Through Method Signatures
+- Example 10: Design for Clear Type Readability and Comprehension
+- Example 11: Use BigDecimal for Precision-Sensitive Calculations
+- Example 12: Strategic Type Selection for Methods and Algorithms
+
+### Example 1: Establish a Clear Type Hierarchy
 
 Title: Organize Classes and Interfaces into Logical Structure
 Description: This rule focuses on organizing classes and interfaces into a logical structure using inheritance and composition. A clear hierarchy makes the relationships between types explicit, improving code navigation and understanding. It often involves using nested static classes for closely related types.
@@ -94,7 +113,7 @@ public class User { // Too generic - could be any type of user
 }
 ```
 
-## Rule 2: Use Consistent Naming Conventions
+### Example 2: Use Consistent Naming Conventions
 
 Title: Apply Uniform Patterns for Naming (Your Type's "Font Family")
 Description: This rule emphasizes using uniform patterns for naming classes, interfaces, methods, and variables. Consistency in naming acts like a consistent font family in typography, making the code easier to read, predict, and maintain across the entire project.
@@ -165,7 +184,48 @@ class ShippingCostCalculatorImpl implements ShipCalc { // Too verbose
 }
 ```
 
-## Rule 3: Create Type-Safe Wrappers
+### Example 3: Embrace Whitespace (Kerning and Leading)
+
+Title: Strategic Use of Spacing for Readability
+Description: This rule advocates for the strategic use of blank lines and spacing within code, analogous to kerning and leading in typography. Proper whitespace improves readability by visually separating logical blocks of code, making it easier to scan and comprehend.
+
+**Good example:**
+
+```java
+// GOOD: Proper spacing for readability
+public Order processOrder(Cart cart, Customer customer) {
+    // Validate inputs
+    validateCart(cart);
+    validateCustomer(customer);
+
+    // Create order
+    Order order = new Order(customer);
+    cart.getItems().forEach(item ->
+        order.addItem(item.getProduct(), item.getQuantity())
+    );
+
+    // Calculate totals
+    order.calculateSubtotal();
+    order.calculateTax();
+
+    return order;
+}
+```
+
+**Bad example:**
+
+```java
+// AVOID: Dense, difficult to parse code
+public Order processOrder(Cart cart,Customer customer){
+    validateCart(cart);validateCustomer(customer);
+    Order order=new Order(customer);
+    cart.getItems().forEach(item->order.addItem(item.getProduct(),item.getQuantity()));
+    order.calculateSubtotal();order.calculateTax();
+    return order;
+}
+```
+
+### Example 4: Create Type-Safe Wrappers
 
 Title: Use Types as Communication Tools
 Description: This rule encourages wrapping primitive types or general-purpose types (like String) in domain-specific types. These wrapper types enhance type safety by enforcing invariants at compile-time and clearly communicate the intended meaning and constraints of data.
@@ -268,7 +328,7 @@ void processPayment(String email, double amount, String currency) {
 // processPayment("invalid-email", -50.0, "XXX"); // Invalid values
 ```
 
-## Rule 4: Leverage Generic Type Parameters
+### Example 5: Leverage Generic Type Parameters
 
 Title: Create Flexible and Reusable Types (Responsive Typography)
 Description: This rule promotes the use of generics to create flexible and reusable types and methods that can operate on objects of various types while maintaining type safety. This is akin to responsive typography that adapts to different screen sizes, as generics adapt to different data types.
@@ -373,7 +433,228 @@ public class ProductRepository {
 }
 ```
 
-## Rule 5: Use BigDecimal for Precision-Sensitive Calculations
+### Example 6: Create Domain-Specific Languages (Typography with Character)
+
+Title: Design Fluent Interfaces for Domain Expression
+Description: This rule suggests designing fluent interfaces or using builder patterns to create mini "languages" specific to a domain. This makes code more expressive and readable, similar to how typography with distinct character adds personality and clarity to text.
+
+**Good example:**
+
+```java
+// GOOD: Fluent interfaces that read like natural language
+Order order = new OrderBuilder()
+    .forCustomer(customer)
+    .withItems(items)
+    .withShippingAddress(address)
+    .withPaymentMethod(paymentMethod)
+    .deliverBy(LocalDate.now().plusDays(3))
+    .build();
+```
+
+**Bad example:**
+
+```java
+// AVOID: Complex constructor calls or setters
+Order order = new Order();
+order.setCustomer(customer);
+order.setItems(items);
+order.setShippingAddress(address);
+order.setPaymentMethod(paymentMethod);
+order.setDeliveryDate(LocalDate.now().plusDays(3));
+```
+
+### Example 7: Use Consistent Type "Weights" (Bold, Regular, Light)
+
+Title: Assign Conceptual Importance to Types
+Description: This rule advises assigning conceptual "weights" (like bold, regular, light in typography) to types based on their importance or role in the domain. Core domain objects might be "bold," supporting types "regular," and utility classes "light," helping to convey the architecture.
+
+**Good example:**
+
+```java
+// GOOD: Types with appropriate "weight" based on importance
+// "Bold" - Core domain objects
+public class Customer { /* ... */ }
+public class Order { /* ... */ }
+public class Product { /* ... */ }
+
+// "Regular" - Supporting types
+public class Address { /* ... */ }
+public class PaymentDetails { /* ... */ }
+
+// "Light" - Helper/utility classes
+public class CustomerFormatter { /* ... */ }
+public class OrderValidator { /* ... */ }
+```
+
+**Bad example:**
+
+```java
+// AVOID: Inconsistent importance signals
+public class CustomerStuff { /* ... */ }
+public class TheOrderClass { /* ... */ }
+public class ProductManager { /* ... */ }
+```
+
+### Example 8: Apply Type Contrast Through Interfaces
+
+Title: Separate Contract from Implementation
+Description: This rule emphasizes defining clear contracts using interfaces and then providing concrete implementations. This creates "contrast" by separating the "what" (interface) from the "how" (implementation), promoting loose coupling and easier testing and maintenance.
+
+**Good example:**
+
+```java
+// GOOD: Clear interface/implementation contrast
+public interface PaymentGateway {
+    PaymentResult processPayment(Payment payment);
+    RefundResult processRefund(Refund refund);
+}
+
+public class StripePaymentGateway implements PaymentGateway {
+    @Override
+    public PaymentResult processPayment(Payment payment) {
+        // Stripe-specific implementation
+    }
+
+    @Override
+    public RefundResult processRefund(Refund refund) {
+        // Stripe-specific implementation
+    }
+}
+
+public class PayPalPaymentGateway implements PaymentGateway {
+    @Override
+    public PaymentResult processPayment(Payment payment) {
+        // PayPal-specific implementation
+    }
+
+    @Override
+    public RefundResult processRefund(Refund refund) {
+        // PayPal-specific implementation
+    }
+}
+```
+
+**Bad example:**
+
+```java
+// AVOID: Direct dependencies on implementations
+public class StripePaymentProcessor {
+    public StripePaymentResult processStripePayment(StripePayment payment) {
+        // Stripe-specific implementation
+    }
+
+    public StripeRefundResult processStripeRefund(StripeRefund refund) {
+        // Stripe-specific implementation
+    }
+}
+```
+
+### Example 9: Create Type Alignment Through Method Signatures
+
+Title: Consistent Signatures for Predictable APIs
+Description: This rule advocates for consistency in method signatures (names, parameter types, return types) across related classes or interfaces. Aligned signatures, like aligned text in typography, create a sense of order and predictability, making APIs easier to learn and use.
+
+**Good example:**
+
+```java
+// GOOD: Aligned method signatures across related classes
+public interface NotificationChannel {
+    void send(Notification notification, Recipient recipient);
+    boolean canDeliver(NotificationType type);
+    DeliveryStatus checkStatus(String notificationId);
+}
+
+public class EmailNotificationChannel implements NotificationChannel {
+    @Override
+    public void send(Notification notification, Recipient recipient) { /* ... */ }
+
+    @Override
+    public boolean canDeliver(NotificationType type) { /* ... */ }
+
+    @Override
+    public DeliveryStatus checkStatus(String notificationId) { /* ... */ }
+}
+
+public class SmsNotificationChannel implements NotificationChannel {
+    @Override
+    public void send(Notification notification, Recipient recipient) { /* ... */ }
+
+    @Override
+    public boolean canDeliver(NotificationType type) { /* ... */ }
+
+    @Override
+    public DeliveryStatus checkStatus(String notificationId) { /* ... */ }
+}
+```
+
+**Bad example:**
+
+```java
+// AVOID: Misaligned method signatures
+public class EmailSender {
+    public void sendEmail(Email email, String recipientAddress) { /* ... */ }
+    public boolean supportsEmailType(EmailType type) { /* ... */ }
+    public String getEmailDeliveryStatus(UUID emailId) { /* ... */ }
+}
+
+public class SmsSender {
+    public void send(SmsMessage message, PhoneNumber recipient) { /* ... */ }
+    public boolean canSendTo(PhoneNumber number) { /* ... */ }
+    public void checkIfDelivered(String messageId) { /* ... */ }
+}
+```
+
+### Example 10: Design for Clear Type Readability and Comprehension
+
+Title: Self-Documenting Code with Clear Intent
+Description: This overarching rule encourages writing self-documenting code with clear, descriptive names for types, methods, and variables. The goal is to make the code's intent immediately obvious, minimizing the need for extensive comments or external documentation.
+
+**Good example:**
+
+```java
+// GOOD: Self-documenting code with clear intent
+public class OrderService {
+    public Order createOrder(Customer customer, List<CartItem> items) {
+        if (items.isEmpty()) {
+            throw new EmptyCartException("Cannot create order with empty cart");
+        }
+
+        if (!customer.hasValidPaymentMethod()) {
+            throw new InvalidPaymentException("Customer has no valid payment method");
+        }
+
+        Order order = new Order(customer);
+        items.forEach(order::addItem);
+
+        orderRepository.save(order);
+        eventPublisher.publish(new OrderCreatedEvent(order));
+
+        return order;
+    }
+}
+```
+
+**Bad example:**
+
+```java
+// AVOID: Cryptic code that's hard to follow
+public class OS {
+    public O proc(C c, List<I> i) {
+        if (i.size() < 1) throw new Ex1("e1");
+        if (!c.hvm()) throw new Ex2("e2");
+
+        O o = new O(c);
+        for (I item : i) o.ai(item);
+
+        r.s(o);
+        p.p(new E(o));
+
+        return o;
+    }
+}
+```
+
+### Example 11: Use BigDecimal for Precision-Sensitive Calculations
 
 Title: Ensure Accuracy in Financial and Mathematical Operations
 Description: This rule emphasizes using `java.math.BigDecimal` for calculations requiring high precision, especially with monetary values or any domain where rounding errors from binary floating-point arithmetic (like `float` or `double`) are unacceptable. Use consistent rounding modes and scale for predictable results.
@@ -480,3 +761,101 @@ public class InaccurateFinancialCalculator {
     }
 }
 ```
+
+### Example 12: Strategic Type Selection for Methods and Algorithms
+
+Title: Choose Appropriate Types for Maximum Clarity and Safety
+Description: This rule emphasizes choosing the most appropriate Java types for method parameters, return values, and internal algorithm variables. Considerations include specificity (preferring the most precise type that still allows necessary flexibility), using interfaces over concrete classes for parameters and return types where appropriate, selecting suitable collection types (`List`, `Set`, `Map`, etc.) based on requirements (e.g., ordering, uniqueness, access patterns, performance characteristics), and leveraging types like `Optional` for results that may be absent. It also covers the deliberate choice between primitive types and their wrapper counterparts, especially concerning nullability and collection usage.
+
+**Good example:**
+
+```java
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.stream.Collectors;
+
+// Define specific domain types (can be records or classes)
+record ProductId(String id) {}
+record Product(ProductId productId, String name, java.math.BigDecimal price) {}
+record CustomerId(String id) {}
+
+interface ProductRepository {
+    Optional<Product> findById(ProductId productId);
+    Set<Product> findByCategory(String category); // Using Set if products in a category are unique and order doesn't matter
+}
+
+class ProductService {
+    private final ProductRepository productRepository;
+
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+
+    // Using specific types for parameters and Optional for return type
+    public Optional<Product> getProductDetails(ProductId productId) {
+        if (productId == null || productId.id().trim().isEmpty()) {
+            // Consider throwing IllegalArgumentException or returning Optional.empty() based on contract
+            return Optional.empty();
+        }
+        return productRepository.findById(productId);
+    }
+
+    // Using Interface for parameter type (Collection) and specific List for return (if order is important)
+    public List<Product> getProductsWithMinimumPrice(Set<ProductId> productIds, java.math.BigDecimal minPrice) {
+        return productIds.stream()
+            .map(productRepository::findById)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .filter(product -> product.price().compareTo(minPrice) >= 0)
+            .collect(Collectors.toList()); // Collecting to List, implies order might matter or is at least acceptable
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import java.util.ArrayList;
+import java.util.HashMap;
+
+// Using generic Object or overly broad types
+class BadProductService {
+    private HashMap<String, Object> productCache; // Using HashMap directly, and Object for product
+
+    public BadProductService() {
+        this.productCache = new HashMap<>();
+    }
+
+    // Returning Object, forcing caller to cast and check type. Parameter is just String, not a specific ID type.
+    public Object getProduct(String productId) {
+        // Potentially returns null if not found, forcing null checks on caller side
+        return productCache.get(productId);
+    }
+
+    // Using ArrayList (concrete type) as parameter, List of Object for products.
+    // What if the algorithm internally needs set-like properties?
+    public ArrayList<Object> findAvailableProducts(ArrayList<Object> allProducts, double minimumPrice) {
+        ArrayList<Object> available = new ArrayList<>();
+        for (Object p : allProducts) {
+            // Requires instanceof checks and casting, error-prone
+            if (p instanceof HashMap) { // Assuming product is a HashMap - very bad practice
+                HashMap<String, Object> productMap = (HashMap<String, Object>) p;
+                if (productMap.containsKey("price") && (Double)productMap.get("price") >= minimumPrice) {
+                    available.add(p);
+                }
+            }
+        }
+        return available; // Returning concrete ArrayList, less flexible
+    }
+}
+```
+## Output Requirements
+
+- Apply type design principles to improve code quality and maintainability
+- Create type-safe wrappers for domain-specific types
+- Use generics to create flexible and reusable components
+- Establish clear type hierarchies and consistent naming conventions
+- Use BigDecimal for precision-sensitive calculations
+- Verify code changes compile and pass tests

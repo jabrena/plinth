@@ -1,44 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<system-prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:noNamespaceSchemaLocation="spml.xsd"
-               id="122-java-type-design" version="1.0">
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="spml-1.1.xsd"
+    id="122-java-type-design" version="1.0">
+
     <metadata>
-        <description></description>
-        <globs></globs>
-        <always-apply>false</always-apply>
+        <!-- Cursor AI specific configuration -->
+        <cursor-ai>
+            <description></description>
+            <globs></globs>
+            <always-apply>false</always-apply>
+        </cursor-ai>
         <tags>
             <tag>java</tag>
             <tag>type-design</tag>
-            <tag>naming</tag>
-            <tag>generics</tag>
             <tag>best-practices</tag>
+            <tag>generics</tag>
+            <tag>type-safety</tag>
         </tags>
         <version>0.8.0</version>
+        <title>Type Design Thinking in Java</title>
     </metadata>
 
-    <header>
-        <title>Type Design Thinking in Java</title>
-    </header>
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
-    <system-characterization>
-        <role-definition>You are a Senior software engineer with extensive experience in Java software development</role-definition>
-    </system-characterization>
+    <goal>
+        Type design thinking in Java applies typography principles to code structure and organization. Just as typography creates readable, accessible text, thoughtful type design in Java produces maintainable, comprehensible code.
 
-    <description>
-        Type design thinking in Java applies typography principles to code structure and organization. Just as typography creates readable, accessible text, thoughtful type design in Java produces maintainable, comprehensible code. This document focuses on establishing clear type hierarchies, using consistent naming conventions, leveraging generics effectively, and creating type-safe wrappers that communicate intent clearly.
-    </description>
+        ### Implementing These Principles
 
-    <toc auto-generate="true"/>
+        1.  **Start with domain modeling**: Sketch your type system before coding.
+        2.  **Create a type style guide**: Document naming conventions and patterns.
+        3.  **Review for type consistency**: Periodically check for style adherence.
+        4.  **Refactor toward clearer type expressions**: Improve existing code.
+        5.  **Use tools to enforce style**: Configure linters and static analyzers.
 
-    <content-sections>
-        <rule-section number="1" id="establish-clear-type-hierarchy">
-            <rule-header>
-                <rule-title>Establish a Clear Type Hierarchy</rule-title>
-                <rule-subtitle>Organize Classes and Interfaces into Logical Structure</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        Remember, good type design in Java is about communication - making your code's intent clear both to the compiler and to other developers.
+    </goal>
+
+    <examples>
+        <toc auto-generate="true" />
+
+        <example number="1" id="establish-clear-type-hierarchy">
+            <example-header>
+                <example-title>Establish a Clear Type Hierarchy</example-title>
+                <example-subtitle>Organize Classes and Interfaces into Logical Structure</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
                 This rule focuses on organizing classes and interfaces into a logical structure using inheritance and composition. A clear hierarchy makes the relationships between types explicit, improving code navigation and understanding. It often involves using nested static classes for closely related types.
-            </rule-description>
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Clear type hierarchy with descriptive names
@@ -103,16 +114,18 @@ public class User { // Too generic - could be any type of user
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="2" id="use-consistent-naming-conventions">
-            <rule-header>
-                <rule-title>Use Consistent Naming Conventions</rule-title>
-                <rule-subtitle>Apply Uniform Patterns for Naming (Your Type's "Font Family")</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        <example number="2" id="use-consistent-naming-conventions">
+            <example-header>
+                <example-title>Use Consistent Naming Conventions</example-title>
+                <example-subtitle>Apply Uniform Patterns for Naming (Your Type's "Font Family")</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
                 This rule emphasizes using uniform patterns for naming classes, interfaces, methods, and variables. Consistency in naming acts like a consistent font family in typography, making the code easier to read, predict, and maintain across the entire project.
-            </rule-description>
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Consistent naming patterns
@@ -175,16 +188,62 @@ class ShippingCostCalculatorImpl implements ShipCalc { // Too verbose
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="3" id="create-type-safe-wrappers">
-            <rule-header>
-                <rule-title>Create Type-Safe Wrappers</rule-title>
-                <rule-subtitle>Use Types as Communication Tools</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        <example number="3" id="embrace-whitespace">
+            <example-header>
+                <example-title>Embrace Whitespace (Kerning and Leading)</example-title>
+                <example-subtitle>Strategic Use of Spacing for Readability</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                This rule advocates for the strategic use of blank lines and spacing within code, analogous to kerning and leading in typography. Proper whitespace improves readability by visually separating logical blocks of code, making it easier to scan and comprehend.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Proper spacing for readability
+public Order processOrder(Cart cart, Customer customer) {
+    // Validate inputs
+    validateCart(cart);
+    validateCustomer(customer);
+
+    // Create order
+    Order order = new Order(customer);
+    cart.getItems().forEach(item ->
+        order.addItem(item.getProduct(), item.getQuantity())
+    );
+
+    // Calculate totals
+    order.calculateSubtotal();
+    order.calculateTax();
+
+    return order;
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Dense, difficult to parse code
+public Order processOrder(Cart cart,Customer customer){
+    validateCart(cart);validateCustomer(customer);
+    Order order=new Order(customer);
+    cart.getItems().forEach(item->order.addItem(item.getProduct(),item.getQuantity()));
+    order.calculateSubtotal();order.calculateTax();
+    return order;
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="create-type-safe-wrappers">
+            <example-header>
+                <example-title>Create Type-Safe Wrappers</example-title>
+                <example-subtitle>Use Types as Communication Tools</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
                 This rule encourages wrapping primitive types or general-purpose types (like String) in domain-specific types. These wrapper types enhance type safety by enforcing invariants at compile-time and clearly communicate the intended meaning and constraints of data.
-            </rule-description>
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Type-safe wrappers communicate intent
@@ -279,16 +338,18 @@ void processPayment(String email, double amount, String currency) {
 // processPayment("invalid-email", -50.0, "XXX"); // Invalid values]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="4" id="leverage-generic-type-parameters">
-            <rule-header>
-                <rule-title>Leverage Generic Type Parameters</rule-title>
-                <rule-subtitle>Create Flexible and Reusable Types (Responsive Typography)</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        <example number="5" id="leverage-generic-type-parameters">
+            <example-header>
+                <example-title>Leverage Generic Type Parameters</example-title>
+                <example-subtitle>Create Flexible and Reusable Types (Responsive Typography)</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
                 This rule promotes the use of generics to create flexible and reusable types and methods that can operate on objects of various types while maintaining type safety. This is akin to responsive typography that adapts to different screen sizes, as generics adapt to different data types.
-            </rule-description>
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Generic types adapt to different contexts
@@ -385,16 +446,254 @@ public class ProductRepository {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="5" id="use-bigdecimal-for-precision">
-            <rule-header>
-                <rule-title>Use BigDecimal for Precision-Sensitive Calculations</rule-title>
-                <rule-subtitle>Ensure Accuracy in Financial and Mathematical Operations</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        <example number="6" id="create-domain-specific-languages">
+            <example-header>
+                <example-title>Create Domain-Specific Languages (Typography with Character)</example-title>
+                <example-subtitle>Design Fluent Interfaces for Domain Expression</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                This rule suggests designing fluent interfaces or using builder patterns to create mini "languages" specific to a domain. This makes code more expressive and readable, similar to how typography with distinct character adds personality and clarity to text.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Fluent interfaces that read like natural language
+Order order = new OrderBuilder()
+    .forCustomer(customer)
+    .withItems(items)
+    .withShippingAddress(address)
+    .withPaymentMethod(paymentMethod)
+    .deliverBy(LocalDate.now().plusDays(3))
+    .build();]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Complex constructor calls or setters
+Order order = new Order();
+order.setCustomer(customer);
+order.setItems(items);
+order.setShippingAddress(address);
+order.setPaymentMethod(paymentMethod);
+order.setDeliveryDate(LocalDate.now().plusDays(3));]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="7" id="use-consistent-type-weights">
+            <example-header>
+                <example-title>Use Consistent Type "Weights" (Bold, Regular, Light)</example-title>
+                <example-subtitle>Assign Conceptual Importance to Types</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                This rule advises assigning conceptual "weights" (like bold, regular, light in typography) to types based on their importance or role in the domain. Core domain objects might be "bold," supporting types "regular," and utility classes "light," helping to convey the architecture.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Types with appropriate "weight" based on importance
+// "Bold" - Core domain objects
+public class Customer { /* ... */ }
+public class Order { /* ... */ }
+public class Product { /* ... */ }
+
+// "Regular" - Supporting types
+public class Address { /* ... */ }
+public class PaymentDetails { /* ... */ }
+
+// "Light" - Helper/utility classes
+public class CustomerFormatter { /* ... */ }
+public class OrderValidator { /* ... */ }]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Inconsistent importance signals
+public class CustomerStuff { /* ... */ }
+public class TheOrderClass { /* ... */ }
+public class ProductManager { /* ... */ }]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="8" id="apply-type-contrast-through-interfaces">
+            <example-header>
+                <example-title>Apply Type Contrast Through Interfaces</example-title>
+                <example-subtitle>Separate Contract from Implementation</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                This rule emphasizes defining clear contracts using interfaces and then providing concrete implementations. This creates "contrast" by separating the "what" (interface) from the "how" (implementation), promoting loose coupling and easier testing and maintenance.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Clear interface/implementation contrast
+public interface PaymentGateway {
+    PaymentResult processPayment(Payment payment);
+    RefundResult processRefund(Refund refund);
+}
+
+public class StripePaymentGateway implements PaymentGateway {
+    @Override
+    public PaymentResult processPayment(Payment payment) {
+        // Stripe-specific implementation
+    }
+
+    @Override
+    public RefundResult processRefund(Refund refund) {
+        // Stripe-specific implementation
+    }
+}
+
+public class PayPalPaymentGateway implements PaymentGateway {
+    @Override
+    public PaymentResult processPayment(Payment payment) {
+        // PayPal-specific implementation
+    }
+
+    @Override
+    public RefundResult processRefund(Refund refund) {
+        // PayPal-specific implementation
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Direct dependencies on implementations
+public class StripePaymentProcessor {
+    public StripePaymentResult processStripePayment(StripePayment payment) {
+        // Stripe-specific implementation
+    }
+
+    public StripeRefundResult processStripeRefund(StripeRefund refund) {
+        // Stripe-specific implementation
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="9" id="create-type-alignment-through-method-signatures">
+            <example-header>
+                <example-title>Create Type Alignment Through Method Signatures</example-title>
+                <example-subtitle>Consistent Signatures for Predictable APIs</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                This rule advocates for consistency in method signatures (names, parameter types, return types) across related classes or interfaces. Aligned signatures, like aligned text in typography, create a sense of order and predictability, making APIs easier to learn and use.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Aligned method signatures across related classes
+public interface NotificationChannel {
+    void send(Notification notification, Recipient recipient);
+    boolean canDeliver(NotificationType type);
+    DeliveryStatus checkStatus(String notificationId);
+}
+
+public class EmailNotificationChannel implements NotificationChannel {
+    @Override
+    public void send(Notification notification, Recipient recipient) { /* ... */ }
+
+    @Override
+    public boolean canDeliver(NotificationType type) { /* ... */ }
+
+    @Override
+    public DeliveryStatus checkStatus(String notificationId) { /* ... */ }
+}
+
+public class SmsNotificationChannel implements NotificationChannel {
+    @Override
+    public void send(Notification notification, Recipient recipient) { /* ... */ }
+
+    @Override
+    public boolean canDeliver(NotificationType type) { /* ... */ }
+
+    @Override
+    public DeliveryStatus checkStatus(String notificationId) { /* ... */ }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Misaligned method signatures
+public class EmailSender {
+    public void sendEmail(Email email, String recipientAddress) { /* ... */ }
+    public boolean supportsEmailType(EmailType type) { /* ... */ }
+    public String getEmailDeliveryStatus(UUID emailId) { /* ... */ }
+}
+
+public class SmsSender {
+    public void send(SmsMessage message, PhoneNumber recipient) { /* ... */ }
+    public boolean canSendTo(PhoneNumber number) { /* ... */ }
+    public void checkIfDelivered(String messageId) { /* ... */ }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="10" id="design-for-clear-type-readability">
+            <example-header>
+                <example-title>Design for Clear Type Readability and Comprehension</example-title>
+                <example-subtitle>Self-Documenting Code with Clear Intent</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                This overarching rule encourages writing self-documenting code with clear, descriptive names for types, methods, and variables. The goal is to make the code's intent immediately obvious, minimizing the need for extensive comments or external documentation.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Self-documenting code with clear intent
+public class OrderService {
+    public Order createOrder(Customer customer, List<CartItem> items) {
+        if (items.isEmpty()) {
+            throw new EmptyCartException("Cannot create order with empty cart");
+        }
+
+        if (!customer.hasValidPaymentMethod()) {
+            throw new InvalidPaymentException("Customer has no valid payment method");
+        }
+
+        Order order = new Order(customer);
+        items.forEach(order::addItem);
+
+        orderRepository.save(order);
+        eventPublisher.publish(new OrderCreatedEvent(order));
+
+        return order;
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Cryptic code that's hard to follow
+public class OS {
+    public O proc(C c, List<I> i) {
+        if (i.size() < 1) throw new Ex1("e1");
+        if (!c.hvm()) throw new Ex2("e2");
+
+        O o = new O(c);
+        for (I item : i) o.ai(item);
+
+        r.s(o);
+        p.p(new E(o));
+
+        return o;
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="11" id="use-bigdecimal-for-precision">
+            <example-header>
+                <example-title>Use BigDecimal for Precision-Sensitive Calculations</example-title>
+                <example-subtitle>Ensure Accuracy in Financial and Mathematical Operations</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
                 This rule emphasizes using `java.math.BigDecimal` for calculations requiring high precision, especially with monetary values or any domain where rounding errors from binary floating-point arithmetic (like `float` or `double`) are unacceptable. Use consistent rounding modes and scale for predictable results.
-            </rule-description>
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Using BigDecimal for financial calculations
@@ -494,6 +793,110 @@ public class InaccurateFinancialCalculator {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
-    </content-sections>
-</system-prompt>
+        </example>
+
+        <example number="12" id="strategic-type-selection">
+            <example-header>
+                <example-title>Strategic Type Selection for Methods and Algorithms</example-title>
+                <example-subtitle>Choose Appropriate Types for Maximum Clarity and Safety</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                This rule emphasizes choosing the most appropriate Java types for method parameters, return values, and internal algorithm variables. Considerations include specificity (preferring the most precise type that still allows necessary flexibility), using interfaces over concrete classes for parameters and return types where appropriate, selecting suitable collection types (`List`, `Set`, `Map`, etc.) based on requirements (e.g., ordering, uniqueness, access patterns, performance characteristics), and leveraging types like `Optional` for results that may be absent. It also covers the deliberate choice between primitive types and their wrapper counterparts, especially concerning nullability and collection usage.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.stream.Collectors;
+
+// Define specific domain types (can be records or classes)
+record ProductId(String id) {}
+record Product(ProductId productId, String name, java.math.BigDecimal price) {}
+record CustomerId(String id) {}
+
+interface ProductRepository {
+    Optional<Product> findById(ProductId productId);
+    Set<Product> findByCategory(String category); // Using Set if products in a category are unique and order doesn't matter
+}
+
+class ProductService {
+    private final ProductRepository productRepository;
+
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+
+    // Using specific types for parameters and Optional for return type
+    public Optional<Product> getProductDetails(ProductId productId) {
+        if (productId == null || productId.id().trim().isEmpty()) {
+            // Consider throwing IllegalArgumentException or returning Optional.empty() based on contract
+            return Optional.empty();
+        }
+        return productRepository.findById(productId);
+    }
+
+    // Using Interface for parameter type (Collection) and specific List for return (if order is important)
+    public List<Product> getProductsWithMinimumPrice(Set<ProductId> productIds, java.math.BigDecimal minPrice) {
+        return productIds.stream()
+            .map(productRepository::findById)
+            .filter(Optional::isPresent)
+            .map(Optional::get)
+            .filter(product -> product.price().compareTo(minPrice) >= 0)
+            .collect(Collectors.toList()); // Collecting to List, implies order might matter or is at least acceptable
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.ArrayList;
+import java.util.HashMap;
+
+// Using generic Object or overly broad types
+class BadProductService {
+    private HashMap<String, Object> productCache; // Using HashMap directly, and Object for product
+
+    public BadProductService() {
+        this.productCache = new HashMap<>();
+    }
+
+    // Returning Object, forcing caller to cast and check type. Parameter is just String, not a specific ID type.
+    public Object getProduct(String productId) {
+        // Potentially returns null if not found, forcing null checks on caller side
+        return productCache.get(productId);
+    }
+
+    // Using ArrayList (concrete type) as parameter, List of Object for products.
+    // What if the algorithm internally needs set-like properties?
+    public ArrayList<Object> findAvailableProducts(ArrayList<Object> allProducts, double minimumPrice) {
+        ArrayList<Object> available = new ArrayList<>();
+        for (Object p : allProducts) {
+            // Requires instanceof checks and casting, error-prone
+            if (p instanceof HashMap) { // Assuming product is a HashMap - very bad practice
+                HashMap<String, Object> productMap = (HashMap<String, Object>) p;
+                if (productMap.containsKey("price") && (Double)productMap.get("price") >= minimumPrice) {
+                    available.add(p);
+                }
+            }
+        }
+        return available; // Returning concrete ArrayList, less flexible
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+
+    <output-requirements-section>
+        <output-requirements-list>
+            <output-requirements-item>Apply type design principles to improve code quality and maintainability</output-requirements-item>
+            <output-requirements-item>Create type-safe wrappers for domain-specific types</output-requirements-item>
+            <output-requirements-item>Use generics to create flexible and reusable components</output-requirements-item>
+            <output-requirements-item>Establish clear type hierarchies and consistent naming conventions</output-requirements-item>
+            <output-requirements-item>Use BigDecimal for precision-sensitive calculations</output-requirements-item>
+            <output-requirements-item>Verify code changes compile and pass tests</output-requirements-item>
+        </output-requirements-list>
+    </output-requirements-section>
+</prompt>
