@@ -28,7 +28,6 @@ alwaysApply: </xsl:text><xsl:value-of select="normalize-space(metadata/cursor-ai
 
 </xsl:text><xsl:value-of select="role"/>
         <xsl:text>
-
 </xsl:text>
         <!-- Apply restrictions template if present -->
         <xsl:apply-templates select="restrictions"/>
@@ -36,7 +35,6 @@ alwaysApply: </xsl:text><xsl:value-of select="normalize-space(metadata/cursor-ai
         <!-- Examples section with auto-generated table of contents -->
         <xsl:if test="examples/toc[@auto-generate='true']">
             <xsl:text>
-
 ## Examples
 
 ### Table of contents
@@ -162,7 +160,8 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
 
     <!-- Restrictions template -->
     <xsl:template match="restrictions">
-        <xsl:text>## Restrictions
+        <xsl:text>
+## Restrictions
 
 </xsl:text>
         <xsl:if test="restrictions-description">
