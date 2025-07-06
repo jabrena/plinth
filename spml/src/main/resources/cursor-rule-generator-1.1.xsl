@@ -24,10 +24,14 @@ alwaysApply: </xsl:text><xsl:value-of select="normalize-space(metadata/cursor-ai
         <!-- Process goal (Instructions for AI) before role -->
         <xsl:apply-templates select="goal"/>
         <xsl:text>
-
 ## Role
 
 </xsl:text><xsl:value-of select="role"/>
+        <xsl:text>
+
+</xsl:text>
+        <!-- Apply restrictions template if present -->
+        <xsl:apply-templates select="restrictions"/>
 
         <!-- Examples section with auto-generated table of contents -->
         <xsl:if test="examples/toc[@auto-generate='true']">
@@ -130,7 +134,9 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
 ## Instructions for AI
 
 </xsl:text>
-        <xsl:value-of select="normalize-space(.)"/>
+        <xsl:call-template name="trim-goal-content">
+            <xsl:with-param name="content" select="."/>
+        </xsl:call-template>
     </xsl:template>
 
     <!-- Output requirements section template - handles both complex and simple structures -->
@@ -156,7 +162,7 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
 
     <!-- Restrictions template -->
     <xsl:template match="restrictions">
-        <xsl:text>### Restrictions
+        <xsl:text>## Restrictions
 
 </xsl:text>
         <xsl:if test="restrictions-description">
@@ -228,6 +234,72 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
             <xsl:when test="substring($string, string-length($string)) = ' '">
                 <xsl:call-template name="rtrim">
                     <xsl:with-param name="string" select="substring($string, 1, string-length($string) - 1)"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="$string"/>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <!-- Template to trim goal content while preserving paragraph structure -->
+    <xsl:template name="trim-goal-content">
+        <xsl:param name="content"/>
+        <xsl:variable name="trimmed-start">
+            <xsl:choose>
+                <xsl:when test="starts-with($content, '&#10;')">
+                    <xsl:value-of select="substring($content, 2)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$content"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="trimmed-both">
+            <xsl:choose>
+                <xsl:when test="substring($trimmed-start, string-length($trimmed-start)) = '&#10;'">
+                    <xsl:value-of select="substring($trimmed-start, 1, string-length($trimmed-start) - 1)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$trimmed-start"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:call-template name="remove-goal-indentation">
+            <xsl:with-param name="text" select="$trimmed-both"/>
+        </xsl:call-template>
+    </xsl:template>
+
+    <!-- Remove leading spaces from each line while preserving paragraph structure -->
+    <xsl:template name="remove-goal-indentation">
+        <xsl:param name="text"/>
+        <xsl:choose>
+            <xsl:when test="contains($text, '&#10;')">
+                <xsl:variable name="line" select="substring-before($text, '&#10;')"/>
+                <xsl:variable name="rest" select="substring-after($text, '&#10;')"/>
+                <xsl:call-template name="ltrim">
+                    <xsl:with-param name="string" select="$line"/>
+                </xsl:call-template>
+                <xsl:text>&#10;</xsl:text>
+                <xsl:call-template name="remove-goal-indentation">
+                    <xsl:with-param name="text" select="$rest"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:call-template name="ltrim">
+                    <xsl:with-param name="string" select="$text"/>
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
+    </xsl:template>
+
+    <!-- Left trim (remove leading spaces) -->
+    <xsl:template name="ltrim">
+        <xsl:param name="string"/>
+        <xsl:choose>
+            <xsl:when test="substring($string, 1, 1) = ' '">
+                <xsl:call-template name="ltrim">
+                    <xsl:with-param name="string" select="substring($string, 2)"/>
                 </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
