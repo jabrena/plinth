@@ -320,7 +320,7 @@ class CursorRuleGeneratorTest {
         saveGeneratedContentToTarget(bestPracticesResult, "110-java-maven-best-practices.mdc");
         saveGeneratedContentToTarget(documentationResult, "112-java-maven-documentation.mdc");
         saveGeneratedContentToTarget(objectOrientedDesignResult, "121-java-object-oriented-design.mdc");
-        //saveGeneratedContentToTarget(typeDesignResult, "unified-type-design.mdc");
+        saveGeneratedContentToTarget(typeDesignResult, "122-java-type-design.mdc");
         //saveGeneratedContentToTarget(generalGuidelinesResult, "unified-general-guidelines.mdc");
         //saveGeneratedContentToTarget(secureCodingResult, "unified-secure-coding.mdc");
         //saveGeneratedContentToTarget(concurrencyResult, "unified-concurrency.mdc");

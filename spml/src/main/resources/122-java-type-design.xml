@@ -3,8 +3,8 @@
                xsi:noNamespaceSchemaLocation="spml.xsd"
                id="122-java-type-design" version="1.0">
     <metadata>
-        <description>Type Design Thinking in Java</description>
-        <globs>*.java</globs>
+        <description></description>
+        <globs></globs>
         <always-apply>false</always-apply>
         <tags>
             <tag>java</tag>

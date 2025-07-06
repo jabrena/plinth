@@ -6,8 +6,8 @@
     <metadata>
         <!-- Cursor AI specific configuration -->
         <cursor-ai>
-            <description>Java Object-Oriented Design Guidelines</description>
-            <globs>*.java</globs>
+            <description></description>
+            <globs></globs>
             <always-apply>false</always-apply>
         </cursor-ai>
         <tags>
