@@ -302,7 +302,7 @@ class CursorRuleGeneratorTest {
 
         // When
         String checklistGuideResult = generator.generate("100-java-checklist-guide.xml", "cursor-rule-generator.xsl");
-        String bestPracticesResult = generator.generate("110-java-maven-best-practices.xml", "cursor-rule-generator.xsl", "spml-1.1.xsd");
+        String bestPracticesResult = generator.generate("110-java-maven-best-practices.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String documentationResult = generator.generate("112-java-maven-documentation.xml", "cursor-rule-generator.xsl");
         String objectOrientedDesignResult = generator.generate("121-java-object-oriented-design.xml", "cursor-rule-generator.xsl");
         String typeDesignResult = generator.generate("122-java-type-design.xml", "cursor-rule-generator.xsl");

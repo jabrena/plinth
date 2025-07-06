@@ -5,31 +5,27 @@ alwaysApply: false
 ---
 # Maven Best Practices
 
-## System prompt characterization
-
-Role definition: You are a Senior software engineer with extensive experience in Java software development
-
-## Description
-
-Effective Maven usage involves robust dependency management via `<dependencyManagement>` and BOMs, adherence to the standard directory layout, and centralized plugin management. Build profiles should be used for environment-specific configurations. POMs must be kept readable and maintainable with logical structure and properties for versions. Custom repositories should be declared explicitly and their use minimized, preferably managed via a central repository manager.
-
-## Table of contents
-
-- Rule 1: Effective Dependency Management
-- Rule 2: Standard Directory Layout
-- Rule 3: Plugin Management and Configuration
-- Rule 4: Use Build Profiles for Environment-Specific Configurations
-- Rule 5: Keep POMs Readable and Maintainable
-- Rule 6: Manage Repositories Explicitly
-- Rule 7: Centralize Version Management with Properties
-
-
 ## Instructions for AI
 
 Update the pom.xml based on the following rules about Maven best practices.
 
+## Role
 
-## Rule 1: Effective Dependency Management
+You are a Senior software engineer with extensive experience in Java software development
+
+## Examples
+
+### Table of contents
+
+- Example 1: Effective Dependency Management
+- Example 2: Standard Directory Layout
+- Example 3: Plugin Management and Configuration
+- Example 4: Use Build Profiles for Environment-Specific Configurations
+- Example 5: Keep POMs Readable and Maintainable
+- Example 6: Manage Repositories Explicitly
+- Example 7: Centralize Version Management with Properties
+
+### Example 1: Effective Dependency Management
 
 Title: Manage Dependencies Effectively using `dependencyManagement` and BOMs
 Description: Use the `<dependencyManagement>` section in parent POMs or import Bill of Materials (BOMs) to centralize and control dependency versions. This helps avoid version conflicts and ensures consistency across multi-module projects. Avoid hardcoding versions directly in `<dependencies>` when managed elsewhere.
@@ -128,7 +124,7 @@ Description: Use the `<dependencyManagement>` section in parent POMs or import B
 
 ```
 
-## Rule 2: Standard Directory Layout
+### Example 2: Standard Directory Layout
 
 Title: Adhere to the Standard Directory Layout
 Description: Follow Maven's convention for directory structure (`src/main/java`, `src/main/resources`, `src/test/java`, `src/test/resources`, etc.). This makes projects easier to understand and build, as Maven relies on these defaults.
@@ -167,7 +163,7 @@ my-app/
 
 ```
 
-## Rule 3: Plugin Management and Configuration
+### Example 3: Plugin Management and Configuration
 
 Title: Manage Plugin Versions and Configurations Centrally
 Description: Use `<pluginManagement>` in a parent POM to define plugin versions and common configurations. Child POMs can then use the plugins without specifying versions, ensuring consistency. Override configurations in child POMs only when necessary.
@@ -234,7 +230,7 @@ Description: Use `<pluginManagement>` in a parent POM to define plugin versions 
 
 ```
 
-## Rule 4: Use Build Profiles for Environment-Specific Configurations
+### Example 4: Use Build Profiles for Environment-Specific Configurations
 
 Title: Employ Build Profiles for Environment-Specific Settings
 Description: Use Maven profiles to customize build settings for different environments (e.g., dev, test, prod) or other conditional scenarios. This can include different dependencies, plugin configurations, or properties. Activate profiles via command line, OS, JDK, or file presence.
@@ -301,7 +297,7 @@ Description: Use Maven profiles to customize build settings for different enviro
 
 ```
 
-## Rule 5: Keep POMs Readable and Maintainable
+### Example 5: Keep POMs Readable and Maintainable
 
 Title: Structure POMs Logically for Readability
 Description: Organize your `pom.xml` sections in a consistent order (e.g., project coordinates, parent, properties, dependencyManagement, dependencies, build, profiles, repositories). Use properties for recurring versions or values. Add comments for complex configurations.
@@ -387,7 +383,7 @@ Description: Organize your `pom.xml` sections in a consistent order (e.g., proje
 
 ```
 
-## Rule 6: Manage Repositories Explicitly
+### Example 6: Manage Repositories Explicitly
 
 Title: Declare Custom Repositories Explicitly and Minimize Their Use
 Description: Prefer dependencies from Maven Central. If custom repositories are necessary, declare them in the `<repositories>` section and `<pluginRepositories>` for plugins. It's often better to manage these in a company-wide Nexus/Artifactory instance configured in `settings.xml` rather than per-project POMs. Avoid relying on transitive repositories.
@@ -434,7 +430,7 @@ Description: Prefer dependencies from Maven Central. If custom repositories are 
 
 ```
 
-## Rule 7: Centralize Version Management with Properties
+### Example 7: Centralize Version Management with Properties
 
 Title: Use Properties to Manage Dependency and Plugin Versions
 Description: Define all dependency and plugin versions in the `<properties>` section rather than hardcoding them throughout the POM. This centralizes version management, makes updates easier, reduces duplication, and helps maintain consistency across related dependencies. Use consistent property naming conventions: `maven-plugin-[name].version` for Maven plugins, simple names like `[library].version` for dependencies, and descriptive names for quality thresholds like `coverage.level`.
@@ -588,7 +584,6 @@ Description: Define all dependency and plugin versions in the `<properties>` sec
 </project>
 
 ```
-
 
 ## Output Requirements
 

@@ -3,16 +3,13 @@
            elementFormDefault="qualified">
 
     <!-- Root element for a system prompt -->
-    <xs:element name="system-prompt">
+    <xs:element name="prompt">
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="metadata"/>
-                <xs:element ref="header"/>
-                <xs:element ref="system-characterization"/>
-                <xs:element ref="description"/>
-                <xs:element ref="toc" minOccurs="0"/>
-                <xs:element ref="instruction-section" minOccurs="0"/>
-                <xs:element ref="example-section" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="goal" minOccurs="0"/>
+                <xs:element ref="role"/>
+                <xs:element ref="examples" minOccurs="0"/>
                 <xs:element ref="output-requirements-section" minOccurs="0"/>
             </xs:sequence>
             <xs:attribute name="id" type="xs:string" use="required"/>
@@ -24,18 +21,28 @@
     <xs:element name="metadata">
         <xs:complexType>
             <xs:sequence>
+                <xs:element ref="cursor-ai"/>
+                <xs:element ref="tags" minOccurs="0"/>
+                <xs:element ref="version" minOccurs="0"/>
+                <xs:element ref="title"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Cursor AI specific configuration -->
+    <xs:element name="cursor-ai">
+        <xs:complexType>
+            <xs:sequence>
                 <xs:element ref="description"/>
                 <xs:element ref="globs" minOccurs="0"/>
                 <xs:element ref="always-apply" minOccurs="0"/>
-                <xs:element ref="tags" minOccurs="0"/>
-                <xs:element ref="version" minOccurs="0"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
     <xs:element name="description" type="xs:string"/>
     <xs:element name="globs" type="xs:string"/>
-    <xs:element name="always-apply" type="xs:string"/>
+    <xs:element name="always-apply" type="xs:boolean"/>
     <xs:element name="version" type="xs:string"/>
 
     <xs:element name="tags">
@@ -48,31 +55,26 @@
 
     <xs:element name="tag" type="xs:string"/>
 
-    <!-- Header section -->
-    <xs:element name="header">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="title"/>
-                <xs:element ref="subtitle" minOccurs="0"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
+
 
     <xs:element name="title" type="xs:string"/>
     <xs:element name="subtitle" type="xs:string"/>
 
-    <!-- System characterization -->
-    <xs:element name="system-characterization">
+    <!-- System role -->
+    <xs:element name="role" type="xs:string"/>
+
+    <!-- Goal statement -->
+    <xs:element name="goal" type="xs:string"/>
+
+    <!-- Examples container -->
+    <xs:element name="examples">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="role-definition"/>
-                <xs:element ref="expertise-area" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="toc" minOccurs="0"/>
+                <xs:element ref="example-section" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
-
-    <xs:element name="role-definition" type="xs:string"/>
-    <xs:element name="expertise-area" type="xs:string"/>
 
     <!-- Table of contents (auto-generated) -->
     <xs:element name="toc">
@@ -104,7 +106,6 @@
             <xs:element ref="question-section"/>
             <xs:element ref="template-section"/>
             <xs:element ref="workflow-section"/>
-            <xs:element ref="instruction-section"/>
             <xs:element ref="output-requirements-section"/>
             <xs:element ref="reference-section"/>
         </xs:choice>
@@ -444,81 +445,7 @@
 
     <xs:element name="validation-criteria" type="xs:string"/>
 
-    <!-- Simplified Instruction section for AI behavior -->
-    <xs:element name="instruction-section">
-        <xs:complexType>
-            <xs:choice>
-                <xs:sequence>
-                    <xs:element ref="instruction-header"/>
-                    <xs:element ref="instruction-description" minOccurs="0"/>
-                    <xs:element ref="instruction-rules" minOccurs="0"/>
-                    <xs:element ref="restrictions" minOccurs="0"/>
-                </xs:sequence>
-                <xs:sequence>
-                    <xs:element ref="instruction-title"/>
-                    <xs:element ref="instruction-description" minOccurs="0"/>
-                    <xs:element ref="instruction-rules" minOccurs="0"/>
-                    <xs:element ref="restrictions" minOccurs="0"/>
-                </xs:sequence>
-            </xs:choice>
-        </xs:complexType>
-    </xs:element>
 
-    <xs:element name="instruction-header">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="instruction-title"/>
-                <xs:element ref="instruction-subtitle" minOccurs="0"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="instruction-title" type="xs:string"/>
-    <xs:element name="instruction-subtitle" type="xs:string"/>
-
-    <xs:element name="instruction-description">
-        <xs:complexType mixed="true">
-            <xs:choice minOccurs="0" maxOccurs="unbounded">
-                <xs:element ref="emphasis"/>
-                <xs:element ref="code-inline"/>
-            </xs:choice>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="instruction-rules">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="instruction-rule" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="instruction-rule">
-        <xs:complexType mixed="true">
-            <xs:choice minOccurs="0" maxOccurs="unbounded">
-                <xs:element ref="emphasis"/>
-                <xs:element ref="code-inline"/>
-            </xs:choice>
-            <xs:attribute name="type" use="optional">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="mandatory"/>
-                        <xs:enumeration value="optional"/>
-                        <xs:enumeration value="conditional"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
-            <xs:attribute name="priority" use="optional">
-                <xs:simpleType>
-                    <xs:restriction base="xs:string">
-                        <xs:enumeration value="high"/>
-                        <xs:enumeration value="medium"/>
-                        <xs:enumeration value="low"/>
-                    </xs:restriction>
-                </xs:simpleType>
-            </xs:attribute>
-        </xs:complexType>
-    </xs:element>
 
     <!-- Restrictions block within instruction section -->
     <xs:element name="restrictions">
@@ -585,6 +512,10 @@
                 </xs:sequence>
                 <xs:sequence>
                     <xs:element ref="output-requirements-title"/>
+                    <xs:element ref="output-requirements-description" minOccurs="0"/>
+                    <xs:element ref="output-requirements-rules" minOccurs="0"/>
+                </xs:sequence>
+                <xs:sequence>
                     <xs:element ref="output-requirements-description" minOccurs="0"/>
                     <xs:element ref="output-requirements-rules" minOccurs="0"/>
                 </xs:sequence>

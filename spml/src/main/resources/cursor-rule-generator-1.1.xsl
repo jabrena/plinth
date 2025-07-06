@@ -1,87 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output method="text" encoding="UTF-8"/>
-    <xsl:strip-space elements="*"/>
+    <xsl:strip-space elements="prompt metadata tags example-section code-examples good-example bad-example question-section workflow-section template-section instruction-section output-requirements-section"/>
 
-    <xsl:template match="/system-prompt">
+    <xsl:template match="/prompt">
         <!-- Common frontmatter and header -->
         <xsl:text>---
 description:</xsl:text>
-        <xsl:if test="normalize-space(metadata/description)">
-            <xsl:text> </xsl:text><xsl:value-of select="normalize-space(metadata/description)"/>
+        <xsl:if test="normalize-space(metadata/cursor-ai/description)">
+            <xsl:text> </xsl:text><xsl:value-of select="normalize-space(metadata/cursor-ai/description)"/>
         </xsl:if>
         <xsl:text>
 globs:</xsl:text>
-        <xsl:if test="normalize-space(metadata/globs)">
-            <xsl:text> </xsl:text><xsl:value-of select="normalize-space(metadata/globs)"/>
+        <xsl:if test="normalize-space(metadata/cursor-ai/globs)">
+            <xsl:text> </xsl:text><xsl:value-of select="normalize-space(metadata/cursor-ai/globs)"/>
         </xsl:if>
         <xsl:text>
-alwaysApply: </xsl:text><xsl:value-of select="normalize-space(metadata/always-apply)"/>
+alwaysApply: </xsl:text><xsl:value-of select="normalize-space(metadata/cursor-ai/always-apply)"/>
         <xsl:text>
 ---
-# </xsl:text><xsl:value-of select="normalize-space(header/title)"/>
+# </xsl:text><xsl:value-of select="metadata/title"/>
+
+        <!-- Process goal (Instructions for AI) before role -->
+        <xsl:apply-templates select="goal"/>
         <xsl:text>
 
-## System prompt characterization
+## Role
 
-Role definition: </xsl:text><xsl:value-of select="normalize-space(system-characterization/role-definition)"/>
-        <xsl:text>
+</xsl:text><xsl:value-of select="role"/>
 
-## Description
+        <!-- Examples section with auto-generated table of contents -->
+        <xsl:if test="examples/toc[@auto-generate='true']">
+            <xsl:text>
 
-</xsl:text><xsl:value-of select="normalize-space(description)"/>
+## Examples
 
-        <!-- Table of contents (if present) -->
-        <xsl:choose>
-            <!-- Handle new toc element with auto-generation -->
-            <xsl:when test="toc[@auto-generate='true']">
+### Table of contents
+
+</xsl:text>
+            <xsl:for-each select="examples/example-section">
+                <xsl:text>- Example </xsl:text><xsl:value-of select="@number"/><xsl:text>: </xsl:text><xsl:value-of select="normalize-space(example-header/example-title)"/>
                 <xsl:text>
-
-## Table of contents
-
 </xsl:text>
-                <xsl:for-each select="example-section">
-                    <xsl:text>- Rule </xsl:text><xsl:value-of select="@number"/><xsl:text>: </xsl:text><xsl:value-of select="normalize-space(example-header/example-title)"/>
-                    <xsl:text>
-</xsl:text>
-                </xsl:for-each>
-            </xsl:when>
-            <!-- Handle manual toc element -->
-            <xsl:when test="toc/toc-item">
-                <xsl:text>
+            </xsl:for-each>
+        </xsl:if>
 
-## Table of contents
+        <!-- Process all content sections (goal already processed above) -->
+        <xsl:apply-templates select="examples | output-requirements-section"/>
+    </xsl:template>
 
-</xsl:text>
-                <xsl:for-each select="toc/toc-item">
-                    <xsl:text>- </xsl:text><xsl:value-of select="normalize-space(.)"/>
-                    <xsl:text>
-</xsl:text>
-                </xsl:for-each>
-            </xsl:when>
-            <!-- Handle legacy table-of-contents element -->
-            <xsl:when test="table-of-contents/toc-item">
-                <xsl:text>
-
-## Table of contents
-
-</xsl:text>
-                <xsl:for-each select="table-of-contents/toc-item">
-                    <xsl:text>- </xsl:text><xsl:value-of select="normalize-space(.)"/>
-                    <xsl:text>
-</xsl:text>
-                </xsl:for-each>
-            </xsl:when>
-        </xsl:choose>
-
-        <!-- Process all content sections -->
-        <xsl:apply-templates select="instruction-section | example-section | template-section | question-section | workflow-section | output-requirements-section"/>
+    <!-- Examples container template -->
+    <xsl:template match="examples">
+        <xsl:apply-templates select="example-section"/>
     </xsl:template>
 
     <!-- Example section template -->
     <xsl:template match="example-section">
         <xsl:text>
-## Rule </xsl:text><xsl:value-of select="@number"/><xsl:text>: </xsl:text><xsl:value-of select="normalize-space(example-header/example-title)"/>
+### Example </xsl:text><xsl:value-of select="@number"/><xsl:text>: </xsl:text><xsl:value-of select="normalize-space(example-header/example-title)"/>
         <xsl:text>
 
 Title: </xsl:text><xsl:value-of select="normalize-space(example-header/example-subtitle)"/>
@@ -147,146 +123,21 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
         </xsl:if>
     </xsl:template>
 
-    <!-- Template section template -->
-    <xsl:template match="template-section">
+    <!-- Goal template - simple goal statement -->
+    <xsl:template match="goal">
         <xsl:text>
 
-## </xsl:text><xsl:value-of select="normalize-space(template-header/template-title)"/>
-        <xsl:text>:
-
-</xsl:text><xsl:value-of select="normalize-space(template-description)"/>
-        <xsl:text>
-
----
-</xsl:text><xsl:value-of select="template-content/code-block"/>
-    </xsl:template>
-
-    <!-- Question section template -->
-    <xsl:template match="question-section">
-        <xsl:text>
-
-## </xsl:text><xsl:value-of select="normalize-space(question-header/question-title)"/>
-        <xsl:if test="question-header/question-subtitle">
-            <xsl:text>: </xsl:text><xsl:value-of select="normalize-space(question-header/question-subtitle)"/>
-        </xsl:if>
-        <xsl:text>
+## Instructions for AI
 
 </xsl:text>
-        <xsl:if test="question-description">
-            <xsl:value-of select="normalize-space(question-description)"/>
-            <xsl:text>
-
-</xsl:text>
-        </xsl:if>
-        <xsl:for-each select="question-items/question-item">
-            <xsl:text>- </xsl:text><xsl:value-of select="normalize-space(option-text)"/>
-            <xsl:if test="option-description">
-                <xsl:text>: </xsl:text><xsl:value-of select="normalize-space(option-description)"/>
-            </xsl:if>
-            <xsl:text>
-</xsl:text>
-        </xsl:for-each>
-    </xsl:template>
-
-    <!-- Workflow section template -->
-    <xsl:template match="workflow-section">
-        <xsl:text>
-
-## </xsl:text><xsl:value-of select="normalize-space(workflow-header/workflow-title)"/>
-        <xsl:if test="workflow-header/workflow-subtitle">
-            <xsl:text>: </xsl:text><xsl:value-of select="normalize-space(workflow-header/workflow-subtitle)"/>
-        </xsl:if>
-        <xsl:text>
-
-</xsl:text>
-        <xsl:if test="workflow-description">
-            <xsl:value-of select="normalize-space(workflow-description)"/>
-            <xsl:text>
-
-</xsl:text>
-        </xsl:if>
-        <xsl:for-each select="workflow-steps/workflow-step">
-            <xsl:text>### Step </xsl:text><xsl:value-of select="@number"/><xsl:text>: </xsl:text><xsl:value-of select="normalize-space(step-header/step-title)"/>
-            <xsl:text>
-
-</xsl:text><xsl:value-of select="normalize-space(step-description)"/>
-            <xsl:if test="step-content/code-block">
-                <xsl:text>
-
-```</xsl:text>
-                <xsl:if test="step-content/code-block/@language">
-                    <xsl:value-of select="step-content/code-block/@language"/>
-                </xsl:if>
-                <xsl:text>
-</xsl:text>
-                <xsl:call-template name="trim-code-block">
-                    <xsl:with-param name="content" select="step-content/code-block"/>
-                </xsl:call-template>
-                <xsl:text>
-```</xsl:text>
-            </xsl:if>
-            <xsl:text>
-
-</xsl:text>
-        </xsl:for-each>
-    </xsl:template>
-
-    <!-- Instruction section template - handles both complex and simple structures -->
-    <xsl:template match="instruction-section">
-        <xsl:text>
-
-## </xsl:text>
-        <xsl:choose>
-            <xsl:when test="instruction-header/instruction-title">
-                <xsl:value-of select="normalize-space(instruction-header/instruction-title)"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="normalize-space(instruction-title)"/>
-            </xsl:otherwise>
-        </xsl:choose>
-        <xsl:text>
-
-</xsl:text>
-        <xsl:if test="instruction-description">
-            <xsl:value-of select="normalize-space(instruction-description)"/>
-            <xsl:choose>
-                <xsl:when test="normalize-space(instruction-description) = '### Template Boundaries:'">
-                    <xsl:text>
-
-</xsl:text>
-                </xsl:when>
-                <xsl:when test="substring(normalize-space(instruction-description), string-length(normalize-space(instruction-description))) = ':'">
-                    <xsl:text>
-</xsl:text>
-                </xsl:when>
-                <xsl:otherwise>
-                    <xsl:text>
-
-</xsl:text>
-                </xsl:otherwise>
-            </xsl:choose>
-        </xsl:if>
-        <xsl:apply-templates select="restrictions"/>
-        <xsl:for-each select="instruction-rules/instruction-rule">
-            <xsl:text>- </xsl:text><xsl:value-of select="normalize-space(.)"/>
-            <xsl:text>
-</xsl:text>
-        </xsl:for-each>
+        <xsl:value-of select="normalize-space(.)"/>
     </xsl:template>
 
     <!-- Output requirements section template - handles both complex and simple structures -->
     <xsl:template match="output-requirements-section">
         <xsl:text>
 
-## </xsl:text>
-        <xsl:choose>
-            <xsl:when test="output-requirements-header/output-requirements-title">
-                <xsl:value-of select="normalize-space(output-requirements-header/output-requirements-title)"/>
-            </xsl:when>
-            <xsl:otherwise>
-                <xsl:value-of select="normalize-space(output-requirements-title)"/>
-            </xsl:otherwise>
-        </xsl:choose>
+## Output Requirements</xsl:text>
         <xsl:text>
 
 </xsl:text>
