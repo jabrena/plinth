@@ -140,7 +140,6 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
     <!-- Output requirements section template - handles both complex and simple structures -->
     <xsl:template match="output-requirements-section">
         <xsl:text>
-
 ## Output Requirements</xsl:text>
         <xsl:text>
 

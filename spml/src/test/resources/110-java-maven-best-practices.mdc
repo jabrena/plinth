@@ -584,7 +584,6 @@ Description: Define all dependency and plugin versions in the `<properties>` sec
 </project>
 
 ```
-
 ## Output Requirements
 
 - Update the file pom.xml if something is not correct
