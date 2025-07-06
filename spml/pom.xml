@@ -231,6 +231,7 @@
                   <includes>
                     <include>100-java-checklist-guide.mdc</include>
                     <include>110-java-maven-best-practices.mdc</include>
+                    <include>112-java-maven-documentation.mdc</include>
                   </includes>
                 </resource>
               </resources>

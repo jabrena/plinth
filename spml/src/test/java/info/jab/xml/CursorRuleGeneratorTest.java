@@ -57,6 +57,23 @@ class CursorRuleGeneratorTest {
     class UnifiedXsltGeneratorTests {
 
         @Test
+        @DisplayName("Should generate exact content matching original expected Java checklist guide document using unified XSLT")
+        void should_generateExactContentMatchingOriginalExpected_when_transformingJavaChecklistGuideWithUnifiedXslt() throws IOException {
+            // Given
+            CursorRuleGenerator generator = new CursorRuleGenerator();
+            String expectedContent = loadExpectedContent("100-java-checklist-guide.mdc");
+
+            // When
+            String actualResult = generator.generate("100-java-checklist-guide.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
+
+            // Then - Unified XSLT should produce identical output to expected
+            assertThat(actualResult)
+                .isNotNull()
+                .isNotEmpty()
+                .isEqualTo(expectedContent);
+        }
+
+        @Test
         @DisplayName("Should generate exact content matching original expected Maven best practices document using unified XSLT")
         void should_generateExactContentMatchingOriginalExpected_when_transformingMavenBestPracticesWithUnifiedXslt() throws IOException {
             // Given
@@ -81,26 +98,9 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("112-java-maven-documentation.mdc");
 
             // When
-            String actualResult = generator.generate("112-java-maven-documentation.xml", "cursor-rule-generator.xsl");
+            String actualResult = generator.generate("112-java-maven-documentation.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
 
             // Then - Unified XSLT should produce identical output to specialized XSLT
-            assertThat(actualResult)
-                .isNotNull()
-                .isNotEmpty()
-                .isEqualTo(expectedContent);
-        }
-
-        @Test
-        @DisplayName("Should generate exact content matching original expected Java checklist guide document using unified XSLT")
-        void should_generateExactContentMatchingOriginalExpected_when_transformingJavaChecklistGuideWithUnifiedXslt() throws IOException {
-            // Given
-            CursorRuleGenerator generator = new CursorRuleGenerator();
-            String expectedContent = loadExpectedContent("100-java-checklist-guide.mdc");
-
-            // When
-            String actualResult = generator.generate("100-java-checklist-guide.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
-
-            // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
                 .isNotNull()
                 .isNotEmpty()
@@ -303,7 +303,7 @@ class CursorRuleGeneratorTest {
         // When
         String checklistGuideResult = generator.generate("100-java-checklist-guide.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String bestPracticesResult = generator.generate("110-java-maven-best-practices.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
-        String documentationResult = generator.generate("112-java-maven-documentation.xml", "cursor-rule-generator.xsl");
+        String documentationResult = generator.generate("112-java-maven-documentation.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String objectOrientedDesignResult = generator.generate("121-java-object-oriented-design.xml", "cursor-rule-generator.xsl");
         String typeDesignResult = generator.generate("122-java-type-design.xml", "cursor-rule-generator.xsl");
         String generalGuidelinesResult = generator.generate("123-java-general-guidelines.xml", "cursor-rule-generator.xsl");

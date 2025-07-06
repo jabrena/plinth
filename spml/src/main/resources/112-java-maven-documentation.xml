@@ -1,78 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<system-prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:noNamespaceSchemaLocation="spml.xsd"
-               id="112-java-maven-documentation" version="1.0">
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="spml-1.1.xsd"
+        id="112-java-maven-documentation" version="1.0">
+
     <metadata>
-        <description>Create README-DEV.md with information about how to use the Maven project</description>
-        <globs>pom.xml</globs>
-        <always-apply>false</always-apply>
+        <cursor-ai>
+            <description>Create README-DEV.md with information about how to use the Maven project</description>
+            <globs>pom.xml</globs>
+            <always-apply>false</always-apply>
+        </cursor-ai>
         <tags>
             <tag>maven</tag>
             <tag>java</tag>
             <tag>documentation</tag>
         </tags>
         <version>0.8.0</version>
+        <title>Create README-DEV.md with information about how to use the Maven project</title>
     </metadata>
 
-    <header>
-        <title>Create README-DEV.md with information about how to use the Maven project</title>
-    </header>
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
-    <system-characterization>
-        <role-definition>You are a Senior software engineer with extensive experience in Java software development</role-definition>
-    </system-characterization>
-
-    <description>
+    <goal>
         When creating a README-DEV.md file for a Maven project, include ONLY the following sections with the specified Maven goals. Do NOT add any additional sections, explanations, or content beyond what is explicitly listed below.
-    </description>
 
-    <content-sections>
-        <template-section type="configuration">
-            <template-header>
-                <template-title>STRICT Structure for README-DEV.md (Template)</template-title>
-            </template-header>
-            <template-description>
-                **IMPORTANT: Include ONLY the content specified below.**
-            </template-description>
-            <template-content>
-                <code-block language="markdown">
-# Essential Maven Goals:
+        Create a markdown file named `README-DEV.md` with the following exact structure: [java-maven-documentation-template.md](mdc:.cursor/rules/templates/java-maven-documentation-template.md)
+    </goal>
 
-```bash
-# Analyze dependencies
-./mvnw dependency:tree
-./mvnw dependency:analyze
-./mvnw dependency:resolve
+    <restrictions>
+        <restrictions-description>**MANDATORY REQUIREMENT**: Follow the embedded template EXACTLY - do not add, remove, or modify any steps, sections, or cursor rules that are not explicitly shown in the template. ### What NOT to Include:</restrictions-description>
+        <restriction-list>
+            <restriction>**DO NOT** create additional steps beyond what's shown in the template</restriction>
+            <restriction>**DO NOT** expand or elaborate on sections beyond what the template shows</restriction>
+            <restriction>**ONLY** use the exact wording and structure from the template</restriction>
+            <restriction>If a cursor rule exists in the workspace but is not in the template, **DO NOT** include it</restriction>
+        </restriction-list>
+    </restrictions>
 
-./mvnw clean validate -U
-./mvnw buildplan:list-plugin
-./mvnw buildplan:list-phase
-./mvnw help:all-profiles
-./mvnw help:active-profiles
-./mvnw license:third-party-report
-
-# Clean the project
-./mvnw clean
-
-# Clean and package in one command
-./mvnw clean package
-
-# Run integration tests
-./mvnw verify
-
-# Check for dependency updates
-./mvnw versions:display-property-updates
-./mvnw versions:display-dependency-updates
-./mvnw versions:display-plugin-updates
-
-# Generate project reports
-./mvnw site
-jwebserver -p 8005 -d "$(pwd)/target/site/"
-```
-
-**END OF TEMPLATE - DO NOT ADD ANYTHING BEYOND THIS POINT**
-                </code-block>
-            </template-content>
-        </template-section>
-    </content-sections>
-</system-prompt>
+    <output-requirements-section>
+        <output-requirements-list>
+            <output-requirements-item>Generate the complete markdown file following the embedded template exactly</output-requirements-item>
+            <output-requirements-item>Use proper markdown formatting with headers, code blocks, tables, and checklists</output-requirements-item>
+            <output-requirements-item>**VERIFY**: Final output contains ONLY what appears in the embedded template</output-requirements-item>
+        </output-requirements-list>
+    </output-requirements-section>
+</prompt>
