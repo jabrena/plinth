@@ -183,7 +183,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("125-java-concurrency.mdc");
 
             // When
-            String actualResult = generator.generate("125-java-concurrency.xml", "cursor-rule-generator.xsl");
+            String actualResult = generator.generate("125-java-concurrency.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -308,7 +308,7 @@ class CursorRuleGeneratorTest {
         String typeDesignResult = generator.generate("122-java-type-design.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String generalGuidelinesResult = generator.generate("123-java-general-guidelines.xml", "cursor-rule-generator.xsl");
         String secureCodingResult = generator.generate("124-java-secure-coding.xml", "cursor-rule-generator.xsl");
-        String concurrencyResult = generator.generate("125-java-concurrency.xml", "cursor-rule-generator.xsl");
+        String concurrencyResult = generator.generate("125-java-concurrency.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String loggingResult = generator.generate("126-java-logging.xml", "cursor-rule-generator.xsl");
         String unitTestingResult = generator.generate("131-java-unit-testing.xml", "cursor-rule-generator.xsl");
         String refactoringWithModernFeaturesResult = generator.generate("141-java-refactoring-with-modern-features.xml", "cursor-rule-generator.xsl");
