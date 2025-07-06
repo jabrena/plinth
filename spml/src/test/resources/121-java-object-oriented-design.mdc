@@ -5,22 +5,24 @@ alwaysApply: false
 ---
 # Java Object-Oriented Design Guidelines
 
-## System prompt characterization
+## Role
 
-Role definition: You are a Senior software engineer with extensive experience in Java software development
+You are a Senior software engineer with extensive experience in Java software development
 
-## Description
+## Instructions for AI
 
-This document provides comprehensive guidelines for robust Java object-oriented design and refactoring. It emphasizes core principles like SOLID, DRY, and YAGNI, best practices for class and interface design including favoring composition over inheritance and designing for immutability. The rules also cover mastering encapsulation, inheritance, and polymorphism, and finally, identifying and refactoring common object-oriented design code smells such as God Classes, Feature Envy, and Data Clumps to promote maintainable, flexible, and understandable code.
+Apply comprehensive guidelines for robust Java object-oriented design and refactoring. Follow core principles like SOLID, DRY, and YAGNI, implement best practices for class and interface design including favoring composition over inheritance and designing for immutability. Master encapsulation, inheritance, and polymorphism, and identify and refactor common object-oriented design code smells such as God Classes, Feature Envy, and Data Clumps to promote maintainable, flexible, and understandable code.
 
-## Table of contents
+## Examples
 
-- Rule 1: Adhere to Core Design Principles (SOLID, DRY, YAGNI)
-- Rule 2: Follow Best Practices for Class and Interface Design
-- Rule 3: Master Encapsulation, Inheritance, and Polymorphism
-- Rule 4: Identify and Refactor Object-Oriented Design Code Smells
+### Table of contents
 
-## Rule 1: Adhere to Core Design Principles (SOLID, DRY, YAGNI)
+- Example 1: Adhere to Core Design Principles (SOLID, DRY, YAGNI)
+- Example 2: Follow Best Practices for Class and Interface Design
+- Example 3: Master Encapsulation, Inheritance, and Polymorphism
+- Example 4: Identify and Refactor Object-Oriented Design Code Smells
+
+### Example 1: Adhere to Core Design Principles (SOLID, DRY, YAGNI)
 
 Title: Apply Fundamental Software Design Principles
 Description: Core principles like SOLID, DRY, and YAGNI are foundational to good object-oriented design, leading to more robust, maintainable, and understandable systems. These principles should guide all design decisions and help create systems that are flexible and resistant to change.
@@ -83,7 +85,7 @@ class User {
 }
 ```
 
-## Rule 2: Follow Best Practices for Class and Interface Design
+### Example 2: Follow Best Practices for Class and Interface Design
 
 Title: Design Well-Structured and Maintainable Classes and Interfaces
 Description: Good class and interface design is crucial for building flexible and understandable OOD systems. Favor composition over inheritance, program to interfaces rather than implementations, keep classes small and focused, and design for immutability where appropriate. Use clear, descriptive naming conventions.
@@ -153,7 +155,7 @@ class BadPetrolEngine {
 }
 ```
 
-## Rule 3: Master Encapsulation, Inheritance, and Polymorphism
+### Example 3: Master Encapsulation, Inheritance, and Polymorphism
 
 Title: Effectively Utilize Core Object-Oriented Concepts
 Description: Encapsulation, Inheritance, and Polymorphism are the three pillars of object-oriented programming. Proper encapsulation protects internal state and exposes behavior through well-defined interfaces. Inheritance should model true "is-a" relationships following the Liskov Substitution Principle. Polymorphism allows objects of different types to be treated uniformly.
@@ -219,7 +221,7 @@ class BadBankAccount {
 // account.accountNumber = null; // Can break account number
 ```
 
-## Rule 4: Identify and Refactor Object-Oriented Design Code Smells
+### Example 4: Identify and Refactor Object-Oriented Design Code Smells
 
 Title: Recognize and Fix Common Design Anti-Patterns
 Description: Develop the ability to identify common object-oriented design "code smells" such as God Class, Feature Envy, Data Clumps, and Refused Bequest. Recognizing and refactoring these smells is crucial for improving the long-term health, maintainability, and clarity of the codebase.
@@ -292,3 +294,8 @@ class OrderManager {
     // This class has too many responsibilities and reasons to change
 }
 ```
+## Output Requirements
+
+- Apply object-oriented design principles to improve code quality and maintainability
+- Refactor code to follow SOLID principles and eliminate design smells
+- Verify code changes compile and pass tests

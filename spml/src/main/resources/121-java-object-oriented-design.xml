@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<system-prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:noNamespaceSchemaLocation="spml.xsd"
-               id="121-java-object-oriented-design" version="1.0">
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="spml-1.1.xsd"
+    id="121-java-object-oriented-design" version="1.0">
+
     <metadata>
-        <description>Java Object-Oriented Design Guidelines</description>
-        <globs>*.java</globs>
-        <always-apply>false</always-apply>
+        <!-- Cursor AI specific configuration -->
+        <cursor-ai>
+            <description>Java Object-Oriented Design Guidelines</description>
+            <globs>*.java</globs>
+            <always-apply>false</always-apply>
+        </cursor-ai>
         <tags>
             <tag>java</tag>
             <tag>object-oriented</tag>
@@ -13,31 +17,28 @@
             <tag>best-practices</tag>
         </tags>
         <version>0.8.0</version>
+        <title>Java Object-Oriented Design Guidelines</title>
     </metadata>
 
-    <header>
-        <title>Java Object-Oriented Design Guidelines</title>
-    </header>
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
-    <system-characterization>
-        <role-definition>You are a Senior software engineer with extensive experience in Java software development</role-definition>
-    </system-characterization>
+    <goal>
+        Apply comprehensive guidelines for robust Java object-oriented design and refactoring. Follow core principles like SOLID, DRY, and YAGNI, implement best practices for class and interface design including favoring composition over inheritance and designing for immutability. Master encapsulation, inheritance, and polymorphism, and identify and refactor common object-oriented design code smells such as God Classes, Feature Envy, and Data Clumps to promote maintainable, flexible, and understandable code.
+    </goal>
 
-    <description>
-        This document provides comprehensive guidelines for robust Java object-oriented design and refactoring. It emphasizes core principles like SOLID, DRY, and YAGNI, best practices for class and interface design including favoring composition over inheritance and designing for immutability. The rules also cover mastering encapsulation, inheritance, and polymorphism, and finally, identifying and refactoring common object-oriented design code smells such as God Classes, Feature Envy, and Data Clumps to promote maintainable, flexible, and understandable code.
-    </description>
+    <examples>
+        <toc auto-generate="true" />
 
-    <toc auto-generate="true"/>
-
-    <content-sections>
-        <rule-section number="1" id="adhere-to-core-design-principles">
-            <rule-header>
-                <rule-title>Adhere to Core Design Principles (SOLID, DRY, YAGNI)</rule-title>
-                <rule-subtitle>Apply Fundamental Software Design Principles</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        <example number="1" id="adhere-to-core-design-principles">
+            <example-header>
+                <example-title>Adhere to Core Design Principles (SOLID, DRY, YAGNI)</example-title>
+                <example-subtitle>Apply Fundamental Software Design Principles</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
                 Core principles like SOLID, DRY, and YAGNI are foundational to good object-oriented design, leading to more robust, maintainable, and understandable systems. These principles should guide all design decisions and help create systems that are flexible and resistant to change.
-            </rule-description>
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// Good: Separate responsibilities following SRP
@@ -92,16 +93,18 @@ class User {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="2" id="follow-class-interface-design-best-practices">
-            <rule-header>
-                <rule-title>Follow Best Practices for Class and Interface Design</rule-title>
-                <rule-subtitle>Design Well-Structured and Maintainable Classes and Interfaces</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        <example number="2" id="follow-class-interface-design-best-practices">
+            <example-header>
+                <example-title>Follow Best Practices for Class and Interface Design</example-title>
+                <example-subtitle>Design Well-Structured and Maintainable Classes and Interfaces</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
                 Good class and interface design is crucial for building flexible and understandable OOD systems. Favor composition over inheritance, program to interfaces rather than implementations, keep classes small and focused, and design for immutability where appropriate. Use clear, descriptive naming conventions.
-            </rule-description>
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// Interface (Abstraction)
@@ -163,16 +166,18 @@ class BadPetrolEngine {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="3" id="master-encapsulation-inheritance-polymorphism">
-            <rule-header>
-                <rule-title>Master Encapsulation, Inheritance, and Polymorphism</rule-title>
-                <rule-subtitle>Effectively Utilize Core Object-Oriented Concepts</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        <example number="3" id="master-encapsulation-inheritance-polymorphism">
+            <example-header>
+                <example-title>Master Encapsulation, Inheritance, and Polymorphism</example-title>
+                <example-subtitle>Effectively Utilize Core Object-Oriented Concepts</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
                 Encapsulation, Inheritance, and Polymorphism are the three pillars of object-oriented programming. Proper encapsulation protects internal state and exposes behavior through well-defined interfaces. Inheritance should model true "is-a" relationships following the Liskov Substitution Principle. Polymorphism allows objects of different types to be treated uniformly.
-            </rule-description>
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// Good: Proper encapsulation with validation
@@ -230,16 +235,18 @@ class BadBankAccount {
 // account.accountNumber = null; // Can break account number]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="4" id="identify-refactor-code-smells">
-            <rule-header>
-                <rule-title>Identify and Refactor Object-Oriented Design Code Smells</rule-title>
-                <rule-subtitle>Recognize and Fix Common Design Anti-Patterns</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        <example number="4" id="identify-refactor-code-smells">
+            <example-header>
+                <example-title>Identify and Refactor Object-Oriented Design Code Smells</example-title>
+                <example-subtitle>Recognize and Fix Common Design Anti-Patterns</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
                 Develop the ability to identify common object-oriented design "code smells" such as God Class, Feature Envy, Data Clumps, and Refused Bequest. Recognizing and refactoring these smells is crucial for improving the long-term health, maintainability, and clarity of the codebase.
-            </rule-description>
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// Good: Refactored from God Class - separate responsibilities
@@ -305,6 +312,14 @@ class OrderManager {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
-    </content-sections>
-</system-prompt>
+        </example>
+    </examples>
+
+    <output-requirements-section>
+        <output-requirements-list>
+            <output-requirements-item>Apply object-oriented design principles to improve code quality and maintainability</output-requirements-item>
+            <output-requirements-item>Refactor code to follow SOLID principles and eliminate design smells</output-requirements-item>
+            <output-requirements-item>Verify code changes compile and pass tests</output-requirements-item>
+        </output-requirements-list>
+    </output-requirements-section>
+</prompt>

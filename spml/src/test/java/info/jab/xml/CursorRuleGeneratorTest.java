@@ -114,8 +114,8 @@ class CursorRuleGeneratorTest {
             CursorRuleGenerator generator = new CursorRuleGenerator();
             String expectedContent = loadExpectedContent("121-java-object-oriented-design.mdc");
 
-            // When
-            String actualResult = generator.generate("121-java-object-oriented-design.xml", "cursor-rule-generator.xsl");
+            // When - Updated to use new XSLT since XML was refactored to spml-1.1.xsd
+            String actualResult = generator.generate("121-java-object-oriented-design.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -304,7 +304,7 @@ class CursorRuleGeneratorTest {
         String checklistGuideResult = generator.generate("100-java-checklist-guide.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String bestPracticesResult = generator.generate("110-java-maven-best-practices.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String documentationResult = generator.generate("112-java-maven-documentation.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
-        String objectOrientedDesignResult = generator.generate("121-java-object-oriented-design.xml", "cursor-rule-generator.xsl");
+        String objectOrientedDesignResult = generator.generate("121-java-object-oriented-design.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String typeDesignResult = generator.generate("122-java-type-design.xml", "cursor-rule-generator.xsl");
         String generalGuidelinesResult = generator.generate("123-java-general-guidelines.xml", "cursor-rule-generator.xsl");
         String secureCodingResult = generator.generate("124-java-secure-coding.xml", "cursor-rule-generator.xsl");
@@ -318,8 +318,8 @@ class CursorRuleGeneratorTest {
         // Save all for comparison
         saveGeneratedContentToTarget(checklistGuideResult, "100-java-checklist-guide.mdc");
         saveGeneratedContentToTarget(bestPracticesResult, "110-java-maven-best-practices.mdc");
-        //saveGeneratedContentToTarget(documentationResult, "unified-documentation.mdc");
-        //saveGeneratedContentToTarget(objectOrientedDesignResult, "unified-object-oriented-design.mdc");
+        saveGeneratedContentToTarget(documentationResult, "112-java-maven-documentation.mdc");
+        saveGeneratedContentToTarget(objectOrientedDesignResult, "121-java-object-oriented-design.mdc");
         //saveGeneratedContentToTarget(typeDesignResult, "unified-type-design.mdc");
         //saveGeneratedContentToTarget(generalGuidelinesResult, "unified-general-guidelines.mdc");
         //saveGeneratedContentToTarget(secureCodingResult, "unified-secure-coding.mdc");
