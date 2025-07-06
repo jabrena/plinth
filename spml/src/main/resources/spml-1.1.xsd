@@ -7,8 +7,8 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="metadata"/>
-                <xs:element ref="goal" minOccurs="0"/>
                 <xs:element ref="role"/>
+                <xs:element ref="goal" minOccurs="0"/>
                 <xs:element ref="restrictions" minOccurs="0"/>
                 <xs:element ref="examples" minOccurs="0"/>
                 <xs:element ref="output-requirements-section" minOccurs="0"/>

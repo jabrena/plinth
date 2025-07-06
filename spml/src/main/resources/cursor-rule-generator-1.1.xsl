@@ -20,15 +20,13 @@ alwaysApply: </xsl:text><xsl:value-of select="normalize-space(metadata/cursor-ai
         <xsl:text>
 ---
 # </xsl:text><xsl:value-of select="metadata/title"/>
-
-        <!-- Process goal (Instructions for AI) before role -->
-        <xsl:apply-templates select="goal"/>
         <xsl:text>
+
 ## Role
 
 </xsl:text><xsl:value-of select="role"/>
-        <xsl:text>
-</xsl:text>
+        <!-- Process goal (Instructions for AI) after role -->
+        <xsl:apply-templates select="goal"/>
         <!-- Apply restrictions template if present -->
         <xsl:apply-templates select="restrictions"/>
 

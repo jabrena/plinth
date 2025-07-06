@@ -5,13 +5,13 @@ alwaysApply: false
 ---
 # Maven Best Practices
 
-## Instructions for AI
-
-Update the pom.xml based on the following rules about Maven best practices.
-
 ## Role
 
 You are a Senior software engineer with extensive experience in Java software development
+
+## Instructions for AI
+
+Update the pom.xml based on the following rules about Maven best practices.
 
 ## Examples
 

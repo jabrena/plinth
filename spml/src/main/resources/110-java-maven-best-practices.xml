@@ -19,11 +19,11 @@
         <title>Maven Best Practices</title>
     </metadata>
 
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
+
     <goal>
         Update the pom.xml based on the following rules about Maven best practices.
     </goal>
-
-    <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
     <examples>
         <toc auto-generate="true" />
