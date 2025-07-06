@@ -509,16 +509,16 @@
                 <xs:sequence>
                     <xs:element ref="output-requirements-header"/>
                     <xs:element ref="output-requirements-description" minOccurs="0"/>
-                    <xs:element ref="output-requirements-rules" minOccurs="0"/>
+                    <xs:element ref="output-requirements-list" minOccurs="0"/>
                 </xs:sequence>
                 <xs:sequence>
                     <xs:element ref="output-requirements-title"/>
                     <xs:element ref="output-requirements-description" minOccurs="0"/>
-                    <xs:element ref="output-requirements-rules" minOccurs="0"/>
+                    <xs:element ref="output-requirements-list" minOccurs="0"/>
                 </xs:sequence>
                 <xs:sequence>
                     <xs:element ref="output-requirements-description" minOccurs="0"/>
-                    <xs:element ref="output-requirements-rules" minOccurs="0"/>
+                    <xs:element ref="output-requirements-list" minOccurs="0"/>
                 </xs:sequence>
             </xs:choice>
         </xs:complexType>
@@ -545,15 +545,15 @@
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="output-requirements-rules">
+    <xs:element name="output-requirements-list">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="output-requirements-rule" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="output-requirements-item" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="output-requirements-rule">
+    <xs:element name="output-requirements-item">
         <xs:complexType mixed="true">
             <xs:choice minOccurs="0" maxOccurs="unbounded">
                 <xs:element ref="emphasis"/>

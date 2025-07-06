@@ -624,9 +624,9 @@ my-app/
     </examples>
 
     <output-requirements-section>
-        <output-requirements-rules>
-            <output-requirements-rule>Update the file pom.xml if something is not correct</output-requirements-rule>
-            <output-requirements-rule>verify changes with the command: `mvn validate`</output-requirements-rule>
-        </output-requirements-rules>
+        <output-requirements-list>
+            <output-requirements-item>Update the file pom.xml if something is not correct</output-requirements-item>
+            <output-requirements-item>verify changes with the command: `mvn validate`</output-requirements-item>
+        </output-requirements-list>
     </output-requirements-section>
 </prompt>

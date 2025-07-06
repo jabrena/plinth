@@ -150,7 +150,7 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
 
 </xsl:text>
         </xsl:if>
-        <xsl:for-each select="output-requirements-rules/output-requirements-rule">
+        <xsl:for-each select="output-requirements-list/output-requirements-item">
             <xsl:text>- </xsl:text><xsl:value-of select="normalize-space(.)"/>
             <xsl:text>
 </xsl:text>

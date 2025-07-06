@@ -39,10 +39,10 @@
     </restrictions>
 
     <output-requirements-section>
-        <output-requirements-rules>
-            <output-requirements-rule>Generate the complete markdown file following the embedded template exactly</output-requirements-rule>
-            <output-requirements-rule>Use proper markdown formatting with headers, code blocks, tables, and checklists</output-requirements-rule>
-            <output-requirements-rule>**VERIFY**: Final output contains ONLY what appears in the embedded template</output-requirements-rule>
-        </output-requirements-rules>
+        <output-requirements-list>
+            <output-requirements-item>Generate the complete markdown file following the embedded template exactly</output-requirements-item>
+            <output-requirements-item>Use proper markdown formatting with headers, code blocks, tables, and checklists</output-requirements-item>
+            <output-requirements-item>**VERIFY**: Final output contains ONLY what appears in the embedded template</output-requirements-item>
+        </output-requirements-list>
     </output-requirements-section>
 </prompt>
