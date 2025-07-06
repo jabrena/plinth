@@ -27,7 +27,7 @@
 
     <examples>
         <toc auto-generate="true" />
-        <example-section number="1" id="effective-dependency-management">
+        <example number="1" id="effective-dependency-management">
             <example-header>
                 <example-title>Effective Dependency Management</example-title>
                 <example-subtitle>Manage Dependencies Effectively using `dependencyManagement` and BOMs</example-subtitle>
@@ -129,9 +129,9 @@
                 ]]></code-block>
                 </bad-example>
             </code-examples>
-        </example-section>
+        </example>
 
-        <example-section number="2" id="standard-directory-layout">
+        <example number="2" id="standard-directory-layout">
             <example-header>
                 <example-title>Standard Directory Layout</example-title>
                 <example-subtitle>Adhere to the Standard Directory Layout</example-subtitle>
@@ -173,9 +173,9 @@ my-app/
                     ]]></code-block>
                 </bad-example>
             </code-examples>
-        </example-section>
+        </example>
 
-        <example-section number="3" id="plugin-management">
+        <example number="3" id="plugin-management">
             <example-header>
                 <example-title>Plugin Management and Configuration</example-title>
                 <example-subtitle>Manage Plugin Versions and Configurations Centrally</example-subtitle>
@@ -245,9 +245,9 @@ my-app/
                 ]]></code-block>
                 </bad-example>
             </code-examples>
-        </example-section>
+        </example>
 
-        <example-section number="4" id="build-profiles">
+        <example number="4" id="build-profiles">
             <example-header>
                 <example-title>Use Build Profiles for Environment-Specific Configurations</example-title>
                 <example-subtitle>Employ Build Profiles for Environment-Specific Settings</example-subtitle>
@@ -317,9 +317,9 @@ my-app/
                 ]]></code-block>
                 </bad-example>
             </code-examples>
-        </example-section>
+        </example>
 
-        <example-section number="5" id="readable-poms">
+        <example number="5" id="readable-poms">
             <example-header>
                 <example-title>Keep POMs Readable and Maintainable</example-title>
                 <example-subtitle>Structure POMs Logically for Readability</example-subtitle>
@@ -408,9 +408,9 @@ my-app/
                 ]]></code-block>
                 </bad-example>
             </code-examples>
-        </example-section>
+        </example>
 
-        <example-section number="6" id="manage-repositories">
+        <example number="6" id="manage-repositories">
             <example-header>
                 <example-title>Manage Repositories Explicitly</example-title>
                 <example-subtitle>Declare Custom Repositories Explicitly and Minimize Their Use</example-subtitle>
@@ -460,9 +460,9 @@ my-app/
                 ]]></code-block>
                 </bad-example>
             </code-examples>
-        </example-section>
+        </example>
 
-        <example-section number="7" id="centralize-version-management">
+        <example number="7" id="centralize-version-management">
             <example-header>
                 <example-title>Centralize Version Management with Properties</example-title>
                 <example-subtitle>Use Properties to Manage Dependency and Plugin Versions</example-subtitle>
@@ -620,7 +620,7 @@ my-app/
                 ]]></code-block>
                 </bad-example>
             </code-examples>
-        </example-section>
+        </example>
     </examples>
 
     <output-requirements-section>

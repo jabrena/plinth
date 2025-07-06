@@ -71,7 +71,7 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="toc" minOccurs="0"/>
-                <xs:element ref="example-section" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="example" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
@@ -102,7 +102,7 @@
     <xs:element name="content-sections">
         <xs:complexType>
                     <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:element ref="example-section"/>
+            <xs:element ref="example"/>
             <xs:element ref="question-section"/>
             <xs:element ref="template-section"/>
             <xs:element ref="workflow-section"/>
@@ -580,7 +580,7 @@
     </xs:element>
 
     <!-- Example section -->
-    <xs:element name="example-section">
+    <xs:element name="example">
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="example-header"/>

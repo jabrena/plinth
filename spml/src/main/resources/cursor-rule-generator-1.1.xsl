@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output method="text" encoding="UTF-8"/>
-    <xsl:strip-space elements="prompt metadata tags example-section code-examples good-example bad-example question-section workflow-section template-section instruction-section output-requirements-section"/>
+    <xsl:strip-space elements="prompt metadata tags example code-examples good-example bad-example question-section workflow-section template-section instruction-section output-requirements-section"/>
 
     <xsl:template match="/prompt">
         <!-- Common frontmatter and header -->
@@ -38,7 +38,7 @@ alwaysApply: </xsl:text><xsl:value-of select="normalize-space(metadata/cursor-ai
 ### Table of contents
 
 </xsl:text>
-            <xsl:for-each select="examples/example-section">
+            <xsl:for-each select="examples/example">
                 <xsl:text>- Example </xsl:text><xsl:value-of select="@number"/><xsl:text>: </xsl:text><xsl:value-of select="normalize-space(example-header/example-title)"/>
                 <xsl:text>
 </xsl:text>
@@ -51,11 +51,11 @@ alwaysApply: </xsl:text><xsl:value-of select="normalize-space(metadata/cursor-ai
 
     <!-- Examples container template -->
     <xsl:template match="examples">
-        <xsl:apply-templates select="example-section"/>
+        <xsl:apply-templates select="example"/>
     </xsl:template>
 
     <!-- Example section template -->
-    <xsl:template match="example-section">
+    <xsl:template match="example">
         <xsl:text>
 ### Example </xsl:text><xsl:value-of select="@number"/><xsl:text>: </xsl:text><xsl:value-of select="normalize-space(example-header/example-title)"/>
         <xsl:text>

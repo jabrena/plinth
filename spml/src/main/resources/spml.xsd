@@ -124,7 +124,7 @@
                 <xs:element ref="workflow-section"/>
                 <xs:element ref="instruction-section"/>
                 <xs:element ref="output-requirements-section"/>
-                <xs:element ref="example-section"/>
+                <xs:element ref="example"/>
                 <xs:element ref="reference-section"/>
             </xs:choice>
         </xs:complexType>
@@ -701,7 +701,7 @@
     </xs:element>
 
     <!-- Example section -->
-    <xs:element name="example-section">
+    <xs:element name="example">
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="example-header"/>
