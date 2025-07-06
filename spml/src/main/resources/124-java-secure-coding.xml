@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<system-prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:noNamespaceSchemaLocation="spml.xsd"
-               id="124-java-secure-coding" version="1.0">
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="spml-1.1.xsd"
+    id="124-java-secure-coding" version="1.0">
+
     <metadata>
-        <description>Java Secure coding guidelines</description>
-        <globs>*.java</globs>
-        <always-apply>false</always-apply>
+        <!-- Cursor AI specific configuration -->
+        <cursor-ai>
+            <description>Java Secure coding guidelines</description>
+            <globs>*.java</globs>
+            <always-apply>false</always-apply>
+        </cursor-ai>
         <tags>
             <tag>java</tag>
             <tag>security</tag>
@@ -16,31 +20,27 @@
             <tag>secure-practices</tag>
         </tags>
         <version>1.0.0</version>
+        <title>Java Secure coding guidelines</title>
     </metadata>
 
-    <header>
-        <title>Java Secure coding guidelines</title>
-    </header>
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
-    <system-characterization>
-        <role-definition>You are a Senior software engineer with extensive experience in Java software development</role-definition>
-    </system-characterization>
+    <goal>
+        Apply secure coding practices to Java code to prevent common vulnerabilities and enhance application security.
+    </goal>
 
-    <description>
-        This document provides essential Java secure coding guidelines, focusing on five key areas: validating all untrusted inputs to prevent attacks like injection and path traversal; protecting against injection attacks (e.g., SQL injection) by using parameterized queries or prepared statements; minimizing the attack surface by adhering to the principle of least privilege and reducing exposure; employing strong, current cryptographic algorithms for hashing, encryption, and digital signatures while avoiding deprecated ones; and handling exceptions securely by avoiding the exposure of sensitive information in error messages to users and logging detailed, non-sensitive diagnostic information for developers.
-    </description>
-
-    <toc auto-generate="true"/>
-
-    <content-sections>
-        <rule-section number="1" id="input-validation">
-            <rule-header>
-                <rule-title>Input Validation</rule-title>
-                <rule-subtitle>Validate All Untrusted Inputs</rule-subtitle>
-            </rule-header>
-            <rule-description>
+    <examples>
+        <toc auto-generate="true" />
+        <example number="1" id="input-validation">
+            <example-header>
+                <example-title>Input Validation</example-title>
+                <example-subtitle>Validate All Untrusted Inputs</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
                 Always validate and sanitize data received from untrusted sources (users, network, files, etc.) before processing. This helps prevent various attacks like injection, path traversal, and buffer overflows. Validation should check for type, length, format, and range.
-            </rule-description>
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Comprehensive input validation
@@ -111,16 +111,18 @@ public class UnsafeInputProcessor {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="2" id="injection-protection">
-            <rule-header>
-                <rule-title>Protect Against Injection Attacks</rule-title>
-                <rule-subtitle>Use Parameterized Queries and Safe APIs</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        <example number="2" id="injection-protection">
+            <example-header>
+                <example-title>Protect Against Injection Attacks</example-title>
+                <example-subtitle>Use Parameterized Queries and Safe APIs</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
                 To prevent SQL Injection and other injection attacks, always use parameterized queries (PreparedStatements in JDBC) or an ORM that handles this automatically. Never concatenate user input directly into SQL queries, OS commands, or other executable statements.
-            </rule-description>
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Using PreparedStatement to prevent SQL Injection
@@ -211,16 +213,18 @@ public class VulnerableDataAccess {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="3" id="minimize-attack-surface">
-            <rule-header>
-                <rule-title>Minimize Attack Surface</rule-title>
-                <rule-subtitle>Apply Principle of Least Privilege</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        <example number="3" id="minimize-attack-surface">
+            <example-header>
+                <example-title>Minimize Attack Surface</example-title>
+                <example-subtitle>Apply Principle of Least Privilege</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
                 Grant only necessary permissions to code and users. Avoid running processes with excessive privileges. Expose only essential functionality and network ports. Regularly review and remove unused features, libraries, and accounts.
-            </rule-description>
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Minimal privileges and controlled access
@@ -320,16 +324,18 @@ public class UnsafeFileManager {
 // Having default passwords or credentials]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="4" id="strong-cryptography">
-            <rule-header>
-                <rule-title>Use Strong Cryptography</rule-title>
-                <rule-subtitle>Employ Current and Robust Cryptographic Algorithms</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        <example number="4" id="strong-cryptography">
+            <example-header>
+                <example-title>Use Strong Cryptography</example-title>
+                <example-subtitle>Employ Current and Robust Cryptographic Algorithms</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
                 Use well-vetted, industry-standard cryptographic libraries and algorithms for hashing, encryption, and digital signatures. Avoid deprecated or weak algorithms (e.g., MD5, SHA1 for passwords, DES). Keep cryptographic keys secure and manage them properly.
-            </rule-description>
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Strong cryptographic practices
@@ -494,16 +500,18 @@ public class WeakCryptoUtils {
 // - Using weak key derivation functions]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="5" id="secure-exception-handling">
-            <rule-header>
-                <rule-title>Handle Exceptions Securely</rule-title>
-                <rule-subtitle>Avoid Exposing Sensitive Information</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        <example number="5" id="secure-exception-handling">
+            <example-header>
+                <example-title>Handle Exceptions Securely</example-title>
+                <example-subtitle>Avoid Exposing Sensitive Information</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
                 Catch exceptions appropriately, but do not reveal sensitive system details or stack traces to users in production. Log detailed error information server-side for debugging, but provide generic error messages to the client.
-            </rule-description>
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Secure exception handling
@@ -520,133 +528,120 @@ public class SecureExceptionHandler {
         try {
             validateUser(userId);
             processData(sensitiveData);
-
-        } catch (ValidationException e) {
-            // Log detailed error for developers (no sensitive data)
-            logger.warn("Validation failed for user: {}. Error: {}",
-                       sanitizeForLogging(userId), e.getErrorCode());
-
-            // Provide generic error message to user
-            throw new ServiceException("Invalid input provided. Please check your data.", e);
-
-        } catch (DatabaseException e) {
-            // Log technical details for debugging
-            logger.error("Database error during operation for user: {}. Query: {}",
-                        sanitizeForLogging(userId), e.getQueryId(), e);
-
-            // Generic message to user - don't expose database details
-            throw new ServiceException("Service temporarily unavailable. Please try again later.", e);
-
-        } catch (SecurityException e) {
-            // Security incidents need special logging
-            logger.error("SECURITY: Unauthorized access attempt by user: {}. Details: {}",
-                        sanitizeForLogging(userId), e.getMessage());
-
-            // Don't give attackers information about what they're doing wrong
-            throw new ServiceException("Access denied.", e);
-
+            
+        } catch (UserNotFoundException e) {
+            // Log detailed error for debugging
+            logger.error("User not found during sensitive operation: userId={}", userId, e);
+            // Return generic error to client
+            throw new ServiceException("Operation failed", ErrorCode.INVALID_REQUEST);
+            
+        } catch (DataProcessingException e) {
+            // Log technical details
+            logger.error("Data processing failed: userId={}, dataLength={}", 
+                        userId, sensitiveData.length(), e);
+            // Don't expose internal details
+            throw new ServiceException("Processing error occurred", ErrorCode.INTERNAL_ERROR);
+            
         } catch (Exception e) {
-            // Catch-all for unexpected errors
-            logger.error("Unexpected error in sensitive operation for user: {}",
-                        sanitizeForLogging(userId), e);
-
-            throw new ServiceException("An unexpected error occurred. Please contact support.", e);
+            // Catch unexpected errors
+            logger.error("Unexpected error in sensitive operation: userId={}", userId, e);
+            throw new ServiceException("System error", ErrorCode.INTERNAL_ERROR);
         }
     }
 
-    /**
-     * Sanitizes user input for safe logging
-     */
-    private String sanitizeForLogging(String input) {
-        if (input == null) return "null";
+    // Secure error response helper
+    public void handleError(HttpServletResponse response, ServiceException e) throws IOException {
+        response.setStatus(e.getErrorCode().getHttpStatus());
+        response.setContentType("application/json");
+        
+        String errorResponse = String.format(
+            "{\"error\": \"%s\", \"code\": \"%s\", \"timestamp\": \"%s\"}",
+            e.getMessage(), e.getErrorCode().name(), Instant.now()
+        );
+        
+        response.getWriter().write(errorResponse);
+    }
+}
 
-        // Remove or mask potentially sensitive characters
-        return input.replaceAll("[^a-zA-Z0-9-_]", "*");
+// Secure error codes without sensitive details
+public enum ErrorCode {
+    INVALID_REQUEST(400, "Invalid request"),
+    UNAUTHORIZED(401, "Unauthorized"),
+    FORBIDDEN(403, "Forbidden"),
+    NOT_FOUND(404, "Not found"),
+    INTERNAL_ERROR(500, "Internal server error");
+
+    private final int httpStatus;
+    private final String message;
+
+    ErrorCode(int httpStatus, String message) {
+        this.httpStatus = httpStatus;
+        this.message = message;
     }
 
-    public void handleWebRequest(HttpServletResponse response, String userInput) {
-        try {
-            processUserInput(userInput);
-            response.setStatus(200);
-
-        } catch (ServiceException e) {
-            // Log the exception with context
-            logger.error("Service error processing request: {}", e.getMessage(), e);
-
-            try {
-                // Return generic error to client
-                response.setStatus(500);
-                response.getWriter().write("{\"error\":\"Internal server error\"}");
-            } catch (IOException ioException) {
-                logger.error("Failed to write error response", ioException);
-            }
-        }
-    }
+    public int getHttpStatus() { return httpStatus; }
+    public String getMessage() { return message; }
 }]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block language="java"><![CDATA[// AVOID: Insecure exception handling
+                    <code-block language="java"><![CDATA[// AVOID: Exposing sensitive information
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class InsecureExceptionHandler {
 
-    public void performSensitiveOperation(String userId, String creditCardNumber) {
+    public void performSensitiveOperation(String userId, String sensitiveData)
+            throws Exception {
         try {
-            processPayment(userId, creditCardNumber);
-
-        } catch (SQLException e) {
-            // BAD: Exposing SQL error details to user
-            throw new RuntimeException("Database error: " + e.toString() +
-                                     " Query: " + e.getMessage());
-
-        } catch (SecurityException e) {
-            // BAD: Revealing security details to potential attacker
-            throw new RuntimeException("Security check failed: " + e.getMessage() +
-                                     " User role: admin required, current: " + getCurrentUserRole());
-
+            validateUser(userId);
+            processData(sensitiveData);
         } catch (Exception e) {
-            // BAD: Generic catch that might expose stack traces
-            e.printStackTrace(); // Prints to stderr, might be visible to users
-            throw new RuntimeException("Error processing payment for card: " +
-                                     creditCardNumber, e); // Leaks sensitive data!
+            // BAD: Exposing full exception details to caller
+            throw new Exception("Database connection failed: " + e.getMessage() + 
+                              " at host: db.internal.company.com:5432", e);
         }
     }
 
-    public void handleWebRequest(HttpServletResponse response, String userInput) {
+    // BAD: Exposing stack traces to users
+    public void handleError(HttpServletResponse response, Exception e) throws IOException {
+        response.setStatus(500);
+        response.setContentType("text/plain");
+        
+        // TERRIBLE: Exposing full stack trace to client
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+        
+        response.getWriter().write("Error occurred:\n" + sw.toString());
+    }
+
+    // BAD: Logging sensitive data
+    public void processPayment(String cardNumber, String cvv) {
         try {
-            processUserInput(userInput);
-
+            // Process payment...
         } catch (Exception e) {
-            try {
-                // BAD: Exposing full stack trace to client
-                response.getWriter().println("Error: " + e.toString());
-                e.printStackTrace(response.getWriter()); // NEVER do this!
-
-                // BAD: Revealing internal paths and system information
-                response.getWriter().println("System details: " + System.getProperty("user.dir"));
-                response.getWriter().println("Java version: " + System.getProperty("java.version"));
-
-            } catch (IOException ioException) {
-                // More problems - nested exception handling
-                ioException.printStackTrace();
-            }
+            // TERRIBLE: Logging sensitive data
+            System.out.println("Payment failed for card: " + cardNumber + ", CVV: " + cvv);
+            e.printStackTrace(); // Exposing stack trace in logs
         }
     }
 
-    public void authenticateUser(String username, String password) {
-        try {
-            performAuthentication(username, password);
-        } catch (Exception e) {
-            // BAD: Logging sensitive information
-            System.out.println("Authentication failed for user: " + username +
-                              " with password: " + password + " Error: " + e.getMessage());
+    // BAD: Different error messages reveal system information
+    public void login(String username, String password) throws Exception {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new Exception("User '" + username + "' does not exist in database");
         }
+        
+        if (!user.getPassword().equals(password)) {
+            throw new Exception("Invalid password for user '" + username + "'");
+        }
+        
+        // This tells attackers which usernames exist vs which don't
     }
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
-    </content-sections>
-</system-prompt>
+        </example>
+    </examples>
+</prompt>
