@@ -46,7 +46,6 @@
                 - Create custom functional interfaces only when a specific signature is needed that isn't covered by built-in ones.
                 - Always annotate custom functional interfaces with `@FunctionalInterface` to ensure they meet the criteria (a single abstract method) and to clearly communicate their purpose.
                 ]]>
-                            ]]>
             </example-description>
             <code-examples>
                 <good-example>
@@ -129,7 +128,6 @@ public class OldStyleAnonymousClass {
                 <![CDATA[
                 Use streams for processing sequences of elements from collections or other sources in a functional style. Prefer a declarative approach (what to do) over an imperative one (how to do it) for stream operations. Chain stream operations effectively to create a readable processing pipeline. Use appropriate terminal operations to produce a result or side-effect. Be mindful of performance implications, especially with large datasets or complex operations.
                 ]]>
-                            ]]>
             </example-description>
             <code-examples>
                 <good-example>
@@ -205,7 +203,6 @@ public class StreamAntiPattern {
                 <![CDATA[
                 Use `Optional<T>` to explicitly represent values that may be absent, making your API clearer about nullability. Avoid calling `Optional.get()` directly without first checking `isPresent()`. Prefer functional alternatives. Leverage `Optional`'s functional-style methods like `map()`, `flatMap()`, `filter()`, `orElse()`, `orElseGet()`, `orElseThrow()` to handle absent values in a fluent and safe manner.
                 ]]>
-                            ]]>
             </example-description>
             <code-examples>
                 <good-example>
