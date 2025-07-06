@@ -5,22 +5,34 @@ alwaysApply: false
 ---
 # Java Logging Best Practices
 
-## System prompt characterization
+## Role
 
-Role definition: You are a Senior software engineer with extensive experience in Java software development
+You are a Senior software engineer with extensive experience in Java software development
 
-## Description
+## Goal
 
 Effective Java logging involves selecting a standard framework (SLF4J with Logback/Log4j2), using appropriate log levels (ERROR, WARN, INFO, DEBUG, TRACE), and adhering to core practices like parameterized logging, proper exception handling, and avoiding sensitive data exposure. Configuration should be environment-specific with clear output formats. Security is paramount: mask sensitive data, control log access, and ensure secure transmission. Implement centralized log aggregation, monitoring, and alerting for proactive issue detection. Finally, logging behavior and its impact should be validated through comprehensive testing.
 
-## Table of contents
+### Implementing These Principles
 
-- Rule 1: Choose an Appropriate Logging Framework
-- Rule 2: Understand and Use Logging Levels Correctly
-- Rule 3: Adhere to Core Logging Practices
-- Rule 4: Implement Secure Logging Practices
+1. **Start with framework selection**: Choose SLF4J with Logback as your standard logging approach.
+2. **Establish logging level conventions**: Create consistent patterns for when to use each log level.
+3. **Implement security-first practices**: Always mask sensitive data and validate log outputs.
+4. **Use structured logging**: Leverage parameterized logging and MDC for better observability.
+5. **Monitor and measure**: Set up proper log aggregation and alerting systems.
 
-## Rule 1: Choose an Appropriate Logging Framework
+Remember, good logging in Java is about operational excellence - making your application's behavior transparent and debuggable while maintaining security and performance.
+
+## Examples
+
+### Table of contents
+
+- Example 1: Choose an Appropriate Logging Framework
+- Example 2: Understand and Use Logging Levels Correctly
+- Example 3: Adhere to Core Logging Practices
+- Example 4: Implement Secure Logging Practices
+
+### Example 1: Choose an Appropriate Logging Framework
 
 Title: Select a Standard Logging Facade and Implementation
 Description: Using a standard logging facade like SLF4J allows for flexibility in choosing and switching an underlying logging implementation. The primary recommendation is SLF4J with Logback for its robustness and feature-richness.
@@ -140,7 +152,7 @@ public class BadLoggingService {
 }
 ```
 
-## Rule 2: Understand and Use Logging Levels Correctly
+### Example 2: Understand and Use Logging Levels Correctly
 
 Title: Apply Appropriate Logging Levels for Messages
 Description: Use logging levels consistently to categorize the severity and importance of log messages. ERROR for critical issues, WARN for potentially harmful situations, INFO for important business events, DEBUG for detailed information, and TRACE for fine-grained debugging.
@@ -309,7 +321,7 @@ public class BadLevelUsage {
 }
 ```
 
-## Rule 3: Adhere to Core Logging Practices
+### Example 3: Adhere to Core Logging Practices
 
 Title: Implement Fundamental Best Practices
 Description: Follow core practices including using parameterized logging, proper exception handling, avoiding sensitive data exposure, and implementing performance considerations for logging operations.
@@ -594,7 +606,7 @@ public class PoorLoggingPractices {
 }
 ```
 
-## Rule 4: Implement Secure Logging Practices
+### Example 4: Implement Secure Logging Practices
 
 Title: Ensure Logs Do Not Compromise Security
 Description: Actively mask or filter sensitive data, control access to log files, use secure transmission protocols, and comply with data protection regulations when logging information.
