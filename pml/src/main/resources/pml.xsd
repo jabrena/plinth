@@ -63,6 +63,28 @@
     <!-- Goal statement -->
     <xs:element name="goal" type="xs:string"/>
 
+    <!-- Restrictions block -->
+    <xs:element name="restrictions">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="restrictions-description" minOccurs="0"/>
+                <xs:element ref="restriction-list"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="restrictions-description" type="xs:string"/>
+
+    <xs:element name="restriction-list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="restriction" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="restriction" type="xs:string"/>
+
     <!-- Examples container -->
     <xs:element name="examples">
         <xs:complexType>
@@ -94,6 +116,33 @@
             </xs:attribute>
         </xs:complexType>
     </xs:element>
+
+    <!-- Example section -->
+    <xs:element name="example">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="example-header"/>
+                <xs:element ref="example-description" minOccurs="0"/>
+                <xs:element ref="code-examples" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="type" type="xs:string" use="optional"/>
+            <xs:attribute name="number" type="xs:string" use="optional"/>
+            <xs:attribute name="id" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="example-header">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="example-title"/>
+                <xs:element ref="example-subtitle" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="example-title" type="xs:string"/>
+    <xs:element name="example-subtitle" type="xs:string"/>
+    <xs:element name="example-description" type="xs:string"/>
 
     <!-- Code examples with good and bad patterns -->
     <xs:element name="code-examples">
@@ -131,28 +180,6 @@
         </xs:complexType>
     </xs:element>
 
-    <!-- Restrictions block -->
-    <xs:element name="restrictions">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="restrictions-description" minOccurs="0"/>
-                <xs:element ref="restriction-list"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="restrictions-description" type="xs:string"/>
-
-    <xs:element name="restriction-list">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="restriction" minOccurs="0" maxOccurs="unbounded"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="restriction" type="xs:string"/>
-
     <!-- Output requirements section -->
     <xs:element name="output-requirements-section">
         <xs:complexType>
@@ -171,32 +198,5 @@
     </xs:element>
 
     <xs:element name="output-requirements-item" type="xs:string"/>
-
-    <!-- Example section -->
-    <xs:element name="example">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="example-header"/>
-                <xs:element ref="example-description" minOccurs="0"/>
-                <xs:element ref="code-examples" minOccurs="0"/>
-            </xs:sequence>
-            <xs:attribute name="type" type="xs:string" use="optional"/>
-            <xs:attribute name="number" type="xs:string" use="optional"/>
-            <xs:attribute name="id" type="xs:string" use="optional"/>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="example-header">
-        <xs:complexType>
-            <xs:sequence>
-                <xs:element ref="example-title"/>
-                <xs:element ref="example-subtitle" minOccurs="0"/>
-            </xs:sequence>
-        </xs:complexType>
-    </xs:element>
-
-    <xs:element name="example-title" type="xs:string"/>
-    <xs:element name="example-subtitle" type="xs:string"/>
-    <xs:element name="example-description" type="xs:string"/>
 
 </xs:schema>
