@@ -25,8 +25,6 @@ import org.xml.sax.XMLReader;
  */
 public final class CursorRuleGenerator {
 
-    private static final String XSD_FILE_NAME_V1_1 = "pml-1.1.xsd";
-
     // ===============================================================
     // PUBLIC API - Entry point for cursor rule generation
     // ===============================================================

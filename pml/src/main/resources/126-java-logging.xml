@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="pml-1.1.xsd"
+    xsi:noNamespaceSchemaLocation="pml.xsd"
     id="126-java-logging" version="1.0">
 
     <metadata>

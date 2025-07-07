@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output method="text" encoding="UTF-8"/>
-    <xsl:strip-space elements="prompt metadata tags example code-examples good-example bad-example question-section workflow-section template-section instruction-section output-requirements-section"/>
+    <xsl:strip-space elements="prompt metadata tags example code-examples good-example bad-example output-requirements-section"/>
 
     <xsl:template match="/prompt">
         <!-- Common frontmatter and header -->
@@ -64,23 +64,7 @@ Title: </xsl:text><xsl:value-of select="normalize-space(example-header/example-s
         <xsl:text>
 Description: </xsl:text>        <xsl:value-of select="normalize-space(example-description)"/>
 
-        <xsl:for-each select="rule-notes">
-            <xsl:text>
 
-</xsl:text>
-            <xsl:if test="notes-title">
-                <xsl:text>**</xsl:text><xsl:value-of select="normalize-space(notes-title)"/>
-                <xsl:text>**
-
-</xsl:text>
-            </xsl:if>
-            <xsl:for-each select="note-item">
-                <xsl:text>*   **</xsl:text><xsl:value-of select="normalize-space(note-term)"/>
-                <xsl:text>**: </xsl:text><xsl:value-of select="normalize-space(note-description)"/>
-                <xsl:text>
-</xsl:text>
-            </xsl:for-each>
-        </xsl:for-each>
 
         <xsl:if test="code-examples/good-example">
             <xsl:text>
@@ -135,19 +119,12 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
         </xsl:call-template>
     </xsl:template>
 
-    <!-- Output requirements section template - handles both complex and simple structures -->
+    <!-- Output requirements section template -->
     <xsl:template match="output-requirements-section">
         <xsl:text>
-## Output Requirements</xsl:text>
-        <xsl:text>
+## Output Requirements
 
 </xsl:text>
-        <xsl:if test="output-requirements-description">
-            <xsl:value-of select="normalize-space(output-requirements-description)"/>
-            <xsl:text>
-
-</xsl:text>
-        </xsl:if>
         <xsl:for-each select="output-requirements-list/output-requirements-item">
             <xsl:text>- </xsl:text><xsl:value-of select="normalize-space(.)"/>
             <xsl:text>
