@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<system-prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:noNamespaceSchemaLocation="spml.xsd"
-               id="143-java-data-oriented-programming" version="1.0">
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="spml-1.1.xsd"
+    id="143-java-data-oriented-programming" version="1.0">
+
     <metadata>
-        <description></description>
-        <globs></globs>
-        <always-apply>false</always-apply>
+        <!-- Markdown Front Matter for Cursor Rules -->
+        <cursor-ai>
+            <description></description>
+            <globs></globs>
+            <always-apply>false</always-apply>
+        </cursor-ai>
         <tags>
             <tag>java</tag>
             <tag>data-oriented-programming</tag>
@@ -15,35 +19,37 @@
             <tag>best-practices</tag>
         </tags>
         <version>1.0.0</version>
+        <title>Java rules to apply data oriented programming style</title>
     </metadata>
 
-    <header>
-        <title>Java rules to apply data oriented programming style</title>
-    </header>
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
-    <system-characterization>
-        <role-definition>You are a Senior software engineer with extensive experience in Java software development</role-definition>
-    </system-characterization>
+    <goal><![CDATA[
+        Java Data-Oriented Programming emphasizes separating code (behavior) from data structures, which should ideally be immutable (e.g., using records). Data manipulation should occur via pure functions that transform data into new instances. It's often beneficial to keep data structures flat and denormalized (using IDs for references) where appropriate, and to start with generic data representations (like `Map<String, Object>`) converting to specific types only when necessary. Data integrity is ensured through pure validation functions. Flexible, generic data access layers facilitate working with various data types and storage mechanisms. All data transformations should be explicit, traceable, and composed of clear, pure functional steps.
 
-    <description>
-        Java Data-Oriented Programming emphasizes separating code (behavior) from data structures, which should ideally be immutable (e.g., using records). Data manipulation should occur via pure functions that transform data into new instances. It's often beneficial to keep data structures flat and denormalized (using IDs for references) where appropriate, and to start with generic data representations (like `Map&lt;String, Object&gt;`) converting to specific types only when necessary. Data integrity is ensured through pure validation functions. Flexible, generic data access layers facilitate working with various data types and storage mechanisms. All data transformations should be explicit, traceable, and composed of clear, pure functional steps.
-    </description>
+        ### Implementing These Principles
 
-    <toc auto-generate="true"/>
+        These guidelines are built upon the following core principles:
 
-    <content-sections>
-        <rule-section number="1" id="separate-code-from-data">
-            <rule-header>
-                <rule-title>Separate Code from Data</rule-title>
-                <rule-subtitle>Decouple Behavior (Code) from Data Structures</rule-subtitle>
-            </rule-header>
-            <rule-description>
-- Use records or simple POJOs primarily for holding data.
-- Place behavior (methods that operate on data) in separate utility classes or services.
-- Avoid mixing state (fields) and complex behavior (methods with logic) within the same class intended as a data carrier.
-- Prefer static methods in utility classes for operations on data objects.
-- Design data structures to be self-contained and focused solely on representing state.
-            </rule-description>
+        1.  **Separation of Concerns (Data vs. Code)**: Strictly decouple data structures (which should be simple carriers like records or POJOs) from the code (behavior) that operates on them. Behavior should reside in separate utility classes or services.
+        2.  **Immutability**: Design data structures to be immutable. Use records or final fields, and ensure that any transformations on data produce new instances rather than modifying existing ones.
+        3.  **Pure Data Transformations**: Manipulate data using pure functions that depend only on their inputs and produce no side effects. This makes transformations predictable, testable, and easier to reason about.
+        4.  **Simplicity and Flexibility of Data Structures**: Prefer flat, denormalized data structures where appropriate, using IDs for references rather than deep nesting. Start with generic representations (like `Map<String, Object>`) if the schema is dynamic, converting to specific types only when necessary for processing.
+        5.  **Explicit and Traceable Operations**: Ensure all data validation and transformation steps are explicit, composed of clear functional steps, and easily traceable. Avoid hidden or implicit logic within data objects.
+     ]]></goal>
+
+    <examples>
+        <toc auto-generate="true" />
+        <example number="1" id="separate-code-from-data">
+            <example-header>
+                <example-title>Separate Code from Data</example-title>
+                <example-subtitle>Decouple Behavior (Code) from Data Structures</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use records or simple POJOs primarily for holding data. Place behavior (methods that operate on data) in separate utility classes or services. Avoid mixing state (fields) and complex behavior (methods with logic) within the same class intended as a data carrier. Prefer static methods in utility classes for operations on data objects. Design data structures to be self-contained and focused solely on representing state.
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// Data structure (record)
@@ -112,20 +118,18 @@ class User {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="2" id="data-should-be-immutable">
-            <rule-header>
-                <rule-title>Data Should Be Immutable</rule-title>
-                <rule-subtitle>Ensure Data Immutability</rule-subtitle>
-            </rule-header>
-            <rule-description>
-- Use records (which are inherently immutable) whenever possible for data carriers.
-- Declare all fields as `final`.
-- Do not provide setter methods for fields.
-- When returning collections or other mutable types from getters, return defensive copies or unmodifiable views (e.g., `List.copyOf()`, `Collections.unmodifiableList()`).
-- For transformations, always create and return new instances with the modified data rather than altering existing instances.
-            </rule-description>
+        <example number="2" id="data-should-be-immutable">
+            <example-header>
+                <example-title>Data Should Be Immutable</example-title>
+                <example-subtitle>Ensure Data Immutability</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use records (which are inherently immutable) whenever possible for data carriers. Declare all fields as final. Do not provide setter methods for fields. When returning collections or other mutable types from getters, return defensive copies or unmodifiable views (e.g., List.copyOf(), Collections.unmodifiableList()). For transformations, always create and return new instances with the modified data rather than altering existing instances.
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[import java.util.List;
@@ -221,21 +225,18 @@ class MutableConfig {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="3" id="use-pure-functions">
-            <rule-header>
-                <rule-title>Use Pure Functions to Manipulate Data</rule-title>
-                <rule-subtitle>Employ Pure Functions for Data Transformations</rule-subtitle>
-            </rule-header>
-            <rule-description>
-- Functions that manipulate data should depend solely on their input parameters, not on any instance or external state.
-- They must not cause any side effects (e.g., modifying input objects, global variables, I/O operations).
-- Pure functions are inherently stateless: given the same input, they always produce the same output.
-- Transformations should return new data instances rather than modifying the input data directly.
-- Prefer static methods for such pure data transformation functions.
-- Keep each function focused on a single, well-defined transformation.
-            </rule-description>
+        <example number="3" id="use-pure-functions">
+            <example-header>
+                <example-title>Use Pure Functions to Manipulate Data</example-title>
+                <example-subtitle>Employ Pure Functions for Data Transformations</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Functions that manipulate data should depend solely on their input parameters, not on any instance or external state. They must not cause any side effects (e.g., modifying input objects, global variables, I/O operations). Pure functions are inherently stateless: given the same input, they always produce the same output. Transformations should return new data instances rather than modifying the input data directly. Prefer static methods for such pure data transformation functions. Keep each function focused on a single, well-defined transformation.
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[import java.util.List;
@@ -324,20 +325,18 @@ class PriceCalculator {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="4" id="keep-data-flat-denormalized">
-            <rule-header>
-                <rule-title>Keep Data Flat and Denormalized</rule-title>
-                <rule-subtitle>Prefer Flatter Data Structures with References</rule-subtitle>
-            </rule-header>
-            <rule-description>
-- Avoid excessively deep nesting of data objects, which can make data harder to access and manage.
-- When representing relationships, consider using references (like IDs) instead of directly embedding complex objects within other objects, especially for many-to-many or one-to-many relationships.
-- Store related but distinct entities in separate flat collections or maps, linked by these IDs.
-- This approach can simplify querying, updating, and serializing data.
-- However, balance this with the need for data co-location for performance in specific access patterns. Denormalization is a trade-off.
-            </rule-description>
+        <example number="4" id="keep-data-flat-denormalized">
+            <example-header>
+                <example-title>Keep Data Flat and Denormalized</example-title>
+                <example-subtitle>Prefer Flatter Data Structures with References</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Avoid excessively deep nesting of data objects, which can make data harder to access and manage. When representing relationships, consider using references (like IDs) instead of directly embedding complex objects within other objects, especially for many-to-many or one-to-many relationships. Store related but distinct entities in separate flat collections or maps, linked by these IDs. This approach can simplify querying, updating, and serializing data. However, balance this with the need for data co-location for performance in specific access patterns. Denormalization is a trade-off.
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[import java.util.List;
@@ -430,21 +429,18 @@ class DeeplyNestedExample {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="5" id="keep-data-generic-until-specific">
-            <rule-header>
-                <rule-title>Keep Data Generic Until Specific</rule-title>
-                <rule-subtitle>Start with Generic Data Structures, Convert to Specific Types When Needed</rule-subtitle>
-            </rule-header>
-            <rule-description>
-- For highly dynamic or externally defined data, start with generic data structures like `Map&lt;String, Object&gt;` or JSON-like trees.
-- This allows flexibility in handling varied or evolving data schemas.
-- Convert to specific, strongly-typed objects (like records) only when the data needs to be processed in a type-safe manner or when specific business logic applies.
-- Implement robust, type-safe converter functions or classes to perform this transformation.
-- Validate data during the conversion process to ensure it conforms to the expected specific type.
-- Clearly document the expected structure of the generic data.
-            </rule-description>
+        <example number="5" id="keep-data-generic-until-specific">
+            <example-header>
+                <example-title>Keep Data Generic Until Specific</example-title>
+                <example-subtitle>Start with Generic Data Structures, Convert to Specific Types When Needed</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                For highly dynamic or externally defined data, start with generic data structures like Map<String, Object> or JSON-like trees. This allows flexibility in handling varied or evolving data schemas. Convert to specific, strongly-typed objects (like records) only when the data needs to be processed in a type-safe manner or when specific business logic applies. Implement robust, type-safe converter functions or classes to perform this transformation. Validate data during the conversion process to ensure it conforms to the expected specific type. Clearly document the expected structure of the generic data.
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[import java.util.Map;
@@ -550,21 +546,18 @@ class RigidDataExample {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="6" id="data-integrity-validation">
-            <rule-header>
-                <rule-title>Data Integrity through Validation Functions</rule-title>
-                <rule-subtitle>Ensure Data Integrity with Pure Validation Functions</rule-subtitle>
-            </rule-header>
-            <rule-description>
-- Implement data validation logic as pure functions that take data as input and return validation results (e.g., a list of errors, or an object indicating success/failure).
-- These functions should not throw exceptions for validation failures as a primary flow control; instead, they should return information about the validation outcome.
-- Multiple validation rules can be composed or chained together.
-- Consider using `Optional` or a custom result type to represent validation messages for individual rules.
-- Keep validation logic separate from the data structures themselves.
-- Make validation rules reusable across different parts of the application.
-            </rule-description>
+        <example number="6" id="data-integrity-validation">
+            <example-header>
+                <example-title>Data Integrity through Validation Functions</example-title>
+                <example-subtitle>Ensure Data Integrity with Pure Validation Functions</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Implement data validation logic as pure functions that take data as input and return validation results (e.g., a list of errors, or an object indicating success/failure). These functions should not throw exceptions for validation failures as a primary flow control; instead, they should return information about the validation outcome. Multiple validation rules can be composed or chained together. Consider using Optional or a custom result type to represent validation messages for individual rules. Keep validation logic separate from the data structures themselves. Make validation rules reusable across different parts of the application.
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[import java.util.List;
@@ -663,22 +656,18 @@ record UserWithEmbeddedValidation(String email, int age) {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="7" id="flexible-generic-data-access">
-            <rule-header>
-                <rule-title>Flexible and Generic Data Access</rule-title>
-                <rule-subtitle>Design Flexible and Generic Data Access Layers</rule-subtitle>
-            </rule-header>
-            <rule-description>
-- Define generic interfaces for data access operations (CRUD - Create, Read, Update, Delete).
-- Use type parameters (`&lt;T&gt;`) in these interfaces to allow them to work with various data types.
-- Implementations of these interfaces can then provide data storage and retrieval using different mechanisms (e.g., in-memory maps, databases, file systems) while the calling code remains decoupled.
-- Ensure data storage implementations are thread-safe if they will be accessed concurrently.
-- Support common querying needs like filtering or finding by ID.
-- Design in a way that allows the underlying storage implementation to be easily swapped or replaced.
-- Consider caching strategies at this layer for performance improvement.
-            </rule-description>
+        <example number="7" id="flexible-generic-data-access">
+            <example-header>
+                <example-title>Flexible and Generic Data Access</example-title>
+                <example-subtitle>Design Flexible and Generic Data Access Layers</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Define generic interfaces for data access operations (CRUD - Create, Read, Update, Delete). Use type parameters (<T>) in these interfaces to allow them to work with various data types. Implementations of these interfaces can then provide data storage and retrieval using different mechanisms (e.g., in-memory maps, databases, file systems) while the calling code remains decoupled. Ensure data storage implementations are thread-safe if they will be accessed concurrently. Support common querying needs like filtering or finding by ID. Design in a way that allows the underlying storage implementation to be easily swapped or replaced. Consider caching strategies at this layer for performance improvement.
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[import java.util.List;
@@ -789,21 +778,18 @@ class BadDataAccessExample {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="8" id="explicit-traceable-transformation">
-            <rule-header>
-                <rule-title>Explicit and Traceable Data Transformation</rule-title>
-                <rule-subtitle>Ensure Data Transformations are Explicit and Traceable</rule-subtitle>
-            </rule-header>
-            <rule-description>
-- Make all data transformation steps visible and easy to follow.
-- Use sequences of pure functions for complex transformations, making each step clear.
-- Avoid hidden or implicit transformations within objects or complex method calls.
-- Consider logging input, output, and intermediate steps of significant transformations, especially during debugging or for auditing.
-- Handle potential errors or exceptional cases gracefully within the transformation pipeline.
-- Document the overall flow and purpose of complex data transformations.
-            </rule-description>
+        <example number="8" id="explicit-traceable-transformation">
+            <example-header>
+                <example-title>Explicit and Traceable Data Transformation</example-title>
+                <example-subtitle>Ensure Data Transformations are Explicit and Traceable</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Make all data transformation steps visible and easy to follow. Use sequences of pure functions for complex transformations, making each step clear. Avoid hidden or implicit transformations within objects or complex method calls. Consider logging input, output, and intermediate steps of significant transformations, especially during debugging or for auditing. Handle potential errors or exceptional cases gracefully within the transformation pipeline. Document the overall flow and purpose of complex data transformations.
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[import java.util.Map;
@@ -916,6 +902,6 @@ class HiddenTransformationExample {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
-    </content-sections>
-</system-prompt>
+        </example>
+    </examples>
+</prompt>
