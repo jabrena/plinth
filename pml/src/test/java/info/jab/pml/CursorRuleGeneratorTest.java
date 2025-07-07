@@ -33,11 +33,11 @@ class CursorRuleGeneratorTest {
             CursorRuleGenerator generator = new CursorRuleGenerator();
 
             // When & Then - Updated for functional API exception handling
-            assertThatThrownBy(() -> generator.generate("non-existent.xml", "cursor-rule-generator.xsl"))
+            assertThatThrownBy(() -> generator.generate("non-existent.xml", "cursor-rules.xsl"))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Failed to generate cursor rules for")
                 .hasMessageContaining("non-existent.xml")
-                .hasMessageContaining("cursor-rule-generator.xsl");
+                .hasMessageContaining("cursor-rules.xsl");
         }
 
         @Test
@@ -68,7 +68,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent(baseFileName + ".mdc");
 
             // When
-            String actualResult = generator.generate(baseFileName + ".xml", "cursor-rule-generator.xsl", "pml.xsd");
+            String actualResult = generator.generate(baseFileName + ".xml", "cursor-rules.xsl", "pml.xsd");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -123,19 +123,19 @@ class CursorRuleGeneratorTest {
         CursorRuleGenerator generator = new CursorRuleGenerator();
 
         // When
-        String checklistGuideResult = generator.generate("100-java-checklist-guide.xml", "cursor-rule-generator.xsl", "pml.xsd");
-        String bestPracticesResult = generator.generate("110-java-maven-best-practices.xml", "cursor-rule-generator.xsl", "pml.xsd");
-        String documentationResult = generator.generate("112-java-maven-documentation.xml", "cursor-rule-generator.xsl", "pml.xsd");
-        String objectOrientedDesignResult = generator.generate("121-java-object-oriented-design.xml", "cursor-rule-generator.xsl", "pml.xsd");
-        String typeDesignResult = generator.generate("122-java-type-design.xml", "cursor-rule-generator.xsl", "pml.xsd");
-        String generalGuidelinesResult = generator.generate("123-java-general-guidelines.xml", "cursor-rule-generator.xsl", "pml.xsd");
-        String secureCodingResult = generator.generate("124-java-secure-coding.xml", "cursor-rule-generator.xsl", "pml.xsd");
-        String concurrencyResult = generator.generate("125-java-concurrency.xml", "cursor-rule-generator.xsl", "pml.xsd");
-        String loggingResult = generator.generate("126-java-logging.xml", "cursor-rule-generator.xsl", "pml.xsd");
-        String unitTestingResult = generator.generate("131-java-unit-testing.xml", "cursor-rule-generator.xsl", "pml.xsd");
-        String refactoringWithModernFeaturesResult = generator.generate("141-java-refactoring-with-modern-features.xml", "cursor-rule-generator.xsl", "pml.xsd");
-        String functionalProgrammingResult = generator.generate("142-java-functional-programming.xml", "cursor-rule-generator.xsl", "pml.xsd");
-        String dataOrientedProgrammingResult = generator.generate("143-java-data-oriented-programming.xml", "cursor-rule-generator.xsl", "pml.xsd");
+        String checklistGuideResult = generator.generate("100-java-checklist-guide.xml", "cursor-rules.xsl", "pml.xsd");
+        String bestPracticesResult = generator.generate("110-java-maven-best-practices.xml", "cursor-rules.xsl", "pml.xsd");
+        String documentationResult = generator.generate("112-java-maven-documentation.xml", "cursor-rules.xsl", "pml.xsd");
+        String objectOrientedDesignResult = generator.generate("121-java-object-oriented-design.xml", "cursor-rules.xsl", "pml.xsd");
+        String typeDesignResult = generator.generate("122-java-type-design.xml", "cursor-rules.xsl", "pml.xsd");
+        String generalGuidelinesResult = generator.generate("123-java-general-guidelines.xml", "cursor-rules.xsl", "pml.xsd");
+        String secureCodingResult = generator.generate("124-java-secure-coding.xml", "cursor-rules.xsl", "pml.xsd");
+        String concurrencyResult = generator.generate("125-java-concurrency.xml", "cursor-rules.xsl", "pml.xsd");
+        String loggingResult = generator.generate("126-java-logging.xml", "cursor-rules.xsl", "pml.xsd");
+        String unitTestingResult = generator.generate("131-java-unit-testing.xml", "cursor-rules.xsl", "pml.xsd");
+        String refactoringWithModernFeaturesResult = generator.generate("141-java-refactoring-with-modern-features.xml", "cursor-rules.xsl", "pml.xsd");
+        String functionalProgrammingResult = generator.generate("142-java-functional-programming.xml", "cursor-rules.xsl", "pml.xsd");
+        String dataOrientedProgrammingResult = generator.generate("143-java-data-oriented-programming.xml", "cursor-rules.xsl", "pml.xsd");
 
         // Save all for comparison
         saveGeneratedContentToTarget(checklistGuideResult, "100-java-checklist-guide.mdc");
