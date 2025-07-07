@@ -235,6 +235,7 @@
                     <include>121-java-object-oriented-design.mdc</include>
                     <include>122-java-type-design.mdc</include>
                     <include>123-java-general-guidelines.mdc</include>
+                    <include>142-java-functional-programming.mdc</include>
                   </includes>
                 </resource>
               </resources>
