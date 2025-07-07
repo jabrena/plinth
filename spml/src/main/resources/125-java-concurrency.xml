@@ -6,8 +6,8 @@
     <metadata>
         <!-- Markdown Front Matter for Cursor Rules -->
         <cursor-ai>
-            <description>Java rules for Concurrency objects</description>
-            <globs>*.java</globs>
+            <description></description>
+            <globs></globs>
             <always-apply>false</always-apply>
         </cursor-ai>
         <tags>

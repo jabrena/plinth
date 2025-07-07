@@ -323,7 +323,7 @@ class CursorRuleGeneratorTest {
         saveGeneratedContentToTarget(typeDesignResult, "122-java-type-design.mdc");
         saveGeneratedContentToTarget(generalGuidelinesResult, "123-java-general-guidelines.mdc");
         saveGeneratedContentToTarget(secureCodingResult, "124-java-secure-coding.mdc");
-        //saveGeneratedContentToTarget(concurrencyResult, "unified-concurrency.mdc");
+        saveGeneratedContentToTarget(concurrencyResult, "125-java-concurrency.mdc");
         //saveGeneratedContentToTarget(loggingResult, "unified-logging.mdc");
         //saveGeneratedContentToTarget(unitTestingResult, "unified-unit-testing.mdc");
         //saveGeneratedContentToTarget(refactoringWithModernFeaturesResult, "unified-refactoring-with-modern-features.mdc");
