@@ -5,33 +5,46 @@ alwaysApply: false
 ---
 # Java Functional Programming rules
 
-## System prompt characterization
+## Role
 
-Role definition: You are a Senior software engineer with extensive experience in Java software development
+You are a Senior software engineer with extensive experience in Java software development
 
-## Description
+## Instructions for AI
 
-Java functional programming revolves around immutable objects and state transformations, ensuring functions are pure (no side effects, depend only on inputs). It leverages functional interfaces, concise lambda expressions, and the Stream API for collection processing. Core paradigms include function composition, `Optional` for null safety, and higher-order functions. Modern Java features like Records enhance immutable data transfer, while pattern matching (for `instanceof` and `switch`) and switch expressions improve conditional logic. Sealed classes and interfaces enable controlled, exhaustive hierarchies, and upcoming Stream Gatherers will offer advanced custom stream operations.
+Apply functional programming principles in Java development, emphasizing immutability, pure functions, and type safety through functional interfaces and modern Java features.
 
-## Table of contents
+### Implementing These Principles
 
-- Rule 1: Immutable Objects
-- Rule 2: State Immutability
-- Rule 3: Pure Functions
-- Rule 4: Functional Interfaces
-- Rule 5: Lambda Expressions
-- Rule 6: Streams
-- Rule 7: Functional Programming Paradigms
-- Rule 8: Leverage Records for Immutable Data Transfer
-- Rule 9: Employ Pattern Matching for `instanceof` and `switch`
-- Rule 10: Use Switch Expressions for Concise Multi-way Conditionals
-- Rule 11: Leverage Sealed Classes and Interfaces for Controlled Hierarchies
-- Rule 12: Explore Stream Gatherers for Custom Stream Operations
+These guidelines are built upon the following core principles:
 
-## Rule 1: Immutable Objects
+1.  **Immutability**: Prioritize immutable data structures (e.g., Records, `List.of()`) and state transformations that produce new instances rather than modifying existing ones. This reduces side effects and simplifies reasoning about state.
+2.  **Purity and Side-Effect Management**: Strive to write pure functions—functions whose output depends only on their input and which have no observable side effects. Isolate and control side effects when they are necessary.
+3.  **Expressiveness and Conciseness**: Leverage lambda expressions, method references, and the Stream API to write code that is declarative, concise, and clearly expresses the intent of data transformations and operations.
+4.  **Higher-Order Abstractions**: Utilize functional interfaces, function composition, and higher-order functions (functions that operate on other functions) to build flexible and reusable code components.
+5.  **Modern Java Integration**: Embrace modern Java features like Records, Pattern Matching, Switch Expressions, and Sealed Classes, which align well with and enhance functional programming paradigms by promoting immutability, type safety, and expressive conditional logic.
+
+## Examples
+
+### Table of contents
+
+- Example 1: Immutable Objects
+- Example 2: State Immutability
+- Example 3: Pure Functions
+- Example 4: Functional Interfaces
+- Example 5: Lambda Expressions
+- Example 6: Streams
+- Example 7: Functional Programming Paradigms
+- Example 8: Leverage Records for Immutable Data Transfer
+- Example 9: Employ Pattern Matching for `instanceof` and `switch`
+- Example 10: Use Switch Expressions for Concise Multi-way Conditionals
+- Example 11: Leverage Sealed Classes and Interfaces for Controlled Hierarchies
+- Example 12: Create Type-Safe Wrappers for Domain Types
+- Example 13: Explore Stream Gatherers for Custom Stream Operations
+
+### Example 1: Immutable Objects
 
 Title: Ensure Objects are Immutable
-Description: - Use `final` classes and fields. - Initialize all fields in the constructor. - Do not provide setter methods. - Return defensive copies of mutable fields (e.g., collections, dates) when exposing them via getters.
+Description: Use `final` classes and fields. Initialize all fields in the constructor. Do not provide setter methods. Return defensive copies of mutable fields (e.g., collections, dates) when exposing them via getters.
 
 **Good example:**
 
@@ -67,10 +80,10 @@ public final class Person {
 
 ```
 
-## Rule 2: State Immutability
+### Example 2: State Immutability
 
 Title: Prefer Immutable State Transformations
-Description: - Instead of modifying existing objects, return new objects representing the new state. - Utilize collectors that produce immutable collections (e.g., `Collectors.toUnmodifiableList()`). - Leverage immutable collection types provided by libraries or Java itself.
+Description: Instead of modifying existing objects, return new objects representing the new state. Utilize collectors that produce immutable collections (e.g., `Collectors.toUnmodifiableList()`). Leverage immutable collection types provided by libraries or Java itself.
 
 **Good example:**
 
@@ -88,10 +101,10 @@ public class PriceCalculator {
 
 ```
 
-## Rule 3: Pure Functions
+### Example 3: Pure Functions
 
 Title: Write Pure Functions
-Description: - Functions should depend only on their input parameters and not on any external or hidden state. - They should not cause any side effects (e.g., modifying external variables, I/O operations). - Given the same input, a pure function must always return the same output. - Avoid modifying external state or relying on it.
+Description: Functions should depend only on their input parameters and not on any external or hidden state. They should not cause any side effects (e.g., modifying external variables, I/O operations). Given the same input, a pure function must always return the same output. Avoid modifying external state or relying on it.
 
 **Good example:**
 
@@ -115,10 +128,10 @@ public class MathOperations {
 
 ```
 
-## Rule 4: Functional Interfaces
+### Example 4: Functional Interfaces
 
 Title: Utilize Functional Interfaces Effectively
-Description: - Prefer built-in functional interfaces from `java.util.function` (e.g., `Function`, `Predicate`, `Consumer`, `Supplier`, `UnaryOperator`) when they suit the need. - Create custom functional interfaces (annotated with `@FunctionalInterface`) for specific, clearly defined single abstract methods. - Keep functional interfaces focused on a single responsibility.
+Description: Prefer built-in functional interfaces from `java.util.function` (e.g., `Function`, `Predicate`, `Consumer`, `Supplier`, `UnaryOperator`) when they suit the need. Create custom functional interfaces (annotated with `@FunctionalInterface`) for specific, clearly defined single abstract methods. Keep functional interfaces focused on a single responsibility.
 
 **Good example:**
 
@@ -145,10 +158,10 @@ interface Validator<T> {
 
 ```
 
-## Rule 5: Lambda Expressions
+### Example 5: Lambda Expressions
 
 Title: Employ Lambda Expressions Clearly and Concisely
-Description: - Use method references (e.g., `String::length`, `System.out::println`) when they are clearer and more concise than an equivalent lambda expression. - Keep lambda expressions short and focused on a single piece of logic to maintain readability. - Extract complex or multi-line lambda logic into separate, well-named private methods.
+Description: Use method references (e.g., `String::length`, `System.out::println`) when they are clearer and more concise than an equivalent lambda expression. Keep lambda expressions short and focused on a single piece of logic to maintain readability. Extract complex or multi-line lambda logic into separate, well-named private methods.
 
 **Good example:**
 
@@ -186,10 +199,10 @@ public class LambdaExamples {
 
 ```
 
-## Rule 6: Streams
+### Example 6: Streams
 
 Title: Leverage Streams for Collection Processing
-Description: - Use the Stream API for processing sequences of elements from collections or other sources. - Chain stream operations (intermediate operations like `filter`, `map`, `sorted`) to create a pipeline for complex transformations. - Consider using parallel streams (`collection.parallelStream()`) for potentially improved performance on large datasets, but be mindful of the overhead and suitability for the task. - Choose appropriate terminal operations (e.g., `collect`, `forEach`, `reduce`, `findFirst`, `anyMatch`) to produce a result or side-effect.
+Description: Use the Stream API for processing sequences of elements from collections or other sources. Chain stream operations (intermediate operations like `filter`, `map`, `sorted`) to create a pipeline for complex transformations. Consider using parallel streams (`collection.parallelStream()`) for potentially improved performance on large datasets, but be mindful of the overhead and suitability for the task. Choose appropriate terminal operations (e.g., `collect`, `forEach`, `reduce`, `findFirst`, `anyMatch`) to produce a result or side-effect.
 
 **Good example:**
 
@@ -226,10 +239,10 @@ public class StreamExamples {
 
 ```
 
-## Rule 7: Functional Programming Paradigms
+### Example 7: Functional Programming Paradigms
 
 Title: Apply Core Functional Programming Paradigms
-Description: - **Function Composition**: Combine simpler functions to create more complex ones. Use `Function.compose()` and `Function.andThen()`. - **Optional for Null Safety**: Use `Optional<T>` to represent values that may be absent, avoiding `NullPointerExceptions` and clearly signaling optionality. - **Recursion**: Implement algorithms using recursion where it naturally fits the problem (e.g., tree traversal), especially tail recursion if supported or optimized by the JVM. - **Higher-Order Functions**: Utilize functions that accept other functions as arguments or return them as results (e.g., `Stream.map`, `Stream.filter`).
+Description: **Function Composition**: Combine simpler functions to create more complex ones. Use `Function.compose()` and `Function.andThen()`. **Optional for Null Safety**: Use `Optional<T>` to represent values that may be absent, avoiding `NullPointerExceptions` and clearly signaling optionality. **Recursion**: Implement algorithms using recursion where it naturally fits the problem (e.g., tree traversal), especially tail recursion if supported or optimized by the JVM. **Higher-Order Functions**: Utilize functions that accept other functions as arguments or return them as results (e.g., `Stream.map`, `Stream.filter`).
 
 **Good example:**
 
@@ -307,10 +320,10 @@ public class FunctionalParadigms {
 
 ```
 
-## Rule 8: Leverage Records for Immutable Data Transfer
+### Example 8: Leverage Records for Immutable Data Transfer
 
-Title: Leverage Records for Immutable Data Transfer
-Description: - Use Records (JEP 395, standardized in Java 16) as the primary way to model simple, immutable data aggregates. - Records automatically provide constructors, getters (accessor methods with the same name as the field), `equals()`, `hashCode()`, and `toString()` methods, reducing boilerplate. - This aligns perfectly with the functional paradigm's preference for immutability and conciseness.
+Title: Use Records for Type-Safe Immutable Data
+Description: Use Records (JEP 395, standardized in Java 16) as the primary way to model simple, immutable data aggregates. Records automatically provide constructors, getters (accessor methods with the same name as the field), `equals()`, `hashCode()`, and `toString()` methods, reducing boilerplate. This aligns perfectly with the functional paradigm's preference for immutability and conciseness.
 
 **Good example:**
 
@@ -370,10 +383,10 @@ public final class PointClass {
 
 ```
 
-## Rule 9: Employ Pattern Matching for `instanceof` and `switch`
+### Example 9: Employ Pattern Matching for `instanceof` and `switch`
 
-Title: Employ Pattern Matching for Type-Safe Conditional Logic
-Description: - Utilize Pattern Matching for `instanceof` to simplify type checks and casts in a single step. - Employ Pattern Matching for `switch` for more expressive and robust conditional logic, especially with sealed types and records. - This reduces boilerplate, improves readability, and enhances type safety.
+Title: Use Pattern Matching for Type-Safe Conditional Logic
+Description: Utilize Pattern Matching for `instanceof` to simplify type checks and casts in a single step. Employ Pattern Matching for `switch` for more expressive and robust conditional logic, especially with sealed types and records. This reduces boilerplate, improves readability, and enhances type safety.
 
 **Good example:**
 
@@ -424,10 +437,10 @@ public String processShapeLegacy(Object shape) {
 
 ```
 
-## Rule 10: Use Switch Expressions for Concise Multi-way Conditionals
+### Example 10: Use Switch Expressions for Concise Multi-way Conditionals
 
-Title: Use Switch Expressions for Concise and Safe Multi-way Conditionals
-Description: - Prefer Switch Expressions (JEP 361, Java 14) over traditional switch statements for assigning the result of a multi-way conditional to a variable. - Switch expressions are more concise, less error-prone (e.g., no fall-through by default, compiler checks for exhaustiveness with enums/sealed types). - They fit well with functional programming's emphasis on expressions over statements.
+Title: Employ Switch Expressions for Safer Conditional Logic
+Description: Prefer Switch Expressions (JEP 361, Java 14) over traditional switch statements for assigning the result of a multi-way conditional to a variable. Switch expressions are more concise, less error-prone (e.g., no fall-through by default, compiler checks for exhaustiveness with enums/sealed types). They fit well with functional programming's emphasis on expressions over statements.
 
 **Good example:**
 
@@ -478,10 +491,10 @@ public String getDayTypeLegacy(String day) {
 
 ```
 
-## Rule 11: Leverage Sealed Classes and Interfaces for Controlled Hierarchies
+### Example 11: Leverage Sealed Classes and Interfaces for Controlled Hierarchies
 
-Title: Leverage Sealed Classes and Interfaces for Precise Domain Modeling
-Description: - Use Sealed Classes and Interfaces (JEP 409, Java 17) to define class/interface hierarchies where all direct subtypes are known, finite, and explicitly listed. - This enables more robust domain modeling and allows the compiler to perform exhaustive checks in pattern matching (e.g., with `switch` expressions), eliminating the need for a default case in many scenarios. - Particularly useful for creating sum types (algebraic data types) which are common in functional programming.
+Title: Use Sealed Types for Domain Modeling
+Description: Use Sealed Classes and Interfaces (JEP 409, Java 17) to define class/interface hierarchies where all direct subtypes are known, finite, and explicitly listed. This enables more robust domain modeling and allows the compiler to perform exhaustive checks in pattern matching (e.g., with `switch` expressions), eliminating the need for a default case in many scenarios. Particularly useful for creating sum types (algebraic data types) which are common in functional programming.
 
 **Good example:**
 
@@ -518,10 +531,77 @@ public class EventProcessor {
 
 ```
 
-## Rule 12: Explore Stream Gatherers for Custom Stream Operations
+### Example 12: Create Type-Safe Wrappers for Domain Types
 
-Title: Explore Stream Gatherers for Advanced Custom Stream Operations
-Description: - For complex or highly custom stream processing tasks that are not easily achieved with standard terminal operations or collectors, investigate Stream Gatherers (JEP 461). - Gatherers (`java.util.stream.Gatherer`) allow defining custom intermediate operations, offering more flexibility and power for sophisticated data transformations within functional pipelines. - This feature is aimed at more advanced use cases where reusability and composition of stream operations are key.
+Title: Use Strong Types for Domain Modeling
+Description: Create type-safe wrappers for domain-specific types instead of using primitive types or general-purpose types like String. These wrapper types enhance type safety by enforcing invariants at compile-time and clearly communicate the intended meaning and constraints of data. This approach from type design thinking improves the functional programming paradigm by making invalid states unrepresentable.
+
+**Good example:**
+
+```java
+// Type-safe wrappers for functional programming domains
+public record UserId(String value) {
+    public UserId {
+        if (value == null || value.trim().isEmpty()) {
+            throw new IllegalArgumentException("UserId cannot be null or empty");
+        }
+    }
+}
+
+public record EmailAddress(String value) {
+    public EmailAddress {
+        if (value == null || !isValidEmail(value)) {
+            throw new IllegalArgumentException("Invalid email format: " + value);
+        }
+    }
+
+    private static boolean isValidEmail(String email) {
+        return email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+    }
+}
+
+// Usage in functional context
+public class UserService {
+    public Optional<User> findUser(UserId userId) {
+        // Type safety ensures only valid UserIds are passed
+        return userRepository.findById(userId.value());
+    }
+
+    public List<User> findUsersByEmail(EmailAddress email) {
+        // Type safety ensures only valid emails are processed
+        return userRepository.findByEmail(email.value());
+    }
+}
+
+```
+
+**Bad example:**
+
+```java
+// Primitive obsession - error prone
+public class UserService {
+    public Optional<User> findUser(String userId) {
+        // No validation, could be null or empty
+        return userRepository.findById(userId);
+    }
+
+    public List<User> findUsersByEmail(String email) {
+        // No validation, could be invalid email format
+        return userRepository.findByEmail(email);
+    }
+
+    // Easy to make mistakes:
+    // findUser(null); // Runtime error
+    // findUsersByEmail("invalid-email"); // Invalid data propagated
+    // findUser("user@example.com"); // Wrong parameter type confusion
+}
+
+```
+
+### Example 13: Explore Stream Gatherers for Custom Stream Operations
+
+Title: Use Stream Gatherers for Advanced Stream Processing
+Description: For complex or highly custom stream processing tasks that are not easily achieved with standard terminal operations or collectors, investigate Stream Gatherers (JEP 461). Gatherers (`java.util.stream.Gatherer`) allow defining custom intermediate operations, offering more flexibility and power for sophisticated data transformations within functional pipelines. This feature is aimed at more advanced use cases where reusability and composition of stream operations are key.
 
 **Good example:**
 

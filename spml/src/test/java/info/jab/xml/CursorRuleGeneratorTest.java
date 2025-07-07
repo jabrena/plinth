@@ -267,8 +267,8 @@ class CursorRuleGeneratorTest {
             CursorRuleGenerator generator = new CursorRuleGenerator();
             String expectedContent = loadExpectedContent("142-java-functional-programming.mdc");
 
-            // When
-            String actualResult = generator.generate("142-java-functional-programming.xml", "cursor-rule-generator.xsl");
+            // When - Updated to use new XSLT since XML was refactored to spml-1.1.xsd
+            String actualResult = generator.generate("142-java-functional-programming.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -312,7 +312,7 @@ class CursorRuleGeneratorTest {
         String loggingResult = generator.generate("126-java-logging.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String unitTestingResult = generator.generate("131-java-unit-testing.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String refactoringWithModernFeaturesResult = generator.generate("141-java-refactoring-with-modern-features.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
-        String functionalProgrammingResult = generator.generate("142-java-functional-programming.xml", "cursor-rule-generator.xsl");
+        String functionalProgrammingResult = generator.generate("142-java-functional-programming.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String dataOrientedProgrammingResult = generator.generate("143-java-data-oriented-programming.xml", "cursor-rule-generator.xsl");
 
         // Save all for comparison
@@ -327,8 +327,8 @@ class CursorRuleGeneratorTest {
         saveGeneratedContentToTarget(loggingResult, "126-java-logging.mdc");
         saveGeneratedContentToTarget(unitTestingResult, "131-java-unit-testing.mdc");
         saveGeneratedContentToTarget(refactoringWithModernFeaturesResult, "unified-refactoring-with-modern-features.mdc");
+        saveGeneratedContentToTarget(functionalProgrammingResult, "142-java-functional-programming.mdc");
         //saveGeneratedContentToTarget(dataOrientedProgrammingResult, "unified-data-oriented-programming.mdc");
-        //saveGeneratedContentToTarget(functionalProgrammingResult, "unified-functional-programming.mdc");
     }
 
     /**
