@@ -236,6 +236,7 @@
                     <include>122-java-type-design.mdc</include>
                     <include>123-java-general-guidelines.mdc</include>
                     <include>124-java-secure-coding.mdc</include>
+                    <include>131-java-unit-testing.mdc</include>
                     <include>125-java-concurrency.mdc</include>
                     <include>126-java-logging.mdc</include>
                   </includes>
