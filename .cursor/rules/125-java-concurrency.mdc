@@ -1,6 +1,6 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: false
 ---
 # Java rules for Concurrency objects
@@ -24,7 +24,7 @@ These guidelines are built upon the following core principles:
 5.  **Prioritize Immutability and Safe Publication**: Design classes to be immutable whenever feasible to inherently achieve thread safety. Ensure that shared mutable objects are safely published (e.g., via `volatile`, static initializers, or proper synchronization) so that their state is consistently visible to all threads.
 6.  **Optimize for Performance, Considering Concurrency overheads**: Be mindful of performance implications such as lock contention (minimize scope, use finer-grained locks), memory consistency (understand happens-before, use `volatile` where appropriate), context switching overhead (size thread pools carefully), and potential issues like false sharing.
 7.  **Thorough Testing and Debugging**: Rigorously test concurrent code. This includes unit tests for thread-safe components, integration tests for interactions, and stress tests to reveal race conditions or deadlocks. Utilize thread dump analysis, proper logging, and concurrency testing tools.
-8.  **Adopt Modern Java Concurrency Features for Enhanced Development**: 
+8.  **Adopt Modern Java Concurrency Features for Enhanced Development**:
     *   **Virtual Threads (Project Loom)**: Embrace virtual threads via `Executors.newVirtualThreadPerTaskExecutor()` for I/O-bound tasks to dramatically increase scalability with minimal resource overhead. Avoid pooling virtual threads.
     *   **Structured Concurrency**: Use `StructuredTaskScope` to simplify the management of multiple related concurrent tasks as a single unit of work, improving error handling, cancellation, and resource management.
     *   **Scoped Values**: Prefer `ScopedValue` over `ThreadLocal` for sharing immutable data robustly and efficiently across tasks within a dynamically bounded scope, especially when working with virtual threads.
@@ -75,7 +75,7 @@ class Task {}
 class Event {}
 class State {
     public State(String initialState) {} // Constructor for initial state
-} 
+}
 class UserContext {}
 class Item {}
 
@@ -494,7 +494,7 @@ class AsyncService {
                 return List.of(new Result("batch-error"));
             });
     }
-    
+
     public void shutdown() {
         customExecutor.shutdown();
         try {
@@ -525,7 +525,7 @@ class AsyncService {
         service.processAllAsync(batch)
                .thenAccept(results -> System.out.println("Batch results: " + results))
                .join(); // Wait for completion for demo
-        
+
         service.shutdown();
     }
 }
@@ -597,14 +597,14 @@ public final class ImmutableValue { // Class is final
         List<String> initialItems = new ArrayList<>();
         initialItems.add("one");
         initialItems.add("two");
-        
+
         ImmutableValue iv = new ImmutableValue(100, initialItems);
         System.out.println("Value: " + iv.getValue());
         System.out.println("Items: " + iv.getItems());
-        
+
         initialItems.add("three"); // Modify original list
         System.out.println("Original list modified. ImmutableValue items: " + iv.getItems()); // iv.items remains unchanged
-        
+
         try {
             iv.getItems().add("four"); // This will throw UnsupportedOperationException
         } catch (UnsupportedOperationException e) {
@@ -646,7 +646,7 @@ class SafePublicationExample {
 
         t1.join();
         t2.join();
-        
+
         System.out.println("Cache content: " + cache);
     }
 }
@@ -765,6 +765,747 @@ class MemoryConsistencyExample {
 ```
 
 **Bad Example:**
+
+```java
+// Bad example to be added
+// e.g., holding a lock for too long, or a reader thread not seeing updates due to missing volatile/synchronization.
+```
+
+## Rule 7: Testing and Debugging Concurrent Code
+
+Title: Rigorously Test and Debug Concurrent Applications
+Description:
+Thoroughly test concurrent code using appropriate tools and techniques to identify race conditions, deadlocks, and other concurrency issues.
+- Write unit tests for thread-safe components with proper synchronization testing.
+- Use stress tests to reveal race conditions and deadlocks under load.
+- Implement integration tests for concurrent interactions between components.
+- Utilize thread dump analysis and profiling tools for debugging.
+- Apply proper logging strategies for concurrent environments.
+- Use testing frameworks like JUnit 5 with parallel execution capabilities.
+
+**Good example:**
+
+```java
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.time.Duration;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.RepeatedTest;
+import org.junit.jupiter.api.parallel.Execution;
+import org.junit.jupiter.api.parallel.ExecutionMode;
+import static org.junit.jupiter.api.Assertions.*;
+
+class ConcurrentTestExample {
+
+    @Test
+    @RepeatedTest(100) // Run multiple times to catch race conditions
+    void testThreadSafeCounter() throws InterruptedException {
+        ThreadSafeCounter counter = new ThreadSafeCounter();
+        int numberOfThreads = 10;
+        int incrementsPerThread = 1000;
+
+        ExecutorService executor = Executors.newFixedThreadPool(numberOfThreads);
+        CountDownLatch latch = new CountDownLatch(numberOfThreads);
+
+        for (int i = 0; i < numberOfThreads; i++) {
+            executor.submit(() -> {
+                try {
+                    for (int j = 0; j < incrementsPerThread; j++) {
+                        counter.increment();
+                    }
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        assertTrue(latch.await(10, TimeUnit.SECONDS), "Test should complete within timeout");
+        executor.shutdown();
+
+        assertEquals(numberOfThreads * incrementsPerThread, counter.getValue(),
+                    "Counter should equal total increments");
+    }
+
+    @Test
+    void testProducerConsumerPattern() throws InterruptedException {
+        ProducerConsumerQueue<String> queue = new ProducerConsumerQueue<>(10);
+        List<String> consumed = Collections.synchronizedList(new ArrayList<>());
+
+        ExecutorService executor = Executors.newFixedThreadPool(4);
+        CountDownLatch producerLatch = new CountDownLatch(2);
+        CountDownLatch consumerLatch = new CountDownLatch(2);
+
+        // Start producers
+        for (int i = 0; i < 2; i++) {
+            final int producerId = i;
+            executor.submit(() -> {
+                try {
+                    for (int j = 0; j < 5; j++) {
+                        queue.put("producer-" + producerId + "-item-" + j);
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                } finally {
+                    producerLatch.countDown();
+                }
+            });
+        }
+
+        // Start consumers
+        for (int i = 0; i < 2; i++) {
+            executor.submit(() -> {
+                try {
+                    for (int j = 0; j < 5; j++) {
+                        String item = queue.take();
+                        consumed.add(item);
+                    }
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                } finally {
+                    consumerLatch.countDown();
+                }
+            });
+        }
+
+        assertTrue(producerLatch.await(5, TimeUnit.SECONDS), "Producers should complete");
+        assertTrue(consumerLatch.await(5, TimeUnit.SECONDS), "Consumers should complete");
+
+        executor.shutdown();
+        assertEquals(10, consumed.size(), "Should consume all produced items");
+    }
+
+    @Test
+    void testDeadlockDetection() {
+        DeadlockDetector detector = new DeadlockDetector();
+
+        // Test should complete without deadlock
+        assertTimeoutPreemptively(Duration.ofSeconds(5), () -> {
+            detector.performOperationWithProperLockOrdering("A", "B");
+        });
+    }
+
+    // Stress test for race conditions
+    @Test
+    @Execution(ExecutionMode.CONCURRENT)
+    void stressTestConcurrentCollection() throws InterruptedException {
+        ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
+        int numberOfThreads = 20;
+        int operationsPerThread = 1000;
+
+        ExecutorService executor = Executors.newFixedThreadPool(numberOfThreads);
+        CountDownLatch latch = new CountDownLatch(numberOfThreads);
+
+        for (int i = 0; i < numberOfThreads; i++) {
+            final int threadId = i;
+            executor.submit(() -> {
+                try {
+                    for (int j = 0; j < operationsPerThread; j++) {
+                        String key = "key-" + (j % 100);
+                        map.compute(key, (k, v) -> v == null ? 1 : v + 1);
+                    }
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        assertTrue(latch.await(30, TimeUnit.SECONDS), "Stress test should complete");
+        executor.shutdown();
+
+        // Verify total operations
+        int totalOperations = map.values().stream().mapToInt(Integer::intValue).sum();
+        assertEquals(numberOfThreads * operationsPerThread, totalOperations,
+                    "Total operations should match expected count");
+    }
+}
+
+// Helper classes for testing
+class ThreadSafeCounter {
+    private final AtomicInteger count = new AtomicInteger(0);
+
+    public void increment() {
+        count.incrementAndGet();
+    }
+
+    public int getValue() {
+        return count.get();
+    }
+}
+
+class ProducerConsumerQueue<T> {
+    private final BlockingQueue<T> queue;
+
+    public ProducerConsumerQueue(int capacity) {
+        this.queue = new LinkedBlockingQueue<>(capacity);
+    }
+
+    public void put(T item) throws InterruptedException {
+        queue.put(item);
+    }
+
+    public T take() throws InterruptedException {
+        return queue.take();
+    }
+}
+
+class DeadlockDetector {
+    private final Object lock1 = new Object();
+    private final Object lock2 = new Object();
+
+    public void performOperationWithProperLockOrdering(String first, String second) {
+        // Always acquire locks in consistent order to prevent deadlock
+        Object firstLock = first.compareTo(second) < 0 ? lock1 : lock2;
+        Object secondLock = first.compareTo(second) < 0 ? lock2 : lock1;
+
+        synchronized (firstLock) {
+            synchronized (secondLock) {
+                // Perform operation
+                System.out.println("Operation completed safely");
+            }
+        }
+    }
+}
+```
+
+**Bad Example:**
+
+```java
+// Bad example to be added
+// e.g., tests that don't properly synchronize, missing timeouts, or inadequate stress testing.
+```
+
+## Rule 8: Embrace Virtual Threads for Enhanced Scalability
+
+Title: Use Virtual Threads for I/O-bound Tasks
+Description:
+Leverage virtual threads (Project Loom) for I/O-bound tasks to dramatically increase scalability with minimal resource overhead. Avoid pooling virtual threads and use structured concurrency where appropriate.
+- Use `Executors.newVirtualThreadPerTaskExecutor()` for I/O-bound tasks.
+- Avoid pooling virtual threads as they are lightweight.
+- Be aware of pinning issues with synchronized blocks.
+- Prefer `ScopedValue` over `ThreadLocal` for virtual thread contexts.
+- Use structured concurrency for managing related tasks.
+
+**Good example:**
+
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.StructuredTaskScope;
+import java.util.List;
+import java.util.stream.IntStream;
+
+class VirtualThreadExample {
+
+    // Use virtual thread executor for I/O-bound tasks
+    private final ExecutorService virtualExecutor = Executors.newVirtualThreadPerTaskExecutor();
+
+    public void handleManyIORequests() {
+        List<Future<String>> futures = IntStream.range(0, 10000)
+            .mapToObj(i -> virtualExecutor.submit(() -> performIOOperation("task-" + i)))
+            .toList();
+
+        // Collect results
+        futures.forEach(future -> {
+            try {
+                String result = future.get();
+                System.out.println("Completed: " + result);
+            } catch (Exception e) {
+                System.err.println("Task failed: " + e.getMessage());
+            }
+        });
+    }
+
+    // Virtual threads are perfect for blocking I/O operations
+    private String performIOOperation(String taskId) {
+        try {
+            // Simulate I/O operation (database call, web request, etc.)
+            Thread.sleep(1000); // This would block a platform thread
+            return "Result for " + taskId;
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return "Interrupted: " + taskId;
+        }
+    }
+
+    // Using scoped values with virtual threads (Java 20+)
+    // Note: ScopedValue is a preview feature in Java 20+ and may require --enable-preview flag
+    private static final ScopedValue<String> USER_ID = ScopedValue.newInstance();
+
+    public void processWithScopedValue(String userId, List<String> tasks) {
+        // Run with scoped value
+        ScopedValue.where(USER_ID, userId)
+            .run(() -> {
+                tasks.parallelStream().forEach(task -> {
+                    virtualExecutor.submit(() -> {
+                        // Access scoped value safely
+                        String currentUserId = USER_ID.get();
+                        performTaskForUser(currentUserId, task);
+                    });
+                });
+            });
+    }
+
+    private void performTaskForUser(String userId, String task) {
+        System.out.println("Processing task " + task + " for user " + userId +
+                          " on thread " + Thread.currentThread());
+    }
+
+    // Structured concurrency for managing related tasks
+    // Note: StructuredTaskScope is a preview feature in Java 19+ and may require --enable-preview flag
+    public String fetchUserDataWithStructuredConcurrency(String userId) throws Exception {
+        try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+
+            Future<String> profile = scope.fork(() -> fetchUserProfile(userId));
+            Future<String> preferences = scope.fork(() -> fetchUserPreferences(userId));
+            Future<String> history = scope.fork(() -> fetchUserHistory(userId));
+
+            scope.join();           // Wait for all tasks
+            scope.throwIfFailed();  // Propagate any failures
+
+            // All tasks completed successfully
+            return combineUserData(profile.resultNow(),
+                                 preferences.resultNow(),
+                                 history.resultNow());
+        }
+    }
+
+    private String fetchUserProfile(String userId) {
+        // Simulate I/O operation
+        try { Thread.sleep(100); } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return "Profile for " + userId;
+    }
+
+    private String fetchUserPreferences(String userId) {
+        try { Thread.sleep(150); } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return "Preferences for " + userId;
+    }
+
+    private String fetchUserHistory(String userId) {
+        try { Thread.sleep(200); } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return "History for " + userId;
+    }
+
+    private String combineUserData(String profile, String preferences, String history) {
+        return String.format("User data: %s, %s, %s", profile, preferences, history);
+    }
+
+    public void shutdown() {
+        virtualExecutor.shutdown();
+    }
+}
+```
+
+**Bad Example:**
+
+```java
+// Bad example to be added
+// e.g., pooling virtual threads, using them for CPU-intensive tasks, or improper synchronization.
+```
+
+## Rule 9: Simplify Concurrent Code with Structured Concurrency
+
+Title: Manage Related Tasks as a Single Unit
+Description:
+Use `StructuredTaskScope` to simplify the management of multiple related concurrent tasks as a single unit of work, improving error handling, cancellation, and resource management.
+- Use `StructuredTaskScope.ShutdownOnFailure()` for fail-fast behavior.
+- Use `StructuredTaskScope.ShutdownOnSuccess()` for racing tasks.
+- Ensure proper resource cleanup with try-with-resources.
+- Handle task results and exceptions appropriately.
+- Combine structured concurrency with virtual threads for optimal performance.
+
+**Good example:**
+
+```java
+import java.util.concurrent.StructuredTaskScope;
+import java.util.concurrent.Future;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import java.util.List;
+import java.util.concurrent.TimeUnit;
+
+class StructuredConcurrencyExample {
+
+    private final ExecutorService virtualExecutor = Executors.newVirtualThreadPerTaskExecutor();
+
+    // Example: Fetch user data from multiple sources
+    // Note: StructuredTaskScope is a preview feature in Java 19+ and may require --enable-preview flag
+    public UserData fetchCompleteUserData(String userId) throws Exception {
+        try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+
+            // Fork multiple related tasks
+            Future<Profile> profileFuture = scope.fork(() -> fetchUserProfile(userId));
+            Future<Settings> settingsFuture = scope.fork(() -> fetchUserSettings(userId));
+            Future<List<Order>> ordersFuture = scope.fork(() -> fetchUserOrders(userId));
+            Future<List<Notification>> notificationsFuture = scope.fork(() -> fetchUserNotifications(userId));
+
+            // Wait for all tasks to complete or fail
+            scope.join();
+            scope.throwIfFailed(); // Propagate any failures
+
+            // All tasks completed successfully - access results
+            return new UserData(
+                profileFuture.resultNow(),
+                settingsFuture.resultNow(),
+                ordersFuture.resultNow(),
+                notificationsFuture.resultNow()
+            );
+        }
+    }
+
+    // Example: Race multiple service calls and return first success
+    public String fetchDataFromAnySource(String query) throws Exception {
+        try (var scope = new StructuredTaskScope.ShutdownOnSuccess<String>()) {
+
+            // Fork tasks that compete to provide result
+            scope.fork(() -> fetchFromPrimaryService(query));
+            scope.fork(() -> fetchFromSecondaryService(query));
+            scope.fork(() -> fetchFromCacheService(query));
+
+            // Wait for first successful completion
+            scope.join();
+
+            // Return the first successful result
+            return scope.result();
+        }
+    }
+
+    // Example: Batch processing with structured concurrency
+    public List<ProcessedItem> processBatch(List<String> items) throws Exception {
+        try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+
+            // Fork processing tasks for each item
+            List<Future<ProcessedItem>> futures = items.stream()
+                .map(item -> scope.fork(() -> processItem(item)))
+                .toList();
+
+            // Wait for all processing to complete
+            scope.join();
+            scope.throwIfFailed();
+
+            // Collect all results
+            return futures.stream()
+                .map(Future::resultNow)
+                .toList();
+        }
+    }
+
+    // Example: Timeout handling with structured concurrency
+    public String fetchWithTimeout(String request, long timeoutSeconds) throws Exception {
+        try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+
+            // Fork the main task
+            Future<String> resultFuture = scope.fork(() -> performLongRunningTask(request));
+
+            // Fork timeout task
+            Future<String> timeoutFuture = scope.fork(() -> {
+                Thread.sleep(timeoutSeconds * 1000);
+                throw new TimeoutException("Operation timed out after " + timeoutSeconds + " seconds");
+            });
+
+            // Wait for either completion or timeout
+            scope.join();
+            scope.throwIfFailed();
+
+            // Return result if main task completed first
+            return resultFuture.resultNow();
+        }
+    }
+
+    // Helper methods simulating various operations
+    private Profile fetchUserProfile(String userId) {
+        simulateIO(100);
+        return new Profile(userId, "John Doe", "john@example.com");
+    }
+
+    private Settings fetchUserSettings(String userId) {
+        simulateIO(150);
+        return new Settings(userId, "dark", "en");
+    }
+
+    private List<Order> fetchUserOrders(String userId) {
+        simulateIO(200);
+        return List.of(new Order("order1", 100.0), new Order("order2", 250.0));
+    }
+
+    private List<Notification> fetchUserNotifications(String userId) {
+        simulateIO(120);
+        return List.of(new Notification("Welcome!"), new Notification("Order shipped"));
+    }
+
+    private String fetchFromPrimaryService(String query) {
+        simulateIO(300);
+        return "Primary result for: " + query;
+    }
+
+    private String fetchFromSecondaryService(String query) {
+        simulateIO(200);
+        return "Secondary result for: " + query;
+    }
+
+    private String fetchFromCacheService(String query) {
+        simulateIO(50);
+        return "Cached result for: " + query;
+    }
+
+    private ProcessedItem processItem(String item) {
+        simulateIO(100);
+        return new ProcessedItem(item, "processed");
+    }
+
+    private String performLongRunningTask(String request) {
+        simulateIO(5000); // 5 seconds
+        return "Completed: " + request;
+    }
+
+    private void simulateIO(int milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Data classes
+    record UserData(Profile profile, Settings settings, List<Order> orders, List<Notification> notifications) {}
+    record Profile(String userId, String name, String email) {}
+    record Settings(String userId, String theme, String language) {}
+    record Order(String id, double amount) {}
+    record Notification(String message) {}
+    record ProcessedItem(String original, String status) {}
+
+    class TimeoutException extends Exception {
+        public TimeoutException(String message) {
+            super(message);
+        }
+    }
+}
+```
+
+**Bad Example:**
+
+```java
+// Bad example to be added
+// e.g., manual task management, poor error handling, resource leaks.
+```
+
+## Rule 10: Manage Thread-Shared Data with Scoped Values
+
+Title: Use Scoped Values for Thread-Safe Context Propagation
+Description:
+Prefer `ScopedValue` over `ThreadLocal` for sharing immutable data robustly and efficiently across tasks within a dynamically bounded scope, especially when working with virtual threads.
+- Use `ScopedValue.newInstance()` to create scoped value instances.
+- Use `ScopedValue.where()` to establish scoped bindings.
+- Prefer scoped values for immutable context data.
+- Avoid `ThreadLocal` with virtual threads due to potential memory issues.
+- Use scoped values for request-scoped data in web applications.
+
+**Good example:**
+
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.StructuredTaskScope;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+class ScopedValueExample {
+
+    // Define scoped values for different types of context
+    // Note: ScopedValue is a preview feature in Java 20+ and may require --enable-preview flag
+    private static final ScopedValue<String> USER_ID = ScopedValue.newInstance();
+    private static final ScopedValue<String> REQUEST_ID = ScopedValue.newInstance();
+    private static final ScopedValue<Map<String, String>> SECURITY_CONTEXT = ScopedValue.newInstance();
+
+    private final ExecutorService virtualExecutor = Executors.newVirtualThreadPerTaskExecutor();
+
+    // Example: Web request processing with scoped context
+    public String handleWebRequest(String userId, String requestId, Map<String, String> securityContext) {
+        // Establish scoped values for the entire request processing
+        return ScopedValue.where(USER_ID, userId)
+            .where(REQUEST_ID, requestId)
+            .where(SECURITY_CONTEXT, securityContext)
+            .call(() -> {
+                // Process request with full context available
+                return processRequestWithContext();
+            });
+    }
+
+    private String processRequestWithContext() {
+        // Access scoped values anywhere in the call stack
+        String userId = USER_ID.get();
+        String requestId = REQUEST_ID.get();
+        Map<String, String> securityContext = SECURITY_CONTEXT.get();
+
+        System.out.println("Processing request " + requestId + " for user " + userId);
+
+        // Process in parallel while maintaining context
+        return ScopedValue.where(USER_ID, userId)
+            .where(REQUEST_ID, requestId)
+            .where(SECURITY_CONTEXT, securityContext)
+            .call(() -> {
+                try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+
+                    // All forked tasks inherit the scoped values
+                    Future<String> businessLogic = scope.fork(this::executeBusinessLogic);
+                    Future<String> auditLog = scope.fork(this::createAuditLog);
+                    Future<String> notification = scope.fork(this::sendNotification);
+
+                    scope.join();
+                    scope.throwIfFailed();
+
+                    return combineResults(
+                        businessLogic.resultNow(),
+                        auditLog.resultNow(),
+                        notification.resultNow()
+                    );
+
+                } catch (Exception e) {
+                    throw new RuntimeException("Request processing failed", e);
+                }
+            });
+    }
+
+    private String executeBusinessLogic() {
+        // Context is automatically available
+        String userId = USER_ID.get();
+        String requestId = REQUEST_ID.get();
+
+        // Simulate business logic
+        simulateWork(100);
+
+        return "Business logic completed for user " + userId + " (request: " + requestId + ")";
+    }
+
+    private String createAuditLog() {
+        // Context is automatically available
+        String userId = USER_ID.get();
+        String requestId = REQUEST_ID.get();
+        Map<String, String> securityContext = SECURITY_CONTEXT.get();
+
+        // Simulate audit logging
+        simulateWork(50);
+
+        String securityInfo = securityContext.getOrDefault("role", "unknown");
+        return "Audit logged for user " + userId + " with role " + securityInfo + " (request: " + requestId + ")";
+    }
+
+    private String sendNotification() {
+        // Context is automatically available
+        String userId = USER_ID.get();
+        String requestId = REQUEST_ID.get();
+
+        // Simulate notification sending
+        simulateWork(75);
+
+        return "Notification sent to user " + userId + " (request: " + requestId + ")";
+    }
+
+    // Example: Nested scoped value usage
+    public void processWithNestedScope(String userId, List<String> tasks) {
+        ScopedValue.where(USER_ID, userId)
+            .run(() -> {
+                for (String task : tasks) {
+                    // Create nested scope for each task
+                    ScopedValue.where(REQUEST_ID, "task-" + task)
+                        .run(() -> {
+                            processTask(task);
+                        });
+                }
+            });
+    }
+
+    private void processTask(String task) {
+        String userId = USER_ID.get();
+        String requestId = REQUEST_ID.get();
+
+        System.out.println("Processing task " + task + " for user " + userId + " (request: " + requestId + ")");
+        simulateWork(50);
+    }
+
+    // Example: Service layer with scoped context
+    public class UserService {
+
+        public UserProfile getUserProfile() {
+            String userId = USER_ID.get(); // Context available from outer scope
+            String requestId = REQUEST_ID.get();
+
+            System.out.println("Fetching profile for user " + userId + " (request: " + requestId + ")");
+            simulateWork(100);
+
+            return new UserProfile(userId, "John Doe", "john@example.com");
+        }
+
+        public List<Order> getUserOrders() {
+            String userId = USER_ID.get(); // Context available from outer scope
+            String requestId = REQUEST_ID.get();
+
+            System.out.println("Fetching orders for user " + userId + " (request: " + requestId + ")");
+            simulateWork(150);
+
+            return List.of(
+                new Order("order1", 100.0),
+                new Order("order2", 250.0)
+            );
+        }
+    }
+
+    // Helper methods
+    private String combineResults(String businessResult, String auditResult, String notificationResult) {
+        return String.format("Results: [%s] [%s] [%s]", businessResult, auditResult, notificationResult);
+    }
+
+    private void simulateWork(int milliseconds) {
+        try {
+            Thread.sleep(milliseconds);
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Data classes
+    record UserProfile(String userId, String name, String email) {}
+    record Order(String id, double amount) {}
+
+    // Example usage
+    public static void main(String[] args) {
+        ScopedValueExample example = new ScopedValueExample();
+
+        Map<String, String> securityContext = new ConcurrentHashMap<>();
+        securityContext.put("role", "admin");
+        securityContext.put("permissions", "read,write");
+
+        String result = example.handleWebRequest("user123", "req456", securityContext);
+        System.out.println("Final result: " + result);
+    }
+}
+```
+
+**Bad Example:**
+
+```java
+// Bad example to be added
+// e.g., using ThreadLocal with virtual threads, not cleaning up thread-local values, or improper context propagation.
+```
 
 ```java
 // Bad example to be added
