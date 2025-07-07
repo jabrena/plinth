@@ -5,30 +5,40 @@ alwaysApply: false
 ---
 # Modern Java Development Guidelines (Java 8+)
 
-## System prompt characterization
+## Role
 
-Role definition: You are a Senior software engineer with extensive experience in Java software development
+You are a Senior software engineer with extensive experience in Java software development
 
-## Description
+## Instructions for AI
 
-Modern Java development (Java 8+) emphasizes leveraging lambda expressions and functional interfaces over anonymous classes, and using the Stream API for declarative collection processing. The `Optional` API should be used for handling potentially absent values gracefully, and the `java.time` API for all date/time operations. Default methods allow non-breaking interface evolution. Local Variable Type Inference (`var`) can improve readability when used judiciously. Unmodifiable collection factory methods (`List.of()`, etc.) provide concise immutable collections. `CompletableFuture` facilitates composable asynchronous programming. The Java Platform Module System (JPMS, Java 9+) enables strong encapsulation. Performance implications of new features should be considered and profiled. Testing strategies need to adapt to these modern features, and text blocks (Java 15+) offer improved readability for multi-line strings.
+Refactor Java code to use modern Java features (Java 8+) including lambda expressions, Stream API, Optional, java.time API, and other modern constructs for improved code readability, maintainability, and performance. Apply type design thinking principles to create clear, well-structured code that communicates intent effectively.
 
-## Table of contents
+### Key Principles
 
-- Rule 1: Lambda Expressions and Functional Interfaces
-- Rule 2: Stream API
-- Rule 3: Optional API
-- Rule 4: Date/Time API (java.time)
-- Rule 5: Default Methods in Interfaces
-- Rule 6: Local Variable Type Inference (var)
-- Rule 7: Collection Factory Methods
-- Rule 8: CompletableFuture for Asynchronous Programming
-- Rule 9: Module System (Java 9+)
-- Rule 10: Performance Considerations with Modern Features
-- Rule 11: Testing Modern Java Code
-- Rule 12: Use Text Blocks for Readable Multi-line Strings
+1. **Functional Programming**: Leverage lambda expressions, method references, and functional interfaces
+2. **Type Safety**: Use Optional for null safety and appropriate generic types
+3. **Clear Intent**: Choose descriptive names and use modern APIs that express intent clearly
+4. **Performance Awareness**: Consider performance implications of modern features
+5. **Type Design**: Apply typography-inspired principles to code structure
 
-## Rule 1: Lambda Expressions and Functional Interfaces
+## Examples
+
+### Table of contents
+
+- Example 1: Lambda Expressions and Functional Interfaces
+- Example 2: Stream API
+- Example 3: Optional API
+- Example 4: Date/Time API (java.time)
+- Example 5: Default Methods in Interfaces
+- Example 6: Local Variable Type Inference (var)
+- Example 7: Collection Factory Methods
+- Example 8: CompletableFuture for Asynchronous Programming
+- Example 9: Module System (Java 9+)
+- Example 10: Performance Considerations with Modern Features
+- Example 11: Testing Modern Java Code
+- Example 12: Use Text Blocks for Readable Multi-line Strings
+
+### Example 1: Lambda Expressions and Functional Interfaces
 
 Title: Effectively Use Lambda Expressions and Functional Interfaces
 Description: - Prefer lambda expressions over anonymous inner classes for concise implementation of functional interfaces. - Keep lambda expressions short, readable, and focused on a single piece of logic. - Use method references (e.g., `System.out::println`, `String::isEmpty`) when they are clearer and more direct than an equivalent lambda. - Leverage the rich set of built-in functional interfaces from the `java.util.function` package (e.g., `Predicate`, `Function`, `Consumer`, `Supplier`). - Create custom functional interfaces only when a specific signature is needed that isn't covered by built-in ones. - Always annotate custom functional interfaces with `@FunctionalInterface` to ensure they meet the criteria (a single abstract method) and to clearly communicate their purpose.
@@ -106,7 +116,7 @@ public class OldStyleAnonymousClass {
 }
 ```
 
-## Rule 2: Stream API
+### Example 2: Stream API
 
 Title: Leverage the Stream API for Collection Processing
 Description: Use streams for processing sequences of elements from collections or other sources in a functional style. Prefer a declarative approach (what to do) over an imperative one (how to do it) for stream operations. Chain stream operations effectively to create a readable processing pipeline. Use appropriate terminal operations to produce a result or side-effect. Be mindful of performance implications, especially with large datasets or complex operations.
@@ -177,7 +187,7 @@ public class StreamAntiPattern {
 }
 ```
 
-## Rule 3: Optional API
+### Example 3: Optional API
 
 Title: Handle Potentially Absent Values Gracefully with Optional
 Description: Use `Optional<T>` to explicitly represent values that may be absent, making your API clearer about nullability. Avoid calling `Optional.get()` directly without first checking `isPresent()`. Prefer functional alternatives. Leverage `Optional`'s functional-style methods like `map()`, `flatMap()`, `filter()`, `orElse()`, `orElseGet()`, `orElseThrow()` to handle absent values in a fluent and safe manner.
@@ -265,7 +275,7 @@ public class OptionalAntiPattern {
 }
 ```
 
-## Rule 4: Date/Time API (java.time)
+### Example 4: Date/Time API (java.time)
 
 Title: Utilize the Modern java.time API for Dates and Times
 Description: Replace legacy `java.util.Date`, `java.util.Calendar`, and `java.text.SimpleDateFormat` with the classes from the `java.time` package (introduced in Java 8). Choose the appropriate `java.time` class for your specific needs: `Instant` for machine time, `LocalDate` for dates without time-zone, `LocalDateTime` for date-time without time-zone, `ZonedDateTime` for date-time with specific time-zone, `Duration` for time-based amounts, and `Period` for date-based amounts.
@@ -346,7 +356,7 @@ public class LegacyDateTime {
 }
 ```
 
-## Rule 5: Default Methods in Interfaces
+### Example 5: Default Methods in Interfaces
 
 Title: Enhance Interfaces with Default Methods for Non-Breaking Evolution
 Description: Use default methods to add new functionality to existing interfaces without breaking implementing classes. Keep default method implementations simple and focused. Complex logic might be better suited for helper classes or abstract base classes. Clearly document the behavior of default methods, including any assumptions they make about the interface's contract. Avoid introducing state (fields) into interfaces, as default methods cannot access instance fields directly.
@@ -425,7 +435,7 @@ interface BadInterface {
 }
 ```
 
-## Rule 6: Local Variable Type Inference (var)
+### Example 6: Local Variable Type Inference (var)
 
 Title: Use var judiciously to improve readability
 Description: Use the `var` keyword (introduced in Java 10) for local variable declarations when the type is obvious from the context and it improves readability. Avoid using `var` when it makes the code less clear or when the inferred type might not be what you expect. Use `var` with care in complex expressions or when the type provides important documentation value.
@@ -500,7 +510,7 @@ public class VarAntiPattern {
 }
 ```
 
-## Rule 7: Collection Factory Methods
+### Example 7: Collection Factory Methods
 
 Title: Utilize Unmodifiable Collection Factory Methods
 Description: Use the static factory methods `List.of()`, `Set.of()`, and `Map.of()` (Java 9+) to create compact, unmodifiable (immutable) collections when the elements are known at compile time. For creating mutable collections, continue to use traditional constructors (e.g., `new ArrayList<>()`) or Stream API collectors. Be aware that these factory methods create unmodifiable collections, do not permit `null` elements, and `Map.of()` does not permit duplicate keys.
@@ -585,7 +595,7 @@ public class CollectionFactoryAntiPattern {
 }
 ```
 
-## Rule 8: CompletableFuture for Asynchronous Programming
+### Example 8: CompletableFuture for Asynchronous Programming
 
 Title: Employ CompletableFuture for Composable Asynchronous Operations
 Description: Use `CompletableFuture` (Java 8+) for managing sequences of asynchronous operations, avoiding callback hell and enabling a more functional, composable style. Chain asynchronous tasks using methods like `thenApplyAsync()`, `thenComposeAsync()`, `thenAcceptAsync()`, `thenRunAsync()`. Combine results from multiple `CompletableFuture` instances using `allOf()` or `anyOf()`. Handle exceptions gracefully using `exceptionally()` or `handle()`. Be mindful of the `Executor` used for each stage and consider timeout handling for asynchronous operations.
@@ -706,7 +716,7 @@ public class CompletableFutureAntiPattern {
 }
 ```
 
-## Rule 9: Module System (Java 9+)
+### Example 9: Module System (Java 9+)
 
 Title: Leverage the Java Platform Module System (JPMS) for Strong Encapsulation
 Description: For applications built on Java 9 or later, consider designing them as modules to achieve strong encapsulation and reliable configuration. Create a `module-info.java` file at the root of your source code to declare your module. Use `requires` clauses to specify dependencies, `exports` clauses to make packages publicly available, `opens` clauses for reflection access, and `provides ... with ...` for service discovery. Carefully consider which packages to export to maintain good encapsulation.
@@ -781,7 +791,7 @@ public class BadModuleExample {
 }
 ```
 
-## Rule 10: Performance Considerations with Modern Features
+### Example 10: Performance Considerations with Modern Features
 
 Title: Be Mindful of Performance Implications of Modern Java Features
 Description: Always profile your application before attempting optimizations. Avoid premature optimization. Choose appropriate data structures for the task. Streams can sometimes have overhead compared to simple loops for very small collections. Parallel streams can improve performance for CPU-bound tasks on large datasets but can degrade performance if misused. `Optional` can add object allocation overhead. Lazy initialization should be implemented correctly using double-checked locking or suppliers.
@@ -887,7 +897,7 @@ public class PerformanceAntiPattern {
 }
 ```
 
-## Rule 11: Testing Modern Java Code
+### Example 11: Testing Modern Java Code
 
 Title: Adapt Testing Strategies for Modern Java Features
 Description: Adapt testing strategies to properly test modern Java features. Focus on testing behavior rather than implementation when testing lambda expressions and functional code. Use appropriate mocking strategies for functional interfaces and streams. Test asynchronous code with CompletableFuture properly, including timeout scenarios and exception handling. Ensure proper testing coverage of Optional usage patterns and edge cases. Utilize modern testing frameworks and assertion libraries that integrate well with modern Java features.
@@ -1030,7 +1040,7 @@ public class InsufficientTesting {
 }
 ```
 
-## Rule 12: Use Text Blocks for Readable Multi-line Strings
+### Example 12: Use Text Blocks for Readable Multi-line Strings
 
 Title: Employ Text Blocks for Clear and Maintainable Multi-line String Literals
 Description: Utilize text blocks (`"""..."""`) to represent multi-line string literals in a way that preserves indentation and formatting, making them easier to read and write, especially for embedded code snippets like JSON, XML, SQL, or HTML. Text blocks automatically handle newline characters and manage indentation. Incidental leading white space is automatically stripped from each line. You can control trailing white space and use escape sequences as needed.
