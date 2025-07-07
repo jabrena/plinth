@@ -306,9 +306,9 @@ class CursorRuleGeneratorTest {
         String documentationResult = generator.generate("112-java-maven-documentation.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String objectOrientedDesignResult = generator.generate("121-java-object-oriented-design.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String typeDesignResult = generator.generate("122-java-type-design.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
-        String generalGuidelinesResult = generator.generate("123-java-general-guidelines.xml", "cursor-rule-generator.xsl");
-        String secureCodingResult = generator.generate("124-java-secure-coding.xml", "cursor-rule-generator.xsl");
-        String concurrencyResult = generator.generate("125-java-concurrency.xml", "cursor-rule-generator.xsl");
+        String generalGuidelinesResult = generator.generate("123-java-general-guidelines.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
+        String secureCodingResult = generator.generate("124-java-secure-coding.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
+        String concurrencyResult = generator.generate("125-java-concurrency.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String loggingResult = generator.generate("126-java-logging.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String unitTestingResult = generator.generate("131-java-unit-testing.xml", "cursor-rule-generator.xsl");
         String refactoringWithModernFeaturesResult = generator.generate("141-java-refactoring-with-modern-features.xml", "cursor-rule-generator.xsl");
