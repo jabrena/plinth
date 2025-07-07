@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="pml.xsd"
+        id="112-java-maven-documentation" version="1.0">
+
+    <metadata>
+        <cursor-ai>
+            <description>Create README-DEV.md with information about how to use the Maven project</description>
+            <globs>pom.xml</globs>
+            <always-apply>false</always-apply>
+        </cursor-ai>
+        <tags>
+            <tag>maven</tag>
+            <tag>java</tag>
+            <tag>documentation</tag>
+        </tags>
+        <version>0.8.0</version>
+        <title>Create README-DEV.md with information about how to use the Maven project</title>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
+
+    <goal>
+        When creating a README-DEV.md file for a Maven project, include ONLY the following sections with the specified Maven goals. Do NOT add any additional sections, explanations, or content beyond what is explicitly listed below.
+
+        Create a markdown file named `README-DEV.md` with the following exact structure: [java-maven-documentation-template.md](mdc:.cursor/rules/templates/java-maven-documentation-template.md)
+    </goal>
+
+    <restrictions>
+        <restrictions-description>**MANDATORY REQUIREMENT**: Follow the embedded template EXACTLY - do not add, remove, or modify any steps, sections, or cursor rules that are not explicitly shown in the template. ### What NOT to Include:</restrictions-description>
+        <restriction-list>
+            <restriction>**DO NOT** create additional steps beyond what's shown in the template</restriction>
+            <restriction>**DO NOT** expand or elaborate on sections beyond what the template shows</restriction>
+            <restriction>**ONLY** use the exact wording and structure from the template</restriction>
+            <restriction>If a cursor rule exists in the workspace but is not in the template, **DO NOT** include it</restriction>
+        </restriction-list>
+    </restrictions>
+
+    <output-requirements-section>
+        <output-requirements-list>
+            <output-requirements-item>Generate the complete markdown file following the embedded template exactly</output-requirements-item>
+            <output-requirements-item>Use proper markdown formatting with headers, code blocks, tables, and checklists</output-requirements-item>
+            <output-requirements-item>**VERIFY**: Final output contains ONLY what appears in the embedded template</output-requirements-item>
+        </output-requirements-list>
+    </output-requirements-section>
+</prompt>

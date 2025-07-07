@@ -1,52 +1,62 @@
----
-description:
-globs:
-alwaysApply: false
----
-# Modern Java Development Guidelines (Java 8+)
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="pml.xsd"
+        id="141-java-refactoring-with-modern-features" version="1.0">
 
-## Role
+    <metadata>
+        <cursor-ai>
+            <description></description>
+            <globs></globs>
+            <always-apply>false</always-apply>
+        </cursor-ai>
+        <tags>
+            <tag>java</tag>
+            <tag>refactoring</tag>
+            <tag>modern-features</tag>
+            <tag>java8+</tag>
+            <tag>lambda</tag>
+            <tag>streams</tag>
+            <tag>optional</tag>
+            <tag>best-practices</tag>
+        </tags>
+        <version>1.0.0</version>
+        <title>Modern Java Development Guidelines (Java 8+)</title>
+    </metadata>
 
-You are a Senior software engineer with extensive experience in Java software development
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
-## Instructions for AI
+    <goal>
+        Refactor Java code to use modern Java features (Java 8+) including lambda expressions, Stream API, Optional, java.time API, and other modern constructs for improved code readability, maintainability, and performance. Apply type design thinking principles to create clear, well-structured code that communicates intent effectively.
 
-Refactor Java code to use modern Java features (Java 8+) including lambda expressions, Stream API, Optional, java.time API, and other modern constructs for improved code readability, maintainability, and performance. Apply type design thinking principles to create clear, well-structured code that communicates intent effectively.
+        ### Key Principles
 
-### Key Principles
+        1. **Functional Programming**: Leverage lambda expressions, method references, and functional interfaces
+        2. **Type Safety**: Use Optional for null safety and appropriate generic types
+        3. **Clear Intent**: Choose descriptive names and use modern APIs that express intent clearly
+        4. **Performance Awareness**: Consider performance implications of modern features
+        5. **Type Design**: Apply typography-inspired principles to code structure
+    </goal>
 
-1. **Functional Programming**: Leverage lambda expressions, method references, and functional interfaces
-2. **Type Safety**: Use Optional for null safety and appropriate generic types
-3. **Clear Intent**: Choose descriptive names and use modern APIs that express intent clearly
-4. **Performance Awareness**: Consider performance implications of modern features
-5. **Type Design**: Apply typography-inspired principles to code structure
-
-## Examples
-
-### Table of contents
-
-- Example 1: Lambda Expressions and Functional Interfaces
-- Example 2: Stream API
-- Example 3: Optional API
-- Example 4: Date/Time API (java.time)
-- Example 5: Default Methods in Interfaces
-- Example 6: Local Variable Type Inference (var)
-- Example 7: Collection Factory Methods
-- Example 8: CompletableFuture for Asynchronous Programming
-- Example 9: Module System (Java 9+)
-- Example 10: Performance Considerations with Modern Features
-- Example 11: Testing Modern Java Code
-- Example 12: Use Text Blocks for Readable Multi-line Strings
-
-### Example 1: Lambda Expressions and Functional Interfaces
-
-Title: Effectively Use Lambda Expressions and Functional Interfaces
-Description: - Prefer lambda expressions over anonymous inner classes for concise implementation of functional interfaces. - Keep lambda expressions short, readable, and focused on a single piece of logic. - Use method references (e.g., `System.out::println`, `String::isEmpty`) when they are clearer and more direct than an equivalent lambda. - Leverage the rich set of built-in functional interfaces from the `java.util.function` package (e.g., `Predicate`, `Function`, `Consumer`, `Supplier`). - Create custom functional interfaces only when a specific signature is needed that isn't covered by built-in ones. - Always annotate custom functional interfaces with `@FunctionalInterface` to ensure they meet the criteria (a single abstract method) and to clearly communicate their purpose.
-
-**Good example:**
-
-```java
-import java.util.List;
+    <examples>
+        <toc auto-generate="true"/>
+        <example number="1" id="lambda-expressions-functional-interfaces">
+            <example-header>
+                <example-title>Lambda Expressions and Functional Interfaces</example-title>
+                <example-subtitle>Effectively Use Lambda Expressions and Functional Interfaces</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                - Prefer lambda expressions over anonymous inner classes for concise implementation of functional interfaces.
+                - Keep lambda expressions short, readable, and focused on a single piece of logic.
+                - Use method references (e.g., `System.out::println`, `String::isEmpty`) when they are clearer and more direct than an equivalent lambda.
+                - Leverage the rich set of built-in functional interfaces from the `java.util.function` package (e.g., `Predicate`, `Function`, `Consumer`, `Supplier`).
+                - Create custom functional interfaces only when a specific signature is needed that isn't covered by built-in ones.
+                - Always annotate custom functional interfaces with `@FunctionalInterface` to ensure they meet the criteria (a single abstract method) and to clearly communicate their purpose.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
 import java.util.stream.Collectors;
 import java.util.Arrays;
 import java.util.function.Predicate;
@@ -83,13 +93,10 @@ public class LambdaExample {
         int lengthOfAlice = nameLengthProcessor.process("Alice");
         System.out.println("Length of 'Alice' using custom processor: " + lengthOfAlice);
     }
-}
-```
-
-**Bad example:**
-
-```java
-import java.util.List;
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
@@ -113,18 +120,24 @@ public class OldStyleAnonymousClass {
             return isLong && startsWithVowel; // Multiple conditions
         }).forEach(System.out::println);
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 2: Stream API
-
-Title: Leverage the Stream API for Collection Processing
-Description: Use streams for processing sequences of elements from collections or other sources in a functional style. Prefer a declarative approach (what to do) over an imperative one (how to do it) for stream operations. Chain stream operations effectively to create a readable processing pipeline. Use appropriate terminal operations to produce a result or side-effect. Be mindful of performance implications, especially with large datasets or complex operations.
-
-**Good example:**
-
-```java
-import java.util.List;
+        <example number="2" id="stream-api">
+            <example-header>
+                <example-title>Stream API</example-title>
+                <example-subtitle>Leverage the Stream API for Collection Processing</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use streams for processing sequences of elements from collections or other sources in a functional style. Prefer a declarative approach (what to do) over an imperative one (how to do it) for stream operations. Chain stream operations effectively to create a readable processing pipeline. Use appropriate terminal operations to produce a result or side-effect. Be mindful of performance implications, especially with large datasets or complex operations.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -152,13 +165,10 @@ public class StreamApiExample {
             .sum();
         System.out.println("Sum of squares of even numbers: " + sumOfEvenSquares);
     }
-}
-```
-
-**Bad example:**
-
-```java
-import java.util.List;
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -184,18 +194,24 @@ public class StreamAntiPattern {
                          .reduce(0, Integer::sum);
         System.out.println("Sum (parallel, overkill): " + sum);
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 3: Optional API
-
-Title: Handle Potentially Absent Values Gracefully with Optional
-Description: Use `Optional<T>` to explicitly represent values that may be absent, making your API clearer about nullability. Avoid calling `Optional.get()` directly without first checking `isPresent()`. Prefer functional alternatives. Leverage `Optional`'s functional-style methods like `map()`, `flatMap()`, `filter()`, `orElse()`, `orElseGet()`, `orElseThrow()` to handle absent values in a fluent and safe manner.
-
-**Good example:**
-
-```java
-import java.util.Optional;
+        <example number="3" id="optional-api">
+            <example-header>
+                <example-title>Optional API</example-title>
+                <example-subtitle>Handle Potentially Absent Values Gracefully with Optional</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use `Optional<T>` to explicitly represent values that may be absent, making your API clearer about nullability. Avoid calling `Optional.get()` directly without first checking `isPresent()`. Prefer functional alternatives. Leverage `Optional`'s functional-style methods like `map()`, `flatMap()`, `filter()`, `orElse()`, `orElseGet()`, `orElseThrow()` to handle absent values in a fluent and safe manner.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.Optional;
 import java.util.Map;
 
 class User {
@@ -240,13 +256,10 @@ public class OptionalExample {
             .map(String::toUpperCase)
             .orElse("DEFAULT_VALUE");
     }
-}
-```
-
-**Bad example:**
-
-```java
-import java.util.Optional;
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.Optional;
 
 public class OptionalAntiPattern {
 
@@ -272,18 +285,24 @@ public class OptionalAntiPattern {
     // Optional field - generally not recommended
     private Optional<String> configuration = Optional.empty();
     public void setConfiguration(String config) { this.configuration = Optional.ofNullable(config); }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 4: Date/Time API (java.time)
-
-Title: Utilize the Modern java.time API for Dates and Times
-Description: Replace legacy `java.util.Date`, `java.util.Calendar`, and `java.text.SimpleDateFormat` with the classes from the `java.time` package (introduced in Java 8). Choose the appropriate `java.time` class for your specific needs: `Instant` for machine time, `LocalDate` for dates without time-zone, `LocalDateTime` for date-time without time-zone, `ZonedDateTime` for date-time with specific time-zone, `Duration` for time-based amounts, and `Period` for date-based amounts.
-
-**Good example:**
-
-```java
-import java.time.*;
+        <example number="4" id="datetime-api">
+            <example-header>
+                <example-title>Date/Time API (java.time)</example-title>
+                <example-subtitle>Utilize the Modern java.time API for Dates and Times</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Replace legacy `java.util.Date`, `java.util.Calendar`, and `java.text.SimpleDateFormat` with the classes from the `java.time` package (introduced in Java 8). Choose the appropriate `java.time` class for your specific needs: `Instant` for machine time, `LocalDate` for dates without time-zone, `LocalDateTime` for date-time without time-zone, `ZonedDateTime` for date-time with specific time-zone, `Duration` for time-based amounts, and `Period` for date-based amounts.
+                            ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 
@@ -324,13 +343,10 @@ public class DateTimeApiExample {
         LocalDateTime parsedDateTime = LocalDateTime.parse("2023-01-15 10:30:00", formatter);
         System.out.println("Parsed LocalDateTime: " + parsedDateTime);
     }
-}
-```
-
-**Bad example:**
-
-```java
-import java.util.Date;
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.Date;
 import java.util.Calendar;
 import java.text.SimpleDateFormat;
 
@@ -353,18 +369,24 @@ public class LegacyDateTime {
         System.out.println("Legacy formatted date: " + formattedOldDate);
         // If sdf were shared among threads, it could lead to incorrect parsing/formatting.
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 5: Default Methods in Interfaces
-
-Title: Enhance Interfaces with Default Methods for Non-Breaking Evolution
-Description: Use default methods to add new functionality to existing interfaces without breaking implementing classes. Keep default method implementations simple and focused. Complex logic might be better suited for helper classes or abstract base classes. Clearly document the behavior of default methods, including any assumptions they make about the interface's contract. Avoid introducing state (fields) into interfaces, as default methods cannot access instance fields directly.
-
-**Good example:**
-
-```java
-interface DataProcessorInterface {
+        <example number="5" id="default-methods-interfaces">
+            <example-header>
+                <example-title>Default Methods in Interfaces</example-title>
+                <example-subtitle>Enhance Interfaces with Default Methods for Non-Breaking Evolution</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use default methods to add new functionality to existing interfaces without breaking implementing classes. Keep default method implementations simple and focused. Complex logic might be better suited for helper classes or abstract base classes. Clearly document the behavior of default methods, including any assumptions they make about the interface's contract. Avoid introducing state (fields) into interfaces, as default methods cannot access instance fields directly.
+                            ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[interface DataProcessorInterface {
     String process(String data);
 
     // Good: Default method providing optional, additive behavior
@@ -403,13 +425,10 @@ class AdvancedDataProcessor implements DataProcessorInterface {
         System.out.println("Advanced Log: Post-processing done.");
         return result;
     }
-}
-```
-
-**Bad example:**
-
-```java
-interface BadInterface {
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[interface BadInterface {
     void coreAction();
 
     // Bad: Default method with overly complex logic or many dependencies
@@ -432,18 +451,24 @@ interface BadInterface {
         }
         return result.toString();
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 6: Local Variable Type Inference (var)
-
-Title: Use var judiciously to improve readability
-Description: Use the `var` keyword (introduced in Java 10) for local variable declarations when the type is obvious from the context and it improves readability. Avoid using `var` when it makes the code less clear or when the inferred type might not be what you expect. Use `var` with care in complex expressions or when the type provides important documentation value.
-
-**Good example:**
-
-```java
-import java.util.List;
+        <example number="6" id="local-variable-type-inference">
+            <example-header>
+                <example-title>Local Variable Type Inference (var)</example-title>
+                <example-subtitle>Use var judiciously to improve readability</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use the `var` keyword (introduced in Java 10) for local variable declarations when the type is obvious from the context and it improves readability. Avoid using `var` when it makes the code less clear or when the inferred type might not be what you expect. Use `var` with care in complex expressions or when the type provides important documentation value.
+                            ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -472,13 +497,10 @@ public class VarExample {
 }
 
 class User {}
-class Configuration {}
-```
-
-**Bad example:**
-
-```java
-import java.util.List;
+class Configuration {}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
 
 public class VarAntiPattern {
     public void demonstrateBadVarUsage() {
@@ -507,18 +529,24 @@ public class VarAntiPattern {
 
     private List<?> getData() { return List.of(); }
     private Object processData(List<?> data) { return new Object(); }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 7: Collection Factory Methods
-
-Title: Utilize Unmodifiable Collection Factory Methods
-Description: Use the static factory methods `List.of()`, `Set.of()`, and `Map.of()` (Java 9+) to create compact, unmodifiable (immutable) collections when the elements are known at compile time. For creating mutable collections, continue to use traditional constructors (e.g., `new ArrayList<>()`) or Stream API collectors. Be aware that these factory methods create unmodifiable collections, do not permit `null` elements, and `Map.of()` does not permit duplicate keys.
-
-**Good example:**
-
-```java
-import java.util.List;
+        <example number="7" id="collection-factory-methods">
+            <example-header>
+                <example-title>Collection Factory Methods</example-title>
+                <example-subtitle>Utilize Unmodifiable Collection Factory Methods</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use the static factory methods `List.of()`, `Set.of()`, and `Map.of()` (Java 9+) to create compact, unmodifiable (immutable) collections when the elements are known at compile time. For creating mutable collections, continue to use traditional constructors (e.g., `new ArrayList<>()`) or Stream API collectors. Be aware that these factory methods create unmodifiable collections, do not permit `null` elements, and `Map.of()` does not permit duplicate keys.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
 import java.util.Set;
 import java.util.Map;
 import java.util.stream.Stream;
@@ -557,13 +585,10 @@ public class CollectionFactoryExample {
         anotherMutableList.add("added");
         System.out.println("Mutable list initialized from List.of: " + anotherMutableList);
     }
-}
-```
-
-**Bad example:**
-
-```java
-import java.util.List;
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
 import java.util.Set;
 import java.util.Map;
 
@@ -592,18 +617,24 @@ public class CollectionFactoryAntiPattern {
         // List<String> mutableMyList = new ArrayList<>(List.of("one", "two"));
         // mutableMyList.add("three");
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 8: CompletableFuture for Asynchronous Programming
-
-Title: Employ CompletableFuture for Composable Asynchronous Operations
-Description: Use `CompletableFuture` (Java 8+) for managing sequences of asynchronous operations, avoiding callback hell and enabling a more functional, composable style. Chain asynchronous tasks using methods like `thenApplyAsync()`, `thenComposeAsync()`, `thenAcceptAsync()`, `thenRunAsync()`. Combine results from multiple `CompletableFuture` instances using `allOf()` or `anyOf()`. Handle exceptions gracefully using `exceptionally()` or `handle()`. Be mindful of the `Executor` used for each stage and consider timeout handling for asynchronous operations.
-
-**Good example:**
-
-```java
-import java.util.concurrent.CompletableFuture;
+        <example number="8" id="completable-future">
+            <example-header>
+                <example-title>CompletableFuture for Asynchronous Programming</example-title>
+                <example-subtitle>Employ CompletableFuture for Composable Asynchronous Operations</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use `CompletableFuture` (Java 8+) for managing sequences of asynchronous operations, avoiding callback hell and enabling a more functional, composable style. Chain asynchronous tasks using methods like `thenApplyAsync()`, `thenComposeAsync()`, `thenAcceptAsync()`, `thenRunAsync()`. Combine results from multiple `CompletableFuture` instances using `allOf()` or `anyOf()`. Handle exceptions gracefully using `exceptionally()` or `handle()`. Be mindful of the `Executor` used for each stage and consider timeout handling for asynchronous operations.
+                            ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -672,13 +703,10 @@ public class CompletableFutureExample {
         }
         System.out.println("All operations finished.");
     }
-}
-```
-
-**Bad example:**
-
-```java
-import java.util.concurrent.CompletableFuture;
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public class CompletableFutureAntiPattern {
@@ -713,18 +741,24 @@ public class CompletableFutureAntiPattern {
         }
         // An .exceptionally() or .handle() should be used in the chain.
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 9: Module System (Java 9+)
-
-Title: Leverage the Java Platform Module System (JPMS) for Strong Encapsulation
-Description: For applications built on Java 9 or later, consider designing them as modules to achieve strong encapsulation and reliable configuration. Create a `module-info.java` file at the root of your source code to declare your module. Use `requires` clauses to specify dependencies, `exports` clauses to make packages publicly available, `opens` clauses for reflection access, and `provides ... with ...` for service discovery. Carefully consider which packages to export to maintain good encapsulation.
-
-**Good example:**
-
-```java
-// In src/com.example.application/module-info.java
+        <example number="9" id="module-system">
+            <example-header>
+                <example-title>Module System (Java 9+)</example-title>
+                <example-subtitle>Leverage the Java Platform Module System (JPMS) for Strong Encapsulation</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                For applications built on Java 9 or later, consider designing them as modules to achieve strong encapsulation and reliable configuration. Create a `module-info.java` file at the root of your source code to declare your module. Use `requires` clauses to specify dependencies, `exports` clauses to make packages publicly available, `opens` clauses for reflection access, and `provides ... with ...` for service discovery. Carefully consider which packages to export to maintain good encapsulation.
+                            ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// In src/com.example.application/module-info.java
 /*
 module com.example.application {
     // Depends on the standard java.base and java.logging modules
@@ -764,13 +798,10 @@ public class ModuleSystemExample {
         // AppService app = new AppService();
         // System.out.println(app.getGreeting());
     }
-}
-```
-
-**Bad example:**
-
-```java
-// In module-info.java
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// In module-info.java
 /*
 module com.example.badmodule {
     // Bad: Exporting too many internal packages, breaking encapsulation
@@ -788,18 +819,24 @@ public class BadModuleExample {
     public static void main(String[] args) {
         System.out.println("Illustrates bad practices in module-info.java like over-exporting internals.");
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 10: Performance Considerations with Modern Features
-
-Title: Be Mindful of Performance Implications of Modern Java Features
-Description: Always profile your application before attempting optimizations. Avoid premature optimization. Choose appropriate data structures for the task. Streams can sometimes have overhead compared to simple loops for very small collections. Parallel streams can improve performance for CPU-bound tasks on large datasets but can degrade performance if misused. `Optional` can add object allocation overhead. Lazy initialization should be implemented correctly using double-checked locking or suppliers.
-
-**Good example:**
-
-```java
-import java.util.List;
+        <example number="10" id="performance-considerations">
+            <example-header>
+                <example-title>Performance Considerations with Modern Features</example-title>
+                <example-subtitle>Be Mindful of Performance Implications of Modern Java Features</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Always profile your application before attempting optimizations. Avoid premature optimization. Choose appropriate data structures for the task. Streams can sometimes have overhead compared to simple loops for very small collections. Parallel streams can improve performance for CPU-bound tasks on large datasets but can degrade performance if misused. `Optional` can add object allocation overhead. Lazy initialization should be implemented correctly using double-checked locking or suppliers.
+                            ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
 import java.util.stream.IntStream;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -858,13 +895,10 @@ public class PerformanceConsiderations {
         System.out.println("Parallel sum of squares:   " + sumParallel + " in " + (endTime-startTime)/1_000_000 + "ms");
         // On multi-core machines, parallel *may* be faster here.
     }
-}
-```
-
-**Bad example:**
-
-```java
-import java.util.List;
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
 import java.util.ArrayList;
 import java.util.stream.Collectors;
 
@@ -894,18 +928,24 @@ public class PerformanceAntiPattern {
         long sum = smallList.parallelStream().mapToInt(Integer::intValue).sum();
         System.out.println("Sum: " + sum);
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 11: Testing Modern Java Code
-
-Title: Adapt Testing Strategies for Modern Java Features
-Description: Adapt testing strategies to properly test modern Java features. Focus on testing behavior rather than implementation when testing lambda expressions and functional code. Use appropriate mocking strategies for functional interfaces and streams. Test asynchronous code with CompletableFuture properly, including timeout scenarios and exception handling. Ensure proper testing coverage of Optional usage patterns and edge cases. Utilize modern testing frameworks and assertion libraries that integrate well with modern Java features.
-
-**Good example:**
-
-```java
-import java.util.List;
+        <example number="11" id="testing-modern-code">
+            <example-header>
+                <example-title>Testing Modern Java Code</example-title>
+                <example-subtitle>Adapt Testing Strategies for Modern Java Features</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Adapt testing strategies to properly test modern Java features. Focus on testing behavior rather than implementation when testing lambda expressions and functional code. Use appropriate mocking strategies for functional interfaces and streams. Test asynchronous code with CompletableFuture properly, including timeout scenarios and exception handling. Ensure proper testing coverage of Optional usage patterns and edge cases. Utilize modern testing frameworks and assertion libraries that integrate well with modern Java features.
+                            ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
@@ -1004,13 +1044,10 @@ public class TestingModernCodeExample {
         tests.testProcessDataAsync_success();
         tests.testProcessDataAsync_failure();
     }
-}
-```
-
-**Bad example:**
-
-```java
-import java.util.List;
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
 import java.util.Optional;
 
 // Bad: Not testing edge cases or different lambda behaviors
@@ -1037,18 +1074,24 @@ public class InsufficientTesting {
         // - Performance with very large lists
         // This lack of thorough testing can lead to bugs in production.
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 12: Use Text Blocks for Readable Multi-line Strings
-
-Title: Employ Text Blocks for Clear and Maintainable Multi-line String Literals
-Description: Utilize text blocks (`"""..."""`) to represent multi-line string literals in a way that preserves indentation and formatting, making them easier to read and write, especially for embedded code snippets like JSON, XML, SQL, or HTML. Text blocks automatically handle newline characters and manage indentation. Incidental leading white space is automatically stripped from each line. You can control trailing white space and use escape sequences as needed.
-
-**Good example:**
-
-```java
-public class TextBlockExample {
+        <example number="12" id="text-blocks">
+            <example-header>
+                <example-title>Use Text Blocks for Readable Multi-line Strings</example-title>
+                <example-subtitle>Employ Text Blocks for Clear and Maintainable Multi-line String Literals</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Utilize text blocks (`"""..."""`) to represent multi-line string literals in a way that preserves indentation and formatting, making them easier to read and write, especially for embedded code snippets like JSON, XML, SQL, or HTML. Text blocks automatically handle newline characters and manage indentation. Incidental leading white space is automatically stripped from each line. You can control trailing white space and use escape sequences as needed.
+                            ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[public class TextBlockExample {
     public static void main(String[] args) {
         // Good: HTML snippet using a text block
         String html = """
@@ -1088,13 +1131,10 @@ public class TextBlockExample {
             """;
         System.out.println("Indented Example:\n" + indented);
     }
-}
-```
-
-**Bad example:**
-
-```java
-public class OldMultiLineStringExample {
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[public class OldMultiLineStringExample {
     public static void main(String[] args) {
         // Bad: Using traditional string concatenation for multi-line text
         String htmlOld = "<html>\n" +
@@ -1119,5 +1159,9 @@ public class OldMultiLineStringExample {
                              """; // The indentation is determined by the least indented line or the closing """
         System.out.println("Mixed Style (potentially confusing indentation):\n" + mixedStyle);
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+</prompt>

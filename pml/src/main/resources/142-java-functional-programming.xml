@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="pml.xsd"
+    id="142-java-functional-programming" version="1.0">
+
+    <metadata>
+        <!-- Markdown Front Matter for Cursor Rules -->
+        <cursor-ai>
+            <description></description>
+            <globs></globs>
+            <always-apply>false</always-apply>
+        </cursor-ai>
+        <tags>
+            <tag>java</tag>
+            <tag>functional-programming</tag>
+            <tag>immutability</tag>
+            <tag>streams</tag>
+            <tag>lambda</tag>
+            <tag>type-safety</tag>
+        </tags>
+        <version>1.0</version>
+        <title>Java Functional Programming rules</title>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
+
+    <goal>
+        Apply functional programming principles in Java development, emphasizing immutability, pure functions, and type safety through functional interfaces and modern Java features.
+
+        ### Implementing These Principles
+
+        These guidelines are built upon the following core principles:
+
+        1.  **Immutability**: Prioritize immutable data structures (e.g., Records, `List.of()`) and state transformations that produce new instances rather than modifying existing ones. This reduces side effects and simplifies reasoning about state.
+        2.  **Purity and Side-Effect Management**: Strive to write pure functions—functions whose output depends only on their input and which have no observable side effects. Isolate and control side effects when they are necessary.
+        3.  **Expressiveness and Conciseness**: Leverage lambda expressions, method references, and the Stream API to write code that is declarative, concise, and clearly expresses the intent of data transformations and operations.
+        4.  **Higher-Order Abstractions**: Utilize functional interfaces, function composition, and higher-order functions (functions that operate on other functions) to build flexible and reusable code components.
+        5.  **Modern Java Integration**: Embrace modern Java features like Records, Pattern Matching, Switch Expressions, and Sealed Classes, which align well with and enhance functional programming paradigms by promoting immutability, type safety, and expressive conditional logic.
+    </goal>
+
+    <examples>
+        <toc auto-generate="true" />
+        <example number="1" id="immutable-objects">
+            <example-header>
+                <example-title>Immutable Objects</example-title>
+                <example-subtitle>Ensure Objects are Immutable</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use `final` classes and fields. Initialize all fields in the constructor. Do not provide setter methods. Return defensive copies of mutable fields (e.g., collections, dates) when exposing them via getters.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import java.util.List;
+import java.util.ArrayList;
+
+public final class Person {
+    private final String name;
+    private final int age;
+    private final List<String> hobbies; // Make it List, not ArrayList
+
+    public Person(String name, int age, List<String> hobbies) {
+        this.name = name;
+        this.age = age;
+        // Ensure the incoming list is defensively copied to an immutable list
+        this.hobbies = List.copyOf(hobbies);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    // Return an immutable view or a defensive copy
+    public List<String> getHobbies() {
+        return this.hobbies; // List.copyOf already returns an unmodifiable list
+    }
+}
+                    ]]></code-block>
+                </good-example>
+            </code-examples>
+        </example>
+
+        <example number="2" id="state-immutability">
+            <example-header>
+                <example-title>State Immutability</example-title>
+                <example-subtitle>Prefer Immutable State Transformations</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Instead of modifying existing objects, return new objects representing the new state. Utilize collectors that produce immutable collections (e.g., `Collectors.toUnmodifiableList()`). Leverage immutable collection types provided by libraries or Java itself.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class PriceCalculator {
+    public static List<Double> applyDiscount(List<Double> prices, double discount) {
+        return prices.stream()
+            .map(price -> price * (1 - discount))
+            .collect(Collectors.toUnmodifiableList()); // Ensures the returned list is immutable
+    }
+}
+                    ]]></code-block>
+                </good-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="pure-functions">
+            <example-header>
+                <example-title>Pure Functions</example-title>
+                <example-subtitle>Write Pure Functions</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Functions should depend only on their input parameters and not on any external or hidden state. They should not cause any side effects (e.g., modifying external variables, I/O operations). Given the same input, a pure function must always return the same output. Avoid modifying external state or relying on it.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class MathOperations {
+    // Pure function: depends only on input, no side effects
+    public static int add(int a, int b) {
+        return a + b;
+    }
+
+    // Pure function: transforms input list to a new list without modifying the original
+    public static List<Integer> doubleNumbers(List<Integer> numbers) {
+        return numbers.stream()
+            .map(n -> n * 2)
+            .collect(Collectors.toList()); // Could also be toUnmodifiableList()
+    }
+}
+                    ]]></code-block>
+                </good-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="functional-interfaces">
+            <example-header>
+                <example-title>Functional Interfaces</example-title>
+                <example-subtitle>Utilize Functional Interfaces Effectively</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Prefer built-in functional interfaces from `java.util.function` (e.g., `Function`, `Predicate`, `Consumer`, `Supplier`, `UnaryOperator`) when they suit the need. Create custom functional interfaces (annotated with `@FunctionalInterface`) for specific, clearly defined single abstract methods. Keep functional interfaces focused on a single responsibility.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.function.Consumer;
+import java.util.function.Supplier;
+import java.time.LocalDateTime;
+
+// Built-in functional interfaces
+class FunctionalInterfaceExamples {
+    Function<String, Integer> stringToLength = String::length;
+    Predicate<Integer> isEven = n -> n % 2 == 0;
+    Consumer<String> printer = System.out::println;
+    Supplier<LocalDateTime> now = LocalDateTime::now;
+}
+
+// Custom functional interface
+@FunctionalInterface
+interface Validator<T> {
+    boolean validate(T value);
+}
+                    ]]></code-block>
+                </good-example>
+            </code-examples>
+        </example>
+
+        <example number="5" id="lambda-expressions">
+            <example-header>
+                <example-title>Lambda Expressions</example-title>
+                <example-subtitle>Employ Lambda Expressions Clearly and Concisely</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use method references (e.g., `String::length`, `System.out::println`) when they are clearer and more concise than an equivalent lambda expression. Keep lambda expressions short and focused on a single piece of logic to maintain readability. Extract complex or multi-line lambda logic into separate, well-named private methods.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
+public class LambdaExamples {
+    public static void main(String[] args) {
+        List<String> names = Arrays.asList("Alice", "Bob", "Charlie", "David", "Eve");
+
+        // Method reference for conciseness
+        names.forEach(System.out::println);
+
+        // Simple, readable lambda
+        List<String> longNames = names.stream()
+            .filter(name -> name.length() > 4)
+            .collect(Collectors.toList());
+
+        // Complex logic extracted to a private helper method
+        List<String> validNames = names.stream()
+            .filter(LambdaExamples::isValidName)
+            .collect(Collectors.toList());
+
+        System.out.println("Long names: " + longNames);
+        System.out.println("Valid names: " + validNames);
+    }
+
+    // Helper method for more complex lambda logic
+    private static boolean isValidName(String name) {
+        return name.length() > 3 && Character.isUpperCase(name.charAt(0));
+    }
+}
+                    ]]></code-block>
+                </good-example>
+            </code-examples>
+        </example>
+
+        <example number="6" id="streams">
+            <example-header>
+                <example-title>Streams</example-title>
+                <example-subtitle>Leverage Streams for Collection Processing</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use the Stream API for processing sequences of elements from collections or other sources. Chain stream operations (intermediate operations like `filter`, `map`, `sorted`) to create a pipeline for complex transformations. Consider using parallel streams (`collection.parallelStream()`) for potentially improved performance on large datasets, but be mindful of the overhead and suitability for the task. Choose appropriate terminal operations (e.g., `collect`, `forEach`, `reduce`, `findFirst`, `anyMatch`) to produce a result or side-effect.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class StreamExamples {
+    public static void main(String[] args) {
+        List<Integer> numbers = Arrays.asList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+
+        // Basic stream operations: filter even numbers and square them
+        List<Integer> evenSquares = numbers.stream()
+            .filter(n -> n % 2 == 0)
+            .map(n -> n * n)
+            .collect(Collectors.toList());
+        System.out.println("Even squares: " + evenSquares);
+
+        // Advanced stream operations: partitioning numbers
+        Map<Boolean, List<Integer>> partitionedByGreaterThanFive = numbers.stream()
+            .collect(Collectors.partitioningBy(n -> n > 5));
+        System.out.println("Partitioned by > 5: " + partitionedByGreaterThanFive);
+
+        // Parallel stream for calculating average (use with caution, consider dataset size)
+        double average = numbers.parallelStream()
+            .mapToDouble(Integer::doubleValue)
+            .average()
+            .orElse(0.0);
+        System.out.println("Average: " + average);
+    }
+}
+                    ]]></code-block>
+                </good-example>
+            </code-examples>
+        </example>
+
+        <example number="7" id="functional-programming-paradigms">
+            <example-header>
+                <example-title>Functional Programming Paradigms</example-title>
+                <example-subtitle>Apply Core Functional Programming Paradigms</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                **Function Composition**: Combine simpler functions to create more complex ones. Use `Function.compose()` and `Function.andThen()`. **Optional for Null Safety**: Use `Optional<T>` to represent values that may be absent, avoiding `NullPointerExceptions` and clearly signaling optionality. **Recursion**: Implement algorithms using recursion where it naturally fits the problem (e.g., tree traversal), especially tail recursion if supported or optimized by the JVM. **Higher-Order Functions**: Utilize functions that accept other functions as arguments or return them as results (e.g., `Stream.map`, `Stream.filter`).
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.stream.IntStream;
+
+public class FunctionalParadigms {
+
+    // Function composition
+    public static void demonstrateComposition() {
+        Function<Integer, String> intToString = Object::toString;
+        Function<String, Integer> stringLength = String::length;
+        // Executes intToString first, then stringLength
+        Function<Integer, Integer> composedLengthAfterToString = stringLength.compose(intToString);
+        System.out.println("Composed (123 -> length): " + composedLengthAfterToString.apply(123)); // Output: 3
+    }
+
+    // Optional usage for safe division
+    public static Optional<Double> divideNumbers(Double numerator, Double denominator) {
+        if (Objects.isNull(denominator) || denominator == 0) {
+            return Optional.empty();
+        }
+        return Optional.of(numerator / denominator);
+    }
+
+    // Factorial using IntStream (more functional and often safer for large n)
+    public static long factorialFunctional(int n) {
+        if (n < 0) throw new IllegalArgumentException("Factorial not defined for negative numbers");
+        return IntStream.rangeClosed(1, n)
+                .asLongStream() // Ensure long for intermediate products
+                .reduce(1L, (a, b) -> a * b);
+    }
+
+    // Recursion example: factorial (iterative version often preferred for stack safety in Java)
+    // Note: Streams provide a more functional way for such operations in many cases.
+    public static long factorialRecursive(int n) {
+        if (n < 0) throw new IllegalArgumentException("Factorial not defined for negative numbers");
+        if (n == 0 || n == 1) return 1;
+        return n * factorialRecursive(n - 1);
+    }
+
+    // Higher-order function: memoization
+    public static <T, R> Function<T, R> memoize(Function<T, R> function) {
+        Map<T, R> cache = new ConcurrentHashMap<>();
+        // The returned function closes over the cache
+        return input -> cache.computeIfAbsent(input, function);
+    }
+
+    public static void main(String[] args) {
+        demonstrateComposition();
+
+        System.out.println("Divide 10 by 2: " + divideNumbers(10.0, 2.0).orElse(Double.NaN));
+        System.out.println("Divide 10 by 0: " + divideNumbers(10.0, 0.0).orElse(Double.NaN));
+
+        System.out.println("Factorial recursive (5): " + factorialRecursive(5));
+        System.out.println("Factorial functional (5): " + factorialFunctional(5));
+
+        Function<Integer, Integer> expensiveOperation = x -> {
+            System.out.println("Computing for " + x);
+            try { Thread.sleep(1000); } catch (InterruptedException e) {}
+            return x * x;
+        };
+
+        Function<Integer, Integer> memoizedOp = memoize(expensiveOperation);
+        System.out.println("Memoized (4): " + memoizedOp.apply(4)); // Computes
+        System.out.println("Memoized (4): " + memoizedOp.apply(4)); // Returns from cache
+        System.out.println("Memoized (5): " + memoizedOp.apply(5)); // Computes
+    }
+}
+                    ]]></code-block>
+                </good-example>
+            </code-examples>
+        </example>
+
+        <example number="8" id="records-immutable-data">
+            <example-header>
+                <example-title>Leverage Records for Immutable Data Transfer</example-title>
+                <example-subtitle>Use Records for Type-Safe Immutable Data</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use Records (JEP 395, standardized in Java 16) as the primary way to model simple, immutable data aggregates. Records automatically provide constructors, getters (accessor methods with the same name as the field), `equals()`, `hashCode()`, and `toString()` methods, reducing boilerplate. This aligns perfectly with the functional paradigm's preference for immutability and conciseness.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+public record PointRecord(int x, int y) {
+    // Optional: add custom compact constructors, static factory methods, or instance methods.
+    // By default, all fields are final, and public accessor methods (e.g., x(), y()) are generated.
+}
+
+// Usage:
+// PointRecord p = new PointRecord(10, 20);
+// int xVal = p.x(); // Accessor method
+// int yVal = p.y(); // Accessor method
+                    ]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[
+public final class PointClass {
+    private final int x;
+    private final int y;
+
+    public PointClass(int x, int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (Objects.isNull(o) || getClass() != o.getClass()) return false;
+        PointClass that = (PointClass) o;
+        return x == that.x && y == that.y;
+    }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(x, y);
+    }
+
+    @Override
+    public String toString() {
+        return "PointClass[" +
+               "x=" + x + ", " +
+               "y=" + y + ']';
+    }
+}
+                    ]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="9" id="pattern-matching-instanceof-switch">
+            <example-header>
+                <example-title>Employ Pattern Matching for `instanceof` and `switch`</example-title>
+                <example-subtitle>Use Pattern Matching for Type-Safe Conditional Logic</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Utilize Pattern Matching for `instanceof` to simplify type checks and casts in a single step. Employ Pattern Matching for `switch` for more expressive and robust conditional logic, especially with sealed types and records. This reduces boilerplate, improves readability, and enhances type safety.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+public String processShapeWithPatternInstanceof(Object shape) {
+    if (shape instanceof Circle c) { // Type test and binding in one
+        return "Circle with radius " + c.getRadius();
+    } else if (shape instanceof Rectangle r) {
+        return "Rectangle with width " + r.getWidth() + " and height " + r.getHeight();
+    }
+    return "Unknown shape";
+}
+
+// Pattern Matching for switch with Records and Sealed Interfaces
+sealed interface Shape permits CircleRecord, RectangleRecord, SquareRecord {}
+record CircleRecord(double radius) implements Shape {}
+record RectangleRecord(double length, double width) implements Shape {}
+record SquareRecord(double side) implements Shape {}
+
+public String processShapeWithPatternSwitch(Shape shape) {
+    return switch (shape) {
+        case CircleRecord c -> "Circle with radius " + c.radius();
+        case RectangleRecord r -> "Rectangle with length " + r.length() + " and width " + r.width();
+        case SquareRecord s -> "Square with side " + s.side();
+        // No default needed if all permitted types of the sealed interface are covered
+    };
+}
+                    ]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[
+public String processShapeLegacy(Object shape) {
+    if (shape instanceof Circle) {
+        Circle c = (Circle) shape;
+        return "Circle with radius " + c.getRadius();
+    } else if (shape instanceof Rectangle) {
+        Rectangle r = (Rectangle) shape;
+        return "Rectangle with width " + r.getWidth() + " and height " + r.getHeight();
+    }
+    return "Unknown shape";
+}
+
+// Assume Circle and Rectangle classes exist for this example
+// class Circle { public double getRadius() { return 0; } }
+// class Rectangle { public double getWidth() { return 0; } public double getHeight() { return 0; } }
+                    ]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="10" id="switch-expressions">
+            <example-header>
+                <example-title>Use Switch Expressions for Concise Multi-way Conditionals</example-title>
+                <example-subtitle>Employ Switch Expressions for Safer Conditional Logic</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Prefer Switch Expressions (JEP 361, Java 14) over traditional switch statements for assigning the result of a multi-way conditional to a variable. Switch expressions are more concise, less error-prone (e.g., no fall-through by default, compiler checks for exhaustiveness with enums/sealed types). They fit well with functional programming's emphasis on expressions over statements.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+public String getDayTypeWithSwitchExpr(String day) {
+    return switch (day) {
+        case "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY" -> "Weekday";
+        case "SATURDAY", "SUNDAY" -> "Weekend";
+        default -> throw new IllegalArgumentException("Invalid day: " + day);
+    };
+}
+
+// Example with enum for exhaustive switch
+enum Day { MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY, SATURDAY, SUNDAY }
+
+public String getDayCategory(Day day) {
+    return switch (day) {
+        case MONDAY, TUESDAY, WEDNESDAY, THURSDAY, FRIDAY -> "Weekday";
+        case SATURDAY, SUNDAY -> "Weekend";
+        // No default needed if all enum constants are covered
+    };
+}
+                    ]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[
+public String getDayTypeLegacy(String day) {
+    String type;
+    switch (day) {
+        case "MONDAY":
+        case "TUESDAY":
+        case "WEDNESDAY":
+        case "THURSDAY":
+        case "FRIDAY":
+            type = "Weekday";
+            break;
+        case "SATURDAY":
+        case "SUNDAY":
+            type = "Weekend";
+            break;
+        default:
+            throw new IllegalArgumentException("Invalid day: " + day);
+    }
+    return type;
+}
+                    ]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="11" id="sealed-classes-interfaces">
+            <example-header>
+                <example-title>Leverage Sealed Classes and Interfaces for Controlled Hierarchies</example-title>
+                <example-subtitle>Use Sealed Types for Domain Modeling</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use Sealed Classes and Interfaces (JEP 409, Java 17) to define class/interface hierarchies where all direct subtypes are known, finite, and explicitly listed. This enables more robust domain modeling and allows the compiler to perform exhaustive checks in pattern matching (e.g., with `switch` expressions), eliminating the need for a default case in many scenarios. Particularly useful for creating sum types (algebraic data types) which are common in functional programming.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+// Define a sealed interface for different types of events
+public sealed interface Event permits LoginEvent, LogoutEvent, FileUploadEvent {
+    long getTimestamp();
+}
+
+// Define permitted implementations (often records for immutability)
+public record LoginEvent(String userId, long timestamp) implements Event {
+    @Override public long getTimestamp() { return timestamp; }
+}
+
+public record LogoutEvent(String userId, long timestamp) implements Event {
+    @Override public long getTimestamp() { return timestamp; }
+}
+
+public record FileUploadEvent(String userId, String fileName, long fileSize, long timestamp) implements Event {
+    @Override public long getTimestamp() { return timestamp; }
+}
+
+// A function processing the sealed hierarchy can be made exhaustive
+public class EventProcessor {
+    public String processEvent(Event event) {
+        return switch (event) {
+            case LoginEvent le -> "User " + le.userId() + " logged in at " + le.getTimestamp();
+            case LogoutEvent loe -> "User " + loe.userId() + " logged out at " + loe.getTimestamp();
+            case FileUploadEvent fue -> "User " + fue.userId() + " uploaded " + fue.fileName() + " at " + fue.getTimestamp();
+            // No default case is necessary if the switch is exhaustive for all permitted types of Event.
+        };
+    }
+}
+                    ]]></code-block>
+                </good-example>
+            </code-examples>
+        </example>
+
+        <example number="12" id="type-safe-wrappers">
+            <example-header>
+                <example-title>Create Type-Safe Wrappers for Domain Types</example-title>
+                <example-subtitle>Use Strong Types for Domain Modeling</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Create type-safe wrappers for domain-specific types instead of using primitive types or general-purpose types like String. These wrapper types enhance type safety by enforcing invariants at compile-time and clearly communicate the intended meaning and constraints of data. This approach from type design thinking improves the functional programming paradigm by making invalid states unrepresentable.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+// Type-safe wrappers for functional programming domains
+public record UserId(String value) {
+    public UserId {
+        if (value == null || value.trim().isEmpty()) {
+            throw new IllegalArgumentException("UserId cannot be null or empty");
+        }
+    }
+}
+
+public record EmailAddress(String value) {
+    public EmailAddress {
+        if (value == null || !isValidEmail(value)) {
+            throw new IllegalArgumentException("Invalid email format: " + value);
+        }
+    }
+
+    private static boolean isValidEmail(String email) {
+        return email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$");
+    }
+}
+
+// Usage in functional context
+public class UserService {
+    public Optional<User> findUser(UserId userId) {
+        // Type safety ensures only valid UserIds are passed
+        return userRepository.findById(userId.value());
+    }
+
+    public List<User> findUsersByEmail(EmailAddress email) {
+        // Type safety ensures only valid emails are processed
+        return userRepository.findByEmail(email.value());
+    }
+}
+                    ]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[
+// Primitive obsession - error prone
+public class UserService {
+    public Optional<User> findUser(String userId) {
+        // No validation, could be null or empty
+        return userRepository.findById(userId);
+    }
+
+    public List<User> findUsersByEmail(String email) {
+        // No validation, could be invalid email format
+        return userRepository.findByEmail(email);
+    }
+
+    // Easy to make mistakes:
+    // findUser(null); // Runtime error
+    // findUsersByEmail("invalid-email"); // Invalid data propagated
+    // findUser("user@example.com"); // Wrong parameter type confusion
+}
+                    ]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="13" id="stream-gatherers">
+            <example-header>
+                <example-title>Explore Stream Gatherers for Custom Stream Operations</example-title>
+                <example-subtitle>Use Stream Gatherers for Advanced Stream Processing</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                For complex or highly custom stream processing tasks that are not easily achieved with standard terminal operations or collectors, investigate Stream Gatherers (JEP 461). Gatherers (`java.util.stream.Gatherer`) allow defining custom intermediate operations, offering more flexibility and power for sophisticated data transformations within functional pipelines. This feature is aimed at more advanced use cases where reusability and composition of stream operations are key.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import java.util.List;
+import java.util.stream.Stream;
+// import java.util.stream.Gatherers; // Assuming this is where predefined gatherers might reside
+
+public class StreamGathererExample {
+
+    // Hypothetical: A custom gatherer that creates sliding windows of elements.
+    // The actual implementation of such a gatherer would be more involved.
+    // static <T> Gatherer<T, ?, List<T>> windowed(int size) {
+    //     // ... implementation details ...
+    //     return null; // Placeholder
+    // }
+
+    public static void main(String[] args) {
+        // List<List<Integer>> windows = Stream.of(1, 2, 3, 4, 5, 6, 7)
+        //        .gather(windowed(3)) // Using a hypothetical custom 'windowed' gatherer
+        //        .toList();
+        //
+        // // Expected output might be: [[1, 2, 3], [2, 3, 4], [3, 4, 5], [4, 5, 6], [5, 6, 7]]
+        // System.out.println(windows);
+
+        System.out.println("Stream Gatherers are a new feature. Refer to official Java documentation for concrete examples and API details as they become available.");
+    }
+}
+
+// Rule of Thumb:
+// Before implementing very complex custom collectors or resorting to imperative loops for intricate stream transformations,
+// evaluate if a Stream Gatherer could offer a more declarative, reusable, and composable solution.
+// This is for advanced stream users looking to build sophisticated data processing pipelines.
+                    ]]></code-block>
+                </good-example>
+            </code-examples>
+        </example>
+    </examples>
+</prompt>

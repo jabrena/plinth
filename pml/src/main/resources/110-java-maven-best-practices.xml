@@ -1,38 +1,45 @@
----
-description: Maven Best Practices
-globs: pom.xml
-alwaysApply: false
----
-# Maven Best Practices
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="pml.xsd"
+    id="110-java-maven-best-practices" version="1.0">
 
-## Role
+    <metadata>
+        <!-- Markdown Front Matter for Cursor Rules -->
+        <cursor-ai>
+            <description>Maven Best Practices</description>
+            <globs>pom.xml</globs>
+            <always-apply>false</always-apply>
+        </cursor-ai>
+        <tags>
+            <tag>maven</tag>
+            <tag>java</tag>
+            <tag>best-practices</tag>
+        </tags>
+        <version>0.8.0</version>
+        <title>Maven Best Practices</title>
+    </metadata>
 
-You are a Senior software engineer with extensive experience in Java software development
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
-## Instructions for AI
+    <goal>
+        Update the pom.xml based on the following rules about Maven best practices.
+    </goal>
 
-Update the pom.xml based on the following rules about Maven best practices.
-
-## Examples
-
-### Table of contents
-
-- Example 1: Effective Dependency Management
-- Example 2: Standard Directory Layout
-- Example 3: Plugin Management and Configuration
-- Example 4: Use Build Profiles for Environment-Specific Configurations
-- Example 5: Keep POMs Readable and Maintainable
-- Example 6: Manage Repositories Explicitly
-- Example 7: Centralize Version Management with Properties
-
-### Example 1: Effective Dependency Management
-
-Title: Manage Dependencies Effectively using `dependencyManagement` and BOMs
-Description: Use the `<dependencyManagement>` section in parent POMs or import Bill of Materials (BOMs) to centralize and control dependency versions. This helps avoid version conflicts and ensures consistency across multi-module projects. Avoid hardcoding versions directly in `<dependencies>` when managed elsewhere.
-
-**Good example:**
-
-```xml
+    <examples>
+        <toc auto-generate="true" />
+        <example number="1" id="effective-dependency-management">
+            <example-header>
+                <example-title>Effective Dependency Management</example-title>
+                <example-subtitle>Manage Dependencies Effectively using `dependencyManagement` and BOMs</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use the `<dependencyManagement>` section in parent POMs or import Bill of Materials (BOMs) to centralize and control dependency versions. This helps avoid version conflicts and ensures consistency across multi-module projects. Avoid hardcoding versions directly in `<dependencies>` when managed elsewhere.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="xml"><![CDATA[
 <!-- Parent POM -->
 <project>
   <modelVersion>4.0.0</modelVersion>
@@ -94,12 +101,10 @@ Description: Use the `<dependencyManagement>` section in parent POMs or import B
     </dependency>
   </dependencies>
 </project>
-
-```
-
-**Bad example:**
-
-```xml
+                ]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="xml"><![CDATA[
 <!-- Child POM hardcoding versions -->
 <project>
   <modelVersion>4.0.0</modelVersion>
@@ -121,17 +126,24 @@ Description: Use the `<dependencyManagement>` section in parent POMs or import B
     </dependency>
   </dependencies>
 </project>
+                ]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-```
-
-### Example 2: Standard Directory Layout
-
-Title: Adhere to the Standard Directory Layout
-Description: Follow Maven's convention for directory structure (`src/main/java`, `src/main/resources`, `src/test/java`, `src/test/resources`, etc.). This makes projects easier to understand and build, as Maven relies on these defaults.
-
-**Good example:**
-
-```text
+        <example number="2" id="standard-directory-layout">
+            <example-header>
+                <example-title>Standard Directory Layout</example-title>
+                <example-subtitle>Adhere to the Standard Directory Layout</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Follow Maven's convention for directory structure (`src/main/java`, `src/main/resources`, `src/test/java`, `src/test/resources`, etc.). This makes projects easier to understand and build, as Maven relies on these defaults.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="text"><![CDATA[
 my-app/
 ├── pom.xml
 └── src/
@@ -145,12 +157,10 @@ my-app/
         │   └── com/example/myapp/AppTest.java
         └── resources/
             └── test-data.xml
-
-```
-
-**Bad example:**
-
-```text
+                   ]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="text"><![CDATA[
 my-app/
 ├── pom.xml
 ├── sources/  <!-- Non-standard -->
@@ -160,17 +170,24 @@ my-app/
 └── tests/    <!-- Non-standard -->
     └── com/example/myapp/AppTest.java
 <!-- This would require explicit configuration in pom.xml to specify source/resource directories -->
+                    ]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-```
-
-### Example 3: Plugin Management and Configuration
-
-Title: Manage Plugin Versions and Configurations Centrally
-Description: Use `<pluginManagement>` in a parent POM to define plugin versions and common configurations. Child POMs can then use the plugins without specifying versions, ensuring consistency. Override configurations in child POMs only when necessary.
-
-**Good example:**
-
-```xml
+        <example number="3" id="plugin-management">
+            <example-header>
+                <example-title>Plugin Management and Configuration</example-title>
+                <example-subtitle>Manage Plugin Versions and Configurations Centrally</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use `<pluginManagement>` in a parent POM to define plugin versions and common configurations. Child POMs can then use the plugins without specifying versions, ensuring consistency. Override configurations in child POMs only when necessary.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="xml"><![CDATA[
 <!-- Parent POM -->
 <project>
   <!-- ... -->
@@ -204,12 +221,10 @@ Description: Use `<pluginManagement>` in a parent POM to define plugin versions 
     </plugins>
   </build>
 </project>
-
-```
-
-**Bad example:**
-
-```xml
+                ]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="xml"><![CDATA[
 <!-- Child POM -->
 <project>
   <!-- ... -->
@@ -227,17 +242,24 @@ Description: Use `<pluginManagement>` in a parent POM to define plugin versions 
     </plugins>
   </build>
 </project>
+                ]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-```
-
-### Example 4: Use Build Profiles for Environment-Specific Configurations
-
-Title: Employ Build Profiles for Environment-Specific Settings
-Description: Use Maven profiles to customize build settings for different environments (e.g., dev, test, prod) or other conditional scenarios. This can include different dependencies, plugin configurations, or properties. Activate profiles via command line, OS, JDK, or file presence.
-
-**Good example:**
-
-```xml
+        <example number="4" id="build-profiles">
+            <example-header>
+                <example-title>Use Build Profiles for Environment-Specific Configurations</example-title>
+                <example-subtitle>Employ Build Profiles for Environment-Specific Settings</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use Maven profiles to customize build settings for different environments (e.g., dev, test, prod) or other conditional scenarios. This can include different dependencies, plugin configurations, or properties. Activate profiles via command line, OS, JDK, or file presence.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="xml"><![CDATA[
 <project>
   <!-- ... -->
   <profiles>
@@ -280,12 +302,10 @@ Description: Use Maven profiles to customize build settings for different enviro
   </profiles>
 </project>
 <!-- Activation: mvn clean install -P prod -->
-
-```
-
-**Bad example:**
-
-```xml
+                ]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="xml"><![CDATA[
 <!-- Commented out sections for different environments -->
 <project>
   <!-- ... -->
@@ -294,17 +314,24 @@ Description: Use Maven profiles to customize build settings for different enviro
     <database.url>jdbc:postgresql://prodserver/mydb</database.url> <!-- Manually switch by commenting/uncommenting -->
   </properties>
 </project>
+                ]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-```
-
-### Example 5: Keep POMs Readable and Maintainable
-
-Title: Structure POMs Logically for Readability
-Description: Organize your `pom.xml` sections in a consistent order (e.g., project coordinates, parent, properties, dependencyManagement, dependencies, build, profiles, repositories). Use properties for recurring versions or values. Add comments for complex configurations.
-
-**Good example:**
-
-```xml
+        <example number="5" id="readable-poms">
+            <example-header>
+                <example-title>Keep POMs Readable and Maintainable</example-title>
+                <example-subtitle>Structure POMs Logically for Readability</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Organize your `pom.xml` sections in a consistent order (e.g., project coordinates, parent, properties, dependencyManagement, dependencies, build, profiles, repositories). Use properties for recurring versions or values. Add comments for complex configurations.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="xml"><![CDATA[
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
@@ -354,12 +381,10 @@ Description: Organize your `pom.xml` sections in a consistent order (e.g., proje
     <!-- Repositories and Plugin Repositories (if needed) -->
     <!-- ... -->
 </project>
-
-```
-
-**Bad example:**
-
-```xml
+                ]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="xml"><![CDATA[
 <!-- Haphazard order, missing properties for versions -->
 <project>
   <dependencies>
@@ -380,17 +405,24 @@ Description: Organize your `pom.xml` sections in a consistent order (e.g., proje
   <artifactId>my-app</artifactId>
   <version>1.0.0-SNAPSHOT</version>
 </project>
+                ]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-```
-
-### Example 6: Manage Repositories Explicitly
-
-Title: Declare Custom Repositories Explicitly and Minimize Their Use
-Description: Prefer dependencies from Maven Central. If custom repositories are necessary, declare them in the `<repositories>` section and `<pluginRepositories>` for plugins. It's often better to manage these in a company-wide Nexus/Artifactory instance configured in `settings.xml` rather than per-project POMs. Avoid relying on transitive repositories.
-
-**Good example:**
-
-```xml
+        <example number="6" id="manage-repositories">
+            <example-header>
+                <example-title>Manage Repositories Explicitly</example-title>
+                <example-subtitle>Declare Custom Repositories Explicitly and Minimize Their Use</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Prefer dependencies from Maven Central. If custom repositories are necessary, declare them in the `<repositories>` section and `<pluginRepositories>` for plugins. It's often better to manage these in a company-wide Nexus/Artifactory instance configured in `settings.xml` rather than per-project POMs. Avoid relying on transitive repositories.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="xml"><![CDATA[
 <project>
   <!-- ... -->
   <repositories>
@@ -407,12 +439,10 @@ Description: Prefer dependencies from Maven Central. If custom repositories are 
   </pluginRepositories>
 </project>
 <!-- Better: Configure these in settings.xml and use a repository manager -->
-
-```
-
-**Bad example:**
-
-```xml
+                ]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="xml"><![CDATA[
 <!-- No explicit repository for a non-central artifact, relying on developer's local settings or transitive ones -->
 <project>
   <!-- ... -->
@@ -427,17 +457,24 @@ Description: Prefer dependencies from Maven Central. If custom repositories are 
     </dependency>
   </dependencies>
 </project>
+                ]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-```
-
-### Example 7: Centralize Version Management with Properties
-
-Title: Use Properties to Manage Dependency and Plugin Versions
-Description: Define all dependency and plugin versions in the `<properties>` section rather than hardcoding them throughout the POM. This centralizes version management, makes updates easier, reduces duplication, and helps maintain consistency across related dependencies. Use consistent property naming conventions: `maven-plugin-[name].version` for Maven plugins, simple names like `[library].version` for dependencies, and descriptive names for quality thresholds like `coverage.level`.
-
-**Good example:**
-
-```xml
+        <example number="7" id="centralize-version-management">
+            <example-header>
+                <example-title>Centralize Version Management with Properties</example-title>
+                <example-subtitle>Use Properties to Manage Dependency and Plugin Versions</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Define all dependency and plugin versions in the `<properties>` section rather than hardcoding them throughout the POM. This centralizes version management, makes updates easier, reduces duplication, and helps maintain consistency across related dependencies. Use consistent property naming conventions: `maven-plugin-[name].version` for Maven plugins, simple names like `[library].version` for dependencies, and descriptive names for quality thresholds like `coverage.level`.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="xml"><![CDATA[
 <project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.example</groupId>
@@ -515,12 +552,10 @@ Description: Define all dependency and plugin versions in the `<properties>` sec
     </plugins>
   </build>
 </project>
-
-```
-
-**Bad example:**
-
-```xml
+                ]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="xml"><![CDATA[
 <!-- Hardcoded versions scattered throughout the POM -->
 <project>
   <modelVersion>4.0.0</modelVersion>
@@ -582,9 +617,16 @@ Description: Define all dependency and plugin versions in the `<properties>` sec
     </plugins>
   </build>
 </project>
+                ]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
 
-```
-## Output Requirements
-
-- Update the file pom.xml if something is not correct
-- verify changes with the command: `mvn validate`
+    <output-requirements-section>
+        <output-requirements-list>
+            <output-requirements-item>Update the file pom.xml if something is not correct</output-requirements-item>
+            <output-requirements-item>verify changes with the command: `mvn validate`</output-requirements-item>
+        </output-requirements-list>
+    </output-requirements-section>
+</prompt>

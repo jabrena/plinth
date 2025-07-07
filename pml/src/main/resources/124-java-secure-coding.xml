@@ -1,49 +1,61 @@
----
-description:
-globs:
-alwaysApply: false
----
-# Java Secure coding guidelines
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="pml.xsd"
+    id="124-java-secure-coding" version="1.0">
 
-## Role
+    <metadata>
+        <!-- Cursor AI specific configuration -->
+        <cursor-ai>
+            <description></description>
+            <globs></globs>
+            <always-apply>false</always-apply>
+        </cursor-ai>
+        <tags>
+            <tag>java</tag>
+            <tag>security</tag>
+            <tag>validation</tag>
+            <tag>injection</tag>
+            <tag>cryptography</tag>
+            <tag>exceptions</tag>
+            <tag>secure-practices</tag>
+        </tags>
+        <version>1.0.0</version>
+        <title>Java Secure coding guidelines</title>
+    </metadata>
 
-You are a Senior software engineer with extensive experience in Java software development
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
-## Instructions for AI
+    <goal>
+        Apply secure coding practices to Java code to prevent common vulnerabilities and enhance application security.
 
-Apply secure coding practices to Java code to prevent common vulnerabilities and enhance application security.
+        This document provides essential Java secure coding guidelines, focusing on five key areas: validating all untrusted inputs to prevent attacks like injection and path traversal; protecting against injection attacks (e.g., SQL injection) by using parameterized queries or prepared statements; minimizing the attack surface by adhering to the principle of least privilege and reducing exposure; employing strong, current cryptographic algorithms for hashing, encryption, and digital signatures while avoiding deprecated ones; and handling exceptions securely by avoiding the exposure of sensitive information in error messages to users and logging detailed, non-sensitive diagnostic information for developers.
 
-This document provides essential Java secure coding guidelines, focusing on five key areas: validating all untrusted inputs to prevent attacks like injection and path traversal; protecting against injection attacks (e.g., SQL injection) by using parameterized queries or prepared statements; minimizing the attack surface by adhering to the principle of least privilege and reducing exposure; employing strong, current cryptographic algorithms for hashing, encryption, and digital signatures while avoiding deprecated ones; and handling exceptions securely by avoiding the exposure of sensitive information in error messages to users and logging detailed, non-sensitive diagnostic information for developers.
+        ### Implementing These Principles
 
-### Implementing These Principles
+        These guidelines are built upon the following core principles:
 
-These guidelines are built upon the following core principles:
+        1.  **Comprehensive Input Validation**: Treat all external input as untrusted. Rigorously validate and sanitize data for type, length, format, and range before processing to prevent common vulnerabilities like injection attacks, path traversal, and buffer overflows.
+        2.  **Defense Against Injection**: Actively protect against all forms of injection attacks (e.g., SQL, OS Command, LDAP, XPath). Primarily achieve this by using safe APIs like parameterized queries (e.g., `PreparedStatement` in JDBC) or dedicated libraries that correctly handle data escaping, and by never directly concatenating untrusted input into executable commands or queries.
+        3.  **Attack Surface Minimization**: Adhere to the principle of least privilege for users, processes, and code. Reduce the exposure of system components by running with minimal necessary permissions, exposing only essential functionalities and network ports, and regularly reviewing and removing unused features, libraries, and accounts.
+        4.  **Strong Cryptographic Practices**: Employ current, robust, and industry-standard cryptographic algorithms and libraries for all sensitive operations, including hashing (especially for passwords), encryption, and digital signatures. Avoid deprecated or weak algorithms. Ensure cryptographic keys are generated securely, stored safely, and managed properly throughout their lifecycle.
+        5.  **Secure Exception Handling**: Manage exceptions in a way that does not expose sensitive information to users or attackers. Log detailed, non-sensitive diagnostic information for developers to aid in debugging, but provide generic, non-revealing error messages to clients. Avoid direct exposure of stack traces or internal system details in error outputs.
+    </goal>
 
-1.  **Comprehensive Input Validation**: Treat all external input as untrusted. Rigorously validate and sanitize data for type, length, format, and range before processing to prevent common vulnerabilities like injection attacks, path traversal, and buffer overflows.
-2.  **Defense Against Injection**: Actively protect against all forms of injection attacks (e.g., SQL, OS Command, LDAP, XPath). Primarily achieve this by using safe APIs like parameterized queries (e.g., `PreparedStatement` in JDBC) or dedicated libraries that correctly handle data escaping, and by never directly concatenating untrusted input into executable commands or queries.
-3.  **Attack Surface Minimization**: Adhere to the principle of least privilege for users, processes, and code. Reduce the exposure of system components by running with minimal necessary permissions, exposing only essential functionalities and network ports, and regularly reviewing and removing unused features, libraries, and accounts.
-4.  **Strong Cryptographic Practices**: Employ current, robust, and industry-standard cryptographic algorithms and libraries for all sensitive operations, including hashing (especially for passwords), encryption, and digital signatures. Avoid deprecated or weak algorithms. Ensure cryptographic keys are generated securely, stored safely, and managed properly throughout their lifecycle.
-5.  **Secure Exception Handling**: Manage exceptions in a way that does not expose sensitive information to users or attackers. Log detailed, non-sensitive diagnostic information for developers to aid in debugging, but provide generic, non-revealing error messages to clients. Avoid direct exposure of stack traces or internal system details in error outputs.
-
-## Examples
-
-### Table of contents
-
-- Example 1: Input Validation
-- Example 2: Protect Against Injection Attacks
-- Example 3: Minimize Attack Surface
-- Example 4: Use Strong Cryptography
-- Example 5: Handle Exceptions Securely
-
-### Example 1: Input Validation
-
-Title: Validate All Untrusted Inputs
-Description: Always validate and sanitize data received from untrusted sources (users, network, files, etc.) before processing. This helps prevent various attacks like injection, path traversal, and buffer overflows. Validation should check for type, length, format, and range.
-
-**Good example:**
-
-```java
-// GOOD: Comprehensive input validation
+    <examples>
+        <toc auto-generate="true" />
+        <example number="1" id="input-validation">
+            <example-header>
+                <example-title>Input Validation</example-title>
+                <example-subtitle>Validate All Untrusted Inputs</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Always validate and sanitize data received from untrusted sources (users, network, files, etc.) before processing. This helps prevent various attacks like injection, path traversal, and buffer overflows. Validation should check for type, length, format, and range.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Comprehensive input validation
 import java.util.Objects;
 import java.util.regex.Pattern;
 
@@ -88,13 +100,10 @@ public class SecureInputValidator {
 
         return sanitized;
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: No input validation
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: No input validation
 public class UnsafeInputProcessor {
     public void processUserData(String username, String ageString) {
         // Directly using input without validation - DANGEROUS!
@@ -111,18 +120,24 @@ public class UnsafeInputProcessor {
         // User could pass "../../etc/passwd" to access sensitive files
         return readFileContent(userPath);
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 2: Protect Against Injection Attacks
-
-Title: Use Parameterized Queries and Safe APIs
-Description: To prevent SQL Injection and other injection attacks, always use parameterized queries (PreparedStatements in JDBC) or an ORM that handles this automatically. Never concatenate user input directly into SQL queries, OS commands, or other executable statements.
-
-**Good example:**
-
-```java
-// GOOD: Using PreparedStatement to prevent SQL Injection
+        <example number="2" id="injection-protection">
+            <example-header>
+                <example-title>Protect Against Injection Attacks</example-title>
+                <example-subtitle>Use Parameterized Queries and Safe APIs</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                To prevent SQL Injection and other injection attacks, always use parameterized queries (PreparedStatements in JDBC) or an ORM that handles this automatically. Never concatenate user input directly into SQL queries, OS commands, or other executable statements.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Using PreparedStatement to prevent SQL Injection
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -166,13 +181,10 @@ public class SecureDataAccess {
             pstmt.executeUpdate();
         }
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Vulnerable to SQL Injection
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Vulnerable to SQL Injection
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -210,18 +222,24 @@ public class VulnerableDataAccess {
             // Handle exception
         }
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 3: Minimize Attack Surface
-
-Title: Apply Principle of Least Privilege
-Description: Grant only necessary permissions to code and users. Avoid running processes with excessive privileges. Expose only essential functionality and network ports. Regularly review and remove unused features, libraries, and accounts.
-
-**Good example:**
-
-```java
-// GOOD: Minimal privileges and controlled access
+        <example number="3" id="minimize-attack-surface">
+            <example-header>
+                <example-title>Minimize Attack Surface</example-title>
+                <example-subtitle>Apply Principle of Least Privilege</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Grant only necessary permissions to code and users. Avoid running processes with excessive privileges. Expose only essential functionality and network ports. Regularly review and remove unused features, libraries, and accounts.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Minimal privileges and controlled access
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -280,13 +298,10 @@ public interface AdminService extends UserService {
     void deleteUser(Long id);
     List<User> getAllUsers();
     void resetPassword(Long id);
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Excessive privileges and exposure
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Excessive privileges and exposure
 import java.io.File;
 import java.nio.file.Files;
 
@@ -318,18 +333,24 @@ public class UnsafeFileManager {
 // Starting application as root/administrator user
 // Using database accounts with DBA privileges for regular operations
 // Exposing debug endpoints in production
-// Having default passwords or credentials
-```
+// Having default passwords or credentials]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 4: Use Strong Cryptography
-
-Title: Employ Current and Robust Cryptographic Algorithms
-Description: Use well-vetted, industry-standard cryptographic libraries and algorithms for hashing, encryption, and digital signatures. Avoid deprecated or weak algorithms (e.g., MD5, SHA1 for passwords, DES). Keep cryptographic keys secure and manage them properly.
-
-**Good example:**
-
-```java
-// GOOD: Strong cryptographic practices
+        <example number="4" id="strong-cryptography">
+            <example-header>
+                <example-title>Use Strong Cryptography</example-title>
+                <example-subtitle>Employ Current and Robust Cryptographic Algorithms</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use well-vetted, industry-standard cryptographic libraries and algorithms for hashing, encryption, and digital signatures. Avoid deprecated or weak algorithms (e.g., MD5, SHA1 for passwords, DES). Keep cryptographic keys secure and manage them properly.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Strong cryptographic practices
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -413,13 +434,10 @@ public class SecureCryptoUtils {
 
         // Getters...
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Weak cryptographic practices
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Weak cryptographic practices
 import java.security.MessageDigest;
 import javax.crypto.Cipher;
 import javax.crypto.spec.SecretKeySpec;
@@ -491,18 +509,24 @@ public class WeakCryptoUtils {
 // - Using ECB mode for encryption
 // - Not using authenticated encryption
 // - Reusing IVs/nonces
-// - Using weak key derivation functions
-```
+// - Using weak key derivation functions]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 5: Handle Exceptions Securely
-
-Title: Avoid Exposing Sensitive Information
-Description: Catch exceptions appropriately, but do not reveal sensitive system details or stack traces to users in production. Log detailed error information server-side for debugging, but provide generic error messages to the client.
-
-**Good example:**
-
-```java
-// GOOD: Secure exception handling
+        <example number="5" id="secure-exception-handling">
+            <example-header>
+                <example-title>Handle Exceptions Securely</example-title>
+                <example-subtitle>Avoid Exposing Sensitive Information</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Catch exceptions appropriately, but do not reveal sensitive system details or stack traces to users in production. Log detailed error information server-side for debugging, but provide generic error messages to the client.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Secure exception handling
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import javax.servlet.http.HttpServletResponse;
@@ -569,13 +593,10 @@ public enum ErrorCode {
 
     public int getHttpStatus() { return httpStatus; }
     public String getMessage() { return message; }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Exposing sensitive information
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Exposing sensitive information
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
@@ -630,5 +651,9 @@ public class InsecureExceptionHandler {
 
         // This tells attackers which usernames exist vs which don't
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+</prompt>

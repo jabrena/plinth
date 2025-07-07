@@ -1,53 +1,61 @@
----
-description:
-globs:
-alwaysApply: false
----
-# Java Logging Best Practices
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="pml.xsd"
+    id="126-java-logging" version="1.0">
 
-## Role
+    <metadata>
+        <!-- Markdown Front Matter for Cursor Rules -->
+        <cursor-ai>
+            <description></description>
+            <globs></globs>
+            <always-apply>false</always-apply>
+        </cursor-ai>
+        <tags>
+            <tag>java</tag>
+            <tag>logging</tag>
+            <tag>slf4j</tag>
+            <tag>logback</tag>
+            <tag>monitoring</tag>
+            <tag>security</tag>
+            <tag>performance</tag>
+        </tags>
+        <version>1.0.0</version>
+        <title>Java Logging Best Practices</title>
+    </metadata>
 
-You are a Senior software engineer with extensive experience in Java software development
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
-## Instructions for AI
+    <goal>
+        Effective Java logging involves selecting a standard framework (SLF4J with Logback/Log4j2), using appropriate log levels (ERROR, WARN, INFO, DEBUG, TRACE), and adhering to core practices like parameterized logging, proper exception handling, and avoiding sensitive data exposure. Configuration should be environment-specific with clear output formats. Security is paramount: mask sensitive data, control log access, and ensure secure transmission. Implement centralized log aggregation, monitoring, and alerting for proactive issue detection. Finally, logging behavior and its impact should be validated through comprehensive testing.
 
-Effective Java logging involves selecting a standard framework (SLF4J with Logback/Log4j2), using appropriate log levels (ERROR, WARN, INFO, DEBUG, TRACE), and adhering to core practices like parameterized logging, proper exception handling, and avoiding sensitive data exposure. Configuration should be environment-specific with clear output formats. Security is paramount: mask sensitive data, control log access, and ensure secure transmission. Implement centralized log aggregation, monitoring, and alerting for proactive issue detection. Finally, logging behavior and its impact should be validated through comprehensive testing.
+        ### Implementing These Principles
 
-### Implementing These Principles
+        These guidelines are built upon the following core principles:
 
-These guidelines are built upon the following core principles:
+        1. **Standardized Framework Selection**: Utilize a widely accepted logging facade (preferably SLF4J) and a robust underlying implementation (Logback or Log4j2). This promotes consistency, flexibility, and access to advanced logging features.
+        2. **Meaningful and Consistent Log Levels**: Employ logging levels (ERROR, WARN, INFO, DEBUG, TRACE) deliberately and consistently to categorize the severity and importance of messages. This allows for effective filtering, monitoring, and targeted issue diagnosis.
+        3. **Adherence to Core Logging Practices**: Follow fundamental best practices such as using parameterized logging (avoiding string concatenation for performance and clarity), always logging exceptions with their stack traces, never logging sensitive data directly (PII, credentials).
+        4. **Thoughtful and Flexible Configuration**: Manage logging configuration externally (e.g., `logback.xml`, `log4j2.xml`). Tailor configurations for different environments (dev, test, prod) with appropriate log levels for various packages, clear and informative output formats (including timestamps, levels, logger names, thread info), and robust log rotation and retention policies.
+        5. **Security-Conscious Logging**: Prioritize security in all logging activities. Actively mask or filter sensitive information, control access to log files and log management systems, use secure protocols for transmitting logs, and ensure compliance with relevant data protection regulations (e.g., GDPR, HIPAA).
+        6. **Proactive Log Monitoring and Alerting**: Implement centralized log aggregation systems (e.g., ELK Stack, Splunk, Grafana Loki). Establish automated alerts based on log patterns, error rates, or specific critical events to enable proactive issue detection and rapid response.
+        7. **Comprehensive Logging Validation Through Testing**: Integrate logging into the testing strategy. Assert that critical log messages (especially errors and warnings) are generated as expected under specific conditions, verify log formats, test log level filtering, and assess any performance impact of logging.
 
-1. **Standardized Framework Selection**: Utilize a widely accepted logging facade (preferably SLF4J) and a robust underlying implementation (Logback or Log4j2). This promotes consistency, flexibility, and access to advanced logging features.
-2. **Meaningful and Consistent Log Levels**: Employ logging levels (ERROR, WARN, INFO, DEBUG, TRACE) deliberately and consistently to categorize the severity and importance of messages. This allows for effective filtering, monitoring, and targeted issue diagnosis.
-3. **Adherence to Core Logging Practices**: Follow fundamental best practices such as using parameterized logging (avoiding string concatenation for performance and clarity), always logging exceptions with their stack traces, never logging sensitive data directly (PII, credentials).
-4. **Thoughtful and Flexible Configuration**: Manage logging configuration externally (e.g., `logback.xml`, `log4j2.xml`). Tailor configurations for different environments (dev, test, prod) with appropriate log levels for various packages, clear and informative output formats (including timestamps, levels, logger names, thread info), and robust log rotation and retention policies.
-5. **Security-Conscious Logging**: Prioritize security in all logging activities. Actively mask or filter sensitive information, control access to log files and log management systems, use secure protocols for transmitting logs, and ensure compliance with relevant data protection regulations (e.g., GDPR, HIPAA).
-6. **Proactive Log Monitoring and Alerting**: Implement centralized log aggregation systems (e.g., ELK Stack, Splunk, Grafana Loki). Establish automated alerts based on log patterns, error rates, or specific critical events to enable proactive issue detection and rapid response.
-7. **Comprehensive Logging Validation Through Testing**: Integrate logging into the testing strategy. Assert that critical log messages (especially errors and warnings) are generated as expected under specific conditions, verify log formats, test log level filtering, and assess any performance impact of logging.
+        Remember, good logging in Java is about operational excellence - making your application's behavior transparent and debuggable while maintaining security and performance.
+    </goal>
 
-Remember, good logging in Java is about operational excellence - making your application's behavior transparent and debuggable while maintaining security and performance.
-
-## Examples
-
-### Table of contents
-
-- Example 1: Choose an Appropriate Logging Framework
-- Example 2: Understand and Use Logging Levels Correctly
-- Example 3: Adhere to Core Logging Practices
-- Example 4: Follow Configuration Best Practices
-- Example 5: Implement Secure Logging Practices
-- Example 6: Establish Effective Log Monitoring and Alerting
-- Example 7: Incorporate Logging in Testing
-
-### Example 1: Choose an Appropriate Logging Framework
-
-Title: Select a Standard Logging Facade and Implementation
-Description: Using a standard logging facade like SLF4J allows for flexibility in choosing and switching an underlying logging implementation. The primary recommendation is SLF4J with Logback for its robustness and feature-richness.
-
-**Good example:**
-
-```java
-// GOOD: Using SLF4J facade with proper logger declaration
+    <examples>
+        <toc auto-generate="true"/>
+        <example number="1" id="logging-framework-selection">
+            <example-header>
+                <example-title>Choose an Appropriate Logging Framework</example-title>
+                <example-subtitle>Select a Standard Logging Facade and Implementation</example-subtitle>
+            </example-header>
+            <example-description>
+                Using a standard logging facade like SLF4J allows for flexibility in choosing and switching an underlying logging implementation. The primary recommendation is SLF4J with Logback for its robustness and feature-richness.
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Using SLF4J facade with proper logger declaration
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Objects;
@@ -109,13 +117,10 @@ public class UserService {
             super(message);
         }
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Using System.out.println or direct logging implementation
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Using System.out.println or direct logging implementation
 public class BadLoggingService {
 
     public void performAction(String input) {
@@ -156,18 +161,22 @@ public class BadLoggingService {
         System.out.println("Using System.out");
         // Inconsistent and confusing!
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 2: Understand and Use Logging Levels Correctly
-
-Title: Apply Appropriate Logging Levels for Messages
-Description: Use logging levels consistently to categorize the severity and importance of log messages. ERROR for critical issues, WARN for potentially harmful situations, INFO for important business events, DEBUG for detailed information, and TRACE for fine-grained debugging.
-
-**Good example:**
-
-```java
-// GOOD: Proper usage of logging levels
+        <example number="2" id="logging-levels">
+            <example-header>
+                <example-title>Understand and Use Logging Levels Correctly</example-title>
+                <example-subtitle>Apply Appropriate Logging Levels for Messages</example-subtitle>
+            </example-header>
+            <example-description>
+                Use logging levels consistently to categorize the severity and importance of log messages. ERROR for critical issues, WARN for potentially harmful situations, INFO for important business events, DEBUG for detailed information, and TRACE for fine-grained debugging.
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Proper usage of logging levels
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Objects;
@@ -261,13 +270,10 @@ public class OrderProcessor {
     private static class HealthCheckException extends Exception {
         public HealthCheckException(String message) { super(message); }
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Misusing logging levels
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Misusing logging levels
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -325,18 +331,22 @@ public class BadLevelUsage {
     private String processUserData(String userId) {
         return "processed-" + userId;
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 3: Adhere to Core Logging Practices
-
-Title: Implement Fundamental Best Practices
-Description: Follow core practices including using parameterized logging, proper exception handling, avoiding sensitive data exposure, and implementing performance considerations for logging operations.
-
-**Good example:**
-
-```java
-// GOOD: Core logging best practices
+        <example number="3" id="core-logging-practices">
+            <example-header>
+                <example-title>Adhere to Core Logging Practices</example-title>
+                <example-subtitle>Implement Fundamental Best Practices</example-subtitle>
+            </example-header>
+            <example-description>
+                Follow core practices including using parameterized logging, proper exception handling, avoiding sensitive data exposure, and implementing performance considerations for logging operations.
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Core logging best practices
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -481,13 +491,10 @@ public class SecureTransactionService {
             super(message, cause);
         }
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Poor logging practices
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Poor logging practices
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -610,18 +617,22 @@ public class PoorLoggingPractices {
     private static class SQLException extends Exception {
         public SQLException(String message) { super(message); }
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 4: Follow Configuration Best Practices
-
-Title: Configure Your Logging Framework Thoughtfully
-Description: Proper configuration is key to effective logging. Use separate configurations per environment, implement different log levels for different packages, and include comprehensive output formats with timestamps, levels, logger names, and thread information.
-
-**Good example:**
-
-```java
-// Configuration shown through usage - actual config would be in logback.xml or log4j2.xml
+        <example number="4" id="configuration-best-practices">
+            <example-header>
+                <example-title>Follow Configuration Best Practices</example-title>
+                <example-subtitle>Configure Your Logging Framework Thoughtfully</example-subtitle>
+            </example-header>
+            <example-description>
+                Proper configuration is key to effective logging. Use separate configurations per environment, implement different log levels for different packages, and include comprehensive output formats with timestamps, levels, logger names, and thread information.
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// Configuration shown through usage - actual config would be in logback.xml or log4j2.xml
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -673,13 +684,10 @@ public class ConfiguredLoggerExample {
         example.performBusinessOperation("OP123", "user456");
         example.demonstrateLogLevels();
     }
-}
-```
-
-**Bad example:**
-
-```java
-// Poor configuration consequences
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Poor configuration consequences
 public class BadConfigConsequences {
     private static final Logger logger = LoggerFactory.getLogger(BadConfigConsequences.class);
 
@@ -702,18 +710,22 @@ public class BadConfigConsequences {
         BadConfigConsequences example = new BadConfigConsequences();
         example.performOperation();
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 5: Implement Secure Logging Practices
-
-Title: Ensure Logs Do Not Compromise Security
-Description: Actively mask or filter sensitive data, control access to log files, use secure transmission protocols, and comply with data protection regulations when logging information.
-
-**Good example:**
-
-```java
-// GOOD: Secure logging practices
+        <example number="5" id="secure-logging-practices">
+            <example-header>
+                <example-title>Implement Secure Logging Practices</example-title>
+                <example-subtitle>Ensure Logs Do Not Compromise Security</example-subtitle>
+            </example-header>
+            <example-description>
+                Actively mask or filter sensitive data, control access to log files, use secure transmission protocols, and comply with data protection regulations when logging information.
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Secure logging practices
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.regex.Pattern;
@@ -929,13 +941,10 @@ public class SecureLoggingService {
         }
         public String getErrorType() { return errorType; }
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Insecure logging practices
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Insecure logging practices
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -1097,18 +1106,22 @@ public class InsecureLoggingService {
     private static class PaymentException extends Exception {
         public PaymentException(String message) { super(message); }
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 6: Establish Effective Log Monitoring and Alerting
-
-Title: Implement Log Aggregation, Monitoring, and Alerting
-Description: Set up centralized log aggregation, implement alerts based on log patterns, use structured logging for querying, and regularly analyze logs to identify trends and issues.
-
-**Good example:**
-
-```java
-import org.slf4j.Logger;
+        <example number="6" id="log-monitoring-alerting">
+            <example-header>
+                <example-title>Establish Effective Log Monitoring and Alerting</example-title>
+                <example-subtitle>Implement Log Aggregation, Monitoring, and Alerting</example-subtitle>
+            </example-header>
+            <example-description>
+                Set up centralized log aggregation, implement alerts based on log patterns, use structured logging for querying, and regularly analyze logs to identify trends and issues.
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
 import java.util.Objects;
@@ -1200,13 +1213,10 @@ public class MonitoredService {
 
         service.performHealthCheck();
     }
-}
-```
-
-**Bad example:**
-
-```java
-import org.slf4j.Logger;
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Objects;
 
@@ -1238,18 +1248,22 @@ public class UnmonitoredService {
         // - No alerts: Critical errors might be missed until users report them.
         // - No analysis: Trends or recurring non-fatal issues are hard to spot.
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 7: Incorporate Logging in Testing
-
-Title: Validate Logging Behavior and Impact During Testing
-Description: Ensure logging works as expected and doesn't negatively impact the application. Assert that specific log messages are generated, verify log formats, test different logging levels, and check performance impact.
-
-**Good example:**
-
-```java
-import org.slf4j.Logger;
+        <example number="7" id="logging-in-testing">
+            <example-header>
+                <example-title>Incorporate Logging in Testing</example-title>
+                <example-subtitle>Validate Logging Behavior and Impact During Testing</example-subtitle>
+            </example-header>
+            <example-description>
+                Ensure logging works as expected and doesn't negatively impact the application. Assert that specific log messages are generated, verify log formats, test different logging levels, and check performance impact.
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Objects;
 
@@ -1329,13 +1343,10 @@ public class LoggingTestExample {
         System.out.println("In real implementation, use JUnit/TestNG with LogCapture utilities");
         System.out.println("Example dependencies: ch.qos.logback.classic.Logger with ListAppender");
     }
-}
-```
-
-**Bad example:**
-
-```java
-// Code that is hard to test for logging behavior
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Code that is hard to test for logging behavior
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Objects;
@@ -1381,5 +1392,9 @@ public class UntestableLogging {
         // verifying that the WARN message is logged correctly (and only when expected)
         // is difficult. Developers might skip testing logging, leading to unverified log output.
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+</prompt>

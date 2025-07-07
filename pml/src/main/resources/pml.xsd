@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified">
+
+    <!-- Root element for a system prompt -->
+    <xs:element name="prompt">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="metadata"/>
+                <xs:element ref="role"/>
+                <xs:element ref="goal"/>
+                <xs:element ref="restrictions" minOccurs="0"/>
+                <xs:element ref="examples" minOccurs="0"/>
+                <xs:element ref="output-requirements-section" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="id" type="xs:string" use="required"/>
+            <xs:attribute name="version" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Metadata section (equivalent to frontmatter) -->
+    <xs:element name="metadata">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="cursor-ai"/>
+                <xs:element ref="tags" minOccurs="0"/>
+                <xs:element ref="version" minOccurs="0"/>
+                <xs:element ref="title"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Cursor AI specific configuration -->
+    <xs:element name="cursor-ai">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="description"/>
+                <xs:element ref="globs"/>
+                <xs:element ref="always-apply"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="description" type="xs:string"/>
+    <xs:element name="globs" type="xs:string"/>
+    <xs:element name="always-apply" type="xs:boolean"/>
+    <xs:element name="version" type="xs:string"/>
+
+    <xs:element name="tags">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="tag" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="tag" type="xs:string"/>
+    <xs:element name="title" type="xs:string"/>
+
+    <!-- System role -->
+    <xs:element name="role" type="xs:string"/>
+
+    <!-- Goal statement -->
+    <xs:element name="goal" type="xs:string"/>
+
+    <!-- Restrictions block -->
+    <xs:element name="restrictions">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="restrictions-description" minOccurs="0"/>
+                <xs:element ref="restriction-list"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="restrictions-description" type="xs:string"/>
+
+    <xs:element name="restriction-list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="restriction" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="restriction" type="xs:string"/>
+
+    <!-- Examples container -->
+    <xs:element name="examples">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="toc" minOccurs="0"/>
+                <xs:element ref="example" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Table of contents (auto-generated) -->
+    <xs:element name="toc">
+        <xs:complexType>
+            <xs:attribute name="auto-generate" use="optional" default="true">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="true"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+            <xs:attribute name="source" type="xs:string" use="optional" default="rule-sections"/>
+            <xs:attribute name="include-subtitles" use="optional" default="false">
+                <xs:simpleType>
+                    <xs:restriction base="xs:string">
+                        <xs:enumeration value="true"/>
+                        <xs:enumeration value="false"/>
+                    </xs:restriction>
+                </xs:simpleType>
+            </xs:attribute>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Example section -->
+    <xs:element name="example">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="example-header"/>
+                <xs:element ref="example-description" minOccurs="0"/>
+                <xs:element ref="code-examples" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="type" type="xs:string" use="optional"/>
+            <xs:attribute name="number" type="xs:string" use="optional"/>
+            <xs:attribute name="id" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="example-header">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="example-title"/>
+                <xs:element ref="example-subtitle" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="example-title" type="xs:string"/>
+    <xs:element name="example-subtitle" type="xs:string"/>
+    <xs:element name="example-description" type="xs:string"/>
+
+    <!-- Code examples with good and bad patterns -->
+    <xs:element name="code-examples">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="good-example" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="bad-example" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="good-example">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="code-block"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="bad-example">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="code-block"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="code-block">
+        <xs:complexType>
+            <xs:simpleContent>
+                <xs:extension base="xs:string">
+                    <xs:attribute name="language" type="xs:string" use="optional"/>
+                </xs:extension>
+            </xs:simpleContent>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Output requirements section -->
+    <xs:element name="output-requirements-section">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="output-requirements-list"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="output-requirements-list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="output-requirements-item" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="output-requirements-item" type="xs:string"/>
+
+</xs:schema>

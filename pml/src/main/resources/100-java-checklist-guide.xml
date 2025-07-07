@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="pml.xsd"
+        id="100-java-checklist-guide" version="1.0">
+
+    <metadata>
+        <cursor-ai>
+            <description></description>
+            <globs></globs>
+            <always-apply>false</always-apply>
+        </cursor-ai>
+        <tags>
+            <tag>java</tag>
+            <tag>checklist</tag>
+            <tag>cursor-rules</tag>
+        </tags>
+        <version>0.8.0</version>
+        <title>Create a Checklist with all Java steps to use with cursor rules for Java</title>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Java programming language and technical documentation</role>
+
+    <goal>
+        Your task is to create a comprehensive step-by-step guide that follows the exact format and structure defined in the embedded template below.
+
+        Create a markdown file named `CURSOR-RULES-JAVA.md` with the following exact structure: [java-checklist-template.md](mdc:.cursor/rules/templates/java-checklist-template.md)
+    </goal>
+
+    <restrictions>
+        <restrictions-description>**MANDATORY REQUIREMENT**: Follow the embedded template EXACTLY - do not add, remove, or modify any steps, sections, or cursor rules that are not explicitly shown in the template. ### What NOT to Include:</restrictions-description>
+        <restriction-list>
+            <restriction>**DO NOT** create additional steps beyond what's shown in the template</restriction>
+            <restriction>**DO NOT** add cursor rules that are not explicitly listed in the embedded template</restriction>
+            <restriction>**DO NOT** expand or elaborate on sections beyond what the template shows</restriction>
+            <restriction>**ONLY** use cursor rules that appear in the embedded template</restriction>
+            <restriction>**ONLY** use the exact wording and structure from the template</restriction>
+            <restriction>If a cursor rule exists in the workspace but is not in the template, **DO NOT** include it</restriction>
+        </restriction-list>
+    </restrictions>
+
+    <output-requirements-section>
+        <output-requirements-list>
+            <output-requirements-item>Generate the complete markdown file following the embedded template exactly</output-requirements-item>
+            <output-requirements-item>Use proper markdown formatting with headers, code blocks, tables, and checklists</output-requirements-item>
+            <output-requirements-item>**VERIFY**: Final output contains ONLY what appears in the embedded template</output-requirements-item>
+        </output-requirements-list>
+    </output-requirements-section>
+</prompt>

@@ -1,50 +1,58 @@
----
-description:
-globs:
-alwaysApply: false
----
-# Java rules to apply data oriented programming style
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="pml.xsd"
+    id="143-java-data-oriented-programming" version="1.0">
 
-## Role
+    <metadata>
+        <!-- Markdown Front Matter for Cursor Rules -->
+        <cursor-ai>
+            <description></description>
+            <globs></globs>
+            <always-apply>false</always-apply>
+        </cursor-ai>
+        <tags>
+            <tag>java</tag>
+            <tag>data-oriented-programming</tag>
+            <tag>immutability</tag>
+            <tag>records</tag>
+            <tag>pure-functions</tag>
+            <tag>best-practices</tag>
+        </tags>
+        <version>1.0.0</version>
+        <title>Java rules to apply data oriented programming style</title>
+    </metadata>
 
-You are a Senior software engineer with extensive experience in Java software development
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
-## Instructions for AI
+    <goal><![CDATA[
+        Java Data-Oriented Programming emphasizes separating code (behavior) from data structures, which should ideally be immutable (e.g., using records). Data manipulation should occur via pure functions that transform data into new instances. It's often beneficial to keep data structures flat and denormalized (using IDs for references) where appropriate, and to start with generic data representations (like `Map<String, Object>`) converting to specific types only when necessary. Data integrity is ensured through pure validation functions. Flexible, generic data access layers facilitate working with various data types and storage mechanisms. All data transformations should be explicit, traceable, and composed of clear, pure functional steps.
 
-Java Data-Oriented Programming emphasizes separating code (behavior) from data structures, which should ideally be immutable (e.g., using records). Data manipulation should occur via pure functions that transform data into new instances. It's often beneficial to keep data structures flat and denormalized (using IDs for references) where appropriate, and to start with generic data representations (like `Map<String, Object>`) converting to specific types only when necessary. Data integrity is ensured through pure validation functions. Flexible, generic data access layers facilitate working with various data types and storage mechanisms. All data transformations should be explicit, traceable, and composed of clear, pure functional steps.
+        ### Implementing These Principles
 
-### Implementing These Principles
+        These guidelines are built upon the following core principles:
 
-These guidelines are built upon the following core principles:
+        1.  **Separation of Concerns (Data vs. Code)**: Strictly decouple data structures (which should be simple carriers like records or POJOs) from the code (behavior) that operates on them. Behavior should reside in separate utility classes or services.
+        2.  **Immutability**: Design data structures to be immutable. Use records or final fields, and ensure that any transformations on data produce new instances rather than modifying existing ones.
+        3.  **Pure Data Transformations**: Manipulate data using pure functions that depend only on their inputs and produce no side effects. This makes transformations predictable, testable, and easier to reason about.
+        4.  **Simplicity and Flexibility of Data Structures**: Prefer flat, denormalized data structures where appropriate, using IDs for references rather than deep nesting. Start with generic representations (like `Map<String, Object>`) if the schema is dynamic, converting to specific types only when necessary for processing.
+        5.  **Explicit and Traceable Operations**: Ensure all data validation and transformation steps are explicit, composed of clear functional steps, and easily traceable. Avoid hidden or implicit logic within data objects.
+     ]]></goal>
 
-1.  **Separation of Concerns (Data vs. Code)**: Strictly decouple data structures (which should be simple carriers like records or POJOs) from the code (behavior) that operates on them. Behavior should reside in separate utility classes or services.
-2.  **Immutability**: Design data structures to be immutable. Use records or final fields, and ensure that any transformations on data produce new instances rather than modifying existing ones.
-3.  **Pure Data Transformations**: Manipulate data using pure functions that depend only on their inputs and produce no side effects. This makes transformations predictable, testable, and easier to reason about.
-4.  **Simplicity and Flexibility of Data Structures**: Prefer flat, denormalized data structures where appropriate, using IDs for references rather than deep nesting. Start with generic representations (like `Map<String, Object>`) if the schema is dynamic, converting to specific types only when necessary for processing.
-5.  **Explicit and Traceable Operations**: Ensure all data validation and transformation steps are explicit, composed of clear functional steps, and easily traceable. Avoid hidden or implicit logic within data objects.
-
-## Examples
-
-### Table of contents
-
-- Example 1: Separate Code from Data
-- Example 2: Data Should Be Immutable
-- Example 3: Use Pure Functions to Manipulate Data
-- Example 4: Keep Data Flat and Denormalized
-- Example 5: Keep Data Generic Until Specific
-- Example 6: Data Integrity through Validation Functions
-- Example 7: Flexible and Generic Data Access
-- Example 8: Explicit and Traceable Data Transformation
-
-### Example 1: Separate Code from Data
-
-Title: Decouple Behavior (Code) from Data Structures
-Description: Use records or simple POJOs primarily for holding data. Place behavior (methods that operate on data) in separate utility classes or services. Avoid mixing state (fields) and complex behavior (methods with logic) within the same class intended as a data carrier. Prefer static methods in utility classes for operations on data objects. Design data structures to be self-contained and focused solely on representing state.
-
-**Good example:**
-
-```java
-// Data structure (record)
+    <examples>
+        <toc auto-generate="true" />
+        <example number="1" id="separate-code-from-data">
+            <example-header>
+                <example-title>Separate Code from Data</example-title>
+                <example-subtitle>Decouple Behavior (Code) from Data Structures</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use records or simple POJOs primarily for holding data. Place behavior (methods that operate on data) in separate utility classes or services. Avoid mixing state (fields) and complex behavior (methods with logic) within the same class intended as a data carrier. Prefer static methods in utility classes for operations on data objects. Design data structures to be self-contained and focused solely on representing state.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// Data structure (record)
 record UserData(String name, int age) {}
 
 // Behavior in a separate utility class
@@ -77,13 +85,10 @@ class SeparateCodeDataExample {
             System.err.println(e.getMessage());
         }
     }
-}
-```
-
-**Bad example:**
-
-```java
-// Mixing code and data in one class
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Mixing code and data in one class
 class User {
     private String name;
     private int age;
@@ -110,18 +115,24 @@ class User {
         // Problem: User object itself has methods, not just data.
         // If User was a record, it couldn't have such instance methods beyond generated ones.
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 2: Data Should Be Immutable
-
-Title: Ensure Data Immutability
-Description: Use records (which are inherently immutable) whenever possible for data carriers. Declare all fields as final. Do not provide setter methods for fields. When returning collections or other mutable types from getters, return defensive copies or unmodifiable views (e.g., List.copyOf(), Collections.unmodifiableList()). For transformations, always create and return new instances with the modified data rather than altering existing instances.
-
-**Good example:**
-
-```java
-import java.util.List;
+        <example number="2" id="data-should-be-immutable">
+            <example-header>
+                <example-title>Data Should Be Immutable</example-title>
+                <example-subtitle>Ensure Data Immutability</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use records (which are inherently immutable) whenever possible for data carriers. Declare all fields as final. Do not provide setter methods for fields. When returning collections or other mutable types from getters, return defensive copies or unmodifiable views (e.g., List.copyOf(), Collections.unmodifiableList()). For transformations, always create and return new instances with the modified data rather than altering existing instances.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
 import java.util.ArrayList;
 
 // Immutable data using record
@@ -166,13 +177,10 @@ class ImmutabilityExample {
         System.out.println("Config2 (new port): " + config2);
         System.out.println("Config1 is unchanged: " + config1);
     }
-}
-```
-
-**Bad example:**
-
-```java
-import java.util.List;
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
 import java.util.ArrayList;
 
 // Mutable data class
@@ -214,18 +222,24 @@ class MutableConfig {
         gotFeatures.add("AnotherFeatureAddedExternally"); // External modification of internal state!
         System.out.println("mConfig after external list modification: " + mConfig);
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 3: Use Pure Functions to Manipulate Data
-
-Title: Employ Pure Functions for Data Transformations
-Description: Functions that manipulate data should depend solely on their input parameters, not on any instance or external state. They must not cause any side effects (e.g., modifying input objects, global variables, I/O operations). Pure functions are inherently stateless: given the same input, they always produce the same output. Transformations should return new data instances rather than modifying the input data directly. Prefer static methods for such pure data transformation functions. Keep each function focused on a single, well-defined transformation.
-
-**Good example:**
-
-```java
-import java.util.List;
+        <example number="3" id="use-pure-functions">
+            <example-header>
+                <example-title>Use Pure Functions to Manipulate Data</example-title>
+                <example-subtitle>Employ Pure Functions for Data Transformations</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Functions that manipulate data should depend solely on their input parameters, not on any instance or external state. They must not cause any side effects (e.g., modifying input objects, global variables, I/O operations). Pure functions are inherently stateless: given the same input, they always produce the same output. Transformations should return new data instances rather than modifying the input data directly. Prefer static methods for such pure data transformation functions. Keep each function focused on a single, well-defined transformation.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
 import java.util.stream.Collectors;
 import java.util.ArrayList;
 
@@ -268,13 +282,10 @@ class PureFunctionExample {
         System.out.println("Original catalogue: " + catalogue);
         System.out.println("Discounted catalogue: " + discountedCatalogue);
     }
-}
-```
-
-**Bad example:**
-
-```java
-import java.util.List;
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
 import java.util.ArrayList;
 
 // Impure function with side effects and dependency on instance state
@@ -311,18 +322,24 @@ class PriceCalculator {
         calc.applyDiscountToAllItems(0.1);
         System.out.println("Prices after discount (mutated): " + calc.getPrices()); // Original list inside calc is modified
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 4: Keep Data Flat and Denormalized
-
-Title: Prefer Flatter Data Structures with References
-Description: Avoid excessively deep nesting of data objects, which can make data harder to access and manage. When representing relationships, consider using references (like IDs) instead of directly embedding complex objects within other objects, especially for many-to-many or one-to-many relationships. Store related but distinct entities in separate flat collections or maps, linked by these IDs. This approach can simplify querying, updating, and serializing data. However, balance this with the need for data co-location for performance in specific access patterns. Denormalization is a trade-off.
-
-**Good example:**
-
-```java
-import java.util.List;
+        <example number="4" id="keep-data-flat-denormalized">
+            <example-header>
+                <example-title>Keep Data Flat and Denormalized</example-title>
+                <example-subtitle>Prefer Flatter Data Structures with References</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Avoid excessively deep nesting of data objects, which can make data harder to access and manage. When representing relationships, consider using references (like IDs) instead of directly embedding complex objects within other objects, especially for many-to-many or one-to-many relationships. Store related but distinct entities in separate flat collections or maps, linked by these IDs. This approach can simplify querying, updating, and serializing data. However, balance this with the need for data co-location for performance in specific access patterns. Denormalization is a trade-off.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.stream.Collectors;
@@ -358,13 +375,10 @@ class FlatDataStore {
         // ... add more data
         // Accessing data involves looking up by ID and potentially joining.
     }
-}
-```
-
-**Bad example:**
-
-```java
-import java.util.List;
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
 import java.util.ArrayList;
 
 // Deeply nested structure
@@ -412,18 +426,24 @@ class DeeplyNestedExample {
         // Updates are complex. Serialization can be very large.
         System.out.println(dept.getEmployees().get(0).getProjects().get(0).getTasks().get(0).getTaskName());
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 5: Keep Data Generic Until Specific
-
-Title: Start with Generic Data Structures, Convert to Specific Types When Needed
-Description: For highly dynamic or externally defined data, start with generic data structures like Map<String, Object> or JSON-like trees. This allows flexibility in handling varied or evolving data schemas. Convert to specific, strongly-typed objects (like records) only when the data needs to be processed in a type-safe manner or when specific business logic applies. Implement robust, type-safe converter functions or classes to perform this transformation. Validate data during the conversion process to ensure it conforms to the expected specific type. Clearly document the expected structure of the generic data.
-
-**Good example:**
-
-```java
-import java.util.Map;
+        <example number="5" id="keep-data-generic-until-specific">
+            <example-header>
+                <example-title>Keep Data Generic Until Specific</example-title>
+                <example-subtitle>Start with Generic Data Structures, Convert to Specific Types When Needed</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                For highly dynamic or externally defined data, start with generic data structures like Map<String, Object> or JSON-like trees. This allows flexibility in handling varied or evolving data schemas. Convert to specific, strongly-typed objects (like records) only when the data needs to be processed in a type-safe manner or when specific business logic applies. Implement robust, type-safe converter functions or classes to perform this transformation. Validate data during the conversion process to ensure it conforms to the expected specific type. Clearly document the expected structure of the generic data.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.Map;
 import java.util.HashMap;
 import java.time.LocalDate;
 import java.util.Objects;
@@ -498,13 +518,10 @@ class GenericDataExample {
             System.err.println("Conversion error: " + e.getMessage());
         }
     }
-}
-```
-
-**Bad example:**
-
-```java
-import java.time.LocalDate;
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.time.LocalDate;
 
 // Too specific too early, making it rigid if data source changes slightly
 record UserProfileRigid(
@@ -526,18 +543,24 @@ class RigidDataExample {
         // UserProfileRigid profile = new UserProfileRigid(...);
         System.out.println("This example illustrates inflexibility if source data structure is volatile.");
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 6: Data Integrity through Validation Functions
-
-Title: Ensure Data Integrity with Pure Validation Functions
-Description: Implement data validation logic as pure functions that take data as input and return validation results (e.g., a list of errors, or an object indicating success/failure). These functions should not throw exceptions for validation failures as a primary flow control; instead, they should return information about the validation outcome. Multiple validation rules can be composed or chained together. Consider using Optional or a custom result type to represent validation messages for individual rules. Keep validation logic separate from the data structures themselves. Make validation rules reusable across different parts of the application.
-
-**Good example:**
-
-```java
-import java.util.List;
+        <example number="6" id="data-integrity-validation">
+            <example-header>
+                <example-title>Data Integrity through Validation Functions</example-title>
+                <example-subtitle>Ensure Data Integrity with Pure Validation Functions</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Implement data validation logic as pure functions that take data as input and return validation results (e.g., a list of errors, or an object indicating success/failure). These functions should not throw exceptions for validation failures as a primary flow control; instead, they should return information about the validation outcome. Multiple validation rules can be composed or chained together. Consider using Optional or a custom result type to represent validation messages for individual rules. Keep validation logic separate from the data structures themselves. Make validation rules reusable across different parts of the application.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.regex.Pattern;
@@ -595,13 +618,10 @@ class ValidationFunctionExample {
             System.out.println("User 2 validation errors: " + errors2);
         }
     }
-}
-```
-
-**Bad example:**
-
-```java
-// Validation logic mixed into data object, or throwing exceptions for normal flow
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Validation logic mixed into data object, or throwing exceptions for normal flow
 import java.util.Objects;
 record UserWithEmbeddedValidation(String email, int age) {
     public UserWithEmbeddedValidation {
@@ -633,18 +653,24 @@ record UserWithEmbeddedValidation(String email, int age) {
             // Using exceptions for validation flow control is generally an anti-pattern.
         }
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 7: Flexible and Generic Data Access
-
-Title: Design Flexible and Generic Data Access Layers
-Description: Define generic interfaces for data access operations (CRUD - Create, Read, Update, Delete). Use type parameters (<T>) in these interfaces to allow them to work with various data types. Implementations of these interfaces can then provide data storage and retrieval using different mechanisms (e.g., in-memory maps, databases, file systems) while the calling code remains decoupled. Ensure data storage implementations are thread-safe if they will be accessed concurrently. Support common querying needs like filtering or finding by ID. Design in a way that allows the underlying storage implementation to be easily swapped or replaced. Consider caching strategies at this layer for performance improvement.
-
-**Good example:**
-
-```java
-import java.util.List;
+        <example number="7" id="flexible-generic-data-access">
+            <example-header>
+                <example-title>Flexible and Generic Data Access</example-title>
+                <example-subtitle>Design Flexible and Generic Data Access Layers</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Define generic interfaces for data access operations (CRUD - Create, Read, Update, Delete). Use type parameters (<T>) in these interfaces to allow them to work with various data types. Implementations of these interfaces can then provide data storage and retrieval using different mechanisms (e.g., in-memory maps, databases, file systems) while the calling code remains decoupled. Ensure data storage implementations are thread-safe if they will be accessed concurrently. Support common querying needs like filtering or finding by ID. Design in a way that allows the underlying storage implementation to be easily swapped or replaced. Consider caching strategies at this layer for performance improvement.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
@@ -716,13 +742,10 @@ class DataAccessExample {
         productStore.deleteById("P102");
         System.out.println("All products after delete: " + productStore.findAll());
     }
-}
-```
-
-**Bad example:**
-
-```java
-import java.util.HashMap;
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.HashMap;
 import java.util.Map;
 
 // Non-generic, tightly coupled data access for a specific type
@@ -752,18 +775,24 @@ class BadDataAccessExample {
         // Problems: not generic, not easily testable with mocks if directly instantiated,
         // not thread-safe by default, harder to maintain for many data types.
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 8: Explicit and Traceable Data Transformation
-
-Title: Ensure Data Transformations are Explicit and Traceable
-Description: Make all data transformation steps visible and easy to follow. Use sequences of pure functions for complex transformations, making each step clear. Avoid hidden or implicit transformations within objects or complex method calls. Consider logging input, output, and intermediate steps of significant transformations, especially during debugging or for auditing. Handle potential errors or exceptional cases gracefully within the transformation pipeline. Document the overall flow and purpose of complex data transformations.
-
-**Good example:**
-
-```java
-import java.util.Map;
+        <example number="8" id="explicit-traceable-transformation">
+            <example-header>
+                <example-title>Explicit and Traceable Data Transformation</example-title>
+                <example-subtitle>Ensure Data Transformations are Explicit and Traceable</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Make all data transformation steps visible and easy to follow. Use sequences of pure functions for complex transformations, making each step clear. Avoid hidden or implicit transformations within objects or complex method calls. Consider logging input, output, and intermediate steps of significant transformations, especially during debugging or for auditing. Handle potential errors or exceptional cases gracefully within the transformation pipeline. Document the overall flow and purpose of complex data transformations.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.Map;
 import java.util.function.Function;
 
 // Source data record
@@ -823,13 +852,10 @@ class TransformationTraceExample {
         ProcessedOrderHeader processed2 = OrderProcessingService.processOrder(order2, "USD", ratesToUSD);
         System.out.println("Processed Order 2: " + processed2);
     }
-}
-```
-
-**Bad example:**
-
-```java
-import java.util.Map;
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.Map;
 
 // Complex object that mutates itself and has hidden transformations
 class MutableOrder {
@@ -873,5 +899,9 @@ class HiddenTransformationExample {
         // It's not clear from the call site what exactly changed or how.
         // If multiple such methods are called, the state becomes hard to reason about.
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+</prompt>
