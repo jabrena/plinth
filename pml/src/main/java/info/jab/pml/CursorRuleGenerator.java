@@ -33,7 +33,6 @@ public final class CursorRuleGenerator {
 
     /**
      * Generates cursor rules by transforming XML with XSLT.
-     * Uses automatic schema detection with fallback.
      */
     public String generate(String xmlFileName, String xslFileName) {
         return generate(xmlFileName, xslFileName, null);
@@ -87,9 +86,7 @@ public final class CursorRuleGenerator {
             factory.setValidating(false); // We'll use schema validation instead
 
             // Load XSD schema - use explicit schema if provided, otherwise use fallback
-            Optional<Schema> schema = schemaFileName != null
-                ? loadXsdSchema(schemaFileName)
-                : loadXsdSchemaWithFallback();
+            Optional<Schema> schema = loadXsdSchema(schemaFileName);
 
             if (schema.isPresent()) {
                 factory.setSchema(schema.get());
@@ -165,15 +162,6 @@ public final class CursorRuleGenerator {
                     throw new RuntimeException("Failed to load XSD schema: " + schemaFileName, e);
                 }
             });
-    }
-
-    /**
-     * Loads XSD schema from classpath for validation.
-     * Returns Optional to handle missing schema gracefully.
-     * Uses v1.1 schema (direct sections).
-     */
-    private Optional<Schema> loadXsdSchemaWithFallback() {
-        return loadXsdSchema(XSD_FILE_NAME_V1_1);
     }
 
     /**
