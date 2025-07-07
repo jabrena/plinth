@@ -8,7 +8,7 @@
   <version>0.1.0</version>
 
   <properties>
-    <java.version>24</java.version>
+    <java.version>21</java.version>
     <maven.version>3.9.10</maven.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -141,7 +141,7 @@
                   <version>${maven.version}</version>
                 </requireMavenVersion>
                 <requireJavaVersion>
-                  <version>${java.version}</version>
+                  <version>[21,)</version>
                 </requireJavaVersion>
                 <bannedDependencies>
                   <excludes>
@@ -236,7 +236,8 @@
                     <include>122-java-type-design.mdc</include>
                     <include>123-java-general-guidelines.mdc</include>
                     <include>124-java-secure-coding.mdc</include>
-                    <!--<include>125-java-concurrency.mdc</include>-->
+                    <include>125-java-concurrency.mdc</include>
+                    <include>126-java-logging.mdc</include>
                   </includes>
                 </resource>
               </resources>

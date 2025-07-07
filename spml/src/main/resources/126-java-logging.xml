@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<system-prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:noNamespaceSchemaLocation="spml.xsd"
-               id="126-java-logging" version="1.0">
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="spml-1.1.xsd"
+    id="126-java-logging" version="1.0">
+
     <metadata>
-        <description>Java Logging Best Practices</description>
-        <globs>*.java</globs>
-        <always-apply>false</always-apply>
+        <!-- Markdown Front Matter for Cursor Rules -->
+        <cursor-ai>
+            <description></description>
+            <globs></globs>
+            <always-apply>false</always-apply>
+        </cursor-ai>
         <tags>
             <tag>java</tag>
             <tag>logging</tag>
@@ -16,31 +20,35 @@
             <tag>performance</tag>
         </tags>
         <version>1.0.0</version>
+        <title>Java Logging Best Practices</title>
     </metadata>
 
-    <header>
-        <title>Java Logging Best Practices</title>
-    </header>
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
-    <system-characterization>
-        <role-definition>You are a Senior software engineer with extensive experience in Java software development</role-definition>
-    </system-characterization>
-
-    <description>
+    <goal>
         Effective Java logging involves selecting a standard framework (SLF4J with Logback/Log4j2), using appropriate log levels (ERROR, WARN, INFO, DEBUG, TRACE), and adhering to core practices like parameterized logging, proper exception handling, and avoiding sensitive data exposure. Configuration should be environment-specific with clear output formats. Security is paramount: mask sensitive data, control log access, and ensure secure transmission. Implement centralized log aggregation, monitoring, and alerting for proactive issue detection. Finally, logging behavior and its impact should be validated through comprehensive testing.
-    </description>
 
-    <toc auto-generate="true"/>
+        ### Implementing These Principles
 
-    <content-sections>
-        <rule-section number="1" id="logging-framework-selection">
-            <rule-header>
-                <rule-title>Choose an Appropriate Logging Framework</rule-title>
-                <rule-subtitle>Select a Standard Logging Facade and Implementation</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        1. **Start with framework selection**: Choose SLF4J with Logback as your standard logging approach.
+        2. **Establish logging level conventions**: Create consistent patterns for when to use each log level.
+        3. **Implement security-first practices**: Always mask sensitive data and validate log outputs.
+        4. **Use structured logging**: Leverage parameterized logging and MDC for better observability.
+        5. **Monitor and measure**: Set up proper log aggregation and alerting systems.
+
+        Remember, good logging in Java is about operational excellence - making your application's behavior transparent and debuggable while maintaining security and performance.
+    </goal>
+
+    <examples>
+        <toc auto-generate="true"/>
+        <example number="1" id="logging-framework-selection">
+            <example-header>
+                <example-title>Choose an Appropriate Logging Framework</example-title>
+                <example-subtitle>Select a Standard Logging Facade and Implementation</example-subtitle>
+            </example-header>
+            <example-description>
                 Using a standard logging facade like SLF4J allows for flexibility in choosing and switching an underlying logging implementation. The primary recommendation is SLF4J with Logback for its robustness and feature-richness.
-            </rule-description>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Using SLF4J facade with proper logger declaration
@@ -152,16 +160,16 @@ public class BadLoggingService {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="2" id="logging-levels">
-            <rule-header>
-                <rule-title>Understand and Use Logging Levels Correctly</rule-title>
-                <rule-subtitle>Apply Appropriate Logging Levels for Messages</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        <example number="2" id="logging-levels">
+            <example-header>
+                <example-title>Understand and Use Logging Levels Correctly</example-title>
+                <example-subtitle>Apply Appropriate Logging Levels for Messages</example-subtitle>
+            </example-header>
+            <example-description>
                 Use logging levels consistently to categorize the severity and importance of log messages. ERROR for critical issues, WARN for potentially harmful situations, INFO for important business events, DEBUG for detailed information, and TRACE for fine-grained debugging.
-            </rule-description>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Proper usage of logging levels
@@ -322,16 +330,16 @@ public class BadLevelUsage {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="3" id="core-logging-practices">
-            <rule-header>
-                <rule-title>Adhere to Core Logging Practices</rule-title>
-                <rule-subtitle>Implement Fundamental Best Practices</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        <example number="3" id="core-logging-practices">
+            <example-header>
+                <example-title>Adhere to Core Logging Practices</example-title>
+                <example-subtitle>Implement Fundamental Best Practices</example-subtitle>
+            </example-header>
+            <example-description>
                 Follow core practices including using parameterized logging, proper exception handling, avoiding sensitive data exposure, and implementing performance considerations for logging operations.
-            </rule-description>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Core logging best practices
@@ -608,16 +616,16 @@ public class PoorLoggingPractices {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="4" id="secure-logging-practices">
-            <rule-header>
-                <rule-title>Implement Secure Logging Practices</rule-title>
-                <rule-subtitle>Ensure Logs Do Not Compromise Security</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        <example number="4" id="secure-logging-practices">
+            <example-header>
+                <example-title>Implement Secure Logging Practices</example-title>
+                <example-subtitle>Ensure Logs Do Not Compromise Security</example-subtitle>
+            </example-header>
+            <example-description>
                 Actively mask or filter sensitive data, control access to log files, use secure transmission protocols, and comply with data protection regulations when logging information.
-            </rule-description>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Secure logging practices
@@ -1004,6 +1012,6 @@ public class InsecureLoggingService {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
-    </content-sections>
-</system-prompt>
+        </example>
+    </examples>
+</prompt>
