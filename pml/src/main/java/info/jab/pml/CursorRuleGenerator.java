@@ -1,4 +1,4 @@
-package info.jab.xml;
+package info.jab.pml;
 
 import java.io.InputStream;
 import java.io.StringWriter;
@@ -25,8 +25,7 @@ import org.xml.sax.XMLReader;
  */
 public final class CursorRuleGenerator {
 
-    private static final String XSD_FILE_NAME_V1_1 = "spml-1.1.xsd";
-    private static final String XSD_FILE_NAME_V1_0 = "spml.xsd";
+    private static final String XSD_FILE_NAME_V1_1 = "pml-1.1.xsd";
 
     // ===============================================================
     // PUBLIC API - Entry point for cursor rule generation
@@ -169,20 +168,12 @@ public final class CursorRuleGenerator {
     }
 
     /**
-     * Loads XSD schema from classpath for validation with fallback.
+     * Loads XSD schema from classpath for validation.
      * Returns Optional to handle missing schema gracefully.
-     * Tries v1.0 schema first, then v1.1 schema as fallback.
+     * Uses v1.1 schema (direct sections).
      */
     private Optional<Schema> loadXsdSchemaWithFallback() {
-        // Try v1.0 schema first (with content-sections wrapper)
-        Optional<Schema> schema = loadXsdSchema(XSD_FILE_NAME_V1_0);
-
-        // If v1.0 not found, try v1.1 schema (direct sections)
-        if (schema.isEmpty()) {
-            schema = loadXsdSchema(XSD_FILE_NAME_V1_1);
-        }
-
-        return schema;
+        return loadXsdSchema(XSD_FILE_NAME_V1_1);
     }
 
     /**
