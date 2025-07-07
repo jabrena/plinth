@@ -23,7 +23,7 @@ import org.xml.sax.XMLReader;
  * Generator for Cursor Rules using XML/XSLT transformation.
  * Follows functional programming principles with immutability and pure functions.
  */
-public final class CursorRuleGenerator {
+public final class CursorRulesGenerator {
 
     // ===============================================================
     // PUBLIC API - Entry point for cursor rule generation

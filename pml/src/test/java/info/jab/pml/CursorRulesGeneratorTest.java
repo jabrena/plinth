@@ -17,10 +17,10 @@ import org.slf4j.LoggerFactory;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@DisplayName("Cursor Rule Generator Tests")
-class CursorRuleGeneratorTest {
+@DisplayName("Cursor Rules Generator Tests")
+class CursorRulesGeneratorTest {
 
-    private static final Logger logger = LoggerFactory.getLogger(CursorRuleGeneratorTest.class);
+    private static final Logger logger = LoggerFactory.getLogger(CursorRulesGeneratorTest.class);
 
     @Nested
     @DisplayName("Parameterized Generate Method Tests")
@@ -30,7 +30,7 @@ class CursorRuleGeneratorTest {
         @DisplayName("Should throw exception when XML file does not exist")
         void should_throwException_when_xmlFileDoesNotExist() {
             // Given
-            CursorRuleGenerator generator = new CursorRuleGenerator();
+            CursorRulesGenerator generator = new CursorRulesGenerator();
 
             // When & Then - Updated for functional API exception handling
             assertThatThrownBy(() -> generator.generate("non-existent.xml", "cursor-rules.xsl"))
@@ -44,7 +44,7 @@ class CursorRuleGeneratorTest {
         @DisplayName("Should throw exception when XSLT file does not exist")
         void should_throwException_when_xsltFileDoesNotExist() {
             // Given
-            CursorRuleGenerator generator = new CursorRuleGenerator();
+            CursorRulesGenerator generator = new CursorRulesGenerator();
 
             // When & Then - Updated for functional API exception handling
             assertThatThrownBy(() -> generator.generate("112-java-maven-documentation.xml", "non-existent.xsl"))
@@ -64,7 +64,7 @@ class CursorRuleGeneratorTest {
         @DisplayName("Should generate exact content matching original expected document using unified XSLT")
         void should_generateExactContentMatchingOriginalExpected_when_transformingWithUnifiedXslt(String baseFileName) throws IOException {
             // Given
-            CursorRuleGenerator generator = new CursorRuleGenerator();
+            CursorRulesGenerator generator = new CursorRulesGenerator();
             String expectedContent = loadExpectedContent(baseFileName + ".mdc");
 
             // When
@@ -120,7 +120,7 @@ class CursorRuleGeneratorTest {
     @DisplayName("Should produce consistent content structure regardless of XML content type")
     void should_produceConsistentStructure_when_processingDifferentXmlTypes() throws IOException {
         // Given
-        CursorRuleGenerator generator = new CursorRuleGenerator();
+        CursorRulesGenerator generator = new CursorRulesGenerator();
 
         // When
         String checklistGuideResult = generator.generate("100-java-checklist-guide.xml", "cursor-rules.xsl", "pml.xsd");
