@@ -149,7 +149,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("123-java-general-guidelines.mdc");
 
             // When
-            String actualResult = generator.generate("123-java-general-guidelines.xml", "cursor-rule-generator.xsl");
+            String actualResult = generator.generate("123-java-general-guidelines.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -321,8 +321,8 @@ class CursorRuleGeneratorTest {
         saveGeneratedContentToTarget(documentationResult, "112-java-maven-documentation.mdc");
         saveGeneratedContentToTarget(objectOrientedDesignResult, "121-java-object-oriented-design.mdc");
         saveGeneratedContentToTarget(typeDesignResult, "122-java-type-design.mdc");
-        //saveGeneratedContentToTarget(generalGuidelinesResult, "unified-general-guidelines.mdc");
-        //saveGeneratedContentToTarget(secureCodingResult, "unified-secure-coding.mdc");
+        saveGeneratedContentToTarget(generalGuidelinesResult, "123-java-general-guidelines.mdc");
+        saveGeneratedContentToTarget(secureCodingResult, "124-java-secure-coding.mdc");
         //saveGeneratedContentToTarget(concurrencyResult, "unified-concurrency.mdc");
         //saveGeneratedContentToTarget(loggingResult, "unified-logging.mdc");
         //saveGeneratedContentToTarget(unitTestingResult, "unified-unit-testing.mdc");

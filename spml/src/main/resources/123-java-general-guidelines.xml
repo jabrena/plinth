@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<system-prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-               xsi:noNamespaceSchemaLocation="spml.xsd"
-               id="123-java-general-guidelines" version="1.0">
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="spml-1.1.xsd"
+        id="123-java-general-guidelines" version="1.0">
+
     <metadata>
-        <description>Java General Guidelines</description>
-        <globs>*.java</globs>
-        <always-apply>false</always-apply>
+        <cursor-ai>
+            <description></description>
+            <globs></globs>
+            <always-apply>false</always-apply>
+        </cursor-ai>
         <tags>
             <tag>java</tag>
             <tag>guidelines</tag>
@@ -16,31 +19,38 @@
             <tag>best-practices</tag>
         </tags>
         <version>1.0.0</version>
+        <title>Java General Guidelines</title>
     </metadata>
 
-    <header>
-        <title>Java General Guidelines</title>
-    </header>
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
-    <system-characterization>
-        <role-definition>You are a Senior software engineer with extensive experience in Java software development</role-definition>
-    </system-characterization>
-
-    <description>
+    <goal>
         This document outlines general Java coding guidelines covering fundamental aspects such as naming conventions for packages, classes, methods, variables, and constants; code formatting rules including indentation, line length, brace style, and whitespace usage; standards for organizing import statements; best practices for Javadoc documentation; and comprehensive error and exception handling with a strong focus on security, including avoiding sensitive information exposure, catching specific exceptions, and secure resource management.
-    </description>
 
-    <toc auto-generate="true"/>
+        ### Implementing These Principles
 
-    <content-sections>
-        <rule-section number="1" id="naming-conventions">
-            <rule-header>
-                <rule-title>Naming Conventions</rule-title>
-                <rule-subtitle>Follow Standard Java Naming Patterns</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        These guidelines are built upon the following core principles:
+
+        1. **Clarity and Consistency in Naming**: Adhere to standard Java naming conventions for all code elements (packages, classes, methods, variables, constants). This promotes code that is intuitive, predictable, and easier for developers to understand and navigate.
+        2. **Readability through Formatting**: Consistently apply formatting rules for indentation, line length, brace style, and whitespace. Well-formatted code is significantly easier to read, debug, and maintain.
+        3. **Organized Import Statements**: Structure import statements logically by grouping related packages and alphabetizing within those groups. Avoid wildcard imports to ensure clarity about class origins and prevent namespace conflicts.
+        4. **Effective Documentation**: Strive for self-documenting code. For public APIs, complex algorithms, non-obvious business logic, or any part of the code that isn't immediately clear, provide comprehensive Javadoc. Good documentation aids understanding, usage, and maintenance.
+        5. **Robust and Secure Error Handling**: Implement thorough error and exception handling with a strong focus on security. This includes using specific exceptions, managing resources diligently (preferably with try-with-resources), preventing the leakage of sensitive information in logs or error messages, and never "swallowing" exceptions without proper handling or justification. Resilient and secure applications depend on robust error management.
+    </goal>
+
+    <examples>
+        <toc auto-generate="true"/>
+
+        <example number="1" id="naming-conventions">
+            <example-header>
+                <example-title>Naming Conventions</example-title>
+                <example-subtitle>Follow Standard Java Naming Patterns</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
                 Adhere to standard Java naming conventions for all code elements to promote intuitive, predictable, and easier to understand code navigation.
-            </rule-description>
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Proper naming conventions
@@ -80,16 +90,18 @@ public class userprofilesvc { // Not PascalCase
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="2" id="formatting">
-            <rule-header>
-                <rule-title>Formatting</rule-title>
-                <rule-subtitle>Apply Consistent Code Formatting</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        <example number="2" id="formatting">
+            <example-header>
+                <example-title>Formatting</example-title>
+                <example-subtitle>Apply Consistent Code Formatting</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
                 Consistently apply formatting rules for indentation, line length, brace style, and whitespace to improve code readability and maintainability.
-            </rule-description>
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Proper formatting
@@ -134,16 +146,18 @@ public class BadFormattingExample{
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="3" id="import-statements">
-            <rule-header>
-                <rule-title>Import Statements</rule-title>
-                <rule-subtitle>Organize Imports Systematically</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        <example number="3" id="import-statements">
+            <example-header>
+                <example-title>Import Statements</example-title>
+                <example-subtitle>Organize Imports Systematically</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
                 Structure import statements logically by grouping related packages and alphabetizing within groups. Avoid wildcard imports to ensure clarity about class origins.
-            </rule-description>
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Organized imports
@@ -185,16 +199,18 @@ public class UserService {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="4" id="documentation-standards">
-            <rule-header>
-                <rule-title>Documentation Standards</rule-title>
-                <rule-subtitle>Maintain Clear Documentation</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        <example number="4" id="documentation-standards">
+            <example-header>
+                <example-title>Documentation Standards</example-title>
+                <example-subtitle>Maintain Clear Documentation</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
                 Write self-documenting code and provide comprehensive Javadoc for public APIs, complex algorithms, and non-obvious business logic with required elements like @param, @return, @throws.
-            </rule-description>
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Comprehensive documentation
@@ -254,16 +270,18 @@ public class StringHelper {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
+        </example>
 
-        <rule-section number="5" id="comprehensive-error-handling">
-            <rule-header>
-                <rule-title>Comprehensive Error and Exception Handling</rule-title>
-                <rule-subtitle>Implement Secure and Robust Error Management</rule-subtitle>
-            </rule-header>
-            <rule-description>
+        <example number="5" id="comprehensive-error-handling">
+            <example-header>
+                <example-title>Comprehensive Error and Exception Handling</example-title>
+                <example-subtitle>Implement Secure and Robust Error Management</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
                 Implement robust error handling using specific exceptions, managing them at appropriate levels while preventing information leakage and ensuring proper resource cleanup.
-            </rule-description>
+                ]]>
+            </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Comprehensive error handling
@@ -332,6 +350,14 @@ public class UnsafeFileProcessor {
 }]]></code-block>
                 </bad-example>
             </code-examples>
-        </rule-section>
-    </content-sections>
-</system-prompt>
+        </example>
+    </examples>
+
+    <output-requirements-section>
+        <output-requirements-list>
+            <output-requirements-item>Apply the Java general guidelines to improve code quality and maintainability</output-requirements-item>
+            <output-requirements-item>Follow naming conventions, formatting rules, and documentation standards</output-requirements-item>
+            <output-requirements-item>Implement comprehensive error handling with security considerations</output-requirements-item>
+        </output-requirements-list>
+    </output-requirements-section>
+</prompt>
