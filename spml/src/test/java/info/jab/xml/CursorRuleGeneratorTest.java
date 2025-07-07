@@ -328,7 +328,7 @@ class CursorRuleGeneratorTest {
         saveGeneratedContentToTarget(unitTestingResult, "131-java-unit-testing.mdc");
         saveGeneratedContentToTarget(refactoringWithModernFeaturesResult, "unified-refactoring-with-modern-features.mdc");
         saveGeneratedContentToTarget(functionalProgrammingResult, "142-java-functional-programming.mdc");
-        //saveGeneratedContentToTarget(dataOrientedProgrammingResult, "unified-data-oriented-programming.mdc");
+        saveGeneratedContentToTarget(dataOrientedProgrammingResult, "143-java-data-oriented-programming.mdc");
     }
 
     /**

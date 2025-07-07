@@ -6,8 +6,8 @@
     <metadata>
         <!-- Markdown Front Matter for Cursor Rules -->
         <cursor-ai>
-            <description>Java Data-Oriented Programming</description>
-            <globs>*.java</globs>
+            <description></description>
+            <globs></globs>
             <always-apply>false</always-apply>
         </cursor-ai>
         <tags>
@@ -24,9 +24,19 @@
 
     <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
-    <goal>
+    <goal><![CDATA[
         Apply data-oriented programming principles to Java code, emphasizing immutable data structures, pure functions, and clear separation between data and behavior.
-    </goal>
+
+        ### Implementing These Principles
+
+        These guidelines are built upon the following core principles:
+
+        1.  **Separation of Concerns (Data vs. Code)**: Strictly decouple data structures (which should be simple carriers like records or POJOs) from the code (behavior) that operates on them. Behavior should reside in separate utility classes or services.
+        2.  **Immutability**: Design data structures to be immutable. Use records or final fields, and ensure that any transformations on data produce new instances rather than modifying existing ones.
+        3.  **Pure Data Transformations**: Manipulate data using pure functions that depend only on their inputs and produce no side effects. This makes transformations predictable, testable, and easier to reason about.
+        4.  **Simplicity and Flexibility of Data Structures**: Prefer flat, denormalized data structures where appropriate, using IDs for references rather than deep nesting. Start with generic representations (like `Map<String, Object>`) if the schema is dynamic, converting to specific types only when necessary for processing.
+        5.  **Explicit and Traceable Operations**: Ensure all data validation and transformation steps are explicit, composed of clear functional steps, and easily traceable. Avoid hidden or implicit logic within data objects.
+     ]]></goal>
 
     <examples>
         <toc auto-generate="true" />

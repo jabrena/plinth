@@ -240,6 +240,7 @@
                     <include>131-java-unit-testing.mdc</include>
                     <include>125-java-concurrency.mdc</include>
                     <include>126-java-logging.mdc</include>
+                    <include>143-java-data-oriented-programming.mdc</include>
                   </includes>
                 </resource>
               </resources>
