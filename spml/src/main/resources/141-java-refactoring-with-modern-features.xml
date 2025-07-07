@@ -5,8 +5,8 @@
 
     <metadata>
         <cursor-ai>
-            <description>Modern Java Development Guidelines (Java 8+)</description>
-            <globs>*.java</globs>
+            <description></description>
+            <globs></globs>
             <always-apply>false</always-apply>
         </cursor-ai>
         <tags>
@@ -26,7 +26,15 @@
     <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
     <goal>
-        Refactor Java code to use modern Java features (Java 8+) including lambda expressions, Stream API, Optional, java.time API, and other modern constructs for improved code readability, maintainability, and performance.
+        Refactor Java code to use modern Java features (Java 8+) including lambda expressions, Stream API, Optional, java.time API, and other modern constructs for improved code readability, maintainability, and performance. Apply type design thinking principles to create clear, well-structured code that communicates intent effectively.
+
+        ### Key Principles
+
+        1. **Functional Programming**: Leverage lambda expressions, method references, and functional interfaces
+        2. **Type Safety**: Use Optional for null safety and appropriate generic types
+        3. **Clear Intent**: Choose descriptive names and use modern APIs that express intent clearly
+        4. **Performance Awareness**: Consider performance implications of modern features
+        5. **Type Design**: Apply typography-inspired principles to code structure
     </goal>
 
     <examples>
@@ -37,7 +45,6 @@
                 <example-subtitle>Effectively Use Lambda Expressions and Functional Interfaces</example-subtitle>
             </example-header>
             <example-description>
-                <![CDATA[
                 <![CDATA[
                 - Prefer lambda expressions over anonymous inner classes for concise implementation of functional interfaces.
                 - Keep lambda expressions short, readable, and focused on a single piece of logic.
@@ -125,7 +132,6 @@ public class OldStyleAnonymousClass {
             </example-header>
             <example-description>
                 <![CDATA[
-                <![CDATA[
                 Use streams for processing sequences of elements from collections or other sources in a functional style. Prefer a declarative approach (what to do) over an imperative one (how to do it) for stream operations. Chain stream operations effectively to create a readable processing pipeline. Use appropriate terminal operations to produce a result or side-effect. Be mindful of performance implications, especially with large datasets or complex operations.
                 ]]>
             </example-description>
@@ -199,7 +205,6 @@ public class StreamAntiPattern {
                 <example-subtitle>Handle Potentially Absent Values Gracefully with Optional</example-subtitle>
             </example-header>
             <example-description>
-                <![CDATA[
                 <![CDATA[
                 Use `Optional<T>` to explicitly represent values that may be absent, making your API clearer about nullability. Avoid calling `Optional.get()` directly without first checking `isPresent()`. Prefer functional alternatives. Leverage `Optional`'s functional-style methods like `map()`, `flatMap()`, `filter()`, `orElse()`, `orElseGet()`, `orElseThrow()` to handle absent values in a fluent and safe manner.
                 ]]>
@@ -536,8 +541,8 @@ public class VarAntiPattern {
             </example-header>
             <example-description>
                 <![CDATA[
-                Use the static factory methods `List.of()`, `Set.of()`, and `Map.of()` (Java 9+) to create compact, unmodifiable (immutable) collections when the elements are known at compile time. For creating mutable collections, continue to use traditional constructors (e.g., `new ArrayList&lt;&gt;()`) or Stream API collectors. Be aware that these factory methods create unmodifiable collections, do not permit `null` elements, and `Map.of()` does not permit duplicate keys.
-                            ]]>
+                Use the static factory methods `List.of()`, `Set.of()`, and `Map.of()` (Java 9+) to create compact, unmodifiable (immutable) collections when the elements are known at compile time. For creating mutable collections, continue to use traditional constructors (e.g., `new ArrayList<>()`) or Stream API collectors. Be aware that these factory methods create unmodifiable collections, do not permit `null` elements, and `Map.of()` does not permit duplicate keys.
+                ]]>
             </example-description>
             <code-examples>
                 <good-example>

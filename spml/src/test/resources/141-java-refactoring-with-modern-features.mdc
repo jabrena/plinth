@@ -41,7 +41,7 @@ Refactor Java code to use modern Java features (Java 8+) including lambda expres
 ### Example 1: Lambda Expressions and Functional Interfaces
 
 Title: Effectively Use Lambda Expressions and Functional Interfaces
-Description: Prefer lambda expressions over anonymous inner classes for concise implementation of functional interfaces. Keep lambda expressions short, readable, and focused on a single piece of logic. Use method references when they are clearer than equivalent lambdas. Leverage built-in functional interfaces from `java.util.function` package. Create custom functional interfaces only when needed, always annotating them with `@FunctionalInterface`. Apply type design thinking by choosing descriptive names that communicate the functional interface's purpose clearly.
+Description: - Prefer lambda expressions over anonymous inner classes for concise implementation of functional interfaces. - Keep lambda expressions short, readable, and focused on a single piece of logic. - Use method references (e.g., `System.out::println`, `String::isEmpty`) when they are clearer and more direct than an equivalent lambda. - Leverage the rich set of built-in functional interfaces from the `java.util.function` package (e.g., `Predicate`, `Function`, `Consumer`, `Supplier`). - Create custom functional interfaces only when a specific signature is needed that isn't covered by built-in ones. - Always annotate custom functional interfaces with `@FunctionalInterface` to ensure they meet the criteria (a single abstract method) and to clearly communicate their purpose.
 
 **Good example:**
 
