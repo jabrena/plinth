@@ -1,27 +1,39 @@
 ---
-description: Java General Guidelines
-globs: *.java
+description:
+globs:
 alwaysApply: false
 ---
 # Java General Guidelines
 
-## System prompt characterization
+## Role
 
-Role definition: You are a Senior software engineer with extensive experience in Java software development
+You are a Senior software engineer with extensive experience in Java software development
 
-## Description
+## Instructions for AI
 
 This document outlines general Java coding guidelines covering fundamental aspects such as naming conventions for packages, classes, methods, variables, and constants; code formatting rules including indentation, line length, brace style, and whitespace usage; standards for organizing import statements; best practices for Javadoc documentation; and comprehensive error and exception handling with a strong focus on security, including avoiding sensitive information exposure, catching specific exceptions, and secure resource management.
 
-## Table of contents
+### Implementing These Principles
 
-- Rule 1: Naming Conventions
-- Rule 2: Formatting
-- Rule 3: Import Statements
-- Rule 4: Documentation Standards
-- Rule 5: Comprehensive Error and Exception Handling
+These guidelines are built upon the following core principles:
 
-## Rule 1: Naming Conventions
+1. **Clarity and Consistency in Naming**: Adhere to standard Java naming conventions for all code elements (packages, classes, methods, variables, constants). This promotes code that is intuitive, predictable, and easier for developers to understand and navigate.
+2. **Readability through Formatting**: Consistently apply formatting rules for indentation, line length, brace style, and whitespace. Well-formatted code is significantly easier to read, debug, and maintain.
+3. **Organized Import Statements**: Structure import statements logically by grouping related packages and alphabetizing within those groups. Avoid wildcard imports to ensure clarity about class origins and prevent namespace conflicts.
+4. **Effective Documentation**: Strive for self-documenting code. For public APIs, complex algorithms, non-obvious business logic, or any part of the code that isn't immediately clear, provide comprehensive Javadoc. Good documentation aids understanding, usage, and maintenance.
+5. **Robust and Secure Error Handling**: Implement thorough error and exception handling with a strong focus on security. This includes using specific exceptions, managing resources diligently (preferably with try-with-resources), preventing the leakage of sensitive information in logs or error messages, and never "swallowing" exceptions without proper handling or justification. Resilient and secure applications depend on robust error management.
+
+## Examples
+
+### Table of contents
+
+- Example 1: Naming Conventions
+- Example 2: Formatting
+- Example 3: Import Statements
+- Example 4: Documentation Standards
+- Example 5: Comprehensive Error and Exception Handling
+
+### Example 1: Naming Conventions
 
 Title: Follow Standard Java Naming Patterns
 Description: Adhere to standard Java naming conventions for all code elements to promote intuitive, predictable, and easier to understand code navigation.
@@ -69,7 +81,7 @@ public class userprofilesvc { // Not PascalCase
 }
 ```
 
-## Rule 2: Formatting
+### Example 2: Formatting
 
 Title: Apply Consistent Code Formatting
 Description: Consistently apply formatting rules for indentation, line length, brace style, and whitespace to improve code readability and maintainability.
@@ -122,7 +134,7 @@ public class BadFormattingExample{
 }
 ```
 
-## Rule 3: Import Statements
+### Example 3: Import Statements
 
 Title: Organize Imports Systematically
 Description: Structure import statements logically by grouping related packages and alphabetizing within groups. Avoid wildcard imports to ensure clarity about class origins.
@@ -172,7 +184,7 @@ public class UserService {
 }
 ```
 
-## Rule 4: Documentation Standards
+### Example 4: Documentation Standards
 
 Title: Maintain Clear Documentation
 Description: Write self-documenting code and provide comprehensive Javadoc for public APIs, complex algorithms, and non-obvious business logic with required elements like @param, @return, @throws.
@@ -240,7 +252,7 @@ public class StringHelper {
 }
 ```
 
-## Rule 5: Comprehensive Error and Exception Handling
+### Example 5: Comprehensive Error and Exception Handling
 
 Title: Implement Secure and Robust Error Management
 Description: Implement robust error handling using specific exceptions, managing them at appropriate levels while preventing information leakage and ensuring proper resource cleanup.
@@ -316,3 +328,8 @@ public class UnsafeFileProcessor {
     }
 }
 ```
+## Output Requirements
+
+- Apply the Java general guidelines to improve code quality and maintainability
+- Follow naming conventions, formatting rules, and documentation standards
+- Implement comprehensive error handling with security considerations
