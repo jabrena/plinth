@@ -30,11 +30,15 @@
 
         ### Implementing These Principles
 
-        1. **Start with framework selection**: Choose SLF4J with Logback as your standard logging approach.
-        2. **Establish logging level conventions**: Create consistent patterns for when to use each log level.
-        3. **Implement security-first practices**: Always mask sensitive data and validate log outputs.
-        4. **Use structured logging**: Leverage parameterized logging and MDC for better observability.
-        5. **Monitor and measure**: Set up proper log aggregation and alerting systems.
+        These guidelines are built upon the following core principles:
+
+        1. **Standardized Framework Selection**: Utilize a widely accepted logging facade (preferably SLF4J) and a robust underlying implementation (Logback or Log4j2). This promotes consistency, flexibility, and access to advanced logging features.
+        2. **Meaningful and Consistent Log Levels**: Employ logging levels (ERROR, WARN, INFO, DEBUG, TRACE) deliberately and consistently to categorize the severity and importance of messages. This allows for effective filtering, monitoring, and targeted issue diagnosis.
+        3. **Adherence to Core Logging Practices**: Follow fundamental best practices such as using parameterized logging (avoiding string concatenation for performance and clarity), always logging exceptions with their stack traces, never logging sensitive data directly (PII, credentials).
+        4. **Thoughtful and Flexible Configuration**: Manage logging configuration externally (e.g., `logback.xml`, `log4j2.xml`). Tailor configurations for different environments (dev, test, prod) with appropriate log levels for various packages, clear and informative output formats (including timestamps, levels, logger names, thread info), and robust log rotation and retention policies.
+        5. **Security-Conscious Logging**: Prioritize security in all logging activities. Actively mask or filter sensitive information, control access to log files and log management systems, use secure protocols for transmitting logs, and ensure compliance with relevant data protection regulations (e.g., GDPR, HIPAA).
+        6. **Proactive Log Monitoring and Alerting**: Implement centralized log aggregation systems (e.g., ELK Stack, Splunk, Grafana Loki). Establish automated alerts based on log patterns, error rates, or specific critical events to enable proactive issue detection and rapid response.
+        7. **Comprehensive Logging Validation Through Testing**: Integrate logging into the testing strategy. Assert that critical log messages (especially errors and warnings) are generated as expected under specific conditions, verify log formats, test log level filtering, and assess any performance impact of logging.
 
         Remember, good logging in Java is about operational excellence - making your application's behavior transparent and debuggable while maintaining security and performance.
     </goal>
@@ -618,7 +622,100 @@ public class PoorLoggingPractices {
             </code-examples>
         </example>
 
-        <example number="4" id="secure-logging-practices">
+        <example number="4" id="configuration-best-practices">
+            <example-header>
+                <example-title>Follow Configuration Best Practices</example-title>
+                <example-subtitle>Configure Your Logging Framework Thoughtfully</example-subtitle>
+            </example-header>
+            <example-description>
+                Proper configuration is key to effective logging. Use separate configurations per environment, implement different log levels for different packages, and include comprehensive output formats with timestamps, levels, logger names, and thread information.
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// Configuration shown through usage - actual config would be in logback.xml or log4j2.xml
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+
+public class ConfiguredLoggerExample {
+    private static final Logger appLogger = LoggerFactory.getLogger(ConfiguredLoggerExample.class);
+    private static final Logger performanceLogger = LoggerFactory.getLogger("performance." + ConfiguredLoggerExample.class.getName());
+
+    public void performBusinessOperation(String operationId, String userId) {
+        // Using MDC for contextual information
+        MDC.put("operationId", operationId);
+        MDC.put("userId", userId);
+
+        try {
+            long startTime = System.currentTimeMillis();
+            appLogger.info("Starting business operation");
+
+            // Simulate work
+            Thread.sleep(100);
+
+            long duration = System.currentTimeMillis() - startTime;
+            performanceLogger.info("Operation completed in {} ms", duration);
+
+            appLogger.info("Business operation completed successfully");
+
+        } catch (InterruptedException e) {
+            appLogger.warn("Operation interrupted", e);
+            Thread.currentThread().interrupt();
+        } catch (Exception e) {
+            appLogger.error("Business operation failed", e);
+            throw new RuntimeException("Operation failed", e);
+        } finally {
+            // Always clear MDC
+            MDC.clear();
+        }
+    }
+
+    public void demonstrateLogLevels() {
+        // These will be filtered based on configuration
+        appLogger.trace("This is trace level - very detailed");
+        appLogger.debug("This is debug level - detailed for development");
+        appLogger.info("This is info level - important business events");
+        appLogger.warn("This is warn level - potentially harmful situations");
+        appLogger.error("This is error level - critical issues");
+    }
+
+    public static void main(String[] args) {
+        ConfiguredLoggerExample example = new ConfiguredLoggerExample();
+        example.performBusinessOperation("OP123", "user456");
+        example.demonstrateLogLevels();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Poor configuration consequences
+public class BadConfigConsequences {
+    private static final Logger logger = LoggerFactory.getLogger(BadConfigConsequences.class);
+
+    public void performOperation() {
+        // If configuration is bad (everything at TRACE), this floods logs
+        logger.trace("Entering method");
+        logger.trace("Creating variables");
+        logger.trace("About to check condition");
+
+        logger.info("User logged in.");
+        logger.error("Failed to connect to DB.", new RuntimeException("DB connection timeout"));
+
+        // With bad pattern configuration, output might be:
+        // User logged in.
+        // Failed to connect to DB.
+        // Problem: No timestamp, no level, no logger name, no thread info
+    }
+
+    public static void main(String[] args) {
+        BadConfigConsequences example = new BadConfigConsequences();
+        example.performOperation();
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="5" id="secure-logging-practices">
             <example-header>
                 <example-title>Implement Secure Logging Practices</example-title>
                 <example-subtitle>Ensure Logs Do Not Compromise Security</example-subtitle>
@@ -1008,6 +1105,292 @@ public class InsecureLoggingService {
 
     private static class PaymentException extends Exception {
         public PaymentException(String message) { super(message); }
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="6" id="log-monitoring-alerting">
+            <example-header>
+                <example-title>Establish Effective Log Monitoring and Alerting</example-title>
+                <example-subtitle>Implement Log Aggregation, Monitoring, and Alerting</example-subtitle>
+            </example-header>
+            <example-description>
+                Set up centralized log aggregation, implement alerts based on log patterns, use structured logging for querying, and regularly analyze logs to identify trends and issues.
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
+import java.util.Objects;
+import java.util.UUID;
+
+public class MonitoredService {
+    private static final Logger logger = LoggerFactory.getLogger(MonitoredService.class);
+
+    public void handleApiRequest(String endpoint, String payload) {
+        String requestId = UUID.randomUUID().toString();
+        MDC.put("requestId", requestId);
+        MDC.put("endpoint", endpoint);
+
+        try {
+            logger.info("API request received");
+
+            if (payload.contains("<script>")) {
+                // Log a security-sensitive event that monitoring tools can pick up for alerts.
+                logger.warn("SECURITY_ALERT: Potential XSS attempt detected in payload for endpoint: {}", endpoint);
+                // Handle error, e.g., return 400 Bad Request
+                return;
+            }
+
+            // Simulate some processing
+            if (endpoint.equals("/critical_op")) {
+                if (Math.random() > 0.9) { // Simulate a sporadic critical failure
+                    throw new RuntimeException("Critical operation failure detected!");
+                }
+            }
+
+            logger.info("API request processed successfully");
+
+            // Structured logging for metrics and monitoring
+            logger.info("METRICS: endpoint={}, duration={}, status=success", endpoint, System.currentTimeMillis() % 1000);
+
+        } catch (RuntimeException e) {
+            // This ERROR log (especially with stack trace) would be a key candidate for alerting.
+            logger.error("ALERT: Unhandled exception during API request processing", e);
+            // Could trigger immediate alert in monitoring system
+        } finally {
+            MDC.clear();
+        }
+    }
+
+    public void performHealthCheck() {
+        try {
+            // Simulate health checks
+            checkDatabase();
+            checkExternalService();
+
+            logger.info("HEALTH_CHECK: All systems operational");
+
+        } catch (Exception e) {
+            logger.error("HEALTH_CHECK: System health check failed", e);
+            // This would trigger alerts for operational teams
+        }
+    }
+
+    private void checkDatabase() {
+        // Simulate database check
+        if (Math.random() > 0.95) {
+            throw new RuntimeException("Database connection failed");
+        }
+    }
+
+    private void checkExternalService() {
+        // Simulate external service check
+        if (Math.random() > 0.98) {
+            throw new RuntimeException("External service unavailable");
+        }
+    }
+
+    public static void main(String[] args) {
+        MonitoredService service = new MonitoredService();
+
+        // These logs would be searchable in monitoring systems by:
+        // - requestId for request tracing
+        // - endpoint for API-specific analysis
+        // - SECURITY_ALERT for security incident detection
+        // - HEALTH_CHECK for system monitoring
+        // - METRICS for performance analysis
+
+        service.handleApiRequest("/user_data", "{\"data\": \"normal\"}");
+        service.handleApiRequest("/submit_form", "payload with <script>alert('XSS')</script>");
+
+        for (int i = 0; i < 20; i++) {
+            service.handleApiRequest("/critical_op", "some_data");
+        }
+
+        service.performHealthCheck();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.Objects;
+
+public class UnmonitoredService {
+    private static final Logger logger = LoggerFactory.getLogger(UnmonitoredService.class);
+
+    public void doWork() {
+        try {
+            logger.info("Work started.");
+            // ... some logic ...
+            if (Math.random() > 0.5) {
+                throw new Exception("Something went wrong randomly!");
+            }
+            logger.info("Work finished.");
+        } catch (Exception e) {
+            // Logs an error, but if logs are only on local disk and not monitored,
+            // this critical issue might go unnoticed for a long time.
+            logger.error("Error during work", e);
+        }
+    }
+
+    public static void main(String[] args) {
+        UnmonitoredService service = new UnmonitoredService();
+        for (int i = 0; i < 5; i++) {
+            service.doWork();
+        }
+        // Problem: Logs are likely just going to console or a local file.
+        // - No central aggregation: Difficult to search across instances or time.
+        // - No alerts: Critical errors might be missed until users report them.
+        // - No analysis: Trends or recurring non-fatal issues are hard to spot.
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="7" id="logging-in-testing">
+            <example-header>
+                <example-title>Incorporate Logging in Testing</example-title>
+                <example-subtitle>Validate Logging Behavior and Impact During Testing</example-subtitle>
+            </example-header>
+            <example-description>
+                Ensure logging works as expected and doesn't negatively impact the application. Assert that specific log messages are generated, verify log formats, test different logging levels, and check performance impact.
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.Objects;
+
+// ---- System Under Test ----
+class ImportantService {
+    private static final Logger logger = LoggerFactory.getLogger(ImportantService.class);
+
+    public void processImportantData(String dataId) {
+        if (Objects.isNull(dataId)) {
+            logger.error("Data ID is null, cannot process.");
+            throw new IllegalArgumentException("Data ID cannot be null");
+        }
+        if (dataId.startsWith("invalid_")) {
+            logger.warn("Received potentially invalid data ID: {}", dataId);
+            // continue processing with caution
+        }
+        logger.info("Processing data for ID: {}", dataId);
+        // ... actual processing ...
+    }
+}
+
+// ---- Test Example (Conceptual - would use JUnit/TestNG) ----
+public class LoggingTestExample {
+
+    // This would be actual test code using testing frameworks
+    public void demonstrateLoggingTests() {
+        ImportantService service = new ImportantService();
+
+        // Test 1: Verify ERROR log for null input
+        try {
+            service.processImportantData(null);
+            // Should not reach here
+        } catch (IllegalArgumentException e) {
+            // In real test, would capture logs and assert:
+            // - ERROR level log contains "Data ID is null"
+            // - Only one ERROR log entry
+            System.out.println("Test 1 passed: ERROR log generated for null input");
+        }
+
+        // Test 2: Verify WARN log for invalid input
+        service.processImportantData("invalid_XYZ");
+        // In real test, would assert:
+        // - WARN level log contains "Received potentially invalid data ID: invalid_XYZ"
+        // - INFO level log contains "Processing data for ID: invalid_XYZ"
+        System.out.println("Test 2 passed: WARN and INFO logs generated for invalid input");
+
+        // Test 3: Verify INFO log for valid input
+        service.processImportantData("valid_123");
+        // In real test, would assert:
+        // - Only INFO level log contains "Processing data for ID: valid_123"
+        // - No WARN or ERROR logs
+        System.out.println("Test 3 passed: INFO log generated for valid input");
+    }
+
+    public void performanceTestExample() {
+        ImportantService service = new ImportantService();
+
+        // Performance test: measure logging overhead
+        long startTime = System.currentTimeMillis();
+
+        for (int i = 0; i < 1000; i++) {
+            service.processImportantData("test_" + i);
+        }
+
+        long duration = System.currentTimeMillis() - startTime;
+        System.out.println("Performance test: 1000 operations completed in " + duration + "ms");
+
+        // In real test, would assert that logging overhead is within acceptable limits
+        // e.g., assert duration < 1000; // Less than 1ms per operation including logging
+    }
+
+    public static void main(String[] args) {
+        LoggingTestExample test = new LoggingTestExample();
+        test.demonstrateLoggingTests();
+        test.performanceTestExample();
+
+        System.out.println("In real implementation, use JUnit/TestNG with LogCapture utilities");
+        System.out.println("Example dependencies: ch.qos.logback.classic.Logger with ListAppender");
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Code that is hard to test for logging behavior
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.Objects;
+
+public class UntestableLogging {
+    private static final Logger logger = LoggerFactory.getLogger(UntestableLogging.class);
+
+    public void complexOperation(String input) {
+        // ... many lines of code ...
+        if (input.equals("problem")) {
+            // Log message is deeply embedded, possibly conditional, hard to trigger specifically
+            // and verify without significant effort or refactoring.
+            logger.warn("A specific problem occurred with input: {}", input);
+        }
+        // ... more code ...
+        // No clear separation of concerns, making it hard to isolate and test logging.
+    }
+
+    public void methodWithSideEffects(String data) {
+        // Expensive logging operation always executed
+        logger.debug("Processing data: {}", buildExpensiveLogMessage(data));
+
+        // No way to test if logging is impacting performance
+        // No way to verify log content without running expensive operations
+    }
+
+    private String buildExpensiveLogMessage(String data) {
+        // Simulate expensive operation that shouldn't run in production
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 10000; i++) {
+            sb.append("Debug info: ").append(data).append(" iteration: ").append(i);
+        }
+        return sb.toString();
+    }
+
+    public static void main(String[] args) {
+        UntestableLogging ul = new UntestableLogging();
+        ul.complexOperation("test");
+        ul.complexOperation("problem");
+        ul.methodWithSideEffects("example");
+
+        // Problem: Without proper test utilities or testable design,
+        // verifying that the WARN message is logged correctly (and only when expected)
+        // is difficult. Developers might skip testing logging, leading to unverified log output.
     }
 }]]></code-block>
                 </bad-example>

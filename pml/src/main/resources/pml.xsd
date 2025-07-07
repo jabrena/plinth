@@ -8,7 +8,7 @@
             <xs:sequence>
                 <xs:element ref="metadata"/>
                 <xs:element ref="role"/>
-                <xs:element ref="goal" minOccurs="0"/>
+                <xs:element ref="goal"/>
                 <xs:element ref="restrictions" minOccurs="0"/>
                 <xs:element ref="examples" minOccurs="0"/>
                 <xs:element ref="output-requirements-section" minOccurs="0"/>
@@ -35,8 +35,8 @@
         <xs:complexType>
             <xs:sequence>
                 <xs:element ref="description"/>
-                <xs:element ref="globs" minOccurs="0"/>
-                <xs:element ref="always-apply" minOccurs="0"/>
+                <xs:element ref="globs"/>
+                <xs:element ref="always-apply"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
