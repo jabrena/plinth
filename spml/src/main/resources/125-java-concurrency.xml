@@ -27,6 +27,22 @@
 
     <goal>
         Effective Java concurrency relies on understanding thread safety fundamentals, using `java.util.concurrent` utilities, and managing thread pools with `ExecutorService`. Key practices include implementing concurrent design patterns like Producer-Consumer, leveraging `CompletableFuture` for asynchronous tasks, and ensuring thread safety through immutability and safe publication. Performance aspects like lock contention and memory consistency must be considered. Thorough testing, including stress tests and thread dump analysis, is crucial. Modern Java offers virtual threads for enhanced scalability, structured concurrency for simplified task management, and scoped values for safer thread-shared data as alternatives to thread-locals.
+
+        ### Implementing These Principles
+
+        These guidelines are built upon the following core principles:
+
+        1.  **Master Thread Safety Fundamentals**: Understand and correctly apply core concepts such as synchronization (locks, conditions), atomic operations (`java.util.concurrent.atomic`), thread-safe collections (`java.util.concurrent`), immutability, and the Java Memory Model to ensure data integrity and prevent race conditions or deadlocks.
+        2.  **Efficient Thread Pool Management**: Utilize `ExecutorService` for robust thread management. Choose appropriate thread pool implementations and configure them with suitable sizing, keep-alive times, queue capacities, and rejection policies based on the application's workload. Implement graceful shutdown procedures.
+        3.  **Leverage Concurrent Design Patterns**: Implement established patterns like Producer-Consumer (using `BlockingQueue`) and Publish-Subscribe to structure concurrent applications effectively, promoting decoupling, scalability, and maintainability.
+        4.  **Embrace Asynchronous Programming with `CompletableFuture`**: Employ `CompletableFuture` to compose and manage asynchronous computations in a non-blocking way. Chain dependent tasks, combine results from multiple futures, and handle exceptions gracefully to build responsive and efficient applications.
+        5.  **Prioritize Immutability and Safe Publication**: Design classes to be immutable whenever feasible to inherently achieve thread safety. Ensure that shared mutable objects are safely published (e.g., via `volatile`, static initializers, or proper synchronization) so that their state is consistently visible to all threads.
+        6.  **Optimize for Performance, Considering Concurrency overheads**: Be mindful of performance implications such as lock contention (minimize scope, use finer-grained locks), memory consistency (understand happens-before, use `volatile` where appropriate), context switching overhead (size thread pools carefully), and potential issues like false sharing.
+        7.  **Thorough Testing and Debugging**: Rigorously test concurrent code. This includes unit tests for thread-safe components, integration tests for interactions, and stress tests to reveal race conditions or deadlocks. Utilize thread dump analysis, proper logging, and concurrency testing tools.
+        8.  **Adopt Modern Java Concurrency Features for Enhanced Development**:
+            *   **Virtual Threads (Project Loom)**: Embrace virtual threads via `Executors.newVirtualThreadPerTaskExecutor()` for I/O-bound tasks to dramatically increase scalability with minimal resource overhead. Avoid pooling virtual threads.
+            *   **Structured Concurrency**: Use `StructuredTaskScope` to simplify the management of multiple related concurrent tasks as a single unit of work, improving error handling, cancellation, and resource management.
+            *   **Scoped Values**: Prefer `ScopedValue` over `ThreadLocal` for sharing immutable data robustly and efficiently across tasks within a dynamically bounded scope, especially when working with virtual threads.
     </goal>
 
     <examples>
@@ -34,17 +50,22 @@
         <example number="1" id="thread-safety-fundamentals">
             <example-header>
                 <example-title>Thread Safety Fundamentals</example-title>
-                <example-subtitle>Master Core Thread Safety Concepts</example-subtitle>
+                <example-subtitle>Understand and Apply Core Thread Safety Concepts</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                Understand and correctly apply core concepts such as synchronization, atomic operations, thread-safe collections, immutability, and the Java Memory Model to ensure data integrity and prevent race conditions or deadlocks.
+                Ensure data integrity and correct behavior in multi-threaded environments by using thread-safe data structures and appropriate synchronization mechanisms.
+                - Prefer `java.util.concurrent` collections over older synchronized wrappers.
+                - Utilize immutable objects to eliminate risks of concurrent modification.
+                - Employ thread-local variables for state confined to a single thread.
+                - Use atomic classes (`java.util.concurrent.atomic`) for lock-free operations on single variables.
+                - Choose flexible locking with `ReentrantLock` or `ReadWriteLock` for more complex scenarios.
+                - Favor `java.util.concurrent` utilities over manual `wait()/notify()`.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[// GOOD: Proper thread safety using concurrent collections and atomics
-import java.util.Map;
+                    <code-block language="java"><![CDATA[import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
@@ -52,63 +73,87 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.concurrent.locks.ReentrantLock;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReadWriteLock;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-public class ThreadSafeCounter {
-    // Preferred concurrent collections
-    private final Map<String, String> concurrentMap = new ConcurrentHashMap<>();
-    private final Queue<String> taskQueue = new ConcurrentLinkedQueue<>();
-    private final BlockingQueue<String> eventQueue = new LinkedBlockingQueue<>();
+// Dummy classes for context
+class Task {}
+class Event {}
+class State {
+    public State(String initialState) {} // Constructor for initial state
+}
+class UserContext {}
+class Item {}
 
-    // Atomic variables for lock-free operations
-    private final AtomicInteger counter = new AtomicInteger(0);
-    private final AtomicReference<String> status = new AtomicReference<>("INIT");
+class ThreadSafetyExamples {
+    // Preferred concurrent collections
+    Map<String, String> concurrentMap = new ConcurrentHashMap<>();
+    Queue<Task> taskQueue = new ConcurrentLinkedQueue<>();
+    BlockingQueue<Event> eventQueue = new LinkedBlockingQueue<>();
+
+    // Atomic variables
+    AtomicInteger counter = new AtomicInteger(0);
+    AtomicReference<State> stateRef = new AtomicReference<>(new State("initial"));
 
     // Thread-local storage
-    private static final ThreadLocal<String> userContext =
-        ThreadLocal.withInitial(() -> "default");
+    private static final ThreadLocal<UserContext> userContext =
+        ThreadLocal.withInitial(UserContext::new);
 
-    // Using ReentrantLock for complex synchronization
+    // Using ReentrantLock
     private final ReentrantLock lock = new ReentrantLock();
-    private int sharedResource = 0;
+    private final Condition notFull = lock.newCondition(); // Example condition
+    private int itemCount = 0; // Example shared resource
+    private final int MAX_ITEMS = 10; // Example capacity
 
-    public void incrementCounter() {
-        // Atomic operation - thread-safe without locks
-        int newValue = counter.incrementAndGet();
-        concurrentMap.put("lastCount", String.valueOf(newValue));
+    private boolean isFull() {
+        return itemCount >= MAX_ITEMS;
+    }
+     private boolean isEmpty() { // Example helper
+        return itemCount <= 0;
     }
 
-    public void updateSharedResource(int delta) {
+
+    public void addItem(Item item) throws InterruptedException { // Added throws for await
         lock.lock();
         try {
-            sharedResource += delta;
-            System.out.println("Updated resource: " + sharedResource);
+            while (isFull()) {
+                System.out.println("Queue is full, waiting to add item...");
+                notFull.await(); // Wait if queue is full
+            }
+            // Add item logic here
+            itemCount++;
+            System.out.println("Item added. Count: " + itemCount);
+            // Potentially signal other conditions (e.g., notEmpty.signalAll())
         } finally {
-            lock.unlock(); // Always unlock in finally block
+            lock.unlock();
         }
     }
 
-    // Using ReadWriteLock for better performance with frequent reads
+    // Using ReadWriteLock
     private final ReadWriteLock rwLock = new ReentrantReadWriteLock();
+    private final Lock readLock = rwLock.readLock();
+    private final Lock writeLock = rwLock.writeLock();
     private String sharedData = "Initial Data";
 
     public String readData() {
-        rwLock.readLock().lock();
+        readLock.lock();
         try {
             return sharedData;
         } finally {
-            rwLock.readLock().unlock();
+            readLock.unlock();
         }
     }
 
     public void writeData(String data) {
-        rwLock.writeLock().lock();
+        writeLock.lock();
         try {
             sharedData = data;
+            System.out.println("Data written: " + data);
         } finally {
-            rwLock.writeLock().unlock();
+            writeLock.unlock();
         }
     }
 }]]></code-block>
@@ -694,7 +739,386 @@ public class BadAsyncService {
             </code-examples>
         </example>
 
-        <example number="5" id="virtual-threads">
+        <example number="5" id="thread-safety-guidelines">
+            <example-header>
+                <example-title>Thread Safety Guidelines (Immutability &amp; Safe Publication)</example-title>
+                <example-subtitle>Ensure Thread Safety through Immutability and Safe Publication</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Minimize concurrency risks by designing classes to be immutable and ensuring shared objects are safely published.
+                - **Immutability**:
+                    - Make fields `final` whenever possible.
+                    - Ensure all fields are initialized during construction.
+                    - Do not provide setters for mutable state.
+                    - Use defensive copying for mutable components (like `List` or `Date`) passed into constructors or returned from getters, or use unmodifiable collections.
+                    - Consider using the builder pattern for complex immutable objects.
+                - **Safe Publication**:
+                    - Ensure that shared objects are correctly published to other threads (e.g., by initializing them in static initializers, storing them in `volatile` fields, or using proper synchronization).
+                    - `java.util.concurrent` collections and atomics handle safe publication internally for their state.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Immutable class with safe publication
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+// Immutable class
+public final class ImmutableValue {
+    private final int value;
+    private final List<String> items;
+
+    public ImmutableValue(int value, List<String> items) {
+        this.value = value;
+        // Defensive copy to ensure immutability
+        this.items = List.copyOf(items);
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public List<String> getItems() {
+        return items; // Already immutable
+    }
+}
+
+// Safe publication example
+class SafePublicationExample {
+    private static final Map<String, String> cache = new ConcurrentHashMap<>();
+
+    public static String getData(String key) {
+        return cache.computeIfAbsent(key, k -> {
+            // Safe publication through ConcurrentHashMap
+            return "Data for " + k;
+        });
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Mutable class with unsafe publication
+import java.util.ArrayList;
+import java.util.List;
+
+public class MutableValue {
+    private int value;
+    private List<String> items; // Mutable field
+
+    public MutableValue(int value, List<String> items) {
+        this.value = value;
+        this.items = items; // Direct reference - not safe
+    }
+
+    public List<String> getItems() {
+        return items; // Returns mutable reference
+    }
+
+    // BAD: Unsafe publication
+    public static MutableValue instance;
+
+    public static void initialize() {
+        // Unsafe publication - other threads might see partially constructed object
+        instance = new MutableValue(42, new ArrayList<>());
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="6" id="performance-considerations">
+            <example-header>
+                <example-title>Performance Considerations in Concurrency</example-title>
+                <example-subtitle>Optimize Concurrent Code for Performance</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Be mindful of performance implications in concurrent applications.
+                - **Lock Contention**: Reduce contention by narrowing lock scopes, using finer-grained locks (lock striping), or exploring optimistic locking or lock-free data structures.
+                - **Memory Consistency**: Understand the Java Memory Model (JMM). Use `volatile` for visibility of single variables across threads. Be aware of happens-before relationships established by synchronization.
+                - **Context Switching**: Excessive threads can lead to high context-switching overhead. Size thread pools appropriately.
+                - **False Sharing**: Be aware of false sharing when mutable fields accessed by different threads reside on the same cache line.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Performance-optimized concurrent code
+import java.util.concurrent.locks.Lock;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+// Lock striping for better performance
+class StripedMap<K, V> {
+    private static final int STRIPE_COUNT = 16;
+    private final List<Lock> stripes;
+    private final List<Map<K, V>> buckets;
+
+    public StripedMap() {
+        stripes = new ArrayList<>(STRIPE_COUNT);
+        buckets = new ArrayList<>(STRIPE_COUNT);
+        for (int i = 0; i < STRIPE_COUNT; i++) {
+            stripes.add(new ReentrantLock());
+            buckets.add(new HashMap<>());
+        }
+    }
+
+    private int getStripeIndex(K key) {
+        return Math.abs(key.hashCode() % STRIPE_COUNT);
+    }
+
+    public V get(K key) {
+        int index = getStripeIndex(key);
+        Lock lock = stripes.get(index);
+        lock.lock();
+        try {
+            return buckets.get(index).get(key);
+        } finally {
+            lock.unlock();
+        }
+    }
+
+    public V put(K key, V value) {
+        int index = getStripeIndex(key);
+        Lock lock = stripes.get(index);
+        lock.lock();
+        try {
+            return buckets.get(index).put(key, value);
+        } finally {
+            lock.unlock();
+        }
+    }
+}
+
+// Memory consistency with volatile
+class MemoryConsistencyExample {
+    private volatile boolean flag = false;
+    private int data = 0;
+
+    public void writer() {
+        data = 42;
+        flag = true; // Volatile write establishes happens-before
+    }
+
+    public void reader() {
+        while (!flag) {
+            // Spin wait
+        }
+        // Guaranteed to see data = 42
+        System.out.println("Data: " + data);
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Performance-harming concurrent code
+import java.util.HashMap;
+import java.util.Map;
+
+public class PoorPerformance {
+    private final Map<String, String> map = new HashMap<>();
+
+    // BAD: Coarse-grained locking
+    public synchronized String get(String key) {
+        return map.get(key);
+    }
+
+    public synchronized void put(String key, String value) {
+        map.put(key, value);
+    }
+
+    // BAD: Non-volatile field without synchronization
+    private boolean flag = false;
+    private int data = 0;
+
+    public void writer() {
+        data = 42;
+        flag = true; // Other threads might not see this change
+    }
+
+    public void reader() {
+        while (!flag) {
+            // Might loop forever
+        }
+        // Might see stale data
+        System.out.println("Data: " + data);
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="7" id="testing-debugging">
+            <example-header>
+                <example-title>Testing and Debugging Concurrent Code</example-title>
+                <example-subtitle>Rigorously Test and Debug Concurrent Applications</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Thoroughly test concurrent code using appropriate tools and techniques to identify race conditions, deadlocks, and other concurrency issues.
+                - Write unit tests for thread-safe components with proper synchronization testing.
+                - Use stress tests to reveal race conditions and deadlocks under load.
+                - Implement integration tests for concurrent interactions between components.
+                - Utilize thread dump analysis and profiling tools for debugging.
+                - Apply proper logging strategies for concurrent environments.
+                - Use testing frameworks like JUnit 5 with parallel execution capabilities.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Proper testing of concurrent code
+import java.util.concurrent.*;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.List;
+import java.util.Collections;
+import java.util.ArrayList;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.RepeatedTest;
+import static org.junit.jupiter.api.Assertions.*;
+
+class ConcurrentTestExample {
+
+    @Test
+    @RepeatedTest(100) // Run multiple times to catch race conditions
+    void testThreadSafeCounter() throws InterruptedException {
+        ThreadSafeCounter counter = new ThreadSafeCounter();
+        int numberOfThreads = 10;
+        int incrementsPerThread = 1000;
+
+        ExecutorService executor = Executors.newFixedThreadPool(numberOfThreads);
+        CountDownLatch latch = new CountDownLatch(numberOfThreads);
+
+        for (int i = 0; i < numberOfThreads; i++) {
+            executor.submit(() -> {
+                try {
+                    for (int j = 0; j < incrementsPerThread; j++) {
+                        counter.increment();
+                    }
+                } finally {
+                    latch.countDown();
+                }
+            });
+        }
+
+        assertTrue(latch.await(10, TimeUnit.SECONDS));
+        executor.shutdown();
+
+        assertEquals(numberOfThreads * incrementsPerThread, counter.getValue());
+    }
+
+    @Test
+    void testProducerConsumer() throws InterruptedException {
+        BlockingQueue<String> queue = new LinkedBlockingQueue<>(10);
+        List<String> consumed = Collections.synchronizedList(new ArrayList<>());
+
+        ExecutorService executor = Executors.newFixedThreadPool(4);
+        CountDownLatch latch = new CountDownLatch(2);
+
+        // Producer
+        executor.submit(() -> {
+            try {
+                for (int i = 0; i < 5; i++) {
+                    queue.put("item-" + i);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            } finally {
+                latch.countDown();
+            }
+        });
+
+        // Consumer
+        executor.submit(() -> {
+            try {
+                for (int i = 0; i < 5; i++) {
+                    String item = queue.take();
+                    consumed.add(item);
+                }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            } finally {
+                latch.countDown();
+            }
+        });
+
+        assertTrue(latch.await(5, TimeUnit.SECONDS));
+        executor.shutdown();
+        assertEquals(5, consumed.size());
+    }
+
+    private static class ThreadSafeCounter {
+        private final AtomicInteger count = new AtomicInteger(0);
+
+        public void increment() {
+            count.incrementAndGet();
+        }
+
+        public int getValue() {
+            return count.get();
+        }
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Inadequate testing of concurrent code
+import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
+class PoorConcurrentTesting {
+
+    @Test
+    void testCounter() {
+        // BAD: Only testing single-threaded scenario
+        UnsafeCounter counter = new UnsafeCounter();
+        counter.increment();
+        assertEquals(1, counter.getValue());
+
+        // This test passes but doesn't verify thread safety
+    }
+
+    @Test
+    void testConcurrentAccess() throws InterruptedException {
+        UnsafeCounter counter = new UnsafeCounter();
+
+        // BAD: Creating threads but not waiting for completion
+        new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        }).start();
+
+        new Thread(() -> {
+            for (int i = 0; i < 1000; i++) {
+                counter.increment();
+            }
+        }).start();
+
+        // BAD: Not waiting for threads to complete
+        Thread.sleep(100); // Unreliable timing
+
+        // This assertion might pass or fail randomly
+        // assertEquals(2000, counter.getValue());
+    }
+
+    private static class UnsafeCounter {
+        private int count = 0;
+
+        public void increment() {
+            count++; // Not thread-safe
+        }
+
+        public int getValue() {
+            return count;
+        }
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="8" id="virtual-threads">
             <example-header>
                 <example-title>Embrace Virtual Threads for Enhanced Scalability</example-title>
                 <example-subtitle>Use Virtual Threads for I/O-bound Tasks</example-subtitle>
@@ -891,6 +1315,405 @@ public class BadVirtualThreadUsage {
 
     private void performTaskForUser(String userId) {
         System.out.println("Processing for user: " + userId);
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="9" id="structured-concurrency">
+            <example-header>
+                <example-title>Simplify Concurrent Code with Structured Concurrency</example-title>
+                <example-subtitle>Manage Related Tasks as a Single Unit</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use `StructuredTaskScope` to simplify the management of multiple related concurrent tasks as a single unit of work, improving error handling, cancellation, and resource management.
+                - Use `StructuredTaskScope.ShutdownOnFailure()` for fail-fast behavior.
+                - Use `StructuredTaskScope.ShutdownOnSuccess()` for racing tasks.
+                - Ensure proper resource cleanup with try-with-resources.
+                - Handle task results and exceptions appropriately.
+                - Combine structured concurrency with virtual threads for optimal performance.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Structured concurrency for managing related tasks
+import java.util.concurrent.StructuredTaskScope;
+import java.util.concurrent.Future;
+import java.util.List;
+
+class StructuredConcurrencyExample {
+
+    // Fetch user data from multiple sources
+    public UserData fetchCompleteUserData(String userId) throws Exception {
+        try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+
+            // Fork multiple related tasks
+            Future<String> profileFuture = scope.fork(() -> fetchUserProfile(userId));
+            Future<String> settingsFuture = scope.fork(() -> fetchUserSettings(userId));
+            Future<String> ordersFuture = scope.fork(() -> fetchUserOrders(userId));
+
+            // Wait for all tasks to complete or fail
+            scope.join();
+            scope.throwIfFailed();
+
+            // All tasks completed successfully
+            return new UserData(
+                profileFuture.resultNow(),
+                settingsFuture.resultNow(),
+                ordersFuture.resultNow()
+            );
+        }
+    }
+
+    // Race multiple service calls and return first success
+    public String fetchDataFromAnySource(String query) throws Exception {
+        try (var scope = new StructuredTaskScope.ShutdownOnSuccess<String>()) {
+
+            // Fork competing tasks
+            scope.fork(() -> fetchFromPrimaryService(query));
+            scope.fork(() -> fetchFromSecondaryService(query));
+            scope.fork(() -> fetchFromCacheService(query));
+
+            // Wait for first successful completion
+            scope.join();
+            return scope.result();
+        }
+    }
+
+    // Batch processing with structured concurrency
+    public List<String> processBatch(List<String> items) throws Exception {
+        try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+
+            List<Future<String>> futures = items.stream()
+                .map(item -> scope.fork(() -> processItem(item)))
+                .toList();
+
+            scope.join();
+            scope.throwIfFailed();
+
+            return futures.stream()
+                .map(Future::resultNow)
+                .toList();
+        }
+    }
+
+    private String fetchUserProfile(String userId) {
+        // Simulate I/O operation
+        try { Thread.sleep(100); } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return "Profile for " + userId;
+    }
+
+    private String fetchUserSettings(String userId) {
+        try { Thread.sleep(150); } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return "Settings for " + userId;
+    }
+
+    private String fetchUserOrders(String userId) {
+        try { Thread.sleep(200); } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return "Orders for " + userId;
+    }
+
+    private String fetchFromPrimaryService(String query) {
+        try { Thread.sleep(300); } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return "Primary result for: " + query;
+    }
+
+    private String fetchFromSecondaryService(String query) {
+        try { Thread.sleep(200); } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return "Secondary result for: " + query;
+    }
+
+    private String fetchFromCacheService(String query) {
+        try { Thread.sleep(50); } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return "Cached result for: " + query;
+    }
+
+    private String processItem(String item) {
+        try { Thread.sleep(100); } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+        return "Processed: " + item;
+    }
+
+    record UserData(String profile, String settings, String orders) {}
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Manual task management without structured concurrency
+import java.util.concurrent.*;
+import java.util.List;
+import java.util.ArrayList;
+
+class BadStructuredConcurrency {
+
+    // BAD: Manual task management with resource leaks
+    public UserData fetchUserDataManually(String userId) {
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+
+        try {
+            Future<String> profileFuture = executor.submit(() -> fetchUserProfile(userId));
+            Future<String> settingsFuture = executor.submit(() -> fetchUserSettings(userId));
+            Future<String> ordersFuture = executor.submit(() -> fetchUserOrders(userId));
+
+            // BAD: No proper error handling
+            return new UserData(
+                profileFuture.get(),
+                settingsFuture.get(),
+                ordersFuture.get()
+            );
+        } catch (Exception e) {
+            // BAD: Poor error handling
+            throw new RuntimeException(e);
+        } finally {
+            // BAD: Improper shutdown
+            executor.shutdown();
+        }
+    }
+
+    // BAD: No cancellation when one task fails
+    public String fetchFromAnySourceBadly(String query) {
+        ExecutorService executor = Executors.newFixedThreadPool(3);
+
+        try {
+            Future<String> primary = executor.submit(() -> fetchFromPrimaryService(query));
+            Future<String> secondary = executor.submit(() -> fetchFromSecondaryService(query));
+            Future<String> cache = executor.submit(() -> fetchFromCacheService(query));
+
+            // BAD: All tasks continue even if one succeeds
+            while (true) {
+                if (primary.isDone() && !primary.isCancelled()) {
+                    return primary.get();
+                }
+                if (secondary.isDone() && !secondary.isCancelled()) {
+                    return secondary.get();
+                }
+                if (cache.isDone() && !cache.isCancelled()) {
+                    return cache.get();
+                }
+                Thread.sleep(10);
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        } finally {
+            executor.shutdown();
+        }
+    }
+
+    record UserData(String profile, String settings, String orders) {}
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="10" id="scoped-values">
+            <example-header>
+                <example-title>Manage Thread-Shared Data with Scoped Values</example-title>
+                <example-subtitle>Use Scoped Values for Thread-Safe Context Propagation</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Prefer `ScopedValue` over `ThreadLocal` for sharing immutable data robustly and efficiently across tasks within a dynamically bounded scope, especially when working with virtual threads.
+                - Use `ScopedValue.newInstance()` to create scoped value instances.
+                - Use `ScopedValue.where()` to establish scoped bindings.
+                - Prefer scoped values for immutable context data.
+                - Avoid `ThreadLocal` with virtual threads due to potential memory issues.
+                - Use scoped values for request-scoped data in web applications.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Scoped values for thread-safe context propagation
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.StructuredTaskScope;
+import java.util.concurrent.Future;
+import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+
+class ScopedValueExample {
+
+    // Define scoped values for different types of context
+    private static final ScopedValue<String> USER_ID = ScopedValue.newInstance();
+    private static final ScopedValue<String> REQUEST_ID = ScopedValue.newInstance();
+    private static final ScopedValue<Map<String, String>> SECURITY_CONTEXT = ScopedValue.newInstance();
+
+    private final ExecutorService virtualExecutor = Executors.newVirtualThreadPerTaskExecutor();
+
+    // Web request processing with scoped context
+    public String handleWebRequest(String userId, String requestId, Map<String, String> securityContext) {
+        return ScopedValue.where(USER_ID, userId)
+            .where(REQUEST_ID, requestId)
+            .where(SECURITY_CONTEXT, securityContext)
+            .call(() -> processRequestWithContext());
+    }
+
+    private String processRequestWithContext() {
+        String userId = USER_ID.get();
+        String requestId = REQUEST_ID.get();
+
+        System.out.println("Processing request " + requestId + " for user " + userId);
+
+        // Process in parallel while maintaining context
+        return ScopedValue.where(USER_ID, userId)
+            .where(REQUEST_ID, requestId)
+            .where(SECURITY_CONTEXT, SECURITY_CONTEXT.get())
+            .call(() -> {
+                try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+
+                    // All forked tasks inherit the scoped values
+                    Future<String> businessLogic = scope.fork(this::executeBusinessLogic);
+                    Future<String> auditLog = scope.fork(this::createAuditLog);
+                    Future<String> notification = scope.fork(this::sendNotification);
+
+                    scope.join();
+                    scope.throwIfFailed();
+
+                    return combineResults(
+                        businessLogic.resultNow(),
+                        auditLog.resultNow(),
+                        notification.resultNow()
+                    );
+
+                } catch (Exception e) {
+                    throw new RuntimeException("Request processing failed", e);
+                }
+            });
+    }
+
+    private String executeBusinessLogic() {
+        String userId = USER_ID.get();
+        String requestId = REQUEST_ID.get();
+
+        // Simulate business logic
+        try { Thread.sleep(100); } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+        }
+
+        return "Business logic completed for user " + userId + " (request: " + requestId + ")";
+    }
+
+    private String createAuditLog() {
+        String userId = USER_ID.get();
+        String requestId = REQUEST_ID.get();
+        Map<String, String> securityContext = SECURITY_CONTEXT.get();
+
+        String securityInfo = securityContext.getOrDefault("role", "unknown");
+        return "Audit logged for user " + userId + " with role " + securityInfo + " (request: " + requestId + ")";
+    }
+
+    private String sendNotification() {
+        String userId = USER_ID.get();
+        String requestId = REQUEST_ID.get();
+
+        return "Notification sent to user " + userId + " (request: " + requestId + ")";
+    }
+
+    // Nested scoped value usage
+    public void processWithNestedScope(String userId, List<String> tasks) {
+        ScopedValue.where(USER_ID, userId)
+            .run(() -> {
+                for (String task : tasks) {
+                    ScopedValue.where(REQUEST_ID, "task-" + task)
+                        .run(() -> processTask(task));
+                }
+            });
+    }
+
+    private void processTask(String task) {
+        String userId = USER_ID.get();
+        String requestId = REQUEST_ID.get();
+
+        System.out.println("Processing task " + task + " for user " + userId + " (request: " + requestId + ")");
+    }
+
+    private String combineResults(String businessResult, String auditResult, String notificationResult) {
+        return String.format("Results: [%s] [%s] [%s]", businessResult, auditResult, notificationResult);
+    }
+
+    public void shutdown() {
+        virtualExecutor.shutdown();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                                         <code-block language="java"><![CDATA[// AVOID: ThreadLocal with virtual threads
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.Map;
+import java.util.HashMap;
+
+class BadScopedValueUsage {
+
+    // BAD: Using ThreadLocal with virtual threads
+    private static final ThreadLocal<String> USER_CONTEXT = new ThreadLocal<>();
+
+    public void processWithThreadLocal(String userId) {
+        USER_CONTEXT.set(userId);
+
+        ExecutorService virtualExecutor = Executors.newVirtualThreadPerTaskExecutor();
+
+        virtualExecutor.submit(() -> {
+            // BAD: ThreadLocal values don't propagate to virtual threads properly
+            String currentUserId = USER_CONTEXT.get(); // Likely null
+            System.out.println("Processing for user: " + currentUserId);
+        });
+
+        // BAD: Not cleaning up ThreadLocal
+        // USER_CONTEXT.remove(); // Missing cleanup
+    }
+
+    // BAD: Manual context propagation
+    public void processWithManualPropagation(String userId, String requestId) {
+        ExecutorService executor = Executors.newFixedThreadPool(10);
+
+        // BAD: Manually passing context to each task
+        executor.submit(() -> {
+            processTask(userId, requestId, "task1");
+        });
+
+        executor.submit(() -> {
+            processTask(userId, requestId, "task2");
+        });
+
+        // BAD: Error-prone and verbose
+    }
+
+    private void processTask(String userId, String requestId, String task) {
+        System.out.println("Processing " + task + " for user " + userId + " (request: " + requestId + ")");
+    }
+
+    // BAD: ThreadLocal memory leak
+    private static final ThreadLocal<Map<String, String>> CONTEXT =
+        ThreadLocal.withInitial(HashMap::new);
+
+    public void leakyContextManagement() {
+        CONTEXT.get().put("userId", "123");
+        CONTEXT.get().put("requestId", "456");
+
+        // Process something
+        processData();
+
+        // BAD: Forgetting to clean up can cause memory leaks
+        // CONTEXT.remove(); // Missing cleanup
+    }
+
+    private void processData() {
+        System.out.println("Processing data...");
     }
 }]]></code-block>
                 </bad-example>
