@@ -200,7 +200,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("126-java-logging.mdc");
 
             // When
-            String actualResult = generator.generate("126-java-logging.xml", "cursor-rule-generator.xsl");
+            String actualResult = generator.generate("126-java-logging.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -309,7 +309,7 @@ class CursorRuleGeneratorTest {
         String generalGuidelinesResult = generator.generate("123-java-general-guidelines.xml", "cursor-rule-generator.xsl");
         String secureCodingResult = generator.generate("124-java-secure-coding.xml", "cursor-rule-generator.xsl");
         String concurrencyResult = generator.generate("125-java-concurrency.xml", "cursor-rule-generator.xsl");
-        String loggingResult = generator.generate("126-java-logging.xml", "cursor-rule-generator.xsl");
+        String loggingResult = generator.generate("126-java-logging.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String unitTestingResult = generator.generate("131-java-unit-testing.xml", "cursor-rule-generator.xsl");
         String refactoringWithModernFeaturesResult = generator.generate("141-java-refactoring-with-modern-features.xml", "cursor-rule-generator.xsl");
         String functionalProgrammingResult = generator.generate("142-java-functional-programming.xml", "cursor-rule-generator.xsl");
@@ -324,7 +324,7 @@ class CursorRuleGeneratorTest {
         //saveGeneratedContentToTarget(generalGuidelinesResult, "unified-general-guidelines.mdc");
         //saveGeneratedContentToTarget(secureCodingResult, "unified-secure-coding.mdc");
         //saveGeneratedContentToTarget(concurrencyResult, "unified-concurrency.mdc");
-        //saveGeneratedContentToTarget(loggingResult, "unified-logging.mdc");
+        saveGeneratedContentToTarget(loggingResult, "126-java-logging.mdc");
         //saveGeneratedContentToTarget(unitTestingResult, "unified-unit-testing.mdc");
         //saveGeneratedContentToTarget(refactoringWithModernFeaturesResult, "unified-refactoring-with-modern-features.mdc");
         //saveGeneratedContentToTarget(dataOrientedProgrammingResult, "unified-data-oriented-programming.mdc");

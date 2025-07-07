@@ -6,8 +6,8 @@
     <metadata>
         <!-- Markdown Front Matter for Cursor Rules -->
         <cursor-ai>
-            <description>Java Logging Best Practices</description>
-            <globs>*.java</globs>
+            <description></description>
+            <globs></globs>
             <always-apply>false</always-apply>
         </cursor-ai>
         <tags>
@@ -27,6 +27,16 @@
 
     <goal>
         Effective Java logging involves selecting a standard framework (SLF4J with Logback/Log4j2), using appropriate log levels (ERROR, WARN, INFO, DEBUG, TRACE), and adhering to core practices like parameterized logging, proper exception handling, and avoiding sensitive data exposure. Configuration should be environment-specific with clear output formats. Security is paramount: mask sensitive data, control log access, and ensure secure transmission. Implement centralized log aggregation, monitoring, and alerting for proactive issue detection. Finally, logging behavior and its impact should be validated through comprehensive testing.
+
+        ### Implementing These Principles
+
+        1. **Start with framework selection**: Choose SLF4J with Logback as your standard logging approach.
+        2. **Establish logging level conventions**: Create consistent patterns for when to use each log level.
+        3. **Implement security-first practices**: Always mask sensitive data and validate log outputs.
+        4. **Use structured logging**: Leverage parameterized logging and MDC for better observability.
+        5. **Monitor and measure**: Set up proper log aggregation and alerting systems.
+
+        Remember, good logging in Java is about operational excellence - making your application's behavior transparent and debuggable while maintaining security and performance.
     </goal>
 
     <examples>
