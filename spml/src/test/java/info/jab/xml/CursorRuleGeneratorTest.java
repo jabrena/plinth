@@ -166,7 +166,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("124-java-secure-coding.mdc");
 
             // When
-            String actualResult = generator.generate("124-java-secure-coding.xml", "cursor-rule-generator.xsl");
+            String actualResult = generator.generate("124-java-secure-coding.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -183,7 +183,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("125-java-concurrency.mdc");
 
             // When
-            String actualResult = generator.generate("125-java-concurrency.xml", "cursor-rule-generator.xsl");
+            String actualResult = generator.generate("125-java-concurrency.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -200,7 +200,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("126-java-logging.mdc");
 
             // When
-            String actualResult = generator.generate("126-java-logging.xml", "cursor-rule-generator.xsl");
+            String actualResult = generator.generate("126-java-logging.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -217,7 +217,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("131-java-unit-testing.mdc");
 
             // When
-            String actualResult = generator.generate("131-java-unit-testing.xml", "cursor-rule-generator.xsl");
+            String actualResult = generator.generate("131-java-unit-testing.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -234,7 +234,7 @@ class CursorRuleGeneratorTest {
             String expectedContent = loadExpectedContent("141-java-refactoring-with-modern-features.mdc");
 
             // When
-            String actualResult = generator.generate("141-java-refactoring-with-modern-features.xml", "cursor-rule-generator.xsl");
+            String actualResult = generator.generate("141-java-refactoring-with-modern-features.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
 
             // Then - Unified XSLT should produce identical output to expected
             assertThat(actualResult)
@@ -307,11 +307,11 @@ class CursorRuleGeneratorTest {
         String objectOrientedDesignResult = generator.generate("121-java-object-oriented-design.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String typeDesignResult = generator.generate("122-java-type-design.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String generalGuidelinesResult = generator.generate("123-java-general-guidelines.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
-        String secureCodingResult = generator.generate("124-java-secure-coding.xml", "cursor-rule-generator.xsl");
-        String concurrencyResult = generator.generate("125-java-concurrency.xml", "cursor-rule-generator.xsl");
-        String loggingResult = generator.generate("126-java-logging.xml", "cursor-rule-generator.xsl");
-        String unitTestingResult = generator.generate("131-java-unit-testing.xml", "cursor-rule-generator.xsl");
-        String refactoringWithModernFeaturesResult = generator.generate("141-java-refactoring-with-modern-features.xml", "cursor-rule-generator.xsl");
+        String secureCodingResult = generator.generate("124-java-secure-coding.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
+        String concurrencyResult = generator.generate("125-java-concurrency.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
+        String loggingResult = generator.generate("126-java-logging.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
+        String unitTestingResult = generator.generate("131-java-unit-testing.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
+        String refactoringWithModernFeaturesResult = generator.generate("141-java-refactoring-with-modern-features.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String functionalProgrammingResult = generator.generate("142-java-functional-programming.xml", "cursor-rule-generator-1.1.xsl", "spml-1.1.xsd");
         String dataOrientedProgrammingResult = generator.generate("143-java-data-oriented-programming.xml", "cursor-rule-generator.xsl");
 
@@ -322,13 +322,13 @@ class CursorRuleGeneratorTest {
         saveGeneratedContentToTarget(objectOrientedDesignResult, "121-java-object-oriented-design.mdc");
         saveGeneratedContentToTarget(typeDesignResult, "122-java-type-design.mdc");
         saveGeneratedContentToTarget(generalGuidelinesResult, "123-java-general-guidelines.mdc");
-        //saveGeneratedContentToTarget(secureCodingResult, "unified-secure-coding.mdc");
-        //saveGeneratedContentToTarget(concurrencyResult, "unified-concurrency.mdc");
-        //saveGeneratedContentToTarget(loggingResult, "unified-logging.mdc");
-        //saveGeneratedContentToTarget(unitTestingResult, "unified-unit-testing.mdc");
-        //saveGeneratedContentToTarget(refactoringWithModernFeaturesResult, "unified-refactoring-with-modern-features.mdc");
-        //saveGeneratedContentToTarget(dataOrientedProgrammingResult, "unified-data-oriented-programming.mdc");
+        saveGeneratedContentToTarget(secureCodingResult, "124-java-secure-coding.mdc");
+        saveGeneratedContentToTarget(concurrencyResult, "125-java-concurrency.mdc");
+        saveGeneratedContentToTarget(loggingResult, "126-java-logging.mdc");
+        saveGeneratedContentToTarget(unitTestingResult, "131-java-unit-testing.mdc");
+        saveGeneratedContentToTarget(refactoringWithModernFeaturesResult, "unified-refactoring-with-modern-features.mdc");
         saveGeneratedContentToTarget(functionalProgrammingResult, "142-java-functional-programming.mdc");
+        //saveGeneratedContentToTarget(dataOrientedProgrammingResult, "unified-data-oriented-programming.mdc");
     }
 
     /**

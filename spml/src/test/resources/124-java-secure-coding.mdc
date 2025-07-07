@@ -1,27 +1,41 @@
 ---
-description: Java Secure coding guidelines
-globs: *.java
+description:
+globs:
 alwaysApply: false
 ---
 # Java Secure coding guidelines
 
-## System prompt characterization
+## Role
 
-Role definition: You are a Senior software engineer with extensive experience in Java software development
+You are a Senior software engineer with extensive experience in Java software development
 
-## Description
+## Instructions for AI
+
+Apply secure coding practices to Java code to prevent common vulnerabilities and enhance application security.
 
 This document provides essential Java secure coding guidelines, focusing on five key areas: validating all untrusted inputs to prevent attacks like injection and path traversal; protecting against injection attacks (e.g., SQL injection) by using parameterized queries or prepared statements; minimizing the attack surface by adhering to the principle of least privilege and reducing exposure; employing strong, current cryptographic algorithms for hashing, encryption, and digital signatures while avoiding deprecated ones; and handling exceptions securely by avoiding the exposure of sensitive information in error messages to users and logging detailed, non-sensitive diagnostic information for developers.
 
-## Table of contents
+### Implementing These Principles
 
-- Rule 1: Input Validation
-- Rule 2: Protect Against Injection Attacks
-- Rule 3: Minimize Attack Surface
-- Rule 4: Use Strong Cryptography
-- Rule 5: Handle Exceptions Securely
+These guidelines are built upon the following core principles:
 
-## Rule 1: Input Validation
+1.  **Comprehensive Input Validation**: Treat all external input as untrusted. Rigorously validate and sanitize data for type, length, format, and range before processing to prevent common vulnerabilities like injection attacks, path traversal, and buffer overflows.
+2.  **Defense Against Injection**: Actively protect against all forms of injection attacks (e.g., SQL, OS Command, LDAP, XPath). Primarily achieve this by using safe APIs like parameterized queries (e.g., `PreparedStatement` in JDBC) or dedicated libraries that correctly handle data escaping, and by never directly concatenating untrusted input into executable commands or queries.
+3.  **Attack Surface Minimization**: Adhere to the principle of least privilege for users, processes, and code. Reduce the exposure of system components by running with minimal necessary permissions, exposing only essential functionalities and network ports, and regularly reviewing and removing unused features, libraries, and accounts.
+4.  **Strong Cryptographic Practices**: Employ current, robust, and industry-standard cryptographic algorithms and libraries for all sensitive operations, including hashing (especially for passwords), encryption, and digital signatures. Avoid deprecated or weak algorithms. Ensure cryptographic keys are generated securely, stored safely, and managed properly throughout their lifecycle.
+5.  **Secure Exception Handling**: Manage exceptions in a way that does not expose sensitive information to users or attackers. Log detailed, non-sensitive diagnostic information for developers to aid in debugging, but provide generic, non-revealing error messages to clients. Avoid direct exposure of stack traces or internal system details in error outputs.
+
+## Examples
+
+### Table of contents
+
+- Example 1: Input Validation
+- Example 2: Protect Against Injection Attacks
+- Example 3: Minimize Attack Surface
+- Example 4: Use Strong Cryptography
+- Example 5: Handle Exceptions Securely
+
+### Example 1: Input Validation
 
 Title: Validate All Untrusted Inputs
 Description: Always validate and sanitize data received from untrusted sources (users, network, files, etc.) before processing. This helps prevent various attacks like injection, path traversal, and buffer overflows. Validation should check for type, length, format, and range.
@@ -100,7 +114,7 @@ public class UnsafeInputProcessor {
 }
 ```
 
-## Rule 2: Protect Against Injection Attacks
+### Example 2: Protect Against Injection Attacks
 
 Title: Use Parameterized Queries and Safe APIs
 Description: To prevent SQL Injection and other injection attacks, always use parameterized queries (PreparedStatements in JDBC) or an ORM that handles this automatically. Never concatenate user input directly into SQL queries, OS commands, or other executable statements.
@@ -199,7 +213,7 @@ public class VulnerableDataAccess {
 }
 ```
 
-## Rule 3: Minimize Attack Surface
+### Example 3: Minimize Attack Surface
 
 Title: Apply Principle of Least Privilege
 Description: Grant only necessary permissions to code and users. Avoid running processes with excessive privileges. Expose only essential functionality and network ports. Regularly review and remove unused features, libraries, and accounts.
@@ -307,7 +321,7 @@ public class UnsafeFileManager {
 // Having default passwords or credentials
 ```
 
-## Rule 4: Use Strong Cryptography
+### Example 4: Use Strong Cryptography
 
 Title: Employ Current and Robust Cryptographic Algorithms
 Description: Use well-vetted, industry-standard cryptographic libraries and algorithms for hashing, encryption, and digital signatures. Avoid deprecated or weak algorithms (e.g., MD5, SHA1 for passwords, DES). Keep cryptographic keys secure and manage them properly.
@@ -480,7 +494,7 @@ public class WeakCryptoUtils {
 // - Using weak key derivation functions
 ```
 
-## Rule 5: Handle Exceptions Securely
+### Example 5: Handle Exceptions Securely
 
 Title: Avoid Exposing Sensitive Information
 Description: Catch exceptions appropriately, but do not reveal sensitive system details or stack traces to users in production. Log detailed error information server-side for debugging, but provide generic error messages to the client.
@@ -503,131 +517,118 @@ public class SecureExceptionHandler {
             validateUser(userId);
             processData(sensitiveData);
 
-        } catch (ValidationException e) {
-            // Log detailed error for developers (no sensitive data)
-            logger.warn("Validation failed for user: {}. Error: {}",
-                       sanitizeForLogging(userId), e.getErrorCode());
+        } catch (UserNotFoundException e) {
+            // Log detailed error for debugging
+            logger.error("User not found during sensitive operation: userId={}", userId, e);
+            // Return generic error to client
+            throw new ServiceException("Operation failed", ErrorCode.INVALID_REQUEST);
 
-            // Provide generic error message to user
-            throw new ServiceException("Invalid input provided. Please check your data.", e);
-
-        } catch (DatabaseException e) {
-            // Log technical details for debugging
-            logger.error("Database error during operation for user: {}. Query: {}",
-                        sanitizeForLogging(userId), e.getQueryId(), e);
-
-            // Generic message to user - don't expose database details
-            throw new ServiceException("Service temporarily unavailable. Please try again later.", e);
-
-        } catch (SecurityException e) {
-            // Security incidents need special logging
-            logger.error("SECURITY: Unauthorized access attempt by user: {}. Details: {}",
-                        sanitizeForLogging(userId), e.getMessage());
-
-            // Don't give attackers information about what they're doing wrong
-            throw new ServiceException("Access denied.", e);
+        } catch (DataProcessingException e) {
+            // Log technical details
+            logger.error("Data processing failed: userId={}, dataLength={}",
+                        userId, sensitiveData.length(), e);
+            // Don't expose internal details
+            throw new ServiceException("Processing error occurred", ErrorCode.INTERNAL_ERROR);
 
         } catch (Exception e) {
-            // Catch-all for unexpected errors
-            logger.error("Unexpected error in sensitive operation for user: {}",
-                        sanitizeForLogging(userId), e);
-
-            throw new ServiceException("An unexpected error occurred. Please contact support.", e);
+            // Catch unexpected errors
+            logger.error("Unexpected error in sensitive operation: userId={}", userId, e);
+            throw new ServiceException("System error", ErrorCode.INTERNAL_ERROR);
         }
     }
 
-    /**
-     * Sanitizes user input for safe logging
-     */
-    private String sanitizeForLogging(String input) {
-        if (input == null) return "null";
+    // Secure error response helper
+    public void handleError(HttpServletResponse response, ServiceException e) throws IOException {
+        response.setStatus(e.getErrorCode().getHttpStatus());
+        response.setContentType("application/json");
 
-        // Remove or mask potentially sensitive characters
-        return input.replaceAll("[^a-zA-Z0-9-_]", "*");
+        String errorResponse = String.format(
+            "{\"error\": \"%s\", \"code\": \"%s\", \"timestamp\": \"%s\"}",
+            e.getMessage(), e.getErrorCode().name(), Instant.now()
+        );
+
+        response.getWriter().write(errorResponse);
+    }
+}
+
+// Secure error codes without sensitive details
+public enum ErrorCode {
+    INVALID_REQUEST(400, "Invalid request"),
+    UNAUTHORIZED(401, "Unauthorized"),
+    FORBIDDEN(403, "Forbidden"),
+    NOT_FOUND(404, "Not found"),
+    INTERNAL_ERROR(500, "Internal server error");
+
+    private final int httpStatus;
+    private final String message;
+
+    ErrorCode(int httpStatus, String message) {
+        this.httpStatus = httpStatus;
+        this.message = message;
     }
 
-    public void handleWebRequest(HttpServletResponse response, String userInput) {
-        try {
-            processUserInput(userInput);
-            response.setStatus(200);
-
-        } catch (ServiceException e) {
-            // Log the exception with context
-            logger.error("Service error processing request: {}", e.getMessage(), e);
-
-            try {
-                // Return generic error to client
-                response.setStatus(500);
-                response.getWriter().write("{\"error\":\"Internal server error\"}");
-            } catch (IOException ioException) {
-                logger.error("Failed to write error response", ioException);
-            }
-        }
-    }
+    public int getHttpStatus() { return httpStatus; }
+    public String getMessage() { return message; }
 }
 ```
 
 **Bad example:**
 
 ```java
-// AVOID: Insecure exception handling
+// AVOID: Exposing sensitive information
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 
 public class InsecureExceptionHandler {
 
-    public void performSensitiveOperation(String userId, String creditCardNumber) {
+    public void performSensitiveOperation(String userId, String sensitiveData)
+            throws Exception {
         try {
-            processPayment(userId, creditCardNumber);
-
-        } catch (SQLException e) {
-            // BAD: Exposing SQL error details to user
-            throw new RuntimeException("Database error: " + e.toString() +
-                                     " Query: " + e.getMessage());
-
-        } catch (SecurityException e) {
-            // BAD: Revealing security details to potential attacker
-            throw new RuntimeException("Security check failed: " + e.getMessage() +
-                                     " User role: admin required, current: " + getCurrentUserRole());
-
+            validateUser(userId);
+            processData(sensitiveData);
         } catch (Exception e) {
-            // BAD: Generic catch that might expose stack traces
-            e.printStackTrace(); // Prints to stderr, might be visible to users
-            throw new RuntimeException("Error processing payment for card: " +
-                                     creditCardNumber, e); // Leaks sensitive data!
+            // BAD: Exposing full exception details to caller
+            throw new Exception("Database connection failed: " + e.getMessage() +
+                              " at host: db.internal.company.com:5432", e);
         }
     }
 
-    public void handleWebRequest(HttpServletResponse response, String userInput) {
+    // BAD: Exposing stack traces to users
+    public void handleError(HttpServletResponse response, Exception e) throws IOException {
+        response.setStatus(500);
+        response.setContentType("text/plain");
+
+        // TERRIBLE: Exposing full stack trace to client
+        StringWriter sw = new StringWriter();
+        PrintWriter pw = new PrintWriter(sw);
+        e.printStackTrace(pw);
+
+        response.getWriter().write("Error occurred:\n" + sw.toString());
+    }
+
+    // BAD: Logging sensitive data
+    public void processPayment(String cardNumber, String cvv) {
         try {
-            processUserInput(userInput);
-
+            // Process payment...
         } catch (Exception e) {
-            try {
-                // BAD: Exposing full stack trace to client
-                response.getWriter().println("Error: " + e.toString());
-                e.printStackTrace(response.getWriter()); // NEVER do this!
-
-                // BAD: Revealing internal paths and system information
-                response.getWriter().println("System details: " + System.getProperty("user.dir"));
-                response.getWriter().println("Java version: " + System.getProperty("java.version"));
-
-            } catch (IOException ioException) {
-                // More problems - nested exception handling
-                ioException.printStackTrace();
-            }
+            // TERRIBLE: Logging sensitive data
+            System.out.println("Payment failed for card: " + cardNumber + ", CVV: " + cvv);
+            e.printStackTrace(); // Exposing stack trace in logs
         }
     }
 
-    public void authenticateUser(String username, String password) {
-        try {
-            performAuthentication(username, password);
-        } catch (Exception e) {
-            // BAD: Logging sensitive information
-            System.out.println("Authentication failed for user: " + username +
-                              " with password: " + password + " Error: " + e.getMessage());
+    // BAD: Different error messages reveal system information
+    public void login(String username, String password) throws Exception {
+        User user = userRepository.findByUsername(username);
+        if (user == null) {
+            throw new Exception("User '" + username + "' does not exist in database");
         }
+
+        if (!user.getPassword().equals(password)) {
+            throw new Exception("Invalid password for user '" + username + "'");
+        }
+
+        // This tells attackers which usernames exist vs which don't
     }
 }
 ```
