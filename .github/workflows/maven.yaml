@@ -19,7 +19,7 @@ jobs:
           curl -Ls https://sh.jbang.dev | bash -s - app setup
           echo "$HOME/.jbang/bin" >> $GITHUB_PATH
       - name: Validate Markdown Files
-        run: jbang scripts/MarkdownValidator.java --verbose
+        run: jbang scripts/MarkdownValidator.java --verbose .
 
   generate-cursor-rules:
     name: Generate Cursor Rules

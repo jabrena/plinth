@@ -3,7 +3,6 @@
 //DEPS info.picocli:picocli:4.7.5
 //DEPS org.commonmark:commonmark:0.21.0
 //DEPS org.commonmark:commonmark-ext-gfm-tables:0.21.0
-//JAVA 21
 
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
@@ -24,7 +23,7 @@ import java.util.stream.Stream;
 @Command(name = "markdown-validator", 
          mixinStandardHelpOptions = true, 
          version = "1.0",
-         description = "Validates markdown files from .cursor/rules directories")
+         description = "Validates markdown files from specified directories")
 public class MarkdownValidator implements Callable<Integer> {
 
     @Option(names = {"-v", "--verbose"}, description = "Enable verbose output")
@@ -33,13 +32,13 @@ public class MarkdownValidator implements Callable<Integer> {
     @Option(names = {"-f", "--fail-fast"}, description = "Stop on first validation error")
     boolean failFast;
 
+    @Option(names = {"-d", "--directories"}, 
+            description = "Directories to scan for markdown files (default: .cursor/rules,.cursor/rules/templates)",
+            split = ",")
+    List<String> targetDirectories = List.of(".cursor/rules", ".cursor/rules/templates");
+
     @Parameters(description = "Root directory to scan (default: current directory)")
     String rootDir = ".";
-
-    private static final List<String> TARGET_DIRECTORIES = List.of(
-        ".cursor/rules",
-        ".cursor/rules/templates"
-    );
 
     private static final List<String> MARKDOWN_EXTENSIONS = List.of(".md", ".mdc");
 
@@ -89,7 +88,7 @@ public class MarkdownValidator implements Callable<Integer> {
     private List<Path> findMarkdownFiles(Path root) throws IOException {
         List<Path> files = new ArrayList<>();
         
-        for (String targetDir : TARGET_DIRECTORIES) {
+        for (String targetDir : targetDirectories) {
             Path dir = root.resolve(targetDir);
             if (Files.exists(dir) && Files.isDirectory(dir)) {
                 try (Stream<Path> paths = Files.walk(dir)) {
