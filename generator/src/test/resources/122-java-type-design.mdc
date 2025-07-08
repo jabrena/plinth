@@ -851,6 +851,7 @@ class BadProductService {
     }
 }
 ```
+
 ## Output Format
 
 - Apply type design principles to improve code quality and maintainability

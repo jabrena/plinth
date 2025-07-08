@@ -323,7 +323,7 @@ public class SecureFileProcessor {
     }
 }]]></code-block>
                 </good-example>
-                <bad-example>
+                <bad-example last-item="true">
                     <code-block language="java"><![CDATA[// AVOID: Poor error handling
 public class UnsafeFileProcessor {
 

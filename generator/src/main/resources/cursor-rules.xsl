@@ -100,6 +100,10 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
             </xsl:call-template>
             <xsl:text>
 ```</xsl:text>
+            <xsl:if test="code-examples/bad-example/@last-item = 'true'">
+                <xsl:text>
+</xsl:text>
+            </xsl:if>
         </xsl:if>
         <xsl:if test="position() != last()">
             <xsl:text>

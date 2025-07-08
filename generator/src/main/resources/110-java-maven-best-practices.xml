@@ -554,7 +554,7 @@ my-app/
 </project>
                 ]]></code-block>
                 </good-example>
-                <bad-example>
+                <bad-example last-item="true">
                     <code-block language="xml"><![CDATA[
 <!-- Hardcoded versions scattered throughout the POM -->
 <project>

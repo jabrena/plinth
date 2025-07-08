@@ -850,7 +850,7 @@ class ProductService {
     }
 }]]></code-block>
                 </good-example>
-                <bad-example>
+                <bad-example last-item="true">
                     <code-block language="java"><![CDATA[import java.util.ArrayList;
 import java.util.HashMap;
 
