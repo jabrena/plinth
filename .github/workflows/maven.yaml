@@ -39,7 +39,6 @@ jobs:
   examples:
     name: Build Examples
     runs-on: ubuntu-latest
-    needs: validate-markdown
     strategy:
       matrix:
         example:
