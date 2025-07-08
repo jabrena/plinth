@@ -24,15 +24,15 @@ Analyze Java code to identify object-oriented design improvement opportunities a
 🔍 I found 3 object-oriented design improvements in this code:
 
 1. **CRITICAL: Single Responsibility Principle Violation**
-   - Problem: UserService handles data, persistence, and notifications
-   - Solutions: A) Split into separate services B) Extract repositories C) Use mediator pattern
+- Problem: UserService handles data, persistence, and notifications
+- Solutions: A) Split into separate services B) Extract repositories C) Use mediator pattern
 
 2. **DESIGN: Feature Envy in calculateTotal()**
-   - Problem: Method uses more Order data than Item data
-   - Solutions: A) Move to Order class B) Create Calculator utility C) Use visitor pattern
+- Problem: Method uses more Order data than Item data
+- Solutions: A) Move to Order class B) Create Calculator utility C) Use visitor pattern
 
 3. **QUALITY: Public fields break encapsulation**
-   - Solutions: A) Add getters/setters B) Use records C) Apply builder pattern
+- Solutions: A) Add getters/setters B) Use records C) Apply builder pattern
 
 Which would you like to implement? (1A, 1B, 1C, 2A, 2B, 2C, 3A, 3B, 3C, or 'show more details')
 ```
