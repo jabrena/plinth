@@ -5,7 +5,8 @@
 - Maven demo : `Help me to review the pom.xml following the best practices for dependency management and directory structure use the cursor rule @110-java-maven-best-practices`
 - Maven demo : `Can you improve the pom.xml using the cursor rule @111-java-maven-deps-and-plugins`
 - Maven demo: `Generate developer documentation with essential Maven commands using @112-java-maven-documentation`
-- Spring boot demo: `Review my code for object-oriented design using the cursor rule @121-java-object-oriented-design` WIP
+- Spring boot demo: `Review my code for object-oriented design using the cursor rule @121-java-object-oriented-design`
+- Spring boot demo: `Help me improve my type design using the cursor rule @122-java-type-design`
 
 ## List of examples
 
