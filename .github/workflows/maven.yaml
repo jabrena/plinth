@@ -3,9 +3,24 @@ name: CI Builds
 on: [push]
 
 jobs:
+  generate-cursor-rules:
+    name: Generate Cursor Rules
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true  # Fetches all submodules
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'graalvm' # See 'Supported distributions' for available options
+          java-version: '24'
+      - name: Generate Cursor Rules
+        run: cd generator && ./mvnw --batch-mode --no-transfer-progress verify --file pom.xml
+
   validate-markdown:
     name: Validate Markdown Files
     runs-on: ubuntu-latest
+    needs: generate-cursor-rules
     steps:
       - uses: actions/checkout@v4
         with:
@@ -20,21 +35,6 @@ jobs:
           echo "$HOME/.jbang/bin" >> $GITHUB_PATH
       - name: Validate Markdown Files
         run: jbang scripts/MarkdownValidator.java --verbose .
-
-  generate-cursor-rules:
-    name: Generate Cursor Rules
-    runs-on: ubuntu-latest
-    needs: validate-markdown
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          submodules: true  # Fetches all submodules
-      - uses: actions/setup-java@v4
-        with:
-          distribution: 'graalvm' # See 'Supported distributions' for available options
-          java-version: '24'
-      - name: Generate Cursor Rules
-        run: cd generator && ./mvnw --batch-mode --no-transfer-progress verify --file pom.xml
 
   examples:
     name: Build Examples
