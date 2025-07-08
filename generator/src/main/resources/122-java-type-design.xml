@@ -889,14 +889,14 @@ class BadProductService {
         </example>
     </examples>
 
-    <output-requirements-section>
-        <output-requirements-list>
-            <output-requirements-item>Apply type design principles to improve code quality and maintainability</output-requirements-item>
-            <output-requirements-item>Create type-safe wrappers for domain-specific types</output-requirements-item>
-            <output-requirements-item>Use generics to create flexible and reusable components</output-requirements-item>
-            <output-requirements-item>Establish clear type hierarchies and consistent naming conventions</output-requirements-item>
-            <output-requirements-item>Use BigDecimal for precision-sensitive calculations</output-requirements-item>
-            <output-requirements-item>Verify code changes compile and pass tests</output-requirements-item>
-        </output-requirements-list>
-    </output-requirements-section>
+    <output-format>
+        <output-format-list>
+            <output-format-item>Apply type design principles to improve code quality and maintainability</output-format-item>
+            <output-format-item>Create type-safe wrappers for domain-specific types</output-format-item>
+            <output-format-item>Use generics to create flexible and reusable components</output-format-item>
+            <output-format-item>Establish clear type hierarchies and consistent naming conventions</output-format-item>
+            <output-format-item>Use BigDecimal for precision-sensitive calculations</output-format-item>
+            <output-format-item>Verify code changes compile and pass tests</output-format-item>
+        </output-format-list>
+    </output-format>
 </prompt>

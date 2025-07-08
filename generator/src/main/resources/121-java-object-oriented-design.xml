@@ -2627,11 +2627,11 @@ class FileOperationException extends Exception {
 
     </examples>
 
-    <output-requirements-section>
-        <output-requirements-list>
-            <output-requirements-item>Apply object-oriented design principles to improve code quality and maintainability</output-requirements-item>
-            <output-requirements-item>Refactor code to follow SOLID principles and eliminate design smells</output-requirements-item>
-            <output-requirements-item>Verify code changes compile and pass tests</output-requirements-item>
-        </output-requirements-list>
-    </output-requirements-section>
+    <output-format>
+        <output-format-list>
+            <output-format-item>Apply object-oriented design principles to improve code quality and maintainability</output-format-item>
+            <output-format-item>Refactor code to follow SOLID principles and eliminate design smells</output-format-item>
+            <output-format-item>Verify code changes compile and pass tests</output-format-item>
+        </output-format-list>
+    </output-format>
 </prompt>

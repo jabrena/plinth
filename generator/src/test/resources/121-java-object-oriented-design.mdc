@@ -2466,7 +2466,7 @@ public class FileManager {
     }
 }
 ```
-## Output Requirements
+## Output Format
 
 - Apply object-oriented design principles to improve code quality and maintainability
 - Refactor code to follow SOLID principles and eliminate design smells

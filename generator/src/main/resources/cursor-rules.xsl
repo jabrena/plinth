@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output method="text" encoding="UTF-8"/>
-    <xsl:strip-space elements="prompt metadata tags example code-examples good-example bad-example output-requirements-section"/>
+    <xsl:strip-space elements="prompt metadata tags example code-examples good-example bad-example output-format"/>
 
     <xsl:template match="/prompt">
         <!-- Common frontmatter and header -->
@@ -27,8 +27,8 @@ alwaysApply: </xsl:text><xsl:value-of select="normalize-space(metadata/cursor-ai
 </xsl:text><xsl:value-of select="role"/>
         <!-- Process goal (Instructions for AI) after role -->
         <xsl:apply-templates select="goal"/>
-        <!-- Apply restrictions template if present -->
-        <xsl:apply-templates select="restrictions"/>
+        <!-- Apply constraints template if present -->
+        <xsl:apply-templates select="constraints"/>
 
         <!-- Examples section with auto-generated table of contents -->
         <xsl:if test="examples/toc[@auto-generate='true']">
@@ -46,7 +46,7 @@ alwaysApply: </xsl:text><xsl:value-of select="normalize-space(metadata/cursor-ai
         </xsl:if>
 
         <!-- Process all content sections (goal already processed above) -->
-        <xsl:apply-templates select="examples | output-requirements-section"/>
+        <xsl:apply-templates select="examples | output-format"/>
     </xsl:template>
 
     <!-- Examples container template -->
@@ -119,32 +119,32 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
         </xsl:call-template>
     </xsl:template>
 
-    <!-- Output requirements section template -->
-    <xsl:template match="output-requirements-section">
+    <!-- Output format section template -->
+    <xsl:template match="output-format">
         <xsl:text>
-## Output Requirements
+## Output Format
 
 </xsl:text>
-        <xsl:for-each select="output-requirements-list/output-requirements-item">
+        <xsl:for-each select="output-format-list/output-format-item">
             <xsl:text>- </xsl:text><xsl:value-of select="normalize-space(.)"/>
             <xsl:text>
 </xsl:text>
         </xsl:for-each>
     </xsl:template>
 
-    <!-- Restrictions template -->
-    <xsl:template match="restrictions">
+    <!-- Constraints template -->
+    <xsl:template match="constraints">
         <xsl:text>
-## Restrictions
+## Constraints
 
 </xsl:text>
-        <xsl:if test="restrictions-description">
-            <xsl:value-of select="normalize-space(restrictions-description)"/>
+        <xsl:if test="constraints-description">
+            <xsl:value-of select="normalize-space(constraints-description)"/>
             <xsl:text>
 
 </xsl:text>
         </xsl:if>
-        <xsl:for-each select="restriction-list/restriction">
+        <xsl:for-each select="constraint-list/constraint">
             <xsl:text>- </xsl:text><xsl:value-of select="normalize-space(.)"/>
             <xsl:text>
 </xsl:text>

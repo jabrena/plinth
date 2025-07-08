@@ -353,11 +353,11 @@ public class UnsafeFileProcessor {
         </example>
     </examples>
 
-    <output-requirements-section>
-        <output-requirements-list>
-            <output-requirements-item>Apply the Java general guidelines to improve code quality and maintainability</output-requirements-item>
-            <output-requirements-item>Follow naming conventions, formatting rules, and documentation standards</output-requirements-item>
-            <output-requirements-item>Implement comprehensive error handling with security considerations</output-requirements-item>
-        </output-requirements-list>
-    </output-requirements-section>
+    <output-format>
+        <output-format-list>
+            <output-format-item>Apply the Java general guidelines to improve code quality and maintainability</output-format-item>
+            <output-format-item>Follow naming conventions, formatting rules, and documentation standards</output-format-item>
+            <output-format-item>Implement comprehensive error handling with security considerations</output-format-item>
+        </output-format-list>
+    </output-format>
 </prompt>

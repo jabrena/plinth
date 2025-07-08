@@ -9,9 +9,9 @@
                 <xs:element ref="metadata"/>
                 <xs:element ref="role"/>
                 <xs:element ref="goal"/>
-                <xs:element ref="restrictions" minOccurs="0"/>
+                <xs:element ref="constraints" minOccurs="0"/>
                 <xs:element ref="examples" minOccurs="0"/>
-                <xs:element ref="output-requirements-section" minOccurs="0"/>
+                <xs:element ref="output-format" minOccurs="0"/>
             </xs:sequence>
             <xs:attribute name="id" type="xs:string" use="required"/>
             <xs:attribute name="version" type="xs:string" use="optional"/>
@@ -63,27 +63,27 @@
     <!-- Goal statement -->
     <xs:element name="goal" type="xs:string"/>
 
-    <!-- Restrictions block -->
-    <xs:element name="restrictions">
+    <!-- Constraints block -->
+    <xs:element name="constraints">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="restrictions-description" minOccurs="0"/>
-                <xs:element ref="restriction-list"/>
+                <xs:element ref="constraints-description" minOccurs="0"/>
+                <xs:element ref="constraint-list"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="restrictions-description" type="xs:string"/>
+    <xs:element name="constraints-description" type="xs:string"/>
 
-    <xs:element name="restriction-list">
+    <xs:element name="constraint-list">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="restriction" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="constraint" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="restriction" type="xs:string"/>
+    <xs:element name="constraint" type="xs:string"/>
 
     <!-- Examples container -->
     <xs:element name="examples">
@@ -180,23 +180,23 @@
         </xs:complexType>
     </xs:element>
 
-    <!-- Output requirements section -->
-    <xs:element name="output-requirements-section">
+    <!-- Output format section -->
+    <xs:element name="output-format">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="output-requirements-list"/>
+                <xs:element ref="output-format-list"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="output-requirements-list">
+    <xs:element name="output-format-list">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="output-requirements-item" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="output-format-item" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="output-requirements-item" type="xs:string"/>
+    <xs:element name="output-format-item" type="xs:string"/>
 
 </xs:schema>

@@ -15,7 +15,7 @@ When creating a README-DEV.md file for a Maven project, include ONLY the followi
 
 Create a markdown file named `README-DEV.md` with the following exact structure: [java-maven-documentation-template.md](mdc:.cursor/rules/templates/java-maven-documentation-template.md)
 
-## Restrictions
+## Constraints
 
 **MANDATORY REQUIREMENT**: Follow the embedded template EXACTLY - do not add, remove, or modify any steps, sections, or cursor rules that are not explicitly shown in the template. ### What NOT to Include:
 
@@ -24,7 +24,7 @@ Create a markdown file named `README-DEV.md` with the following exact structure:
 - **ONLY** use the exact wording and structure from the template
 - If a cursor rule exists in the workspace but is not in the template, **DO NOT** include it
 
-## Output Requirements
+## Output Format
 
 - Generate the complete markdown file following the embedded template exactly
 - Use proper markdown formatting with headers, code blocks, tables, and checklists
