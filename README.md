@@ -19,7 +19,7 @@ Using the Cursor rules is straightforward: simply `drag and drop` the cursor rul
 
 ⚠️ Currently, the cursor rules are released with the [manual scope](https://docs.cursor.com/context/rules#rule-type) on purpose by design to mitigate potential negative performance impact in communications with **The Cursor platform**.
 
-Review the following [sequence diagram](./docs/cursor-interaction-sequence.png) to understand th technical details.
+Review the following [sequence diagram](./docs/cursor-interaction-sequence.png) to understand the technical details.
 
 ## What is the structure of a System prompt?
 
