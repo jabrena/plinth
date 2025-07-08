@@ -219,15 +219,15 @@
         <executions>
           <execution>
             <id>copy-cursor-rules</id>
-            <phase>package</phase>
+            <phase>generate-test-resources</phase>
             <goals>
               <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.basedir}/../.cursor/rules</outputDirectory>
+              <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
               <resources>
                 <resource>
-                  <directory>${project.basedir}/src/test/resources</directory>
+                  <directory>${project.basedir}/../.cursor/rules</directory>
                   <includes>
                     <include>100-java-checklist-guide.mdc</include>
                     <include>110-java-maven-best-practices.mdc</include>
