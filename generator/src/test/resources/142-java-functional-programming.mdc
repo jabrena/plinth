@@ -9,7 +9,7 @@ alwaysApply: false
 
 You are a Senior software engineer with extensive experience in Java software development
 
-## Instructions for AI
+## Goal
 
 Apply functional programming principles in Java development, emphasizing immutability, pure functions, and type safety through functional interfaces and modern Java features.
 

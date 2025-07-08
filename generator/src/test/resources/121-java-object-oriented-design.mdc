@@ -9,7 +9,7 @@ alwaysApply: false
 
 You are a Senior software engineer with extensive experience in Java software development
 
-## Instructions for AI
+## Goal
 
 Apply comprehensive guidelines for robust Java object-oriented design and refactoring. Follow core principles like SOLID, DRY, and YAGNI, implement best practices for class and interface design including favoring composition over inheritance and designing for immutability. Master encapsulation, inheritance, and polymorphism, and identify and refactor common object-oriented design code smells such as God Classes, Feature Envy, and Data Clumps to promote maintainable, flexible, and understandable code.
 

@@ -115,7 +115,7 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
     <xsl:template match="goal">
         <xsl:text>
 
-## Instructions for AI
+## Goal
 
 </xsl:text>
         <xsl:call-template name="trim-goal-content">
