@@ -140,8 +140,6 @@ public class MarkdownValidator implements Callable<Integer> {
         }
     }
 
-
-
     private void addError(Path file, int lineNumber, String message) {
         errors.add(new ValidationError(file, lineNumber, message));
         if (verbose) {

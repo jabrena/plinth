@@ -34,7 +34,7 @@ jobs:
           curl -Ls https://sh.jbang.dev | bash -s - app setup
           echo "$HOME/.jbang/bin" >> $GITHUB_PATH
       - name: Validate Markdown Files
-        run: jbang scripts/MarkdownValidator.java --verbose .
+        run: jbang .github/scripts/MarkdownValidator.java --verbose .
 
   examples:
     name: Build Examples
