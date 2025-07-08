@@ -41,3 +41,14 @@ jobs:
           java-version: '24'
       - name: Build ${{ matrix.example.name }}
         run: cd ${{ matrix.example.path }} && ./mvnw --batch-mode --no-transfer-progress ${{ matrix.example.goal }} --file pom.xml
+  markdownlint:
+    name: Markdown Lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true  # Fetches all submodules
+      - uses: DavidAnson/markdownlint-cli2-action@v20
+        with:
+          fix: true
+          globs: '**/*.md, **/*.mdc'
