@@ -9,7 +9,7 @@ alwaysApply: false
 
 You are a Senior software engineer with extensive experience in Java software development
 
-## Instructions for AI
+## Goal
 
 Refactor Java code to use modern Java features (Java 8+) including lambda expressions, Stream API, Optional, java.time API, and other modern constructs for improved code readability, maintainability, and performance. Apply type design thinking principles to create clear, well-structured code that communicates intent effectively.
 

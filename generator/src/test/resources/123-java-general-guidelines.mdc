@@ -9,7 +9,7 @@ alwaysApply: false
 
 You are a Senior software engineer with extensive experience in Java software development
 
-## Instructions for AI
+## Goal
 
 This document outlines general Java coding guidelines covering fundamental aspects such as naming conventions for packages, classes, methods, variables, and constants; code formatting rules including indentation, line length, brace style, and whitespace usage; standards for organizing import statements; best practices for Javadoc documentation; and comprehensive error and exception handling with a strong focus on security, including avoiding sensitive information exposure, catching specific exceptions, and secure resource management.
 

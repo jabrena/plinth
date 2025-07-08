@@ -9,7 +9,7 @@ alwaysApply: false
 
 You are a Senior software engineer with extensive experience in Java software development
 
-## Instructions for AI
+## Goal
 
 Update the pom.xml based on the following rules about Maven best practices.
 
