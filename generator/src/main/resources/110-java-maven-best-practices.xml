@@ -626,7 +626,12 @@ my-app/
     <output-format>
         <output-format-list>
             <output-format-item>Update the file pom.xml if something is not correct</output-format-item>
-            <output-format-item>verify changes with the command: `mvn validate`</output-format-item>
         </output-format-list>
     </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>verify changes with the command: `mvn validate`</safeguards-item>
+        </safeguards-list>
+    </safeguards>
 </prompt>

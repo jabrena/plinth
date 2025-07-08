@@ -8,10 +8,12 @@
             <xs:sequence>
                 <xs:element ref="metadata"/>
                 <xs:element ref="role"/>
+                <xs:element ref="context" minOccurs="0"/>
                 <xs:element ref="goal"/>
                 <xs:element ref="constraints" minOccurs="0"/>
                 <xs:element ref="examples" minOccurs="0"/>
                 <xs:element ref="output-format" minOccurs="0"/>
+                <xs:element ref="safeguards" minOccurs="0"/>
             </xs:sequence>
             <xs:attribute name="id" type="xs:string" use="required"/>
             <xs:attribute name="version" type="xs:string" use="optional"/>
@@ -56,6 +58,9 @@
 
     <xs:element name="tag" type="xs:string"/>
     <xs:element name="title" type="xs:string"/>
+
+    <!-- Context information -->
+    <xs:element name="context" type="xs:string"/>
 
     <!-- System role -->
     <xs:element name="role" type="xs:string"/>
@@ -198,5 +203,24 @@
     </xs:element>
 
     <xs:element name="output-format-item" type="xs:string"/>
+
+    <!-- Safeguards section -->
+    <xs:element name="safeguards">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="safeguards-list"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="safeguards-list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="safeguards-item" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="safeguards-item" type="xs:string"/>
 
 </xs:schema>
