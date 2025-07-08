@@ -38,11 +38,11 @@
         </constraint-list>
     </constraints>
 
-    <output-requirements-section>
-        <output-requirements-list>
-            <output-requirements-item>Generate the complete markdown file following the embedded template exactly</output-requirements-item>
-            <output-requirements-item>Use proper markdown formatting with headers, code blocks, tables, and checklists</output-requirements-item>
-            <output-requirements-item>**VERIFY**: Final output contains ONLY what appears in the embedded template</output-requirements-item>
-        </output-requirements-list>
-    </output-requirements-section>
+    <output-format>
+        <output-format-list>
+            <output-format-item>Generate the complete markdown file following the embedded template exactly</output-format-item>
+            <output-format-item>Use proper markdown formatting with headers, code blocks, tables, and checklists</output-format-item>
+            <output-format-item>**VERIFY**: Final output contains ONLY what appears in the embedded template</output-format-item>
+        </output-format-list>
+    </output-format>
 </prompt>

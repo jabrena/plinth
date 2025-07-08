@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
     <xsl:output method="text" encoding="UTF-8"/>
-    <xsl:strip-space elements="prompt metadata tags example code-examples good-example bad-example output-requirements-section"/>
+    <xsl:strip-space elements="prompt metadata tags example code-examples good-example bad-example output-format"/>
 
     <xsl:template match="/prompt">
         <!-- Common frontmatter and header -->
@@ -46,7 +46,7 @@ alwaysApply: </xsl:text><xsl:value-of select="normalize-space(metadata/cursor-ai
         </xsl:if>
 
         <!-- Process all content sections (goal already processed above) -->
-        <xsl:apply-templates select="examples | output-requirements-section"/>
+        <xsl:apply-templates select="examples | output-format"/>
     </xsl:template>
 
     <!-- Examples container template -->
@@ -119,13 +119,13 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
         </xsl:call-template>
     </xsl:template>
 
-    <!-- Output requirements section template -->
-    <xsl:template match="output-requirements-section">
+    <!-- Output format section template -->
+    <xsl:template match="output-format">
         <xsl:text>
 ## Output Requirements
 
 </xsl:text>
-        <xsl:for-each select="output-requirements-list/output-requirements-item">
+        <xsl:for-each select="output-format-list/output-format-item">
             <xsl:text>- </xsl:text><xsl:value-of select="normalize-space(.)"/>
             <xsl:text>
 </xsl:text>

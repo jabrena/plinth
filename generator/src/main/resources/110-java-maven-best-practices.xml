@@ -623,10 +623,10 @@ my-app/
         </example>
     </examples>
 
-    <output-requirements-section>
-        <output-requirements-list>
-            <output-requirements-item>Update the file pom.xml if something is not correct</output-requirements-item>
-            <output-requirements-item>verify changes with the command: `mvn validate`</output-requirements-item>
-        </output-requirements-list>
-    </output-requirements-section>
+    <output-format>
+        <output-format-list>
+            <output-format-item>Update the file pom.xml if something is not correct</output-format-item>
+            <output-format-item>verify changes with the command: `mvn validate`</output-format-item>
+        </output-format-list>
+    </output-format>
 </prompt>
