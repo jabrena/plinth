@@ -122,7 +122,7 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
     <!-- Output format section template -->
     <xsl:template match="output-format">
         <xsl:text>
-## Output Requirements
+## Output Format
 
 </xsl:text>
         <xsl:for-each select="output-format-list/output-format-item">

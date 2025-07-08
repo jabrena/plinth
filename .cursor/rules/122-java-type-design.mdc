@@ -851,7 +851,7 @@ class BadProductService {
     }
 }
 ```
-## Output Requirements
+## Output Format
 
 - Apply type design principles to improve code quality and maintainability
 - Create type-safe wrappers for domain-specific types
