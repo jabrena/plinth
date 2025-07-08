@@ -19,7 +19,7 @@
             <tag>exceptions</tag>
             <tag>secure-practices</tag>
         </tags>
-        <version>1.0.0</version>
+        <version>0.8.0</version>
         <title>Java Secure coding guidelines</title>
     </metadata>
 

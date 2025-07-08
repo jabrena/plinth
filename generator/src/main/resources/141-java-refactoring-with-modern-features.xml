@@ -19,7 +19,7 @@
             <tag>optional</tag>
             <tag>best-practices</tag>
         </tags>
-        <version>1.0.0</version>
+        <version>0.8.0</version>
         <title>Modern Java Development Guidelines (Java 8+)</title>
     </metadata>
 

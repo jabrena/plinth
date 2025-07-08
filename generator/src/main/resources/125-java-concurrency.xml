@@ -19,7 +19,7 @@
             <tag>synchronization</tag>
             <tag>performance</tag>
         </tags>
-        <version>1.0.0</version>
+        <version>0.8.0</version>
         <title>Java rules for Concurrency objects</title>
     </metadata>
 

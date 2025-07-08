@@ -2471,4 +2471,7 @@ public class FileManager {
 
 - Apply object-oriented design principles to improve code quality and maintainability
 - Refactor code to follow SOLID principles and eliminate design smells
-- Verify code changes compile and pass tests
+
+## Safeguards
+
+- Verify code changes compile and pass tests: `mvn clean verify` or `./mvnw clean verify`

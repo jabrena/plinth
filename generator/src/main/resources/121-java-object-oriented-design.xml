@@ -2631,7 +2631,12 @@ class FileOperationException extends Exception {
         <output-format-list>
             <output-format-item>Apply object-oriented design principles to improve code quality and maintainability</output-format-item>
             <output-format-item>Refactor code to follow SOLID principles and eliminate design smells</output-format-item>
-            <output-format-item>Verify code changes compile and pass tests</output-format-item>
         </output-format-list>
     </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>Verify code changes compile and pass tests: `mvn clean verify` or `./mvnw clean verify`</safeguards-item>
+        </safeguards-list>
+    </safeguards>
 </prompt>

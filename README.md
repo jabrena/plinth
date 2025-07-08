@@ -9,6 +9,10 @@
 
 Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agent model` behaves using reusable and scoped instructions. In cursor, the way to do it is named `Cursor rule` and you could see it as a `System prompt` if you use a generic term. This repository provides a collection of Cursor rules designed for Java development.
 
+## Goal
+
+PENDING
+
 ## What is a System prompt?
 
 A system prompt is a set of instructions given to an AI model that defines how it should behave, what role it should take on, and what guidelines it should follow when responding to users. Think of it as the "operating manual" that shapes the AI's personality, capabilities, and boundaries.
@@ -76,6 +80,8 @@ The rules was tested with the following examples:
 - [Microservices: Quarkus application](./examples/quarkus-demo/README.md)
 - [Serverless: AWS Lambda](./examples/aws-lambda-hello-world/README.md)
 - [Serverless: Azure Function](./examples/azure-function-hello-world/README.md)
+
+[Here](./examples/README.md), you can see Scenarios using the Cursor rules for Java
 
 ## Changelog
 
