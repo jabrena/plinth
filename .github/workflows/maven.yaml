@@ -17,6 +17,24 @@ jobs:
       - name: Generate Cursor Rules
         run: cd generator && ./mvnw --batch-mode --no-transfer-progress verify --file pom.xml
 
+  validate-markdown:
+    name: Validate Markdown Files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true  # Fetches all submodules
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'graalvm' # See 'Supported distributions' for available options
+          java-version: '24'
+      - name: Install JBang
+        run: |
+          curl -Ls https://sh.jbang.dev | bash -s - app setup
+          echo "$HOME/.jbang/bin" >> $GITHUB_PATH
+      - name: Validate Markdown Files
+        run: jbang .github/scripts/MarkdownValidator.java --verbose .
+
   examples:
     name: Build Examples
     runs-on: ubuntu-latest
