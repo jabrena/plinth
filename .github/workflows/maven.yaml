@@ -3,8 +3,8 @@ name: CI Builds
 on: [push]
 
 jobs:
-  run:
-    name: Build
+  generate-cursor-rules:
+    name: Generate Cursor Rules
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -15,20 +15,29 @@ jobs:
           distribution: 'graalvm' # See 'Supported distributions' for available options
           java-version: '24'
       - name: Generate Cursor Rules
-        run: cd pml && ./mvnw --batch-mode --no-transfer-progress verify --file pom.xml
-      - name: Maven build
-        run: cd examples/maven-demo && ./mvnw --batch-mode --no-transfer-progress verify --file pom.xml
-      - name: Spring Boot build
-        run: cd examples/spring-boot-demo/implementation && ./mvnw --batch-mode --no-transfer-progress verify -Pjacoco --file pom.xml
-      - name: AWS Lambda build
-        run: cd examples/aws-lambda-hello-world && ./mvnw --batch-mode --no-transfer-progress package --file pom.xml
-      - name: Azure Function build
-        run: cd examples/azure-function-hello-world && ./mvnw --batch-mode --no-transfer-progress package --file pom.xml
-      - name: Spring Boot Memory Leak build
-        run: cd examples/spring-boot-memory-leak-demo && ./mvnw --batch-mode --no-transfer-progress package --file pom.xml
-      - name: Spring Boot Performance Bottleneck build
-        run: cd examples/spring-boot-performance-bottleneck-demo && ./mvnw --batch-mode --no-transfer-progress package --file pom.xml
-      - name: Spring Boot JMeter build
-        run: cd examples/spring-boot-jmeter-demo && ./mvnw --batch-mode --no-transfer-progress package --file pom.xml
-      - name: Quarkus build
-        run: cd examples/quarkus-demo && ./mvnw --batch-mode --no-transfer-progress package --file pom.xml
+        run: cd generator && ./mvnw --batch-mode --no-transfer-progress verify --file pom.xml
+
+  examples:
+    name: Build Examples
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        example:
+          - { name: "Maven", path: "examples/maven-demo", goal: "verify" }
+          - { name: "Spring Boot", path: "examples/spring-boot-demo/implementation", goal: "verify -Pjacoco" }
+          - { name: "AWS Lambda", path: "examples/aws-lambda-hello-world", goal: "package" }
+          - { name: "Azure Function", path: "examples/azure-function-hello-world", goal: "package" }
+          - { name: "Spring Boot Memory Leak", path: "examples/spring-boot-memory-leak-demo", goal: "package" }
+          - { name: "Spring Boot Performance Bottleneck", path: "examples/spring-boot-performance-bottleneck-demo", goal: "package" }
+          - { name: "Spring Boot JMeter", path: "examples/spring-boot-jmeter-demo", goal: "package" }
+          - { name: "Quarkus", path: "examples/quarkus-demo", goal: "package" }
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true  # Fetches all submodules
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'graalvm' # See 'Supported distributions' for available options
+          java-version: '24'
+      - name: Build ${{ matrix.example.name }}
+        run: cd ${{ matrix.example.path }} && ./mvnw --batch-mode --no-transfer-progress ${{ matrix.example.goal }} --file pom.xml
