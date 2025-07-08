@@ -625,13 +625,14 @@ my-app/
 
     <output-format>
         <output-format-list>
-            <output-format-item>Update the file pom.xml if something is not correct</output-format-item>
+            <output-format-item>Update the file pom.xml with the advices provided by the examples</output-format-item>
+            <output-format-item>Not add any extra plugin or dependency</output-format-item>
         </output-format-list>
     </output-format>
 
     <safeguards>
         <safeguards-list>
-            <safeguards-item>verify changes with the command: `mvn validate`</safeguards-item>
+            <safeguards-item>verify changes with the command: `mvn validate` or `./mvnw validate`</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>
