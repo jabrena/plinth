@@ -110,9 +110,7 @@ public class MarkdownValidator implements Callable<Integer> {
     }
 
     private void validateFile(Path file) {
-        if (verbose) {
-            System.out.printf("🔍 Validating: %s\n", file);
-        }
+        System.out.printf("🔍 Validating: %s\n", file);
 
         try {
             String content = Files.readString(file);
