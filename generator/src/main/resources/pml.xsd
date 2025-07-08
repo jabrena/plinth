@@ -9,7 +9,7 @@
                 <xs:element ref="metadata"/>
                 <xs:element ref="role"/>
                 <xs:element ref="goal"/>
-                <xs:element ref="restrictions" minOccurs="0"/>
+                <xs:element ref="constraints" minOccurs="0"/>
                 <xs:element ref="examples" minOccurs="0"/>
                 <xs:element ref="output-requirements-section" minOccurs="0"/>
             </xs:sequence>
@@ -63,27 +63,27 @@
     <!-- Goal statement -->
     <xs:element name="goal" type="xs:string"/>
 
-    <!-- Restrictions block -->
-    <xs:element name="restrictions">
+    <!-- Constraints block -->
+    <xs:element name="constraints">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="restrictions-description" minOccurs="0"/>
-                <xs:element ref="restriction-list"/>
+                <xs:element ref="constraints-description" minOccurs="0"/>
+                <xs:element ref="constraint-list"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="restrictions-description" type="xs:string"/>
+    <xs:element name="constraints-description" type="xs:string"/>
 
-    <xs:element name="restriction-list">
+    <xs:element name="constraint-list">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="restriction" minOccurs="0" maxOccurs="unbounded"/>
+                <xs:element ref="constraint" minOccurs="0" maxOccurs="unbounded"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
-    <xs:element name="restriction" type="xs:string"/>
+    <xs:element name="constraint" type="xs:string"/>
 
     <!-- Examples container -->
     <xs:element name="examples">

@@ -27,8 +27,8 @@ alwaysApply: </xsl:text><xsl:value-of select="normalize-space(metadata/cursor-ai
 </xsl:text><xsl:value-of select="role"/>
         <!-- Process goal (Instructions for AI) after role -->
         <xsl:apply-templates select="goal"/>
-        <!-- Apply restrictions template if present -->
-        <xsl:apply-templates select="restrictions"/>
+        <!-- Apply constraints template if present -->
+        <xsl:apply-templates select="constraints"/>
 
         <!-- Examples section with auto-generated table of contents -->
         <xsl:if test="examples/toc[@auto-generate='true']">
@@ -132,19 +132,19 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
         </xsl:for-each>
     </xsl:template>
 
-    <!-- Restrictions template -->
-    <xsl:template match="restrictions">
+    <!-- Constraints template -->
+    <xsl:template match="constraints">
         <xsl:text>
-## Restrictions
+## Constraints
 
 </xsl:text>
-        <xsl:if test="restrictions-description">
-            <xsl:value-of select="normalize-space(restrictions-description)"/>
+        <xsl:if test="constraints-description">
+            <xsl:value-of select="normalize-space(constraints-description)"/>
             <xsl:text>
 
 </xsl:text>
         </xsl:if>
-        <xsl:for-each select="restriction-list/restriction">
+        <xsl:for-each select="constraint-list/constraint">
             <xsl:text>- </xsl:text><xsl:value-of select="normalize-space(.)"/>
             <xsl:text>
 </xsl:text>
