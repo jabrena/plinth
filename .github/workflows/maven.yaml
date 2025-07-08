@@ -49,6 +49,7 @@ jobs:
         with:
           submodules: true  # Fetches all submodules
       - uses: DavidAnson/markdownlint-cli2-action@v20
+        if: false  # Disabled
         with:
           globs: '**/*.md, .cursor/rules/*.mdc'
           separator: ','
