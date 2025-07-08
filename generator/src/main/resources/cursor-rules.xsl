@@ -46,7 +46,7 @@ alwaysApply: </xsl:text><xsl:value-of select="normalize-space(metadata/cursor-ai
         </xsl:if>
 
         <!-- Process all content sections (goal already processed above) -->
-        <xsl:apply-templates select="examples | output-format"/>
+        <xsl:apply-templates select="examples | output-format | safeguards"/>
     </xsl:template>
 
     <!-- Examples container template -->
@@ -126,6 +126,19 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
 
 </xsl:text>
         <xsl:for-each select="output-format-list/output-format-item">
+            <xsl:text>- </xsl:text><xsl:value-of select="normalize-space(.)"/>
+            <xsl:text>
+</xsl:text>
+        </xsl:for-each>
+    </xsl:template>
+
+    <!-- Safeguards section template -->
+    <xsl:template match="safeguards">
+        <xsl:text>
+## Safeguards
+
+</xsl:text>
+        <xsl:for-each select="safeguards-list/safeguards-item">
             <xsl:text>- </xsl:text><xsl:value-of select="normalize-space(.)"/>
             <xsl:text>
 </xsl:text>

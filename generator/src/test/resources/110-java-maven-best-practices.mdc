@@ -587,4 +587,7 @@ Description: Define all dependency and plugin versions in the `<properties>` sec
 ## Output Format
 
 - Update the file pom.xml if something is not correct
+
+## Safeguards
+
 - verify changes with the command: `mvn validate`
