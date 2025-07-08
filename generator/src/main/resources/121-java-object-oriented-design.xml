@@ -2591,7 +2591,7 @@ class FileOperationException extends Exception {
     }
 }]]></code-block>
                 </good-example>
-                <bad-example>
+                <bad-example last-item="true">
                     <code-block language="java"><![CDATA[public class FileManager {
     public String readFileContent(String filename) {
         try {
