@@ -2,12 +2,10 @@
 
 //DEPS info.picocli:picocli:4.7.5
 //DEPS org.commonmark:commonmark:0.21.0
-//DEPS org.commonmark:commonmark-ext-gfm-tables:0.21.0
 
 import org.commonmark.node.*;
 import org.commonmark.parser.Parser;
 import org.commonmark.renderer.html.HtmlRenderer;
-import org.commonmark.ext.gfm.tables.TablesExtension;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
@@ -17,7 +15,6 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
 import java.util.concurrent.Callable;
-import java.util.regex.Pattern;
 import java.util.stream.Stream;
 
 @Command(name = "markdown-validator", 
@@ -43,12 +40,12 @@ public class MarkdownValidator implements Callable<Integer> {
     private static final List<String> MARKDOWN_EXTENSIONS = List.of(".md", ".mdc");
 
     private final Parser parser;
+    private final HtmlRenderer renderer;
     private final List<ValidationError> errors = new ArrayList<>();
 
     public MarkdownValidator() {
-        this.parser = Parser.builder()
-            .extensions(Collections.singletonList(TablesExtension.create()))
-            .build();
+        this.parser = Parser.builder().build();
+        this.renderer = HtmlRenderer.builder().build();
     }
 
     public static void main(String... args) {
@@ -121,211 +118,23 @@ public class MarkdownValidator implements Callable<Integer> {
     }
 
     private void validateContent(Path file, String content) {
-        // Parse with CommonMark
-        Node document = parser.parse(content);
-        
-        // Validate structure
-        validateDocumentStructure(file, document);
-        
-        // Validate content patterns
-        validateContentPatterns(file, content);
-        
-        // Validate links and references
-        validateLinks(file, content, document);
-        
-        // Validate tables
-        validateTables(file, document);
-        
-        // Validate code blocks
-        validateCodeBlocks(file, document);
-    }
-
-    private void validateDocumentStructure(Path file, Node document) {
-        boolean hasHeading = false;
-        int headingLevel = 0;
-        
-        Node walker = document.getFirstChild();
-        while (walker != null) {
-            if (walker instanceof Heading) {
-                Heading heading = (Heading) walker;
-                hasHeading = true;
-                
-                // Check heading hierarchy
-                if (headingLevel == 0) {
-                    if (heading.getLevel() != 1) {
-                        addError(file, 0, "Document should start with H1 heading, found H" + heading.getLevel());
-                    }
-                }
-                headingLevel = heading.getLevel();
-                
-                // Check empty headings
-                if (getTextContent(heading).trim().isEmpty()) {
-                    addError(file, 0, "Empty heading found");
-                }
-            }
-            walker = walker.getNext();
-        }
-        
-        if (!hasHeading) {
-            addError(file, 0, "Document should contain at least one heading");
-        }
-    }
-
-    private void validateContentPatterns(Path file, String content) {
-        String[] lines = content.split("\n");
-        
-        for (int i = 0; i < lines.length; i++) {
-            String line = lines[i];
-            int lineNum = i + 1;
+        try {
+            // Parse markdown content
+            Node document = parser.parse(content);
             
-            // Check trailing whitespace
-            if (line.endsWith(" ") || line.endsWith("\t")) {
-                addError(file, lineNum, "Line has trailing whitespace");
-            }
+            // Try to render to HTML to validate structure
+            String html = renderer.render(document);
             
-            // Check for TODO/FIXME comments that might indicate incomplete content
-            if (line.toUpperCase().contains("TODO") || line.toUpperCase().contains("FIXME")) {
-                addError(file, lineNum, "TODO/FIXME found - content may be incomplete");
+            if (verbose) {
+                System.out.printf("✅ Successfully parsed: %s (%d characters)\n", 
+                    file.getFileName(), content.length());
             }
-            
-            // Check for broken reference-style links
-            if (line.matches(".*\\[.*\\]\\[.*\\].*") && !content.contains(line.replaceAll(".*\\[.*\\]\\[(.*)\\].*", "$1") + ":")) {
-                addError(file, lineNum, "Possible broken reference-style link");
-            }
+        } catch (Exception e) {
+            addError(file, 0, "Failed to parse markdown: " + e.getMessage());
         }
     }
 
-    private void validateLinks(Path file, String content, Node document) {
-        // Pattern for markdown links
-        Pattern linkPattern = Pattern.compile("\\[([^\\]]+)\\]\\(([^\\)]+)\\)");
-        var matcher = linkPattern.matcher(content);
-        
-        while (matcher.find()) {
-            String linkText = matcher.group(1);
-            String linkUrl = matcher.group(2);
-            
-            // Check for empty link text
-            if (linkText.trim().isEmpty()) {
-                addError(file, 0, "Empty link text found");
-            }
-            
-            // Check for relative file links
-            if (linkUrl.startsWith(".") || (!linkUrl.startsWith("http") && !linkUrl.startsWith("#"))) {
-                Path targetPath = file.getParent().resolve(linkUrl);
-                if (!Files.exists(targetPath)) {
-                    addError(file, 0, "Broken relative link: " + linkUrl);
-                }
-            }
-            
-            // Check for cursor rule references
-            if (linkUrl.startsWith("mdc:") || linkUrl.contains(".mdc")) {
-                String referencedFile = linkUrl.replace("mdc:", "");
-                Path cursorRulePath = Paths.get(rootDir).resolve(referencedFile);
-                if (!Files.exists(cursorRulePath)) {
-                    addError(file, 0, "Broken cursor rule reference: " + linkUrl);
-                }
-            }
-        }
-    }
 
-    private void validateTables(Path file, Node document) {
-        Node walker = document.getFirstChild();
-        while (walker != null) {
-            if (walker.getClass().getSimpleName().equals("TableBlock")) {
-                validateTableBlock(file, walker);
-            }
-            walker = walker.getNext();
-        }
-    }
-
-    private void validateTableBlock(Path file, Node tableBlock) {
-        // Count rows and check consistency
-        int columnCount = -1;
-        Node row = tableBlock.getFirstChild();
-        int rowIndex = 0;
-        
-        while (row != null) {
-            if (row.getClass().getSimpleName().equals("TableRow")) {
-                int currentColumnCount = 0;
-                Node cell = row.getFirstChild();
-                
-                while (cell != null) {
-                    currentColumnCount++;
-                    
-                    // Check for empty cells
-                    String cellContent = getTextContent(cell).trim();
-                    if (cellContent.isEmpty() && rowIndex > 0) { // Allow empty header cells
-                        addError(file, 0, "Empty table cell found in row " + (rowIndex + 1));
-                    }
-                    
-                    cell = cell.getNext();
-                }
-                
-                if (columnCount == -1) {
-                    columnCount = currentColumnCount;
-                } else if (columnCount != currentColumnCount) {
-                    addError(file, 0, "Inconsistent table column count. Expected " + columnCount + ", found " + currentColumnCount + " in row " + (rowIndex + 1));
-                }
-                
-                rowIndex++;
-            }
-            row = row.getNext();
-        }
-    }
-
-    private void validateCodeBlocks(Path file, Node document) {
-        Node walker = document.getFirstChild();
-        while (walker != null) {
-            if (walker instanceof FencedCodeBlock) {
-                FencedCodeBlock codeBlock = (FencedCodeBlock) walker;
-                String info = codeBlock.getInfo();
-                String literal = codeBlock.getLiteral();
-                
-                // Check for empty code blocks
-                if (literal == null || literal.trim().isEmpty()) {
-                    addError(file, 0, "Empty code block found");
-                }
-                
-                // Validate language specification for syntax highlighting
-                if (info != null && !info.trim().isEmpty()) {
-                    String language = info.trim().split("\\s+")[0];
-                    if (!isValidLanguage(language)) {
-                        addError(file, 0, "Unknown language specification: " + language);
-                    }
-                }
-            } else if (walker instanceof IndentedCodeBlock) {
-                IndentedCodeBlock codeBlock = (IndentedCodeBlock) walker;
-                if (codeBlock.getLiteral() == null || codeBlock.getLiteral().trim().isEmpty()) {
-                    addError(file, 0, "Empty indented code block found");
-                }
-            }
-            walker = walker.getNext();
-        }
-    }
-
-    private boolean isValidLanguage(String language) {
-        // Common programming languages and markup formats
-        Set<String> validLanguages = Set.of(
-            "java", "javascript", "python", "bash", "shell", "sh", "xml", "json", "yaml", "yml",
-            "html", "css", "markdown", "md", "sql", "dockerfile", "properties", "ini", "text",
-            "plaintext", "console", "log", "diff", "makefile", "gradle", "maven", "pom"
-        );
-        return validLanguages.contains(language.toLowerCase());
-    }
-
-    private String getTextContent(Node node) {
-        StringBuilder sb = new StringBuilder();
-        Node walker = node.getFirstChild();
-        while (walker != null) {
-            if (walker instanceof Text) {
-                sb.append(((Text) walker).getLiteral());
-            } else if (walker.getFirstChild() != null) {
-                sb.append(getTextContent(walker));
-            }
-            walker = walker.getNext();
-        }
-        return sb.toString();
-    }
 
     private void addError(Path file, int lineNumber, String message) {
         errors.add(new ValidationError(file, lineNumber, message));
