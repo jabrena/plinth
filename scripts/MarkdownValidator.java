@@ -125,9 +125,15 @@ public class MarkdownValidator implements Callable<Integer> {
             // Try to render to HTML to validate structure
             String html = renderer.render(document);
             
+            // Assert that HTML output is not null
+            if (html == null) {
+                addError(file, 0, "HTML rendering produced null output");
+                return;
+            }
+            
             if (verbose) {
-                System.out.printf("✅ Successfully parsed: %s (%d characters)\n", 
-                    file.getFileName(), content.length());
+                System.out.printf("✅ Successfully parsed: %s (%d characters, HTML: %d characters)\n", 
+                    file.getFileName(), content.length(), html.length());
             }
         } catch (Exception e) {
             addError(file, 0, "Failed to parse markdown: " + e.getMessage());
