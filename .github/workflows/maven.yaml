@@ -3,9 +3,28 @@ name: CI Builds
 on: [push]
 
 jobs:
+  validate-markdown:
+    name: Validate Markdown Files
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: true  # Fetches all submodules
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'graalvm' # See 'Supported distributions' for available options
+          java-version: '24'
+      - name: Install JBang
+        run: |
+          curl -Ls https://sh.jbang.dev | bash -s - app setup
+          echo "$HOME/.jbang/bin" >> $GITHUB_PATH
+      - name: Validate Markdown Files
+        run: jbang scripts/MarkdownValidator.java --verbose
+
   generate-cursor-rules:
     name: Generate Cursor Rules
     runs-on: ubuntu-latest
+    needs: validate-markdown
     steps:
       - uses: actions/checkout@v4
         with:
@@ -20,6 +39,7 @@ jobs:
   examples:
     name: Build Examples
     runs-on: ubuntu-latest
+    needs: validate-markdown
     strategy:
       matrix:
         example:
