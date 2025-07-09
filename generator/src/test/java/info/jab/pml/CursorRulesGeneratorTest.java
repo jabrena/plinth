@@ -6,7 +6,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Optional;
 import java.util.stream.Stream;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -117,7 +116,6 @@ class CursorRulesGeneratorTest {
         }
     }
 
-    @Disabled
     @Test
     @DisplayName("Should produce consistent content structure regardless of XML content type")
     void should_produceConsistentStructure_when_processingDifferentXmlTypes() throws IOException {

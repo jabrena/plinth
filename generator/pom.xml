@@ -219,16 +219,17 @@
         <executions>
           <execution>
             <id>copy-cursor-rules</id>
-            <phase>generate-test-resources</phase>
+            <phase>package</phase>
             <goals>
               <goal>copy-resources</goal>
             </goals>
             <configuration>
-              <outputDirectory>${project.build.testOutputDirectory}</outputDirectory>
+              <outputDirectory>${project.basedir}/../.cursor/rules</outputDirectory>
               <resources>
                 <resource>
-                  <directory>${project.basedir}/../.cursor/rules</directory>
+                  <directory>${project.basedir}/src/test/resources</directory>
                   <includes>
+                    <!--
                     <include>100-java-checklist-guide.mdc</include>
                     <include>110-java-maven-best-practices.mdc</include>
                     <include>112-java-maven-documentation.mdc</include>
@@ -242,6 +243,7 @@
                     <include>141-java-refactoring-with-modern-features.mdc</include>
                     <include>142-java-functional-programming.mdc</include>
                     <include>143-java-data-oriented-programming.mdc</include>
+                    -->
                   </includes>
                 </resource>
               </resources>
