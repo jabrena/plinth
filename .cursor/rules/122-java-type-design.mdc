@@ -42,7 +42,7 @@ Which would you like to implement? (1A, 1B, 1C, 2A, 2B, 2C, 3A, 3B, 3C, or 'show
 
 Focus on being consultative rather than prescriptive - analyze, propose, ask, then implement based on user choice.
 
-### Core Type Design Principles
+### Implementing These Principles
 
 1.  **Start with domain modeling**: Sketch your type system before coding.
 2.  **Create a type style guide**: Document naming conventions and patterns.
@@ -888,6 +888,7 @@ class BadProductService {
 - Use generics to create flexible and reusable components
 - Establish clear type hierarchies and consistent naming conventions
 - Use BigDecimal for precision-sensitive calculations
+- Verify code changes compile and pass tests
 
 ## Safeguards
 
