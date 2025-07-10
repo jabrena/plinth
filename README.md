@@ -11,7 +11,7 @@ Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agen
 
 ## Goal
 
-PENDING
+Provide a set of Interactive Cursor rules for Java which help Software engineers in the daily work.
 
 ## What is a System prompt?
 
@@ -82,6 +82,11 @@ The rules was tested with the following examples:
 - [Serverless: Azure Function](./examples/azure-function-hello-world/README.md)
 
 [Here](./examples/README.md), you can see Scenarios using the Cursor rules for Java
+
+## Architectural decision records, ADR
+
+- [ADR-001: Generate Cursor Rules from XML Files](./docs/adr/ADR-001-generate-cursor-rules-from-xml-files.md)
+- [ADR-002: Configure Cursor Rules Manual Scope](./docs/adr/ADR-002-configure-cursor-rules-manual-scope.md)
 
 ## Changelog
 
