@@ -227,9 +227,8 @@
               <outputDirectory>${project.basedir}/../.cursor/rules</outputDirectory>
               <resources>
                 <resource>
-                  <directory>${project.basedir}/src/test/resources</directory>
+                  <directory>${project.build.directory}</directory>
                   <includes>
-                    <!--
                     <include>100-java-checklist-guide.mdc</include>
                     <include>110-java-maven-best-practices.mdc</include>
                     <include>112-java-maven-documentation.mdc</include>
@@ -243,7 +242,6 @@
                     <include>141-java-refactoring-with-modern-features.mdc</include>
                     <include>142-java-functional-programming.mdc</include>
                     <include>143-java-data-oriented-programming.mdc</include>
-                    -->
                   </includes>
                 </resource>
               </resources>
