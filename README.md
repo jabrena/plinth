@@ -68,6 +68,24 @@ Type the following prompt in the cursor chat:
 Create an java development guide using the cursor rule @100-java-checklist-guide
 ```
 
+## Limitations & Opportunities
+
+From the beginning you need to know that results provided by the interaction with the different `Cursor rules` are not deterministic due to Models`s nature but this fact is not something to be considered in a negative way because you could see as an opportunity to run more times the rules and see how models offer more additional point of view about your repository, package or class in a different so, new ways to improve your Java software.
+
+## Safety
+
+The modern rules are designed with safety in mind so any change proposed the models will be verified:
+
+```xml
+<safeguards>
+    <safeguards-list>
+        <safeguards-item>verify changes with the command: `mvn validate` or `./mvnw validate`</safeguards-item>
+    </safeguards-list>
+</safeguards>
+```
+
+And changes later will be reviewed by the software engineer
+
 ## Examples
 
 The rules was tested with the following examples:
