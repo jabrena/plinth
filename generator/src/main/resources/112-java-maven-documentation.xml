@@ -5,8 +5,8 @@
 
     <metadata>
         <cursor-ai>
-            <description>Create README-DEV.md with information about how to use the Maven project</description>
-            <globs>pom.xml</globs>
+            <description></description>
+            <globs></globs>
             <always-apply>false</always-apply>
         </cursor-ai>
         <tags>

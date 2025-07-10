@@ -1,6 +1,6 @@
 ---
-description: Update pom.xml to add Maven dependencies & plugins
-globs: pom.xml
+description:
+globs:
 alwaysApply: false
 ---
 # Update pom.xml to add Maven dependencies & plugins
@@ -48,7 +48,7 @@ This rule provides a comprehensive, conversational approach to updating Maven po
 
 4. **Verify installation**: Check that the following files were created:
    - `mvnw` (executable script for Unix/Mac)
-   - `mvnw.cmd` (batch script for Windows) 
+   - `mvnw.cmd` (batch script for Windows)
    - `.mvn/wrapper/maven-wrapper.properties`
    - `.mvn/wrapper/maven-wrapper.jar`
 
@@ -149,7 +149,7 @@ After getting answers, implement the configuration following this order:
 
 #### Implementation Approach:
 1. **Ask about code quality dependencies**: Follow the questions in the template file
-2. **Add only selected dependencies**: Don't include dependencies the user doesn't need  
+2. **Add only selected dependencies**: Don't include dependencies the user doesn't need
 3. **Configure with appropriate scope**: Use `provided` scope for compile-time only dependencies
 
 ### 2.3 Build Plugins Section (Conditional)
@@ -162,7 +162,7 @@ After getting answers, implement the configuration following this order:
 
 **Core Plugins** (ask if user wants enhanced enforcement):
 - **maven-compiler-plugin**: Enhanced with Error Prone and NullAway analysis
-- **maven-enforcer-plugin**: With dependency convergence and circular dependency checks  
+- **maven-enforcer-plugin**: With dependency convergence and circular dependency checks
 - **maven-surefire-plugin**: For unit testing with proper configuration
 
 **Feature-Based Plugins** (add only if selected):
@@ -190,7 +190,7 @@ After getting answers, implement the configuration following this order:
 
 **Available Profiles** (add only if features selected):
 - `jacoco`: Code coverage analysis
-- `pitest`: Mutation testing  
+- `pitest`: Mutation testing
 - `security`: OWASP dependency security scanning
 - `find-bugs`: Static analysis with SpotBugs and PMD
 

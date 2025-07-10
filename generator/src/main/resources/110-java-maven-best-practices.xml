@@ -6,8 +6,8 @@
     <metadata>
         <!-- Markdown Front Matter for Cursor Rules -->
         <cursor-ai>
-            <description>Maven Best Practices</description>
-            <globs>pom.xml</globs>
+            <description></description>
+            <globs></globs>
             <always-apply>false</always-apply>
         </cursor-ai>
         <tags>
