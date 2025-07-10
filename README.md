@@ -46,7 +46,7 @@ Read the generated list of cursor rules for Java [here](./CURSOR-RULES-JAVA.md).
 
 ## Getting started
 
-If you are interested in getting the benefits of these cursor rules for Java, you can manually download this repository and copy the './cursor' folder and paste it into your repository, or delegate this task to a specific command-line tool based on **Jbang**:
+If you are interested in getting the benefits of these cursor rules for Java, you can manually download this repository and copy the './cursor' folder and paste it into your repository, download the rules from [the last release](https://github.com/jabrena/cursor-rules-java/releases) in zip format or just delegate this task to a specific command-line tool based on **Jbang**:
 
 ```bash
 sdk install jbang
@@ -56,9 +56,9 @@ jbang --fresh setup@jabrena init --cursor https://github.com/jabrena/cursor-rule
 
 Once you have installed the cursor rules:
 
-| Phase | Role | Cursor Rule | Description |
-|-------|------|-------------|-------------|
-| Getting Started | All | [Create Java Development Guide](.cursor/rules/100-java-checklist-guide.mdc) | Cursor rule designed to help the user when using the whole set of cursor rules for Java in an easy way |
+| Cursor Rule | Description | Prompt | Notes |
+|-------------|-------------|--------|-------|
+| [100-java-checklist-guide](.cursor/rules/100-java-checklist-guide.mdc) | Create a comprehensive step-by-step guide for using cursor rules for Java | `Create an java development guide using the cursor rule @100-java-checklist-guide` | This cursor rule is applied automatically without any interaction with the Software engineer. |
 
 Type the following prompt in the cursor chat:
 
