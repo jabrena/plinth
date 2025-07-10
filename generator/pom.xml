@@ -229,19 +229,7 @@
                 <resource>
                   <directory>${project.build.directory}</directory>
                   <includes>
-                    <include>100-java-checklist-guide.mdc</include>
-                    <include>110-java-maven-best-practices.mdc</include>
-                    <include>112-java-maven-documentation.mdc</include>
-                    <include>121-java-object-oriented-design.mdc</include>
-                    <include>122-java-type-design.mdc</include>
-                    <include>123-java-general-guidelines.mdc</include>
-                    <include>124-java-secure-coding.mdc</include>
-                    <include>131-java-unit-testing.mdc</include>
-                    <include>125-java-concurrency.mdc</include>
-                    <include>126-java-logging.mdc</include>
-                    <include>141-java-refactoring-with-modern-features.mdc</include>
-                    <include>142-java-functional-programming.mdc</include>
-                    <include>143-java-data-oriented-programming.mdc</include>
+                    <include>*.mdc</include>
                   </includes>
                 </resource>
               </resources>
