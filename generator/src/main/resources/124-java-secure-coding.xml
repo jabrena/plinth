@@ -622,7 +622,7 @@ public enum ErrorCode {
     public String getMessage() { return message; }
 }]]></code-block>
                 </good-example>
-                <bad-example>
+                <bad-example last-item="true">
                     <code-block language="java"><![CDATA[// AVOID: Exposing sensitive information
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
