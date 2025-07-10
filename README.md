@@ -68,11 +68,11 @@ Type the following prompt in the cursor chat:
 Create an java development guide using the cursor rule @100-java-checklist-guide
 ```
 
-## Limitations & Opportunities
+## Limitations & Opportunities
 
 From the beginning, you need to know that results provided by the interaction with the different `Cursor rules` are not deterministic due to the models' nature, but this fact should not be considered in a negative way because you could see it as an opportunity to run the rules multiple times and see how models offer additional points of view about your repository, package, or class in different ways to improve your Java software.
 
-## Safety
+## Safety guards
 
 The modern rules are designed with safety in mind so any change proposed by the models will be verified:
 
