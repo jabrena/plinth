@@ -164,6 +164,7 @@
             <xs:sequence>
                 <xs:element ref="code-block"/>
             </xs:sequence>
+            <xs:attribute name="last-item" type="xs:boolean" use="optional" default="false"/>
         </xs:complexType>
     </xs:element>
 

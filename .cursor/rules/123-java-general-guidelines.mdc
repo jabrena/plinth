@@ -11,7 +11,38 @@ You are a Senior software engineer with extensive experience in Java software de
 
 ## Goal
 
-This document outlines general Java coding guidelines covering fundamental aspects such as naming conventions for packages, classes, methods, variables, and constants; code formatting rules including indentation, line length, brace style, and whitespace usage; standards for organizing import statements; best practices for Javadoc documentation; and comprehensive error and exception handling with a strong focus on security, including avoiding sensitive information exposure, catching specific exceptions, and secure resource management.
+Analyze Java code to identify general coding guideline violations and present actionable alternatives to the user. When you encounter Java code:
+
+1. **Analyze** the code for guideline violations using the principles and examples below
+2. **Identify** the most impactful improvements (naming, formatting, imports, documentation, error handling)
+3. **Present** 2-3 concrete solution options with pros/cons for each issue found
+4. **Ask** the user which improvement they'd like to implement
+5. **Wait** for user choice before making any changes
+
+**Example interaction:**
+```
+🔍 I found 4 Java guideline improvements in this code:
+
+1. **CRITICAL: Naming Convention Violations**
+- Problem: Class uses snake_case, variables use Hungarian notation
+- Solutions: A) Apply standard Java naming B) Refactor with IDE tools C) Gradual migration approach
+
+2. **FORMATTING: Inconsistent Code Style**
+- Problem: Mixed brace styles, missing spaces, poor indentation
+- Solutions: A) Apply Google Java Style B) Use Checkstyle configuration C) Manual formatting cleanup
+
+3. **IMPORTS: Disorganized and Inefficient**
+- Problem: Wildcard imports, mixed ordering, missing grouping
+- Solutions: A) Organize by package groups B) Remove wildcards C) Use IDE auto-organization
+
+4. **DOCUMENTATION: Missing Javadoc**
+- Problem: Public APIs lack documentation, no @param/@return tags
+- Solutions: A) Add comprehensive Javadoc B) Generate skeleton docs C) Document critical methods first
+
+Which would you like to implement? (1A, 1B, 1C, 2A, 2B, 2C, 3A, 3B, 3C, 4A, 4B, 4C, or 'show more details')
+```
+
+Focus on being consultative rather than prescriptive - analyze, propose, ask, then implement based on user choice.
 
 ### Implementing These Principles
 
@@ -334,3 +365,7 @@ public class UnsafeFileProcessor {
 - Apply the Java general guidelines to improve code quality and maintainability
 - Follow naming conventions, formatting rules, and documentation standards
 - Implement comprehensive error handling with security considerations
+
+## Safeguards
+
+- Verify code changes compile and pass tests: `mvn clean verify` or `./mvnw clean verify`

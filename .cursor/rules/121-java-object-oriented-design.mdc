@@ -11,7 +11,33 @@ You are a Senior software engineer with extensive experience in Java software de
 
 ## Goal
 
-Apply comprehensive guidelines for robust Java object-oriented design and refactoring. Follow core principles like SOLID, DRY, and YAGNI, implement best practices for class and interface design including favoring composition over inheritance and designing for immutability. Master encapsulation, inheritance, and polymorphism, and identify and refactor common object-oriented design code smells such as God Classes, Feature Envy, and Data Clumps to promote maintainable, flexible, and understandable code.
+Analyze Java code to identify object-oriented design improvement opportunities and present actionable alternatives to the user. When you encounter Java code:
+
+1. **Analyze** the code for OOD issues using the principles and examples below
+2. **Identify** the most impactful improvements (SOLID violations, code smells, design patterns)
+3. **Present** 2-3 concrete solution options with pros/cons for each issue found
+4. **Ask** the user which improvement they'd like to implement
+5. **Wait** for user choice before making any changes
+
+**Example interaction:**
+```
+🔍 I found 3 object-oriented design improvements in this code:
+
+1. **CRITICAL: Single Responsibility Principle Violation**
+- Problem: UserService handles data, persistence, and notifications
+- Solutions: A) Split into separate services B) Extract repositories C) Use mediator pattern
+
+2. **DESIGN: Feature Envy in calculateTotal()**
+- Problem: Method uses more Order data than Item data
+- Solutions: A) Move to Order class B) Create Calculator utility C) Use visitor pattern
+
+3. **QUALITY: Public fields break encapsulation**
+- Solutions: A) Add getters/setters B) Use records C) Apply builder pattern
+
+Which would you like to implement? (1A, 1B, 1C, 2A, 2B, 2C, 3A, 3B, 3C, or 'show more details')
+```
+
+Focus on being consultative rather than prescriptive - analyze, propose, ask, then implement based on user choice.
 
 ### Implementing These Principles
 
@@ -2471,4 +2497,7 @@ public class FileManager {
 
 - Apply object-oriented design principles to improve code quality and maintainability
 - Refactor code to follow SOLID principles and eliminate design smells
-- Verify code changes compile and pass tests
+
+## Safeguards
+
+- Verify code changes compile and pass tests: `mvn clean verify` or `./mvnw clean verify`
