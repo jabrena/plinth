@@ -46,7 +46,7 @@ Read the generated list of cursor rules for Java [here](./CURSOR-RULES-JAVA.md).
 
 ## Getting started
 
-If you are interested in getting the benefits of these cursor rules for Java, you can manually download this repository and copy the './cursor' folder and paste it into your repository, or delegate this task to a specific command-line tool based on **Jbang**:
+If you are interested in getting the benefits of these cursor rules for Java, you can manually download this repository and copy the './cursor' folder and paste it into your repository, download the rules from [the last release](https://github.com/jabrena/cursor-rules-java/releases) in zip format or just delegate this task to a specific command-line tool based on **Jbang**:
 
 ```bash
 sdk install jbang

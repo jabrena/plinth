@@ -5,6 +5,40 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.8.0] 2025-07-11
+
+### Added
+
+- **XML-Based Generation System**: Implemented comprehensive XML/XSL transformation system for generating cursor rules
+  - New `generator` module with XML schema validation (pml.xsd)
+  - XSL transformations for consistent markdown generation
+  - Automated generation of cursor rules from XML definitions
+- **Architecture Decision Records (ADRs)**: Added formal documentation for architectural decisions
+  - ADR-001: Generate cursor rules from XML files
+  - ADR-002: Configure cursor rules with manual scope
+- **Comprehensive User Guide**: Added `CURSOR-RULES-JAVA.md` as a complete reference guide for all cursor rules
+- **Build Infrastructure Improvements**:
+  - JBang script for markdown validation
+  - GitHub workflow artifact upload for generated cursor rules
+
+### Changed
+
+- **Cursor Rule Interaction Model**: All cursor rules now use consultative approach instead of prescriptive
+  - Present 2-3 solution options with pros/cons for each improvement
+  - Wait for user choice before implementing changes
+  - Interactive approach with clear problem identification
+- **Manual Scope Configuration**: All cursor rules configured with manual scope by design to improve performance
+  - Eliminates automatic activation that caused performance degradation
+  - Requires explicit user activation for better control and deterministic results
+- **Enhanced Safeguards**: All cursor rules now include verification commands (`mvn clean verify` or `./mvnw clean verify`)
+
+### Technical Improvements
+
+- **Schema Validation**: Implemented XSD schema validation for all XML cursor rule definitions
+- **Build Process**: Enhanced build pipeline with XML validation and automated rule generation
+- **Code Quality**: Improved code formatting and consistency across all generated cursor rules
+- **Error Handling**: Better error handling and validation in generation process
+
 ## [0.7.0] 2025-06-30
 
 ### Added
