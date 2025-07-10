@@ -56,9 +56,9 @@ jbang --fresh setup@jabrena init --cursor https://github.com/jabrena/cursor-rule
 
 Once you have installed the cursor rules:
 
-| Phase | Role | Cursor Rule | Description |
-|-------|------|-------------|-------------|
-| Getting Started | All | [Create Java Development Guide](.cursor/rules/100-java-checklist-guide.mdc) | Cursor rule designed to help the user when using the whole set of cursor rules for Java in an easy way |
+| Cursor Rule | Description | Prompt | Notes |
+|-------------|-------------|--------|-------|
+| [100-java-checklist-guide](.cursor/rules/100-java-checklist-guide.mdc) | Create a comprehensive step-by-step guide for using cursor rules for Java | `Create an java development guide using the cursor rule @100-java-checklist-guide` | This cursor rule is applied automatically without any interaction with the Software engineer. |
 
 Type the following prompt in the cursor chat:
 
