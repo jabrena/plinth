@@ -38,7 +38,7 @@ According to the documentation from [Google Gemini](https://drive.google.com/fil
 - Output format (Optional)
 - Safeguards (Optional)
 
-With this structure in mind, the project uses an XML Schema to define the way that all System prompts are generated for Cursor AI. If you are interested, you could review [the Schema](./generator/src/main/resources/pml.xsd). All non-interactive Cursor rules are generated from XML to enforce consistency in the output and easy maintenance.
+With this structure in mind, the project uses an XML Schema to define the way that all System prompts are generated for Cursor AI. If you are interested, you could review [the Schema](./generator/src/main/resources/pml.xsd).
 
 ## Cursor Rules
 
@@ -84,7 +84,7 @@ The modern rules are designed with safety in mind so any change proposed by the 
 </safeguards>
 ```
 
-And changes later will be reviewed by the software engineer
+And changes later will be reviewed by the Software engineer.
 
 ## Examples
 
