@@ -18,14 +18,13 @@ jobs:
         run: cd generator && ./mvnw --batch-mode --no-transfer-progress verify --file pom.xml
       - name: Archive Cursor Rules
         run: |
-          cd .cursor
-          zip -r cursor-rules.zip rules/
+          zip -r cursor-rules.zip .cursor/
           echo "Created cursor-rules.zip with $(du -h cursor-rules.zip | cut -f1) size"
       - name: Upload Cursor Rules Archive
         uses: actions/upload-artifact@v4
         with:
           name: cursor-rules
-          path: .cursor/cursor-rules.zip
+          path: cursor-rules.zip
           retention-days: 90
 
   validate-markdown:
