@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
         xsi:noNamespaceSchemaLocation="pml.xsd"
         id="112-java-maven-documentation" version="1.0">
 
@@ -23,7 +24,11 @@
     <goal>
         When creating a README-DEV.md file for a Maven project, include ONLY the following sections with the specified Maven goals. Do NOT add any additional sections, explanations, or content beyond what is explicitly listed below.
 
-        Create a markdown file named `README-DEV.md` with the following exact structure: [java-maven-documentation-template.md](mdc:.cursor/rules/templates/java-maven-documentation-template.md)
+        Create a markdown file named `README-DEV.md` with the following content:
+
+        ```markdown
+        <xi:include href="fragments/java-maven-documentation-template.md" parse="text"/>
+        ```
     </goal>
 
     <constraints>

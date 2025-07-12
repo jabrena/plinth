@@ -7,7 +7,10 @@
 ./mvnw dependency:resolve
 
 ./mvnw clean validate -U
+./mvnw buildplan:list-plugin
 ./mvnw buildplan:list-phase
+./mvnw help:all-profiles
+./mvnw help:active-profiles
 ./mvnw license:third-party-report
 
 # Clean the project
@@ -15,9 +18,6 @@
 
 # Clean and package in one command
 ./mvnw clean package
-
-#Format source code
-./mvnw spotless:apply
 
 # Run integration tests
 ./mvnw verify
@@ -30,4 +30,4 @@
 # Generate project reports
 ./mvnw site
 jwebserver -p 8005 -d "$(pwd)/target/site/"
-``` 
+```
