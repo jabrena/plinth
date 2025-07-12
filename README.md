@@ -114,7 +114,7 @@ The rules were tested with the following examples:
 
 Java uses JEPs as the vehicle to describe the new features to be added in the language. The repository continuously reviews which JEPs could improve any of the cursor rules present in this repository.
 
-- [JEPS List](./docs/All-JEPS.md)
+- [JEPS List](./docs/jeps/All-JEPS.md)
 
 ## Contribute
 
