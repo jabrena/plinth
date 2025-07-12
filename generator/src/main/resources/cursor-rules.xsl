@@ -161,14 +161,15 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
     </xsl:template>
 
     <!-- XInclude template - processes included content -->
+    <!-- Note: XInclude processing happens at DOM level before XSLT, so this template -->
+    <!-- handles the case where XInclude has already been processed and content is embedded -->
     <xsl:template match="xi:include">
         <xsl:choose>
             <xsl:when test="@parse='text'">
-                <!-- For text includes, we need to read and output the file content -->
-                <xsl:comment>XInclude: <xsl:value-of select="@href"/></xsl:comment>
-                <xsl:text>
-<!-- Content from: </xsl:text><xsl:value-of select="@href"/><xsl:text> -->
-</xsl:text>
+                <!-- For text includes, output the content with preserved indentation -->
+                <xsl:call-template name="preserve-indentation">
+                    <xsl:with-param name="content" select="."/>
+                </xsl:call-template>
             </xsl:when>
             <xsl:otherwise>
                 <!-- For XML includes, process normally -->
@@ -337,9 +338,21 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <xsl:call-template name="remove-goal-indentation">
-            <xsl:with-param name="text" select="$trimmed-both"/>
-        </xsl:call-template>
+        <!-- Check if content contains shell script code blocks (```bash) -->
+        <xsl:choose>
+            <xsl:when test="contains($trimmed-both, '```bash') and (contains($trimmed-both, '#!/bin/bash') or contains($trimmed-both, '#!/usr/bin/env bash') or contains($trimmed-both, '#!/bin/sh'))">
+                <!-- For shell scripts, preserve all indentation by only trimming leading/trailing newlines -->
+                <xsl:call-template name="preserve-indentation">
+                    <xsl:with-param name="content" select="$trimmed-both"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- For regular content, remove indentation -->
+                <xsl:call-template name="remove-goal-indentation">
+                    <xsl:with-param name="text" select="$trimmed-both"/>
+                </xsl:call-template>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <!-- Remove leading spaces from each line while preserving paragraph structure -->
@@ -378,5 +391,32 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
                 <xsl:value-of select="$string"/>
             </xsl:otherwise>
         </xsl:choose>
+    </xsl:template>
+
+    <!-- Template to preserve indentation for included text files -->
+    <xsl:template name="preserve-indentation">
+        <xsl:param name="content"/>
+        <xsl:variable name="trimmed-start">
+            <xsl:choose>
+                <xsl:when test="starts-with($content, '&#10;')">
+                    <xsl:value-of select="substring($content, 2)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$content"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="trimmed-both">
+            <xsl:choose>
+                <xsl:when test="substring($trimmed-start, string-length($trimmed-start)) = '&#10;'">
+                    <xsl:value-of select="substring($trimmed-start, 1, string-length($trimmed-start) - 1)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$trimmed-start"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <!-- Output the content with preserved indentation - only trim leading/trailing newlines -->
+        <xsl:value-of select="$trimmed-both"/>
     </xsl:template>
 </xsl:stylesheet>

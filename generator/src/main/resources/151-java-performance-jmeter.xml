@@ -63,11 +63,11 @@
             <step number="3">
                 <step-title>Copy Template Content</step-title>
                 <step-content>
-                    Create the entire script with the following content:
+Create the entire script with the following content:
 
-                    ```bash
-                    <xi:include href="fragments/run-jmeter.sh" parse="text"/>
-                    ```
+```bash
+<xi:include href="fragments/run-jmeter.sh" parse="text"/>
+```
 
                 </step-content>
             </step>
