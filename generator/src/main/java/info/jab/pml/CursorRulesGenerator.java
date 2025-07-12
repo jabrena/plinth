@@ -1,18 +1,26 @@
 package info.jab.pml;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Objects;
 import java.util.Optional;
 import javax.xml.XMLConstants;
-import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
-import javax.xml.transform.*;
+import javax.xml.transform.Result;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
+import org.w3c.dom.Document;
 import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -73,11 +81,34 @@ public final class CursorRulesGenerator {
     }
 
     /**
-     * Step 2: Creates SAXSource with XSD validation.
-     * Pure function that creates immutable SAXSource with schema validation.
+     * Step 2: Creates SAXSource with XSD validation and XInclude support.
+     * Pure function that creates immutable SAXSource with schema validation and XInclude processing.
      */
     private SAXSource createSaxSource(TransformationSources sources, String schemaFileName) {
         try {
+            // First, process XInclude using DOM
+            DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
+            domFactory.setNamespaceAware(true);
+            domFactory.setXIncludeAware(true);
+
+            DocumentBuilder builder = domFactory.newDocumentBuilder();
+
+            // Set a proper base URI for XInclude resolution
+            InputSource inputSource = new InputSource(sources.xmlStream());
+            // Use the resource root path as the base URI for XInclude resolution
+            // Point to the classes directory where resources are actually located
+            String baseURI = getClass().getClassLoader().getResource("").toString();
+            // Ensure we're pointing to the classes directory, not test-classes
+            if (baseURI.contains("test-classes")) {
+                baseURI = baseURI.replace("test-classes", "classes");
+            }
+            inputSource.setSystemId(baseURI);
+
+            Document document = builder.parse(inputSource);
+
+            // Convert DOM back to SAX source
+            DOMSource domSource = new DOMSource(document);
+
             // Create SAX parser factory with namespace awareness and validation
             SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setNamespaceAware(true);
@@ -93,9 +124,22 @@ public final class CursorRulesGenerator {
             XMLReader xmlReader = factory.newSAXParser().getXMLReader();
             xmlReader.setErrorHandler(new ValidationErrorHandler());
 
-            return new SAXSource(xmlReader, new InputSource(sources.xmlStream()));
-        } catch (SAXException | ParserConfigurationException e) {
-            throw new RuntimeException("Failed to create SAX source with XSD validation", e);
+            // Create transformer to convert DOM to SAX
+            TransformerFactory transformerFactory = TransformerFactory.newInstance();
+            Transformer transformer = transformerFactory.newTransformer();
+
+            // Create a ByteArrayOutputStream to hold the XML
+            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+            StreamResult result = new StreamResult(baos);
+            transformer.transform(domSource, result);
+
+            // Convert back to InputSource
+            ByteArrayInputStream bais = new ByteArrayInputStream(baos.toByteArray());
+            InputSource processedInputSource = new InputSource(bais);
+
+            return new SAXSource(xmlReader, processedInputSource);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to create SAX source with XSD validation and XInclude support", e);
         }
     }
 

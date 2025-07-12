@@ -66,7 +66,13 @@
     <xs:element name="role" type="xs:string"/>
 
     <!-- Goal statement -->
-    <xs:element name="goal" type="xs:string"/>
+    <xs:element name="goal">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
 
     <!-- Constraints block -->
     <xs:element name="constraints">

@@ -97,6 +97,7 @@ class CursorRulesGeneratorTest {
 
             // Then - Validate the generated content structure
             String[] lines = generatedContent.split("\\n");
+
             validateHasMainTitle(lines, baseFileName);
             validateRequiredSections(lines, baseFileName);
             validateHeadingFormatting(lines, baseFileName);
@@ -107,6 +108,7 @@ class CursorRulesGeneratorTest {
             validateSafeguardsSection(lines, baseFileName);
             validateConsultativeInteractionPattern(lines, baseFileName);
             validateExampleNumberingConsistency(lines, baseFileName);
+
         }
 
         /**
