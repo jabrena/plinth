@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0"
+                xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+                xmlns:xi="http://www.w3.org/2001/XInclude">
     <xsl:output method="text" encoding="UTF-8"/>
-    <xsl:strip-space elements="prompt metadata tags example code-examples good-example bad-example output-format"/>
+    <xsl:strip-space elements="prompt metadata tags example code-examples good-example bad-example output-format instructions steps step"/>
 
     <xsl:template match="/prompt">
         <!-- Common frontmatter and header -->
@@ -27,6 +29,8 @@ alwaysApply: </xsl:text><xsl:value-of select="normalize-space(metadata/cursor-ai
 </xsl:text><xsl:value-of select="role"/>
         <!-- Process goal (Instructions for AI) after role -->
         <xsl:apply-templates select="goal"/>
+        <!-- Process instructions if present -->
+        <xsl:apply-templates select="instructions"/>
         <!-- Apply constraints template if present -->
         <xsl:apply-templates select="constraints"/>
 
@@ -125,6 +129,52 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
         <xsl:call-template name="trim-goal-content">
             <xsl:with-param name="content" select="."/>
         </xsl:call-template>
+    </xsl:template>
+
+    <!-- Instructions template -->
+    <xsl:template match="instructions">
+        <xsl:text>
+## Instructions
+
+</xsl:text>
+        <xsl:apply-templates select="steps"/>
+    </xsl:template>
+
+    <!-- Steps template -->
+    <xsl:template match="steps">
+        <xsl:apply-templates select="step"/>
+    </xsl:template>
+
+    <!-- Step template -->
+    <xsl:template match="step">
+        <xsl:text>### Step </xsl:text>
+        <xsl:if test="@number">
+            <xsl:value-of select="@number"/><xsl:text>: </xsl:text>
+        </xsl:if>
+        <xsl:value-of select="normalize-space(step-title)"/>
+        <xsl:text>
+
+</xsl:text>
+        <xsl:call-template name="trim-step-content">
+            <xsl:with-param name="content" select="step-content"/>
+        </xsl:call-template>
+    </xsl:template>
+
+    <!-- XInclude template - processes included content -->
+    <xsl:template match="xi:include">
+        <xsl:choose>
+            <xsl:when test="@parse='text'">
+                <!-- For text includes, we need to read and output the file content -->
+                <xsl:comment>XInclude: <xsl:value-of select="@href"/></xsl:comment>
+                <xsl:text>
+<!-- Content from: </xsl:text><xsl:value-of select="@href"/><xsl:text> -->
+</xsl:text>
+            </xsl:when>
+            <xsl:otherwise>
+                <!-- For XML includes, process normally -->
+                <xsl:apply-templates/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <!-- Output format section template -->
@@ -238,6 +288,34 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
 
     <!-- Template to trim goal content while preserving paragraph structure -->
     <xsl:template name="trim-goal-content">
+        <xsl:param name="content"/>
+        <xsl:variable name="trimmed-start">
+            <xsl:choose>
+                <xsl:when test="starts-with($content, '&#10;')">
+                    <xsl:value-of select="substring($content, 2)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$content"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:variable name="trimmed-both">
+            <xsl:choose>
+                <xsl:when test="substring($trimmed-start, string-length($trimmed-start)) = '&#10;'">
+                    <xsl:value-of select="substring($trimmed-start, 1, string-length($trimmed-start) - 1)"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:value-of select="$trimmed-start"/>
+                </xsl:otherwise>
+            </xsl:choose>
+        </xsl:variable>
+        <xsl:call-template name="remove-goal-indentation">
+            <xsl:with-param name="text" select="$trimmed-both"/>
+        </xsl:call-template>
+    </xsl:template>
+
+    <!-- Template to trim step content while preserving paragraph structure -->
+    <xsl:template name="trim-step-content">
         <xsl:param name="content"/>
         <xsl:variable name="trimmed-start">
             <xsl:choose>

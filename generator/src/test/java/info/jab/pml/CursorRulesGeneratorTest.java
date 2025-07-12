@@ -78,7 +78,8 @@ class CursorRulesGeneratorTest {
                 "131-java-unit-testing",
                 "141-java-refactoring-with-modern-features",
                 "142-java-functional-programming",
-                "143-java-data-oriented-programming"
+                "143-java-data-oriented-programming",
+                "151-java-performance-jmeter"
             );
         }
 

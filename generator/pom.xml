@@ -219,7 +219,7 @@
         <executions>
           <execution>
             <id>copy-cursor-rules</id>
-            <phase>package</phase>
+            <phase>install</phase>
             <goals>
               <goal>copy-resources</goal>
             </goals>

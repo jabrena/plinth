@@ -29,10 +29,11 @@ Review the following [sequence diagram](./docs/cursor-interaction-sequence.png) 
 
 According to the documentation from [Google Gemini](https://drive.google.com/file/d/1AbaBYbEa_EbPelsT40-vj64L-2IwUJHy/view), [Anthropic Claude](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview) & [OpenAI ChatGPT](https://chatgpt.com/share/686d1066-9e40-800b-ac7f-cc8df7e4c7d0), a prompt should be structured in the following way:
 
-- Metadata
+- Metadata (Optional)
 - Role
 - Context (Optional)
 - Goal
+- Instructions (Optional)
 - Constraints (Optional)
 - Examples (Optional)
 - Output format (Optional)
@@ -42,7 +43,7 @@ With this structure in mind, the project uses an XML Schema to define the way th
 
 ## Cursor Rules
 
-Read the generated list of cursor rules for Java [here](./CURSOR-RULES-JAVA.md). The set of cursor rules covers aspects like Build system based on Maven, Design, Coding, Testing, Refactoring, Performance with JMeter & Profiling with Async Profiler.
+Read the generated list of cursor rules for Java [here](./CURSOR-RULES-JAVA.md). The set of cursor rules covers aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring`, `Performance testing with JMeter` & `Profiling with Async Profiler`.
 
 ## Getting started
 
