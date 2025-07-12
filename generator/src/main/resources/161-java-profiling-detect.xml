@@ -99,41 +99,6 @@
 
         Follow this workflow in order to set up profiling for your Java application:
 
-        ### Step 1: Setup Application Runner Script (`run-with-profiler.sh`)
-
-        **IMPORTANT**: Use the exact bash script from the template without any modification or interpretation.
-
-        The application runner script is available at: [java-profiling-script-run-app-template.md](./cursor/rules/templates/java-profiling-script-run-app-template.md)
-
-        **CRITICAL INSTRUCTION FOR AI ASSISTANTS:**
-        - **COPY THE BASH SCRIPT EXACTLY** from the template file
-        - **DO NOT MODIFY, INTERPRET, OR ENHANCE** the script content
-        - **DO NOT ADD NEW FEATURES** or change the logic
-        - **USE THE SCRIPT VERBATIM** - every line, comment, and function exactly as provided
-        - The script is already complete and tested - no improvements needed
-
-        **Script Location:**
-        ```
-        your-project/
-        └── run-with-profiler.sh    # ← Run main application with the right JVM flags for profiling
-        ```
-
-        **Setup Instructions:**
-        1. Copy the **EXACT** bash script content from `java-profiling-script-run-app-template.md`
-        2. Save it as `run-with-profiler.sh` in your project root
-        3. Make it executable: `chmod +x run-with-profiler.sh`
-        4. **NO MODIFICATIONS** to the script content are needed or allowed
-
-        **Purpose:**
-        - Configures JVM with profiling-friendly flags
-        - Ensures proper async-profiler compatibility
-        - Starts your application ready for profiling
-
-        **Usage:**
-        ```bash
-        # Start your application with profiling-ready JVM settings
-        ./run-with-profiler.sh
-        ```
 
         ### Step 2: Setup Interactive Profiling Script (`java-profile.sh`)
 
@@ -186,141 +151,210 @@
         - Ensures async-profiler can attach properly
         - Starts your application in profiling-ready mode
 
-        ### Step 2: Run Interactive Profiling
-
-        In a separate terminal, execute the interactive profiling script:
-
-        ```bash
-        # Execute the interactive profiling script
-        ./profiler/scripts/java-profile.sh
-        ```
-
-        **Expected execution flow:**
-        1. **Problem Identification**: The script will first ask you to identify what problem you're trying to solve
-        2. **Process Selection**: Lists all Java processes and allows you to select one
-        3. **Directory Setup**: Prompts for profiler directory (default: ./profiler)
-        4. **Auto-setup**: Downloads and configures async-profiler automatically
-        5. **Interactive Menu**: Presents profiling options based on your problem type
-
-        ### Step 3: Problem-Specific Profiling Commands
-
-        Based on the problem you identified, the script will execute these specific profiling commands:
-
-        #### For CPU Hotspots and Performance Bottlenecks
-        ```bash
-        # Quick CPU profiling (30 seconds)
-        ./profiler/current/bin/asprof -d 30 -f ./profiler/results/cpu-hotspots-$(date +%Y%m%d-%H%M%S).html <PID>
-
-        # Extended CPU profiling with method filtering
-        ./profiler/current/bin/asprof -d 60 -i 'com/yourpackage/*' -f ./profiler/results/filtered-cpu-$(date +%Y%m%d-%H%M%S).html <PID>
-        ```
-
-        #### For Memory-Related Problems
-        ```bash
-        # Memory allocation profiling
-        ./profiler/current/bin/asprof -e alloc -d 60 -f ./profiler/results/memory-allocations-$(date +%Y%m%d-%H%M%S).html <PID>
-
-        # Memory leak detection (longer duration)
-        ./profiler/current/bin/asprof -e alloc -d 300 --alloc 1m -f ./profiler/results/memory-leak-$(date +%Y%m%d-%H%M%S).html <PID>
-
-        # Native memory profiling
-        ./profiler/current/bin/asprof -e native -d 60 -f ./profiler/results/native-memory-$(date +%Y%m%d-%H%M%S).html <PID>
-        ```
-
-        #### For Concurrency and Threading Issues
-        ```bash
-        # Lock contention profiling
-        ./profiler/current/bin/asprof -e lock -d 60 -f ./profiler/results/lock-contention-$(date +%Y%m%d-%H%M%S).html <PID>
-
-        # Wall clock profiling (includes waiting threads)
-        ./profiler/current/bin/asprof -e wall -d 60 -f ./profiler/results/wall-clock-$(date +%Y%m%d-%H%M%S).html <PID>
-
-        # Thread-specific profiling
-        ./profiler/current/bin/asprof -d 60 -t -f ./profiler/results/thread-analysis-$(date +%Y%m%d-%H%M%S).html <PID>
-        ```
-
-        #### For Garbage Collection Problems
-        ```bash
-        # GC analysis with JFR
-        ./profiler/current/bin/asprof -d 120 -o jfr -f ./profiler/results/gc-analysis-$(date +%Y%m%d-%H%M%S).jfr <PID>
-
-        # Convert JFR to flamegraph for GC analysis
-        ./profiler/current/bin/jfr2flame ./profiler/results/gc-analysis-*.jfr ./profiler/results/gc-flamegraph-$(date +%Y%m%d-%H%M%S).html
-        ```
-
-        #### For I/O and Network Bottlenecks
-        ```bash
-        # I/O profiling with wall clock events
-        ./profiler/current/bin/asprof -e wall -d 90 -f ./profiler/results/io-analysis-$(date +%Y%m%d-%H%M%S).html <PID>
-
-        # Combined CPU and I/O analysis
-        ./profiler/current/bin/asprof -e cpu,wall -d 90 -f ./profiler/results/cpu-io-combined-$(date +%Y%m%d-%H%M%S).html <PID>
-        ```
-
-        ### Step 4: Advanced Analysis with Interactive Heatmaps
-
-        For time-based analysis, create interactive heatmaps:
-
-        ```bash
-        # Generate JFR recording
-        ./profiler/current/bin/asprof -d 120 -o jfr -f ./profiler/results/profile-$(date +%Y%m%d-%H%M%S).jfr <PID>
-
-        # Convert to interactive heatmap
-        ./profiler/current/bin/jfrconv --cpu -o heatmap ./profiler/results/profile-*.jfr ./profiler/results/heatmap-cpu-$(date +%Y%m%d-%H%M%S).html
-
-        # Create allocation heatmap
-        ./profiler/current/bin/jfrconv --alloc -o heatmap ./profiler/results/profile-*.jfr ./profiler/results/heatmap-alloc-$(date +%Y%m%d-%H%M%S).html
-        ```
-
-        ### Step 5: Results Organization and Analysis
-
-        After profiling, organize and analyze your results:
-
-        ```bash
-        # List all generated profiling files
-        ls -la ./profiler/results/
-
-        # View recent profiling results organized by type
-        echo "=== CPU Profiling Results ==="
-        ls -lt ./profiler/results/*cpu* ./profiler/results/*flamegraph* 2>/dev/null | head -5
-
-        echo "=== Memory Profiling Results ==="
-        ls -lt ./profiler/results/*memory* ./profiler/results/*alloc* 2>/dev/null | head -5
-
-        echo "=== Threading/Lock Analysis ==="
-        ls -lt ./profiler/results/*lock* ./profiler/results/*wall* ./profiler/results/*thread* 2>/dev/null | head -5
-
-        echo "=== Heatmap Analysis ==="
-        ls -lt ./profiler/results/*heatmap* 2>/dev/null | head -5
-
-        echo "=== JFR Recordings ==="
-        ls -lt ./profiler/results/*.jfr 2>/dev/null | head -5
-        ```
-
-        ## Interpreting Flamegraphs
-
-        ### Reading Flamegraphs
-        - **Width**: Represents the time spent in a method (wider = more time)
-        - **Height**: Represents the call stack depth
-        - **Color**: Randomly assigned for visibility (no special meaning)
-        - **Search**: Use the search box to find specific methods
-        - **Zoom**: Click on any frame to zoom in
-
-        ### Common Patterns to Look For
-        - **Wide flames**: Methods consuming significant CPU time
-        - **Tall stacks**: Deep call chains that might indicate recursion issues
-        - **Flat profiles**: Even distribution might indicate I/O bound operations
-        - **Spikes**: Hotspots that are good optimization candidates
-
-        ## Resources
-
-        - [Async-profiler v4.0 Release](https://github.com/async-profiler/async-profiler/releases/tag/v4.0)
-        - [Async-profiler GitHub Repository](https://github.com/async-profiler/async-profiler)
-        - [Async-profiler Documentation](https://github.com/async-profiler/async-profiler/wiki)
-        - [Java Flight Recorder Guide](https://docs.oracle.com/javacomponents/jmc-5-4/jfr-runtime-guide/about.htm)
-        - [Brendan Gregg's Flame Graph Resources](http://www.brendangregg.com/flamegraphs.html)
         ]]>
     </goal>
+
+
+    <instructions>
+        <steps>
+            <step number="1">
+                <step-title>Setup Application Runner Script</step-title>
+                <step-content>
+                    ### Step 1: Setup Application Runner Script (`run-with-profiler.sh`)
+
+                    **IMPORTANT**: Use the exact bash script from the template without any modification or interpretation.
+
+                    The application runner script is available at: [java-profiling-script-run-app-template.md](./cursor/rules/templates/java-profiling-script-run-app-template.md)
+
+                    **CRITICAL INSTRUCTION FOR AI ASSISTANTS:**
+                    - **COPY THE BASH SCRIPT EXACTLY** from the template file
+                    - **DO NOT MODIFY, INTERPRET, OR ENHANCE** the script content
+                    - **DO NOT ADD NEW FEATURES** or change the logic
+                    - **USE THE SCRIPT VERBATIM** - every line, comment, and function exactly as provided
+                    - The script is already complete and tested - no improvements needed
+
+                    **Script Location:**
+                    ```
+                    your-project/
+                    └── run-with-profiler.sh    # ← Run main application with the right JVM flags for profiling
+                    ```
+
+                    **Setup Instructions:**
+                    1. Copy the **EXACT** bash script content from `java-profiling-script-run-app-template.md`
+                    2. Save it as `run-with-profiler.sh` in your project root
+                    3. Make it executable: `chmod +x run-with-profiler.sh`
+                    4. **NO MODIFICATIONS** to the script content are needed or allowed
+
+                    **Purpose:**
+                    - Configures JVM with profiling-friendly flags
+                    - Ensures proper async-profiler compatibility
+                    - Starts your application ready for profiling
+
+                    **Usage:**
+                    ```bash
+                    # Start your application with profiling-ready JVM settings
+                    ./run-with-profiler.sh
+                    ```
+                </step-content>
+            </step>
+            <step number="2">
+                <step-title>Setup Interactive Profiling Script</step-title>
+                <step-content>
+                    ### Step 2: Run Interactive Profiling
+
+                    In a separate terminal, execute the interactive profiling script:
+
+                    ```bash
+                    # Execute the interactive profiling script
+                    ./profiler/scripts/java-profile.sh
+                    ```
+
+                    **Expected execution flow:**
+                    1. **Problem Identification**: The script will first ask you to identify what problem you're trying to solve
+                    2. **Process Selection**: Lists all Java processes and allows you to select one
+                    3. **Directory Setup**: Prompts for profiler directory (default: ./profiler)
+                    4. **Auto-setup**: Downloads and configures async-profiler automatically
+                    5. **Interactive Menu**: Presents profiling options based on your problem type
+
+                </step-content>
+            </step>
+            <step number="3">
+                <step-title>Setup Interactive Profiling Script</step-title>
+                <step-content>
+                    <![CDATA[
+                    ### Step 3: Problem-Specific Profiling Commands
+
+                    Based on the problem you identified, the script will execute these specific profiling commands:
+
+                    #### For CPU Hotspots and Performance Bottlenecks
+                    ```bash
+                    # Quick CPU profiling (30 seconds)
+                    ./profiler/current/bin/asprof -d 30 -f ./profiler/results/cpu-hotspots-$(date +%Y%m%d-%H%M%S).html <PID>
+
+                    # Extended CPU profiling with method filtering
+                    ./profiler/current/bin/asprof -d 60 -i 'com/yourpackage/*' -f ./profiler/results/filtered-cpu-$(date +%Y%m%d-%H%M%S).html <PID>
+                    ```
+
+                    #### For Memory-Related Problems
+                    ```bash
+                    # Memory allocation profiling
+                    ./profiler/current/bin/asprof -e alloc -d 60 -f ./profiler/results/memory-allocations-$(date +%Y%m%d-%H%M%S).html <PID>
+
+                    # Memory leak detection (longer duration)
+                    ./profiler/current/bin/asprof -e alloc -d 300 --alloc 1m -f ./profiler/results/memory-leak-$(date +%Y%m%d-%H%M%S).html <PID>
+
+                    # Native memory profiling
+                    ./profiler/current/bin/asprof -e native -d 60 -f ./profiler/results/native-memory-$(date +%Y%m%d-%H%M%S).html <PID>
+                    ```
+
+                    #### For Concurrency and Threading Issues
+                    ```bash
+                    # Lock contention profiling
+                    ./profiler/current/bin/asprof -e lock -d 60 -f ./profiler/results/lock-contention-$(date +%Y%m%d-%H%M%S).html <PID>
+
+                    # Wall clock profiling (includes waiting threads)
+                    ./profiler/current/bin/asprof -e wall -d 60 -f ./profiler/results/wall-clock-$(date +%Y%m%d-%H%M%S).html <PID>
+
+                    # Thread-specific profiling
+                    ./profiler/current/bin/asprof -d 60 -t -f ./profiler/results/thread-analysis-$(date +%Y%m%d-%H%M%S).html <PID>
+                    ```
+
+                    #### For Garbage Collection Problems
+                    ```bash
+                    # GC analysis with JFR
+                    ./profiler/current/bin/asprof -d 120 -o jfr -f ./profiler/results/gc-analysis-$(date +%Y%m%d-%H%M%S).jfr <PID>
+
+                    # Convert JFR to flamegraph for GC analysis
+                    ./profiler/current/bin/jfr2flame ./profiler/results/gc-analysis-*.jfr ./profiler/results/gc-flamegraph-$(date +%Y%m%d-%H%M%S).html
+                    ```
+
+                    #### For I/O and Network Bottlenecks
+                    ```bash
+                    # I/O profiling with wall clock events
+                    ./profiler/current/bin/asprof -e wall -d 90 -f ./profiler/results/io-analysis-$(date +%Y%m%d-%H%M%S).html <PID>
+
+                    # Combined CPU and I/O analysis
+                    ./profiler/current/bin/asprof -e cpu,wall -d 90 -f ./profiler/results/cpu-io-combined-$(date +%Y%m%d-%H%M%S).html <PID>
+                    ```
+                    ]]>
+                </step-content>
+            </step>
+            <step number="4">
+                <step-title>Setup Interactive Profiling Script</step-title>
+                <step-content>
+                    <![CDATA[
+                    ### Step 4: Advanced Analysis with Interactive Heatmaps
+
+                    For time-based analysis, create interactive heatmaps:
+
+                    ```bash
+                    # Generate JFR recording
+                    ./profiler/current/bin/asprof -d 120 -o jfr -f ./profiler/results/profile-$(date +%Y%m%d-%H%M%S).jfr <PID>
+
+                    # Convert to interactive heatmap
+                    ./profiler/current/bin/jfrconv --cpu -o heatmap ./profiler/results/profile-*.jfr ./profiler/results/heatmap-cpu-$(date +%Y%m%d-%H%M%S).html
+
+                    # Create allocation heatmap
+                    ./profiler/current/bin/jfrconv --alloc -o heatmap ./profiler/results/profile-*.jfr ./profiler/results/heatmap-alloc-$(date +%Y%m%d-%H%M%S).html
+                    ```
+                    ]]>
+                </step-content>
+            </step>
+            <step number="5">
+                <step-title>Setup Interactive Profiling Script</step-title>
+                <step-content>
+                    ### Step 5: Results Organization and Analysis
+
+                    After profiling, organize and analyze your results:
+
+                    ```bash
+                    # List all generated profiling files
+                    ls -la ./profiler/results/
+
+                    # View recent profiling results organized by type
+                    echo "=== CPU Profiling Results ==="
+                    ls -lt ./profiler/results/*cpu* ./profiler/results/*flamegraph* 2>/dev/null | head -5
+
+                    echo "=== Memory Profiling Results ==="
+                    ls -lt ./profiler/results/*memory* ./profiler/results/*alloc* 2>/dev/null | head -5
+
+                    echo "=== Threading/Lock Analysis ==="
+                    ls -lt ./profiler/results/*lock* ./profiler/results/*wall* ./profiler/results/*thread* 2>/dev/null | head -5
+
+                    echo "=== Heatmap Analysis ==="
+                    ls -lt ./profiler/results/*heatmap* 2>/dev/null | head -5
+
+                    echo "=== JFR Recordings ==="
+                    ls -lt ./profiler/results/*.jfr 2>/dev/null | head -5
+                    ```
+
+                    ## Interpreting Flamegraphs
+
+                    ### Reading Flamegraphs
+                    - **Width**: Represents the time spent in a method (wider = more time)
+                    - **Height**: Represents the call stack depth
+                    - **Color**: Randomly assigned for visibility (no special meaning)
+                    - **Search**: Use the search box to find specific methods
+                    - **Zoom**: Click on any frame to zoom in
+
+                    ### Common Patterns to Look For
+                    - **Wide flames**: Methods consuming significant CPU time
+                    - **Tall stacks**: Deep call chains that might indicate recursion issues
+                    - **Flat profiles**: Even distribution might indicate I/O bound operations
+                    - **Spikes**: Hotspots that are good optimization candidates
+
+                    ## Resources
+
+                    - [Async-profiler v4.0 Release](https://github.com/async-profiler/async-profiler/releases/tag/v4.0)
+                    - [Async-profiler GitHub Repository](https://github.com/async-profiler/async-profiler)
+                    - [Async-profiler Documentation](https://github.com/async-profiler/async-profiler/wiki)
+                    - [Java Flight Recorder Guide](https://docs.oracle.com/javacomponents/jmc-5-4/jfr-runtime-guide/about.htm)
+                    - [Brendan Gregg's Flame Graph Resources](http://www.brendangregg.com/flamegraphs.html)
+
+                </step-content>
+            </step>
+        </steps>
+    </instructions>
 
     <output-format>
         <output-format-list>

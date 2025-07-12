@@ -47,13 +47,18 @@
                 <step-content>
                     ## Step 1: MANDATORY Conversational Assessment
 
-                    **CRITICAL**: You MUST ask the exact questions from the template in strict order before making any changes to understand the project needs. Based on the answers, you will conditionally add only relevant dependencies and plugins.
+                    **CRITICAL**: You MUST ask the exact questions from the following template in strict order before making any changes to understand the project needs.
+                    Based on the answers, you will conditionally add only relevant dependencies and plugins.
 
-                    ### Project Assessment Questions (STRICT TEMPLATE COMPLIANCE)
+                    ```markdown
+                    <xi:include href="fragments/java-maven-questions-template.md" parse="text"/>
+                    ```
 
                     **MANDATORY PROCESS:**
 
-                    1. **ALWAYS READ THE TEMPLATE FRESH**: Before asking any questions, you MUST use the `file_search` and `read_file` tools to locate and read the complete content of `java-maven-questions-template.md`. DO NOT use cached or remembered questions from previous interactions.
+                    1. **ALWAYS READ THE TEMPLATE FRESH**: Before asking any questions, you MUST use the `file_search` and `read_file` tools to locate and read
+                    the complete content of the template.
+                    DO NOT use cached or remembered questions from previous interactions.
 
                     2. **Reference the Template**: Use the questions from the template
 
@@ -84,8 +89,6 @@
                        - **STOP** and verify all applicable questions have been answered
                        - **Do NOT proceed** to Step 2 until complete responses received
                        - **Confirm** understanding of user selections before implementation
-
-                    **TEMPLATE ADHERENCE IS MANDATORY** - Follow the template questions exactly as written, maintaining their structure, options, and recommendations.
                 </step-content>
             </step>
             <step number="3">
@@ -95,7 +98,13 @@
 
                     **⚠️ CRITICAL TEMPLATE COMPLIANCE REQUIREMENT ⚠️**
 
-                    **ALL plugin configurations MUST exactly match the templates in `java-maven-plugins-template.md`. Do NOT deviate from template specifications. This includes:**
+                    **ALL plugin configurations MUST exactly match the following template:
+
+                    ```markdown
+                    <xi:include href="fragments/java-maven-plugins-template.md" parse="text"/>
+                    ```
+
+                    Do NOT deviate from template specifications. This includes:
 
                     - ✅ **Property Naming Convention**: Use `maven-plugins-*` format (e.g., `maven-plugins-compiler.version`, NOT `maven-compiler-plugin.version`)
                     - ✅ **Complete Compiler Configuration**: Include ALL Error Prone and NullAway options as specified in template:
@@ -115,6 +124,10 @@
 
                     **Reference**: For detailed properties configuration strategy and conditional logic, see the template file.
 
+                    ```markdown
+                    <xi:include href="fragments/java-maven-properties-template.md" parse="text"/>
+                    ```
+
                     **Summary**: Build properties incrementally based on user's actual needs and project requirements. The template provides comprehensive guidance on:
                     - Core properties (always added)
                     - Maven version and plugin properties (conditional)
@@ -128,6 +141,10 @@
                     **Dependency Strategy**: Add only essential dependencies that enhance code quality and safety.
 
                     **Reference**: For specific dependency configurations, see the template file.
+
+                    ```markdown
+                    <xi:include href="fragments/java-maven-dependencies-template.md" parse="text"/>
+                    ```
 
                     #### Available Dependencies (add only if selected):
                     - **JSpecify**: Nullness annotations for improved null safety
@@ -181,60 +198,6 @@
 
                     #### Profile Usage Examples:
                     Only provide examples for profiles that were actually added based on user selections.
-                </step-content>
-            </step>
-            <step number="4">
-                <step-title>Final Validation</step-title>
-                <step-content>
-
-                    After all updates are complete, validate the configuration:
-
-                    ### If using Maven Wrapper (recommended):
-                    ```bash
-                    ./mvnw validate
-                    ```
-
-                    ### If using system Maven:
-                    ```bash
-                    mvn validate
-                    ```
-
-                    **Note**: Always prefer using the Maven Wrapper (./mvnw) if it was installed during the pre-requisites check, as it ensures consistent build behavior across different environments.
-                </step-content>
-            </step>
-            <step number="5">
-                <step-title>Provide Usage Examples</step-title>
-                <step-content>
-                    ## Step 4: Provide Usage Examples
-
-                    Only provide examples for the features that were actually added based on user selections.
-
-                    ## Implementation Guidelines
-
-                    1. **ALWAYS ask the questions first** - Do not make assumptions about what the user needs
-                    2. **STRICTLY follow template specifications** - Copy configurations exactly from `java-maven-plugins-template.md` without modifications
-                    3. **Add only what was requested** - Don't include everything by default
-                    4. **Follow the order**: Questions → Properties → Dependencies → Plugins → Profiles
-                    5. **Customize package names**: Update package structure to match the actual project
-                    6. **Adjust thresholds**: Use the coverage levels specified by the user
-                    7. **Configure Sonar parameters**: Replace template placeholders with user-provided values:
-                       - Replace `YOUR_GITHUB_USER` with the provided organization identifier
-                       - Replace `YOUR_GITHUB_USER_REPOSITORY_NAME` with the provided project key
-                       - Replace `YOUR_PROJECT_NAME` with the provided project display name
-                       - Set `sonar.host.url` based on the selected Sonar service (SonarCloud or custom SonarQube)
-                    8. **Validate configuration**: Always run validation after changes
-                    9. **Provide relevant examples**: Only show usage examples for added features
-
-                    ## Conversation Flow Example
-
-                    1. Start with: "I'll help you improve your pom.xml with Maven best practices. Let me ask a few questions to understand your project needs."
-                    2. Ask all relevant questions from Step 1
-                    3. Based on answers, explain what will be added: "Based on your selections, I'll add..."
-                    4. Implement only the requested features
-                    5. Validate the configuration
-                    6. Provide usage examples for the added features
-
-                    This approach ensures the pom.xml is tailored to the actual project needs rather than adding everything by default.
                 </step-content>
             </step>
         </steps>
