@@ -27,19 +27,21 @@ Review the following [sequence diagram](./docs/cursor-interaction-sequence.png) 
 
 ## What is the structure of a System prompt?
 
-According to the documentation from [Google Gemini](https://drive.google.com/file/d/1AbaBYbEa_EbPelsT40-vj64L-2IwUJHy/view), [Anthropic Claude](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview) & [OpenAI ChatGPT](https://chatgpt.com/share/686d1066-9e40-800b-ac7f-cc8df7e4c7d0), a prompt should be structured in the following way:
+According to the documentation from [Google Gemini](https://drive.google.com/file/d/1AbaBYbEa_EbPelsT40-vj64L-2IwUJHy/view), [Anthropic Claude](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview) & [OpenAI ChatGPT](https://chatgpt.com/share/686d1066-9e40-800b-ac7f-cc8df7e4c7d0), a prompt could be structured in the following way:
 
-- Metadata (Optional)
+- Metadata
 - Role
-- Context (Optional)
+- Context
 - Goal
-- Instructions (Optional)
-- Constraints (Optional)
-- Examples (Optional)
-- Output format (Optional)
-- Safeguards (Optional)
+- Instructions
+- Constraints
+- Examples
+- Output format
+- Safeguards
 
-With this structure in mind, the project uses an XML Schema to define the way that all System prompts are generated for Cursor AI. If you are interested, you could review [the Schema](./generator/src/main/resources/pml.xsd).
+With this structure in mind, the project uses an XML Schema to define the way that all System prompts are generated for Cursor AI. If you are interested in this area, you could review [the Schema](./generator/src/main/resources/pml.xsd).
+
+**Note:** But it is not necessary to add all parts in a prompt.
 
 ## Cursor Rules
 
