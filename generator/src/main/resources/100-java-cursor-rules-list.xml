@@ -27,7 +27,7 @@
         Create a markdown file named `CURSOR-RULES-JAVA.md` with the following content:
 
         ```markdown
-        <xi:include href="fragments/java-checklist-template.md" parse="text"/>
+        <xi:include href="fragments/java-cursor-rules-list-template.md" parse="text"/>
         ```
     </goal>
 

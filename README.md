@@ -59,14 +59,14 @@ Once you have installed the cursor rules:
 
 | Cursor Rule | Description | Prompt | Notes |
 |-------------|-------------|--------|-------|
-| [100-java-checklist-guide](.cursor/rules/100-java-checklist-guide.mdc) | Create a comprehensive step-by-step guide for using cursor rules for Java | `Create an java development guide using the cursor rule @100-java-checklist-guide` | This cursor rule is applied automatically without any interaction with the Software engineer. |
+| [100-java-cursor-rules-list](.cursor/rules/100-java-cursor-rules-list.mdc) | Create a comprehensive step-by-step guide for using cursor rules for Java | `Create an java development guide using the cursor rule @100-java-cursor-rules-list` | This cursor rule is applied automatically without any interaction with the Software engineer. |
 
 Type the following prompt in the cursor chat:
 
 ![](./docs/getting-started-prompt.png)
 
 ```bash
-Create an java development guide using the cursor rule @100-java-checklist-guide
+Create an java development guide using the cursor rule @100-java-cursor-rules-list
 ```
 
 ## Limitations & Opportunities
