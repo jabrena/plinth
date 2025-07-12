@@ -68,6 +68,7 @@ class CursorRulesGeneratorTest {
             return Stream.of(
                 "100-java-cursor-rules-list",
                 "110-java-maven-best-practices",
+                "111-java-maven-deps-and-plugins",
                 "112-java-maven-documentation",
                 "121-java-object-oriented-design",
                 "122-java-type-design",
@@ -79,7 +80,10 @@ class CursorRulesGeneratorTest {
                 "141-java-refactoring-with-modern-features",
                 "142-java-functional-programming",
                 "143-java-data-oriented-programming",
-                "151-java-performance-jmeter"
+                "151-java-performance-jmeter",
+                "161-java-profiling-detect",
+                "162-java-profiling-analyze",
+                "164-java-profiling-compare"
             );
         }
 

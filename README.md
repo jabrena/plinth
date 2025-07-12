@@ -41,7 +41,7 @@ According to the documentation from [Google Gemini](https://drive.google.com/fil
 
 With this structure in mind, the project uses an XML Schema to define the way that all System prompts are generated for Cursor AI. If you are interested in this area, you could review [the Schema](./generator/src/main/resources/pml.xsd).
 
-**Note:** But it is not necessary to add all parts in a prompt.
+**Note:** It is not necessary to add all parts in a prompt.
 
 ## Cursor Rules
 
