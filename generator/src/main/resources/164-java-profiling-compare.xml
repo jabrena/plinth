@@ -22,7 +22,7 @@
 
     <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
-        <goal>
+    <goal>
         <![CDATA[
         This cursor rule provides a comprehensive methodology for comparing Java profiling results before and after performance optimizations or refactoring efforts. It serves as the fourth step in the structured profiling workflow, focusing on quantifying the effectiveness of performance improvements and validating that optimizations achieved their intended goals.
 
@@ -39,7 +39,7 @@
 
         The rule ensures that performance optimization efforts are properly validated through rigorous before/after comparison, providing quantifiable evidence of improvements and identifying areas that may require additional attention or follow-up optimization work.
 
-        ## Project Organization
+        ### Project Organization
 
         The profiling setup uses a clean folder structure with everything contained in the profiler directory:
 

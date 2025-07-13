@@ -1,15 +1,16 @@
 ---
-description: 
-globs: 
+description:
+globs:
 alwaysApply: false
 ---
 # Java Profiling Workflow / Step 4 / Compare results after refactoring
 
-## System prompt characterization
+## Role
 
-Role definition: You are a Senior software engineer with extensive experience in Java software development
+You are a Senior software engineer with extensive experience in Java software development
 
-## Description
+## Goal
+
 
 This cursor rule provides a comprehensive methodology for comparing Java profiling results before and after performance optimizations or refactoring efforts. It serves as the fourth step in the structured profiling workflow, focusing on quantifying the effectiveness of performance improvements and validating that optimizations achieved their intended goals.
 
@@ -26,23 +27,23 @@ Key capabilities include:
 
 The rule ensures that performance optimization efforts are properly validated through rigorous before/after comparison, providing quantifiable evidence of improvements and identifying areas that may require additional attention or follow-up optimization work.
 
-## Project Organization
+### Project Organization
 
 The profiling setup uses a clean folder structure with everything contained in the profiler directory:
 
 ```
 your-project/
 └── profiler/               # ← All profiling-related files
-    ├── scripts/            # ← Profiling scripts and tools
-    │   └── java-profile.sh # ← Main profiling script
-    ├── results/            # ← Generated profiling output
-    │   ├── *.html          # ← Flamegraph files
-    │   └── *.jfr           # ← JFR recording files
-    ├── docs/               # ← Analysis documentation
-    │   ├── profiling-comparison-analysis-YYYYMMDD.md
-    │   └── profiling-final-results-YYYYMMDD.md
-    ├── current/            # ← Symlink to current profiler version
-    └── async-profiler-*/   # ← Downloaded profiler binaries
+├── scripts/            # ← Profiling scripts and tools
+│   └── java-profile.sh # ← Main profiling script
+├── results/            # ← Generated profiling output
+│   ├── *.html          # ← Flamegraph files
+│   └── *.jfr           # ← JFR recording files
+├── docs/               # ← Analysis documentation
+│   ├── profiling-comparison-analysis-YYYYMMDD.md
+│   └── profiling-final-results-YYYYMMDD.md
+├── current/            # ← Symlink to current profiler version
+└── async-profiler-*/   # ← Downloaded profiler binaries
 ```
 
 ## Complete Comparison Workflow
@@ -106,12 +107,12 @@ wc -c profiler/results/*.html
 
 #### Memory Analysis Checklist
 - [ ] **Memory leak detection**: Compare heap usage patterns between before/after flamegraphs
-- [ ] **Allocation patterns**: Analyze allocation flamegraphs for reduced object creation  
+- [ ] **Allocation patterns**: Analyze allocation flamegraphs for reduced object creation
 - [ ] **GC pressure**: Compare garbage collection frequency and duration
 - [ ] **Peak memory usage**: Identify improvements in maximum heap utilization
 - [ ] **Stack depth**: Compare flamegraph complexity (canvas height, levels)
 
-#### CPU Performance Checklist  
+#### CPU Performance Checklist
 - [ ] **Hot spots identification**: Compare CPU flamegraphs to identify resolved bottlenecks
 - [ ] **Method execution time**: Analyze improvements in critical path performance
 - [ ] **Thread contention**: Look for reduced blocking or improved concurrency
@@ -122,7 +123,7 @@ wc -c profiler/results/*.html
 # Browser tab 1: Baseline report
 open profiler/results/memory-leak-*baseline*.html
 
-# Browser tab 2: After refactoring report  
+# Browser tab 2: After refactoring report
 open profiler/results/memory-leak-*after*.html
 
 # Compare:
@@ -159,7 +160,7 @@ Template for `profiler/docs/profiling-comparison-analysis-YYYYMMDD.md`:
 
 ## Before/After Metrics
 | Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
+|-----|-----|----|----|
 | Stack Depth (levels) | X | Y | Z% |
 | Canvas Height (px) | X | Y | Z% |
 | Memory Allocations | X | Y | Z% |
@@ -201,7 +202,7 @@ Template for `profiler/docs/profiling-final-results-YYYYMMDD.md`:
 
 ## Key Metrics Summary
 | Performance Area | Before | After | Improvement |
-|------------------|---------|-------|-------------|
+|---|---|----|----|
 | Memory Usage | [value] | [value] | [%] |
 | CPU Usage | [value] | [value] | [%] |
 | Response Time | [value] | [value] | [%] |
@@ -271,9 +272,9 @@ echo "Test scenarios used:" > profiler/docs/test-scenarios.md
 cat > profiler/scripts/load-test.sh << 'EOF'
 #!/bin/bash
 for i in {1..10}; do
-    curl http://localhost:8080/api/v1/objects/create
-    curl http://localhost:8080/api/v1/threads/create
-    sleep 5
+curl http://localhost:8080/api/v1/objects/create
+curl http://localhost:8080/api/v1/threads/create
+sleep 5
 done
 EOF
 chmod +x profiler/scripts/load-test.sh
@@ -287,7 +288,7 @@ chmod +x profiler/scripts/load-test.sh
 memory-leak-baseline-YYYYMMDD-HHMMSS.html
 allocation-flamegraph-baseline-YYYYMMDD-HHMMSS.html
 
-# After refactoring  
+# After refactoring
 memory-leak-after-refactoring-YYYYMMDD-HHMMSS.html
 allocation-flamegraph-after-refactoring-YYYYMMDD-HHMMSS.html
 
@@ -319,7 +320,7 @@ ls profiler/results/ | grep -E "(after|refactoring)" | wc -l  # Should be > 0
 
 ### Documentation Deliverables
 - [ ] `profiler/docs/profiling-comparison-analysis-YYYYMMDD.md` created
-- [ ] `profiler/docs/profiling-final-results-YYYYMMDD.md` created  
+- [ ] `profiler/docs/profiling-final-results-YYYYMMDD.md` created
 - [ ] Quantified performance improvements documented
 - [ ] Recommendations for production deployment provided
 - [ ] Ongoing monitoring strategy defined
@@ -329,7 +330,7 @@ ls profiler/results/ | grep -E "(after|refactoring)" | wc -l  # Should be > 0
 # Final validation that comparison is complete
 echo "=== COMPARISON READINESS CHECK ==="
 echo "Baseline reports: $(ls profiler/results/*baseline* 2>/dev/null | wc -l)"
-echo "After reports: $(ls profiler/results/*after* 2>/dev/null | wc -l)"  
+echo "After reports: $(ls profiler/results/*after* 2>/dev/null | wc -l)"
 echo "Analysis docs: $(ls profiler/docs/profiling-comparison-analysis-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].md 2>/dev/null | wc -l)"
 echo "Final results: $(ls profiler/docs/profiling-final-results-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].md 2>/dev/null | wc -l)"
 ```
@@ -344,7 +345,7 @@ If you're missing post-refactoring reports, run these commands:
 sleep 30
 
 # 2. Generate new reports
-cd profiler/scripts  
+cd profiler/scripts
 ./java-profile.sh --mode memory --duration 60 --output-prefix after-refactoring
 
 # 3. Run load test while profiling
@@ -357,3 +358,20 @@ ls -la ../results/*after*
 echo "Ready to compare baseline vs after-refactoring reports"
 ```
 
+
+## Output Format
+
+- Generate post-refactoring profiling reports using identical test conditions as baseline
+- Perform systematic side-by-side comparison of before/after flamegraphs and metrics
+- Create comprehensive comparison analysis documentation with quantified improvements
+- Validate that performance optimization goals were achieved through rigorous measurement
+- Identify any performance regressions introduced during optimization efforts
+- Provide clear recommendations for production deployment and ongoing monitoring
+
+## Safeguards
+
+- Always ensure identical test conditions between baseline and post-refactoring profiling sessions
+- Verify that both baseline and post-refactoring reports are complete and non-empty before comparison
+- Document all test scenarios and load patterns used for consistent reproduction
+- Validate that application is fully operational with refactored code before generating new reports
+- Create dated documentation files to maintain historical analysis tracking

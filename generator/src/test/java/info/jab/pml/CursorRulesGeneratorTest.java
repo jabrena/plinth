@@ -82,8 +82,8 @@ class CursorRulesGeneratorTest {
                 "143-java-data-oriented-programming",
                 "151-java-performance-jmeter",
                 "161-java-profiling-detect",
-                "162-java-profiling-analyze"
-                // "164-java-profiling-compare"
+                "162-java-profiling-analyze",
+                "164-java-profiling-compare"
             );
         }
 
@@ -111,7 +111,6 @@ class CursorRulesGeneratorTest {
             validateCodeBlockFormatting(lines, baseFileName);
             validateOutputFormatSection(lines, baseFileName);
             validateSafeguardsSection(lines, baseFileName);
-            //validateConsultativeInteractionPattern(lines, baseFileName);
             validateExampleNumberingConsistency(lines, baseFileName);
 
         }
@@ -386,43 +385,6 @@ class CursorRulesGeneratorTest {
                         .isTrue();
                 }
             }
-        }
-
-                /**
-         * Validates the consultative interaction pattern in the Goal section.
-         * Only applies to code analysis rules, not template generation rules.
-         */
-        private void validateConsultativeInteractionPattern(String[] lines, String baseFileName) {
-            String content = String.join("\n", lines);
-
-            // Skip validation for template generation rules
-            if (isTemplateGenerationRule(content, baseFileName)) {
-                logger.info("Skipping consultative interaction pattern validation for template generation rule: {}", baseFileName);
-                return;
-            }
-
-            // Should contain the consultative approach keywords
-            boolean hasAnalyzeStep = content.contains("**Analyze**") || content.contains("Analyze");
-            boolean hasIdentifyStep = content.contains("**Identify**") || content.contains("Identify");
-            boolean hasPresentStep = content.contains("**Present**") || content.contains("Present");
-            boolean hasAskStep = content.contains("**Ask**") || content.contains("Ask");
-            boolean hasWaitStep = content.contains("**Wait**") || content.contains("Wait");
-
-            // Should have most of these consultative steps
-            int consultativeSteps = (hasAnalyzeStep ? 1 : 0) + (hasIdentifyStep ? 1 : 0) +
-                                   (hasPresentStep ? 1 : 0) + (hasAskStep ? 1 : 0) + (hasWaitStep ? 1 : 0);
-
-            assertThat(consultativeSteps)
-                .withFailMessage("MDC file %s.mdc should follow consultative interaction pattern with analyze/identify/present/ask/wait steps", baseFileName)
-                .isGreaterThanOrEqualTo(3);
-
-            // Should contain example interaction
-            boolean hasExampleInteraction = content.contains("**Example interaction:**") ||
-                                          content.contains("Example interaction:");
-
-            assertThat(hasExampleInteraction)
-                .withFailMessage("MDC file %s.mdc should contain an example interaction section", baseFileName)
-                .isTrue();
         }
 
         /**
