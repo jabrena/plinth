@@ -64,8 +64,6 @@
             <step number="1">
                 <step-title>Inventory Available Results</step-title>
                 <step-content>
-                    ### Step 1: Inventory Available Results
-
                     Scan the following directories for profiling results:
                     - `*/profiler/results/` - Example-specific profiling results
 
@@ -75,28 +73,27 @@
                     - `inverted-flamegraph-*.html` - Bottom-up call analysis
                     - `memory-leak-*.html` - Memory leak detection reports
                     - `*.jfr` - Java Flight Recorder files
+
                 </step-content>
             </step>
             <step number="2">
                 <step-title>Problem Identification Process</step-title>
                 <step-content>
-                    ### Step 2: Problem Identification Process
-
                     For each profiling result file, analyze and document:
 
-                    #### Memory-Related Issues
+                    **Memory-Related Issues:**
                     - **Memory Leaks**: Look for continuously growing memory usage patterns
                     - **Excessive Allocations**: Identify high-frequency object creation
                     - **Memory Fragmentation**: Check for inefficient memory usage patterns
                     - **GC Pressure**: Analyze garbage collection frequency and duration
 
-                    #### Performance Issues
+                    **Performance Issues:**
                     - **CPU Hotspots**: Identify methods consuming excessive CPU time
                     - **Blocking Operations**: Look for synchronization bottlenecks
                     - **Inefficient Algorithms**: Spot methods with unexpected complexity
                     - **Resource Contention**: Identify thread contention issues
 
-                    #### Threading Issues
+                    **Threading Issues:**
                     - **Deadlocks**: Look for thread synchronization problems
                     - **Context Switching**: Excessive thread switching overhead
                     - **Thread Pool Saturation**: Insufficient thread pool sizing
@@ -106,14 +103,13 @@
             <step number="3">
                 <step-title>Problem Identification Process</step-title>
                 <step-content>
-                    ### Step 3: Create Analysis Documents
-
                     Generate the following documents in the `*/profiler/docs/` (According with Project organization) folder:
 
-                    #### Problem Analysis Document
+                    **Problem Analysis Document:**
                     Create: `docs/profiling-problem-analysis-YYYYMMDD.md`
 
                     Structure:
+
                     ```markdown
                     # Profiling Problem Analysis - [Date]
 
@@ -148,6 +144,7 @@
                     Create: `docs/profiling-solutions-YYYYMMDD.md`
 
                     Structure:
+
                     ```markdown
                     # Profiling Solutions and Recommendations - [Date]
 
@@ -183,82 +180,78 @@
             <step number="4">
                 <step-title>Problem Identification Process</step-title>
                 <step-content>
-                    ### Step 4: Analysis Execution Guidelines
-
-                    #### File Naming Convention
+                    **File Naming Convention:**
                     - Problem analysis: `profiling-problem-analysis-YYYYMMDD.md`
                     - Solutions: `profiling-solutions-YYYYMMDD.md`
                     - Summary reports: `profiling-summary-YYYYMMDD.md`
 
-                    #### Data Correlation
+                    **Data Correlation:**
                     - Cross-reference multiple profiling files
                     - Compare different time periods
                     - Correlate with application logs
                     - Consider load testing scenarios
 
-                    #### Evidence Documentation
+                    **Evidence Documentation:**
                     - Include specific flamegraph screenshots
                     - Reference exact file names and timestamps
                     - Provide quantitative metrics
                     - Document reproduction steps
+
                 </step-content>
             </step>
             <step number="5">
-                <step-title>Problem Identification Process</step-title>
+                <step-title>Solution Prioritization Framework</step-title>
                 <step-content>
-                    ### Step 5: Solution Prioritization Framework
-
                     Rate each identified problem using:
 
-                    #### Impact Score (1-5)
+                    **Impact Score (1-5):**
                     - 5: Critical performance degradation
                     - 4: Significant resource waste
                     - 3: Moderate performance impact
                     - 2: Minor inefficiency
                     - 1: Cosmetic optimization
 
-                    #### Effort Score (1-5)
+                    **Effort Score (1-5):**
                     - 1: Configuration change
                     - 2: Single method optimization
                     - 3: Class-level refactoring
                     - 4: Module restructuring
                     - 5: Architecture change
 
-                    #### Priority = Impact / Effort
+                    **Priority = Impact / Effort**
                     Focus on high-priority items first.
 
-                    ## Integration with Development Workflow
+                    **Integration with Development Workflow**
 
-                    ### Before Analysis
+                    **Before Analysis:**
                     1. Ensure all profiling results are recent and relevant
                     2. Verify results represent realistic load scenarios
                     3. Document test conditions and environment
 
-                    ### During Analysis
+                    **During Analysis:**
                     1. Use systematic approach for consistency
                     2. Document assumptions and limitations
                     3. Validate findings with additional data points
 
-                    ### After Analysis
+                    **After Analysis:**
                     1. Share findings with development team
                     2. Create implementation tickets/issues
                     3. Plan validation and monitoring approach
                     4. Schedule follow-up profiling sessions
 
-                    ## Tools and Techniques
+                    **Tools and Techniques:**
 
-                    ### Analysis Tools
+                    **Analysis Tools:**
                     - **async-profiler**: Flamegraph generation and CPU/memory profiling
                     - **JFR (Java Flight Recorder)**: Low-overhead continuous profiling
                     - **JProfiler/YourKit**: Commercial profiling tools for deep analysis
                     - **GCViewer**: Garbage collection log analysis
 
-                    ### Visualization Techniques
+                    **Visualization Techniques:**
                     - **Flamegraphs**: Call stack visualization
                     - **Heatmaps**: Temporal analysis of hotspots
                     - **Allocation tracking**: Memory usage patterns
                     - **Thread dumps**: Concurrency analysis
-
                 </step-content>
             </step>
         </steps>
