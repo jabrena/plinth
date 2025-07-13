@@ -6,10 +6,11 @@
     <xs:element name="prompt">
         <xs:complexType>
             <xs:sequence>
-                <xs:element ref="metadata"/>
+                <xs:element ref="metadata" minOccurs="0"/>
                 <xs:element ref="role"/>
                 <xs:element ref="context" minOccurs="0"/>
                 <xs:element ref="goal"/>
+                <xs:element ref="instructions" minOccurs="0"/>
                 <xs:element ref="constraints" minOccurs="0"/>
                 <xs:element ref="examples" minOccurs="0"/>
                 <xs:element ref="output-format" minOccurs="0"/>
@@ -66,7 +67,71 @@
     <xs:element name="role" type="xs:string"/>
 
     <!-- Goal statement -->
-    <xs:element name="goal" type="xs:string"/>
+    <xs:element name="goal">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Instructions section -->
+    <xs:element name="instructions">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="steps"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Steps container -->
+    <xs:element name="steps">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="step" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Individual step -->
+    <xs:element name="step">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="step-title"/>
+                <xs:element ref="step-content"/>
+                <xs:element ref="step-constraints" minOccurs="0"/>
+            </xs:sequence>
+            <xs:attribute name="number" type="xs:string" use="optional"/>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="step-title" type="xs:string"/>
+    <xs:element name="step-content">
+        <xs:complexType mixed="true">
+            <xs:sequence>
+                <xs:any namespace="##any" processContents="lax" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <!-- Step constraints -->
+    <xs:element name="step-constraints">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="step-constraint-list"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="step-constraint-list">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element ref="step-constraint" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="step-constraint" type="xs:string"/>
 
     <!-- Constraints block -->
     <xs:element name="constraints">

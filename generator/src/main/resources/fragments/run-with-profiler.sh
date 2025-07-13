@@ -1,4 +1,3 @@
-```bash
 #!/bin/bash
 
 # Java Application Runner with Async-Profiler Support
@@ -139,7 +138,7 @@ detect_framework() {
     if [[ "$FRAMEWORK" != "auto" ]]; then
         return 0
     fi
-    
+
     # Check pom.xml for framework indicators
     if [[ -f "pom.xml" ]]; then
         if grep -q "spring-boot-starter" pom.xml; then
@@ -150,7 +149,7 @@ detect_framework() {
             log_info "Detected Quarkus from pom.xml"
         fi
     fi
-    
+
     # Check for JAR files if framework still not detected
     if [[ "$FRAMEWORK" == "auto" ]]; then
         if [[ -n "$APP_JAR" ]]; then
@@ -172,7 +171,7 @@ detect_framework() {
             fi
         fi
     fi
-    
+
     # Default to Spring Boot if still not detected
     if [[ "$FRAMEWORK" == "auto" ]]; then
         FRAMEWORK="springboot"
@@ -226,22 +225,22 @@ JVM_FLAGS=(
     # Memory settings
     "-Xms$HEAP_SIZE"
     "-Xmx$HEAP_SIZE"
-    
+
     # Profiling optimization flags
     "-XX:+UnlockDiagnosticVMOptions"
     "-XX:+DebugNonSafepoints"
     "-XX:+PreserveFramePointer"
-    
+
     # JFR settings (useful for some profiling modes)
     "-XX:+FlightRecorder"
     "-XX:StartFlightRecording=filename=flight-recording-${TIMESTAMP}.jfr"
-    
+
     # GC logging for memory leak analysis
     "-Xlog:gc*:gc-${TIMESTAMP}.log:time,tags"
-    
+
     # Security settings for profiler attachment
     "-Djdk.attach.allowAttachSelf=true"
-    
+
     # Optional: Disable C2 compiler for more accurate profiling (uncomment if needed)
     # "-XX:TieredStopAtLevel=1"
 )
@@ -273,7 +272,7 @@ get_app_args
 run_with_maven() {
     log_info "Running with Maven..."
     export JAVA_TOOL_OPTIONS="${JVM_FLAGS[*]}"
-    
+
     case $FRAMEWORK in
         springboot)
             # Start Spring Boot application
@@ -303,14 +302,14 @@ run_with_jar() {
                 ;;
         esac
     fi
-    
+
     if [[ ! -f "$APP_JAR" ]]; then
         log_error "Failed to build or find JAR file: $APP_JAR"
         exit 1
     fi
-    
+
     log_info "Running JAR: $APP_JAR"
-    
+
     # Start the application
     java "${JVM_FLAGS[@]}" -jar "$APP_JAR" "${APP_ARGS[@]}"
 }
@@ -318,7 +317,7 @@ run_with_jar() {
 # Function to run with class
 run_with_class() {
     log_info "Running main class: $APP_CLASS"
-    
+
     # Start the application
     java "${JVM_FLAGS[@]}" -cp "target/classes:$(mvn dependency:build-classpath -Dmdep.outputFile=/dev/stdout -q)" "$APP_CLASS" "${APP_ARGS[@]}"
 }
@@ -339,5 +338,4 @@ else
     run_with_class
 fi
 
-log_success "Application completed!" 
-```
+log_success "Application completed!"

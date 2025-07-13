@@ -27,22 +27,25 @@ Review the following [sequence diagram](./docs/cursor-interaction-sequence.png) 
 
 ## What is the structure of a System prompt?
 
-According to the documentation from [Google Gemini](https://drive.google.com/file/d/1AbaBYbEa_EbPelsT40-vj64L-2IwUJHy/view), [Anthropic Claude](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview) & [OpenAI ChatGPT](https://chatgpt.com/share/686d1066-9e40-800b-ac7f-cc8df7e4c7d0), a prompt should be structured in the following way:
+According to the documentation from [Google Gemini](https://drive.google.com/file/d/1AbaBYbEa_EbPelsT40-vj64L-2IwUJHy/view), [Anthropic Claude](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview) & [OpenAI ChatGPT](https://chatgpt.com/share/686d1066-9e40-800b-ac7f-cc8df7e4c7d0), a prompt could be structured in the following way:
 
 - Metadata
 - Role
-- Context (Optional)
+- Context
 - Goal
-- Constraints (Optional)
-- Examples (Optional)
-- Output format (Optional)
-- Safeguards (Optional)
+- Instructions
+- Constraints
+- Examples
+- Output format
+- Safeguards
 
-With this structure in mind, the project uses an XML Schema to define the way that all System prompts are generated for Cursor AI. If you are interested, you could review [the Schema](./generator/src/main/resources/pml.xsd).
+With this structure in mind, the project uses an XML Schema to define the way that all System prompts are generated for Cursor AI. If you are interested in this area, you could review [the Schema](./generator/src/main/resources/pml.xsd).
+
+**Note:** It is not necessary to add all parts in a prompt.
 
 ## Cursor Rules
 
-Read the generated list of cursor rules for Java [here](./CURSOR-RULES-JAVA.md). The set of cursor rules covers aspects like Build system based on Maven, Design, Coding, Testing, Refactoring, Performance with JMeter & Profiling with Async Profiler.
+Read the generated list of cursor rules for Java [here](./CURSOR-RULES-JAVA.md). The set of cursor rules covers aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring`, `Performance testing with JMeter` & `Profiling with Async Profiler`.
 
 ## Getting started
 
@@ -58,14 +61,14 @@ Once you have installed the cursor rules:
 
 | Cursor Rule | Description | Prompt | Notes |
 |-------------|-------------|--------|-------|
-| [100-java-checklist-guide](.cursor/rules/100-java-checklist-guide.mdc) | Create a comprehensive step-by-step guide for using cursor rules for Java | `Create an java development guide using the cursor rule @100-java-checklist-guide` | This cursor rule is applied automatically without any interaction with the Software engineer. |
+| [100-java-cursor-rules-list](.cursor/rules/100-java-cursor-rules-list.mdc) | Create a comprehensive step-by-step guide for using cursor rules for Java | `Create an java development guide using the cursor rule @100-java-cursor-rules-list` | This cursor rule is applied automatically without any interaction with the Software engineer. |
 
 Type the following prompt in the cursor chat:
 
 ![](./docs/getting-started-prompt.png)
 
 ```bash
-Create an java development guide using the cursor rule @100-java-checklist-guide
+Create an java development guide using the cursor rule @100-java-cursor-rules-list
 ```
 
 ## Limitations & Opportunities

@@ -1,4 +1,3 @@
-```bash
 #!/bin/bash
 
 # java-profile.sh - Automated Java profiling script
@@ -31,7 +30,7 @@ echo ""
 
 while true; do
     read -p "Select the problem category you're investigating (0-5): " PROBLEM_SELECTION
-    
+
     if [[ "$PROBLEM_SELECTION" =~ ^[0-5]$ ]]; then
         case $PROBLEM_SELECTION in
             1) PROBLEM_CATEGORY="Performance Bottlenecks"; SUGGESTED_PROFILE="CPU" ;;
@@ -41,7 +40,7 @@ while true; do
             5) PROBLEM_CATEGORY="I/O and Network Bottlenecks"; SUGGESTED_PROFILE="I/O Analysis" ;;
             0) PROBLEM_CATEGORY="General Analysis"; SUGGESTED_PROFILE="CPU" ;;
         esac
-        
+
         echo -e "${GREEN}Selected problem category: $PROBLEM_CATEGORY${NC}"
         echo -e "${GREEN}Suggested profiling approach: $SUGGESTED_PROFILE${NC}"
         echo ""
@@ -88,12 +87,12 @@ else
     # Multiple processes found, provide selection menu
     echo -e "${GREEN}Found $PROCESS_COUNT Java processes:${NC}"
     echo ""
-    
+
     # Create numbered list
     i=1
     declare -a PIDS
     declare -a NAMES
-    
+
     while IFS= read -r line; do
         pid=$(echo "$line" | cut -d' ' -f1)
         name=$(echo "$line" | cut -d' ' -f2-)
@@ -102,15 +101,15 @@ else
         echo "  $i) PID: $pid - $name"
         ((i++))
     done <<< "$JAVA_PROCESSES"
-    
+
     echo ""
     echo "0) Manual PID entry"
     echo ""
-    
+
     # Get user selection
     while true; do
         read -p "Select a process to profile (0-$PROCESS_COUNT): " SELECTION
-        
+
         if [[ "$SELECTION" =~ ^[0-9]+$ ]]; then
             if [ "$SELECTION" -eq 0 ]; then
                 # Manual PID entry
@@ -162,7 +161,7 @@ echo "-----"
 detect_os_arch() {
     OS=$(uname -s | tr '[:upper:]' '[:lower:]')
     ARCH=$(uname -m)
-    
+
     case "$OS" in
         linux*)
             case "$ARCH" in
@@ -182,7 +181,7 @@ detect_os_arch() {
             exit 1
             ;;
     esac
-    
+
     echo -e "${GREEN}Detected platform: $PLATFORM${NC}"
 }
 
@@ -190,7 +189,7 @@ download_profiler() {
     local platform=$1
     local profiler_dir=$2
     local version="4.0"
-    
+
     # For macOS, v4.0 uses .zip format, Linux still uses .tar.gz
     if [[ "$platform" == "macos" ]]; then
         local filename="async-profiler-$version-$platform.zip"
@@ -199,18 +198,18 @@ download_profiler() {
         local filename="async-profiler-$version-$platform.tar.gz"
         local extract_cmd="tar -xzf"
     fi
-    
+
     local url="https://github.com/jvm-profiling-tools/async-profiler/releases/download/v$version/$filename"
-    
+
     if [ ! -d "$profiler_dir/current" ]; then
         echo "Downloading async-profiler..."
         echo "URL: $url"
         mkdir -p "$profiler_dir"
         cd "$profiler_dir"
-        
+
         # Remove any failed downloads
         rm -f async-profiler-*.tar.gz async-profiler-*.zip 2>/dev/null
-        
+
         if command -v curl >/dev/null 2>&1; then
             curl -L -o "$filename" "$url"
         elif command -v wget >/dev/null 2>&1; then
@@ -219,13 +218,13 @@ download_profiler() {
             echo -e "${RED}Error: Neither curl nor wget is available${NC}"
             exit 1
         fi
-        
+
         # Check if download was successful
         if [[ ! -f "$filename" ]]; then
             echo -e "${RED}Download failed: File $filename not found${NC}"
             exit 1
         fi
-        
+
         # Check file size (should be larger than 1MB for a valid download)
         local file_size
         if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -233,7 +232,7 @@ download_profiler() {
         else
             file_size=$(stat -c%s "$filename" 2>/dev/null || echo "0")
         fi
-        
+
         if [[ "$file_size" -lt 100000 ]]; then  # Less than 100KB
             echo -e "${RED}Download failed: File is too small ($file_size bytes). This usually means a redirect or error page was downloaded.${NC}"
             echo -e "${YELLOW}Contents of downloaded file:${NC}"
@@ -241,23 +240,23 @@ download_profiler() {
             rm -f "$filename"
             exit 1
         fi
-        
+
         # Extract the archive
         echo "Extracting $filename..."
         $extract_cmd "$filename"
-        
+
         if [[ $? -ne 0 ]]; then
             echo -e "${RED}Failed to extract $filename${NC}"
             rm -f "$filename"
             exit 1
         fi
-        
+
         # Create symbolic link
         ln -sf "async-profiler-$version-$platform" current
-        
+
         # Clean up archive
         rm -f "$filename"
-        
+
         cd - > /dev/null
         echo -e "${GREEN}Async-profiler downloaded successfully to $profiler_dir${NC}"
     else
@@ -276,7 +275,7 @@ mkdir -p "$RESULTS_DIR"
 check_platform_capabilities() {
     echo -e "${BLUE}Platform Capabilities Check:${NC}"
     echo "-----"
-    
+
     if [[ "$OSTYPE" == "darwin"* ]]; then
         echo -e "${YELLOW}Platform: macOS${NC}"
         echo "✅ CPU profiling (limited to user space)"
@@ -297,7 +296,7 @@ check_platform_capabilities() {
         echo "✅ Wall clock profiling"
         echo "✅ Hardware performance counters"
         echo "✅ JFR format"
-        
+
         # Check if running as root or with proper permissions
         if [[ $EUID -eq 0 ]]; then
             echo "✅ Running with elevated privileges"
@@ -320,7 +319,7 @@ show_profiling_menu() {
     echo -e "${YELLOW}Problem Category: $PROBLEM_CATEGORY${NC}"
     echo -e "${YELLOW}Suggested Approach: $SUGGESTED_PROFILE${NC}"
     echo -e "${BLUE}===========================================${NC}"
-    
+
     # Show recommended options first based on problem category
     case $SUGGESTED_PROFILE in
         "Memory")
@@ -360,7 +359,7 @@ show_profiling_menu() {
             echo -e "${BLUE}Other Options:${NC}"
             ;;
     esac
-    
+
     echo "1. CPU Profiling (30s)"
     echo "2. Memory Allocation Profiling (30s)"
     echo "3. Lock Contention Profiling (30s)"
@@ -384,11 +383,11 @@ show_profiling_menu() {
 handle_profiling_error() {
     local exit_code=$1
     local profiling_type=$2
-    
+
     if [[ $exit_code -ne 0 ]]; then
         echo -e "${RED}Profiling failed with exit code: $exit_code${NC}"
         echo -e "${YELLOW}Common solutions:${NC}"
-        
+
         if [[ "$OSTYPE" == "darwin"* ]]; then
             echo "• On macOS, some profiling modes have limitations"
             echo "• Try using --all-user flag for CPU profiling"
@@ -400,7 +399,7 @@ handle_profiling_error() {
             echo "• Try running with sudo for full system profiling"
             echo "• Use --all-user flag to profile only user-space code"
         fi
-        
+
         echo -e "${BLUE}Alternative: Try option 2 (Memory Allocation Profiling) which works on all platforms${NC}"
         return 1
     fi
@@ -410,7 +409,7 @@ handle_profiling_error() {
 # Function to execute profiling
 execute_profiling() {
     local option=$1
-    
+
     case $option in
         1)
             echo -e "${GREEN}Starting CPU profiling for 30 seconds...${NC}"
@@ -440,10 +439,10 @@ execute_profiling() {
             TIMESTAMP=$(date +%Y%m%d-%H%M%S)
             JFR_FILE="$RESULTS_DIR/profile-$TIMESTAMP.jfr"
             HEATMAP_FILE="$RESULTS_DIR/heatmap-cpu-$TIMESTAMP.html"
-            
+
             echo -e "${BLUE}Step 1: Generating JFR recording...${NC}"
             "$PROFILER_DIR/current/bin/asprof" -d 60 -o jfr -f "$JFR_FILE" "$PID"
-            
+
             echo -e "${BLUE}Step 2: Converting JFR to heatmap...${NC}"
             "$PROFILER_DIR/current/bin/jfrconv" --cpu -o heatmap "$JFR_FILE" "$HEATMAP_FILE"
             echo -e "${GREEN}Heatmap generated: $HEATMAP_FILE${NC}"
@@ -492,16 +491,16 @@ execute_profiling() {
         11)
             echo -e "${GREEN}Starting Complete Memory Analysis Workflow...${NC}"
             TIMESTAMP=$(date +%Y%m%d-%H%M%S)
-            
+
             echo -e "${BLUE}Step 1: Quick memory allocation baseline (30s)...${NC}"
             "$PROFILER_DIR/current/bin/asprof" -e alloc -d 30 -f "$RESULTS_DIR/memory-baseline-$TIMESTAMP.html" "$PID"
-            
+
             echo -e "${BLUE}Step 2: Heap profiling (60s)...${NC}"
             "$PROFILER_DIR/current/bin/asprof" -e alloc -d 60 -f "$RESULTS_DIR/heap-analysis-$TIMESTAMP.html" "$PID"
-            
+
             echo -e "${BLUE}Step 3: Memory leak detection (5min)...${NC}"
             "$PROFILER_DIR/current/bin/asprof" -e alloc -d 300 --alloc 1m -f "$RESULTS_DIR/memory-leak-complete-$TIMESTAMP.html" "$PID"
-            
+
             echo -e "${GREEN}Complete memory analysis finished! Check these files:${NC}"
             echo "- memory-baseline-$TIMESTAMP.html (30s baseline)"
             echo "- heap-analysis-$TIMESTAMP.html (60s detailed heap)"
@@ -516,12 +515,12 @@ execute_profiling() {
             return
             ;;
     esac
-    
+
     if [ $option -ne 9 ] && [ $option -ne 0 ]; then
         echo -e "${GREEN}Profiling completed!${NC}"
         echo -e "${YELLOW}Generated files in $RESULTS_DIR:${NC}"
         ls -lat "$RESULTS_DIR"/*.html "$RESULTS_DIR"/*.jfr 2>/dev/null | head -5 || echo "No profiling files found"
-        
+
         # Automatically open the latest file if on macOS
         if [[ "$OSTYPE" == "darwin"* ]]; then
             LATEST_HTML=$(ls -t "$RESULTS_DIR"/*.html 2>/dev/null | head -1)
@@ -539,7 +538,7 @@ while true; do
     if ! kill -0 "$PID" 2>/dev/null; then
         echo -e "${RED}Warning: Process $PID is no longer running!${NC}"
         echo "The process may have been terminated or restarted."
-        
+
         # Try to find the same process again
         NEW_PID=$(jps -l | grep "$PROCESS_NAME" | head -1 | cut -d' ' -f1)
         if [ ! -z "$NEW_PID" ] && [ "$NEW_PID" != "$PID" ]; then
@@ -557,13 +556,12 @@ while true; do
             exit 1
         fi
     fi
-    
+
     show_profiling_menu
     read -p "Select profiling option (0-11): " PROFILE_TYPE
     execute_profiling "$PROFILE_TYPE"
-    
+
     echo ""
     echo -e "${BLUE}Press Enter to continue or Ctrl+C to exit...${NC}"
     read -p ""
-done 
-```
+done

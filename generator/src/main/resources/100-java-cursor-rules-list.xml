@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
         xsi:noNamespaceSchemaLocation="pml.xsd"
         id="100-java-checklist-guide" version="1.0">
 
@@ -23,7 +24,11 @@
     <goal>
         Your task is to create a comprehensive step-by-step guide that follows the exact format and structure defined in the embedded template below.
 
-        Create a markdown file named `CURSOR-RULES-JAVA.md` with the following exact structure: [java-checklist-template.md](mdc:.cursor/rules/templates/java-checklist-template.md)
+        Create a markdown file named `CURSOR-RULES-JAVA.md` with the following content:
+
+        ```markdown
+        <xi:include href="fragments/java-cursor-rules-list-template.md" parse="text"/>
+        ```
     </goal>
 
     <constraints>

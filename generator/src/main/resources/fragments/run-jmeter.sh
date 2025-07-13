@@ -1,4 +1,3 @@
-```bash
 #!/bin/bash
 
 # JMeter Load Test Script
@@ -65,7 +64,7 @@ show_usage() {
     echo ""
     echo "ENVIRONMENT VARIABLES:"
     echo "  JMETER_LOOPS          Override default number of loops"
-    echo "  JMETER_THREADS        Override default number of threads"  
+    echo "  JMETER_THREADS        Override default number of threads"
     echo "  JMETER_RAMP_UP        Override default ramp-up period"
     echo ""
     echo "EXAMPLES:"
@@ -126,7 +125,7 @@ check_jmeter() {
         print_info "Download from: https://jmeter.apache.org/download_jmeter.cgi"
         exit 1
     fi
-    
+
     JMETER_VERSION=$(jmeter -v 2>&1 | head -n 1 | grep -o 'Version [0-9.]*' | cut -d' ' -f2)
     print_info "Found JMeter version: $JMETER_VERSION"
 }
@@ -153,7 +152,7 @@ clean_previous_results() {
         rm "$RESULTS_FILE"
         print_info "Cleaned previous results file"
     fi
-    
+
     if [[ -d "$REPORT_DIR" ]]; then
         rm -rf "$REPORT_DIR"
         print_info "Cleaned previous report directory"
@@ -167,7 +166,7 @@ run_jmeter_test() {
     print_info "  - Loops: $JMETER_LOOPS"
     print_info "  - Threads: $JMETER_THREADS"
     print_info "  - Ramp-up: $JMETER_RAMP_UP seconds"
-    
+
     # Run JMeter in non-GUI mode
     jmeter -n \
         -t "$TEST_PLAN" \
@@ -178,7 +177,7 @@ run_jmeter_test() {
         -Jthreads="$JMETER_THREADS" \
         -Jrampup="$JMETER_RAMP_UP" \
         -j "$LOG_FILE"
-    
+
     if [[ $? -eq 0 ]]; then
         print_success "JMeter test completed successfully"
     else
@@ -192,13 +191,13 @@ run_jmeter_gui() {
     print_info "Opening JMeter GUI..."
     print_info "Test plan will be loaded: $TEST_PLAN"
     print_info "You can configure and run tests manually in the GUI"
-    
+
     # Run JMeter in GUI mode with test plan loaded
     jmeter -t "$TEST_PLAN" \
         -Jloops="$JMETER_LOOPS" \
         -Jthreads="$JMETER_THREADS" \
         -Jrampup="$JMETER_RAMP_UP"
-    
+
     print_success "JMeter GUI session completed"
 }
 
@@ -208,12 +207,12 @@ show_results() {
     print_info "Results file: $RESULTS_FILE"
     print_info "HTML report: $REPORT_DIR/index.html"
     print_info "Log file: $LOG_FILE"
-    
+
     if [[ -f "$RESULTS_FILE" ]]; then
         TOTAL_SAMPLES=$(tail -n +2 "$RESULTS_FILE" | wc -l)
         print_info "Total samples: $TOTAL_SAMPLES"
     fi
-    
+
     # Try to open the HTML report
     if command -v open &> /dev/null; then
         print_info "Opening HTML report in browser..."
@@ -230,10 +229,10 @@ show_results() {
 main() {
     print_info "JMeter Load Test Script"
     print_info "======================="
-    
+
     check_jmeter
     check_test_plan
-    
+
     if [[ "$GUI_MODE" == "true" ]]; then
         # GUI mode - just open JMeter with the test plan
         run_jmeter_gui
@@ -250,4 +249,3 @@ main() {
 
 # Execute main function
 main "$@"
-```

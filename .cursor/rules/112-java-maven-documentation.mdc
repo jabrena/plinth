@@ -13,7 +13,44 @@ You are a Senior software engineer with extensive experience in Java software de
 
 When creating a README-DEV.md file for a Maven project, include ONLY the following sections with the specified Maven goals. Do NOT add any additional sections, explanations, or content beyond what is explicitly listed below.
 
-Create a markdown file named `README-DEV.md` with the following exact structure: [java-maven-documentation-template.md](mdc:.cursor/rules/templates/java-maven-documentation-template.md)
+Create a markdown file named `README-DEV.md` with the following content:
+
+```markdown
+# Essential Maven Goals:
+
+```bash
+# Analyze dependencies
+./mvnw dependency:tree
+./mvnw dependency:analyze
+./mvnw dependency:resolve
+
+./mvnw clean validate -U
+./mvnw buildplan:list-plugin
+./mvnw buildplan:list-phase
+./mvnw help:all-profiles
+./mvnw help:active-profiles
+./mvnw license:third-party-report
+
+# Clean the project
+./mvnw clean
+
+# Clean and package in one command
+./mvnw clean package
+
+# Run integration tests
+./mvnw verify
+
+# Check for dependency updates
+./mvnw versions:display-property-updates
+./mvnw versions:display-dependency-updates
+./mvnw versions:display-plugin-updates
+
+# Generate project reports
+./mvnw site
+jwebserver -p 8005 -d "$(pwd)/target/site/"
+```
+
+```
 
 ## Constraints
 

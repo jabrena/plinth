@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns:xi="http://www.w3.org/2001/XInclude"
+        xsi:noNamespaceSchemaLocation="pml.xsd"
+        id="151-java-performance-jmeter" version="1.0">
+
+    <metadata>
+        <cursor-ai>
+            <description></description>
+            <globs></globs>
+            <always-apply>false</always-apply>
+        </cursor-ai>
+        <tags>
+            <tag>java</tag>
+            <tag>performance</tag>
+            <tag>jmeter</tag>
+            <tag>testing</tag>
+        </tags>
+        <version>0.8.0</version>
+        <title>Run performance tests based on JMeter</title>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Java software development and performance testing</role>
+
+    <goal>
+        When a user requests JMeter performance testing setup, follow the instructions steps to provide a complete performance testing solution.
+    </goal>
+
+    <instructions>
+        <steps>
+            <step number="1">
+                <step-title>JMeter Installation</step-title>
+                <step-content>
+                    Verify that JMeter is installed and available in PATH.
+                    If not, show a message and exit.
+                </step-content>
+            </step>
+            <step number="2">
+                <step-title>Create Script File</step-title>
+                <step-content>
+                    When a user requests JMeter performance testing setup:
+
+                    1. **Create the file** as `run-jmeter.sh` in the project root
+                    2. **Make it executable**: `chmod +x run-jmeter.sh`
+                    3. **Verify permissions**: Ensure the script has execute permissions
+
+                    **Required Project Structure:**
+                    ```
+                    project-root/
+                    ├── run-jmeter.sh                          # The performance script
+                    ├── src/test/resources/jmeter/
+                    │   └── load-test.jmx                      # JMeter test plan
+                    └── target/                                # Generated reports (auto-created)
+                        ├── jmeter-results.jtl                 # Raw results
+                        ├── jmeter-report/                     # HTML dashboard
+                        │   └── index.html                     # Main report
+                        └── jmeter.log                         # Execution log
+                    ```
+
+                </step-content>
+            </step>
+
+            <step number="3">
+                <step-title>Copy Template Content</step-title>
+                <step-content>
+Create the entire script with the following content:
+
+```bash
+<xi:include href="fragments/run-jmeter.sh" parse="text"/>
+```
+
+                </step-content>
+            </step>
+
+            <step number="4">
+                <step-title>Provide Usage Information</step-title>
+                <step-content>
+                    **Basic Usage:**
+                    ```bash
+                    # Run with default settings (1000 loops, 1 thread, 1s ramp-up)
+                    ./run-jmeter.sh
+
+                    # Custom configuration
+                    ./run-jmeter.sh -l 500 -t 10 -r 30
+
+                    # Open JMeter GUI
+                    ./run-jmeter.sh -g
+                    ```
+
+                    **Available Options:**
+                    - `-l, --loops LOOPS`: Number of loops per thread (default: 1000)
+                    - `-t, --threads THREADS`: Number of concurrent threads (default: 1)
+                    - `-r, --ramp-up SECONDS`: Ramp-up period in seconds (default: 1)
+                    - `-g, --gui`: Open JMeter GUI instead of running in non-GUI mode
+                    - `-h, --help`: Show detailed help message
+
+                    **Environment Variables:**
+                    ```bash
+                    # Override defaults using environment variables
+                    JMETER_LOOPS=500 JMETER_THREADS=5 ./run-jmeter.sh
+
+                    # Or export them
+                    export JMETER_LOOPS=1000
+                    export JMETER_THREADS=10
+                    export JMETER_RAMP_UP=30
+                    ./run-jmeter.sh
+                    ```
+
+                    **Example Scenarios:**
+                    ```bash
+                    # Light load test
+                    ./run-jmeter.sh -l 100 -t 1 -r 1
+
+                    # Medium load test
+                    ./run-jmeter.sh -l 500 -t 5 -r 10
+
+                    # Heavy load test
+                    ./run-jmeter.sh -l 1000 -t 20 -r 60
+
+                    # Quick GUI setup
+                    ./run-jmeter.sh -g
+                    ```
+                </step-content>
+            </step>
+        </steps>
+    </instructions>
+
+    <constraints>
+        <constraints-description>**MANDATORY REQUIREMENT**: Follow the embedded template EXACTLY - do not add, remove, or modify any parts of the performance script template.</constraints-description>
+        <constraint-list>
+            <constraint>**DO NOT** create your own version of the performance script</constraint>
+            <constraint>**DO NOT** modify the template logic, structure, or features</constraint>
+            <constraint>**DO NOT** add enhancements or interpretations</constraint>
+            <constraint>**ONLY** use the exact template from `fragments/java-performance-script-template.sh`</constraint>
+            <constraint>**ONLY** copy the script verbatim without any changes</constraint>
+        </constraint-list>
+    </constraints>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>Copy the performance script template exactly as specified</output-format-item>
+            <output-format-item>Create `run-jmeter.sh` file in the project root</output-format-item>
+            <output-format-item>Make the script executable with `chmod +x run-jmeter.sh`</output-format-item>
+            <output-format-item>**VERIFY**: Final script contains ONLY what appears in the template</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>Verify the script is executable: `chmod +x run-jmeter.sh`</safeguards-item>
+            <safeguards-item>Verify the script is working with basic usage: `./run-jmeter.sh -h`</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>

@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
+    xsi:noNamespaceSchemaLocation="pml.xsd"
+    id="161-java-profiling-detect" version="1.0">
+
+    <metadata>
+        <cursor-ai>
+            <description></description>
+            <globs></globs>
+            <always-apply>false</always-apply>
+        </cursor-ai>
+        <tags>
+            <tag>java</tag>
+            <tag>profiling</tag>
+            <tag>performance</tag>
+            <tag>detection</tag>
+            <tag>measurement</tag>
+        </tags>
+        <version>0.8.0</version>
+        <title>Java Profiling Workflow / Step 1 / Collect data to measure potential issues</title>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
+
+    <goal>
+        This cursor rule provides a comprehensive Java application profiling framework designed to detect and measure performance issues systematically.
+        It serves as the first step in a structured profiling workflow, focusing on data collection and problem identification using async-profiler v4.0.
+
+        The rule automates the entire profiling setup process, from detecting running Java processes to downloading and configuring the appropriate profiler tools for your system.
+        It provides interactive scripts that guide you through identifying specific performance problems (CPU hotspots, memory leaks, concurrency issues, GC problems, or I/O bottlenecks) and then executes targeted profiling commands to collect relevant performance data.
+
+        Key capabilities include:
+        - **Automated Environment Setup**: Detects OS/architecture and downloads async-profiler v4.0 automatically
+        - **Problem-Driven Profiling**: Guides users through identifying specific performance issues before profiling
+        - **Interactive Workflow**: Provides menu-driven interface for selecting appropriate profiling strategies
+        - **Comprehensive Data Collection**: Supports CPU profiling, memory allocation tracking, lock contention analysis, GC monitoring, and I/O bottleneck detection
+        - **Modern Tooling**: Leverages async-profiler v4.0 features including interactive heatmaps, native memory leak detection, and enhanced JFR conversion
+        - **Organized Results**: Maintains clean directory structure with timestamped results for easy analysis and comparison
+
+        The rule ensures consistent, repeatable profiling procedures while providing the flexibility to target specific performance concerns based on your application's behavior and suspected issues.
+
+        The profiling setup uses a clean folder structure with everything contained in the profiler directory:
+
+        ```text
+        your-project/
+        ├── run-with-profiler.sh    # ← Step 1: Run main application with profiling JVM flags
+        └── profiler/               # ← All profiling-related files
+            ├── scripts/            # ← Profiling scripts and tools
+            │   └── java-profile.sh # ← Step 2: Interactive profiling script
+            ├── results/            # ← Generated profiling output
+            │   ├── *.html          # ← Flamegraph files
+            │   └── *.jfr           # ← JFR recording files
+            ├── current/            # ← Symlink to current profiler version
+            └── async-profiler-*/   # ← Downloaded profiler binaries
+        ```
+    </goal>
+
+    <instructions>
+        <steps>
+            <step number="1">
+                <step-title>Setup Application Runner Script</step-title>
+                <step-content>
+**IMPORTANT**: Use the exact bash script from the template without any modification or interpretation.
+
+```bash
+<xi:include href="fragments/run-with-profiler.sh" parse="text"/>
+```
+
+**Script Location:**
+```
+your-project/
+└── run-with-profiler.sh    # ← Run main application with the right JVM flags for profiling
+```
+
+**Setup Instructions:**
+1. Copy the **EXACT** bash script content from `java-profiling-script-run-app-template.md`
+2. Save it as `run-with-profiler.sh` in your project root
+3. Make it executable: `chmod +x run-with-profiler.sh`
+4. **NO MODIFICATIONS** to the script content are needed or allowed
+
+**Purpose:**
+- Configures JVM with profiling-friendly flags
+- Ensures proper async-profiler compatibility
+- Starts your application ready for profiling
+
+**Usage:**
+```bash
+# Start your application with profiling-ready JVM settings
+./run-with-profiler.sh
+```
+                </step-content>
+                <step-constraints>
+                    <step-constraint-list>
+                        <step-constraint>**CRITICAL INSTRUCTION FOR AI ASSISTANTS:**</step-constraint>
+                        <step-constraint>**COPY THE BASH SCRIPT EXACTLY** from the template file</step-constraint>
+                        <step-constraint>**DO NOT MODIFY, INTERPRET, OR ENHANCE** the script content</step-constraint>
+                        <step-constraint>**DO NOT ADD NEW FEATURES** or change the logic</step-constraint>
+                        <step-constraint>**USE THE SCRIPT VERBATIM** - every line, comment, and function exactly as provided</step-constraint>
+                        <step-constraint>The script is already complete and tested - no improvements needed</step-constraint>
+                    </step-constraint-list>
+                </step-constraints>
+            </step>
+            <step number="2">
+                <step-title>Setup Interactive Profiling Script</step-title>
+                <step-content>
+**IMPORTANT**: Use the exact bash script from the template without any modification or interpretation.
+
+```bash
+<xi:include href="fragments/java-profile.sh" parse="text"/>
+```
+
+**Script Location:**
+```
+└── profiler/               # ← All profiling-related files
+    ├── scripts/            # ← Profiling scripts and tools
+    │   └── java-profile.sh # ← Copy exact script from template
+```
+
+**Setup Instructions:**
+1. Copy the **EXACT** bash script from the template
+2. Save it as `profiler/scripts/java-profile.sh` in your project root
+3. Make it executable: `chmod +x profiler/scripts/java-profile.sh`
+4. **NO MODIFICATIONS** to the script content are needed or allowed
+
+**Purpose:**
+- Detects running Java processes automatically
+- Downloads and configures async-profiler v4.0
+- Provides interactive menu for different profiling scenarios
+- Generates flamegraphs and analysis reports
+
+**Usage:**
+```bash
+# Execute the interactive profiling script
+./profiler/scripts/java-profile.sh
+```
+                </step-content>
+                <step-constraints>
+                    <step-constraint-list>
+                        <step-constraint>**CRITICAL INSTRUCTION FOR AI ASSISTANTS:**</step-constraint>
+                        <step-constraint>**COPY THE BASH SCRIPT EXACTLY** from the template file</step-constraint>
+                        <step-constraint>**DO NOT MODIFY, INTERPRET, OR ENHANCE** the script content</step-constraint>
+                        <step-constraint>**DO NOT ADD NEW FEATURES** or change the logic</step-constraint>
+                        <step-constraint>**USE THE SCRIPT VERBATIM** - every line, comment, and function exactly as provided</step-constraint>
+                        <step-constraint>The script is already complete and tested - no improvements needed</step-constraint>
+                        <step-constraint>Create the profiler directory structure: `mkdir -p profiler/scripts profiler/results`</step-constraint>
+                        <step-constraint>Copy the **EXACT** bash script content from `java-profiling-script-template.md`</step-constraint>
+                        <step-constraint>Save it as `profiler/scripts/java-profile.sh`</step-constraint>
+                        <step-constraint>Make it executable: `chmod +x profiler/scripts/java-profile.sh`</step-constraint>
+                        <step-constraint>**NO MODIFICATIONS** to the script content are needed or allowed</step-constraint>
+                    </step-constraint-list>
+                </step-constraints>
+            </step>
+            <step number="3">
+                <step-title>Explain how to use the scripts</step-title>
+                <step-content>
+                    - Run the script to start the application with profiling support
+                    - Run the script to start the interactive profiling script
+                </step-content>
+            </step>
+        </steps>
+    </instructions>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>Set up automated Java profiling environment with async-profiler v4.0</output-format-item>
+            <output-format-item>Create interactive profiling scripts for problem-driven data collection</output-format-item>
+            <output-format-item>Generate targeted profiling data based on specific performance issues (CPU, memory, threading, GC, I/O)</output-format-item>
+            <output-format-item>Organize profiling results in structured directory hierarchy with timestamped files</output-format-item>
+            <output-format-item>Provide flamegraph and heatmap visualizations for performance analysis</output-format-item>
+            <output-format-item>Enable systematic measurement and detection of Java application performance bottlenecks</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>Always use the exact bash script templates without modification or interpretation</safeguards-item>
+            <safeguards-item>Ensure proper JVM flags are applied for profiling compatibility before data collection</safeguards-item>
+            <safeguards-item>Verify Java processes are running and accessible before attempting to attach profiler</safeguards-item>
+            <safeguards-item>Create organized directory structure for profiling results with timestamped files</safeguards-item>
+            <safeguards-item>Validate async-profiler v4.0 installation and compatibility with target Java version</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>
