@@ -158,6 +158,20 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
         <xsl:call-template name="trim-step-content">
             <xsl:with-param name="content" select="step-content"/>
         </xsl:call-template>
+        <!-- Process step constraints if present -->
+        <xsl:if test="step-constraints">
+            <xsl:text>
+#### Step Constraints
+
+</xsl:text>
+            <xsl:for-each select="step-constraints/step-constraint-list/step-constraint">
+                <xsl:text>- </xsl:text><xsl:value-of select="normalize-space(.)"/>
+                <xsl:text>
+</xsl:text>
+            </xsl:for-each>
+            <xsl:text>
+</xsl:text>
+        </xsl:if>
     </xsl:template>
 
     <!-- XInclude template - processes included content -->
@@ -338,10 +352,16 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
                 </xsl:otherwise>
             </xsl:choose>
         </xsl:variable>
-        <!-- Check if content contains shell script code blocks (```bash) -->
+        <!-- Check if content contains code blocks that need indentation preserved -->
         <xsl:choose>
             <xsl:when test="contains($trimmed-both, '```bash') and (contains($trimmed-both, '#!/bin/bash') or contains($trimmed-both, '#!/usr/bin/env bash') or contains($trimmed-both, '#!/bin/sh'))">
                 <!-- For shell scripts, preserve all indentation by only trimming leading/trailing newlines -->
+                <xsl:call-template name="preserve-indentation">
+                    <xsl:with-param name="content" select="$trimmed-both"/>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="contains($trimmed-both, '```xml') or contains($trimmed-both, '```java') or contains($trimmed-both, '```txt')">
+                <!-- For XML, Java, and txt code blocks, preserve all indentation -->
                 <xsl:call-template name="preserve-indentation">
                     <xsl:with-param name="content" select="$trimmed-both"/>
                 </xsl:call-template>

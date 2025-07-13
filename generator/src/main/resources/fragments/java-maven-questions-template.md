@@ -8,7 +8,7 @@
 
 Options:
 - Java Library (for publishing to Maven Central/Nexus)
-- Java CLI Application (command-line tool)  
+- Java CLI Application (command-line tool)
 - Java Microservice (Web service/REST API/Modular monolith)
 - Serverless (AWS Lambdas, Azure Functions)
 - Other (specify)
@@ -95,13 +95,3 @@ Options:
 - SonarQube Server (specify your server URL)
 
 **If SonarQube Server**: Please provide your SonarQube server URL (e.g., `https://sonar.mycompany.com`)
-
-## Instructions for AI Assistant
-
-1. Ask ALL questions above before making any changes
-2. Wait for user responses to each question
-3. Based on answers, conditionally add only the requested features
-4. Do not assume or add features that weren't explicitly requested
-5. Customize configuration based on the specific answers provided
-6. **For Sonar questions (5-6)**: Only ask if "Static code analysis (SpotBugs, Sonar)" was selected in question 3
-7. **Validate Sonar parameters**: Ensure provided values follow the expected format and naming conventions

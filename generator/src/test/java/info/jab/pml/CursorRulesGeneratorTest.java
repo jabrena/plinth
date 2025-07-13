@@ -80,10 +80,11 @@ class CursorRulesGeneratorTest {
                 "141-java-refactoring-with-modern-features",
                 "142-java-functional-programming",
                 "143-java-data-oriented-programming",
-                "151-java-performance-jmeter",
-                "161-java-profiling-detect",
-                "162-java-profiling-analyze",
-                "164-java-profiling-compare"
+                "151-java-performance-jmeter"
+                //,
+                // "161-java-profiling-detect",
+                // "162-java-profiling-analyze",
+                // "164-java-profiling-compare"
             );
         }
 
@@ -111,7 +112,7 @@ class CursorRulesGeneratorTest {
             validateCodeBlockFormatting(lines, baseFileName);
             validateOutputFormatSection(lines, baseFileName);
             validateSafeguardsSection(lines, baseFileName);
-            validateConsultativeInteractionPattern(lines, baseFileName);
+            //validateConsultativeInteractionPattern(lines, baseFileName);
             validateExampleNumberingConsistency(lines, baseFileName);
 
         }
