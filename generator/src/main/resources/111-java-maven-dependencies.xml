@@ -202,22 +202,28 @@ Only provide examples for dependencies that were actually added based on user se
 
 **JSpecify Usage Example** (if added):
 ```java
-import org.jspecify.annotations.Nullable;
-import org.jspecify.annotations.NullMarked;
+import java.util.Objects;
 
-@NullMarked
-public class UserService {
+import org.jspecify.annotations.NonNull;
 
-    public @Nullable String findUserName(String userId) {
-        // Implementation that might return null
-        return userId.equals("unknown") ? null : "John Doe";
+public class ConstructorSimple {
+    private final String property1;
+
+    public ConstructorSimple(@NonNull String property1) {
+        //Preconditions
+        preconditions(property1);
+
+        this.property1 = property1;
     }
 
-    public void processUser(String userId) {
-        @Nullable String name = findUserName(userId);
-        if (name != null) {
-            System.out.println("Processing user: " + name);
+    private void preconditions(String property1) {
+        if(Objects.isNull(property1)) {
+            throw new IllegalArgumentException("Not valid property1");
         }
+    }
+
+    public @NonNull String getProperty1() {
+        return property1;
     }
 }
 ```
