@@ -59,7 +59,7 @@
                     Based on the answers, you will conditionally add only relevant dependencies and plugins.
 
                     ```markdown
-                    <xi:include href="fragments/java-maven-questions-template.md" parse="text"/>
+                    <xi:include href="fragments/java-maven-plugins-questions-template.md" parse="text"/>
                     ```
                 </step-content>
                 <step-constraints>
