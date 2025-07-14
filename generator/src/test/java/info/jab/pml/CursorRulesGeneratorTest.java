@@ -66,6 +66,7 @@ class CursorRulesGeneratorTest {
          */
         private static Stream<String> provideXmlFileNames() {
             return Stream.of(
+                "001-java-complexity-detection",
                 "100-java-cursor-rules-list",
                 "110-java-maven-best-practices",
                 "111-java-maven-dependencies",
