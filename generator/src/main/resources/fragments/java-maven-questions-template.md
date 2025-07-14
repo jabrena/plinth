@@ -31,7 +31,6 @@ Options:
 Options:
 - Format source code (Spotless)
 - Maven Enforcer
-- Compiler behaviour improvements with ErrorProne + NullAway (Ask for JSpecify)
 - Unit Testing (Surefire)
 - Integration testing (Failsafe)
 - Code coverage reporting (JaCoCo)
