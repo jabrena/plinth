@@ -74,7 +74,6 @@ Options:
 Options:
 - Format source code (Spotless)
 - Maven Enforcer
-- Compiler behaviour improvements with ErrorProne + NullAway (Ask for JSpecify)
 - Unit Testing (Surefire)
 - Integration testing (Failsafe)
 - Code coverage reporting (JaCoCo)
@@ -1012,78 +1011,11 @@ The final `<properties>` section will look like this (example with common select
 
                     **Dependency Strategy**: Add only essential dependencies that enhance code quality and safety.
 
-                    **Reference**: For specific dependency configurations, see the template file.
-
-                    ```markdown
-                    # Java Maven Dependencies
-
-This template provides Maven dependency configurations that should be added conditionally based on user selections from the main Maven dependencies and plugins rule.
-
-**Usage**: Reference this template from the main rule rather than duplicating configurations.
-
-## Code Quality Dependencies
-
-### Add JSpecify for Null Safety
-
-**When to use**: Recommended for all projects to improve null safety and code documentation.
-**User question**: "Do you want to use JSpecify nullness annotations for better null safety? (y/n)"
-
-**Benefits of JSpecify**:
-- Provides standardized nullness annotations (@Nullable, @NonNull)
-- Improves code safety and documentation
-- Works with static analysis tools like NullAway and Error Prone
-- Compile-time only dependency (scope: provided)
-- Better tooling support compared to legacy JSR-305
-
-Update the pom.xml with this dependency:
-
-```xml
-<dependencies>
-  <!-- Null Safety Annotations -->
-  <dependency>
-    <groupId>org.jspecify</groupId>
-    <artifactId>jspecify</artifactId>
-    <version>${jspecify.version}</version>
-    <scope>provided</scope>
-  </dependency>
-</dependencies>
-```
-
-**If JSpecify selected**:
-```xml
-<!-- Dependency versions -->
-<jspecify.version>1.0.0</jspecify.version>
-```
-
-**Usage Example**:
-```java
-import org.jspecify.annotations.Nullable;
-import org.jspecify.annotations.NonNull;
-
-public class Example {
-    public @Nullable String processInput(@NonNull String input) {
-        if (input.isEmpty()) {
-            return null; // Explicitly nullable return
-        }
-        return input.toUpperCase();
-    }
-}
-```
-                    ```
-
-                    - **JSpecify**: Nullness annotations for improved null safety
-
-                    #### Implementation Approach:
-                    1. **Ask about code quality dependencies**: Follow the questions in the template file
-                    2. **Add only selected dependencies**: Don't include dependencies the user doesn't need
-                    3. **Configure with appropriate scope**: Use `provided` scope for compile-time only dependencies
-
                     **Plugin Configuration Strategy**: Add plugins based only on selected features and user needs.
 
                     **Reference**: For specific plugin configurations, see the template file.
 
                     **Core Plugins** (ask if user wants enhanced enforcement):
-                    - **maven-compiler-plugin**: Enhanced with Error Prone and NullAway analysis
                     - **maven-enforcer-plugin**: With dependency convergence and circular dependency checks
                     - **maven-surefire-plugin**: For unit testing with proper configuration
 
@@ -1118,10 +1050,6 @@ public class Example {
 
 - **MUST NOT** deviate from template specifications
 - **MUST** use `maven-plugins-*` format for property naming (e.g., `maven-plugins-compiler.version`, NOT `maven-compiler-plugin.version`)
-- **MUST** include ALL Error Prone and NullAway options as specified in template
-- **MUST** include `-Xlint:all` and `-Werror` compiler arguments
-- **MUST** include `--should-stop=ifError=FLOW` configuration
-- **MUST** include full NullAway configuration with `JSpecifyMode=true`, `TreatGeneratedAsUnannotated=true`, etc.
 - **MUST** include `extra-enforcer-rules` dependency and all specified rules in enforcer plugin
 - **MUST** follow template's `<build>` vs `<reporting>` section separation for profiles
 - **MUST** create `.mvn/jvm.config` when Error Prone is enabled
