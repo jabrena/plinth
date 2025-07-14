@@ -120,210 +120,209 @@ open profiler/results/memory-leak-*after*.html
 
 ### Step Documentation Creation
 
-                    
-                    **Note**: All documentation files are created with date suffixes (YYYYMMDD format) to enable tracking multiple profiling sessions and maintain historical analysis records.
+**Note**: All documentation files are created with date suffixes (YYYYMMDD format) to enable tracking multiple profiling sessions and maintain historical analysis records.
 
-                    **Step 1: Create Comparison Analysis Document**
-                    ```bash
-                    # Create the comparison analysis document with date suffix
-                    DATE_SUFFIX=$(date +%Y%m%d)
-                    touch profiler/docs/profiling-comparison-analysis-${DATE_SUFFIX}.md
-                    ```
+**Step 1: Create Comparison Analysis Document**
+```bash
+# Create the comparison analysis document with date suffix
+DATE_SUFFIX=$(date +%Y%m%d)
+touch profiler/docs/profiling-comparison-analysis-${DATE_SUFFIX}.md
+```
 
-                    Template for `profiler/docs/profiling-comparison-analysis-YYYYMMDD.md`:
+Template for `profiler/docs/profiling-comparison-analysis-YYYYMMDD.md`:
 
-                    ```markdown
-                    # Profiling Comparison Analysis - [Date]
+```markdown
+# Profiling Comparison Analysis - [Date]
 
-                    ## Executive Summary
-                    - **Refactoring Objective**: [What was being fixed]
-                    - **Overall Result**: [Success/Partial/Failed]
-                    - **Key Improvements**: [List main improvements]
+## Executive Summary
+- **Refactoring Objective**: [What was being fixed]
+- **Overall Result**: [Success/Partial/Failed]
+- **Key Improvements**: [List main improvements]
 
-                    ## Methodology
-                    - **Baseline Date**: [Timestamp of baseline reports]
-                    - **Post-Refactoring Date**: [Timestamp of after reports]
-                    - **Test Scenarios**: [What endpoints/operations were tested]
-                    - **Duration**: [How long profiling ran]
+## Methodology
+- **Baseline Date**: [Timestamp of baseline reports]
+- **Post-Refactoring Date**: [Timestamp of after reports]
+- **Test Scenarios**: [What endpoints/operations were tested]
+- **Duration**: [How long profiling ran]
 
-                    ## Before/After Metrics
-                    | Metric | Before | After | Improvement |
-                    |-----|-----|----|----|
-                    | Stack Depth (levels) | X | Y | Z% |
-                    | Canvas Height (px) | X | Y | Z% |
-                    | Memory Allocations | X | Y | Z% |
-                    | Thread Count | X | Y | Z% |
+## Before/After Metrics
+| Metric | Before | After | Improvement |
+|-----|-----|----|----|
+| Stack Depth (levels) | X | Y | Z% |
+| Canvas Height (px) | X | Y | Z% |
+| Memory Allocations | X | Y | Z% |
+| Thread Count | X | Y | Z% |
 
-                    ## Key Findings
-                    ### Resolved Issues
-                    - [ ] Issue 1: [Description and evidence]
-                    - [ ] Issue 2: [Description and evidence]
+## Key Findings
+### Resolved Issues
+- [ ] Issue 1: [Description and evidence]
+- [ ] Issue 2: [Description and evidence]
 
-                    ### Remaining Concerns
-                    - [ ] Concern 1: [Description and next steps]
+### Remaining Concerns
+- [ ] Concern 1: [Description and next steps]
 
-                    ## Visual Evidence
-                    - **Baseline Reports**: `../results/[filename]`
-                    - **After Reports**: `../results/[filename]`
-                    - **Key Differences**: [Describe what to look for in flamegraphs]
+## Visual Evidence
+- **Baseline Reports**: `../results/[filename]`
+- **After Reports**: `../results/[filename]`
+- **Key Differences**: [Describe what to look for in flamegraphs]
 
-                    ## Recommendations
-                    1. [Next step 1]
-                    2. [Next step 2]
-                    ```
+## Recommendations
+1. [Next step 1]
+2. [Next step 2]
+```
 
-                    **Step 2: Create Final Results Summary**
-                    ```bash
-                    # Create the final results summary document with date suffix
-                    DATE_SUFFIX=$(date +%Y%m%d)
-                    touch profiler/docs/profiling-final-results-${DATE_SUFFIX}.md
-                    ```
+**Step 2: Create Final Results Summary**
+```bash
+# Create the final results summary document with date suffix
+DATE_SUFFIX=$(date +%Y%m%d)
+touch profiler/docs/profiling-final-results-${DATE_SUFFIX}.md
+```
 
-                    Template for `profiler/docs/profiling-final-results-YYYYMMDD.md`:
+Template for `profiler/docs/profiling-final-results-YYYYMMDD.md`:
 
-                    ```markdown
-                    # Profiling Final Results - [Date]
+```markdown
+# Profiling Final Results - [Date]
 
-                    ## Summary
-                    - **Analysis Date**: [Date of analysis]
-                    - **Performance Objective**: [What was being optimized]
-                    - **Status**: [Complete/Ongoing/Failed]
+## Summary
+- **Analysis Date**: [Date of analysis]
+- **Performance Objective**: [What was being optimized]
+- **Status**: [Complete/Ongoing/Failed]
 
-                    ## Key Metrics Summary
-                    | Performance Area | Before | After | Improvement |
-                    |---|---|----|----|
-                    | Memory Usage | [value] | [value] | [%] |
-                    | CPU Usage | [value] | [value] | [%] |
-                    | Response Time | [value] | [value] | [%] |
-                    | Throughput | [value] | [value] | [%] |
+## Key Metrics Summary
+| Performance Area | Before | After | Improvement |
+|---|---|----|----|
+| Memory Usage | [value] | [value] | [%] |
+| CPU Usage | [value] | [value] | [%] |
+| Response Time | [value] | [value] | [%] |
+| Throughput | [value] | [value] | [%] |
 
-                    ## Critical Issues Resolved
-                    1. **[Issue Name]**: [Description and resolution]
-                    2. **[Issue Name]**: [Description and resolution]
+## Critical Issues Resolved
+1. **[Issue Name]**: [Description and resolution]
+2. **[Issue Name]**: [Description and resolution]
 
-                    ## Production Readiness
-                    - [ ] Performance targets met
-                    - [ ] No regressions introduced
-                    - [ ] Load testing completed
-                    - [ ] Monitoring alerts configured
+## Production Readiness
+- [ ] Performance targets met
+- [ ] No regressions introduced
+- [ ] Load testing completed
+- [ ] Monitoring alerts configured
 
-                    ## Next Steps
-                    1. [Action item 1]
-                    2. [Action item 2]
+## Next Steps
+1. [Action item 1]
+2. [Action item 2]
 
-                    ## Related Documents
-                    - Analysis: `profiling-comparison-analysis-YYYYMMDD.md`
-                    - Reports: `../results/[report-files]`
-                    ```
+## Related Documents
+- Analysis: `profiling-comparison-analysis-YYYYMMDD.md`
+- Reports: `../results/[report-files]`
+```
 
-                    ### Phase 5: Troubleshooting Missing Reports
+### Phase 5: Troubleshooting Missing Reports
 
-                    #### Problem: No New Reports Generated
-                    ```bash
-                    # 1. Check if profiler is working
-                    cd profiler/scripts
-                    ./java-profile.sh --help
+#### Problem: No New Reports Generated
+```bash
+# 1. Check if profiler is working
+cd profiler/scripts
+./java-profile.sh --help
 
-                    # 2. Verify application is running
-                    curl http://localhost:8080/actuator/health
-                    jps | grep -i spring
+# 2. Verify application is running
+curl http://localhost:8080/actuator/health
+jps | grep -i spring
 
-                    # 3. Check profiler permissions
-                    ls -la profiler/current/bin/asprof
-                    chmod +x profiler/current/bin/asprof
+# 3. Check profiler permissions
+ls -la profiler/current/bin/asprof
+chmod +x profiler/current/bin/asprof
 
-                    # 4. Manual profiling attempt
-                    java -jar profiler/current/lib/async-profiler.jar --help
-                    ```
+# 4. Manual profiling attempt
+java -jar profiler/current/lib/async-profiler.jar --help
+```
 
-                    #### Problem: Reports Are Empty or Corrupted
-                    ```bash
-                    # 1. Check file sizes
-                    ls -la profiler/results/*.html | tail -5
+#### Problem: Reports Are Empty or Corrupted
+```bash
+# 1. Check file sizes
+ls -la profiler/results/*.html | tail -5
 
-                    # 2. Verify HTML structure
-                    head -20 profiler/results/[latest-report].html
+# 2. Verify HTML structure
+head -20 profiler/results/[latest-report].html
 
-                    # 3. Re-run with verbose logging
-                    cd profiler/scripts
-                    ./java-profile.sh --mode memory --duration 30 --verbose
-                    ```
+# 3. Re-run with verbose logging
+cd profiler/scripts
+./java-profile.sh --mode memory --duration 30 --verbose
+```
 
-                    **Problem: Can't Compare - Different Test Scenarios**
-                    ```bash
-                    # 1. Document your test scenarios
-                    echo "Test scenarios used:" > profiler/docs/test-scenarios.md
+**Problem: Can't Compare - Different Test Scenarios**
+```bash
+# 1. Document your test scenarios
+echo "Test scenarios used:" > profiler/docs/test-scenarios.md
 
-                    # 2. Re-run with identical load patterns
-                    # Use same curl commands, same timing, same duration
+# 2. Re-run with identical load patterns
+# Use same curl commands, same timing, same duration
 
-                    # 3. Automate test scenarios
-                    cat > profiler/scripts/load-test.sh << 'EOF'
-                    #!/bin/bash
-                    for i in {1..10}; do
-                        curl http://localhost:8080/api/v1/objects/create
-                        curl http://localhost:8080/api/v1/threads/create
-                        sleep 5
-                    done
-                    EOF
-                    chmod +x profiler/scripts/load-test.sh
-                    ```
+# 3. Automate test scenarios
+cat > profiler/scripts/load-test.sh << 'EOF'
+#!/bin/bash
+for i in {1..10}; do
+    curl http://localhost:8080/api/v1/objects/create
+    curl http://localhost:8080/api/v1/threads/create
+    sleep 5
+done
+EOF
+chmod +x profiler/scripts/load-test.sh
+```
 
-                    **File Naming Conventions**
+**File Naming Conventions**
 
-                    **Recommended Naming Pattern**
-                    ```bash
-                    # Before refactoring (baseline)
-                    memory-leak-baseline-YYYYMMDD-HHMMSS.html
-                    allocation-flamegraph-baseline-YYYYMMDD-HHMMSS.html
+**Recommended Naming Pattern**
+```bash
+# Before refactoring (baseline)
+memory-leak-baseline-YYYYMMDD-HHMMSS.html
+allocation-flamegraph-baseline-YYYYMMDD-HHMMSS.html
 
-                    # After refactoring
-                    memory-leak-after-refactoring-YYYYMMDD-HHMMSS.html
-                    allocation-flamegraph-after-refactoring-YYYYMMDD-HHMMSS.html
+# After refactoring
+memory-leak-after-refactoring-YYYYMMDD-HHMMSS.html
+allocation-flamegraph-after-refactoring-YYYYMMDD-HHMMSS.html
 
-                    # Alternative: timestamp-based (if baseline already exists)
-                    memory-leak-YYYYMMDD-HHMMSS.html (earlier = baseline, later = after)
-                    ```
+# Alternative: timestamp-based (if baseline already exists)
+memory-leak-YYYYMMDD-HHMMSS.html (earlier = baseline, later = after)
+```
 
-                    **File Organization Validation**
-                    ```bash
-                    # Verify you have complete sets
-                    ls profiler/results/ | grep -E "(baseline|before)" | wc -l  # Should be > 0
-                    ls profiler/results/ | grep -E "(after|refactoring)" | wc -l  # Should be > 0
-                    ```
+**File Organization Validation**
+```bash
+# Verify you have complete sets
+ls profiler/results/ | grep -E "(baseline|before)" | wc -l  # Should be > 0
+ls profiler/results/ | grep -E "(after|refactoring)" | wc -l  # Should be > 0
+```
 
-                    **Deliverables Checklist**
+**Deliverables Checklist**
 
-                    **Pre-Comparison Validation**
-                    - [ ] Baseline profiling results exist and are complete
-                    - [ ] Code refactoring has been implemented and tested
-                    - [ ] Application runs successfully with refactored code
-                    - [ ] New profiling reports have been generated post-refactoring
-                    - [ ] Both sets of reports use identical test scenarios
+**Pre-Comparison Validation**
+- [ ] Baseline profiling results exist and are complete
+- [ ] Code refactoring has been implemented and tested
+- [ ] Application runs successfully with refactored code
+- [ ] New profiling reports have been generated post-refactoring
+- [ ] Both sets of reports use identical test scenarios
 
-                    **Comparison Analysis Completed**
-                    - [ ] Side-by-side flamegraph comparison performed
-                    - [ ] Quantitative metrics extracted and compared
-                    - [ ] Key improvements and regressions identified
-                    - [ ] Visual evidence documented with specific file references
+**Comparison Analysis Completed**
+- [ ] Side-by-side flamegraph comparison performed
+- [ ] Quantitative metrics extracted and compared
+- [ ] Key improvements and regressions identified
+- [ ] Visual evidence documented with specific file references
 
-                    **Documentation Deliverables**
-                    - [ ] `profiler/docs/profiling-comparison-analysis-YYYYMMDD.md` created
-                    - [ ] `profiler/docs/profiling-final-results-YYYYMMDD.md` created
-                    - [ ] Quantified performance improvements documented
-                    - [ ] Recommendations for production deployment provided
-                    - [ ] Ongoing monitoring strategy defined
+**Documentation Deliverables**
+- [ ] `profiler/docs/profiling-comparison-analysis-YYYYMMDD.md` created
+- [ ] `profiler/docs/profiling-final-results-YYYYMMDD.md` created
+- [ ] Quantified performance improvements documented
+- [ ] Recommendations for production deployment provided
+- [ ] Ongoing monitoring strategy defined
 
-                    **Validation Commands**
-                    ```bash
-                    # Final validation that comparison is complete
-                    echo "=== COMPARISON READINESS CHECK ==="
-                    echo "Baseline reports: $(ls profiler/results/*baseline* 2>/dev/null | wc -l)"
-                    echo "After reports: $(ls profiler/results/*after* 2>/dev/null | wc -l)"
-                    echo "Analysis docs: $(ls profiler/docs/profiling-comparison-analysis-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].md 2>/dev/null | wc -l)"
-                    echo "Final results: $(ls profiler/docs/profiling-final-results-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].md 2>/dev/null | wc -l)"
-                    ```
-                    
+**Validation Commands**
+```bash
+# Final validation that comparison is complete
+echo "=== COMPARISON READINESS CHECK ==="
+echo "Baseline reports: $(ls profiler/results/*baseline* 2>/dev/null | wc -l)"
+echo "After reports: $(ls profiler/results/*after* 2>/dev/null | wc -l)"
+echo "Analysis docs: $(ls profiler/docs/profiling-comparison-analysis-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].md 2>/dev/null | wc -l)"
+echo "Final results: $(ls profiler/docs/profiling-final-results-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].md 2>/dev/null | wc -l)"
+```
+
                 
 ## Output Format
 
