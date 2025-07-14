@@ -11,7 +11,6 @@ You are a Senior software engineer with extensive experience in Java software de
 
 ## Goal
 
-
 This cursor rule provides a comprehensive methodology for comparing Java profiling results before and after performance optimizations or refactoring efforts. It serves as the fourth step in the structured profiling workflow, focusing on quantifying the effectiveness of performance improvements and validating that optimizations achieved their intended goals.
 
 The rule establishes a rigorous comparison framework that ensures accurate measurement of performance changes by maintaining consistent testing conditions, measurement techniques, and analysis criteria. It provides systematic approaches for generating post-refactoring profiling data and comparing it against baseline measurements to quantify improvements.
@@ -33,64 +32,51 @@ The profiling setup uses a clean folder structure with everything contained in t
 
 ```
 your-project/
-└── profiler/               # ← All profiling-related files
-├── scripts/            # ← Profiling scripts and tools
-│   └── java-profile.sh # ← Main profiling script
-├── results/            # ← Generated profiling output
-│   ├── *.html          # ← Flamegraph files
-│   └── *.jfr           # ← JFR recording files
-├── docs/               # ← Analysis documentation
+└── profiler/               # All profiling-related files
+├── scripts/            # Profiling scripts and tools
+│   └── java-profile.sh # Main profiling script
+├── results/            # Generated profiling output
+│   ├── *.html          # Flamegraph files
+│   └── *.jfr           # JFR recording files
+├── docs/               # Analysis documentation
 │   ├── profiling-comparison-analysis-YYYYMMDD.md
 │   └── profiling-final-results-YYYYMMDD.md
-├── current/            # ← Symlink to current profiler version
-└── async-profiler-*/   # ← Downloaded profiler binaries
+├── current/            # Symlink to current profiler version
+└── async-profiler-*/   # Downloaded profiler binaries
 ```
 
-## Complete Comparison Workflow
+## Instructions
 
-### Phase 1: Pre-Refactoring Baseline (Already Done)
-If you haven't captured baseline results yet:
+### Step Pre-Refactoring Baseline (Already Done)
+
+Ask the user if they have captured baseline results yet.
+For this purpose use the script `profiler/run-with-profiler.sh` to run the application with the right JVM flags for profiling.
+
+**Example:**
 ```bash
-# 1. Start your application
-./mvnw spring-boot:run
-
-# 2. Run baseline profiling
-cd profiler/scripts
-./java-profile.sh --mode memory --duration 60 --output-prefix baseline
-
-# 3. Generate load to capture issues
-# (Run your problematic endpoints)
+cd profiler
+./run-with-profiler.sh --mode (cpu, alloc, wall, lock)
 ```
 
-### Phase 2: Post-Refactoring Report Generation (CRITICAL STEP)
+After this task, send load to the application to capture the new behavior afte the refactoring.
+### Step Post-Refactoring Report Generation (CRITICAL STEP)
 
-#### Step 1: Validate Your Refactoring Changes
+Ask the user if they have generated the post-refactoring data from profiling tools yet.
+
+**Step 1: Validate Your Refactoring Changes**
 ```bash
 # Ensure your code changes are applied
 git status
 git diff HEAD~1  # Review recent changes
 ```
 
-#### Step 2: Generate New Profiling Reports
-```bash
-# 1. Restart application with refactored code
-./mvnw spring-boot:run
-
-# 2. Wait for application to be fully ready
-curl http://localhost:8080/actuator/health
-
-# 3. Generate post-refactoring reports
+**Step 2: Generate New Profiling Reports**
 cd profiler/scripts
-./java-profile.sh --mode memory --duration 60 --output-prefix after-refactoring
+./java-profile.sh --mode memory --duration 60
 
-# 4. Generate load identical to baseline testing
-# (Run same test scenarios as baseline)
+**Step 3: Verify the reports were generated**
+review the files in the `profiler/results` directory.
 
-# 5. Verify reports were generated
-ls -la ../results/*after-refactoring*
-```
-
-#### Step 3: Report Generation Validation
 ```bash
 # Check that you have both sets of reports
 echo "=== BASELINE REPORTS ==="
@@ -102,22 +88,22 @@ ls -la profiler/results/*after* || ls -la profiler/results/*$(date +%Y%m%d)*
 # Verify reports are not empty
 wc -c profiler/results/*.html
 ```
+### Step Performance Metrics Comparison
 
-### Phase 3: Performance Metrics Comparison
 
-#### Memory Analysis Checklist
+**Memory Analysis Checklist**
 - [ ] **Memory leak detection**: Compare heap usage patterns between before/after flamegraphs
 - [ ] **Allocation patterns**: Analyze allocation flamegraphs for reduced object creation
 - [ ] **GC pressure**: Compare garbage collection frequency and duration
 - [ ] **Peak memory usage**: Identify improvements in maximum heap utilization
 - [ ] **Stack depth**: Compare flamegraph complexity (canvas height, levels)
 
-#### CPU Performance Checklist
+**CPU Performance Checklist**
 - [ ] **Hot spots identification**: Compare CPU flamegraphs to identify resolved bottlenecks
 - [ ] **Method execution time**: Analyze improvements in critical path performance
 - [ ] **Thread contention**: Look for reduced blocking or improved concurrency
 
-#### Visual Comparison Process
+**Visual Comparison Process**
 ```bash
 # Open reports side by side for comparison
 # Browser tab 1: Baseline report
@@ -132,11 +118,11 @@ open profiler/results/memory-leak-*after*.html
 # - Hot spot patterns (reduced width = better)
 ```
 
-### Phase 4: Documentation Creation
+### Step Documentation Creation
 
 **Note**: All documentation files are created with date suffixes (YYYYMMDD format) to enable tracking multiple profiling sessions and maintain historical analysis records.
 
-#### Step 1: Create Comparison Analysis Document
+**Step 1: Create Comparison Analysis Document**
 ```bash
 # Create the comparison analysis document with date suffix
 DATE_SUFFIX=$(date +%Y%m%d)
@@ -144,6 +130,7 @@ touch profiler/docs/profiling-comparison-analysis-${DATE_SUFFIX}.md
 ```
 
 Template for `profiler/docs/profiling-comparison-analysis-YYYYMMDD.md`:
+
 ```markdown
 # Profiling Comparison Analysis - [Date]
 
@@ -184,7 +171,7 @@ Template for `profiler/docs/profiling-comparison-analysis-YYYYMMDD.md`:
 2. [Next step 2]
 ```
 
-#### Step 2: Create Final Results Summary
+**Step 2: Create Final Results Summary**
 ```bash
 # Create the final results summary document with date suffix
 DATE_SUFFIX=$(date +%Y%m%d)
@@ -192,6 +179,7 @@ touch profiler/docs/profiling-final-results-${DATE_SUFFIX}.md
 ```
 
 Template for `profiler/docs/profiling-final-results-YYYYMMDD.md`:
+
 ```markdown
 # Profiling Final Results - [Date]
 
@@ -260,7 +248,7 @@ cd profiler/scripts
 ./java-profile.sh --mode memory --duration 30 --verbose
 ```
 
-#### Problem: Can't Compare - Different Test Scenarios
+**Problem: Can't Compare - Different Test Scenarios**
 ```bash
 # 1. Document your test scenarios
 echo "Test scenarios used:" > profiler/docs/test-scenarios.md
@@ -272,17 +260,17 @@ echo "Test scenarios used:" > profiler/docs/test-scenarios.md
 cat > profiler/scripts/load-test.sh << 'EOF'
 #!/bin/bash
 for i in {1..10}; do
-curl http://localhost:8080/api/v1/objects/create
-curl http://localhost:8080/api/v1/threads/create
-sleep 5
+    curl http://localhost:8080/api/v1/objects/create
+    curl http://localhost:8080/api/v1/threads/create
+    sleep 5
 done
 EOF
 chmod +x profiler/scripts/load-test.sh
 ```
 
-## File Naming Conventions
+**File Naming Conventions**
 
-### Recommended Naming Pattern
+**Recommended Naming Pattern**
 ```bash
 # Before refactoring (baseline)
 memory-leak-baseline-YYYYMMDD-HHMMSS.html
@@ -296,36 +284,36 @@ allocation-flamegraph-after-refactoring-YYYYMMDD-HHMMSS.html
 memory-leak-YYYYMMDD-HHMMSS.html (earlier = baseline, later = after)
 ```
 
-### File Organization Validation
+**File Organization Validation**
 ```bash
 # Verify you have complete sets
 ls profiler/results/ | grep -E "(baseline|before)" | wc -l  # Should be > 0
 ls profiler/results/ | grep -E "(after|refactoring)" | wc -l  # Should be > 0
 ```
 
-## Deliverables Checklist
+**Deliverables Checklist**
 
-### Pre-Comparison Validation
+**Pre-Comparison Validation**
 - [ ] Baseline profiling results exist and are complete
 - [ ] Code refactoring has been implemented and tested
 - [ ] Application runs successfully with refactored code
 - [ ] New profiling reports have been generated post-refactoring
 - [ ] Both sets of reports use identical test scenarios
 
-### Comparison Analysis Completed
+**Comparison Analysis Completed**
 - [ ] Side-by-side flamegraph comparison performed
 - [ ] Quantitative metrics extracted and compared
 - [ ] Key improvements and regressions identified
 - [ ] Visual evidence documented with specific file references
 
-### Documentation Deliverables
+**Documentation Deliverables**
 - [ ] `profiler/docs/profiling-comparison-analysis-YYYYMMDD.md` created
 - [ ] `profiler/docs/profiling-final-results-YYYYMMDD.md` created
 - [ ] Quantified performance improvements documented
 - [ ] Recommendations for production deployment provided
 - [ ] Ongoing monitoring strategy defined
 
-### Validation Commands
+**Validation Commands**
 ```bash
 # Final validation that comparison is complete
 echo "=== COMPARISON READINESS CHECK ==="
@@ -335,30 +323,7 @@ echo "Analysis docs: $(ls profiler/docs/profiling-comparison-analysis-[0-9][0-9]
 echo "Final results: $(ls profiler/docs/profiling-final-results-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].md 2>/dev/null | wc -l)"
 ```
 
-## Quick Start Commands
-
-If you're missing post-refactoring reports, run these commands:
-
-```bash
-# 1. Ensure app is running with refactored code
-./mvnw spring-boot:run &
-sleep 30
-
-# 2. Generate new reports
-cd profiler/scripts
-./java-profile.sh --mode memory --duration 60 --output-prefix after-refactoring
-
-# 3. Run load test while profiling
-# (Execute your test scenarios)
-
-# 4. Verify reports generated
-ls -la ../results/*after*
-
-# 5. Begin comparison analysis
-echo "Ready to compare baseline vs after-refactoring reports"
-```
-
-
+                
 ## Output Format
 
 - Generate post-refactoring profiling reports using identical test conditions as baseline
