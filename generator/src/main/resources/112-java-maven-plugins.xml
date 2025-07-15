@@ -2,7 +2,7 @@
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:xi="http://www.w3.org/2001/XInclude"
         xsi:noNamespaceSchemaLocation="pml.xsd"
-        id="111-java-maven-deps-and-plugins" version="1.0">
+        id="112-java-maven-plugins" version="1.0">
 
     <metadata>
         <cursor-ai>
@@ -13,22 +13,53 @@
         <tags>
             <tag>maven</tag>
             <tag>java</tag>
-            <tag>dependencies</tag>
             <tag>plugins</tag>
             <tag>best-practices</tag>
+            <tag>modular</tag>
         </tags>
         <version>0.8.0</version>
-        <title>Update pom.xml to add Maven dependencies and plugins</title>
+        <title>Update pom.xml to add Maven plugins with modular step-based configuration</title>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
     <goal>
-        This rule provides a comprehensive, conversational approach to updating Maven pom.xml files with properties, dependencies, plugins, and profiles. It MUST ask questions first to understand the project needs and then conditionally add only relevant components.
+        This rule provides a modular, step-based approach to updating Maven pom.xml files with plugins and profiles. Each step has a single responsibility and clear dependencies on user answers, making the configuration process more maintainable and user-friendly.
+
+        **CRITICAL**: This rule PRESERVES existing plugins and configurations. It only ADDS or ENHANCES plugins, never replaces or removes existing ones.
     </goal>
 
-    <instructions>
+            <instructions>
         <steps>
+            <step number="0">
+                <step-title>MANDATORY: Existing Configuration Preservation and Analysis</step-title>
+                <step-content>
+                    **CRITICAL PRESERVATION RULES**: Before making ANY changes to pom.xml:
+
+                    1. **SCAN existing pom.xml** to identify current plugins, properties, and profiles
+                    2. **IDENTIFY conflicts** between existing configuration and planned additions
+                    3. **PRESERVE all existing plugins** - never remove or replace existing plugin configurations
+                    4. **ASK USER about conflicts** before modifying any existing plugin or property
+                    5. **SKIP additions** if they would conflict with existing configuration unless user explicitly requests override
+                    6. **DOCUMENT what will be added** vs what already exists
+
+                    **Implementation Steps**:
+                    1. Read and analyze the current pom.xml file
+                    2. List all existing plugins in `&lt;build&gt;&lt;plugins&gt;` section
+                    3. List all existing properties in `&lt;properties&gt;` section
+                    4. List all existing profiles in `&lt;profiles&gt;` section
+                    5. Compare against planned additions from subsequent steps
+                    6. Present analysis to user: "Found existing plugins: [list]. Will only add: [list of new plugins]"
+                    7. **WAIT for user confirmation** before proceeding
+
+                    **If conflicts detected**:
+                    - Plugin already exists: Ask "Plugin X already exists. Skip adding duplicate? (y/n)"
+                    - Property already exists: Ask "Property X already exists with value Y. Keep existing? (y/n)"
+                    - Profile already exists: Ask "Profile X already exists. Skip adding duplicate? (y/n)"
+
+                    **Only proceed to Step 1 after completing this analysis and getting user confirmation.**
+                </step-content>
+            </step>
             <step number="1">
                 <step-title>Maven Wrapper Check and Installation</step-title>
                 <step-content>
@@ -55,8 +86,10 @@
             <step number="2">
                 <step-title>Project Assessment Questions</step-title>
                 <step-content>
+                    **DEPENDENCIES**: Requires completion of Step 0 (existing configuration analysis).
+
                     **CRITICAL**: You MUST ask the exact questions from the following template in strict order before making any changes to understand the project needs.
-                    Based on the answers, you will conditionally add only relevant dependencies and plugins.
+                    Based on the answers, you will conditionally execute only relevant subsequent steps.
 
                     ```markdown
                     <xi:include href="fragments/java-maven-plugins-questions-template.md" parse="text"/>
@@ -64,6 +97,7 @@
                 </step-content>
                 <step-constraints>
                     <step-constraint-list>
+                        <step-constraint>**MUST** complete Step 0 analysis before asking any questions</step-constraint>
                         <step-constraint>**MUST** read template files fresh using file_search and read_file tools before asking any questions</step-constraint>
                         <step-constraint>**MUST NOT** use cached or remembered questions from previous interactions</step-constraint>
                         <step-constraint>**MUST** ask questions ONE BY ONE in the exact order specified in the template</step-constraint>
@@ -75,116 +109,211 @@
                         <step-constraint>**MUST NOT** assume answers or provide defaults</step-constraint>
                         <step-constraint>**MUST NOT** skip questions or change their order</step-constraint>
                         <step-constraint>**MUST** follow question sequence: Project Nature → Java Version → Build and Quality Aspects → Coverage Threshold (conditional) → Sonar Configuration (conditional) → Sonar Host Configuration (conditional)</step-constraint>
-                        <step-constraint>**MUST** verify that ALL options from the template are included before asking questions</step-constraint>
-                        <step-constraint>**MUST** cross-check question content against the freshly read template file</step-constraint>
-                        <step-constraint>**MUST** re-read the template and correct questions if there are discrepancies</step-constraint>
-                        <step-constraint>**MUST** STOP and verify all applicable questions have been answered</step-constraint>
-                        <step-constraint>**MUST NOT** proceed to Step 3 until complete responses received</step-constraint>
-                        <step-constraint>**MUST** confirm understanding of user selections before implementation</step-constraint>
+                        <step-constraint>**MUST** confirm understanding of user selections before proceeding to Step 3</step-constraint>
                         <step-constraint>**MUST NOT** ask about Coverage Threshold if user did not select jacoco coverage</step-constraint>
                     </step-constraint-list>
                 </step-constraints>
             </step>
             <step number="3">
-                <step-title>Conditional Configuration Based on Answers</step-title>
+                <step-title>Properties Configuration</step-title>
                 <step-content>
-                    Use the following template to add the dependencies and plugins to the pom.xml file.
+                    **Purpose**: Configure Maven properties based on user selections from Step 2.
 
-                    ```markdown
-                    <xi:include href="fragments/java-maven-plugins-template.md" parse="text"/>
-                    ```
+                    **Dependencies**: Requires completion of Step 2 questions.
 
-                    After getting answers, implement the configuration following this order:
-
-                    **Reference**: For detailed properties configuration strategy and conditional logic, see the template file.
+                    Use the following template to add properties to the pom.xml file:
 
                     ```markdown
                     <xi:include href="fragments/java-maven-properties-template.md" parse="text"/>
                     ```
 
-                    **Summary**: Build properties incrementally based on user's actual needs and project requirements. The template provides comprehensive guidance on:
-                    - Core properties (always added)
-                    - Maven version and plugin properties (conditional)
-                    - Dependency version properties (based on selections)
-                    - Quality and analysis properties (with custom thresholds)
-                    - Feature-specific plugin version properties
-                    - Implementation guidelines
+                    **Implementation Strategy:**
+                    1. **Core Properties**: Always add Java version, Maven version, and encoding properties
+                    2. **Plugin Version Properties**: Add version properties for plugins that will be used based on Step 2 answers
+                    3. **Quality Properties**: Add coverage and threshold properties if quality features selected
+                    4. **Feature-Specific Properties**: Add properties only for selected features (Error Prone, NullAway, etc.)
 
-                    **Dependency Strategy**: Add only essential dependencies that enhance code quality and safety.
-
-                    **Plugin Configuration Strategy**: Add plugins based only on selected features and user needs.
-
-                    **Reference**: For specific plugin configurations, see the template file.
-
-                    **Core Plugins** (ask if user wants enhanced enforcement):
-                    - **maven-enforcer-plugin**: With dependency convergence and circular dependency checks
-                    - **maven-surefire-plugin**: For unit testing with proper configuration
-
-                    **Feature-Based Plugins** (add only if selected):
-                    - **Integration Testing**: maven-failsafe-plugin
-                    - **Code Coverage**: jacoco-maven-plugin (in profile)
-                    - **Mutation Testing**: pitest-maven (in profile)
-                    - **Security Scanning**: dependency-check-maven (in profile)
-                    - **Static Analysis**: spotbugs-maven-plugin, maven-pmd-plugin (in profile) &amp; sonar (in profile)
-                    - **Version Management**: versions-maven-plugin
-                    - **Build Info**: git-commit-id-plugin
-                    - **Library Publishing**: flatten-maven-plugin
-
-                    1. **Ask about enhancement level**: "Do you want enhanced code analysis (Error Prone, NullAway)? (y/n)"
-                    2. **Add core plugins** based on enhancement choice
-                    3. **Add feature plugins** only for selected features
-                    4. **Configure profiles** for optional analysis tools
-                    5. **Customize package names** in plugin configurations
-
-                    **Profile Strategy**: Create profiles only for selected optional features to avoid overwhelming the default build.
-
-                    **Reference**: For specific profile configurations, see the template file.
-
-                    **Available Profiles** (add only if features selected):
-                    - `jacoco`: Code coverage analysis
-                    - `pitest`: Mutation testing
-                    - `security`: OWASP dependency security scanning
-                    - `find-bugs`: Static analysis with SpotBugs and PMD
-
+                    **Property Naming Convention**: Use `maven-plugin-*` format for consistency (e.g., `maven-plugin-compiler.version`)
                 </step-content>
                 <step-constraints>
                     <step-constraint-list>
-                        <step-constraint>**MUST NOT** deviate from template specifications</step-constraint>
-                        <step-constraint>**MUST** use `maven-plugins-*` format for property naming (e.g., `maven-plugins-compiler.version`, NOT `maven-compiler-plugin.version`)</step-constraint>
-                        <step-constraint>**MUST** include `extra-enforcer-rules` dependency and all specified rules in enforcer plugin</step-constraint>
-                        <step-constraint>**MUST** follow template's `&lt;build&gt;` vs `&lt;reporting&gt;` section separation for profiles</step-constraint>
-                        <step-constraint>**MUST** create `.mvn/jvm.config` when Error Prone is enabled</step-constraint>
-                        <step-constraint>**MUST** update `AnnotatedPackages` and `targetClasses` to match actual project structure</step-constraint>
-                        <step-constraint>**MUST** ensure template adherence is mandatory - no exceptions or simplified versions allowed</step-constraint>
+                        <step-constraint>**MUST** use `maven-plugin-*` format for property naming (e.g., `maven-plugin-compiler.version`, NOT `maven-compiler-plugin.version`)</step-constraint>
+                        <step-constraint>**MUST** add only properties for features selected in Step 2</step-constraint>
+                        <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
+                        <step-constraint>**MUST** follow template specifications exactly</step-constraint>
+                        <step-constraint>**MUST** validate Java version matches user selection from Step 2</step-constraint>
                     </step-constraint-list>
                 </step-constraints>
             </step>
             <step number="4">
-                <step-title>Profile Usage Examples</step-title>
+                <step-title>Core Plugins Configuration</step-title>
                 <step-content>
-                    Only provide examples for profiles that were actually added based on user selections.
+                    **Purpose**: Configure essential Maven plugins that are always needed.
+
+                    **Dependencies**: Requires completion of Steps 2 and 3.
+
+                    **Always Configure These Core Plugins:**
+                    1. **maven-enforcer-plugin**: With dependency convergence and circular dependency checks
+                    2. **maven-compiler-plugin**: With proper Java version configuration
+                    3. **maven-surefire-plugin**: For unit testing with proper configuration
+
+                    **Enhanced Compiler Analysis**: If user selected enhanced analysis in Step 2, configure Error Prone and NullAway.
+
+                    Use core plugins section from the template:
+
+                    ```markdown
+                    <xi:include href="fragments/java-maven-core-plugins-template.md" parse="text"/>
+                    ```
+
+                    **Implementation Order:**
+                    1. Add maven-enforcer-plugin with all specified rules
+                    2. Configure maven-compiler-plugin (basic or enhanced based on Step 2)
+                    3. Add maven-surefire-plugin with proper test includes/excludes
+                    4. Create .mvn/jvm.config file if enhanced analysis selected
                 </step-content>
+                <step-constraints>
+                    <step-constraint-list>
+                        <step-constraint>**MUST** include `extra-enforcer-rules` dependency and all specified rules in enforcer plugin</step-constraint>
+                        <step-constraint>**MUST** update `AnnotatedPackages` parameter to match actual project structure</step-constraint>
+                        <step-constraint>**MUST** create .mvn/jvm.config with exports if enhanced analysis selected</step-constraint>
+                        <step-constraint>**MUST** use properties configured in Step 3 for plugin versions</step-constraint>
+                        <step-constraint>**MUST** follow template specifications exactly</step-constraint>
+                    </step-constraint-list>
+                </step-constraints>
+            </step>
+            <step number="5">
+                <step-title>Testing Plugins Configuration</step-title>
+                <step-content>
+                    **Purpose**: Configure testing-related plugins based on user selections.
+
+                    **Dependencies**: Only execute if user selected testing features in Step 2.
+
+                    **Conditional Configuration:**
+                    - **Integration Testing**: Add maven-failsafe-plugin only if selected in Step 2
+                    - **HTML Test Reports**: Add test reporting plugins only if selected in Step 2
+
+                    Use testing plugins section from the template:
+
+                    ```markdown
+                    <xi:include href="fragments/java-maven-testing-plugins-template.md" parse="text"/>
+                    ```
+
+                    **Implementation Strategy:**
+                    1. **Check Step 2 answers** for integration testing selection
+                    2. **Add maven-failsafe-plugin** only if integration testing selected
+                    3. **Check Step 2 answers** for HTML test reports selection
+                    4. **Add reporting section** only if HTML reports selected
+                </step-content>
+                <step-constraints>
+                    <step-constraint-list>
+                        <step-constraint>**MUST** only add failsafe plugin if integration testing was selected in Step 2</step-constraint>
+                        <step-constraint>**MUST** only add test reporting if HTML reports were selected in Step 2</step-constraint>
+                        <step-constraint>**MUST** configure proper includes/excludes for test file patterns</step-constraint>
+                        <step-constraint>**MUST** use properties configured in Step 3 for plugin versions</step-constraint>
+                        <step-constraint>**MUST** skip this step entirely if no testing features selected</step-constraint>
+                    </step-constraint-list>
+                </step-constraints>
+            </step>
+            <step number="6">
+                <step-title>Quality Analysis Profiles Configuration</step-title>
+                <step-content>
+                    **Purpose**: Configure quality analysis profiles based on user selections.
+
+                    **Dependencies**: Only execute if user selected quality analysis features in Step 2.
+
+                    **Conditional Profiles to Create:**
+                    - **jacoco**: Only if code coverage selected
+                    - **pitest**: Only if mutation testing selected
+                    - **security**: Only if security scanning selected
+                    - **find-bugs**: Only if static analysis selected
+                    - **sonar**: Only if Sonar integration selected
+
+                    Use quality analysis profiles section from the template:
+
+                    ```markdown
+                    <xi:include href="fragments/java-maven-quality-profiles-template.md" parse="text"/>
+                    ```
+
+                    **Implementation Strategy:**
+                    1. **Check each quality feature** from Step 2 answers
+                    2. **Create profiles only for selected features** to avoid overwhelming default build
+                    3. **Configure coverage thresholds** using values from Step 2
+                    4. **Update targetClasses and targetTests** to match project structure
+                    5. **Configure Sonar properties** using values collected in Step 2
+                </step-content>
+                <step-constraints>
+                    <step-constraint-list>
+                        <step-constraint>**MUST** create profiles only for features selected in Step 2</step-constraint>
+                        <step-constraint>**MUST** follow template's `&lt;build&gt;` vs `&lt;reporting&gt;` section separation for profiles</step-constraint>
+                        <step-constraint>**MUST** update `targetClasses` and `targetTests` to match actual project structure</step-constraint>
+                        <step-constraint>**MUST** use coverage threshold values from Step 2</step-constraint>
+                        <step-constraint>**MUST** configure Sonar properties with actual values from Step 2 if Sonar selected</step-constraint>
+                        <step-constraint>**MUST** skip this step entirely if no quality features selected</step-constraint>
+                    </step-constraint-list>
+                </step-constraints>
+            </step>
+            <step number="7">
+                <step-title>Build Enhancement Plugins Configuration</step-title>
+                <step-content>
+                    **Purpose**: Configure optional build enhancement plugins based on user selections.
+
+                    **Dependencies**: Only execute if user selected build enhancement features in Step 2.
+
+                    **Conditional Plugins to Configure:**
+                    - **spotless-maven-plugin**: For code formatting (if selected)
+                    - **versions-maven-plugin**: For version management (if selected)
+                    - **git-commit-id-plugin**: For build information (if selected)
+                    - **flatten-maven-plugin**: For library publishing (if library project type selected)
+
+                    Use build enhancement plugins section from the template:
+
+                    ```markdown
+                    <xi:include href="fragments/java-maven-build-plugins-template.md" parse="text"/>
+                    ```
+
+                    **Implementation Strategy:**
+                    1. **Check project nature** from Step 2 - add flatten plugin only for library projects
+                    2. **Check build aspects** from Step 2 for other enhancement features
+                    3. **Configure each plugin** only if corresponding feature was selected
+                    4. **Provide usage instructions** only for plugins that were actually added
+                </step-content>
+                <step-constraints>
+                    <step-constraint-list>
+                        <step-constraint>**MUST** add flatten plugin only if "Java Library" was selected as project nature in Step 2</step-constraint>
+                        <step-constraint>**MUST** add other plugins only if corresponding features were selected in Step 2</step-constraint>
+                        <step-constraint>**MUST** use properties configured in Step 3 for plugin versions</step-constraint>
+                        <step-constraint>**MUST** skip this step entirely if no build enhancement features selected</step-constraint>
+                        <step-constraint>**MUST** provide usage examples only for plugins that were actually added</step-constraint>
+                    </step-constraint-list>
+                </step-constraints>
             </step>
         </steps>
     </instructions>
 
     <output-format>
         <output-format-list>
-            <output-format-item>Ask questions one by one following the template exactly</output-format-item>
-            <output-format-item>Wait for user responses before proceeding</output-format-item>
+            <output-format-item>Ask questions one by one following the template exactly in Step 2</output-format-item>
+            <output-format-item>Execute steps 3-7 only based on user selections from Step 2</output-format-item>
+            <output-format-item>Skip entire steps if no relevant features were selected</output-format-item>
             <output-format-item>Implement only requested features based on user selections</output-format-item>
             <output-format-item>Follow template specifications exactly for all configurations</output-format-item>
-            <output-format-item>Validate configuration after implementation</output-format-item>
+            <output-format-item>Provide clear progress feedback showing which step is being executed</output-format-item>
             <output-format-item>Provide usage examples only for features that were added</output-format-item>
         </output-format-list>
     </output-format>
 
     <safeguards>
         <safeguards-list>
+            <safeguards-item>**MANDATORY**: Complete Step 0 (existing configuration analysis) before making any changes</safeguards-item>
+            <safeguards-item>**NEVER remove or replace existing plugins** - only add new plugins that don't already exist</safeguards-item>
+            <safeguards-item>**NEVER remove or replace existing properties** - only add new properties that don't conflict</safeguards-item>
+            <safeguards-item>**ASK USER before overriding** any existing configuration element</safeguards-item>
             <safeguards-item>Verify changes with the command: `mvn validate` or `./mvnw validate`</safeguards-item>
             <safeguards-item>Always read template files fresh using file_search and read_file tools</safeguards-item>
-            <safeguards-item>Never proceed without user confirmation for each step</safeguards-item>
+            <safeguards-item>Never proceed to next step without completing dependencies</safeguards-item>
             <safeguards-item>Template adherence is mandatory - no exceptions or simplified versions</safeguards-item>
+            <safeguards-item>Validate that all plugin configurations reference properties from Step 3</safeguards-item>
+            <safeguards-item>**DOCUMENT what was added vs what was preserved** in the final summary</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>

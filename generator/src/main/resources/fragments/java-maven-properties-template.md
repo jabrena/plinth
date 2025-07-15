@@ -4,16 +4,30 @@
 
 Build properties incrementally based on user's actual needs and project requirements. This template provides a comprehensive, conversational approach to configuring Maven properties.
 
-## Core Properties (Always Added)
+**CRITICAL PRESERVATION RULE**: Only ADD properties that don't already exist. Never REPLACE or REMOVE existing properties.
+
+## Pre-Implementation Property Check
+
+**BEFORE adding any property, check if it already exists in the `<properties>` section:**
+
+1. **Scan existing properties** in the pom.xml
+2. **Compare with planned additions** from the templates below
+3. **Ask user for conflicts**: "Property X already exists with value Y. Keep existing value? (y/n)"
+4. **Skip conflicting properties** unless user explicitly requests override
+5. **Only add NEW properties** that don't already exist
+
+## Core Properties (Only Add If Missing)
 
 Start with essential build properties that every project needs (use the Java version selected in the initial questions):
+
+**Check first if these properties already exist. Only add missing ones:**
 
 ```xml
 <properties>
   <java.version>[USER_SELECTED_JAVA_VERSION]</java.version>
   <maven.version>3.9.10</maven.version>
   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>  
+  <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 </properties>
 ```
 
@@ -142,7 +156,7 @@ The final `<properties>` section will look like this (example with common select
 
 ```xml
 <properties>
-  <java.version>24</java.version> 
+  <java.version>24</java.version>
   <maven.version>3.9.10</maven.version>
   <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
