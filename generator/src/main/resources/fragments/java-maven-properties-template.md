@@ -37,7 +37,6 @@ Start with essential build properties that every project needs (use the Java ver
 
 **If yes, add**:
 ```xml
-<maven-plugin-compiler.version>3.14.0</maven-plugin-compiler.version>
 <maven-plugin-surefire.version>3.5.3</maven-plugin-surefire.version>
 <maven-plugin-enforcer.version>3.5.0</maven-plugin-enforcer.version>
 ```
@@ -45,12 +44,6 @@ Start with essential build properties that every project needs (use the Java ver
 ## Dependency Version Properties (Conditional)
 
 **Based on dependency selections**, add relevant version properties:
-
-### Code Quality Dependencies
-**If JSpecify selected**:
-```xml
-<jspecify.version>1.0.0</jspecify.version>
-```
 
 ## Quality and Analysis Properties (Conditional)
 
@@ -109,14 +102,6 @@ Start with essential build properties that every project needs (use the Java ver
 <maven-plugin-spotbugs.version>4.9.3.0</maven-plugin-spotbugs.version>
 <maven-plugin-pmd.version>3.26.0</maven-plugin-pmd.version>
 <maven-plugin-sonar.version>4.0.0.4121</maven-plugin-sonar.version>
-```
-
-### Enhanced Compiler Analysis
-**If Enhanced Code Analysis selected**:
-```xml
-<error-prone.version>2.38.0</error-prone.version>
-<nullaway.version>0.11.0</nullaway.version>
-<extra-enforcer-rules.version>1.10.0</extra-enforcer-rules.version>
 ```
 
 ### Version Management

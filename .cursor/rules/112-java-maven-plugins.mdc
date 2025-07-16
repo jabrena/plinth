@@ -19,7 +19,6 @@ This rule provides a modular, step-based approach to updating Maven pom.xml file
 
 ### Step 1: MANDATORY: Existing Configuration Preservation and Analysis
 
-
 **CRITICAL PRESERVATION RULES**: Before making ANY changes to pom.xml:
 
 1. **SCAN existing pom.xml** to identify current plugins, properties, and profiles
@@ -191,14 +190,13 @@ Options:
 
 ### Step 4: Properties Configuration
 
-                    **Purpose**: Configure Maven properties based on user selections from Step 3.
+**Purpose**: Configure Maven properties based on user selections from Step 3.
 
-                    **Dependencies**: Requires completion of Step 3 questions.
+**Dependencies**: Requires completion of Step 3 questions.
 
-                    Use the following template to add properties to the pom.xml file:
+Use the following template to add properties to the pom.xml file:
 
-                    ```markdown
-                    # Java Maven Properties Configuration
+# Java Maven Properties Configuration
 
 ## Properties Configuration Strategy
 
@@ -237,7 +235,6 @@ Start with essential build properties that every project needs (use the Java ver
 
 **If yes, add**:
 ```xml
-<maven-plugin-compiler.version>3.14.0</maven-plugin-compiler.version>
 <maven-plugin-surefire.version>3.5.3</maven-plugin-surefire.version>
 <maven-plugin-enforcer.version>3.5.0</maven-plugin-enforcer.version>
 ```
@@ -245,12 +242,6 @@ Start with essential build properties that every project needs (use the Java ver
 ## Dependency Version Properties (Conditional)
 
 **Based on dependency selections**, add relevant version properties:
-
-### Code Quality Dependencies
-**If JSpecify selected**:
-```xml
-<jspecify.version>1.0.0</jspecify.version>
-```
 
 ## Quality and Analysis Properties (Conditional)
 
@@ -309,14 +300,6 @@ Start with essential build properties that every project needs (use the Java ver
 <maven-plugin-spotbugs.version>4.9.3.0</maven-plugin-spotbugs.version>
 <maven-plugin-pmd.version>3.26.0</maven-plugin-pmd.version>
 <maven-plugin-sonar.version>4.0.0.4121</maven-plugin-sonar.version>
-```
-
-### Enhanced Compiler Analysis
-**If Enhanced Code Analysis selected**:
-```xml
-<error-prone.version>2.38.0</error-prone.version>
-<nullaway.version>0.11.0</nullaway.version>
-<extra-enforcer-rules.version>1.10.0</extra-enforcer-rules.version>
 ```
 
 ### Version Management
@@ -390,96 +373,94 @@ The final `<properties>` section will look like this (example with common select
 5. **Use descriptive names**: Property names should clearly indicate their purpose
 6. **Version consistency**: Ensure compatible versions across related plugins
 
-                    ```
 
-                    **Implementation Strategy:**
-                    1. **Core Properties**: Always add Java version, Maven version, and encoding properties
-                    2. **Plugin Version Properties**: Add version properties for plugins that will be used based on Step 2 answers
-                    3. **Quality Properties**: Add coverage and threshold properties if quality features selected
-                    4. **Feature-Specific Properties**: Add properties only for selected features (Error Prone, NullAway, etc.)
+**Implementation Strategy:**
+1. **Core Properties**: Always add Java version, Maven version, and encoding properties
+2. **Plugin Version Properties**: Add version properties ONLY for plugins that were selected in Step 3
+3. **Quality Properties**: Add coverage and threshold properties if quality features selected
 
-                    **Property Naming Convention**: Use `maven-plugin-*` format for consistency (e.g., `maven-plugin-compiler.version`)
+**Property Naming Convention**: Use `maven-plugin-*` format for consistency (e.g., `maven-plugin-compiler.version`)
                 
 #### Step Constraints
 
 - **MUST** use `maven-plugin-*` format for property naming (e.g., `maven-plugin-compiler.version`, NOT `maven-compiler-plugin.version`)
-- **MUST** add only properties for features selected in Step 3
+- **MUST** add only properties for features actually selected in Step 3
+- **MUST NOT** add properties for unselected features
 - **MUST** read template files fresh using file_search and read_file tools
 - **MUST** follow template specifications exactly
 - **MUST** validate Java version matches user selection from Step 3
 
 ### Step 5: Maven Enforcer Plugin Configuration
 
-                    
-                    **Purpose**: Configure maven-enforcer-plugin to enforce dependency convergence, prevent circular dependencies, and ensure consistent Maven/Java versions.
+**Purpose**: Configure maven-enforcer-plugin to enforce dependency convergence, prevent circular dependencies, and ensure consistent Maven/Java versions.
 
-                    **Dependencies**: Requires completion of Steps 3 and 4.
+**Dependencies**: Requires completion of Steps 3 and 4.
 
-                    **CRITICAL PRESERVATION RULE**: Only ADD this plugin if it doesn't already exist. Never REPLACE or REMOVE existing configuration.
+**CRITICAL PRESERVATION RULE**: Only ADD this plugin if it doesn't already exist. Never REPLACE or REMOVE existing configuration.
 
-                    ## Pre-Implementation Check
+## Pre-Implementation Check
 
-                    **BEFORE adding maven-enforcer-plugin, check if it already exists in the pom.xml:**
+**BEFORE adding maven-enforcer-plugin, check if it already exists in the pom.xml:**
 
-                    If maven-enforcer-plugin already exists: Ask user "maven-enforcer-plugin already exists. Do you want to enhance the existing configuration? (y/n)"
+If maven-enforcer-plugin already exists: Ask user "maven-enforcer-plugin already exists. Do you want to enhance the existing configuration? (y/n)"
 
-                    If user says "n": Skip this step entirely.
-                    If user says "y": Proceed with adding missing configuration elements only.
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing configuration elements only.
 
-                    ## Maven Enforcer Plugin Configuration
+## Maven Enforcer Plugin Configuration
 
-                    **ADD this plugin to the `<build><plugins>` section ONLY if it doesn't already exist:**
+**ADD this plugin to the `<build><plugins>` section ONLY if it doesn't already exist:**
 
-                    ```xml
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-enforcer-plugin</artifactId>
-                        <version>${maven-plugin-enforcer.version}</version>
-                        <dependencies>
-                            <dependency>
-                                <groupId>org.codehaus.mojo</groupId>
-                                <artifactId>extra-enforcer-rules</artifactId>
-                                <version>${extra-enforcer-rules.version}</version>
-                            </dependency>
-                        </dependencies>
-                        <executions>
-                            <execution>
-                                <id>enforce</id>
-                                <configuration>
-                                    <rules>
-                                        <banCircularDependencies/>
-                                        <dependencyConvergence />
-                                        <banDuplicatePomDependencyVersions />
-                                        <requireMavenVersion>
-                                            <version>${maven.version}</version>
-                                        </requireMavenVersion>
-                                        <requireJavaVersion>
-                                            <version>${java.version}</version>
-                                        </requireJavaVersion>
-                                        <bannedDependencies>
-                                            <excludes>
-                                                <exclude>org.projectlombok:lombok</exclude>
-                                            </excludes>
-                                        </bannedDependencies>
-                                    </rules>
-                                    <fail>true</fail>
-                                </configuration>
-                                <goals>
-                                    <goal>enforce</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    ```
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-enforcer-plugin</artifactId>
+    <version>${maven-plugin-enforcer.version}</version>
+    <dependencies>
+        <dependency>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>extra-enforcer-rules</artifactId>
+            <version>${extra-enforcer-rules.version}</version>
+        </dependency>
+    </dependencies>
+    <executions>
+        <execution>
+            <id>enforce</id>
+            <configuration>
+                <rules>
+                    <banCircularDependencies/>
+                    <dependencyConvergence />
+                    <banDuplicatePomDependencyVersions />
+                    <requireMavenVersion>
+                        <version>${maven.version}</version>
+                    </requireMavenVersion>
+                    <requireJavaVersion>
+                        <version>${java.version}</version>
+                    </requireJavaVersion>
+                    <bannedDependencies>
+                        <excludes>
+                            <exclude>org.projectlombok:lombok</exclude>
+                        </excludes>
+                    </bannedDependencies>
+                </rules>
+                <fail>true</fail>
+            </configuration>
+            <goals>
+                <goal>enforce</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+```
 
-                    ## Validation
+## Validation
 
-                    After adding this plugin, verify the configuration:
+After adding this plugin, verify the configuration:
 
-                    ```bash
-                    # Validate plugin configuration
-                    ./mvnw validate
-                    ```
+```bash
+# Validate plugin configuration
+./mvnw validate
+```
                     
                 
 #### Step Constraints
@@ -489,196 +470,138 @@ The final `<properties>` section will look like this (example with common select
 - **MUST** check if plugin already exists before adding
 - **MUST** ask user permission before modifying existing plugin configuration
 
-### Step 6: Maven Compiler Plugin Configuration
+### Step 6: Maven Surefire Plugin Configuration
 
-                    
-                    **Purpose**: Configure maven-compiler-plugin with proper Java version configuration and compiler warnings.
+**Purpose**: Configure maven-surefire-plugin for unit testing with proper includes/excludes and failure handling.
 
-                    **Dependencies**: Requires completion of Steps 3, 4, and 5.
+**Dependencies**: Only execute if user selected "Unit Testing (Surefire)" in Step 3. Requires completion of Steps 3, 4, and 5.
 
-                    **CRITICAL PRESERVATION RULE**: Only ADD this plugin if it doesn't already exist. Never REPLACE or REMOVE existing configuration.
+**CRITICAL PRESERVATION RULE**: Only ADD this plugin if it doesn't already exist. Never REPLACE or REMOVE existing configuration.
 
-                    ## Pre-Implementation Check
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Unit Testing (Surefire)" in Step 3.
 
-                    **BEFORE adding maven-compiler-plugin, check if it already exists in the pom.xml:**
+## Pre-Implementation Check
 
-                    If maven-compiler-plugin already exists: Ask user "maven-compiler-plugin already exists. Do you want to enhance the existing configuration? (y/n)"
+**BEFORE adding maven-surefire-plugin, check if it already exists in the pom.xml:**
 
-                    If user says "n": Skip this step entirely.
-                    If user says "y": Proceed with adding missing configuration elements only.
+If maven-surefire-plugin already exists: Ask user "maven-surefire-plugin already exists. Do you want to enhance the existing configuration? (y/n)"
 
-                    ## Maven Compiler Plugin Configuration
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing configuration elements only.
 
-                    **Basic Configuration (always needed):**
+## Maven Surefire Plugin Configuration
 
-                    **ADD this plugin to the `<build><plugins>` section ONLY if it doesn't already exist:**
+**ADD this plugin to the `<build><plugins>` section ONLY if it doesn't already exist:**
 
-                    ```xml
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>${maven-plugin-compiler.version}</version>
-                        <configuration>
-                            <release>${java.version}</release>
-                            <compilerArgs>
-                                <arg>-Xlint:all</arg>
-                                <arg>-Werror</arg>
-                            </compilerArgs>
-                        </configuration>
-                    </plugin>
-                    ```
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-surefire-plugin</artifactId>
+    <version>${maven-plugin-surefire.version}</version>
+    <configuration>
+        <skipAfterFailureCount>1</skipAfterFailureCount>
+        <includes>
+            <include>**/*Test.java</include>
+        </includes>
+        <excludes>
+            <exclude>**/*IT.java</exclude>
+        </excludes>
+    </configuration>
+</plugin>
+```
 
-                    **Enhanced Analysis Configuration (only if selected in Step 3):**
+## Validation
 
-                    If user selected enhanced analysis in Step 3, also create .mvn/jvm.config file with required exports for Error Prone and NullAway.
+After adding this plugin, verify the configuration:
 
-                    ## Validation
-
-                    After adding this plugin, verify the configuration:
-
-                    ```bash
-                    # Test compilation
-                    ./mvnw clean compile
-                    ```
+```bash
+# Run unit tests
+./mvnw test
+```
                     
                 
 #### Step Constraints
 
-- **MUST** use properties configured in Step 4 for plugin versions
-- **MUST** check if plugin already exists before adding
-- **MUST** ask user permission before modifying existing plugin configuration
-- **MUST** create .mvn/jvm.config with exports if enhanced analysis selected in Step 3
-
-### Step 7: Maven Surefire Plugin Configuration
-
-                    
-                    **Purpose**: Configure maven-surefire-plugin for unit testing with proper includes/excludes and failure handling.
-
-                    **Dependencies**: Requires completion of Steps 3, 4, 5, and 6.
-
-                    **CRITICAL PRESERVATION RULE**: Only ADD this plugin if it doesn't already exist. Never REPLACE or REMOVE existing configuration.
-
-                    ## Pre-Implementation Check
-
-                    **BEFORE adding maven-surefire-plugin, check if it already exists in the pom.xml:**
-
-                    If maven-surefire-plugin already exists: Ask user "maven-surefire-plugin already exists. Do you want to enhance the existing configuration? (y/n)"
-
-                    If user says "n": Skip this step entirely.
-                    If user says "y": Proceed with adding missing configuration elements only.
-
-                    ## Maven Surefire Plugin Configuration
-
-                    **ADD this plugin to the `<build><plugins>` section ONLY if it doesn't already exist:**
-
-                    ```xml
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-surefire-plugin</artifactId>
-                        <version>${maven-plugin-surefire.version}</version>
-                        <configuration>
-                            <skipAfterFailureCount>1</skipAfterFailureCount>
-                            <includes>
-                                <include>**/*Test.java</include>
-                            </includes>
-                            <excludes>
-                                <exclude>**/*IT.java</exclude>
-                            </excludes>
-                        </configuration>
-                    </plugin>
-                    ```
-
-                    ## Validation
-
-                    After adding this plugin, verify the configuration:
-
-                    ```bash
-                    # Run unit tests
-                    ./mvnw test
-                    ```
-                    
-                
-#### Step Constraints
-
+- **MUST** only add surefire plugin if "Unit Testing (Surefire)" was selected in Step 3
 - **MUST** use properties configured in Step 4 for plugin versions
 - **MUST** check if plugin already exists before adding
 - **MUST** ask user permission before modifying existing plugin configuration
 - **MUST** configure proper includes/excludes for test file patterns
+- **MUST** skip this step entirely if unit testing was not selected
 
-### Step 8: Maven Failsafe Plugin Configuration
+### Step 7: Maven Failsafe Plugin Configuration
 
-                    
-                    **Purpose**: Configure maven-failsafe-plugin for integration testing with proper file patterns and execution phases.
+**Purpose**: Configure maven-failsafe-plugin for integration testing with proper file patterns and execution phases.
 
-                    **Dependencies**: Only execute if user selected "Integration testing (Failsafe)" in Step 3. Requires completion of Steps 5, 6, and 7.
+**Dependencies**: Only execute if user selected "Integration testing (Failsafe)" in Step 3. Requires completion of Steps 3, 4, and 5.
 
-                    **CRITICAL PRESERVATION RULE**: Only ADD this plugin if it doesn't already exist. Never REPLACE or REMOVE existing configuration.
+**CRITICAL PRESERVATION RULE**: Only ADD this plugin if it doesn't already exist. Never REPLACE or REMOVE existing configuration.
 
-                    ## Pre-Implementation Check
+## Pre-Implementation Check
 
-                    **BEFORE adding maven-failsafe-plugin, check if it already exists in the pom.xml:**
+**BEFORE adding maven-failsafe-plugin, check if it already exists in the pom.xml:**
 
-                    If maven-failsafe-plugin already exists: Ask user "maven-failsafe-plugin already exists. Do you want to enhance the existing configuration? (y/n)"
+If maven-failsafe-plugin already exists: Ask user "maven-failsafe-plugin already exists. Do you want to enhance the existing configuration? (y/n)"
 
-                    If user says "n": Skip this step entirely.
-                    If user says "y": Proceed with adding missing configuration elements only.
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing configuration elements only.
 
-                    **CONDITIONAL EXECUTION**: Only execute this step if user selected "Integration testing (Failsafe)" in Step 3.
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Integration testing (Failsafe)" in Step 3.
 
-                    ## Maven Failsafe Plugin Configuration
+## Maven Failsafe Plugin Configuration
 
-                    **ADD this plugin to the `<build><plugins>` section ONLY if it doesn't already exist:**
+**ADD this plugin to the `<build><plugins>` section ONLY if it doesn't already exist:**
 
-                    ```xml
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-failsafe-plugin</artifactId>
-                        <version>${maven-plugin-failsafe.version}</version>
-                        <configuration>
-                            <includes>
-                                <include>**/*IT.java</include>
-                            </includes>
-                            <excludes>
-                                <exclude>**/*Test.java</exclude>
-                            </excludes>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>integration-test</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    ```
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-failsafe-plugin</artifactId>
+    <version>${maven-plugin-failsafe.version}</version>
+    <configuration>
+        <includes>
+            <include>**/*IT.java</include>
+        </includes>
+        <excludes>
+            <exclude>**/*Test.java</exclude>
+        </excludes>
+    </configuration>
+    <executions>
+        <execution>
+            <goals>
+                <goal>integration-test</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+```
 
-                    ## Implementation Guidelines
+## Implementation Guidelines
 
-                    1. **Verify file patterns**: Ensure `*IT.java` files are included and `*Test.java` files are excluded
-                    2. **Test execution**: Integration tests run during `verify` phase
-                    3. **Example integration test**: Create a sample `*IT.java` file to verify configuration
+1. **Verify file patterns**: Ensure `*IT.java` files are included and `*Test.java` files are excluded
+2. **Test execution**: Integration tests run during `verify` phase
+3. **Example integration test**: Create a sample `*IT.java` file to verify configuration
 
-                    ## Usage Examples
+## Usage Examples
 
-                    ```bash
-                    # Run only unit tests
-                    ./mvnw test
+```bash
+# Run only unit tests
+./mvnw test
 
-                    # Run both unit and integration tests
-                    ./mvnw verify
+# Run both unit and integration tests
+./mvnw verify
 
-                    # Run only integration tests
-                    ./mvnw failsafe:integration-test
-                    ```
+# Run only integration tests
+./mvnw failsafe:integration-test
+```
 
-                    ## Validation
+## Validation
 
-                    After adding this plugin, verify the configuration:
+After adding this plugin, verify the configuration:
 
-                    ```bash
-                    # Run tests to verify configuration
-                    ./mvnw clean verify
-                    ```
+```bash
+# Run tests to verify configuration
+./mvnw clean verify
+```
                     
                 
 #### Step Constraints
@@ -690,82 +613,81 @@ The final `<properties>` section will look like this (example with common select
 - **MUST** use properties configured in Step 4 for plugin versions
 - **MUST** skip this step entirely if integration testing was not selected
 
-### Step 9: HTML Test Reports Configuration
+### Step 8: HTML Test Reports Configuration
 
-                    
-                    **Purpose**: Configure HTML test reports generation with maven-surefire-report-plugin and maven-jxr-plugin.
+**Purpose**: Configure HTML test reports generation with maven-surefire-report-plugin and maven-jxr-plugin.
 
-                    **Dependencies**: Only execute if user selected "HTML test reports" in Step 3. Requires completion of Steps 5, 6, and 7.
+**Dependencies**: Only execute if user selected "HTML test reports" in Step 3. Requires completion of Steps 3, 4, and 5.
 
-                    **CRITICAL PRESERVATION RULE**: Only ADD reporting section if it doesn't already exist. Never REPLACE or REMOVE existing configuration.
+**CRITICAL PRESERVATION RULE**: Only ADD reporting section if it doesn't already exist. Never REPLACE or REMOVE existing configuration.
 
-                    ## Pre-Implementation Check
+## Pre-Implementation Check
 
-                    **BEFORE adding reporting section, check if it already exists in the pom.xml:**
+**BEFORE adding reporting section, check if it already exists in the pom.xml:**
 
-                    If `<reporting>` section already exists: Ask user "Reporting section already exists. Do you want to enhance it with test reporting plugins? (y/n)"
+If `<reporting>` section already exists: Ask user "Reporting section already exists. Do you want to enhance it with test reporting plugins? (y/n)"
 
-                    If user says "n": Skip this step entirely.
-                    If user says "y": Proceed with adding missing reporting plugins only.
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing reporting plugins only.
 
-                    **CONDITIONAL EXECUTION**: Only execute this step if user selected "HTML test reports" in Step 3.
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "HTML test reports" in Step 3.
 
-                    ## HTML Test Reports Configuration
+## HTML Test Reports Configuration
 
-                    **ADD this `<reporting>` section at the same level as `<build>` ONLY if it doesn't already exist:**
+**ADD this `<reporting>` section at the same level as `<build>` ONLY if it doesn't already exist:**
 
-                    ```xml
-                    <reporting>
-                        <plugins>
-                            <!-- Generates HTML test reports -->
-                            <plugin>
-                                <groupId>org.apache.maven.plugins</groupId>
-                                <artifactId>maven-surefire-report-plugin</artifactId>
-                                <version>${maven-plugin-surefire.version}</version>
-                                <configuration>
-                                    <outputName>junit-report</outputName>
-                                    <showSuccess>true</showSuccess>
-                                </configuration>
-                            </plugin>
+```xml
+<reporting>
+    <plugins>
+        <!-- Generates HTML test reports -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-report-plugin</artifactId>
+            <version>${maven-plugin-surefire.version}</version>
+            <configuration>
+                <outputName>junit-report</outputName>
+                <showSuccess>true</showSuccess>
+            </configuration>
+        </plugin>
 
-                            <!-- Adds links to source code in reports -->
-                            <plugin>
-                                <groupId>org.apache.maven.plugins</groupId>
-                                <artifactId>maven-jxr-plugin</artifactId>
-                                <version>${maven-plugin-jxr.version}</version>
-                            </plugin>
-                        </plugins>
-                    </reporting>
-                    ```
+        <!-- Adds links to source code in reports -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-jxr-plugin</artifactId>
+            <version>${maven-plugin-jxr.version}</version>
+        </plugin>
+    </plugins>
+</reporting>
+```
 
-                    ## Implementation Guidelines
+## Implementation Guidelines
 
-                    1. **Add reporting section** only if HTML reports were requested
-                    2. **Verify plugin versions**: Ensure version properties are defined in Step 3
-                    3. **Generate reports**: Reports are generated during `site` phase
-                    4. **View reports**: HTML reports will be available in `target/site/` directory
+1. **Add reporting section** only if HTML reports were requested
+2. **Verify plugin versions**: Ensure version properties are defined in Step 3
+3. **Generate reports**: Reports are generated during `site` phase
+4. **View reports**: HTML reports will be available in `target/site/` directory
 
-                    ## Usage Examples
+## Usage Examples
 
-                    ```bash
-                    # Generate test reports
-                    ./mvnw site
+```bash
+# Generate test reports
+./mvnw site
 
-                    # View reports in browser
-                    open target/site/junit-report.html
+# View reports in browser
+open target/site/junit-report.html
 
-                    # Or serve reports locally
-                    ./mvnw site:run
-                    ```
+# Or serve reports locally
+./mvnw site:run
+```
 
-                    ## Validation
+## Validation
 
-                    After adding this reporting configuration, verify it:
+After adding this reporting configuration, verify it:
 
-                    ```bash
-                    # Generate reports to verify configuration
-                    ./mvnw clean test site
-                    ```
+```bash
+# Generate reports to verify configuration
+./mvnw clean test site
+```
                     
                 
 #### Step Constraints
@@ -776,127 +698,126 @@ The final `<properties>` section will look like this (example with common select
 - **MUST** use properties configured in Step 4 for plugin versions
 - **MUST** skip this step entirely if HTML test reports were not selected
 
-### Step 10: JaCoCo Code Coverage Profile Configuration
+### Step 9: JaCoCo Code Coverage Profile Configuration
 
-                    
-                    **Purpose**: Configure JaCoCo code coverage profile to analyze and enforce coverage thresholds with detailed reporting.
+**Purpose**: Configure JaCoCo code coverage profile to analyze and enforce coverage thresholds with detailed reporting.
 
-                    **Dependencies**: Only execute if user selected "Code coverage reporting (JaCoCo)" in Step 3. Requires completion of core plugin steps (5, 6, 7).
+**Dependencies**: Only execute if user selected "Code coverage reporting (JaCoCo)" in Step 3. Requires completion of core plugin steps (3, 4, 5).
 
-                    **CRITICAL PRESERVATION RULE**: Only ADD this profile if it doesn't already exist. Never REPLACE or REMOVE existing profiles.
+**CRITICAL PRESERVATION RULE**: Only ADD this profile if it doesn't already exist. Never REPLACE or REMOVE existing profiles.
 
-                    ## Pre-Implementation Check
+## Pre-Implementation Check
 
-                    **BEFORE adding JaCoCo profile, check if it already exists in the pom.xml:**
+**BEFORE adding JaCoCo profile, check if it already exists in the pom.xml:**
 
-                    If `<profiles>` section with `jacoco` profile already exists: Ask user "JaCoCo profile already exists. Do you want to enhance the existing configuration? (y/n)"
+If `<profiles>` section with `jacoco` profile already exists: Ask user "JaCoCo profile already exists. Do you want to enhance the existing configuration? (y/n)"
 
-                    If user says "n": Skip this step entirely.
-                    If user says "y": Proceed with adding missing configuration elements only.
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing configuration elements only.
 
-                    **CONDITIONAL EXECUTION**: Only execute this step if user selected "Code coverage reporting (JaCoCo)" in Step 3.
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Code coverage reporting (JaCoCo)" in Step 3.
 
-                    ## JaCoCo Profile Configuration
+## JaCoCo Profile Configuration
 
-                    **ADD this profile to the `<profiles>` section in pom.xml ONLY if it doesn't already exist:**
+**ADD this profile to the `<profiles>` section in pom.xml ONLY if it doesn't already exist:**
 
-                    ```xml
-                    <profile>
-                        <id>jacoco</id>
-                        <activation>
-                            <activeByDefault>false</activeByDefault>
-                        </activation>
-                        <build>
-                            <plugins>
-                                <plugin>
-                                    <groupId>org.jacoco</groupId>
-                                    <artifactId>jacoco-maven-plugin</artifactId>
-                                    <version>${maven-plugin-jacoco.version}</version>
-                                    <executions>
-                                        <execution>
-                                            <id>prepare-agent</id>
-                                            <goals>
-                                                <goal>prepare-agent</goal>
-                                            </goals>
-                                        </execution>
-                                        <execution>
-                                            <id>report</id>
-                                            <phase>test</phase>
-                                            <goals>
-                                                <goal>report</goal>
-                                            </goals>
-                                        </execution>
-                                        <execution>
-                                            <id>check</id>
-                                            <phase>verify</phase>
-                                            <goals>
-                                                <goal>check</goal>
-                                            </goals>
-                                            <configuration>
-                                                <rules>
-                                                    <rule>
-                                                        <element>BUNDLE</element>
-                                                        <limits>
-                                                            <limit>
-                                                                <counter>LINE</counter>
-                                                                <value>COVEREDRATIO</value>
-                                                                <minimum>${coverage.level}%</minimum>
-                                                            </limit>
-                                                            <limit>
-                                                                <counter>BRANCH</counter>
-                                                                <value>COVEREDRATIO</value>
-                                                                <minimum>${coverage.level}%</minimum>
-                                                            </limit>
-                                                            <limit>
-                                                                <counter>METHOD</counter>
-                                                                <value>COVEREDRATIO</value>
-                                                                <minimum>${coverage.level}%</minimum>
-                                                            </limit>
-                                                            <limit>
-                                                                <counter>CLASS</counter>
-                                                                <value>COVEREDRATIO</value>
-                                                                <minimum>${coverage.level}%</minimum>
-                                                            </limit>
-                                                            <limit>
-                                                                <counter>INSTRUCTION</counter>
-                                                                <value>COVEREDRATIO</value>
-                                                                <minimum>${coverage.level}%</minimum>
-                                                            </limit>
-                                                            <limit>
-                                                                <counter>COMPLEXITY</counter>
-                                                                <value>COVEREDRATIO</value>
-                                                                <minimum>${coverage.level}%</minimum>
-                                                            </limit>
-                                                        </limits>
-                                                    </rule>
-                                                </rules>
-                                            </configuration>
-                                        </execution>
-                                    </executions>
-                                </plugin>
-                            </plugins>
-                        </build>
-                    </profile>
-                    ```
+```xml
+<profile>
+    <id>jacoco</id>
+    <activation>
+        <activeByDefault>false</activeByDefault>
+    </activation>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.jacoco</groupId>
+                <artifactId>jacoco-maven-plugin</artifactId>
+                <version>${maven-plugin-jacoco.version}</version>
+                <executions>
+                    <execution>
+                        <id>prepare-agent</id>
+                        <goals>
+                            <goal>prepare-agent</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>report</id>
+                        <phase>test</phase>
+                        <goals>
+                            <goal>report</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>check</id>
+                        <phase>verify</phase>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <rule>
+                                    <element>BUNDLE</element>
+                                    <limits>
+                                        <limit>
+                                            <counter>LINE</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>${coverage.level}%</minimum>
+                                        </limit>
+                                        <limit>
+                                            <counter>BRANCH</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>${coverage.level}%</minimum>
+                                        </limit>
+                                        <limit>
+                                            <counter>METHOD</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>${coverage.level}%</minimum>
+                                        </limit>
+                                        <limit>
+                                            <counter>CLASS</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>${coverage.level}%</minimum>
+                                        </limit>
+                                        <limit>
+                                            <counter>INSTRUCTION</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>${coverage.level}%</minimum>
+                                        </limit>
+                                        <limit>
+                                            <counter>COMPLEXITY</counter>
+                                            <value>COVEREDRATIO</value>
+                                            <minimum>${coverage.level}%</minimum>
+                                        </limit>
+                                    </limits>
+                                </rule>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</profile>
+```
 
-                    ## Usage Examples
+## Usage Examples
 
-                    ```bash
-                    # Run tests with coverage
-                    ./mvnw clean verify -Pjacoco
+```bash
+# Run tests with coverage
+./mvnw clean verify -Pjacoco
 
-                    # View coverage reports
-                    open target/site/jacoco/index.html
-                    ```
+# View coverage reports
+open target/site/jacoco/index.html
+```
 
-                    ## Validation
+## Validation
 
-                    After adding this profile, verify the configuration:
+After adding this profile, verify the configuration:
 
-                    ```bash
-                    # Test JaCoCo profile
-                    ./mvnw clean verify -Pjacoco
-                    ```
+```bash
+# Test JaCoCo profile
+./mvnw clean verify -Pjacoco
+```
                     
                 
 #### Step Constraints
@@ -908,103 +829,102 @@ The final `<properties>` section will look like this (example with common select
 - **MUST** use properties configured in Step 4 for plugin versions
 - **MUST** skip this step entirely if code coverage was not selected
 
-### Step 11: PiTest Mutation Testing Profile Configuration
+### Step 10: PiTest Mutation Testing Profile Configuration
 
-                    
-                    **Purpose**: Configure PiTest mutation testing profile to analyze test quality by introducing mutations and verifying test detection.
+**Purpose**: Configure PiTest mutation testing profile to analyze test quality by introducing mutations and verifying test detection.
 
-                    **Dependencies**: Only execute if user selected "Mutation testing (PiTest)" in Step 3. Requires completion of core plugin steps (5, 6, 7).
+**Dependencies**: Only execute if user selected "Mutation testing (PiTest)" in Step 3. Requires completion of core plugin steps (3, 4, 5).
 
-                    **CRITICAL PRESERVATION RULE**: Only ADD this profile if it doesn't already exist. Never REPLACE or REMOVE existing profiles.
+**CRITICAL PRESERVATION RULE**: Only ADD this profile if it doesn't already exist. Never REPLACE or REMOVE existing profiles.
 
-                    ## Pre-Implementation Check
+## Pre-Implementation Check
 
-                    **BEFORE adding PiTest profile, check if it already exists in the pom.xml:**
+**BEFORE adding PiTest profile, check if it already exists in the pom.xml:**
 
-                    If `<profiles>` section with `pitest` profile already exists: Ask user "PiTest profile already exists. Do you want to enhance the existing configuration? (y/n)"
+If `<profiles>` section with `pitest` profile already exists: Ask user "PiTest profile already exists. Do you want to enhance the existing configuration? (y/n)"
 
-                    If user says "n": Skip this step entirely.
-                    If user says "y": Proceed with adding missing configuration elements only.
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing configuration elements only.
 
-                    **CONDITIONAL EXECUTION**: Only execute this step if user selected "Mutation testing (PiTest)" in Step 3.
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Mutation testing (PiTest)" in Step 3.
 
-                    ## PiTest Profile Configuration
+## PiTest Profile Configuration
 
-                    **ADD this profile to the `<profiles>` section in pom.xml ONLY if it doesn't already exist:**
+**ADD this profile to the `<profiles>` section in pom.xml ONLY if it doesn't already exist:**
 
-                    ```xml
-                    <profile>
-                        <id>pitest</id>
-                        <activation>
-                            <activeByDefault>false</activeByDefault>
-                        </activation>
-                        <build>
-                            <plugins>
-                                <plugin>
-                                    <groupId>org.pitest</groupId>
-                                    <artifactId>pitest-maven</artifactId>
-                                    <version>${maven-plugin-pitest.version}</version>
-                                    <configuration>
-                                        <targetClasses>
-                                            <param>REPLACE_WITH_ACTUAL_PACKAGE.*</param>
-                                        </targetClasses>
-                                        <targetTests>
-                                            <param>REPLACE_WITH_ACTUAL_PACKAGE.*</param>
-                                        </targetTests>
-                                        <outputFormats>
-                                            <outputFormat>HTML</outputFormat>
-                                            <outputFormat>XML</outputFormat>
-                                        </outputFormats>
-                                        <mutationThreshold>${coverage.level}</mutationThreshold>
-                                        <coverageThreshold>${coverage.level}</coverageThreshold>
-                                        <timestampedReports>false</timestampedReports>
-                                        <verbose>false</verbose>
-                                    </configuration>
-                                    <dependencies>
-                                        <dependency>
-                                            <groupId>org.pitest</groupId>
-                                            <artifactId>pitest-junit5-plugin</artifactId>
-                                            <version>${maven-plugin-pitest-junit5.version}</version>
-                                        </dependency>
-                                    </dependencies>
-                                    <executions>
-                                        <execution>
-                                            <id>pitest-mutation-testing</id>
-                                            <goals>
-                                                <goal>mutationCoverage</goal>
-                                            </goals>
-                                            <phase>verify</phase>
-                                        </execution>
-                                    </executions>
-                                </plugin>
-                            </plugins>
-                        </build>
-                    </profile>
-                    ```
+```xml
+<profile>
+    <id>pitest</id>
+    <activation>
+        <activeByDefault>false</activeByDefault>
+    </activation>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>${maven-plugin-pitest.version}</version>
+                <configuration>
+                    <targetClasses>
+                        <param>REPLACE_WITH_ACTUAL_PACKAGE.*</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>REPLACE_WITH_ACTUAL_PACKAGE.*</param>
+                    </targetTests>
+                    <outputFormats>
+                        <outputFormat>HTML</outputFormat>
+                        <outputFormat>XML</outputFormat>
+                    </outputFormats>
+                    <mutationThreshold>${coverage.level}</mutationThreshold>
+                    <coverageThreshold>${coverage.level}</coverageThreshold>
+                    <timestampedReports>false</timestampedReports>
+                    <verbose>false</verbose>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-junit5-plugin</artifactId>
+                        <version>${maven-plugin-pitest-junit5.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>pitest-mutation-testing</id>
+                        <goals>
+                            <goal>mutationCoverage</goal>
+                        </goals>
+                        <phase>verify</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</profile>
+```
 
-                    ## Implementation Guidelines
+## Implementation Guidelines
 
-                    1. **Update package names**: Replace `REPLACE_WITH_ACTUAL_PACKAGE` with the project's actual base package
-                    2. **Configure thresholds**: Use coverage threshold values from Step 2
+1. **Update package names**: Replace `REPLACE_WITH_ACTUAL_PACKAGE` with the project's actual base package
+2. **Configure thresholds**: Use coverage threshold values from Step 2
 
-                    ## Usage Examples
+## Usage Examples
 
-                    ```bash
-                    # Run mutation testing
-                    ./mvnw clean verify -Ppitest
+```bash
+# Run mutation testing
+./mvnw clean verify -Ppitest
 
-                    # View mutation test reports
-                    open target/pit-reports/index.html
-                    ```
+# View mutation test reports
+open target/pit-reports/index.html
+```
 
-                    ## Validation
+## Validation
 
-                    After adding this profile, verify the configuration:
+After adding this profile, verify the configuration:
 
-                    ```bash
-                    # Test PiTest profile
-                    ./mvnw clean verify -Ppitest
-                    ```
+```bash
+# Test PiTest profile
+./mvnw clean verify -Ppitest
+```
                     
                 
 #### Step Constraints
@@ -1017,91 +937,90 @@ The final `<properties>` section will look like this (example with common select
 - **MUST** use properties configured in Step 4 for plugin versions
 - **MUST** skip this step entirely if mutation testing was not selected
 
-### Step 12: Security Vulnerability Scanning Profile Configuration
+### Step 11: Security Vulnerability Scanning Profile Configuration
 
-                    
-                    **Purpose**: Configure OWASP Dependency Check profile to scan dependencies for known security vulnerabilities.
+**Purpose**: Configure OWASP Dependency Check profile to scan dependencies for known security vulnerabilities.
 
-                    **Dependencies**: Only execute if user selected "Security vulnerability scanning (OWASP)" in Step 3. Requires completion of core plugin steps (5, 6, 7).
+**Dependencies**: Only execute if user selected "Security vulnerability scanning (OWASP)" in Step 3. Requires completion of core plugin steps (3, 4, 5).
 
-                    **CRITICAL PRESERVATION RULE**: Only ADD this profile if it doesn't already exist. Never REPLACE or REMOVE existing profiles.
+**CRITICAL PRESERVATION RULE**: Only ADD this profile if it doesn't already exist. Never REPLACE or REMOVE existing profiles.
 
-                    ## Pre-Implementation Check
+## Pre-Implementation Check
 
-                    **BEFORE adding Security profile, check if it already exists in the pom.xml:**
+**BEFORE adding Security profile, check if it already exists in the pom.xml:**
 
-                    If `<profiles>` section with `security` profile already exists: Ask user "Security profile already exists. Do you want to enhance the existing configuration? (y/n)"
+If `<profiles>` section with `security` profile already exists: Ask user "Security profile already exists. Do you want to enhance the existing configuration? (y/n)"
 
-                    If user says "n": Skip this step entirely.
-                    If user says "y": Proceed with adding missing configuration elements only.
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing configuration elements only.
 
-                    **CONDITIONAL EXECUTION**: Only execute this step if user selected "Security vulnerability scanning (OWASP)" in Step 3.
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Security vulnerability scanning (OWASP)" in Step 3.
 
-                    ## Security Profile Configuration
+## Security Profile Configuration
 
-                    **ADD this profile to the `<profiles>` section in pom.xml ONLY if it doesn't already exist:**
+**ADD this profile to the `<profiles>` section in pom.xml ONLY if it doesn't already exist:**
 
-                    ```xml
-                    <profile>
-                        <id>security</id>
-                        <activation>
-                            <activeByDefault>false</activeByDefault>
-                        </activation>
-                        <build>
-                            <plugins>
-                                <plugin>
-                                    <groupId>org.owasp</groupId>
-                                    <artifactId>dependency-check-maven</artifactId>
-                                    <version>${maven-plugin-dependency-check.version}</version>
-                                    <configuration>
-                                        <outputDirectory>${project.build.directory}/dependency-check</outputDirectory>
-                                        <format>ALL</format>
-                                        <failBuildOnCVSS>7</failBuildOnCVSS>
-                                        <skipProvidedScope>false</skipProvidedScope>
-                                        <skipRuntimeScope>false</skipRuntimeScope>
-                                        <skipSystemScope>false</skipSystemScope>
-                                        <skipTestScope>false</skipTestScope>
-                                        <!-- Performance and reliability improvements -->
-                                        <nvdApiDelay>4000</nvdApiDelay>
-                                        <nvdMaxRetryCount>3</nvdMaxRetryCount>
-                                        <nvdValidForHours>24</nvdValidForHours>
-                                        <!-- Skip analyzers that might cause issues -->
-                                        <nodeAnalyzerEnabled>false</nodeAnalyzerEnabled>
-                                        <retireJsAnalyzerEnabled>false</retireJsAnalyzerEnabled>
-                                    </configuration>
-                                    <executions>
-                                        <execution>
-                                            <id>dependency-check</id>
-                                            <goals>
-                                                <goal>check</goal>
-                                            </goals>
-                                            <phase>verify</phase>
-                                        </execution>
-                                    </executions>
-                                </plugin>
-                            </plugins>
-                        </build>
-                    </profile>
-                    ```
+```xml
+<profile>
+    <id>security</id>
+    <activation>
+        <activeByDefault>false</activeByDefault>
+    </activation>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.owasp</groupId>
+                <artifactId>dependency-check-maven</artifactId>
+                <version>${maven-plugin-dependency-check.version}</version>
+                <configuration>
+                    <outputDirectory>${project.build.directory}/dependency-check</outputDirectory>
+                    <format>ALL</format>
+                    <failBuildOnCVSS>7</failBuildOnCVSS>
+                    <skipProvidedScope>false</skipProvidedScope>
+                    <skipRuntimeScope>false</skipRuntimeScope>
+                    <skipSystemScope>false</skipSystemScope>
+                    <skipTestScope>false</skipTestScope>
+                    <!-- Performance and reliability improvements -->
+                    <nvdApiDelay>4000</nvdApiDelay>
+                    <nvdMaxRetryCount>3</nvdMaxRetryCount>
+                    <nvdValidForHours>24</nvdValidForHours>
+                    <!-- Skip analyzers that might cause issues -->
+                    <nodeAnalyzerEnabled>false</nodeAnalyzerEnabled>
+                    <retireJsAnalyzerEnabled>false</retireJsAnalyzerEnabled>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>dependency-check</id>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <phase>verify</phase>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</profile>
+```
 
-                    ## Usage Examples
+## Usage Examples
 
-                    ```bash
-                    # Run security scan
-                    ./mvnw clean verify -Psecurity
+```bash
+# Run security scan
+./mvnw clean verify -Psecurity
 
-                    # View security reports
-                    open target/dependency-check/dependency-check-report.html
-                    ```
+# View security reports
+open target/dependency-check/dependency-check-report.html
+```
 
-                    ## Validation
+## Validation
 
-                    After adding this profile, verify the configuration:
+After adding this profile, verify the configuration:
 
-                    ```bash
-                    # Test Security profile
-                    ./mvnw clean verify -Psecurity
-                    ```
+```bash
+# Test Security profile
+./mvnw clean verify -Psecurity
+```
                     
                 
 #### Step Constraints
@@ -1112,101 +1031,100 @@ The final `<properties>` section will look like this (example with common select
 - **MUST** use properties configured in Step 4 for plugin versions
 - **MUST** skip this step entirely if security scanning was not selected
 
-### Step 13: Static Code Analysis Profile Configuration
+### Step 12: Static Code Analysis Profile Configuration
 
-                    
-                    **Purpose**: Configure SpotBugs and PMD static analysis profile to detect potential bugs and code quality issues.
+**Purpose**: Configure SpotBugs and PMD static analysis profile to detect potential bugs and code quality issues.
 
-                    **Dependencies**: Only execute if user selected "Static code analysis (SpotBugs, PMD)" in Step 3. Requires completion of core plugin steps (5, 6, 7).
+**Dependencies**: Only execute if user selected "Static code analysis (SpotBugs, PMD)" in Step 3. Requires completion of core plugin steps (3, 4, 5).
 
-                    **CRITICAL PRESERVATION RULE**: Only ADD this profile if it doesn't already exist. Never REPLACE or REMOVE existing profiles.
+**CRITICAL PRESERVATION RULE**: Only ADD this profile if it doesn't already exist. Never REPLACE or REMOVE existing profiles.
 
-                    ## Pre-Implementation Check
+## Pre-Implementation Check
 
-                    **BEFORE adding Static Analysis profile, check if it already exists in the pom.xml:**
+**BEFORE adding Static Analysis profile, check if it already exists in the pom.xml:**
 
-                    If `<profiles>` section with `find-bugs` profile already exists: Ask user "Static analysis profile already exists. Do you want to enhance the existing configuration? (y/n)"
+If `<profiles>` section with `find-bugs` profile already exists: Ask user "Static analysis profile already exists. Do you want to enhance the existing configuration? (y/n)"
 
-                    If user says "n": Skip this step entirely.
-                    If user says "y": Proceed with adding missing configuration elements only.
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing configuration elements only.
 
-                    **CONDITIONAL EXECUTION**: Only execute this step if user selected "Static code analysis (SpotBugs, PMD)" in Step 3.
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Static code analysis (SpotBugs, PMD)" in Step 3.
 
-                    ## Static Analysis Profile Configuration
+## Static Analysis Profile Configuration
 
-                    **ADD this profile to the `<profiles>` section in pom.xml ONLY if it doesn't already exist:**
+**ADD this profile to the `<profiles>` section in pom.xml ONLY if it doesn't already exist:**
 
-                    ```xml
-                    <profile>
-                        <id>find-bugs</id>
-                        <activation>
-                            <activeByDefault>false</activeByDefault>
-                        </activation>
-                        <build>
-                            <plugins>
-                                <plugin>
-                                    <groupId>org.apache.maven.plugins</groupId>
-                                    <artifactId>maven-pmd-plugin</artifactId>
-                                    <version>${maven-plugin-pmd.version}</version>
-                                </plugin>
-                                <plugin>
-                                    <groupId>com.github.spotbugs</groupId>
-                                    <artifactId>spotbugs-maven-plugin</artifactId>
-                                    <version>${maven-plugin-spotbugs.version}</version>
-                                    <configuration>
-                                        <effort>Max</effort>
-                                        <threshold>Low</threshold>
-                                        <failOnError>true</failOnError>
-                                    </configuration>
-                                </plugin>
-                            </plugins>
-                        </build>
-                        <reporting>
-                            <plugins>
-                                <!-- SpotBugs reporting for Maven site -->
-                                <plugin>
-                                    <groupId>com.github.spotbugs</groupId>
-                                    <artifactId>spotbugs-maven-plugin</artifactId>
-                                    <version>${maven-plugin-spotbugs.version}</version>
-                                    <configuration>
-                                        <effort>Max</effort>
-                                        <threshold>Low</threshold>
-                                        <includeFilterFile>src/main/spotbugs/spotbugs-include.xml</includeFilterFile>
-                                        <excludeFilterFile>src/main/spotbugs/spotbugs-exclude.xml</excludeFilterFile>
-                                    </configuration>
-                                </plugin>
-                                <plugin>
-                                    <groupId>org.apache.maven.plugins</groupId>
-                                    <artifactId>maven-pmd-plugin</artifactId>
-                                    <version>${maven-plugin-pmd.version}</version>
-                                </plugin>
-                            </plugins>
-                        </reporting>
-                    </profile>
-                    ```
+```xml
+<profile>
+    <id>find-bugs</id>
+    <activation>
+        <activeByDefault>false</activeByDefault>
+    </activation>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>${maven-plugin-pmd.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>${maven-plugin-spotbugs.version}</version>
+                <configuration>
+                    <effort>Max</effort>
+                    <threshold>Low</threshold>
+                    <failOnError>true</failOnError>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+    <reporting>
+        <plugins>
+            <!-- SpotBugs reporting for Maven site -->
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>${maven-plugin-spotbugs.version}</version>
+                <configuration>
+                    <effort>Max</effort>
+                    <threshold>Low</threshold>
+                    <includeFilterFile>src/main/spotbugs/spotbugs-include.xml</includeFilterFile>
+                    <excludeFilterFile>src/main/spotbugs/spotbugs-exclude.xml</excludeFilterFile>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-pmd-plugin</artifactId>
+                <version>${maven-plugin-pmd.version}</version>
+            </plugin>
+        </plugins>
+    </reporting>
+</profile>
+```
 
-                    ## Usage Examples
+## Usage Examples
 
-                    ```bash
-                    # Run static analysis
-                    ./mvnw clean verify -Pfind-bugs
+```bash
+# Run static analysis
+./mvnw clean verify -Pfind-bugs
 
-                    # Generate reports
-                    ./mvnw site -Pfind-bugs
+# Generate reports
+./mvnw site -Pfind-bugs
 
-                    # View reports
-                    open target/site/spotbugs.html
-                    open target/site/pmd.html
-                    ```
+# View reports
+open target/site/spotbugs.html
+open target/site/pmd.html
+```
 
-                    ## Validation
+## Validation
 
-                    After adding this profile, verify the configuration:
+After adding this profile, verify the configuration:
 
-                    ```bash
-                    # Test Static Analysis profile
-                    ./mvnw clean verify -Pfind-bugs
-                    ```
+```bash
+# Test Static Analysis profile
+./mvnw clean verify -Pfind-bugs
+```
                     
                 
 #### Step Constraints
@@ -1217,93 +1135,92 @@ The final `<properties>` section will look like this (example with common select
 - **MUST** use properties configured in Step 4 for plugin versions
 - **MUST** skip this step entirely if static analysis was not selected
 
-### Step 14: SonarQube/SonarCloud Profile Configuration
+### Step 13: SonarQube/SonarCloud Profile Configuration
 
-                    
-                    **Purpose**: Configure SonarQube/SonarCloud profile for comprehensive code quality analysis integration.
+**Purpose**: Configure SonarQube/SonarCloud profile for comprehensive code quality analysis integration.
 
-                    **Dependencies**: Only execute if user selected "Sonar" in Step 2 and provided Sonar configuration. Requires completion of core plugin steps (4, 5, 6).
+**Dependencies**: Only execute if user selected "Sonar" in Step 3 and provided Sonar configuration. Requires completion of core plugin steps (3, 4, 5).
 
-                    **CRITICAL PRESERVATION RULE**: Only ADD this profile if it doesn't already exist. Never REPLACE or REMOVE existing profiles.
+**CRITICAL PRESERVATION RULE**: Only ADD this profile if it doesn't already exist. Never REPLACE or REMOVE existing profiles.
 
-                    ## Pre-Implementation Check
+## Pre-Implementation Check
 
-                    **BEFORE adding Sonar profile, check if it already exists in the pom.xml:**
+**BEFORE adding Sonar profile, check if it already exists in the pom.xml:**
 
-                    If `<profiles>` section with `sonar` profile already exists: Ask user "Sonar profile already exists. Do you want to enhance the existing configuration? (y/n)"
+If `<profiles>` section with `sonar` profile already exists: Ask user "Sonar profile already exists. Do you want to enhance the existing configuration? (y/n)"
 
-                    If user says "n": Skip this step entirely.
-                    If user says "y": Proceed with adding missing configuration elements only.
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing configuration elements only.
 
-                    **CONDITIONAL EXECUTION**: Only execute this step if user selected "Sonar" in Step 2 and provided Sonar configuration.
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Sonar" in Step 3 and provided Sonar configuration.
 
-                    ## Sonar Profile Configuration
+## Sonar Profile Configuration
 
-                    **ADD this profile to the `<profiles>` section in pom.xml ONLY if it doesn't already exist:**
+**ADD this profile to the `<profiles>` section in pom.xml ONLY if it doesn't already exist:**
 
-                    ```xml
-                    <profile>
-                        <id>sonar</id>
-                        <activation>
-                            <activeByDefault>false</activeByDefault>
-                        </activation>
-                        <properties>
-                            <!-- SonarCloud configuration -->
-                            <sonar.host.url>REPLACE_WITH_SONAR_HOST_URL</sonar.host.url>
-                            <sonar.organization>REPLACE_WITH_SONAR_ORGANIZATION</sonar.organization>
-                            <sonar.projectKey>REPLACE_WITH_SONAR_PROJECT_KEY</sonar.projectKey>
-                            <sonar.projectName>REPLACE_WITH_SONAR_PROJECT_NAME</sonar.projectName>
-                            <sonar.projectVersion>${project.version}</sonar.projectVersion>
-                            <sonar.sources>src/main/java</sonar.sources>
-                            <sonar.tests>src/test/java</sonar.tests>
-                            <sonar.java.binaries>target/classes</sonar.java.binaries>
-                            <sonar.java.test.binaries>target/test-classes</sonar.java.test.binaries>
-                            <sonar.jacoco.reportPath>target/jacoco.exec</sonar.jacoco.reportPath>
-                            <sonar.junit.reportPaths>target/surefire-reports</sonar.junit.reportPaths>
-                            <sonar.coverage.exclusions>**/*Test.java,**/*IT.java</sonar.coverage.exclusions>
-                            <sonar.java.source>${java.version}</sonar.java.source>
-                        </properties>
-                        <build>
-                            <plugins>
-                                <plugin>
-                                    <groupId>org.sonarsource.scanner.maven</groupId>
-                                    <artifactId>sonar-maven-plugin</artifactId>
-                                    <version>${maven-plugin-sonar.version}</version>
-                                </plugin>
-                            </plugins>
-                        </build>
-                    </profile>
-                    ```
+```xml
+<profile>
+    <id>sonar</id>
+    <activation>
+        <activeByDefault>false</activeByDefault>
+    </activation>
+    <properties>
+        <!-- SonarCloud configuration -->
+        <sonar.host.url>REPLACE_WITH_SONAR_HOST_URL</sonar.host.url>
+        <sonar.organization>REPLACE_WITH_SONAR_ORGANIZATION</sonar.organization>
+        <sonar.projectKey>REPLACE_WITH_SONAR_PROJECT_KEY</sonar.projectKey>
+        <sonar.projectName>REPLACE_WITH_SONAR_PROJECT_NAME</sonar.projectName>
+        <sonar.projectVersion>${project.version}</sonar.projectVersion>
+        <sonar.sources>src/main/java</sonar.sources>
+        <sonar.tests>src/test/java</sonar.tests>
+        <sonar.java.binaries>target/classes</sonar.java.binaries>
+        <sonar.java.test.binaries>target/test-classes</sonar.java.test.binaries>
+        <sonar.jacoco.reportPath>target/jacoco.exec</sonar.jacoco.reportPath>
+        <sonar.junit.reportPaths>target/surefire-reports</sonar.junit.reportPaths>
+        <sonar.coverage.exclusions>**/*Test.java,**/*IT.java</sonar.coverage.exclusions>
+        <sonar.java.source>${java.version}</sonar.java.source>
+    </properties>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>${maven-plugin-sonar.version}</version>
+            </plugin>
+        </plugins>
+    </build>
+</profile>
+```
 
-                    ## Implementation Guidelines
+## Implementation Guidelines
 
-                    1. **Replace Sonar placeholders** with actual values from Step 2:
-                       - `REPLACE_WITH_SONAR_HOST_URL`
-                       - `REPLACE_WITH_SONAR_ORGANIZATION`
-                       - `REPLACE_WITH_SONAR_PROJECT_KEY`
-                       - `REPLACE_WITH_SONAR_PROJECT_NAME`
+1. **Replace Sonar placeholders** with actual values from Step 3:
+    - `REPLACE_WITH_SONAR_HOST_URL`
+    - `REPLACE_WITH_SONAR_ORGANIZATION`
+    - `REPLACE_WITH_SONAR_PROJECT_KEY`
+    - `REPLACE_WITH_SONAR_PROJECT_NAME`
 
-                    ## Usage Examples
+## Usage Examples
 
-                    ```bash
-                    # Run Sonar analysis (requires token)
-                    ./mvnw clean verify sonar:sonar -Psonar -Dsonar.login=YOUR_TOKEN
+```bash
+# Run Sonar analysis (requires token)
+./mvnw clean verify sonar:sonar -Psonar -Dsonar.login=YOUR_TOKEN
 
-                    # For SonarCloud with GitHub Actions
-                    ./mvnw clean verify sonar:sonar -Psonar -Dsonar.login=$SONAR_TOKEN
+# For SonarCloud with GitHub Actions
+./mvnw clean verify sonar:sonar -Psonar -Dsonar.login=$SONAR_TOKEN
 
-                    # Combined with JaCoCo
-                    ./mvnw clean verify sonar:sonar -Pjacoco,sonar -Dsonar.login=$SONAR_TOKEN
-                    ```
+# Combined with JaCoCo
+./mvnw clean verify sonar:sonar -Pjacoco,sonar -Dsonar.login=$SONAR_TOKEN
+```
 
-                    ## Validation
+## Validation
 
-                    After adding this profile, verify the configuration:
+After adding this profile, verify the configuration:
 
-                    ```bash
-                    # Validate Sonar profile (requires token)
-                    ./mvnw clean verify sonar:sonar -Psonar -Dsonar.login=YOUR_TOKEN
-                    ```
+```bash
+# Validate Sonar profile (requires token)
+./mvnw clean verify sonar:sonar -Psonar -Dsonar.login=YOUR_TOKEN
+```
                     
                 
 #### Step Constraints
@@ -1315,82 +1232,81 @@ The final `<properties>` section will look like this (example with common select
 - **MUST** use properties configured in Step 4 for plugin versions
 - **MUST** skip this step entirely if Sonar was not selected
 
-### Step 15: Spotless Code Formatting Plugin Configuration
+### Step 14: Spotless Code Formatting Plugin Configuration
 
-                    
-                    **Purpose**: Configure Spotless Maven plugin to automatically format and enforce code style consistency.
+**Purpose**: Configure Spotless Maven plugin to automatically format and enforce code style consistency.
 
-                    **Dependencies**: Only execute if user selected "Format source code (Spotless)" in Step 3. Requires completion of core plugin steps (5, 6, 7).
+**Dependencies**: Only execute if user selected "Format source code (Spotless)" in Step 3. Requires completion of core plugin steps (3, 4, 5).
 
-                    **CRITICAL PRESERVATION RULE**: Only ADD this plugin if it doesn't already exist. Never REPLACE or REMOVE existing plugins.
+**CRITICAL PRESERVATION RULE**: Only ADD this plugin if it doesn't already exist. Never REPLACE or REMOVE existing plugins.
 
-                    ## Pre-Implementation Check
+## Pre-Implementation Check
 
-                    **BEFORE adding Spotless plugin, check if it already exists in the pom.xml:**
+**BEFORE adding Spotless plugin, check if it already exists in the pom.xml:**
 
-                    If spotless-maven-plugin already exists: Ask user "Spotless plugin already exists. Do you want to enhance the existing configuration? (y/n)"
+If spotless-maven-plugin already exists: Ask user "Spotless plugin already exists. Do you want to enhance the existing configuration? (y/n)"
 
-                    If user says "n": Skip this step entirely.
-                    If user says "y": Proceed with adding missing configuration elements only.
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing configuration elements only.
 
-                    **CONDITIONAL EXECUTION**: Only execute this step if user selected "Format source code (Spotless)" in Step 3.
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Format source code (Spotless)" in Step 3.
 
-                    ## Spotless Plugin Configuration
+## Spotless Plugin Configuration
 
-                    **ADD this plugin to the `<build><plugins>` section ONLY if it doesn't already exist:**
+**ADD this plugin to the `<build><plugins>` section ONLY if it doesn't already exist:**
 
-                    ```xml
-                    <plugin>
-                        <groupId>com.diffplug.spotless</groupId>
-                        <artifactId>spotless-maven-plugin</artifactId>
-                        <version>${maven-plugin-spotless.version}</version>
-                        <configuration>
-                            <encoding>UTF-8</encoding>
-                            <java>
-                                <removeUnusedImports />
-                                <importOrder>
-                                    <order>,\#</order>
-                                </importOrder>
-                                <endWithNewline />
-                                <trimTrailingWhitespace />
-                                <indent>
-                                    <spaces>true</spaces>
-                                    <spacesPerTab>4</spacesPerTab>
-                                </indent>
-                            </java>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                                <phase>process-sources</phase>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    ```
+```xml
+<plugin>
+    <groupId>com.diffplug.spotless</groupId>
+    <artifactId>spotless-maven-plugin</artifactId>
+    <version>${maven-plugin-spotless.version}</version>
+    <configuration>
+        <encoding>UTF-8</encoding>
+        <java>
+            <removeUnusedImports />
+            <importOrder>
+                <order>,\#</order>
+            </importOrder>
+            <endWithNewline />
+            <trimTrailingWhitespace />
+            <indent>
+                <spaces>true</spaces>
+                <spacesPerTab>4</spacesPerTab>
+            </indent>
+        </java>
+    </configuration>
+    <executions>
+        <execution>
+            <goals>
+                <goal>check</goal>
+            </goals>
+            <phase>process-sources</phase>
+        </execution>
+    </executions>
+</plugin>
+```
 
-                    ## Usage Examples
+## Usage Examples
 
-                    ```bash
-                    # Check code formatting
-                    ./mvnw spotless:check
+```bash
+# Check code formatting
+./mvnw spotless:check
 
-                    # Apply code formatting
-                    ./mvnw spotless:apply
+# Apply code formatting
+./mvnw spotless:apply
 
-                    # Integration with build
-                    ./mvnw clean compile  # Will fail if formatting violations exist
-                    ```
+# Integration with build
+./mvnw clean compile  # Will fail if formatting violations exist
+```
 
-                    ## Validation
+## Validation
 
-                    After adding this plugin, verify the configuration:
+After adding this plugin, verify the configuration:
 
-                    ```bash
-                    # Test Spotless configuration
-                    ./mvnw spotless:check
-                    ```
+```bash
+# Test Spotless configuration
+./mvnw spotless:check
+```
                     
                 
 #### Step Constraints
@@ -1401,68 +1317,67 @@ The final `<properties>` section will look like this (example with common select
 - **MUST** use properties configured in Step 4 for plugin versions
 - **MUST** skip this step entirely if code formatting was not selected
 
-### Step 16: Versions Maven Plugin Configuration
+### Step 15: Versions Maven Plugin Configuration
 
-                    
-                    **Purpose**: Configure Versions Maven plugin to help manage and update dependency and plugin versions systematically.
+**Purpose**: Configure Versions Maven plugin to help manage and update dependency and plugin versions systematically.
 
-                    **Dependencies**: Only execute if user selected "Version management" in Step 3. Requires completion of core plugin steps (5, 6, 7).
+**Dependencies**: Only execute if user selected "Version management" in Step 3. Requires completion of core plugin steps (3, 4, 5).
 
-                    **CRITICAL PRESERVATION RULE**: Only ADD this plugin if it doesn't already exist. Never REPLACE or REMOVE existing plugins.
+**CRITICAL PRESERVATION RULE**: Only ADD this plugin if it doesn't already exist. Never REPLACE or REMOVE existing plugins.
 
-                    ## Pre-Implementation Check
+## Pre-Implementation Check
 
-                    **BEFORE adding Versions plugin, check if it already exists in the pom.xml:**
+**BEFORE adding Versions plugin, check if it already exists in the pom.xml:**
 
-                    If versions-maven-plugin already exists: Ask user "Versions plugin already exists. Do you want to enhance the existing configuration? (y/n)"
+If versions-maven-plugin already exists: Ask user "Versions plugin already exists. Do you want to enhance the existing configuration? (y/n)"
 
-                    If user says "n": Skip this step entirely.
-                    If user says "y": Proceed with adding missing configuration elements only.
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing configuration elements only.
 
-                    **CONDITIONAL EXECUTION**: Only execute this step if user selected "Version management" in Step 3.
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Version management" in Step 3.
 
-                    ## Versions Plugin Configuration
+## Versions Plugin Configuration
 
-                    **ADD this plugin to the `<build><plugins>` section ONLY if it doesn't already exist:**
+**ADD this plugin to the `<build><plugins>` section ONLY if it doesn't already exist:**
 
-                    ```xml
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>versions-maven-plugin</artifactId>
-                        <version>${maven-plugin-versions.version}</version>
-                        <configuration>
-                            <allowSnapshots>false</allowSnapshots>
-                        </configuration>
-                    </plugin>
-                    ```
+```xml
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>versions-maven-plugin</artifactId>
+    <version>${maven-plugin-versions.version}</version>
+    <configuration>
+        <allowSnapshots>false</allowSnapshots>
+    </configuration>
+</plugin>
+```
 
-                    ## Usage Examples
+## Usage Examples
 
-                    ```bash
-                    # Check for dependency updates
-                    ./mvnw versions:display-dependency-updates
+```bash
+# Check for dependency updates
+./mvnw versions:display-dependency-updates
 
-                    # Check for plugin updates
-                    ./mvnw versions:display-plugin-updates
+# Check for plugin updates
+./mvnw versions:display-plugin-updates
 
-                    # Check for property updates
-                    ./mvnw versions:display-property-updates
+# Check for property updates
+./mvnw versions:display-property-updates
 
-                    # Update to next snapshot versions
-                    ./mvnw versions:set -DnextSnapshot=true
+# Update to next snapshot versions
+./mvnw versions:set -DnextSnapshot=true
 
-                    # Update specific dependency
-                    ./mvnw versions:use-latest-versions -Dincludes=org.junit.jupiter:*
-                    ```
+# Update specific dependency
+./mvnw versions:use-latest-versions -Dincludes=org.junit.jupiter:*
+```
 
-                    ## Validation
+## Validation
 
-                    After adding this plugin, verify the configuration:
+After adding this plugin, verify the configuration:
 
-                    ```bash
-                    # Test Versions plugin configuration
-                    ./mvnw versions:display-plugin-updates
-                    ```
+```bash
+# Test Versions plugin configuration
+./mvnw versions:display-plugin-updates
+```
                     
                 
 #### Step Constraints
@@ -1473,79 +1388,78 @@ The final `<properties>` section will look like this (example with common select
 - **MUST** use properties configured in Step 4 for plugin versions
 - **MUST** skip this step entirely if version management was not selected
 
-### Step 17: Git Commit ID Plugin Configuration
+### Step 16: Git Commit ID Plugin Configuration
 
-                    
-                    **Purpose**: Configure Git Commit ID plugin to include Git commit information in the build artifacts for traceability.
+**Purpose**: Configure Git Commit ID plugin to include Git commit information in the build artifacts for traceability.
 
-                    **Dependencies**: Only execute if user selected "Build information tracking" in Step 3. Requires completion of core plugin steps (5, 6, 7).
+**Dependencies**: Only execute if user selected "Build information tracking" in Step 3. Requires completion of core plugin steps (3, 4, 5).
 
-                    **CRITICAL PRESERVATION RULE**: Only ADD this plugin if it doesn't already exist. Never REPLACE or REMOVE existing plugins.
+**CRITICAL PRESERVATION RULE**: Only ADD this plugin if it doesn't already exist. Never REPLACE or REMOVE existing plugins.
 
-                    ## Pre-Implementation Check
+## Pre-Implementation Check
 
-                    **BEFORE adding Git Commit ID plugin, check if it already exists in the pom.xml:**
+**BEFORE adding Git Commit ID plugin, check if it already exists in the pom.xml:**
 
-                    If git-commit-id-plugin already exists: Ask user "Git Commit ID plugin already exists. Do you want to enhance the existing configuration? (y/n)"
+If git-commit-id-plugin already exists: Ask user "Git Commit ID plugin already exists. Do you want to enhance the existing configuration? (y/n)"
 
-                    If user says "n": Skip this step entirely.
-                    If user says "y": Proceed with adding missing configuration elements only.
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing configuration elements only.
 
-                    **CONDITIONAL EXECUTION**: Only execute this step if user selected "Build information tracking" in Step 3.
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Build information tracking" in Step 3.
 
-                    ## Git Commit ID Plugin Configuration
+## Git Commit ID Plugin Configuration
 
-                    **ADD this plugin to the `<build><plugins>` section ONLY if it doesn't already exist:**
+**ADD this plugin to the `<build><plugins>` section ONLY if it doesn't already exist:**
 
-                    ```xml
-                    <plugin>
-                        <groupId>pl.project13.maven</groupId>
-                        <artifactId>git-commit-id-plugin</artifactId>
-                        <version>${maven-plugin-git-commit-id.version}</version>
-                        <executions>
-                            <execution>
-                                <id>get-the-git-infos</id>
-                                <goals>
-                                    <goal>revision</goal>
-                                </goals>
-                                <phase>initialize</phase>
-                            </execution>
-                        </executions>
-                        <configuration>
-                            <generateGitPropertiesFile>true</generateGitPropertiesFile>
-                            <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
-                            <commitIdGenerationMode>full</commitIdGenerationMode>
-                        </configuration>
-                    </plugin>
-                    ```
+```xml
+<plugin>
+    <groupId>pl.project13.maven</groupId>
+    <artifactId>git-commit-id-plugin</artifactId>
+    <version>${maven-plugin-git-commit-id.version}</version>
+    <executions>
+        <execution>
+            <id>get-the-git-infos</id>
+            <goals>
+                <goal>revision</goal>
+            </goals>
+            <phase>initialize</phase>
+        </execution>
+    </executions>
+    <configuration>
+        <generateGitPropertiesFile>true</generateGitPropertiesFile>
+        <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
+        <commitIdGenerationMode>full</commitIdGenerationMode>
+    </configuration>
+</plugin>
+```
 
-                    ## Usage Examples
+## Usage Examples
 
-                    ```bash
-                    # Build with git information
-                    ./mvnw clean package
+```bash
+# Build with git information
+./mvnw clean package
 
-                    # Git properties will be available at runtime
-                    cat target/classes/git.properties
-                    ```
+# Git properties will be available at runtime
+cat target/classes/git.properties
+```
 
-                    **Access in Java code:**
-                    ```java
-                    Properties gitProps = new Properties();
-                    gitProps.load(getClass().getResourceAsStream("/git.properties"));
-                    String commitId = gitProps.getProperty("git.commit.id");
-                    String buildTime = gitProps.getProperty("git.build.time");
-                    ```
+**Access in Java code:**
+```java
+Properties gitProps = new Properties();
+gitProps.load(getClass().getResourceAsStream("/git.properties"));
+String commitId = gitProps.getProperty("git.commit.id");
+String buildTime = gitProps.getProperty("git.build.time");
+```
 
-                    ## Validation
+## Validation
 
-                    After adding this plugin, verify the configuration:
+After adding this plugin, verify the configuration:
 
-                    ```bash
-                    # Test Git Commit ID plugin
-                    ./mvnw clean package
-                    cat target/classes/git.properties
-                    ```
+```bash
+# Test Git Commit ID plugin
+./mvnw clean package
+cat target/classes/git.properties
+```
                     
                 
 #### Step Constraints
@@ -1557,81 +1471,80 @@ The final `<properties>` section will look like this (example with common select
 - **MUST** skip this step entirely if build information tracking was not selected
 - **MUST** ensure project is in a git repository for proper functionality
 
-### Step 18: Flatten Maven Plugin Configuration
+### Step 17: Flatten Maven Plugin Configuration
 
-                    
-                    **Purpose**: Configure Flatten Maven plugin to flatten POM files for library publishing to Maven repositories.
+**Purpose**: Configure Flatten Maven plugin to flatten POM files for library publishing to Maven repositories.
 
-                    **Dependencies**: Only execute if user selected "Java Library" as project nature in Step 3. Requires completion of core plugin steps (5, 6, 7).
+**Dependencies**: Only execute if user selected "Java Library" as project nature in Step 3. Requires completion of core plugin steps (3, 4, 5).
 
-                    **CRITICAL PRESERVATION RULE**: Only ADD this plugin if it doesn't already exist. Never REPLACE or REMOVE existing plugins.
+**CRITICAL PRESERVATION RULE**: Only ADD this plugin if it doesn't already exist. Never REPLACE or REMOVE existing plugins.
 
-                    ## Pre-Implementation Check
+## Pre-Implementation Check
 
-                    **BEFORE adding Flatten plugin, check if it already exists in the pom.xml:**
+**BEFORE adding Flatten plugin, check if it already exists in the pom.xml:**
 
-                    If flatten-maven-plugin already exists: Ask user "Flatten plugin already exists. Do you want to enhance the existing configuration? (y/n)"
+If flatten-maven-plugin already exists: Ask user "Flatten plugin already exists. Do you want to enhance the existing configuration? (y/n)"
 
-                    If user says "n": Skip this step entirely.
-                    If user says "y": Proceed with adding missing configuration elements only.
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing configuration elements only.
 
-                    **CONDITIONAL EXECUTION**: Only execute this step if user selected "Java Library" as project nature in Step 3.
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Java Library" as project nature in Step 3.
 
-                    ## Flatten Plugin Configuration
+## Flatten Plugin Configuration
 
-                    **ADD this plugin to the `<build><plugins>` section ONLY if it doesn't already exist:**
+**ADD this plugin to the `<build><plugins>` section ONLY if it doesn't already exist:**
 
-                    ```xml
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>flatten-maven-plugin</artifactId>
-                        <version>${maven-plugin-flatten.version}</version>
-                        <configuration>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>flatten</id>
-                                <phase>process-resources</phase>
-                                <goals>
-                                    <goal>flatten</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>flatten.clean</id>
-                                <phase>clean</phase>
-                                <goals>
-                                    <goal>clean</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                    ```
+```xml
+<plugin>
+    <groupId>org.codehaus.mojo</groupId>
+    <artifactId>flatten-maven-plugin</artifactId>
+    <version>${maven-plugin-flatten.version}</version>
+    <configuration>
+    </configuration>
+    <executions>
+        <execution>
+            <id>flatten</id>
+            <phase>process-resources</phase>
+            <goals>
+                <goal>flatten</goal>
+            </goals>
+        </execution>
+        <execution>
+            <id>flatten.clean</id>
+            <phase>clean</phase>
+            <goals>
+                <goal>clean</goal>
+            </goals>
+        </execution>
+    </executions>
+</plugin>
+```
 
-                    ## Usage Examples
+## Usage Examples
 
-                    ```bash
-                    # Build library with flattened POM
-                    ./mvnw clean package
+```bash
+# Build library with flattened POM
+./mvnw clean package
 
-                    # The flattened POM will be in target/
-                    cat target/.flattened-pom.xml
+# The flattened POM will be in target/
+cat target/.flattened-pom.xml
 
-                    # Deploy to repository
-                    ./mvnw clean deploy
+# Deploy to repository
+./mvnw clean deploy
 
-                    # Clean flattened files
-                    ./mvnw flatten:clean
-                    ```
+# Clean flattened files
+./mvnw flatten:clean
+```
 
-                    ## Validation
+## Validation
 
-                    After adding this plugin, verify the configuration:
+After adding this plugin, verify the configuration:
 
-                    ```bash
-                    # Test Flatten plugin
-                    ./mvnw clean package
-                    ls target/.flattened-pom.xml
-                    ```
+```bash
+# Test Flatten plugin
+./mvnw clean package
+ls target/.flattened-pom.xml
+```
                     
                 
 #### Step Constraints
