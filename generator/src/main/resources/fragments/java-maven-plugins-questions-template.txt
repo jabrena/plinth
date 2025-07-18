@@ -26,6 +26,7 @@ Options:
 - Format source code (Spotless)
 - Maven Enforcer
 - Unit Testing (Surefire)
+- Unit Testing Reports (Surefire Reports)
 - Integration testing (Failsafe)
 - Code coverage reporting (JaCoCo)
 - Mutation testing (PiTest)
