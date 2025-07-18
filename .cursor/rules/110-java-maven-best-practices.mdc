@@ -52,6 +52,15 @@ Which would you like to implement? (1A, 1B, 1C, 2A, 2B, 2C, 3A, 3B, 3C, or 'show
 Focus on being consultative rather than prescriptive - analyze, propose, ask, then implement based on user choice.
 
 
+## Constraints
+
+Before applying Maven best practices recommendations, ensure the project is in a valid state by running Maven validation. This helps identify any existing configuration issues that need to be resolved first.
+
+- **MANDATORY**: Run `./mvnw validate` or `mvn validate` before applying any Maven best practices recommendations
+- **VERIFY**: Ensure all validation errors are resolved before proceeding with POM modifications
+- **PREREQUISITE**: Project must compile and pass basic validation checks before optimization
+- **SAFETY**: If validation fails, not continue and ask the user to fix the issues before continuing
+
 ## Examples
 
 ### Table of contents
@@ -627,11 +636,19 @@ Description: Define all dependency and plugin versions in the `<properties>` sec
 ## Output Format
 
 - Analyze Maven POM files for best practices violations and improvement opportunities
-- Present structured analysis with prioritized improvement recommendations
+- Present structured analysis with prioritized improvement recommendations using Impact/Effort scoring
+- Identify specific Maven configuration issues: outdated versions, missing properties, suboptimal plugin configurations
 - Provide multiple solution options with clear pros/cons for each issue
 - Wait for user selection before implementing any changes
 - When implementing, apply only the chosen solution without adding unrequested plugins or dependencies
+- **DOCUMENT what was added vs what was preserved** in the final summary
 
 ## Safeguards
 
-- verify changes with the command: `mvn validate` or `./mvnw validate`
+- **MANDATORY**: Analyze existing POM configuration before making any changes
+- **NEVER remove or replace existing plugins** - only add new plugins that don't already exist
+- **NEVER remove or replace existing properties** - only add new properties that don't conflict
+- **ASK USER before overriding** any existing configuration element
+- Verify changes with the command: `./mvnw clean verify`
+- Preserve existing dependency versions unless explicitly requested to update
+- Maintain backward compatibility with existing build process

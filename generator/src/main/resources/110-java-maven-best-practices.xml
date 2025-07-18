@@ -5,7 +5,6 @@
     id="110-java-maven-best-practices" version="1.0">
 
     <metadata>
-        <!-- Markdown Front Matter for Cursor Rules -->
         <cursor-ai>
             <description></description>
             <globs></globs>
@@ -28,6 +27,19 @@
         <xi:include href="fragments/system-prompt-behaviour-consultative-interaction-template.md" parse="text"/>
     </goal>
 
+    <constraints>
+        <constraints-description>
+            <![CDATA[
+            Before applying Maven best practices recommendations, ensure the project is in a valid state by running Maven validation. This helps identify any existing configuration issues that need to be resolved first.
+            ]]>
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw validate` or `mvn validate` before applying any Maven best practices recommendations</constraint>
+            <constraint>**VERIFY**: Ensure all validation errors are resolved before proceeding with POM modifications</constraint>
+            <constraint>**PREREQUISITE**: Project must compile and pass basic validation checks before optimization</constraint>
+            <constraint>**SAFETY**: If validation fails, not continue and ask the user to fix the issues before continuing</constraint>
+        </constraint-list>
+    </constraints>
 
     <examples>
         <toc auto-generate="true" />
@@ -630,16 +642,24 @@ my-app/
     <output-format>
         <output-format-list>
             <output-format-item>Analyze Maven POM files for best practices violations and improvement opportunities</output-format-item>
-            <output-format-item>Present structured analysis with prioritized improvement recommendations</output-format-item>
+            <output-format-item>Present structured analysis with prioritized improvement recommendations using Impact/Effort scoring</output-format-item>
+            <output-format-item>Identify specific Maven configuration issues: outdated versions, missing properties, suboptimal plugin configurations</output-format-item>
             <output-format-item>Provide multiple solution options with clear pros/cons for each issue</output-format-item>
             <output-format-item>Wait for user selection before implementing any changes</output-format-item>
             <output-format-item>When implementing, apply only the chosen solution without adding unrequested plugins or dependencies</output-format-item>
+            <output-format-item>**DOCUMENT what was added vs what was preserved** in the final summary</output-format-item>
         </output-format-list>
     </output-format>
 
     <safeguards>
         <safeguards-list>
-            <safeguards-item>verify changes with the command: `mvn validate` or `./mvnw validate`</safeguards-item>
+            <safeguards-item>**MANDATORY**: Analyze existing POM configuration before making any changes</safeguards-item>
+            <safeguards-item>**NEVER remove or replace existing plugins** - only add new plugins that don't already exist</safeguards-item>
+            <safeguards-item>**NEVER remove or replace existing properties** - only add new properties that don't conflict</safeguards-item>
+            <safeguards-item>**ASK USER before overriding** any existing configuration element</safeguards-item>
+            <safeguards-item>Verify changes with the command: `./mvnw clean verify`</safeguards-item>
+            <safeguards-item>Preserve existing dependency versions unless explicitly requested to update</safeguards-item>
+            <safeguards-item>Maintain backward compatibility with existing build process</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>
