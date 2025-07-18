@@ -25,8 +25,6 @@
 
     <goal>
         This rule provides a modular, step-based approach to updating Maven pom.xml files with plugins and profiles. Each step has a single responsibility and clear dependencies on user answers, making the configuration process more maintainable and user-friendly.
-
-        **CRITICAL**: This rule PRESERVES existing plugins and configurations. It only ADDS or ENHANCES plugins, never replaces or removes existing ones.
     </goal>
 
     <instructions>

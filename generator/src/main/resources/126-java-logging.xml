@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xi="http://www.w3.org/2001/XInclude"
     xsi:noNamespaceSchemaLocation="pml.xsd"
     id="126-java-logging" version="1.0">
 
@@ -26,35 +27,14 @@
     <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
     <goal>
-        Analyze Java code to identify logging improvement opportunities and present actionable alternatives to the user. When you encounter Java code:
+        Effective Java logging involves selecting a standard framework (SLF4J with Logback/Log4j2), using appropriate log levels (ERROR, WARN, INFO, DEBUG, TRACE),
+        and adhering to core practices like parameterized logging, proper exception handling, and avoiding sensitive data exposure.
+        Configuration should be environment-specific with clear output formats.
+        Security is paramount: mask sensitive data, control log access, and ensure secure transmission.
+        Implement centralized log aggregation, monitoring, and alerting for proactive issue detection.
+        Finally, logging behavior and its impact should be validated through comprehensive testing.
 
-        1. **Analyze** the code for logging issues using the principles and examples below
-        2. **Identify** the most impactful improvements (framework selection, log levels, security, performance, monitoring)
-        3. **Present** 2-3 concrete solution options with pros/cons for each issue found
-        4. **Ask** the user which improvement they'd like to implement
-        5. **Wait** for user choice before making any changes
-
-        **Example interaction:**
-        ```
-        🔍 I found 3 logging improvements in this code:
-
-        1. **CRITICAL: Security Risk - Sensitive Data Exposure**
-        - Problem: Credit card numbers and passwords logged in plain text
-        - Solutions: A) Implement data masking B) Use structured logging with filters C) Remove sensitive logging entirely
-
-        2. **PERFORMANCE: String Concatenation in Logging**
-        - Problem: Using + operator instead of parameterized logging
-        - Solutions: A) Convert to SLF4J placeholders B) Add guard clauses C) Use lazy evaluation
-
-        3. **MAINTAINABILITY: Inconsistent Log Levels**
-        - Problem: Business events logged as DEBUG, errors as INFO
-        - Solutions: A) Standardize level usage B) Create logging guidelines C) Use different loggers by category
-
-        Which would you like to implement? (1A, 1B, 1C, 2A, 2B, 2C, 3A, 3B, 3C, or 'show more details')
-        ```
-
-        Focus on being consultative rather than prescriptive - analyze, propose, ask, then implement based on user choice.
-
+        <xi:include href="fragments/system-prompt-behaviour-consultative-interaction-template.md" parse="text"/>
         ### Implementing These Principles
 
         These guidelines are built upon the following core principles:
