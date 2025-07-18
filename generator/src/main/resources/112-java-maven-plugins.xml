@@ -90,7 +90,7 @@
                     **IMPORTANT**: Ask these questions to understand the project needs before making any changes to the pom.xml. Based on the answers, you will conditionally add only relevant dependencies and plugins.
 
                     ```markdown
-                    <xi:include href="fragments/java-maven-plugins-questions-template.txt" parse="text"/>
+                    <xi:include href="fragments/java-maven-plugins-questions-template.md" parse="text"/>
                     ```
                 </step-content>
                 <step-constraints>
