@@ -29,7 +29,7 @@
         **CRITICAL**: This rule PRESERVES existing plugins and configurations. It only ADDS or ENHANCES plugins, never replaces or removes existing ones.
     </goal>
 
-            <instructions>
+    <instructions>
         <steps>
             <step number="1">
                 <step-title>MANDATORY: Existing Configuration Preservation and Analysis</step-title>
@@ -87,10 +87,7 @@
             <step number="3">
                 <step-title>Project Assessment Questions</step-title>
                 <step-content>
-                    **DEPENDENCIES**: Requires completion of Step 1 (existing configuration analysis).
-
-                    **CRITICAL**: You MUST ask the exact questions from the following template in strict order before making any changes to understand the project needs.
-                    Based on the answers, you will conditionally execute only relevant subsequent steps.
+                    **IMPORTANT**: Ask these questions to understand the project needs before making any changes to the pom.xml. Based on the answers, you will conditionally add only relevant dependencies and plugins.
 
                     ```markdown
                     <xi:include href="fragments/java-maven-plugins-questions-template.md" parse="text"/>
@@ -98,6 +95,9 @@
                 </step-content>
                 <step-constraints>
                     <step-constraint-list>
+                        <step-constraint>**DEPENDENCIES**: Requires completion of Step 1 (existing configuration analysis)</step-constraint>
+                        <step-constraint>**CRITICAL**: You MUST ask the exact questions from the following template in strict order before making any changes to understand the project needs</step-constraint>
+                        <step-constraint>Based on the answers, you will conditionally execute only relevant subsequent steps</step-constraint>
                         <step-constraint>**MUST** complete Step 1 analysis before asking any questions</step-constraint>
                         <step-constraint>**MUST** read template files fresh using file_search and read_file tools before asking any questions</step-constraint>
                         <step-constraint>**MUST NOT** use cached or remembered questions from previous interactions</step-constraint>

@@ -1,10 +1,4 @@
-# Java Maven Configuration Questions
-
-**IMPORTANT**: Ask these questions to understand the project needs before making any changes to the pom.xml. Based on the answers, you will conditionally add only relevant dependencies and plugins.
-
-## 1. Project Nature
-
-**What type of Java project is this?**
+**Question 1**: What type of Java project is this?
 
 Options:
 - Java Library (for publishing to Maven Central/Nexus)
@@ -13,9 +7,9 @@ Options:
 - Serverless (AWS Lambdas, Azure Functions)
 - Other (specify)
 
-## 2. Java Version
+---
 
-**Which Java version does your project target?**
+**Question 2**: Which Java version does your project target?
 
 Options:
 
@@ -24,14 +18,15 @@ Options:
 - Java 24 (latest features)
 - Other (specify version)
 
-## 3. Build and Quality Aspects
+---
 
-**What build and quality aspects are important for your project?** (Select all that apply)
+**Question 3**: What build and quality aspects are important for your project?
 
 Options:
 - Format source code (Spotless)
 - Maven Enforcer
 - Unit Testing (Surefire)
+- Unit Testing Reports (Surefire Reports)
 - Integration testing (Failsafe)
 - Code coverage reporting (JaCoCo)
 - Mutation testing (PiTest)
@@ -40,9 +35,9 @@ Options:
 - Sonar
 - Version management
 
-## 4. Coverage Threshold
+---
 
-**What is your target coverage threshold?**
+**Question 4**:  What is your target coverage threshold?
 
 Options:
 - 70% (moderate)
@@ -50,47 +45,49 @@ Options:
 - 90% (high)
 - Custom percentage (specify)
 
-## 5. Sonar Configuration (conditional)
+---
+
+**Question 5**: Do you want to configure Sonar/SonarCloud integration?** (y/n)
 
 **Note**: This question is only asked if "Static code analysis (SpotBugs, Sonar)" was selected in question 3.
 
-**Do you want to configure Sonar/SonarCloud integration?** (y/n)
-
 **If yes, please provide the following information:**
 
-### 5.1 Sonar Organization
+---
 
-**What is your Sonar organization identifier?**
+**Question 5.1**: What is your Sonar organization identifier?
 
 - For SonarCloud: This is typically your GitHub username or organization name
 - For SonarQube: This is your organization key as configured in SonarQube
 - Example: `my-github-user` or `my-company-org`
 
-### 5.2 Sonar Project Key
+---
 
-**What is your Sonar project key?**
+**Question 5.2**: What is your Sonar project key?
 
 - For SonarCloud: Usually in format `GITHUB_USER_REPOSITORY_NAME` (e.g., `john-doe_my-java-project`)
 - For SonarQube: Custom project key as defined in your SonarQube instance
 - Must be unique within your Sonar organization
 - Example: `john-doe_awesome-java-lib`
 
-### 5.3 Sonar Project Name
+---
 
-**What is your Sonar project display name?**
+**Question 5.3**: What is your Sonar project display name?
 
 - Human-readable name for your project as it appears in Sonar dashboard
 - Can contain spaces and special characters
 - Example: `Awesome Java Library` or `My Microservice API`
 
-## 6. Sonar Host Configuration (conditional)
+---
+
+**Question 5.4**: Which Sonar service are you using? (conditional)
 
 **Note**: This question is only asked if Sonar configuration was enabled in question 5.
-
-**Which Sonar service are you using?**
 
 Options:
 - SonarCloud (https://sonarcloud.io) - recommended for open source projects
 - SonarQube Server (specify your server URL)
 
 **If SonarQube Server**: Please provide your SonarQube server URL (e.g., `https://sonar.mycompany.com`)
+
+---

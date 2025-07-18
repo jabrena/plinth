@@ -1,12 +1,6 @@
-# Java Maven Properties Configuration
-
-## Properties Configuration Strategy
-
 Build properties incrementally based on user's actual needs and project requirements. This template provides a comprehensive, conversational approach to configuring Maven properties.
 
 **CRITICAL PRESERVATION RULE**: Only ADD properties that don't already exist. Never REPLACE or REMOVE existing properties.
-
-## Pre-Implementation Property Check
 
 **BEFORE adding any property, check if it already exists in the `<properties>` section:**
 
@@ -15,8 +9,6 @@ Build properties incrementally based on user's actual needs and project requirem
 3. **Ask user for conflicts**: "Property X already exists with value Y. Keep existing value? (y/n)"
 4. **Skip conflicting properties** unless user explicitly requests override
 5. **Only add NEW properties** that don't already exist
-
-## Core Properties (Only Add If Missing)
 
 Start with essential build properties that every project needs (use the Java version selected in the initial questions):
 
@@ -31,21 +23,11 @@ Start with essential build properties that every project needs (use the Java ver
 </properties>
 ```
 
-## Maven Version and Plugin Properties (Conditional)
-
-**Ask**: "Do you want to enforce specific Maven and plugin versions for build consistency? (y/n)"
-
-**If yes, add**:
-```xml
-<maven-plugin-surefire.version>3.5.3</maven-plugin-surefire.version>
-<maven-plugin-enforcer.version>3.5.0</maven-plugin-enforcer.version>
-```
-
-## Dependency Version Properties (Conditional)
+**Dependency Version Properties:** (Conditional)
 
 **Based on dependency selections**, add relevant version properties:
 
-## Quality and Analysis Properties (Conditional)
+**Quality and Analysis Properties:** (Conditional)
 
 **Ask**: "Do you want to configure quality thresholds for code coverage and analysis? (y/n)"
 
@@ -60,43 +42,55 @@ Start with essential build properties that every project needs (use the Java ver
 <mutation.level>[USER_SPECIFIED_MUTATION]</mutation.level>
 ```
 
-## Additional Plugin Version Properties (Feature-Based)
+**Additional Plugin Version Properties:** (Feature-Based)
 
 **Only add plugin version properties for selected features**:
 
-### Static Analysis
+**If Maven enforcer selected**:
+**If yes, add**:
+```xml
+<maven-plugin-enforcer.version>3.5.0</maven-plugin-enforcer.version>
+```
+
 **If Format source code selected**:
 ```xml
 <maven-plugin-spotless.version>2.44.5</maven-plugin-spotless.version>
 ```
 
-### Integration Testing
+**If Unit testing selected**:
+**If yes, add**:
+```xml
+<maven-plugin-surefire.version>3.5.3</maven-plugin-surefire.version>
+```
+
+**If Unit testing Reporting selected**:
+**If yes, add**:
+```xml
+<maven-plugin-surefire.version>3.5.3</maven-plugin-surefire.version>
+<maven-plugin-jxr.version>3.6.0</maven-plugin-jxr.version>
+```
+
 **If Integration Testing selected**:
 ```xml
 <maven-plugin-failsafe.version>3.5.3</maven-plugin-failsafe.version>
 ```
 
-### Code Coverage
 **If Code Coverage selected**:
 ```xml
 <maven-plugin-jacoco.version>0.8.13</maven-plugin-jacoco.version>
-<maven-plugin-jxr.version>3.6.0</maven-plugin-jxr.version>
 ```
 
-### Mutation Testing
 **If Mutation Testing selected**:
 ```xml
 <maven-plugin-pitest.version>1.19.4</maven-plugin-pitest.version>
 <maven-plugin-pitest-junit5.version>1.2.3</maven-plugin-pitest-junit5.version>
 ```
 
-### Security Scanning
 **If Security Scanning selected**:
 ```xml
 <maven-plugin-dependency-check.version>12.1.1</maven-plugin-dependency-check.version>
 ```
 
-### Static Analysis
 **If Static Analysis selected**:
 ```xml
 <maven-plugin-spotbugs.version>4.9.3.0</maven-plugin-spotbugs.version>
@@ -104,38 +98,31 @@ Start with essential build properties that every project needs (use the Java ver
 <maven-plugin-sonar.version>4.0.0.4121</maven-plugin-sonar.version>
 ```
 
-### Version Management
 **If Version Management selected**:
 ```xml
 <maven-plugin-versions.version>2.18.0</maven-plugin-versions.version>
 ```
 
-### Build Info
 **If Build Info selected**:
 ```xml
 <maven-plugin-git-commit-id.version>4.9.10</maven-plugin-git-commit-id.version>
 ```
 
-### Library Publishing
 **If Library Publishing selected**:
 ```xml
 <maven-plugin-flatten.version>1.7.0</maven-plugin-flatten.version>
 ```
 
-### Site and Reporting
 **If Site Generation selected**:
 ```xml
 <maven-plugin-site.version>3.20.0</maven-plugin-site.version>
 <maven-plugin-project-info-reports.version>3.7.0</maven-plugin-project-info-reports.version>
 ```
 
-### SonarQube Integration
 **If SonarQube Integration selected**:
 ```xml
 <maven-plugin-sonar.version>4.0.0.4121</maven-plugin-sonar.version>
 ```
-
-## Final Properties Structure Example
 
 The final `<properties>` section will look like this (example with common selections):
 
@@ -150,9 +137,6 @@ The final `<properties>` section will look like this (example with common select
   <jspecify.version>1.0.0</jspecify.version>
 
   <!-- Feature-specific plugin versions (based on selections) -->
-  <maven-plugin-compiler.version>3.14.0</maven-plugin-compiler.version>
-  <error-prone.version>2.38.0</error-prone.version>
-  <nullaway.version>0.11.0</nullaway.version>
   <maven-plugin-surefire.version>3.5.3</maven-plugin-surefire.version>
   <maven-plugin-enforcer.version>3.5.0</maven-plugin-enforcer.version>
   <maven-plugin-jacoco.version>0.8.13</maven-plugin-jacoco.version>
@@ -165,12 +149,3 @@ The final `<properties>` section will look like this (example with common select
   <mutation.level>70</mutation.level>
 </properties>
 ```
-
-## Implementation Guidelines
-
-1. **Build incrementally**: Start with core properties and add only what's needed
-2. **Ask before adding**: Don't include properties for unselected features
-3. **Customize versions**: Use the Java version and thresholds specified by the user
-4. **Group logically**: Keep related properties together with comments
-5. **Use descriptive names**: Property names should clearly indicate their purpose
-6. **Version consistency**: Ensure compatible versions across related plugins

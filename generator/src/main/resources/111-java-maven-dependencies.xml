@@ -55,7 +55,8 @@
             <step number="2">
                 <step-title>Dependency Assessment Questions</step-title>
                 <step-content>
-                    **CRITICAL**: You MUST ask the exact questions from the following template in strict order before making any changes to understand the dependency needs.
+                    I need to understand what dependencies to add to enhance your project's code quality and safety.
+                    I'll ask you a few targeted questions:
 
                     ```markdown
                     <xi:include href="fragments/java-maven-dependencies-questions-template.md" parse="text"/>
@@ -63,6 +64,7 @@
                 </step-content>
                 <step-constraints>
                     <step-constraint-list>
+                        <step-constraint>**CRITICAL**: You MUST ask the exact questions from the following template in strict order before making any changes to understand the dependency needs</step-constraint>
                         <step-constraint>**MUST** read template files fresh using file_search and read_file tools before asking any questions</step-constraint>
                         <step-constraint>**MUST NOT** use cached or remembered questions from previous interactions</step-constraint>
                         <step-constraint>**MUST** ask questions ONE BY ONE in the exact order specified in the template</step-constraint>
@@ -85,8 +87,7 @@
             </step>
             <step number="3">
                 <step-title>Conditional Dependency Configuration</step-title>
-                <step-content>
-                    <![CDATA[
+                <step-content><![CDATA[
 Based on user responses, implement the dependency configuration following this order:
 
 **Properties Configuration**: Add version properties for selected dependencies.
@@ -179,8 +180,7 @@ Create `.mvn/jvm.config` file with:
 ```
 
 **Package Name Update**: Update the `AnnotatedPackages` configuration in the compiler plugin to match your actual project package structure.
-                    ]]>
-                </step-content>
+                ]]></step-content>
                 <step-constraints>
                     <step-constraint-list>
                         <step-constraint>**MUST** add only dependencies that were selected by the user</step-constraint>
@@ -201,6 +201,7 @@ Create `.mvn/jvm.config` file with:
 Only provide examples for dependencies that were actually added based on user selections.
 
 **JSpecify Usage Example** (if added):
+
 ```java
 import java.util.Objects;
 
