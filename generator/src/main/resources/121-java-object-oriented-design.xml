@@ -39,6 +39,7 @@
             *   **Inheritance**: Model true "is-a" relationships, ensuring subclasses are substitutable for their base types (Liskov Substitution Principle).
             *   **Polymorphism**: Allow objects of different types to respond to the same message in their own way, simplifying client code.
         4.  **Proactive Code Smell Management**: Develop the ability to identify common object-oriented design "code smells" (e.g., God Class, Feature Envy, Data Clumps, Refused Bequest). Recognizing and refactoring these smells is crucial for improving the long-term health, maintainability, and clarity of the codebase.
+        5.  **Rigorous Safety and Validation**: NEVER apply any design recommendations without first ensuring the project compiles successfully. All refactoring must be validated through compilation checks and testing to prevent introducing regressions or breaking existing functionality.
     </goal>
 
     <constraints>
@@ -2645,15 +2646,31 @@ class FileOperationException extends Exception {
     </examples>
 
     <output-format>
+        <!-- CRITICAL: These output requirements work in conjunction with the constraints above.
+             ALL constraints must be satisfied before applying these output formats. -->
         <output-format-list>
-            <output-format-item>Apply object-oriented design principles to improve code quality and maintainability</output-format-item>
-            <output-format-item>Refactor code to follow SOLID principles and eliminate design smells</output-format-item>
+            <output-format-item>**MANDATORY**: Always run compilation check (`./mvnw compile` or `mvn compile`) BEFORE making any design recommendations</output-format-item>
+            <output-format-item>**REQUIRED**: Provide specific, actionable refactoring steps with clear before/after code examples</output-format-item>
+            <output-format-item>**ESSENTIAL**: Apply SOLID principles systematically - identify which principle applies and explain the improvement</output-format-item>
+            <output-format-item>**CRITICAL**: Identify and eliminate design smells (God Class, Feature Envy, Data Clumps, etc.) with concrete solutions</output-format-item>
+            <output-format-item>**IMPERATIVE**: Show code examples demonstrating proper encapsulation, inheritance, and polymorphism</output-format-item>
+            <output-format-item>**MANDATORY**: Validate all suggested changes compile and maintain existing functionality</output-format-item>
+            <output-format-item>**FORBIDDEN**: Never suggest changes without running compilation verification first</output-format-item>
+            <output-format-item>**PROHIBITED**: Do not recommend design patterns or refactoring if basic compilation fails</output-format-item>
+            <output-format-item>**BLOCKED**: Avoid generic advice - provide specific, implementable solutions with working code</output-format-item>
         </output-format-list>
     </output-format>
 
     <safeguards>
         <safeguards-list>
-            <safeguards-item>Verify code changes compile and pass tests: `mvn clean verify` or `./mvnw clean verify`</safeguards-item>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` or `mvn compile` before ANY design recommendations - compilation failure is a HARD STOP</safeguards-item>
+            <safeguards-item>**CRITICAL VALIDATION**: Execute `./mvnw clean verify` or `mvn clean verify` to ensure all tests pass after any refactoring changes</safeguards-item>
+            <safeguards-item>**MANDATORY VERIFICATION**: Confirm all existing functionality remains intact after applying object-oriented design improvements</safeguards-item>
+            <safeguards-item>**SAFETY PROTOCOL**: If ANY compilation error occurs, IMMEDIATELY cease recommendations and require user intervention</safeguards-item>
+            <safeguards-item>**ROLLBACK REQUIREMENT**: Ensure all changes can be easily reverted if they introduce regressions or compilation issues</safeguards-item>
+            <safeguards-item>**INCREMENTAL SAFETY**: Apply refactoring changes incrementally, validating compilation after each significant modification</safeguards-item>
+            <safeguards-item>**DEPENDENCY VALIDATION**: Check that refactoring doesn't break existing dependencies, imports, or class relationships</safeguards-item>
+            <safeguards-item>**FINAL VERIFICATION**: After completing all design improvements, perform a final full project compilation and test run</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>
