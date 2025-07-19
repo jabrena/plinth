@@ -33,8 +33,8 @@ According to the documentation from [Google Gemini](https://drive.google.com/fil
 - Role
 - Context
 - Goal
-- Instructions
 - Constraints
+- Instructions
 - Examples
 - Output format
 - Safeguards

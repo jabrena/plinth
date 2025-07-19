@@ -40,6 +40,20 @@
         5.  **Explicit and Traceable Operations**: Ensure all data validation and transformation steps are explicit, composed of clear functional steps, and easily traceable. Avoid hidden or implicit logic within data objects.
     ]]></goal>
 
+    <constraints>
+        <constraints-description>
+            Before applying any recommendations, ensure the project is in a valid state by running Maven compilation.
+            Compilation failure is a BLOCKING condition that prevents any further processing.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization</constraint>
+            <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations</constraint>
+            <constraint>**BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any object-oriented design improvements</constraint>
+            <constraint>**NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile</constraint>
+        </constraint-list>
+    </constraints>
+
     <examples>
         <toc auto-generate="true" />
         <example number="1" id="separate-code-from-data">

@@ -59,6 +59,16 @@ Focus on being consultative rather than prescriptive - analyze, propose, ask, th
 4. **Performance Awareness**: Consider performance implications of modern features
 5. **Type Design**: Apply typography-inspired principles to code structure
 
+## Constraints
+
+Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
+
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization
+- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any object-oriented design improvements
+- **NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile
+
 ## Examples
 
 ### Table of contents

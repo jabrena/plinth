@@ -61,6 +61,16 @@ These guidelines are built upon the following core principles:
 4.  **Strong Cryptographic Practices**: Employ current, robust, and industry-standard cryptographic algorithms and libraries for all sensitive operations, including hashing (especially for passwords), encryption, and digital signatures. Avoid deprecated or weak algorithms. Ensure cryptographic keys are generated securely, stored safely, and managed properly throughout their lifecycle.
 5.  **Secure Exception Handling**: Manage exceptions in a way that does not expose sensitive information to users or attackers. Log detailed, non-sensitive diagnostic information for developers to aid in debugging, but provide generic, non-revealing error messages to clients. Avoid direct exposure of stack traces or internal system details in error outputs.
 
+## Constraints
+
+Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
+
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization
+- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any object-oriented design improvements
+- **NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile
+
 ## Examples
 
 ### Table of contents

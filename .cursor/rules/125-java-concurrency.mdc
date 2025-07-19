@@ -67,6 +67,16 @@ These guidelines are built upon the following core principles:
 *   **Structured Concurrency**: Use `StructuredTaskScope` to simplify the management of multiple related concurrent tasks as a single unit of work, improving error handling, cancellation, and resource management.
 *   **Scoped Values**: Prefer `ScopedValue` over `ThreadLocal` for sharing immutable data robustly and efficiently across tasks within a dynamically bounded scope, especially when working with virtual threads.
 
+## Constraints
+
+Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
+
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization
+- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any object-oriented design improvements
+- **NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile
+
 ## Examples
 
 ### Table of contents

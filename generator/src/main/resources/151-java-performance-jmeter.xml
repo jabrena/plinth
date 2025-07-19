@@ -68,8 +68,16 @@ Create the entire script with the following content:
 ```bash
 <xi:include href="fragments/run-jmeter.sh" parse="text"/>
 ```
-
                 </step-content>
+                <step-constraints>
+                    <step-constraint-list>
+                        <step-constraint>**DO NOT** create your own version of the performance script</step-constraint>
+                        <step-constraint>**DO NOT** modify the template logic, structure, or features</step-constraint>
+                        <step-constraint>**DO NOT** add enhancements or interpretations</step-constraint>
+                        <step-constraint>**ONLY** use the exact template provided</step-constraint>
+                        <step-constraint>**ONLY** copy the script verbatim without any changes</step-constraint>
+                    </step-constraint-list>
+                </step-constraints>
             </step>
 
             <step number="4">
@@ -124,17 +132,6 @@ Create the entire script with the following content:
             </step>
         </steps>
     </instructions>
-
-    <constraints>
-        <constraints-description>**MANDATORY REQUIREMENT**: Follow the embedded template EXACTLY - do not add, remove, or modify any parts of the performance script template.</constraints-description>
-        <constraint-list>
-            <constraint>**DO NOT** create your own version of the performance script</constraint>
-            <constraint>**DO NOT** modify the template logic, structure, or features</constraint>
-            <constraint>**DO NOT** add enhancements or interpretations</constraint>
-            <constraint>**ONLY** use the exact template from `fragments/java-performance-script-template.sh`</constraint>
-            <constraint>**ONLY** copy the script verbatim without any changes</constraint>
-        </constraint-list>
-    </constraints>
 
     <output-format>
         <output-format-list>

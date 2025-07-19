@@ -61,6 +61,16 @@ These guidelines are built upon the following core principles:
 4. **Effective Documentation**: Strive for self-documenting code. For public APIs, complex algorithms, non-obvious business logic, or any part of the code that isn't immediately clear, provide comprehensive Javadoc. Good documentation aids understanding, usage, and maintenance.
 5. **Robust and Secure Error Handling**: Implement thorough error and exception handling with a strong focus on security. This includes using specific exceptions, managing resources diligently (preferably with try-with-resources), preventing the leakage of sensitive information in logs or error messages, and never "swallowing" exceptions without proper handling or justification. Resilient and secure applications depend on robust error management.
 
+## Constraints
+
+Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
+
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization
+- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any object-oriented design improvements
+- **NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile
+
 ## Examples
 
 ### Table of contents

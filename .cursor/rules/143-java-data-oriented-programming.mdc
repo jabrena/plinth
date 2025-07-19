@@ -61,6 +61,16 @@ These guidelines are built upon the following core principles:
 4.  **Simplicity and Flexibility of Data Structures**: Prefer flat, denormalized data structures where appropriate, using IDs for references rather than deep nesting. Start with generic representations (like `Map<String, Object>`) if the schema is dynamic, converting to specific types only when necessary for processing.
 5.  **Explicit and Traceable Operations**: Ensure all data validation and transformation steps are explicit, composed of clear functional steps, and easily traceable. Avoid hidden or implicit logic within data objects.
 
+## Constraints
+
+Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
+
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization
+- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any object-oriented design improvements
+- **NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile
+
 ## Examples
 
 ### Table of contents

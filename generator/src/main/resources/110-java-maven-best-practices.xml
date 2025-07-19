@@ -25,13 +25,24 @@
         Effective Maven usage involves robust dependency management via `<dependencyManagement>` and BOMs, adherence to the standard directory layout, and centralized plugin management. Build profiles should be used for environment-specific configurations. POMs must be kept readable and maintainable with logical structure and properties for versions. Custom repositories should be declared explicitly and their use minimized, preferably managed via a central repository manager.
         ]]>
         <xi:include href="fragments/system-prompt-behaviour-consultative-interaction-template.md" parse="text"/>
+        ### Core Principles Behind Maven
+
+        Maven is built on several foundational principles that guide its design and usage:
+
+        **1. Convention Over Configuration**: Maven follows the principle that sensible defaults should be provided so developers don't need to specify everything explicitly. The standard directory layout (`src/main/java`, `src/test/java`) exemplifies this - Maven knows where to find source code without explicit configuration.
+        **2. Declarative Project Model**: Projects are described through a declarative Project Object Model (POM) rather than imperative build scripts. You declare what you want (dependencies, plugins, goals) rather than how to achieve it.
+        **3. Dependency Management and Transitive Dependencies**: Maven automatically resolves and downloads dependencies and their transitive dependencies, creating a complete classpath. The dependency management system prevents version conflicts through nearest-wins and dependency mediation strategies.
+        **4. Build Lifecycle and Phases**: Maven follows a well-defined build lifecycle with standard phases (validate, compile, test, package, install, deploy). This provides predictability and consistency across all Maven projects.
+        **5. Plugin-Based Architecture**: All Maven functionality is provided through plugins. Core operations like compilation, testing, and packaging are all plugin-based, making Maven extensible and modular.
+        **6. Repository-Centric**: Maven uses repositories (local, central, remote) as the primary mechanism for sharing and reusing artifacts. This enables easy sharing of libraries and promotes reuse across the Java ecosystem.
+        **7. Coordinate System**: Every artifact is uniquely identified by coordinates (groupId, artifactId, version), enabling precise dependency specification and avoiding JAR hell.
+        **8. Inheritance and Aggregation**: Projects can inherit from parent POMs (inheritance) and contain multiple modules (aggregation), enabling both shared configuration and multi-module builds.
     </goal>
 
     <constraints>
         <constraints-description>
-            <![CDATA[
-            Before applying Maven best practices recommendations, ensure the project is in a valid state by running Maven validation. This helps identify any existing configuration issues that need to be resolved first.
-            ]]>
+            Before applying Maven best practices recommendations, ensure the project is in a valid state by running Maven validation.
+            This helps identify any existing configuration issues that need to be resolved first.
         </constraints-description>
         <constraint-list>
             <constraint>**MANDATORY**: Run `./mvnw validate` or `mvn validate` before applying any Maven best practices recommendations</constraint>

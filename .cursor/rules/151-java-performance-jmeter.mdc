@@ -298,8 +298,16 @@ main() {
 main "$@"
 
 ```
+                
+#### Step Constraints
 
-                ### Step 4: Provide Usage Information
+- **DO NOT** create your own version of the performance script
+- **DO NOT** modify the template logic, structure, or features
+- **DO NOT** add enhancements or interpretations
+- **ONLY** use the exact template provided
+- **ONLY** copy the script verbatim without any changes
+
+### Step 4: Provide Usage Information
 
 **Basic Usage:**
 ```bash
@@ -346,16 +354,6 @@ export JMETER_RAMP_UP=30
 # Quick GUI setup
 ./run-jmeter.sh -g
 ```
-
-## Constraints
-
-**MANDATORY REQUIREMENT**: Follow the embedded template EXACTLY - do not add, remove, or modify any parts of the performance script template.
-
-- **DO NOT** create your own version of the performance script
-- **DO NOT** modify the template logic, structure, or features
-- **DO NOT** add enhancements or interpretations
-- **ONLY** use the exact template from `fragments/java-performance-script-template.sh`
-- **ONLY** copy the script verbatim without any changes
 
 ## Output Format
 

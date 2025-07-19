@@ -29,10 +29,10 @@ alwaysApply: </xsl:text><xsl:value-of select="normalize-space(metadata/cursor-ai
 </xsl:text><xsl:value-of select="role"/>
         <!-- Process goal (Instructions for AI) after role -->
         <xsl:apply-templates select="goal"/>
-        <!-- Process instructions if present -->
-        <xsl:apply-templates select="instructions"/>
         <!-- Apply constraints template if present -->
         <xsl:apply-templates select="constraints"/>
+        <!-- Process instructions if present -->
+        <xsl:apply-templates select="instructions"/>
 
         <!-- Examples section with auto-generated table of contents -->
         <xsl:if test="examples/toc[@auto-generate='true']">

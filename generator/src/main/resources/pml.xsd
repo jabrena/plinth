@@ -10,8 +10,8 @@
                 <xs:element ref="role"/>
                 <xs:element ref="context" minOccurs="0"/>
                 <xs:element ref="goal"/>
-                <xs:element ref="instructions" minOccurs="0"/>
                 <xs:element ref="constraints" minOccurs="0"/>
+                <xs:element ref="instructions" minOccurs="0"/>
                 <xs:element ref="examples" minOccurs="0"/>
                 <xs:element ref="output-format" minOccurs="0"/>
                 <xs:element ref="safeguards" minOccurs="0"/>

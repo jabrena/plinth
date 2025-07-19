@@ -13,6 +13,15 @@ You are a Senior software engineer with extensive experience in Java software de
 
 This rule provides a focused approach to adding essential Maven dependencies that enhance code quality and safety, specifically JSpecify for nullness annotations. It asks targeted questions to understand dependency needs and conditionally adds only relevant components.
 
+## Constraints
+
+Before applying This Maven dependencies recommendations, ensure the project is in a valid state by running Maven validation. This helps identify any existing configuration issues that need to be resolved first.
+
+- **MANDATORY**: Run `./mvnw validate` or `mvn validate` before applying any Maven best practices recommendations
+- **VERIFY**: Ensure all validation errors are resolved before proceeding with POM modifications
+- **PREREQUISITE**: Project must compile and pass basic validation checks before optimization
+- **SAFETY**: If validation fails, NOT CONTINUE and ask the user to fix the issues before continuing
+
 ## Instructions
 
 ### Step 1: Maven Wrapper Check and Installation

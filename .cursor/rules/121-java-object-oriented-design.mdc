@@ -64,6 +64,16 @@ These guidelines are built upon the following core principles:
 *   **Polymorphism**: Allow objects of different types to respond to the same message in their own way, simplifying client code.
 4.  **Proactive Code Smell Management**: Develop the ability to identify common object-oriented design "code smells" (e.g., God Class, Feature Envy, Data Clumps, Refused Bequest). Recognizing and refactoring these smells is crucial for improving the long-term health, maintainability, and clarity of the codebase.
 
+## Constraints
+
+Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
+
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization
+- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any object-oriented design improvements
+- **NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile
+
 ## Examples
 
 ### Table of contents

@@ -41,6 +41,20 @@
         5.  **Maintainability and Focus**: Tests should be easy to maintain. This means avoiding tests that are too complex, test implementation details, or have multiple responsibilities. A well-written test makes it clear what is being tested and why, simplifying debugging and refactoring efforts.
     </goal>
 
+    <constraints>
+        <constraints-description>
+            Before applying any recommendations, ensure the project is in a valid state by running Maven compilation.
+            Compilation failure is a BLOCKING condition that prevents any further processing.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization</constraint>
+            <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations</constraint>
+            <constraint>**BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any object-oriented design improvements</constraint>
+            <constraint>**NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile</constraint>
+        </constraint-list>
+    </constraints>
+
     <examples>
         <toc auto-generate="true" />
 
