@@ -12,6 +12,8 @@ APP_CLASS="info.jab.ms.MainApplication"
 HEAP_SIZE="512m"
 PROFILE_NAME="default"
 FRAMEWORK="auto"
+ENABLE_JFR="false"
+ENABLE_GC_LOG="false"
 
 # Colors for output
 RED='\033[0;31m'
@@ -51,6 +53,8 @@ OPTIONS:
     -c, --class CLASS       Main class to run (default: info.jab.ms.MainApplication)
     -h, --heap SIZE         Heap size (default: 512m)
     -p, --profile PROFILE   Profile to activate (default: default)
+    --jfr                   Enable Java Flight Recorder (disabled by default)
+    --gc-log                Enable GC logging (disabled by default)
     --help                  Show this help message
 
 FRAMEWORK DETECTION:
@@ -70,6 +74,12 @@ EXAMPLES:
 
     # Run with wall-clock profiling
     $0 -m wall
+
+    # Run with JFR enabled for detailed profiling
+    $0 -m cpu --jfr
+
+    # Run with both JFR and GC logging enabled
+    $0 -m alloc --jfr --gc-log
 
 EOF
 }
@@ -100,6 +110,14 @@ while [[ $# -gt 0 ]]; do
         -p|--profile)
             PROFILE_NAME="$2"
             shift 2
+            ;;
+        --jfr)
+            ENABLE_JFR="true"
+            shift
+            ;;
+        --gc-log)
+            ENABLE_GC_LOG="true"
+            shift
             ;;
         --help)
             show_usage
@@ -231,19 +249,29 @@ JVM_FLAGS=(
     "-XX:+DebugNonSafepoints"
     "-XX:+PreserveFramePointer"
 
-    # JFR settings (useful for some profiling modes)
-    "-XX:+FlightRecorder"
-    "-XX:StartFlightRecording=filename=flight-recording-${TIMESTAMP}.jfr"
-
-    # GC logging for memory leak analysis
-    "-Xlog:gc*:gc-${TIMESTAMP}.log:time,tags"
-
     # Security settings for profiler attachment
     "-Djdk.attach.allowAttachSelf=true"
 
     # Optional: Disable C2 compiler for more accurate profiling (uncomment if needed)
     # "-XX:TieredStopAtLevel=1"
 )
+
+# Add JFR settings if enabled
+if [[ "$ENABLE_JFR" == "true" ]]; then
+    JVM_FLAGS+=(
+        "-XX:+FlightRecorder"
+        "-XX:StartFlightRecording=filename=flight-recording-${TIMESTAMP}.jfr"
+    )
+    log_info "JFR enabled: flight-recording-${TIMESTAMP}.jfr"
+fi
+
+# Add GC logging if enabled
+if [[ "$ENABLE_GC_LOG" == "true" ]]; then
+    JVM_FLAGS+=(
+        "-Xlog:gc*:gc-${TIMESTAMP}.log:time,tags"
+    )
+    log_info "GC logging enabled: gc-${TIMESTAMP}.log"
+fi
 
 # Framework-specific arguments
 get_app_args() {

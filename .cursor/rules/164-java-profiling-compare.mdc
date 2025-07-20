@@ -36,7 +36,9 @@ your-project/
 │   └── java-profile.sh # Main profiling script
 ├── results/            # Generated profiling output
 │   ├── *.html          # Flamegraph files
-│   └── *.jfr           # JFR recording files
+│   ├── *.jfr           # JFR recording files
+│   ├── *.log           # Garbage Collection Log files
+│   └── *.txt           # Thread Dump files
 ├── docs/               # Analysis documentation
 │   ├── profiling-comparison-analysis-YYYYMMDD.md
 │   └── profiling-final-results-YYYYMMDD.md
