@@ -38,7 +38,7 @@ This is needed to configure NullAway to analyze your code. For example, if your 
 
 **Question 4**: Do you want to add VAVR for functional programming support?
 
-VAVR is a functional programming library for Java that provides immutable data types, functional control structures (Try, Either, Option), and enhanced collections. It helps write more robust and expressive code using functional programming patterns.
+VAVR is a functional programming library for Java that provides immutable data types, functional control structures (Try & Either), and immutable collections. It helps write more robust and expressive code using functional programming patterns.
 
 **Options**:
 - **y** - Add VAVR dependency for functional programming (recommended for functional style)
