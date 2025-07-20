@@ -22,7 +22,7 @@ Use the following set of Java Cursor Rules to improve your Java development.
 
 | Cursor Rule | Description | Prompt | Notes |
 |----|----|-----|----|
-| [123-java-general-guidelines](.cursor/rules/123-java-general-guidelines.mdc) | Apply general purpose Java guidelines | **Prompt:** `Review my code for general Java best practices using the cursor rule @123-java-general-guidelines` **Note:** Add a package in the context. | Non conversational cursor rule. |
+| [123-java-general-guidelines](.cursor/rules/123-java-general-guidelines.mdc) | Apply general purpose Java guidelines | **Prompt:** `Review my code for general Java best practices using the cursor rule @123-java-general-guidelines` **Note:** Add a package in the context. | Interactive cursor rule. |
 | [124-java-secure-coding](.cursor/rules/124-java-secure-coding.mdc) | Review your coide with Secure Java Coding rules | **Prompt:** `Check my code for security issues using the cursor rule @124-java-secure-coding` **Note:** Add a package in the context. | Interactive cursor rule. |
 | [125-java-concurrency](.cursor/rules/125-java-concurrency.mdc) | Improve your code with Concurrency rules | **Prompt:** `Review my code for concurrency best practices using the cursor rule @125-java-concurrency` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | Interactive cursor rule. |
 | [126-java-logging](.cursor/rules/126-java-logging.mdc) | Apply logging guidelines in your development | **Prompt:** `Help me improve logging using the cursor rule @126-java-logging` **Note:** Add a class or package which consider that it could bye improved by the cursor rule. | Interactive cursor rule. |
