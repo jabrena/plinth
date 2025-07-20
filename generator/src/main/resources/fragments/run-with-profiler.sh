@@ -8,12 +8,10 @@ set -e
 # Default values
 PROFILE_MODE="cpu"
 APP_JAR=""
-APP_CLASS="info.jab.ms.MainApplication"
+APP_CLASS="info.jab.info.MainApplication"
 HEAP_SIZE="512m"
 PROFILE_NAME="default"
 FRAMEWORK="auto"
-ENABLE_JFR="false"
-ENABLE_GC_LOG="false"
 
 # Colors for output
 RED='\033[0;31m'
@@ -50,13 +48,9 @@ OPTIONS:
     -m, --mode MODE         Profiling mode: cpu, alloc, wall, lock (default: cpu)
     -f, --framework FRAMEWORK   Framework: springboot, quarkus, auto (default: auto)
     -j, --jar PATH          Path to application JAR file
-    -c, --class CLASS       Main class to run (default: info.jab.ms.MainApplication)
+    -c, --class CLASS       Main class to run (default: info.jab.info.MainApplication)
     -h, --heap SIZE         Heap size (default: 512m)
     -p, --profile PROFILE   Profile to activate (default: default)
-                           For Spring Boot: sets spring.profiles.active
-                           For Quarkus: sets quarkus.profile
-    --jfr                   Enable Java Flight Recorder (disabled by default)
-    --gc-log                Enable GC logging (disabled by default)
     --help                  Show this help message
 
 FRAMEWORK DETECTION:
@@ -74,20 +68,8 @@ EXAMPLES:
     # Force Quarkus with custom heap size and profile
     $0 -f quarkus -h 1g -p dev
 
-    # Run Spring Boot with virtual threads profile
-    $0 -f springboot -p vt
-
-    # Run Spring Boot with development profile
-    $0 -f springboot -p dev
-
     # Run with wall-clock profiling
     $0 -m wall
-
-    # Run with JFR enabled for detailed profiling
-    $0 -m cpu --jfr
-
-    # Run with both JFR and GC logging enabled
-    $0 -m alloc --jfr --gc-log
 
 EOF
 }
@@ -118,14 +100,6 @@ while [[ $# -gt 0 ]]; do
         -p|--profile)
             PROFILE_NAME="$2"
             shift 2
-            ;;
-        --jfr)
-            ENABLE_JFR="true"
-            shift
-            ;;
-        --gc-log)
-            ENABLE_GC_LOG="true"
-            shift
             ;;
         --help)
             show_usage
@@ -164,7 +138,7 @@ detect_framework() {
     if [[ "$FRAMEWORK" != "auto" ]]; then
         return 0
     fi
-
+    
     # Check pom.xml for framework indicators
     if [[ -f "pom.xml" ]]; then
         if grep -q "spring-boot-starter" pom.xml; then
@@ -175,7 +149,7 @@ detect_framework() {
             log_info "Detected Quarkus from pom.xml"
         fi
     fi
-
+    
     # Check for JAR files if framework still not detected
     if [[ "$FRAMEWORK" == "auto" ]]; then
         if [[ -n "$APP_JAR" ]]; then
@@ -197,7 +171,7 @@ detect_framework() {
             fi
         fi
     fi
-
+    
     # Default to Spring Boot if still not detected
     if [[ "$FRAMEWORK" == "auto" ]]; then
         FRAMEWORK="springboot"
@@ -251,35 +225,25 @@ JVM_FLAGS=(
     # Memory settings
     "-Xms$HEAP_SIZE"
     "-Xmx$HEAP_SIZE"
-
+    
     # Profiling optimization flags
     "-XX:+UnlockDiagnosticVMOptions"
     "-XX:+DebugNonSafepoints"
     "-XX:+PreserveFramePointer"
-
+    
+    # JFR settings (useful for some profiling modes)
+    "-XX:+FlightRecorder"
+    "-XX:StartFlightRecording=filename=flight-recording-${TIMESTAMP}.jfr"
+    
+    # GC logging for memory leak analysis
+    "-Xlog:gc*:gc-${TIMESTAMP}.log:time,tags"
+    
     # Security settings for profiler attachment
     "-Djdk.attach.allowAttachSelf=true"
-
+    
     # Optional: Disable C2 compiler for more accurate profiling (uncomment if needed)
     # "-XX:TieredStopAtLevel=1"
 )
-
-# Add JFR settings if enabled
-if [[ "$ENABLE_JFR" == "true" ]]; then
-    JVM_FLAGS+=(
-        "-XX:+FlightRecorder"
-        "-XX:StartFlightRecording=filename=flight-recording-${TIMESTAMP}.jfr"
-    )
-    log_info "JFR enabled: flight-recording-${TIMESTAMP}.jfr"
-fi
-
-# Add GC logging if enabled
-if [[ "$ENABLE_GC_LOG" == "true" ]]; then
-    JVM_FLAGS+=(
-        "-Xlog:gc*:gc-${TIMESTAMP}.log:time,tags"
-    )
-    log_info "GC logging enabled: gc-${TIMESTAMP}.log"
-fi
 
 # Framework-specific arguments
 get_app_args() {
@@ -287,14 +251,14 @@ get_app_args() {
         springboot)
             APP_ARGS=(
                 "--spring.profiles.active=$PROFILE_NAME"
-                "--logging.level.info.jab.ms=DEBUG"
+                "--logging.level.info.jab.info=DEBUG"
                 "--server.port=8080"
             )
             ;;
         quarkus)
             APP_ARGS=(
                 "-Dquarkus.profile=$PROFILE_NAME"
-                "-Dquarkus.log.category.\"info.jab.ms\".level=DEBUG"
+                "-Dquarkus.log.category.\"info.jab.info\".level=DEBUG"
                 "-Dquarkus.http.port=8080"
             )
             ;;
@@ -308,7 +272,7 @@ get_app_args
 run_with_maven() {
     log_info "Running with Maven..."
     export JAVA_TOOL_OPTIONS="${JVM_FLAGS[*]}"
-
+    
     case $FRAMEWORK in
         springboot)
             # Start Spring Boot application
@@ -338,14 +302,14 @@ run_with_jar() {
                 ;;
         esac
     fi
-
+    
     if [[ ! -f "$APP_JAR" ]]; then
         log_error "Failed to build or find JAR file: $APP_JAR"
         exit 1
     fi
-
+    
     log_info "Running JAR: $APP_JAR"
-
+    
     # Start the application
     java "${JVM_FLAGS[@]}" -jar "$APP_JAR" "${APP_ARGS[@]}"
 }
@@ -353,7 +317,7 @@ run_with_jar() {
 # Function to run with class
 run_with_class() {
     log_info "Running main class: $APP_CLASS"
-
+    
     # Start the application
     java "${JVM_FLAGS[@]}" -cp "target/classes:$(mvn dependency:build-classpath -Dmdep.outputFile=/dev/stdout -q)" "$APP_CLASS" "${APP_ARGS[@]}"
 }
@@ -374,4 +338,4 @@ else
     run_with_class
 fi
 
-log_success "Application completed!"
+log_success "Application completed!" 

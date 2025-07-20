@@ -11,6 +11,7 @@ JMETER_THREADS=${JMETER_THREADS:-1}
 JMETER_RAMP_UP=${JMETER_RAMP_UP:-1}
 OUTPUT_DIR=""
 GUI_MODE=false
+INPUT_JTL=""
 
 # Project paths
 PROJECT_DIR=$(pwd)
@@ -63,8 +64,9 @@ show_usage() {
     echo ""
     echo "DESCRIPTION:"
     echo "  This script executes JMeter load tests in non-GUI mode and generates"
-    echo "  comprehensive HTML reports. It provides flexible configuration options"
-    echo "  and automatically opens the results in your browser."
+    echo "  comprehensive HTML reports. It can also generate reports from existing"
+    echo "  JTL files. It provides flexible configuration options and automatically"
+    echo "  opens the results in your browser."
     echo ""
     echo "USAGE:"
     echo "  $0 [OPTIONS]"
@@ -74,6 +76,7 @@ show_usage() {
     echo "  -t, --threads THREADS  Number of concurrent threads (default: $JMETER_THREADS)"
     echo "  -r, --ramp-up SECONDS  Ramp-up period in seconds (default: $JMETER_RAMP_UP)"
     echo "  -o, --output-dir DIR   Output directory for results and reports (default: target/)"
+    echo "  -j, --jtl FILE        Generate report from existing JTL file (skips test execution)"
     echo "  -g, --gui             Open JMeter GUI instead of running in non-GUI mode"
     echo "  -h, --help            Show this detailed help message"
     echo ""
@@ -87,6 +90,7 @@ show_usage() {
     echo "  $0 -l 500 -t 10 -r 30          # 500 loops, 10 threads, 30s ramp-up"
     echo "  $0 --loops 100 --threads 5     # Long form options"
     echo "  $0 -o /tmp/jmeter-results      # Custom output directory"
+    echo "  $0 -j results.jtl -o reports/  # Generate report from existing JTL file"
     echo "  $0 -g                           # Open JMeter GUI with test plan loaded"
     echo "  JMETER_THREADS=5 $0             # Using environment variables"
     echo ""
@@ -120,6 +124,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         -o|--output-dir)
             OUTPUT_DIR="$2"
+            shift 2
+            ;;
+        -j|--jtl)
+            INPUT_JTL="$2"
             shift 2
             ;;
         -g|--gui)
@@ -158,6 +166,15 @@ check_test_plan() {
         exit 1
     fi
     print_info "Using test plan: $TEST_PLAN"
+}
+
+# Function to check if input JTL file exists
+check_input_jtl() {
+    if [[ ! -f "$INPUT_JTL" ]]; then
+        print_error "Input JTL file not found: $INPUT_JTL"
+        exit 1
+    fi
+    print_info "Using input JTL file: $INPUT_JTL"
 }
 
 # Function to create target directory
@@ -222,16 +239,46 @@ run_jmeter_gui() {
     print_success "JMeter GUI session completed"
 }
 
+# Function to generate report from existing JTL file
+generate_report_from_jtl() {
+    print_info "Generating HTML report from existing JTL file..."
+    print_info "Input JTL: $INPUT_JTL"
+    print_info "Output report directory: $REPORT_DIR"
+
+    # Generate HTML report from existing JTL file
+    jmeter -g "$INPUT_JTL" -o "$REPORT_DIR"
+
+    if [[ $? -eq 0 ]]; then
+        print_success "HTML report generated successfully"
+    else
+        print_error "Failed to generate HTML report"
+        exit 1
+    fi
+}
+
 # Function to show results
 show_results() {
-    print_success "Test Results:"
-    print_info "Results file: $RESULTS_FILE"
-    print_info "HTML report: $REPORT_DIR/index.html"
-    print_info "Log file: $LOG_FILE"
+    print_success "Results:"
 
-    if [[ -f "$RESULTS_FILE" ]]; then
-        TOTAL_SAMPLES=$(tail -n +2 "$RESULTS_FILE" | wc -l)
-        print_info "Total samples: $TOTAL_SAMPLES"
+    if [[ -n "$INPUT_JTL" ]]; then
+        # Report generated from existing JTL
+        print_info "Source JTL file: $INPUT_JTL"
+        print_info "HTML report: $REPORT_DIR/index.html"
+
+        if [[ -f "$INPUT_JTL" ]]; then
+            TOTAL_SAMPLES=$(tail -n +2 "$INPUT_JTL" | wc -l)
+            print_info "Total samples: $TOTAL_SAMPLES"
+        fi
+    else
+        # Results from test execution
+        print_info "Results file: $RESULTS_FILE"
+        print_info "HTML report: $REPORT_DIR/index.html"
+        print_info "Log file: $LOG_FILE"
+
+        if [[ -f "$RESULTS_FILE" ]]; then
+            TOTAL_SAMPLES=$(tail -n +2 "$RESULTS_FILE" | wc -l)
+            print_info "Total samples: $TOTAL_SAMPLES"
+        fi
     fi
 
     # Try to open the HTML report
@@ -255,14 +302,23 @@ main() {
     set_output_paths
 
     check_jmeter
-    check_test_plan
 
-    if [[ "$GUI_MODE" == "true" ]]; then
+    if [[ -n "$INPUT_JTL" ]]; then
+        # Report generation mode - generate report from existing JTL file
+        check_input_jtl
+        create_target_dir
+        clean_previous_results
+        generate_report_from_jtl
+        show_results
+        print_success "HTML report generated successfully!"
+    elif [[ "$GUI_MODE" == "true" ]]; then
         # GUI mode - just open JMeter with the test plan
+        check_test_plan
         run_jmeter_gui
         print_success "JMeter GUI session completed successfully!"
     else
         # Non-GUI mode - run automated test and generate report
+        check_test_plan
         create_target_dir
         clean_previous_results
         run_jmeter_test
