@@ -346,6 +346,7 @@ show_profiling_menu() {
             ;;
         "GC Analysis")
             echo -e "${GREEN}*** RECOMMENDED FOR YOUR PROBLEM ***${NC}"
+            echo "14. Garbage Collection Log (custom duration) ⭐"
             echo "5. Interactive Heatmap (60s) ⭐"
             echo "2. Memory Allocation Profiling (30s) ⭐"
             echo ""
@@ -375,6 +376,9 @@ show_profiling_menu() {
     echo "9. View recent results"
     echo "10. Memory Leak Detection (5min)"
     echo "11. Complete Memory Analysis Workflow"
+    echo "12. JFR Recording (custom duration)"
+    echo "13. Thread Dump (instant snapshot)"
+    echo "14. Garbage Collection Log (custom duration)"
     echo "0. Exit profiler"
     echo -e "${BLUE}===========================================${NC}"
 }
@@ -478,9 +482,22 @@ execute_profiling() {
                 "$PROFILER_DIR/current/bin/asprof" -d "$DURATION" -f "$RESULTS_DIR/cpu-flamegraph-$(date +%Y%m%d-%H%M%S).html" "$PID"
             fi
             ;;
-        9)
+                9)
             echo -e "${YELLOW}Recent profiling results in $RESULTS_DIR:${NC}"
-            ls -lat "$RESULTS_DIR"/*.html "$RESULTS_DIR"/*.jfr 2>/dev/null | head -10 || echo "No profiling files found"
+            ls -lat "$RESULTS_DIR"/*.html "$RESULTS_DIR"/*.jfr "$RESULTS_DIR"/*.txt "$RESULTS_DIR"/*.log 2>/dev/null | head -10 || echo "No profiling files found"
+
+            # Show breakdown by file type
+            echo ""
+            echo -e "${BLUE}File types:${NC}"
+            HTML_COUNT=$(ls "$RESULTS_DIR"/*.html 2>/dev/null | wc -l | xargs)
+            JFR_COUNT=$(ls "$RESULTS_DIR"/*.jfr 2>/dev/null | wc -l | xargs)
+            TXT_COUNT=$(ls "$RESULTS_DIR"/*.txt 2>/dev/null | wc -l | xargs)
+            LOG_COUNT=$(ls "$RESULTS_DIR"/*.log 2>/dev/null | wc -l | xargs)
+
+            echo "  HTML files (flame graphs): $HTML_COUNT"
+            echo "  JFR files (recordings): $JFR_COUNT"
+            echo "  TXT files (thread dumps): $TXT_COUNT"
+            echo "  LOG files (GC logs): $LOG_COUNT"
             return
             ;;
         10)
@@ -506,6 +523,225 @@ execute_profiling() {
             echo "- heap-analysis-$TIMESTAMP.html (60s detailed heap)"
             echo "- memory-leak-complete-$TIMESTAMP.html (5min leak detection)"
             ;;
+        12)
+            echo -e "${GREEN}Creating JFR Recording...${NC}"
+            read -p "Enter duration in seconds (default: 60): " JFR_DURATION
+            JFR_DURATION=${JFR_DURATION:-60}
+
+            if ! [[ "$JFR_DURATION" =~ ^[0-9]+$ ]] || [ "$JFR_DURATION" -lt 1 ]; then
+                echo -e "${RED}Invalid duration. Using default 60 seconds.${NC}"
+                JFR_DURATION=60
+            fi
+
+            TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+            JFR_FILE="$RESULTS_DIR/recording-${JFR_DURATION}s-$TIMESTAMP.jfr"
+
+            echo -e "${BLUE}Starting JFR recording for $JFR_DURATION seconds...${NC}"
+            "$PROFILER_DIR/current/bin/asprof" -d "$JFR_DURATION" -o jfr -f "$JFR_FILE" "$PID"
+
+            if [ $? -eq 0 ]; then
+                echo -e "${GREEN}JFR recording completed: $JFR_FILE${NC}"
+                echo -e "${YELLOW}You can analyze this JFR file with:${NC}"
+                echo "  - JProfiler"
+                echo "  - VisualVM"
+                echo "  - Mission Control"
+                echo "  - jfrconv (included with async-profiler)"
+            else
+                echo -e "${RED}JFR recording failed${NC}"
+            fi
+            ;;
+        13)
+            echo -e "${GREEN}Creating Thread Dump...${NC}"
+            TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+            THREAD_DUMP_FILE="$RESULTS_DIR/threaddump-$TIMESTAMP.txt"
+
+            # Try jstack first (if available), then fall back to async-profiler
+            if command -v jstack >/dev/null 2>&1; then
+                echo -e "${BLUE}Using jstack to generate thread dump...${NC}"
+                jstack "$PID" > "$THREAD_DUMP_FILE" 2>&1
+                JSTACK_EXIT_CODE=$?
+
+                if [ $JSTACK_EXIT_CODE -eq 0 ] && [ -s "$THREAD_DUMP_FILE" ]; then
+                    echo -e "${GREEN}Thread dump completed: $THREAD_DUMP_FILE${NC}"
+                else
+                    echo -e "${YELLOW}jstack failed, trying async-profiler...${NC}"
+                    "$PROFILER_DIR/current/bin/asprof" -d 1 -e cpu -o text -f "$THREAD_DUMP_FILE" "$PID" >/dev/null 2>&1
+                    if [ $? -eq 0 ]; then
+                        echo -e "${GREEN}Thread dump completed: $THREAD_DUMP_FILE${NC}"
+                    else
+                        echo -e "${RED}Thread dump failed with both methods${NC}"
+                        rm -f "$THREAD_DUMP_FILE"
+                    fi
+                fi
+            else
+                echo -e "${BLUE}jstack not available, using async-profiler...${NC}"
+                # Use async-profiler to get thread information
+                "$PROFILER_DIR/current/bin/asprof" -d 1 -e cpu -o text -f "$THREAD_DUMP_FILE" "$PID" >/dev/null 2>&1
+                if [ $? -eq 0 ]; then
+                    echo -e "${GREEN}Thread dump completed: $THREAD_DUMP_FILE${NC}"
+                else
+                    echo -e "${RED}Thread dump failed${NC}"
+                    rm -f "$THREAD_DUMP_FILE"
+                fi
+            fi
+
+                         if [ -f "$THREAD_DUMP_FILE" ]; then
+                 echo -e "${YELLOW}Thread dump summary:${NC}"
+                 echo "  File: $THREAD_DUMP_FILE"
+                 echo "  Size: $(wc -l < "$THREAD_DUMP_FILE") lines"
+                 echo -e "${BLUE}Use 'cat $THREAD_DUMP_FILE' to view the complete thread dump${NC}"
+             fi
+             ;;
+        14)
+            echo -e "${GREEN}Collecting Garbage Collection Logs...${NC}"
+            read -p "Enter duration in seconds (default: 300): " GC_DURATION
+            GC_DURATION=${GC_DURATION:-300}
+
+            if ! [[ "$GC_DURATION" =~ ^[0-9]+$ ]] || [ "$GC_DURATION" -lt 1 ]; then
+                echo -e "${RED}Invalid duration. Using default 300 seconds.${NC}"
+                GC_DURATION=300
+            fi
+
+            TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+            GC_LOG_FILE="$RESULTS_DIR/gc-${GC_DURATION}s-$TIMESTAMP.log"
+
+            echo -e "${BLUE}Collecting GC logs for $GC_DURATION seconds...${NC}"
+
+            # Get Java version to determine the best approach
+            JAVA_VERSION=$(jcmd "$PID" VM.version 2>/dev/null | grep -E "Java version|OpenJDK" | head -1)
+
+            # Try different approaches for GC logging
+            GC_SUCCESS=false
+
+            # Method 1: Try jcmd with unified logging (Java 9+)
+            if command -v jcmd >/dev/null 2>&1; then
+                echo -e "${BLUE}Attempting to enable GC logging via jcmd...${NC}"
+
+                # First, try to enable GC logging dynamically
+                jcmd "$PID" VM.log output="$GC_LOG_FILE" what=gc 2>/dev/null
+                if [ $? -eq 0 ]; then
+                    echo -e "${GREEN}GC logging enabled via jcmd${NC}"
+                    echo "Collecting logs for $GC_DURATION seconds..."
+                    sleep "$GC_DURATION"
+
+                    # Disable logging
+                    jcmd "$PID" VM.log output=none what=gc 2>/dev/null
+                    GC_SUCCESS=true
+                fi
+            fi
+
+            # Method 2: Use async-profiler to capture GC events if jcmd failed
+            if [ "$GC_SUCCESS" = false ]; then
+                echo -e "${YELLOW}jcmd approach failed, using async-profiler for GC events...${NC}"
+
+                # Use async-profiler to capture GC events
+                "$PROFILER_DIR/current/bin/asprof" -e gc -d "$GC_DURATION" -o text -f "$GC_LOG_FILE" "$PID" 2>/dev/null
+
+                if [ $? -eq 0 ] && [ -s "$GC_LOG_FILE" ]; then
+                    GC_SUCCESS=true
+                    echo -e "${GREEN}GC events captured via async-profiler${NC}"
+                fi
+            fi
+
+            # Method 3: Try to find existing GC logs from the JVM
+            if [ "$GC_SUCCESS" = false ]; then
+                echo -e "${YELLOW}Direct GC logging failed, searching for existing GC logs...${NC}"
+
+                # Try to find GC log files associated with the process
+                PROC_DIR="/proc/$PID"
+                if [ -d "$PROC_DIR" ]; then
+                    # Look for open file descriptors that might be GC logs
+                    GC_LOG_CANDIDATES=$(lsof -p "$PID" 2>/dev/null | grep -E "\\.log|gc" | awk '{print $NF}' | sort -u)
+
+                    if [ ! -z "$GC_LOG_CANDIDATES" ]; then
+                        echo -e "${BLUE}Found potential GC log files:${NC}"
+                        echo "$GC_LOG_CANDIDATES"
+
+                        # Monitor the most recent log file
+                        LATEST_LOG=$(echo "$GC_LOG_CANDIDATES" | head -1)
+                        if [ -f "$LATEST_LOG" ]; then
+                            echo -e "${BLUE}Monitoring existing log: $LATEST_LOG${NC}"
+
+                            # Get current size and tail the log for the specified duration
+                            INITIAL_SIZE=$(wc -l < "$LATEST_LOG" 2>/dev/null || echo "0")
+
+                            # Start monitoring in background and collect for specified duration
+                            timeout "$GC_DURATION" tail -f "$LATEST_LOG" > "$GC_LOG_FILE" 2>/dev/null &
+                            TAIL_PID=$!
+
+                            echo "Monitoring GC log for $GC_DURATION seconds..."
+                            wait $TAIL_PID 2>/dev/null
+
+                            if [ -s "$GC_LOG_FILE" ]; then
+                                GC_SUCCESS=true
+                                echo -e "${GREEN}GC log monitoring completed${NC}"
+                            fi
+                        fi
+                    fi
+                fi
+            fi
+
+            # Method 4: Create a custom GC monitoring script using jstat
+            if [ "$GC_SUCCESS" = false ]; then
+                echo -e "${YELLOW}Falling back to jstat for GC monitoring...${NC}"
+
+                if command -v jstat >/dev/null 2>&1; then
+                    echo -e "${BLUE}Using jstat to collect GC statistics...${NC}"
+
+                    # Create header
+                    echo "# GC Statistics collected via jstat" > "$GC_LOG_FILE"
+                    echo "# Timestamp,S0C,S1C,S0U,S1U,EC,EU,OC,OU,MC,MU,CCSC,CCSU,YGC,YGCT,FGC,FGCT,GCT" >> "$GC_LOG_FILE"
+
+                    # Collect GC stats every second for the specified duration
+                    END_TIME=$(($(date +%s) + GC_DURATION))
+
+                    while [ $(date +%s) -lt $END_TIME ]; do
+                        TIMESTAMP=$(date '+%Y-%m-%d %H:%M:%S')
+                        GC_STATS=$(jstat -gc "$PID" 2>/dev/null | tail -1)
+                        if [ $? -eq 0 ] && [ ! -z "$GC_STATS" ]; then
+                            echo "$TIMESTAMP,$GC_STATS" >> "$GC_LOG_FILE"
+                        fi
+                        sleep 1
+                    done
+
+                    if [ -s "$GC_LOG_FILE" ]; then
+                        GC_SUCCESS=true
+                        echo -e "${GREEN}GC statistics collection completed${NC}"
+                    fi
+                fi
+            fi
+
+            # Report results
+            if [ "$GC_SUCCESS" = true ] && [ -f "$GC_LOG_FILE" ]; then
+                echo -e "${GREEN}GC log collection completed: $GC_LOG_FILE${NC}"
+                echo -e "${YELLOW}Log summary:${NC}"
+                echo "  File: $GC_LOG_FILE"
+                echo "  Size: $(wc -l < "$GC_LOG_FILE") lines"
+                echo "  Duration: $GC_DURATION seconds"
+
+                # Show a few sample lines
+                echo -e "${BLUE}Sample log entries (first 5 lines):${NC}"
+                head -5 "$GC_LOG_FILE" 2>/dev/null || echo "  (No content to preview)"
+
+                echo -e "${YELLOW}Analysis suggestions:${NC}"
+                echo "  - Look for frequent GC events indicating memory pressure"
+                echo "  - Check for long GC pause times"
+                echo "  - Monitor heap utilization trends"
+                echo "  - Analyze collection generation patterns"
+            else
+                echo -e "${RED}GC log collection failed${NC}"
+                echo -e "${YELLOW}This might happen if:${NC}"
+                echo "  - The JVM doesn't have GC logging enabled"
+                echo "  - Insufficient permissions to access GC logs"
+                echo "  - The Java version doesn't support dynamic GC logging"
+                echo -e "${BLUE}Consider starting your application with GC logging enabled:${NC}"
+                echo "  Java 8: -XX:+PrintGC -XX:+PrintGCDetails -Xloggc:gc.log"
+                echo "  Java 9+: -Xlog:gc*:gc.log"
+
+                # Clean up empty file
+                [ -f "$GC_LOG_FILE" ] && [ ! -s "$GC_LOG_FILE" ] && rm -f "$GC_LOG_FILE"
+            fi
+            ;;
         0)
             echo -e "${GREEN}Exiting profiler. Goodbye!${NC}"
             exit 0
@@ -519,7 +755,7 @@ execute_profiling() {
     if [ $option -ne 9 ] && [ $option -ne 0 ]; then
         echo -e "${GREEN}Profiling completed!${NC}"
         echo -e "${YELLOW}Generated files in $RESULTS_DIR:${NC}"
-        ls -lat "$RESULTS_DIR"/*.html "$RESULTS_DIR"/*.jfr 2>/dev/null | head -5 || echo "No profiling files found"
+        ls -lat "$RESULTS_DIR"/*.html "$RESULTS_DIR"/*.jfr "$RESULTS_DIR"/*.txt "$RESULTS_DIR"/*.log 2>/dev/null | head -5 || echo "No profiling files found"
 
         # Automatically open the latest file if on macOS
         if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -558,7 +794,7 @@ while true; do
     fi
 
     show_profiling_menu
-    read -p "Select profiling option (0-11): " PROFILE_TYPE
+    read -p "Select profiling option (0-14): " PROFILE_TYPE
     execute_profiling "$PROFILE_TYPE"
 
     echo ""

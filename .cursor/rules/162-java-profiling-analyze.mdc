@@ -33,9 +33,11 @@ your-project/
 └── profiler/               # ← All profiling-related files
 ├── scripts/            # ← Profiling scripts and tools
 │   └── java-profile.sh # ← Main profiling script
-├── results/            # ← Generated profiling output
-│   ├── *.html          # ← Flamegraph files
-│   └── *.jfr           # ← JFR recording files
+├── results/            # Generated profiling output
+│   ├── *.html          # Flamegraph files
+│   ├── *.jfr           # JFR recording files
+│   ├── *.log           # Garbage Collection Log files
+│   └── *.txt           # Thread Dump files
 ├── current/            # ← Symlink to current profiler version
 └── async-profiler-*/   # ← Downloaded profiler binaries
 ```
@@ -59,6 +61,8 @@ Look for these file types:
 - `inverted-flamegraph-*.html` - Bottom-up call analysis
 - `memory-leak-*.html` - Memory leak detection reports
 - `*.jfr` - Java Flight Recorder files
+- `*.txt` - Thread dump files
+- `*.log` - GC log files
 
 ### Step 2: Problem Identification Process
 
