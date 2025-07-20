@@ -9,14 +9,28 @@ set -e
 JMETER_LOOPS=${JMETER_LOOPS:-1000}
 JMETER_THREADS=${JMETER_THREADS:-1}
 JMETER_RAMP_UP=${JMETER_RAMP_UP:-1}
+OUTPUT_DIR=""
 GUI_MODE=false
 
 # Project paths
 PROJECT_DIR=$(pwd)
 TEST_PLAN="$PROJECT_DIR/src/test/resources/jmeter/load-test.jmx"
-RESULTS_FILE="$PROJECT_DIR/target/jmeter-results.jtl"
-REPORT_DIR="$PROJECT_DIR/target/jmeter-report"
-LOG_FILE="$PROJECT_DIR/jmeter.log"
+
+# Function to set output paths based on output directory
+set_output_paths() {
+    local base_dir
+    local timestamp=$(date +%Y%m%d-%H%M%S)
+
+    if [[ -n "$OUTPUT_DIR" ]]; then
+        base_dir="$OUTPUT_DIR"
+    else
+        base_dir="$PROJECT_DIR/target"
+    fi
+
+    RESULTS_FILE="$base_dir/jmeter-result-$timestamp.jtl"
+    REPORT_DIR="$base_dir/jmeter-report-$timestamp"
+    LOG_FILE="$base_dir/jmeter-$timestamp.log"
+}
 
 # Colors for output
 RED='\033[0;31m'
@@ -59,6 +73,7 @@ show_usage() {
     echo "  -l, --loops LOOPS      Number of loops per thread (default: $JMETER_LOOPS)"
     echo "  -t, --threads THREADS  Number of concurrent threads (default: $JMETER_THREADS)"
     echo "  -r, --ramp-up SECONDS  Ramp-up period in seconds (default: $JMETER_RAMP_UP)"
+    echo "  -o, --output-dir DIR   Output directory for results and reports (default: target/)"
     echo "  -g, --gui             Open JMeter GUI instead of running in non-GUI mode"
     echo "  -h, --help            Show this detailed help message"
     echo ""
@@ -71,13 +86,15 @@ show_usage() {
     echo "  $0                              # Run with defaults (1000 loops, 1 thread, 1s ramp-up)"
     echo "  $0 -l 500 -t 10 -r 30          # 500 loops, 10 threads, 30s ramp-up"
     echo "  $0 --loops 100 --threads 5     # Long form options"
+    echo "  $0 -o /tmp/jmeter-results      # Custom output directory"
     echo "  $0 -g                           # Open JMeter GUI with test plan loaded"
     echo "  JMETER_THREADS=5 $0             # Using environment variables"
     echo ""
     echo "OUTPUT FILES:"
-    echo "  target/jmeter-results.jtl       # Raw test results (JTL format)"
-    echo "  target/jmeter-report/index.html # HTML dashboard report"
-    echo "  jmeter.log                      # JMeter execution log"
+    echo "  [output-dir]/jmeter-result-YYYYMMDD-HHMMSS.jtl       # Raw test results (JTL format)"
+    echo "  [output-dir]/jmeter-report-YYYYMMDD-HHMMSS/index.html # HTML dashboard report"
+    echo "  [output-dir]/jmeter-YYYYMMDD-HHMMSS.log              # JMeter execution log"
+    echo "  (default output-dir is target/, YYYYMMDD-HHMMSS is current date and time)"
     echo ""
     echo "REQUIREMENTS:"
     echo "  - JMeter must be installed and available in PATH"
@@ -99,6 +116,10 @@ while [[ $# -gt 0 ]]; do
             ;;
         -r|--ramp-up)
             JMETER_RAMP_UP="$2"
+            shift 2
+            ;;
+        -o|--output-dir)
+            OUTPUT_DIR="$2"
             shift 2
             ;;
         -g|--gui)
@@ -143,7 +164,7 @@ check_test_plan() {
 create_target_dir() {
     mkdir -p "$(dirname "$RESULTS_FILE")"
     mkdir -p "$REPORT_DIR"
-    print_info "Created target directories"
+    print_info "Created output directories"
 }
 
 # Function to clean previous results
@@ -229,6 +250,9 @@ show_results() {
 main() {
     print_info "JMeter Load Test Script"
     print_info "======================="
+
+    # Set output paths after parsing arguments
+    set_output_paths
 
     check_jmeter
     check_test_plan
