@@ -48,4 +48,4 @@ Once you have installed the cursor rules in the path `./cursor/rules`, type the 
 Create an java development guide using the cursor rule @100-java-cursor-rules-list
 ```
 
-**Note** ⚠️ Drag and drop the file @100-java-cursor-rules-list into the chat area to add the effect from the cursor rule.
+**Note:** ⚠️ Drag and drop the file @100-java-cursor-rules-list into the chat area to add the effect from the cursor rule.
