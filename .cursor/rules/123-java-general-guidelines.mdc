@@ -379,10 +379,21 @@ public class UnsafeFileProcessor {
 
 ## Output Format
 
-- Apply the Java general guidelines to improve code quality and maintainability
-- Follow naming conventions, formatting rules, and documentation standards
-- Implement comprehensive error handling with security considerations
+- **ANALYZE** the current codebase to identify specific coding standard violations and categorize them by impact (CRITICAL, MAINTAINABILITY, READABILITY, CONSISTENCY) and area (naming conventions, formatting, imports, documentation, error handling)
+- **CATEGORIZE** coding standard issues found: Naming Convention Violations (inconsistent package/class/method/variable naming), Formatting Inconsistencies (indentation, brace style, spacing), Import Organization Problems (wildcard imports, poor grouping), Documentation Gaps (missing Javadoc, incomplete API documentation), and Error Handling Weaknesses (generic exceptions, poor resource management, information leakage)
+- **PROPOSE** multiple improvement options for each identified issue with clear trade-offs: Naming standardization approaches (automated vs manual), formatting strategies (IDE configuration vs code formatter tools), import organization methods (IDE-based vs manual restructuring), documentation enhancement techniques (comprehensive vs minimal approaches), and error handling improvement patterns (specific exception hierarchies vs generic handling)
+- **EXPLAIN** the benefits and considerations of each proposed solution: Readability improvements, maintainability enhancements, team consistency benefits, tooling integration options, and implementation complexity for different coding standard approaches
+- **PRESENT** comprehensive coding standard improvement strategies: Team coding style guide adoption, automated formatting tool integration, documentation standard implementations, error handling pattern establishment, and code quality measurement approaches
+- **ASK** the user to choose their preferred approach for each category of coding standard improvements, considering their team preferences, existing conventions, and tooling constraints rather than applying all changes automatically
+- **VALIDATE** that any proposed coding standard changes will compile successfully, maintain existing functionality, align with team conventions, and improve overall code quality before implementation
 
 ## Safeguards
 
-- Verify code changes compile and pass tests: `mvn clean verify` or `./mvnw clean verify`
+- **BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` before ANY recommendations to ensure project baseline
+- **INCREMENTAL VALIDATION**: After each category of changes (naming, formatting, imports, etc.), verify compilation still succeeds
+- **CRITICAL TESTING**: Execute `./mvnw clean verify` to ensure all tests pass after implementation
+- **ROLLBACK READINESS**: Ensure all changes can be easily reverted by maintaining clear change boundaries
+- **SECURITY VALIDATION**: Verify that error handling improvements don't introduce information leakage vulnerabilities
+- **DOCUMENTATION INTEGRITY**: Confirm that Javadoc changes are syntactically correct and don't break documentation generation
+- **IMPORT SAFETY**: Validate that import reorganization doesn't introduce compilation errors or unintended dependencies
+- **FORMATTING CONSISTENCY**: Ensure formatting changes maintain consistency across the entire codebase, not just modified files

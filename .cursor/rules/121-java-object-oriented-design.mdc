@@ -2519,15 +2519,13 @@ public class FileManager {
 
 ## Output Format
 
-- **MANDATORY**: Always run compilation check (`./mvnw compile` or `mvn compile`) BEFORE making any design recommendations
-- **REQUIRED**: Provide specific, actionable refactoring steps with clear before/after code examples
-- **ESSENTIAL**: Apply SOLID principles systematically - identify which principle applies and explain the improvement
-- **CRITICAL**: Identify and eliminate design smells (God Class, Feature Envy, Data Clumps, etc.) with concrete solutions
-- **IMPERATIVE**: Show code examples demonstrating proper encapsulation, inheritance, and polymorphism
-- **MANDATORY**: Validate all suggested changes compile and maintain existing functionality
-- **FORBIDDEN**: Never suggest changes without running compilation verification first
-- **PROHIBITED**: Do not recommend design patterns or refactoring if basic compilation fails
-- **BLOCKED**: Avoid generic advice - provide specific, implementable solutions with working code
+- **ANALYZE** the current object-oriented design to identify specific issues and categorize them by impact (CRITICAL, MAINTAINABILITY, FLEXIBILITY, CODE_QUALITY) and design area (SOLID violations, code smells, encapsulation problems, inheritance misuse, composition opportunities)
+- **CATEGORIZE** object-oriented design problems found: SOLID Principle Violations (SRP, OCP, LSP, ISP, DIP breaches), Code Smells (God Class, Feature Envy, Data Clumps, Refused Bequest, Shotgun Surgery), Encapsulation Issues (exposed internal state, inappropriate access levels), Inheritance Problems (incorrect is-a relationships, LSP violations), and Composition Opportunities (favor composition over inheritance situations)
+- **PROPOSE** multiple refactoring options for each identified issue with clear trade-offs: SOLID compliance strategies (single responsibility extraction, interface segregation approaches, dependency inversion techniques), code smell remediation approaches (class decomposition vs method extraction vs design pattern application), encapsulation improvement methods (access level adjustments vs wrapper creation), inheritance restructuring options (hierarchy flattening vs interface extraction vs composition adoption)
+- **EXPLAIN** the benefits and considerations of each proposed solution: Maintainability improvements, flexibility enhancements, testability benefits, performance implications, migration complexity, and team adoption considerations for different object-oriented design approaches
+- **PRESENT** comprehensive design improvement strategies: SOLID principle application methodologies, design pattern implementation options, refactoring techniques (Extract Class, Move Method, Replace Inheritance with Composition), architectural restructuring approaches, and object-oriented best practice adoption paths
+- **ASK** the user to choose their preferred approach for each category of object-oriented design improvements, considering their codebase complexity, team expertise, maintenance requirements, and refactoring timeline rather than implementing all changes automatically
+- **VALIDATE** that any proposed object-oriented design changes will compile successfully, maintain existing functionality, preserve business logic integrity, and align with established architectural patterns before implementation
 
 ## Safeguards
 

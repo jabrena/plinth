@@ -652,13 +652,13 @@ my-app/
 
     <output-format>
         <output-format-list>
-            <output-format-item>Analyze Maven POM files for best practices violations and improvement opportunities</output-format-item>
-            <output-format-item>Present structured analysis with prioritized improvement recommendations using Impact/Effort scoring</output-format-item>
-            <output-format-item>Identify specific Maven configuration issues: outdated versions, missing properties, suboptimal plugin configurations</output-format-item>
-            <output-format-item>Provide multiple solution options with clear pros/cons for each issue</output-format-item>
-            <output-format-item>Wait for user selection before implementing any changes</output-format-item>
-            <output-format-item>When implementing, apply only the chosen solution without adding unrequested plugins or dependencies</output-format-item>
-            <output-format-item>**DOCUMENT what was added vs what was preserved** in the final summary</output-format-item>
+            <output-format-item>**ANALYZE** Maven POM files to identify specific best practices violations and categorize them by impact (CRITICAL, MAINTENANCE, PERFORMANCE, STRUCTURE) and area (dependency management, plugin configuration, project structure, repository management, version control)</output-format-item>
+            <output-format-item>**CATEGORIZE** Maven configuration issues found: Dependency Management Problems (missing dependencyManagement, hardcoded versions, version conflicts, unused dependencies), Plugin Configuration Issues (outdated versions, missing configurations, suboptimal settings), Project Structure Violations (non-standard layouts, poor POM organization, missing properties), and Repository Management Concerns (insecure repositories, missing declarations, transitive dependencies)</output-format-item>
+            <output-format-item>**PROPOSE** multiple Maven improvement options for each identified issue with clear trade-offs: Dependency management strategies (BOM adoption vs parent POM vs properties centralization), plugin modernization approaches (version updates vs configuration improvements vs new plugin additions), project structure optimization methods (POM reorganization vs module separation vs profile utilization)</output-format-item>
+            <output-format-item>**EXPLAIN** the benefits and considerations of each proposed Maven solution: Build reliability improvements, dependency resolution benefits, maintenance complexity reductions, performance optimizations, security enhancements, and team productivity impacts for different Maven configuration approaches</output-format-item>
+            <output-format-item>**PRESENT** comprehensive Maven optimization strategies: Dependency management best practices (BOM usage, version property centralization, scope optimization), plugin configuration improvements (version standardization, goal binding optimization, profile utilization), and project structure enhancement methods (POM organization, module architecture, repository management)</output-format-item>
+            <output-format-item>**ASK** the user to choose their preferred approach for each category of Maven improvements, considering their project complexity, team expertise, build requirements, and migration timeline rather than implementing all changes automatically</output-format-item>
+            <output-format-item>**VALIDATE** that any proposed Maven changes will compile successfully, maintain existing build behavior, preserve dependency compatibility, and align with established project conventions before implementation</output-format-item>
         </output-format-list>
     </output-format>
 

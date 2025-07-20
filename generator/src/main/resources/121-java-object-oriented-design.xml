@@ -2646,18 +2646,14 @@ class FileOperationException extends Exception {
     </examples>
 
     <output-format>
-        <!-- CRITICAL: These output requirements work in conjunction with the constraints above.
-             ALL constraints must be satisfied before applying these output formats. -->
         <output-format-list>
-            <output-format-item>**MANDATORY**: Always run compilation check (`./mvnw compile` or `mvn compile`) BEFORE making any design recommendations</output-format-item>
-            <output-format-item>**REQUIRED**: Provide specific, actionable refactoring steps with clear before/after code examples</output-format-item>
-            <output-format-item>**ESSENTIAL**: Apply SOLID principles systematically - identify which principle applies and explain the improvement</output-format-item>
-            <output-format-item>**CRITICAL**: Identify and eliminate design smells (God Class, Feature Envy, Data Clumps, etc.) with concrete solutions</output-format-item>
-            <output-format-item>**IMPERATIVE**: Show code examples demonstrating proper encapsulation, inheritance, and polymorphism</output-format-item>
-            <output-format-item>**MANDATORY**: Validate all suggested changes compile and maintain existing functionality</output-format-item>
-            <output-format-item>**FORBIDDEN**: Never suggest changes without running compilation verification first</output-format-item>
-            <output-format-item>**PROHIBITED**: Do not recommend design patterns or refactoring if basic compilation fails</output-format-item>
-            <output-format-item>**BLOCKED**: Avoid generic advice - provide specific, implementable solutions with working code</output-format-item>
+            <output-format-item>**ANALYZE** the current object-oriented design to identify specific issues and categorize them by impact (CRITICAL, MAINTAINABILITY, FLEXIBILITY, CODE_QUALITY) and design area (SOLID violations, code smells, encapsulation problems, inheritance misuse, composition opportunities)</output-format-item>
+            <output-format-item>**CATEGORIZE** object-oriented design problems found: SOLID Principle Violations (SRP, OCP, LSP, ISP, DIP breaches), Code Smells (God Class, Feature Envy, Data Clumps, Refused Bequest, Shotgun Surgery), Encapsulation Issues (exposed internal state, inappropriate access levels), Inheritance Problems (incorrect is-a relationships, LSP violations), and Composition Opportunities (favor composition over inheritance situations)</output-format-item>
+            <output-format-item>**PROPOSE** multiple refactoring options for each identified issue with clear trade-offs: SOLID compliance strategies (single responsibility extraction, interface segregation approaches, dependency inversion techniques), code smell remediation approaches (class decomposition vs method extraction vs design pattern application), encapsulation improvement methods (access level adjustments vs wrapper creation), inheritance restructuring options (hierarchy flattening vs interface extraction vs composition adoption)</output-format-item>
+            <output-format-item>**EXPLAIN** the benefits and considerations of each proposed solution: Maintainability improvements, flexibility enhancements, testability benefits, performance implications, migration complexity, and team adoption considerations for different object-oriented design approaches</output-format-item>
+            <output-format-item>**PRESENT** comprehensive design improvement strategies: SOLID principle application methodologies, design pattern implementation options, refactoring techniques (Extract Class, Move Method, Replace Inheritance with Composition), architectural restructuring approaches, and object-oriented best practice adoption paths</output-format-item>
+            <output-format-item>**ASK** the user to choose their preferred approach for each category of object-oriented design improvements, considering their codebase complexity, team expertise, maintenance requirements, and refactoring timeline rather than implementing all changes automatically</output-format-item>
+            <output-format-item>**VALIDATE** that any proposed object-oriented design changes will compile successfully, maintain existing functionality, preserve business logic integrity, and align with established architectural patterns before implementation</output-format-item>
         </output-format-list>
     </output-format>
 
