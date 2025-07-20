@@ -61,6 +61,16 @@ Focus on being consultative rather than prescriptive - analyze, propose, ask, th
 
 Remember, good type design in Java is about communication - making your code's intent clear both to the compiler and to other developers.
 
+## Constraints
+
+Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
+
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization
+- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any object-oriented design improvements
+- **NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile
+
 ## Examples
 
 ### Table of contents
@@ -892,13 +902,23 @@ class BadProductService {
 
 ## Output Format
 
-- Apply type design principles to improve code quality and maintainability
-- Create type-safe wrappers for domain-specific types
-- Use generics to create flexible and reusable components
-- Establish clear type hierarchies and consistent naming conventions
-- Use BigDecimal for precision-sensitive calculations
-- Verify code changes compile and pass tests
+- **ANALYZE** the current type design to identify specific issues and categorize them by impact (CRITICAL, MAINTAINABILITY, TYPE_SAFETY, READABILITY) and type design area (naming conventions, type hierarchies, generic usage, primitive obsession, type safety)
+- **CATEGORIZE** type design problems found: Naming Convention Issues (inconsistent patterns, unclear intent), Type Hierarchy Problems (poor organization, missing abstractions), Generic Type Deficiencies (missing type parameters, overly broad bounds), Primitive Obsession (String/int overuse instead of domain types), Type Safety Gaps (unsafe casts, missing validation), and Precision Issues (double/float for financial calculations)
+- **PROPOSE** multiple improvement options for each identified issue with clear trade-offs: Type wrapper creation strategies (value objects vs records), generic design approaches (bounded vs unbounded parameters), hierarchy organization methods (inheritance vs composition), naming standardization techniques (domain-driven vs technical naming), and precision type adoption paths (gradual vs complete BigDecimal migration)
+- **EXPLAIN** the benefits and considerations of each proposed solution: Type safety improvements, maintainability enhancements, readability benefits, performance implications, migration complexity, and team adoption considerations for different type design approaches
+- **PRESENT** comprehensive type design improvement strategies: Domain-driven type modeling approaches, fluent interface design patterns, type hierarchy organization principles, generic type parameter optimization, and precision-sensitive calculation refactoring methods
+- **ASK** the user to choose their preferred approach for each category of type design improvements, considering their domain requirements, team expertise, performance constraints, and migration timeline rather than implementing all changes automatically
+- **VALIDATE** that any proposed type design changes will compile successfully, maintain existing functionality, preserve type safety, and align with established architectural patterns before implementation
 
 ## Safeguards
 
-- Verify code changes compile and pass tests: `mvn clean verify` or `./mvnw clean verify`
+- **CONTINUOUS COMPILATION**: Validate compilation after each type design change to catch issues immediately
+- **TYPE COMPATIBILITY**: Ensure new type designs maintain backward compatibility with existing APIs and don't break client code
+- **CIRCULAR DEPENDENCY CHECK**: Verify that new type hierarchies don't introduce circular dependencies or inappropriate coupling
+- **GENERIC BOUNDS VALIDATION**: Confirm that generic type parameters have appropriate bounds and don't create unchecked warnings
+- **TEST COVERAGE MAINTENANCE**: Execute `./mvnw clean verify` to ensure all tests pass after implementing type design improvements
+- **FUNCTIONAL REGRESSION CHECK**: Confirm all existing functionality remains intact after applying type design changes
+- **ROLLBACK READINESS**: Ensure all type design changes can be easily reverted if they introduce regressions or compilation issues
+- **INCREMENTAL VALIDATION**: Apply improvements incrementally, validating each change before proceeding to the next
+- **DEPENDENCY IMPACT ANALYSIS**: Verify that type changes don't break existing dependencies, imports, or class relationships
+- **FINAL INTEGRATION TEST**: Perform comprehensive project compilation and test execution after completing all type design improvements

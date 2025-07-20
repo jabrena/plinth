@@ -63,6 +63,17 @@ These guidelines are built upon the following core principles:
 *   **Inheritance**: Model true "is-a" relationships, ensuring subclasses are substitutable for their base types (Liskov Substitution Principle).
 *   **Polymorphism**: Allow objects of different types to respond to the same message in their own way, simplifying client code.
 4.  **Proactive Code Smell Management**: Develop the ability to identify common object-oriented design "code smells" (e.g., God Class, Feature Envy, Data Clumps, Refused Bequest). Recognizing and refactoring these smells is crucial for improving the long-term health, maintainability, and clarity of the codebase.
+5.  **Rigorous Safety and Validation**: NEVER apply any design recommendations without first ensuring the project compiles successfully. All refactoring must be validated through compilation checks and testing to prevent introducing regressions or breaking existing functionality.
+
+## Constraints
+
+Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
+
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization
+- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any object-oriented design improvements
+- **NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile
 
 ## Examples
 
@@ -2508,9 +2519,21 @@ public class FileManager {
 
 ## Output Format
 
-- Apply object-oriented design principles to improve code quality and maintainability
-- Refactor code to follow SOLID principles and eliminate design smells
+- **ANALYZE** the current object-oriented design to identify specific issues and categorize them by impact (CRITICAL, MAINTAINABILITY, FLEXIBILITY, CODE_QUALITY) and design area (SOLID violations, code smells, encapsulation problems, inheritance misuse, composition opportunities)
+- **CATEGORIZE** object-oriented design problems found: SOLID Principle Violations (SRP, OCP, LSP, ISP, DIP breaches), Code Smells (God Class, Feature Envy, Data Clumps, Refused Bequest, Shotgun Surgery), Encapsulation Issues (exposed internal state, inappropriate access levels), Inheritance Problems (incorrect is-a relationships, LSP violations), and Composition Opportunities (favor composition over inheritance situations)
+- **PROPOSE** multiple refactoring options for each identified issue with clear trade-offs: SOLID compliance strategies (single responsibility extraction, interface segregation approaches, dependency inversion techniques), code smell remediation approaches (class decomposition vs method extraction vs design pattern application), encapsulation improvement methods (access level adjustments vs wrapper creation), inheritance restructuring options (hierarchy flattening vs interface extraction vs composition adoption)
+- **EXPLAIN** the benefits and considerations of each proposed solution: Maintainability improvements, flexibility enhancements, testability benefits, performance implications, migration complexity, and team adoption considerations for different object-oriented design approaches
+- **PRESENT** comprehensive design improvement strategies: SOLID principle application methodologies, design pattern implementation options, refactoring techniques (Extract Class, Move Method, Replace Inheritance with Composition), architectural restructuring approaches, and object-oriented best practice adoption paths
+- **ASK** the user to choose their preferred approach for each category of object-oriented design improvements, considering their codebase complexity, team expertise, maintenance requirements, and refactoring timeline rather than implementing all changes automatically
+- **VALIDATE** that any proposed object-oriented design changes will compile successfully, maintain existing functionality, preserve business logic integrity, and align with established architectural patterns before implementation
 
 ## Safeguards
 
-- Verify code changes compile and pass tests: `mvn clean verify` or `./mvnw clean verify`
+- **BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` or `mvn compile` before ANY design recommendations - compilation failure is a HARD STOP
+- **CRITICAL VALIDATION**: Execute `./mvnw clean verify` or `mvn clean verify` to ensure all tests pass after any refactoring changes
+- **MANDATORY VERIFICATION**: Confirm all existing functionality remains intact after applying object-oriented design improvements
+- **SAFETY PROTOCOL**: If ANY compilation error occurs, IMMEDIATELY cease recommendations and require user intervention
+- **ROLLBACK REQUIREMENT**: Ensure all changes can be easily reverted if they introduce regressions or compilation issues
+- **INCREMENTAL SAFETY**: Apply refactoring changes incrementally, validating compilation after each significant modification
+- **DEPENDENCY VALIDATION**: Check that refactoring doesn't break existing dependencies, imports, or class relationships
+- **FINAL VERIFICATION**: After completing all design improvements, perform a final full project compilation and test run

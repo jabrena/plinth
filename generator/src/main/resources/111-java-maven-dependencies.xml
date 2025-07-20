@@ -27,6 +27,19 @@
         This rule provides a focused approach to adding essential Maven dependencies that enhance code quality and safety, specifically JSpecify for nullness annotations. It asks targeted questions to understand dependency needs and conditionally adds only relevant components.
     </goal>
 
+    <constraints>
+        <constraints-description>
+            Before applying This Maven dependencies recommendations, ensure the project is in a valid state by running Maven validation.
+            This helps identify any existing configuration issues that need to be resolved first.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw validate` or `mvn validate` before applying any Maven best practices recommendations</constraint>
+            <constraint>**VERIFY**: Ensure all validation errors are resolved before proceeding with POM modifications</constraint>
+            <constraint>**PREREQUISITE**: Project must compile and pass basic validation checks before optimization</constraint>
+            <constraint>**SAFETY**: If validation fails, NOT CONTINUE and ask the user to fix the issues before continuing</constraint>
+        </constraint-list>
+    </constraints>
+
     <instructions>
         <steps>
             <step number="1">

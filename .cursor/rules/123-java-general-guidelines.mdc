@@ -61,6 +61,16 @@ These guidelines are built upon the following core principles:
 4. **Effective Documentation**: Strive for self-documenting code. For public APIs, complex algorithms, non-obvious business logic, or any part of the code that isn't immediately clear, provide comprehensive Javadoc. Good documentation aids understanding, usage, and maintenance.
 5. **Robust and Secure Error Handling**: Implement thorough error and exception handling with a strong focus on security. This includes using specific exceptions, managing resources diligently (preferably with try-with-resources), preventing the leakage of sensitive information in logs or error messages, and never "swallowing" exceptions without proper handling or justification. Resilient and secure applications depend on robust error management.
 
+## Constraints
+
+Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
+
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization
+- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any object-oriented design improvements
+- **NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile
+
 ## Examples
 
 ### Table of contents
@@ -369,10 +379,21 @@ public class UnsafeFileProcessor {
 
 ## Output Format
 
-- Apply the Java general guidelines to improve code quality and maintainability
-- Follow naming conventions, formatting rules, and documentation standards
-- Implement comprehensive error handling with security considerations
+- **ANALYZE** the current codebase to identify specific coding standard violations and categorize them by impact (CRITICAL, MAINTAINABILITY, READABILITY, CONSISTENCY) and area (naming conventions, formatting, imports, documentation, error handling)
+- **CATEGORIZE** coding standard issues found: Naming Convention Violations (inconsistent package/class/method/variable naming), Formatting Inconsistencies (indentation, brace style, spacing), Import Organization Problems (wildcard imports, poor grouping), Documentation Gaps (missing Javadoc, incomplete API documentation), and Error Handling Weaknesses (generic exceptions, poor resource management, information leakage)
+- **PROPOSE** multiple improvement options for each identified issue with clear trade-offs: Naming standardization approaches (automated vs manual), formatting strategies (IDE configuration vs code formatter tools), import organization methods (IDE-based vs manual restructuring), documentation enhancement techniques (comprehensive vs minimal approaches), and error handling improvement patterns (specific exception hierarchies vs generic handling)
+- **EXPLAIN** the benefits and considerations of each proposed solution: Readability improvements, maintainability enhancements, team consistency benefits, tooling integration options, and implementation complexity for different coding standard approaches
+- **PRESENT** comprehensive coding standard improvement strategies: Team coding style guide adoption, automated formatting tool integration, documentation standard implementations, error handling pattern establishment, and code quality measurement approaches
+- **ASK** the user to choose their preferred approach for each category of coding standard improvements, considering their team preferences, existing conventions, and tooling constraints rather than applying all changes automatically
+- **VALIDATE** that any proposed coding standard changes will compile successfully, maintain existing functionality, align with team conventions, and improve overall code quality before implementation
 
 ## Safeguards
 
-- Verify code changes compile and pass tests: `mvn clean verify` or `./mvnw clean verify`
+- **BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` before ANY recommendations to ensure project baseline
+- **INCREMENTAL VALIDATION**: After each category of changes (naming, formatting, imports, etc.), verify compilation still succeeds
+- **CRITICAL TESTING**: Execute `./mvnw clean verify` to ensure all tests pass after implementation
+- **ROLLBACK READINESS**: Ensure all changes can be easily reverted by maintaining clear change boundaries
+- **SECURITY VALIDATION**: Verify that error handling improvements don't introduce information leakage vulnerabilities
+- **DOCUMENTATION INTEGRITY**: Confirm that Javadoc changes are syntactically correct and don't break documentation generation
+- **IMPORT SAFETY**: Validate that import reorganization doesn't introduce compilation errors or unintended dependencies
+- **FORMATTING CONSISTENCY**: Ensure formatting changes maintain consistency across the entire codebase, not just modified files

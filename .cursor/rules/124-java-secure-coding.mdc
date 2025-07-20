@@ -61,6 +61,16 @@ These guidelines are built upon the following core principles:
 4.  **Strong Cryptographic Practices**: Employ current, robust, and industry-standard cryptographic algorithms and libraries for all sensitive operations, including hashing (especially for passwords), encryption, and digital signatures. Avoid deprecated or weak algorithms. Ensure cryptographic keys are generated securely, stored safely, and managed properly throughout their lifecycle.
 5.  **Secure Exception Handling**: Manage exceptions in a way that does not expose sensitive information to users or attackers. Log detailed, non-sensitive diagnostic information for developers to aid in debugging, but provide generic, non-revealing error messages to clients. Avoid direct exposure of stack traces or internal system details in error outputs.
 
+## Constraints
+
+Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
+
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization
+- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any object-oriented design improvements
+- **NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile
+
 ## Examples
 
 ### Table of contents
@@ -669,6 +679,23 @@ public class InsecureExceptionHandler {
 }
 ```
 
+## Output Format
+
+- **ANALYZE** the current codebase to identify specific security vulnerabilities and categorize them by severity (CRITICAL, HIGH, MEDIUM, LOW) and vulnerability type (injection, authentication, authorization, cryptography, etc.)
+- **CATEGORIZE** security issues found: Input Validation Gaps (missing validation, insufficient sanitization), Injection Vulnerabilities (SQL, command, XSS), Authentication/Authorization Flaws (weak permissions, excessive privileges), Cryptographic Weaknesses (deprecated algorithms, weak key management), and Exception Handling Issues (information disclosure, sensitive data exposure)
+- **PROPOSE** multiple remediation options for each identified vulnerability with clear trade-offs: Input validation strategies (whitelisting vs blacklisting vs sanitization), injection protection approaches (parameterized queries vs ORM vs input encoding), privilege management options (RBAC vs ABAC vs minimal permissions), cryptographic upgrade paths (algorithm migration strategies), and secure error handling techniques
+- **EXPLAIN** the security benefits and implementation considerations of each proposed solution: Risk reduction impact, performance implications, compatibility concerns, implementation complexity, and maintenance requirements for different security approaches
+- **PRESENT** comprehensive security improvement strategies: Defense-in-depth approaches, security configuration options, secure coding standard implementations, compliance framework alignments, and security testing methodologies
+- **ASK** the user to choose their preferred approach for each category of security improvements, considering their risk tolerance, compliance requirements, and implementation constraints rather than applying all changes automatically
+- **VALIDATE** that any proposed security changes will compile successfully, maintain existing functionality, not introduce new vulnerabilities, and align with security best practices before implementation
+
 ## Safeguards
 
-- Verify code changes compile and pass tests: `mvn clean verify` or `./mvnw clean verify`
+- **BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` before ANY security recommendations to ensure project stability
+- **CRITICAL VALIDATION**: Execute `./mvnw clean verify` to ensure all tests pass after each security improvement
+- **MANDATORY VERIFICATION**: Confirm all existing functionality remains intact through comprehensive test execution
+- **ROLLBACK REQUIREMENT**: Ensure all security changes can be easily reverted using version control checkpoints
+- **INCREMENTAL SAFETY**: Apply security improvements incrementally, validating after each modification to isolate potential issues
+- **SECURITY VALIDATION**: Verify that security improvements don't introduce new vulnerabilities or break existing security controls
+- **DEPENDENCY SAFETY**: Validate that any new security libraries or dependencies don't conflict with existing project requirements
+- **PERFORMANCE IMPACT**: Monitor that security enhancements don't significantly degrade application performance

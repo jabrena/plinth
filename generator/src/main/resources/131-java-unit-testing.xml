@@ -41,6 +41,20 @@
         5.  **Maintainability and Focus**: Tests should be easy to maintain. This means avoiding tests that are too complex, test implementation details, or have multiple responsibilities. A well-written test makes it clear what is being tested and why, simplifying debugging and refactoring efforts.
     </goal>
 
+    <constraints>
+        <constraints-description>
+            Before applying any recommendations, ensure the project is in a valid state by running Maven compilation.
+            Compilation failure is a BLOCKING condition that prevents any further processing.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization</constraint>
+            <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations</constraint>
+            <constraint>**BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any object-oriented design improvements</constraint>
+            <constraint>**NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile</constraint>
+        </constraint-list>
+    </constraints>
+
     <examples>
         <toc auto-generate="true" />
 
@@ -888,9 +902,28 @@ public class UserValidationPoorTest {
         </example>
     </examples>
 
+    <output-format>
+        <output-format-list>
+            <output-format-item>**ANALYZE** the current test codebase to identify specific unit testing issues and categorize them by impact (CRITICAL, MAINTAINABILITY, PERFORMANCE, etc.)</output-format-item>
+            <output-format-item>**CATEGORIZE** testing problems found: Framework Usage (JUnit 4 vs 5), Assertion Style (JUnit vs AssertJ), Test Structure (naming, organization), Test Independence (shared state issues), and Coverage Gaps (boundary conditions, error scenarios)</output-format-item>
+            <output-format-item>**PROPOSE** multiple solution options for each identified issue with clear trade-offs: Alternative approaches for test framework migration, assertion library adoption, test structure improvements, and mocking strategies</output-format-item>
+            <output-format-item>**EXPLAIN** the benefits and considerations of each proposed solution: JUnit 5 migration paths, AssertJ adoption strategies, Given-When-Then implementation options, parameterized test approaches, and mocking framework choices</output-format-item>
+            <output-format-item>**PRESENT** comprehensive testing methodology options: RIGHT-BICEP boundary testing approaches, A-TRIP test characteristics implementation, CORRECT validation strategies, and JSpecify null safety integration choices</output-format-item>
+            <output-format-item>**ASK** the user to choose their preferred approach for each category of improvements rather than implementing all changes automatically</output-format-item>
+            <output-format-item>**VALIDATE** that any proposed changes will compile and maintain existing functionality before implementation</output-format-item>
+        </output-format-list>
+    </output-format>
+
     <safeguards>
         <safeguards-list>
-            <safeguards-item>Verify code changes compile and pass tests: `mvn clean verify` or `./mvnw clean verify`</safeguards-item>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` before ANY testing recommendations to ensure project stability</safeguards-item>
+            <safeguards-item>**CRITICAL VALIDATION**: Execute `./mvnw clean verify` to ensure all existing tests pass before implementing new test strategies</safeguards-item>
+            <safeguards-item>**MANDATORY VERIFICATION**: Confirm all existing functionality remains intact after applying any test improvements</safeguards-item>
+            <safeguards-item>**ROLLBACK REQUIREMENT**: Ensure all test changes can be easily reverted if they introduce compilation or runtime issues</safeguards-item>
+            <safeguards-item>**INCREMENTAL SAFETY**: Apply test improvements incrementally, validating compilation and test execution after each modification</safeguards-item>
+            <safeguards-item>**DEPENDENCY VALIDATION**: Verify that any new testing dependencies (AssertJ, Mockito extensions) are properly configured and compatible</safeguards-item>
+            <safeguards-item>**TEST ISOLATION VERIFICATION**: Ensure new tests don't introduce dependencies between test methods or classes</safeguards-item>
+            <safeguards-item>**PERFORMANCE MONITORING**: Validate that test execution times remain reasonable and don't significantly impact build performance</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>

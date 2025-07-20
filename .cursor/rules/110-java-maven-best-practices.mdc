@@ -51,6 +51,27 @@ Which would you like to implement? (1A, 1B, 1C, 2A, 2B, 2C, 3A, 3B, 3C, or 'show
 
 Focus on being consultative rather than prescriptive - analyze, propose, ask, then implement based on user choice.
 
+### Core Principles Behind Maven
+
+Maven is built on several foundational principles that guide its design and usage:
+
+**1. Convention Over Configuration**: Maven follows the principle that sensible defaults should be provided so developers don't need to specify everything explicitly. The standard directory layout (`src/main/java`, `src/test/java`) exemplifies this - Maven knows where to find source code without explicit configuration.
+**2. Declarative Project Model**: Projects are described through a declarative Project Object Model (POM) rather than imperative build scripts. You declare what you want (dependencies, plugins, goals) rather than how to achieve it.
+**3. Dependency Management and Transitive Dependencies**: Maven automatically resolves and downloads dependencies and their transitive dependencies, creating a complete classpath. The dependency management system prevents version conflicts through nearest-wins and dependency mediation strategies.
+**4. Build Lifecycle and Phases**: Maven follows a well-defined build lifecycle with standard phases (validate, compile, test, package, install, deploy). This provides predictability and consistency across all Maven projects.
+**5. Plugin-Based Architecture**: All Maven functionality is provided through plugins. Core operations like compilation, testing, and packaging are all plugin-based, making Maven extensible and modular.
+**6. Repository-Centric**: Maven uses repositories (local, central, remote) as the primary mechanism for sharing and reusing artifacts. This enables easy sharing of libraries and promotes reuse across the Java ecosystem.
+**7. Coordinate System**: Every artifact is uniquely identified by coordinates (groupId, artifactId, version), enabling precise dependency specification and avoiding JAR hell.
+**8. Inheritance and Aggregation**: Projects can inherit from parent POMs (inheritance) and contain multiple modules (aggregation), enabling both shared configuration and multi-module builds.
+
+## Constraints
+
+Before applying Maven best practices recommendations, ensure the project is in a valid state by running Maven validation. This helps identify any existing configuration issues that need to be resolved first.
+
+- **MANDATORY**: Run `./mvnw validate` or `mvn validate` before applying any Maven best practices recommendations
+- **VERIFY**: Ensure all validation errors are resolved before proceeding with POM modifications
+- **PREREQUISITE**: Project must compile and pass basic validation checks before optimization
+- **SAFETY**: If validation fails, not continue and ask the user to fix the issues before continuing
 
 ## Examples
 
@@ -626,12 +647,20 @@ Description: Define all dependency and plugin versions in the `<properties>` sec
 
 ## Output Format
 
-- Analyze Maven POM files for best practices violations and improvement opportunities
-- Present structured analysis with prioritized improvement recommendations
-- Provide multiple solution options with clear pros/cons for each issue
-- Wait for user selection before implementing any changes
-- When implementing, apply only the chosen solution without adding unrequested plugins or dependencies
+- **ANALYZE** Maven POM files to identify specific best practices violations and categorize them by impact (CRITICAL, MAINTENANCE, PERFORMANCE, STRUCTURE) and area (dependency management, plugin configuration, project structure, repository management, version control)
+- **CATEGORIZE** Maven configuration issues found: Dependency Management Problems (missing dependencyManagement, hardcoded versions, version conflicts, unused dependencies), Plugin Configuration Issues (outdated versions, missing configurations, suboptimal settings), Project Structure Violations (non-standard layouts, poor POM organization, missing properties), and Repository Management Concerns (insecure repositories, missing declarations, transitive dependencies)
+- **PROPOSE** multiple Maven improvement options for each identified issue with clear trade-offs: Dependency management strategies (BOM adoption vs parent POM vs properties centralization), plugin modernization approaches (version updates vs configuration improvements vs new plugin additions), project structure optimization methods (POM reorganization vs module separation vs profile utilization)
+- **EXPLAIN** the benefits and considerations of each proposed Maven solution: Build reliability improvements, dependency resolution benefits, maintenance complexity reductions, performance optimizations, security enhancements, and team productivity impacts for different Maven configuration approaches
+- **PRESENT** comprehensive Maven optimization strategies: Dependency management best practices (BOM usage, version property centralization, scope optimization), plugin configuration improvements (version standardization, goal binding optimization, profile utilization), and project structure enhancement methods (POM organization, module architecture, repository management)
+- **ASK** the user to choose their preferred approach for each category of Maven improvements, considering their project complexity, team expertise, build requirements, and migration timeline rather than implementing all changes automatically
+- **VALIDATE** that any proposed Maven changes will compile successfully, maintain existing build behavior, preserve dependency compatibility, and align with established project conventions before implementation
 
 ## Safeguards
 
-- verify changes with the command: `mvn validate` or `./mvnw validate`
+- **MANDATORY**: Analyze existing POM configuration before making any changes
+- **NEVER remove or replace existing plugins** - only add new plugins that don't already exist
+- **NEVER remove or replace existing properties** - only add new properties that don't conflict
+- **ASK USER before overriding** any existing configuration element
+- Verify changes with the command: `./mvnw clean verify`
+- Preserve existing dependency versions unless explicitly requested to update
+- Maintain backward compatibility with existing build process

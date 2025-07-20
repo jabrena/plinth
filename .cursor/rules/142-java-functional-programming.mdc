@@ -61,6 +61,16 @@ These guidelines are built upon the following core principles:
 4.  **Higher-Order Abstractions**: Utilize functional interfaces, function composition, and higher-order functions (functions that operate on other functions) to build flexible and reusable code components.
 5.  **Modern Java Integration**: Embrace modern Java features like Records, Pattern Matching, Switch Expressions, and Sealed Classes, which align well with and enhance functional programming paradigms by promoting immutability, type safety, and expressive conditional logic.
 
+## Constraints
+
+Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
+
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization
+- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any object-oriented design improvements
+- **NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile
+
 ## Examples
 
 ### Table of contents
@@ -676,6 +686,25 @@ public class StreamGathererExample {
 
 ```
 
+## Output Format
+
+- **ANALYZE** Java code to identify specific functional programming opportunities and categorize them by impact (CRITICAL, MAINTAINABILITY, PERFORMANCE, EXPRESSIVENESS) and area (immutability violations, side effects, imperative patterns, non-functional constructs, type safety gaps)
+- **CATEGORIZE** functional programming improvements found: Immutability Issues (mutable objects vs immutable, state mutation vs transformation, defensive copying needs), Purity Problems (side effects in functions, external state dependencies, non-deterministic behavior), Imperative Code Patterns (traditional loops vs streams, null checks vs Optional, exception handling vs functional error handling), and Type Safety Opportunities (primitive obsession vs domain types, unsafe casting vs pattern matching, weak type boundaries)
+- **PROPOSE** multiple functional programming refactoring options for each identified opportunity with clear trade-offs: Immutability strategies (Records vs traditional immutable classes vs builder patterns), purity approaches (pure function extraction vs side effect isolation vs functional composition), stream adoption methods (imperative to declarative conversion vs parallel processing vs custom collectors), and type safety enhancements (sealed types vs traditional hierarchies vs pattern matching integration)
+- **EXPLAIN** the benefits and considerations of each proposed functional solution: Code expressiveness improvements, reasoning simplification benefits, concurrency safety enhancements, performance implications (stream overhead vs loop efficiency), learning curve requirements, and maintainability impacts for different functional programming approaches
+- **PRESENT** comprehensive functional programming adoption strategies: Paradigm shift roadmaps (immutability first → purity focus → functional composition → advanced patterns), refactoring techniques (Extract Pure Function, Replace Loop with Stream, Introduce Immutable Types, Apply Pattern Matching), testing strategies for functional code, and functional design patterns (Function composition, Monadic patterns, Algebraic data types)
+- **ASK** the user to choose their preferred approach for each category of functional programming improvements, considering their team's functional programming experience, performance requirements, Java version constraints, and gradual adoption timeline rather than implementing all changes automatically
+- **VALIDATE** that any proposed functional programming refactoring will compile successfully, maintain behavioral equivalence, preserve business logic correctness, and achieve expected expressiveness benefits before implementation
+
 ## Safeguards
 
-- Verify code changes compile and pass tests: `mvn clean verify` or `./mvnw clean verify`
+- **BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` or `mvn compile` before ANY functional programming refactoring recommendations - compilation failure is a HARD STOP
+- **CRITICAL VALIDATION**: Execute `./mvnw clean verify` or `mvn clean verify` to ensure all tests pass after applying functional programming patterns
+- **MANDATORY VERIFICATION**: Confirm all existing functionality remains intact after functional refactoring, especially behavioral equivalence of pure function extractions and immutable transformations
+- **SAFETY PROTOCOL**: If ANY compilation error occurs during functional programming transformation, IMMEDIATELY cease recommendations and require user intervention
+- **PERFORMANCE VALIDATION**: Ensure functional programming patterns don't introduce performance regressions, especially with stream operations, immutable object creation, and recursive function calls
+- **PURITY VERIFICATION**: Validate that extracted pure functions truly have no side effects and that immutable transformations don't inadvertently modify original state
+- **ROLLBACK REQUIREMENT**: Ensure all functional programming refactoring changes can be easily reverted if they introduce complexity or performance issues
+- **INCREMENTAL SAFETY**: Apply functional programming patterns incrementally, validating compilation and tests after each significant transformation step
+- **DEPENDENCY VALIDATION**: Check that functional programming patterns are compatible with existing frameworks and don't break dependency injection or serialization requirements
+- **FINAL VERIFICATION**: After completing all functional programming improvements, perform a final full project compilation, test run, and verification that functional invariants are maintained

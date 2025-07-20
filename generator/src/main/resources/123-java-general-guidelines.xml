@@ -40,6 +40,20 @@
         5. **Robust and Secure Error Handling**: Implement thorough error and exception handling with a strong focus on security. This includes using specific exceptions, managing resources diligently (preferably with try-with-resources), preventing the leakage of sensitive information in logs or error messages, and never "swallowing" exceptions without proper handling or justification. Resilient and secure applications depend on robust error management.
     </goal>
 
+    <constraints>
+        <constraints-description>
+            Before applying any recommendations, ensure the project is in a valid state by running Maven compilation.
+            Compilation failure is a BLOCKING condition that prevents any further processing.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization</constraint>
+            <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations</constraint>
+            <constraint>**BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any object-oriented design improvements</constraint>
+            <constraint>**NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile</constraint>
+        </constraint-list>
+    </constraints>
+
     <examples>
         <toc auto-generate="true"/>
 
@@ -357,15 +371,26 @@ public class UnsafeFileProcessor {
 
     <output-format>
         <output-format-list>
-            <output-format-item>Apply the Java general guidelines to improve code quality and maintainability</output-format-item>
-            <output-format-item>Follow naming conventions, formatting rules, and documentation standards</output-format-item>
-            <output-format-item>Implement comprehensive error handling with security considerations</output-format-item>
+            <output-format-item>**ANALYZE** the current codebase to identify specific coding standard violations and categorize them by impact (CRITICAL, MAINTAINABILITY, READABILITY, CONSISTENCY) and area (naming conventions, formatting, imports, documentation, error handling)</output-format-item>
+            <output-format-item>**CATEGORIZE** coding standard issues found: Naming Convention Violations (inconsistent package/class/method/variable naming), Formatting Inconsistencies (indentation, brace style, spacing), Import Organization Problems (wildcard imports, poor grouping), Documentation Gaps (missing Javadoc, incomplete API documentation), and Error Handling Weaknesses (generic exceptions, poor resource management, information leakage)</output-format-item>
+            <output-format-item>**PROPOSE** multiple improvement options for each identified issue with clear trade-offs: Naming standardization approaches (automated vs manual), formatting strategies (IDE configuration vs code formatter tools), import organization methods (IDE-based vs manual restructuring), documentation enhancement techniques (comprehensive vs minimal approaches), and error handling improvement patterns (specific exception hierarchies vs generic handling)</output-format-item>
+            <output-format-item>**EXPLAIN** the benefits and considerations of each proposed solution: Readability improvements, maintainability enhancements, team consistency benefits, tooling integration options, and implementation complexity for different coding standard approaches</output-format-item>
+            <output-format-item>**PRESENT** comprehensive coding standard improvement strategies: Team coding style guide adoption, automated formatting tool integration, documentation standard implementations, error handling pattern establishment, and code quality measurement approaches</output-format-item>
+            <output-format-item>**ASK** the user to choose their preferred approach for each category of coding standard improvements, considering their team preferences, existing conventions, and tooling constraints rather than applying all changes automatically</output-format-item>
+            <output-format-item>**VALIDATE** that any proposed coding standard changes will compile successfully, maintain existing functionality, align with team conventions, and improve overall code quality before implementation</output-format-item>
         </output-format-list>
     </output-format>
 
     <safeguards>
         <safeguards-list>
-            <safeguards-item>Verify code changes compile and pass tests: `mvn clean verify` or `./mvnw clean verify`</safeguards-item>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` before ANY recommendations to ensure project baseline</safeguards-item>
+            <safeguards-item>**INCREMENTAL VALIDATION**: After each category of changes (naming, formatting, imports, etc.), verify compilation still succeeds</safeguards-item>
+            <safeguards-item>**CRITICAL TESTING**: Execute `./mvnw clean verify` to ensure all tests pass after implementation</safeguards-item>
+            <safeguards-item>**ROLLBACK READINESS**: Ensure all changes can be easily reverted by maintaining clear change boundaries</safeguards-item>
+            <safeguards-item>**SECURITY VALIDATION**: Verify that error handling improvements don't introduce information leakage vulnerabilities</safeguards-item>
+            <safeguards-item>**DOCUMENTATION INTEGRITY**: Confirm that Javadoc changes are syntactically correct and don't break documentation generation</safeguards-item>
+            <safeguards-item>**IMPORT SAFETY**: Validate that import reorganization doesn't introduce compilation errors or unintended dependencies</safeguards-item>
+            <safeguards-item>**FORMATTING CONSISTENCY**: Ensure formatting changes maintain consistency across the entire codebase, not just modified files</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>

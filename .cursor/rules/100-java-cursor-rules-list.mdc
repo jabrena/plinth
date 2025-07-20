@@ -93,6 +93,6 @@ Use the following set of Java Cursor Rules to improve your Java development.
 
 ## Output Format
 
-- Generate the complete markdown file following the embedded template exactly
-- Use proper markdown formatting with headers, code blocks, tables, and checklists
-- **VERIFY**: Final output contains ONLY what appears in the embedded template
+- **File Creation**: Generate the complete markdown file named `CURSOR-RULES-JAVA.md` in the project root directory
+- **Template Adherence**: Follow the embedded template structure and content exactly - no additions, modifications, or omissions
+- **File Handling**: If `CURSOR-RULES-JAVA.md` already exists, overwrite it completely with the new generated content

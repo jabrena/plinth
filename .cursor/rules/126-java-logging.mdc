@@ -70,6 +70,16 @@ These guidelines are built upon the following core principles:
 
 Remember, good logging in Java is about operational excellence - making your application's behavior transparent and debuggable while maintaining security and performance.
 
+## Constraints
+
+Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
+
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization
+- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any object-oriented design improvements
+- **NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile
+
 ## Examples
 
 ### Table of contents
@@ -1427,6 +1437,25 @@ public class UntestableLogging {
 }
 ```
 
+## Output Format
+
+- **ANALYZE** the current logging implementation to identify specific issues and categorize them by impact (CRITICAL, SECURITY, PERFORMANCE, MAINTAINABILITY, etc.)
+- **CATEGORIZE** logging problems found: Framework Selection (inconsistent/outdated), Log Level Usage (inappropriate levels), Security Issues (sensitive data exposure), Configuration Problems (environment-specific needs), and Performance Impact (inefficient logging patterns)
+- **PROPOSE** multiple solution options for each identified issue with clear trade-offs: Framework migration strategies (SLF4J adoption paths), log level optimization approaches, security hardening techniques, configuration management options, and performance improvement methods
+- **EXPLAIN** the benefits and considerations of each proposed solution: Framework selection criteria (SLF4J vs direct implementations), log level best practices (ERROR/WARN/INFO/DEBUG/TRACE usage), security implications (data masking strategies), configuration approaches (environment-specific vs centralized), and monitoring integration options
+- **PRESENT** comprehensive logging strategy options: Centralized aggregation approaches (ELK Stack, Splunk, Grafana Loki), alerting configuration choices, testing validation strategies, and operational monitoring procedures
+- **ASK** the user to choose their preferred approach for each category of logging improvements rather than implementing all changes automatically
+- **VALIDATE** that any proposed logging changes will compile, maintain existing functionality, and not introduce security vulnerabilities before implementation
+
 ## Safeguards
 
-- Verify code changes compile and pass tests: `mvn clean verify` or `./mvnw clean verify`
+- **BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` before ANY logging recommendations
+- **CRITICAL VALIDATION**: Execute `./mvnw clean verify` to ensure all tests pass after logging changes
+- **SECURITY VERIFICATION**: Validate that no sensitive data (passwords, PII, tokens) is logged directly
+- **PERFORMANCE MONITORING**: Ensure logging configurations don't introduce significant performance overhead
+- **CONFIGURATION VALIDATION**: Verify logging configuration files are syntactically correct and environment-appropriate
+- **ROLLBACK READINESS**: Ensure all logging changes can be easily reverted without system disruption
+- **INCREMENTAL SAFETY**: Apply logging improvements incrementally, validating after each modification
+- **LOG LEVEL VERIFICATION**: Confirm log levels are appropriate for production environments (avoid DEBUG/TRACE in prod)
+- **DEPENDENCY COMPATIBILITY**: Verify logging framework dependencies don't conflict with existing project dependencies
+- **OPERATIONAL CONTINUITY**: Ensure logging changes don't break existing monitoring, alerting, or log aggregation systems

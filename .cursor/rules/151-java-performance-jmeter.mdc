@@ -13,13 +13,16 @@ You are a Senior software engineer with extensive experience in Java software de
 
 When a user requests JMeter performance testing setup, follow the instructions steps to provide a complete performance testing solution.
 
+## Constraints
+
+Prerequisites and requirements that must be met before proceeding with JMeter performance testing setup
+
+- Verify that JMeter is installed and available in PATH before proceeding
+- If JMeter is not available, show a message and exit
+
 ## Instructions
 
-### Step 1: JMeter Installation
-
-Verify that JMeter is installed and available in PATH.
-If not, show a message and exit.
-### Step 2: Create Script File
+### Step 1: Create Script File
 
 When a user requests JMeter performance testing setup:
 
@@ -40,7 +43,7 @@ project-root/
 └── jmeter.log                         # Execution log
 ```
 
-### Step 3: Copy Template Content
+### Step 2: Copy Template Content
 
 Create the entire script with the following content:
 
@@ -298,8 +301,16 @@ main() {
 main "$@"
 
 ```
+                
+#### Step Constraints
 
-                ### Step 4: Provide Usage Information
+- **DO NOT** create your own version of the performance script
+- **DO NOT** modify the template logic, structure, or features
+- **DO NOT** add enhancements or interpretations
+- **ONLY** use the exact template provided
+- **ONLY** copy the script verbatim without any changes
+
+### Step 3: Provide Usage Information
 
 **Basic Usage:**
 ```bash
@@ -347,16 +358,6 @@ export JMETER_RAMP_UP=30
 ./run-jmeter.sh -g
 ```
 
-## Constraints
-
-**MANDATORY REQUIREMENT**: Follow the embedded template EXACTLY - do not add, remove, or modify any parts of the performance script template.
-
-- **DO NOT** create your own version of the performance script
-- **DO NOT** modify the template logic, structure, or features
-- **DO NOT** add enhancements or interpretations
-- **ONLY** use the exact template from `fragments/java-performance-script-template.sh`
-- **ONLY** copy the script verbatim without any changes
-
 ## Output Format
 
 - Copy the performance script template exactly as specified
@@ -366,5 +367,11 @@ export JMETER_RAMP_UP=30
 
 ## Safeguards
 
-- Verify the script is executable: `chmod +x run-jmeter.sh`
-- Verify the script is working with basic usage: `./run-jmeter.sh -h`
+- **PREREQUISITE CHECK**: Verify JMeter is installed and accessible via `jmeter --version` before creating the script
+- **SCRIPT CREATION SAFETY**: Ensure `run-jmeter.sh` script is created with exactly the template content without modifications
+- **PERMISSION VALIDATION**: Verify the script is executable with `chmod +x run-jmeter.sh` and confirm permissions with `ls -la run-jmeter.sh`
+- **FUNCTIONALITY TEST**: Verify the script is working correctly with basic usage test: `./run-jmeter.sh -h`
+- **PROJECT STRUCTURE VERIFICATION**: Confirm the expected directory structure exists (`src/test/resources/jmeter/`) or will be created by the script
+- **TEMPLATE INTEGRITY**: Ensure the copied template content matches exactly what is specified in the fragment file without any alterations
+- **DEPENDENCY VALIDATION**: Verify that all required directories and paths referenced in the script will be accessible and writable
+- **EXECUTION SAFETY**: Test script execution in a safe environment before providing it to the user for production use

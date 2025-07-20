@@ -47,6 +47,20 @@
             *   **Scoped Values**: Prefer `ScopedValue` over `ThreadLocal` for sharing immutable data robustly and efficiently across tasks within a dynamically bounded scope, especially when working with virtual threads.
     </goal>
 
+    <constraints>
+        <constraints-description>
+            Before applying any recommendations, ensure the project is in a valid state by running Maven compilation.
+            Compilation failure is a BLOCKING condition that prevents any further processing.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization</constraint>
+            <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations</constraint>
+            <constraint>**BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any object-oriented design improvements</constraint>
+            <constraint>**NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile</constraint>
+        </constraint-list>
+    </constraints>
+
     <examples>
         <toc auto-generate="true" />
         <example number="1" id="thread-safety-fundamentals">
@@ -1723,9 +1737,30 @@ class BadScopedValueUsage {
         </example>
     </examples>
 
+    <output-format>
+        <output-format-list>
+            <output-format-item>**ANALYZE** the current concurrency implementation to identify specific issues and categorize them by impact (CRITICAL, PERFORMANCE, DEADLOCK_RISK, SCALABILITY, etc.)</output-format-item>
+            <output-format-item>**CATEGORIZE** concurrency problems found: Thread Safety Issues (race conditions, unsafe collections), Thread Pool Management (sizing, configuration, lifecycle), Synchronization Problems (deadlocks, contention), Performance Issues (blocking operations, memory consistency), and Modern Concurrency Gaps (missing virtual threads, structured concurrency opportunities)</output-format-item>
+            <output-format-item>**PROPOSE** multiple solution options for each identified issue with clear trade-offs: Synchronization strategies (locks vs atomic vs concurrent collections), thread pool configurations (fixed vs cached vs virtual threads), design pattern implementations (Producer-Consumer vs Publish-Subscribe), and performance optimization approaches</output-format-item>
+            <output-format-item>**EXPLAIN** the benefits and considerations of each proposed solution: Thread safety mechanisms (immutability vs synchronization), ExecutorService choices (resource management trade-offs), CompletableFuture composition strategies, modern concurrency features adoption (virtual threads vs platform threads), and testing approaches for concurrent code</output-format-item>
+            <output-format-item>**PRESENT** comprehensive concurrency architecture options: Legacy concurrency patterns vs modern approaches (structured concurrency, scoped values), performance optimization strategies (lock-free algorithms, memory consistency patterns), and scalability enhancement techniques</output-format-item>
+            <output-format-item>**ASK** the user to choose their preferred approach for each category of concurrency improvements rather than implementing all changes automatically</output-format-item>
+            <output-format-item>**VALIDATE** that any proposed concurrency changes will compile, maintain thread safety, avoid deadlocks, and not introduce performance regressions before implementation</output-format-item>
+        </output-format-list>
+    </output-format>
+
     <safeguards>
         <safeguards-list>
-            <safeguards-item>Verify code changes compile and pass tests: `mvn clean verify` or `./mvnw clean verify`</safeguards-item>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` before ANY recommendations</safeguards-item>
+            <safeguards-item>**CRITICAL VALIDATION**: Execute `./mvnw clean verify` to ensure all tests pass</safeguards-item>
+            <safeguards-item>**MANDATORY VERIFICATION**: Confirm all existing functionality remains intact after concurrency improvements</safeguards-item>
+            <safeguards-item>**ROLLBACK REQUIREMENT**: Ensure all changes can be easily reverted if issues arise</safeguards-item>
+            <safeguards-item>**INCREMENTAL SAFETY**: Apply concurrency improvements incrementally, validating after each modification</safeguards-item>
+            <safeguards-item>**THREAD SAFETY VALIDATION**: Verify thread-safe components work correctly under concurrent access</safeguards-item>
+            <safeguards-item>**DEADLOCK PREVENTION**: Check for potential deadlock scenarios in synchronized code</safeguards-item>
+            <safeguards-item>**RESOURCE LEAK PROTECTION**: Ensure proper cleanup of thread pools, executors, and other concurrent resources</safeguards-item>
+            <safeguards-item>**MEMORY CONSISTENCY CHECK**: Validate proper synchronization and memory visibility semantics</safeguards-item>
+            <safeguards-item>**PERFORMANCE REGRESSION GUARD**: Monitor for performance degradation after concurrency changes</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>

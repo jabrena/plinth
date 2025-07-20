@@ -41,6 +41,20 @@
         5.  **Secure Exception Handling**: Manage exceptions in a way that does not expose sensitive information to users or attackers. Log detailed, non-sensitive diagnostic information for developers to aid in debugging, but provide generic, non-revealing error messages to clients. Avoid direct exposure of stack traces or internal system details in error outputs.
     </goal>
 
+    <constraints>
+        <constraints-description>
+            Before applying any recommendations, ensure the project is in a valid state by running Maven compilation.
+            Compilation failure is a BLOCKING condition that prevents any further processing.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization</constraint>
+            <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations</constraint>
+            <constraint>**BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any object-oriented design improvements</constraint>
+            <constraint>**NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile</constraint>
+        </constraint-list>
+    </constraints>
+
     <examples>
         <toc auto-generate="true" />
         <example number="1" id="input-validation">
@@ -657,9 +671,28 @@ public class InsecureExceptionHandler {
         </example>
     </examples>
 
+    <output-format>
+        <output-format-list>
+            <output-format-item>**ANALYZE** the current codebase to identify specific security vulnerabilities and categorize them by severity (CRITICAL, HIGH, MEDIUM, LOW) and vulnerability type (injection, authentication, authorization, cryptography, etc.)</output-format-item>
+            <output-format-item>**CATEGORIZE** security issues found: Input Validation Gaps (missing validation, insufficient sanitization), Injection Vulnerabilities (SQL, command, XSS), Authentication/Authorization Flaws (weak permissions, excessive privileges), Cryptographic Weaknesses (deprecated algorithms, weak key management), and Exception Handling Issues (information disclosure, sensitive data exposure)</output-format-item>
+            <output-format-item>**PROPOSE** multiple remediation options for each identified vulnerability with clear trade-offs: Input validation strategies (whitelisting vs blacklisting vs sanitization), injection protection approaches (parameterized queries vs ORM vs input encoding), privilege management options (RBAC vs ABAC vs minimal permissions), cryptographic upgrade paths (algorithm migration strategies), and secure error handling techniques</output-format-item>
+            <output-format-item>**EXPLAIN** the security benefits and implementation considerations of each proposed solution: Risk reduction impact, performance implications, compatibility concerns, implementation complexity, and maintenance requirements for different security approaches</output-format-item>
+            <output-format-item>**PRESENT** comprehensive security improvement strategies: Defense-in-depth approaches, security configuration options, secure coding standard implementations, compliance framework alignments, and security testing methodologies</output-format-item>
+            <output-format-item>**ASK** the user to choose their preferred approach for each category of security improvements, considering their risk tolerance, compliance requirements, and implementation constraints rather than applying all changes automatically</output-format-item>
+            <output-format-item>**VALIDATE** that any proposed security changes will compile successfully, maintain existing functionality, not introduce new vulnerabilities, and align with security best practices before implementation</output-format-item>
+        </output-format-list>
+    </output-format>
+
     <safeguards>
         <safeguards-list>
-            <safeguards-item>Verify code changes compile and pass tests: `mvn clean verify` or `./mvnw clean verify`</safeguards-item>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` before ANY security recommendations to ensure project stability</safeguards-item>
+            <safeguards-item>**CRITICAL VALIDATION**: Execute `./mvnw clean verify` to ensure all tests pass after each security improvement</safeguards-item>
+            <safeguards-item>**MANDATORY VERIFICATION**: Confirm all existing functionality remains intact through comprehensive test execution</safeguards-item>
+            <safeguards-item>**ROLLBACK REQUIREMENT**: Ensure all security changes can be easily reverted using version control checkpoints</safeguards-item>
+            <safeguards-item>**INCREMENTAL SAFETY**: Apply security improvements incrementally, validating after each modification to isolate potential issues</safeguards-item>
+            <safeguards-item>**SECURITY VALIDATION**: Verify that security improvements don't introduce new vulnerabilities or break existing security controls</safeguards-item>
+            <safeguards-item>**DEPENDENCY SAFETY**: Validate that any new security libraries or dependencies don't conflict with existing project requirements</safeguards-item>
+            <safeguards-item>**PERFORMANCE IMPACT**: Monitor that security enhancements don't significantly degrade application performance</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>

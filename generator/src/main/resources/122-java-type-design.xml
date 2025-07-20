@@ -39,6 +39,20 @@
         Remember, good type design in Java is about communication - making your code's intent clear both to the compiler and to other developers.
     </goal>
 
+    <constraints>
+        <constraints-description>
+            Before applying any recommendations, ensure the project is in a valid state by running Maven compilation.
+            Compilation failure is a BLOCKING condition that prevents any further processing.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization</constraint>
+            <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations</constraint>
+            <constraint>**BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any object-oriented design improvements</constraint>
+            <constraint>**NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile</constraint>
+        </constraint-list>
+    </constraints>
+
     <examples>
         <toc auto-generate="true" />
 
@@ -893,18 +907,28 @@ class BadProductService {
 
     <output-format>
         <output-format-list>
-            <output-format-item>Apply type design principles to improve code quality and maintainability</output-format-item>
-            <output-format-item>Create type-safe wrappers for domain-specific types</output-format-item>
-            <output-format-item>Use generics to create flexible and reusable components</output-format-item>
-            <output-format-item>Establish clear type hierarchies and consistent naming conventions</output-format-item>
-            <output-format-item>Use BigDecimal for precision-sensitive calculations</output-format-item>
-            <output-format-item>Verify code changes compile and pass tests</output-format-item>
+            <output-format-item>**ANALYZE** the current type design to identify specific issues and categorize them by impact (CRITICAL, MAINTAINABILITY, TYPE_SAFETY, READABILITY) and type design area (naming conventions, type hierarchies, generic usage, primitive obsession, type safety)</output-format-item>
+            <output-format-item>**CATEGORIZE** type design problems found: Naming Convention Issues (inconsistent patterns, unclear intent), Type Hierarchy Problems (poor organization, missing abstractions), Generic Type Deficiencies (missing type parameters, overly broad bounds), Primitive Obsession (String/int overuse instead of domain types), Type Safety Gaps (unsafe casts, missing validation), and Precision Issues (double/float for financial calculations)</output-format-item>
+            <output-format-item>**PROPOSE** multiple improvement options for each identified issue with clear trade-offs: Type wrapper creation strategies (value objects vs records), generic design approaches (bounded vs unbounded parameters), hierarchy organization methods (inheritance vs composition), naming standardization techniques (domain-driven vs technical naming), and precision type adoption paths (gradual vs complete BigDecimal migration)</output-format-item>
+            <output-format-item>**EXPLAIN** the benefits and considerations of each proposed solution: Type safety improvements, maintainability enhancements, readability benefits, performance implications, migration complexity, and team adoption considerations for different type design approaches</output-format-item>
+            <output-format-item>**PRESENT** comprehensive type design improvement strategies: Domain-driven type modeling approaches, fluent interface design patterns, type hierarchy organization principles, generic type parameter optimization, and precision-sensitive calculation refactoring methods</output-format-item>
+            <output-format-item>**ASK** the user to choose their preferred approach for each category of type design improvements, considering their domain requirements, team expertise, performance constraints, and migration timeline rather than implementing all changes automatically</output-format-item>
+            <output-format-item>**VALIDATE** that any proposed type design changes will compile successfully, maintain existing functionality, preserve type safety, and align with established architectural patterns before implementation</output-format-item>
         </output-format-list>
     </output-format>
 
     <safeguards>
         <safeguards-list>
-            <safeguards-item>Verify code changes compile and pass tests: `mvn clean verify` or `./mvnw clean verify`</safeguards-item>
+            <safeguards-item>**CONTINUOUS COMPILATION**: Validate compilation after each type design change to catch issues immediately</safeguards-item>
+            <safeguards-item>**TYPE COMPATIBILITY**: Ensure new type designs maintain backward compatibility with existing APIs and don't break client code</safeguards-item>
+            <safeguards-item>**CIRCULAR DEPENDENCY CHECK**: Verify that new type hierarchies don't introduce circular dependencies or inappropriate coupling</safeguards-item>
+            <safeguards-item>**GENERIC BOUNDS VALIDATION**: Confirm that generic type parameters have appropriate bounds and don't create unchecked warnings</safeguards-item>
+            <safeguards-item>**TEST COVERAGE MAINTENANCE**: Execute `./mvnw clean verify` to ensure all tests pass after implementing type design improvements</safeguards-item>
+            <safeguards-item>**FUNCTIONAL REGRESSION CHECK**: Confirm all existing functionality remains intact after applying type design changes</safeguards-item>
+            <safeguards-item>**ROLLBACK READINESS**: Ensure all type design changes can be easily reverted if they introduce regressions or compilation issues</safeguards-item>
+            <safeguards-item>**INCREMENTAL VALIDATION**: Apply improvements incrementally, validating each change before proceeding to the next</safeguards-item>
+            <safeguards-item>**DEPENDENCY IMPACT ANALYSIS**: Verify that type changes don't break existing dependencies, imports, or class relationships</safeguards-item>
+            <safeguards-item>**FINAL INTEGRATION TEST**: Perform comprehensive project compilation and test execution after completing all type design improvements</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>

@@ -67,6 +67,16 @@ These guidelines are built upon the following core principles:
 *   **Structured Concurrency**: Use `StructuredTaskScope` to simplify the management of multiple related concurrent tasks as a single unit of work, improving error handling, cancellation, and resource management.
 *   **Scoped Values**: Prefer `ScopedValue` over `ThreadLocal` for sharing immutable data robustly and efficiently across tasks within a dynamically bounded scope, especially when working with virtual threads.
 
+## Constraints
+
+Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
+
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization
+- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any object-oriented design improvements
+- **NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile
+
 ## Examples
 
 ### Table of contents
@@ -1690,6 +1700,25 @@ class BadScopedValueUsage {
 }
 ```
 
+## Output Format
+
+- **ANALYZE** the current concurrency implementation to identify specific issues and categorize them by impact (CRITICAL, PERFORMANCE, DEADLOCK_RISK, SCALABILITY, etc.)
+- **CATEGORIZE** concurrency problems found: Thread Safety Issues (race conditions, unsafe collections), Thread Pool Management (sizing, configuration, lifecycle), Synchronization Problems (deadlocks, contention), Performance Issues (blocking operations, memory consistency), and Modern Concurrency Gaps (missing virtual threads, structured concurrency opportunities)
+- **PROPOSE** multiple solution options for each identified issue with clear trade-offs: Synchronization strategies (locks vs atomic vs concurrent collections), thread pool configurations (fixed vs cached vs virtual threads), design pattern implementations (Producer-Consumer vs Publish-Subscribe), and performance optimization approaches
+- **EXPLAIN** the benefits and considerations of each proposed solution: Thread safety mechanisms (immutability vs synchronization), ExecutorService choices (resource management trade-offs), CompletableFuture composition strategies, modern concurrency features adoption (virtual threads vs platform threads), and testing approaches for concurrent code
+- **PRESENT** comprehensive concurrency architecture options: Legacy concurrency patterns vs modern approaches (structured concurrency, scoped values), performance optimization strategies (lock-free algorithms, memory consistency patterns), and scalability enhancement techniques
+- **ASK** the user to choose their preferred approach for each category of concurrency improvements rather than implementing all changes automatically
+- **VALIDATE** that any proposed concurrency changes will compile, maintain thread safety, avoid deadlocks, and not introduce performance regressions before implementation
+
 ## Safeguards
 
-- Verify code changes compile and pass tests: `mvn clean verify` or `./mvnw clean verify`
+- **BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` before ANY recommendations
+- **CRITICAL VALIDATION**: Execute `./mvnw clean verify` to ensure all tests pass
+- **MANDATORY VERIFICATION**: Confirm all existing functionality remains intact after concurrency improvements
+- **ROLLBACK REQUIREMENT**: Ensure all changes can be easily reverted if issues arise
+- **INCREMENTAL SAFETY**: Apply concurrency improvements incrementally, validating after each modification
+- **THREAD SAFETY VALIDATION**: Verify thread-safe components work correctly under concurrent access
+- **DEADLOCK PREVENTION**: Check for potential deadlock scenarios in synchronized code
+- **RESOURCE LEAK PROTECTION**: Ensure proper cleanup of thread pools, executors, and other concurrent resources
+- **MEMORY CONSISTENCY CHECK**: Validate proper synchronization and memory visibility semantics
+- **PERFORMANCE REGRESSION GUARD**: Monitor for performance degradation after concurrency changes

@@ -33,8 +33,8 @@ According to the documentation from [Google Gemini](https://drive.google.com/fil
 - Role
 - Context
 - Goal
-- Instructions
 - Constraints
+- Instructions
 - Examples
 - Output format
 - Safeguards
@@ -46,6 +46,14 @@ With this structure in mind, the project uses an XML Schema to define the way th
 ## Cursor Rules
 
 Read the generated list of cursor rules for Java [here](./CURSOR-RULES-JAVA.md). The set of cursor rules covers aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring`, `Performance testing with JMeter` & `Profiling with Async Profiler`.
+
+## Constraints, Output format & Safety guards
+
+The cursor rules in this repository follow [The Three-Node Quality Framework for AI Prompts](./docs/articles/prompt-quality-framework.md) which ensures both comprehensive responses and safe execution. This framework consists of three distinct pillars: **constraints**, **output-format** and **safeguards**. Each node operates at different phases of the AI interaction timeline, creating a defense-in-depth strategy.
+
+The **constraints** act as gate-keeping mechanisms that define hard requirements and blocking conditions before any work begins - essentially asking "Can I start?" The **output-format** provides prescriptive guidance during execution, ensuring comprehensive coverage and organized responses by defining "What should I deliver?" Finally, **safeguards** implement protective measures throughout and after execution, continuously asking "Did it work safely?" This temporal flow from pre-execution validation to structured execution to continuous monitoring ensures quality at every stage.
+
+This framework transforms AI from a general assistant into a specialized consultant with built-in quality controls and safety measures, making it particularly suitable for critical applications like Java software development. By embedding domain-specific expertise directly into the prompt structure, the cursor rules provide predictable, comprehensive, and safe interactions while reducing cognitive load for developers and ensuring system integrity throughout the development process.
 
 ## Getting started
 
@@ -74,20 +82,6 @@ Create an java development guide using the cursor rule @100-java-cursor-rules-li
 ## Limitations & Opportunities
 
 From the beginning, you need to know that results provided by the interaction with the different `Cursor rules` are not deterministic due to the models' nature, but this fact should not be considered in a negative way because you could see it as an opportunity to run the rules multiple times and see how models offer additional points of view about your repository, package, or class in different ways to improve your Java software.
-
-## Safety guards
-
-The modern rules are designed with safety in mind so any change proposed by the models will be verified:
-
-```xml
-<safeguards>
-    <safeguards-list>
-        <safeguards-item>verify changes with the command: `mvn validate` or `./mvnw validate`</safeguards-item>
-    </safeguards-list>
-</safeguards>
-```
-
-And changes later will be reviewed by the Software engineer.
 
 ## Examples
 

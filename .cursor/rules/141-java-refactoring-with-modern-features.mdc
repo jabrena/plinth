@@ -59,6 +59,16 @@ Focus on being consultative rather than prescriptive - analyze, propose, ask, th
 4. **Performance Awareness**: Consider performance implications of modern features
 5. **Type Design**: Apply typography-inspired principles to code structure
 
+## Constraints
+
+Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
+
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization
+- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any object-oriented design improvements
+- **NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile
+
 ## Examples
 
 ### Table of contents
@@ -1160,6 +1170,24 @@ public class OldMultiLineStringExample {
 }
 ```
 
+## Output Format
+
+- **ANALYZE** Java code to identify specific modern feature refactoring opportunities and categorize them by impact (CRITICAL, MAINTAINABILITY, PERFORMANCE, READABILITY) and area (lambda expressions, stream API, Optional usage, java.time API, collection factories, CompletableFuture, text blocks, pattern matching)
+- **CATEGORIZE** modern Java refactoring opportunities found: Legacy Code Issues (anonymous classes vs lambdas, Iterator loops vs streams, null checks vs Optional, Date/Calendar vs java.time), Performance Improvements (parallel stream opportunities, lazy initialization patterns, efficient collection creation), Readability Enhancements (method references vs lambdas, text blocks vs string concatenation, var type inference), and Modern API Adoption (CompletableFuture for async, module system benefits, pattern matching simplifications)
+- **PROPOSE** multiple modern Java refactoring options for each identified opportunity with clear trade-offs: Lambda conversion strategies (method references vs lambda expressions vs keeping anonymous classes), Stream API adoption approaches (sequential vs parallel vs traditional loops), Optional integration methods (return type changes vs internal usage vs gradual adoption), API modernization paths (java.time migration vs incremental adoption vs compatibility layers)
+- **EXPLAIN** the benefits and considerations of each proposed modern Java solution: Code readability improvements, performance implications and benchmarking needs, maintenance complexity changes, team learning curve requirements, backward compatibility concerns, and migration effort estimates for different modernization approaches
+- **PRESENT** comprehensive modern Java adoption strategies: Feature-by-feature modernization roadmaps (lambdas → streams → Optional → java.time → modules), refactoring techniques (Extract Lambda, Replace Loop with Stream, Introduce Optional), testing strategies for modern features, and performance validation approaches (before/after benchmarks, profiling modern vs legacy code)
+- **ASK** the user to choose their preferred approach for each category of modern Java improvements, considering their Java version constraints, team expertise level, performance requirements, and modernization timeline rather than implementing all changes automatically
+- **VALIDATE** that any proposed modern Java refactoring will compile successfully, maintain existing functionality, preserve business logic integrity, and achieve expected performance characteristics before implementation
+
 ## Safeguards
 
-- Verify code changes compile and pass tests: `mvn clean verify` or `./mvnw clean verify`
+- **BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` or `mvn compile` before ANY modern Java refactoring recommendations - compilation failure is a HARD STOP
+- **CRITICAL VALIDATION**: Execute `./mvnw clean verify` or `mvn clean verify` to ensure all tests pass after applying modern Java features
+- **MANDATORY VERIFICATION**: Confirm all existing functionality remains intact after modern Java refactoring, especially behavioral equivalence of lambda conversions
+- **SAFETY PROTOCOL**: If ANY compilation error occurs during modernization, IMMEDIATELY cease recommendations and require user intervention
+- **PERFORMANCE VALIDATION**: Ensure modern Java features don't introduce performance regressions, especially with stream operations and Optional usage patterns
+- **ROLLBACK REQUIREMENT**: Ensure all modern Java refactoring changes can be easily reverted if they introduce issues or performance problems
+- **INCREMENTAL SAFETY**: Apply modern Java features incrementally, validating compilation and tests after each significant refactoring step
+- **DEPENDENCY VALIDATION**: Check that modern Java features are compatible with project's target Java version and don't break existing dependencies
+- **FINAL VERIFICATION**: After completing all modern Java improvements, perform a final full project compilation, test run, and basic performance check

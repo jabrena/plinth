@@ -45,9 +45,9 @@
 
     <output-format>
         <output-format-list>
-            <output-format-item>Generate the complete markdown file following the embedded template exactly</output-format-item>
-            <output-format-item>Use proper markdown formatting with headers, code blocks, tables, and checklists</output-format-item>
-            <output-format-item>**VERIFY**: Final output contains ONLY what appears in the embedded template</output-format-item>
+            <output-format-item>**File Creation**: Generate the complete markdown file named `CURSOR-RULES-JAVA.md` in the project root directory</output-format-item>
+            <output-format-item>**Template Adherence**: Follow the embedded template structure and content exactly - no additions, modifications, or omissions</output-format-item>
+            <output-format-item>**File Handling**: If `CURSOR-RULES-JAVA.md` already exists, overwrite it completely with the new generated content</output-format-item>
         </output-format-list>
     </output-format>
 </prompt>
