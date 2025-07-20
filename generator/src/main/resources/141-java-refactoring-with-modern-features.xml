@@ -5,6 +5,8 @@
         id="141-java-refactoring-with-modern-features" version="1.0">
 
     <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.8.0</version>
         <cursor-ai>
             <description></description>
             <globs></globs>
@@ -20,7 +22,6 @@
             <tag>optional</tag>
             <tag>best-practices</tag>
         </tags>
-        <version>0.8.0</version>
         <title>Modern Java Development Guidelines (Java 8+)</title>
     </metadata>
 

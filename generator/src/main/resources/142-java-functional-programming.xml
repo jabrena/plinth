@@ -5,6 +5,8 @@
     id="142-java-functional-programming" version="1.0">
 
     <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.8.0</version>
         <!-- Markdown Front Matter for Cursor Rules -->
         <cursor-ai>
             <description></description>
@@ -19,7 +21,6 @@
             <tag>lambda</tag>
             <tag>type-safety</tag>
         </tags>
-        <version>0.8.0</version>
         <title>Java Functional Programming rules</title>
     </metadata>
 

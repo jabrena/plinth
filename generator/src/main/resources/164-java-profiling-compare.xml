@@ -4,6 +4,8 @@
     id="164-java-profiling-compare" version="1.0">
 
     <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.8.0</version>
         <cursor-ai>
             <description></description>
             <globs></globs>
@@ -16,7 +18,6 @@
             <tag>comparison</tag>
             <tag>refactoring</tag>
         </tags>
-        <version>0.8.0</version>
         <title>Java Profiling Workflow / Step 4 / Compare results after refactoring</title>
     </metadata>
 

@@ -5,6 +5,8 @@
         id="100-java-checklist-guide" version="1.0">
 
     <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.8.0</version>
         <cursor-ai>
             <description></description>
             <globs></globs>
@@ -15,7 +17,6 @@
             <tag>checklist</tag>
             <tag>cursor-rules</tag>
         </tags>
-        <version>0.8.0</version>
         <title>Create a Checklist with all Java steps to use with cursor rules for Java</title>
     </metadata>
 

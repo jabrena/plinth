@@ -5,6 +5,8 @@
     id="143-java-data-oriented-programming" version="1.0">
 
     <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.8.0</version>
         <!-- Markdown Front Matter for Cursor Rules -->
         <cursor-ai>
             <description></description>
@@ -19,7 +21,6 @@
             <tag>pure-functions</tag>
             <tag>best-practices</tag>
         </tags>
-        <version>0.8.0</version>
         <title>Java rules to apply data oriented programming style</title>
     </metadata>
 

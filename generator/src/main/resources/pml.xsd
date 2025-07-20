@@ -25,9 +25,10 @@
     <xs:element name="metadata">
         <xs:complexType>
             <xs:sequence>
+                <xs:element ref="author" minOccurs="0"/>
+                <xs:element ref="version" minOccurs="0"/>
                 <xs:element ref="cursor-ai"/>
                 <xs:element ref="tags" minOccurs="0"/>
-                <xs:element ref="version" minOccurs="0"/>
                 <xs:element ref="title"/>
             </xs:sequence>
         </xs:complexType>
@@ -47,6 +48,7 @@
     <xs:element name="description" type="xs:string"/>
     <xs:element name="globs" type="xs:string"/>
     <xs:element name="always-apply" type="xs:boolean"/>
+    <xs:element name="author" type="xs:string"/>
     <xs:element name="version" type="xs:string"/>
 
     <xs:element name="tags">

@@ -5,6 +5,8 @@
         id="111-java-maven-dependencies" version="1.0">
 
     <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.8.0</version>
         <cursor-ai>
             <description></description>
             <globs></globs>
@@ -17,7 +19,6 @@
             <tag>jspecify</tag>
             <tag>nullness</tag>
         </tags>
-        <version>0.8.0</version>
         <title>Add Maven dependencies for improved code quality</title>
     </metadata>
 
