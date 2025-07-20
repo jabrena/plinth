@@ -5,6 +5,8 @@
     id="121-java-object-oriented-design" version="1.0">
 
     <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.8.0</version>
         <!-- Cursor AI specific configuration -->
         <cursor-ai>
             <description></description>
@@ -17,7 +19,6 @@
             <tag>design</tag>
             <tag>best-practices</tag>
         </tags>
-        <version>0.8.0</version>
         <title>Java Object-Oriented Design Guidelines</title>
     </metadata>
 

@@ -5,6 +5,8 @@
     id="125-java-concurrency" version="1.0">
 
     <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.8.0</version>
         <!-- Markdown Front Matter for Cursor Rules -->
         <cursor-ai>
             <description></description>
@@ -20,7 +22,6 @@
             <tag>synchronization</tag>
             <tag>performance</tag>
         </tags>
-        <version>0.8.0</version>
         <title>Java rules for Concurrency objects</title>
     </metadata>
 

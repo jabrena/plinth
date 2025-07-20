@@ -7,18 +7,15 @@
 
     <xsl:template match="/prompt">
         <!-- Common frontmatter and header -->
-        <xsl:text>---
-description:</xsl:text>
-        <xsl:if test="normalize-space(metadata/cursor-ai/description)">
-            <xsl:text> </xsl:text><xsl:value-of select="normalize-space(metadata/cursor-ai/description)"/>
+        <xsl:text>---</xsl:text>
+        <xsl:if test="normalize-space(metadata/author)">
+            <xsl:text>
+author: </xsl:text><xsl:value-of select="normalize-space(metadata/author)"/>
         </xsl:if>
-        <xsl:text>
-globs:</xsl:text>
-        <xsl:if test="normalize-space(metadata/cursor-ai/globs)">
-            <xsl:text> </xsl:text><xsl:value-of select="normalize-space(metadata/cursor-ai/globs)"/>
+        <xsl:if test="normalize-space(metadata/version)">
+            <xsl:text>
+version: </xsl:text><xsl:value-of select="normalize-space(metadata/version)"/>
         </xsl:if>
-        <xsl:text>
-alwaysApply: </xsl:text><xsl:value-of select="normalize-space(metadata/cursor-ai/always-apply)"/>
         <xsl:text>
 ---
 # </xsl:text><xsl:value-of select="metadata/title"/>

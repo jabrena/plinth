@@ -5,6 +5,8 @@
     id="122-java-type-design" version="1.0">
 
     <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.8.0</version>
         <!-- Cursor AI specific configuration -->
         <cursor-ai>
             <description></description>
@@ -18,7 +20,6 @@
             <tag>generics</tag>
             <tag>type-safety</tag>
         </tags>
-        <version>0.8.0</version>
         <title>Type Design Thinking in Java</title>
     </metadata>
 

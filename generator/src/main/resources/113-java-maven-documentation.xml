@@ -5,6 +5,8 @@
         id="112-java-maven-documentation" version="1.0">
 
     <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.8.0</version>
         <cursor-ai>
             <description></description>
             <globs></globs>
@@ -15,7 +17,6 @@
             <tag>java</tag>
             <tag>documentation</tag>
         </tags>
-        <version>0.8.0</version>
         <title>Create README-DEV.md with information about how to use the Maven project</title>
     </metadata>
 

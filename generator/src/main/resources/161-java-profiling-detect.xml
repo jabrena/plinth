@@ -5,6 +5,8 @@
     id="161-java-profiling-detect" version="1.0">
 
     <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.8.0</version>
         <cursor-ai>
             <description></description>
             <globs></globs>
@@ -17,7 +19,6 @@
             <tag>detection</tag>
             <tag>measurement</tag>
         </tags>
-        <version>0.8.0</version>
         <title>Java Profiling Workflow / Step 1 / Collect data to measure potential issues</title>
     </metadata>
 

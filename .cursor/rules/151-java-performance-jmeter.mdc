@@ -1,7 +1,6 @@
 ---
-description:
-globs:
-alwaysApply: false
+author: Juan Antonio Breña Moral
+version: 0.8.0
 ---
 # Run performance tests based on JMeter
 
