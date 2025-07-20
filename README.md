@@ -13,6 +13,12 @@ Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agen
 
 Provide a set of Interactive Cursor rules for Java that help software engineers in their daily work.
 
+## Getting started
+
+If you are interested in getting the benefits of this cursor rules for Java, you have different alternatives like: `Using this Git repository`, `Using the Zipped rules from latest release` or using a `JBang CLI` specialized in this task.
+
+Read [the following document](./GETTING-STARTED.md) to start using this set of Cursor rules.
+
 ## What is a System prompt?
 
 A system prompt is a set of instructions given to an AI model that defines how it should behave, what role it should take on, and what guidelines it should follow when responding to users. Think of it as the "operating manual" that shapes the AI's personality, capabilities, and boundaries.
@@ -54,30 +60,6 @@ The cursor rules in this repository follow [The Three-Node Quality Framework for
 The **constraints** act as gate-keeping mechanisms that define hard requirements and blocking conditions before any work begins - essentially asking "Can I start?" The **output-format** provides prescriptive guidance during execution, ensuring comprehensive coverage and organized responses by defining "What should I deliver?" Finally, **safeguards** implement protective measures throughout and after execution, continuously asking "Did it work safely?" This temporal flow from pre-execution validation to structured execution to continuous monitoring ensures quality at every stage.
 
 This framework transforms AI from a general assistant into a specialized consultant with built-in quality controls and safety measures, making it particularly suitable for critical applications like Java software development. By embedding domain-specific expertise directly into the prompt structure, the cursor rules provide predictable, comprehensive, and safe interactions while reducing cognitive load for developers and ensuring system integrity throughout the development process.
-
-## Getting started
-
-If you are interested in getting the benefits of these cursor rules for Java, you can manually download this repository and copy the './cursor' folder and paste it into your repository, download the rules from [the last release](https://github.com/jabrena/cursor-rules-java/releases) in zip format or just delegate this task to a specific command-line tool based on **Jbang**:
-
-```bash
-sdk install jbang
-# Add cursor rules for Java in ./cursor/rules
-jbang --fresh setup@jabrena init --cursor https://github.com/jabrena/cursor-rules-java
-```
-
-Once you have installed the cursor rules:
-
-| Cursor Rule | Description | Prompt | Notes |
-|-------------|-------------|--------|-------|
-| [100-java-cursor-rules-list](.cursor/rules/100-java-cursor-rules-list.mdc) | Create a comprehensive step-by-step guide for using cursor rules for Java | `Create an java development guide using the cursor rule @100-java-cursor-rules-list` | This cursor rule is applied automatically without any interaction with the Software engineer. |
-
-Type the following prompt in the cursor chat:
-
-![](./docs/getting-started-prompt.png)
-
-```bash
-Create an java development guide using the cursor rule @100-java-cursor-rules-list
-```
 
 ## Limitations & Opportunities
 
