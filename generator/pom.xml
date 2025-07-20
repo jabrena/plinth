@@ -5,7 +5,7 @@
 
   <groupId>info.jab.pml</groupId>
   <artifactId>cursor-rules-generator</artifactId>
-  <version>0.1.0</version>
+  <version>0.9.0-SNAPSHOT</version>
 
   <properties>
     <java.version>24</java.version>
@@ -16,17 +16,18 @@
     <!-- Plugin versions -->
     <maven-plugin-compiler.version>3.14.0</maven-plugin-compiler.version>
     <maven-plugin-surefire.version>3.5.3</maven-plugin-surefire.version>
-    <maven-plugin-enforcer.version>3.5.0</maven-plugin-enforcer.version>
-    <maven-plugin-spotless.version>2.44.5</maven-plugin-spotless.version>
+    <maven-plugin-enforcer.version>3.6.1</maven-plugin-enforcer.version>
+    <maven-plugin-spotless.version>2.45.0</maven-plugin-spotless.version>
     <maven-plugin-versions.version>2.18.0</maven-plugin-versions.version>
     <extra-enforcer-rules.version>1.10.0</extra-enforcer-rules.version>
 
     <!-- Logging dependency versions -->
-    <slf4j.version>2.0.15</slf4j.version>
-    <logback.version>1.5.12</logback.version>
+    <slf4j.version>2.0.17</slf4j.version>
+    <logback.version>1.5.18</logback.version>
+    <junit.version>5.13.3</junit.version>
 
     <!-- Test dependency versions -->
-    <assertj.version>3.26.3</assertj.version>
+    <assertj.version>3.27.3</assertj.version>
   </properties>
 
   <dependencyManagement>
@@ -34,7 +35,7 @@
       <dependency>
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
-        <version>5.11.0</version>
+        <version>${junit.version}</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
