@@ -17,6 +17,7 @@
             <tag>java</tag>
             <tag>dependencies</tag>
             <tag>jspecify</tag>
+            <tag>vavr</tag>
             <tag>nullness</tag>
         </tags>
         <title>Add Maven dependencies for improved code quality</title>
@@ -119,10 +120,11 @@ Based on user responses, implement the dependency configuration following this o
     <jspecify.version>1.0.0</jspecify.version>
     <error-prone.version>2.35.1</error-prone.version>
     <nullaway.version>0.12.0</nullaway.version>
+    <vavr.version>0.10.6</vavr.version>
 </properties>
 ```
 
-**Dependency Strategy**: Add only essential dependencies that enhance code quality and safety.
+**Dependency Strategy**: Add only essential dependencies that enhance code quality, safety, and functional programming capabilities.
 
 **JSpecify Dependency** (add only if selected):
 ```xml
@@ -132,6 +134,17 @@ Based on user responses, implement the dependency configuration following this o
         <artifactId>jspecify</artifactId>
         <version>${jspecify.version}</version>
         <scope>provided</scope>
+    </dependency>
+</dependencies>
+```
+
+**VAVR Dependency** (add only if selected):
+```xml
+<dependencies>
+    <dependency>
+        <groupId>io.vavr</groupId>
+        <artifactId>vavr</artifactId>
+        <version>${vavr.version}</version>
     </dependency>
 </dependencies>
 ```
@@ -199,6 +212,7 @@ Create `.mvn/jvm.config` file with:
                     <step-constraint-list>
                         <step-constraint>**MUST** add only dependencies that were selected by the user</step-constraint>
                         <step-constraint>**MUST** use `provided` scope for JSpecify dependency</step-constraint>
+                        <step-constraint>**MUST** use `compile` scope for VAVR dependency (default scope)</step-constraint>
                         <step-constraint>**MUST** include full Error Prone and NullAway configuration when selected</step-constraint>
                         <step-constraint>**MUST** include `-Xlint:all` and `-Werror` compiler arguments</step-constraint>
                         <step-constraint>**MUST** include `--should-stop=ifError=FLOW` configuration</step-constraint>
@@ -211,7 +225,7 @@ Create `.mvn/jvm.config` file with:
             </step>
             <step number="4">
                 <step-title>Usage Examples</step-title>
-                <step-content>
+                <step-content><![CDATA[
 Only provide examples for dependencies that were actually added based on user selections.
 
 **JSpecify Usage Example** (if added):
@@ -243,6 +257,47 @@ public class ConstructorSimple {
 }
 ```
 
+**VAVR Usage Example** (if added):
+
+```java
+import io.vavr.control.Try;
+import io.vavr.control.Either;
+import io.vavr.collection.List;
+
+public class VavrExamples {
+
+    // Try monad for error handling
+    public static void tryExample() {
+        Try<Integer> success = Try.of(() -> 10 / 2);
+        success.onSuccess(System.out::println);
+        success.onFailure(System.err::println);
+
+        Try<Integer> failure = Try.of(() -> 10 / 0);
+        failure.onSuccess(System.out::println);
+        failure.onFailure(System.err::println);
+    }
+
+    // Either monad for functional error handling
+    public static Either<String, Integer> divide(int a, int b) {
+        if (b == 0) {
+            return Either.left("Division by zero");
+        }
+        return Either.right(a / b);
+    }
+
+    // Immutable collections
+    public static void collectionsExample() {
+        List<Integer> numbers = List.of(1, 2, 3, 4, 5);
+        List<Integer> doubled = numbers.map(x -> x * 2);
+        List<Integer> evens = numbers.filter(x -> x % 2 == 0);
+
+        System.out.println("Original: " + numbers);
+        System.out.println("Doubled: " + doubled);
+        System.out.println("Evens: " + evens);
+    }
+}
+```
+
 **Build Command Examples** (if enhanced compiler analysis added):
 ```bash
 # Run with enhanced analysis
@@ -251,7 +306,7 @@ public class ConstructorSimple {
 # Compile will fail with nullness violations
 ./mvnw clean compile -Dmaven.compiler.showWarnings=true
 ```
-                </step-content>
+                ]]></step-content>
             </step>
         </steps>
     </instructions>
@@ -263,6 +318,7 @@ public class ConstructorSimple {
             <output-format-item>Add only requested dependencies based on user selections</output-format-item>
             <output-format-item>Follow configuration specifications exactly</output-format-item>
             <output-format-item>Update package names in NullAway configuration</output-format-item>
+            <output-format-item>Add VAVR dependency only if user selected functional programming support</output-format-item>
             <output-format-item>Provide usage examples only for features that were added</output-format-item>
         </output-format-list>
     </output-format>
@@ -273,6 +329,7 @@ public class ConstructorSimple {
             <safeguards-item>Always read template files fresh using file_search and read_file tools</safeguards-item>
             <safeguards-item>Never proceed without user confirmation for each step</safeguards-item>
             <safeguards-item>Ensure JSpecify dependency uses `provided` scope</safeguards-item>
+            <safeguards-item>Ensure VAVR dependency uses default `compile` scope</safeguards-item>
             <safeguards-item>Test enhanced compiler analysis with a simple build</safeguards-item>
         </safeguards-list>
     </safeguards>

@@ -87,6 +87,18 @@ This is needed to configure NullAway to analyze your code. For example, if your 
 
 ---
 
+**Question 4**: Do you want to add VAVR for functional programming support?
+
+VAVR is a functional programming library for Java that provides immutable data types, functional control structures (Try & Either), and immutable collections. It helps write more robust and expressive code using functional programming patterns.
+
+**Options**:
+- **y** - Add VAVR dependency for functional programming (recommended for functional style)
+- **n** - Skip VAVR dependency
+
+**Recommendation**: Choose 'y' if you want to use functional programming patterns, immutable data structures, or need better error handling with Try/Either monads.
+
+---
+
 ```
 
 #### Step Constraints
@@ -129,10 +141,11 @@ Based on user responses, implement the dependency configuration following this o
     <jspecify.version>1.0.0</jspecify.version>
     <error-prone.version>2.35.1</error-prone.version>
     <nullaway.version>0.12.0</nullaway.version>
+    <vavr.version>0.10.6</vavr.version>
 </properties>
 ```
 
-**Dependency Strategy**: Add only essential dependencies that enhance code quality and safety.
+**Dependency Strategy**: Add only essential dependencies that enhance code quality, safety, and functional programming capabilities.
 
 **JSpecify Dependency** (add only if selected):
 ```xml
@@ -142,6 +155,17 @@ Based on user responses, implement the dependency configuration following this o
         <artifactId>jspecify</artifactId>
         <version>${jspecify.version}</version>
         <scope>provided</scope>
+    </dependency>
+</dependencies>
+```
+
+**VAVR Dependency** (add only if selected):
+```xml
+<dependencies>
+    <dependency>
+        <groupId>io.vavr</groupId>
+        <artifactId>vavr</artifactId>
+        <version>${vavr.version}</version>
     </dependency>
 </dependencies>
 ```
@@ -209,6 +233,7 @@ Create `.mvn/jvm.config` file with:
 
 - **MUST** add only dependencies that were selected by the user
 - **MUST** use `provided` scope for JSpecify dependency
+- **MUST** use `compile` scope for VAVR dependency (default scope)
 - **MUST** include full Error Prone and NullAway configuration when selected
 - **MUST** include `-Xlint:all` and `-Werror` compiler arguments
 - **MUST** include `--should-stop=ifError=FLOW` configuration
@@ -250,6 +275,47 @@ public class ConstructorSimple {
 }
 ```
 
+**VAVR Usage Example** (if added):
+
+```java
+import io.vavr.control.Try;
+import io.vavr.control.Either;
+import io.vavr.collection.List;
+
+public class VavrExamples {
+
+    // Try monad for error handling
+    public static void tryExample() {
+        Try<Integer> success = Try.of(() -> 10 / 2);
+        success.onSuccess(System.out::println);
+        success.onFailure(System.err::println);
+
+        Try<Integer> failure = Try.of(() -> 10 / 0);
+        failure.onSuccess(System.out::println);
+        failure.onFailure(System.err::println);
+    }
+
+    // Either monad for functional error handling
+    public static Either<String, Integer> divide(int a, int b) {
+        if (b == 0) {
+            return Either.left("Division by zero");
+        }
+        return Either.right(a / b);
+    }
+
+    // Immutable collections
+    public static void collectionsExample() {
+        List<Integer> numbers = List.of(1, 2, 3, 4, 5);
+        List<Integer> doubled = numbers.map(x -> x * 2);
+        List<Integer> evens = numbers.filter(x -> x % 2 == 0);
+
+        System.out.println("Original: " + numbers);
+        System.out.println("Doubled: " + doubled);
+        System.out.println("Evens: " + evens);
+    }
+}
+```
+
 **Build Command Examples** (if enhanced compiler analysis added):
 ```bash
 # Run with enhanced analysis
@@ -266,6 +332,7 @@ public class ConstructorSimple {
 - Add only requested dependencies based on user selections
 - Follow configuration specifications exactly
 - Update package names in NullAway configuration
+- Add VAVR dependency only if user selected functional programming support
 - Provide usage examples only for features that were added
 
 ## Safeguards
@@ -274,4 +341,5 @@ public class ConstructorSimple {
 - Always read template files fresh using file_search and read_file tools
 - Never proceed without user confirmation for each step
 - Ensure JSpecify dependency uses `provided` scope
+- Ensure VAVR dependency uses default `compile` scope
 - Test enhanced compiler analysis with a simple build

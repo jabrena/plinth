@@ -45,7 +45,7 @@ Once you have installed the cursor rules in the path `./cursor/rules`, type the 
 ![](./docs/getting-started-prompt.png)
 
 ```bash
-Create an java development guide using the cursor rule @100-java-cursor-rules-list
+Create a document with all cursor rules for Java using the cursor rule @100-java-cursor-rules-list
 ```
 
 **Note:** ⚠️ Drag and drop the file @100-java-cursor-rules-list into the chat area to add the effect from the cursor rule.
