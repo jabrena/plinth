@@ -48,7 +48,7 @@ Use the following set of Java Cursor Rules to improve your Java development.
 |----|---|-----|----|
 | [151-java-performance-jmeter](.cursor/rules/151-java-performance-jmeter.mdc) | Run a peformance test with Jmeter | **Prompt:** `Add JMeter performance testing to this project using @151-java-performance-jmeter.mdc` **Note:** You could ask the model to create a JMeter based on a RestController/Resource. Example: `Can you create a Jmeter file based on the restcontroller in the path src/test/resources/jmeter/load-test.jmx?` | This cursor rule is applied automatically without any interaction with the Software engineer. If you create a Jmeter file with the model, review the generation, sometimes it is necessary to hammer a bit. |
 
-## Profiling rules (Async profiler)
+## Profiling rules (Async profiler, jps, jstack, jcmd & jstat)
 
 | Activity | Description | Prompt | Notes |
 |----|----|-----|----|
