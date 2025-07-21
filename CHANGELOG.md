@@ -5,6 +5,57 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.9.0] 2025-07-22
+
+### Added
+
+- **New Cursor Rules**:
+  - `@127-java-functional-exception-handling`: Comprehensive cursor rule for handling exceptions in functional programming style with Either & Optional
+  - `@111-java-maven-dependencies`: Focused cursor rule for Maven dependency management
+  - `@112-java-maven-plugins`: Dedicated cursor rule for Maven plugins management
+
+- **Enhanced Documentation & Getting Started**:
+  - New `GETTING-STARTED.md` comprehensive guide for new users
+  - `docs/articles/prompt-quality-framework.md`: Framework for evaluating prompt quality and cursor rule effectiveness
+
+- **Performance & Profiling Enhancements**:
+  - Enhanced JMeter integration with improved scripts and detailed performance analysis reports
+
+- **Project Examples & Templates**:
+  - `examples/maven-demo-ko/`: New negative example project demonstrating common Maven pitfalls
+  - Enhanced generator template system with modular fragments
+  - New behavioral templates for consultative interaction patterns
+
+### Changed
+
+- **Cursor Rules Architecture Overhaul**:
+  - **Externalized Behavior**: Moved common behavioral patterns from individual rules to shared templates for consistency
+  - **Enhanced Structure**: All cursor rules now include explicit sections for:
+    - Detailed constraints and preconditions
+    - Standardized output format specifications
+    - Comprehensive safeguards and verification steps
+  - **Consultative Approach**: Reinforced interactive, consultative methodology across all rules
+
+- **Rule Organization & Refinement**:
+  - Split `@111-java-maven-deps-and-plugins` into two focused, specialized rules for better clarity
+  - Simplified and refined questioning approach in Maven-related cursor rules
+
+- **Quality & Consistency Improvements**:
+  - Standardized all cursor rules with enhanced constraints, output formats, and safeguards
+  - Improved template system with shared behavioral patterns and reduced duplication
+  - Enhanced XML schema validation and XSL transformation consistency
+
+### Removed
+
+- **Template Consolidation**:
+  - Removed redundant template files that were consolidated into the generator system:
+    - `java-checklist-template.md`
+    - `java-maven-deps-template.md`
+    - `java-maven-plugins-template.md`
+    - `java-performance-script-template.md`
+  - Removed old combined `@111-java-maven-deps-and-plugins.mdc` (split into separate rules)
+  - Removed `@100-java-checklist-guide.mdc` (replaced with cursor rules list)
+
 ## [0.8.0] 2025-07-11
 
 ### Added
