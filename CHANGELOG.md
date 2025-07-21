@@ -9,6 +9,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
+- **Version Control on Cursor Rules**:
+  - All cursor rules include version control
+
 - **New Cursor Rules**:
   - `@127-java-functional-exception-handling`: Comprehensive cursor rule for handling exceptions in functional programming style with Either & Optional
   - `@111-java-maven-dependencies`: Focused cursor rule for Maven dependency management
