@@ -103,6 +103,8 @@ OPTIONS:
     -c, --class CLASS       Main class to run (default: info.jab.ms.MainApplication)
     -h, --heap SIZE         Heap size (default: 512m)
     -p, --profile PROFILE   Profile to activate (default: default)
+                           For Spring Boot: sets spring.profiles.active
+                           For Quarkus: sets quarkus.profile
     --jfr                   Enable Java Flight Recorder (disabled by default)
     --gc-log                Enable GC logging (disabled by default)
     --help                  Show this help message
@@ -121,6 +123,12 @@ EXAMPLES:
 
     # Force Quarkus with custom heap size and profile
     $0 -f quarkus -h 1g -p dev
+
+    # Run Spring Boot with virtual threads profile
+    $0 -f springboot -p vt
+
+    # Run Spring Boot with development profile
+    $0 -f springboot -p dev
 
     # Run with wall-clock profiling
     $0 -m wall

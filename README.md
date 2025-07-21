@@ -51,7 +51,7 @@ With this structure in mind, the project uses an XML Schema to define the way th
 
 ## Cursor Rules
 
-Read the generated list of cursor rules for Java [here](./CURSOR-RULES-JAVA.md). The set of cursor rules covers aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring`, `Performance testing with JMeter` & `Profiling with Async Profiler`.
+Read the generated list of cursor rules for Java [here](./CURSOR-RULES-JAVA.md). The set of cursor rules covers aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring`, `Performance testing with JMeter` & `Profiling with Async profiler, jps, jstack, jcmd & jstat`.
 
 ## Constraints, Output format & Safety guards
 
@@ -61,9 +61,15 @@ The **constraints** act as gate-keeping mechanisms that define hard requirements
 
 This framework transforms AI from a general assistant into a specialized consultant with built-in quality controls and safety measures, making it particularly suitable for critical applications like Java software development. By embedding domain-specific expertise directly into the prompt structure, the cursor rules provide predictable, comprehensive, and safe interactions while reducing cognitive load for developers and ensuring system integrity throughout the development process.
 
-## Limitations & Opportunities
+## Limitations
 
-From the beginning, you need to know that results provided by the interaction with the different `Cursor rules` are not deterministic due to the models' nature, but this fact should not be considered in a negative, Software engineers not always has the same idea to solve a problem, you could find an analogy on this fact.
+### Lack of determinism
+
+From the beginning, you need to know that results provided by the interaction with the different `Cursor rules` are not deterministic due to the models' nature, but this fact should not be considered negative. Software engineers do not always have the same idea to solve a problem, and you could find an analogy in this fact.
+
+### Limits of interactions with Models
+
+Models are able to generate code but they are not able to run code with your local data. In order to solve that limitation you can observe that a few prompts provide scripts to fix the gaps on the model side.
 
 ## Contribute
 

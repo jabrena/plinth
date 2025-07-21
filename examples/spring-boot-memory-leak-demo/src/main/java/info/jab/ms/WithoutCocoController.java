@@ -48,9 +48,10 @@ public class WithoutCocoController {
     public ResponseEntity<String> getObjectsParty() {
         logger.info("Starting object creation endpoint.");
 
-        // Add Bounds Protection
+        // Auto-reset when reaching limit to avoid errors
         if (objects.size() >= MAX_OBJECTS) {
-            return ResponseEntity.badRequest().body("Maximum objects limit reached: " + MAX_OBJECTS);
+            logger.info("Objects limit reached ({}), clearing collection for continued operation", MAX_OBJECTS);
+            objects.clear();
         }
 
         String message = largeMessageSupplier.get();
