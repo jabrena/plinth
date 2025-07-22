@@ -3,9 +3,9 @@
     xsi:noNamespaceSchemaLocation="pml.xsd"
     id="162-java-profiling-analyze" version="1.0">
 
-       <metadata>
+    <metadata>
        <author>Juan Antonio Breña Moral</author>
-       <version>0.9.0-SNAPSHOT</version>
+        <version>0.9.0</version>
         <cursor-ai>
             <description></description>
             <globs></globs>

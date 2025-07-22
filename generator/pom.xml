@@ -1,243 +1,244 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>info.jab.pml</groupId>
-  <artifactId>cursor-rules-generator</artifactId>
-  <version>0.9.0-SNAPSHOT</version>
+    <groupId>info.jab.pml</groupId>
+    <artifactId>cursor-rules-generator</artifactId>
+    <version>0.9.0</version>
 
-  <properties>
-    <java.version>24</java.version>
-    <maven.version>3.9.10</maven.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <properties>
+        <java.version>24</java.version>
+        <maven.version>3.9.10</maven.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <!-- Plugin versions -->
-    <maven-plugin-compiler.version>3.14.0</maven-plugin-compiler.version>
-    <maven-plugin-surefire.version>3.5.3</maven-plugin-surefire.version>
-    <maven-plugin-enforcer.version>3.6.1</maven-plugin-enforcer.version>
-    <maven-plugin-spotless.version>2.45.0</maven-plugin-spotless.version>
-    <maven-plugin-versions.version>2.18.0</maven-plugin-versions.version>
-    <extra-enforcer-rules.version>1.10.0</extra-enforcer-rules.version>
+        <!-- Plugin versions -->
+        <maven-plugin-compiler.version>3.14.0</maven-plugin-compiler.version>
+        <maven-plugin-surefire.version>3.5.3</maven-plugin-surefire.version>
+        <maven-plugin-enforcer.version>3.6.1</maven-plugin-enforcer.version>
+        <maven-plugin-spotless.version>2.45.0</maven-plugin-spotless.version>
+        <maven-plugin-versions.version>2.18.0</maven-plugin-versions.version>
+        <extra-enforcer-rules.version>1.10.0</extra-enforcer-rules.version>
 
-    <!-- Logging dependency versions -->
-    <slf4j.version>2.0.17</slf4j.version>
-    <logback.version>1.5.18</logback.version>
-    <junit.version>5.13.3</junit.version>
+        <!-- Logging dependency versions -->
+        <slf4j.version>2.0.17</slf4j.version>
+        <logback.version>1.5.18</logback.version>
+        <junit.version>5.13.3</junit.version>
 
-    <!-- Test dependency versions -->
-    <assertj.version>3.27.3</assertj.version>
-  </properties>
+        <!-- Test dependency versions -->
+        <assertj.version>3.27.3</assertj.version>
+    </properties>
 
-  <dependencyManagement>
-    <dependencies>
-      <dependency>
-        <groupId>org.junit</groupId>
-        <artifactId>junit-bom</artifactId>
-        <version>${junit.version}</version>
-        <type>pom</type>
-        <scope>import</scope>
-      </dependency>
-    </dependencies>
-  </dependencyManagement>
-
-  <dependencies>
-    <!-- Logging dependencies -->
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-api</artifactId>
-      <version>${slf4j.version}</version>
-    </dependency>
-    <dependency>
-      <groupId>ch.qos.logback</groupId>
-      <artifactId>logback-classic</artifactId>
-      <version>${logback.version}</version>
-    </dependency>
-
-    <!-- Test dependencies -->
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-api</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <!-- Optionally: parameterized tests support -->
-    <dependency>
-      <groupId>org.junit.jupiter</groupId>
-      <artifactId>junit-jupiter-params</artifactId>
-      <scope>test</scope>
-    </dependency>
-    <!-- AssertJ for fluent assertions -->
-    <dependency>
-      <groupId>org.assertj</groupId>
-      <artifactId>assertj-core</artifactId>
-      <version>${assertj.version}</version>
-      <scope>test</scope>
-    </dependency>
-  </dependencies>
-
-  <build>
-    <plugins>
-      <!-- Compiler configuration -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>${maven-plugin-compiler.version}</version>
-        <configuration>
-          <release>${java.version}</release>
-        </configuration>
-      </plugin>
-
-      <!-- Code formatting -->
-      <plugin>
-        <groupId>com.diffplug.spotless</groupId>
-        <artifactId>spotless-maven-plugin</artifactId>
-        <version>${maven-plugin-spotless.version}</version>
-        <configuration>
-          <encoding>UTF-8</encoding>
-          <java>
-            <removeUnusedImports />
-            <importOrder>
-              <order>,\#</order>
-            </importOrder>
-            <endWithNewline />
-            <trimTrailingWhitespace />
-            <indent>
-              <spaces>true</spaces>
-              <spacesPerTab>4</spacesPerTab>
-            </indent>
-          </java>
-        </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>check</goal>
-            </goals>
-            <phase>process-sources</phase>
-          </execution>
-        </executions>
-      </plugin>
-
-      <!-- Maven enforcer for build consistency -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-enforcer-plugin</artifactId>
-        <version>${maven-plugin-enforcer.version}</version>
+    <dependencyManagement>
         <dependencies>
-          <dependency>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>extra-enforcer-rules</artifactId>
-            <version>${extra-enforcer-rules.version}</version>
-          </dependency>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>${junit.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
         </dependencies>
-        <executions>
-          <execution>
-            <id>enforce</id>
-            <configuration>
-              <rules>
-                <banCircularDependencies/>
-                <dependencyConvergence />
-                <banDuplicatePomDependencyVersions />
-                <requireMavenVersion>
-                  <version>${maven.version}</version>
-                </requireMavenVersion>
-                <requireJavaVersion>
-                  <version>${java.version}</version>
-                </requireJavaVersion>
-                <bannedDependencies>
-                  <excludes>
-                    <exclude>org.projectlombok:lombok</exclude>
-                  </excludes>
-                </bannedDependencies>
-              </rules>
-              <fail>true</fail>
-            </configuration>
-            <goals>
-              <goal>enforce</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
+    </dependencyManagement>
 
-      <!-- Unit testing -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-surefire-plugin</artifactId>
-        <version>${maven-plugin-surefire.version}</version>
-        <configuration>
-          <skipAfterFailureCount>1</skipAfterFailureCount>
-          <includes>
-            <include>**/*Test.java</include>
-          </includes>
-          <excludes>
-            <exclude>**/*IT.java</exclude>
-          </excludes>
-        </configuration>
-      </plugin>
+    <dependencies>
+        <!-- Logging dependencies -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>${logback.version}</version>
+        </dependency>
 
-      <!-- Version management -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>versions-maven-plugin</artifactId>
-        <version>${maven-plugin-versions.version}</version>
-        <configuration>
-          <allowSnapshots>false</allowSnapshots>
-        </configuration>
-      </plugin>
+        <!-- Test dependencies -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Optionally: parameterized tests support -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- AssertJ for fluent assertions -->
+        <dependency>
+            <groupId>org.assertj</groupId>
+            <artifactId>assertj-core</artifactId>
+            <version>${assertj.version}</version>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
 
-      <!-- XML validation against XSD -->
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>xml-maven-plugin</artifactId>
-        <version>1.1.0</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>validate</goal>
-            </goals>
-            <phase>validate</phase>
-            <configuration>
-              <validationSets>
-                <validationSet>
-                  <dir>src/main/resources</dir>
-                  <includes>
-                    <include>*.xml</include>
-                  </includes>
-                  <validating>true</validating>
-                  <schemaLanguage>http://www.w3.org/2001/XMLSchema</schemaLanguage>
-                </validationSet>
-              </validationSets>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+    <build>
+        <plugins>
+            <!-- Compiler configuration -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-plugin-compiler.version}</version>
+                <configuration>
+                    <release>${java.version}</release>
+                </configuration>
+            </plugin>
 
-      <!-- Copy generated file to cursor rules directory -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-resources-plugin</artifactId>
-        <version>3.3.1</version>
-        <executions>
-          <execution>
-            <id>copy-cursor-rules</id>
-            <phase>install</phase>
-            <goals>
-              <goal>copy-resources</goal>
-            </goals>
-            <configuration>
-              <outputDirectory>${project.basedir}/../.cursor/rules</outputDirectory>
-              <resources>
-                <resource>
-                  <directory>${project.build.directory}</directory>
-                  <includes>
-                    <include>*.mdc</include>
-                  </includes>
-                </resource>
-              </resources>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+            <!-- Code formatting -->
+            <plugin>
+                <groupId>com.diffplug.spotless</groupId>
+                <artifactId>spotless-maven-plugin</artifactId>
+                <version>${maven-plugin-spotless.version}</version>
+                <configuration>
+                    <encoding>UTF-8</encoding>
+                    <java>
+                        <removeUnusedImports />
+                        <importOrder>
+                            <order>,\#</order>
+                        </importOrder>
+                        <endWithNewline />
+                        <trimTrailingWhitespace />
+                        <indent>
+                            <spaces>true</spaces>
+                            <spacesPerTab>4</spacesPerTab>
+                        </indent>
+                    </java>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>check</goal>
+                        </goals>
+                        <phase>process-sources</phase>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Maven enforcer for build consistency -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <version>${maven-plugin-enforcer.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>extra-enforcer-rules</artifactId>
+                        <version>${extra-enforcer-rules.version}</version>
+                    </dependency>
+                </dependencies>
+                <executions>
+                    <execution>
+                        <id>enforce</id>
+                        <configuration>
+                            <rules>
+                                <banCircularDependencies />
+                                <dependencyConvergence />
+                                <banDuplicatePomDependencyVersions />
+                                <requireMavenVersion>
+                                    <version>${maven.version}</version>
+                                </requireMavenVersion>
+                                <requireJavaVersion>
+                                    <version>${java.version}</version>
+                                </requireJavaVersion>
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>org.projectlombok:lombok</exclude>
+                                    </excludes>
+                                </bannedDependencies>
+                            </rules>
+                            <fail>true</fail>
+                        </configuration>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Unit testing -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>${maven-plugin-surefire.version}</version>
+                <configuration>
+                    <skipAfterFailureCount>1</skipAfterFailureCount>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+                    <excludes>
+                        <exclude>**/*IT.java</exclude>
+                    </excludes>
+                </configuration>
+            </plugin>
+
+            <!-- Version management -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>${maven-plugin-versions.version}</version>
+                <configuration>
+                    <allowSnapshots>false</allowSnapshots>
+                </configuration>
+            </plugin>
+
+            <!-- XML validation against XSD -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>xml-maven-plugin</artifactId>
+                <version>1.1.0</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>validate</goal>
+                        </goals>
+                        <phase>validate</phase>
+                        <configuration>
+                            <validationSets>
+                                <validationSet>
+                                    <dir>src/main/resources</dir>
+                                    <includes>
+                                        <include>*.xml</include>
+                                    </includes>
+                                    <validating>true</validating>
+                                    <schemaLanguage>http://www.w3.org/2001/XMLSchema</schemaLanguage>
+                                </validationSet>
+                            </validationSets>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
+            <!-- Copy generated file to cursor rules directory -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.3.1</version>
+                <executions>
+                    <execution>
+                        <id>copy-cursor-rules</id>
+                        <phase>install</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.basedir}/../.cursor/rules</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.build.directory}</directory>
+                                    <includes>
+                                        <include>*.mdc</include>
+                                    </includes>
+                                </resource>
+                            </resources>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
