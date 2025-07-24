@@ -3,3 +3,5 @@ target/
 .idea/
 .vscode/
 .classpath
+.claude
+system-prompts
