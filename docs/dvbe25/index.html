@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+		<title>reveal.js</title>
+
+		<link rel="stylesheet" href="dist/reset.css">
+		<link rel="stylesheet" href="dist/reveal.css">
+		<link rel="stylesheet" href="dist/theme/white.css">
+
+		<!-- Theme used for syntax highlighted code -->
+		<link rel="stylesheet" href="plugin/highlight/monokai.css">
+
+        <link rel="icon" href="images/java-icon.png" type="image/png" />
+	</head>
+	<body>
+		<div class="reveal">
+			<!-- My CSS Adventures in 2025 -->
+			<!-- Footer -->
+			<style>
+				.footer {
+					position: absolute;
+					left: 10px;
+					bottom: 0px;
+					z-index: 999;
+					background: #fff;
+					margin-bottom: 10px;
+					padding-bottom: 0px;
+				}
+			</style>
+			<div class="footer">
+				<small><a href="https://twitter.com/juanantoniobm" target="_blank">Twitter: @juanantoniobm</a></small>
+			</div>
+			<div class="slides">
+                <section>
+					<section data-background-image="images/bg.jpg">
+						<h2>
+                            <span style="display: inline-block; color: black;  background: #DFFF6D;">
+                                The power of Cursor rules in Java Enterprise development
+                            </span>
+                        </h2>
+                        <p>
+							<span style="display: inline-block; color: black;  background: #fff;">
+								<a href="https://twitter.com/juanantoniobm" target="_blank">Juan Antonio Breña Moral</a>
+							</span>
+						</p>
+						<img src="images/duke.png" width="15%" />
+					</section>
+				</section>
+				<section>
+					<h2>Agenda (30 min)</h2>
+					<ul>
+						<li>Who I am</li>
+						<li>What is a System prompt?</li>
+						<li>When to use in your daily work?</li>
+						<li>Demos</li>
+						<li>Limitations</li>
+						<li>Takeaways</li>
+						<li>References</li>
+						<li>Q&A</li>
+					</ul>
+				</section>
+			</div>
+		</div>
+
+		<script src="dist/reveal.js"></script>
+		<script src="plugin/notes/notes.js"></script>
+		<script src="plugin/markdown/markdown.js"></script>
+		<script src="plugin/highlight/highlight.js"></script>
+		<script>
+			Reveal.configure({ slideNumber: true });
+			//Reveal.configure({ slideNumber: 'c/t' });
+			// More info about initialization & config:
+			// - https://revealjs.com/initialization/
+			// - https://revealjs.com/config/
+			Reveal.initialize({
+				hash: true,
+				transition: 'fade', // none/fade/slide/convex/concave/zoom
+				slideNumber: true,
+				showSlideNumber: 'all',
+				scrollActivationWidth: null, // https://revealjs.com/scroll-view/ from 4.6.1 -> latest version
+
+				// Learn about plugins: https://revealjs.com/plugins/
+				plugins: [RevealMarkdown, RevealHighlight, RevealNotes]
+			});
+		</script>
+	</body>
+</html>
