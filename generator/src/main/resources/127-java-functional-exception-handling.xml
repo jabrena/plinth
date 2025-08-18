@@ -229,7 +229,7 @@ public class UserService {
             <example-description>
                 <![CDATA[
                 Use exceptions only for truly exceptional circumstances like system failures, programming errors, or unrecoverable conditions.
-                For business logic failures, validation errors, and recoverable conditions, prefer functional error handling with Optional, Either, or Result types.
+                For business logic failures, validation errors, and recoverable conditions, prefer functional error handling with Optional or Either types.
                 ]]>
             </example-description>
             <code-examples>
@@ -301,7 +301,6 @@ public class DocumentProcessor {
     }
 }
 
-// Result types for business logic errors
 public static class ProcessingError {
     private final String code;
     private final String message;
@@ -888,7 +887,7 @@ public class FileProcessor {
             .thenApply(parsed -> parsed.map(this::createDocument));
     }
 
-    // Individual operations return Optional/Result instead of throwing
+    // Individual operations return Optional instead of throwing
     private Optional<Path> validateFile(Path filePath) {
         if (Files.exists(filePath) && Files.isReadable(filePath)) {
             return Optional.of(filePath);
@@ -905,7 +904,7 @@ public class FileProcessor {
         }
     }
 
-        private Either<ProcessingError, String> readFileContentSafely(Path filePath) {
+    private Either<ProcessingError, String> readFileContentSafely(Path filePath) {
         try {
             String content = Files.readString(filePath);
             return Either.right(content);
@@ -1301,7 +1300,7 @@ public class BankAccountService {
             </example-header>
             <example-description>
                 <![CDATA[
-                Use functional programming patterns like Optional, Either, and Result types for control flow.
+                Use functional programming patterns like Optional and Either types for control flow.
                 This approach makes code more predictable, testable, and eliminates the performance overhead of exception handling.
                 ]]>
             </example-description>
