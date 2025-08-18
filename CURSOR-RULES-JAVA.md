@@ -57,6 +57,12 @@ Use the following set of Java Cursor Rules to improve your Java development.
 | - | Code Refactoring from suggestions from analysis | `Can you apply the solutions from @profiling-solutions-yyyymmdd.md in @/info to mitigate bottlenecks` | Make a refactoring with the notes from the analysis |
 | [164-java-profiling-compare](.cursor/rules/164-java-profiling-compare.mdc) | Compare results comparing results before and after applying changes in the code | **Prompt:** `Review if the problems was solved with last refactoring using the reports located in @/results with the cursor rule 154-java-profiling-compare.mdc` **Note:**  Put in the context the folder with the results | This cursor rule is applied automatically without any interaction with the Software engineer. |
 
+## Documentation rule
+
+| Activity | Description | Prompt | Notes |
+|----|----|-----|----|
+| [170-java-documentation](.cursor/rules/170-java-documentation.mdc) | Generate Java project documentation & diagrams including README.md and package-info.java files using a modular step-based approach | **Prompt:** `Generate technical documentation & diagrams about the project with the cursor rule @170-java-documentation.mdc and software located in YOUR_DIRECTORY` **Note:** The rule will analyze existing documentation and ask for user preferences before generating anything. Ensures project validation with Maven before proceeding. | Interactive cursor rule with 6 modular steps: 1) Existing documentation analysis and preservation, 2) Project structure analysis, 3) Documentation preferences assessment, 4) README.md generation, 5) package-info.java generation, 6) Validation and summary. Preserves existing documentation and creates backups when needed. |
+
 ---
 
 **Note:** This guide is self-contained and portable. Copy it into any Java project to get started with Cursor Rules for Java development.

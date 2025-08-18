@@ -85,7 +85,8 @@ class CursorRulesGeneratorTest {
                 "151-java-performance-jmeter",
                 "161-java-profiling-detect",
                 "162-java-profiling-analyze",
-                "164-java-profiling-compare"
+                "164-java-profiling-compare",
+                "170-java-documentation"
             );
         }
 

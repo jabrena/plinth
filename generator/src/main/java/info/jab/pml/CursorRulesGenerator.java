@@ -29,7 +29,12 @@ import org.xml.sax.XMLReader;
 
 /**
  * Generator for Cursor Rules using XML/XSLT transformation.
- * Follows functional programming principles with immutability and pure functions.
+ * <p>
+ * This component provides a small, focused API to transform rule-definition XML
+ * resources into rendered Markdown Cursor (MDC) content using a unified XSLT
+ * stylesheet. The implementation emphasizes immutability and pure functions to
+ * ensure predictable, repeatable transformations suitable for automated
+ * documentation pipelines.
  */
 public final class CursorRulesGenerator {
 
@@ -38,15 +43,32 @@ public final class CursorRulesGenerator {
     // ===============================================================
 
     /**
-     * Generates cursor rules by transforming XML with XSLT.
+     * Generates Cursor rules by transforming an XML resource with the provided XSLT stylesheet.
+     * <p>
+     * This overload does not perform XSD validation. For schema validation use
+     * {@link #generate(String, String, String)} and supply an XSD resource name.
+     *
+     * @param xmlFileName the classpath-relative name of the XML rule definition to transform
+     * @param xslFileName the classpath-relative name of the XSLT stylesheet used for transformation
+     * @return the generated MDC content as a String (never {@code null})
+     * @throws RuntimeException if resources cannot be loaded or the transformation fails
      */
     public String generate(String xmlFileName, String xslFileName) {
         return generate(xmlFileName, xslFileName, null);
     }
 
     /**
-     * Generates cursor rules by transforming XML with XSLT.
-     * Uses explicitly provided schema name.
+     * Generates Cursor rules by transforming an XML resource with the provided XSLT stylesheet,
+     * optionally validating the XML against an XSD schema.
+     * <p>
+     * When {@code schemaFileName} is supplied, the XML is validated using XSD prior to
+     * transformation. Any validation error will abort the process with a detailed exception.
+     *
+     * @param xmlFileName the classpath-relative name of the XML rule definition to transform
+     * @param xslFileName the classpath-relative name of the XSLT stylesheet used for transformation
+     * @param schemaFileName the classpath-relative name of the XSD schema used for validation; may be {@code null}
+     * @return the generated MDC content as a String (never {@code null})
+     * @throws RuntimeException if resources cannot be loaded, XSD validation fails, or the transformation fails
      */
     public String generate(String xmlFileName, String xslFileName, String schemaFileName) {
         return loadTransformationSources(xmlFileName, xslFileName)
