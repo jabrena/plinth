@@ -8,6 +8,7 @@
             <xs:sequence>
                 <xs:element ref="metadata" minOccurs="0"/>
                 <xs:element ref="role"/>
+                <xs:element ref="tone" minOccurs="0"/>
                 <xs:element ref="context" minOccurs="0"/>
                 <xs:element ref="goal"/>
                 <xs:element ref="constraints" minOccurs="0"/>
@@ -67,6 +68,9 @@
 
     <!-- System role -->
     <xs:element name="role" type="xs:string"/>
+
+    <!-- Tone specification -->
+    <xs:element name="tone" type="xs:string"/>
 
     <!-- Goal statement -->
     <xs:element name="goal">
