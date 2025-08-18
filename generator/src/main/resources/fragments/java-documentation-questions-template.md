@@ -14,6 +14,7 @@ Options:
 - README.md (project overview and usage instructions)
 - package-info.java files (package-level documentation)
 - Both README.md and package-info.java files
+- Skip
 
 ---
 
@@ -62,5 +63,35 @@ Options:
 - Developer-friendly (informal but comprehensive)
 - Minimal (concise and to-the-point)
 - Educational (with explanations and learning context)
+
+---
+
+**Question 8**: Would you like to generate UML sequence diagrams to illustrate key workflows and interactions?
+
+Options:
+- Yes, generate sequence diagrams for main application flows
+- Yes, generate sequence diagrams for API interactions only
+- Yes, generate sequence diagrams for complex business logic flows
+- No, skip UML sequence diagram generation
+
+---
+
+**Question 9**: Would you like to generate UML class diagrams to illustrate the structure and relationships of your Java classes?
+
+Options:
+- Yes, generate class diagrams for all packages
+- Yes, generate class diagrams for core business logic packages only
+- Yes, generate class diagrams for specific packages (will ask which ones)
+- No, skip UML class diagram generation
+
+---
+
+**Question 10**: Would you like to generate C4 model diagrams to visualize the system architecture at different levels of abstraction?
+
+Options:
+- Yes, generate complete C4 model (Context, Container & Component diagrams)
+- Yes, generate high-level diagrams only (Context and Container diagrams)
+- Yes, generate detailed diagrams only (Component and Code diagrams)
+- No, skip C4 diagram generation
 
 ---

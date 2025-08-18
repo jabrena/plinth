@@ -1,0 +1,39 @@
+@startuml
+!theme plain
+title Generator Module - Class Structure
+
+package "info.jab.pml" {
+  class CursorRulesGenerator {
+    + generate(xmlFileName: String, xslFileName: String): String
+    + generate(xmlFileName: String, xslFileName: String, schemaFileName: String): String
+    --
+    - loadTransformationSources(xml: String, xsl: String): Optional<TransformationSources>
+    - loadResource(fileName: String): Optional<InputStream>
+    - createSaxSource(sources: TransformationSources, schemaFileName: String): SAXSource
+    - performTransformation(xmlSource: SAXSource, xslFileName: String): Optional<String>
+    - executeTransformation(xmlSource: SAXSource, xslStream: InputStream): Optional<String>
+  }
+
+  class TransformationSources <<record, private>> {
+    - xmlStream: InputStream
+    - xslStream: InputStream
+  }
+
+  class ValidationErrorHandler <<private>> {
+    + warning(e: SAXParseException)
+    + error(e: SAXParseException)
+    + fatalError(e: SAXParseException)
+  }
+}
+
+CursorRulesGenerator *-- TransformationSources : creates
+CursorRulesGenerator ..> ValidationErrorHandler : uses
+
+note right of CursorRulesGenerator
+  Pure functions with Optional results,
+  immutable record for sources, and
+  XInclude + XSD validation support
+end note
+
+@enduml
+

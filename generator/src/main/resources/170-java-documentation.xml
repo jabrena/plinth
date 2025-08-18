@@ -6,7 +6,7 @@
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
-        <version>0.9.0</version>
+        <version>0.10.0-SNAPSHOT</version>
         <cursor-ai>
             <description></description>
             <globs></globs>
@@ -18,6 +18,11 @@
             <tag>refactoring</tag>
             <tag>readme</tag>
             <tag>package-info</tag>
+            <tag>uml</tag>
+            <tag>sequence-diagrams</tag>
+            <tag>class-diagrams</tag>
+            <tag>c4-model</tag>
+            <tag>plantuml</tag>
             <tag>best-practices</tag>
             <tag>modular</tag>
         </tags>
@@ -361,11 +366,340 @@ After generating package-info.java files:
                 </step-constraints>
             </step>
             <step number="6">
+                <step-title>UML Sequence Diagram Generation</step-title>
+                <step-content>
+**Purpose**: Generate UML sequence diagrams to illustrate key application workflows and interactions based on code analysis and user preferences.
+
+**Dependencies**: Only execute if user selected UML sequence diagram generation in Step 3. Requires completion of Steps 1, 2, and 3.
+
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Yes" to any UML sequence diagram generation option in Step 3 (Question 8).
+
+## Implementation Strategy
+
+Use the following template and guidelines:
+
+<xi:include href="fragments/java-uml-sequence-diagram-template.md" parse="text"/>
+
+## Workflow Analysis Process
+
+**For each selected diagram type:**
+
+1. **Main Application Flows** (if selected):
+   - Analyze application entry points and main use cases
+   - Identify authentication and authorization flows
+   - Document core business process workflows
+   - Include user registration, login, and main feature usage
+
+2. **API Interactions** (if selected):
+   - Analyze REST endpoints and their implementations
+   - Trace request/response patterns through controllers to services
+   - Document API authentication and error handling
+   - Include typical CRUD operations and data flows
+
+3. **Complex Business Logic Flows** (if selected):
+   - Identify multi-step business processes
+   - Analyze workflow orchestration and state management
+   - Document transaction boundaries and data consistency
+   - Include batch processing and background job flows
+
+## Diagram Generation Guidelines
+
+1. **Use PlantUML syntax** for sequence diagrams to ensure compatibility and renderability
+2. **Analyze actual code paths** using codebase_search to ensure accuracy
+3. **Include realistic method names and parameters** from the actual codebase
+4. **Show alternative flows** (success/failure scenarios) using alt fragments
+5. **Document error handling** and exception flows where appropriate
+6. **Use proper naming conventions** matching the actual codebase
+
+## Integration Strategy
+
+**Based on user documentation preferences:**
+
+1. **README.md Integration** (if README generation was selected):
+   - Add "Architecture Overview" or "How It Works" section
+   - Include sequence diagrams with contextual explanations
+   - Link diagrams to relevant code sections
+
+2. **Separate Documentation Files**:
+   - Create dedicated diagram files (diagrams.md or architecture.md)
+   - Organize diagrams by workflow type or business domain
+   - Include comprehensive explanations for each diagram
+
+3. **Package Documentation Integration** (if package-info.java generation was selected):
+   - Reference relevant sequence diagrams in package descriptions
+   - Include ASCII art versions for simple flows
+   - Link to external diagram files when appropriate
+
+## Content Quality Requirements
+
+1. **Accuracy**: Diagrams must reflect actual code implementation
+2. **Completeness**: Cover main user journeys and critical paths
+3. **Clarity**: Include proper labels, participants, and message descriptions
+4. **Maintainability**: Use consistent naming and formatting conventions
+
+## Validation
+
+After generating sequence diagrams:
+1. **Verify PlantUML syntax** for proper rendering
+2. **Validate against codebase** to ensure accuracy
+3. **Test diagram readability** and comprehensiveness
+4. **Ensure proper integration** with other documentation
+                </step-content>
+                <step-constraints>
+                    <step-constraint-list>
+                        <step-constraint>**MUST** only execute if UML sequence diagram generation was selected in Step 3</step-constraint>
+                        <step-constraint>**MUST** use codebase_search extensively to analyze actual code flows</step-constraint>
+                        <step-constraint>**MUST** generate accurate diagrams that reflect real implementation</step-constraint>
+                        <step-constraint>**MUST** use proper PlantUML sequence diagram syntax</step-constraint>
+                        <step-constraint>**MUST** include alternative flows and error handling where appropriate</step-constraint>
+                        <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
+                        <step-constraint>**MUST** integrate diagrams appropriately with other generated documentation</step-constraint>
+                        <step-constraint>**MUST NOT** generate generic or templated diagrams without code analysis</step-constraint>
+                        <step-constraint>**MUST** validate PlantUML syntax for renderability</step-constraint>
+                    </step-constraint-list>
+                </step-constraints>
+            </step>
+            <step number="7">
+                <step-title>UML Class Diagram Generation</step-title>
+                <step-content>
+**Purpose**: Generate UML class diagrams to illustrate the structure, relationships, and design patterns within Java packages and modules based on code analysis and user preferences.
+
+**Dependencies**: Only execute if user selected UML class diagram generation in Step 3. Requires completion of Steps 1, 2, and 3.
+
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Yes" to any UML class diagram generation option in Step 3 (Question 9).
+
+## Implementation Strategy
+
+Use the following template and guidelines:
+
+<xi:include href="fragments/java-uml-class-diagram-template.md" parse="text"/>
+
+## Package Analysis Process
+
+**For each selected package scope:**
+
+1. **All Packages** (if selected):
+   - Analyze complete project structure across all modules
+   - Identify core domain packages and supporting infrastructure
+   - Generate high-level architecture diagrams showing package relationships
+   - Create detailed diagrams for each significant package
+
+2. **Core Business Logic Packages** (if selected):
+   - Focus on domain models and business service classes
+   - Analyze entities, value objects, and business rules
+   - Document service layer patterns and business workflows
+   - Include repository patterns and data access abstractions
+
+3. **Specific Packages** (if selected):
+   - Analyze user-specified packages in detail
+   - Generate focused diagrams showing class relationships within packages
+   - Include cross-package dependencies and interactions
+   - Document package-specific design patterns and architectures
+
+## Class Analysis Guidelines
+
+1. **Identify Class Categories**:
+   - Domain entities and value objects (core business concepts)
+   - Service classes (business logic and orchestration)
+   - Repository classes (data access patterns)
+   - Controller classes (API and presentation layer)
+   - Configuration and infrastructure classes
+   - Utility and helper classes
+
+2. **Analyze Relationships**:
+   - Inheritance hierarchies (extends/implements)
+   - Composition and aggregation relationships
+   - Interface implementations and abstractions
+   - Dependency injection patterns
+   - Design pattern implementations
+
+3. **Determine Appropriate Detail Level**:
+   - Include key methods and attributes for business logic
+   - Show important annotations (@Entity, @Service, @Repository, @Controller)
+   - Document method signatures for public APIs
+   - Include visibility modifiers and type information
+
+## Diagram Generation Strategy
+
+**Based on user documentation preferences:**
+
+1. **README.md Integration** (if README generation was selected):
+   - Add "Architecture" or "System Design" section
+   - Include high-level class diagrams showing main components
+   - Focus on architectural patterns and key relationships
+   - Link diagrams to relevant code sections
+
+2. **Package Documentation Integration** (if package-info.java generation was selected):
+   - Include package-specific class diagrams
+   - Show intra-package relationships and patterns
+   - Document package responsibilities and boundaries
+   - Reference cross-package dependencies
+
+3. **Separate Architecture Documentation**:
+   - Create dedicated architecture.md or design.md files
+   - Organize diagrams by business domain or technical layer
+   - Include both overview and detailed diagrams
+   - Provide comprehensive design documentation
+
+## Content Quality Requirements
+
+1. **Structural Accuracy**: Diagrams must reflect actual class structure and relationships
+2. **Relationship Correctness**: Show accurate inheritance, composition, and dependency relationships
+3. **Appropriate Abstraction**: Include relevant details without overwhelming complexity
+4. **Design Pattern Documentation**: Highlight important architectural and design patterns
+5. **Clear Organization**: Use packages and grouping for logical organization
+
+## Validation
+
+After generating class diagrams:
+1. **Verify PlantUML syntax** for proper rendering
+2. **Validate against codebase** to ensure structural accuracy
+3. **Check relationship correctness** (inheritance, composition, dependencies)
+4. **Ensure appropriate detail level** for intended audience
+5. **Test diagram integration** with other documentation
+                </step-content>
+                <step-constraints>
+                    <step-constraint-list>
+                        <step-constraint>**MUST** only execute if UML class diagram generation was selected in Step 3</step-constraint>
+                        <step-constraint>**MUST** use codebase_search extensively to analyze class structure and relationships</step-constraint>
+                        <step-constraint>**MUST** generate accurate diagrams that reflect actual class hierarchy and relationships</step-constraint>
+                        <step-constraint>**MUST** use proper PlantUML class diagram syntax</step-constraint>
+                        <step-constraint>**MUST** include appropriate level of detail based on user selection</step-constraint>
+                        <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
+                        <step-constraint>**MUST** integrate diagrams appropriately with other generated documentation</step-constraint>
+                        <step-constraint>**MUST** show accurate inheritance, composition, and association relationships</step-constraint>
+                        <step-constraint>**MUST** include important annotations and design patterns</step-constraint>
+                        <step-constraint>**MUST NOT** generate generic or templated diagrams without actual code analysis</step-constraint>
+                        <step-constraint>**MUST** validate PlantUML syntax for renderability</step-constraint>
+                    </step-constraint-list>
+                </step-constraints>
+            </step>
+            <step number="8">
+                <step-title>C4 Model Diagram Generation</step-title>
+                <step-content>
+**Purpose**: Generate C4 model diagrams to visualize system architecture at different levels of abstraction (Context, Container, Component, and Code) based on code analysis and user preferences.
+
+**Dependencies**: Only execute if user selected C4 diagram generation in Step 3. Requires completion of Steps 1, 2, and 3.
+
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Yes" to any C4 diagram generation option in Step 3 (Question 10).
+
+## Implementation Strategy
+
+Use the following template and guidelines:
+
+<xi:include href="fragments/java-c4-diagram-template.md" parse="text"/>
+
+## C4 Model Analysis Process
+
+**For each selected diagram level:**
+
+1. **Complete C4 Model** (if selected):
+   - Generate all four levels of C4 diagrams
+   - Start with System Context for business overview
+   - Create Container diagrams for deployment architecture
+   - Develop Component diagrams for logical structure
+   - Add Code diagrams for critical implementations
+
+2. **High-Level Diagrams Only** (if selected):
+   - Focus on System Context and Container levels
+   - Emphasize business context and system boundaries
+   - Show technology choices and deployment units
+   - Document external integrations and dependencies
+
+3. **Detailed Diagrams Only** (if selected):
+   - Focus on Component and Code levels
+   - Analyze internal system structure
+   - Document component responsibilities and interfaces
+   - Show implementation patterns and key classes
+
+## Architecture Analysis Guidelines
+
+1. **System Context Analysis**:
+   - Identify all external users and personas
+   - Map external systems and third-party integrations
+   - Define clear system boundaries and responsibilities
+   - Document business capabilities and value propositions
+
+2. **Container Analysis**:
+   - Identify deployable units (web apps, services, databases)
+   - Analyze technology stack and framework choices
+   - Document communication protocols and API contracts
+   - Map deployment and infrastructure requirements
+
+3. **Component Analysis**:
+   - Identify logical components within each container
+   - Analyze component responsibilities and boundaries
+   - Document inter-component communication patterns
+   - Map business capabilities to technical components
+
+4. **Code Analysis**:
+   - Focus on architecturally significant components
+   - Show key classes, interfaces, and design patterns
+   - Document important implementation decisions
+   - Illustrate complex algorithmic or business logic
+
+## Integration Strategy
+
+**Based on user documentation preferences:**
+
+1. **README.md Integration** (if README generation was selected):
+   - Add "System Architecture" section with Context diagram
+   - Include "Technical Architecture" with Container diagram
+   - Focus on high-level system overview and business context
+   - Link to detailed architectural documentation
+
+2. **Dedicated Architecture Documentation**:
+   - Create comprehensive architecture.md files
+   - Include complete C4 model with all selected levels
+   - Organize diagrams by abstraction level and business domain
+   - Provide detailed explanations and architectural decisions
+
+3. **Module-Specific Documentation**:
+   - Include Component diagrams in module README files
+   - Show how modules fit into overall system architecture
+   - Document module interfaces and dependencies
+   - Reference Code diagrams for complex implementations
+
+## Content Quality Requirements
+
+1. **Architectural Accuracy**: Diagrams must reflect actual system architecture and deployment
+2. **Business Context**: Include real users, use cases, and business value
+3. **Technical Precision**: Show accurate technology choices, protocols, and integrations
+4. **Appropriate Abstraction**: Each level should provide appropriate detail for its audience
+5. **Clear Relationships**: Document accurate data flows and interaction patterns
+
+## Validation
+
+After generating C4 diagrams:
+1. **Verify PlantUML syntax** with C4-PlantUML library compatibility
+2. **Validate architectural accuracy** against actual system implementation
+3. **Check abstraction appropriateness** for each diagram level
+4. **Ensure business context accuracy** with stakeholder needs
+5. **Test diagram integration** with documentation structure
+6. **Verify visual clarity** and layout effectiveness
+                </step-content>
+                <step-constraints>
+                    <step-constraint-list>
+                        <step-constraint>**MUST** only execute if C4 diagram generation was selected in Step 3</step-constraint>
+                        <step-constraint>**MUST** use codebase_search extensively to analyze system architecture</step-constraint>
+                        <step-constraint>**MUST** generate accurate diagrams that reflect actual system structure</step-constraint>
+                        <step-constraint>**MUST** use proper PlantUML syntax with C4-PlantUML library</step-constraint>
+                        <step-constraint>**MUST** include appropriate abstraction level based on user selection</step-constraint>
+                        <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
+                        <step-constraint>**MUST** integrate diagrams appropriately with other generated documentation</step-constraint>
+                        <step-constraint>**MUST** show accurate business context and user scenarios</step-constraint>
+                        <step-constraint>**MUST** include real technology choices and deployment architecture</step-constraint>
+                        <step-constraint>**MUST NOT** generate generic or templated diagrams without actual architectural analysis</step-constraint>
+                        <step-constraint>**MUST** validate C4-PlantUML syntax for renderability</step-constraint>
+                    </step-constraint-list>
+                </step-constraints>
+            </step>
+            <step number="9">
                 <step-title>Documentation Validation and Summary</step-title>
                 <step-content><![CDATA[
 **Purpose**: Validate all generated documentation and provide a comprehensive summary of changes made.
 
-**Dependencies**: Requires completion of applicable steps (4 and/or 5 based on user selections).
+**Dependencies**: Requires completion of applicable steps (4, 5, 6, 7, and/or 8 based on user selections).
 
 ## Validation Process
 
@@ -393,11 +727,17 @@ After generating package-info.java files:
 ### Files Modified/Created:
 - **README.md files**: [List locations and actions taken]
 - **package-info.java files**: [List packages and actions taken]
+- **UML sequence diagrams**: [List diagram files created and workflows documented]
+- **UML class diagrams**: [List diagram files created and packages/classes documented]
+- **C4 model diagrams**: [List diagram files created and architecture levels documented]
 - **Backup files**: [List any backup files created]
 
 ### Content Generated:
 - **Software descriptions**: [Summary of main functionality documented]
 - **Package documentation**: [Count and brief overview of packages documented]
+- **UML sequence diagrams**: [Count and types of workflows documented]
+- **UML class diagrams**: [Count and packages/classes documented]
+- **C4 model diagrams**: [Count and architecture levels documented]
 - **Additional sections**: [Any additional sections added like Getting Started, API docs, etc.]
 
 ### Actions Taken:
@@ -411,6 +751,7 @@ After generating package-info.java files:
 # To view generated documentation
 ls -la README.md
 find . -name "package-info.java" -type f
+find . -name "*.puml" -type f
 
 # To validate compilation
 ./mvnw clean compile
@@ -454,7 +795,7 @@ If validation passes, documentation generation is complete and successful.
     <output-format>
         <output-format-list>
             <output-format-item>Ask questions one by one following the template exactly in Step 3</output-format-item>
-            <output-format-item>Execute steps 4-6 only based on user selections from Step 3</output-format-item>
+            <output-format-item>Execute steps 4-9 only based on user selections from Step 3</output-format-item>
             <output-format-item>Skip entire steps if no relevant documentation types were selected</output-format-item>
             <output-format-item>Generate only requested documentation types based on user selections</output-format-item>
             <output-format-item>Follow template specifications exactly for all documentation generation</output-format-item>

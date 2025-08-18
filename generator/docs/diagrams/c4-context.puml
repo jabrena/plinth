@@ -1,0 +1,16 @@
+@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title Cursor Rules Generator - System Context
+
+Person(dev, "Developer", "Maintains XML rule definitions and runs generator")
+System(cursor_rules_generator, "Cursor Rules Generator", "Transforms XML rules into MDC files")
+System_Ext(cursor_editor, "Cursor AI Editor", "Consumes generated MDC rules")
+System_Ext(maven_central, "Maven Central", "Provides Maven runtime and plugins")
+
+Rel(dev, cursor_rules_generator, "Generates rules using")
+Rel(cursor_rules_generator, cursor_editor, "Outputs MDC rules to be used by")
+Rel(dev, maven_central, "Fetches dependencies from")
+
+@enduml
+

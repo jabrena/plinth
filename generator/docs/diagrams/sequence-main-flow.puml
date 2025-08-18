@@ -1,0 +1,58 @@
+@startuml
+!theme plain
+title Cursor Rules Generation Main Flow
+
+actor Developer
+participant "CursorRulesGenerator" as Generator
+participant "ClassLoader" as CL
+participant "DocumentBuilderFactory" as DBF
+participant "DocumentBuilder" as DB
+participant "SAXParserFactory" as SPF
+participant "XMLReader" as XR
+participant "TransformerFactory" as TF
+participant "Transformer" as T
+participant "SchemaFactory" as SF
+
+== Generate MDC from XML + XSLT ==
+Developer -> Generator: generate(xmlFileName, xslFileName[, schemaFileName])
+activate Generator
+
+Generator -> Generator: loadTransformationSources(xmlFileName, xslFileName)
+Generator -> CL: getResourceAsStream(xmlFileName)
+CL --> Generator: InputStream xmlStream
+Generator -> CL: getResourceAsStream(xslFileName)
+CL --> Generator: InputStream xslStream
+
+Generator -> Generator: createSaxSource(TransformationSources, schemaFileName)
+Generator -> DBF: newDocumentBuilderFactory()
+DBF --> Generator: DocumentBuilderFactory
+Generator -> DBF: newDocumentBuilder()
+DBF --> DB: DocumentBuilder
+Generator -> DB: parse(InputSource with XInclude baseURI)
+DB --> Generator: Document
+
+Generator -> SPF: newSAXParserFactory()
+SPF --> Generator: SAXParserFactory
+alt schemaFileName provided
+  Generator -> SF: newSchema(schemaFileName)
+  SF --> Generator: Schema
+  Generator -> SPF: setSchema(Schema)
+end
+Generator -> SPF: newSAXParser().getXMLReader()
+SPF --> XR: XMLReader
+
+Generator -> TF: newTransformer()
+TF --> T: Transformer
+Generator -> T: transform(DOMSource -> StreamResult)
+T --> Generator: SAXSource
+
+Generator -> Generator: performTransformation(saxSource, xslFileName)
+Generator -> TF: newTransformer(StreamSource(xsl))
+TF --> T: Transformer
+Generator -> T: transform(saxSource -> StringWriter)
+T --> Generator: String (MDC content)
+Generator --> Developer: MDC content
+deactivate Generator
+
+@enduml
+
