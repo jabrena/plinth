@@ -52,7 +52,7 @@ With this structure in mind, the project uses an XML Schema to define the way th
 
 ## Cursor Rules
 
-Read the generated list of cursor rules for Java [here](./CURSOR-RULES-JAVA.md). The set of cursor rules covers aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring`, `Performance testing with JMeter` & `Profiling with Async profiler, jps, jstack, jcmd & jstat`.
+Read the generated list of cursor rules for Java [here](./CURSOR-RULES-JAVA.md). The set of cursor rules covers aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring`, `Performance testing with JMeter`, `Profiling with Async profiler, jps, jstack, jcmd & jstat` & `Documentation`.
 
 ## Constraints, Output format & Safety guards
 
