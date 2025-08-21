@@ -7,8 +7,7 @@
         <title>Create a Checklist with all Java steps to use with cursor rules for Java</title>
     </metadata>
 
-    <role>You are a Senior software engineer with extensive experience in Java programming language
-        and technical documentation</role>
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
     <goal> Your task is to create a comprehensive step-by-step guide that follows the exact format
         and structure defined in the embedded template below. Create a markdown file named
