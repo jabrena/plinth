@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:xi="http://www.w3.org/2001/XInclude"
-    xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.1.0-SNAPSHOT/pml.xsd">
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>

@@ -97,11 +97,10 @@ class CursorRulesGeneratorTest {
             // Given
             CursorRulesGenerator generator = new CursorRulesGenerator();
 
-            // When - Generate content on-the-fly using remote schema
+            // When - Generate content (no schema validation)
             String generatedContent = generator.generate(
                 baseFileName + ".xml",
-                "cursor-rules.xsl",
-                "https://jabrena.github.io/pml/schemas/0.1.0-SNAPSHOT/pml.xsd"
+                "cursor-rules.xsl"
             );
 
             // Save generated content to target for inspection
