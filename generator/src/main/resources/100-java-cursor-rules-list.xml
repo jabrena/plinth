@@ -1,54 +1,47 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:xi="http://www.w3.org/2001/XInclude"
-        xsi:noNamespaceSchemaLocation="pml.xsd"
-        id="100-java-checklist-guide" version="1.0">
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
         <version>0.10.0-SNAPSHOT</version>
-        <cursor-ai>
-            <description></description>
-            <globs></globs>
-            <always-apply>false</always-apply>
-        </cursor-ai>
-        <tags>
-            <tag>java</tag>
-            <tag>checklist</tag>
-            <tag>cursor-rules</tag>
-        </tags>
         <title>Create a Checklist with all Java steps to use with cursor rules for Java</title>
     </metadata>
 
-    <role>You are a Senior software engineer with extensive experience in Java programming language and technical documentation</role>
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
-    <goal>
-        Your task is to create a comprehensive step-by-step guide that follows the exact format and structure defined in the embedded template below.
-
-        Create a markdown file named `CURSOR-RULES-JAVA.md` with the following content:
+    <goal> Your task is to create a comprehensive step-by-step guide that follows the exact format
+        and structure defined in the embedded template below. Create a markdown file named
+        `CURSOR-RULES-JAVA.md` with the following content:
 
         ```markdown
-        <xi:include href="fragments/java-cursor-rules-list-template.md" parse="text"/>
+        <xi:include href="fragments/java-cursor-rules-list-template.md" parse="text" />
         ```
     </goal>
 
     <constraints>
-        <constraints-description>**MANDATORY REQUIREMENT**: Follow the embedded template EXACTLY - do not add, remove, or modify any steps, sections, or cursor rules that are not explicitly shown in the template. ### What NOT to Include:</constraints-description>
+        <constraints-description>**MANDATORY REQUIREMENT**: Follow the embedded template EXACTLY -
+            do not add, remove, or modify any steps, sections, or cursor rules that are not
+            explicitly shown in the template. ### What NOT to Include:</constraints-description>
         <constraint-list>
             <constraint>**DO NOT** create additional steps beyond what's shown in the template</constraint>
-            <constraint>**DO NOT** add cursor rules that are not explicitly listed in the embedded template</constraint>
+            <constraint>**DO NOT** add cursor rules that are not explicitly listed in the embedded
+                template</constraint>
             <constraint>**DO NOT** expand or elaborate on sections beyond what the template shows</constraint>
             <constraint>**ONLY** use cursor rules that appear in the embedded template</constraint>
             <constraint>**ONLY** use the exact wording and structure from the template</constraint>
-            <constraint>If a cursor rule exists in the workspace but is not in the template, **DO NOT** include it</constraint>
+            <constraint>If a cursor rule exists in the workspace but is not in the template, **DO
+                NOT** include it</constraint>
         </constraint-list>
     </constraints>
 
     <output-format>
         <output-format-list>
-            <output-format-item>**File Creation**: Generate the complete markdown file named `CURSOR-RULES-JAVA.md` in the project root directory</output-format-item>
-            <output-format-item>**Template Adherence**: Follow the embedded template structure and content exactly - no additions, modifications, or omissions</output-format-item>
-            <output-format-item>**File Handling**: If `CURSOR-RULES-JAVA.md` already exists, overwrite it completely with the new generated content</output-format-item>
+            <output-format-item>**File Creation**: Generate the complete markdown file named
+                `CURSOR-RULES-JAVA.md` in the project root directory</output-format-item>
+            <output-format-item>**Template Adherence**: Follow the embedded template structure and
+                content exactly - no additions, modifications, or omissions</output-format-item>
+            <output-format-item>**File Handling**: If `CURSOR-RULES-JAVA.md` already exists,
+                overwrite it completely with the new generated content</output-format-item>
         </output-format-list>
     </output-format>
 </prompt>

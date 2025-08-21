@@ -1,26 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:xi="http://www.w3.org/2001/XInclude"
-    xsi:noNamespaceSchemaLocation="pml.xsd"
-    id="142-java-functional-programming" version="1.0">
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
         <version>0.10.0-SNAPSHOT</version>
-        <!-- Markdown Front Matter for Cursor Rules -->
-        <cursor-ai>
-            <description></description>
-            <globs></globs>
-            <always-apply>false</always-apply>
-        </cursor-ai>
-        <tags>
-            <tag>java</tag>
-            <tag>functional-programming</tag>
-            <tag>immutability</tag>
-            <tag>streams</tag>
-            <tag>lambda</tag>
-            <tag>type-safety</tag>
-        </tags>
         <title>Java Functional Programming rules</title>
     </metadata>
 

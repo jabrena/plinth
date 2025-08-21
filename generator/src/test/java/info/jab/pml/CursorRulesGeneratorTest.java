@@ -65,29 +65,7 @@ class CursorRulesGeneratorTest {
          * Each base name corresponds to both an XML file and expected MDC file.
          */
         private static Stream<String> provideXmlFileNames() {
-            return Stream.of(
-                "100-java-cursor-rules-list",
-                "110-java-maven-best-practices",
-                "111-java-maven-dependencies",
-                "112-java-maven-plugins",
-                "113-java-maven-documentation",
-                "121-java-object-oriented-design",
-                "122-java-type-design",
-                "123-java-general-guidelines",
-                "124-java-secure-coding",
-                "125-java-concurrency",
-                "126-java-logging",
-                "127-java-functional-exception-handling",
-                "131-java-unit-testing",
-                "141-java-refactoring-with-modern-features",
-                "142-java-functional-programming",
-                "143-java-data-oriented-programming",
-                "151-java-performance-jmeter",
-                "161-java-profiling-detect",
-                "162-java-profiling-analyze",
-                "164-java-profiling-compare",
-                "170-java-documentation"
-            );
+            return TestXmlFiles.baseNames();
         }
 
         @ParameterizedTest
@@ -97,8 +75,11 @@ class CursorRulesGeneratorTest {
             // Given
             CursorRulesGenerator generator = new CursorRulesGenerator();
 
-            // When - Generate content on-the-fly
-            String generatedContent = generator.generate(baseFileName + ".xml", "cursor-rules.xsl", "pml.xsd");
+            // When - Generate content (no schema validation)
+            String generatedContent = generator.generate(
+                baseFileName + ".xml",
+                "cursor-rules.xsl"
+            );
 
             // Save generated content to target for inspection
             saveGeneratedContentToTarget(generatedContent, baseFileName + ".mdc");

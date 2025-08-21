@@ -1,24 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:xi="http://www.w3.org/2001/XInclude"
-    xsi:noNamespaceSchemaLocation="pml.xsd"
-    id="121-java-object-oriented-design" version="1.0">
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
         <version>0.10.0-SNAPSHOT</version>
-        <!-- Cursor AI specific configuration -->
-        <cursor-ai>
-            <description></description>
-            <globs></globs>
-            <always-apply>false</always-apply>
-        </cursor-ai>
-        <tags>
-            <tag>java</tag>
-            <tag>object-oriented</tag>
-            <tag>design</tag>
-            <tag>best-practices</tag>
-        </tags>
         <title>Java Object-Oriented Design Guidelines</title>
     </metadata>
 

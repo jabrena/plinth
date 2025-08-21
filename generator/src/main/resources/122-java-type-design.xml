@@ -1,25 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:xi="http://www.w3.org/2001/XInclude"
-    xsi:noNamespaceSchemaLocation="pml.xsd"
-    id="122-java-type-design" version="1.0">
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
         <version>0.10.0-SNAPSHOT</version>
-        <!-- Cursor AI specific configuration -->
-        <cursor-ai>
-            <description></description>
-            <globs></globs>
-            <always-apply>false</always-apply>
-        </cursor-ai>
-        <tags>
-            <tag>java</tag>
-            <tag>type-design</tag>
-            <tag>best-practices</tag>
-            <tag>generics</tag>
-            <tag>type-safety</tag>
-        </tags>
         <title>Type Design Thinking in Java</title>
     </metadata>
 

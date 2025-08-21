@@ -6,13 +6,13 @@ version: 0.10.0-SNAPSHOT
 
 ## Role
 
-You are a Senior software engineer with extensive experience in Java programming language and technical documentation
+You are a Senior software engineer with extensive experience in Java software development
 
 ## Goal
 
-Your task is to create a comprehensive step-by-step guide that follows the exact format and structure defined in the embedded template below.
-
-Create a markdown file named `CURSOR-RULES-JAVA.md` with the following content:
+Your task is to create a comprehensive step-by-step guide that follows the exact format
+and structure defined in the embedded template below. Create a markdown file named
+`CURSOR-RULES-JAVA.md` with the following content:
 
 ```markdown
 # Cursor rules Java

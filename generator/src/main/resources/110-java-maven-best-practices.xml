@@ -1,22 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="pml.xsd"
-    xmlns:xi="http://www.w3.org/2001/XInclude"
-    id="110-java-maven-best-practices" version="1.0">
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
         <version>0.10.0-SNAPSHOT</version>
-        <cursor-ai>
-            <description></description>
-            <globs></globs>
-            <always-apply>false</always-apply>
-        </cursor-ai>
-        <tags>
-            <tag>maven</tag>
-            <tag>java</tag>
-            <tag>best-practices</tag>
-        </tags>
         <title>Maven Best Practices</title>
     </metadata>
 

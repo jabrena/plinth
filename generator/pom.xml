@@ -186,33 +186,6 @@
                 </configuration>
             </plugin>
 
-            <!-- XML validation against XSD -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>xml-maven-plugin</artifactId>
-                <version>1.1.0</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>validate</goal>
-                        </goals>
-                        <phase>validate</phase>
-                        <configuration>
-                            <validationSets>
-                                <validationSet>
-                                    <dir>src/main/resources</dir>
-                                    <includes>
-                                        <include>*.xml</include>
-                                    </includes>
-                                    <validating>true</validating>
-                                    <schemaLanguage>http://www.w3.org/2001/XMLSchema</schemaLanguage>
-                                </validationSet>
-                            </validationSets>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
             <!-- Copy generated file to cursor rules directory -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

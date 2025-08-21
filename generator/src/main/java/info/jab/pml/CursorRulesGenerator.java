@@ -6,7 +6,6 @@ import java.io.InputStream;
 import java.io.StringWriter;
 import java.util.Objects;
 import java.util.Optional;
-import javax.xml.XMLConstants;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.SAXParserFactory;
@@ -18,13 +17,8 @@ import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.sax.SAXSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 import org.w3c.dom.Document;
-import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException;
 import org.xml.sax.XMLReader;
 
 /**
@@ -45,8 +39,8 @@ public final class CursorRulesGenerator {
     /**
      * Generates Cursor rules by transforming an XML resource with the provided XSLT stylesheet.
      * <p>
-     * This overload does not perform XSD validation. For schema validation use
-     * {@link #generate(String, String, String)} and supply an XSD resource name.
+     * This overload does not perform schema validation. It only applies XInclude
+     * resolution and XSLT transformation.
      *
      * @param xmlFileName the classpath-relative name of the XML rule definition to transform
      * @param xslFileName the classpath-relative name of the XSLT stylesheet used for transformation
@@ -54,29 +48,14 @@ public final class CursorRulesGenerator {
      * @throws RuntimeException if resources cannot be loaded or the transformation fails
      */
     public String generate(String xmlFileName, String xslFileName) {
-        return generate(xmlFileName, xslFileName, null);
-    }
-
-    /**
-     * Generates Cursor rules by transforming an XML resource with the provided XSLT stylesheet,
-     * optionally validating the XML against an XSD schema.
-     * <p>
-     * When {@code schemaFileName} is supplied, the XML is validated using XSD prior to
-     * transformation. Any validation error will abort the process with a detailed exception.
-     *
-     * @param xmlFileName the classpath-relative name of the XML rule definition to transform
-     * @param xslFileName the classpath-relative name of the XSLT stylesheet used for transformation
-     * @param schemaFileName the classpath-relative name of the XSD schema used for validation; may be {@code null}
-     * @return the generated MDC content as a String (never {@code null})
-     * @throws RuntimeException if resources cannot be loaded, XSD validation fails, or the transformation fails
-     */
-    public String generate(String xmlFileName, String xslFileName, String schemaFileName) {
         return loadTransformationSources(xmlFileName, xslFileName)
-            .map(sources -> createSaxSource(sources, schemaFileName))
+            .map(sources -> createSaxSource(sources))
             .flatMap(saxSource -> performTransformation(saxSource, xslFileName))
             .orElseThrow(() -> new RuntimeException(
                 "Failed to generate cursor rules for: " + xmlFileName + ", " + xslFileName));
     }
+
+    // Removed legacy 3-argument generate method (schema validation no longer supported)
 
     // ===============================================================
     // PRIVATE METHODS - Organized in call order for readability
@@ -103,10 +82,10 @@ public final class CursorRulesGenerator {
     }
 
     /**
-     * Step 2: Creates SAXSource with XSD validation and XInclude support.
-     * Pure function that creates immutable SAXSource with schema validation and XInclude processing.
+     * Step 2: Creates SAXSource with XInclude support.
+     * Pure function that creates immutable SAXSource with XInclude processing.
      */
-    private SAXSource createSaxSource(TransformationSources sources, String schemaFileName) {
+    private SAXSource createSaxSource(TransformationSources sources) {
         try {
             // First, process XInclude using DOM
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
@@ -131,20 +110,12 @@ public final class CursorRulesGenerator {
             // Convert DOM back to SAX source
             DOMSource domSource = new DOMSource(document);
 
-            // Create SAX parser factory with namespace awareness and validation
+            // Create SAX parser factory with namespace awareness
             SAXParserFactory factory = SAXParserFactory.newInstance();
             factory.setNamespaceAware(true);
-            factory.setValidating(false); // We'll use schema validation instead
-
-            // Load XSD schema - use explicit schema if provided, otherwise use fallback
-            Optional<Schema> schema = loadXsdSchema(schemaFileName);
-
-            if (schema.isPresent()) {
-                factory.setSchema(schema.get());
-            }
+            factory.setValidating(false);
 
             XMLReader xmlReader = factory.newSAXParser().getXMLReader();
-            xmlReader.setErrorHandler(new ValidationErrorHandler());
 
             // Create transformer to convert DOM to SAX
             TransformerFactory transformerFactory = TransformerFactory.newInstance();
@@ -161,7 +132,7 @@ public final class CursorRulesGenerator {
 
             return new SAXSource(xmlReader, processedInputSource);
         } catch (Exception e) {
-            throw new RuntimeException("Failed to create SAX source with XSD validation and XInclude support", e);
+            throw new RuntimeException("Failed to create SAX source with XInclude support", e);
         }
     }
 
@@ -213,40 +184,5 @@ public final class CursorRulesGenerator {
         }
     }
 
-    /**
-     * Loads XSD schema by explicit filename.
-     */
-    private Optional<Schema> loadXsdSchema(String schemaFileName) {
-        return loadResource(schemaFileName)
-            .map(xsdStream -> {
-                try {
-                    SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-                    return schemaFactory.newSchema(new StreamSource(xsdStream));
-                } catch (SAXException e) {
-                    throw new RuntimeException("Failed to load XSD schema: " + schemaFileName, e);
-                }
-            });
-    }
-
-    /**
-     * Custom ErrorHandler for XSD validation errors.
-     * Provides better error reporting for validation issues.
-     */
-    private static final class ValidationErrorHandler implements ErrorHandler {
-        @Override
-        public void warning(SAXParseException exception) throws SAXException {
-            // Log warning in a real application
-            System.err.println("XSD Validation Warning: " + exception.getMessage());
-        }
-
-        @Override
-        public void error(SAXParseException exception) throws SAXException {
-            throw new SAXException("XSD Validation Error: " + exception.getMessage(), exception);
-        }
-
-        @Override
-        public void fatalError(SAXParseException exception) throws SAXException {
-            throw new SAXException("XSD Validation Fatal Error: " + exception.getMessage(), exception);
-        }
-    }
+    // XSD schema validation has been intentionally removed; transformation strictly uses XSLT.
 }

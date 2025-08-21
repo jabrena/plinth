@@ -1,26 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:xi="http://www.w3.org/2001/XInclude"
-    xsi:noNamespaceSchemaLocation="pml.xsd"
-    id="143-java-data-oriented-programming" version="1.0">
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
         <version>0.10.0-SNAPSHOT</version>
-        <!-- Markdown Front Matter for Cursor Rules -->
-        <cursor-ai>
-            <description></description>
-            <globs></globs>
-            <always-apply>false</always-apply>
-        </cursor-ai>
-        <tags>
-            <tag>java</tag>
-            <tag>data-oriented-programming</tag>
-            <tag>immutability</tag>
-            <tag>records</tag>
-            <tag>pure-functions</tag>
-            <tag>best-practices</tag>
-        </tags>
         <title>Java rules to apply data oriented programming style</title>
     </metadata>
 

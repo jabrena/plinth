@@ -1,23 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:xi="http://www.w3.org/2001/XInclude"
-        xsi:noNamespaceSchemaLocation="pml.xsd"
-        id="151-java-performance-jmeter" version="1.0">
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
         <version>0.10.0-SNAPSHOT</version>
-        <cursor-ai>
-            <description></description>
-            <globs></globs>
-            <always-apply>false</always-apply>
-        </cursor-ai>
-        <tags>
-            <tag>java</tag>
-            <tag>performance</tag>
-            <tag>jmeter</tag>
-            <tag>testing</tag>
-        </tags>
         <title>Run performance tests based on JMeter</title>
     </metadata>
 

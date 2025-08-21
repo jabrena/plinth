@@ -1,23 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:noNamespaceSchemaLocation="pml.xsd"
-    id="164-java-profiling-compare" version="1.0">
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
         <version>0.10.0-SNAPSHOT</version>
-        <cursor-ai>
-            <description></description>
-            <globs></globs>
-            <always-apply>false</always-apply>
-        </cursor-ai>
-        <tags>
-            <tag>java</tag>
-            <tag>profiling</tag>
-            <tag>performance</tag>
-            <tag>comparison</tag>
-            <tag>refactoring</tag>
-        </tags>
         <title>Java Profiling Workflow / Step 4 / Compare results after refactoring</title>
     </metadata>
 
