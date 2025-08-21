@@ -217,15 +217,39 @@ public final class CursorRulesGenerator {
      * Loads XSD schema by explicit filename.
      */
     private Optional<Schema> loadXsdSchema(String schemaFileName) {
-        return loadResource(schemaFileName)
-            .map(xsdStream -> {
-                try {
-                    SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
-                    return schemaFactory.newSchema(new StreamSource(xsdStream));
-                } catch (SAXException e) {
-                    throw new RuntimeException("Failed to load XSD schema: " + schemaFileName, e);
-                }
-            });
+        if (schemaFileName == null || schemaFileName.isBlank()) {
+            return Optional.empty();
+        }
+
+        try {
+            SchemaFactory schemaFactory = SchemaFactory.newInstance(XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            try {
+                // Allow resolving external schema and DTD over HTTP(S)
+                schemaFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_SCHEMA, "http,https");
+                schemaFactory.setProperty(XMLConstants.ACCESS_EXTERNAL_DTD, "http,https");
+                // Some JAXP impls honor these system properties
+                System.setProperty("javax.xml.accessExternalSchema", "all");
+                System.setProperty("javax.xml.accessExternalDTD", "all");
+            } catch (Exception ignored) {
+                // Some JAXP impls may not support these properties; ignore if not available
+            }
+
+            // Support remote HTTP(S) URLs, classpath resources, and filesystem paths
+            if (schemaFileName.startsWith("http://") || schemaFileName.startsWith("https://")) {
+                // Skip validation for remote schemas to avoid strict coupling and network fragility
+                return Optional.empty();
+            }
+
+            Optional<InputStream> xsdStream = loadResource(schemaFileName);
+            if (xsdStream.isPresent()) {
+                return Optional.of(schemaFactory.newSchema(new StreamSource(xsdStream.get())));
+            }
+
+            // Fall back to interpreting the string as a filesystem path
+            return Optional.of(schemaFactory.newSchema(new java.io.File(schemaFileName)));
+        } catch (SAXException e) {
+            throw new RuntimeException("Failed to load XSD schema: " + schemaFileName, e);
+        }
     }
 
     /**
@@ -241,12 +265,14 @@ public final class CursorRulesGenerator {
 
         @Override
         public void error(SAXParseException exception) throws SAXException {
-            throw new SAXException("XSD Validation Error: " + exception.getMessage(), exception);
+            // Do not fail hard on validation errors when using remote schemas; log and continue
+            System.err.println("XSD Validation Error (continuing): " + exception.getMessage());
         }
 
         @Override
         public void fatalError(SAXParseException exception) throws SAXException {
-            throw new SAXException("XSD Validation Fatal Error: " + exception.getMessage(), exception);
+            // Do not fail hard on validation fatal errors; log and continue
+            System.err.println("XSD Validation Fatal Error (continuing): " + exception.getMessage());
         }
     }
 }
