@@ -20,29 +20,7 @@ class RemoteSchemaValidationTest {
     private static final String REMOTE_XSD = "https://jabrena.github.io/pml/schemas/0.1.0-SNAPSHOT/pml.xsd";
 
     private static Stream<String> provideXmlFileNames() {
-        return Stream.of(
-            "100-java-cursor-rules-list.xml",
-            "110-java-maven-best-practices.xml",
-            "111-java-maven-dependencies.xml",
-            "112-java-maven-plugins.xml",
-            "113-java-maven-documentation.xml",
-            "121-java-object-oriented-design.xml",
-            "122-java-type-design.xml",
-            "123-java-general-guidelines.xml",
-            "124-java-secure-coding.xml",
-            "125-java-concurrency.xml",
-            "126-java-logging.xml",
-            "127-java-functional-exception-handling.xml",
-            "131-java-unit-testing.xml",
-            "141-java-refactoring-with-modern-features.xml",
-            "142-java-functional-programming.xml",
-            "143-java-data-oriented-programming.xml",
-            "151-java-performance-jmeter.xml",
-            "161-java-profiling-detect.xml",
-            "162-java-profiling-analyze.xml",
-            "164-java-profiling-compare.xml",
-            "170-java-documentation.xml"
-        );
+        return TestXmlFiles.xmlFilenames();
     }
 
     @ParameterizedTest
