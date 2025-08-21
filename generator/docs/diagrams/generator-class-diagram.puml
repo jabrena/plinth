@@ -1,15 +1,14 @@
-@startuml
+@startuml generator_class_structure
 !theme plain
 title "Generator Module - Class Structure (info.jab.pml)"
 
 package "info.jab.pml" {
   class CursorRulesGenerator {
     + generate(xmlFileName: String, xslFileName: String): String
-    + generate(xmlFileName: String, xslFileName: String, schemaFileName: String): String
     ..private pipeline..
     - loadTransformationSources(xmlFileName: String, xslFileName: String): Optional<TransformationSources>
     - loadResource(fileName: String): Optional<InputStream>
-    - createSaxSource(sources: TransformationSources, schemaFileName: String): SAXSource
+    - createSaxSource(sources: TransformationSources): SAXSource
     - performTransformation(xmlSource: SAXSource, xslFileName: String): Optional<String>
     - executeTransformation(xmlSource: SAXSource, xslStream: InputStream): Optional<String>
   }
@@ -18,16 +17,9 @@ package "info.jab.pml" {
     - xmlStream: InputStream
     - xslStream: InputStream
   }
-
-  class ValidationErrorHandler {
-    + warning(exception: SAXParseException)
-    + error(exception: SAXParseException)
-    + fatalError(exception: SAXParseException)
-  }
 }
 
 CursorRulesGenerator *-- TransformationSources : uses
-CursorRulesGenerator ..> ValidationErrorHandler : uses
 
 note right of TransformationSources
 Immutable record bundling XML and XSL input streams
@@ -35,9 +27,8 @@ for thread-safe, explicit resource handling.
 end note
 
 note bottom of CursorRulesGenerator
-Public API provides two generate(...) overloads:
+Public API provides one generate(...) overload:
  - without schema validation
- - with optional XSD validation
 The private pipeline is organized as pure, focused steps.
 end note
 
