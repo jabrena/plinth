@@ -1,22 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:xi="http://www.w3.org/2001/XInclude"
-        xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.1.0-SNAPSHOT/pml.xsd"
-        id="141-java-refactoring-with-modern-features" version="1.0">
+        xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.1.0-SNAPSHOT/pml.xsd">
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
         <version>0.10.0-SNAPSHOT</version>
-        <tags>
-            <tag>java</tag>
-            <tag>refactoring</tag>
-            <tag>modern-features</tag>
-            <tag>java8+</tag>
-            <tag>lambda</tag>
-            <tag>streams</tag>
-            <tag>optional</tag>
-            <tag>best-practices</tag>
-        </tags>
         <title>Modern Java Development Guidelines (Java 8+)</title>
     </metadata>
 

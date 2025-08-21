@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.1.0-SNAPSHOT/pml.xsd"
-    xmlns:xi="http://www.w3.org/2001/XInclude"
-    id="110-java-maven-best-practices" version="1.0">
+    xmlns:xi="http://www.w3.org/2001/XInclude">
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
         <version>0.10.0-SNAPSHOT</version>
-        <tags>
-            <tag>maven</tag>
-            <tag>java</tag>
-            <tag>best-practices</tag>
-        </tags>
         <title>Maven Best Practices</title>
     </metadata>
 

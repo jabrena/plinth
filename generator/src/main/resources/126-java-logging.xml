@@ -1,21 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:xi="http://www.w3.org/2001/XInclude"
-    xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.1.0-SNAPSHOT/pml.xsd"
-    id="126-java-logging" version="1.0">
+    xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.1.0-SNAPSHOT/pml.xsd">
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
         <version>0.10.0-SNAPSHOT</version>
-        <tags>
-            <tag>java</tag>
-            <tag>logging</tag>
-            <tag>slf4j</tag>
-            <tag>logback</tag>
-            <tag>monitoring</tag>
-            <tag>security</tag>
-            <tag>performance</tag>
-        </tags>
         <title>Java Logging Best Practices</title>
     </metadata>
 

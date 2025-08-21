@@ -1,26 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xmlns:xi="http://www.w3.org/2001/XInclude"
-        xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.1.0-SNAPSHOT/pml.xsd"
-        id="170-java-documentation" version="1.0">
+        xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.1.0-SNAPSHOT/pml.xsd">
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
         <version>0.10.0-SNAPSHOT</version>
-        <tags>
-            <tag>java</tag>
-            <tag>documentation</tag>
-            <tag>refactoring</tag>
-            <tag>readme</tag>
-            <tag>package-info</tag>
-            <tag>uml</tag>
-            <tag>sequence-diagrams</tag>
-            <tag>class-diagrams</tag>
-            <tag>c4-model</tag>
-            <tag>plantuml</tag>
-            <tag>best-practices</tag>
-            <tag>modular</tag>
-        </tags>
         <title>Java Documentation Generator with modular step-based configuration</title>
     </metadata>
 

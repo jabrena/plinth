@@ -1,21 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xmlns:xi="http://www.w3.org/2001/XInclude"
-        xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.1.0-SNAPSHOT/pml.xsd"
-        id="123-java-general-guidelines" version="1.0">
+        xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.1.0-SNAPSHOT/pml.xsd">
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
         <version>0.10.0-SNAPSHOT</version>
-        <tags>
-            <tag>java</tag>
-            <tag>guidelines</tag>
-            <tag>naming</tag>
-            <tag>formatting</tag>
-            <tag>documentation</tag>
-            <tag>exceptions</tag>
-            <tag>best-practices</tag>
-        </tags>
         <title>Java General Guidelines</title>
     </metadata>
 
