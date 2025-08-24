@@ -5,6 +5,7 @@ Options:
 - Java CLI Application (command-line tool)
 - Java Microservice (Web service/REST API/Modular monolith)
 - Serverless (AWS Lambdas, Azure Functions)
+- POC
 - Other (specify)
 
 ---
@@ -34,6 +35,7 @@ Options:
 - Static code analysis (SpotBugs, PMD)
 - Sonar
 - Version management
+- JMH
 
 ---
 

@@ -124,6 +124,13 @@ Start with essential build properties that every project needs (use the Java ver
 <maven-plugin-sonar.version>4.0.0.4121</maven-plugin-sonar.version>
 ```
 
+**If JMH selected**:
+```xml
+<jmh.version>1.37</jmh.version>
+<maven-plugin-build-helper>3.4.0</maven-plugin-build-helper>
+<maven-plugin-shade>3.5.1</maven-plugin-shade>
+```
+
 The final `<properties>` section will look like this (example with common selections):
 
 ```xml
