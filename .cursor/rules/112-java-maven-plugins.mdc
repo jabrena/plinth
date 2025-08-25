@@ -333,8 +333,9 @@ Start with essential build properties that every project needs (use the Java ver
 **If JMH selected**:
 ```xml
 <jmh.version>1.37</jmh.version>
-<maven-plugin-build-helper>3.4.0</maven-plugin-build-helper>
-<maven-plugin-shade>3.5.1</maven-plugin-shade>
+<maven-plugin-build-helper.version>3.4.0</maven-plugin-build-helper.version>
+<maven-plugin-shade.version>3.5.1</maven-plugin-shade.version>
+<maven-plugin-compiler.version>3.13.0</maven-plugin-compiler.version>
 ```
 
 The final `<properties>` section will look like this (example with common selections):
@@ -1601,7 +1602,7 @@ ls target/.flattened-pom.xml
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
-                <version>${maven-plugin-build-helper}</version>
+                <version>${maven-plugin-build-helper.version}</version>
                 <executions>
                     <execution>
                         <id>add-jmh-source</id>
@@ -1639,7 +1640,7 @@ ls target/.flattened-pom.xml
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>${maven-plugin-shade}</version>
+                <version>${maven-plugin-shade.version}</version>
                 <executions>
                     <execution>
                         <phase>package</phase>
@@ -1814,8 +1815,15 @@ java -jar target/jmh-benchmarks.jar -l
 java -jar target/jmh-benchmarks.jar -h
 
 # Run benchmark
-java -cp target/jmh-benchmarks.jar info.jab.benchmarks.SampleBenchmark -wi 1 -i 1 -f 1
+java -cp target/jmh-benchmarks.jar info.jab.demo.benchmarks.FibonacciBenchmark -wi 1 -i 1 -f 1
 
+# Verify that results are generated
+ls jmh-fibonacci-benchmark-results.json
+
+# Share references to JMH
+
+- https://openjdk.org/projects/code-tools/jmh/
+- https://jmh.morethan.io
 ```
                     
                 
