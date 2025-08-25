@@ -1499,7 +1499,7 @@ mkdir -p src/jmh/java/com/example/demo/benchmarks
 
 ## Sample Benchmark Class
 
-**Create a sample benchmark in `src/jmh/java/[your-package]/benchmarks/SampleBenchmark.java`:**
+**Create a sample benchmark in `src/jmh/java/[your-package]/benchmarks/FibonacciBenchmark.java`:**
 
 ```java
 package info.jab.benchmarks;
@@ -1585,7 +1585,7 @@ public class FibonacciBenchmark {
      */
     public static void main(String[] args) throws RunnerException {
         Options options = new OptionsBuilder()
-                .include(SampleBenchmark.class.getSimpleName())
+                .include(FibonacciBenchmark.class.getSimpleName())
                 .resultFormat(ResultFormatType.JSON)
                 .result("jmh-fibonacci-benchmark-results.json")
                 .build();
