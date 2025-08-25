@@ -83,7 +83,7 @@ Options:
 - Java CLI Application (command-line tool)
 - Java Microservice (Web service/REST API/Modular monolith)
 - Serverless (AWS Lambdas, Azure Functions)
-- POC
+- Java POC (Proof of Concept)
 - Other (specify)
 
 ---
@@ -110,10 +110,10 @@ Options:
 - Code coverage reporting (JaCoCo)
 - Mutation testing (PiTest)
 - Security vulnerability scanning (OWASP)
-- Static code analysis (SpotBugs, PMD)
+- Security static code analysis (SpotBugs, PMD)
 - Sonar
 - Version management
-- JMH
+- JMH (Java Microbenchmark Harness)
 
 ---
 
@@ -124,6 +124,8 @@ Options:
 - 80% (recommended)
 - 90% (high)
 - Custom percentage (specify)
+
+**Note**: This question is only asked if "Code coverage reporting (JaCoCo)" was selected in question 3.
 
 ---
 
@@ -1660,6 +1662,7 @@ ls target/.flattened-pom.xml
                                         <exclude>META-INF/*.SF</exclude>
                                         <exclude>META-INF/*.DSA</exclude>
                                         <exclude>META-INF/*.RSA</exclude>
+                                        <exclude>META-INF/MANIFEST.MF</exclude>
                                     </excludes>
                                 </filter>
                             </filters>
@@ -1692,25 +1695,6 @@ mkdir -p src/jmh/java/com/example/demo/benchmarks
 3. **Follow JMH naming conventions**: Benchmark classes should end with `Benchmark` suffix
 4. **Package structure**: Mirror main source package structure in `src/jmh/java`
 
-## Usage Examples
-
-```bash
-# Build with JMH profile
-./mvnw clean package -Pjmh
-
-# Run all benchmarks
-java -jar target/jmh-benchmarks.jar
-
-# Run specific benchmark
-java -jar target/jmh-benchmarks.jar MyBenchmark
-
-# Run with options
-java -jar target/jmh-benchmarks.jar -wi 3 -i 5 -f 1
-
-# List available benchmarks
-java -jar target/jmh-benchmarks.jar -l
-```
-
 ## Sample Benchmark Class
 
 **Create a sample benchmark in `src/jmh/java/[your-package]/benchmarks/SampleBenchmark.java`:**
@@ -1718,7 +1702,20 @@ java -jar target/jmh-benchmarks.jar -l
 ```java
 package info.jab.benchmarks;
 
-import org.openjdk.jmh.annotations.*;
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
+import org.openjdk.jmh.results.format.ResultFormatType;
+import org.openjdk.jmh.runner.Runner;
+import org.openjdk.jmh.runner.RunnerException;
+import org.openjdk.jmh.runner.options.Options;
+import org.openjdk.jmh.runner.options.OptionsBuilder;
 import java.util.concurrent.TimeUnit;
 
 @BenchmarkMode(Mode.AverageTime)
@@ -1727,7 +1724,7 @@ import java.util.concurrent.TimeUnit;
 @Fork(value = 2, jvmArgs = {"-Xms2G", "-Xmx2G"})
 @Warmup(iterations = 3)
 @Measurement(iterations = 5)
-public class SampleBenchmark {
+public class FibonacciBenchmark {
 
     private static final int FIBONACCI_N = 20;
 
@@ -1780,6 +1777,19 @@ public class SampleBenchmark {
             return curr;
         }
     }
+
+    /**
+     * Main method to run benchmarks with JSON output configuration
+     */
+    public static void main(String[] args) throws RunnerException {
+        Options options = new OptionsBuilder()
+                .include(SampleBenchmark.class.getSimpleName())
+                .resultFormat(ResultFormatType.JSON)
+                .result("jmh-fibonacci-benchmark-results.json")
+                .build();
+
+        new Runner(options).run();
+    }
 }
 ```
 
@@ -1797,8 +1807,15 @@ After adding this profile, verify the configuration:
 # Verify JAR creation
 ls target/jmh-benchmarks.jar
 
-# Test benchmark execution (with sample benchmark)
+# List available benchmarks
 java -jar target/jmh-benchmarks.jar -l
+
+# Show help
+java -jar target/jmh-benchmarks.jar -h
+
+# Run benchmark
+java -cp target/jmh-benchmarks.jar info.jab.benchmarks.SampleBenchmark -wi 1 -i 1 -f 1
+
 ```
                     
                 

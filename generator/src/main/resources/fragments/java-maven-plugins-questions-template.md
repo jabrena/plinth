@@ -5,7 +5,7 @@ Options:
 - Java CLI Application (command-line tool)
 - Java Microservice (Web service/REST API/Modular monolith)
 - Serverless (AWS Lambdas, Azure Functions)
-- POC
+- Java POC (Proof of Concept)
 - Other (specify)
 
 ---
@@ -32,10 +32,10 @@ Options:
 - Code coverage reporting (JaCoCo)
 - Mutation testing (PiTest)
 - Security vulnerability scanning (OWASP)
-- Static code analysis (SpotBugs, PMD)
+- Security static code analysis (SpotBugs, PMD)
 - Sonar
 - Version management
-- JMH
+- JMH (Java Microbenchmark Harness)
 
 ---
 
@@ -46,6 +46,8 @@ Options:
 - 80% (recommended)
 - 90% (high)
 - Custom percentage (specify)
+
+**Note**: This question is only asked if "Code coverage reporting (JaCoCo)" was selected in question 3.
 
 ---
 
