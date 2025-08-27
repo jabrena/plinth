@@ -24,6 +24,8 @@ The repository was designed to offer support for Cursor but other tools has evol
 
 A system prompt is a set of instructions given to an AI model that defines how it should behave, what role it should take on, and what guidelines it should follow when responding to users. Think of it as the "operating manual" that shapes the AI's personality, capabilities, and boundaries.
 
+![](./docs/prompts.png)
+
 ## How to use a System prompt in your development?
 
 Read [the following document](./HOW-TO-USE.md) to understand how to use System prompts in the development
