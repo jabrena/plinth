@@ -72,7 +72,9 @@ From the beginning, you need to know that results provided by the interaction wi
 
 Models are able to generate code but they are not able to run code with your local data. In order to solve that limitation you can observe that a few prompts provide scripts to fix the gaps on the model side.
 
-## [Contribute](./CONTRIBUTING.md)
+## Contribute
+
+If you have great ideas, [read the following document](./CONTRIBUTING.md) for contributing.
 
 ## Examples
 
