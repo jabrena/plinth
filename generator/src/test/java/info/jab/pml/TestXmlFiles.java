@@ -7,7 +7,7 @@ public final class TestXmlFiles {
     private TestXmlFiles() {
     }
 
-    public static Stream<String> baseNames() {
+    public static final Stream<String> baseNames() {
         return Stream.of(
             "100-java-cursor-rules-list",
             "110-java-maven-best-practices",

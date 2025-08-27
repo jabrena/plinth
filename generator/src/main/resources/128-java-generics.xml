@@ -1138,7 +1138,7 @@ public class ModernGenericsUsage {
     }
 }]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
+                <bad-example>
                     <code-block language="java"><![CDATA[import java.util.List;
 
 // Not leveraging modern Java features with generics
@@ -1228,6 +1228,282 @@ public class OldStyleGenerics {
             return "Error: " + result.getError();
         }
     }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="9" id="heap-pollution-safevarargs">
+            <example-header>
+                <example-title>Prevent Heap Pollution with @SafeVarargs</example-title>
+                <example-subtitle>Use @SafeVarargs on trusted generic varargs and avoid unsafe patterns</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Generic varargs can cause heap pollution because the varargs array is reifiable while its component type is erased. Mark only provably safe varargs methods with `@SafeVarargs` (final, static, or private) and avoid storing or exposing the varargs array. Validate when suppression is necessary and keep `@SuppressWarnings` as narrow as possible.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.Collection;
+import java.util.List;
+
+public class SafeVarargsExample {
+
+    @SafeVarargs
+    public static <T> List<T> of(T... items) {
+        return List.of(items); // Doesn't store or mutate the varargs array
+    }
+
+    @SafeVarargs
+    public static <T> void addAll(Collection<T> target, T... items) {
+        for (T item : items) {
+            target.add(item);
+        }
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
+import java.util.ArrayList;
+
+public class UnsafeVarargsExample {
+
+    // Generic array of parameterized type is unsafe (heap pollution risk)
+    @SafeVarargs // Misused: method is not provably safe
+    public static <T> void dangerous(List<T>... lists) {
+        Object[] array = lists;               // Allowed by arrays covariance
+        array[0] = List.of(42);               // Heap pollution
+        T item = lists[0].get(0);             // ClassCastException at runtime
+    }
+
+    // Storing the varargs array leaks its alias and is unsafe
+    private static List<Object[]> cache = new ArrayList<>();
+    public static <T> void cacheVarargs(T... items) {
+        cache.add(new Object[]{items});       // Stores generic varargs array
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="10" id="wildcard-capture-helper">
+            <example-header>
+                <example-title>Use Helper Methods for Wildcard Capture</example-title>
+                <example-subtitle>Implement operations like swap(List&lt;?&gt;) via capture</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Wildcard types like `List<?>` are read-only with respect to element type. To perform write operations, use a private helper method with its own type parameter so the compiler can capture the wildcard (`capture-of ?`). This enables safe implementations while keeping a flexible public API.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
+
+public class WildcardCaptureUtils {
+
+    public static void swap(List<?> list, int i, int j) {
+        swapHelper(list, i, j); // capture-of ? => T
+    }
+
+    private static <T> void swapHelper(List<T> list, int i, int j) {
+        T tmp = list.get(i);
+        list.set(i, list.get(j));
+        list.set(j, tmp);
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.List;
+
+public class BadWildcardCapture {
+
+    public static void swap(List<?> list, int i, int j) {
+        // list.set(i, list.get(j)); // COMPILATION ERROR: cannot put into List<?>
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="11" id="self-bounded-generics-builders">
+            <example-header>
+                <example-title>Apply Self-Bounded Generics for Fluent Builders</example-title>
+                <example-subtitle>Use CRTP to preserve subtype return types in chains</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Fluent APIs often need methods in a base class to return the most specific subtype to keep chaining type-safe. Use the Curiously Recurring Template Pattern (CRTP): `abstract class Base<T extends Base<T>>` with `protected abstract T self()` so base methods can return `T`.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[abstract class Builder<T extends Builder<T>> {
+    private String name;
+
+    public T withName(String name) {
+        this.name = name;
+        return self();
+    }
+
+    protected abstract T self();
+    public String build() { return name; }
+}
+
+final class UserBuilder extends Builder<UserBuilder> {
+    private int age;
+
+    public UserBuilder withAge(int age) {
+        this.age = age;
+        return self();
+    }
+
+    @Override protected UserBuilder self() { return this; }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[class BaseBuilder {
+    public BaseBuilder withName(String name) { return this; }
+}
+
+class BadUserBuilder extends BaseBuilder {
+    public BadUserBuilder withAge(int age) { return this; }
+
+    static void demo() {
+        BadUserBuilder b = new BadUserBuilder();
+        // Chaining loses subtype after calling BaseBuilder methods
+        // b.withName("a").withAge(10); // Not type-safe without casts
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="12" id="api-wildcards-contravariant-comparator">
+            <example-header>
+                <example-title>Design APIs with Proper Wildcards</example-title>
+                <example-subtitle>Prefer wildcards in parameters, support comparator contravariance</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Place wildcards in input positions to increase flexibility: `List<? extends T>` for producers and `Comparator<? super T>` for consumers. For functional interfaces, prefer `Function<? super T, ? extends R>`. Avoid wildcards in return types which reduce usability.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.*;
+import java.util.function.Function;
+
+public final class ApiDesign {
+    public static <T> void sort(List<T> list, Comparator<? super T> comparator) {
+        list.sort(comparator);
+    }
+
+    public static <T, R> List<R> map(List<? extends T> source,
+                                     Function<? super T, ? extends R> mapper) {
+        List<R> out = new ArrayList<>();
+        for (T t : source) {
+            out.add(mapper.apply(t));
+        }
+        return out;
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import java.util.*;
+import java.util.function.Function;
+
+public final class RigidApi {
+    public static <T> void sort(List<T> list, Comparator<T> comparator) { /* too strict */ }
+
+    public static <T, R> List<R> map(List<T> source, Function<T, R> mapper) {
+        return Collections.emptyList(); // Can't accept supertypes/subtypes easily
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="13" id="arrays-vs-generics-covariance">
+            <example-header>
+                <example-title>Avoid Arrays Covariance Pitfalls</example-title>
+                <example-subtitle>Prefer generic collections over arrays for type safety</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Arrays are covariant (`Integer[]` is a subtype of `Object[]`), which allows runtime `ArrayStoreException`. Generics are invariant and prevent unsafe writes at compile time. Prefer `List<T>` with wildcards to achieve variance safely.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.*;
+
+public class PreferCollectionsOverArrays {
+    public static void safeVariance() {
+        List<Integer> ints = new ArrayList<>();
+        List<? extends Number> numbers = ints; // Read-only w.r.t element type
+        // numbers.add(3.14); // COMPILATION ERROR: prevents runtime corruption
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[public class ArrayCovariancePitfall {
+    public static void main(String[] args) {
+        Integer[] ints = new Integer[1];
+        Object[] objects = ints;      // Arrays are covariant
+        objects[0] = 3.14;            // ArrayStoreException at runtime
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="14" id="serialization-generic-type-tokens">
+            <example-header>
+                <example-title>Serialize Collections with Type Tokens</example-title>
+                <example-subtitle>Use Jackson TypeReference or Gson TypeToken for generic types</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Due to type erasure, serializers need explicit type information for `List<Foo>` and similar. Provide a type token: Jackson's `TypeReference<T>` or Gson's `TypeToken<T>`. Avoid raw types and unchecked casts in (de)serialization code.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.reflect.TypeToken;
+import java.util.List;
+
+public class SerializationGenerics {
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    public static List<Foo> fromJson(String json) throws Exception {
+        return MAPPER.readValue(json, new TypeReference<List<Foo>>() {});
+    }
+
+    public static java.lang.reflect.Type fooListType() {
+        return new TypeToken<List<Foo>>() {}.getType();
+    }
+
+    public static final class Foo { public String name; }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
+
+public class RawSerialization {
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    @SuppressWarnings("unchecked")
+    public static List<Foo> fromJson(String json) throws Exception {
+        List list = MAPPER.readValue(json, List.class); // Raw type loses T
+        return (List<Foo>) list; // Unsafe cast, may fail at runtime
+    }
+
+    public static final class Foo { public String name; }
 }]]></code-block>
                 </bad-example>
             </code-examples>
