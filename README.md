@@ -7,7 +7,7 @@
 
 ## Motivation
 
-Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agent model` behaves using reusable and scoped instructions. In Cursor, this is achieved through `Cursor rules`, which can be understood as `System prompts` in generic terms. This repository provides a collection of Cursor rules designed for Java development.
+Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agent model` behaves using reusable and scoped instructions. In Cursor, this is achieved through `Cursor rules`, which can be understood as `System prompts` in generic terms.
 
 ## Goal
 
