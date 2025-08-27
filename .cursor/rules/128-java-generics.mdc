@@ -88,6 +88,8 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 12: Design APIs with Proper Wildcards
 - Example 13: Avoid Arrays Covariance Pitfalls
 - Example 14: Serialize Collections with Type Tokens
+- Example 15: Eliminate Unchecked Warnings
+- Example 16: Use Typesafe Heterogeneous Containers
 
 ### Example 1: Avoid Raw Types
 
@@ -1513,6 +1515,93 @@ public class RawSerialization {
     }
 
     public static final class Foo { public String name; }
+}
+```
+
+### Example 15: Eliminate Unchecked Warnings
+
+Title: Fix root causes instead of suppressing warnings
+Description: Unchecked warnings indicate potential heap pollution or type safety issues. Prefer eliminating them by using generics properly rather than suppressing. Use @SuppressWarnings("unchecked") only for provably safe operations and scope it as narrowly as possible (method or statement level).
+
+**Good example:**
+
+```java
+import java.util.List;
+import java.util.ArrayList;
+
+public class NoWarningsExample {
+
+    // No warnings - proper generics usage
+    public static <T> List<T> createList(T item) {
+        List<T> list = new ArrayList<>();
+        list.add(item);
+        return list;
+    }
+
+    // Safe operation with narrow suppression if needed
+    @SuppressWarnings("unchecked") // Provably safe
+    private static <T> T[] toArray(List<T> list, Class<T> type) {
+        return list.toArray((T[]) java.lang.reflect.Array.newInstance(type, list.size()));
+    }
+}
+```
+
+**Bad example:**
+
+```java
+@SuppressWarnings("unchecked") // Broad suppression hides issues
+public class WarningSuppressionAbuse {
+
+    public static List createList(Object item) {
+        List list = new ArrayList(); // Raw types cause warnings
+        list.add(item);
+        return list; // Unchecked conversion
+    }
+}
+```
+
+### Example 16: Use Typesafe Heterogeneous Containers
+
+Title: Safely store multiple types using Class as key
+Description: For containers needing different types (like annotations or preferences), use Class<T> as map keys and cast on retrieval. This maintains type safety without raw types or unchecked casts visible to clients.
+
+**Good example:**
+
+```java
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Objects;
+
+public class HeterogeneousContainer {
+    private final Map<Class<?>, Object> container = new HashMap<>();
+
+    public <T> void put(Class<T> type, T instance) {
+        container.put(Objects.requireNonNull(type), type.cast(instance));
+    }
+
+    public <T> T get(Class<T> type) {
+        return type.cast(container.get(type));
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import java.util.Map;
+import java.util.HashMap;
+
+@SuppressWarnings("unchecked")
+public class UnsafeContainer {
+    private final Map<String, Object> container = new HashMap<>();
+
+    public void put(String key, Object instance) {
+        container.put(key, instance);
+    }
+
+    public <T> T get(String key) {
+        return (T) container.get(key); // Unsafe cast
+    }
 }
 ```
 
