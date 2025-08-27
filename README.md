@@ -7,16 +7,16 @@
 
 ## Motivation
 
-Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agent model` behaves using reusable and scoped instructions. In cursor, the way to do it is named `Cursor rule` and you could see it as a `System prompt` if you use a generic term. This repository provides a collection of Cursor rules designed for Java development.
+Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agent model` behaves using reusable and scoped instructions. In Cursor, this is achieved through `Cursor rules`, which can be understood as `System prompts` in generic terms. This repository provides a collection of Cursor rules designed for Java development.
 
 ## Goal
 
 Provide a collection of **Cursor rules for Java** (System prompts) which help software engineers in their daily work.
-The [available Cursor Rules for Java](./CURSOR-RULES-JAVA.md) covers aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing` (JMeter), `Profiling`(Async profiler, jps, jstack, jcmd & jstat) & `Documentation`.
+The [available Cursor Rules for Java](./CURSOR-RULES-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing` (JMeter), `Profiling` (Async profiler, jps, jstack, jcmd & jstat) & `Documentation`.
 
 ### Compatibility with Modern IDEs, Cli & Others
 
-The repository was designed to offer support for Cursor but other tools has evolved and offer better support for System prompts. The repository executes regular test regression for  IDEs like *Cursor*, *Cursor CLI*, *Claude Code*, *Github Copilot* & *Jetbrains Junie*.
+The repository was designed to offer support for Cursor, but other tools have evolved and now offer better support for System prompts. The repository executes regular regression testing for IDEs like *Cursor*, *Cursor CLI*, *Claude Code*, *GitHub Copilot* & *JetBrains Junie*.
 
 ⚠️ **Note:** Currently the best environments to use this repository are: *Cursor*, *Cursor CLI* & *Claude Code* (Last update: 27/08/2025)
 
@@ -28,15 +28,15 @@ A system prompt is a set of instructions given to an AI model that defines how i
 
 ## How to use a System prompt in your development?
 
-Read [the following document](./HOW-TO-USE.md) to understand how to use System prompts in the development
+Read [the following document](./HOW-TO-USE.md) to understand how to use System prompts in development
 
 ## Getting started
 
-If you continue interested in using this repository, please read [the following document](./GETTING-STARTED.md) to start using it.
+If you are interested in using this repository, please read [the following document](./GETTING-STARTED.md) to get started.
 
 ## Constraints, Output format & Safety guards
 
-The cursor rules in this repository follow [The Three-Node Quality Framework for AI Prompts](./docs/articles/prompt-quality-framework.md) which ensures both comprehensive responses and safe execution. This framework consists of three distinct pillars: **constraints**, **output-format** and **safeguards**. Each node operates at different phases of the AI interaction timeline, creating a defense-in-depth strategy.
+The cursor rules in this repository follow [The Three-Node Quality Framework for AI Prompts](./docs/articles/prompt-quality-framework.md), which ensures both comprehensive responses and safe execution. This framework consists of three distinct pillars: **constraints**, **output-format** and **safeguards**. Each node operates at different phases of the AI interaction timeline, creating a defense-in-depth strategy.
 
 The **constraints** act as gate-keeping mechanisms that define hard requirements and blocking conditions before any work begins - essentially asking "Can I start?" The **output-format** provides prescriptive guidance during execution, ensuring comprehensive coverage and organized responses by defining "What should I deliver?" Finally, **safeguards** implement protective measures throughout and after execution, continuously asking "Did it work safely?" This temporal flow from pre-execution validation to structured execution to continuous monitoring ensures quality at every stage.
 
@@ -46,11 +46,11 @@ This framework transforms AI from a general assistant into a specialized consult
 
 ### Lack of determinism
 
-From the beginning, you need to know that results provided by the interaction with the different `Cursor rules` are not deterministic due to the models' nature, but this fact should not be considered negative. Software engineers do not always have the same idea to solve a problem, and you could find an analogy in this fact.
+From the beginning, you need to know that results provided by interactions with the different `Cursor rules` are not deterministic due to the nature of the models, but this fact should not be considered negative. Software engineers do not always have the same idea to solve a problem, and you could find an analogy in this fact.
 
 ### Limits of interactions with Models
 
-Models are able to generate code but they are not able to run code with your local data. In order to solve that limitation you can observe that a few prompts provide scripts to fix the gaps on the model side.
+Models are able to generate code but they cannot run code with your local data. To address this limitation, you can observe that a few prompts provide scripts to bridge the gaps on the model side.
 
 ## Contribute
 
