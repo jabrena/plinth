@@ -11,48 +11,62 @@ Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agen
 
 ## Goal
 
-Provide a set of Interactive Cursor rules for Java that help software engineers in their daily work.
+Provide a collection of **Cursor rules for Java** (System prompts) which help software engineers in their daily work.
+The [available Cursor Rules for Java](./CURSOR-RULES-JAVA.md) covers aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing` (JMeter), `Profiling`(Async profiler, jps, jstack, jcmd & jstat) & `Documentation`.
 
-## Getting started
+### Compatibility with Modern IDEs, Cli & Others
 
-If you are interested in getting the benefits of this cursor rules for Java, you have different alternatives like: `Using this Git repository`, `Using the Zipped rules from latest release` or using a `JBang CLI` specialized in this task.
+The repository was designed to offer support for Cursor but other tools has evolved and offer better support for System prompts. The repository executes regular test regression for  IDEs like *Cursor*, *Cursor CLI*, *Claude Code*, *Github Copilot* & *Jetbrains Junie*.
 
-Read [the following document](./GETTING-STARTED.md) to start using this set of Cursor rules.
+⚠️ **Note:** Currently the best Tooling for cursor rules are: *Cursor*, *Cursor CLI* & *Claude Code* (Last update: 27/08/2025)
 
 ## What is a System prompt?
 
 A system prompt is a set of instructions given to an AI model that defines how it should behave, what role it should take on, and what guidelines it should follow when responding to users. Think of it as the "operating manual" that shapes the AI's personality, capabilities, and boundaries.
 
-## How to use the Cursor rules?
+## How to use a System prompt in your development?
 
-Using the Cursor rules is straightforward: simply `drag and drop` the cursor rule that you need into the chat textbox where you are typing your `User prompt`.
+![](./docs/prompts.png)
 
-⚠️ Currently, the cursor rules are released with the [manual scope](https://docs.cursor.com/context/rules#rule-type) by design to mitigate potential negative performance impact on communications with **The Cursor platform**.
+Using a System prompt in your development is pretty easy, if you are using a Modern IDE which includes AI features, like Cursor, open the chat:
 
-Review the following [sequence diagram](./docs/cursor-interaction-sequence.png) to understand the technical details.
+![](./docs/cursor-chat1.png)
 
-## What is the structure of a System prompt?
+and type your own **User prompt**, like the following example:
 
-According to the documentation from [Google Gemini](https://drive.google.com/file/d/1AbaBYbEa_EbPelsT40-vj64L-2IwUJHy/view), [Anthropic Claude](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview) & [OpenAI ChatGPT](https://chatgpt.com/share/686d1066-9e40-800b-ac7f-cc8df7e4c7d0), a prompt could be structured in the following way:
+```
+Improve the pom.xml using the cursor rule @112-java-maven-plugins
+```
 
-- Metadata
-- Role
-- Context
-- Goal
-- Tone
-- Constraints
-- Instructions
-- Examples
-- Output format
-- Safeguards
+and add `drag and drop` the system prompt that you need into the chat and the pom.xml file.
 
-With this structure in mind, the project uses an XML Schema to define the way that all System prompts are generated for Cursor AI. If you are interested in this area, you could review [the Schema](./generator/src/main/resources/pml.xsd).
+The result should be:
 
-**Note:** It is not necessary to add all parts in a prompt.
+![](./docs/cursor-chat2.png)
 
-## Cursor Rules
+---
 
-Read the generated list of cursor rules for Java [here](./CURSOR-RULES-JAVA.md). The set of cursor rules covers aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with tools like Async profiler, jps, jstack, jcmd & jstat` & `Documentation`.
+Recently appear another way to interact models, in this case using CLI tools, the approach is exactly the same.
+
+Starting from a clean session from [Cursor CLI](https://cursor.com/cli):
+
+![](./docs/cursor-cli1.png)
+
+Type in the text area your user Prompt:
+
+```
+Improve the pom.xml using the cursor rule @112-java-maven-plugins
+```
+
+![](./docs/cursor-cli2.png)
+
+and finally select the file which you want to apply the process:
+
+![](./docs/cursor-cli3.png)
+
+## Getting started
+
+Read [the following document](./GETTING-STARTED.md) to start using this set of Cursor rules.
 
 ## Constraints, Output format & Safety guards
 
