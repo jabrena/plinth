@@ -18,7 +18,7 @@ The [available Cursor Rules for Java](./CURSOR-RULES-JAVA.md) cover aspects like
 
 The repository was designed to offer support for Cursor, but other tools have evolved and now offer better support for System prompts. The repository executes regular regression testing for IDEs like *Cursor*, *Cursor CLI*, *Claude Code*, *GitHub Copilot* & *JetBrains Junie*.
 
-⚠️ **Note:** Currently the best environments to use this repository are: *Cursor*, *Cursor CLI* & *Claude Code* (Last update: 27/08/2025)
+⚠️ **Note:** Currently the best environments to use this repository are: *Cursor*, *Cursor CLI* & *Claude Code*. If you use *Jetbrains Intellij*, you could combine with *Cursor Cli* or *Claude code*. (Last update: 27/08/2025)
 
 ## What is a System prompt?
 
