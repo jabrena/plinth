@@ -18,7 +18,7 @@ The [available Cursor Rules for Java](./CURSOR-RULES-JAVA.md) covers aspects lik
 
 The repository was designed to offer support for Cursor but other tools has evolved and offer better support for System prompts. The repository executes regular test regression for  IDEs like *Cursor*, *Cursor CLI*, *Claude Code*, *Github Copilot* & *Jetbrains Junie*.
 
-⚠️ **Note:** Currently the best Tooling for cursor rules are: *Cursor*, *Cursor CLI* & *Claude Code* (Last update: 27/08/2025)
+⚠️ **Note:** Currently the best environments to use this repository are: *Cursor*, *Cursor CLI* & *Claude Code* (Last update: 27/08/2025)
 
 ## What is a System prompt?
 
@@ -102,8 +102,6 @@ The rules were tested with the following examples:
 - [Microservices: Quarkus application](./examples/quarkus-demo/README.md)
 - [Serverless: AWS Lambda](./examples/aws-lambda-hello-world/README.md)
 - [Serverless: Azure Function](./examples/azure-function-hello-world/README.md)
-
-[Here](./examples/README.md), you can see Scenarios using the Cursor rules for Java
 
 ## Architectural decision records, ADR
 
