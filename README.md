@@ -7,56 +7,36 @@
 
 ## Motivation
 
-Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agent model` behaves using reusable and scoped instructions. In cursor, the way to do it is named `Cursor rule` and you could see it as a `System prompt` if you use a generic term. This repository provides a collection of Cursor rules designed for Java development.
+Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agent model` behaves using reusable and scoped instructions. In Cursor, this is achieved through `Cursor rules`, which can be understood as `System prompts` in generic terms. This repository provides a collection of Cursor rules designed for Java development.
 
 ## Goal
 
-Provide a set of Interactive Cursor rules for Java that help software engineers in their daily work.
+Provide a collection of **Cursor rules for Java** (System prompts) which help software engineers in their daily work.
+The [available Cursor Rules for Java](./CURSOR-RULES-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing` (JMeter), `Profiling` (Async profiler, jps, jstack, jcmd & jstat) & `Documentation`.
 
-## Getting started
+### Compatibility with Modern IDEs, Cli & Others
 
-If you are interested in getting the benefits of this cursor rules for Java, you have different alternatives like: `Using this Git repository`, `Using the Zipped rules from latest release` or using a `JBang CLI` specialized in this task.
+The repository was designed to offer support for Cursor, but other tools have evolved and now offer better support for System prompts. The repository executes regular regression testing for IDEs like *Cursor*, *Cursor CLI*, *Claude Code*, *GitHub Copilot* & *JetBrains Junie*.
 
-Read [the following document](./GETTING-STARTED.md) to start using this set of Cursor rules.
+⚠️ **Note:** Currently the best environments to use this repository are: *Cursor*, *Cursor CLI* & *Claude Code* (Last update: 27/08/2025)
 
 ## What is a System prompt?
 
 A system prompt is a set of instructions given to an AI model that defines how it should behave, what role it should take on, and what guidelines it should follow when responding to users. Think of it as the "operating manual" that shapes the AI's personality, capabilities, and boundaries.
 
-## How to use the Cursor rules?
+![](./docs/prompts.png)
 
-Using the Cursor rules is straightforward: simply `drag and drop` the cursor rule that you need into the chat textbox where you are typing your `User prompt`.
+## How to use a System prompt in your development?
 
-⚠️ Currently, the cursor rules are released with the [manual scope](https://docs.cursor.com/context/rules#rule-type) by design to mitigate potential negative performance impact on communications with **The Cursor platform**.
+Read [the following document](./HOW-TO-USE.md) to understand how to use System prompts in development
 
-Review the following [sequence diagram](./docs/cursor-interaction-sequence.png) to understand the technical details.
+## Getting started
 
-## What is the structure of a System prompt?
-
-According to the documentation from [Google Gemini](https://drive.google.com/file/d/1AbaBYbEa_EbPelsT40-vj64L-2IwUJHy/view), [Anthropic Claude](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview) & [OpenAI ChatGPT](https://chatgpt.com/share/686d1066-9e40-800b-ac7f-cc8df7e4c7d0), a prompt could be structured in the following way:
-
-- Metadata
-- Role
-- Context
-- Goal
-- Tone
-- Constraints
-- Instructions
-- Examples
-- Output format
-- Safeguards
-
-With this structure in mind, the project uses an XML Schema to define the way that all System prompts are generated for Cursor AI. If you are interested in this area, you could review [the Schema](./generator/src/main/resources/pml.xsd).
-
-**Note:** It is not necessary to add all parts in a prompt.
-
-## Cursor Rules
-
-Read the generated list of cursor rules for Java [here](./CURSOR-RULES-JAVA.md). The set of cursor rules covers aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with tools like Async profiler, jps, jstack, jcmd & jstat` & `Documentation`.
+If you are interested in using this repository, please read [the following document](./GETTING-STARTED.md) to get started.
 
 ## Constraints, Output format & Safety guards
 
-The cursor rules in this repository follow [The Three-Node Quality Framework for AI Prompts](./docs/articles/prompt-quality-framework.md) which ensures both comprehensive responses and safe execution. This framework consists of three distinct pillars: **constraints**, **output-format** and **safeguards**. Each node operates at different phases of the AI interaction timeline, creating a defense-in-depth strategy.
+The cursor rules in this repository follow [The Three-Node Quality Framework for AI Prompts](./docs/articles/prompt-quality-framework.md), which ensures both comprehensive responses and safe execution. This framework consists of three distinct pillars: **constraints**, **output-format** and **safeguards**. Each node operates at different phases of the AI interaction timeline, creating a defense-in-depth strategy.
 
 The **constraints** act as gate-keeping mechanisms that define hard requirements and blocking conditions before any work begins - essentially asking "Can I start?" The **output-format** provides prescriptive guidance during execution, ensuring comprehensive coverage and organized responses by defining "What should I deliver?" Finally, **safeguards** implement protective measures throughout and after execution, continuously asking "Did it work safely?" This temporal flow from pre-execution validation to structured execution to continuous monitoring ensures quality at every stage.
 
@@ -66,11 +46,11 @@ This framework transforms AI from a general assistant into a specialized consult
 
 ### Lack of determinism
 
-From the beginning, you need to know that results provided by the interaction with the different `Cursor rules` are not deterministic due to the models' nature, but this fact should not be considered negative. Software engineers do not always have the same idea to solve a problem, and you could find an analogy in this fact.
+From the beginning, you need to know that results provided by interactions with the different `Cursor rules` are not deterministic due to the nature of the models, but this fact should not be considered negative. Software engineers do not always have the same idea to solve a problem, and you could find an analogy in this fact.
 
 ### Limits of interactions with Models
 
-Models are able to generate code but they are not able to run code with your local data. In order to solve that limitation you can observe that a few prompts provide scripts to fix the gaps on the model side.
+Models are able to generate code but they cannot run code with your local data. To address this limitation, you can observe that a few prompts provide scripts to bridge the gaps on the model side.
 
 ## Contribute
 
@@ -88,8 +68,6 @@ The rules were tested with the following examples:
 - [Microservices: Quarkus application](./examples/quarkus-demo/README.md)
 - [Serverless: AWS Lambda](./examples/aws-lambda-hello-world/README.md)
 - [Serverless: Azure Function](./examples/azure-function-hello-world/README.md)
-
-[Here](./examples/README.md), you can see Scenarios using the Cursor rules for Java
 
 ## Architectural decision records, ADR
 
