@@ -2,9 +2,9 @@ package info.jab.pml;
 
 import java.util.stream.Stream;
 
-public final class SystemPromptInventory {
+public final class SystemPromptsInventory {
 
-    private SystemPromptInventory() {
+    private SystemPromptsInventory() {
     }
 
     public static final Stream<String> baseNames() {
