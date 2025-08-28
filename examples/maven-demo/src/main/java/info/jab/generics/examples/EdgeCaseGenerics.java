@@ -1,9 +1,18 @@
 package info.jab.generics.examples;
 
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.*;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Edge cases and advanced scenarios in Java generics including wildcard capture,

@@ -1,4 +1,4 @@
-package info.jab.demo.utils;
+package info.jab.functional.utils;
 
 import java.io.BufferedReader;
 import java.io.IOException;

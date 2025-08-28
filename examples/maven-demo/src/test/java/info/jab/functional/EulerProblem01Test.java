@@ -1,6 +1,6 @@
-package info.jab.demo;
+package info.jab.functional;
 
-import info.jab.demo.utils.EulerAnswersLoader;
+import info.jab.functional.utils.EulerAnswersLoader;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;

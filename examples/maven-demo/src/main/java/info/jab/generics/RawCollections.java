@@ -1,9 +1,18 @@
-package info.jab.generics.challenge;
+package info.jab.generics;
 
 import java.lang.reflect.Array;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.function.*;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Examples showing the problems solved by advanced generics edge case handling,
@@ -578,7 +587,7 @@ public class RawCollections {
 
             // PROBLEM: Variance operations are unsafe
             List integers = Arrays.asList(1, 2, 3); // PROBLEM: Raw list
-            List produced = UnsafeVarianceOperations.produceItems(() -> integers);
+            List produced = UnsafeVarianceOperations.produceItems((Supplier) () -> integers);
             System.out.println("Produced: " + produced);
 
             // PROBLEM: Array operations are complex and unsafe
