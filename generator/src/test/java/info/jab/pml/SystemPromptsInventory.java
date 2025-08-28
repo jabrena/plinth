@@ -2,12 +2,12 @@ package info.jab.pml;
 
 import java.util.stream.Stream;
 
-public final class TestXmlFiles {
+public final class SystemPromptsInventory {
 
-    private TestXmlFiles() {
+    private SystemPromptsInventory() {
     }
 
-    public static Stream<String> baseNames() {
+    public static final Stream<String> baseNames() {
         return Stream.of(
             "100-java-cursor-rules-list",
             "110-java-maven-best-practices",
@@ -21,6 +21,7 @@ public final class TestXmlFiles {
             "125-java-concurrency",
             "126-java-logging",
             "127-java-functional-exception-handling",
+            "128-java-generics",
             "131-java-unit-testing",
             "141-java-refactoring-with-modern-features",
             "142-java-functional-programming",

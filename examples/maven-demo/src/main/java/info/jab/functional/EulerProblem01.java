@@ -1,4 +1,4 @@
-package info.jab.demo;
+package info.jab.functional;
 
 public class EulerProblem01 implements IEuler<Integer, Integer> {
 

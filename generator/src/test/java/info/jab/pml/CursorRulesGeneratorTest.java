@@ -65,7 +65,7 @@ class CursorRulesGeneratorTest {
          * Each base name corresponds to both an XML file and expected MDC file.
          */
         private static Stream<String> provideXmlFileNames() {
-            return TestXmlFiles.baseNames();
+            return SystemPromptsInventory.baseNames();
         }
 
         @ParameterizedTest

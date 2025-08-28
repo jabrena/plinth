@@ -1,4 +1,4 @@
-package info.jab.demo;
+package info.jab.functional;
 
 import java.util.ArrayList;
 import java.util.List;
