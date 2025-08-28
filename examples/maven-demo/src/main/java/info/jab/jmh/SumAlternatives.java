@@ -1,4 +1,4 @@
-package info.jab.demo;
+package info.jab.jmh;
 
 public class SumAlternatives {
 

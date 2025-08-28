@@ -1,4 +1,4 @@
-package info.jab.demo;
+package info.jab.jmh;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
