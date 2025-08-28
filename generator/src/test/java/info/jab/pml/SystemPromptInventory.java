@@ -2,9 +2,9 @@ package info.jab.pml;
 
 import java.util.stream.Stream;
 
-public final class TestXmlFiles {
+public final class SystemPromptInventory {
 
-    private TestXmlFiles() {
+    private SystemPromptInventory() {
     }
 
     public static final Stream<String> baseNames() {
