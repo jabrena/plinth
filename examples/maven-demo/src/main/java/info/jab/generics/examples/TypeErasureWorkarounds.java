@@ -1,4 +1,4 @@
-package info.jab.demo.generics;
+package info.jab.generics.examples;
 
 import java.lang.reflect.*;
 import java.util.*;

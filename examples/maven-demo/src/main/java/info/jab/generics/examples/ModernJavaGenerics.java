@@ -1,4 +1,4 @@
-package info.jab.demo.generics;
+package generics;
 
 import java.util.*;
 import java.util.function.*;

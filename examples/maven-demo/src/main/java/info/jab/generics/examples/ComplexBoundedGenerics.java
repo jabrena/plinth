@@ -1,4 +1,4 @@
-package info.jab.demo.generics;
+package generics;
 
 import java.io.Serializable;
 import java.util.*;
@@ -97,7 +97,7 @@ public class ComplexBoundedGenerics {
     }
 
     // Generic method with flexible constraints using interfaces
-    public static <T extends Iterable<? extends Number> & Collection<? extends Number>>
+    public static <T extends Collection<? extends Number>>
             double calculateWeightedAverage(T numbers, Function<Number, Double> weightFunction) {
 
         double weightedSum = 0.0;

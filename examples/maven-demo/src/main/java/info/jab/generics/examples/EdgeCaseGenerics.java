@@ -1,4 +1,4 @@
-package info.jab.demo.generics;
+package generics;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -53,7 +53,7 @@ public class EdgeCaseGenerics {
         }
     }
 
-        // Safe varargs patterns to prevent heap pollution
+    // Safe varargs patterns to prevent heap pollution
     public static class SafeVarargsExamples {
 
         // Safe: doesn't store or return the varargs array
