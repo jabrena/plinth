@@ -155,7 +155,11 @@ public class EdgeCaseGenerics {
             if (value != null && !key.getType().isInstance(value)) {
                 throw new ClassCastException("Value is not of type " + key.getType());
             }
-            storage.put(key, value);
+            if (value == null) {
+                storage.remove(key);  // Handle null values by removing the key
+            } else {
+                storage.put(key, value);
+            }
         }
 
         @SuppressWarnings("unchecked")

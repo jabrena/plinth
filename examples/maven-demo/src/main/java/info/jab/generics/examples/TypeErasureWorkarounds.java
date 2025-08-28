@@ -315,12 +315,25 @@ public class TypeErasureWorkarounds {
                 Class<?> targetClass = target.getClass();
                 Method[] methods = targetClass.getMethods();
 
+                // First try to find exact parameter type match
                 for (Method method : methods) {
                     if (method.getName().equals(methodName) &&
                         method.getParameterCount() == args.length) {
 
-                        Object result = method.invoke(target, args);
-                        return returnType.cast(result);
+                        Class<?>[] paramTypes = method.getParameterTypes();
+                        boolean matches = true;
+
+                        for (int i = 0; i < args.length; i++) {
+                            if (args[i] != null && !paramTypes[i].isAssignableFrom(args[i].getClass())) {
+                                matches = false;
+                                break;
+                            }
+                        }
+
+                        if (matches) {
+                            Object result = method.invoke(target, args);
+                            return returnType.cast(result);
+                        }
                     }
                 }
 

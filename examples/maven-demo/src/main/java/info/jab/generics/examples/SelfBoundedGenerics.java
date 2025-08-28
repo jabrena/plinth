@@ -151,10 +151,15 @@ public class SelfBoundedGenerics {
         protected final String id;
         protected final LocalDateTime createdAt;
 
-        protected ComparableEntity(String id) {
-            this.id = id;
-            this.createdAt = LocalDateTime.now();
-        }
+            protected ComparableEntity(String id) {
+        this.id = id;
+        this.createdAt = LocalDateTime.now();
+    }
+
+    protected ComparableEntity(String id, LocalDateTime createdAt) {
+        this.id = id;
+        this.createdAt = createdAt;
+    }
 
         public String getId() {
             return id;
@@ -190,6 +195,12 @@ public class SelfBoundedGenerics {
             this.data = Map.copyOf(data);
         }
 
+        private TimestampedEvent(String id, String eventType, Map<String, Object> data, LocalDateTime createdAt) {
+            super(id, createdAt);
+            this.eventType = eventType;
+            this.data = Map.copyOf(data);
+        }
+
         public String getEventType() {
             return eventType;
         }
@@ -200,7 +211,7 @@ public class SelfBoundedGenerics {
 
         @Override
         public TimestampedEvent clone() {
-            return new TimestampedEvent(this.id, this.eventType, this.data);
+            return new TimestampedEvent(this.id, this.eventType, this.data, this.createdAt);
         }
 
         // Additional method specific to TimestampedEvent
@@ -223,6 +234,13 @@ public class SelfBoundedGenerics {
             this.details = details;
         }
 
+        private AuditRecord(String id, String action, String userId, String details, LocalDateTime createdAt) {
+            super(id, createdAt);
+            this.action = action;
+            this.userId = userId;
+            this.details = details;
+        }
+
         public String getAction() {
             return action;
         }
@@ -237,7 +255,7 @@ public class SelfBoundedGenerics {
 
         @Override
         public AuditRecord clone() {
-            return new AuditRecord(this.id, this.action, this.userId, this.details);
+            return new AuditRecord(this.id, this.action, this.userId, this.details, this.createdAt);
         }
 
         // Comparison override for audit records (by action first, then time)
