@@ -7,6 +7,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.BinaryOperator;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 /**
  * Examples showing the problems solved by bounded generics.
@@ -68,8 +71,8 @@ public class RawBoundedTypes {
             if (result.containsKey(key)) {
                 Object existingValue = result.get(key);
                 // We have to implement merging logic manually and unsafely
-                if (valuesMerger instanceof java.util.function.BinaryOperator) {
-                    java.util.function.BinaryOperator merger = (java.util.function.BinaryOperator) valuesMerger;
+                if (valuesMerger instanceof BinaryOperator) {
+                    BinaryOperator merger = (BinaryOperator) valuesMerger;
                     result.put(key, merger.apply(existingValue, value));
                 } else {
                     // Fallback - just overwrite
@@ -88,8 +91,8 @@ public class RawBoundedTypes {
         Collection result;
 
         // PROBLEM: We have to check types at runtime
-        if (collectionFactory instanceof java.util.function.Supplier) {
-            java.util.function.Supplier factory = (java.util.function.Supplier) collectionFactory;
+        if (collectionFactory instanceof Supplier) {
+            Supplier factory = (Supplier) collectionFactory;
             Object factoryResult = factory.get();
             if (factoryResult instanceof Collection) {
                 result = (Collection) factoryResult;
@@ -101,8 +104,8 @@ public class RawBoundedTypes {
         }
 
         // PROBLEM: Unsafe transformation
-        if (mapper instanceof java.util.function.Function) {
-            java.util.function.Function function = (java.util.function.Function) mapper;
+        if (mapper instanceof Function) {
+            Function function = (Function) mapper;
             for (Object item : source) {
                 try {
                     Object transformed = function.apply(item);
@@ -174,11 +177,11 @@ public class RawBoundedTypes {
         double weightedSum = 0.0;
         double totalWeight = 0.0;
 
-        if (!(weightFunction instanceof java.util.function.Function)) {
+        if (!(weightFunction instanceof Function)) {
             throw new RuntimeException("Weight function must be a Function");
         }
 
-        java.util.function.Function function = (java.util.function.Function) weightFunction;
+        Function function = (Function) weightFunction;
 
         for (Object item : numbers) {
             // PROBLEM: We have to check if each item is a Number at runtime
@@ -269,8 +272,8 @@ public class RawBoundedTypes {
             }
 
             // PROBLEM: We have to check type at runtime
-            if (constructor instanceof java.util.function.Function) {
-                java.util.function.Function function = (java.util.function.Function) constructor;
+            if (constructor instanceof Function) {
+                Function function = (Function) constructor;
                 try {
                     return function.apply(args);
                 } catch (ClassCastException e) {
@@ -325,7 +328,7 @@ public class RawBoundedTypes {
             map2.put("b", 3);
             map2.put("c", 4);
 
-            Map merged = mergeMaps(map1, map2, (java.util.function.BinaryOperator<Integer>) Integer::sum);
+            Map merged = mergeMaps(map1, map2, (BinaryOperator<Integer>) Integer::sum);
             System.out.println("Merged map: " + merged);
 
             // PROBLEM: Transformation is unsafe and verbose
@@ -333,8 +336,8 @@ public class RawBoundedTypes {
             try {
                 Collection lengths = transformAndCollect(
                     strings,
-                    (java.util.function.Function<String, Integer>) String::length,
-                    (java.util.function.Supplier<Collection>) ArrayList::new
+                    (Function<String, Integer>) String::length,
+                    (Supplier<Collection>) ArrayList::new
                 );
                 System.out.println("String lengths: " + lengths);
             } catch (RuntimeException e) {
@@ -357,14 +360,14 @@ public class RawBoundedTypes {
             // PROBLEM: Weighted average requires runtime type checking
             List numberList = Arrays.asList(1, 2, 3, 4, 5);
             double avg = calculateWeightedAverage(numberList,
-                (java.util.function.Function<Number, Double>) n -> 1.0);
+                (Function<Number, Double>) n -> 1.0);
             System.out.println("Average: " + avg);
 
             // This would fail:
             List nonNumbers = Arrays.asList("1", "2", "3");
             try {
                 calculateWeightedAverage(nonNumbers,
-                    (java.util.function.Function<Number, Double>) n -> 1.0);
+                    (Function<Number, Double>) n -> 1.0);
             } catch (RuntimeException e) {
                 System.out.println("ERROR with non-numbers: " + e.getMessage());
             }
@@ -372,7 +375,7 @@ public class RawBoundedTypes {
             // PROBLEM: Factory is completely unsafe
             RawFactory sbFactory = new RawFactory(StringBuilder.class);
             sbFactory.registerConstructor("withCapacity",
-                (java.util.function.Function<Object[], Object>) args -> {
+                (Function<Object[], Object>) args -> {
                     if (args.length != 1 || !(args[0] instanceof Integer)) {
                         throw new RuntimeException("Expected single Integer argument");
                     }
