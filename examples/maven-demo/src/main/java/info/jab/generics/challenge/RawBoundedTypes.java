@@ -1,4 +1,4 @@
-package generics.challenge;
+package info.jab.generics.challenge;
 
 import java.io.Serializable;
 import java.util.*;

@@ -1,4 +1,4 @@
-package generics.challenge;
+package info.jab.generics.challenge;
 
 import java.lang.reflect.Array;
 import java.util.*;

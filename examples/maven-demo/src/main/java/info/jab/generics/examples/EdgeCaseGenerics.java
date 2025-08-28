@@ -1,4 +1,4 @@
-package generics;
+package info.jab.generics.examples;
 
 import java.lang.reflect.Array;
 import java.util.*;

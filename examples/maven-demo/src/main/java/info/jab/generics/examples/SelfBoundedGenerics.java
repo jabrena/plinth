@@ -1,4 +1,4 @@
-package generics;
+package info.jab.generics.examples;
 
 import java.time.LocalDateTime;
 import java.util.*;

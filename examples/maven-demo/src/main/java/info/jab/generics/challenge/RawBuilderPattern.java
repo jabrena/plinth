@@ -1,4 +1,4 @@
-package generics.challenge;
+package info.jab.generics.challenge;
 
 import java.time.LocalDateTime;
 import java.util.*;
