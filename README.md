@@ -35,15 +35,15 @@ The repository provides System prompts that can behave interactively or non-inte
 
 ## Getting started
 
-If you are interested in using this repository, please read [the following document](./GETTING-STARTED.md) to get started.
+New to this repository? Start with our [comprehensive guide](./GETTING-STARTED.md) for a quick introduction to setting up and using the Cursor rules.
 
 ## How to use a System prompt in your development?
 
-Read [the following document](./HOW-TO-USE.md) to understand how to use System prompts in development
+Learn [how to integrate System prompts](./HOW-TO-USE.md) into your development workflow and maximize their effectiveness in your daily coding tasks.
 
 ## How many System prompts include this repository?
 
-Read [the following document](./CURSOR-RULES-JAVA.md) take a look about the inventory of System prompts.
+Explore the [complete catalog of available System prompts](./CURSOR-RULES-JAVA.md) to discover the full range of capabilities and find the perfect rules for your specific use cases.
 
 ## Constraints, Output format & Safety guards
 
