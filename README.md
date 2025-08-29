@@ -41,6 +41,10 @@ If you are interested in using this repository, please read [the following docum
 
 Read [the following document](./HOW-TO-USE.md) to understand how to use System prompts in development
 
+## How many System prompts include this repository?
+
+Read [the following document](./CURSOR-RULES-JAVA.md) take a look about the inventory of System prompts.
+
 ## Constraints, Output format & Safety guards
 
 The cursor rules in this repository follow [The Three-Node Quality Framework for AI Prompts](./docs/articles/prompt-quality-framework.md), which ensures both comprehensive responses and safe execution. This framework consists of three distinct pillars: **constraints**, **output-format** and **safeguards**. Each node operates at different phases of the AI interaction timeline, creating a defense-in-depth strategy.
