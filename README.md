@@ -26,13 +26,24 @@ A system prompt is a set of instructions given to an AI model that defines how i
 
 ![](./docs/prompts.png)
 
-## How to use a System prompt in your development?
+### Types of System prompts
 
-Read [the following document](./HOW-TO-USE.md) to understand how to use System prompts in development
+The repository provides System prompts that can behave interactively or non-interactively, depending on how the user employs them.
+
+- **Interactive tests:** `Review my code to show several alternatives to apply Java Generics with the cursor rule @128-java-generics` or `Review my testing code for unit testing showing several alternatives thanks to the cursor rule @131-java-unit-testing`
+- **Pure system prompt:** `Create a UML class diagram with @170-java-documentation.mdc without any question` or `Add Maven Enforcer plugin only from the rule @112-java-maven-plugins.mdc without any question`
 
 ## Getting started
 
 If you are interested in using this repository, please read [the following document](./GETTING-STARTED.md) to get started.
+
+## How to use a System prompt in your development?
+
+Read [the following document](./HOW-TO-USE.md) to understand how to use System prompts in development
+
+## How many System prompts include this repository?
+
+Read [the following document](./CURSOR-RULES-JAVA.md) take a look about the inventory of System prompts.
 
 ## Constraints, Output format & Safety guards
 

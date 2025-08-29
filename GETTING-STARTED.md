@@ -2,8 +2,6 @@
 
 If you are interested in getting the benefits of this cursor rules for Java, you have different alternatives like: `Using this Git repository`, `Using the Zipped rules from latest release` or using a `JBang CLI` specialized in this task.
 
-Read [the following document](./GETTING-STARTED.md) to start using this set of Cursor rules.
-
 ## Install the rules
 
 ### Using the Git repository

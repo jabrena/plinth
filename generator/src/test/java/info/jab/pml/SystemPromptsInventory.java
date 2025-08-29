@@ -20,6 +20,7 @@ public final class SystemPromptsInventory {
             "124-java-secure-coding",
             "125-java-concurrency",
             "126-java-logging",
+            "127-java-exception-handling",
             "128-java-generics",
             "131-java-unit-testing",
             "141-java-refactoring-with-modern-features",
