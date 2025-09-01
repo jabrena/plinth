@@ -82,7 +82,7 @@ class CursorRulesGeneratorTest {
             );
 
             // Save generated content to target for inspection
-            saveGeneratedContentToTarget(generatedContent, baseFileName + ".mdc");
+            saveGeneratedContentToTarget(generatedContent, baseFileName + ".md");
 
             // Then - Validate the generated content structure
             String[] lines = generatedContent.split("\\n");

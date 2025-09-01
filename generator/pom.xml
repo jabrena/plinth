@@ -204,7 +204,7 @@
                                 <resource>
                                     <directory>${project.build.directory}</directory>
                                     <includes>
-                                        <include>*.mdc</include>
+                                        <include>*.md</include>
                                     </includes>
                                 </resource>
                             </resources>
