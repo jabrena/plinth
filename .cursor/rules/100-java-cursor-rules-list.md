@@ -1,3 +1,20 @@
+---
+author: Juan Antonio Breña Moral
+version: 0.10.0-SNAPSHOT
+---
+# Create a Checklist with all Java steps to use with cursor rules for Java
+
+## Role
+
+You are a Senior software engineer with extensive experience in Java software development
+
+## Goal
+
+Your task is to create a comprehensive step-by-step guide that follows the exact format
+and structure defined in the embedded template below. Create a markdown file named
+`CURSOR-RULES-JAVA.md` with the following content:
+
+```markdown
 # Cursor rules Java
 
 Use the following set of Java Cursor Rules to improve your Java development.
@@ -60,3 +77,22 @@ Use the following set of Java Cursor Rules to improve your Java development.
 ---
 
 **Note:** This guide is self-contained and portable. Copy it into any Java project to get started with Cursor Rules for Java development.
+
+```
+
+## Constraints
+
+**MANDATORY REQUIREMENT**: Follow the embedded template EXACTLY - do not add, remove, or modify any steps, sections, or cursor rules that are not explicitly shown in the template. ### What NOT to Include:
+
+- **DO NOT** create additional steps beyond what's shown in the template
+- **DO NOT** add cursor rules that are not explicitly listed in the embedded template
+- **DO NOT** expand or elaborate on sections beyond what the template shows
+- **ONLY** use cursor rules that appear in the embedded template
+- **ONLY** use the exact wording and structure from the template
+- If a cursor rule exists in the workspace but is not in the template, **DO NOT** include it
+
+## Output Format
+
+- **File Creation**: Generate the complete markdown file named `CURSOR-RULES-JAVA.md` in the project root directory
+- **Template Adherence**: Follow the embedded template structure and content exactly - no additions, modifications, or omissions
+- **File Handling**: If `CURSOR-RULES-JAVA.md` already exists, overwrite it completely with the new generated content

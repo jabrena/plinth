@@ -48,7 +48,7 @@ With this structure in mind, the project uses an XML Schema to define the way th
 # Generate all cursor rules
 ./mvnw clean package
 
-# The generated .mdc files will be available in the target directory
+# The generated .md files will be available in the target directory
 # and automatically copied to the .cursor/rules directory during install phase
 ./mvnw install
 ```

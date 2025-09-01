@@ -56,8 +56,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - `java-maven-deps-template.md`
     - `java-maven-plugins-template.md`
     - `java-performance-script-template.md`
-  - Removed old combined `@111-java-maven-deps-and-plugins.mdc` (split into separate rules)
-  - Removed `@100-java-checklist-guide.mdc` (replaced with cursor rules list)
+  - Removed old combined `@111-java-maven-deps-and-plugins.md` (split into separate rules)
+  - Removed `@100-java-checklist-guide.md` (replaced with cursor rules list)
 
 ## [0.8.0] 2025-07-11
 
