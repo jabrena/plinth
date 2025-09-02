@@ -30,7 +30,8 @@ A system prompt is a set of instructions given to an AI model that defines how i
 
 The repository provides System prompts that can behave interactively or non-interactively, depending on how the user employs them.
 
-- **Interactive System Prompts:** `Review my code to show several alternatives to apply Java Generics with the cursor rule @128-java-generics` or `Review my testing code for unit testing showing several alternatives thanks to the cursor rule @131-java-unit-testing`
+- **Interactive System Prompts:** Prompts which make questions and has conditional logic. Examples: `Improve the pom.xml using the cursor rule @112-java-maven-plugins` or `Generate technical documentation & diagrams about the project with the cursor rule @170-java-documentation`
+- **Consultative System Prompts:** Prompts which suggest alternatives to improve the developments. Examples: `Review my code to show several alternatives to apply Java Generics with the cursor rule @128-java-generics` or `Review my testing code for unit testing showing several alternatives thanks to the cursor rule @131-java-unit-testing`
 - **System prompts:** `Create a UML class diagram with @170-java-documentation without any question` or `Add Maven Enforcer plugin only from the rule @112-java-maven-plugins without any question`
 
 ## Getting started
