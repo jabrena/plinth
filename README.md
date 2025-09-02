@@ -18,7 +18,7 @@ The [available Cursor Rules for Java](./CURSOR-RULES-JAVA.md) cover aspects like
 
 The repository was designed to offer support for Cursor, but other tools have evolved and now offer better support for System prompts. The repository executes regular regression testing for IDEs like *Cursor*, *Cursor CLI*, *Claude Code*, *GitHub Copilot* & *JetBrains Junie*.
 
-⚠️ **Note:** Currently the best environments to use this repository are: *Cursor*, *Cursor CLI* & *Claude Code*. If you use *Jetbrains Intellij*, you could combine with *Cursor Cli* or *Claude code*. (Last update: 27/08/2025)
+⚠️ **Note:** Currently the best environments to use this repository are: *Cursor*, *Cursor CLI* & *Claude Code*. If you use *Jetbrains Intellij IDEA*, you could combine with *Cursor Cli* or *Claude code*. Further information about the latest review [here](./docs/reviews/review-20250829.md).
 
 ## What is a System prompt?
 
@@ -30,8 +30,9 @@ A system prompt is a set of instructions given to an AI model that defines how i
 
 The repository provides System prompts that can behave interactively or non-interactively, depending on how the user employs them.
 
-- **Interactive System Prompts:** `Review my code to show several alternatives to apply Java Generics with the cursor rule @128-java-generics` or `Review my testing code for unit testing showing several alternatives thanks to the cursor rule @131-java-unit-testing`
-- **System prompts:** `Create a UML class diagram with @170-java-documentation.md without any question` or `Add Maven Enforcer plugin only from the rule @112-java-maven-plugins.md without any question`
+- **Interactive System Prompts:** Prompts which make questions and have conditional logic. Examples: `Improve the pom.xml using the cursor rule @112-java-maven-plugins` or `Generate technical documentation & diagrams about the project with the cursor rule @170-java-documentation`
+- **Consultative System Prompts:** Prompts which suggest alternatives to improve the software developments. Examples: `Review my code to show several alternatives to apply Java Generics with the cursor rule @128-java-generics` or `Review my testing code for unit testing showing several alternatives thanks to the cursor rule @131-java-unit-testing`
+- **System prompts:** `Create a UML class diagram with @170-java-documentation without any question` or `Add Maven Enforcer plugin only from the rule @112-java-maven-plugins without any question`
 
 ## Getting started
 
