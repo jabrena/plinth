@@ -2,6 +2,12 @@
 
 Use the following set of Java Cursor Rules to improve your Java development.
 
+## Generate this list
+
+| Cursor Rule | Description | Prompt | Notes |
+|----|----|-----|-----|
+| [100-java-cursor-rules-list](.cursor/rules/100-java-cursor-rules-list.md) | Generate list of System Prompts for Java | **User Prompt:** `Create a document with all cursor rules for Java using the cursor rule @100-java-cursor-rules-list` | Non interactive rule |
+
 ## Build system rules (Maven)
 
 | Cursor Rule | Description | Prompt | Notes |
