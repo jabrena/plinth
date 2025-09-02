@@ -28,11 +28,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Generator System Enhancements**:
   - Added remote XML schema fetching capabilities (https://github.com/jabrena/pml)
 
-- **Dependencies & Infrastructure**:
-  - Bumped `actions/checkout` from v4 to v5
-  - Bumped `actions/setup-java` from v4 to v5
-  - Updated project version to 0.10.0-SNAPSHOT
-
 ## [0.9.0] 2025-07-22
 
 ### Added

@@ -23,7 +23,7 @@
  * schema validation. Logging is implemented through SLF4J with Logback for operation tracking
  * and debugging support.
  *
- * @since 0.10.0-SNAPSHOT
+ * @since 0.10.0
  * @author Juan Antonio Breña Moral
  */
 package info.jab.pml;
