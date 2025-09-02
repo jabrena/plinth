@@ -1,4 +1,4 @@
-# Cursor AI rules for Java
+# Cursor AI rules for Java (v0.10.0)
 
 ## Stargazers over time
 [![Stargazers over time](https://starchart.cc/jabrena/cursor-rules-java.svg?variant=light)](https://starchart.cc/jabrena/cursor-rules-java)
@@ -70,16 +70,7 @@ If you have great ideas, [read the following document](./CONTRIBUTING.md) for co
 
 ## Examples
 
-The rules were tested with the following examples:
-
-- [General: Maven Java project](./examples/maven-demo/README.md)
-- [Microservices: Spring Boot application](./examples/spring-boot-demo/implementation/README.md)
-- [Microservices: Spring Boot application with Memory leaks](./examples/spring-boot-memory-leak-demo/README.md)
-- [Microservices: Spring Boot application with Performance Bottleneck](./examples/spring-boot-performance-bottleneck-demo/README.md)
-- [Microservices: Spring Boot application with JMeter Load Testing](./examples/spring-boot-jmeter-demo/README.md)
-- [Microservices: Quarkus application](./examples/quarkus-demo/README.md)
-- [Serverless: AWS Lambda](./examples/aws-lambda-hello-world/README.md)
-- [Serverless: Azure Function](./examples/azure-function-hello-world/README.md)
+The repository includes [a collection of examples](./examples/) where you can explore the possiblities from this collection of System prompts designed for Java.
 
 ## Architectural decision records, ADR
 
