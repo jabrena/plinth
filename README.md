@@ -92,11 +92,14 @@ Java uses JEPs as the vehicle to describe the new features to be added in the la
 - https://www.cursor.com/
 - https://docs.cursor.com/context/rules
 - https://docs.cursor.com/context/@-symbols/@-cursor-rules
+- https://cursor.com/cli
+- https://www.anthropic.com/claude-code
+- https://github.com/features/copilot
+- https://www.jetbrains.com/junie/
 - https://openjdk.org/jeps/0
 
 ## Cursor rules ecosystem
 
-- https://github.com/jabrena/101-cursor
 - https://github.com/jabrena/pml
 - https://github.com/jabrena/cursor-rules-agile
 - https://github.com/jabrena/cursor-rules-java
