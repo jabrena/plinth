@@ -1,6 +1,6 @@
 # Maintenance
 
-## Prompts:
+Some **User prompts** designed to help in the maintenance of this repository.
 
 ```bash
 ## Prompt to update some cursor rules with ideas included in JEPS
@@ -11,5 +11,5 @@ Can you propose new rules?
 Review that the list doesn´t any broken link to @/.cursor with .md files
 
 # Prompt to provide a release changelog
-Can you update the current changelog for 0.7.0 comparing commits in relation to 0.6.0 tag. Use  @https://keepachangelog.com/en/1.1.0/  rules
+Can you update the current changelog for 0.10.0 comparing git commits in relation to 0.9.0 tag. Use  @https://keepachangelog.com/en/1.1.0/  rules
 ```
