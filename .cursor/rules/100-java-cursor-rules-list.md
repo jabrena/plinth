@@ -1,6 +1,6 @@
 ---
 author: Juan Antonio Breña Moral
-version: 0.10.0-SNAPSHOT
+version: 0.10.0
 ---
 # Create a Checklist with all Java steps to use with cursor rules for Java
 

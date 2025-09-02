@@ -1,6 +1,6 @@
 ---
 author: Juan Antonio Breña Moral
-version: 0.10.0-SNAPSHOT
+version: 0.10.0
 ---
 # Java Profiling Workflow / Step 4 / Compare results after refactoring
 
