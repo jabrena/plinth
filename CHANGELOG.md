@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.10.0] 2025-09-04
+
+### Added
+
+- **New Cursor Rules**:
+  - `@127-java-exception-handling`: Comprehensive cursor rule for Java exception handling with best practices and examples
+  - `@128-java-generics`: Advanced cursor rule covering Java generics patterns, bounded types, and type erasure workarounds
+  - `@170-java-documentation`: Specialized cursor rule for generating comprehensive Java documentation with C4 diagrams and UML
+
+- **Enhanced Development Tools & Scripts**:
+  - JMH (Java Microbenchmark Harness) support for Maven projects without modules
+  - Enhanced Maven plugins cursor rule with comprehensive JMH integration
+
+- Tested the project for Cursor, Cursor CLI, Claude Code, Github Copilot & Jetbrains Junie. Further information in https://github.com/jabrena/cursor-rules-java/blob/main/docs/reviews/review-20250829.md
+
+### Changed
+
+- **File Extension Migration**:
+  - **Breaking Change**: Renamed all cursor rule files from `.mdc` to `.md` extension for better readability
+
+- **Generator System Enhancements**:
+  - Added remote XML schema fetching capabilities (https://github.com/jabrena/pml)
+
+- **Dependencies & Infrastructure**:
+  - Bumped `actions/checkout` from v4 to v5
+  - Bumped `actions/setup-java` from v4 to v5
+  - Updated project version to 0.10.0-SNAPSHOT
+
 ## [0.9.0] 2025-07-22
 
 ### Added
