@@ -36,7 +36,7 @@ The repository provides System prompts that can behave interactively or non-inte
 
 ### Java development workflow
 
-Adding AI tools to the Java development workflow can help increase the possibilities of implementing software specifications on time and with quality.
+Adding AI tools to the Java development workflow can increase the possibilities of implementing software specifications on time and with quality.
 
 ![](./docs/workflow.png)
 
