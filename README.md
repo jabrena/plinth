@@ -40,7 +40,7 @@ Adding AI tools to the Java development workflow can help increase the possibili
 
 ![](./docs/workflow.png)
 
-**Note:** Remember that if you use Models and ask questions about recent topics like Java 25, it is probable that models will not provide accurate answers.
+**Note:** Remember that if you use Models and ask questions about recent topics like *Java 25*, it is probable that models will not provide accurate answers.
 
 ## Getting started
 
