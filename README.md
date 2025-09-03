@@ -36,9 +36,11 @@ The repository provides System prompts that can behave interactively or non-inte
 
 ### Java development workflow
 
-Adding AI tools in the Java development workflow can help to increase the possibilities to implement the Software specifications on time & quality.
+Adding AI tools to the Java development workflow can help increase the possibilities of implementing software specifications on time and with quality.
 
 ![](./docs/workflow.png)
+
+**Note:** Remember that if you use Models and ask questions about recent topics like Java 25, it is probable that models will not provide accurate answers.
 
 ## Getting started
 
@@ -76,7 +78,7 @@ If you have great ideas, [read the following document](./CONTRIBUTING.md) for co
 
 ## Examples
 
-The repository includes [a collection of examples](./examples/) where you can explore the possiblities from this collection of System prompts designed for Java.
+The repository includes [a collection of examples](./examples/) where you can explore the possibilities from this collection of System prompts designed for Java.
 
 ## Architectural decision records, ADR
 
