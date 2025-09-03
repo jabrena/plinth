@@ -34,6 +34,12 @@ The repository provides System prompts that can behave interactively or non-inte
 - **Consultative System Prompts:** Prompts which suggest alternatives to improve the software developments. Examples: `Review my code to show several alternatives to apply Java Generics with the cursor rule @128-java-generics` or `Review my testing code for unit testing showing several alternatives thanks to the cursor rule @131-java-unit-testing`
 - **System prompts:** `Create a UML class diagram with @170-java-documentation without any question` or `Add Maven Enforcer plugin only from the rule @112-java-maven-plugins without any question`
 
+### Development workflow
+
+To understand the benefits of this repository, it is necessary to see the development workflow:
+
+![](./docs/workflow.png)
+
 ## Getting started
 
 New to this repository? Start with our [comprehensive guide](./GETTING-STARTED.md) for a quick introduction to setting up and using the Cursor rules.
