@@ -39,7 +39,7 @@ Use the following set of Java Cursor Rules to improve your Java development.
 
 | Cursor Rule | Description | Prompt | Notes |
 |----|----|-----|----|
-| [131-java-unit-testing](.cursor/rules/131-java-unit-testing.md) | Apply Unit Testing best practices | **Interactive User Prompt:** `Review my testing code for unit testing showing several alternatives thanks to the cursor rule @131-java-unit-testing` **User Prompt:** `Improve tests using @131-java-unit-testing and not make any question` or `Add test for the following classes with  @131-java-unit-testing` (Examples) **Note:** Add a class or package which consider that it could be improved by the cursor rule. | Interactive cursor rule. |
+| [131-java-unit-testing](.cursor/rules/131-java-unit-testing.md) | Apply Unit Testing best practices | **Interactive User Prompt:** `Review my testing code for unit testing showing several alternatives thanks to the cursor rule @131-java-unit-testing` **User Prompt:** `Improve tests using @131-java-unit-testing and not make any question` or `Add tests for the following classes with  @131-java-unit-testing` (Examples) **Note:** Add a class or package which consider that it could be improved by the cursor rule. | Interactive cursor rule. |
 
 ## Refactoring rules
 
