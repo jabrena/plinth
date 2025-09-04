@@ -1,13 +1,13 @@
-# How to use a System prompt in your development
+# How to use a system prompt in your development
 
 
 ![](./docs/prompts.png)
 
-Using a System prompt in your development is straightforward. If you are using a modern IDE that includes AI features, like Cursor, open the chat:
+Using a system prompt in your development is straightforward. If you are using a modern IDE that includes AI features, such as Cursor, open the chat:
 
 ![](./docs/cursor-chat1.png)
 
-and type your own **User prompt**, like the following example:
+and type your own **user prompt**, such as the following example:
 
 ```
 Improve the pom.xml using the cursor rule @112-java-maven-plugins
@@ -21,9 +21,9 @@ The result should be:
 
 ---
 
-Another way to interact with models has recently appeared: using CLI tools. The approach is exactly the same.
+Another way to interact with models has recently emerged: using CLI tools. The approach is exactly the same.
 
-Starting from a clean session from [Cursor CLI](https://cursor.com/cli):
+Starting from a clean session in [Cursor CLI](https://cursor.com/cli):
 
 ![](./docs/cursor-cli1.png)
 

@@ -18,7 +18,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - JMH (Java Microbenchmark Harness) support for Maven projects without modules
   - Enhanced Maven plugins cursor rule with comprehensive JMH integration
 
-- Tested the project for Cursor, Cursor CLI, Claude Code, Github Copilot & Jetbrains Junie. Further information in https://github.com/jabrena/cursor-rules-java/blob/main/docs/reviews/review-20250829.md
+- Tested the project for Cursor, Cursor CLI, Claude Code, GitHub Copilot & JetBrains Junie. Further information at https://github.com/jabrena/cursor-rules-java/blob/main/docs/reviews/review-20250829.md
 
 ### Changed
 
@@ -28,16 +28,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Generator System Enhancements**:
   - Added remote XML schema fetching capabilities (https://github.com/jabrena/pml)
 
-- **Dependencies & Infrastructure**:
-  - Bumped `actions/checkout` from v4 to v5
-  - Bumped `actions/setup-java` from v4 to v5
-  - Updated project version to 0.10.0-SNAPSHOT
-
 ## [0.9.0] 2025-07-22
 
 ### Added
 
-- **Version Control on Cursor Rules**:
+- **Version Control for Cursor Rules**:
   - All cursor rules include version control
 
 - **New Cursor Rules**:
@@ -45,8 +40,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `@111-java-maven-dependencies`: Focused cursor rule for Maven dependency management
   - `@112-java-maven-plugins`: Dedicated cursor rule for Maven plugins management
 
-- **Enhanced Documentation & Getting Started**:
-  - New `GETTING-STARTED.md` comprehensive guide for new users
+- **Enhanced Documentation & Getting Started Guide**:
+  - New `GETTING-STARTED.md`: comprehensive guide for new users
   - `docs/articles/prompt-quality-framework.md`: Framework for evaluating prompt quality and cursor rule effectiveness
 
 - **Performance & Profiling Enhancements**:
@@ -173,19 +168,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Added
 
-- Added a new cursor rules about Maven dependencies & plugins
+- Added new cursor rules about Maven dependencies & plugins
 
 ### Changed
 
 - Removed Cursor rules about Books for clarity
-- Moved the Cursor rule about Acceptance criterias as part of the repository about [Agile](https://github.com/jabrena/cursor-rules-agile)
+- Moved the Cursor rule about acceptance criteria as part of the repository about [Agile](https://github.com/jabrena/cursor-rules-agile)
 - Increased consistency in all cursor rules, now all examples use asserts from AssertJ
 
 ## [0.5.0] 20/05/2025
 
 ### Added
 
-- Added new cursor rules (Maven, Acceptance Criteria, Object oriented design, Type Design, Secure codign guidelines, REST API Design)
+- Added new cursor rules (Maven, Acceptance Criteria, Object-oriented design, Type Design, Secure coding guidelines, REST API Design)
 - Added template for future cursor rules
 - Added JEP inventory
 
@@ -211,7 +206,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Updated cursor rules (Java, Effective Java, Concurrency, Functional programming, Data Oriented programming Pragmatic Unit Testing, Spring Boot & Quarkus)
+- Updated cursor rules (Java, Effective Java, Concurrency, Functional programming, Data-Oriented programming, Pragmatic Unit Testing, Spring Boot & Quarkus)
 
 
 ## [0.2.0] 01/03/2025
@@ -222,10 +217,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
-- Updated cursor rules (Java, Effective Java, Concurrency, Functional programming, Data Oriented programming & Spring Boot)
+- Updated cursor rules (Java, Effective Java, Concurrency, Functional programming, Data-Oriented programming & Spring Boot)
 
 ## [0.1.0] 09/02/2025
 
 ### Added
 
-- Added initial cursor rules (Java, Effective Java, Concurrency, Functional programming, Data Oriented programming & Spring Boot)
+- Added initial cursor rules (Java, Effective Java, Concurrency, Functional programming, Data-Oriented programming & Spring Boot)

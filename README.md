@@ -11,14 +11,14 @@ Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agen
 
 ## Goal
 
-Provide a collection of **Cursor rules for Java** (System prompts) which help software engineers in their daily work.
-The [available Cursor Rules for Java](./CURSOR-RULES-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing` (JMeter), `Profiling` (Async profiler, jps, jstack, jcmd & jstat) & `Documentation`.
+The project provides a collection of System prompts for Java that help software engineers in their daily programming work.
+The [available System prompts for Java](./CURSOR-RULES-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/JDK tools` & `Documentation`.
 
-### Compatibility with Modern IDEs, Cli & Others
+### Compatibility with Modern IDEs, CLI & Others
 
 The repository was designed to offer support for Cursor, but other tools have evolved and now offer better support for System prompts. The repository executes regular regression testing for IDEs like *Cursor*, *Cursor CLI*, *Claude Code*, *GitHub Copilot* & *JetBrains Junie*.
 
-⚠️ **Note:** Currently the best environments to use this repository are: *Cursor*, *Cursor CLI* & *Claude Code*. If you use *Jetbrains Intellij IDEA*, you could combine with *Cursor Cli* or *Claude code*. Further information about the latest review [here](./docs/reviews/review-20250829.md).
+⚠️ **Note:** Currently, the best environments to use this repository are: *Cursor*, *Cursor CLI* & *Claude Code*. If you use *JetBrains IntelliJ IDEA*, you could combine it with *Cursor CLI* or *Claude Code*. Further information about the latest review [here](./docs/reviews/review-20250829.md).
 
 ## What is a System prompt?
 
@@ -30,9 +30,17 @@ A system prompt is a set of instructions given to an AI model that defines how i
 
 The repository provides System prompts that can behave interactively or non-interactively, depending on how the user employs them.
 
-- **Interactive System Prompts:** Prompts which make questions and have conditional logic. Examples: `Improve the pom.xml using the cursor rule @112-java-maven-plugins` or `Generate technical documentation & diagrams about the project with the cursor rule @170-java-documentation`
-- **Consultative System Prompts:** Prompts which suggest alternatives to improve the software developments. Examples: `Review my code to show several alternatives to apply Java Generics with the cursor rule @128-java-generics` or `Review my testing code for unit testing showing several alternatives thanks to the cursor rule @131-java-unit-testing`
+- **Interactive System Prompts:** Prompts that ask questions and have conditional logic. Examples: `Improve the pom.xml using the cursor rule @112-java-maven-plugins` or `Generate technical documentation & diagrams about the project with the cursor rule @170-java-documentation`
+- **Consultative System Prompts:** Prompts that suggest alternatives to improve software development. Examples: `Review my code to show several alternatives to apply Java Generics with the cursor rule @128-java-generics` or `Review my testing code for unit testing showing several alternatives thanks to the cursor rule @131-java-unit-testing`
 - **System prompts:** `Create a UML class diagram with @170-java-documentation without any question` or `Add Maven Enforcer plugin only from the rule @112-java-maven-plugins without any question`
+
+### Java development workflow
+
+Adding AI tools to the Java development workflow can increase the possibilities of implementing software specifications on time and with quality.
+
+![](./docs/workflow.png)
+
+**Note:** Remember that if you use models and ask questions about recent topics like *Java 25*, it is probable that models will not provide accurate answers.
 
 ## Getting started
 
@@ -58,11 +66,11 @@ This framework transforms AI from a general assistant into a specialized consult
 
 ### Lack of determinism
 
-From the beginning, you need to know that results provided by interactions with the different `Cursor rules` are not deterministic due to the nature of the models, but this fact should not be considered negative. Software engineers do not always have the same idea to solve a problem, and you could find an analogy in this fact.
+From the beginning, you need to know that results provided by interactions with the different `Cursor rules` are not deterministic due to the nature of the models, but this fact should not be considered negative. Software engineers do not always have the same idea to solve a problem, and you can find an analogy in this fact.
 
-### Limits of interactions with Models
+### Limits of interactions with models
 
-Models are able to generate code but they cannot run code with your local data. To address this limitation, you can observe that a few prompts provide scripts to bridge the gaps on the model side.
+Models are able to generate code but they cannot run code with your local data. To address this limitation, you can observe that a few prompts provide scripts to bridge the gap on the model side.
 
 ## Contribute
 
@@ -70,16 +78,7 @@ If you have great ideas, [read the following document](./CONTRIBUTING.md) for co
 
 ## Examples
 
-The rules were tested with the following examples:
-
-- [General: Maven Java project](./examples/maven-demo/README.md)
-- [Microservices: Spring Boot application](./examples/spring-boot-demo/implementation/README.md)
-- [Microservices: Spring Boot application with Memory leaks](./examples/spring-boot-memory-leak-demo/README.md)
-- [Microservices: Spring Boot application with Performance Bottleneck](./examples/spring-boot-performance-bottleneck-demo/README.md)
-- [Microservices: Spring Boot application with JMeter Load Testing](./examples/spring-boot-jmeter-demo/README.md)
-- [Microservices: Quarkus application](./examples/quarkus-demo/README.md)
-- [Serverless: AWS Lambda](./examples/aws-lambda-hello-world/README.md)
-- [Serverless: Azure Function](./examples/azure-function-hello-world/README.md)
+The repository includes [a collection of examples](./examples/) where you can explore the possibilities from this collection of System prompts designed for Java.
 
 ## Architectural decision records, ADR
 
@@ -92,7 +91,7 @@ The rules were tested with the following examples:
 
 ## Java JEPS from Java 8
 
-Java uses JEPs as the vehicle to describe the new features to be added in the language. The repository continuously reviews which JEPs could improve any of the cursor rules present in this repository.
+Java uses JEPs as the vehicle to describe new features to be added to the language. The repository continuously reviews which JEPs could improve any of the cursor rules present in this repository.
 
 - [JEPS List](./docs/jeps/All-JEPS.md)
 
@@ -101,11 +100,14 @@ Java uses JEPs as the vehicle to describe the new features to be added in the la
 - https://www.cursor.com/
 - https://docs.cursor.com/context/rules
 - https://docs.cursor.com/context/@-symbols/@-cursor-rules
+- https://cursor.com/cli
+- https://www.anthropic.com/claude-code
+- https://github.com/features/copilot
+- https://www.jetbrains.com/junie/
 - https://openjdk.org/jeps/0
 
 ## Cursor rules ecosystem
 
-- https://github.com/jabrena/101-cursor
 - https://github.com/jabrena/pml
 - https://github.com/jabrena/cursor-rules-agile
 - https://github.com/jabrena/cursor-rules-java
