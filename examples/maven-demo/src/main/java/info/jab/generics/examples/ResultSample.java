@@ -4,7 +4,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
- * Example generics: PECS wildcards, sealed types,
+ * Example using Java generics features like PECS wildcards, sealed types,
  * covariance, diamond operator, bounded generics, and modern Java integration.
  */
 public class ResultSample {
