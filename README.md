@@ -11,7 +11,7 @@ Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agen
 
 ## Goal
 
-The project provides a collection of System prompts that help software engineers in their daily programming work.
+The project provides a collection of System prompts for Java that help software engineers in their daily programming work.
 The [available System prompts for Java](./CURSOR-RULES-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/JDK tools` & `Documentation`.
 
 ### Compatibility with Modern IDEs, CLI & Others
