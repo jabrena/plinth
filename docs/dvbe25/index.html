@@ -35,7 +35,7 @@
 			</div>
 			<div class="slides">
                 <section>
-					<section data-background-image="./images/bg2.jpg">
+					<section data-background-image="./images/jackson-pollock-stenographic-figure.jpg">
 						<h2>
                             <span style="display: inline-block; color: black;  background: #DFFF6D;">
                                 The power of Cursor rules in Java Enterprise development
@@ -48,43 +48,54 @@
 						</p>
 						<img src="images/duke.png" width="15%" />
 					</section>
+                    <section>
+                        <img src="./images/jackson-pollock-stenographic-figure.jpg" width="45%" />
+                        <p>
+                            Stenographic Figure, <a href="https://www.jackson-pollock.org/" target="_blank">Jackson Pollock</a> (1943)<br />
+                            <a href="https://www.moma.org/" target="_blank">Museum of Modern Art (MoMA)</a><br />
+                            Abstract expressionism
+                        </p>
+                    </section>
 				</section>
-                <section align="left" data-background="#ffd7b5"><!-- data-background="./images/innovation.jpg" -->
-					<h2 align="center">Who I am</h2>
-					<table>
-						<tr>
-							<td>
-								<img src="./images/jabAvatar.jpg" width="80%" />
-							</td>
-							<td style="color: #336699; vertical-align: top">
-								Juan Antonio Breña Moral<br />
-								<div style="display:inline-block;">Engineering Manager @ C1</div>
-								<!--,
-								Footballitics,
-								Novag Chess user
-								-->
-								<br />
-								<a target="_blank" href="https://twitter.com/juanantoniobm">Twitter</a> |
-								<a target="_blank" href="https://github.com/jabrena">Github</a></li> |
-								<a target="_blank" href="https://www.linkedin.com/in/juanantoniobrenamoral">LinkedIn</a>
-							</td>
-						</tr>
-						<!--
-						<tr>
-							<td colspan="2" align="center" style="color: #336699;">
-								Purpose: <i>"Riding dragons with innovation & fun"</i>
-							</td>
-						</tr>
-						-->
-						<tr>
-							<td colspan="2" align="center" style="color: #336699;">
-								<strong>Quotes:</strong> <i>"Lead me, follow me, or get out of my way." <br />"Pressure makes diamonds."</i><br />
-								<i>- George S. Patton Jr.</i>
-							</td>
-						</tr>
+                <section>
+                    <section align="left" data-background="#ffd7b5">
+                        <h2 align="center">Who I am</h2>
+                        <table>
+                            <tr>
+                                <td>
+                                    <img src="./images/jabAvatar.jpg" width="90%" />
+                                </td>
+                                <td style="color: #336699; vertical-align: top">
+                                    Juan Antonio Breña Moral<br />
+                                    <div style="display:inline-block;">Software Engineering Manager @ Capital One, C1</div>
+                                    <!--,
+                                    Footballitics,
+                                    Novag Chess user
+                                    -->
+                                    <br />
+                                    <a target="_blank" href="https://twitter.com/juanantoniobm">Twitter</a> |
+                                    <a target="_blank" href="https://github.com/jabrena">Github</a></li> |
+                                    <a target="_blank" href="https://www.linkedin.com/in/juanantoniobrenamoral">LinkedIn</a>
+                                </td>
+                            </tr>
+                            <!--
+                            <tr>
+                                <td colspan="2" align="center" style="color: #336699;">
+                                    Purpose: <i>"Riding dragons with innovation & fun"</i>
+                                </td>
+                            </tr>
+                            -->
+                            <tr>
+                                <td colspan="2" align="center" style="color: #336699;">
+                                    <em>"Make it work, make it right, make it fast." <br />- Kent Beck</em><br />
+                                    <em>"Lead me, follow me, or get out of my way.", <br />"Pressure makes diamonds." <br />- George S. Patton Jr.</em>
+                                </td>
+                            </tr>
 
-					</table>
-				</section>
+                        </table>
+                    </section>
+                </section>
+
                 <section>
                     <img src="./images/ppt.png" width="60%" />
                     <small><strong>Source: </strong><a href="https://cio-wiki.org/wiki/Leavitt%27s_Alignment_Model" target="_blank">Leavitt's Alignment Model (1965) >> People, Process and Technology Framework</a></small>
@@ -93,11 +104,8 @@
 					<h2>Agenda (30 min)</h2>
 					<ul>
                         <li>Introduction</li>
-						<li>What is a System prompt?</li>
-                        <li>Why use it?</li>
-                        <li>When use it?</li>
-                        <li>How to use it?</li>
-						<li>Limitations</li>
+                        <li>WH Questions</li>
+                        <li>Demo</li>
 						<li>References</li>
 						<li>Q&A</li>
 					</ul>
@@ -106,22 +114,51 @@
                     <section>
                         <h2>Introduction</h2>
                         <p>
-                            Software Development workflow has evolved with the raise of Cloud AI enhancements.
+                            Software Development workflow has evolved with the raise of AI tools enhancements.
                         </p>
-                        <img src="./images/cursor-ai.png" width="100%" />
+                        <img src="./images/workflow.png" width="100%" />
                     </section>
                 </section>
                 <section>
                     <section>
+                        <h2>WH Questions</h2>
+                        <h3>
+                            about System prompts
+                        </h3>
+                        <img src="./images/wh.png" width="50%" />
+                    </section>
+                    <section>
+                        <h2>What is a Prompt?</h2>
+                        <p>
+                            <u>A prompt is an instruction, question, or input given to an AI system to generate a response.</u>
+                            It's essentially how you communicate with AI to get it to do what you want.
+                        </p>
+                        <p>
+                           <strong>Example:</strong>
+                        </p>
+                        <pre><code data-trim>
+                            Can you create a JMH benchmark
+                            in order to know what is the best implementation?
+                        </code></pre>
+                    </section>
+                    <section>
+                        <h2>What is a Prompt?</h2>
+                        <p>
+                            A prompt could be enahanced with the help of a system prompt or a context.
+                        </p>
+                        <img src="./images/prompts.png" width="80%" />
+                    </section>
+                    <section>
                         <h2>What is a System prompt?</h2>
                         <p>
-                            A system prompt is a set of instructions given to an AI model that defines how it should behave, what role it should take on, and what guidelines it should follow when responding to users. Think of it as the "operating manual" that shapes the AI's personality, capabilities, and boundaries.
+                            <u>A system prompt is a set of instructions given to an AI model that defines how it should behave.</u>
+                            Think of it as the "operating manual" that shapes the AI's personality, capabilities, and boundaries.
                         </p>
                     </section>
                     <section>
                         <h2>What is a System prompt?</h2>
                         <p>
-                            A prompt can be modeled with the following elements:
+                            A system prompt can include the following elements:
                         </p>
                         <table>
                             <tr>
@@ -142,57 +179,112 @@
                         </table>
                         <hr />
                         <p>
-                            Valid for Modelis from: Anthropic Claude Sonnet, OpenAI ChatGPT, Google Gemini.
+                            Valid for: <br />
+                            <a href="https://www.anthropic.com/claude/sonnet" target="_blank">Anthropic Claude Sonnet</a>,
+                            <a href="https://openai.com/api/" target="_blank">OpenAI ChatGPT</a>,
+                            <a href="https://gemini.google.com/" target="_blank">Google Gemini</a> &
+                            <a href="https://x.ai/grok" target="_blank">xAI Grok</a>.
                         </p>
                     </section>
                     <section>
                         <h2>What is a System prompt?</h2>
-                        <img src="./images/prompts.png" width="100%" />
-                    </section>
-                </section>
-                <section>
-                    <h2>Why use it?</h2>
-                    <p>
-                        System prompts can help Engineering teams to:
-                    </p>
-                    <ul>
-                        <li>Reduce ambiguity in the way than models anwers your questions.</li>
-                        <li>Increase the homogeneity of the results.</li>
-                    </ul>
-                </section>
-                <section>
-                    <h2>When use it?</h2>
-                    <p>
-                        In what scenarios, system prompts could help?
-                    </p>
-                    <ul>
-                        <li>Scenario 1: Delegate a task to the model and add in the context a System prompt.</li>
-                        <li>Scenario 2: Refactor a stable solution applying a System prompts.</li>
-                    </ul>
-                </section>
-                <section>
-                    <section>
-                        <h2>How to use it?</h2>
-                        <ul>
-                            <li>Demo 1: Refactor a solution in a functional way.</li>
-                            <li>Demo 2: Improve unit tests.</li>
-                            <li>Demo 3: Review that all tests cover Acceptance Criteria.</li>
-                            <li>Demo 4: Detect memory leak.</li>
-                        </ul>
+                        <p>
+                            <strong>Examples:</strong>
+                        </p>
+                        <p>
+                            <a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/128-java-generics.md" target="_blank">128-java-generics.md</a>
+                            <br />
+                            <a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/131-java-unit-testing.md" target="_blank">131-java-unit-testing.md</a>
+                            <br />
+                            <a href="https://github.com/jabrena/cursor-rules-agile/blob/main/.cursor/rules/2003-agile-create-user-story.mdc" target="_blank">2003-agile-create-user-story.mdc</a>
+                            <br />
+                            <a href="https://github.com/jabrena/cursor-rules-agile/blob/main/.cursor/rules/2006-adr-create-functional-requirements-for-rest-api-development.mdc" target="_blank">2006-adr-create-functional-requirements-for-rest-api-development.mdc</a>
+                        </p>
                     </section>
                     <section>
-                        <h2>How to use it?</h2>
+                        <h2>Why use System prompts?</h2>
+                        <p>
+                            System prompts can help Engineering teams reduce ambiguity in the way that models answer their questions while increasing the homogeneity and consistency of results across different interactions and team members.
+                        </p>
+                    </section>
+                    <section>
+                        <h2>When use System prompts?</h2>
+                        <img src="./images/xp.png" width="60%" /><br />
+                        <small><strong>Source: </strong><a href="https://www.pythian.com/blog/technical-track/top-5-extreme-programming-xp-tools-every-team-should-use" target="_blank">XP Core practices</a></small>
+                    </section>
+                    <section>
+                        <h2>How to use System prompts?</h2>
+                        <p>
+                            Lets see with a Live demo.
+                        </p>
                         <img src="./images/demo.png" width="80%" />
                     </section>
                 </section>
                 <section>
-                    <h2>Limitations</h2>
-                    <ul>
-                        <li>Not all IDEs support rich system prompts.</li>
-                        <li>Models are not able to do everything. Sometimes they require local actions to complete tasks and they use local scripts.</li>
-                        <li>Models have a limited context</li>
-                        <li>Not all models are valid for your tasks.</li>
-                    </ul>
+                    <section>
+                        <h2>Demo</h2>
+                        <p>
+<strong>Goal:</strong>
+Implement Result Type prototype in Java in the development to avoid Java exceptions propagation.
+                        </p>
+                        <img src="./images/michelangelo-david.png" width="30%" />
+                    </section>
+                    <section>
+                        <h2>Demo</h2>
+                        <p>
+                            <strong>Step 1:</strong> Create a Result Type based on a User prompt
+                        </p>
+                        <p>
+                            <strong>User prompt:</strong>
+                        </p>
+                        <pre><code data-trim>
+                            Create an Result type in java
+                        </code></pre>
+                        <img src="./images/demo.png" width="40%" />
+                    </section>
+                    <section>
+                        <h2>Demo</h2>
+                        <p>
+                            <strong>Step 2:</strong> Refactor the first implementation taking ideas from Kotlin
+                        </p>
+                        <p>
+                            <strong>User prompt:</strong>
+                        </p>
+                        <pre><code data-trim>
+                            Evolve the first implementation of Result Type
+                            taking ideas from Kotlin:
+                            https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-result/
+                        </code></pre>
+                        <img src="./images/demo.png" width="40%" />
+                    </section>
+                    <section>
+                        <h2>Demo</h2>
+                        <p>
+                            <strong>Step 3:</strong> Refactor the second implementation using a System prompt
+                        </p>
+                        <p>
+                            <strong>User prompt:</strong>
+                        </p>
+                        <pre><code data-trim>
+                            Refactor the second implementation
+                            using the cursor rule @128-java-generics from the url:
+                            https://raw.githubusercontent.com/jabrena/cursor-rules-java/refs/heads/main/.cursor/rules/128-java-generics.md
+                            and not make any question
+                        </code></pre>
+                        <img src="./images/demo.png" width="40%" />
+                    </section>
+                    <section>
+                        <h2>Demo</h2>
+                        <p>
+                            <strong>Step 4:</strong> Verify results
+                        </p>
+                        <pre><code data-trim>
+                            Explain why the third version is better than the second one
+                            and the second one is better from the first one
+                            Use a table to explain the benefits between all 3 versions
+                        </code></pre>
+                        <img src="./images/demo.png" width="40%" />
+                    </section>
                 </section>
                 <section>
                     <h2>References</h2>
