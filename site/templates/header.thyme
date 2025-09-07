@@ -21,6 +21,6 @@
 	    <![endif]-->
 
 	    <!-- Fav and touch icons -->
-	    <link th:with="rootpath=(${content.rootpath != null} ? ${content.rootpath} : '')" rel="shortcut icon" th:href="${rootpath}+'images/java-icon.png'"/>
+	    <link th:with="rootpath=(${content.rootpath != null} ? ${content.rootpath} : '')" rel="shortcut icon" th:href="${rootpath}+'/cursor-rules-java/images/java-icon.png'"/>
 	</head>
 </html>

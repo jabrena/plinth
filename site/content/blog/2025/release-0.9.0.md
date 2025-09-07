@@ -52,7 +52,7 @@ You are a Senior software engineer with extensive experience in Java software de
 
 Exception handling is a core feature in Java, but that feature didn't have a specific system prompt. In this release, a specific rule about exception handling with a functional point of view was added.
 
-![](/images/java-exceptions-goto.png)
+![](/cursor-rules-java/images/java-exceptions-goto.png)
 
 Consultative Interaction Technique
 In the previous release, the project added a way to interact with software engineers. In this release, we externalized the behavior in the following building block: https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/fragments/system-prompt-behaviour-consultative-interaction-template.md
@@ -70,7 +70,7 @@ Now that solution has been extended to the majority of the provided system promp
 ```
 Example: https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/110-java-maven-best-practices.xml
 
-![](/images/example-rules.png)
+![](/cursor-rules-java/images/example-rules.png)
 
 ### A better Getting Started documentation
 

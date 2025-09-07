@@ -2,22 +2,22 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>JBake</title>
-    <link>https://jabrena.github.io</link>
-    <atom:link href="https://jabrena.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <link>https://jabrena.github.io/cursor-rules-java/</link>
+    <atom:link href="https://jabrena.github.io/cursor-rules-java//feed.xml" rel="self" type="application/rss+xml" />
     <description>JBake Bootstrap Template</description>
     <language>en-gb</language>
-    <pubDate>Sun, 7 Sep 2025 17:23:08 +0200</pubDate>
-    <lastBuildDate>Sun, 7 Sep 2025 17:23:08 +0200</lastBuildDate>
+    <pubDate>Sun, 7 Sep 2025 17:34:47 +0200</pubDate>
+    <lastBuildDate>Sun, 7 Sep 2025 17:34:47 +0200</lastBuildDate>
 
     <item>
       <title>What&#39;s new in Cursor rules for Java 0.10.0?</title>
-      <link>https://jabrena.github.io/blog/2025/release-0.10.0.html</link>
+      <link>https://jabrena.github.io/cursor-rules-java//blog/2025/release-0.10.0.html</link>
       <pubDate>Fri, 5 Sep 2025 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2025/release-0.10.0.html</guid>
       <description>&amp;lt;h2&amp;gt;What are Cursor rules for Java?&amp;lt;/h2&amp;gt;
 &amp;lt;p&amp;gt;The project provides a collection of System prompts for Java that help software engineers in their daily programming work.&amp;lt;br /&amp;gt;
 The &amp;lt;a href=&amp;quot;../../CURSOR-RULES-JAVA.md&amp;quot;&amp;gt;available System prompts for Java&amp;lt;/a&amp;gt; cover aspects like &amp;lt;code&amp;gt;Build system based on Maven&amp;lt;/code&amp;gt;, &amp;lt;code&amp;gt;Design&amp;lt;/code&amp;gt;, &amp;lt;code&amp;gt;Coding&amp;lt;/code&amp;gt;, &amp;lt;code&amp;gt;Testing&amp;lt;/code&amp;gt;, &amp;lt;code&amp;gt;Refactoring &amp;amp;amp; JMH Benchmarking&amp;lt;/code&amp;gt;, &amp;lt;code&amp;gt;Performance testing with JMeter&amp;lt;/code&amp;gt;, &amp;lt;code&amp;gt;Profiling with Async profiler/JDK tools&amp;lt;/code&amp;gt; &amp;amp;amp; &amp;lt;code&amp;gt;Documentation&amp;lt;/code&amp;gt;.&amp;lt;/p&amp;gt;
-&amp;lt;p&amp;gt;&amp;lt;img src=&amp;quot;/images/workflow.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;img src=&amp;quot;/cursor-rules-java/images/workflow.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;/p&amp;gt;
 &amp;lt;h2&amp;gt;What is new in this release?&amp;lt;/h2&amp;gt;
 &amp;lt;p&amp;gt;In this release, the project has released several features:&amp;lt;/p&amp;gt;
 &amp;lt;ul&amp;gt;
@@ -49,7 +49,7 @@ java -cp target/jmh-benchmarks.jar info.jab.demo.benchmarks.FibonacciBenchmark #
 &amp;lt;pre&amp;gt;&amp;lt;code class=&amp;quot;language-bash&amp;quot;&amp;gt;Can you explain the JMH results and advise about the best implementation?
 &amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
 &amp;lt;p&amp;gt;This kind of analysis can help the team make decisions about which alternative is better to maintain in the repository.&amp;lt;/p&amp;gt;
-&amp;lt;p&amp;gt;&amp;lt;img src=&amp;quot;/images/jmh-summary-visualization-sample.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;img src=&amp;quot;/cursor-rules-java/images/jmh-summary-visualization-sample.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;/p&amp;gt;
 &amp;lt;p&amp;gt;Further information about JMH:&amp;lt;/p&amp;gt;
 &amp;lt;ul&amp;gt;
 &amp;lt;li&amp;gt;&amp;lt;a href=&amp;quot;https://github.com/openjdk/jmh&amp;quot;&amp;gt;https://github.com/openjdk/jmh&amp;lt;/a&amp;gt;&amp;lt;/li&amp;gt;
@@ -65,7 +65,7 @@ java -cp target/jmh-benchmarks.jar info.jab.demo.benchmarks.FibonacciBenchmark #
 &amp;lt;li&amp;gt;Diagrams (UML Class diagram, UML Sequence diagram &amp;amp;amp; C4 Model diagrams)&amp;lt;/li&amp;gt;
 &amp;lt;/ul&amp;gt;
 &amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;UML class diagram sample:&amp;lt;/strong&amp;gt;&amp;lt;/p&amp;gt;
-&amp;lt;p&amp;gt;&amp;lt;img src=&amp;quot;/images/uml-class-diagram-sample.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;img src=&amp;quot;/cursor-rules-java/images/uml-class-diagram-sample.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;/p&amp;gt;
 &amp;lt;p&amp;gt;Using &amp;lt;code&amp;gt;UML Class diagrams&amp;lt;/code&amp;gt;, you can understand how is currently the implementation and if you can improve in some way the code from a high level perspective.&amp;lt;/p&amp;gt;
 &amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Note:&amp;lt;/strong&amp;gt; All diagrams are generated in &amp;lt;code&amp;gt;PlantUML&amp;lt;/code&amp;gt; format. To convert &amp;lt;code&amp;gt;.puml&amp;lt;/code&amp;gt; files into &amp;lt;code&amp;gt;.png&amp;lt;/code&amp;gt; format you could use the following command line tool: &amp;lt;code&amp;gt;jbang puml-to-png@jabrena --watch .&amp;lt;/code&amp;gt; or generate the images &amp;lt;a href=&amp;quot;https://www.plantuml.com/plantuml/uml/&amp;quot;&amp;gt;online&amp;lt;/a&amp;gt;.&amp;lt;/p&amp;gt;
 &amp;lt;p&amp;gt;Further information about documentation &amp;amp;amp; diagrams:&amp;lt;/p&amp;gt;
@@ -78,7 +78,7 @@ java -cp target/jmh-benchmarks.jar info.jab.demo.benchmarks.FibonacciBenchmark #
 &amp;lt;/ul&amp;gt;
 &amp;lt;h3&amp;gt;Added support for Java Generics&amp;lt;/h3&amp;gt;
 &amp;lt;p&amp;gt;Java Generics is not an easy feature in Java. Indeed, if you interact with &amp;lt;a href=&amp;quot;https://claude.ai/new&amp;quot;&amp;gt;Claude&amp;lt;/a&amp;gt; and ask about &amp;lt;code&amp;gt;What are the hardest parts in Java to master for a Software engineer?&amp;lt;/code&amp;gt;&amp;lt;/p&amp;gt;
-&amp;lt;p&amp;gt;&amp;lt;img src=&amp;quot;/images/claude-question.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;img src=&amp;quot;/cursor-rules-java/images/claude-question.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;/p&amp;gt;
 &amp;lt;p&amp;gt;&amp;lt;code&amp;gt;Java Generics&amp;lt;/code&amp;gt; always appears. In this release, the project has added a new system prompt to cover this gap. Now, you can create the following interactive user prompt:&amp;lt;/p&amp;gt;
 &amp;lt;pre&amp;gt;&amp;lt;code class=&amp;quot;language-bash&amp;quot;&amp;gt;Review my code to show several alternatives to apply Java Generics with the cursor rule @128-java-generics
 &amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
@@ -233,11 +233,11 @@ public class ResultSample {
 &amp;lt;a href=&amp;quot;https://github.com/jabrena/cursor-rules-java/tree/main/.cursor/rules&amp;quot;&amp;gt;https://github.com/jabrena/cursor-rules-java/tree/main/.cursor/rules&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
 &amp;lt;h2&amp;gt;Do you still have doubts about the project?&amp;lt;/h2&amp;gt;
 &amp;lt;p&amp;gt;If you feel stuck using this project or you have any doubts, you could attend the following talk at Devoxx BE in October: &amp;lt;a href=&amp;quot;https://devoxx.be/app/talk/4715/the-power-of-cursor-rules-in-java-enterprise-development&amp;quot;&amp;gt;https://devoxx.be/app/talk/4715/the-power-of-cursor-rules-in-java-enterprise-development&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
-&amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;https://devoxx.be/&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;/images/devoxx-logo.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;a href=&amp;quot;https://devoxx.be/&amp;quot;&amp;gt;&amp;lt;img src=&amp;quot;/cursor-rules-java/images/devoxx-logo.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
 </description>	  
     </item><item>
       <title>What&#39;s new in Cursor rules for Java 0.9.0?</title>
-      <link>https://jabrena.github.io/blog/2025/release-0.9.0.html</link>
+      <link>https://jabrena.github.io/cursor-rules-java//blog/2025/release-0.9.0.html</link>
       <pubDate>Wed, 23 Jul 2025 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2025/release-0.9.0.html</guid>
       <description>&amp;lt;h2&amp;gt;What are Cursor rules for Java?&amp;lt;/h2&amp;gt;
@@ -270,7 +270,7 @@ You are a Senior software engineer with extensive experience in Java software de
 &amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
 &amp;lt;h3&amp;gt;Exceptions handling&amp;lt;/h3&amp;gt;
 &amp;lt;p&amp;gt;Exception handling is a core feature in Java, but that feature didn&amp;#39;t have a specific system prompt. In this release, a specific rule about exception handling with a functional point of view was added.&amp;lt;/p&amp;gt;
-&amp;lt;p&amp;gt;&amp;lt;img src=&amp;quot;/images/java-exceptions-goto.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;img src=&amp;quot;/cursor-rules-java/images/java-exceptions-goto.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;/p&amp;gt;
 &amp;lt;p&amp;gt;Consultative Interaction Technique&amp;lt;br /&amp;gt;
 In the previous release, the project added a way to interact with software engineers. In this release, we externalized the behavior in the following building block: &amp;lt;a href=&amp;quot;https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/fragments/system-prompt-behaviour-consultative-interaction-template.md&amp;quot;&amp;gt;https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/fragments/system-prompt-behaviour-consultative-interaction-template.md&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
 &amp;lt;p&amp;gt;Now that solution has been extended to the majority of the provided system prompts,  adding consultative behavior:&amp;lt;/p&amp;gt;
@@ -283,7 +283,7 @@ In the previous release, the project added a way to interact with software engin
     &amp;amp;lt;/goal&amp;amp;gt;
 &amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
 &amp;lt;p&amp;gt;Example: &amp;lt;a href=&amp;quot;https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/110-java-maven-best-practices.xml&amp;quot;&amp;gt;https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/110-java-maven-best-practices.xml&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
-&amp;lt;p&amp;gt;&amp;lt;img src=&amp;quot;/images/example-rules.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;img src=&amp;quot;/cursor-rules-java/images/example-rules.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;/p&amp;gt;
 &amp;lt;h3&amp;gt;A better Getting Started documentation&amp;lt;/h3&amp;gt;
 &amp;lt;p&amp;gt;The repository has improved the documentation for new users in order to reduce the Onboarding time for new users: &amp;lt;a href=&amp;quot;https://github.com/jabrena/cursor-rules-java/blob/main/GETTING-STARTED.md&amp;quot;&amp;gt;https://github.com/jabrena/cursor-rules-java/blob/main/GETTING-STARTED.md&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
 &amp;lt;h3&amp;gt;Specific rules for Maven Dependencies &amp;amp;amp; Maven plugins&amp;lt;/h3&amp;gt;
@@ -300,7 +300,7 @@ GC Pressure Reduced: More efficient garbage collection with stable retention pat
 </description>	  
     </item><item>
       <title>The Three-Node Quality Framework for AI Prompts</title>
-      <link>https://jabrena.github.io/blog/2025/prompt-quality-framework.html</link>
+      <link>https://jabrena.github.io/cursor-rules-java//blog/2025/prompt-quality-framework.html</link>
       <pubDate>Sun, 20 Jul 2025 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2025/prompt-quality-framework.html</guid>
       <description>&amp;lt;h2&amp;gt;Overview&amp;lt;/h2&amp;gt;
@@ -481,7 +481,7 @@ GC Pressure Reduced: More efficient garbage collection with stable retention pat
 </description>	  
     </item><item>
       <title>What&#39;s new in Cursor rules for Java 0.8.0?</title>
-      <link>https://jabrena.github.io/blog/2025/release-0.8.0.html</link>
+      <link>https://jabrena.github.io/cursor-rules-java//blog/2025/release-0.8.0.html</link>
       <pubDate>Sat, 12 Jul 2025 00:00:00 +0200</pubDate>
       <guid isPermaLink="false">blog/2025/release-0.8.0.html</guid>
       <description>&amp;lt;h2&amp;gt;New interactive behaviors in the Cursor rules&amp;lt;/h2&amp;gt;
@@ -490,9 +490,9 @@ Over this example, add the following user prompt:&amp;lt;/p&amp;gt;
 &amp;lt;blockquote&amp;gt;
 &amp;lt;p&amp;gt;&amp;amp;quot;Review my code for object-oriented design using the cursor rule @121-java-object-oriented-design.md @src/&amp;amp;quot;&amp;lt;/p&amp;gt;
 &amp;lt;/blockquote&amp;gt;
-&amp;lt;p&amp;gt;&amp;lt;img src=&amp;quot;/images/0.8.0-1.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;br /&amp;gt;
-&amp;lt;img src=&amp;quot;/images/0.8.0-2.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;br /&amp;gt;
-&amp;lt;img src=&amp;quot;/images/0.8.0-3.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;img src=&amp;quot;/cursor-rules-java/images/0.8.0-1.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;br /&amp;gt;
+&amp;lt;img src=&amp;quot;/cursor-rules-java/images/0.8.0-2.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;br /&amp;gt;
+&amp;lt;img src=&amp;quot;/cursor-rules-java/images/0.8.0-3.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;/p&amp;gt;
 &amp;lt;p&amp;gt;Now, the software engineer has full control over the suggestion and later refactoring because they are able to interact with the Cursor rule and guide how the solution could be improved. If you like this feature, you can try the following cursor rules included in the release:&amp;lt;/p&amp;gt;
 &amp;lt;ul&amp;gt;
 &amp;lt;li&amp;gt;110-java-maven-best-practices&amp;lt;/li&amp;gt;
@@ -542,7 +542,7 @@ Over this example, add the following user prompt:&amp;lt;/p&amp;gt;
 &amp;lt;h2&amp;gt;My 20 Cents&amp;lt;/h2&amp;gt;
 &amp;lt;p&amp;gt;Using models &amp;amp;amp; system prompts like this project: &amp;lt;a href=&amp;quot;https://github.com/jabrena/cursor-rules-java&amp;quot;&amp;gt;https://github.com/jabrena/cursor-rules-java&amp;lt;/a&amp;gt; could increase your squad velocity and increase squad satisfaction as part of the &amp;lt;a href=&amp;quot;https://queue.acm.org/detail.cfm?id=3454124&amp;quot;&amp;gt;SPACE framework&amp;lt;/a&amp;gt;.&amp;lt;/p&amp;gt;
 &amp;lt;p&amp;gt;Join us with more than 600+ users in the last 14 days.&amp;lt;/p&amp;gt;
-&amp;lt;p&amp;gt;&amp;lt;img src=&amp;quot;/images/0.8.0-4.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;img src=&amp;quot;/cursor-rules-java/images/0.8.0-4.png&amp;quot; alt=&amp;quot;&amp;quot; /&amp;gt;&amp;lt;/p&amp;gt;
 &amp;lt;p&amp;gt;Enjoy&amp;lt;/p&amp;gt;
 &amp;lt;p&amp;gt;Juan Antonio&amp;lt;/p&amp;gt;
 </description>	  
