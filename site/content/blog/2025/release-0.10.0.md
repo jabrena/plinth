@@ -10,7 +10,7 @@ status=published
 The project provides a collection of System prompts for Java that help software engineers in their daily programming work.
 The [available System prompts for Java](../../CURSOR-RULES-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/JDK tools` & `Documentation`.
 
-![](/images/workflow.png)
+![](/cursor-rules-java/images/workflow.png)
 
 ## What is new in this release?
 
@@ -61,7 +61,7 @@ Can you explain the JMH results and advise about the best implementation?
 
 This kind of analysis can help the team make decisions about which alternative is better to maintain in the repository.
 
-![](/images/jmh-summary-visualization-sample.png)
+![](/cursor-rules-java/images/jmh-summary-visualization-sample.png)
 
 Further information about JMH:
 
@@ -83,7 +83,7 @@ This system prompt supports:
 
 **UML class diagram sample:**
 
-![](/images/uml-class-diagram-sample.png)
+![](/cursor-rules-java/images/uml-class-diagram-sample.png)
 
 Using `UML Class diagrams`, you can understand how is currently the implementation and if you can improve in some way the code from a high level perspective.
 
@@ -101,7 +101,7 @@ Further information about documentation & diagrams:
 
 Java Generics is not an easy feature in Java. Indeed, if you interact with [Claude](https://claude.ai/new) and ask about `What are the hardest parts in Java to master for a Software engineer?`
 
-![](/images/claude-question.png)
+![](/cursor-rules-java/images/claude-question.png)
 
 `Java Generics` always appears. In this release, the project has added a new system prompt to cover this gap. Now, you can create the following interactive user prompt:
 
@@ -292,4 +292,4 @@ https://github.com/jabrena/cursor-rules-java/tree/main/.cursor/rules
 
 If you feel stuck using this project or you have any doubts, you could attend the following talk at Devoxx BE in October: https://devoxx.be/app/talk/4715/the-power-of-cursor-rules-in-java-enterprise-development
 
-[![](/images/devoxx-logo.png)](https://devoxx.be/)
+[![](/cursor-rules-java/images/devoxx-logo.png)](https://devoxx.be/)
