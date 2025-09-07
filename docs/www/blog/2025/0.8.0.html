@@ -1,0 +1,148 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	    <meta charset="utf-8"/>
+	    <title>What&#39;s new in Cursor rules for Java 0.8.0?</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	    <meta name="description" content=""/>
+	    <meta name="author" content="Juan Antonio Breña Moral"/>
+	    <meta name="keywords" content=""/>
+	    <meta name="generator" content="Cursor rules for Java"/>
+
+	    <!-- Le styles -->
+	    <link href="../../css/bootstrap.min.css" rel="stylesheet"/>
+	    <link href="../../css/asciidoctor.css" rel="stylesheet"/>
+	    <link href="../../css/base.css" rel="stylesheet"/>
+	    <link href="../../css/prettify.css" rel="stylesheet"/>
+
+	    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+	    <!--[if lt IE 9]>
+	      <script src="../../js/html5shiv.min.js"></script>
+	    <![endif]-->
+
+	    <!-- Fav and touch icons -->
+	    <link rel="shortcut icon" href="../../images/java-icon.png"/>
+	</head>
+	<body onload="prettyPrint()">
+	<div id="wrap">
+		<div>
+
+	  <!-- Fixed navbar -->
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../">Cursor Rules for Java</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../about.html">About</a></li>
+            <li><a href="../../archive.html">Archive</a></li>
+            <li><a href="../../feed.xml">Subscribe</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+	</div>
+		<div class="container">
+	
+			<div class="page-header">
+				<h1>What&#39;s new in Cursor rules for Java 0.8.0?</h1>
+			</div>
+		
+			<p><em>12 July 2025</em></p>
+		
+			<p><h2>New interactive behaviors in the Cursor rules</h2>
+<p>In the previous release, the project added interactive behavior to a few complex rules to improve the developer experience, but in this release, new rules have evolved to add more interactive behavior regardless of complexity. The motivation behind this change: now the rules suggest alternatives to the software engineer to improve development at the package/class/method level. Maybe you could ask the question: why that change? Every software engineer has a unique way to solve software problems, so why force a suggestion in the code without a preliminary review? Let's explain the idea with an example to show the evolution in the cursor rule. The repository cursor-rules-java has different working examples that can be improved with the rules. Let's use an example based on Spring Boot: <a href="https://github.com/jabrena/cursor-rules-java/tree/main/examples/spring-boot-demo/implementation">https://github.com/jabrena/cursor-rules-java/tree/main/examples/spring-boot-demo/implementation</a><br />
+Over this example, add the following user prompt:</p>
+<blockquote>
+<p>&quot;Review my code for object-oriented design using the cursor rule @121-java-object-oriented-design.md @src/&quot;</p>
+</blockquote>
+<p><img src="/images/0.8.0-1.png" alt="" /><br />
+<img src="/images/0.8.0-2.png" alt="" /><br />
+<img src="/images/0.8.0-3.png" alt="" /></p>
+<p>Now, the software engineer has full control over the suggestion and later refactoring because they are able to interact with the Cursor rule and guide how the solution could be improved. If you like this feature, you can try the following cursor rules included in the release:</p>
+<ul>
+<li>110-java-maven-best-practices</li>
+<li>112-java-maven-documentation</li>
+<li>121-java-object-oriented-design</li>
+<li>122-java-type-design</li>
+<li>123-java-general-guidelines</li>
+<li>124-java-secure-coding</li>
+<li>125-java-concurrency</li>
+<li>126-java-logging</li>
+<li>131-java-unit-testing</li>
+<li>141-java-refactoring-with-modern-features</li>
+<li>142-java-functional-programming</li>
+<li>143-java-data-oriented-programming</li>
+</ul>
+<p>Remember that models don't answer in a deterministic way, in the same way that in your team, not all software engineers solve problems in the same way.</p>
+<h2>Consistency in the syntax</h2>
+<p>When the repository is growing and there are 18 rules and counting, consistency is something important to take into account to improve maintenance and accuracy in the way software engineers use natural language to interact with models. With this purpose, in release 0.8.0 I invested effort to convert all Cursor rules from Markdown to XML in order to have the flexibility of this format to have strict rules about the design of the language and the flexibility to convert XML into Markdown with front matter. With this goal, there now exists a new XML Schema dedicated to prompts: <a href="https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/pml.xsd">https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/pml.xsd</a> which was designed with ideas from the main players in the models market (Anthropic, OpenAI, Google) in order to structure a prompt:</p>
+<pre><code class="language-xml">    &lt;xs:element name=&quot;prompt&quot;&gt;
+        &lt;xs:complexType&gt;
+            &lt;xs:sequence&gt;
+                &lt;xs:element ref=&quot;metadata&quot;/&gt;
+                &lt;xs:element ref=&quot;role&quot;/&gt;
+                &lt;xs:element ref=&quot;context&quot; minOccurs=&quot;0&quot;/&gt;
+                &lt;xs:element ref=&quot;goal&quot;/&gt;
+                &lt;xs:element ref=&quot;constraints&quot; minOccurs=&quot;0&quot;/&gt;
+                &lt;xs:element ref=&quot;examples&quot; minOccurs=&quot;0&quot;/&gt;
+                &lt;xs:element ref=&quot;output-format&quot; minOccurs=&quot;0&quot;/&gt;
+                &lt;xs:element ref=&quot;safeguards&quot; minOccurs=&quot;0&quot;/&gt;
+            &lt;/xs:sequence&gt;
+            &lt;xs:attribute name=&quot;id&quot; type=&quot;xs:string&quot; use=&quot;required&quot;/&gt;
+            &lt;xs:attribute name=&quot;version&quot; type=&quot;xs:string&quot; use=&quot;optional&quot;/&gt;
+        &lt;/xs:complexType&gt;
+    &lt;/xs:element&gt;
+</code></pre>
+<p>Once all cursor rules are modeled in XML format, it is easy to convert them into the format used by Cursor AI, Markdown with front matter: <a href="https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/cursor-rules.xsl">https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/cursor-rules.xsl</a></p>
+<p>Using a schema and transformation, it is possible to guarantee consistency in the sources and the output format.</p>
+<h2>Safeguards in the system prompts</h2>
+<p>When you are working with AI models, safety is a critical aspect that cannot be ignored. In release 0.8.0, safeguards have been introduced to ensure that the cursor rules provide responsible validation of the changes introduced in the code.</p>
+<pre><code class="language-xml">    &lt;safeguards&gt;
+        &lt;safeguards-list&gt;
+            &lt;safeguards-item&gt;Verify code changes compile and pass tests: `mvn clean verify` or `./mvnw clean verify`&lt;/safeguards-item&gt;
+        &lt;/safeguards-list&gt;
+    &lt;/safeguards&gt;
+</code></pre>
+<p>It's not only that the model changes the code; the model needs to finish the prompt execution with a formal validation of the changes.</p>
+<h2>My 20 Cents</h2>
+<p>Using models &amp; system prompts like this project: <a href="https://github.com/jabrena/cursor-rules-java">https://github.com/jabrena/cursor-rules-java</a> could increase your squad velocity and increase squad satisfaction as part of the <a href="https://queue.acm.org/detail.cfm?id=3454124">SPACE framework</a>.</p>
+<p>Join us with more than 600+ users in the last 14 days.</p>
+<p><img src="/images/0.8.0-4.png" alt="" /></p>
+<p>Enjoy</p>
+<p>Juan Antonio</p>
+</p>
+		
+			<hr />
+			
+		</div>
+	</div>
+	<div>
+			<div id="push"></div>
+
+		    <div id="footer">
+		      <div class="container">
+		        <p class="muted credit">&copy; 2025 | Mixed with <a href="http://getbootstrap.com/">Bootstrap v3.1.1</a> | Baked with <a href="http://jbake.org">JBake <span>v2.7.0-rc.6</span></a></p>
+		      </div>
+		    </div>
+
+		    <!-- Le javascript
+		    ================================================== -->
+		    <!-- Placed at the end of the document so the pages load faster -->
+		    <script src="../../js/jquery-1.11.1.min.js"></script>
+		    <script src="../../js/bootstrap.min.js"></script>
+		    <script src="../../js/prettify.js"></script>
+
+    	</div>
+    </body>
+</html>

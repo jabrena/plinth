@@ -2,18 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9 http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
     <url>
         <loc>https://jabrena.github.io/about.html</loc>
-        <lastmod>2013-09-24</lastmod>
+        <lastmod>2015-02-01</lastmod>
     </url><url>
-        <loc>https://jabrena.github.io/blog/2013/fourth-post.html</loc>
-        <lastmod>2013-10-17</lastmod>
+        <loc>https://jabrena.github.io/blog/2025/0.10.0.html</loc>
+        <lastmod>2025-09-05</lastmod>
     </url><url>
-        <loc>https://jabrena.github.io/blog/2013/third-post.html</loc>
-        <lastmod>2013-09-26</lastmod>
+        <loc>https://jabrena.github.io/blog/2025/0.9.0.html</loc>
+        <lastmod>2025-07-23</lastmod>
     </url><url>
-        <loc>https://jabrena.github.io/blog/2013/second-post.html</loc>
-        <lastmod>2013-08-25</lastmod>
-    </url><url>
-        <loc>https://jabrena.github.io/blog/2013/first-post.html</loc>
-        <lastmod>2013-07-24</lastmod>
+        <loc>https://jabrena.github.io/blog/2025/0.8.0.html</loc>
+        <lastmod>2025-07-12</lastmod>
     </url>
 </urlset>
