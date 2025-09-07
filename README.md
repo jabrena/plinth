@@ -5,13 +5,9 @@
 
 [![CI Builds](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml/badge.svg)](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml)
 
-## Motivation
-
-Modern Java IDEs, such as **Cursor AI**, provide ways to customize how the `Agent model` behaves using reusable and scoped instructions. In Cursor, this is achieved through `Cursor rules`, which can be understood as `System prompts` in generic terms.
-
 ## Goal
 
-The project provides a collection of System prompts for Java that help software engineers in their daily programming work.
+The project provides a collection of `System prompts` for Java Enterprise development that help software engineers in their daily programming work.
 The [available System prompts for Java](./CURSOR-RULES-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/JDK tools` & `Documentation`.
 
 ### Compatibility with Modern IDEs, CLI & Others
@@ -97,10 +93,11 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 
 ## References
 
+- https://agents.md/
 - https://www.cursor.com/
+- https://cursor.com/cli
 - https://docs.cursor.com/context/rules
 - https://docs.cursor.com/context/@-symbols/@-cursor-rules
-- https://cursor.com/cli
 - https://www.anthropic.com/claude-code
 - https://github.com/features/copilot
 - https://www.jetbrains.com/junie/
