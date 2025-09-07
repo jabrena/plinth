@@ -41,11 +41,11 @@ If the tests passes, you could promote the changes to `./cursor/rules`:
 - The project is based on Java 24.
 
 ## Commit Messages and Pull Requests
+
 - Follow the [Chris Beams](http://chris.beams.io/posts/git-commit/) style for
   commit messages.
 - Every pull request should answer:
   - **What changed?**
   - **Why?**
   - **Breaking changes?**
-  - **Server PR** (if the change requires a coordinated server update)
 - Comments should be complete sentences and end with a period.
