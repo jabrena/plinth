@@ -18,6 +18,14 @@
 		    <script th:with="rootpath=(${content.rootpath != null} ? ${content.rootpath} : '')" th:src="${rootpath} + 'js/bootstrap.min.js'"></script>
 		    <script th:with="rootpath=(${content.rootpath != null} ? ${content.rootpath} : '')" th:src="${rootpath} + 'js/prettify.js'"></script>
 
+			<script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+			<script>
+				window.dataLayer = window.dataLayer || [];
+				function gtag(){dataLayer.push(arguments);}
+				gtag('js', new Date());
+
+				gtag('config', 'G-13CV90H4J4');
+			</script>
     	</div>
   	</body>
 </html>
