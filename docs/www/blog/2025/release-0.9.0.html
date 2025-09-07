@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	    <meta charset="utf-8"/>
+	    <title>What&#39;s new in Cursor rules for Java 0.9.0?</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	    <meta name="description" content=""/>
+	    <meta name="author" content="Juan Antonio Breña Moral"/>
+	    <meta name="keywords" content=""/>
+	    <meta name="generator" content="Cursor rules for Java"/>
+
+	    <!-- Le styles -->
+	    <link href="../../css/bootstrap.min.css" rel="stylesheet"/>
+	    <link href="../../css/asciidoctor.css" rel="stylesheet"/>
+	    <link href="../../css/base.css" rel="stylesheet"/>
+	    <link href="../../css/prettify.css" rel="stylesheet"/>
+
+	    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+	    <!--[if lt IE 9]>
+	      <script src="../../js/html5shiv.min.js"></script>
+	    <![endif]-->
+
+	    <!-- Fav and touch icons -->
+	    <link rel="shortcut icon" href="../../images/java-icon.png"/>
+	</head>
+	<body onload="prettyPrint()">
+	<div id="wrap">
+		<div>
+
+	  <!-- Fixed navbar -->
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../">Cursor Rules for Java</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../about.html">About</a></li>
+            <li><a href="../../archive.html">Archive</a></li>
+            <li><a href="../../feed.xml">Subscribe</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+	</div>
+		<div class="container">
+	
+			<div class="page-header">
+				<h1>What&#39;s new in Cursor rules for Java 0.9.0?</h1>
+			</div>
+		
+			<p><em>23 July 2025</em></p>
+		
+			<p><h2>What are Cursor rules for Java?</h2>
+<p>Cursor Rules for Java is an Open Source project that provides a set of interactive system prompts for Java that help software engineers in their daily work.</p>
+<hr />
+<p>In this new release, the project includes the following features:</p>
+<h3>Added Version control</h3>
+<p>Added a new rule about 127-java-functional-exception-handling</p>
+<p>Added Consultative Interaction Technique in the majority of Rules</p>
+<p>A betterf Getting Started documentation</p>
+<p>Specific rules for Maven Dependencies &amp; Maven plugins</p>
+<p>Profiling improvements</p>
+<p>For further information about the full CHANGELOG, visit the following link: <a href="https://github.com/jabrena/cursor-rules-java/blob/main/CHANGELOG.md#090-2025-07-22">https://github.com/jabrena/cursor-rules-java/blob/main/CHANGELOG.md#090-2025-07-22</a></p>
+<p>Added Version Control<br />
+If you are one of the thousands of users who at some point in time cloned the Git repository, maybe you don't remember when the system prompt was added to your workspace. In this version, all prompts include in the Markdown Frontmatter section, metadata about the version to track which version you are using and whether you need to update to the latest version.</p>
+<p>This way, you will have full awareness of whether you need to upgrade your system prompt or not.</p>
+<pre><code class="language-markdown">---
+author: Juan Antonio Breña Moral
+version: 0.9.0
+---
+# Add Maven dependencies for improved code quality
+
+## Role
+
+You are a Senior software engineer with extensive experience in Java software development
+
+## Goal
+
+...
+</code></pre>
+<h3>Exceptions handling</h3>
+<p>Exception handling is a core feature in Java, but that feature didn't have a specific system prompt. In this release, a specific rule about exception handling with a functional point of view was added.</p>
+<p><img src="/images/java-exceptions-goto.png" alt="" /></p>
+<p>Consultative Interaction Technique<br />
+In the previous release, the project added a way to interact with software engineers. In this release, we externalized the behavior in the following building block: <a href="https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/fragments/system-prompt-behaviour-consultative-interaction-template.md">https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/fragments/system-prompt-behaviour-consultative-interaction-template.md</a></p>
+<p>Now that solution has been extended to the majority of the provided system prompts,  adding consultative behavior:</p>
+<pre><code class="language-xml">    &lt;goal&gt;&lt;![CDATA[
+        Effective Maven usage involves robust dependency management via `&lt;dependencyManagement&gt;` and BOMs, adherence to the standard directory layout, and centralized plugin management. Build profiles should be used for environment-specific configurations. POMs must be kept readable and maintainable with logical structure and properties for versions. Custom repositories should be declared explicitly and their use minimized, preferably managed via a central repository manager.
+        ]]&gt;
+        &lt;xi:include href=&quot;fragments/system-prompt-behaviour-consultative-interaction-template.md&quot; parse=&quot;text&quot;/&gt;
+        ...
+
+    &lt;/goal&gt;
+</code></pre>
+<p>Example: <a href="https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/110-java-maven-best-practices.xml">https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/110-java-maven-best-practices.xml</a></p>
+<p><img src="/images/example-rules.png" alt="" /></p>
+<h3>A better Getting Started documentation</h3>
+<p>The repository has improved the documentation for new users in order to reduce the Onboarding time for new users: <a href="https://github.com/jabrena/cursor-rules-java/blob/main/GETTING-STARTED.md">https://github.com/jabrena/cursor-rules-java/blob/main/GETTING-STARTED.md</a></p>
+<h3>Specific rules for Maven Dependencies &amp; Maven plugins</h3>
+<p>One of the obsessions in this project is to provide solutions that are easy to maintain in the medium term. In the past, the system prompt 111-java-maven-deps-and-plugins offered a very nice experience, but in terms of maintenance, it was a bit complex, so in this release it was split into 2: 111-java-maven-dependencies &amp; 112-java-maven-plugins</p>
+<h3>Profiling improvements</h3>
+<p>One of the most interesting features included in this project is the capacity to add features to detect potential issues that require profiling skills. In this version, the system prompts are able to generate thread dumps and GC logs in order to improve your profiling analysis. Thread dumps in some scenarios can be quite large and cannot be analyzed by models because these large files consume the entire context window, but you can use third-party tools like <a href="https://fastthread.io">https://fastthread.io</a> to review these files. Adding thread dumps and GC logs to the existing documents generated with AsyncProfiler improves the overall analysis with models. You can see part of the analysis generated by 164-java-profiling-compare.mdc:</p>
+<pre><code class="language-bash">Resolved Issues
+Memory Leak Eliminated: GC retention pattern changed from growing (49M→77M→105M→135M) to stable (22M→22M)
+Thread Pool Leaks Fixed: Thread dump reduced from 5.9MB to 44KB, indicating proper ExecutorService lifecycle management
+Bounded Collections Active: Memory retention baseline improved by 55% (49MB→22MB)
+GC Pressure Reduced: More efficient garbage collection with stable retention patterns
+</code></pre>
+<p>Full sample document: <a href="https://github.com/jabrena/cursor-rules-java/blob/main/examples/spring-boot-memory-leak-demo/profiler/docs/profiling-comparison-analysis-20250720.md">https://github.com/jabrena/cursor-rules-java/blob/main/examples/spring-boot-memory-leak-demo/profiler/docs/profiling-comparison-analysis-20250720.md</a></p>
+</p>
+		
+			<hr />
+			
+		</div>
+	</div>
+	<div>
+			<div id="push"></div>
+
+		    <div id="footer">
+		      <div class="container">
+		        <p class="muted credit">&copy; 2025 | Mixed with <a href="http://getbootstrap.com/">Bootstrap v3.1.1</a> | Baked with <a href="http://jbake.org">JBake <span>v2.7.0-rc.6</span></a></p>
+		      </div>
+		    </div>
+
+		    <!-- Le javascript
+		    ================================================== -->
+		    <!-- Placed at the end of the document so the pages load faster -->
+		    <script src="../../js/jquery-1.11.1.min.js"></script>
+		    <script src="../../js/bootstrap.min.js"></script>
+		    <script src="../../js/prettify.js"></script>
+
+    	</div>
+    </body>
+</html>

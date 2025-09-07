@@ -1,0 +1,307 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	    <meta charset="utf-8"/>
+	    <title>What&#39;s new in Cursor rules for Java 0.10.0?</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	    <meta name="description" content=""/>
+	    <meta name="author" content="Juan Antonio Breña Moral"/>
+	    <meta name="keywords" content=""/>
+	    <meta name="generator" content="Cursor rules for Java"/>
+
+	    <!-- Le styles -->
+	    <link href="../../css/bootstrap.min.css" rel="stylesheet"/>
+	    <link href="../../css/asciidoctor.css" rel="stylesheet"/>
+	    <link href="../../css/base.css" rel="stylesheet"/>
+	    <link href="../../css/prettify.css" rel="stylesheet"/>
+
+	    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+	    <!--[if lt IE 9]>
+	      <script src="../../js/html5shiv.min.js"></script>
+	    <![endif]-->
+
+	    <!-- Fav and touch icons -->
+	    <link rel="shortcut icon" href="../../images/java-icon.png"/>
+	</head>
+	<body onload="prettyPrint()">
+	<div id="wrap">
+		<div>
+
+	  <!-- Fixed navbar -->
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../">Cursor Rules for Java</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../about.html">About</a></li>
+            <li><a href="../../archive.html">Archive</a></li>
+            <li><a href="../../feed.xml">Subscribe</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+	</div>
+		<div class="container">
+	
+			<div class="page-header">
+				<h1>What&#39;s new in Cursor rules for Java 0.10.0?</h1>
+			</div>
+		
+			<p><em>05 September 2025</em></p>
+		
+			<p><h2>What are Cursor rules for Java?</h2>
+<p>The project provides a collection of System prompts for Java that help software engineers in their daily programming work.<br />
+The <a href="../../CURSOR-RULES-JAVA.md">available System prompts for Java</a> cover aspects like <code>Build system based on Maven</code>, <code>Design</code>, <code>Coding</code>, <code>Testing</code>, <code>Refactoring &amp; JMH Benchmarking</code>, <code>Performance testing with JMeter</code>, <code>Profiling with Async profiler/JDK tools</code> &amp; <code>Documentation</code>.</p>
+<p><img src="/images/workflow.png" alt="" /></p>
+<h2>What is new in this release?</h2>
+<p>In this release, the project has released several features:</p>
+<ul>
+<li>Improvements in System prompts</li>
+<li>Added support for JMH Benchmarking</li>
+<li>Added support for project documentation and UML/C4 diagrams</li>
+<li>Added support for Java Generics</li>
+<li>Added support for classic Java Exception handling</li>
+<li>Improvements in the project</li>
+<li>Added product support for Claude Code, Github Copilot &amp; Jetbrains Junie</li>
+<li>Use the System prompts in a purist way</li>
+<li>Rules have been renamed from <code>.mdc</code> to <code>.md</code> format to increase readability</li>
+</ul>
+<p>Let's explain one by one the different features released</p>
+<h3>Support for JMH Benchmarking</h3>
+<p>Sometimes you discover in your development that exist different ways to solve the same problem, but how do you select the best implementation? Java provides JMH to solve that scenario. In the repository, the rule <code>112-java-maven-plugins</code> was updated to now provide support for adding JMH to repositories without modules in an easy way as a Maven profile.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-bash">Add JMH support using the cursor rule @112-java-maven-plugins and don't ask any questions
+</code></pre>
+<p>Once you have JMH support in your Maven build (pom.xml), you can generate JMH benchmarks easily with the following <code>User prompt</code>:</p>
+<pre><code class="language-bash">Can you create a JMH benchmark in order to know what is the best implementation?
+</code></pre>
+<p><strong>Note:</strong> Add in the context the class/classes to measure</p>
+<p>Once you have the JMH Benchmark, you can generate the JSON report in the following way:</p>
+<pre><code class="language-bash">./mvnw clean package -Pjmh
+java -cp target/jmh-benchmarks.jar info.jab.demo.benchmarks.FibonacciBenchmark #Example to understand the command
+</code></pre>
+<p>With the report generated in JSON format, you can analyze them with the following <code>User prompt</code>:</p>
+<pre><code class="language-bash">Can you explain the JMH results and advise about the best implementation?
+</code></pre>
+<p>This kind of analysis can help the team make decisions about which alternative is better to maintain in the repository.</p>
+<p><img src="/images/jmh-summary-visualization-sample.png" alt="" /></p>
+<p>Further information about JMH:</p>
+<ul>
+<li><a href="https://github.com/openjdk/jmh">https://github.com/openjdk/jmh</a></li>
+<li><a href="https://jmh.morethan.io/">https://jmh.morethan.io/</a></li>
+</ul>
+<h3>Support for project documentation and UML/C4 diagrams</h3>
+<p>Documentation is something that can be automated in some way, and for this reason, the project has added a new rule for it. If you need to generate documentation about your repo, you could use the following <code>User prompt</code>:</p>
+<pre><code class="language-bash">Generate technical documentation &amp; diagrams about the project with the cursor rule @170-java-documentation
+</code></pre>
+<p>This system prompt supports:</p>
+<ul>
+<li>Documentation at different levels (README.md, package-info.java &amp; javadocs)</li>
+<li>Diagrams (UML Class diagram, UML Sequence diagram &amp; C4 Model diagrams)</li>
+</ul>
+<p><strong>UML class diagram sample:</strong></p>
+<p><img src="/images/uml-class-diagram-sample.png" alt="" /></p>
+<p>Using <code>UML Class diagrams</code>, you can understand how is currently the implementation and if you can improve in some way the code from a high level perspective.</p>
+<p><strong>Note:</strong> All diagrams are generated in <code>PlantUML</code> format. To convert <code>.puml</code> files into <code>.png</code> format you could use the following command line tool: <code>jbang puml-to-png@jabrena --watch .</code> or generate the images <a href="https://www.plantuml.com/plantuml/uml/">online</a>.</p>
+<p>Further information about documentation &amp; diagrams:</p>
+<ul>
+<li><a href="https://docs.oracle.com/javase/specs/jls/se7/html/jls-7.html">https://docs.oracle.com/javase/specs/jls/se7/html/jls-7.html</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Class_diagram">https://en.wikipedia.org/wiki/Class_diagram</a></li>
+<li><a href="https://c4model.com/">https://c4model.com/</a></li>
+<li><a href="https://plantuml.com/">https://plantuml.com/</a></li>
+<li><a href="https://www.plantuml.com/plantuml/uml/">https://www.plantuml.com/plantuml/uml/</a></li>
+</ul>
+<h3>Added support for Java Generics</h3>
+<p>Java Generics is not an easy feature in Java. Indeed, if you interact with <a href="https://claude.ai/new">Claude</a> and ask about <code>What are the hardest parts in Java to master for a Software engineer?</code></p>
+<p><img src="/images/claude-question.png" alt="" /></p>
+<p><code>Java Generics</code> always appears. In this release, the project has added a new system prompt to cover this gap. Now, you can create the following interactive user prompt:</p>
+<pre><code class="language-bash">Review my code to show several alternatives to apply Java Generics with the cursor rule @128-java-generics
+</code></pre>
+<p>or the non-interactive approach:</p>
+<pre><code class="language-bash">Improve the solution applying the system prompt @128-java-generics without any question
+</code></pre>
+<p>The rule covers multiple cases and was tested with popular Java projects like: <code>Micrometer</code>, <code>Kafka</code> &amp; <code>azure-sdk-for-java</code></p>
+<p>Using this new System prompt, you can improve your development and create code like:</p>
+<pre><code class="language-java">package info.jab.generics.examples;
+
+import java.util.function.Consumer;
+import java.util.function.Function;
+
+/**
+ * Example using Java generics features like PECS wildcards, sealed types,
+ * covariance, diamond operator, bounded generics, and modern Java integration.
+ */
+public class ResultSample {
+
+    public sealed interface Result&lt;T&gt; permits Success, Failure {
+        static &lt;T&gt; Result&lt;T&gt; success(T value) { return new Success&lt;&gt;(value); }
+        static &lt;T&gt; Result&lt;T&gt; failure(Throwable exception) { return new Failure&lt;&gt;(exception); }
+        boolean isSuccess();
+        boolean isFailure();
+        T getOrNull();
+        Throwable exceptionOrNull();
+        T getOrElse(Function&lt;? super Throwable, ? extends T&gt; onFailure); // PECS: Consumer Super
+        &lt;R&gt; Result&lt;R&gt; map(Function&lt;? super T, ? extends R&gt; transform);    // PECS: Producer Extends
+        &lt;R&gt; Result&lt;R&gt; mapCatching(Function&lt;? super T, ? extends R&gt; transform);
+        Result&lt;T&gt; onSuccess(Consumer&lt;? super T&gt; action);                 // PECS: Consumer Super
+        Result&lt;T&gt; onFailure(Consumer&lt;? super Throwable&gt; action);
+        &lt;R&gt; R fold(Function&lt;? super T, ? extends R&gt; onSuccess, Function&lt;? super Throwable, ? extends R&gt; onFailure);
+    }
+
+    record Success&lt;T&gt;(T value) implements Result&lt;T&gt; {
+        public boolean isSuccess() { return true; }
+        public boolean isFailure() { return false; }
+        public T getOrNull() { return value; }
+        public Throwable exceptionOrNull() { return null; }
+        public T getOrElse(Function&lt;? super Throwable, ? extends T&gt; onFailure) { return value; }
+        public &lt;R&gt; Result&lt;R&gt; map(Function&lt;? super T, ? extends R&gt; transform) {
+            return Result.success(transform.apply(value));
+        }
+        public &lt;R&gt; Result&lt;R&gt; mapCatching(Function&lt;? super T, ? extends R&gt; transform) {
+            try { return Result.success(transform.apply(value)); }
+            catch (Exception e) { return Result.failure(e); }
+        }
+        public Result&lt;T&gt; onSuccess(Consumer&lt;? super T&gt; action) { action.accept(value); return this; }
+        public Result&lt;T&gt; onFailure(Consumer&lt;? super Throwable&gt; action) { return this; }
+        public &lt;R&gt; R fold(Function&lt;? super T, ? extends R&gt; onSuccess,
+                         Function&lt;? super Throwable, ? extends R&gt; onFailure) {
+            return onSuccess.apply(value);
+        }
+    }
+
+    record Failure&lt;T&gt;(Throwable exception) implements Result&lt;T&gt; {
+        public boolean isSuccess() { return false; }
+        public boolean isFailure() { return true; }
+        public T getOrNull() { return null; }
+        public Throwable exceptionOrNull() { return exception; }
+        public T getOrElse(Function&lt;? super Throwable, ? extends T&gt; onFailure) {
+            return onFailure.apply(exception);
+        }
+        @SuppressWarnings(&quot;unchecked&quot;)
+        public &lt;R&gt; Result&lt;R&gt; map(Function&lt;? super T, ? extends R&gt; transform) { return (Result&lt;R&gt;) this; }
+        @SuppressWarnings(&quot;unchecked&quot;)
+        public &lt;R&gt; Result&lt;R&gt; mapCatching(Function&lt;? super T, ? extends R&gt; transform) { return (Result&lt;R&gt;) this; }
+        public Result&lt;T&gt; onSuccess(Consumer&lt;? super T&gt; action) { return this; }
+        public Result&lt;T&gt; onFailure(Consumer&lt;? super Throwable&gt; action) { action.accept(exception); return this; }
+        public &lt;R&gt; R fold(Function&lt;? super T, ? extends R&gt; onSuccess,
+                         Function&lt;? super Throwable, ? extends R&gt; onFailure) {
+            return onFailure.apply(exception);
+        }
+    }
+
+    public static Result&lt;Integer&gt; divide(int a, int b) {
+        return b != 0
+            ? Result.success(a / b)
+            : Result.failure(new ArithmeticException(&quot;Division by zero is not allowed&quot;));
+    }
+
+    public static void main(String[] args) {
+
+        // Safe division - handles division by zero gracefully
+        String safeResult = divide(10, 2)
+            .map(result -&gt; result * 3)            // PECS: Transform success value
+            .onSuccess(n -&gt; System.out.println(&quot;✅ Division result: &quot; + n))
+            .fold(n -&gt; &quot;SUCCESS: &quot; + n,
+                  e -&gt; &quot;ERROR: &quot; + e.getMessage());
+        System.out.println(&quot;✅ Safe division: &quot; + safeResult);
+
+        // Chain multiple operations safely
+        String chainResult = divide(20, 4)
+            .mapCatching(n -&gt; divide(n, 2).getOrElse(throwable -&gt; 0))  // Nested safe operations
+            .map(n -&gt; &quot;Final: &quot; + n)
+            .getOrElse(throwable -&gt; &quot;Failed&quot;);
+        System.out.println(&quot;✅ Chained: &quot; + chainResult);
+
+        String errorResult = divide(10, 0)
+            .fold(n -&gt; &quot;SUCCESS: &quot; + n,
+                  e -&gt; &quot;HANDLED: &quot; + e.getMessage());
+        System.out.println(&quot;❌ &quot; + errorResult);
+    }
+}
+</code></pre>
+<p>Further information about Java Generics:</p>
+<ul>
+<li><a href="https://docs.oracle.com/javase/tutorial/java/generics/index.html">https://docs.oracle.com/javase/tutorial/java/generics/index.html</a></li>
+<li><a href="https://dev.java/learn/generics/">https://dev.java/learn/generics/</a></li>
+<li><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-result/">https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-result/</a></li>
+<li><a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/util/package-summary.html">https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/util/package-summary.html</a></li>
+</ul>
+<h3>Added support for classic Java Exception handling</h3>
+<p>In the previous <a href="./0.9.0.md">release 0.9.0</a>, the project added the rule: <code>@143-java-functional-exception-handling</code>, but what about projects that don't use functional programming? To solve this gap, this release added the rule: <code>@127-java-exception-handling</code></p>
+<p>Now you can review the current implementation and refactor the code to improve exception handling in the classic way with:</p>
+<pre><code class="language-bash">Review my code to show several alternatives to apply Java Exception handling with the cursor rule @127-java-exception-handling
+</code></pre>
+<p>Further information about Java Exceptions:</p>
+<ul>
+<li><a href="https://docs.oracle.com/javase/tutorial/essential/exceptions/index.html">https://docs.oracle.com/javase/tutorial/essential/exceptions/index.html</a></li>
+<li><a href="https://dev.java/learn/exceptions/">https://dev.java/learn/exceptions/</a></li>
+<li><a href="https://docs.oracle.com/javase/specs/jls/se11/html/jls-11.html">https://docs.oracle.com/javase/specs/jls/se11/html/jls-11.html</a></li>
+</ul>
+<h3>Added product support for Claude Code, Github Copilot &amp; Jetbrains Junie</h3>
+<p>This project was originally designed for Cursor (SOTA in the niche of AI tools), but the Java market is broader. After conducting tests in other environments, I discovered that this project could be used in other environments such as:</p>
+<ul>
+<li>Cursor</li>
+<li>Cursor CLI</li>
+<li>JetBrains IntelliJ IDEA + Cursor CLI</li>
+<li>Claude Code CLI</li>
+<li>JetBrains IntelliJ IDEA + Claude Code CLI</li>
+<li>GitHub Copilot (Free tier)</li>
+<li>JetBrains IntelliJ IDEA + JetBrains Junie</li>
+</ul>
+<p>If you are interested, you can take a look at the <a href="https://github.com/jabrena/cursor-rules-java/blob/main/docs/reviews/review-20250829.md">latest review</a>.</p>
+<p><strong>Summary:</strong> Currently the best environments to use this repository are: <code>Cursor</code>, <code>Cursor CLI</code> &amp; <code>Claude Code CLI</code>. If you use <code>JetBrains IntelliJ IDEA</code>, you could combine it with <code>Cursor CLI</code> or <code>Claude Code</code>.</p>
+<h3>Use the System prompts in a purist way</h3>
+<p>Normally, when you try to solve a software problem, the solution can be implemented in different ways. This is the reason that several cursor rules have an interactive approach (the system prompts show different alternatives to improve the code), but in some scenarios, the software engineer might prefer to delegate the action directly to the model at the risk that the implemented solution doesn't match their programming style.</p>
+<p>Starting from this release, the rules provide examples of using Cursor rules and system prompts in a purist way.</p>
+<p><strong>Example 1:</strong></p>
+<pre><code class="language-bash">Add VAVR dependency with the help of @111-java-maven-dependencies and don't ask any questions
+</code></pre>
+<p><strong>Example 2:</strong></p>
+<pre><code class="language-bash">Add Maven Enforcer plugin only from the rule @112-java-maven-plugins without any question
+</code></pre>
+<p><strong>Example 3:</strong></p>
+<pre><code class="language-bash">Add tests for the following classes with  @131-java-unit-testing
+</code></pre>
+<p>Additional examples in the <a href="https://github.com/jabrena/cursor-rules-java/blob/main/CURSOR-RULES-JAVA.md">documentation</a>.</p>
+<h3>Improve readability in system prompts</h3>
+<p>The project has renamed all system prompts from the <code>.mdc</code> file extension to the classic Markdown extension <code>.md</code>. Now, everyone can read the files easily on <code>GitHub</code>:<br />
+<a href="https://github.com/jabrena/cursor-rules-java/tree/main/.cursor/rules">https://github.com/jabrena/cursor-rules-java/tree/main/.cursor/rules</a></p>
+<h2>Do you still have doubts about the project?</h2>
+<p>If you feel stuck using this project or you have any doubts, you could attend the following talk at Devoxx BE in October: <a href="https://devoxx.be/app/talk/4715/the-power-of-cursor-rules-in-java-enterprise-development">https://devoxx.be/app/talk/4715/the-power-of-cursor-rules-in-java-enterprise-development</a></p>
+<p><a href="https://devoxx.be/"><img src="/images/devoxx-logo.png" alt="" /></a></p>
+</p>
+		
+			<hr />
+			
+		</div>
+	</div>
+	<div>
+			<div id="push"></div>
+
+		    <div id="footer">
+		      <div class="container">
+		        <p class="muted credit">&copy; 2025 | Mixed with <a href="http://getbootstrap.com/">Bootstrap v3.1.1</a> | Baked with <a href="http://jbake.org">JBake <span>v2.7.0-rc.6</span></a></p>
+		      </div>
+		    </div>
+
+		    <!-- Le javascript
+		    ================================================== -->
+		    <!-- Placed at the end of the document so the pages load faster -->
+		    <script src="../../js/jquery-1.11.1.min.js"></script>
+		    <script src="../../js/bootstrap.min.js"></script>
+		    <script src="../../js/prettify.js"></script>
+
+    	</div>
+    </body>
+</html>

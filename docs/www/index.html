@@ -1,0 +1,621 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	    <meta charset="utf-8"/>
+	    <title>JBake</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	    <meta name="description" content=""/>
+	    <meta name="author" content="Juan Antonio Breña Moral"/>
+	    <meta name="keywords" content=""/>
+	    <meta name="generator" content="Cursor rules for Java"/>
+
+	    <!-- Le styles -->
+	    <link href="css/bootstrap.min.css" rel="stylesheet"/>
+	    <link href="css/asciidoctor.css" rel="stylesheet"/>
+	    <link href="css/base.css" rel="stylesheet"/>
+	    <link href="css/prettify.css" rel="stylesheet"/>
+
+	    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+	    <!--[if lt IE 9]>
+	      <script src="js/html5shiv.min.js"></script>
+	    <![endif]-->
+
+	    <!-- Fav and touch icons -->
+	    <link rel="shortcut icon" href="images/java-icon.png"/>
+	</head>
+	<body onload="prettyPrint()">
+	<div id="wrap">
+		<div>
+
+	  <!-- Fixed navbar -->
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="">Cursor Rules for Java</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="index.html">Home</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="archive.html">Archive</a></li>
+            <li><a href="feed.xml">Subscribe</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+	</div>
+		<div class="container">
+			<div class="page-header">
+				<h1>Blog</h1>
+			</div>
+			
+			<div>
+				<a href='blog/2025/release-0.10.0.html'><h1>What&#39;s new in Cursor rules for Java 0.10.0?</h1></a>
+				<p>05 September 2025</p>
+				<p><h2>What are Cursor rules for Java?</h2>
+<p>The project provides a collection of System prompts for Java that help software engineers in their daily programming work.<br />
+The <a href="../../CURSOR-RULES-JAVA.md">available System prompts for Java</a> cover aspects like <code>Build system based on Maven</code>, <code>Design</code>, <code>Coding</code>, <code>Testing</code>, <code>Refactoring &amp; JMH Benchmarking</code>, <code>Performance testing with JMeter</code>, <code>Profiling with Async profiler/JDK tools</code> &amp; <code>Documentation</code>.</p>
+<p><img src="/images/workflow.png" alt="" /></p>
+<h2>What is new in this release?</h2>
+<p>In this release, the project has released several features:</p>
+<ul>
+<li>Improvements in System prompts</li>
+<li>Added support for JMH Benchmarking</li>
+<li>Added support for project documentation and UML/C4 diagrams</li>
+<li>Added support for Java Generics</li>
+<li>Added support for classic Java Exception handling</li>
+<li>Improvements in the project</li>
+<li>Added product support for Claude Code, Github Copilot &amp; Jetbrains Junie</li>
+<li>Use the System prompts in a purist way</li>
+<li>Rules have been renamed from <code>.mdc</code> to <code>.md</code> format to increase readability</li>
+</ul>
+<p>Let's explain one by one the different features released</p>
+<h3>Support for JMH Benchmarking</h3>
+<p>Sometimes you discover in your development that exist different ways to solve the same problem, but how do you select the best implementation? Java provides JMH to solve that scenario. In the repository, the rule <code>112-java-maven-plugins</code> was updated to now provide support for adding JMH to repositories without modules in an easy way as a Maven profile.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-bash">Add JMH support using the cursor rule @112-java-maven-plugins and don't ask any questions
+</code></pre>
+<p>Once you have JMH support in your Maven build (pom.xml), you can generate JMH benchmarks easily with the following <code>User prompt</code>:</p>
+<pre><code class="language-bash">Can you create a JMH benchmark in order to know what is the best implementation?
+</code></pre>
+<p><strong>Note:</strong> Add in the context the class/classes to measure</p>
+<p>Once you have the JMH Benchmark, you can generate the JSON report in the following way:</p>
+<pre><code class="language-bash">./mvnw clean package -Pjmh
+java -cp target/jmh-benchmarks.jar info.jab.demo.benchmarks.FibonacciBenchmark #Example to understand the command
+</code></pre>
+<p>With the report generated in JSON format, you can analyze them with the following <code>User prompt</code>:</p>
+<pre><code class="language-bash">Can you explain the JMH results and advise about the best implementation?
+</code></pre>
+<p>This kind of analysis can help the team make decisions about which alternative is better to maintain in the repository.</p>
+<p><img src="/images/jmh-summary-visualization-sample.png" alt="" /></p>
+<p>Further information about JMH:</p>
+<ul>
+<li><a href="https://github.com/openjdk/jmh">https://github.com/openjdk/jmh</a></li>
+<li><a href="https://jmh.morethan.io/">https://jmh.morethan.io/</a></li>
+</ul>
+<h3>Support for project documentation and UML/C4 diagrams</h3>
+<p>Documentation is something that can be automated in some way, and for this reason, the project has added a new rule for it. If you need to generate documentation about your repo, you could use the following <code>User prompt</code>:</p>
+<pre><code class="language-bash">Generate technical documentation &amp; diagrams about the project with the cursor rule @170-java-documentation
+</code></pre>
+<p>This system prompt supports:</p>
+<ul>
+<li>Documentation at different levels (README.md, package-info.java &amp; javadocs)</li>
+<li>Diagrams (UML Class diagram, UML Sequence diagram &amp; C4 Model diagrams)</li>
+</ul>
+<p><strong>UML class diagram sample:</strong></p>
+<p><img src="/images/uml-class-diagram-sample.png" alt="" /></p>
+<p>Using <code>UML Class diagrams</code>, you can understand how is currently the implementation and if you can improve in some way the code from a high level perspective.</p>
+<p><strong>Note:</strong> All diagrams are generated in <code>PlantUML</code> format. To convert <code>.puml</code> files into <code>.png</code> format you could use the following command line tool: <code>jbang puml-to-png@jabrena --watch .</code> or generate the images <a href="https://www.plantuml.com/plantuml/uml/">online</a>.</p>
+<p>Further information about documentation &amp; diagrams:</p>
+<ul>
+<li><a href="https://docs.oracle.com/javase/specs/jls/se7/html/jls-7.html">https://docs.oracle.com/javase/specs/jls/se7/html/jls-7.html</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Class_diagram">https://en.wikipedia.org/wiki/Class_diagram</a></li>
+<li><a href="https://c4model.com/">https://c4model.com/</a></li>
+<li><a href="https://plantuml.com/">https://plantuml.com/</a></li>
+<li><a href="https://www.plantuml.com/plantuml/uml/">https://www.plantuml.com/plantuml/uml/</a></li>
+</ul>
+<h3>Added support for Java Generics</h3>
+<p>Java Generics is not an easy feature in Java. Indeed, if you interact with <a href="https://claude.ai/new">Claude</a> and ask about <code>What are the hardest parts in Java to master for a Software engineer?</code></p>
+<p><img src="/images/claude-question.png" alt="" /></p>
+<p><code>Java Generics</code> always appears. In this release, the project has added a new system prompt to cover this gap. Now, you can create the following interactive user prompt:</p>
+<pre><code class="language-bash">Review my code to show several alternatives to apply Java Generics with the cursor rule @128-java-generics
+</code></pre>
+<p>or the non-interactive approach:</p>
+<pre><code class="language-bash">Improve the solution applying the system prompt @128-java-generics without any question
+</code></pre>
+<p>The rule covers multiple cases and was tested with popular Java projects like: <code>Micrometer</code>, <code>Kafka</code> &amp; <code>azure-sdk-for-java</code></p>
+<p>Using this new System prompt, you can improve your development and create code like:</p>
+<pre><code class="language-java">package info.jab.generics.examples;
+
+import java.util.function.Consumer;
+import java.util.function.Function;
+
+/**
+ * Example using Java generics features like PECS wildcards, sealed types,
+ * covariance, diamond operator, bounded generics, and modern Java integration.
+ */
+public class ResultSample {
+
+    public sealed interface Result&lt;T&gt; permits Success, Failure {
+        static &lt;T&gt; Result&lt;T&gt; success(T value) { return new Success&lt;&gt;(value); }
+        static &lt;T&gt; Result&lt;T&gt; failure(Throwable exception) { return new Failure&lt;&gt;(exception); }
+        boolean isSuccess();
+        boolean isFailure();
+        T getOrNull();
+        Throwable exceptionOrNull();
+        T getOrElse(Function&lt;? super Throwable, ? extends T&gt; onFailure); // PECS: Consumer Super
+        &lt;R&gt; Result&lt;R&gt; map(Function&lt;? super T, ? extends R&gt; transform);    // PECS: Producer Extends
+        &lt;R&gt; Result&lt;R&gt; mapCatching(Function&lt;? super T, ? extends R&gt; transform);
+        Result&lt;T&gt; onSuccess(Consumer&lt;? super T&gt; action);                 // PECS: Consumer Super
+        Result&lt;T&gt; onFailure(Consumer&lt;? super Throwable&gt; action);
+        &lt;R&gt; R fold(Function&lt;? super T, ? extends R&gt; onSuccess, Function&lt;? super Throwable, ? extends R&gt; onFailure);
+    }
+
+    record Success&lt;T&gt;(T value) implements Result&lt;T&gt; {
+        public boolean isSuccess() { return true; }
+        public boolean isFailure() { return false; }
+        public T getOrNull() { return value; }
+        public Throwable exceptionOrNull() { return null; }
+        public T getOrElse(Function&lt;? super Throwable, ? extends T&gt; onFailure) { return value; }
+        public &lt;R&gt; Result&lt;R&gt; map(Function&lt;? super T, ? extends R&gt; transform) {
+            return Result.success(transform.apply(value));
+        }
+        public &lt;R&gt; Result&lt;R&gt; mapCatching(Function&lt;? super T, ? extends R&gt; transform) {
+            try { return Result.success(transform.apply(value)); }
+            catch (Exception e) { return Result.failure(e); }
+        }
+        public Result&lt;T&gt; onSuccess(Consumer&lt;? super T&gt; action) { action.accept(value); return this; }
+        public Result&lt;T&gt; onFailure(Consumer&lt;? super Throwable&gt; action) { return this; }
+        public &lt;R&gt; R fold(Function&lt;? super T, ? extends R&gt; onSuccess,
+                         Function&lt;? super Throwable, ? extends R&gt; onFailure) {
+            return onSuccess.apply(value);
+        }
+    }
+
+    record Failure&lt;T&gt;(Throwable exception) implements Result&lt;T&gt; {
+        public boolean isSuccess() { return false; }
+        public boolean isFailure() { return true; }
+        public T getOrNull() { return null; }
+        public Throwable exceptionOrNull() { return exception; }
+        public T getOrElse(Function&lt;? super Throwable, ? extends T&gt; onFailure) {
+            return onFailure.apply(exception);
+        }
+        @SuppressWarnings(&quot;unchecked&quot;)
+        public &lt;R&gt; Result&lt;R&gt; map(Function&lt;? super T, ? extends R&gt; transform) { return (Result&lt;R&gt;) this; }
+        @SuppressWarnings(&quot;unchecked&quot;)
+        public &lt;R&gt; Result&lt;R&gt; mapCatching(Function&lt;? super T, ? extends R&gt; transform) { return (Result&lt;R&gt;) this; }
+        public Result&lt;T&gt; onSuccess(Consumer&lt;? super T&gt; action) { return this; }
+        public Result&lt;T&gt; onFailure(Consumer&lt;? super Throwable&gt; action) { action.accept(exception); return this; }
+        public &lt;R&gt; R fold(Function&lt;? super T, ? extends R&gt; onSuccess,
+                         Function&lt;? super Throwable, ? extends R&gt; onFailure) {
+            return onFailure.apply(exception);
+        }
+    }
+
+    public static Result&lt;Integer&gt; divide(int a, int b) {
+        return b != 0
+            ? Result.success(a / b)
+            : Result.failure(new ArithmeticException(&quot;Division by zero is not allowed&quot;));
+    }
+
+    public static void main(String[] args) {
+
+        // Safe division - handles division by zero gracefully
+        String safeResult = divide(10, 2)
+            .map(result -&gt; result * 3)            // PECS: Transform success value
+            .onSuccess(n -&gt; System.out.println(&quot;✅ Division result: &quot; + n))
+            .fold(n -&gt; &quot;SUCCESS: &quot; + n,
+                  e -&gt; &quot;ERROR: &quot; + e.getMessage());
+        System.out.println(&quot;✅ Safe division: &quot; + safeResult);
+
+        // Chain multiple operations safely
+        String chainResult = divide(20, 4)
+            .mapCatching(n -&gt; divide(n, 2).getOrElse(throwable -&gt; 0))  // Nested safe operations
+            .map(n -&gt; &quot;Final: &quot; + n)
+            .getOrElse(throwable -&gt; &quot;Failed&quot;);
+        System.out.println(&quot;✅ Chained: &quot; + chainResult);
+
+        String errorResult = divide(10, 0)
+            .fold(n -&gt; &quot;SUCCESS: &quot; + n,
+                  e -&gt; &quot;HANDLED: &quot; + e.getMessage());
+        System.out.println(&quot;❌ &quot; + errorResult);
+    }
+}
+</code></pre>
+<p>Further information about Java Generics:</p>
+<ul>
+<li><a href="https://docs.oracle.com/javase/tutorial/java/generics/index.html">https://docs.oracle.com/javase/tutorial/java/generics/index.html</a></li>
+<li><a href="https://dev.java/learn/generics/">https://dev.java/learn/generics/</a></li>
+<li><a href="https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-result/">https://kotlinlang.org/api/core/kotlin-stdlib/kotlin/-result/</a></li>
+<li><a href="https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/util/package-summary.html">https://docs.oracle.com/en/java/javase/24/docs/api/java.base/java/util/package-summary.html</a></li>
+</ul>
+<h3>Added support for classic Java Exception handling</h3>
+<p>In the previous <a href="./0.9.0.md">release 0.9.0</a>, the project added the rule: <code>@143-java-functional-exception-handling</code>, but what about projects that don't use functional programming? To solve this gap, this release added the rule: <code>@127-java-exception-handling</code></p>
+<p>Now you can review the current implementation and refactor the code to improve exception handling in the classic way with:</p>
+<pre><code class="language-bash">Review my code to show several alternatives to apply Java Exception handling with the cursor rule @127-java-exception-handling
+</code></pre>
+<p>Further information about Java Exceptions:</p>
+<ul>
+<li><a href="https://docs.oracle.com/javase/tutorial/essential/exceptions/index.html">https://docs.oracle.com/javase/tutorial/essential/exceptions/index.html</a></li>
+<li><a href="https://dev.java/learn/exceptions/">https://dev.java/learn/exceptions/</a></li>
+<li><a href="https://docs.oracle.com/javase/specs/jls/se11/html/jls-11.html">https://docs.oracle.com/javase/specs/jls/se11/html/jls-11.html</a></li>
+</ul>
+<h3>Added product support for Claude Code, Github Copilot &amp; Jetbrains Junie</h3>
+<p>This project was originally designed for Cursor (SOTA in the niche of AI tools), but the Java market is broader. After conducting tests in other environments, I discovered that this project could be used in other environments such as:</p>
+<ul>
+<li>Cursor</li>
+<li>Cursor CLI</li>
+<li>JetBrains IntelliJ IDEA + Cursor CLI</li>
+<li>Claude Code CLI</li>
+<li>JetBrains IntelliJ IDEA + Claude Code CLI</li>
+<li>GitHub Copilot (Free tier)</li>
+<li>JetBrains IntelliJ IDEA + JetBrains Junie</li>
+</ul>
+<p>If you are interested, you can take a look at the <a href="https://github.com/jabrena/cursor-rules-java/blob/main/docs/reviews/review-20250829.md">latest review</a>.</p>
+<p><strong>Summary:</strong> Currently the best environments to use this repository are: <code>Cursor</code>, <code>Cursor CLI</code> &amp; <code>Claude Code CLI</code>. If you use <code>JetBrains IntelliJ IDEA</code>, you could combine it with <code>Cursor CLI</code> or <code>Claude Code</code>.</p>
+<h3>Use the System prompts in a purist way</h3>
+<p>Normally, when you try to solve a software problem, the solution can be implemented in different ways. This is the reason that several cursor rules have an interactive approach (the system prompts show different alternatives to improve the code), but in some scenarios, the software engineer might prefer to delegate the action directly to the model at the risk that the implemented solution doesn't match their programming style.</p>
+<p>Starting from this release, the rules provide examples of using Cursor rules and system prompts in a purist way.</p>
+<p><strong>Example 1:</strong></p>
+<pre><code class="language-bash">Add VAVR dependency with the help of @111-java-maven-dependencies and don't ask any questions
+</code></pre>
+<p><strong>Example 2:</strong></p>
+<pre><code class="language-bash">Add Maven Enforcer plugin only from the rule @112-java-maven-plugins without any question
+</code></pre>
+<p><strong>Example 3:</strong></p>
+<pre><code class="language-bash">Add tests for the following classes with  @131-java-unit-testing
+</code></pre>
+<p>Additional examples in the <a href="https://github.com/jabrena/cursor-rules-java/blob/main/CURSOR-RULES-JAVA.md">documentation</a>.</p>
+<h3>Improve readability in system prompts</h3>
+<p>The project has renamed all system prompts from the <code>.mdc</code> file extension to the classic Markdown extension <code>.md</code>. Now, everyone can read the files easily on <code>GitHub</code>:<br />
+<a href="https://github.com/jabrena/cursor-rules-java/tree/main/.cursor/rules">https://github.com/jabrena/cursor-rules-java/tree/main/.cursor/rules</a></p>
+<h2>Do you still have doubts about the project?</h2>
+<p>If you feel stuck using this project or you have any doubts, you could attend the following talk at Devoxx BE in October: <a href="https://devoxx.be/app/talk/4715/the-power-of-cursor-rules-in-java-enterprise-development">https://devoxx.be/app/talk/4715/the-power-of-cursor-rules-in-java-enterprise-development</a></p>
+<p><a href="https://devoxx.be/"><img src="/images/devoxx-logo.png" alt="" /></a></p>
+</p>
+			</div>
+			
+			<div>
+				<a href='blog/2025/release-0.9.0.html'><h1>What&#39;s new in Cursor rules for Java 0.9.0?</h1></a>
+				<p>23 July 2025</p>
+				<p><h2>What are Cursor rules for Java?</h2>
+<p>Cursor Rules for Java is an Open Source project that provides a set of interactive system prompts for Java that help software engineers in their daily work.</p>
+<hr />
+<p>In this new release, the project includes the following features:</p>
+<h3>Added Version control</h3>
+<p>Added a new rule about 127-java-functional-exception-handling</p>
+<p>Added Consultative Interaction Technique in the majority of Rules</p>
+<p>A betterf Getting Started documentation</p>
+<p>Specific rules for Maven Dependencies &amp; Maven plugins</p>
+<p>Profiling improvements</p>
+<p>For further information about the full CHANGELOG, visit the following link: <a href="https://github.com/jabrena/cursor-rules-java/blob/main/CHANGELOG.md#090-2025-07-22">https://github.com/jabrena/cursor-rules-java/blob/main/CHANGELOG.md#090-2025-07-22</a></p>
+<p>Added Version Control<br />
+If you are one of the thousands of users who at some point in time cloned the Git repository, maybe you don't remember when the system prompt was added to your workspace. In this version, all prompts include in the Markdown Frontmatter section, metadata about the version to track which version you are using and whether you need to update to the latest version.</p>
+<p>This way, you will have full awareness of whether you need to upgrade your system prompt or not.</p>
+<pre><code class="language-markdown">---
+author: Juan Antonio Breña Moral
+version: 0.9.0
+---
+# Add Maven dependencies for improved code quality
+
+## Role
+
+You are a Senior software engineer with extensive experience in Java software development
+
+## Goal
+
+...
+</code></pre>
+<h3>Exceptions handling</h3>
+<p>Exception handling is a core feature in Java, but that feature didn't have a specific system prompt. In this release, a specific rule about exception handling with a functional point of view was added.</p>
+<p><img src="/images/java-exceptions-goto.png" alt="" /></p>
+<p>Consultative Interaction Technique<br />
+In the previous release, the project added a way to interact with software engineers. In this release, we externalized the behavior in the following building block: <a href="https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/fragments/system-prompt-behaviour-consultative-interaction-template.md">https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/fragments/system-prompt-behaviour-consultative-interaction-template.md</a></p>
+<p>Now that solution has been extended to the majority of the provided system prompts,  adding consultative behavior:</p>
+<pre><code class="language-xml">    &lt;goal&gt;&lt;![CDATA[
+        Effective Maven usage involves robust dependency management via `&lt;dependencyManagement&gt;` and BOMs, adherence to the standard directory layout, and centralized plugin management. Build profiles should be used for environment-specific configurations. POMs must be kept readable and maintainable with logical structure and properties for versions. Custom repositories should be declared explicitly and their use minimized, preferably managed via a central repository manager.
+        ]]&gt;
+        &lt;xi:include href=&quot;fragments/system-prompt-behaviour-consultative-interaction-template.md&quot; parse=&quot;text&quot;/&gt;
+        ...
+
+    &lt;/goal&gt;
+</code></pre>
+<p>Example: <a href="https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/110-java-maven-best-practices.xml">https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/110-java-maven-best-practices.xml</a></p>
+<p><img src="/images/example-rules.png" alt="" /></p>
+<h3>A better Getting Started documentation</h3>
+<p>The repository has improved the documentation for new users in order to reduce the Onboarding time for new users: <a href="https://github.com/jabrena/cursor-rules-java/blob/main/GETTING-STARTED.md">https://github.com/jabrena/cursor-rules-java/blob/main/GETTING-STARTED.md</a></p>
+<h3>Specific rules for Maven Dependencies &amp; Maven plugins</h3>
+<p>One of the obsessions in this project is to provide solutions that are easy to maintain in the medium term. In the past, the system prompt 111-java-maven-deps-and-plugins offered a very nice experience, but in terms of maintenance, it was a bit complex, so in this release it was split into 2: 111-java-maven-dependencies &amp; 112-java-maven-plugins</p>
+<h3>Profiling improvements</h3>
+<p>One of the most interesting features included in this project is the capacity to add features to detect potential issues that require profiling skills. In this version, the system prompts are able to generate thread dumps and GC logs in order to improve your profiling analysis. Thread dumps in some scenarios can be quite large and cannot be analyzed by models because these large files consume the entire context window, but you can use third-party tools like <a href="https://fastthread.io">https://fastthread.io</a> to review these files. Adding thread dumps and GC logs to the existing documents generated with AsyncProfiler improves the overall analysis with models. You can see part of the analysis generated by 164-java-profiling-compare.mdc:</p>
+<pre><code class="language-bash">Resolved Issues
+Memory Leak Eliminated: GC retention pattern changed from growing (49M→77M→105M→135M) to stable (22M→22M)
+Thread Pool Leaks Fixed: Thread dump reduced from 5.9MB to 44KB, indicating proper ExecutorService lifecycle management
+Bounded Collections Active: Memory retention baseline improved by 55% (49MB→22MB)
+GC Pressure Reduced: More efficient garbage collection with stable retention patterns
+</code></pre>
+<p>Full sample document: <a href="https://github.com/jabrena/cursor-rules-java/blob/main/examples/spring-boot-memory-leak-demo/profiler/docs/profiling-comparison-analysis-20250720.md">https://github.com/jabrena/cursor-rules-java/blob/main/examples/spring-boot-memory-leak-demo/profiler/docs/profiling-comparison-analysis-20250720.md</a></p>
+</p>
+			</div>
+			
+			<div>
+				<a href='blog/2025/prompt-quality-framework.html'><h1>The Three-Node Quality Framework for AI Prompts</h1></a>
+				<p>20 July 2025</p>
+				<p><h2>Overview</h2>
+<p>When designing AI prompts for complex tasks like code generation and software development, a structured quality framework ensures both comprehensive responses and safe execution. This document outlines the <strong>three-node quality framework</strong> that combines prerequisites, content structure, and ongoing safety measures.</p>
+<h2>The Three Pillars</h2>
+<h3>1. <code>constraints</code> - Prerequisites &amp; Blocking Conditions</h3>
+<p><strong>Purpose</strong>: Defines hard requirements that must be met BEFORE starting any work.</p>
+<p><strong>Philosophy</strong>: <em>&quot;Don't even try if...&quot;</em></p>
+<p><strong>Characteristics</strong>:<br />
+- <strong>Focus</strong>: Entry conditions and show-stoppers<br />
+- <strong>Nature</strong>: Gate-keeping (what blocks execution entirely)<br />
+- <strong>Timing</strong>: <strong>Pre-execution</strong> validation<br />
+- <strong>Failure Impact</strong>: <strong>BLOCKS ALL WORK</strong></p>
+<p><strong>Example Implementation</strong>:</p>
+<pre><code class="language-xml">&lt;constraint&gt;**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change&lt;/constraint&gt;
+&lt;constraint&gt;**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE&lt;/constraint&gt;
+&lt;constraint&gt;**BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding&lt;/constraint&gt;
+</code></pre>
+<p><strong>Key Benefits</strong>:<br />
+- Prevents wasted effort on infeasible tasks<br />
+- Provides immediate feedback on project state<br />
+- Protects against futile work<br />
+- Establishes clear entry criteria</p>
+<h3>2. <code>output-format</code> - Response Structure &amp; Deliverables</h3>
+<p><strong>Purpose</strong>: Defines what to deliver and how to organize the AI response.</p>
+<p><strong>Philosophy</strong>: <em>&quot;When you do it, include...&quot;</em></p>
+<p><strong>Characteristics</strong>:<br />
+- <strong>Focus</strong>: Content structure and completeness<br />
+- <strong>Nature</strong>: Prescriptive guidance (what TO include)<br />
+- <strong>Timing</strong>: <strong>During execution</strong> - response creation<br />
+- <strong>Failure Impact</strong>: <strong>INCOMPLETE RESPONSE</strong></p>
+<p><strong>Example Implementation</strong>:</p>
+<pre><code class="language-xml">&lt;output-format-item&gt;Apply type design principles to improve code quality and maintainability&lt;/output-format-item&gt;
+&lt;output-format-item&gt;Create type-safe wrappers for domain-specific types&lt;/output-format-item&gt;
+&lt;output-format-item&gt;Use generics to create flexible and reusable components&lt;/output-format-item&gt;
+&lt;output-format-item&gt;Establish clear type hierarchies and consistent naming conventions&lt;/output-format-item&gt;
+&lt;output-format-item&gt;Use BigDecimal for precision-sensitive calculations&lt;/output-format-item&gt;
+&lt;output-format-item&gt;Verify code changes compile and pass tests&lt;/output-format-item&gt;
+</code></pre>
+<p><strong>Key Benefits</strong>:<br />
+- Ensures comprehensive coverage of the topic<br />
+- Creates predictable, organized responses<br />
+- Acts as a completion checklist<br />
+- Reduces cognitive load for users<br />
+- Transforms AI into domain-specific consultant</p>
+<h3>3. <code>safeguards</code> - Ongoing Safety &amp; Validation</h3>
+<p><strong>Purpose</strong>: Defines safety protocols and validation requirements throughout the process.</p>
+<p><strong>Philosophy</strong>: <em>&quot;As you work, ensure...&quot;</em></p>
+<p><strong>Characteristics</strong>:<br />
+- <strong>Focus</strong>: Risk mitigation and continuous validation<br />
+- <strong>Nature</strong>: Protective measures (ongoing safety checks)<br />
+- <strong>Timing</strong>: <strong>During &amp; post-execution</strong> - throughout the work<br />
+- <strong>Failure Impact</strong>: <strong>BROKEN SYSTEM</strong></p>
+<p><strong>Example Implementation</strong>:</p>
+<pre><code class="language-xml">&lt;safeguards-item&gt;**BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` before ANY recommendations&lt;/safeguards-item&gt;
+&lt;safeguards-item&gt;**CRITICAL VALIDATION**: Execute `./mvnw clean verify` to ensure all tests pass&lt;/safeguards-item&gt;
+&lt;safeguards-item&gt;**MANDATORY VERIFICATION**: Confirm all existing functionality remains intact&lt;/safeguards-item&gt;
+&lt;safeguards-item&gt;**ROLLBACK REQUIREMENT**: Ensure all changes can be easily reverted&lt;/safeguards-item&gt;
+&lt;safeguards-item&gt;**INCREMENTAL SAFETY**: Apply improvements incrementally, validating after each modification&lt;/safeguards-item&gt;
+</code></pre>
+<p><strong>Key Benefits</strong>:<br />
+- Continuous quality assurance<br />
+- Rollback capabilities<br />
+- Post-change validation<br />
+- Risk mitigation throughout the process</p>
+<h2>Framework Comparison</h2>
+<p>| Aspect | Constraints | Output Format | Safeguards |<br />
+|--------|-------------|---------------|------------|<br />
+| <strong>Intent</strong> | Block bad starts | Structure deliverables | Prevent failures |<br />
+| <strong>Timing</strong> | Pre-execution | During execution | During/Post-execution |<br />
+| <strong>Tone</strong> | Restrictive | Prescriptive | Protective |<br />
+| <strong>Focus</strong> | Entry conditions | Content quality | Process safety |<br />
+| <strong>Failure Mode</strong> | Blocked execution | Incomplete response | Broken code/system |<br />
+| <strong>Question Asked</strong> | &quot;Can I start?&quot; | &quot;What should I deliver?&quot; | &quot;Did it work safely?&quot; |</p>
+<h2>The Temporal Flow</h2>
+<pre><code class="language-mermaid">graph LR
+    A[constraints] --&gt; B[output-format] --&gt; C[safeguards]
+    A --&gt; D[&quot;Don't even try if...&quot;]
+    B --&gt; E[&quot;When you do it, include...&quot;]
+    C --&gt; F[&quot;As you work, ensure...&quot;]
+</code></pre>
+<h3>Sequential Application</h3>
+<ol>
+<li><strong>Constraints Check</strong>: Validate prerequisites before starting</li>
+<li><strong>Structured Execution</strong>: Follow output format during work</li>
+<li><strong>Continuous Validation</strong>: Apply safeguards throughout and after</li>
+</ol>
+<h2>Benefits of the Three-Node Framework</h2>
+<h3>Defense-in-Depth Strategy</h3>
+<ul>
+<li><strong>Pre-flight checks</strong> prevent wasted effort</li>
+<li><strong>Structured execution</strong> ensures comprehensive solutions</li>
+<li><strong>Continuous monitoring</strong> maintains system integrity</li>
+</ul>
+<h3>Quality Assurance</h3>
+<ul>
+<li>Embeds quality gates directly into the process</li>
+<li>Ensures responses aren't just theoretical but include practical validation</li>
+<li>Creates accountability for both content and safety</li>
+</ul>
+<h3>Cognitive Load Management</h3>
+<ul>
+<li>Clear expectations at each phase</li>
+<li>Predictable structure reduces uncertainty</li>
+<li>Actionable guidance rather than abstract advice</li>
+</ul>
+<h3>Domain Specialization</h3>
+<ul>
+<li>Transforms general AI into domain-specific consultant</li>
+<li>Tailored safety measures for specific contexts</li>
+<li>Built-in expertise validation</li>
+</ul>
+<h2>Implementation Guidelines</h2>
+<h3>For Prompt Designers</h3>
+<ol>
+<li><strong>Define Clear Constraints</strong></li>
+</ol>
+<ul>
+<li>Identify blocking conditions specific to your domain</li>
+<li>Make requirements explicit and testable</li>
+<li>Use strong language (<code>MANDATORY</code>, <code>CRITICAL</code>, <code>BLOCKING</code>)</li>
+</ul>
+<ol>
+<li><strong>Structure Comprehensive Output Formats</strong></li>
+</ol>
+<ul>
+<li>Cover all aspects of the domain systematically</li>
+<li>Include validation steps as deliverable items</li>
+<li>Make items actionable and specific</li>
+</ul>
+<ol>
+<li><strong>Embed Continuous Safeguards</strong></li>
+</ol>
+<ul>
+<li>Include rollback mechanisms</li>
+<li>Require incremental validation</li>
+<li>Address both immediate and downstream risks</li>
+</ul>
+<h3>For AI Systems</h3>
+<ol>
+<li><strong>Respect the Hierarchy</strong></li>
+</ol>
+<ul>
+<li>Never proceed if constraints aren't met</li>
+<li>Address all output format items</li>
+<li>Apply safeguards continuously</li>
+</ul>
+<ol>
+<li><strong>Communicate Clearly</strong></li>
+</ol>
+<ul>
+<li>Explain which constraints are being checked</li>
+<li>Show progress through output format items</li>
+<li>Report safeguard validation results</li>
+</ul>
+<h2>Real-World Applications</h2>
+<h3>Software Development</h3>
+<ul>
+<li><strong>Constraints</strong>: Code must compile, dependencies must be available</li>
+<li><strong>Output Format</strong>: Include code, tests, documentation, migration steps</li>
+<li><strong>Safeguards</strong>: Validate compilation, run tests, ensure rollback capability</li>
+</ul>
+<h3>Infrastructure Changes</h3>
+<ul>
+<li><strong>Constraints</strong>: Backup must exist, maintenance window must be scheduled</li>
+<li><strong>Output Format</strong>: Include implementation plan, rollback plan, monitoring</li>
+<li><strong>Safeguards</strong>: Health checks, gradual rollout, immediate rollback triggers</li>
+</ul>
+<h3>Data Processing</h3>
+<ul>
+<li><strong>Constraints</strong>: Data validation, resource availability</li>
+<li><strong>Output Format</strong>: Processing steps, error handling, result validation</li>
+<li><strong>Safeguards</strong>: Data integrity checks, resource monitoring, recovery procedures</li>
+</ul>
+<h2>Conclusion</h2>
+<p>The three-node quality framework provides a comprehensive approach to AI prompt design that ensures both high-quality responses and safe execution. By separating concerns into prerequisites (constraints), content structure (output-format), and ongoing safety (safeguards), we create a robust foundation for AI-assisted complex tasks.</p>
+<p>This approach transforms AI from a general assistant into a specialized consultant with built-in quality controls and safety measures, making it suitable for critical applications like software development, infrastructure management, and data processing.</p>
+</p>
+			</div>
+			
+			<div>
+				<a href='blog/2025/release-0.8.0.html'><h1>What&#39;s new in Cursor rules for Java 0.8.0?</h1></a>
+				<p>12 July 2025</p>
+				<p><h2>New interactive behaviors in the Cursor rules</h2>
+<p>In the previous release, the project added interactive behavior to a few complex rules to improve the developer experience, but in this release, new rules have evolved to add more interactive behavior regardless of complexity. The motivation behind this change: now the rules suggest alternatives to the software engineer to improve development at the package/class/method level. Maybe you could ask the question: why that change? Every software engineer has a unique way to solve software problems, so why force a suggestion in the code without a preliminary review? Let's explain the idea with an example to show the evolution in the cursor rule. The repository cursor-rules-java has different working examples that can be improved with the rules. Let's use an example based on Spring Boot: <a href="https://github.com/jabrena/cursor-rules-java/tree/main/examples/spring-boot-demo/implementation">https://github.com/jabrena/cursor-rules-java/tree/main/examples/spring-boot-demo/implementation</a><br />
+Over this example, add the following user prompt:</p>
+<blockquote>
+<p>&quot;Review my code for object-oriented design using the cursor rule @121-java-object-oriented-design.md @src/&quot;</p>
+</blockquote>
+<p><img src="/images/0.8.0-1.png" alt="" /><br />
+<img src="/images/0.8.0-2.png" alt="" /><br />
+<img src="/images/0.8.0-3.png" alt="" /></p>
+<p>Now, the software engineer has full control over the suggestion and later refactoring because they are able to interact with the Cursor rule and guide how the solution could be improved. If you like this feature, you can try the following cursor rules included in the release:</p>
+<ul>
+<li>110-java-maven-best-practices</li>
+<li>112-java-maven-documentation</li>
+<li>121-java-object-oriented-design</li>
+<li>122-java-type-design</li>
+<li>123-java-general-guidelines</li>
+<li>124-java-secure-coding</li>
+<li>125-java-concurrency</li>
+<li>126-java-logging</li>
+<li>131-java-unit-testing</li>
+<li>141-java-refactoring-with-modern-features</li>
+<li>142-java-functional-programming</li>
+<li>143-java-data-oriented-programming</li>
+</ul>
+<p>Remember that models don't answer in a deterministic way, in the same way that in your team, not all software engineers solve problems in the same way.</p>
+<h2>Consistency in the syntax</h2>
+<p>When the repository is growing and there are 18 rules and counting, consistency is something important to take into account to improve maintenance and accuracy in the way software engineers use natural language to interact with models. With this purpose, in release 0.8.0 I invested effort to convert all Cursor rules from Markdown to XML in order to have the flexibility of this format to have strict rules about the design of the language and the flexibility to convert XML into Markdown with front matter. With this goal, there now exists a new XML Schema dedicated to prompts: <a href="https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/pml.xsd">https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/pml.xsd</a> which was designed with ideas from the main players in the models market (Anthropic, OpenAI, Google) in order to structure a prompt:</p>
+<pre><code class="language-xml">    &lt;xs:element name=&quot;prompt&quot;&gt;
+        &lt;xs:complexType&gt;
+            &lt;xs:sequence&gt;
+                &lt;xs:element ref=&quot;metadata&quot;/&gt;
+                &lt;xs:element ref=&quot;role&quot;/&gt;
+                &lt;xs:element ref=&quot;context&quot; minOccurs=&quot;0&quot;/&gt;
+                &lt;xs:element ref=&quot;goal&quot;/&gt;
+                &lt;xs:element ref=&quot;constraints&quot; minOccurs=&quot;0&quot;/&gt;
+                &lt;xs:element ref=&quot;examples&quot; minOccurs=&quot;0&quot;/&gt;
+                &lt;xs:element ref=&quot;output-format&quot; minOccurs=&quot;0&quot;/&gt;
+                &lt;xs:element ref=&quot;safeguards&quot; minOccurs=&quot;0&quot;/&gt;
+            &lt;/xs:sequence&gt;
+            &lt;xs:attribute name=&quot;id&quot; type=&quot;xs:string&quot; use=&quot;required&quot;/&gt;
+            &lt;xs:attribute name=&quot;version&quot; type=&quot;xs:string&quot; use=&quot;optional&quot;/&gt;
+        &lt;/xs:complexType&gt;
+    &lt;/xs:element&gt;
+</code></pre>
+<p>Once all cursor rules are modeled in XML format, it is easy to convert them into the format used by Cursor AI, Markdown with front matter: <a href="https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/cursor-rules.xsl">https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/cursor-rules.xsl</a></p>
+<p>Using a schema and transformation, it is possible to guarantee consistency in the sources and the output format.</p>
+<h2>Safeguards in the system prompts</h2>
+<p>When you are working with AI models, safety is a critical aspect that cannot be ignored. In release 0.8.0, safeguards have been introduced to ensure that the cursor rules provide responsible validation of the changes introduced in the code.</p>
+<pre><code class="language-xml">    &lt;safeguards&gt;
+        &lt;safeguards-list&gt;
+            &lt;safeguards-item&gt;Verify code changes compile and pass tests: `mvn clean verify` or `./mvnw clean verify`&lt;/safeguards-item&gt;
+        &lt;/safeguards-list&gt;
+    &lt;/safeguards&gt;
+</code></pre>
+<p>It's not only that the model changes the code; the model needs to finish the prompt execution with a formal validation of the changes.</p>
+<h2>My 20 Cents</h2>
+<p>Using models &amp; system prompts like this project: <a href="https://github.com/jabrena/cursor-rules-java">https://github.com/jabrena/cursor-rules-java</a> could increase your squad velocity and increase squad satisfaction as part of the <a href="https://queue.acm.org/detail.cfm?id=3454124">SPACE framework</a>.</p>
+<p>Join us with more than 600+ users in the last 14 days.</p>
+<p><img src="/images/0.8.0-4.png" alt="" /></p>
+<p>Enjoy</p>
+<p>Juan Antonio</p>
+</p>
+			</div>
+				
+			<hr />
+			
+			<p>Older posts are available in the <a href='archive.html'>archive</a>.</p>
+		</div>
+	</div>
+	
+	<div>
+			<div id="push"></div>
+
+		    <div id="footer">
+		      <div class="container">
+		        <p class="muted credit">&copy; 2025 | Mixed with <a href="http://getbootstrap.com/">Bootstrap v3.1.1</a> | Baked with <a href="http://jbake.org">JBake <span>v2.7.0-rc.6</span></a></p>
+		      </div>
+		    </div>
+
+		    <!-- Le javascript
+		    ================================================== -->
+		    <!-- Placed at the end of the document so the pages load faster -->
+		    <script src="js/jquery-1.11.1.min.js"></script>
+		    <script src="js/bootstrap.min.js"></script>
+		    <script src="js/prettify.js"></script>
+
+    	</div>
+    </body>
+</html>

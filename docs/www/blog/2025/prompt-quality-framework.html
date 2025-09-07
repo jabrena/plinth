@@ -1,0 +1,262 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+	    <meta charset="utf-8"/>
+	    <title>The Three-Node Quality Framework for AI Prompts</title>
+	    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	    <meta name="description" content=""/>
+	    <meta name="author" content="Juan Antonio Breña Moral"/>
+	    <meta name="keywords" content=""/>
+	    <meta name="generator" content="Cursor rules for Java"/>
+
+	    <!-- Le styles -->
+	    <link href="../../css/bootstrap.min.css" rel="stylesheet"/>
+	    <link href="../../css/asciidoctor.css" rel="stylesheet"/>
+	    <link href="../../css/base.css" rel="stylesheet"/>
+	    <link href="../../css/prettify.css" rel="stylesheet"/>
+
+	    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+	    <!--[if lt IE 9]>
+	      <script src="../../js/html5shiv.min.js"></script>
+	    <![endif]-->
+
+	    <!-- Fav and touch icons -->
+	    <link rel="shortcut icon" href="../../images/java-icon.png"/>
+	</head>
+	<body onload="prettyPrint()">
+	<div id="wrap">
+		<div>
+
+	  <!-- Fixed navbar -->
+      <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="../../">Cursor Rules for Java</a>
+        </div>
+        <div class="navbar-collapse collapse">
+          <ul class="nav navbar-nav">
+            <li><a href="../../index.html">Home</a></li>
+            <li><a href="../../about.html">About</a></li>
+            <li><a href="../../archive.html">Archive</a></li>
+            <li><a href="../../feed.xml">Subscribe</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div>
+    </div>
+
+	</div>
+		<div class="container">
+	
+			<div class="page-header">
+				<h1>The Three-Node Quality Framework for AI Prompts</h1>
+			</div>
+		
+			<p><em>20 July 2025</em></p>
+		
+			<p><h2>Overview</h2>
+<p>When designing AI prompts for complex tasks like code generation and software development, a structured quality framework ensures both comprehensive responses and safe execution. This document outlines the <strong>three-node quality framework</strong> that combines prerequisites, content structure, and ongoing safety measures.</p>
+<h2>The Three Pillars</h2>
+<h3>1. <code>constraints</code> - Prerequisites &amp; Blocking Conditions</h3>
+<p><strong>Purpose</strong>: Defines hard requirements that must be met BEFORE starting any work.</p>
+<p><strong>Philosophy</strong>: <em>&quot;Don't even try if...&quot;</em></p>
+<p><strong>Characteristics</strong>:<br />
+- <strong>Focus</strong>: Entry conditions and show-stoppers<br />
+- <strong>Nature</strong>: Gate-keeping (what blocks execution entirely)<br />
+- <strong>Timing</strong>: <strong>Pre-execution</strong> validation<br />
+- <strong>Failure Impact</strong>: <strong>BLOCKS ALL WORK</strong></p>
+<p><strong>Example Implementation</strong>:</p>
+<pre><code class="language-xml">&lt;constraint&gt;**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change&lt;/constraint&gt;
+&lt;constraint&gt;**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE&lt;/constraint&gt;
+&lt;constraint&gt;**BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding&lt;/constraint&gt;
+</code></pre>
+<p><strong>Key Benefits</strong>:<br />
+- Prevents wasted effort on infeasible tasks<br />
+- Provides immediate feedback on project state<br />
+- Protects against futile work<br />
+- Establishes clear entry criteria</p>
+<h3>2. <code>output-format</code> - Response Structure &amp; Deliverables</h3>
+<p><strong>Purpose</strong>: Defines what to deliver and how to organize the AI response.</p>
+<p><strong>Philosophy</strong>: <em>&quot;When you do it, include...&quot;</em></p>
+<p><strong>Characteristics</strong>:<br />
+- <strong>Focus</strong>: Content structure and completeness<br />
+- <strong>Nature</strong>: Prescriptive guidance (what TO include)<br />
+- <strong>Timing</strong>: <strong>During execution</strong> - response creation<br />
+- <strong>Failure Impact</strong>: <strong>INCOMPLETE RESPONSE</strong></p>
+<p><strong>Example Implementation</strong>:</p>
+<pre><code class="language-xml">&lt;output-format-item&gt;Apply type design principles to improve code quality and maintainability&lt;/output-format-item&gt;
+&lt;output-format-item&gt;Create type-safe wrappers for domain-specific types&lt;/output-format-item&gt;
+&lt;output-format-item&gt;Use generics to create flexible and reusable components&lt;/output-format-item&gt;
+&lt;output-format-item&gt;Establish clear type hierarchies and consistent naming conventions&lt;/output-format-item&gt;
+&lt;output-format-item&gt;Use BigDecimal for precision-sensitive calculations&lt;/output-format-item&gt;
+&lt;output-format-item&gt;Verify code changes compile and pass tests&lt;/output-format-item&gt;
+</code></pre>
+<p><strong>Key Benefits</strong>:<br />
+- Ensures comprehensive coverage of the topic<br />
+- Creates predictable, organized responses<br />
+- Acts as a completion checklist<br />
+- Reduces cognitive load for users<br />
+- Transforms AI into domain-specific consultant</p>
+<h3>3. <code>safeguards</code> - Ongoing Safety &amp; Validation</h3>
+<p><strong>Purpose</strong>: Defines safety protocols and validation requirements throughout the process.</p>
+<p><strong>Philosophy</strong>: <em>&quot;As you work, ensure...&quot;</em></p>
+<p><strong>Characteristics</strong>:<br />
+- <strong>Focus</strong>: Risk mitigation and continuous validation<br />
+- <strong>Nature</strong>: Protective measures (ongoing safety checks)<br />
+- <strong>Timing</strong>: <strong>During &amp; post-execution</strong> - throughout the work<br />
+- <strong>Failure Impact</strong>: <strong>BROKEN SYSTEM</strong></p>
+<p><strong>Example Implementation</strong>:</p>
+<pre><code class="language-xml">&lt;safeguards-item&gt;**BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` before ANY recommendations&lt;/safeguards-item&gt;
+&lt;safeguards-item&gt;**CRITICAL VALIDATION**: Execute `./mvnw clean verify` to ensure all tests pass&lt;/safeguards-item&gt;
+&lt;safeguards-item&gt;**MANDATORY VERIFICATION**: Confirm all existing functionality remains intact&lt;/safeguards-item&gt;
+&lt;safeguards-item&gt;**ROLLBACK REQUIREMENT**: Ensure all changes can be easily reverted&lt;/safeguards-item&gt;
+&lt;safeguards-item&gt;**INCREMENTAL SAFETY**: Apply improvements incrementally, validating after each modification&lt;/safeguards-item&gt;
+</code></pre>
+<p><strong>Key Benefits</strong>:<br />
+- Continuous quality assurance<br />
+- Rollback capabilities<br />
+- Post-change validation<br />
+- Risk mitigation throughout the process</p>
+<h2>Framework Comparison</h2>
+<p>| Aspect | Constraints | Output Format | Safeguards |<br />
+|--------|-------------|---------------|------------|<br />
+| <strong>Intent</strong> | Block bad starts | Structure deliverables | Prevent failures |<br />
+| <strong>Timing</strong> | Pre-execution | During execution | During/Post-execution |<br />
+| <strong>Tone</strong> | Restrictive | Prescriptive | Protective |<br />
+| <strong>Focus</strong> | Entry conditions | Content quality | Process safety |<br />
+| <strong>Failure Mode</strong> | Blocked execution | Incomplete response | Broken code/system |<br />
+| <strong>Question Asked</strong> | &quot;Can I start?&quot; | &quot;What should I deliver?&quot; | &quot;Did it work safely?&quot; |</p>
+<h2>The Temporal Flow</h2>
+<pre><code class="language-mermaid">graph LR
+    A[constraints] --&gt; B[output-format] --&gt; C[safeguards]
+    A --&gt; D[&quot;Don't even try if...&quot;]
+    B --&gt; E[&quot;When you do it, include...&quot;]
+    C --&gt; F[&quot;As you work, ensure...&quot;]
+</code></pre>
+<h3>Sequential Application</h3>
+<ol>
+<li><strong>Constraints Check</strong>: Validate prerequisites before starting</li>
+<li><strong>Structured Execution</strong>: Follow output format during work</li>
+<li><strong>Continuous Validation</strong>: Apply safeguards throughout and after</li>
+</ol>
+<h2>Benefits of the Three-Node Framework</h2>
+<h3>Defense-in-Depth Strategy</h3>
+<ul>
+<li><strong>Pre-flight checks</strong> prevent wasted effort</li>
+<li><strong>Structured execution</strong> ensures comprehensive solutions</li>
+<li><strong>Continuous monitoring</strong> maintains system integrity</li>
+</ul>
+<h3>Quality Assurance</h3>
+<ul>
+<li>Embeds quality gates directly into the process</li>
+<li>Ensures responses aren't just theoretical but include practical validation</li>
+<li>Creates accountability for both content and safety</li>
+</ul>
+<h3>Cognitive Load Management</h3>
+<ul>
+<li>Clear expectations at each phase</li>
+<li>Predictable structure reduces uncertainty</li>
+<li>Actionable guidance rather than abstract advice</li>
+</ul>
+<h3>Domain Specialization</h3>
+<ul>
+<li>Transforms general AI into domain-specific consultant</li>
+<li>Tailored safety measures for specific contexts</li>
+<li>Built-in expertise validation</li>
+</ul>
+<h2>Implementation Guidelines</h2>
+<h3>For Prompt Designers</h3>
+<ol>
+<li><strong>Define Clear Constraints</strong></li>
+</ol>
+<ul>
+<li>Identify blocking conditions specific to your domain</li>
+<li>Make requirements explicit and testable</li>
+<li>Use strong language (<code>MANDATORY</code>, <code>CRITICAL</code>, <code>BLOCKING</code>)</li>
+</ul>
+<ol>
+<li><strong>Structure Comprehensive Output Formats</strong></li>
+</ol>
+<ul>
+<li>Cover all aspects of the domain systematically</li>
+<li>Include validation steps as deliverable items</li>
+<li>Make items actionable and specific</li>
+</ul>
+<ol>
+<li><strong>Embed Continuous Safeguards</strong></li>
+</ol>
+<ul>
+<li>Include rollback mechanisms</li>
+<li>Require incremental validation</li>
+<li>Address both immediate and downstream risks</li>
+</ul>
+<h3>For AI Systems</h3>
+<ol>
+<li><strong>Respect the Hierarchy</strong></li>
+</ol>
+<ul>
+<li>Never proceed if constraints aren't met</li>
+<li>Address all output format items</li>
+<li>Apply safeguards continuously</li>
+</ul>
+<ol>
+<li><strong>Communicate Clearly</strong></li>
+</ol>
+<ul>
+<li>Explain which constraints are being checked</li>
+<li>Show progress through output format items</li>
+<li>Report safeguard validation results</li>
+</ul>
+<h2>Real-World Applications</h2>
+<h3>Software Development</h3>
+<ul>
+<li><strong>Constraints</strong>: Code must compile, dependencies must be available</li>
+<li><strong>Output Format</strong>: Include code, tests, documentation, migration steps</li>
+<li><strong>Safeguards</strong>: Validate compilation, run tests, ensure rollback capability</li>
+</ul>
+<h3>Infrastructure Changes</h3>
+<ul>
+<li><strong>Constraints</strong>: Backup must exist, maintenance window must be scheduled</li>
+<li><strong>Output Format</strong>: Include implementation plan, rollback plan, monitoring</li>
+<li><strong>Safeguards</strong>: Health checks, gradual rollout, immediate rollback triggers</li>
+</ul>
+<h3>Data Processing</h3>
+<ul>
+<li><strong>Constraints</strong>: Data validation, resource availability</li>
+<li><strong>Output Format</strong>: Processing steps, error handling, result validation</li>
+<li><strong>Safeguards</strong>: Data integrity checks, resource monitoring, recovery procedures</li>
+</ul>
+<h2>Conclusion</h2>
+<p>The three-node quality framework provides a comprehensive approach to AI prompt design that ensures both high-quality responses and safe execution. By separating concerns into prerequisites (constraints), content structure (output-format), and ongoing safety (safeguards), we create a robust foundation for AI-assisted complex tasks.</p>
+<p>This approach transforms AI from a general assistant into a specialized consultant with built-in quality controls and safety measures, making it suitable for critical applications like software development, infrastructure management, and data processing.</p>
+</p>
+		
+			<hr />
+			
+		</div>
+	</div>
+	<div>
+			<div id="push"></div>
+
+		    <div id="footer">
+		      <div class="container">
+		        <p class="muted credit">&copy; 2025 | Mixed with <a href="http://getbootstrap.com/">Bootstrap v3.1.1</a> | Baked with <a href="http://jbake.org">JBake <span>v2.7.0-rc.6</span></a></p>
+		      </div>
+		    </div>
+
+		    <!-- Le javascript
+		    ================================================== -->
+		    <!-- Placed at the end of the document so the pages load faster -->
+		    <script src="../../js/jquery-1.11.1.min.js"></script>
+		    <script src="../../js/bootstrap.min.js"></script>
+		    <script src="../../js/prettify.js"></script>
+
+    	</div>
+    </body>
+</html>

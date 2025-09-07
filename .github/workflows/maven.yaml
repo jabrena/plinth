@@ -15,7 +15,7 @@ jobs:
           distribution: 'graalvm' # See 'Supported distributions' for available options
           java-version: '24'
       - name: Generate Cursor Rules
-        run: cd generator && ./mvnw --batch-mode --no-transfer-progress verify --file pom.xml
+        run: ./mvnw --batch-mode --no-transfer-progress verify --file pom.xml
       - name: Archive Cursor Rules
         run: |
           zip -r cursor-rules.zip .cursor/
