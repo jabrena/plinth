@@ -10,7 +10,7 @@ status=published
 The project provides a collection of System prompts for Java that help software engineers in their daily programming work.
 The [available System prompts for Java](../../CURSOR-RULES-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/JDK tools` & `Documentation`.
 
-![](/www/images/workflow.png)
+![](/cursor-rules-java/www/images/workflow.png)
 
 ## What is new in this release?
 
