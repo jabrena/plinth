@@ -20,7 +20,7 @@ The repository was designed to offer support for Cursor, but other tools have ev
 
 A system prompt is a set of instructions given to an AI model that defines how it should behave, what role it should take on, and what guidelines it should follow when responding to users. Think of it as the "operating manual" that shapes the AI's personality, capabilities, and boundaries.
 
-![](./docs/prompts.png)
+![](./documentation/prompts.png)
 
 ### Types of System prompts
 
@@ -34,7 +34,7 @@ The repository provides System prompts that can behave interactively or non-inte
 
 Adding AI tools to the Java development workflow can increase the possibilities of implementing software specifications on time and with quality.
 
-![](./docs/workflow.png)
+![](./documentation/workflow.png)
 
 **Note:** Remember that if you use models and ask questions about recent topics like *Java 25*, it is probable that models will not provide accurate answers.
 
@@ -78,8 +78,8 @@ The repository includes [a collection of examples](./examples/) where you can ex
 
 ## Architectural decision records, ADR
 
-- [ADR-001: Generate Cursor Rules from XML Files](./docs/adr/ADR-001-generate-cursor-rules-from-xml-files.md)
-- [ADR-002: Configure Cursor Rules Manual Scope](./docs/adr/ADR-002-configure-cursor-rules-manual-scope.md)
+- [ADR-001: Generate Cursor Rules from XML Files](./documentation/adr/ADR-001-generate-cursor-rules-from-xml-files.md)
+- [ADR-002: Configure Cursor Rules Manual Scope](./documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md)
 
 ## Changelog
 
@@ -89,7 +89,7 @@ The repository includes [a collection of examples](./examples/) where you can ex
 
 Java uses JEPs as the vehicle to describe new features to be added to the language. The repository continuously reviews which JEPs could improve any of the cursor rules present in this repository.
 
-- [JEPS List](./docs/jeps/All-JEPS.md)
+- [JEPS List](./documentation/jeps/All-JEPS.md)
 
 ## References
 

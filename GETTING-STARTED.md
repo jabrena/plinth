@@ -8,7 +8,7 @@ If you are interested in getting the benefits of these cursor rules for Java, yo
 
 This view has a big green button with the text: `<> Code`. If you click on it, you will see the tab `Local` and you will see the link for: `Download Zip`.
 
-![](./docs/getting-started-github.png)
+![](./documentation/getting-started-github.png)
 
 Once you have downloaded it, go to the `Downloads` folder in your system and you should see the zip file: `cursor-rules-java-main.zip`. Unzip it and copy the folder `./cursor` into the Java repository where you want to use these Cursor rules.
 
@@ -40,7 +40,7 @@ jbang --fresh setup@jabrena init --cursor https://github.com/jabrena/cursor-rule
 
 Once you have installed the cursor rules in the path `./cursor/rules`, type the following prompt in the cursor chat:
 
-![](./docs/getting-started-prompt.png)
+![](./documentation/getting-started-prompt.png)
 
 ```bash
 Create a document with all cursor rules for Java using the cursor rule @100-java-cursor-rules-list
