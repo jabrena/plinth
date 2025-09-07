@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:th="http://www.thymeleaf.org">
+  <channel>
+    <title>JBake</title>
+    <link th:text='${config.site_host}'/>
+    <atom:link th:href='${config.site_host+"/feed.xml"}' href="link" rel="self" type="application/rss+xml" />
+    <description>JBake Bootstrap Template</description>
+    <language>en-gb</language>
+    <pubDate th:text='${#dates.format(published_date,"EEE, d MMM yyyy HH:mm:ss Z")}'>pubdate</pubDate>
+    <lastBuildDate th:text='${#dates.format(published_date,"EEE, d MMM yyyy HH:mm:ss Z")}'>lastbuilddate</lastBuildDate>
+
+    <item th:each="post: ${published_posts}">
+      <title th:text='${post.title}'>title</title>
+      <link th:text='${config.site_host+"/"+post.uri}'/>
+      <pubDate th:text='${#dates.format(post.date,"EEE, d MMM yyyy HH:mm:ss Z")}'>pubdate</pubDate>
+      <guid th:text='${post.uri}' isPermaLink="false">guid</guid>
+      <description th:text='${#strings.escapeXml(post.body)}'>description</description>	  
+    </item>
+
+  </channel> 
+</rss>
