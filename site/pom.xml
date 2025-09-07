@@ -29,6 +29,7 @@
             <plugin>
                 <groupId>org.jbake</groupId>
                 <artifactId>jbake-maven-plugin</artifactId>
+                <version>${version.org.jbake}</version>
                 <executions>
                     <execution>
                         <phase>generate-resources</phase>
