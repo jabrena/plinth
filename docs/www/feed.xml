@@ -6,14 +6,14 @@
     <atom:link href="https://jabrena.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <description>JBake Bootstrap Template</description>
     <language>en-gb</language>
-    <pubDate>Sun, 7 Sep 2025 16:45:54 +0200</pubDate>
-    <lastBuildDate>Sun, 7 Sep 2025 16:45:54 +0200</lastBuildDate>
+    <pubDate>Sun, 7 Sep 2025 16:56:33 +0200</pubDate>
+    <lastBuildDate>Sun, 7 Sep 2025 16:56:33 +0200</lastBuildDate>
 
     <item>
       <title>What&#39;s new in Cursor rules for Java 0.10.0?</title>
-      <link>https://jabrena.github.io/blog/2025/0.10.0.html</link>
+      <link>https://jabrena.github.io/blog/2025/release-0.10.0.html</link>
       <pubDate>Fri, 5 Sep 2025 00:00:00 +0200</pubDate>
-      <guid isPermaLink="false">blog/2025/0.10.0.html</guid>
+      <guid isPermaLink="false">blog/2025/release-0.10.0.html</guid>
       <description>&amp;lt;h2&amp;gt;What are Cursor rules for Java?&amp;lt;/h2&amp;gt;
 &amp;lt;p&amp;gt;The project provides a collection of System prompts for Java that help software engineers in their daily programming work.&amp;lt;br /&amp;gt;
 The &amp;lt;a href=&amp;quot;../../CURSOR-RULES-JAVA.md&amp;quot;&amp;gt;available System prompts for Java&amp;lt;/a&amp;gt; cover aspects like &amp;lt;code&amp;gt;Build system based on Maven&amp;lt;/code&amp;gt;, &amp;lt;code&amp;gt;Design&amp;lt;/code&amp;gt;, &amp;lt;code&amp;gt;Coding&amp;lt;/code&amp;gt;, &amp;lt;code&amp;gt;Testing&amp;lt;/code&amp;gt;, &amp;lt;code&amp;gt;Refactoring &amp;amp;amp; JMH Benchmarking&amp;lt;/code&amp;gt;, &amp;lt;code&amp;gt;Performance testing with JMeter&amp;lt;/code&amp;gt;, &amp;lt;code&amp;gt;Profiling with Async profiler/JDK tools&amp;lt;/code&amp;gt; &amp;amp;amp; &amp;lt;code&amp;gt;Documentation&amp;lt;/code&amp;gt;.&amp;lt;/p&amp;gt;
@@ -237,9 +237,9 @@ public class ResultSample {
 </description>	  
     </item><item>
       <title>What&#39;s new in Cursor rules for Java 0.9.0?</title>
-      <link>https://jabrena.github.io/blog/2025/0.9.0.html</link>
+      <link>https://jabrena.github.io/blog/2025/release-0.9.0.html</link>
       <pubDate>Wed, 23 Jul 2025 00:00:00 +0200</pubDate>
-      <guid isPermaLink="false">blog/2025/0.9.0.html</guid>
+      <guid isPermaLink="false">blog/2025/release-0.9.0.html</guid>
       <description>&amp;lt;h2&amp;gt;What are Cursor rules for Java?&amp;lt;/h2&amp;gt;
 &amp;lt;p&amp;gt;Cursor Rules for Java is an Open Source project that provides a set of interactive system prompts for Java that help software engineers in their daily work.&amp;lt;/p&amp;gt;
 &amp;lt;hr /&amp;gt;
@@ -299,10 +299,191 @@ GC Pressure Reduced: More efficient garbage collection with stable retention pat
 &amp;lt;p&amp;gt;Full sample document: &amp;lt;a href=&amp;quot;https://github.com/jabrena/cursor-rules-java/blob/main/examples/spring-boot-memory-leak-demo/profiler/docs/profiling-comparison-analysis-20250720.md&amp;quot;&amp;gt;https://github.com/jabrena/cursor-rules-java/blob/main/examples/spring-boot-memory-leak-demo/profiler/docs/profiling-comparison-analysis-20250720.md&amp;lt;/a&amp;gt;&amp;lt;/p&amp;gt;
 </description>	  
     </item><item>
+      <title>The Three-Node Quality Framework for AI Prompts</title>
+      <link>https://jabrena.github.io/blog/2025/prompt-quality-framework.html</link>
+      <pubDate>Sun, 20 Jul 2025 00:00:00 +0200</pubDate>
+      <guid isPermaLink="false">blog/2025/prompt-quality-framework.html</guid>
+      <description>&amp;lt;h2&amp;gt;Overview&amp;lt;/h2&amp;gt;
+&amp;lt;p&amp;gt;When designing AI prompts for complex tasks like code generation and software development, a structured quality framework ensures both comprehensive responses and safe execution. This document outlines the &amp;lt;strong&amp;gt;three-node quality framework&amp;lt;/strong&amp;gt; that combines prerequisites, content structure, and ongoing safety measures.&amp;lt;/p&amp;gt;
+&amp;lt;h2&amp;gt;The Three Pillars&amp;lt;/h2&amp;gt;
+&amp;lt;h3&amp;gt;1. &amp;lt;code&amp;gt;constraints&amp;lt;/code&amp;gt; - Prerequisites &amp;amp;amp; Blocking Conditions&amp;lt;/h3&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Purpose&amp;lt;/strong&amp;gt;: Defines hard requirements that must be met BEFORE starting any work.&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Philosophy&amp;lt;/strong&amp;gt;: &amp;lt;em&amp;gt;&amp;amp;quot;Don&amp;#39;t even try if...&amp;amp;quot;&amp;lt;/em&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Characteristics&amp;lt;/strong&amp;gt;:&amp;lt;br /&amp;gt;
+- &amp;lt;strong&amp;gt;Focus&amp;lt;/strong&amp;gt;: Entry conditions and show-stoppers&amp;lt;br /&amp;gt;
+- &amp;lt;strong&amp;gt;Nature&amp;lt;/strong&amp;gt;: Gate-keeping (what blocks execution entirely)&amp;lt;br /&amp;gt;
+- &amp;lt;strong&amp;gt;Timing&amp;lt;/strong&amp;gt;: &amp;lt;strong&amp;gt;Pre-execution&amp;lt;/strong&amp;gt; validation&amp;lt;br /&amp;gt;
+- &amp;lt;strong&amp;gt;Failure Impact&amp;lt;/strong&amp;gt;: &amp;lt;strong&amp;gt;BLOCKS ALL WORK&amp;lt;/strong&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Example Implementation&amp;lt;/strong&amp;gt;:&amp;lt;/p&amp;gt;
+&amp;lt;pre&amp;gt;&amp;lt;code class=&amp;quot;language-xml&amp;quot;&amp;gt;&amp;amp;lt;constraint&amp;amp;gt;**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change&amp;amp;lt;/constraint&amp;amp;gt;
+&amp;amp;lt;constraint&amp;amp;gt;**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE&amp;amp;lt;/constraint&amp;amp;gt;
+&amp;amp;lt;constraint&amp;amp;gt;**BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding&amp;amp;lt;/constraint&amp;amp;gt;
+&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Key Benefits&amp;lt;/strong&amp;gt;:&amp;lt;br /&amp;gt;
+- Prevents wasted effort on infeasible tasks&amp;lt;br /&amp;gt;
+- Provides immediate feedback on project state&amp;lt;br /&amp;gt;
+- Protects against futile work&amp;lt;br /&amp;gt;
+- Establishes clear entry criteria&amp;lt;/p&amp;gt;
+&amp;lt;h3&amp;gt;2. &amp;lt;code&amp;gt;output-format&amp;lt;/code&amp;gt; - Response Structure &amp;amp;amp; Deliverables&amp;lt;/h3&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Purpose&amp;lt;/strong&amp;gt;: Defines what to deliver and how to organize the AI response.&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Philosophy&amp;lt;/strong&amp;gt;: &amp;lt;em&amp;gt;&amp;amp;quot;When you do it, include...&amp;amp;quot;&amp;lt;/em&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Characteristics&amp;lt;/strong&amp;gt;:&amp;lt;br /&amp;gt;
+- &amp;lt;strong&amp;gt;Focus&amp;lt;/strong&amp;gt;: Content structure and completeness&amp;lt;br /&amp;gt;
+- &amp;lt;strong&amp;gt;Nature&amp;lt;/strong&amp;gt;: Prescriptive guidance (what TO include)&amp;lt;br /&amp;gt;
+- &amp;lt;strong&amp;gt;Timing&amp;lt;/strong&amp;gt;: &amp;lt;strong&amp;gt;During execution&amp;lt;/strong&amp;gt; - response creation&amp;lt;br /&amp;gt;
+- &amp;lt;strong&amp;gt;Failure Impact&amp;lt;/strong&amp;gt;: &amp;lt;strong&amp;gt;INCOMPLETE RESPONSE&amp;lt;/strong&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Example Implementation&amp;lt;/strong&amp;gt;:&amp;lt;/p&amp;gt;
+&amp;lt;pre&amp;gt;&amp;lt;code class=&amp;quot;language-xml&amp;quot;&amp;gt;&amp;amp;lt;output-format-item&amp;amp;gt;Apply type design principles to improve code quality and maintainability&amp;amp;lt;/output-format-item&amp;amp;gt;
+&amp;amp;lt;output-format-item&amp;amp;gt;Create type-safe wrappers for domain-specific types&amp;amp;lt;/output-format-item&amp;amp;gt;
+&amp;amp;lt;output-format-item&amp;amp;gt;Use generics to create flexible and reusable components&amp;amp;lt;/output-format-item&amp;amp;gt;
+&amp;amp;lt;output-format-item&amp;amp;gt;Establish clear type hierarchies and consistent naming conventions&amp;amp;lt;/output-format-item&amp;amp;gt;
+&amp;amp;lt;output-format-item&amp;amp;gt;Use BigDecimal for precision-sensitive calculations&amp;amp;lt;/output-format-item&amp;amp;gt;
+&amp;amp;lt;output-format-item&amp;amp;gt;Verify code changes compile and pass tests&amp;amp;lt;/output-format-item&amp;amp;gt;
+&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Key Benefits&amp;lt;/strong&amp;gt;:&amp;lt;br /&amp;gt;
+- Ensures comprehensive coverage of the topic&amp;lt;br /&amp;gt;
+- Creates predictable, organized responses&amp;lt;br /&amp;gt;
+- Acts as a completion checklist&amp;lt;br /&amp;gt;
+- Reduces cognitive load for users&amp;lt;br /&amp;gt;
+- Transforms AI into domain-specific consultant&amp;lt;/p&amp;gt;
+&amp;lt;h3&amp;gt;3. &amp;lt;code&amp;gt;safeguards&amp;lt;/code&amp;gt; - Ongoing Safety &amp;amp;amp; Validation&amp;lt;/h3&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Purpose&amp;lt;/strong&amp;gt;: Defines safety protocols and validation requirements throughout the process.&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Philosophy&amp;lt;/strong&amp;gt;: &amp;lt;em&amp;gt;&amp;amp;quot;As you work, ensure...&amp;amp;quot;&amp;lt;/em&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Characteristics&amp;lt;/strong&amp;gt;:&amp;lt;br /&amp;gt;
+- &amp;lt;strong&amp;gt;Focus&amp;lt;/strong&amp;gt;: Risk mitigation and continuous validation&amp;lt;br /&amp;gt;
+- &amp;lt;strong&amp;gt;Nature&amp;lt;/strong&amp;gt;: Protective measures (ongoing safety checks)&amp;lt;br /&amp;gt;
+- &amp;lt;strong&amp;gt;Timing&amp;lt;/strong&amp;gt;: &amp;lt;strong&amp;gt;During &amp;amp;amp; post-execution&amp;lt;/strong&amp;gt; - throughout the work&amp;lt;br /&amp;gt;
+- &amp;lt;strong&amp;gt;Failure Impact&amp;lt;/strong&amp;gt;: &amp;lt;strong&amp;gt;BROKEN SYSTEM&amp;lt;/strong&amp;gt;&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Example Implementation&amp;lt;/strong&amp;gt;:&amp;lt;/p&amp;gt;
+&amp;lt;pre&amp;gt;&amp;lt;code class=&amp;quot;language-xml&amp;quot;&amp;gt;&amp;amp;lt;safeguards-item&amp;amp;gt;**BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` before ANY recommendations&amp;amp;lt;/safeguards-item&amp;amp;gt;
+&amp;amp;lt;safeguards-item&amp;amp;gt;**CRITICAL VALIDATION**: Execute `./mvnw clean verify` to ensure all tests pass&amp;amp;lt;/safeguards-item&amp;amp;gt;
+&amp;amp;lt;safeguards-item&amp;amp;gt;**MANDATORY VERIFICATION**: Confirm all existing functionality remains intact&amp;amp;lt;/safeguards-item&amp;amp;gt;
+&amp;amp;lt;safeguards-item&amp;amp;gt;**ROLLBACK REQUIREMENT**: Ensure all changes can be easily reverted&amp;amp;lt;/safeguards-item&amp;amp;gt;
+&amp;amp;lt;safeguards-item&amp;amp;gt;**INCREMENTAL SAFETY**: Apply improvements incrementally, validating after each modification&amp;amp;lt;/safeguards-item&amp;amp;gt;
+&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;p&amp;gt;&amp;lt;strong&amp;gt;Key Benefits&amp;lt;/strong&amp;gt;:&amp;lt;br /&amp;gt;
+- Continuous quality assurance&amp;lt;br /&amp;gt;
+- Rollback capabilities&amp;lt;br /&amp;gt;
+- Post-change validation&amp;lt;br /&amp;gt;
+- Risk mitigation throughout the process&amp;lt;/p&amp;gt;
+&amp;lt;h2&amp;gt;Framework Comparison&amp;lt;/h2&amp;gt;
+&amp;lt;p&amp;gt;| Aspect | Constraints | Output Format | Safeguards |&amp;lt;br /&amp;gt;
+|--------|-------------|---------------|------------|&amp;lt;br /&amp;gt;
+| &amp;lt;strong&amp;gt;Intent&amp;lt;/strong&amp;gt; | Block bad starts | Structure deliverables | Prevent failures |&amp;lt;br /&amp;gt;
+| &amp;lt;strong&amp;gt;Timing&amp;lt;/strong&amp;gt; | Pre-execution | During execution | During/Post-execution |&amp;lt;br /&amp;gt;
+| &amp;lt;strong&amp;gt;Tone&amp;lt;/strong&amp;gt; | Restrictive | Prescriptive | Protective |&amp;lt;br /&amp;gt;
+| &amp;lt;strong&amp;gt;Focus&amp;lt;/strong&amp;gt; | Entry conditions | Content quality | Process safety |&amp;lt;br /&amp;gt;
+| &amp;lt;strong&amp;gt;Failure Mode&amp;lt;/strong&amp;gt; | Blocked execution | Incomplete response | Broken code/system |&amp;lt;br /&amp;gt;
+| &amp;lt;strong&amp;gt;Question Asked&amp;lt;/strong&amp;gt; | &amp;amp;quot;Can I start?&amp;amp;quot; | &amp;amp;quot;What should I deliver?&amp;amp;quot; | &amp;amp;quot;Did it work safely?&amp;amp;quot; |&amp;lt;/p&amp;gt;
+&amp;lt;h2&amp;gt;The Temporal Flow&amp;lt;/h2&amp;gt;
+&amp;lt;pre&amp;gt;&amp;lt;code class=&amp;quot;language-mermaid&amp;quot;&amp;gt;graph LR
+    A[constraints] --&amp;amp;gt; B[output-format] --&amp;amp;gt; C[safeguards]
+    A --&amp;amp;gt; D[&amp;amp;quot;Don&amp;#39;t even try if...&amp;amp;quot;]
+    B --&amp;amp;gt; E[&amp;amp;quot;When you do it, include...&amp;amp;quot;]
+    C --&amp;amp;gt; F[&amp;amp;quot;As you work, ensure...&amp;amp;quot;]
+&amp;lt;/code&amp;gt;&amp;lt;/pre&amp;gt;
+&amp;lt;h3&amp;gt;Sequential Application&amp;lt;/h3&amp;gt;
+&amp;lt;ol&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Constraints Check&amp;lt;/strong&amp;gt;: Validate prerequisites before starting&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Structured Execution&amp;lt;/strong&amp;gt;: Follow output format during work&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Continuous Validation&amp;lt;/strong&amp;gt;: Apply safeguards throughout and after&amp;lt;/li&amp;gt;
+&amp;lt;/ol&amp;gt;
+&amp;lt;h2&amp;gt;Benefits of the Three-Node Framework&amp;lt;/h2&amp;gt;
+&amp;lt;h3&amp;gt;Defense-in-Depth Strategy&amp;lt;/h3&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Pre-flight checks&amp;lt;/strong&amp;gt; prevent wasted effort&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Structured execution&amp;lt;/strong&amp;gt; ensures comprehensive solutions&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Continuous monitoring&amp;lt;/strong&amp;gt; maintains system integrity&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;h3&amp;gt;Quality Assurance&amp;lt;/h3&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;Embeds quality gates directly into the process&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Ensures responses aren&amp;#39;t just theoretical but include practical validation&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Creates accountability for both content and safety&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;h3&amp;gt;Cognitive Load Management&amp;lt;/h3&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;Clear expectations at each phase&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Predictable structure reduces uncertainty&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Actionable guidance rather than abstract advice&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;h3&amp;gt;Domain Specialization&amp;lt;/h3&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;Transforms general AI into domain-specific consultant&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Tailored safety measures for specific contexts&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Built-in expertise validation&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;h2&amp;gt;Implementation Guidelines&amp;lt;/h2&amp;gt;
+&amp;lt;h3&amp;gt;For Prompt Designers&amp;lt;/h3&amp;gt;
+&amp;lt;ol&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Define Clear Constraints&amp;lt;/strong&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ol&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;Identify blocking conditions specific to your domain&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Make requirements explicit and testable&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Use strong language (&amp;lt;code&amp;gt;MANDATORY&amp;lt;/code&amp;gt;, &amp;lt;code&amp;gt;CRITICAL&amp;lt;/code&amp;gt;, &amp;lt;code&amp;gt;BLOCKING&amp;lt;/code&amp;gt;)&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;ol&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Structure Comprehensive Output Formats&amp;lt;/strong&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ol&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;Cover all aspects of the domain systematically&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Include validation steps as deliverable items&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Make items actionable and specific&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;ol&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Embed Continuous Safeguards&amp;lt;/strong&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ol&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;Include rollback mechanisms&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Require incremental validation&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Address both immediate and downstream risks&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;h3&amp;gt;For AI Systems&amp;lt;/h3&amp;gt;
+&amp;lt;ol&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Respect the Hierarchy&amp;lt;/strong&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ol&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;Never proceed if constraints aren&amp;#39;t met&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Address all output format items&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Apply safeguards continuously&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;ol&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Communicate Clearly&amp;lt;/strong&amp;gt;&amp;lt;/li&amp;gt;
+&amp;lt;/ol&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;Explain which constraints are being checked&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Show progress through output format items&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;Report safeguard validation results&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;h2&amp;gt;Real-World Applications&amp;lt;/h2&amp;gt;
+&amp;lt;h3&amp;gt;Software Development&amp;lt;/h3&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Constraints&amp;lt;/strong&amp;gt;: Code must compile, dependencies must be available&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Output Format&amp;lt;/strong&amp;gt;: Include code, tests, documentation, migration steps&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Safeguards&amp;lt;/strong&amp;gt;: Validate compilation, run tests, ensure rollback capability&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;h3&amp;gt;Infrastructure Changes&amp;lt;/h3&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Constraints&amp;lt;/strong&amp;gt;: Backup must exist, maintenance window must be scheduled&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Output Format&amp;lt;/strong&amp;gt;: Include implementation plan, rollback plan, monitoring&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Safeguards&amp;lt;/strong&amp;gt;: Health checks, gradual rollout, immediate rollback triggers&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;h3&amp;gt;Data Processing&amp;lt;/h3&amp;gt;
+&amp;lt;ul&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Constraints&amp;lt;/strong&amp;gt;: Data validation, resource availability&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Output Format&amp;lt;/strong&amp;gt;: Processing steps, error handling, result validation&amp;lt;/li&amp;gt;
+&amp;lt;li&amp;gt;&amp;lt;strong&amp;gt;Safeguards&amp;lt;/strong&amp;gt;: Data integrity checks, resource monitoring, recovery procedures&amp;lt;/li&amp;gt;
+&amp;lt;/ul&amp;gt;
+&amp;lt;h2&amp;gt;Conclusion&amp;lt;/h2&amp;gt;
+&amp;lt;p&amp;gt;The three-node quality framework provides a comprehensive approach to AI prompt design that ensures both high-quality responses and safe execution. By separating concerns into prerequisites (constraints), content structure (output-format), and ongoing safety (safeguards), we create a robust foundation for AI-assisted complex tasks.&amp;lt;/p&amp;gt;
+&amp;lt;p&amp;gt;This approach transforms AI from a general assistant into a specialized consultant with built-in quality controls and safety measures, making it suitable for critical applications like software development, infrastructure management, and data processing.&amp;lt;/p&amp;gt;
+</description>	  
+    </item><item>
       <title>What&#39;s new in Cursor rules for Java 0.8.0?</title>
-      <link>https://jabrena.github.io/blog/2025/0.8.0.html</link>
+      <link>https://jabrena.github.io/blog/2025/release-0.8.0.html</link>
       <pubDate>Sat, 12 Jul 2025 00:00:00 +0200</pubDate>
-      <guid isPermaLink="false">blog/2025/0.8.0.html</guid>
+      <guid isPermaLink="false">blog/2025/release-0.8.0.html</guid>
       <description>&amp;lt;h2&amp;gt;New interactive behaviors in the Cursor rules&amp;lt;/h2&amp;gt;
 &amp;lt;p&amp;gt;In the previous release, the project added interactive behavior to a few complex rules to improve the developer experience, but in this release, new rules have evolved to add more interactive behavior regardless of complexity. The motivation behind this change: now the rules suggest alternatives to the software engineer to improve development at the package/class/method level. Maybe you could ask the question: why that change? Every software engineer has a unique way to solve software problems, so why force a suggestion in the code without a preliminary review? Let&amp;#39;s explain the idea with an example to show the evolution in the cursor rule. The repository cursor-rules-java has different working examples that can be improved with the rules. Let&amp;#39;s use an example based on Spring Boot: &amp;lt;a href=&amp;quot;https://github.com/jabrena/cursor-rules-java/tree/main/examples/spring-boot-demo/implementation&amp;quot;&amp;gt;https://github.com/jabrena/cursor-rules-java/tree/main/examples/spring-boot-demo/implementation&amp;lt;/a&amp;gt;&amp;lt;br /&amp;gt;
 Over this example, add the following user prompt:&amp;lt;/p&amp;gt;

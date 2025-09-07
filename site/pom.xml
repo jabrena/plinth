@@ -24,25 +24,57 @@
                 </plugin>
             </plugins>
         </pluginManagement>
-
-        <plugins>
-            <plugin>
-                <groupId>org.jbake</groupId>
-                <artifactId>jbake-maven-plugin</artifactId>
-                <version>${version.org.jbake}</version>
-                <executions>
-                    <execution>
-                        <phase>generate-resources</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <inputDirectory>${project.basedir}</inputDirectory>
-                    <outputDirectory>${project.basedir}/../docs/www</outputDirectory>
-                </configuration>
-            </plugin>
-        </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>site-update</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <version>3.4.0</version>
+                        <executions>
+                            <execution>
+                                <id>clean-www-folder</id>
+                                <phase>clean</phase>
+                                <goals>
+                                    <goal>clean</goal>
+                                </goals>
+                                <configuration>
+                                    <filesets>
+                                        <fileset>
+                                            <directory>${project.basedir}/../docs/www</directory>
+                                            <includes>
+                                                <include>**/*</include>
+                                            </includes>
+                                            <followSymlinks>false</followSymlinks>
+                                        </fileset>
+                                    </filesets>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.jbake</groupId>
+                        <artifactId>jbake-maven-plugin</artifactId>
+                        <version>${version.org.jbake}</version>
+                        <executions>
+                            <execution>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                        <configuration>
+                            <inputDirectory>${project.basedir}</inputDirectory>
+                            <outputDirectory>${project.basedir}/../docs/www</outputDirectory>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
