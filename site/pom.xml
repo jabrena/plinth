@@ -45,7 +45,7 @@
                                 <configuration>
                                     <filesets>
                                         <fileset>
-                                            <directory>${project.basedir}/../docs/www</directory>
+                                            <directory>${project.basedir}/../docs/</directory>
                                             <includes>
                                                 <include>**/*</include>
                                             </includes>
@@ -70,7 +70,7 @@
                         </executions>
                         <configuration>
                             <inputDirectory>${project.basedir}</inputDirectory>
-                            <outputDirectory>${project.basedir}/../docs/www</outputDirectory>
+                            <outputDirectory>${project.basedir}/../docs/</outputDirectory>
                         </configuration>
                     </plugin>
                 </plugins>
