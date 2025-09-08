@@ -3,7 +3,7 @@
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
-        <version>0.10.0</version>
+        <version>0.11.0-SNAPSHOT</version>
         <title>Java rules for Concurrency objects</title>
     </metadata>
 
@@ -215,7 +215,13 @@ public class UnsafeCounter {
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Proper thread pool management
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ThreadPoolManager {
@@ -366,9 +372,14 @@ public class PoorThreadPoolManager {
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Producer-Consumer pattern with BlockingQueue
-import java.util.concurrent.*;
 import java.util.Set;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 // Producer-Consumer implementation
 public class ProducerConsumerExample {
@@ -472,7 +483,8 @@ public class EventBus {
                 </good-example>
                 <bad-example>
                     <code-block language="java"><![CDATA[// AVOID: Poor concurrent pattern implementation
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BadProducerConsumer {
     // BAD: Using non-thread-safe collection
@@ -558,8 +570,11 @@ public class BadEventBus {
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: CompletableFuture for asynchronous processing
-import java.util.concurrent.*;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class AsyncService {
@@ -657,9 +672,11 @@ public class AsyncService {
                 </good-example>
                 <bad-example>
                     <code-block language="java"><![CDATA[// AVOID: Blocking operations and poor error handling
-import java.util.concurrent.*;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class BadAsyncService {
 
@@ -968,14 +985,20 @@ public class PoorPerformance {
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Proper testing of concurrent code
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.List;
-import java.util.Collections;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.RepeatedTest;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ConcurrentTestExample {
 
@@ -1063,7 +1086,7 @@ class ConcurrentTestExample {
                 <bad-example>
                     <code-block language="java"><![CDATA[// AVOID: Inadequate testing of concurrent code
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PoorConcurrentTesting {
 
@@ -1130,8 +1153,12 @@ class PoorConcurrentTesting {
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// GOOD: Using virtual threads for scalable I/O operations
-import java.util.concurrent.*;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScopedValue;
+import java.util.concurrent.StructuredTaskScope;
 import java.util.stream.IntStream;
 
 public class VirtualThreadExample {
@@ -1240,7 +1267,9 @@ public class VirtualThreadExample {
                 </good-example>
                 <bad-example>
                     <code-block language="java"><![CDATA[// AVOID: Misusing virtual threads
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadLocal;
 
 public class BadVirtualThreadUsage {
 
@@ -1453,9 +1482,11 @@ class StructuredConcurrencyExample {
                 </good-example>
                 <bad-example>
                     <code-block language="java"><![CDATA[// AVOID: Manual task management without structured concurrency
-import java.util.concurrent.*;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 class BadStructuredConcurrency {
 

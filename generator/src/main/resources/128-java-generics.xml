@@ -2,7 +2,7 @@
 <prompt xmlns:xi="http://www.w3.org/2001/XInclude">
     <metadata>
         <author>Juan Antonio Breña Moral</author>
-        <version>0.10.0</version>
+        <version>0.11.0-SNAPSHOT</version>
         <title>Java Generics Best Practices</title>
     </metadata>
 
@@ -476,7 +476,14 @@ public class NonGenericMethods {
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[import java.util.*;
+                    <code-block language="java"><![CDATA[import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DiamondOperatorExample {
@@ -523,7 +530,12 @@ public class DiamondOperatorExample {
 }]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block language="java"><![CDATA[import java.util.*;
+                    <code-block language="java"><![CDATA[import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 // Verbose repetition of type parameters
 public class VerboseGenerics {
@@ -1392,7 +1404,9 @@ class BadUserBuilder extends BaseBuilder {
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[import java.util.*;
+                    <code-block language="java"><![CDATA[import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.function.Function;
 
 public final class ApiDesign {
@@ -1411,7 +1425,9 @@ public final class ApiDesign {
 }]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block language="java"><![CDATA[import java.util.*;
+                    <code-block language="java"><![CDATA[import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.function.Function;
 
 public final class RigidApi {
@@ -1437,7 +1453,8 @@ public final class RigidApi {
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[import java.util.*;
+                    <code-block language="java"><![CDATA[import java.util.ArrayList;
+import java.util.List;
 
 public class PreferCollectionsOverArrays {
     public static void safeVariance() {

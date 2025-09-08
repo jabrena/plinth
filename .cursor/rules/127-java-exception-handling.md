@@ -1,6 +1,6 @@
 ---
 author: Juan Antonio Breña Moral
-version: 0.10.0
+version: 0.11.0-SNAPSHOT
 ---
 # Java Exception Handling Guidelines
 
@@ -215,9 +215,19 @@ Description: Use try-with-resources for automatic resource management. This ensu
 
 ```java
 // GOOD: Proper resource management with try-with-resources
-import java.io.*;
-import java.nio.file.*;
-import java.sql.*;
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.AccessDeniedException;
+import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
+import java.nio.file.Path;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Properties;
 
 public class ResourceManager {
@@ -826,7 +836,12 @@ Description: Handle InterruptedException correctly by restoring the interrupted 
 
 ```java
 // GOOD: Proper thread interruption and concurrent exception handling
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.TimeoutException;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 
@@ -1022,7 +1037,9 @@ public class ConcurrentProcessor {
 
 ```java
 // AVOID: Poor thread interruption and concurrent exception handling
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 public class BadConcurrentProcessor {
     private final ExecutorService executor = Executors.newFixedThreadPool(10);

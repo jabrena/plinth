@@ -1,6 +1,6 @@
 ---
 author: Juan Antonio Breña Moral
-version: 0.10.0
+version: 0.11.0-SNAPSHOT
 ---
 # Java Secure coding guidelines
 
@@ -168,7 +168,11 @@ Description: To prevent SQL Injection and other injection attacks, always use pa
 
 ```java
 // GOOD: Using PreparedStatement to prevent SQL Injection
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -218,7 +222,11 @@ public class SecureDataAccess {
 
 ```java
 // AVOID: Vulnerable to SQL Injection
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
