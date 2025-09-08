@@ -16,7 +16,6 @@ public final class SystemPromptsInventory {
             "113-java-maven-documentation",
             "121-java-object-oriented-design",
             "122-java-type-design",
-            "123-java-general-guidelines",
             "124-java-secure-coding",
             "125-java-concurrency",
             "126-java-logging",
