@@ -3,7 +3,7 @@
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
-        <version>0.10.0</version>
+        <version>0.11.0-SNAPSHOT</version>
         <title>Java Unit testing guidelines</title>
     </metadata>
 
@@ -146,7 +146,9 @@ class AssertJExampleTest {
                 </good-example>
                 <bad-example>
                     <code-block language="java"><![CDATA[import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*; // JUnit Jupiter Assertions
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class JUnitAssertionsExampleTest {
 
@@ -470,7 +472,10 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceTest {

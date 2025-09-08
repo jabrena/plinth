@@ -1,6 +1,6 @@
 ---
 author: Juan Antonio Breña Moral
-version: 0.10.0
+version: 0.11.0-SNAPSHOT
 ---
 # Java rules for Concurrency objects
 
@@ -247,7 +247,13 @@ Description: Utilize ExecutorService for robust thread management. Choose approp
 
 ```java
 // GOOD: Proper thread pool management
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadFactory;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ThreadPoolManager {
@@ -395,9 +401,14 @@ Description: Leverage established patterns like Producer-Consumer and Publish-Su
 
 ```java
 // GOOD: Producer-Consumer pattern with BlockingQueue
-import java.util.concurrent.*;
 import java.util.Set;
+import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
 
 // Producer-Consumer implementation
 public class ProducerConsumerExample {
@@ -504,7 +515,8 @@ public class EventBus {
 
 ```java
 // AVOID: Poor concurrent pattern implementation
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class BadProducerConsumer {
     // BAD: Using non-thread-safe collection
@@ -584,8 +596,11 @@ Description: Employ CompletableFuture to compose and manage asynchronous computa
 
 ```java
 // GOOD: CompletableFuture for asynchronous processing
-import java.util.concurrent.*;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class AsyncService {
@@ -686,9 +701,11 @@ public class AsyncService {
 
 ```java
 // AVOID: Blocking operations and poor error handling
-import java.util.concurrent.*;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class BadAsyncService {
 
@@ -966,14 +983,20 @@ Description: Thoroughly test concurrent code using appropriate tools and techniq
 
 ```java
 // GOOD: Proper testing of concurrent code
-import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicInteger;
-import java.util.List;
-import java.util.Collections;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.RepeatedTest;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class ConcurrentTestExample {
 
@@ -1064,7 +1087,7 @@ class ConcurrentTestExample {
 ```java
 // AVOID: Inadequate testing of concurrent code
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class PoorConcurrentTesting {
 
@@ -1125,8 +1148,12 @@ Description: Leverage virtual threads (Project Loom) for I/O-bound tasks to dram
 
 ```java
 // GOOD: Using virtual threads for scalable I/O operations
-import java.util.concurrent.*;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScopedValue;
+import java.util.concurrent.StructuredTaskScope;
 import java.util.stream.IntStream;
 
 public class VirtualThreadExample {
@@ -1238,7 +1265,9 @@ public class VirtualThreadExample {
 
 ```java
 // AVOID: Misusing virtual threads
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ThreadLocal;
 
 public class BadVirtualThreadUsage {
 
@@ -1443,9 +1472,11 @@ class StructuredConcurrencyExample {
 
 ```java
 // AVOID: Manual task management without structured concurrency
-import java.util.concurrent.*;
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 class BadStructuredConcurrency {
 

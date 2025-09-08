@@ -3,7 +3,7 @@
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
-        <version>0.10.0</version>
+        <version>0.11.0-SNAPSHOT</version>
         <title>Modern Java Development Guidelines (Java 8+)</title>
     </metadata>
 
@@ -301,7 +301,13 @@ public class OptionalAntiPattern {
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[import java.time.*;
+                    <code-block language="java"><![CDATA[import java.time.Duration;
+import java.time.Instant;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 

@@ -1,6 +1,6 @@
 ---
 author: Juan Antonio Breña Moral
-version: 0.10.0
+version: 0.11.0-SNAPSHOT
 ---
 # Java Generics Best Practices
 
@@ -511,7 +511,14 @@ Description: Use the diamond operator (`<>`) introduced in Java 7 to avoid repea
 **Good example:**
 
 ```java
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class DiamondOperatorExample {
@@ -561,7 +568,12 @@ public class DiamondOperatorExample {
 **Bad example:**
 
 ```java
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 // Verbose repetition of type parameters
 public class VerboseGenerics {
@@ -1406,7 +1418,9 @@ Description: Place wildcards in input positions to increase flexibility: `List<?
 **Good example:**
 
 ```java
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
 import java.util.function.Function;
 
 public final class ApiDesign {
@@ -1428,7 +1442,9 @@ public final class ApiDesign {
 **Bad example:**
 
 ```java
-import java.util.*;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 import java.util.function.Function;
 
 public final class RigidApi {
@@ -1448,7 +1464,8 @@ Description: Arrays are covariant (`Integer[]` is a subtype of `Object[]`), whic
 **Good example:**
 
 ```java
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class PreferCollectionsOverArrays {
     public static void safeVariance() {
