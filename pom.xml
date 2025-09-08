@@ -17,7 +17,7 @@
   </properties>
 
   <modules>
-    <module>generator</module>
-    <module>site</module>
+    <module>system-prompts-generator</module>
+    <module>site-generator</module>
   </modules>
 </project>
