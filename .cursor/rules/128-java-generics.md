@@ -51,7 +51,8 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 13: Avoid Arrays Covariance Pitfalls
 - Example 14: Serialize Collections with Type Tokens
 - Example 15: Eliminate Unchecked Warnings
-- Example 16: Use Typesafe Heterogeneous Containers
+- Example 16: Follow Generic Type Parameter Naming Conventions
+- Example 17: Use Typesafe Heterogeneous Containers
 
 ### Example 1: Avoid Raw Types
 
@@ -1539,7 +1540,152 @@ public class WarningSuppressionAbuse {
 }
 ```
 
-### Example 16: Use Typesafe Heterogeneous Containers
+### Example 16: Follow Generic Type Parameter Naming Conventions
+
+Title: Use standard conventions for better code readability
+Description: Use established naming conventions for generic type parameters: `<T>` for general types, `<E>` for collection elements, `<K,V>` for map keys and values, `<?>` for unknown types (often read-only). While not mandatory, these conventions make code more readable and follow Java ecosystem standards. Use descriptive names when the purpose is specific (e.g., `<Request, Response>`).
+
+**Good example:**
+
+```java
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Collection;
+import java.util.function.Function;
+
+// Standard conventions for better readability
+public class GenericNamingConventions {
+
+    // T for general type parameter
+    public static <T> T identity(T value) {
+        return value;
+    }
+
+    // E for collection element type
+    public static class CustomList<E> {
+        private List<E> elements;
+
+        public void add(E element) {
+            elements.add(element);
+        }
+
+        public E get(int index) {
+            return elements.get(index);
+        }
+    }
+
+    // K, V for map key-value pairs
+    public static class Cache<K, V> {
+        private Map<K, V> storage;
+
+        public void put(K key, V value) {
+            storage.put(key, value);
+        }
+
+        public V get(K key) {
+            return storage.get(key);
+        }
+    }
+
+    // ? for unknown types (wildcards)
+    public static int size(Collection<?> collection) {
+        return collection.size(); // Read-only access
+    }
+
+    public static void printAll(List<?> items) {
+        for (Object item : items) {
+            System.out.println(item); // Can only read as Object
+        }
+    }
+
+    // Multiple type parameters with clear naming
+    public static <K, V, R> Map<K, R> transformValues(
+            Map<K, V> map,
+            Function<V, R> transformer) {
+        // Implementation
+        return null;
+    }
+
+    // Descriptive names for specific contexts
+    public interface ApiClient<Request, Response> {
+        Response call(Request request);
+    }
+
+    public static class EventHandler<Event, Result> {
+        public Result handle(Event event) {
+            // Implementation
+            return null;
+        }
+    }
+
+    // Bounded type parameters with conventional names
+    public static <T extends Comparable<T>> T max(T first, T second) {
+        return first.compareTo(second) >= 0 ? first : second;
+    }
+
+    public static <E extends Enum<E>> Set<E> getAllValues(Class<E> enumClass) {
+        return Set.of(enumClass.getEnumConstants());
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import java.util.List;
+import java.util.Map;
+import java.util.Collection;
+
+// Poor naming conventions make code harder to understand
+public class PoorGenericNaming {
+
+    // Unclear single letters
+    public static <X> X doSomething(X value) {
+        return value;
+    }
+
+    // Inconsistent naming for collections
+    public static class BadList<Type> {
+        private List<Type> elements;
+
+        public void add(Type element) {
+            elements.add(element);
+        }
+    }
+
+    // Non-standard map parameter names
+    public static class BadCache<Key, Val> {
+        private Map<Key, Val> storage;
+    }
+
+    // Using concrete types instead of wildcards
+    public static int getSize(Collection<Object> collection) {
+        return collection.size(); // Too restrictive
+    }
+
+    // Confusing parameter names
+    public static <A, B, C, D> Map<A, C> transform(
+            Map<A, B> input,
+            java.util.function.Function<B, C> func) {
+        return null; // Hard to understand what A, B, C, D represent
+    }
+
+    // Overly verbose names
+    public interface VeryLongApiClientInterface<
+            VeryLongRequestParameterType,
+            VeryLongResponseParameterType> {
+        VeryLongResponseParameterType call(VeryLongRequestParameterType request);
+    }
+
+    // Mixed naming styles
+    public static class InconsistentNaming<t, Element, KEY, value_type> {
+        // Inconsistent case and style
+    }
+}
+```
+
+### Example 17: Use Typesafe Heterogeneous Containers
 
 Title: Safely store multiple types using Class as key
 Description: For containers needing different types (like annotations or preferences), use Class<T> as map keys and cast on retrieval. This maintains type safety without raw types or unchecked casts visible to clients.
