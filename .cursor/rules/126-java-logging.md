@@ -17,44 +17,6 @@ Security is paramount: mask sensitive data, control log access, and ensure secur
 Implement centralized log aggregation, monitoring, and alerting for proactive issue detection.
 Finally, logging behavior and its impact should be validated through comprehensive testing.
 
-### Consultative Interaction Technique
-
-This technique emphasizes **analyzing before acting** and **proposing options before implementing**. Instead of immediately making changes, the assistant:
-
-1. **Analyzes** the current state and identifies specific issues
-2. **Categorizes** problems by impact (CRITICAL, MAINTAINABILITY, etc.)
-3. **Proposes** multiple solution options with clear trade-offs
-4. **Asks** the user to choose their preferred approach
-5. **Implements** based on user selection
-
-**Benefits:**
-- Builds user understanding of the codebase
-- Ensures changes align with user preferences and constraints
-- Teaches best practices through explanation
-- Prevents unwanted modifications
-- Encourages informed decision-making
-
-**Example interaction:**
-```
-🔍 I found 3 Maven best practices improvements in this POM:
-
-1. **CRITICAL: Hardcoded Dependency Versions**
-- Problem: Dependencies have hardcoded versions scattered throughout the POM
-- Solutions: A) Move to properties section B) Use dependencyManagement C) Import BOM files
-
-2. **MAINTAINABILITY: Missing Plugin Version Management**
-- Problem: Maven plugins lack explicit version declarations
-- Solutions: A) Add pluginManagement section B) Define plugin versions in properties C) Use parent POM approach
-
-3. **ORGANIZATION: Inconsistent POM Structure**
-- Problem: Elements are not in logical order, affecting readability
-- Solutions: A) Reorganize sections B) Add descriptive comments C) Use consistent naming conventions
-
-Which would you like to implement? (1A, 1B, 1C, 2A, 2B, 2C, 3A, 3B, 3C, or 'show more details')
-```
-
-Focus on being consultative rather than prescriptive - analyze, propose, ask, then implement based on user choice.
-
 ### Implementing These Principles
 
 These guidelines are built upon the following core principles:
@@ -1438,13 +1400,13 @@ public class UntestableLogging {
 
 ## Output Format
 
-- **ANALYZE** the current logging implementation to identify specific issues and categorize them by impact (CRITICAL, SECURITY, PERFORMANCE, MAINTAINABILITY, etc.)
-- **CATEGORIZE** logging problems found: Framework Selection (inconsistent/outdated), Log Level Usage (inappropriate levels), Security Issues (sensitive data exposure), Configuration Problems (environment-specific needs), and Performance Impact (inefficient logging patterns)
-- **PROPOSE** multiple solution options for each identified issue with clear trade-offs: Framework migration strategies (SLF4J adoption paths), log level optimization approaches, security hardening techniques, configuration management options, and performance improvement methods
-- **EXPLAIN** the benefits and considerations of each proposed solution: Framework selection criteria (SLF4J vs direct implementations), log level best practices (ERROR/WARN/INFO/DEBUG/TRACE usage), security implications (data masking strategies), configuration approaches (environment-specific vs centralized), and monitoring integration options
-- **PRESENT** comprehensive logging strategy options: Centralized aggregation approaches (ELK Stack, Splunk, Grafana Loki), alerting configuration choices, testing validation strategies, and operational monitoring procedures
-- **ASK** the user to choose their preferred approach for each category of logging improvements rather than implementing all changes automatically
-- **VALIDATE** that any proposed logging changes will compile, maintain existing functionality, and not introduce security vulnerabilities before implementation
+- **ANALYZE** Java code to identify specific logging issues and categorize them by impact (CRITICAL, SECURITY, PERFORMANCE, MAINTAINABILITY, OBSERVABILITY) and logging area (framework selection, log levels, security, configuration, performance)
+- **CATEGORIZE** logging improvements found: Framework Issues (inconsistent frameworks vs standardized SLF4J, outdated implementations vs modern logging), Log Level Problems (inappropriate levels vs proper level usage, missing contextual information vs structured logging), Security Issues (sensitive data exposure vs secure logging practices, plaintext credentials vs masked data), Configuration Problems (hardcoded settings vs environment-specific configuration, missing structured formats vs JSON/structured output), and Performance Issues (synchronous logging vs asynchronous patterns, excessive logging overhead vs optimized performance, string concatenation vs parameterized messages)
+- **APPLY** logging best practices directly by implementing the most appropriate improvements for each identified issue: Standardize on SLF4J facade with appropriate implementation (Logback/Log4j2), implement proper log level usage with contextual information, secure sensitive data through masking and filtering, configure environment-specific settings with external configuration files, optimize performance through asynchronous logging and parameterized messages, and establish structured logging with JSON output for better parsing and analysis
+- **IMPLEMENT** comprehensive logging refactoring using proven patterns: Migrate to SLF4J facade with consistent logger declarations, establish proper log level hierarchy (ERROR for failures, WARN for degraded service, INFO for business events, DEBUG for troubleshooting), implement secure logging practices with data masking and filtering, configure environment-specific logging with external properties, optimize performance through async appenders and lazy evaluation, and integrate structured logging with correlation IDs and contextual metadata
+- **REFACTOR** code systematically following the logging improvement roadmap: First standardize logging framework usage through SLF4J adoption, then optimize log level usage and add proper contextual information, implement security measures for sensitive data protection, configure environment-specific logging settings with external configuration, optimize logging performance through asynchronous patterns and parameterized messages, and establish comprehensive monitoring and alerting integration
+- **EXPLAIN** the applied logging improvements and their benefits: Framework standardization benefits through SLF4J facade adoption and consistent logger usage, observability enhancements via proper log levels and structured output, security improvements through sensitive data masking and secure logging practices, performance optimizations from asynchronous logging and parameterized messages, and operational benefits from environment-specific configuration and monitoring integration
+- **VALIDATE** that all applied logging refactoring compiles successfully, maintains existing functionality, eliminates security vulnerabilities, follows logging best practices, and achieves the intended observability and performance improvements through comprehensive testing and verification
 
 ## Safeguards
 

@@ -741,3 +741,139 @@ td.gutter {
   background-color: rgba(0, 0, 0, 0.2);
 }
 
+/* Course-specific styles */
+.course-section {
+  margin-bottom: 40px;
+}
+
+.section-title {
+  color: #404040;
+  font-size: 24px;
+  margin-bottom: 25px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid #eee;
+}
+
+.course-preview {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
+  border-radius: 8px;
+  padding: 25px;
+  margin-bottom: 25px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.course-preview:hover {
+  box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
+}
+
+.course-title {
+  color: #2c3e50;
+  font-size: 20px;
+  margin-bottom: 8px;
+  font-weight: 700;
+}
+
+.course-title a {
+  color: #2c3e50;
+  text-decoration: none;
+}
+
+.course-title a:hover {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.course-subtitle {
+  color: #7f8c8d;
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 15px;
+}
+
+.course-subtitle a {
+  color: #7f8c8d;
+  text-decoration: none;
+}
+
+.course-meta {
+  color: #6c757d;
+  font-size: 14px;
+  margin-bottom: 15px;
+}
+
+.course-tags {
+  margin-top: 8px;
+}
+
+.course-tags a {
+  background-color: #3498db;
+  color: white;
+  padding: 3px 8px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-size: 12px;
+  margin-right: 5px;
+  display: inline-block;
+  margin-bottom: 3px;
+}
+
+.course-tags a:hover {
+  background-color: #2980b9;
+  color: white;
+  text-decoration: none;
+}
+
+.course-entry-container {
+  margin-top: 15px;
+}
+
+.course-entry {
+  line-height: 1.6;
+  color: #555;
+}
+
+.course-read-more {
+  background-color: #27ae60;
+  color: white !important;
+  padding: 8px 16px;
+  border-radius: 4px;
+  text-decoration: none;
+  font-weight: 600;
+  display: inline-block;
+  margin-top: 10px;
+  transition: background-color 0.3s ease;
+}
+
+.course-read-more:hover {
+  background-color: #229954;
+  color: white !important;
+  text-decoration: none;
+}
+
+.course-content .course-meta {
+  background-color: #f8f9fa;
+  padding: 15px;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  color: #6c757d;
+}
+
+.posts-section {
+  margin-top: 30px;
+}
+
+/* Adjust existing post styles to work with new structure */
+.post-title {
+  font-size: 18px;
+}
+
+.post-subtitle {
+  font-size: 15px;
+  color: #7f8c8d;
+  font-weight: 400;
+}
+

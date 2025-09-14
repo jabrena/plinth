@@ -12,44 +12,6 @@ You are a Senior software engineer with extensive experience in Java software de
 
 Java Generics provide compile-time type safety, eliminate casting, and enable algorithms to work on collections of different types. Effective use involves proper wildcard usage (? extends for producer, ? super for consumer), bounded type parameters, generic method design, and avoiding raw types. Key practices include leveraging type inference with diamond operator, understanding type erasure implications, using generic constructors and factory methods, and applying PECS (Producer Extends Consumer Super) principle. Modern approaches integrate generics with Records, sealed types, functional interfaces, and pattern matching for robust, type-safe APIs.
 
-### Consultative Interaction Technique
-
-This technique emphasizes **analyzing before acting** and **proposing options before implementing**. Instead of immediately making changes, the assistant:
-
-1. **Analyzes** the current state and identifies specific issues
-2. **Categorizes** problems by impact (CRITICAL, MAINTAINABILITY, etc.)
-3. **Proposes** multiple solution options with clear trade-offs
-4. **Asks** the user to choose their preferred approach
-5. **Implements** based on user selection
-
-**Benefits:**
-- Builds user understanding of the codebase
-- Ensures changes align with user preferences and constraints
-- Teaches best practices through explanation
-- Prevents unwanted modifications
-- Encourages informed decision-making
-
-**Example interaction:**
-```
-🔍 I found 3 Maven best practices improvements in this POM:
-
-1. **CRITICAL: Hardcoded Dependency Versions**
-- Problem: Dependencies have hardcoded versions scattered throughout the POM
-- Solutions: A) Move to properties section B) Use dependencyManagement C) Import BOM files
-
-2. **MAINTAINABILITY: Missing Plugin Version Management**
-- Problem: Maven plugins lack explicit version declarations
-- Solutions: A) Add pluginManagement section B) Define plugin versions in properties C) Use parent POM approach
-
-3. **ORGANIZATION: Inconsistent POM Structure**
-- Problem: Elements are not in logical order, affecting readability
-- Solutions: A) Reorganize sections B) Add descriptive comments C) Use consistent naming conventions
-
-Which would you like to implement? (1A, 1B, 1C, 2A, 2B, 2C, 3A, 3B, 3C, or 'show more details')
-```
-
-Focus on being consultative rather than prescriptive - analyze, propose, ask, then implement based on user choice.
-
 ### Implementing These Principles
 
 These guidelines are built upon the following core principles:
@@ -89,7 +51,8 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 13: Avoid Arrays Covariance Pitfalls
 - Example 14: Serialize Collections with Type Tokens
 - Example 15: Eliminate Unchecked Warnings
-- Example 16: Use Typesafe Heterogeneous Containers
+- Example 16: Follow Generic Type Parameter Naming Conventions
+- Example 17: Use Typesafe Heterogeneous Containers
 
 ### Example 1: Avoid Raw Types
 
@@ -1577,7 +1540,152 @@ public class WarningSuppressionAbuse {
 }
 ```
 
-### Example 16: Use Typesafe Heterogeneous Containers
+### Example 16: Follow Generic Type Parameter Naming Conventions
+
+Title: Use standard conventions for better code readability
+Description: Use established naming conventions for generic type parameters: `<T>` for general types, `<E>` for collection elements, `<K,V>` for map keys and values, `<?>` for unknown types (often read-only). While not mandatory, these conventions make code more readable and follow Java ecosystem standards. Use descriptive names when the purpose is specific (e.g., `<Request, Response>`).
+
+**Good example:**
+
+```java
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.Collection;
+import java.util.function.Function;
+
+// Standard conventions for better readability
+public class GenericNamingConventions {
+
+    // T for general type parameter
+    public static <T> T identity(T value) {
+        return value;
+    }
+
+    // E for collection element type
+    public static class CustomList<E> {
+        private List<E> elements;
+
+        public void add(E element) {
+            elements.add(element);
+        }
+
+        public E get(int index) {
+            return elements.get(index);
+        }
+    }
+
+    // K, V for map key-value pairs
+    public static class Cache<K, V> {
+        private Map<K, V> storage;
+
+        public void put(K key, V value) {
+            storage.put(key, value);
+        }
+
+        public V get(K key) {
+            return storage.get(key);
+        }
+    }
+
+    // ? for unknown types (wildcards)
+    public static int size(Collection<?> collection) {
+        return collection.size(); // Read-only access
+    }
+
+    public static void printAll(List<?> items) {
+        for (Object item : items) {
+            System.out.println(item); // Can only read as Object
+        }
+    }
+
+    // Multiple type parameters with clear naming
+    public static <K, V, R> Map<K, R> transformValues(
+            Map<K, V> map,
+            Function<V, R> transformer) {
+        // Implementation
+        return null;
+    }
+
+    // Descriptive names for specific contexts
+    public interface ApiClient<Request, Response> {
+        Response call(Request request);
+    }
+
+    public static class EventHandler<Event, Result> {
+        public Result handle(Event event) {
+            // Implementation
+            return null;
+        }
+    }
+
+    // Bounded type parameters with conventional names
+    public static <T extends Comparable<T>> T max(T first, T second) {
+        return first.compareTo(second) >= 0 ? first : second;
+    }
+
+    public static <E extends Enum<E>> Set<E> getAllValues(Class<E> enumClass) {
+        return Set.of(enumClass.getEnumConstants());
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import java.util.List;
+import java.util.Map;
+import java.util.Collection;
+
+// Poor naming conventions make code harder to understand
+public class PoorGenericNaming {
+
+    // Unclear single letters
+    public static <X> X doSomething(X value) {
+        return value;
+    }
+
+    // Inconsistent naming for collections
+    public static class BadList<Type> {
+        private List<Type> elements;
+
+        public void add(Type element) {
+            elements.add(element);
+        }
+    }
+
+    // Non-standard map parameter names
+    public static class BadCache<Key, Val> {
+        private Map<Key, Val> storage;
+    }
+
+    // Using concrete types instead of wildcards
+    public static int getSize(Collection<Object> collection) {
+        return collection.size(); // Too restrictive
+    }
+
+    // Confusing parameter names
+    public static <A, B, C, D> Map<A, C> transform(
+            Map<A, B> input,
+            java.util.function.Function<B, C> func) {
+        return null; // Hard to understand what A, B, C, D represent
+    }
+
+    // Overly verbose names
+    public interface VeryLongApiClientInterface<
+            VeryLongRequestParameterType,
+            VeryLongResponseParameterType> {
+        VeryLongResponseParameterType call(VeryLongRequestParameterType request);
+    }
+
+    // Mixed naming styles
+    public static class InconsistentNaming<t, Element, KEY, value_type> {
+        // Inconsistent case and style
+    }
+}
+```
+
+### Example 17: Use Typesafe Heterogeneous Containers
 
 Title: Safely store multiple types using Class as key
 Description: For containers needing different types (like annotations or preferences), use Class<T> as map keys and cast on retrieval. This maintains type safety without raw types or unchecked casts visible to clients.
@@ -1626,11 +1734,11 @@ public class UnsafeContainer {
 
 - **ANALYZE** Java code to identify specific generics usage issues and categorize them by impact (CRITICAL, MAINTAINABILITY, PERFORMANCE, TYPE_SAFETY) and area (raw types usage, wildcard misuse, bounded parameter opportunities, type erasure problems, modern feature integration gaps)
 - **CATEGORIZE** generics improvements found: Type Safety Issues (raw types vs parameterized types, unsafe casts vs type-safe operations, missing bounds vs proper constraints), API Design Problems (inflexible method signatures vs PECS wildcards, verbose type declarations vs diamond operator, inheritance issues vs proper variance), Performance Concerns (unnecessary boxing vs primitive specialization, type erasure workarounds vs efficient patterns), and Modern Integration Opportunities (traditional classes vs Records with generics, old inheritance vs sealed types, verbose conditionals vs pattern matching)
-- **PROPOSE** multiple generics improvement strategies for each identified issue with clear trade-offs: Type safety approaches (eliminate raw types vs gradual migration vs compatibility layers), API flexibility options (wildcard adoption vs method overloading vs bounded parameters), performance optimizations (primitive collections vs generic collections vs specialized implementations), and modernization paths (Record conversion vs sealed type adoption vs pattern matching integration)
-- **EXPLAIN** the benefits and considerations of each proposed generics solution: Compile-time safety improvements, runtime performance implications, API usability enhancements, code maintainability benefits, learning curve requirements for team adoption, and backward compatibility considerations for each generics pattern
-- **PRESENT** comprehensive generics adoption strategies: Migration roadmaps (eliminate raw types → add proper bounds → apply PECS → modernize with Records), refactoring techniques (Extract Type Parameter, Apply Bounded Wildcards, Convert to Generic Method, Introduce Type Token), integration patterns with functional programming and modern Java features, and testing strategies for generic code
-- **ASK** the user to choose their preferred approach for each category of generics improvements, considering their team's experience with generics, performance requirements, Java version constraints, and API compatibility needs rather than implementing all changes automatically
-- **VALIDATE** that any proposed generics refactoring will compile successfully, maintain type safety guarantees, preserve API contracts, and achieve expected flexibility and performance benefits before implementation
+- **APPLY** generics best practices directly by implementing the most appropriate improvements for each identified issue: Eliminate raw types with proper parameterization, replace unsafe casts with type-safe operations, add proper bounds and constraints, implement PECS wildcards for flexible APIs, utilize diamond operator for cleaner syntax, apply bounded parameters for better type constraints, integrate primitive specialization for performance, and modernize with Records and sealed types where beneficial
+- **IMPLEMENT** comprehensive generics refactoring using proven patterns: Convert raw types to parameterized types, transform inflexible method signatures to PECS wildcards, replace verbose type declarations with diamond operator, add proper bounds to type parameters, introduce generic methods where appropriate, apply type tokens for runtime type information, integrate with functional programming patterns, and modernize inheritance hierarchies with sealed types
+- **REFACTOR** code systematically following the generics improvement roadmap: First eliminate raw types and unsafe casts, then add proper bounds and constraints, apply PECS wildcards for API flexibility, utilize diamond operator and var for cleaner syntax, integrate with Records and sealed types, implement pattern matching where applicable, and optimize performance with primitive specialization
+- **EXPLAIN** the applied generics improvements and their benefits: Compile-time safety enhancements through proper parameterization, runtime performance improvements via primitive specialization, API usability gains from PECS wildcards, code maintainability benefits from cleaner syntax and modern features, and backward compatibility considerations for each implemented pattern
+- **VALIDATE** that all applied generics refactoring compiles successfully, maintains type safety guarantees, preserves API contracts, and achieves expected flexibility and performance benefits through comprehensive testing and verification
 
 ## Safeguards
 

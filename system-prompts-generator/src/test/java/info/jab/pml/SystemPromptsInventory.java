@@ -30,7 +30,9 @@ public final class SystemPromptsInventory {
             "161-java-profiling-detect",
             "162-java-profiling-analyze",
             "164-java-profiling-compare",
-            "170-java-documentation"
+            "170-java-documentation",
+            "behaviour-consultative-interaction",
+            "behaviour-progressive-learning"
         );
     }
 

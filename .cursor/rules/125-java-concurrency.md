@@ -12,44 +12,6 @@ You are a Senior software engineer with extensive experience in Java software de
 
 Effective Java concurrency relies on understanding thread safety fundamentals, using `java.util.concurrent` utilities, and managing thread pools with `ExecutorService`. Key practices include implementing concurrent design patterns like Producer-Consumer, leveraging `CompletableFuture` for asynchronous tasks, and ensuring thread safety through immutability and safe publication. Performance aspects like lock contention and memory consistency must be considered. Thorough testing, including stress tests and thread dump analysis, is crucial. Modern Java offers virtual threads for enhanced scalability, structured concurrency for simplified task management, and scoped values for safer thread-shared data as alternatives to thread-locals.
 
-### Consultative Interaction Technique
-
-This technique emphasizes **analyzing before acting** and **proposing options before implementing**. Instead of immediately making changes, the assistant:
-
-1. **Analyzes** the current state and identifies specific issues
-2. **Categorizes** problems by impact (CRITICAL, MAINTAINABILITY, etc.)
-3. **Proposes** multiple solution options with clear trade-offs
-4. **Asks** the user to choose their preferred approach
-5. **Implements** based on user selection
-
-**Benefits:**
-- Builds user understanding of the codebase
-- Ensures changes align with user preferences and constraints
-- Teaches best practices through explanation
-- Prevents unwanted modifications
-- Encourages informed decision-making
-
-**Example interaction:**
-```
-🔍 I found 3 Maven best practices improvements in this POM:
-
-1. **CRITICAL: Hardcoded Dependency Versions**
-- Problem: Dependencies have hardcoded versions scattered throughout the POM
-- Solutions: A) Move to properties section B) Use dependencyManagement C) Import BOM files
-
-2. **MAINTAINABILITY: Missing Plugin Version Management**
-- Problem: Maven plugins lack explicit version declarations
-- Solutions: A) Add pluginManagement section B) Define plugin versions in properties C) Use parent POM approach
-
-3. **ORGANIZATION: Inconsistent POM Structure**
-- Problem: Elements are not in logical order, affecting readability
-- Solutions: A) Reorganize sections B) Add descriptive comments C) Use consistent naming conventions
-
-Which would you like to implement? (1A, 1B, 1C, 2A, 2B, 2C, 3A, 3B, 3C, or 'show more details')
-```
-
-Focus on being consultative rather than prescriptive - analyze, propose, ask, then implement based on user choice.
-
 ### Implementing These Principles
 
 These guidelines are built upon the following core principles:
@@ -1732,13 +1694,13 @@ class BadScopedValueUsage {
 
 ## Output Format
 
-- **ANALYZE** the current concurrency implementation to identify specific issues and categorize them by impact (CRITICAL, PERFORMANCE, DEADLOCK_RISK, SCALABILITY, etc.)
-- **CATEGORIZE** concurrency problems found: Thread Safety Issues (race conditions, unsafe collections), Thread Pool Management (sizing, configuration, lifecycle), Synchronization Problems (deadlocks, contention), Performance Issues (blocking operations, memory consistency), and Modern Concurrency Gaps (missing virtual threads, structured concurrency opportunities)
-- **PROPOSE** multiple solution options for each identified issue with clear trade-offs: Synchronization strategies (locks vs atomic vs concurrent collections), thread pool configurations (fixed vs cached vs virtual threads), design pattern implementations (Producer-Consumer vs Publish-Subscribe), and performance optimization approaches
-- **EXPLAIN** the benefits and considerations of each proposed solution: Thread safety mechanisms (immutability vs synchronization), ExecutorService choices (resource management trade-offs), CompletableFuture composition strategies, modern concurrency features adoption (virtual threads vs platform threads), and testing approaches for concurrent code
-- **PRESENT** comprehensive concurrency architecture options: Legacy concurrency patterns vs modern approaches (structured concurrency, scoped values), performance optimization strategies (lock-free algorithms, memory consistency patterns), and scalability enhancement techniques
-- **ASK** the user to choose their preferred approach for each category of concurrency improvements rather than implementing all changes automatically
-- **VALIDATE** that any proposed concurrency changes will compile, maintain thread safety, avoid deadlocks, and not introduce performance regressions before implementation
+- **ANALYZE** Java code to identify specific concurrency issues and categorize them by impact (CRITICAL, PERFORMANCE, DEADLOCK_RISK, SCALABILITY, THREAD_SAFETY) and concurrency area (thread safety, synchronization, thread pools, async operations, modern concurrency)
+- **CATEGORIZE** concurrency improvements found: Thread Safety Issues (race conditions vs atomic operations, unsafe collections vs concurrent collections, shared mutable state vs immutable objects), Thread Pool Management (improper sizing vs optimal configuration, resource leaks vs proper lifecycle management), Synchronization Problems (deadlock risks vs lock-free algorithms, excessive contention vs efficient synchronization), Performance Issues (blocking operations vs non-blocking alternatives, memory consistency problems vs volatile/final usage), and Modern Concurrency Gaps (platform threads vs virtual threads, callback hell vs CompletableFuture composition, missing structured concurrency vs scoped concurrency patterns)
+- **APPLY** concurrency best practices directly by implementing the most appropriate improvements for each identified issue: Replace unsafe collections with concurrent alternatives, implement proper synchronization using atomic classes and concurrent utilities, configure thread pools with appropriate sizing and lifecycle management, refactor blocking operations to non-blocking alternatives using CompletableFuture, eliminate race conditions through immutability and proper synchronization, and adopt modern concurrency features like virtual threads and structured concurrency where beneficial
+- **IMPLEMENT** comprehensive concurrency refactoring using proven patterns: Establish thread-safe data structures using concurrent collections and atomic classes, implement efficient synchronization with locks, semaphores, and barriers, configure optimal thread pool management with proper ExecutorService usage, apply asynchronous programming patterns with CompletableFuture composition, integrate modern concurrency features (virtual threads, structured concurrency, scoped values), and implement proper error handling and resource management in concurrent contexts
+- **REFACTOR** code systematically following the concurrency improvement roadmap: First eliminate critical thread safety issues through atomic operations and concurrent collections, then optimize synchronization mechanisms to reduce contention and deadlock risks, configure proper thread pool management and lifecycle, refactor blocking operations to asynchronous alternatives, integrate modern concurrency features for improved scalability, and implement comprehensive testing strategies for concurrent code validation
+- **EXPLAIN** the applied concurrency improvements and their benefits: Thread safety enhancements through proper synchronization and atomic operations, performance improvements via optimized thread pool management and non-blocking operations, scalability gains from modern concurrency features like virtual threads, deadlock prevention through lock-free algorithms and proper synchronization patterns, and maintainability improvements from structured concurrency and clear async composition
+- **VALIDATE** that all applied concurrency refactoring compiles successfully, maintains thread safety guarantees, eliminates race conditions and deadlock risks, preserves or improves performance characteristics, and achieves the intended concurrency improvements through comprehensive testing and verification
 
 ## Safeguards
 

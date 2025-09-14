@@ -1,0 +1,1460 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Module 5: Assessment - Validate Your Mastery - Cursor Rules for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../feed.xml" title="Cursor Rules for Java"/>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../css/prettify.css">
+  <link rel="shortcut icon" href="../../favicon.ico">
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../index.html">Cursor Rules for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../courses/generics/index.html">Generics</a>
+    </div>
+  </li>
+  <li><a href="../../archive.html">Archive</a></li>
+  <li><a href="../../tags.html">Tags</a></li>
+  <li><a href="../../about.html">About</a></li>
+</ul>
+</div>
+
+<div class="avatar-container">
+  <div class="avatar-img-border">
+    <a href="../../index.html">
+      <img class="avatar-img" src="../../images/avatar-icon.png"/>
+    </a>
+  </div>
+</div>
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="course-heading">
+<h1>Module 5: Assessment - Validate Your Mastery</h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="course-content">
+
+<div class="course-meta">
+    <i class="fa fa-calendar-o"></i>
+    2025-09-13
+    &nbsp;
+    <i class="fa fa-user"></i>
+    Juan Antonio Breña Moral
+  <div class="course-tags">
+    &nbsp;
+    <i class="fa fa-tags"></i>
+      <a href="../../tags/java.html" class="course-tag">java</a>
+      <a href="../../tags/generics.html" class="course-tag">generics</a>
+      <a href="../../tags/assessment.html" class="course-tag">assessment</a>
+      <a href="../../tags/validation.html" class="course-tag">validation</a>
+  </div>
+</div>
+<hr>
+
+<h2>📖 Module Overview</h2>
+<p>Congratulations on reaching the final module! It's time to validate your Java Generics mastery through comprehensive challenges and code reviews. This module ensures you can apply generics effectively in real-world scenarios.</p>
+<h3>🎯 Learning Objectives</h3>
+<p>By the end of this module, you will have:</p>
+<ul>
+<li><strong>Demonstrated</strong> comprehensive understanding through coding challenges</li>
+<li><strong>Applied</strong> all generics concepts in integrated scenarios</li>
+<li><strong>Reviewed</strong> and critiqued generic code like a senior developer</li>
+<li><strong>Planned</strong> your continued learning journey</li>
+<li><strong>Built</strong> a portfolio of generic programming examples</li>
+</ul>
+<h3>⏱️ Estimated Time: 1-2 hours</h3>
+<hr />
+<h2>🎯 Comprehensive Coding Challenges</h2>
+<h3>🏆 Challenge 1: Generic Data Processing Pipeline</h3>
+<p><strong>Scenario</strong>: Build a type-safe data processing pipeline that can transform, filter, and aggregate data of different types.</p>
+<p><strong>Requirements</strong>:<br />
+- Use PECS principle correctly<br />
+- Handle errors with Result types<br />
+- Support parallel processing<br />
+- Include comprehensive type safety<br />
+- Integrate with modern Java features</p>
+<pre><code class="language-java">import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.function.*;
+import java.util.stream.Collectors;
+
+// TODO: Complete the generic data processing pipeline
+public class DataProcessingPipeline&lt;T&gt; {
+
+    // TODO: Implement pipeline stages with proper generics
+    public static class Pipeline&lt;T&gt; {
+
+        // TODO: Add transformation stage
+        public &lt;R&gt; Pipeline&lt;R&gt; transform(Function&lt;? super T, ? extends R&gt; transformer) {
+
+        }
+
+        // TODO: Add filtering stage
+        public Pipeline&lt;T&gt; filter(Predicate&lt;? super T&gt; predicate) {
+
+        }
+
+        // TODO: Add error handling with Result types
+        public &lt;E&gt; Pipeline&lt;Result&lt;T, E&gt;&gt; handleErrors(Function&lt;Exception, E&gt; errorMapper) {
+
+        }
+
+        // TODO: Add parallel processing support
+        public Pipeline&lt;T&gt; parallel() {
+
+        }
+
+        // TODO: Add aggregation operations
+        public &lt;R&gt; R aggregate(Collector&lt;? super T, ?, R&gt; collector) {
+
+        }
+
+        // TODO: Execute pipeline and return results
+        public List&lt;T&gt; execute() {
+
+        }
+    }
+
+    // TODO: Factory method to create pipeline
+    public static &lt;T&gt; Pipeline&lt;T&gt; of(Collection&lt;? extends T&gt; data) {
+
+    }
+
+    // TODO: Result type for error handling
+    public sealed interface Result&lt;T, E&gt; permits Success, Failure {
+        record Success&lt;T, E&gt;(T value) implements Result&lt;T, E&gt; {}
+        record Failure&lt;T, E&gt;(E error) implements Result&lt;T, E&gt; {}
+    }
+}
+</code></pre>
+<h3>💡 Challenge 1 Solution</h3>
+<details>
+<summary>🎯 Try implementing the complete pipeline yourself first</summary>
+<pre><code class="language-java">import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ForkJoinPool;
+import java.util.function.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class DataProcessingPipeline&lt;T&gt; {
+
+    public static class Pipeline&lt;T&gt; {
+        private final Stream&lt;T&gt; stream;
+        private final boolean isParallel;
+
+        private Pipeline(Stream&lt;T&gt; stream, boolean isParallel) {
+            this.stream = stream;
+            this.isParallel = isParallel;
+        }
+
+        // Transform with proper PECS
+        public &lt;R&gt; Pipeline&lt;R&gt; transform(Function&lt;? super T, ? extends R&gt; transformer) {
+            Stream&lt;R&gt; transformedStream = stream.map(transformer);
+            return new Pipeline&lt;&gt;(transformedStream, isParallel);
+        }
+
+        // Filter with PECS
+        public Pipeline&lt;T&gt; filter(Predicate&lt;? super T&gt; predicate) {
+            Stream&lt;T&gt; filteredStream = stream.filter(predicate);
+            return new Pipeline&lt;&gt;(filteredStream, isParallel);
+        }
+
+        // Error handling with Result types
+        public &lt;E&gt; Pipeline&lt;Result&lt;T, E&gt;&gt; handleErrors(Function&lt;Exception, E&gt; errorMapper) {
+            Stream&lt;Result&lt;T, E&gt;&gt; resultStream = stream.map(item -&gt; {
+                try {
+                    return new Result.Success&lt;T, E&gt;(item);
+                } catch (Exception e) {
+                    return new Result.Failure&lt;T, E&gt;(errorMapper.apply(e));
+                }
+            });
+            return new Pipeline&lt;&gt;(resultStream, isParallel);
+        }
+
+        // Enable parallel processing
+        public Pipeline&lt;T&gt; parallel() {
+            return new Pipeline&lt;&gt;(stream.parallel(), true);
+        }
+
+        // Batch processing
+        public Pipeline&lt;List&lt;T&gt;&gt; batch(int batchSize) {
+            List&lt;T&gt; items = stream.collect(Collectors.toList());
+            Stream&lt;List&lt;T&gt;&gt; batchStream = Stream.iterate(0, i -&gt; i + batchSize)
+                .limit((items.size() + batchSize - 1) / batchSize)
+                .map(i -&gt; items.subList(i, Math.min(i + batchSize, items.size())));
+
+            return new Pipeline&lt;&gt;(batchStream, isParallel);
+        }
+
+        // Aggregation with proper collector types
+        public &lt;R&gt; R aggregate(Collector&lt;? super T, ?, R&gt; collector) {
+            return stream.collect(collector);
+        }
+
+        // Execute and collect results
+        public List&lt;T&gt; execute() {
+            return stream.collect(Collectors.toList());
+        }
+
+        // Execute asynchronously
+        public CompletableFuture&lt;List&lt;T&gt;&gt; executeAsync() {
+            return CompletableFuture.supplyAsync(() -&gt; execute(), ForkJoinPool.commonPool());
+        }
+
+        // Count elements
+        public long count() {
+            return stream.count();
+        }
+
+        // Find first element
+        public Optional&lt;T&gt; findFirst() {
+            return stream.findFirst();
+        }
+
+        // Reduce with proper types
+        public Optional&lt;T&gt; reduce(BinaryOperator&lt;T&gt; accumulator) {
+            return stream.reduce(accumulator);
+        }
+
+        // Group by with proper types
+        public &lt;K&gt; Pipeline&lt;Map&lt;K, List&lt;T&gt;&gt;&gt; groupBy(Function&lt;? super T, ? extends K&gt; classifier) {
+            Map&lt;K, List&lt;T&gt;&gt; grouped = stream.collect(Collectors.groupingBy(classifier));
+            return new Pipeline&lt;&gt;(Stream.of(grouped), isParallel);
+        }
+    }
+
+    // Factory method with proper bounds
+    public static &lt;T&gt; Pipeline&lt;T&gt; of(Collection&lt;? extends T&gt; data) {
+        return new Pipeline&lt;&gt;(data.stream(), false);
+    }
+
+    @SafeVarargs
+    public static &lt;T&gt; Pipeline&lt;T&gt; of(T... items) {
+        return new Pipeline&lt;&gt;(Arrays.stream(items), false);
+    }
+
+    // Result type with pattern matching support
+    public sealed interface Result&lt;T, E&gt; permits Result.Success, Result.Failure {
+
+        record Success&lt;T, E&gt;(T value) implements Result&lt;T, E&gt; {
+            public &lt;R&gt; R fold(Function&lt;T, R&gt; onSuccess, Function&lt;E, R&gt; onFailure) {
+                return onSuccess.apply(value);
+            }
+        }
+
+        record Failure&lt;T, E&gt;(E error) implements Result&lt;T, E&gt; {
+            public &lt;R&gt; R fold(Function&lt;T, R&gt; onSuccess, Function&lt;E, R&gt; onFailure) {
+                return onFailure.apply(error);
+            }
+        }
+
+        // Utility methods
+        default boolean isSuccess() {
+            return this instanceof Success;
+        }
+
+        default boolean isFailure() {
+            return this instanceof Failure;
+        }
+
+        default &lt;R&gt; Result&lt;R, E&gt; map(Function&lt;T, R&gt; mapper) {
+            return switch (this) {
+                case Success&lt;T, E&gt; success -&gt; new Success&lt;&gt;(mapper.apply(success.value()));
+                case Failure&lt;T, E&gt; failure -&gt; new Failure&lt;&gt;(failure.error());
+            };
+        }
+
+        default T orElse(T defaultValue) {
+            return switch (this) {
+                case Success&lt;T, E&gt; success -&gt; success.value();
+                case Failure&lt;T, E&gt; failure -&gt; defaultValue;
+            };
+        }
+    }
+}
+
+// Comprehensive test
+class DataProcessingPipelineTest {
+    public static void main(String[] args) {
+        // Test basic pipeline
+        List&lt;String&gt; words = List.of(&quot;hello&quot;, &quot;world&quot;, &quot;java&quot;, &quot;generics&quot;, &quot;pipeline&quot;, &quot;test&quot;);
+
+        List&lt;Integer&gt; lengths = DataProcessingPipeline.of(words)
+            .filter(s -&gt; s.length() &gt; 4)
+            .transform(String::length)
+            .execute();
+
+        System.out.println(&quot;Word lengths &gt; 4: &quot; + lengths);
+
+        // Test parallel processing
+        List&lt;Integer&gt; numbers = java.util.stream.IntStream.range(1, 1000)
+            .boxed()
+            .collect(Collectors.toList());
+
+        long sum = DataProcessingPipeline.of(numbers)
+            .parallel()
+            .filter(n -&gt; n % 2 == 0)
+            .transform(n -&gt; n * n)
+            .aggregate(Collectors.summingLong(Integer::longValue));
+
+        System.out.println(&quot;Sum of squares of even numbers: &quot; + sum);
+
+        // Test error handling
+        List&lt;String&gt; mixedData = List.of(&quot;123&quot;, &quot;456&quot;, &quot;abc&quot;, &quot;789&quot;);
+
+        List&lt;DataProcessingPipeline.Result&lt;Integer, String&gt;&gt; results =
+            DataProcessingPipeline.of(mixedData)
+                .transform(s -&gt; {
+                    try {
+                        return Integer.parseInt(s);
+                    } catch (NumberFormatException e) {
+                        throw new RuntimeException(&quot;Invalid number: &quot; + s);
+                    }
+                })
+                .handleErrors(ex -&gt; ex.getMessage())
+                .execute();
+
+        System.out.println(&quot;Parsing results:&quot;);
+        results.forEach(result -&gt; {
+            String output = result.fold(
+                success -&gt; &quot;Success: &quot; + success,
+                error -&gt; &quot;Error: &quot; + error
+            );
+            System.out.println(&quot;  &quot; + output);
+        });
+
+        // Test grouping
+        List&lt;String&gt; animals = List.of(&quot;cat&quot;, &quot;dog&quot;, &quot;elephant&quot;, &quot;ant&quot;, &quot;bear&quot;, &quot;eagle&quot;);
+
+        Map&lt;Integer, List&lt;String&gt;&gt; groupedByLength = DataProcessingPipeline.of(animals)
+            .groupBy(String::length)
+            .findFirst()
+            .orElse(Map.of());
+
+        System.out.println(&quot;Animals grouped by length: &quot; + groupedByLength);
+
+        // Test async execution
+        try {
+            List&lt;String&gt; asyncResult = DataProcessingPipeline.of(words)
+                .transform(String::toUpperCase)
+                .executeAsync()
+                .get();
+
+            System.out.println(&quot;Async result: &quot; + asyncResult);
+        } catch (Exception e) {
+            System.err.println(&quot;Async execution failed: &quot; + e.getMessage());
+        }
+    }
+}
+</code></pre>
+<p><strong>✅ Assessment Criteria Met:</strong><br />
+- ✅ <strong>PECS Applied</strong>: Correct use of extends/super in method parameters<br />
+- ✅ <strong>Type Safety</strong>: No raw types or unsafe casts<br />
+- ✅ <strong>Modern Features</strong>: Records, sealed types, pattern matching<br />
+- ✅ <strong>Error Handling</strong>: Type-safe Result pattern<br />
+- ✅ <strong>Performance</strong>: Parallel processing support<br />
+- ✅ <strong>Flexibility</strong>: Multiple operation types and chaining</p>
+</details>
+<hr />
+<h3>🏆 Challenge 2: Generic Repository Pattern</h3>
+<p><strong>Scenario</strong>: Create a type-safe repository pattern that works with different entity types and supports various query operations.</p>
+<p><strong>Requirements</strong>:<br />
+- Generic CRUD operations<br />
+- Type-safe query building<br />
+- Specification pattern with generics<br />
+- Transaction support<br />
+- Caching with type safety</p>
+<pre><code class="language-java">// TODO: Implement comprehensive generic repository pattern
+public interface Repository&lt;T, ID&gt; {
+
+    // TODO: Basic CRUD operations with proper generics
+
+    // TODO: Query methods with specifications
+
+    // TODO: Pagination support
+
+    // TODO: Transaction support
+
+    // TODO: Caching integration
+}
+
+// TODO: Specification pattern for type-safe queries
+public interface Specification&lt;T&gt; {
+
+}
+
+// TODO: Entity base class or interface
+public interface Entity&lt;ID&gt; {
+
+}
+</code></pre>
+<h3>💡 Challenge 2 Solution</h3>
+<details>
+<summary>🎯 Try implementing the repository pattern yourself first</summary>
+<pre><code class="language-java">import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+// Generic repository interface
+public interface Repository&lt;T extends Entity&lt;ID&gt;, ID&gt; {
+
+    // Basic CRUD operations
+    T save(T entity);
+    Optional&lt;T&gt; findById(ID id);
+    List&lt;T&gt; findAll();
+    void deleteById(ID id);
+    void delete(T entity);
+    boolean existsById(ID id);
+    long count();
+
+    // Query operations
+    List&lt;T&gt; findAll(Specification&lt;T&gt; spec);
+    Optional&lt;T&gt; findOne(Specification&lt;T&gt; spec);
+    Page&lt;T&gt; findAll(Specification&lt;T&gt; spec, Pageable pageable);
+    long count(Specification&lt;T&gt; spec);
+
+    // Batch operations
+    List&lt;T&gt; saveAll(Iterable&lt;? extends T&gt; entities);
+    void deleteAll(Iterable&lt;? extends T&gt; entities);
+    void deleteAll();
+}
+
+// Entity interface with generic ID
+public interface Entity&lt;ID&gt; {
+    ID getId();
+    void setId(ID id);
+}
+
+// Specification interface for type-safe queries
+@FunctionalInterface
+public interface Specification&lt;T&gt; {
+    boolean test(T entity);
+
+    // Combinators
+    default Specification&lt;T&gt; and(Specification&lt;T&gt; other) {
+        return entity -&gt; this.test(entity) &amp;&amp; other.test(entity);
+    }
+
+    default Specification&lt;T&gt; or(Specification&lt;T&gt; other) {
+        return entity -&gt; this.test(entity) || other.test(entity);
+    }
+
+    default Specification&lt;T&gt; not() {
+        return entity -&gt; !this.test(entity);
+    }
+
+    // Utility factory methods
+    static &lt;T&gt; Specification&lt;T&gt; where(Predicate&lt;T&gt; predicate) {
+        return predicate::test;
+    }
+
+    static &lt;T&gt; Specification&lt;T&gt; alwaysTrue() {
+        return entity -&gt; true;
+    }
+
+    static &lt;T&gt; Specification&lt;T&gt; alwaysFalse() {
+        return entity -&gt; false;
+    }
+}
+
+// Pagination support
+public record Pageable(int page, int size, Sort sort) {
+    public Pageable(int page, int size) {
+        this(page, size, Sort.unsorted());
+    }
+
+    public int getOffset() {
+        return page * size;
+    }
+}
+
+public record Sort(List&lt;Order&gt; orders) {
+    public static Sort by(String... properties) {
+        return new Sort(Arrays.stream(properties)
+            .map(prop -&gt; new Order(Direction.ASC, prop))
+            .collect(Collectors.toList()));
+    }
+
+    public static Sort by(Direction direction, String... properties) {
+        return new Sort(Arrays.stream(properties)
+            .map(prop -&gt; new Order(direction, prop))
+            .collect(Collectors.toList()));
+    }
+
+    public static Sort unsorted() {
+        return new Sort(List.of());
+    }
+
+    public enum Direction { ASC, DESC }
+
+    public record Order(Direction direction, String property) {}
+}
+
+public record Page&lt;T&gt;(
+    List&lt;T&gt; content,
+    int number,
+    int size,
+    long totalElements,
+    int totalPages
+) {
+    public boolean hasNext() {
+        return number &lt; totalPages - 1;
+    }
+
+    public boolean hasPrevious() {
+        return number &gt; 0;
+    }
+
+    public boolean hasContent() {
+        return !content.isEmpty();
+    }
+
+    public &lt;R&gt; Page&lt;R&gt; map(Function&lt;T, R&gt; mapper) {
+        return new Page&lt;&gt;(
+            content.stream().map(mapper).collect(Collectors.toList()),
+            number,
+            size,
+            totalElements,
+            totalPages
+        );
+    }
+}
+
+// In-memory implementation for demonstration
+public class InMemoryRepository&lt;T extends Entity&lt;ID&gt;, ID&gt; implements Repository&lt;T, ID&gt; {
+
+    private final Map&lt;ID, T&gt; storage = new ConcurrentHashMap&lt;&gt;();
+    private final Map&lt;Class&lt;?&gt;, Map&lt;ID, Object&gt;&gt; cache = new ConcurrentHashMap&lt;&gt;();
+    private final Function&lt;T, ID&gt; idExtractor;
+
+    public InMemoryRepository(Function&lt;T, ID&gt; idExtractor) {
+        this.idExtractor = idExtractor;
+    }
+
+    @Override
+    public T save(T entity) {
+        Objects.requireNonNull(entity, &quot;Entity cannot be null&quot;);
+
+        ID id = idExtractor.apply(entity);
+        if (id == null) {
+            // Generate ID for new entities (simplified)
+            id = generateId();
+            entity.setId(id);
+        }
+
+        storage.put(id, entity);
+        invalidateCache(entity.getClass());
+        return entity;
+    }
+
+    @Override
+    public Optional&lt;T&gt; findById(ID id) {
+        return Optional.ofNullable(storage.get(id));
+    }
+
+    @Override
+    public List&lt;T&gt; findAll() {
+        return new ArrayList&lt;&gt;(storage.values());
+    }
+
+    @Override
+    public void deleteById(ID id) {
+        T removed = storage.remove(id);
+        if (removed != null) {
+            invalidateCache(removed.getClass());
+        }
+    }
+
+    @Override
+    public void delete(T entity) {
+        deleteById(idExtractor.apply(entity));
+    }
+
+    @Override
+    public boolean existsById(ID id) {
+        return storage.containsKey(id);
+    }
+
+    @Override
+    public long count() {
+        return storage.size();
+    }
+
+    @Override
+    public List&lt;T&gt; findAll(Specification&lt;T&gt; spec) {
+        return storage.values().stream()
+            .filter(spec::test)
+            .collect(Collectors.toList());
+    }
+
+    @Override
+    public Optional&lt;T&gt; findOne(Specification&lt;T&gt; spec) {
+        return storage.values().stream()
+            .filter(spec::test)
+            .findFirst();
+    }
+
+    @Override
+    public Page&lt;T&gt; findAll(Specification&lt;T&gt; spec, Pageable pageable) {
+        List&lt;T&gt; allMatching = findAll(spec);
+
+        // Apply sorting
+        if (!pageable.sort().orders().isEmpty()) {
+            allMatching = applySorting(allMatching, pageable.sort());
+        }
+
+        // Apply pagination
+        int start = pageable.getOffset();
+        int end = Math.min(start + pageable.size(), allMatching.size());
+        List&lt;T&gt; pageContent = allMatching.subList(start, end);
+
+        int totalPages = (int) Math.ceil((double) allMatching.size() / pageable.size());
+
+        return new Page&lt;&gt;(pageContent, pageable.page(), pageable.size(),
+                         allMatching.size(), totalPages);
+    }
+
+    @Override
+    public long count(Specification&lt;T&gt; spec) {
+        return storage.values().stream()
+            .filter(spec::test)
+            .count();
+    }
+
+    @Override
+    public List&lt;T&gt; saveAll(Iterable&lt;? extends T&gt; entities) {
+        List&lt;T&gt; saved = new ArrayList&lt;&gt;();
+        for (T entity : entities) {
+            saved.add(save(entity));
+        }
+        return saved;
+    }
+
+    @Override
+    public void deleteAll(Iterable&lt;? extends T&gt; entities) {
+        entities.forEach(this::delete);
+    }
+
+    @Override
+    public void deleteAll() {
+        storage.clear();
+        cache.clear();
+    }
+
+    // Helper methods
+    @SuppressWarnings(&quot;unchecked&quot;)
+    private ID generateId() {
+        // Simplified ID generation
+        return (ID) UUID.randomUUID().toString();
+    }
+
+    private void invalidateCache(Class&lt;?&gt; entityClass) {
+        cache.remove(entityClass);
+    }
+
+    private List&lt;T&gt; applySorting(List&lt;T&gt; entities, Sort sort) {
+        // Simplified sorting implementation
+        return entities.stream()
+            .sorted((e1, e2) -&gt; {
+                for (Sort.Order order : sort.orders()) {
+                    // This would need reflection in real implementation
+                    int comparison = 0; // Simplified
+                    if (comparison != 0) {
+                        return order.direction() == Sort.Direction.ASC ? comparison : -comparison;
+                    }
+                }
+                return 0;
+            })
+            .collect(Collectors.toList());
+    }
+}
+
+// Example entities for testing
+record User(String id, String name, String email, int age) implements Entity&lt;String&gt; {
+    @Override
+    public String getId() { return id; }
+
+    @Override
+    public void setId(String id) {
+        // Records are immutable, so this would need to return new instance
+        // Simplified for demo
+    }
+}
+
+record Product(String id, String name, double price, String category) implements Entity&lt;String&gt; {
+    @Override
+    public String getId() { return id; }
+
+    @Override
+    public void setId(String id) {
+        // Records are immutable, simplified for demo
+    }
+}
+
+// Specification examples
+class UserSpecifications {
+    public static Specification&lt;User&gt; hasName(String name) {
+        return user -&gt; Objects.equals(user.name(), name);
+    }
+
+    public static Specification&lt;User&gt; emailContains(String text) {
+        return user -&gt; user.email().contains(text);
+    }
+
+    public static Specification&lt;User&gt; ageGreaterThan(int age) {
+        return user -&gt; user.age() &gt; age;
+    }
+
+    public static Specification&lt;User&gt; ageBetween(int minAge, int maxAge) {
+        return user -&gt; user.age() &gt;= minAge &amp;&amp; user.age() &lt;= maxAge;
+    }
+}
+
+// Comprehensive test
+class RepositoryPatternTest {
+    public static void main(String[] args) {
+        Repository&lt;User, String&gt; userRepository = new InMemoryRepository&lt;&gt;(User::id);
+
+        // Save users
+        List&lt;User&gt; users = List.of(
+            new User(&quot;1&quot;, &quot;John Doe&quot;, &quot;john@example.com&quot;, 30),
+            new User(&quot;2&quot;, &quot;Jane Smith&quot;, &quot;jane@example.com&quot;, 25),
+            new User(&quot;3&quot;, &quot;Bob Johnson&quot;, &quot;bob@example.com&quot;, 35),
+            new User(&quot;4&quot;, &quot;Alice Brown&quot;, &quot;alice@example.com&quot;, 28)
+        );
+
+        userRepository.saveAll(users);
+
+        System.out.println(&quot;Total users: &quot; + userRepository.count());
+
+        // Find by ID
+        Optional&lt;User&gt; user = userRepository.findById(&quot;1&quot;);
+        System.out.println(&quot;User 1: &quot; + user);
+
+        // Find with specifications
+        List&lt;User&gt; youngUsers = userRepository.findAll(
+            UserSpecifications.ageBetween(20, 30)
+        );
+        System.out.println(&quot;Young users (20-30): &quot; + youngUsers);
+
+        // Complex specification
+        List&lt;User&gt; complexQuery = userRepository.findAll(
+            UserSpecifications.ageGreaterThan(25)
+                .and(UserSpecifications.emailContains(&quot;@example.com&quot;))
+                .and(UserSpecifications.hasName(&quot;John Doe&quot;).not())
+        );
+        System.out.println(&quot;Complex query result: &quot; + complexQuery);
+
+        // Pagination
+        Pageable pageable = new Pageable(0, 2, Sort.by(&quot;name&quot;));
+        Page&lt;User&gt; page = userRepository.findAll(
+            Specification.alwaysTrue(),
+            pageable
+        );
+
+        System.out.println(&quot;Page content: &quot; + page.content());
+        System.out.println(&quot;Total pages: &quot; + page.totalPages());
+        System.out.println(&quot;Has next: &quot; + page.hasNext());
+
+        // Count with specification
+        long adultCount = userRepository.count(UserSpecifications.ageGreaterThan(18));
+        System.out.println(&quot;Adult users: &quot; + adultCount);
+
+        // Transform page content
+        Page&lt;String&gt; nameOnlyPage = page.map(User::name);
+        System.out.println(&quot;Names only: &quot; + nameOnlyPage.content());
+    }
+}
+</code></pre>
+<p><strong>✅ Assessment Criteria Met:</strong><br />
+- ✅ <strong>Generic Design</strong>: Repository works with any Entity type<br />
+- ✅ <strong>Type Safety</strong>: All operations are type-safe<br />
+- ✅ <strong>Specification Pattern</strong>: Type-safe query building<br />
+- ✅ <strong>PECS Applied</strong>: Proper variance in method signatures<br />
+- ✅ <strong>Modern Features</strong>: Records for immutable data<br />
+- ✅ <strong>Comprehensive API</strong>: CRUD, queries, pagination, batch operations</p>
+</details>
+<hr />
+<h2>🔍 Code Review Challenges</h2>
+<h3>📝 Review Challenge 1: Identify Issues</h3>
+<p>Review this code and identify all generics-related issues:</p>
+<pre><code class="language-java">// Code to review - find all the issues!
+import java.util.*;
+
+public class ProblematicGenericCode {
+
+    // Issue 1: ?
+    private List items = new ArrayList();
+    private Map cache = new HashMap();
+
+    // Issue 2: ?
+    public void addItem(Object item) {
+        items.add(item);
+    }
+
+    // Issue 3: ?
+    public Object getItem(int index) {
+        return items.get(index);
+    }
+
+    // Issue 4: ?
+    public static List merge(List list1, List list2) {
+        List result = new ArrayList();
+        result.addAll(list1);
+        result.addAll(list2);
+        return result;
+    }
+
+    // Issue 5: ?
+    public static &lt;T&gt; void swap(List&lt;T&gt; list, int i, int j) {
+        Object temp = list.get(i);
+        list.set(i, list.get(j));
+        list.set(j, temp);
+    }
+
+    // Issue 6: ?
+    public static &lt;T&gt; T[] toArray(List&lt;T&gt; list) {
+        return (T[]) list.toArray();
+    }
+
+    // Issue 7: ?
+    @SafeVarargs
+    public static &lt;T&gt; void processItems(List&lt;T&gt;... lists) {
+        Object[] array = lists;
+        array[0] = Arrays.asList(&quot;danger&quot;);
+    }
+}
+</code></pre>
+<h3>💡 Code Review Solutions</h3>
+<details>
+<summary>🔍 Try identifying all issues yourself first</summary>
+<p><strong>Issues Identified:</strong></p>
+<ol>
+<li><strong>Raw Types (Lines 6-7)</strong>:</li>
+</ol>
+<pre><code class="language-java">// ❌ Problem
+private List items = new ArrayList();
+private Map cache = new HashMap();
+
+// ✅ Solution
+private List&lt;SomeType&gt; items = new ArrayList&lt;&gt;();
+private Map&lt;KeyType, ValueType&gt; cache = new HashMap&lt;&gt;();
+</code></pre>
+<ol>
+<li><strong>Non-generic Method Parameter (Line 10)</strong>:</li>
+</ol>
+<pre><code class="language-java">// ❌ Problem
+public void addItem(Object item) {
+
+// ✅ Solution
+public void addItem(T item) { // Make class generic or use specific type
+</code></pre>
+<ol>
+<li><strong>Non-generic Return Type (Line 14)</strong>:</li>
+</ol>
+<pre><code class="language-java">// ❌ Problem
+public Object getItem(int index) {
+
+// ✅ Solution
+public T getItem(int index) {
+    return items.get(index);
+}
+</code></pre>
+<ol>
+<li><strong>Raw Types in Method Signature (Line 18)</strong>:</li>
+</ol>
+<pre><code class="language-java">// ❌ Problem
+public static List merge(List list1, List list2) {
+
+// ✅ Solution
+public static &lt;T&gt; List&lt;T&gt; merge(List&lt;? extends T&gt; list1, List&lt;? extends T&gt; list2) {
+    List&lt;T&gt; result = new ArrayList&lt;&gt;();
+    result.addAll(list1);
+    result.addAll(list2);
+    return result;
+}
+</code></pre>
+<ol>
+<li><strong>Unsafe Cast in Generic Method (Line 26)</strong>:</li>
+</ol>
+<pre><code class="language-java">// ❌ Problem
+Object temp = list.get(i);
+list.set(j, temp); // Cannot assign Object to T
+
+// ✅ Solution
+T temp = list.get(i);
+list.set(i, list.get(j));
+list.set(j, temp);
+</code></pre>
+<ol>
+<li><strong>Unsafe Array Cast (Line 32)</strong>:</li>
+</ol>
+<pre><code class="language-java">// ❌ Problem
+return (T[]) list.toArray(); // ClassCastException at runtime
+
+// ✅ Solution
+@SuppressWarnings(&quot;unchecked&quot;)
+public static &lt;T&gt; T[] toArray(List&lt;T&gt; list, Class&lt;T&gt; componentType) {
+    return list.toArray((T[]) Array.newInstance(componentType, list.size()));
+}
+</code></pre>
+<ol>
+<li><strong>Misused @SafeVarargs (Line 36)</strong>:</li>
+</ol>
+<pre><code class="language-java">// ❌ Problem - method is NOT safe, causes heap pollution
+@SafeVarargs
+public static &lt;T&gt; void processItems(List&lt;T&gt;... lists) {
+    Object[] array = lists;
+    array[0] = Arrays.asList(&quot;danger&quot;); // Heap pollution!
+}
+
+// ✅ Solution - Remove @SafeVarargs or make method actually safe
+public static &lt;T&gt; void processItems(List&lt;T&gt;... lists) {
+    // Only read from lists, don't store or modify the array
+    for (List&lt;T&gt; list : lists) {
+        // Process each list safely
+    }
+}
+</code></pre>
+<p><strong>Summary</strong>: 7 critical issues found - raw types, unsafe casts, improper variance, and misused annotations.</p>
+</details>
+<hr />
+<h3>📝 Review Challenge 2: API Design Critique</h3>
+<p>Review this API design and suggest improvements:</p>
+<pre><code class="language-java">// API to review and improve
+public class DataProcessor {
+
+    public static List processData(List data, Function transformer) {
+        // Implementation
+    }
+
+    public static void validateItems(Collection items, Validator validator) {
+        // Implementation
+    }
+
+    public static Map groupItems(List items) {
+        // Implementation
+    }
+
+    public static Object findFirst(List items, Predicate condition) {
+        // Implementation
+    }
+}
+</code></pre>
+<h3>💡 API Design Improvements</h3>
+<details>
+<summary>🎨 Try redesigning the API yourself first</summary>
+<p><strong>Improved API Design:</strong></p>
+<pre><code class="language-java">import java.util.*;
+import java.util.function.*;
+import java.util.stream.Collectors;
+
+public class DataProcessor {
+
+    // ✅ Improved: Generic with proper PECS
+    public static &lt;T, R&gt; List&lt;R&gt; processData(
+        List&lt;? extends T&gt; data,                    // Producer - extends
+        Function&lt;? super T, ? extends R&gt; transformer  // Flexible function types
+    ) {
+        return data.stream()
+                  .map(transformer)
+                  .collect(Collectors.toList());
+    }
+
+    // ✅ Improved: Generic with validation result
+    public static &lt;T&gt; ValidationResult&lt;List&lt;T&gt;&gt; validateItems(
+        Collection&lt;? extends T&gt; items,             // Producer - extends
+        Predicate&lt;? super T&gt; validator             // Flexible predicate
+    ) {
+        List&lt;String&gt; errors = new ArrayList&lt;&gt;();
+        List&lt;T&gt; validItems = new ArrayList&lt;&gt;();
+
+        for (T item : items) {
+            if (validator.test(item)) {
+                validItems.add(item);
+            } else {
+                errors.add(&quot;Invalid item: &quot; + item);
+            }
+        }
+
+        return errors.isEmpty()
+            ? ValidationResult.valid(validItems)
+            : ValidationResult.invalid(errors);
+    }
+
+    // ✅ Improved: Generic with flexible key extraction
+    public static &lt;T, K&gt; Map&lt;K, List&lt;T&gt;&gt; groupItems(
+        Collection&lt;? extends T&gt; items,             // Producer - extends
+        Function&lt;? super T, ? extends K&gt; keyExtractor  // Flexible key function
+    ) {
+        return items.stream()
+                   .collect(Collectors.groupingBy(keyExtractor));
+    }
+
+    // ✅ Improved: Generic with Optional return
+    public static &lt;T&gt; Optional&lt;T&gt; findFirst(
+        Collection&lt;? extends T&gt; items,             // Producer - extends
+        Predicate&lt;? super T&gt; condition             // Flexible predicate
+    ) {
+        return items.stream()
+                   .filter(condition)
+                   .findFirst();
+    }
+
+    // ✅ Bonus: Additional utility methods with proper generics
+    public static &lt;T&gt; List&lt;T&gt; filterItems(
+        Collection&lt;? extends T&gt; items,
+        Predicate&lt;? super T&gt; filter
+    ) {
+        return items.stream()
+                   .filter(filter)
+                   .collect(Collectors.toList());
+    }
+
+    public static &lt;T, R&gt; List&lt;R&gt; flatMapItems(
+        Collection&lt;? extends T&gt; items,
+        Function&lt;? super T, ? extends Collection&lt;? extends R&gt;&gt; mapper
+    ) {
+        return items.stream()
+                   .flatMap(item -&gt; mapper.apply(item).stream())
+                   .collect(Collectors.toList());
+    }
+
+    // ✅ Type-safe validation result
+    public sealed interface ValidationResult&lt;T&gt;
+        permits ValidationResult.Valid, ValidationResult.Invalid {
+
+        record Valid&lt;T&gt;(T value) implements ValidationResult&lt;T&gt; {}
+        record Invalid&lt;T&gt;(List&lt;String&gt; errors) implements ValidationResult&lt;T&gt; {}
+
+        static &lt;T&gt; ValidationResult&lt;T&gt; valid(T value) {
+            return new Valid&lt;&gt;(value);
+        }
+
+        static &lt;T&gt; ValidationResult&lt;T&gt; invalid(List&lt;String&gt; errors) {
+            return new Invalid&lt;&gt;(errors);
+        }
+
+        default boolean isValid() {
+            return this instanceof Valid;
+        }
+
+        default T orElseThrow() {
+            return switch (this) {
+                case Valid&lt;T&gt; valid -&gt; valid.value();
+                case Invalid&lt;T&gt; invalid -&gt;
+                    throw new IllegalStateException(&quot;Validation failed: &quot; +
+                        String.join(&quot;, &quot;, invalid.errors()));
+            };
+        }
+    }
+}
+
+// Usage examples demonstrating improved API
+class ImprovedAPITest {
+    public static void main(String[] args) {
+        List&lt;String&gt; words = List.of(&quot;hello&quot;, &quot;world&quot;, &quot;java&quot;, &quot;generics&quot;);
+
+        // Process data with type safety
+        List&lt;Integer&gt; lengths = DataProcessor.processData(words, String::length);
+        System.out.println(&quot;Lengths: &quot; + lengths);
+
+        // Validate with proper result handling
+        DataProcessor.ValidationResult&lt;List&lt;String&gt;&gt; validation =
+            DataProcessor.validateItems(words, s -&gt; s.length() &gt; 3);
+
+        if (validation.isValid()) {
+            System.out.println(&quot;Valid words: &quot; + validation.orElseThrow());
+        }
+
+        // Group with type-safe key extraction
+        Map&lt;Integer, List&lt;String&gt;&gt; grouped =
+            DataProcessor.groupItems(words, String::length);
+        System.out.println(&quot;Grouped by length: &quot; + grouped);
+
+        // Find with Optional return
+        Optional&lt;String&gt; longWord =
+            DataProcessor.findFirst(words, s -&gt; s.length() &gt; 5);
+        System.out.println(&quot;Long word: &quot; + longWord.orElse(&quot;none&quot;));
+
+        // Works with different types
+        List&lt;Integer&gt; numbers = List.of(1, 2, 3, 4, 5);
+        List&lt;String&gt; numberStrings = DataProcessor.processData(numbers, Object::toString);
+        System.out.println(&quot;Number strings: &quot; + numberStrings);
+    }
+}
+</code></pre>
+<p><strong>Key Improvements:</strong><br />
+1. ✅ <strong>Added generics</strong> to all methods<br />
+2. ✅ <strong>Applied PECS principle</strong> correctly<br />
+3. ✅ <strong>Used Optional</strong> instead of nullable Object<br />
+4. ✅ <strong>Added ValidationResult</strong> for proper error handling<br />
+5. ✅ <strong>Flexible function types</strong> with proper variance<br />
+6. ✅ <strong>Type-safe return types</strong> throughout<br />
+7. ✅ <strong>Modern Java features</strong> (sealed interfaces, records)</p>
+</details>
+<hr />
+<h2>🏆 Final Assessment Exam</h2>
+<h3>📋 Comprehensive Assessment</h3>
+<p><strong>Instructions</strong>: Complete all sections</p>
+<h4>Section A: Multiple Choice (5 questions)</h4>
+<ol>
+<li><strong>Which declaration correctly applies the PECS principle?</strong></li>
+</ol>
+<pre><code class="language-java">a) public static &lt;T&gt; void copy(List&lt;T&gt; dest, List&lt;T&gt; src)
+b) public static &lt;T&gt; void copy(List&lt;? super T&gt; dest, List&lt;? extends T&gt; src)
+c) public static &lt;T&gt; void copy(List&lt;? extends T&gt; dest, List&lt;? super T&gt; src)
+d) public static &lt;T&gt; void copy(List&lt;?&gt; dest, List&lt;?&gt; src)
+</code></pre>
+<ol>
+<li><strong>What happens at runtime with this code?</strong></li>
+</ol>
+<pre><code class="language-java">List&lt;String&gt; strings = new ArrayList&lt;&gt;();
+List&lt;Integer&gt; integers = new ArrayList&lt;&gt;();
+System.out.println(strings.getClass() == integers.getClass());
+</code></pre>
+<pre><code>a) Compilation error
+b) Prints false
+c) Prints true
+d) ClassCastException
+</code></pre>
+<ol>
+<li><strong>Which method signature is most flexible?</strong></li>
+</ol>
+<pre><code class="language-java">a) public static &lt;T&gt; T max(List&lt;T&gt; items)
+b) public static &lt;T extends Comparable&lt;T&gt;&gt; T max(List&lt;T&gt; items)
+c) public static &lt;T extends Comparable&lt;? super T&gt;&gt; T max(List&lt;? extends T&gt; items)
+d) public static Object max(List&lt;?&gt; items)
+</code></pre>
+<ol>
+<li><strong>When is @SafeVarargs appropriate?</strong></li>
+</ol>
+<pre><code class="language-java">a) Always with generic varargs
+b) When the method doesn't store the varargs array
+c) Only on static methods
+d) Never with generic types
+</code></pre>
+<ol>
+<li><strong>What's the best way to create a generic array?</strong></li>
+</ol>
+<pre><code class="language-java">a) T[] array = new T[10];
+b) T[] array = (T[]) new Object[10];
+c) T[] array = (T[]) Array.newInstance(clazz, 10);
+d) Generic arrays are impossible
+</code></pre>
+<h4>Section B: Code Implementation (2 problems)</h4>
+<p><strong>Problem 1</strong>: Implement a generic <code>Cache&lt;K, V&gt;</code> class with:<br />
+- Type-safe get/put operations<br />
+- TTL (time-to-live) support<br />
+- Size limits with LRU eviction<br />
+- Thread safety</p>
+<p><strong>Problem 2</strong>: Create a <code>GenericBuilder&lt;T&gt;</code> that:<br />
+- Uses CRTP pattern<br />
+- Supports fluent chaining<br />
+- Has validation before building<br />
+- Works with inheritance</p>
+<h4>Section C: Design Question</h4>
+<p>Design a generic event sourcing system that:<br />
+- Handles different event types safely<br />
+- Supports event replay with type safety<br />
+- Includes snapshot functionality<br />
+- Integrates with modern Java features</p>
+<h3>💡 Answers</h3>
+<details>
+<summary>🏆 Check your answers after completing the exam</summary>
+<p><strong>Section A Answers:</strong><br />
+1. <strong>b)</strong> - Correct PECS: dest is consumer (super), src is producer (extends)<br />
+2. <strong>c)</strong> - Type erasure makes both classes identical at runtime<br />
+3. <strong>c)</strong> - Most flexible: bounded type parameter with PECS wildcards<br />
+4. <strong>b)</strong> - Safe when method doesn't store or expose the varargs array<br />
+5. <strong>c)</strong> - Array.newInstance with Class parameter is type-safe</p>
+<p><strong>Section B Solutions:</strong></p>
+<pre><code class="language-java">// Problem 1: Generic Cache
+public class Cache&lt;K, V&gt; {
+    private final Map&lt;K, CacheEntry&lt;V&gt;&gt; storage = new ConcurrentHashMap&lt;&gt;();
+    private final int maxSize;
+    private final long ttlMillis;
+    private final LinkedHashMap&lt;K, Long&gt; accessOrder = new LinkedHashMap&lt;&gt;(16, 0.75f, true);
+
+    public Cache(int maxSize, long ttlMillis) {
+        this.maxSize = maxSize;
+        this.ttlMillis = ttlMillis;
+    }
+
+    public synchronized void put(K key, V value) {
+        evictExpired();
+
+        if (storage.size() &gt;= maxSize &amp;&amp; !storage.containsKey(key)) {
+            evictLRU();
+        }
+
+        storage.put(key, new CacheEntry&lt;&gt;(value, System.currentTimeMillis()));
+        accessOrder.put(key, System.currentTimeMillis());
+    }
+
+    public synchronized Optional&lt;V&gt; get(K key) {
+        CacheEntry&lt;V&gt; entry = storage.get(key);
+
+        if (entry == null || isExpired(entry)) {
+            storage.remove(key);
+            accessOrder.remove(key);
+            return Optional.empty();
+        }
+
+        accessOrder.put(key, System.currentTimeMillis());
+        return Optional.of(entry.value());
+    }
+
+    private boolean isExpired(CacheEntry&lt;V&gt; entry) {
+        return System.currentTimeMillis() - entry.timestamp() &gt; ttlMillis;
+    }
+
+    private void evictExpired() {
+        storage.entrySet().removeIf(entry -&gt; isExpired(entry.getValue()));
+    }
+
+    private void evictLRU() {
+        K oldestKey = accessOrder.keySet().iterator().next();
+        storage.remove(oldestKey);
+        accessOrder.remove(oldestKey);
+    }
+
+    private record CacheEntry&lt;V&gt;(V value, long timestamp) {}
+}
+
+// Problem 2: Generic Builder with CRTP
+public abstract class GenericBuilder&lt;T extends GenericBuilder&lt;T&gt;&gt; {
+    protected final Map&lt;String, Object&gt; properties = new HashMap&lt;&gt;();
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    protected final T self() {
+        return (T) this;
+    }
+
+    public T with(String key, Object value) {
+        properties.put(key, value);
+        return self();
+    }
+
+    protected abstract void validate();
+
+    public abstract Object build();
+
+    public final Object buildSafely() {
+        validate();
+        return build();
+    }
+}
+
+class PersonBuilder extends GenericBuilder&lt;PersonBuilder&gt; {
+    @Override
+    protected void validate() {
+        if (!properties.containsKey(&quot;name&quot;)) {
+            throw new IllegalStateException(&quot;Name is required&quot;);
+        }
+    }
+
+    @Override
+    public Person build() {
+        return new Person((String) properties.get(&quot;name&quot;),
+                         (Integer) properties.get(&quot;age&quot;));
+    }
+}
+</code></pre>
+<p><strong>Section C Design:</strong><br />
+A complete event sourcing system would include:<br />
+- Generic <code>Event&lt;T&gt;</code> interface with payload types<br />
+- <code>EventStore&lt;T&gt;</code> with type-safe storage<br />
+- <code>EventReplay&lt;T&gt;</code> with type-safe event processing<br />
+- <code>Snapshot&lt;T&gt;</code> for state optimization<br />
+- Integration with Records for immutable events<br />
+- Sealed types for event hierarchies</p>
+<p><strong>Scoring:</strong><br />
+- Section A: 20 points (4 points each)<br />
+- Section B: 40 points (20 points each)<br />
+- Section C: 40 points</p>
+</details>
+<hr />
+<h2>🎓 Congratulations &amp; Next Steps</h2>
+<h3>🏆 Course Completion</h3>
+<p><strong>You've successfully completed the Java Generics Mastery Course!</strong></p>
+<h3>📜 Your Achievements</h3>
+<ul>
+<li>✅ <strong>Mastered Type Safety</strong>: Eliminated ClassCastException risks</li>
+<li>✅ <strong>Applied PECS Principle</strong>: Designed flexible APIs with wildcards</li>
+<li>✅ <strong>Handled Advanced Patterns</strong>: Type erasure, CRTP, and heterogeneous containers</li>
+<li>✅ <strong>Integrated Modern Features</strong>: Records, sealed types, pattern matching</li>
+<li>✅ <strong>Built Real-World Solutions</strong>: Enterprise-ready generic systems</li>
+</ul>
+<h3>🚀 Continuing Your Journey</h3>
+<h4>Advanced Topics to Explore</h4>
+<ol>
+<li><strong>Generic Frameworks</strong>: Study Spring, Hibernate, Jackson generics usage</li>
+<li><strong>Performance Tuning</strong>: Advanced JVM optimizations with generics</li>
+<li><strong>Functional Programming</strong>: Deeper integration with streams and lambdas</li>
+<li><strong>Concurrent Programming</strong>: Generic thread-safe patterns</li>
+<li><strong>Microservices</strong>: Generic API design for distributed systems</li>
+</ol>
+<h4>Recommended Reading</h4>
+<ul>
+<li>&quot;Effective Java&quot; by Joshua Bloch (Items 26-33)</li>
+<li>&quot;Java: The Complete Reference&quot; - Generics chapters</li>
+<li>&quot;Modern Java in Action&quot; - Advanced generics patterns</li>
+<li>Oracle Java Documentation - Generics tutorial</li>
+</ul>
+<h4>Community Involvement</h4>
+<ul>
+<li><strong>Contribute to Open Source</strong>: Apply your skills to real projects</li>
+<li><strong>Blog About Generics</strong>: Share your learning journey</li>
+<li><strong>Mentor Others</strong>: Help developers learn generics</li>
+<li><strong>Join Java Communities</strong>: JUGs, Stack Overflow, Reddit</li>
+</ul>
+<h3>🎯 Portfolio Projects</h3>
+<p>Build these projects to showcase your skills:</p>
+<ol>
+<li><strong>Generic ORM Framework</strong>: Type-safe database operations</li>
+<li><strong>Event Sourcing Library</strong>: Generic event handling system</li>
+<li><strong>Validation Framework</strong>: Type-safe validation with generics</li>
+<li><strong>Caching Library</strong>: Generic cache with advanced features</li>
+<li><strong>API Framework</strong>: Generic REST API with type safety</li>
+</ol>
+<hr />
+<h2>📝 Final Self-Assessment</h2>
+<p>Rate your confidence (1-5) in these areas:</p>
+<ul>
+<li>[ ] Understanding generics fundamentals (1-5)</li>
+<li>[ ] Applying PECS principle correctly (1-5)</li>
+<li>[ ] Handling type erasure challenges (1-5)</li>
+<li>[ ] Using advanced patterns (CRTP, type tokens) (1-5)</li>
+<li>[ ] Integrating with modern Java features (1-5)</li>
+<li>[ ] Designing production-ready generic APIs (1-5)</li>
+<li>[ ] Debugging generic code issues (1-5)</li>
+<li>[ ] Teaching generics to others (1-5)</li>
+</ul>
+<p><strong>Target</strong>: All areas should be 4 or 5. If any area is below 4, consider reviewing that module.</p>
+<hr />
+<h2>🎉 Thank You!</h2>
+<p>Thank you for completing the <strong>Java Generics Mastery Course</strong>! You've invested in becoming a better Java developer, and the skills you've learned will benefit you throughout your career.</p>
+<p><strong>Remember</strong>: Generics are not just about type safety - they're about writing expressive, maintainable, and robust code that stands the test of time.</p>
+<p><strong>Keep coding, keep learning, and keep sharing your knowledge!</strong> 🚀</p>
+
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2025 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../js/jquery-1.11.2.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/prettify.js"></script>
+<script src="../../js/run_prettify.js"></script>
+<script src="../../js/main.js"></script>
+<!-- Google Analytics -->
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-13CV90H4J4', 'auto');
+	ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+</body>
+</html>

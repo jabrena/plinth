@@ -21,44 +21,6 @@ Use monadic composition to create maintainable, testable, and performant error h
 - VAVR library (io.vavr:vavr) for Either<L,R> and other functional programming constructs
 - SLF4J for structured logging compatible with functional error handling
 
-### Consultative Interaction Technique
-
-This technique emphasizes **analyzing before acting** and **proposing options before implementing**. Instead of immediately making changes, the assistant:
-
-1. **Analyzes** the current state and identifies specific issues
-2. **Categorizes** problems by impact (CRITICAL, MAINTAINABILITY, etc.)
-3. **Proposes** multiple solution options with clear trade-offs
-4. **Asks** the user to choose their preferred approach
-5. **Implements** based on user selection
-
-**Benefits:**
-- Builds user understanding of the codebase
-- Ensures changes align with user preferences and constraints
-- Teaches best practices through explanation
-- Prevents unwanted modifications
-- Encourages informed decision-making
-
-**Example interaction:**
-```
-🔍 I found 3 Maven best practices improvements in this POM:
-
-1. **CRITICAL: Hardcoded Dependency Versions**
-- Problem: Dependencies have hardcoded versions scattered throughout the POM
-- Solutions: A) Move to properties section B) Use dependencyManagement C) Import BOM files
-
-2. **MAINTAINABILITY: Missing Plugin Version Management**
-- Problem: Maven plugins lack explicit version declarations
-- Solutions: A) Add pluginManagement section B) Define plugin versions in properties C) Use parent POM approach
-
-3. **ORGANIZATION: Inconsistent POM Structure**
-- Problem: Elements are not in logical order, affecting readability
-- Solutions: A) Reorganize sections B) Add descriptive comments C) Use consistent naming conventions
-
-Which would you like to implement? (1A, 1B, 1C, 2A, 2B, 2C, 3A, 3B, 3C, or 'show more details')
-```
-
-Focus on being consultative rather than prescriptive - analyze, propose, ask, then implement based on user choice.
-
 ### Implementing These Principles
 
 These guidelines are built upon the following core principles:
@@ -1438,3 +1400,26 @@ public class FileProcessor {
     }
 }
 ```
+
+## Output Format
+
+- **ANALYZE** Java code to identify specific functional exception handling opportunities and categorize them by impact (CRITICAL, MAINTAINABILITY, PERFORMANCE, EXPRESSIVENESS) and area (exception overuse, monadic error handling gaps, functional error composition, error type design)
+- **CATEGORIZE** functional exception handling improvements found: Exception Overuse Issues (exceptions for business logic vs monadic error handling, checked exceptions vs functional Either types, exception-driven control flow vs Optional/Either composition), Monadic Error Handling Gaps (null checks vs Optional usage, imperative error handling vs functional composition, missing VAVR Either integration vs comprehensive functional error types), Error Type Design Problems (generic exceptions vs specific error types, poor error context vs rich error information, inconsistent error handling vs unified functional patterns), and Functional Composition Opportunities (imperative exception handling vs monadic chaining, blocking error propagation vs functional error transformation)
+- **APPLY** functional exception handling best practices directly by implementing the most appropriate improvements for each identified opportunity: Replace exceptions with Optional for nullable values, integrate VAVR Either types for error handling, implement functional error composition with monadic operations, design comprehensive error types with clear codes and context, establish functional control flow patterns instead of exception-driven logic, create composable error handling pipelines, and reserve exceptions only for truly exceptional system-level failures
+- **IMPLEMENT** comprehensive functional exception handling refactoring using proven patterns: Establish monadic error handling with Optional and VAVR Either types, create well-structured error hierarchies using sealed classes and enums, implement functional composition for error handling pipelines, replace exception-driven control flow with functional patterns, integrate structured logging compatible with functional error handling, design type-safe error communication with clear error codes and messages, and establish consistent functional error handling idioms throughout the codebase
+- **REFACTOR** code systematically following the functional exception handling improvement roadmap: First replace exception overuse with Optional and Either types for predictable failures, then establish comprehensive error type design with sealed classes and enums, implement functional composition patterns for error handling pipelines, integrate VAVR library for advanced functional error handling, establish structured logging and monitoring compatible with functional approaches, and create consistent functional error handling patterns across the entire codebase
+- **EXPLAIN** the applied functional exception handling improvements and their benefits: Error handling clarity through monadic types and functional composition, maintainability improvements via consistent functional error patterns, performance gains from eliminating exception overhead in normal failure cases, code expressiveness enhancements through functional error composition, and overall robustness improvements through type-safe functional error handling
+- **VALIDATE** that all applied functional exception handling refactoring compiles successfully, maintains existing functionality, preserves error handling semantics, achieves expected functional benefits, and follows functional programming best practices through comprehensive testing and verification
+
+## Safeguards
+
+- **BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` or `mvn compile` before ANY functional exception handling refactoring recommendations - compilation failure is a HARD STOP
+- **CRITICAL VALIDATION**: Execute `./mvnw clean verify` or `mvn clean verify` to ensure all tests pass after applying functional exception handling patterns
+- **MANDATORY VERIFICATION**: Confirm all existing functionality remains intact after functional exception handling refactoring, especially error handling semantics and business logic correctness
+- **SAFETY PROTOCOL**: If ANY compilation error occurs during functional exception handling transformation, IMMEDIATELY cease recommendations and require user intervention
+- **ERROR HANDLING VALIDATION**: Ensure functional error handling patterns maintain proper error propagation, logging, and recovery mechanisms without losing critical error information
+- **DEPENDENCY COMPATIBILITY**: Validate that VAVR library integration and functional patterns are compatible with existing frameworks and don't break dependency injection or serialization requirements
+- **PERFORMANCE VERIFICATION**: Ensure functional exception handling patterns don't introduce performance regressions, especially with monadic composition and error type creation
+- **ROLLBACK REQUIREMENT**: Ensure all functional exception handling refactoring changes can be easily reverted if they introduce complexity or compatibility issues
+- **INCREMENTAL SAFETY**: Apply functional exception handling patterns incrementally, validating compilation and tests after each significant transformation step
+- **FINAL VERIFICATION**: After completing all functional exception handling improvements, perform a final full project compilation, test run, and verification that error handling behavior and business logic integrity are maintained

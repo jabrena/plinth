@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Module 1: Foundations - Core Concepts and Type Safety - Cursor Rules for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../feed.xml" title="Cursor Rules for Java"/>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../css/prettify.css">
+  <link rel="shortcut icon" href="../../favicon.ico">
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../index.html">Cursor Rules for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../courses/generics/index.html">Generics</a>
+    </div>
+  </li>
+  <li><a href="../../archive.html">Archive</a></li>
+  <li><a href="../../tags.html">Tags</a></li>
+  <li><a href="../../about.html">About</a></li>
+</ul>
+</div>
+
+<div class="avatar-container">
+  <div class="avatar-img-border">
+    <a href="../../index.html">
+      <img class="avatar-img" src="../../images/avatar-icon.png"/>
+    </a>
+  </div>
+</div>
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="course-heading">
+<h1>Module 1: Foundations - Core Concepts and Type Safety</h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="course-content">
+
+<div class="course-meta">
+    <i class="fa fa-calendar-o"></i>
+    2025-09-13
+    &nbsp;
+    <i class="fa fa-user"></i>
+    Juan Antonio Breña Moral
+  <div class="course-tags">
+    &nbsp;
+    <i class="fa fa-tags"></i>
+      <a href="../../tags/java.html" class="course-tag">java</a>
+      <a href="../../tags/generics.html" class="course-tag">generics</a>
+      <a href="../../tags/type-safety.html" class="course-tag">type-safety</a>
+      <a href="../../tags/foundations.html" class="course-tag">foundations</a>
+  </div>
+</div>
+<hr>
+
+<h2>📖 Module Overview</h2>
+<p>Welcome to the foundation of Java Generics! In this module, you'll discover why generics were introduced, understand the problems they solve, and learn the fundamental syntax that makes Java code safer and more expressive.</p>
+<h3>🎯 Learning Objectives</h3>
+<p>By the end of this module, you will:</p>
+<ul>
+<li><strong>Understand</strong> the core problems that generics solve</li>
+<li><strong>Eliminate</strong> raw types from your code completely</li>
+<li><strong>Apply</strong> basic generic syntax correctly</li>
+<li><strong>Use</strong> the diamond operator for cleaner code</li>
+<li><strong>Follow</strong> generic naming conventions</li>
+<li><strong>Recognize</strong> and fix common beginner mistakes</li>
+</ul>
+<h3>⏱️ Estimated Time: 2-3 hours</h3>
+<hr />
+<h2>🤔 The Problem: Why Do We Need Generics?</h2>
+<h3>💥 Before Generics (Java 1.4 and earlier)</h3>
+<p>Let's start with a story. Imagine you're building a simple inventory system:</p>
+<pre><code class="language-java">import java.util.ArrayList;
+import java.util.List;
+
+// This is how we had to write code before generics
+public class PreGenericsInventory {
+    private List items = new ArrayList(); // Raw type - dangerous!
+
+    public void addItem(Object item) {
+        items.add(item);
+    }
+
+    public Object getItem(int index) {
+        return items.get(index);
+    }
+
+    // This method looks innocent but is a ticking time bomb
+    public void processItems() {
+        for (int i = 0; i &lt; items.size(); i++) {
+            String item = (String) getItem(i); // Unsafe cast!
+            System.out.println(&quot;Processing: &quot; + item.toUpperCase());
+        }
+    }
+}
+</code></pre>
+<h3>🔍 <strong>Knowledge Check</strong>: What's Wrong Here?</h3>
+<p>Before reading further, can you spot the potential problems in the code above?</p>
+<details>
+<summary>🧠 Think about it, then click to reveal</summary>
+<p><strong>Problems identified:</strong><br />
+1. <strong>No compile-time type checking</strong> - we can add any object type<br />
+2. <strong>Unsafe casting required</strong> - <code>(String)</code> cast can fail at runtime<br />
+3. <strong>ClassCastException risk</strong> - if someone adds a non-String, the app crashes<br />
+4. <strong>No IDE support</strong> - no autocomplete or type hints<br />
+5. <strong>Runtime errors instead of compile-time errors</strong> - bugs discovered late</p>
+</details>
+<h3>💣 The Explosion</h3>
+<pre><code class="language-java">public class InventoryDemo {
+    public static void main(String[] args) {
+        PreGenericsInventory inventory = new PreGenericsInventory();
+
+        // This compiles fine...
+        inventory.addItem(&quot;Laptop&quot;);
+        inventory.addItem(&quot;Mouse&quot;);
+        inventory.addItem(42); // Oops! Added an Integer
+
+        // But this explodes at runtime!
+        inventory.processItems(); // ClassCastException!
+    }
+}
+</code></pre>
+<p><strong>Result</strong>: <code>ClassCastException: Integer cannot be cast to String</code></p>
+<hr />
+<h2>✨ The Solution: Enter Generics</h2>
+<h3>🛡️ Type Safety with Generics</h3>
+<p>Now let's see how generics solve these problems:</p>
+<pre><code class="language-java">import java.util.ArrayList;
+import java.util.List;
+
+public class SafeInventory {
+    private final List&lt;String&gt; items = new ArrayList&lt;&gt;(); // Type-safe!
+
+    public void addItem(String item) {
+        items.add(item); // Only String allowed
+    }
+
+    public String getItem(int index) {
+        return items.get(index); // No casting needed!
+    }
+
+    public void processItems() {
+        for (String item : items) { // Type-safe iteration
+            System.out.println(&quot;Processing: &quot; + item.toUpperCase());
+        }
+    }
+}
+</code></pre>
+<h3>🎉 Benefits Achieved</h3>
+<pre><code class="language-java">public class SafeInventoryDemo {
+    public static void main(String[] args) {
+        SafeInventory inventory = new SafeInventory();
+
+        inventory.addItem(&quot;Laptop&quot;);  // ✅ Compiles
+        inventory.addItem(&quot;Mouse&quot;);   // ✅ Compiles
+        // inventory.addItem(42);     // ❌ Compile error!
+
+        inventory.processItems();     // ✅ Always safe!
+    }
+}
+</code></pre>
+<p><strong>💡 Key Insight</strong>: Generics move errors from runtime to compile-time, making your code safer and bugs easier to catch!</p>
+<hr />
+<h2>🔤 Generic Syntax Fundamentals</h2>
+<h3>📝 Basic Generic Class Declaration</h3>
+<pre><code class="language-java">// Generic class with type parameter T
+public class Container&lt;T&gt; {
+    private T item;
+
+    public Container(T item) {
+        this.item = item;
+    }
+
+    public T getItem() {
+        return item;
+    }
+
+    public void setItem(T item) {
+        this.item = item;
+    }
+}
+</code></pre>
+<h3>🏷️ Type Parameter Naming Conventions</h3>
+<p>Follow these standard conventions for better code readability:</p>
+<pre><code class="language-java">// ✅ Good naming conventions
+public class StandardConventions {
+
+    // T for general Type
+    public static &lt;T&gt; T identity(T value) {
+        return value;
+    }
+
+    // E for Element (collections)
+    public class MyList&lt;E&gt; {
+        private List&lt;E&gt; elements;
+    }
+
+    // K, V for Key-Value pairs
+    public class MyMap&lt;K, V&gt; {
+        private Map&lt;K, V&gt; storage;
+    }
+
+    // ? for unknown types (wildcards)
+    public static int size(Collection&lt;?&gt; collection) {
+        return collection.size();
+    }
+
+    // Descriptive names for specific contexts
+    public interface ApiClient&lt;Request, Response&gt; {
+        Response call(Request request);
+    }
+}
+</code></pre>
+<h3>💎 The Diamond Operator (Java 7+)</h3>
+<p>Reduce verbosity with type inference:</p>
+<pre><code class="language-java">public class DiamondOperatorExamples {
+
+    // ❌ Verbose (pre-Java 7)
+    private Map&lt;String, List&lt;Integer&gt;&gt; oldStyle =
+        new HashMap&lt;String, List&lt;Integer&gt;&gt;();
+
+    // ✅ Clean (Java 7+)
+    private Map&lt;String, List&lt;Integer&gt;&gt; newStyle = new HashMap&lt;&gt;();
+
+    // ✅ Works with complex nested types
+    private Map&lt;String, Map&lt;String, List&lt;Object&gt;&gt;&gt; complex = new HashMap&lt;&gt;();
+
+    // ✅ Method return type inference
+    public List&lt;String&gt; createList() {
+        return new ArrayList&lt;&gt;(); // Type inferred from return type
+    }
+}
+</code></pre>
+<hr />
+<h2>🎯 Hands-On Exercise 1: Converting Raw Types</h2>
+<h3>📋 Your Mission</h3>
+<p>Convert this legacy code to use proper generics. Fix all type safety issues:</p>
+<pre><code class="language-java">import java.util.*;
+
+// TODO: Fix this legacy code!
+public class LegacyShoppingCart {
+    private List items = new ArrayList();
+    private Map itemPrices = new HashMap();
+
+    public void addItem(Object item, Object price) {
+        items.add(item);
+        itemPrices.put(item, price);
+    }
+
+    public Object getItem(int index) {
+        return items.get(index);
+    }
+
+    public double calculateTotal() {
+        double total = 0.0;
+        for (Object item : items) {
+            Double price = (Double) itemPrices.get(item);
+            total += price;
+        }
+        return total;
+    }
+
+    public void printItems() {
+        for (int i = 0; i &lt; items.size(); i++) {
+            String item = (String) getItem(i);
+            Double price = (Double) itemPrices.get(item);
+            System.out.println(item + &quot;: $&quot; + price);
+        }
+    }
+}
+</code></pre>
+<h3>🎯 Requirements</h3>
+<ol>
+<li><strong>Eliminate all raw types</strong></li>
+<li><strong>Remove all unsafe casts</strong></li>
+<li><strong>Use appropriate generic types</strong></li>
+<li><strong>Apply diamond operator where possible</strong></li>
+<li><strong>Ensure compile-time type safety</strong></li>
+</ol>
+<h3>💡 Solution Template</h3>
+<details>
+<summary>🔍 Try it yourself first, then check the solution</summary>
+<pre><code class="language-java">import java.util.*;
+
+public class TypeSafeShoppingCart {
+    private final List&lt;String&gt; items = new ArrayList&lt;&gt;();
+    private final Map&lt;String, Double&gt; itemPrices = new HashMap&lt;&gt;();
+
+    public void addItem(String item, Double price) {
+        items.add(item);
+        itemPrices.put(item, price);
+    }
+
+    public String getItem(int index) {
+        return items.get(index); // No casting needed!
+    }
+
+    public double calculateTotal() {
+        double total = 0.0;
+        for (String item : items) { // Type-safe iteration
+            Double price = itemPrices.get(item); // No casting!
+            if (price != null) {
+                total += price;
+            }
+        }
+        return total;
+    }
+
+    public void printItems() {
+        for (String item : items) { // Clean iteration
+            Double price = itemPrices.get(item);
+            if (price != null) {
+                System.out.println(item + &quot;: $&quot; + price);
+            }
+        }
+    }
+}
+</code></pre>
+<p><strong>🎉 Benefits Achieved:</strong><br />
+- ✅ No raw types<br />
+- ✅ No unsafe casts<br />
+- ✅ Compile-time type safety<br />
+- ✅ Better IDE support<br />
+- ✅ Cleaner, more readable code</p>
+</details>
+<hr />
+<h2>🎯 Hands-On Exercise 2: Generic Utility Methods</h2>
+<h3>📋 Your Mission</h3>
+<p>Create a utility class with generic methods that work with different types:</p>
+<pre><code class="language-java">// TODO: Implement these generic utility methods
+public class GenericUtils {
+
+    // Create a list from variable arguments
+    public static ??? createList(??? ... elements) {
+        // Implementation here
+    }
+
+    // Find the first non-null element
+    public static ??? findFirst(??? ... elements) {
+        // Implementation here
+    }
+
+    // Check if a collection contains all given elements
+    public static ??? containsAll(??? collection, ??? ... elements) {
+        // Implementation here
+    }
+
+    // Swap two elements in a list
+    public static ??? swap(??? list, int i, int j) {
+        // Implementation here
+    }
+}
+</code></pre>
+<h3>💡 Solution and Explanation</h3>
+<details>
+<summary>🔍 Try implementing it yourself first</summary>
+<pre><code class="language-java">import java.util.*;
+
+public class GenericUtils {
+
+    // Generic method with varargs
+    public static &lt;T&gt; List&lt;T&gt; createList(T... elements) {
+        List&lt;T&gt; list = new ArrayList&lt;&gt;();
+        for (T element : elements) {
+            list.add(element);
+        }
+        return list;
+    }
+
+    // Generic method with bounded return type
+    public static &lt;T&gt; T findFirst(T... elements) {
+        for (T element : elements) {
+            if (element != null) {
+                return element;
+            }
+        }
+        return null;
+    }
+
+    // Generic method with collection parameter
+    public static &lt;T&gt; boolean containsAll(Collection&lt;T&gt; collection, T... elements) {
+        for (T element : elements) {
+            if (!collection.contains(element)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    // Generic method modifying a list
+    public static &lt;T&gt; void swap(List&lt;T&gt; list, int i, int j) {
+        T temp = list.get(i);
+        list.set(i, list.get(j));
+        list.set(j, temp);
+    }
+
+    // Usage examples
+    public static void demonstrateUsage() {
+        // Type inference in action
+        List&lt;String&gt; strings = createList(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;);
+        List&lt;Integer&gt; numbers = createList(1, 2, 3);
+
+        String firstString = findFirst(&quot;hello&quot;, null, &quot;world&quot;);
+        Integer firstNumber = findFirst(null, 42, null);
+
+        boolean hasAll = containsAll(strings, &quot;a&quot;, &quot;b&quot;);
+
+        swap(numbers, 0, 2); // [3, 2, 1]
+    }
+}
+</code></pre>
+<p><strong>🧠 Key Learning Points:</strong><br />
+- Generic methods can infer types from usage<br />
+- Use <code>&lt;T&gt;</code> before return type to declare type parameter<br />
+- Varargs work well with generics<br />
+- Type inference makes code cleaner</p>
+</details>
+<hr />
+<h2>🚫 Common Mistakes to Avoid</h2>
+<h3>❌ Mistake 1: Using Raw Types</h3>
+<pre><code class="language-java">// ❌ DON'T do this
+List names = new ArrayList();
+Map scores = new HashMap();
+
+// ✅ DO this instead
+List&lt;String&gt; names = new ArrayList&lt;&gt;();
+Map&lt;String, Integer&gt; scores = new HashMap&lt;&gt;();
+</code></pre>
+<h3>❌ Mistake 2: Unnecessary Type Specification</h3>
+<pre><code class="language-java">// ❌ Verbose (pre-Java 7 style)
+List&lt;String&gt; names = new ArrayList&lt;String&gt;();
+Map&lt;String, Integer&gt; scores = new HashMap&lt;String, Integer&gt;();
+
+// ✅ Clean (Java 7+ diamond operator)
+List&lt;String&gt; names = new ArrayList&lt;&gt;();
+Map&lt;String, Integer&gt; scores = new HashMap&lt;&gt;();
+</code></pre>
+<h3>❌ Mistake 3: Poor Generic Method Design</h3>
+<pre><code class="language-java">// ❌ Too restrictive
+public static void printList(List&lt;Object&gt; list) {
+    // Can only accept List&lt;Object&gt;, not List&lt;String&gt;
+}
+
+// ✅ Flexible with wildcards (we'll learn more in Module 2)
+public static void printList(List&lt;?&gt; list) {
+    // Accepts List of any type
+}
+</code></pre>
+<hr />
+<h2>🧪 Knowledge Check Quiz</h2>
+<p>Test your understanding with these questions:</p>
+<h3>Question 1</h3>
+<p>What will happen when this code runs?</p>
+<pre><code class="language-java">List items = new ArrayList();
+items.add(&quot;Hello&quot;);
+items.add(42);
+String first = (String) items.get(1);
+</code></pre>
+<details>
+<summary>🤔 Your answer?</summary>
+<p><strong>Answer</strong>: <code>ClassCastException</code> at runtime because we're trying to cast an Integer (42) to String.</p>
+<p><strong>Fix</strong>: Use <code>List&lt;String&gt;</code> and only add strings, or use <code>List&lt;Object&gt;</code> and check types before casting.</p>
+</details>
+<h3>Question 2</h3>
+<p>Which declaration is preferred and why?</p>
+<pre><code class="language-java">// Option A
+Map&lt;String, List&lt;Integer&gt;&gt; data = new HashMap&lt;String, List&lt;Integer&gt;&gt;();
+
+// Option B
+Map&lt;String, List&lt;Integer&gt;&gt; data = new HashMap&lt;&gt;();
+</code></pre>
+<details>
+<summary>🤔 Your answer?</summary>
+<p><strong>Answer</strong>: Option B is preferred because:<br />
+- Uses diamond operator for cleaner code<br />
+- Reduces verbosity without losing type safety<br />
+- Leverages type inference (Java 7+ feature)<br />
+- Easier to maintain and read</p>
+</details>
+<h3>Question 3</h3>
+<p>What's wrong with this generic method?</p>
+<pre><code class="language-java">public static &lt;T&gt; void printArray(T[] array) {
+    for (int i = 0; i &lt; array.length; i++) {
+        System.out.println(array[i].toString().toUpperCase());
+    }
+}
+</code></pre>
+<details>
+<summary>🤔 Your answer?</summary>
+<p><strong>Answer</strong>: The method assumes T has a meaningful <code>toString()</code> method and that the result should be converted to uppercase. This only makes sense for certain types.</p>
+<p><strong>Better approach</strong>:</p>
+<pre><code class="language-java">public static &lt;T&gt; void printArray(T[] array) {
+    for (T item : array) {
+        System.out.println(item); // Let println handle toString()
+    }
+}
+
+// Or if you need string processing, be explicit:
+public static void printStringArray(String[] array) {
+    for (String item : array) {
+        System.out.println(item.toUpperCase());
+    }
+}
+</code></pre>
+</details>
+<hr />
+<h2>🎯 Module 1 Project: Generic Data Structure</h2>
+<h3>📋 Final Challenge</h3>
+<p>Create a generic <code>Stack&lt;T&gt;</code> class that demonstrates all concepts learned:</p>
+<p><strong>Requirements:</strong><br />
+- Generic class with type parameter <code>T</code><br />
+- Methods: <code>push(T item)</code>, <code>T pop()</code>, <code>T peek()</code>, <code>boolean isEmpty()</code>, <code>int size()</code><br />
+- Use appropriate generic collections internally<br />
+- Include proper error handling<br />
+- No raw types or unsafe casts<br />
+- Follow naming conventions</p>
+<h3>🏗️ Starter Template</h3>
+<pre><code class="language-java">import java.util.*;
+
+// TODO: Complete this generic Stack implementation
+public class GenericStack&lt;T&gt; {
+
+    // TODO: Choose appropriate internal data structure
+
+    // TODO: Implement constructor
+
+    // TODO: Implement push method
+    public void push(T item) {
+
+    }
+
+    // TODO: Implement pop method
+    public T pop() {
+
+    }
+
+    // TODO: Implement peek method
+    public T peek() {
+
+    }
+
+    // TODO: Implement isEmpty method
+    public boolean isEmpty() {
+
+    }
+
+    // TODO: Implement size method
+    public int size() {
+
+    }
+
+    // TODO: Add toString method for debugging
+    @Override
+    public String toString() {
+
+    }
+}
+</code></pre>
+<h3>🧪 Test Your Implementation</h3>
+<pre><code class="language-java">public class StackTest {
+    public static void main(String[] args) {
+        // Test with Strings
+        GenericStack&lt;String&gt; stringStack = new GenericStack&lt;&gt;();
+        stringStack.push(&quot;First&quot;);
+        stringStack.push(&quot;Second&quot;);
+        stringStack.push(&quot;Third&quot;);
+
+        System.out.println(&quot;Stack: &quot; + stringStack);
+        System.out.println(&quot;Peek: &quot; + stringStack.peek());
+        System.out.println(&quot;Pop: &quot; + stringStack.pop());
+        System.out.println(&quot;Size: &quot; + stringStack.size());
+
+        // Test with Integers
+        GenericStack&lt;Integer&gt; intStack = new GenericStack&lt;&gt;();
+        intStack.push(10);
+        intStack.push(20);
+        intStack.push(30);
+
+        while (!intStack.isEmpty()) {
+            System.out.println(&quot;Popped: &quot; + intStack.pop());
+        }
+    }
+}
+</code></pre>
+<h3>💡 Complete Solution</h3>
+<details>
+<summary>🎯 Try implementing it yourself first, then check the solution</summary>
+<pre><code class="language-java">import java.util.*;
+
+public class GenericStack&lt;T&gt; {
+    private final List&lt;T&gt; elements;
+
+    public GenericStack() {
+        this.elements = new ArrayList&lt;&gt;();
+    }
+
+    public void push(T item) {
+        elements.add(item);
+    }
+
+    public T pop() {
+        if (isEmpty()) {
+            throw new EmptyStackException();
+        }
+        return elements.remove(elements.size() - 1);
+    }
+
+    public T peek() {
+        if (isEmpty()) {
+            throw new EmptyStackException();
+        }
+        return elements.get(elements.size() - 1);
+    }
+
+    public boolean isEmpty() {
+        return elements.isEmpty();
+    }
+
+    public int size() {
+        return elements.size();
+    }
+
+    @Override
+    public String toString() {
+        return &quot;GenericStack&quot; + elements;
+    }
+}
+
+// Custom exception for better error handling
+class EmptyStackException extends RuntimeException {
+    public EmptyStackException() {
+        super(&quot;Cannot perform operation on empty stack&quot;);
+    }
+}
+</code></pre>
+<p><strong>🏆 Congratulations!</strong> You've successfully implemented a generic data structure that:<br />
+- ✅ Uses proper generic syntax<br />
+- ✅ Eliminates raw types and unsafe casts<br />
+- ✅ Provides compile-time type safety<br />
+- ✅ Follows naming conventions<br />
+- ✅ Includes proper error handling</p>
+</details>
+<hr />
+<h2>📚 Module 1 Summary</h2>
+<h3>🎉 What You've Learned</h3>
+<ul>
+<li><strong>The Problem</strong>: Why generics were introduced to Java</li>
+<li><strong>Type Safety</strong>: How generics prevent ClassCastException</li>
+<li><strong>Basic Syntax</strong>: Generic classes, methods, and type parameters</li>
+<li><strong>Diamond Operator</strong>: Reducing verbosity with type inference</li>
+<li><strong>Conventions</strong>: Standard naming patterns for type parameters</li>
+<li><strong>Common Mistakes</strong>: What to avoid when using generics</li>
+</ul>
+<h3>🔑 Key Takeaways</h3>
+<ol>
+<li><strong>Generics move errors from runtime to compile-time</strong> - catch bugs early!</li>
+<li><strong>Always use parameterized types</strong> - avoid raw types completely</li>
+<li><strong>Leverage type inference</strong> - use diamond operator for cleaner code</li>
+<li><strong>Follow naming conventions</strong> - T, E, K, V for better readability</li>
+<li><strong>Generic methods provide flexibility</strong> - one method, multiple types</li>
+</ol>
+<h3>🚀 Next Steps</h3>
+<p>You're now ready for <strong>Module 2: Wildcards &amp; PECS</strong>, where you'll learn:<br />
+- Understanding covariance and contravariance<br />
+- Producer Extends Consumer Super principle<br />
+- Designing flexible APIs with wildcards<br />
+- Advanced collection operations</p>
+<h3>📝 Self-Assessment Checklist</h3>
+<p>Before proceeding, ensure you can:</p>
+<ul>
+<li>[ ] Explain why generics were added to Java</li>
+<li>[ ] Convert raw types to parameterized types</li>
+<li>[ ] Use the diamond operator correctly</li>
+<li>[ ] Write basic generic methods</li>
+<li>[ ] Follow generic naming conventions</li>
+<li>[ ] Identify and fix common generic mistakes</li>
+</ul>
+<p><strong>Ready for the next challenge?</strong> Continue to <a href="./module-2-wildcards.html">Module 2: Wildcards &amp; PECS</a> 🚀</p>
+
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2025 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../js/jquery-1.11.2.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/prettify.js"></script>
+<script src="../../js/run_prettify.js"></script>
+<script src="../../js/main.js"></script>
+<!-- Google Analytics -->
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-13CV90H4J4', 'auto');
+	ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+</body>
+</html>

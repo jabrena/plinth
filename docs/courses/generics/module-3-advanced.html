@@ -1,0 +1,1242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Module 3: Advanced Patterns - Type Erasure and Complex Patterns - Cursor Rules for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../feed.xml" title="Cursor Rules for Java"/>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../css/prettify.css">
+  <link rel="shortcut icon" href="../../favicon.ico">
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../index.html">Cursor Rules for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../courses/generics/index.html">Generics</a>
+    </div>
+  </li>
+  <li><a href="../../archive.html">Archive</a></li>
+  <li><a href="../../tags.html">Tags</a></li>
+  <li><a href="../../about.html">About</a></li>
+</ul>
+</div>
+
+<div class="avatar-container">
+  <div class="avatar-img-border">
+    <a href="../../index.html">
+      <img class="avatar-img" src="../../images/avatar-icon.png"/>
+    </a>
+  </div>
+</div>
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="course-heading">
+<h1>Module 3: Advanced Patterns - Type Erasure and Complex Patterns</h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="course-content">
+
+<div class="course-meta">
+    <i class="fa fa-calendar-o"></i>
+    2025-09-13
+    &nbsp;
+    <i class="fa fa-user"></i>
+    Juan Antonio Breña Moral
+  <div class="course-tags">
+    &nbsp;
+    <i class="fa fa-tags"></i>
+      <a href="../../tags/java.html" class="course-tag">java</a>
+      <a href="../../tags/generics.html" class="course-tag">generics</a>
+      <a href="../../tags/type-erasure.html" class="course-tag">type-erasure</a>
+      <a href="../../tags/crtp.html" class="course-tag">crtp</a>
+      <a href="../../tags/advanced-patterns.html" class="course-tag">advanced-patterns</a>
+      <a href="../../tags/self-bounded.html" class="course-tag">self-bounded</a>
+  </div>
+</div>
+<hr>
+
+<h2>📖 Module Overview</h2>
+<p>Welcome to the deep end of Java Generics! This module covers the most sophisticated patterns and edge cases that separate novice from expert generic programming. You'll understand how generics really work under the hood and master patterns used in production frameworks.</p>
+<h3>🎯 Learning Objectives</h3>
+<p>By the end of this module, you will:</p>
+<ul>
+<li><strong>Understand</strong> type erasure and its runtime implications</li>
+<li><strong>Master</strong> generic inheritance and self-bounded types (CRTP)</li>
+<li><strong>Implement</strong> type-safe heterogeneous containers</li>
+<li><strong>Handle</strong> varargs safely with generics</li>
+<li><strong>Apply</strong> advanced patterns like type tokens</li>
+<li><strong>Avoid</strong> heap pollution and runtime errors</li>
+<li><strong>Design</strong> fluent APIs with preserved type information</li>
+</ul>
+<h3>⏱️ Estimated Time: 4-5 hours</h3>
+<hr />
+<h2>🎭 Understanding Type Erasure</h2>
+<h3>🔍 What is Type Erasure?</h3>
+<p>Type erasure is Java's way of maintaining backward compatibility while adding generics. At runtime, generic type information is &quot;erased&quot; - removed from the bytecode.</p>
+<pre><code class="language-java">// At compile time, these are different types
+List&lt;String&gt; strings = new ArrayList&lt;String&gt;();
+List&lt;Integer&gt; numbers = new ArrayList&lt;Integer&gt;();
+
+// At runtime, they're both just List!
+System.out.println(strings.getClass());  // class java.util.ArrayList
+System.out.println(numbers.getClass());  // class java.util.ArrayList
+System.out.println(strings.getClass() == numbers.getClass()); // true!
+</code></pre>
+<h3>🧠 <strong>Knowledge Check</strong>: Erasure Implications</h3>
+<p>What do you think happens with these operations?</p>
+<pre><code class="language-java">List&lt;String&gt; strings = Arrays.asList(&quot;hello&quot;, &quot;world&quot;);
+
+// Can we check the generic type at runtime?
+if (strings instanceof List&lt;String&gt;) { /* ??? */ }
+
+// Can we create generic arrays?
+List&lt;String&gt;[] arrayOfLists = new List&lt;String&gt;[10]; /* ??? */
+
+// What about generic exceptions?
+class GenericException&lt;T&gt; extends Exception { /* ??? */ }
+</code></pre>
+<details>
+<summary>🤔 Think about the runtime implications, then click to reveal</summary>
+<p><strong>Results:</strong><br />
+1. <strong>instanceof with generics</strong>: ❌ Compilation error - can't check generic types at runtime<br />
+2. <strong>Generic arrays</strong>: ❌ Compilation error - arrays are reifiable, generics are not<br />
+3. <strong>Generic exceptions</strong>: ❌ Compilation error - can't catch generic exception types</p>
+<p><strong>Why?</strong> Type erasure removes generic information at runtime, making these operations impossible or unsafe.</p>
+</details>
+<h3>🔧 Working Around Type Erasure</h3>
+<h4>1. Type Tokens Pattern</h4>
+<pre><code class="language-java">// Abstract class to capture type information
+public abstract class TypeToken&lt;T&gt; {
+    private final Type type;
+
+    protected TypeToken() {
+        Type superclass = getClass().getGenericSuperclass();
+        this.type = ((ParameterizedType) superclass).getActualTypeArguments()[0];
+    }
+
+    public Type getType() {
+        return type;
+    }
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public Class&lt;T&gt; getRawType() {
+        if (type instanceof Class) {
+            return (Class&lt;T&gt;) type;
+        } else if (type instanceof ParameterizedType) {
+            return (Class&lt;T&gt;) ((ParameterizedType) type).getRawType();
+        }
+        throw new IllegalArgumentException(&quot;Cannot determine raw type for &quot; + type);
+    }
+}
+
+// Usage: Capture generic type information
+public class TypeTokenExample {
+    public static void demonstrateTypeTokens() {
+        // Create type tokens for complex generic types
+        TypeToken&lt;List&lt;String&gt;&gt; listToken = new TypeToken&lt;List&lt;String&gt;&gt;() {};
+        TypeToken&lt;Map&lt;String, Integer&gt;&gt; mapToken = new TypeToken&lt;Map&lt;String, Integer&gt;&gt;() {};
+
+        System.out.println(&quot;List type: &quot; + listToken.getType());
+        System.out.println(&quot;Map type: &quot; + mapToken.getType());
+
+        // Use in serialization frameworks (Jackson, Gson)
+        // ObjectMapper mapper = new ObjectMapper();
+        // List&lt;String&gt; list = mapper.readValue(json, listToken.getRawType());
+    }
+}
+</code></pre>
+<h4>2. Class Parameter Pattern</h4>
+<pre><code class="language-java">// Pass Class&lt;T&gt; parameter to preserve type information
+public class GenericFactory&lt;T&gt; {
+    private final Class&lt;T&gt; type;
+
+    public GenericFactory(Class&lt;T&gt; type) {
+        this.type = type;
+    }
+
+    public T createInstance() {
+        try {
+            return type.getDeclaredConstructor().newInstance();
+        } catch (Exception e) {
+            throw new RuntimeException(&quot;Cannot create instance of &quot; + type, e);
+        }
+    }
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public T[] createArray(int size) {
+        return (T[]) Array.newInstance(type, size);
+    }
+
+    public boolean isInstance(Object obj) {
+        return type.isInstance(obj);
+    }
+}
+
+// Usage
+class FactoryExample {
+    public static void main(String[] args) {
+        GenericFactory&lt;StringBuilder&gt; sbFactory = new GenericFactory&lt;&gt;(StringBuilder.class);
+
+        StringBuilder sb = sbFactory.createInstance();
+        StringBuilder[] array = sbFactory.createArray(5);
+
+        System.out.println(&quot;Created: &quot; + sb.getClass());
+        System.out.println(&quot;Array type: &quot; + array.getClass().getComponentType());
+    }
+}
+</code></pre>
+<hr />
+<h2>🏗️ Self-Bounded Generics (CRTP)</h2>
+<h3>🤔 The Fluent API Problem</h3>
+<p>Consider building a fluent API where methods return <code>this</code> for chaining:</p>
+<pre><code class="language-java">// Base builder class
+public class BaseBuilder {
+    protected String name;
+
+    public BaseBuilder withName(String name) {
+        this.name = name;
+        return this; // Problem: returns BaseBuilder, not subtype!
+    }
+}
+
+// Extended builder
+public class UserBuilder extends BaseBuilder {
+    private int age;
+
+    public UserBuilder withAge(int age) {
+        this.age = age;
+        return this;
+    }
+}
+
+// Usage problem
+class FluentProblem {
+    public static void main(String[] args) {
+        UserBuilder builder = new UserBuilder();
+
+        // This breaks the chain - withName returns BaseBuilder!
+        // builder.withName(&quot;John&quot;).withAge(25); // ❌ Compilation error!
+
+        // Ugly workaround with casting
+        UserBuilder result = (UserBuilder) builder.withName(&quot;John&quot;);
+        result.withAge(25);
+    }
+}
+</code></pre>
+<h3>🎯 CRTP Solution</h3>
+<p>The <strong>Curiously Recurring Template Pattern</strong> (CRTP) solves this by making the base class generic in its own subtype:</p>
+<pre><code class="language-java">// Self-bounded generic base class
+public abstract class Builder&lt;T extends Builder&lt;T&gt;&gt; {
+    protected String name;
+
+    public T withName(String name) {
+        this.name = name;
+        return self(); // Returns the actual subtype!
+    }
+
+    // Subclasses must implement this to return themselves
+    protected abstract T self();
+
+    public String build() {
+        return name;
+    }
+}
+
+// Concrete implementation
+public final class UserBuilder extends Builder&lt;UserBuilder&gt; {
+    private int age;
+    private String email;
+
+    public UserBuilder withAge(int age) {
+        this.age = age;
+        return self();
+    }
+
+    public UserBuilder withEmail(String email) {
+        this.email = email;
+        return self();
+    }
+
+    @Override
+    protected UserBuilder self() {
+        return this;
+    }
+
+    @Override
+    public String build() {
+        return String.format(&quot;User{name='%s', age=%d, email='%s'}&quot;,
+                           name, age, email);
+    }
+}
+
+// Perfect fluent chaining!
+class CRTPExample {
+    public static void main(String[] args) {
+        String user = new UserBuilder()
+            .withName(&quot;John&quot;)      // Returns UserBuilder
+            .withAge(25)           // Returns UserBuilder
+            .withEmail(&quot;john@example.com&quot;) // Returns UserBuilder
+            .build();              // Perfect chaining!
+
+        System.out.println(user);
+    }
+}
+</code></pre>
+<h3>🎯 Hands-On Exercise 1: Advanced Builder Pattern</h3>
+<p>Create a sophisticated configuration builder using CRTP:</p>
+<pre><code class="language-java">// TODO: Implement a self-bounded generic configuration system
+public abstract class ConfigBuilder&lt;T extends ConfigBuilder&lt;T&gt;&gt; {
+
+    // TODO: Add common configuration properties
+
+    // TODO: Implement fluent methods that return T
+
+    // TODO: Add abstract self() method
+
+    // TODO: Add validation logic
+}
+
+// TODO: Create specific configuration builders
+public class DatabaseConfig extends ConfigBuilder&lt;DatabaseConfig&gt; {
+    // TODO: Add database-specific configuration
+}
+
+public class CacheConfig extends ConfigBuilder&lt;CacheConfig&gt; {
+    // TODO: Add cache-specific configuration
+}
+
+// TODO: Test fluent chaining with inheritance
+</code></pre>
+<details>
+<summary>🎯 Try implementing the sophisticated builder yourself</summary>
+<pre><code class="language-java">import java.util.*;
+
+// Self-bounded generic configuration builder
+public abstract class ConfigBuilder&lt;T extends ConfigBuilder&lt;T&gt;&gt; {
+    protected String name;
+    protected Map&lt;String, Object&gt; properties = new HashMap&lt;&gt;();
+    protected boolean enabled = true;
+
+    public T withName(String name) {
+        this.name = name;
+        return self();
+    }
+
+    public T withProperty(String key, Object value) {
+        this.properties.put(key, value);
+        return self();
+    }
+
+    public T enabled(boolean enabled) {
+        this.enabled = enabled;
+        return self();
+    }
+
+    protected abstract T self();
+
+    // Template method with validation
+    public final Config build() {
+        validate();
+        return createConfig();
+    }
+
+    protected void validate() {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalStateException(&quot;Name is required&quot;);
+        }
+    }
+
+    protected abstract Config createConfig();
+}
+
+// Database configuration with specific properties
+public final class DatabaseConfig extends ConfigBuilder&lt;DatabaseConfig&gt; {
+    private String url;
+    private String username;
+    private String password;
+    private int maxConnections = 10;
+
+    public DatabaseConfig withUrl(String url) {
+        this.url = url;
+        return self();
+    }
+
+    public DatabaseConfig withCredentials(String username, String password) {
+        this.username = username;
+        this.password = password;
+        return self();
+    }
+
+    public DatabaseConfig withMaxConnections(int maxConnections) {
+        this.maxConnections = maxConnections;
+        return self();
+    }
+
+    @Override
+    protected DatabaseConfig self() {
+        return this;
+    }
+
+    @Override
+    protected void validate() {
+        super.validate();
+        if (url == null) {
+            throw new IllegalStateException(&quot;Database URL is required&quot;);
+        }
+    }
+
+    @Override
+    protected Config createConfig() {
+        return new Config(name, properties, enabled,
+                         Map.of(&quot;url&quot;, url, &quot;username&quot;, username,
+                               &quot;password&quot;, password, &quot;maxConnections&quot;, maxConnections));
+    }
+}
+
+// Cache configuration with specific properties
+public final class CacheConfig extends ConfigBuilder&lt;CacheConfig&gt; {
+    private long ttlSeconds = 3600;
+    private int maxSize = 1000;
+    private String evictionPolicy = &quot;LRU&quot;;
+
+    public CacheConfig withTTL(long seconds) {
+        this.ttlSeconds = seconds;
+        return self();
+    }
+
+    public CacheConfig withMaxSize(int maxSize) {
+        this.maxSize = maxSize;
+        return self();
+    }
+
+    public CacheConfig withEvictionPolicy(String policy) {
+        this.evictionPolicy = policy;
+        return self();
+    }
+
+    @Override
+    protected CacheConfig self() {
+        return this;
+    }
+
+    @Override
+    protected Config createConfig() {
+        return new Config(name, properties, enabled,
+                         Map.of(&quot;ttl&quot;, ttlSeconds, &quot;maxSize&quot;, maxSize,
+                               &quot;evictionPolicy&quot;, evictionPolicy));
+    }
+}
+
+// Immutable configuration result
+public final class Config {
+    private final String name;
+    private final Map&lt;String, Object&gt; properties;
+    private final boolean enabled;
+    private final Map&lt;String, Object&gt; specificProperties;
+
+    public Config(String name, Map&lt;String, Object&gt; properties,
+                  boolean enabled, Map&lt;String, Object&gt; specificProperties) {
+        this.name = name;
+        this.properties = Map.copyOf(properties);
+        this.enabled = enabled;
+        this.specificProperties = Map.copyOf(specificProperties);
+    }
+
+    // Getters and toString...
+    public String getName() { return name; }
+    public Map&lt;String, Object&gt; getProperties() { return properties; }
+    public boolean isEnabled() { return enabled; }
+    public Map&lt;String, Object&gt; getSpecificProperties() { return specificProperties; }
+
+    @Override
+    public String toString() {
+        return String.format(&quot;Config{name='%s', enabled=%s, properties=%s, specific=%s}&quot;,
+                           name, enabled, properties, specificProperties);
+    }
+}
+
+// Test the sophisticated builder pattern
+class AdvancedBuilderTest {
+    public static void main(String[] args) {
+        // Database configuration with perfect chaining
+        Config dbConfig = new DatabaseConfig()
+            .withName(&quot;primary-db&quot;)           // ConfigBuilder method
+            .withProperty(&quot;timeout&quot;, 30)     // ConfigBuilder method
+            .enabled(true)                   // ConfigBuilder method
+            .withUrl(&quot;jdbc:postgresql://localhost:5432/mydb&quot;)  // DatabaseConfig method
+            .withCredentials(&quot;user&quot;, &quot;pass&quot;) // DatabaseConfig method
+            .withMaxConnections(20)          // DatabaseConfig method
+            .build();                        // Perfect fluent chaining!
+
+        // Cache configuration with perfect chaining
+        Config cacheConfig = new CacheConfig()
+            .withName(&quot;user-cache&quot;)          // ConfigBuilder method
+            .withProperty(&quot;region&quot;, &quot;us-east-1&quot;) // ConfigBuilder method
+            .enabled(true)                   // ConfigBuilder method
+            .withTTL(1800)                   // CacheConfig method
+            .withMaxSize(5000)               // CacheConfig method
+            .withEvictionPolicy(&quot;LFU&quot;)       // CacheConfig method
+            .build();                        // Perfect fluent chaining!
+
+        System.out.println(&quot;Database Config: &quot; + dbConfig);
+        System.out.println(&quot;Cache Config: &quot; + cacheConfig);
+    }
+}
+</code></pre>
+<p><strong>🎉 CRTP Benefits Achieved:</strong><br />
+- ✅ <strong>Perfect Type Safety</strong>: No casting required<br />
+- ✅ <strong>Fluent Chaining</strong>: Methods return exact subtype<br />
+- ✅ <strong>Extensible</strong>: Easy to add new configuration types<br />
+- ✅ <strong>Maintainable</strong>: Common logic in base class<br />
+- ✅ <strong>Compile-Time Guarantees</strong>: Invalid chains caught at compile time</p>
+</details>
+<hr />
+<h2>🛡️ Safe Varargs with Generics</h2>
+<h3>⚠️ The Heap Pollution Problem</h3>
+<p>Generic varargs can cause &quot;heap pollution&quot; - when a variable of parameterized type refers to an object that's not of that type:</p>
+<pre><code class="language-java">// This method is DANGEROUS!
+public static &lt;T&gt; void dangerous(List&lt;T&gt;... lists) {
+    Object[] array = lists;           // Allowed by array covariance
+    array[0] = Arrays.asList(42);     // Heap pollution!
+    T item = lists[0].get(0);         // ClassCastException at runtime!
+}
+</code></pre>
+<h3>✅ Safe Varargs Patterns</h3>
+<p>Use <code>@SafeVarargs</code> only on methods that are provably safe:</p>
+<pre><code class="language-java">public class SafeVarargsExamples {
+
+    // ✅ SAFE: Only reads from varargs array, doesn't store it
+    @SafeVarargs
+    public static &lt;T&gt; List&lt;T&gt; of(T... items) {
+        List&lt;T&gt; result = new ArrayList&lt;&gt;();
+        for (T item : items) {
+            result.add(item);  // Safe: only reading from varargs
+        }
+        return result;
+    }
+
+    // ✅ SAFE: Doesn't expose the varargs array
+    @SafeVarargs
+    public static &lt;T&gt; void addAll(Collection&lt;T&gt; target, T... items) {
+        Collections.addAll(target, items);  // Safe delegation
+    }
+
+    // ❌ UNSAFE: Stores the varargs array (potential for heap pollution)
+    private static List&lt;Object[]&gt; cache = new ArrayList&lt;&gt;();
+
+    public static &lt;T&gt; void unsafe(T... items) {
+        cache.add(items);  // DON'T DO THIS - stores generic array
+    }
+
+    // ✅ SAFE: Creates new array, doesn't store original
+    @SafeVarargs
+    public static &lt;T&gt; T[] toArray(T... items) {
+        return Arrays.copyOf(items, items.length);  // Safe copy
+    }
+}
+
+// Usage examples
+class SafeVarargsTest {
+    public static void main(String[] args) {
+        // All these are safe
+        List&lt;String&gt; strings = SafeVarargsExamples.of(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;);
+        List&lt;Integer&gt; numbers = SafeVarargsExamples.of(1, 2, 3);
+
+        Set&lt;String&gt; stringSet = new HashSet&lt;&gt;();
+        SafeVarargsExamples.addAll(stringSet, &quot;hello&quot;, &quot;world&quot;);
+
+        String[] stringArray = SafeVarargsExamples.toArray(&quot;x&quot;, &quot;y&quot;, &quot;z&quot;);
+
+        System.out.println(&quot;Strings: &quot; + strings);
+        System.out.println(&quot;Numbers: &quot; + numbers);
+        System.out.println(&quot;String set: &quot; + stringSet);
+        System.out.println(&quot;String array: &quot; + Arrays.toString(stringArray));
+    }
+}
+</code></pre>
+<h3>🎯 Hands-On Exercise 2: Safe Generic Utilities</h3>
+<p>Create safe generic utility methods with varargs:</p>
+<pre><code class="language-java">// TODO: Implement safe generic utility methods
+public class GenericVarargsUtils {
+
+    // TODO: Safe method to find first non-null element
+    @SafeVarargs
+    public static &lt;T&gt; Optional&lt;T&gt; findFirst(T... items) {
+
+    }
+
+    // TODO: Safe method to create immutable set from varargs
+    @SafeVarargs
+    public static &lt;T&gt; Set&lt;T&gt; setOf(T... items) {
+
+    }
+
+    // TODO: Safe method to concatenate multiple collections
+    @SafeVarargs
+    public static &lt;T&gt; List&lt;T&gt; concat(Collection&lt;? extends T&gt;... collections) {
+
+    }
+
+    // TODO: Safe method to apply function to all varargs elements
+    @SafeVarargs
+    public static &lt;T, R&gt; List&lt;R&gt; mapAll(Function&lt;T, R&gt; mapper, T... items) {
+
+    }
+}
+</code></pre>
+<details>
+<summary>🛡️ Try implementing safe varargs utilities yourself</summary>
+<pre><code class="language-java">import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
+public class GenericVarargsUtils {
+
+    // Safe: Only reads from varargs, doesn't store or expose array
+    @SafeVarargs
+    public static &lt;T&gt; Optional&lt;T&gt; findFirst(T... items) {
+        for (T item : items) {
+            if (item != null) {
+                return Optional.of(item);
+            }
+        }
+        return Optional.empty();
+    }
+
+    // Safe: Creates new collection, doesn't store varargs array
+    @SafeVarargs
+    public static &lt;T&gt; Set&lt;T&gt; setOf(T... items) {
+        Set&lt;T&gt; result = new HashSet&lt;&gt;();
+        Collections.addAll(result, items);
+        return Collections.unmodifiableSet(result);
+    }
+
+    // Safe: Only reads from collections, doesn't store them
+    @SafeVarargs
+    public static &lt;T&gt; List&lt;T&gt; concat(Collection&lt;? extends T&gt;... collections) {
+        List&lt;T&gt; result = new ArrayList&lt;&gt;();
+        for (Collection&lt;? extends T&gt; collection : collections) {
+            result.addAll(collection);
+        }
+        return result;
+    }
+
+    // Safe: Only reads from varargs, applies function safely
+    @SafeVarargs
+    public static &lt;T, R&gt; List&lt;R&gt; mapAll(Function&lt;T, R&gt; mapper, T... items) {
+        return Stream.of(items)
+                    .map(mapper)
+                    .collect(Collectors.toList());
+    }
+
+    // Safe: Statistical operations on varargs
+    @SafeVarargs
+    public static &lt;T extends Number&gt; OptionalDouble average(T... numbers) {
+        if (numbers.length == 0) {
+            return OptionalDouble.empty();
+        }
+
+        double sum = 0.0;
+        for (T number : numbers) {
+            sum += number.doubleValue();
+        }
+        return OptionalDouble.of(sum / numbers.length);
+    }
+
+    // Safe: Filtering with predicate
+    @SafeVarargs
+    public static &lt;T&gt; List&lt;T&gt; filter(java.util.function.Predicate&lt;T&gt; predicate, T... items) {
+        return Stream.of(items)
+                    .filter(predicate)
+                    .collect(Collectors.toList());
+    }
+}
+
+// Comprehensive test
+class SafeVarargsTest {
+    public static void main(String[] args) {
+        // Test findFirst
+        Optional&lt;String&gt; first = GenericVarargsUtils.findFirst(null, &quot;hello&quot;, &quot;world&quot;);
+        System.out.println(&quot;First non-null: &quot; + first.orElse(&quot;none&quot;));
+
+        // Test setOf with different types
+        Set&lt;Integer&gt; numbers = GenericVarargsUtils.setOf(1, 2, 3, 2, 1);
+        Set&lt;String&gt; words = GenericVarargsUtils.setOf(&quot;hello&quot;, &quot;world&quot;, &quot;hello&quot;);
+        System.out.println(&quot;Number set: &quot; + numbers);
+        System.out.println(&quot;Word set: &quot; + words);
+
+        // Test concat with different collection types
+        List&lt;String&gt; list1 = Arrays.asList(&quot;a&quot;, &quot;b&quot;);
+        Set&lt;String&gt; set1 = Set.of(&quot;c&quot;, &quot;d&quot;);
+        Collection&lt;String&gt; collection1 = Arrays.asList(&quot;e&quot;, &quot;f&quot;);
+
+        List&lt;String&gt; concatenated = GenericVarargsUtils.concat(list1, set1, collection1);
+        System.out.println(&quot;Concatenated: &quot; + concatenated);
+
+        // Test mapAll with transformation
+        List&lt;Integer&gt; lengths = GenericVarargsUtils.mapAll(
+            String::length,
+            &quot;hello&quot;, &quot;world&quot;, &quot;java&quot;, &quot;generics&quot;
+        );
+        System.out.println(&quot;String lengths: &quot; + lengths);
+
+        // Test average with different number types
+        OptionalDouble intAverage = GenericVarargsUtils.average(1, 2, 3, 4, 5);
+        OptionalDouble doubleAverage = GenericVarargsUtils.average(1.5, 2.5, 3.5);
+
+        System.out.println(&quot;Integer average: &quot; + intAverage.orElse(0.0));
+        System.out.println(&quot;Double average: &quot; + doubleAverage.orElse(0.0));
+
+        // Test filter
+        List&lt;String&gt; longWords = GenericVarargsUtils.filter(
+            s -&gt; s.length() &gt; 4,
+            &quot;hi&quot;, &quot;hello&quot;, &quot;world&quot;, &quot;java&quot;, &quot;ok&quot;
+        );
+        System.out.println(&quot;Long words: &quot; + longWords);
+    }
+}
+</code></pre>
+<p><strong>🛡️ Safety Principles Applied:</strong><br />
+- ✅ <strong>No Array Storage</strong>: Never store the varargs array<br />
+- ✅ <strong>No Array Exposure</strong>: Never return or expose the varargs array<br />
+- ✅ <strong>Read-Only Access</strong>: Only read from varargs elements<br />
+- ✅ <strong>Safe Delegation</strong>: Use safe library methods like Collections.addAll()<br />
+- ✅ <strong>Proper Annotation</strong>: Use @SafeVarargs only when provably safe</p>
+</details>
+<hr />
+<h2>🗃️ Type-Safe Heterogeneous Containers</h2>
+<h3>🎯 The Challenge</h3>
+<p>Sometimes you need a container that can hold different types safely, like a type-safe map where keys determine value types:</p>
+<pre><code class="language-java">// We want something like this, but type-safe:
+Map&lt;String, Object&gt; properties = new HashMap&lt;&gt;();
+properties.put(&quot;name&quot;, &quot;John&quot;);        // String value
+properties.put(&quot;age&quot;, 25);             // Integer value
+properties.put(&quot;active&quot;, true);        // Boolean value
+
+// But retrieving requires unsafe casting:
+String name = (String) properties.get(&quot;name&quot;);  // Unsafe!
+Integer age = (Integer) properties.get(&quot;age&quot;);  // Unsafe!
+</code></pre>
+<h3>🏆 Type Token Solution</h3>
+<p>Use <code>Class&lt;T&gt;</code> as the key to ensure type safety:</p>
+<pre><code class="language-java">import java.util.*;
+
+// Type-safe heterogeneous container
+public class TypeSafeMap {
+    private final Map&lt;Class&lt;?&gt;, Object&gt; map = new HashMap&lt;&gt;();
+
+    // Type-safe put method
+    public &lt;T&gt; void put(Class&lt;T&gt; type, T instance) {
+        map.put(Objects.requireNonNull(type),
+               type.cast(instance)); // Runtime type check
+    }
+
+    // Type-safe get method
+    public &lt;T&gt; T get(Class&lt;T&gt; type) {
+        return type.cast(map.get(type)); // Safe cast using Class.cast()
+    }
+
+    // Check if type is present
+    public boolean contains(Class&lt;?&gt; type) {
+        return map.containsKey(type);
+    }
+
+    // Remove by type
+    public &lt;T&gt; T remove(Class&lt;T&gt; type) {
+        return type.cast(map.remove(type));
+    }
+
+    // Get all stored types
+    public Set&lt;Class&lt;?&gt;&gt; getTypes() {
+        return Collections.unmodifiableSet(map.keySet());
+    }
+}
+
+// Usage example
+class TypeSafeMapExample {
+    public static void main(String[] args) {
+        TypeSafeMap container = new TypeSafeMap();
+
+        // Type-safe storage
+        container.put(String.class, &quot;John Doe&quot;);
+        container.put(Integer.class, 25);
+        container.put(Boolean.class, true);
+        container.put(Double.class, 98.6);
+
+        // Type-safe retrieval - no casting needed!
+        String name = container.get(String.class);      // Returns String
+        Integer age = container.get(Integer.class);     // Returns Integer
+        Boolean active = container.get(Boolean.class);  // Returns Boolean
+        Double temperature = container.get(Double.class); // Returns Double
+
+        System.out.println(&quot;Name: &quot; + name);
+        System.out.println(&quot;Age: &quot; + age);
+        System.out.println(&quot;Active: &quot; + active);
+        System.out.println(&quot;Temperature: &quot; + temperature);
+
+        // Type safety enforced at compile time
+        // container.put(String.class, 42);  // ❌ Compilation error!
+
+        System.out.println(&quot;Stored types: &quot; + container.getTypes());
+    }
+}
+</code></pre>
+<h3>🎯 Hands-On Exercise 3: Advanced Heterogeneous Container</h3>
+<p>Create a sophisticated configuration system using type-safe heterogeneous containers:</p>
+<pre><code class="language-java">// TODO: Create an advanced configuration system
+public class ConfigurationManager {
+
+    // TODO: Use type-safe heterogeneous container for storage
+
+    // TODO: Add support for default values
+    public &lt;T&gt; T get(Class&lt;T&gt; type, T defaultValue) {
+
+    }
+
+    // TODO: Add support for nested configuration sections
+    public ConfigurationSection getSection(String name) {
+
+    }
+
+    // TODO: Add validation support
+    public &lt;T&gt; void put(Class&lt;T&gt; type, T value, Validator&lt;T&gt; validator) {
+
+    }
+
+    // TODO: Add serialization support
+    public Map&lt;String, Object&gt; toMap() {
+
+    }
+}
+
+// TODO: Create configuration section for hierarchical configs
+public class ConfigurationSection {
+
+}
+
+// TODO: Create validator interface
+public interface Validator&lt;T&gt; {
+    boolean isValid(T value);
+    String getErrorMessage();
+}
+</code></pre>
+<details>
+<summary>🗃️ Try building the advanced configuration system yourself</summary>
+<pre><code class="language-java">import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
+
+// Advanced configuration manager with type safety
+public class ConfigurationManager {
+    private final Map&lt;Class&lt;?&gt;, Object&gt; values = new ConcurrentHashMap&lt;&gt;();
+    private final Map&lt;Class&lt;?&gt;, Validator&lt;?&gt;&gt; validators = new ConcurrentHashMap&lt;&gt;();
+    private final Map&lt;String, ConfigurationSection&gt; sections = new ConcurrentHashMap&lt;&gt;();
+
+    // Type-safe put with optional validation
+    public &lt;T&gt; void put(Class&lt;T&gt; type, T value) {
+        put(type, value, null);
+    }
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public &lt;T&gt; void put(Class&lt;T&gt; type, T value, Validator&lt;T&gt; validator) {
+        Objects.requireNonNull(type, &quot;Type cannot be null&quot;);
+        Objects.requireNonNull(value, &quot;Value cannot be null&quot;);
+
+        // Validate if validator provided
+        if (validator != null) {
+            if (!validator.isValid(value)) {
+                throw new IllegalArgumentException(
+                    &quot;Invalid value for &quot; + type.getSimpleName() + &quot;: &quot; + validator.getErrorMessage()
+                );
+            }
+            validators.put(type, validator);
+        }
+
+        values.put(type, type.cast(value));
+    }
+
+    // Type-safe get
+    public &lt;T&gt; T get(Class&lt;T&gt; type) {
+        return type.cast(values.get(type));
+    }
+
+    // Type-safe get with default
+    public &lt;T&gt; T get(Class&lt;T&gt; type, T defaultValue) {
+        T value = get(type);
+        return value != null ? value : defaultValue;
+    }
+
+    // Type-safe get with supplier for lazy defaults
+    public &lt;T&gt; T get(Class&lt;T&gt; type, Supplier&lt;T&gt; defaultSupplier) {
+        T value = get(type);
+        return value != null ? value : defaultSupplier.get();
+    }
+
+    // Check if configuration exists
+    public boolean contains(Class&lt;?&gt; type) {
+        return values.containsKey(type);
+    }
+
+    // Remove configuration
+    public &lt;T&gt; T remove(Class&lt;T&gt; type) {
+        validators.remove(type);
+        return type.cast(values.remove(type));
+    }
+
+    // Get or create configuration section
+    public ConfigurationSection getSection(String name) {
+        return sections.computeIfAbsent(name, k -&gt; new ConfigurationSection());
+    }
+
+    // Validate all stored values
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public List&lt;String&gt; validate() {
+        List&lt;String&gt; errors = new ArrayList&lt;&gt;();
+
+        for (Map.Entry&lt;Class&lt;?&gt;, Validator&lt;?&gt;&gt; entry : validators.entrySet()) {
+            Class&lt;?&gt; type = entry.getKey();
+            Validator&lt;Object&gt; validator = (Validator&lt;Object&gt;) entry.getValue();
+            Object value = values.get(type);
+
+            if (value != null &amp;&amp; !validator.isValid(value)) {
+                errors.add(type.getSimpleName() + &quot;: &quot; + validator.getErrorMessage());
+            }
+        }
+
+        return errors;
+    }
+
+    // Export to map for serialization
+    public Map&lt;String, Object&gt; toMap() {
+        Map&lt;String, Object&gt; result = new HashMap&lt;&gt;();
+
+        for (Map.Entry&lt;Class&lt;?&gt;, Object&gt; entry : values.entrySet()) {
+            result.put(entry.getKey().getSimpleName(), entry.getValue());
+        }
+
+        for (Map.Entry&lt;String, ConfigurationSection&gt; entry : sections.entrySet()) {
+            result.put(entry.getKey(), entry.getValue().toMap());
+        }
+
+        return result;
+    }
+
+    // Get all configured types
+    public Set&lt;Class&lt;?&gt;&gt; getConfiguredTypes() {
+        return Collections.unmodifiableSet(values.keySet());
+    }
+
+    // Clear all configuration
+    public void clear() {
+        values.clear();
+        validators.clear();
+        sections.clear();
+    }
+}
+
+// Configuration section for hierarchical organization
+public class ConfigurationSection {
+    private final ConfigurationManager manager = new ConfigurationManager();
+
+    public &lt;T&gt; void put(Class&lt;T&gt; type, T value) {
+        manager.put(type, value);
+    }
+
+    public &lt;T&gt; void put(Class&lt;T&gt; type, T value, Validator&lt;T&gt; validator) {
+        manager.put(type, value, validator);
+    }
+
+    public &lt;T&gt; T get(Class&lt;T&gt; type) {
+        return manager.get(type);
+    }
+
+    public &lt;T&gt; T get(Class&lt;T&gt; type, T defaultValue) {
+        return manager.get(type, defaultValue);
+    }
+
+    public boolean contains(Class&lt;?&gt; type) {
+        return manager.contains(type);
+    }
+
+    public ConfigurationSection getSection(String name) {
+        return manager.getSection(name);
+    }
+
+    public Map&lt;String, Object&gt; toMap() {
+        return manager.toMap();
+    }
+
+    public List&lt;String&gt; validate() {
+        return manager.validate();
+    }
+}
+
+// Validator interface for type-safe validation
+public interface Validator&lt;T&gt; {
+    boolean isValid(T value);
+    String getErrorMessage();
+
+    // Utility factory methods
+    static &lt;T extends Comparable&lt;T&gt;&gt; Validator&lt;T&gt; range(T min, T max) {
+        return new Validator&lt;T&gt;() {
+            @Override
+            public boolean isValid(T value) {
+                return value.compareTo(min) &gt;= 0 &amp;&amp; value.compareTo(max) &lt;= 0;
+            }
+
+            @Override
+            public String getErrorMessage() {
+                return &quot;Value must be between &quot; + min + &quot; and &quot; + max;
+            }
+        };
+    }
+
+    static Validator&lt;String&gt; minLength(int minLength) {
+        return new Validator&lt;String&gt;() {
+            @Override
+            public boolean isValid(String value) {
+                return value != null &amp;&amp; value.length() &gt;= minLength;
+            }
+
+            @Override
+            public String getErrorMessage() {
+                return &quot;String must be at least &quot; + minLength + &quot; characters&quot;;
+            }
+        };
+    }
+
+    static &lt;T&gt; Validator&lt;T&gt; notNull() {
+        return new Validator&lt;T&gt;() {
+            @Override
+            public boolean isValid(T value) {
+                return value != null;
+            }
+
+            @Override
+            public String getErrorMessage() {
+                return &quot;Value cannot be null&quot;;
+            }
+        };
+    }
+}
+
+// Comprehensive test
+class AdvancedConfigurationTest {
+    public static void main(String[] args) {
+        ConfigurationManager config = new ConfigurationManager();
+
+        // Basic type-safe configuration
+        config.put(String.class, &quot;MyApplication&quot;);
+        config.put(Integer.class, 8080, Validator.range(1024, 65535));
+        config.put(Boolean.class, true);
+        config.put(Double.class, 99.5);
+
+        // Configuration with validation
+        try {
+            config.put(String.class, &quot;test&quot;, Validator.minLength(5));
+        } catch (IllegalArgumentException e) {
+            System.out.println(&quot;Validation error: &quot; + e.getMessage());
+        }
+
+        // Hierarchical configuration
+        ConfigurationSection dbSection = config.getSection(&quot;database&quot;);
+        dbSection.put(String.class, &quot;jdbc:postgresql://localhost:5432/mydb&quot;);
+        dbSection.put(Integer.class, 10, Validator.range(1, 100));
+
+        ConfigurationSection cacheSection = config.getSection(&quot;cache&quot;);
+        cacheSection.put(Long.class, 3600L);
+        cacheSection.put(Boolean.class, true);
+
+        // Type-safe retrieval
+        String appName = config.get(String.class);
+        Integer port = config.get(Integer.class);
+        Boolean debug = config.get(Boolean.class, false); // with default
+
+        String dbUrl = dbSection.get(String.class);
+        Integer maxConnections = dbSection.get(Integer.class);
+
+        // Display configuration
+        System.out.println(&quot;Application: &quot; + appName);
+        System.out.println(&quot;Port: &quot; + port);
+        System.out.println(&quot;Debug: &quot; + debug);
+        System.out.println(&quot;DB URL: &quot; + dbUrl);
+        System.out.println(&quot;Max Connections: &quot; + maxConnections);
+
+        // Validate all configurations
+        List&lt;String&gt; errors = config.validate();
+        if (errors.isEmpty()) {
+            System.out.println(&quot;All configurations are valid!&quot;);
+        } else {
+            System.out.println(&quot;Validation errors: &quot; + errors);
+        }
+
+        // Export to map
+        System.out.println(&quot;Configuration map: &quot; + config.toMap());
+
+        // Show configured types
+        System.out.println(&quot;Configured types: &quot; + config.getConfiguredTypes());
+    }
+}
+</code></pre>
+<p><strong>🗃️ Advanced Features Achieved:</strong><br />
+- ✅ <strong>Type Safety</strong>: No unsafe casts, compile-time type checking<br />
+- ✅ <strong>Validation</strong>: Type-safe validators with meaningful error messages<br />
+- ✅ <strong>Hierarchical</strong>: Nested configuration sections<br />
+- ✅ <strong>Default Values</strong>: Support for defaults and lazy suppliers<br />
+- ✅ <strong>Serialization</strong>: Export to standard Map for JSON/XML serialization<br />
+- ✅ <strong>Thread Safety</strong>: Concurrent access with ConcurrentHashMap<br />
+- ✅ <strong>Extensible</strong>: Easy to add new types and validators</p>
+</details>
+<hr />
+<h2>📚 Module 3 Summary</h2>
+<h3>🎉 What You've Mastered</h3>
+<ul>
+<li><strong>Type Erasure</strong>: Understanding how generics work at runtime</li>
+<li><strong>Type Tokens</strong>: Preserving generic type information at runtime</li>
+<li><strong>CRTP Pattern</strong>: Self-bounded generics for fluent APIs</li>
+<li><strong>Safe Varargs</strong>: Avoiding heap pollution with generic varargs</li>
+<li><strong>Heterogeneous Containers</strong>: Type-safe storage of different types</li>
+<li><strong>Advanced Patterns</strong>: Production-ready generic programming techniques</li>
+</ul>
+<h3>🔑 Key Takeaways</h3>
+<ol>
+<li><strong>Type erasure affects runtime behavior</strong> - use type tokens when needed</li>
+<li><strong>CRTP enables perfect fluent APIs</strong> - return exact subtype in chains</li>
+<li><strong>@SafeVarargs requires careful consideration</strong> - only for provably safe methods</li>
+<li><strong>Class<T> as key enables type-safe heterogeneous containers</strong></li>
+<li><strong>Advanced patterns solve real-world problems</strong> - not just academic exercises</li>
+</ol>
+<h3>🚀 Next Steps</h3>
+<p>You're now ready for <strong>Module 4: Real-World Applications</strong>, where you'll learn:<br />
+- Integration with modern Java features (Records, sealed types)<br />
+- Serialization with generic types<br />
+- Performance considerations and optimizations<br />
+- Migration strategies for legacy codebases</p>
+<h3>📝 Self-Assessment Checklist</h3>
+<p>Before proceeding, ensure you can:</p>
+<ul>
+<li>[ ] Explain type erasure and its implications</li>
+<li>[ ] Implement CRTP for fluent builders</li>
+<li>[ ] Create safe generic varargs methods</li>
+<li>[ ] Design type-safe heterogeneous containers</li>
+<li>[ ] Apply type tokens for runtime type information</li>
+<li>[ ] Avoid heap pollution and unsafe operations</li>
+</ul>
+<p><strong>Ready for real-world applications?</strong> Continue to <a href="./module-4-realworld.html">Module 4: Real-World Applications</a> 🌍</p>
+
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2025 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../js/jquery-1.11.2.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/prettify.js"></script>
+<script src="../../js/run_prettify.js"></script>
+<script src="../../js/main.js"></script>
+<!-- Google Analytics -->
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-13CV90H4J4', 'auto');
+	ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+</body>
+</html>

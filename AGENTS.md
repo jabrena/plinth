@@ -7,12 +7,12 @@ A collection of `System prompts` for Java Enterprise development.
 ### Repository Layout
 
 - `./cursor/rules`: a collection of `System prompts` for Java Enterprise development. The main outcome of this project.
-- `generator`: a Java project designed to build the System prompts based on XML documents.
+- `system-prompts-generator`: a Java project designed to build the System prompts based on XML documents.
 - `examples`: a collection of Java examples designed to test with the different System prompts.
+- `site-generator`: JBake project designed to autogenerate public site in `docs` folder
+- `documentation`: Diverse documentation about the project
 
 ## Build and test commands
-
-The Java development is located in the folder `generator` and the main activities on this development are:
 
 - Improve current tests to generate better System prompts encoded in Markdown format
 - Develop or Refactor current System prompts with new Examples
@@ -26,13 +26,13 @@ When you add new code, format the code before testing:
 Run the tests:
 
 ```bash
-./mvnw clean verify
+./mvnw clean verify -pl system-prompts-generator
 ```
 
 If the tests passes, you could promote the changes to `./cursor/rules`:
 
 ```bash
-./mvnw clean install
+./mvnw clean install -pl system-prompts-generator
 ```
 
 ## General Guidance
