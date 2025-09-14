@@ -47,7 +47,7 @@ Conditional Flow Rules:
 
 Options:
 - Documentation only (README.md, package-info.java, Javadoc)
-- Diagrams only (UML Sequence/Class, C4)
+- Diagrams only (UML Sequence/Class/State-machine, C4)
 - Both Documentation and Diagrams
 - Skip
 
@@ -156,8 +156,22 @@ Conditional Flow Rules:
 Options:
 - UML sequence diagrams
 - UML class diagrams
+- UML state-machine diagrams
 - C4 model diagrams (Context, Container & Component diagrams)
 - All diagrams
+- Skip
+
+---
+
+**Question 11**: For UML state-machine diagrams, which types would you like to generate?
+Ask this question only if you selected "UML state-machine diagrams" or "All diagrams" in Question 10.
+
+Options:
+- Entity lifecycles (domain object state transitions like Order, User, Document)
+- Business workflows (process state machines like approval, payment, shipping)
+- System behaviors (component operational states like connections, jobs, transactions)
+- User interactions (UI component state transitions like forms, wizards, dialogs)
+- All state machine types
 - Skip
 
 ---
@@ -1884,11 +1898,383 @@ After generating C4 diagrams:
 - **MUST NOT** generate generic or templated diagrams without actual architectural analysis
 - **MUST** validate C4-PlantUML syntax for renderability
 
-### Step 7: Documentation Validation and Summary
+### Step 7: UML State Machine Diagram Generation
+
+**Purpose**: Generate UML state machine diagrams to illustrate the behavior, lifecycle, and workflows of objects, business processes, and system components based on code analysis and user preferences.
+
+**Dependencies**: Only execute if the user selected UML state machine diagrams in Step 1. Requires completion of Step 1.
+
+**CONDITIONAL EXECUTION**: Execute this step only if the user selected "UML state-machine diagrams" in the consolidated diagrams selection question in Step 1.
+
+## Implementation Strategy
+
+Use the following template and guidelines:
+
+# UML State Machine Diagram Generation Guidelines
+
+## Implementation Strategy
+
+Generate UML state machine diagrams using PlantUML syntax to illustrate the behavior and lifecycle of objects, business processes, and system workflows within Java applications.
+
+### Analysis Process
+
+**For each state machine identified:**
+
+1. **Identify state machine subjects**:
+- Domain entities with lifecycle states (Order, User, Document)
+- Business processes with workflow states (Approval, Payment, Shipping)
+- System components with operational states (Connection, Transaction, Job)
+- User interface components with interaction states (Form, Dialog, Wizard)
+
+2. **Analyze state transitions**:
+- Initial and final states
+- Intermediate states and their purposes
+- Transition triggers (events, conditions, actions)
+- Guard conditions and transition actions
+- Concurrent states and parallel workflows
+
+3. **Determine diagram scope** based on user selection:
+- **Entity lifecycles**: Domain object state transitions (e.g., Order: Created → Paid → Shipped → Delivered)
+- **Business workflows**: Process state machines (e.g., Document approval workflow)
+- **System behaviors**: Component operational states (e.g., Connection states, Job execution states)
+- **User interactions**: UI component state transitions (e.g., Multi-step form wizard)
+
+### Diagram Generation Guidelines
+
+#### Basic State Machine Structure
+```plantuml
+@startuml
+!theme plain
+title Order State Machine
+
+[*] --> Created : create order
+
+Created --> Validated : validate()
+Created --> Cancelled : cancel()
+
+Validated --> Paid : payment successful
+Validated --> PaymentFailed : payment failed
+Validated --> Cancelled : cancel()
+
+PaymentFailed --> Validated : retry payment
+PaymentFailed --> Cancelled : cancel after failure
+
+Paid --> Shipped : ship order
+Paid --> Refunded : process refund
+
+Shipped --> Delivered : delivery confirmed
+Shipped --> Returned : return requested
+
+Delivered --> [*] : order complete
+Returned --> Refunded : return processed
+Refunded --> [*] : refund complete
+Cancelled --> [*] : order cancelled
+
+@enduml
+```
+
+#### Advanced State Machine Patterns
+
+**Composite States with Sub-states**:
+```plantuml
+@startuml
+!theme plain
+title User Account State Machine
+
+[*] --> Inactive
+
+Inactive --> PendingVerification : register()
+PendingVerification --> Active : verify email
+PendingVerification --> Inactive : verification expired
+
+state Active {
+[*] --> LoggedOut
+LoggedOut --> LoggedIn : login()
+LoggedIn --> LoggedOut : logout()
+LoggedIn --> LoggedOut : session timeout
+
+state LoggedIn {
+[*] --> Normal
+Normal --> Restricted : policy violation
+Restricted --> Normal : restriction lifted
+}
+}
+
+Active --> Suspended : suspend account
+Suspended --> Active : reactivate()
+Suspended --> Deleted : permanent deletion
+Active --> Deleted : user deletion request
+
+Deleted --> [*]
+
+@enduml
+```
+
+**Concurrent States**:
+```plantuml
+@startuml
+!theme plain
+title Document Processing State Machine
+
+[*] --> Processing
+
+state Processing {
+--
+[*] --> ContentReview
+ContentReview --> ContentApproved : approve content
+ContentReview --> ContentRejected : reject content
+ContentRejected --> ContentReview : resubmit
+--
+[*] --> TechnicalReview
+TechnicalReview --> TechnicalApproved : approve technical
+TechnicalReview --> TechnicalRejected : reject technical
+TechnicalRejected --> TechnicalReview : fix and resubmit
+}
+
+Processing --> Published : [ContentApproved AND TechnicalApproved]
+Processing --> Rejected : [ContentRejected OR TechnicalRejected] after max attempts
+
+Published --> [*] : document published
+Rejected --> [*] : document rejected
+
+@enduml
+```
+
+**State Machine with Actions and Guards**:
+```plantuml
+@startuml
+!theme plain
+title Payment Processing State Machine
+
+[*] --> Initiated : initiate payment
+
+Initiated --> Processing : process() / validate card
+Processing --> Completed : success / send confirmation
+Processing --> Failed : error / log failure
+
+Failed --> Retry : retry() [attempt < 3] / increment attempt
+Failed --> Abandoned : [attempt >= 3] / notify failure
+
+Retry --> Processing : / reset timeout
+Completed --> [*] : / update account
+Abandoned --> [*] : / cleanup resources
+
+note right of Processing : Timeout: 30 seconds
+note right of Retry : Max 3 attempts allowed
+
+@enduml
+```
+
+#### Business Process State Machines
+
+**Approval Workflow**:
+```plantuml
+@startuml
+!theme plain
+title Approval Workflow State Machine
+
+[*] --> Submitted : submit request
+
+Submitted --> UnderReview : assign reviewer
+UnderReview --> ManagerReview : initial approval
+UnderReview --> Rejected : initial rejection
+UnderReview --> NeedsMoreInfo : request clarification
+
+NeedsMoreInfo --> Submitted : provide additional info
+
+ManagerReview --> Approved : manager approval
+ManagerReview --> Rejected : manager rejection
+ManagerReview --> EscalatedReview : escalate to director
+
+EscalatedReview --> Approved : director approval
+EscalatedReview --> Rejected : director rejection
+
+Approved --> [*] : process approval
+Rejected --> [*] : notify rejection
+
+@enduml
+```
+
+#### System Component State Machines
+
+**Database Connection State Machine**:
+```plantuml
+@startuml
+!theme plain
+title Database Connection State Machine
+
+[*] --> Disconnected
+
+Disconnected --> Connecting : connect()
+Connecting --> Connected : connection established
+Connecting --> ConnectionFailed : connection timeout/error
+
+ConnectionFailed --> Disconnected : / cleanup
+ConnectionFailed --> Connecting : retry() [retry < max]
+
+Connected --> Active : begin transaction
+Connected --> Idle : no active transactions
+
+Active --> Connected : commit/rollback
+Active --> Error : transaction error
+
+Error --> Connected : recover
+Error --> Disconnected : fatal error / close connection
+
+Idle --> Active : new transaction
+Idle --> Disconnected : close() / cleanup
+
+Connected --> Disconnected : disconnect()
+
+@enduml
+```
+
+### Content Quality Requirements
+
+1. **State Accuracy**: States must reflect actual object/process lifecycle in the codebase
+2. **Transition Completeness**: Include all valid state transitions and their triggers
+3. **Guard Conditions**: Document conditions that must be met for transitions
+4. **Action Documentation**: Include actions performed during transitions or state entry/exit
+5. **Business Logic Alignment**: Ensure state machines align with business rules and processes
+
+### Integration Guidelines
+
+1. **Code Analysis**: Use codebase_search to identify:
+- Enum classes that represent states
+- State pattern implementations
+- Workflow orchestration code
+- Business process implementations
+- Entity lifecycle management code
+
+2. **Documentation Integration**:
+- Include state machine diagrams in relevant package-info.java files
+- Add state machine sections to README.md for complex workflows
+- Reference state machines in class-level Javadoc for stateful entities
+
+3. **Naming Conventions**:
+- Use clear, business-meaningful state names
+- Follow consistent naming patterns across related state machines
+- Include context in diagram titles (e.g., "Order Processing State Machine")
+
+### Validation
+
+After generating state machine diagrams:
+1. **Verify PlantUML syntax** for proper rendering
+2. **Validate against codebase** to ensure state accuracy
+3. **Check transition completeness** - ensure all paths are covered
+4. **Test business logic alignment** with actual implementation
+5. **Ensure proper integration** with other documentation
+
+
+## State Machine Analysis Process
+
+**For each applicable state machine type:**
+
+1. **Entity Lifecycles** (if selected):
+- Analyze domain entities with clear state transitions
+- Identify state-changing methods and business rules
+- Document entity lifecycle from creation to completion/deletion
+- Include state validation and transition constraints
+
+2. **Business Workflows** (if selected):
+- Analyze business process implementations
+- Identify workflow orchestration patterns
+- Document approval processes, payment flows, and operational workflows
+- Include decision points and parallel processing paths
+
+3. **System Behaviors** (if selected):
+- Analyze system components with operational states
+- Identify connection management, job processing, and transaction states
+- Document error handling and recovery mechanisms
+- Include timeout and retry logic patterns
+
+4. **User Interactions** (if selected):
+- Analyze UI components with interaction states
+- Identify form wizards, dialog flows, and navigation patterns
+- Document user journey state transitions
+- Include validation and error state handling
+
+## State Machine Generation Guidelines
+
+1. **Use PlantUML syntax** for state machine diagrams to ensure compatibility and renderability
+2. **Analyze actual code implementations** using codebase_search to identify:
+- Enum classes representing states
+- State pattern implementations
+- Workflow orchestration code
+- Business process state management
+- Entity lifecycle management methods
+
+3. **Include comprehensive state coverage**:
+- Initial and final states
+- All intermediate states with clear purposes
+- Transition triggers, guards, and actions
+- Concurrent states where applicable
+- Error and exception states
+
+4. **Document business logic alignment**:
+- Ensure state machines reflect actual business rules
+- Include guard conditions from code validation
+- Show actions performed during state transitions
+- Reference actual method names and class structures
+
+## Integration Strategy
+
+**Based on user documentation preferences:**
+
+1. **README.md Integration** (if README generation was selected):
+- Add "Business Logic" or "System Behavior" section
+- Include key state machine diagrams with explanations
+- Focus on user-facing workflows and entity lifecycles
+- Link diagrams to relevant code sections
+
+2. **Package Documentation Integration** (if package-info.java generation was selected):
+- Include relevant state machine diagrams in package descriptions
+- Show how package components participate in state transitions
+- Reference state machines for stateful entities and services
+- Document state-related design patterns
+
+3. **Separate Behavioral Documentation**:
+- Create dedicated behavior.md or workflows.md files
+- Organize diagrams by business domain or system component
+- Include comprehensive explanations for each state machine
+- Provide cross-references between related state machines
+
+## Content Quality Requirements
+
+1. **State Accuracy**: Diagrams must reflect actual object and process lifecycles in the codebase
+2. **Transition Completeness**: Include all valid state transitions with proper triggers and guards
+3. **Business Logic Alignment**: Ensure state machines align with business rules and validation logic
+4. **Implementation Consistency**: Reference actual class names, method names, and enum values
+5. **Documentation Clarity**: Include clear state descriptions and transition explanations
+
+## Validation
+
+After generating state machine diagrams:
+1. **Verify PlantUML syntax** for proper rendering
+2. **Validate against codebase** to ensure state and transition accuracy
+3. **Check business logic alignment** with actual implementation
+4. **Test diagram completeness** covering all significant state transitions
+5. **Ensure proper integration** with other documentation
+
+#### Step Constraints
+
+- **MUST** only execute if "UML state-machine diagrams" was selected in Step 1
+- **MUST** use codebase_search extensively to analyze actual state implementations
+- **MUST** generate accurate diagrams that reflect real state machine behavior
+- **MUST** use proper PlantUML state machine diagram syntax
+- **MUST** include comprehensive state coverage based on user selection
+- **MUST** read template files fresh using file_search and read_file tools
+- **MUST** integrate diagrams appropriately with other generated documentation
+- **MUST** include guard conditions and transition actions where applicable
+- **MUST** reference actual code structures (enums, classes, methods)
+- **MUST NOT** generate generic or templated diagrams without code analysis
+- **MUST** validate PlantUML syntax for renderability
+
+### Step 8: Documentation Validation and Summary
 
 **Purpose**: Validate all generated documentation and provide a comprehensive summary of changes made.
 
-**Dependencies**: Requires completion of applicable steps (2, 3, 4, 5, and/or 6 based on user selections).
+**Dependencies**: Requires completion of applicable steps (2, 3, 4, 5, 6, and/or 7 based on user selections).
 
 ## Validation Process
 
@@ -1918,6 +2304,7 @@ After generating C4 diagrams:
 - **package-info.java files**: [List packages and actions taken]
 - **UML sequence diagrams**: [List diagram files created and workflows documented]
 - **UML class diagrams**: [List diagram files created and packages/classes documented]
+- **UML state machine diagrams**: [List diagram files created and state machines documented]
 - **C4 model diagrams**: [List diagram files created and architecture levels documented]
 - **Backup files**: [List any backup files created]
 
@@ -1926,6 +2313,7 @@ After generating C4 diagrams:
 - **Package documentation**: [Count and brief overview of packages documented]
 - **UML sequence diagrams**: [Count and types of workflows documented]
 - **UML class diagrams**: [Count and packages/classes documented]
+- **UML state machine diagrams**: [Count and types of state machines documented]
 - **C4 model diagrams**: [Count and architecture levels documented]
 - **Additional sections**: [Any additional sections added like Getting Started, API docs, etc.]
 
