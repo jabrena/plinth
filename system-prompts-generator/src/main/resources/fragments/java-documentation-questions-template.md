@@ -14,7 +14,7 @@ Conditional Flow Rules:
 
 Options:
 - Documentation only (README.md, package-info.java, Javadoc)
-- Diagrams only (UML Sequence/Class, C4)
+- Diagrams only (UML Sequence/Class/State-machine, C4)
 - Both Documentation and Diagrams
 - Skip
 
@@ -123,8 +123,22 @@ Conditional Flow Rules:
 Options:
 - UML sequence diagrams
 - UML class diagrams
+- UML state-machine diagrams
 - C4 model diagrams (Context, Container & Component diagrams)
 - All diagrams
+- Skip
+
+---
+
+**Question 11**: For UML state-machine diagrams, which types would you like to generate?
+Ask this question only if you selected "UML state-machine diagrams" or "All diagrams" in Question 10.
+
+Options:
+- Entity lifecycles (domain object state transitions like Order, User, Document)
+- Business workflows (process state machines like approval, payment, shipping)
+- System behaviors (component operational states like connections, jobs, transactions)
+- User interactions (UI component state transitions like forms, wizards, dialogs)
+- All state machine types
 - Skip
 
 ---

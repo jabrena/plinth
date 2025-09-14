@@ -610,11 +610,132 @@ After generating C4 diagrams:
                 </step-constraints>
             </step>
             <step number="7">
+                <step-title>UML State Machine Diagram Generation</step-title>
+                <step-content>
+**Purpose**: Generate UML state machine diagrams to illustrate the behavior, lifecycle, and workflows of objects, business processes, and system components based on code analysis and user preferences.
+
+**Dependencies**: Only execute if the user selected UML state machine diagrams in Step 1. Requires completion of Step 1.
+
+**CONDITIONAL EXECUTION**: Execute this step only if the user selected "UML state-machine diagrams" in the consolidated diagrams selection question in Step 1.
+
+## Implementation Strategy
+
+Use the following template and guidelines:
+
+<xi:include href="fragments/java-uml-state-machine-diagram-template.md" parse="text"/>
+
+## State Machine Analysis Process
+
+**For each applicable state machine type:**
+
+1. **Entity Lifecycles** (if selected):
+   - Analyze domain entities with clear state transitions
+   - Identify state-changing methods and business rules
+   - Document entity lifecycle from creation to completion/deletion
+   - Include state validation and transition constraints
+
+2. **Business Workflows** (if selected):
+   - Analyze business process implementations
+   - Identify workflow orchestration patterns
+   - Document approval processes, payment flows, and operational workflows
+   - Include decision points and parallel processing paths
+
+3. **System Behaviors** (if selected):
+   - Analyze system components with operational states
+   - Identify connection management, job processing, and transaction states
+   - Document error handling and recovery mechanisms
+   - Include timeout and retry logic patterns
+
+4. **User Interactions** (if selected):
+   - Analyze UI components with interaction states
+   - Identify form wizards, dialog flows, and navigation patterns
+   - Document user journey state transitions
+   - Include validation and error state handling
+
+## State Machine Generation Guidelines
+
+1. **Use PlantUML syntax** for state machine diagrams to ensure compatibility and renderability
+2. **Analyze actual code implementations** using codebase_search to identify:
+   - Enum classes representing states
+   - State pattern implementations
+   - Workflow orchestration code
+   - Business process state management
+   - Entity lifecycle management methods
+
+3. **Include comprehensive state coverage**:
+   - Initial and final states
+   - All intermediate states with clear purposes
+   - Transition triggers, guards, and actions
+   - Concurrent states where applicable
+   - Error and exception states
+
+4. **Document business logic alignment**:
+   - Ensure state machines reflect actual business rules
+   - Include guard conditions from code validation
+   - Show actions performed during state transitions
+   - Reference actual method names and class structures
+
+## Integration Strategy
+
+**Based on user documentation preferences:**
+
+1. **README.md Integration** (if README generation was selected):
+   - Add "Business Logic" or "System Behavior" section
+   - Include key state machine diagrams with explanations
+   - Focus on user-facing workflows and entity lifecycles
+   - Link diagrams to relevant code sections
+
+2. **Package Documentation Integration** (if package-info.java generation was selected):
+   - Include relevant state machine diagrams in package descriptions
+   - Show how package components participate in state transitions
+   - Reference state machines for stateful entities and services
+   - Document state-related design patterns
+
+3. **Separate Behavioral Documentation**:
+   - Create dedicated behavior.md or workflows.md files
+   - Organize diagrams by business domain or system component
+   - Include comprehensive explanations for each state machine
+   - Provide cross-references between related state machines
+
+## Content Quality Requirements
+
+1. **State Accuracy**: Diagrams must reflect actual object and process lifecycles in the codebase
+2. **Transition Completeness**: Include all valid state transitions with proper triggers and guards
+3. **Business Logic Alignment**: Ensure state machines align with business rules and validation logic
+4. **Implementation Consistency**: Reference actual class names, method names, and enum values
+5. **Documentation Clarity**: Include clear state descriptions and transition explanations
+
+## Validation
+
+After generating state machine diagrams:
+1. **Verify PlantUML syntax** for proper rendering
+2. **Validate against codebase** to ensure state and transition accuracy
+3. **Check business logic alignment** with actual implementation
+4. **Test diagram completeness** covering all significant state transitions
+5. **Ensure proper integration** with other documentation
+                </step-content>
+                <step-constraints>
+                    <step-constraint-list>
+                        <step-constraint>**MUST** only execute if "UML state-machine diagrams" was selected in Step 1</step-constraint>
+                        <step-constraint>**MUST** use codebase_search extensively to analyze actual state implementations</step-constraint>
+                        <step-constraint>**MUST** generate accurate diagrams that reflect real state machine behavior</step-constraint>
+                        <step-constraint>**MUST** use proper PlantUML state machine diagram syntax</step-constraint>
+                        <step-constraint>**MUST** include comprehensive state coverage based on user selection</step-constraint>
+                        <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
+                        <step-constraint>**MUST** integrate diagrams appropriately with other generated documentation</step-constraint>
+                        <step-constraint>**MUST** include guard conditions and transition actions where applicable</step-constraint>
+                        <step-constraint>**MUST** reference actual code structures (enums, classes, methods)</step-constraint>
+                        <step-constraint>**MUST NOT** generate generic or templated diagrams without code analysis</step-constraint>
+                        <step-constraint>**MUST** validate PlantUML syntax for renderability</step-constraint>
+                    </step-constraint-list>
+                </step-constraints>
+            </step>
+            <step number="8">
                 <step-title>Documentation Validation and Summary</step-title>
                 <step-content><![CDATA[
 **Purpose**: Validate all generated documentation and provide a comprehensive summary of changes made.
 
-**Dependencies**: Requires completion of applicable steps (2, 3, 4, 5, and/or 6 based on user selections).
+**Dependencies**: Requires completion of applicable steps (2, 3, 4, 5, 6, and/or 7 based on user selections).
 
 ## Validation Process
 
@@ -644,6 +765,7 @@ After generating C4 diagrams:
 - **package-info.java files**: [List packages and actions taken]
 - **UML sequence diagrams**: [List diagram files created and workflows documented]
 - **UML class diagrams**: [List diagram files created and packages/classes documented]
+- **UML state machine diagrams**: [List diagram files created and state machines documented]
 - **C4 model diagrams**: [List diagram files created and architecture levels documented]
 - **Backup files**: [List any backup files created]
 
@@ -652,6 +774,7 @@ After generating C4 diagrams:
 - **Package documentation**: [Count and brief overview of packages documented]
 - **UML sequence diagrams**: [Count and types of workflows documented]
 - **UML class diagrams**: [Count and packages/classes documented]
+- **UML state machine diagrams**: [Count and types of state machines documented]
 - **C4 model diagrams**: [Count and architecture levels documented]
 - **Additional sections**: [Any additional sections added like Getting Started, API docs, etc.]
 
