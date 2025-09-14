@@ -1,18 +1,18 @@
 # Cursor rules Java
 
-Use the following set of Java Cursor Rules to improve your Java development.
+Use the following collection of System prompts of Java to improve your Java development.
 
-## Generate this list
+## Generate this list of System prompts for Java
 
 | Cursor Rule | Description | Prompt | Notes |
 |----|----|-----|-----|
-| [100-java-cursor-rules-list](.cursor/rules/100-java-cursor-rules-list.md) | Generate list of System Prompts for Java | **User Prompt:** `Create a document with all cursor rules for Java using the cursor rule @100-java-cursor-rules-list` | Non interactive rule |
+| [100-java-cursor-rules-list](.cursor/rules/100-java-cursor-rules-list.md) | Generate list of System Prompts for Java | **User Prompt:** `Create a document with all cursor rules for Java using the cursor rule @100-java-cursor-rules-list` | |
 
 ## Build system rules (Maven)
 
 | Cursor Rule | Description | Prompt | Notes |
 |----|----|-----|----|
-| [110-java-maven-best-practices](.cursor/rules/110-java-maven-best-practices.md) | Analyze your `pom.xml` and apply Maven best practices | **Interactive User Prompt:** `Review the pom.xml following the best practices showing several alternatives thanks to the cursor rule @110-java-maven-best-practices` **User Prompt:** `Apply in the pom.xml the rule @110-java-maven-best-practices without any question` **Note:** Add in the context the `pom.xml` which you want to generate the documentation. | It is possible to apply the System prompt in an interactive and non interactive way. |
+| [110-java-maven-best-practices](.cursor/rules/110-java-maven-best-practices.md) | Analyze your `pom.xml` and apply Maven best practices | **User Prompt:** `Apply in the pom.xml the rule @110-java-maven-best-practices` **Note:** Add in the context the `pom.xml` which you want to generate the documentation. **User Prompt with Consultative Interactive Behaviour:** `Apply in the pom.xml the rule @110-java-maven-best-practices with the behaviour @behaviour-consultative-interaction`| You can use the System prompt in a purist way or add the Behaviours to customize the final behaviour. |
 | [111-java-maven-dependencies](.cursor/rules/111-java-maven-dependencies.md) | Add Maven dependencies for improved code quality | **Interactive User Prompt:** `Add essential Maven dependencies for code quality using @111-java-maven-dependencies` **User Prompt:** `Add VAVR dependency with the help of@111-java-maven-dependencies and not make any question` (Example)**Note:** Add in the context the `pom.xml` which you want to enhance with quality dependencies. | It is possible to apply the System prompt in an interactive and non interactive way. Using the interactive approach, the Software engineer will interact with the cursor rule to selectively add JSpecify, Error Prone, NullAway and VAVR dependencies based on project needs. |
 | [112-java-maven-plugins](.cursor/rules/112-java-maven-plugins.md) | Update your `pom.xml` with Maven Dependencies & Plugins | **Interactive User Prompt:** `Improve the pom.xml using the cursor rule @112-java-maven-plugins` **User Prompt:** `Add Maven Enforcer plugin only from the rule @112-java-maven-plugins without any question` (Example) **Note:** Add in the context the `pom.xml` which you want to generate the documentation. |  It is possible to apply the System prompt in an interactive and non interactive way. Using the interactive approach, the Software engineer will interact with the cursor rule to update the `pom.xml`. |
 | [113-java-maven-documentation](.cursor/rules/113-java-maven-documentation.md) | Create a Maven Documentation with the file `README-DEV.md` | **User Prompt:** `Generate developer documentation with essential Maven commands using @113-java-maven-documentation` **Note:** Add in the context the `pom.xml` which you want to generate the documentation. | This cursor rule is applied automatically without any interaction with the Software engineer. |
