@@ -6,15 +6,7 @@
   <meta name="author" content="${config.atuhor_name!}" />
   <meta name="description" content="${content.subtitle!}">
   <link rel="alternate" type="application/atom+xml" href="${content.rootpath!}feed.xml" title="${config.site_title}"/>
-  <#if (config.author_gtm)?has_content>
-  <!-- Google Tag Manager -->
-  <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-  new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-  j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-  'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-  })(window,document,'script','dataLayer','${config.author_gtm}');</script>
-  <!-- End Google Tag Manager -->
-  </#if>
+
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
   <link rel="stylesheet" href="${content.rootpath!}css/bootstrap.min.css">
   <link rel="stylesheet" href="${content.rootpath!}css/bootstrap-social.css" />
