@@ -17,6 +17,12 @@ Use the following collection of System prompts of Java to improve your Java deve
 | [112-java-maven-plugins](.cursor/rules/112-java-maven-plugins.md) | Update your `pom.xml` with Maven Dependencies & Plugins | **Interactive User Prompt:** `Improve the pom.xml using the cursor rule @112-java-maven-plugins` **User Prompt:** `Add Maven Enforcer plugin only from the rule @112-java-maven-plugins without any question` (Example) **Note:** Add in the context the `pom.xml` which you want to generate the documentation. |  It is possible to apply the System prompt in an interactive and non interactive way. Using the interactive approach, the Software engineer will interact with the cursor rule to update the `pom.xml`. |
 | [113-java-maven-documentation](.cursor/rules/113-java-maven-documentation.md) | Create a Maven Documentation with the file `README-DEV.md` | **User Prompt:** `Generate developer documentation with essential Maven commands using @113-java-maven-documentation` **Note:** Add in the context the `pom.xml` which you want to generate the documentation. | This cursor rule is applied automatically without any interaction with the Software engineer. |
 
+## Testing rules
+
+| Cursor Rule | Description | User Prompt | Notes |
+|----|----|-----|----|
+| [131-java-unit-testing](.cursor/rules/131-java-unit-testing.md) | Apply Unit Testing best practices | **User Prompt:** `Improve the class/classes added in the context applying the system prompt @131-java-unit-testing` (Example) **Note:** Add in the context a class/classes. **User Prompt with Consultative Interactive Behaviour:** `Improve the class/classes added in the context applying the system prompt @131-java-unit-testing with the behaviour @behaviour-consultative-interaction` | You can use the System prompt in a purist way or add the Behaviours to customize the final behaviour. |
+
 ## Design rules
 
 | Cursor Rule | Description | User Prompt | Notes |
@@ -33,12 +39,6 @@ Use the following collection of System prompts of Java to improve your Java deve
 | [126-java-logging](.cursor/rules/126-java-logging.md) | Apply logging guidelines in your development | **User Prompt:** `Improve the class/classes added in the context applying the system prompt @126-java-logging` (Example) **Note:** Add in the context a class/classes. **User Prompt with Consultative Interactive Behaviour:** `Improve the class/classes added in the context applying the system prompt @126-java-logging with the behaviour @behaviour-consultative-interaction` | You can use the System prompt in a purist way or add the Behaviours to customize the final behaviour. |
 | [127-java-exception-handling](.cursor/rules/127-java-exception-handling.md) | Add Exception handling | **User Prompt:** `Improve the class/classes added in the context applying the system prompt @127-java-exception-handling` (Example) **Note:** Add in the context a class/classes. **User Prompt with Consultative Interactive Behaviour:** `Improve the class/classes added in the context applying the system prompt @127-java-exception-handling with the behaviour @behaviour-consultative-interaction` | You can use the System prompt in a purist way or add the Behaviours to customize the final behaviour. |
 | [128-java-generics](.cursor/rules/128-java-generics.md) | Apply generics in a class | **User Prompt:** `Improve the class/classes added in the context applying the system prompt @128-java-generics` (Example) **Note:** Add in the context a class/classes. **User Prompt with Consultative Interactive Behaviour:** `Improve the class/classes added in the context applying the system prompt @128-java-generics with the behaviour @behaviour-consultative-interaction` **User Prompt with Training behaviour:** `Create a course about @128-java-generics.md using the behavior @behaviour-progressive-learning.md put the course here` **Note:** Add in the context the location to add the course. | You can use the System prompt in a purist way or add the Behaviours to customize the final behaviour. |
-
-## Testing rules
-
-| Cursor Rule | Description | User Prompt | Notes |
-|----|----|-----|----|
-| [131-java-unit-testing](.cursor/rules/131-java-unit-testing.md) | Apply Unit Testing best practices | **User Prompt:** `Improve the class/classes added in the context applying the system prompt @131-java-unit-testing` (Example) **Note:** Add in the context a class/classes. **User Prompt with Consultative Interactive Behaviour:** `Improve the class/classes added in the context applying the system prompt @131-java-unit-testing with the behaviour @behaviour-consultative-interaction` | You can use the System prompt in a purist way or add the Behaviours to customize the final behaviour. |
 
 ## Refactoring rules
 
