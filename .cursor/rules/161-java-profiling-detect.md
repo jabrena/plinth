@@ -22,6 +22,8 @@ Key capabilities include:
 - **Interactive Workflow**: Provides menu-driven interface for selecting appropriate profiling strategies
 - **Comprehensive Data Collection**: Supports CPU profiling, memory allocation tracking, lock contention analysis, GC monitoring, and I/O bottleneck detection
 - **Modern Tooling**: Leverages async-profiler v4.0 features including interactive heatmaps, native memory leak detection, and enhanced JFR conversion
+- **Enhanced JFR Integration (Java 25)**: Utilizes JEP 518 (JFR Cooperative Sampling) and JEP 520 (JFR Method Timing & Tracing) for improved profiling accuracy and reduced overhead
+- **Advanced Sampling**: Benefits from cooperative sampling techniques that minimize profiling impact while maintaining measurement precision
 - **Organized Results**: Maintains clean directory structure with timestamped results for easy analysis and comparison
 
 The rule ensures consistent, repeatable profiling procedures while providing the flexibility to target specific performance concerns based on your application's behavior and suspected issues.
@@ -1317,12 +1319,13 @@ done
 
 ## Output Format
 
-- Set up automated Java profiling environment with async-profiler v4.0
-- Create interactive profiling scripts for problem-driven data collection
-- Generate targeted profiling data based on specific performance issues (CPU, memory, threading, GC, I/O)
-- Organize profiling results in structured directory hierarchy with timestamped files
-- Provide flamegraph and heatmap visualizations for performance analysis
-- Enable systematic measurement and detection of Java application performance bottlenecks
+- Set up automated Java profiling environment with async-profiler v4.0 and enhanced JFR capabilities
+- Create interactive profiling scripts for problem-driven data collection with Java 25 JFR improvements
+- Generate targeted profiling data based on specific performance issues (CPU, memory, threading, GC, I/O) with cooperative sampling
+- Leverage JEP 518 (JFR Cooperative Sampling) for reduced overhead and JEP 520 (Method Timing & Tracing) for enhanced accuracy
+- Organize profiling results in structured directory hierarchy with timestamped files and improved JFR recordings
+- Provide flamegraph and heatmap visualizations for performance analysis with enhanced method-level tracing
+- Enable systematic measurement and detection of Java application performance bottlenecks with minimal profiling impact
 
 ## Safeguards
 

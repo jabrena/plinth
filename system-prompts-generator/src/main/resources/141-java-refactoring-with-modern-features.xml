@@ -10,7 +10,7 @@
     <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
     <goal>
-        Modern Java development (Java 8+) emphasizes leveraging lambda expressions and functional interfaces over anonymous classes, and using the Stream API for declarative collection processing. The `Optional` API should be used for handling potentially absent values gracefully, and the `java.time` API for all date/time operations. Default methods allow non-breaking interface evolution. Local Variable Type Inference (`var`) can improve readability when used judiciously. Unmodifiable collection factory methods (`List.of()`, etc.) provide concise immutable collections. `CompletableFuture` facilitates composable asynchronous programming. The Java Platform Module System (JPMS, Java 9+) enables strong encapsulation. Performance implications of new features should be considered and profiled. Testing strategies need to adapt to these modern features, and text blocks (Java 15+) offer improved readability for multi-line strings.
+        Modern Java development (Java 8+) emphasizes leveraging lambda expressions and functional interfaces over anonymous classes, and using the Stream API for declarative collection processing. The `Optional` API should be used for handling potentially absent values gracefully, and the `java.time` API for all date/time operations. Default methods allow non-breaking interface evolution. Local Variable Type Inference (`var`) can improve readability when used judiciously. Unmodifiable collection factory methods (`List.of()`, etc.) provide concise immutable collections. `CompletableFuture` facilitates composable asynchronous programming. The Java Platform Module System (JPMS, Java 9+) enables strong encapsulation. Java 25 introduces Flexible Constructor Bodies (JEP 513) for enhanced initialization patterns and Module Import Declarations (JEP 511) for simplified module dependencies. Performance implications of new features should be considered and profiled. Testing strategies need to adapt to these modern features, and text blocks (Java 15+) offer improved readability for multi-line strings.
 
         ### Key Principles
 
@@ -752,12 +752,12 @@ public class CompletableFutureAntiPattern {
 
         <example number="9" id="module-system">
             <example-header>
-                <example-title>Module System (Java 9+)</example-title>
+                <example-title>Module System (Java 9+) with Import Declarations (Java 25)</example-title>
                 <example-subtitle>Leverage the Java Platform Module System (JPMS) for Strong Encapsulation</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                For applications built on Java 9 or later, consider designing them as modules to achieve strong encapsulation and reliable configuration. Create a `module-info.java` file at the root of your source code to declare your module. Use `requires` clauses to specify dependencies, `exports` clauses to make packages publicly available, `opens` clauses for reflection access, and `provides ... with ...` for service discovery. Carefully consider which packages to export to maintain good encapsulation.
+                For applications built on Java 9 or later, consider designing them as modules to achieve strong encapsulation and reliable configuration. Create a `module-info.java` file at the root of your source code to declare your module. Use `requires` clauses to specify dependencies, `exports` clauses to make packages publicly available, `opens` clauses for reflection access, and `provides ... with ...` for service discovery. Java 25 introduces Module Import Declarations (JEP 511) that allow importing entire modules into the current module's namespace, simplifying access to frequently used types from other modules. Carefully consider which packages to export to maintain good encapsulation.
                             ]]>
             </example-description>
             <code-examples>
@@ -769,8 +769,14 @@ module com.example.application {
     requires java.base; // Usually implicit but good to be explicit
     requires java.logging;
 
+    // Java 25 - JEP 511: Module Import Declarations
+    // Import entire modules to simplify type access
+    import module java.util.concurrent;
+    import module java.time;
+
     // Depends on an external library module (assuming it's modularized)
-    // requires org.example.somelibrary;
+    requires org.example.somelibrary;
+    import module org.example.somelibrary;
 
     // Exports its API package for other modules to use
     exports com.example.application.api;
@@ -1137,7 +1143,7 @@ public class InsufficientTesting {
     }
 }]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
+                <bad-example>
                     <code-block language="java"><![CDATA[public class OldMultiLineStringExample {
     public static void main(String[] args) {
         // Bad: Using traditional string concatenation for multi-line text
@@ -1167,16 +1173,185 @@ public class InsufficientTesting {
                 </bad-example>
             </code-examples>
         </example>
+
+        <example number="13" id="flexible-constructor-bodies">
+            <example-header>
+                <example-title>Flexible Constructor Bodies (Java 25)</example-title>
+                <example-subtitle>Leverage Enhanced Constructor Initialization Patterns</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Java 25 introduces Flexible Constructor Bodies (JEP 513) that allow statements to appear before explicit constructor invocations (super() or this() calls). This enables validation, preprocessing, and initialization logic to be executed before calling the parent constructor or another constructor in the same class. This feature enhances constructor flexibility while maintaining type safety and initialization guarantees.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Using flexible constructor bodies for validation and preprocessing
+import java.util.Objects;
+import java.util.List;
+import java.util.ArrayList;
+
+public class FlexibleConstructorExample {
+
+    static class ValidatedUser {
+        private final String name;
+        private final String email;
+        private final int age;
+
+        public ValidatedUser(String name, String email, int age) {
+            // Java 25 - JEP 513: Statements before super() call
+            Objects.requireNonNull(name, "Name cannot be null");
+            Objects.requireNonNull(email, "Email cannot be null");
+
+            if (name.trim().isEmpty()) {
+                throw new IllegalArgumentException("Name cannot be empty");
+            }
+
+            if (!email.contains("@")) {
+                throw new IllegalArgumentException("Invalid email format");
+            }
+
+            if (age < 0 || age > 150) {
+                throw new IllegalArgumentException("Age must be between 0 and 150");
+            }
+
+            // Now call super() after validation
+            super();
+
+            this.name = name.trim();
+            this.email = email.toLowerCase();
+            this.age = age;
+        }
+    }
+
+    static class ProcessedData {
+        private final List<String> items;
+        private final String summary;
+
+        public ProcessedData(List<String> rawItems) {
+            // Preprocessing before this() call
+            if (rawItems == null) {
+                rawItems = new ArrayList<>();
+            }
+
+            List<String> cleanedItems = rawItems.stream()
+                .filter(Objects::nonNull)
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toList();
+
+            String processedSummary = "Processed " + cleanedItems.size() + " items";
+
+            // Call another constructor with processed data
+            this(cleanedItems, processedSummary);
+        }
+
+        public ProcessedData(List<String> items, String summary) {
+            super();
+            this.items = new ArrayList<>(items);
+            this.summary = summary;
+        }
+
+        public List<String> getItems() { return new ArrayList<>(items); }
+        public String getSummary() { return summary; }
+    }
+
+    public static void main(String[] args) {
+        try {
+            ValidatedUser user = new ValidatedUser("John Doe", "john@example.com", 30);
+            System.out.println("Created user: " + user.name);
+
+            ProcessedData data = new ProcessedData(List.of("  item1  ", null, "", "item2", "  item3  "));
+            System.out.println("Summary: " + data.getSummary());
+            System.out.println("Items: " + data.getItems());
+
+        } catch (IllegalArgumentException e) {
+            System.err.println("Validation error: " + e.getMessage());
+        }
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// AVOID: Traditional constructor limitations requiring workarounds
+public class TraditionalConstructorExample {
+
+    static class User {
+        private final String name;
+        private final String email;
+        private final int age;
+
+        public User(String name, String email, int age) {
+            // BAD: Cannot perform validation before super() call in traditional Java
+            super(); // Must be first statement
+
+            // Validation happens after super() call, which is less ideal
+            if (name == null || name.trim().isEmpty()) {
+                throw new IllegalArgumentException("Invalid name");
+            }
+
+            if (email == null || !email.contains("@")) {
+                throw new IllegalArgumentException("Invalid email");
+            }
+
+            if (age < 0 || age > 150) {
+                throw new IllegalArgumentException("Invalid age");
+            }
+
+            this.name = name.trim();
+            this.email = email.toLowerCase();
+            this.age = age;
+        }
+    }
+
+    static class ProcessedData {
+        private final List<String> items;
+        private final String summary;
+
+        public ProcessedData(List<String> rawItems) {
+            // BAD: Cannot preprocess data before this() call
+            // Need to use static factory method or separate validation
+            this(validateAndClean(rawItems), createSummary(rawItems));
+        }
+
+        public ProcessedData(List<String> items, String summary) {
+            super();
+            this.items = items;
+            this.summary = summary;
+        }
+
+        // BAD: Need separate static methods for preprocessing
+        private static List<String> validateAndClean(List<String> rawItems) {
+            if (rawItems == null) return new ArrayList<>();
+            return rawItems.stream()
+                .filter(Objects::nonNull)
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .toList();
+        }
+
+        private static String createSummary(List<String> rawItems) {
+            int count = rawItems == null ? 0 : (int) rawItems.stream()
+                .filter(Objects::nonNull)
+                .map(String::trim)
+                .filter(s -> !s.isEmpty())
+                .count();
+            return "Processed " + count + " items";
+        }
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
     </examples>
 
     <output-format>
         <output-format-list>
-            <output-format-item>**ANALYZE** Java code to identify specific modern feature refactoring opportunities and categorize them by impact (CRITICAL, MAINTAINABILITY, PERFORMANCE, READABILITY) and area (lambda expressions, stream API, Optional usage, java.time API, collection factories, CompletableFuture, text blocks, pattern matching)</output-format-item>
-            <output-format-item>**CATEGORIZE** modern Java refactoring improvements found: Legacy Code Issues (anonymous classes vs lambda expressions, Iterator loops vs Stream API, null checks vs Optional usage, Date/Calendar vs java.time API), Performance Opportunities (sequential loops vs parallel streams, traditional collections vs factory methods, blocking operations vs CompletableFuture), Readability Enhancements (verbose lambdas vs method references, string concatenation vs text blocks, explicit types vs var inference), and Modern API Adoption (legacy async patterns vs CompletableFuture composition, traditional switch vs pattern matching, verbose collection creation vs factory methods)</output-format-item>
-            <output-format-item>**APPLY** modern Java features directly by implementing the most appropriate improvements for each identified opportunity: Convert anonymous classes to lambda expressions and method references, replace Iterator loops with Stream API operations, introduce Optional for null-safe method returns, migrate Date/Calendar to java.time API, adopt collection factory methods for immutable collections, refactor blocking operations to CompletableFuture for async processing, replace string concatenation with text blocks for multi-line strings, and integrate pattern matching for cleaner conditional logic</output-format-item>
-            <output-format-item>**IMPLEMENT** comprehensive modern Java refactoring using proven patterns: Establish lambda expressions with method references for functional interfaces, integrate Stream API with proper collectors and operations (map, filter, reduce), adopt Optional throughout the codebase for null-safe operations, migrate to java.time API with LocalDate, LocalDateTime, and ZonedDateTime, implement CompletableFuture for asynchronous processing and composition, utilize text blocks for improved string readability, apply var type inference where it enhances readability, and integrate pattern matching for switch expressions and instanceof checks</output-format-item>
-            <output-format-item>**REFACTOR** code systematically following the modern Java improvement roadmap: First convert anonymous classes to lambda expressions and method references for immediate readability gains, then replace Iterator loops with Stream API operations for functional programming benefits, introduce Optional for null-safe method signatures and operations, migrate Date/Calendar usage to modern java.time API, adopt collection factory methods and modern collection patterns, integrate CompletableFuture for asynchronous operations, apply text blocks and var inference for code clarity, and implement pattern matching where supported for cleaner conditional logic</output-format-item>
-            <output-format-item>**EXPLAIN** the applied modern Java improvements and their benefits: Code readability enhancements through lambda expressions and method references, maintainability improvements via Stream API and functional programming patterns, null-safety gains from Optional adoption, date/time handling improvements through java.time API, performance benefits from parallel streams and async CompletableFuture operations, and overall code modernization through contemporary Java idioms and patterns</output-format-item>
+            <output-format-item>**ANALYZE** Java code to identify specific modern feature refactoring opportunities and categorize them by impact (CRITICAL, MAINTAINABILITY, PERFORMANCE, READABILITY) and area (lambda expressions, stream API, Optional usage, java.time API, collection factories, CompletableFuture, text blocks, pattern matching, flexible constructor bodies, module import declarations)</output-format-item>
+            <output-format-item>**CATEGORIZE** modern Java refactoring improvements found: Legacy Code Issues (anonymous classes vs lambda expressions, Iterator loops vs Stream API, null checks vs Optional usage, Date/Calendar vs java.time API), Performance Opportunities (sequential loops vs parallel streams, traditional collections vs factory methods, blocking operations vs CompletableFuture), Readability Enhancements (verbose lambdas vs method references, string concatenation vs text blocks, explicit types vs var inference), Modern API Adoption (legacy async patterns vs CompletableFuture composition, traditional switch vs pattern matching, verbose collection creation vs factory methods), and Java 25 Features (traditional constructor limitations vs flexible constructor bodies, verbose module dependencies vs module import declarations)</output-format-item>
+            <output-format-item>**APPLY** modern Java features directly by implementing the most appropriate improvements for each identified opportunity: Convert anonymous classes to lambda expressions and method references, replace Iterator loops with Stream API operations, introduce Optional for null-safe method returns, migrate Date/Calendar to java.time API, adopt collection factory methods for immutable collections, refactor blocking operations to CompletableFuture for async processing, replace string concatenation with text blocks for multi-line strings, integrate pattern matching for cleaner conditional logic, apply flexible constructor bodies for enhanced initialization (Java 25), and utilize module import declarations for simplified module dependencies (Java 25)</output-format-item>
+            <output-format-item>**IMPLEMENT** comprehensive modern Java refactoring using proven patterns: Establish lambda expressions with method references for functional interfaces, integrate Stream API with proper collectors and operations (map, filter, reduce), adopt Optional throughout the codebase for null-safe operations, migrate to java.time API with LocalDate, LocalDateTime, and ZonedDateTime, implement CompletableFuture for asynchronous processing and composition, utilize text blocks for improved string readability, apply var type inference where it enhances readability, integrate pattern matching for switch expressions and instanceof checks, leverage flexible constructor bodies for validation and preprocessing (Java 25), and implement module import declarations for cleaner module organization (Java 25)</output-format-item>
+            <output-format-item>**REFACTOR** code systematically following the modern Java improvement roadmap: First convert anonymous classes to lambda expressions and method references for immediate readability gains, then replace Iterator loops with Stream API operations for functional programming benefits, introduce Optional for null-safe method signatures and operations, migrate Date/Calendar usage to modern java.time API, adopt collection factory methods and modern collection patterns, integrate CompletableFuture for asynchronous operations, apply text blocks and var inference for code clarity, implement pattern matching where supported for cleaner conditional logic, upgrade constructor patterns with flexible constructor bodies (Java 25), and simplify module dependencies with import declarations (Java 25)</output-format-item>
+            <output-format-item>**EXPLAIN** the applied modern Java improvements and their benefits: Code readability enhancements through lambda expressions and method references, maintainability improvements via Stream API and functional programming patterns, null-safety gains from Optional adoption, date/time handling improvements through java.time API, performance benefits from parallel streams and async CompletableFuture operations, constructor flexibility gains from flexible constructor bodies (Java 25), module organization improvements through import declarations (Java 25), and overall code modernization through contemporary Java idioms and patterns</output-format-item>
             <output-format-item>**VALIDATE** that all applied modern Java refactoring compiles successfully, maintains existing functionality, preserves business logic integrity, achieves expected performance characteristics, and follows modern Java best practices through comprehensive testing and verification</output-format-item>
         </output-format-list>
     </output-format>
