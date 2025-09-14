@@ -18,12 +18,17 @@
 <div class="row">
 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 
-<div class="posts-list">
+<div class="content-list">
+
+
+<!-- Blog Posts Section -->
+<div class="posts-section">
+<h2 class="section-title"><i class="fa fa-rss"></i> Latest Posts</h2>
 <#list published_posts as post>
 <article class="post-preview">
-<h2 class="post-title"><a href="${content.rootpath!}${post.uri}"><#escape x as x?xml>${post.title}</#escape></a></h2>
+<h3 class="post-title"><a href="${content.rootpath!}${post.uri}"><#escape x as x?xml>${post.title}</#escape></a></h3>
 <#if (post.subtitle)?has_content>
-  <h3 class="post-subtitle"><a href="${content.rootpath!}${post.uri}"><#escape x as x?xml>${post.subtitle}</#escape></a></h3>
+  <h4 class="post-subtitle"><a href="${content.rootpath!}${post.uri}"><#escape x as x?xml>${post.subtitle}</#escape></a></h4>
 </#if>
 
 <p class="post-meta">
@@ -59,6 +64,8 @@
 </div>
 </article>
 </#list>
+</div>
+
 </div>
 
 <#if (nextFileName )?? || (previousFileName)??>

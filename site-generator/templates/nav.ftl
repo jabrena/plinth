@@ -19,6 +19,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div class="collapse navbar-collapse" id="main-navbar">
 <ul class="nav navbar-nav navbar-right">
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="${content.rootpath!}courses/generics/index.html">Generics</a>
+    </div>
+  </li>
   <li><a href="${content.rootpath!}archive.html">Archive</a></li>
   <li><a href="${content.rootpath!}tags.html">Tags</a></li>
   <li><a href="${content.rootpath!}about.html">About</a></li>

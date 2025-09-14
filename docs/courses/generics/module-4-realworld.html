@@ -1,0 +1,1621 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Module 4: Real-World Applications - Production Patterns and Integration - Cursor Rules for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../feed.xml" title="Cursor Rules for Java"/>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../css/prettify.css">
+  <link rel="shortcut icon" href="../../favicon.ico">
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../index.html">Cursor Rules for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../courses/generics/index.html">Generics</a>
+    </div>
+  </li>
+  <li><a href="../../archive.html">Archive</a></li>
+  <li><a href="../../tags.html">Tags</a></li>
+  <li><a href="../../about.html">About</a></li>
+</ul>
+</div>
+
+<div class="avatar-container">
+  <div class="avatar-img-border">
+    <a href="../../index.html">
+      <img class="avatar-img" src="../../images/avatar-icon.png"/>
+    </a>
+  </div>
+</div>
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="course-heading">
+<h1>Module 4: Real-World Applications - Production Patterns and Integration</h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="course-content">
+
+<div class="course-meta">
+    <i class="fa fa-calendar-o"></i>
+    2025-09-13
+    &nbsp;
+    <i class="fa fa-user"></i>
+    Juan Antonio Breña Moral
+  <div class="course-tags">
+    &nbsp;
+    <i class="fa fa-tags"></i>
+      <a href="../../tags/java.html" class="course-tag">java</a>
+      <a href="../../tags/generics.html" class="course-tag">generics</a>
+      <a href="../../tags/real-world.html" class="course-tag">real-world</a>
+      <a href="../../tags/records.html" class="course-tag">records</a>
+      <a href="../../tags/sealed-types.html" class="course-tag">sealed-types</a>
+      <a href="../../tags/serialization.html" class="course-tag">serialization</a>
+      <a href="../../tags/performance.html" class="course-tag">performance</a>
+  </div>
+</div>
+<hr>
+
+<h2>📖 Module Overview</h2>
+<p>Time to apply your generics mastery to real-world scenarios! This module bridges theory and practice, showing how generics integrate with modern Java features and solve actual production problems. You'll work with contemporary patterns used in enterprise applications.</p>
+<h3>🎯 Learning Objectives</h3>
+<p>By the end of this module, you will:</p>
+<ul>
+<li><strong>Integrate</strong> generics with Records and sealed types</li>
+<li><strong>Handle</strong> serialization of generic types correctly</li>
+<li><strong>Apply</strong> pattern matching with generic types</li>
+<li><strong>Optimize</strong> performance with generic design choices</li>
+<li><strong>Migrate</strong> legacy codebases to use generics</li>
+<li><strong>Design</strong> production-ready APIs with generics</li>
+<li><strong>Solve</strong> common enterprise integration challenges</li>
+</ul>
+<h3>⏱️ Estimated Time: 3-4 hours</h3>
+<hr />
+<h2>🎁 Generics with Modern Java Records</h2>
+<h3>📦 Generic Records for Data Transfer</h3>
+<p>Records work beautifully with generics to create type-safe, immutable data structures:</p>
+<pre><code class="language-java">// Generic Result type for API responses
+public record Result&lt;T, E&gt;(T data, E error, boolean success) {
+
+    // Factory methods for convenience
+    public static &lt;T, E&gt; Result&lt;T, E&gt; success(T data) {
+        return new Result&lt;&gt;(data, null, true);
+    }
+
+    public static &lt;T, E&gt; Result&lt;T, E&gt; failure(E error) {
+        return new Result&lt;&gt;(null, error, false);
+    }
+
+    // Transformation methods
+    public &lt;U&gt; Result&lt;U, E&gt; map(java.util.function.Function&lt;T, U&gt; mapper) {
+        return success ? success(mapper.apply(data)) : failure(error);
+    }
+
+    public &lt;F&gt; Result&lt;T, F&gt; mapError(java.util.function.Function&lt;E, F&gt; mapper) {
+        return success ? success(data) : failure(mapper.apply(error));
+    }
+
+    // Convenience methods
+    public java.util.Optional&lt;T&gt; toOptional() {
+        return success ? java.util.Optional.of(data) : java.util.Optional.empty();
+    }
+
+    public T orElse(T defaultValue) {
+        return success ? data : defaultValue;
+    }
+
+    public T orElseThrow() {
+        if (!success) {
+            throw new RuntimeException(&quot;Operation failed: &quot; + error);
+        }
+        return data;
+    }
+}
+
+// Generic Page record for pagination
+public record Page&lt;T&gt;(
+    java.util.List&lt;T&gt; content,
+    int pageNumber,
+    int pageSize,
+    long totalElements,
+    int totalPages
+) {
+    // Compact constructor with validation
+    public Page {
+        content = java.util.List.copyOf(content); // Defensive copy
+        if (pageNumber &lt; 0) throw new IllegalArgumentException(&quot;Page number cannot be negative&quot;);
+        if (pageSize &lt;= 0) throw new IllegalArgumentException(&quot;Page size must be positive&quot;);
+        if (totalElements &lt; 0) throw new IllegalArgumentException(&quot;Total elements cannot be negative&quot;);
+    }
+
+    // Transformation method
+    public &lt;U&gt; Page&lt;U&gt; map(java.util.function.Function&lt;T, U&gt; mapper) {
+        return new Page&lt;&gt;(
+            content.stream().map(mapper).toList(),
+            pageNumber,
+            pageSize,
+            totalElements,
+            totalPages
+        );
+    }
+
+    // Utility methods
+    public boolean hasContent() {
+        return !content.isEmpty();
+    }
+
+    public boolean hasNext() {
+        return pageNumber &lt; totalPages - 1;
+    }
+
+    public boolean hasPrevious() {
+        return pageNumber &gt; 0;
+    }
+}
+</code></pre>
+<h3>🎯 Hands-On Exercise 1: Generic Records for Enterprise APIs</h3>
+<p>Create a comprehensive API response system using generic Records:</p>
+<pre><code class="language-java">// TODO: Create a generic API response system
+public record ApiResponse&lt;T&gt;(???) {
+
+    // TODO: Add factory methods for different response types
+
+    // TODO: Add transformation methods
+
+    // TODO: Add validation in compact constructor
+}
+
+// TODO: Create a generic validation result
+public record ValidationResult&lt;T&gt;(???) {
+
+    // TODO: Add methods to combine validation results
+
+    // TODO: Add methods to extract valid data
+}
+
+// TODO: Create a generic event record
+public record Event&lt;T&gt;(???) {
+
+    // TODO: Add timestamp and metadata
+
+    // TODO: Add serialization support
+}
+</code></pre>
+<details>
+<summary>🎁 Try designing the enterprise API system yourself</summary>
+<pre><code class="language-java">import java.time.Instant;
+import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+
+// Comprehensive API response with metadata
+public record ApiResponse&lt;T&gt;(
+    T data,
+    String message,
+    int statusCode,
+    Instant timestamp,
+    Map&lt;String, Object&gt; metadata
+) {
+    // Compact constructor with validation and defaults
+    public ApiResponse {
+        timestamp = Objects.requireNonNullElse(timestamp, Instant.now());
+        metadata = metadata != null ? Map.copyOf(metadata) : Map.of();
+
+        if (statusCode &lt; 100 || statusCode &gt;= 600) {
+            throw new IllegalArgumentException(&quot;Invalid HTTP status code: &quot; + statusCode);
+        }
+    }
+
+    // Factory methods for common response types
+    public static &lt;T&gt; ApiResponse&lt;T&gt; ok(T data) {
+        return new ApiResponse&lt;&gt;(data, &quot;Success&quot;, 200, null, null);
+    }
+
+    public static &lt;T&gt; ApiResponse&lt;T&gt; ok(T data, String message) {
+        return new ApiResponse&lt;&gt;(data, message, 200, null, null);
+    }
+
+    public static &lt;T&gt; ApiResponse&lt;T&gt; created(T data) {
+        return new ApiResponse&lt;&gt;(data, &quot;Created&quot;, 201, null, null);
+    }
+
+    public static &lt;T&gt; ApiResponse&lt;T&gt; noContent() {
+        return new ApiResponse&lt;&gt;(null, &quot;No Content&quot;, 204, null, null);
+    }
+
+    public static &lt;T&gt; ApiResponse&lt;T&gt; badRequest(String message) {
+        return new ApiResponse&lt;&gt;(null, message, 400, null, null);
+    }
+
+    public static &lt;T&gt; ApiResponse&lt;T&gt; notFound(String message) {
+        return new ApiResponse&lt;&gt;(null, message, 404, null, null);
+    }
+
+    public static &lt;T&gt; ApiResponse&lt;T&gt; serverError(String message) {
+        return new ApiResponse&lt;&gt;(null, message, 500, null, null);
+    }
+
+    // Transformation methods
+    public &lt;U&gt; ApiResponse&lt;U&gt; map(Function&lt;T, U&gt; mapper) {
+        return new ApiResponse&lt;&gt;(
+            data != null ? mapper.apply(data) : null,
+            message,
+            statusCode,
+            timestamp,
+            metadata
+        );
+    }
+
+    // Add metadata
+    public ApiResponse&lt;T&gt; withMetadata(String key, Object value) {
+        Map&lt;String, Object&gt; newMetadata = new HashMap&lt;&gt;(metadata);
+        newMetadata.put(key, value);
+        return new ApiResponse&lt;&gt;(data, message, statusCode, timestamp, newMetadata);
+    }
+
+    // Status checking methods
+    public boolean isSuccess() {
+        return statusCode &gt;= 200 &amp;&amp; statusCode &lt; 300;
+    }
+
+    public boolean isError() {
+        return statusCode &gt;= 400;
+    }
+
+    public boolean isClientError() {
+        return statusCode &gt;= 400 &amp;&amp; statusCode &lt; 500;
+    }
+
+    public boolean isServerError() {
+        return statusCode &gt;= 500;
+    }
+}
+
+// Validation result with error accumulation
+public record ValidationResult&lt;T&gt;(
+    T value,
+    List&lt;String&gt; errors,
+    boolean valid
+) {
+    // Compact constructor
+    public ValidationResult {
+        errors = errors != null ? List.copyOf(errors) : List.of();
+        valid = errors.isEmpty();
+    }
+
+    // Factory methods
+    public static &lt;T&gt; ValidationResult&lt;T&gt; valid(T value) {
+        return new ValidationResult&lt;&gt;(value, List.of(), true);
+    }
+
+    public static &lt;T&gt; ValidationResult&lt;T&gt; invalid(String... errors) {
+        return new ValidationResult&lt;&gt;(null, Arrays.asList(errors), false);
+    }
+
+    public static &lt;T&gt; ValidationResult&lt;T&gt; invalid(List&lt;String&gt; errors) {
+        return new ValidationResult&lt;&gt;(null, errors, false);
+    }
+
+    // Combine validation results
+    public &lt;U&gt; ValidationResult&lt;U&gt; flatMap(Function&lt;T, ValidationResult&lt;U&gt;&gt; mapper) {
+        if (!valid) {
+            return invalid(errors);
+        }
+
+        ValidationResult&lt;U&gt; result = mapper.apply(value);
+        if (result.valid) {
+            return result;
+        } else {
+            List&lt;String&gt; combinedErrors = new ArrayList&lt;&gt;(errors);
+            combinedErrors.addAll(result.errors);
+            return invalid(combinedErrors);
+        }
+    }
+
+    // Transform valid value
+    public &lt;U&gt; ValidationResult&lt;U&gt; map(Function&lt;T, U&gt; mapper) {
+        return valid ? valid(mapper.apply(value)) : invalid(errors);
+    }
+
+    // Combine multiple validation results
+    public static &lt;T&gt; ValidationResult&lt;List&lt;T&gt;&gt; combine(List&lt;ValidationResult&lt;T&gt;&gt; results) {
+        List&lt;String&gt; allErrors = new ArrayList&lt;&gt;();
+        List&lt;T&gt; validValues = new ArrayList&lt;&gt;();
+
+        for (ValidationResult&lt;T&gt; result : results) {
+            if (result.valid) {
+                validValues.add(result.value);
+            } else {
+                allErrors.addAll(result.errors);
+            }
+        }
+
+        return allErrors.isEmpty() ? valid(validValues) : invalid(allErrors);
+    }
+
+    // Extract value or throw
+    public T orElseThrow() {
+        if (!valid) {
+            throw new IllegalStateException(&quot;Validation failed: &quot; + String.join(&quot;, &quot;, errors));
+        }
+        return value;
+    }
+
+    // Get formatted error message
+    public String getErrorMessage() {
+        return valid ? &quot;&quot; : String.join(&quot;; &quot;, errors);
+    }
+}
+
+// Generic event with rich metadata
+public record Event&lt;T&gt;(
+    String id,
+    String type,
+    T payload,
+    Instant timestamp,
+    String source,
+    String version,
+    Map&lt;String, Object&gt; metadata
+) {
+    // Compact constructor with defaults
+    public Event {
+        id = Objects.requireNonNullElse(id, UUID.randomUUID().toString());
+        timestamp = Objects.requireNonNullElse(timestamp, Instant.now());
+        version = Objects.requireNonNullElse(version, &quot;1.0&quot;);
+        metadata = metadata != null ? Map.copyOf(metadata) : Map.of();
+
+        Objects.requireNonNull(type, &quot;Event type cannot be null&quot;);
+        Objects.requireNonNull(payload, &quot;Event payload cannot be null&quot;);
+        Objects.requireNonNull(source, &quot;Event source cannot be null&quot;);
+    }
+
+    // Factory methods
+    public static &lt;T&gt; Event&lt;T&gt; of(String type, T payload, String source) {
+        return new Event&lt;&gt;(null, type, payload, null, source, null, null);
+    }
+
+    public static &lt;T&gt; Event&lt;T&gt; of(String type, T payload, String source, Map&lt;String, Object&gt; metadata) {
+        return new Event&lt;&gt;(null, type, payload, null, source, null, metadata);
+    }
+
+    // Transform payload
+    public &lt;U&gt; Event&lt;U&gt; mapPayload(Function&lt;T, U&gt; mapper) {
+        return new Event&lt;&gt;(id, type, mapper.apply(payload), timestamp, source, version, metadata);
+    }
+
+    // Add metadata
+    public Event&lt;T&gt; withMetadata(String key, Object value) {
+        Map&lt;String, Object&gt; newMetadata = new HashMap&lt;&gt;(metadata);
+        newMetadata.put(key, value);
+        return new Event&lt;&gt;(id, type, payload, timestamp, source, version, newMetadata);
+    }
+
+    // Check event age
+    public boolean isOlderThan(java.time.Duration duration) {
+        return timestamp.plus(duration).isBefore(Instant.now());
+    }
+
+    // Serialization-friendly representation
+    public Map&lt;String, Object&gt; toMap() {
+        Map&lt;String, Object&gt; map = new HashMap&lt;&gt;();
+        map.put(&quot;id&quot;, id);
+        map.put(&quot;type&quot;, type);
+        map.put(&quot;payload&quot;, payload);
+        map.put(&quot;timestamp&quot;, timestamp.toString());
+        map.put(&quot;source&quot;, source);
+        map.put(&quot;version&quot;, version);
+        map.put(&quot;metadata&quot;, metadata);
+        return map;
+    }
+}
+
+// Comprehensive test
+class EnterpriseRecordsTest {
+    public static void main(String[] args) {
+        // Test ApiResponse
+        ApiResponse&lt;String&gt; successResponse = ApiResponse.ok(&quot;Hello World&quot;, &quot;Operation successful&quot;);
+        ApiResponse&lt;Integer&gt; mappedResponse = successResponse.map(String::length);
+
+        System.out.println(&quot;Success response: &quot; + successResponse);
+        System.out.println(&quot;Mapped response: &quot; + mappedResponse);
+        System.out.println(&quot;Is success: &quot; + successResponse.isSuccess());
+
+        // Test ValidationResult
+        ValidationResult&lt;String&gt; validName = ValidationResult.valid(&quot;John Doe&quot;);
+        ValidationResult&lt;Integer&gt; validAge = ValidationResult.valid(25);
+        ValidationResult&lt;String&gt; invalidEmail = ValidationResult.invalid(&quot;Invalid email format&quot;);
+
+        // Combine validations
+        List&lt;ValidationResult&lt;Object&gt;&gt; validations = List.of(
+            validName.map(Object.class::cast),
+            validAge.map(Object.class::cast),
+            invalidEmail.map(Object.class::cast)
+        );
+
+        ValidationResult&lt;List&lt;Object&gt;&gt; combined = ValidationResult.combine(validations);
+        System.out.println(&quot;Combined validation: &quot; + combined);
+        System.out.println(&quot;Validation errors: &quot; + combined.getErrorMessage());
+
+        // Test Event
+        Event&lt;Map&lt;String, Object&gt;&gt; userCreatedEvent = Event.of(
+            &quot;user.created&quot;,
+            Map.of(&quot;userId&quot;, &quot;123&quot;, &quot;username&quot;, &quot;johndoe&quot;),
+            &quot;user-service&quot;,
+            Map.of(&quot;version&quot;, &quot;2.0&quot;, &quot;region&quot;, &quot;us-east-1&quot;)
+        );
+
+        Event&lt;String&gt; transformedEvent = userCreatedEvent.mapPayload(
+            payload -&gt; &quot;User &quot; + payload.get(&quot;username&quot;) + &quot; created&quot;
+        );
+
+        System.out.println(&quot;Original event: &quot; + userCreatedEvent);
+        System.out.println(&quot;Transformed event: &quot; + transformedEvent);
+        System.out.println(&quot;Event map: &quot; + userCreatedEvent.toMap());
+    }
+}
+</code></pre>
+<p><strong>🎁 Enterprise Benefits Achieved:</strong><br />
+- ✅ <strong>Type Safety</strong>: Compile-time guarantees for API responses<br />
+- ✅ <strong>Immutability</strong>: Records are naturally immutable<br />
+- ✅ <strong>Rich Metadata</strong>: Comprehensive context information<br />
+- ✅ <strong>Transformation</strong>: Functional-style data manipulation<br />
+- ✅ <strong>Validation</strong>: Error accumulation and reporting<br />
+- ✅ <strong>Serialization Ready</strong>: Easy conversion to/from JSON</p>
+</details>
+<hr />
+<h2>🔒 Generics with Sealed Types</h2>
+<h3>🎯 Type-Safe State Machines</h3>
+<p>Sealed types with generics create powerful, type-safe state machines and result types:</p>
+<pre><code class="language-java">// Sealed generic result type
+public sealed interface Result&lt;T, E&gt;
+    permits Result.Success, Result.Failure {
+
+    // Pattern matching methods
+    &lt;R&gt; R fold(
+        java.util.function.Function&lt;T, R&gt; onSuccess,
+        java.util.function.Function&lt;E, R&gt; onFailure
+    );
+
+    // Transformation methods
+    &lt;U&gt; Result&lt;U, E&gt; map(java.util.function.Function&lt;T, U&gt; mapper);
+    &lt;F&gt; Result&lt;T, F&gt; mapError(java.util.function.Function&lt;E, F&gt; mapper);
+
+    // Success case
+    public record Success&lt;T, E&gt;(T value) implements Result&lt;T, E&gt; {
+        @Override
+        public &lt;R&gt; R fold(
+            java.util.function.Function&lt;T, R&gt; onSuccess,
+            java.util.function.Function&lt;E, R&gt; onFailure
+        ) {
+            return onSuccess.apply(value);
+        }
+
+        @Override
+        public &lt;U&gt; Result&lt;U, E&gt; map(java.util.function.Function&lt;T, U&gt; mapper) {
+            return new Success&lt;&gt;(mapper.apply(value));
+        }
+
+        @Override
+        public &lt;F&gt; Result&lt;T, F&gt; mapError(java.util.function.Function&lt;E, F&gt; mapper) {
+            return new Success&lt;&gt;(value);
+        }
+    }
+
+    // Failure case
+    public record Failure&lt;T, E&gt;(E error) implements Result&lt;T, E&gt; {
+        @Override
+        public &lt;R&gt; R fold(
+            java.util.function.Function&lt;T, R&gt; onSuccess,
+            java.util.function.Function&lt;E, R&gt; onFailure
+        ) {
+            return onFailure.apply(error);
+        }
+
+        @Override
+        public &lt;U&gt; Result&lt;U, E&gt; map(java.util.function.Function&lt;T, U&gt; mapper) {
+            return new Failure&lt;&gt;(error);
+        }
+
+        @Override
+        public &lt;F&gt; Result&lt;T, F&gt; mapError(java.util.function.Function&lt;E, F&gt; mapper) {
+            return new Failure&lt;&gt;(mapper.apply(error));
+        }
+    }
+
+    // Factory methods
+    static &lt;T, E&gt; Result&lt;T, E&gt; success(T value) {
+        return new Success&lt;&gt;(value);
+    }
+
+    static &lt;T, E&gt; Result&lt;T, E&gt; failure(E error) {
+        return new Failure&lt;&gt;(error);
+    }
+}
+
+// Sealed generic state machine
+public sealed interface ProcessingState&lt;T&gt;
+    permits ProcessingState.Pending, ProcessingState.InProgress,
+            ProcessingState.Completed, ProcessingState.Failed {
+
+    // State transition methods
+    default ProcessingState&lt;T&gt; start() {
+        return switch (this) {
+            case Pending&lt;T&gt; p -&gt; new InProgress&lt;&gt;(p.data(), java.time.Instant.now());
+            case InProgress&lt;T&gt; ip -&gt; ip; // Already in progress
+            case Completed&lt;T&gt; c -&gt; c;   // Already completed
+            case Failed&lt;T&gt; f -&gt; f;      // Failed, cannot restart
+        };
+    }
+
+    default ProcessingState&lt;T&gt; complete(T result) {
+        return switch (this) {
+            case Pending&lt;T&gt; p -&gt; throw new IllegalStateException(&quot;Cannot complete without starting&quot;);
+            case InProgress&lt;T&gt; ip -&gt; new Completed&lt;&gt;(result, java.time.Instant.now());
+            case Completed&lt;T&gt; c -&gt; c;   // Already completed
+            case Failed&lt;T&gt; f -&gt; f;      // Failed, cannot complete
+        };
+    }
+
+    default ProcessingState&lt;T&gt; fail(String error) {
+        return new Failed&lt;&gt;(error, java.time.Instant.now());
+    }
+
+    // State records
+    record Pending&lt;T&gt;(T data) implements ProcessingState&lt;T&gt; {}
+
+    record InProgress&lt;T&gt;(T data, java.time.Instant startTime) implements ProcessingState&lt;T&gt; {}
+
+    record Completed&lt;T&gt;(T result, java.time.Instant completionTime) implements ProcessingState&lt;T&gt; {}
+
+    record Failed&lt;T&gt;(String error, java.time.Instant failureTime) implements ProcessingState&lt;T&gt; {}
+}
+</code></pre>
+<h3>🎯 Pattern Matching with Generics</h3>
+<pre><code class="language-java">// Pattern matching with sealed generic types
+public class PatternMatchingExample {
+
+    // Process result with pattern matching
+    public static &lt;T, E&gt; String processResult(Result&lt;T, E&gt; result) {
+        return switch (result) {
+            case Result.Success&lt;T, E&gt; success -&gt;
+                &quot;Success: &quot; + success.value();
+            case Result.Failure&lt;T, E&gt; failure -&gt;
+                &quot;Failed: &quot; + failure.error();
+        };
+    }
+
+    // Process state with pattern matching
+    public static &lt;T&gt; String describeState(ProcessingState&lt;T&gt; state) {
+        return switch (state) {
+            case ProcessingState.Pending&lt;T&gt; pending -&gt;
+                &quot;Waiting to process: &quot; + pending.data();
+            case ProcessingState.InProgress&lt;T&gt; inProgress -&gt;
+                &quot;Processing since: &quot; + inProgress.startTime();
+            case ProcessingState.Completed&lt;T&gt; completed -&gt;
+                &quot;Completed at: &quot; + completed.completionTime() +
+                &quot; with result: &quot; + completed.result();
+            case ProcessingState.Failed&lt;T&gt; failed -&gt;
+                &quot;Failed at: &quot; + failed.failureTime() +
+                &quot; with error: &quot; + failed.error();
+        };
+    }
+
+    // Complex pattern matching with guards
+    public static &lt;T&gt; boolean canRetry(ProcessingState&lt;T&gt; state) {
+        return switch (state) {
+            case ProcessingState.Pending&lt;T&gt; p -&gt; true;
+            case ProcessingState.Failed&lt;T&gt; f when
+                f.failureTime().isAfter(java.time.Instant.now().minusSeconds(60)) -&gt; true;
+            case ProcessingState.Failed&lt;T&gt; f -&gt; false;
+            case ProcessingState.InProgress&lt;T&gt; ip -&gt; false;
+            case ProcessingState.Completed&lt;T&gt; c -&gt; false;
+        };
+    }
+}
+</code></pre>
+<hr />
+<h2>📡 Serialization with Generic Types</h2>
+<h3>🔧 Handling Type Erasure in Serialization</h3>
+<p>Serialization frameworks need explicit type information for generic types:</p>
+<pre><code class="language-java">import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
+public class GenericSerialization {
+    private static final ObjectMapper JACKSON_MAPPER = new ObjectMapper();
+    private static final Gson GSON = new Gson();
+
+    // Jackson serialization with TypeReference
+    public static &lt;T&gt; String toJsonJackson(T object) throws Exception {
+        return JACKSON_MAPPER.writeValueAsString(object);
+    }
+
+    public static &lt;T&gt; T fromJsonJackson(String json, TypeReference&lt;T&gt; typeRef) throws Exception {
+        return JACKSON_MAPPER.readValue(json, typeRef);
+    }
+
+    // Gson serialization with TypeToken
+    public static &lt;T&gt; String toJsonGson(T object) {
+        return GSON.toJson(object);
+    }
+
+    public static &lt;T&gt; T fromJsonGson(String json, TypeToken&lt;T&gt; typeToken) {
+        return GSON.fromJson(json, typeToken.getType());
+    }
+
+    // Type-safe serialization helper
+    public static class SerializationHelper {
+
+        // Serialize generic collections
+        public static &lt;T&gt; String serializeList(java.util.List&lt;T&gt; list) throws Exception {
+            return JACKSON_MAPPER.writeValueAsString(list);
+        }
+
+        public static &lt;T&gt; java.util.List&lt;T&gt; deserializeList(String json, Class&lt;T&gt; elementType) throws Exception {
+            return JACKSON_MAPPER.readValue(json,
+                JACKSON_MAPPER.getTypeFactory().constructCollectionType(java.util.List.class, elementType));
+        }
+
+        // Serialize generic maps
+        public static &lt;K, V&gt; String serializeMap(java.util.Map&lt;K, V&gt; map) throws Exception {
+            return JACKSON_MAPPER.writeValueAsString(map);
+        }
+
+        public static &lt;K, V&gt; java.util.Map&lt;K, V&gt; deserializeMap(
+            String json, Class&lt;K&gt; keyType, Class&lt;V&gt; valueType
+        ) throws Exception {
+            return JACKSON_MAPPER.readValue(json,
+                JACKSON_MAPPER.getTypeFactory().constructMapType(java.util.Map.class, keyType, valueType));
+        }
+
+        // Serialize generic Result types
+        public static &lt;T, E&gt; String serializeResult(Result&lt;T, E&gt; result) throws Exception {
+            return JACKSON_MAPPER.writeValueAsString(result);
+        }
+
+        public static &lt;T, E&gt; Result&lt;T, E&gt; deserializeResult(
+            String json, Class&lt;T&gt; successType, Class&lt;E&gt; errorType
+        ) throws Exception {
+            // Custom deserializer would be needed for sealed types
+            // This is a simplified example
+            return JACKSON_MAPPER.readValue(json, new TypeReference&lt;Result&lt;T, E&gt;&gt;() {});
+        }
+    }
+}
+
+// Usage examples
+class SerializationExamples {
+    public static void main(String[] args) throws Exception {
+
+        // Serialize/deserialize generic lists
+        java.util.List&lt;String&gt; stringList = java.util.List.of(&quot;hello&quot;, &quot;world&quot;, &quot;java&quot;);
+        String jsonList = GenericSerialization.SerializationHelper.serializeList(stringList);
+        java.util.List&lt;String&gt; deserializedList =
+            GenericSerialization.SerializationHelper.deserializeList(jsonList, String.class);
+
+        System.out.println(&quot;Original: &quot; + stringList);
+        System.out.println(&quot;JSON: &quot; + jsonList);
+        System.out.println(&quot;Deserialized: &quot; + deserializedList);
+
+        // Serialize/deserialize generic maps
+        java.util.Map&lt;String, Integer&gt; scores = java.util.Map.of(&quot;Alice&quot;, 95, &quot;Bob&quot;, 87);
+        String jsonMap = GenericSerialization.SerializationHelper.serializeMap(scores);
+        java.util.Map&lt;String, Integer&gt; deserializedMap =
+            GenericSerialization.SerializationHelper.deserializeMap(jsonMap, String.class, Integer.class);
+
+        System.out.println(&quot;Original map: &quot; + scores);
+        System.out.println(&quot;JSON map: &quot; + jsonMap);
+        System.out.println(&quot;Deserialized map: &quot; + deserializedMap);
+
+        // Using TypeReference for complex types
+        java.util.List&lt;java.util.Map&lt;String, Object&gt;&gt; complexList = java.util.List.of(
+            java.util.Map.of(&quot;name&quot;, &quot;John&quot;, &quot;age&quot;, 30),
+            java.util.Map.of(&quot;name&quot;, &quot;Jane&quot;, &quot;age&quot;, 25)
+        );
+
+        String complexJson = GenericSerialization.toJsonJackson(complexList);
+        java.util.List&lt;java.util.Map&lt;String, Object&gt;&gt; deserializedComplex =
+            GenericSerialization.fromJsonJackson(complexJson,
+                new TypeReference&lt;java.util.List&lt;java.util.Map&lt;String, Object&gt;&gt;&gt;() {});
+
+        System.out.println(&quot;Complex original: &quot; + complexList);
+        System.out.println(&quot;Complex deserialized: &quot; + deserializedComplex);
+    }
+}
+</code></pre>
+<hr />
+<h2>⚡ Performance Considerations</h2>
+<h3>🚀 Generic Performance Patterns</h3>
+<p>Understanding performance implications of generic design choices:</p>
+<pre><code class="language-java">import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+
+public class GenericPerformancePatterns {
+
+    // 1. Prefer specific types over wildcards when possible
+    // ✅ Better performance - no runtime type checks
+    public static &lt;T extends Number&gt; double sum(List&lt;T&gt; numbers) {
+        return numbers.stream().mapToDouble(Number::doubleValue).sum();
+    }
+
+    // ❌ Slower - requires runtime type checking
+    public static double sumWildcard(List&lt;? extends Number&gt; numbers) {
+        return numbers.stream().mapToDouble(Number::doubleValue).sum();
+    }
+
+    // 2. Cache generic instances to avoid repeated allocation
+    private static final Map&lt;Class&lt;?&gt;, Function&lt;?, String&gt;&gt; TO_STRING_CACHE = new ConcurrentHashMap&lt;&gt;();
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public static &lt;T&gt; Function&lt;T, String&gt; getToStringFunction(Class&lt;T&gt; type) {
+        return (Function&lt;T, String&gt;) TO_STRING_CACHE.computeIfAbsent(type,
+            k -&gt; Object::toString);
+    }
+
+    // 3. Use primitive specializations when available
+    public static class PrimitiveOptimizedContainer&lt;T&gt; {
+        private final List&lt;T&gt; objects = new ArrayList&lt;&gt;();
+        // Separate primitive collections for better performance
+        private final java.util.stream.IntStream.Builder intBuilder = java.util.stream.IntStream.builder();
+        private final java.util.stream.DoubleStream.Builder doubleBuilder = java.util.stream.DoubleStream.builder();
+
+        public void add(T item) {
+            objects.add(item);
+
+            // Optimize for common numeric types
+            if (item instanceof Integer) {
+                intBuilder.add((Integer) item);
+            } else if (item instanceof Double) {
+                doubleBuilder.add((Double) item);
+            }
+        }
+
+        // Fast path for numeric operations
+        public OptionalDouble fastSum() {
+            if (!objects.isEmpty() &amp;&amp; objects.get(0) instanceof Number) {
+                return objects.stream()
+                    .mapToDouble(obj -&gt; ((Number) obj).doubleValue())
+                    .reduce(Double::sum);
+            }
+            return OptionalDouble.empty();
+        }
+    }
+
+    // 4. Lazy evaluation with generics
+    public static class LazyGenericContainer&lt;T&gt; {
+        private final java.util.function.Supplier&lt;T&gt; supplier;
+        private volatile T cached;
+        private volatile boolean computed = false;
+
+        public LazyGenericContainer(java.util.function.Supplier&lt;T&gt; supplier) {
+            this.supplier = supplier;
+        }
+
+        public T get() {
+            if (!computed) {
+                synchronized (this) {
+                    if (!computed) {
+                        cached = supplier.get();
+                        computed = true;
+                    }
+                }
+            }
+            return cached;
+        }
+
+        public boolean isComputed() {
+            return computed;
+        }
+    }
+
+    // 5. Memory-efficient generic collections
+    public static class CompactGenericList&lt;T&gt; {
+        private Object[] elements;
+        private int size;
+        private static final int DEFAULT_CAPACITY = 4; // Smaller than ArrayList's 10
+
+        @SuppressWarnings(&quot;unchecked&quot;)
+        public CompactGenericList() {
+            this.elements = new Object[DEFAULT_CAPACITY];
+        }
+
+        public void add(T element) {
+            if (size &gt;= elements.length) {
+                grow();
+            }
+            elements[size++] = element;
+        }
+
+        @SuppressWarnings(&quot;unchecked&quot;)
+        public T get(int index) {
+            if (index &gt;= size) throw new IndexOutOfBoundsException();
+            return (T) elements[index];
+        }
+
+        private void grow() {
+            int newCapacity = elements.length + (elements.length &gt;&gt; 1); // 1.5x growth
+            elements = Arrays.copyOf(elements, newCapacity);
+        }
+
+        public int size() { return size; }
+
+        // Trim to actual size to save memory
+        public void trimToSize() {
+            if (size &lt; elements.length) {
+                elements = Arrays.copyOf(elements, size);
+            }
+        }
+    }
+}
+
+// Performance benchmarking example
+class PerformanceBenchmark {
+    public static void main(String[] args) {
+        // Benchmark different approaches
+        List&lt;Integer&gt; numbers = java.util.stream.IntStream.range(0, 1_000_000)
+            .boxed()
+            .collect(java.util.stream.Collectors.toList());
+
+        // Warm up JVM
+        for (int i = 0; i &lt; 10; i++) {
+            GenericPerformancePatterns.sum(numbers);
+            GenericPerformancePatterns.sumWildcard(numbers);
+        }
+
+        // Benchmark specific types vs wildcards
+        long start = System.nanoTime();
+        for (int i = 0; i &lt; 100; i++) {
+            GenericPerformancePatterns.sum(numbers);
+        }
+        long specificTime = System.nanoTime() - start;
+
+        start = System.nanoTime();
+        for (int i = 0; i &lt; 100; i++) {
+            GenericPerformancePatterns.sumWildcard(numbers);
+        }
+        long wildcardTime = System.nanoTime() - start;
+
+        System.out.println(&quot;Specific type time: &quot; + specificTime / 1_000_000 + &quot; ms&quot;);
+        System.out.println(&quot;Wildcard time: &quot; + wildcardTime / 1_000_000 + &quot; ms&quot;);
+        System.out.println(&quot;Performance difference: &quot; +
+            (wildcardTime - specificTime) / (double) specificTime * 100 + &quot;%&quot;);
+
+        // Test compact list memory usage
+        GenericPerformancePatterns.CompactGenericList&lt;String&gt; compactList =
+            new GenericPerformancePatterns.CompactGenericList&lt;&gt;();
+
+        for (int i = 0; i &lt; 1000; i++) {
+            compactList.add(&quot;Item &quot; + i);
+        }
+
+        System.out.println(&quot;Compact list size: &quot; + compactList.size());
+        compactList.trimToSize();
+        System.out.println(&quot;Memory optimized&quot;);
+    }
+}
+</code></pre>
+<hr />
+<h2>🔄 Legacy Code Migration</h2>
+<h3>📈 Systematic Migration Strategy</h3>
+<pre><code class="language-java">// Step-by-step migration from raw types to generics
+public class LegacyMigrationExample {
+
+    // PHASE 1: Raw types (legacy code)
+    public static class LegacyUserService {
+        private List users = new ArrayList();        // Raw type
+        private Map usersByEmail = new HashMap();    // Raw type
+
+        public void addUser(Object user) {
+            users.add(user);
+            // Unsafe operations
+            Map userMap = (Map) user;
+            usersByEmail.put(userMap.get(&quot;email&quot;), user);
+        }
+
+        public Object getUserByEmail(String email) {
+            return usersByEmail.get(email);
+        }
+
+        public List getAllUsers() {
+            return users;
+        }
+    }
+
+    // PHASE 2: Gradual migration - parameterize collections
+    public static class MigratingUserService {
+        private List&lt;Map&lt;String, Object&gt;&gt; users = new ArrayList&lt;&gt;();  // Partially generic
+        private Map&lt;String, Map&lt;String, Object&gt;&gt; usersByEmail = new HashMap&lt;&gt;();  // Partially generic
+
+        public void addUser(Map&lt;String, Object&gt; user) {  // More specific parameter
+            users.add(user);
+            usersByEmail.put((String) user.get(&quot;email&quot;), user);  // Still some casting
+        }
+
+        public Map&lt;String, Object&gt; getUserByEmail(String email) {  // Specific return type
+            return usersByEmail.get(email);
+        }
+
+        public List&lt;Map&lt;String, Object&gt;&gt; getAllUsers() {  // Specific return type
+            return users;
+        }
+    }
+
+    // PHASE 3: Full generic transformation with proper types
+    public static class ModernUserService&lt;T extends User&gt; {
+        private final List&lt;T&gt; users = new ArrayList&lt;&gt;();
+        private final Map&lt;String, T&gt; usersByEmail = new HashMap&lt;&gt;();
+
+        public void addUser(T user) {
+            users.add(user);
+            usersByEmail.put(user.getEmail(), user);
+        }
+
+        public Optional&lt;T&gt; getUserByEmail(String email) {
+            return Optional.ofNullable(usersByEmail.get(email));
+        }
+
+        public List&lt;T&gt; getAllUsers() {
+            return Collections.unmodifiableList(users);
+        }
+
+        // Additional type-safe methods
+        public List&lt;T&gt; getUsersByPredicate(java.util.function.Predicate&lt;T&gt; predicate) {
+            return users.stream()
+                       .filter(predicate)
+                       .collect(java.util.stream.Collectors.toList());
+        }
+
+        public &lt;R&gt; List&lt;R&gt; mapUsers(java.util.function.Function&lt;T, R&gt; mapper) {
+            return users.stream()
+                       .map(mapper)
+                       .collect(java.util.stream.Collectors.toList());
+        }
+    }
+
+    // Supporting User interface for type safety
+    public interface User {
+        String getEmail();
+        String getName();
+    }
+
+    public record SimpleUser(String email, String name) implements User {
+        @Override
+        public String getEmail() { return email; }
+
+        @Override
+        public String getName() { return name; }
+    }
+}
+
+// Migration utility class
+public class MigrationUtils {
+
+    // Helper method to safely cast collections during migration
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public static &lt;T&gt; List&lt;T&gt; safeCastList(List&lt;?&gt; rawList, Class&lt;T&gt; elementType) {
+        List&lt;T&gt; result = new ArrayList&lt;&gt;();
+        for (Object item : rawList) {
+            if (elementType.isInstance(item)) {
+                result.add((T) item);
+            } else {
+                throw new ClassCastException(&quot;Cannot cast &quot; + item.getClass() + &quot; to &quot; + elementType);
+            }
+        }
+        return result;
+    }
+
+    // Helper method to validate and convert raw maps
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public static &lt;K, V&gt; Map&lt;K, V&gt; safeCastMap(Map&lt;?, ?&gt; rawMap, Class&lt;K&gt; keyType, Class&lt;V&gt; valueType) {
+        Map&lt;K, V&gt; result = new HashMap&lt;&gt;();
+        for (Map.Entry&lt;?, ?&gt; entry : rawMap.entrySet()) {
+            if (keyType.isInstance(entry.getKey()) &amp;&amp; valueType.isInstance(entry.getValue())) {
+                result.put((K) entry.getKey(), (V) entry.getValue());
+            } else {
+                throw new ClassCastException(&quot;Invalid map entry types&quot;);
+            }
+        }
+        return result;
+    }
+
+    // Gradual migration wrapper
+    public static class MigrationWrapper&lt;T&gt; {
+        private final List&lt;Object&gt; rawList;
+        private final Class&lt;T&gt; targetType;
+
+        public MigrationWrapper(List&lt;Object&gt; rawList, Class&lt;T&gt; targetType) {
+            this.rawList = rawList;
+            this.targetType = targetType;
+        }
+
+        // Gradually convert to typed list
+        public List&lt;T&gt; getTypedList() {
+            return safeCastList(rawList, targetType);
+        }
+
+        // Add new items with type safety
+        public void addTyped(T item) {
+            rawList.add(item);
+        }
+
+        // Check migration progress
+        public double getMigrationProgress() {
+            long typedCount = rawList.stream()
+                .filter(targetType::isInstance)
+                .count();
+            return (double) typedCount / rawList.size();
+        }
+    }
+}
+</code></pre>
+<hr />
+<h2>🎯 Module 4 Capstone Project: Enterprise Event System</h2>
+<h3>📋 Final Challenge</h3>
+<p>Create a comprehensive enterprise event processing system that demonstrates all real-world patterns:</p>
+<pre><code class="language-java">// TODO: Design a complete enterprise event system
+// Requirements:
+// 1. Generic event types with Records
+// 2. Sealed type hierarchy for event processing states
+// 3. Type-safe serialization support
+// 4. Performance-optimized event storage
+// 5. Pattern matching for event routing
+// 6. Migration support for legacy events
+
+public class EnterpriseEventSystem&lt;T&gt; {
+
+    // TODO: Implement event storage with performance optimization
+
+    // TODO: Add event processing pipeline with sealed states
+
+    // TODO: Implement serialization with type safety
+
+    // TODO: Add pattern matching for event routing
+
+    // TODO: Create migration utilities for legacy events
+}
+</code></pre>
+<details>
+<summary>🌍 Try building the complete enterprise system yourself</summary>
+<pre><code class="language-java">import java.time.Instant;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.function.Consumer;
+import java.util.function.Function;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
+
+// Complete enterprise event processing system
+public class EnterpriseEventSystem&lt;T&gt; {
+
+    // Event storage with performance optimization
+    private final Map&lt;String, List&lt;Event&lt;T&gt;&gt;&gt; eventsByType = new ConcurrentHashMap&lt;&gt;();
+    private final List&lt;Event&lt;T&gt;&gt; allEvents = new CopyOnWriteArrayList&lt;&gt;();
+    private final Map&lt;String, EventProcessor&lt;T&gt;&gt; processors = new ConcurrentHashMap&lt;&gt;();
+
+    // Event subscription system
+    private final Map&lt;String, List&lt;Consumer&lt;Event&lt;T&gt;&gt;&gt;&gt; subscribers = new ConcurrentHashMap&lt;&gt;();
+
+    // Performance metrics
+    private final Map&lt;String, Long&gt; processingTimes = new ConcurrentHashMap&lt;&gt;();
+    private final Map&lt;String, Integer&gt; processingCounts = new ConcurrentHashMap&lt;&gt;();
+
+    // Generic event record with rich metadata
+    public record Event&lt;T&gt;(
+        String id,
+        String type,
+        T payload,
+        Instant timestamp,
+        String source,
+        String version,
+        Map&lt;String, Object&gt; metadata,
+        EventPriority priority
+    ) {
+        public Event {
+            id = Objects.requireNonNullElse(id, UUID.randomUUID().toString());
+            timestamp = Objects.requireNonNullElse(timestamp, Instant.now());
+            version = Objects.requireNonNullElse(version, &quot;1.0&quot;);
+            metadata = metadata != null ? Map.copyOf(metadata) : Map.of();
+            priority = Objects.requireNonNullElse(priority, EventPriority.NORMAL);
+
+            Objects.requireNonNull(type, &quot;Event type cannot be null&quot;);
+            Objects.requireNonNull(payload, &quot;Event payload cannot be null&quot;);
+            Objects.requireNonNull(source, &quot;Event source cannot be null&quot;);
+        }
+
+        // Factory methods
+        public static &lt;T&gt; Event&lt;T&gt; of(String type, T payload, String source) {
+            return new Event&lt;&gt;(null, type, payload, null, source, null, null, null);
+        }
+
+        public static &lt;T&gt; Event&lt;T&gt; highPriority(String type, T payload, String source) {
+            return new Event&lt;&gt;(null, type, payload, null, source, null, null, EventPriority.HIGH);
+        }
+
+        // Transform payload while preserving metadata
+        public &lt;U&gt; Event&lt;U&gt; mapPayload(Function&lt;T, U&gt; mapper) {
+            return new Event&lt;&gt;(id, type, mapper.apply(payload), timestamp, source, version, metadata, priority);
+        }
+
+        // Add metadata
+        public Event&lt;T&gt; withMetadata(String key, Object value) {
+            Map&lt;String, Object&gt; newMetadata = new HashMap&lt;&gt;(metadata);
+            newMetadata.put(key, value);
+            return new Event&lt;&gt;(id, type, payload, timestamp, source, version, newMetadata, priority);
+        }
+    }
+
+    // Event priority enum
+    public enum EventPriority {
+        LOW(1), NORMAL(2), HIGH(3), CRITICAL(4);
+
+        private final int level;
+        EventPriority(int level) { this.level = level; }
+        public int getLevel() { return level; }
+    }
+
+    // Sealed processing state hierarchy
+    public sealed interface ProcessingState&lt;T&gt;
+        permits ProcessingState.Pending, ProcessingState.Processing,
+                ProcessingState.Completed, ProcessingState.Failed, ProcessingState.Retrying {
+
+        Event&lt;T&gt; getEvent();
+        Instant getStateTime();
+
+        // State transition methods with pattern matching
+        default ProcessingState&lt;T&gt; startProcessing() {
+            return switch (this) {
+                case Pending&lt;T&gt; p -&gt; new Processing&lt;&gt;(p.getEvent(), Instant.now());
+                case Processing&lt;T&gt; pr -&gt; pr; // Already processing
+                case Completed&lt;T&gt; c -&gt; c;   // Already completed
+                case Failed&lt;T&gt; f -&gt; new Retrying&lt;&gt;(f.getEvent(), Instant.now(), f.getError());
+                case Retrying&lt;T&gt; r -&gt; new Processing&lt;&gt;(r.getEvent(), Instant.now());
+            };
+        }
+
+        default ProcessingState&lt;T&gt; complete() {
+            return switch (this) {
+                case Pending&lt;T&gt; p -&gt; throw new IllegalStateException(&quot;Cannot complete without processing&quot;);
+                case Processing&lt;T&gt; pr -&gt; new Completed&lt;&gt;(pr.getEvent(), Instant.now());
+                case Completed&lt;T&gt; c -&gt; c;   // Already completed
+                case Failed&lt;T&gt; f -&gt; throw new IllegalStateException(&quot;Cannot complete failed event&quot;);
+                case Retrying&lt;T&gt; r -&gt; new Processing&lt;&gt;(r.getEvent(), Instant.now());
+            };
+        }
+
+        default ProcessingState&lt;T&gt; fail(String error) {
+            return new Failed&lt;&gt;(getEvent(), Instant.now(), error);
+        }
+
+        // State records
+        record Pending&lt;T&gt;(Event&lt;T&gt; event, Instant stateTime) implements ProcessingState&lt;T&gt; {
+            public Pending(Event&lt;T&gt; event) { this(event, Instant.now()); }
+            @Override public Event&lt;T&gt; getEvent() { return event; }
+            @Override public Instant getStateTime() { return stateTime; }
+        }
+
+        record Processing&lt;T&gt;(Event&lt;T&gt; event, Instant stateTime) implements ProcessingState&lt;T&gt; {
+            @Override public Event&lt;T&gt; getEvent() { return event; }
+            @Override public Instant getStateTime() { return stateTime; }
+        }
+
+        record Completed&lt;T&gt;(Event&lt;T&gt; event, Instant stateTime) implements ProcessingState&lt;T&gt; {
+            @Override public Event&lt;T&gt; getEvent() { return event; }
+            @Override public Instant getStateTime() { return stateTime; }
+        }
+
+        record Failed&lt;T&gt;(Event&lt;T&gt; event, Instant stateTime, String error) implements ProcessingState&lt;T&gt; {
+            @Override public Event&lt;T&gt; getEvent() { return event; }
+            @Override public Instant getStateTime() { return stateTime; }
+            public String getError() { return error; }
+        }
+
+        record Retrying&lt;T&gt;(Event&lt;T&gt; event, Instant stateTime, String previousError) implements ProcessingState&lt;T&gt; {
+            @Override public Event&lt;T&gt; getEvent() { return event; }
+            @Override public Instant getStateTime() { return stateTime; }
+            public String getPreviousError() { return previousError; }
+        }
+    }
+
+    // Event processor interface
+    @FunctionalInterface
+    public interface EventProcessor&lt;T&gt; {
+        ProcessingState&lt;T&gt; process(ProcessingState&lt;T&gt; state);
+    }
+
+    // Core event system methods
+    public void publishEvent(Event&lt;T&gt; event) {
+        // Store event
+        allEvents.add(event);
+        eventsByType.computeIfAbsent(event.type(), k -&gt; new CopyOnWriteArrayList&lt;&gt;()).add(event);
+
+        // Notify subscribers
+        List&lt;Consumer&lt;Event&lt;T&gt;&gt;&gt; eventSubscribers = subscribers.get(event.type());
+        if (eventSubscribers != null) {
+            eventSubscribers.forEach(subscriber -&gt; {
+                try {
+                    subscriber.accept(event);
+                } catch (Exception e) {
+                    System.err.println(&quot;Subscriber error for event &quot; + event.id() + &quot;: &quot; + e.getMessage());
+                }
+            });
+        }
+
+        // Process event if processor exists
+        EventProcessor&lt;T&gt; processor = processors.get(event.type());
+        if (processor != null) {
+            processEventAsync(event, processor);
+        }
+    }
+
+    // Asynchronous event processing
+    private void processEventAsync(Event&lt;T&gt; event, EventProcessor&lt;T&gt; processor) {
+        CompletableFuture.runAsync(() -&gt; {
+            long startTime = System.nanoTime();
+            ProcessingState&lt;T&gt; state = new ProcessingState.Pending&lt;&gt;(event);
+
+            try {
+                state = processor.process(state);
+                long processingTime = System.nanoTime() - startTime;
+
+                // Update metrics
+                processingTimes.put(event.type(), processingTime);
+                processingCounts.merge(event.type(), 1, Integer::sum);
+
+            } catch (Exception e) {
+                state = state.fail(&quot;Processing error: &quot; + e.getMessage());
+            }
+
+            logProcessingResult(state);
+        });
+    }
+
+    // Event subscription
+    public void subscribe(String eventType, Consumer&lt;Event&lt;T&gt;&gt; subscriber) {
+        subscribers.computeIfAbsent(eventType, k -&gt; new CopyOnWriteArrayList&lt;&gt;()).add(subscriber);
+    }
+
+    // Register event processor
+    public void registerProcessor(String eventType, EventProcessor&lt;T&gt; processor) {
+        processors.put(eventType, processor);
+    }
+
+    // Query methods with performance optimization
+    public List&lt;Event&lt;T&gt;&gt; getEventsByType(String type) {
+        return eventsByType.getOrDefault(type, List.of());
+    }
+
+    public List&lt;Event&lt;T&gt;&gt; getEventsByPredicate(Predicate&lt;Event&lt;T&gt;&gt; predicate) {
+        return allEvents.stream()
+            .filter(predicate)
+            .collect(Collectors.toList());
+    }
+
+    public List&lt;Event&lt;T&gt;&gt; getEventsByPriority(EventPriority priority) {
+        return getEventsByPredicate(event -&gt; event.priority() == priority);
+    }
+
+    public List&lt;Event&lt;T&gt;&gt; getRecentEvents(java.time.Duration duration) {
+        Instant cutoff = Instant.now().minus(duration);
+        return getEventsByPredicate(event -&gt; event.timestamp().isAfter(cutoff));
+    }
+
+    // Pattern matching for event routing
+    public void routeEvent(Event&lt;T&gt; event) {
+        String routing = switch (event.priority()) {
+            case CRITICAL -&gt; &quot;critical-queue&quot;;
+            case HIGH -&gt; &quot;high-priority-queue&quot;;
+            case NORMAL -&gt; &quot;standard-queue&quot;;
+            case LOW -&gt; &quot;low-priority-queue&quot;;
+        };
+
+        System.out.println(&quot;Routing event &quot; + event.id() + &quot; to &quot; + routing);
+    }
+
+    // Performance metrics
+    public Map&lt;String, Double&gt; getAverageProcessingTimes() {
+        Map&lt;String, Double&gt; averages = new HashMap&lt;&gt;();
+        for (Map.Entry&lt;String, Long&gt; entry : processingTimes.entrySet()) {
+            String eventType = entry.getKey();
+            long totalTime = entry.getValue();
+            int count = processingCounts.getOrDefault(eventType, 1);
+            averages.put(eventType, (double) totalTime / count / 1_000_000); // Convert to milliseconds
+        }
+        return averages;
+    }
+
+    // Migration utilities for legacy events
+    public static class MigrationUtils {
+
+        @SuppressWarnings(&quot;unchecked&quot;)
+        public static &lt;T&gt; Event&lt;T&gt; migrateLegacyEvent(Map&lt;String, Object&gt; legacyEvent, Class&lt;T&gt; payloadType) {
+            String type = (String) legacyEvent.get(&quot;type&quot;);
+            Object payload = legacyEvent.get(&quot;payload&quot;);
+            String source = (String) legacyEvent.getOrDefault(&quot;source&quot;, &quot;legacy-system&quot;);
+
+            if (!payloadType.isInstance(payload)) {
+                throw new IllegalArgumentException(&quot;Cannot migrate legacy event: payload type mismatch&quot;);
+            }
+
+            return Event.of(type, (T) payload, source);
+        }
+
+        public static &lt;T&gt; List&lt;Event&lt;T&gt;&gt; migrateLegacyEvents(
+            List&lt;Map&lt;String, Object&gt;&gt; legacyEvents, Class&lt;T&gt; payloadType
+        ) {
+            return legacyEvents.stream()
+                .map(legacy -&gt; migrateLegacyEvent(legacy, payloadType))
+                .collect(Collectors.toList());
+        }
+    }
+
+    // Logging and monitoring
+    private void logProcessingResult(ProcessingState&lt;T&gt; state) {
+        String message = switch (state) {
+            case ProcessingState.Completed&lt;T&gt; completed -&gt;
+                &quot;Event &quot; + completed.getEvent().id() + &quot; completed successfully&quot;;
+            case ProcessingState.Failed&lt;T&gt; failed -&gt;
+                &quot;Event &quot; + failed.getEvent().id() + &quot; failed: &quot; + failed.getError();
+            case ProcessingState.Retrying&lt;T&gt; retrying -&gt;
+                &quot;Event &quot; + retrying.getEvent().id() + &quot; retrying after: &quot; + retrying.getPreviousError();
+            default -&gt; &quot;Event &quot; + state.getEvent().id() + &quot; in state: &quot; + state.getClass().getSimpleName();
+        };
+
+        System.out.println(Instant.now() + &quot;: &quot; + message);
+    }
+
+    // System health and statistics
+    public Map&lt;String, Object&gt; getSystemStats() {
+        Map&lt;String, Object&gt; stats = new HashMap&lt;&gt;();
+        stats.put(&quot;totalEvents&quot;, allEvents.size());
+        stats.put(&quot;eventTypeCount&quot;, eventsByType.size());
+        stats.put(&quot;subscriberCount&quot;, subscribers.values().stream().mapToInt(List::size).sum());
+        stats.put(&quot;processorCount&quot;, processors.size());
+        stats.put(&quot;averageProcessingTimes&quot;, getAverageProcessingTimes());
+        return stats;
+    }
+}
+
+// Comprehensive test of the enterprise event system
+class EnterpriseEventSystemTest {
+    public static void main(String[] args) throws InterruptedException {
+        EnterpriseEventSystem&lt;Map&lt;String, Object&gt;&gt; eventSystem = new EnterpriseEventSystem&lt;&gt;();
+
+        // Register event processors
+        eventSystem.registerProcessor(&quot;user.created&quot;, state -&gt; {
+            System.out.println(&quot;Processing user creation: &quot; + state.getEvent().payload());
+            return state.startProcessing().complete();
+        });
+
+        eventSystem.registerProcessor(&quot;order.placed&quot;, state -&gt; {
+            System.out.println(&quot;Processing order: &quot; + state.getEvent().payload());
+            // Simulate processing time
+            try { Thread.sleep(100); } catch (InterruptedException e) {}
+            return state.startProcessing().complete();
+        });
+
+        // Subscribe to events
+        eventSystem.subscribe(&quot;user.created&quot;, event -&gt;
+            System.out.println(&quot;User created notification sent for: &quot; + event.payload().get(&quot;username&quot;))
+        );
+
+        eventSystem.subscribe(&quot;order.placed&quot;, event -&gt;
+            System.out.println(&quot;Order confirmation sent for order: &quot; + event.payload().get(&quot;orderId&quot;))
+        );
+
+        // Publish various events
+        eventSystem.publishEvent(EnterpriseEventSystem.Event.of(
+            &quot;user.created&quot;,
+            Map.of(&quot;userId&quot;, &quot;123&quot;, &quot;username&quot;, &quot;johndoe&quot;, &quot;email&quot;, &quot;john@example.com&quot;),
+            &quot;user-service&quot;
+        ));
+
+        eventSystem.publishEvent(EnterpriseEventSystem.Event.highPriority(
+            &quot;order.placed&quot;,
+            Map.of(&quot;orderId&quot;, &quot;ORD-001&quot;, &quot;userId&quot;, &quot;123&quot;, &quot;amount&quot;, 99.99),
+            &quot;order-service&quot;
+        ));
+
+        eventSystem.publishEvent(EnterpriseEventSystem.Event.of(
+            &quot;payment.processed&quot;,
+            Map.of(&quot;paymentId&quot;, &quot;PAY-001&quot;, &quot;orderId&quot;, &quot;ORD-001&quot;, &quot;status&quot;, &quot;SUCCESS&quot;),
+            &quot;payment-service&quot;
+        ).withMetadata(&quot;region&quot;, &quot;us-east-1&quot;));
+
+        // Wait for async processing
+        Thread.sleep(500);
+
+        // Query events
+        System.out.println(&quot;\n=== Event Queries ===&quot;);
+        System.out.println(&quot;User events: &quot; + eventSystem.getEventsByType(&quot;user.created&quot;).size());
+        System.out.println(&quot;High priority events: &quot; + eventSystem.getEventsByPriority(
+            EnterpriseEventSystem.EventPriority.HIGH).size());
+
+        // Show system statistics
+        System.out.println(&quot;\n=== System Statistics ===&quot;);
+        Map&lt;String, Object&gt; stats = eventSystem.getSystemStats();
+        stats.forEach((key, value) -&gt; System.out.println(key + &quot;: &quot; + value));
+
+        // Test migration utilities
+        System.out.println(&quot;\n=== Legacy Migration Test ===&quot;);
+        List&lt;Map&lt;String, Object&gt;&gt; legacyEvents = List.of(
+            Map.of(&quot;type&quot;, &quot;legacy.event&quot;, &quot;payload&quot;, Map.of(&quot;data&quot;, &quot;legacy1&quot;), &quot;source&quot;, &quot;old-system&quot;),
+            Map.of(&quot;type&quot;, &quot;legacy.event&quot;, &quot;payload&quot;, Map.of(&quot;data&quot;, &quot;legacy2&quot;), &quot;source&quot;, &quot;old-system&quot;)
+        );
+
+        List&lt;EnterpriseEventSystem.Event&lt;Map&lt;String, Object&gt;&gt;&gt; migratedEvents =
+            EnterpriseEventSystem.MigrationUtils.migrateLegacyEvents(legacyEvents, Map.class);
+
+        System.out.println(&quot;Migrated &quot; + migratedEvents.size() + &quot; legacy events&quot;);
+        migratedEvents.forEach(event -&gt; eventSystem.publishEvent(event));
+
+        Thread.sleep(200);
+        System.out.println(&quot;\nFinal system stats: &quot; + eventSystem.getSystemStats());
+    }
+}
+</code></pre>
+<p><strong>🌍 Enterprise Features Achieved:</strong><br />
+- ✅ <strong>Generic Event System</strong>: Type-safe events with rich metadata<br />
+- ✅ <strong>Sealed State Machine</strong>: Type-safe processing states with pattern matching<br />
+- ✅ <strong>Performance Optimization</strong>: Concurrent collections and async processing<br />
+- ✅ <strong>Subscription System</strong>: Type-safe event subscribers<br />
+- ✅ <strong>Pattern Matching</strong>: Modern Java pattern matching for routing<br />
+- ✅ <strong>Legacy Migration</strong>: Safe migration utilities for old systems<br />
+- ✅ <strong>Monitoring</strong>: Comprehensive metrics and health checks<br />
+- ✅ <strong>Real-World Ready</strong>: Production-quality error handling and logging</p>
+</details>
+<hr />
+<h2>📚 Module 4 Summary</h2>
+<h3>🎉 What You've Mastered</h3>
+<ul>
+<li><strong>Modern Java Integration</strong>: Generics with Records, sealed types, and pattern matching</li>
+<li><strong>Serialization</strong>: Type-safe handling of generic types in JSON/XML</li>
+<li><strong>Performance</strong>: Optimization strategies for generic code</li>
+<li><strong>Legacy Migration</strong>: Systematic approaches to modernizing codebases</li>
+<li><strong>Enterprise Patterns</strong>: Production-ready generic design patterns</li>
+<li><strong>Real-World Applications</strong>: Solving actual business problems with generics</li>
+</ul>
+<h3>🔑 Key Takeaways</h3>
+<ol>
+<li><strong>Records + Generics = Powerful APIs</strong>: Immutable, type-safe data structures</li>
+<li><strong>Sealed types enable exhaustive pattern matching</strong> with generic types</li>
+<li><strong>Serialization requires explicit type information</strong> - use TypeReference/TypeToken</li>
+<li><strong>Performance matters</strong>: Choose specific types over wildcards when possible</li>
+<li><strong>Migration is incremental</strong>: Transform legacy code step by step</li>
+<li><strong>Modern Java features enhance generics</strong> significantly</li>
+</ol>
+<h3>🚀 Next Steps</h3>
+<p>You're now ready for <strong>Module 5: Assessment &amp; Certification</strong>, where you'll:<br />
+- Complete comprehensive coding challenges<br />
+- Participate in code review exercises<br />
+- Validate your mastery with certification exam<br />
+- Plan your continued learning journey</p>
+<h3>📝 Self-Assessment Checklist</h3>
+<p>Before proceeding, ensure you can:</p>
+<ul>
+<li>[ ] Design generic Records for enterprise APIs</li>
+<li>[ ] Use sealed types with generics effectively</li>
+<li>[ ] Handle serialization of generic types correctly</li>
+<li>[ ] Apply performance optimization techniques</li>
+<li>[ ] Migrate legacy code systematically</li>
+<li>[ ] Integrate generics with modern Java features</li>
+</ul>
+<p><strong>Ready for the Assessment?</strong> Continue to <a href="./module-5-assessment.html">Module 5: Assessment</a> ✅</p>
+
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2025 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../js/jquery-1.11.2.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/prettify.js"></script>
+<script src="../../js/run_prettify.js"></script>
+<script src="../../js/main.js"></script>
+<!-- Google Analytics -->
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-13CV90H4J4', 'auto');
+	ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+</body>
+</html>

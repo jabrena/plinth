@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Mastering Java Generics - From Type Safety to Advanced Patterns - Cursor Rules for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../feed.xml" title="Cursor Rules for Java"/>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../css/prettify.css">
+  <link rel="shortcut icon" href="../../favicon.ico">
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../index.html">Cursor Rules for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../courses/generics/index.html">Generics</a>
+    </div>
+  </li>
+  <li><a href="../../archive.html">Archive</a></li>
+  <li><a href="../../tags.html">Tags</a></li>
+  <li><a href="../../about.html">About</a></li>
+</ul>
+</div>
+
+<div class="avatar-container">
+  <div class="avatar-img-border">
+    <a href="../../index.html">
+      <img class="avatar-img" src="../../images/avatar-icon.png"/>
+    </a>
+  </div>
+</div>
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="course-heading">
+<h1>Mastering Java Generics - From Type Safety to Advanced Patterns</h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="course-content">
+
+<div class="course-meta">
+    <i class="fa fa-calendar-o"></i>
+    2025-09-13
+    &nbsp;
+    <i class="fa fa-user"></i>
+    Juan Antonio Breña Moral
+    &nbsp;
+    <i class="fa fa-tag"></i>
+    Version 0.11.0-SNAPSHOT
+  <div class="course-tags">
+    &nbsp;
+    <i class="fa fa-tags"></i>
+      <a href="../../tags/java.html" class="course-tag">java</a>
+      <a href="../../tags/generics.html" class="course-tag">generics</a>
+      <a href="../../tags/type-safety.html" class="course-tag">type-safety</a>
+      <a href="../../tags/advanced-patterns.html" class="course-tag">advanced-patterns</a>
+  </div>
+</div>
+<hr>
+
+<h2>Course Overview</h2>
+<p>Transform your Java development skills with this comprehensive course on generics - one of Java's most powerful yet misunderstood features. This course takes you from basic type safety concepts to advanced patterns used in production systems.</p>
+<h3>🎯 Learning Objectives</h3>
+<p>By the end of this course, you will be able to:</p>
+<ul>
+<li><strong>Eliminate ClassCastException</strong> through proper generic type usage</li>
+<li><strong>Design flexible APIs</strong> using PECS (Producer Extends Consumer Super) principle</li>
+<li><strong>Implement type-safe collections</strong> without raw types or unsafe casts</li>
+<li><strong>Handle complex inheritance scenarios</strong> with bounded type parameters</li>
+<li><strong>Integrate generics with modern Java features</strong> like Records and sealed types</li>
+<li><strong>Apply advanced patterns</strong> like type tokens and heterogeneous containers</li>
+<li><strong>Optimize performance</strong> through proper generic design choices</li>
+</ul>
+<h3>📋 Prerequisites</h3>
+<ul>
+<li><strong>Java Fundamentals</strong>: Classes, interfaces, inheritance, and collections</li>
+<li><strong>Object-Oriented Programming</strong>: Understanding of polymorphism and encapsulation</li>
+<li><strong>Basic Maven/Gradle</strong>: Ability to compile and run Java projects</li>
+<li><strong>Development Environment</strong>: Java 17+ with IDE support</li>
+</ul>
+<h3>⏱️ Course Duration &amp; Difficulty</h3>
+<ul>
+<li><strong>Total Time</strong>: 12-15 hours</li>
+<li><strong>Difficulty</strong>: Intermediate to Advanced</li>
+<li><strong>Format</strong>: Self-paced with hands-on exercises</li>
+<li><strong>Certification</strong>: Available upon completion</li>
+</ul>
+<h2>📚 Course Structure</h2>
+<h3>🏗️ Module 1: Foundations (2-3 hours)</h3>
+<p><strong>Core Concepts and Type Safety</strong></p>
+<ul>
+<li>Understanding the problem generics solve</li>
+<li>Raw types vs parameterized types</li>
+<li>Diamond operator and type inference</li>
+<li>Basic generic syntax and conventions</li>
+</ul>
+<p><strong>🎯 Learning Goals</strong>: Eliminate raw types and understand basic generic syntax<br />
+<strong>📝 Assessment</strong>: Convert legacy code to use proper generics</p>
+<hr />
+<h3>🔄 Module 2: Wildcards &amp; PECS (3-4 hours)</h3>
+<p><strong>Variance and Flexible APIs</strong></p>
+<ul>
+<li>Understanding covariance and contravariance</li>
+<li>Producer Extends Consumer Super principle</li>
+<li>Bounded wildcards in practice</li>
+<li>Wildcard capture and helper methods</li>
+</ul>
+<p><strong>🎯 Learning Goals</strong>: Design flexible APIs that accept multiple related types<br />
+<strong>📝 Assessment</strong>: Implement utility methods with proper wildcards</p>
+<hr />
+<h3>🚀 Module 3: Advanced Patterns (4-5 hours)</h3>
+<p><strong>Complex Generics and Edge Cases</strong></p>
+<ul>
+<li>Type erasure and runtime implications</li>
+<li>Generic inheritance and self-bounded types (CRTP)</li>
+<li>Safe varargs and heap pollution prevention</li>
+<li>Type tokens for runtime type information</li>
+</ul>
+<p><strong>🎯 Learning Goals</strong>: Handle complex scenarios and avoid common pitfalls<br />
+<strong>📝 Assessment</strong>: Build type-safe heterogeneous container</p>
+<hr />
+<h3>🌍 Module 4: Real-World Applications (3-4 hours)</h3>
+<p><strong>Production Patterns and Integration</strong></p>
+<ul>
+<li>Serialization with generic types</li>
+<li>Integration with modern Java features (Records, sealed types)</li>
+<li>Performance considerations and optimizations</li>
+<li>Migration strategies for legacy codebases</li>
+</ul>
+<p><strong>🎯 Learning Goals</strong>: Apply generics in real-world scenarios<br />
+<strong>📝 Assessment</strong>: Refactor existing project with comprehensive generics</p>
+<hr />
+<h3>✅ Module 5: Assessment (1-2 hours)</h3>
+<p><strong>Knowledge Validation and Next Steps</strong></p>
+<ul>
+<li>Comprehensive coding challenges</li>
+<li>Code review exercises</li>
+<li>Best practices checklist</li>
+</ul>
+<p><strong>🎯 Learning Goals</strong>: Validate mastery<br />
+<strong>📝 Assessment</strong>: Complete capstone project</p>
+<hr />
+<p><strong>Ready to master Java Generics?</strong> Start with <a href="./module-1-foundations.html">Module 1: Foundations</a> or choose your preferred learning path above.</p>
+
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2025 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../js/jquery-1.11.2.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/prettify.js"></script>
+<script src="../../js/run_prettify.js"></script>
+<script src="../../js/main.js"></script>
+<!-- Google Analytics -->
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-13CV90H4J4', 'auto');
+	ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+</body>
+</html>

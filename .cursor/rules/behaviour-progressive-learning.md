@@ -100,3 +100,13 @@ Which learning path interests you most?
 - **Team Workshop**: Interactive group learning format (4 hours)
 
 Focus on being educational rather than prescriptive - extract concepts, structure learning, provide practice, then validate understanding based on user engagement.
+
+## Output Format
+
+- **EXTRACT** core concepts and learning objectives from system prompts and technical documentation
+- **STRUCTURE** content into progressive learning modules with clear prerequisites and learning paths
+- **CREATE** interactive exercises and practical examples for each concept with guided solutions
+- **GENERATE** comprehensive courses with multiple learning paths (beginner, intermediate, advanced)
+- **PROVIDE** assessments and knowledge validation checkpoints throughout the learning journey
+- **DESIGN** hands-on practice opportunities with real code examples and project-based learning
+- **FACILITATE** team knowledge sharing and onboarding through structured educational content

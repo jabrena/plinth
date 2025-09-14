@@ -45,3 +45,12 @@ This technique emphasizes **analyzing before acting** and **proposing options be
 Which would you like to implement? (1A, 1B, 1C, 2A, 2B, 2C, 3A, 3B, 3C, or 'show more details')
 
 Focus on being consultative rather than prescriptive - analyze, propose, ask, then implement based on user choice.
+
+## Output Format
+
+- **ANALYZE** the current state and identify specific issues with clear categorization by impact level
+- **CATEGORIZE** problems by impact (CRITICAL, MAINTAINABILITY, PERFORMANCE, STRUCTURE) and provide detailed problem descriptions
+- **PROPOSE** multiple solution options for each identified issue with clear trade-offs and implementation approaches
+- **EXPLAIN** the benefits and considerations of each proposed solution to help users make informed decisions
+- **ASK** the user to choose their preferred approach for each category of improvements rather than implementing all changes automatically
+- **IMPLEMENT** based on user selection while providing educational context about the chosen approach

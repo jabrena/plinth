@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Module 2: Wildcards &amp; PECS - Variance and Flexible APIs - Cursor Rules for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../feed.xml" title="Cursor Rules for Java"/>
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../css/prettify.css">
+  <link rel="shortcut icon" href="../../favicon.ico">
+</head>
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../index.html">Cursor Rules for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../courses/generics/index.html">Generics</a>
+    </div>
+  </li>
+  <li><a href="../../archive.html">Archive</a></li>
+  <li><a href="../../tags.html">Tags</a></li>
+  <li><a href="../../about.html">About</a></li>
+</ul>
+</div>
+
+<div class="avatar-container">
+  <div class="avatar-img-border">
+    <a href="../../index.html">
+      <img class="avatar-img" src="../../images/avatar-icon.png"/>
+    </a>
+  </div>
+</div>
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="course-heading">
+<h1>Module 2: Wildcards & PECS - Variance and Flexible APIs</h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="course-content">
+
+<div class="course-meta">
+    <i class="fa fa-calendar-o"></i>
+    2025-09-13
+    &nbsp;
+    <i class="fa fa-user"></i>
+    Juan Antonio Breña Moral
+  <div class="course-tags">
+    &nbsp;
+    <i class="fa fa-tags"></i>
+      <a href="../../tags/java.html" class="course-tag">java</a>
+      <a href="../../tags/generics.html" class="course-tag">generics</a>
+      <a href="../../tags/wildcards.html" class="course-tag">wildcards</a>
+      <a href="../../tags/pecs.html" class="course-tag">pecs</a>
+      <a href="../../tags/variance.html" class="course-tag">variance</a>
+      <a href="../../tags/api-design.html" class="course-tag">api-design</a>
+  </div>
+</div>
+<hr>
+
+<h2>📖 Module Overview</h2>
+<p>Welcome to the most powerful aspect of Java Generics! In this module, you'll master wildcards and the PECS principle to create flexible, reusable APIs that work with families of related types. This is where generics truly shine in real-world applications.</p>
+<h3>🎯 Learning Objectives</h3>
+<p>By the end of this module, you will:</p>
+<ul>
+<li><strong>Understand</strong> covariance, contravariance, and invariance in Java</li>
+<li><strong>Master</strong> the PECS principle (Producer Extends Consumer Super)</li>
+<li><strong>Design</strong> flexible APIs using bounded wildcards</li>
+<li><strong>Implement</strong> wildcard capture patterns for complex operations</li>
+<li><strong>Apply</strong> variance correctly in method signatures</li>
+<li><strong>Avoid</strong> common wildcard pitfalls and limitations</li>
+</ul>
+<h3>⏱️ Estimated Time: 3-4 hours</h3>
+<hr />
+<h2>🤔 The Variance Problem</h2>
+<h3>🔒 Java Generics are Invariant</h3>
+<p>Let's start with a surprising fact that confuses many Java developers:</p>
+<pre><code class="language-java">// This seems logical but doesn't work!
+List&lt;String&gt; strings = Arrays.asList(&quot;hello&quot;, &quot;world&quot;);
+List&lt;Object&gt; objects = strings; // ❌ COMPILATION ERROR!
+
+// Even though String extends Object, this fails:
+// List&lt;String&gt; is NOT a subtype of List&lt;Object&gt;
+</code></pre>
+<h3>🧠 <strong>Knowledge Check</strong>: Why Doesn't This Work?</h3>
+<p>Think about what could go wrong if Java allowed the assignment above...</p>
+<details>
+<summary>🤔 Consider the implications, then click to reveal</summary>
+<p><strong>The Problem</strong>: If <code>List&lt;String&gt;</code> were a subtype of <code>List&lt;Object&gt;</code>, this would be possible:</p>
+<pre><code class="language-java">List&lt;String&gt; strings = Arrays.asList(&quot;hello&quot;, &quot;world&quot;);
+List&lt;Object&gt; objects = strings; // If this were allowed...
+objects.add(42); // We could add an Integer to a String list!
+String s = strings.get(2); // ClassCastException at runtime!
+</code></pre>
+<p><strong>Key Insight</strong>: Generics are invariant for <strong>write safety</strong>. If you can write to a collection, the type must be exact to prevent corruption.</p>
+</details>
+<h3>🎯 The Solution: Wildcards</h3>
+<p>Wildcards provide <strong>controlled variance</strong> - flexibility where safe, restrictions where necessary:</p>
+<pre><code class="language-java">// ✅ This works! Read-only access to String list as Object list
+List&lt;String&gt; strings = Arrays.asList(&quot;hello&quot;, &quot;world&quot;);
+List&lt;? extends Object&gt; objects = strings; // Covariant - safe for reading
+
+// ✅ This also works! Write-only access
+List&lt;Object&gt; objectList = new ArrayList&lt;&gt;();
+List&lt;? super String&gt; strings2 = objectList; // Contravariant - safe for writing
+</code></pre>
+<hr />
+<h2>📚 Understanding Wildcards</h2>
+<h3>🔍 The Three Types of Wildcards</h3>
+<pre><code class="language-java">public class WildcardTypes {
+
+    // 1. Unbounded wildcard - read-only access
+    public static void printSize(List&lt;?&gt; list) {
+        System.out.println(&quot;Size: &quot; + list.size());
+        // Can read as Object, but can't add anything (except null)
+    }
+
+    // 2. Upper bounded wildcard - covariant
+    public static double sum(List&lt;? extends Number&gt; numbers) {
+        double total = 0.0;
+        for (Number num : numbers) { // Can read as Number
+            total += num.doubleValue();
+        }
+        return total;
+        // Can't add anything (except null)
+    }
+
+    // 3. Lower bounded wildcard - contravariant
+    public static void addNumbers(List&lt;? super Integer&gt; list) {
+        list.add(42);        // Can add Integer
+        list.add(100);       // Can add Integer
+        // list.add(3.14);   // ❌ Can't add Double
+        // Can't read as specific type (only as Object)
+    }
+}
+</code></pre>
+<h3>🎨 Visual Memory Aid</h3>
+<pre><code>? extends T    →  📖 READING  →  &quot;Producer Extends&quot;
+      ↑                ↑
+   Covariant      Can read T and subtypes
+
+? super T      →  ✍️ WRITING  →  &quot;Consumer Super&quot;
+      ↑                ↑
+ Contravariant   Can write T and subtypes
+</code></pre>
+<hr />
+<h2>🏆 The PECS Principle</h2>
+<h3>📜 Producer Extends, Consumer Super</h3>
+<p><strong>PECS</strong> is your golden rule for wildcard usage:</p>
+<ul>
+<li><strong>Producer Extends</strong>: Use <code>? extends T</code> when you <strong>read from</strong> the collection</li>
+<li><strong>Consumer Super</strong>: Use <code>? super T</code> when you <strong>write to</strong> the collection</li>
+</ul>
+<h3>🎯 PECS in Action</h3>
+<pre><code class="language-java">public class PECSExamples {
+
+    // PRODUCER: We read from source → use extends
+    public static &lt;T&gt; void copy(List&lt;? super T&gt; dest, List&lt;? extends T&gt; src) {
+        for (T item : src) {        // Reading from src (producer)
+            dest.add(item);         // Writing to dest (consumer)
+        }
+    }
+
+    // PRODUCER: We read numbers → use extends
+    public static double sum(List&lt;? extends Number&gt; numbers) {
+        return numbers.stream()     // Reading from numbers (producer)
+                     .mapToDouble(Number::doubleValue)
+                     .sum();
+    }
+
+    // CONSUMER: We write items → use super
+    public static &lt;T&gt; void addAll(Collection&lt;? super T&gt; target, T... items) {
+        for (T item : items) {
+            target.add(item);       // Writing to target (consumer)
+        }
+    }
+
+    // Usage demonstration
+    public static void demonstratePECS() {
+        List&lt;Integer&gt; integers = Arrays.asList(1, 2, 3);
+        List&lt;Double&gt; doubles = Arrays.asList(1.1, 2.2, 3.3);
+        List&lt;Number&gt; numbers = new ArrayList&lt;&gt;();
+
+        // Copy integers to numbers (Integer → Number)
+        copy(numbers, integers);    // dest: super Integer, src: extends Integer
+
+        // Sum different numeric types
+        double intSum = sum(integers);    // extends Number ← Integer
+        double doubleSum = sum(doubles);  // extends Number ← Double
+
+        // Add to number collection
+        addAll(numbers, 10, 20, 30);     // super Integer ← Number
+    }
+}
+</code></pre>
+<h3>💡 <strong>Learning Reinforcement</strong>: PECS Memory Tricks</h3>
+<ul>
+<li><strong>&quot;PE&quot;</strong> → <strong>P</strong>roducer <strong>E</strong>xtends → You're <strong>P</strong>ulling <strong>E</strong>lements out</li>
+<li><strong>&quot;CS&quot;</strong> → <strong>C</strong>onsumer <strong>S</strong>uper → You're <strong>C</strong>ramming <strong>S</strong>tuff in</li>
+<li><strong>Reading = Extends</strong>, <strong>Writing = Super</strong></li>
+</ul>
+<hr />
+<h2>🎯 Hands-On Exercise 1: API Design with PECS</h2>
+<h3>📋 Your Mission</h3>
+<p>Design a flexible <code>CollectionUtils</code> class with methods that work with different but related types:</p>
+<pre><code class="language-java">import java.util.*;
+import java.util.function.*;
+
+// TODO: Apply PECS principle to make these methods flexible
+public class CollectionUtils {
+
+    // TODO: Make this work with any Number subtype
+    public static double average(List&lt;Integer&gt; numbers) {
+        return numbers.stream().mapToInt(Integer::intValue).average().orElse(0.0);
+    }
+
+    // TODO: Make this work with any comparable type and any collection
+    public static Integer findMax(List&lt;Integer&gt; items) {
+        return Collections.max(items);
+    }
+
+    // TODO: Make this accept any supertype collection for writing
+    public static void fill(List&lt;String&gt; list, String value, int count) {
+        for (int i = 0; i &lt; count; i++) {
+            list.add(value);
+        }
+    }
+
+    // TODO: Make this work with any related types
+    public static List&lt;String&gt; transform(List&lt;Integer&gt; source, Function&lt;Integer, String&gt; mapper) {
+        return source.stream().map(mapper).collect(Collectors.toList());
+    }
+
+    // TODO: Make this work with any collection types
+    public static boolean hasCommonElements(Set&lt;String&gt; set1, Set&lt;String&gt; set2) {
+        for (String item : set1) {
+            if (set2.contains(item)) {
+                return true;
+            }
+        }
+        return false;
+    }
+}
+</code></pre>
+<h3>🎯 Requirements</h3>
+<ol>
+<li><strong>Apply PECS principle</strong> to all method parameters</li>
+<li><strong>Maximize flexibility</strong> while maintaining type safety</li>
+<li><strong>Use appropriate wildcards</strong> for producers and consumers</li>
+<li><strong>Test with different but related types</strong></li>
+</ol>
+<h3>💡 Solution with Explanations</h3>
+<details>
+<summary>🔍 Try designing the APIs yourself first</summary>
+<pre><code class="language-java">import java.util.*;
+import java.util.function.*;
+import java.util.stream.Collectors;
+
+public class FlexibleCollectionUtils {
+
+    // PRODUCER: Reading numbers → extends
+    public static double average(List&lt;? extends Number&gt; numbers) {
+        return numbers.stream()
+                     .mapToDouble(Number::doubleValue)
+                     .average()
+                     .orElse(0.0);
+    }
+
+    // PRODUCER: Reading comparables → extends
+    public static &lt;T extends Comparable&lt;? super T&gt;&gt; T findMax(Collection&lt;? extends T&gt; items) {
+        return Collections.max(items);
+    }
+
+    // CONSUMER: Writing to collection → super
+    public static &lt;T&gt; void fill(Collection&lt;? super T&gt; collection, T value, int count) {
+        for (int i = 0; i &lt; count; i++) {
+            collection.add(value);
+        }
+    }
+
+    // PRODUCER + flexible transformation
+    public static &lt;T, R&gt; List&lt;R&gt; transform(
+            Collection&lt;? extends T&gt; source,           // Producer: extends
+            Function&lt;? super T, ? extends R&gt; mapper   // Flexible function
+    ) {
+        return source.stream()
+                    .map(mapper)
+                    .collect(Collectors.toList());
+    }
+
+    // PRODUCER: Both collections are read from → extends
+    public static &lt;T&gt; boolean hasCommonElements(
+            Collection&lt;? extends T&gt; collection1,
+            Collection&lt;? extends T&gt; collection2
+    ) {
+        for (T item : collection1) {
+            if (collection2.contains(item)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    // Bonus: Flexible copy method
+    public static &lt;T&gt; void copyAll(
+            Collection&lt;? super T&gt; destination,    // Consumer: super
+            Collection&lt;? extends T&gt; source        // Producer: extends
+    ) {
+        destination.addAll(source);
+    }
+}
+
+// Test the flexibility
+class FlexibilityTest {
+    public static void main(String[] args) {
+        // Test average with different Number types
+        List&lt;Integer&gt; integers = Arrays.asList(1, 2, 3, 4, 5);
+        List&lt;Double&gt; doubles = Arrays.asList(1.1, 2.2, 3.3);
+        List&lt;Float&gt; floats = Arrays.asList(1.0f, 2.0f, 3.0f);
+
+        System.out.println(&quot;Int average: &quot; + FlexibleCollectionUtils.average(integers));
+        System.out.println(&quot;Double average: &quot; + FlexibleCollectionUtils.average(doubles));
+        System.out.println(&quot;Float average: &quot; + FlexibleCollectionUtils.average(floats));
+
+        // Test findMax with different comparable types
+        String maxString = FlexibleCollectionUtils.findMax(Arrays.asList(&quot;apple&quot;, &quot;zebra&quot;, &quot;banana&quot;));
+        Integer maxInt = FlexibleCollectionUtils.findMax(integers);
+
+        // Test fill with supertype collections
+        List&lt;Object&gt; objects = new ArrayList&lt;&gt;();
+        FlexibleCollectionUtils.fill(objects, &quot;hello&quot;, 3);  // String → Object
+
+        List&lt;Number&gt; numbers = new ArrayList&lt;&gt;();
+        FlexibleCollectionUtils.fill(numbers, 42, 2);       // Integer → Number
+
+        // Test transform with different types
+        List&lt;String&gt; stringLengths = FlexibleCollectionUtils.transform(
+            Arrays.asList(&quot;hello&quot;, &quot;world&quot;),
+            String::length
+        );
+
+        // Test common elements
+        Set&lt;String&gt; set1 = Set.of(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;);
+        Set&lt;CharSequence&gt; set2 = Set.of(&quot;b&quot;, &quot;d&quot;, &quot;e&quot;);  // CharSequence ← String
+        boolean hasCommon = FlexibleCollectionUtils.hasCommonElements(set1, set2);
+    }
+}
+</code></pre>
+<p><strong>🎉 Benefits Achieved:</strong><br />
+- ✅ <strong>Maximum Flexibility</strong>: Methods work with families of related types<br />
+- ✅ <strong>Type Safety</strong>: No unsafe casts or runtime errors<br />
+- ✅ <strong>PECS Applied</strong>: Correct variance for producers and consumers<br />
+- ✅ <strong>Reusable</strong>: One method handles multiple scenarios</p>
+<p><strong>🧠 Key Insights:</strong><br />
+- <code>? extends</code> for parameters you <strong>read from</strong> (producers)<br />
+- <code>? super</code> for parameters you <strong>write to</strong> (consumers)<br />
+- Wildcards in functional interfaces increase flexibility<br />
+- Bounded type parameters work with wildcards for complex constraints</p>
+</details>
+<hr />
+<h2>🔄 Wildcard Capture</h2>
+<h3>🎭 The Capture Problem</h3>
+<p>Sometimes you need to perform operations that require knowing the exact type, but you're working with wildcards:</p>
+<pre><code class="language-java">// This won't compile - can't assign ? to ?
+public static void swap(List&lt;?&gt; list, int i, int j) {
+    Object temp = list.get(i);
+    list.set(i, list.get(j));  // ❌ Can't put Object into List&lt;?&gt;
+    list.set(j, temp);
+}
+</code></pre>
+<h3>🔓 The Capture Solution</h3>
+<p>Use a helper method to &quot;capture&quot; the wildcard type:</p>
+<pre><code class="language-java">public class WildcardCapture {
+
+    // Public API with wildcard
+    public static void swap(List&lt;?&gt; list, int i, int j) {
+        swapHelper(list, i, j);  // Compiler captures ? as some type T
+    }
+
+    // Private helper with captured type parameter
+    private static &lt;T&gt; void swapHelper(List&lt;T&gt; list, int i, int j) {
+        T temp = list.get(i);    // Now we can work with concrete type T
+        list.set(i, list.get(j));
+        list.set(j, temp);
+    }
+
+    // Another example: reverse any list
+    public static void reverse(List&lt;?&gt; list) {
+        reverseHelper(list);
+    }
+
+    private static &lt;T&gt; void reverseHelper(List&lt;T&gt; list) {
+        Collections.reverse(list);  // Works with concrete type T
+    }
+
+    // Usage
+    public static void demonstrateCapture() {
+        List&lt;String&gt; strings = Arrays.asList(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;);
+        List&lt;Integer&gt; numbers = Arrays.asList(1, 2, 3);
+
+        swap(strings, 0, 2);    // Works with any List type
+        swap(numbers, 0, 1);    // Flexible and type-safe
+
+        reverse(strings);       // [&quot;c&quot;, &quot;b&quot;, &quot;a&quot;]
+        reverse(numbers);       // [2, 1, 3]
+    }
+}
+</code></pre>
+<h3>💡 <strong>Key Insight</strong>: Wildcard Capture Pattern</h3>
+<ol>
+<li><strong>Public method</strong> uses wildcards for flexibility</li>
+<li><strong>Private helper</strong> uses type parameter for operations</li>
+<li><strong>Compiler captures</strong> the wildcard as a concrete type</li>
+<li><strong>Best of both worlds</strong>: Flexibility + Type Safety</li>
+</ol>
+<hr />
+<h2>🎯 Hands-On Exercise 2: Advanced Wildcard Patterns</h2>
+<h3>📋 Your Mission</h3>
+<p>Implement advanced utility methods that require wildcard capture and complex variance:</p>
+<pre><code class="language-java">import java.util.*;
+import java.util.function.*;
+
+public class AdvancedWildcardUtils {
+
+    // TODO: Implement a method that can shuffle any type of list
+    public static void shuffle(List&lt;?&gt; list) {
+        // Hint: Use wildcard capture pattern
+    }
+
+    // TODO: Implement a method that finds common elements between collections
+    // Should work with related types (e.g., List&lt;String&gt; and Set&lt;CharSequence&gt;)
+    public static &lt;T&gt; List&lt;T&gt; findCommon(
+        Collection&lt;?&gt; collection1,
+        Collection&lt;?&gt; collection2
+    ) {
+        // Hint: This is tricky - what should T be?
+    }
+
+    // TODO: Implement a method that merges sorted lists
+    public static &lt;T extends Comparable&lt;? super T&gt;&gt; List&lt;T&gt; mergeSorted(
+        List&lt;? extends T&gt; list1,
+        List&lt;? extends T&gt; list2
+    ) {
+        // Should preserve order and handle different subtypes
+    }
+
+    // TODO: Implement a method that applies a transformation conditionally
+    public static &lt;T, R&gt; void transformIf(
+        Collection&lt;? extends T&gt; source,
+        Collection&lt;? super R&gt; destination,
+        Predicate&lt;? super T&gt; condition,
+        Function&lt;? super T, ? extends R&gt; transformer
+    ) {
+        // Apply transformation only to elements matching condition
+    }
+}
+</code></pre>
+<h3>💡 Advanced Solutions</h3>
+<details>
+<summary>🎯 Try implementing these challenging methods yourself first</summary>
+<pre><code class="language-java">import java.util.*;
+import java.util.function.*;
+import java.util.stream.Collectors;
+
+public class AdvancedWildcardUtils {
+
+    // Wildcard capture for shuffle
+    public static void shuffle(List&lt;?&gt; list) {
+        shuffleHelper(list);
+    }
+
+    private static &lt;T&gt; void shuffleHelper(List&lt;T&gt; list) {
+        Collections.shuffle(list);
+    }
+
+    // Complex wildcard handling for common elements
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public static &lt;T&gt; List&lt;T&gt; findCommon(
+        Collection&lt;? extends T&gt; collection1,
+        Collection&lt;? extends T&gt; collection2
+    ) {
+        return collection1.stream()
+                         .filter(collection2::contains)
+                         .collect(Collectors.toList());
+    }
+
+    // Merge sorted lists with bounded wildcards
+    public static &lt;T extends Comparable&lt;? super T&gt;&gt; List&lt;T&gt; mergeSorted(
+        List&lt;? extends T&gt; list1,
+        List&lt;? extends T&gt; list2
+    ) {
+        List&lt;T&gt; result = new ArrayList&lt;&gt;();
+        int i = 0, j = 0;
+
+        while (i &lt; list1.size() &amp;&amp; j &lt; list2.size()) {
+            T item1 = list1.get(i);
+            T item2 = list2.get(j);
+
+            if (item1.compareTo(item2) &lt;= 0) {
+                result.add(item1);
+                i++;
+            } else {
+                result.add(item2);
+                j++;
+            }
+        }
+
+        // Add remaining elements
+        while (i &lt; list1.size()) {
+            result.add(list1.get(i++));
+        }
+        while (j &lt; list2.size()) {
+            result.add(list2.get(j++));
+        }
+
+        return result;
+    }
+
+    // Complex variance with functional interfaces
+    public static &lt;T, R&gt; void transformIf(
+        Collection&lt;? extends T&gt; source,
+        Collection&lt;? super R&gt; destination,
+        Predicate&lt;? super T&gt; condition,
+        Function&lt;? super T, ? extends R&gt; transformer
+    ) {
+        for (T item : source) {
+            if (condition.test(item)) {
+                R transformed = transformer.apply(item);
+                destination.add(transformed);
+            }
+        }
+    }
+
+    // Bonus: Generic min/max with custom comparator
+    public static &lt;T&gt; Optional&lt;T&gt; findExtreme(
+        Collection&lt;? extends T&gt; collection,
+        Comparator&lt;? super T&gt; comparator
+    ) {
+        return collection.stream().min(comparator);
+    }
+}
+
+// Comprehensive test
+class AdvancedWildcardTest {
+    public static void main(String[] args) {
+        // Test shuffle
+        List&lt;String&gt; words = new ArrayList&lt;&gt;(Arrays.asList(&quot;hello&quot;, &quot;world&quot;, &quot;java&quot;));
+        AdvancedWildcardUtils.shuffle(words);
+        System.out.println(&quot;Shuffled: &quot; + words);
+
+        // Test findCommon with related types
+        List&lt;String&gt; strings = Arrays.asList(&quot;apple&quot;, &quot;banana&quot;, &quot;cherry&quot;);
+        Set&lt;CharSequence&gt; sequences = Set.of(&quot;banana&quot;, &quot;date&quot;, &quot;elderberry&quot;);
+        List&lt;CharSequence&gt; common = AdvancedWildcardUtils.findCommon(strings, sequences);
+        System.out.println(&quot;Common: &quot; + common);
+
+        // Test mergeSorted
+        List&lt;Integer&gt; list1 = Arrays.asList(1, 3, 5, 7);
+        List&lt;Integer&gt; list2 = Arrays.asList(2, 4, 6, 8);
+        List&lt;Integer&gt; merged = AdvancedWildcardUtils.mergeSorted(list1, list2);
+        System.out.println(&quot;Merged: &quot; + merged);
+
+        // Test transformIf
+        List&lt;String&gt; source = Arrays.asList(&quot;hello&quot;, &quot;world&quot;, &quot;java&quot;, &quot;generics&quot;);
+        List&lt;Integer&gt; destination = new ArrayList&lt;&gt;();
+
+        AdvancedWildcardUtils.transformIf(
+            source,
+            destination,
+            s -&gt; s.length() &gt; 4,        // Condition: length &gt; 4
+            String::length              // Transform: string to length
+        );
+        System.out.println(&quot;Transformed lengths: &quot; + destination);
+
+        // Test with inheritance
+        List&lt;Number&gt; numbers = new ArrayList&lt;&gt;();
+        List&lt;Integer&gt; integers = Arrays.asList(10, 20, 30);
+
+        AdvancedWildcardUtils.transformIf(
+            integers,                   // Source: Integer
+            numbers,                    // Destination: Number (super Integer)
+            n -&gt; n &gt; 15,               // Condition: &gt; 15
+            n -&gt; n * 2                 // Transform: double the value
+        );
+        System.out.println(&quot;Filtered and doubled: &quot; + numbers);
+    }
+}
+</code></pre>
+<p><strong>🏆 Advanced Patterns Mastered:</strong><br />
+- ✅ <strong>Wildcard Capture</strong>: Convert <code>List&lt;?&gt;</code> to workable <code>List&lt;T&gt;</code><br />
+- ✅ <strong>Complex Variance</strong>: Multiple wildcards in one signature<br />
+- ✅ <strong>Functional Interface Wildcards</strong>: Flexible predicates and functions<br />
+- ✅ <strong>Inheritance-Aware APIs</strong>: Work with type hierarchies safely</p>
+</details>
+<hr />
+<h2>🚫 Common Wildcard Pitfalls</h2>
+<h3>❌ Pitfall 1: Wildcard Overuse</h3>
+<pre><code class="language-java">// ❌ DON'T overuse wildcards
+public static &lt;T&gt; List&lt;T&gt; process(List&lt;? extends T&gt; input) {
+    // If you're only reading and returning the same type,
+    // wildcards add unnecessary complexity
+}
+
+// ✅ Keep it simple when wildcards don't add value
+public static &lt;T&gt; List&lt;T&gt; process(List&lt;T&gt; input) {
+    // Cleaner and just as flexible
+}
+</code></pre>
+<h3>❌ Pitfall 2: Multiple Wildcards Confusion</h3>
+<pre><code class="language-java">// ❌ Confusing - what's the relationship between the wildcards?
+public static void confusing(List&lt;? extends Number&gt; list1,
+                           List&lt;? extends Number&gt; list2) {
+    // Are these the same type? Different types? Unclear!
+}
+
+// ✅ Be explicit about relationships
+public static &lt;T extends Number&gt; void clear(List&lt;T&gt; list1, List&lt;T&gt; list2) {
+    // Now it's clear both lists have the same type T
+}
+</code></pre>
+<h3>❌ Pitfall 3: Wildcard in Return Types</h3>
+<pre><code class="language-java">// ❌ Avoid wildcards in return types - reduces usability
+public static List&lt;? extends Number&gt; badReturn() {
+    return Arrays.asList(1, 2, 3);
+}
+
+// ✅ Return concrete types when possible
+public static &lt;T extends Number&gt; List&lt;T&gt; goodReturn(T... items) {
+    return Arrays.asList(items);
+}
+</code></pre>
+<hr />
+<h2>🧪 Knowledge Check: PECS Master Quiz</h2>
+<h3>Question 1: API Design Challenge</h3>
+<p>You're designing a method to copy elements from one collection to another. Which signature is correct?</p>
+<pre><code class="language-java">// Option A
+public static &lt;T&gt; void copy(List&lt;T&gt; dest, List&lt;T&gt; src)
+
+// Option B
+public static &lt;T&gt; void copy(List&lt;? super T&gt; dest, List&lt;? extends T&gt; src)
+
+// Option C
+public static &lt;T&gt; void copy(List&lt;? extends T&gt; dest, List&lt;? super T&gt; src)
+</code></pre>
+<details>
+<summary>🤔 Apply PECS principle, then check your answer</summary>
+<p><strong>Answer</strong>: Option B is correct!</p>
+<p><strong>Reasoning:</strong><br />
+- <code>dest</code> is a <strong>consumer</strong> (we write to it) → use <code>? super T</code><br />
+- <code>src</code> is a <strong>producer</strong> (we read from it) → use <code>? extends T</code></p>
+<p><strong>Benefits:</strong></p>
+<pre><code class="language-java">List&lt;Integer&gt; integers = Arrays.asList(1, 2, 3);
+List&lt;Number&gt; numbers = new ArrayList&lt;&gt;();
+copy(numbers, integers); // Works! Number super Integer, Integer extends Integer
+</code></pre>
+</details>
+<h3>Question 2: Wildcard Capture</h3>
+<p>What's wrong with this code and how would you fix it?</p>
+<pre><code class="language-java">public static void reverse(List&lt;?&gt; list) {
+    for (int i = 0; i &lt; list.size() / 2; i++) {
+        Object temp = list.get(i);
+        list.set(i, list.get(list.size() - 1 - i));  // ❌ Compilation error
+        list.set(list.size() - 1 - i, temp);
+    }
+}
+</code></pre>
+<details>
+<summary>🔧 Identify the problem and solution</summary>
+<p><strong>Problem</strong>: Can't put <code>Object</code> into <code>List&lt;?&gt;</code> because <code>?</code> might be a more specific type.</p>
+<p><strong>Solution</strong>: Use wildcard capture pattern:</p>
+<pre><code class="language-java">public static void reverse(List&lt;?&gt; list) {
+    reverseHelper(list);
+}
+
+private static &lt;T&gt; void reverseHelper(List&lt;T&gt; list) {
+    for (int i = 0; i &lt; list.size() / 2; i++) {
+        T temp = list.get(i);  // Now we can work with concrete type T
+        list.set(i, list.get(list.size() - 1 - i));
+        list.set(list.size() - 1 - i, temp);
+    }
+}
+</code></pre>
+</details>
+<h3>Question 3: Complex Variance</h3>
+<p>Which method signature allows maximum flexibility for adding elements to a collection?</p>
+<pre><code class="language-java">// Option A
+public static &lt;T&gt; void addItems(Collection&lt;T&gt; collection, T... items)
+
+// Option B
+public static &lt;T&gt; void addItems(Collection&lt;? extends T&gt; collection, T... items)
+
+// Option C
+public static &lt;T&gt; void addItems(Collection&lt;? super T&gt; collection, T... items)
+</code></pre>
+<details>
+<summary>🎯 Think about what operations you need to perform</summary>
+<p><strong>Answer</strong>: Option C is correct!</p>
+<p><strong>Reasoning:</strong><br />
+- We need to <strong>write</strong> items to the collection (consumer)<br />
+- Consumer → use <code>? super T</code><br />
+- This allows passing a <code>Collection&lt;Object&gt;</code> when adding <code>String</code> items</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-java">List&lt;Object&gt; objects = new ArrayList&lt;&gt;();
+addItems(objects, &quot;hello&quot;, &quot;world&quot;); // String items → Object collection
+</code></pre>
+</details>
+<hr />
+<h2>🎯 Module 2 Capstone Project: Generic Algorithm Library</h2>
+<h3>📋 Final Challenge</h3>
+<p>Create a comprehensive algorithm library that demonstrates mastery of wildcards and PECS:</p>
+<pre><code class="language-java">import java.util.*;
+import java.util.function.*;
+
+// TODO: Complete this generic algorithm library
+public class GenericAlgorithms {
+
+    // TODO: Binary search that works with any comparable type and collection
+    public static &lt;T&gt; int binarySearch(???, T target) {
+
+    }
+
+    // TODO: Merge multiple sorted collections into one
+    public static &lt;T&gt; List&lt;T&gt; mergeAll(???) {
+
+    }
+
+    // TODO: Partition collection based on predicate
+    public static &lt;T&gt; Map&lt;Boolean, List&lt;T&gt;&gt; partition(???, ???) {
+
+    }
+
+    // TODO: Find all elements that appear in all collections
+    public static &lt;T&gt; Set&lt;T&gt; intersection(???) {
+
+    }
+
+    // TODO: Transform and filter in one operation
+    public static &lt;T, R&gt; List&lt;R&gt; mapFilter(???, ???, ???) {
+
+    }
+}
+</code></pre>
+<h3>🎯 Requirements</h3>
+<ol>
+<li><strong>Apply PECS correctly</strong> in all method signatures</li>
+<li><strong>Use wildcard capture</strong> where needed</li>
+<li><strong>Support inheritance hierarchies</strong> (e.g., work with Number subtypes)</li>
+<li><strong>Maximize flexibility</strong> while maintaining type safety</li>
+<li><strong>Include comprehensive tests</strong> showing flexibility</li>
+</ol>
+<h3>💡 Complete Solution</h3>
+<details>
+<summary>🏆 Try implementing the complete library yourself first</summary>
+<pre><code class="language-java">import java.util.*;
+import java.util.function.*;
+import java.util.stream.Collectors;
+
+public class GenericAlgorithms {
+
+    // Binary search with flexible input
+    public static &lt;T extends Comparable&lt;? super T&gt;&gt; int binarySearch(
+        List&lt;? extends T&gt; list, T target
+    ) {
+        return Collections.binarySearch(list, target);
+    }
+
+    // Merge multiple sorted collections
+    @SafeVarargs
+    public static &lt;T extends Comparable&lt;? super T&gt;&gt; List&lt;T&gt; mergeAll(
+        Collection&lt;? extends T&gt;... collections
+    ) {
+        return Arrays.stream(collections)
+                    .flatMap(Collection::stream)
+                    .sorted()
+                    .collect(Collectors.toList());
+    }
+
+    // Partition with flexible predicate
+    public static &lt;T&gt; Map&lt;Boolean, List&lt;T&gt;&gt; partition(
+        Collection&lt;? extends T&gt; collection,
+        Predicate&lt;? super T&gt; predicate
+    ) {
+        return collection.stream()
+                        .collect(Collectors.partitioningBy(predicate));
+    }
+
+    // Intersection of multiple collections
+    @SafeVarargs
+    public static &lt;T&gt; Set&lt;T&gt; intersection(Collection&lt;? extends T&gt;... collections) {
+        if (collections.length == 0) {
+            return Collections.emptySet();
+        }
+
+        Set&lt;T&gt; result = new HashSet&lt;&gt;(collections[0]);
+        for (int i = 1; i &lt; collections.length; i++) {
+            result.retainAll(collections[i]);
+        }
+        return result;
+    }
+
+    // Transform and filter in one operation
+    public static &lt;T, R&gt; List&lt;R&gt; mapFilter(
+        Collection&lt;? extends T&gt; source,
+        Predicate&lt;? super T&gt; filter,
+        Function&lt;? super T, ? extends R&gt; mapper
+    ) {
+        return source.stream()
+                    .filter(filter)
+                    .map(mapper)
+                    .collect(Collectors.toList());
+    }
+
+    // Bonus: Generic quicksort with custom comparator
+    public static &lt;T&gt; void quickSort(List&lt;T&gt; list, Comparator&lt;? super T&gt; comparator) {
+        quickSortHelper(list, 0, list.size() - 1, comparator);
+    }
+
+    private static &lt;T&gt; void quickSortHelper(
+        List&lt;T&gt; list, int low, int high, Comparator&lt;? super T&gt; comparator
+    ) {
+        if (low &lt; high) {
+            int pi = partition(list, low, high, comparator);
+            quickSortHelper(list, low, pi - 1, comparator);
+            quickSortHelper(list, pi + 1, high, comparator);
+        }
+    }
+
+    private static &lt;T&gt; int partition(
+        List&lt;T&gt; list, int low, int high, Comparator&lt;? super T&gt; comparator
+    ) {
+        T pivot = list.get(high);
+        int i = low - 1;
+
+        for (int j = low; j &lt; high; j++) {
+            if (comparator.compare(list.get(j), pivot) &lt;= 0) {
+                i++;
+                Collections.swap(list, i, j);
+            }
+        }
+        Collections.swap(list, i + 1, high);
+        return i + 1;
+    }
+}
+
+// Comprehensive test demonstrating flexibility
+class GenericAlgorithmsTest {
+    public static void main(String[] args) {
+        // Test with different Number types
+        List&lt;Integer&gt; integers = Arrays.asList(1, 5, 3, 9, 2);
+        List&lt;Double&gt; doubles = Arrays.asList(1.1, 5.5, 3.3);
+
+        // Binary search
+        int index = GenericAlgorithms.binarySearch(
+            Arrays.asList(1, 3, 5, 7, 9), 5
+        );
+        System.out.println(&quot;Found at index: &quot; + index);
+
+        // Merge collections of related types
+        List&lt;Number&gt; merged = GenericAlgorithms.mergeAll(integers, doubles);
+        System.out.println(&quot;Merged: &quot; + merged);
+
+        // Partition strings by length
+        List&lt;String&gt; words = Arrays.asList(&quot;hello&quot;, &quot;hi&quot;, &quot;world&quot;, &quot;java&quot;, &quot;ok&quot;);
+        Map&lt;Boolean, List&lt;String&gt;&gt; partitioned = GenericAlgorithms.partition(
+            words,
+            s -&gt; s.length() &gt; 3
+        );
+        System.out.println(&quot;Long words: &quot; + partitioned.get(true));
+        System.out.println(&quot;Short words: &quot; + partitioned.get(false));
+
+        // Intersection with inheritance
+        Set&lt;String&gt; set1 = Set.of(&quot;apple&quot;, &quot;banana&quot;, &quot;cherry&quot;);
+        Set&lt;CharSequence&gt; set2 = Set.of(&quot;banana&quot;, &quot;date&quot;, &quot;elderberry&quot;);
+        Set&lt;CharSequence&gt; common = GenericAlgorithms.intersection(set1, set2);
+        System.out.println(&quot;Common elements: &quot; + common);
+
+        // Map and filter
+        List&lt;Integer&gt; lengths = GenericAlgorithms.mapFilter(
+            words,
+            s -&gt; s.contains(&quot;a&quot;),     // Filter: contains 'a'
+            String::length            // Map: to length
+        );
+        System.out.println(&quot;Lengths of words with 'a': &quot; + lengths);
+
+        // Custom sort with inheritance
+        List&lt;Number&gt; numbers = new ArrayList&lt;&gt;(Arrays.asList(3.14, 2, 1.5f, 10));
+        GenericAlgorithms.quickSort(numbers,
+            (n1, n2) -&gt; Double.compare(n1.doubleValue(), n2.doubleValue())
+        );
+        System.out.println(&quot;Sorted numbers: &quot; + numbers);
+    }
+}
+</code></pre>
+<p><strong>🎉 Mastery Achieved:</strong><br />
+- ✅ <strong>Perfect PECS Application</strong>: Producers use extends, consumers use super<br />
+- ✅ <strong>Maximum Flexibility</strong>: Works with inheritance hierarchies<br />
+- ✅ <strong>Type Safety</strong>: No unsafe casts or runtime errors<br />
+- ✅ <strong>Real-World Utility</strong>: Production-ready algorithm implementations<br />
+- ✅ <strong>Complex Variance</strong>: Multiple wildcards working together</p>
+</details>
+<hr />
+<h2>📚 Module 2 Summary</h2>
+<h3>🎉 What You've Mastered</h3>
+<ul>
+<li><strong>Variance Understanding</strong>: Covariance, contravariance, and invariance in Java</li>
+<li><strong>PECS Principle</strong>: Producer Extends Consumer Super for wildcard usage</li>
+<li><strong>Flexible API Design</strong>: Creating methods that work with type families</li>
+<li><strong>Wildcard Capture</strong>: Converting wildcards to workable type parameters</li>
+<li><strong>Complex Patterns</strong>: Multiple wildcards and functional interface variance</li>
+<li><strong>Common Pitfalls</strong>: What to avoid when using wildcards</li>
+</ul>
+<h3>🔑 Key Takeaways</h3>
+<ol>
+<li><strong>PECS is your guide</strong>: Use extends for producers, super for consumers</li>
+<li><strong>Wildcards enable flexibility</strong>: One method, multiple related types</li>
+<li><strong>Capture pattern solves limitations</strong>: Convert <code>List&lt;?&gt;</code> to <code>List&lt;T&gt;</code></li>
+<li><strong>Variance in functional interfaces</strong>: <code>Function&lt;? super T, ? extends R&gt;</code></li>
+<li><strong>Don't overuse wildcards</strong>: Simple cases don't need complex signatures</li>
+</ol>
+<h3>🚀 Next Steps</h3>
+<p>You're now ready for <strong>Module 3: Advanced Patterns</strong>, where you'll learn:<br />
+- Type erasure and runtime implications<br />
+- Generic inheritance and self-bounded types<br />
+- Integration with modern Java features<br />
+- Performance considerations and optimizations</p>
+<h3>📝 Self-Assessment Checklist</h3>
+<p>Before proceeding, ensure you can:</p>
+<ul>
+<li>[ ] Explain covariance vs contravariance</li>
+<li>[ ] Apply PECS principle correctly</li>
+<li>[ ] Design flexible APIs with wildcards</li>
+<li>[ ] Use wildcard capture pattern</li>
+<li>[ ] Avoid common wildcard pitfalls</li>
+<li>[ ] Create algorithms that work with type hierarchies</li>
+</ul>
+<p><strong>Ready for advanced patterns?</strong> Continue to <a href="./module-3-advanced.html">Module 3: Advanced Patterns</a> 🚀</p>
+
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2025 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../js/jquery-1.11.2.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/prettify.js"></script>
+<script src="../../js/run_prettify.js"></script>
+<script src="../../js/main.js"></script>
+<!-- Google Analytics -->
+<script>
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+	ga('create', 'G-13CV90H4J4', 'auto');
+	ga('send', 'pageview');
+</script>
+<!-- End Google Analytics -->
+
+</body>
+</html>
