@@ -1,124 +1,216 @@
-# Cursor AI rules for Java
+# Enhanced Java Documentation Rule with ADR Support
 
-## Stargazers over time
-[![Stargazers over time](https://starchart.cc/jabrena/cursor-rules-java.svg?variant=light)](https://starchart.cc/jabrena/cursor-rules-java)
+This enhanced version of the `170-java-documentation.xml` rule combines traditional Java documentation generation with Architecture Decision Record (ADR) creation capabilities, inspired by the agile ADR template and conversational assistant approach.
 
-[![CI Builds](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml/badge.svg)](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml)
+## Features
 
-## Goal
+### 1. Traditional Java Documentation
+- **Comprehensive Javadoc Generation**: Automated creation of detailed Javadoc comments for classes, methods, and fields
+- **Package Documentation**: Support for package-info.java files with architectural context
+- **Best Practices Enforcement**: Follows Oracle's Javadoc conventions and industry standards
+- **Template-Based Generation**: Consistent documentation structure across projects
 
-The project provides a collection of `System prompts` for Java Enterprise development that help software engineers in their daily programming work.
-The [available System prompts for Java](./CURSOR-RULES-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/JDK tools` & `Documentation`.
+### 2. Architecture Decision Records (ADRs)
+- **Conversational ADR Creation**: Interactive prompts guide users through the decision-making process
+- **Structured Templates**: Based on agile ADR template with sections for context, decision, and consequences
+- **Status Management**: Support for ADR lifecycle (proposed, accepted, implemented, deprecated, superseded)
+- **Cross-Reference Integration**: Links between code documentation and architectural decisions
 
-### Compatibility with Modern IDEs, CLI & Others
+### 3. Integration Capabilities
+- **Unified Documentation**: Seamless integration between Javadoc and ADRs
+- **Consistency Management**: Tools to maintain alignment between code and architectural documentation
+- **File Organization**: Structured approach to organizing documentation artifacts
 
-The repository was designed to offer support for Cursor, but other tools have evolved and now offer better support for System prompts. The repository executes regular regression testing for IDEs like *Cursor*, *Cursor CLI*, *Claude Code*, *GitHub Copilot* & *JetBrains Junie*.
+## Usage
 
-⚠️ **Note:** Currently, the best environments to use this repository are: *Cursor*, *Cursor CLI* & *Claude Code*. If you use *JetBrains IntelliJ IDEA*, you could combine it with *Cursor CLI* or *Claude Code*. Further information about the latest review [here](./docs/reviews/review-20250829.md).
+### Generating Java Documentation
 
-## What is a System prompt?
+The rule automatically triggers when working with Java files or when documentation-related keywords are detected:
 
-A system prompt is a set of instructions given to an AI model that defines how it should behave, what role it should take on, and what guidelines it should follow when responding to users. Think of it as the "operating manual" that shapes the AI's personality, capabilities, and boundaries.
+```java
+/**
+ * Service for managing user authentication and authorization.
+ * 
+ * <p>This service implements OAuth 2.0 authentication flow and provides
+ * role-based access control for the application.</p>
+ * 
+ * <p><strong>Thread Safety:</strong> This class is thread-safe and can be
+ * used concurrently by multiple threads.</p>
+ * 
+ * @author Development Team
+ * @since 1.0
+ * @see UserRepository
+ * @see SecurityConfig
+ */
+public class AuthenticationService {
+    // Implementation follows architectural decision documented in ADR-003.
+}
+```
 
-![](./documentation/prompts.png)
+### Creating Architecture Decision Records
 
-### Types of System prompts
+When architectural decisions need to be documented, the conversational assistant guides you through:
 
-The repository provides System prompts that can behave interactively or non-interactively, depending on how the user employs them.
+1. **Context Gathering**: Understanding the problem and stakeholders
+2. **Decision Drivers**: Identifying requirements and constraints
+3. **Options Analysis**: Evaluating alternatives
+4. **Decision Rationale**: Documenting the chosen option and reasoning
+5. **Consequences**: Capturing expected outcomes and risks
 
-- **System prompts:** `Create a UML class diagram with @170-java-documentation without any question` or `Add Maven Enforcer plugin only from the rule @112-java-maven-plugins without any question`
-- **Interactive System Prompts:** Prompts that ask questions and have conditional logic. Examples: `Improve the pom.xml using the cursor rule @112-java-maven-plugins` or `Generate technical documentation & diagrams about the project with the cursor rule @170-java-documentation`
+#### Example ADR Output
 
-### Types of customized behaviours for System prompts
+```markdown
+# ADR-003: Adopt Spring Security for Authentication
 
-- **Consultative Interactive:** Prompts that suggest alternatives to improve software development. Examples: `Improve the class/classes added in the context applying the system prompt @128-java-generics with the behaviour @behaviour-consultative-interaction` or `Improve the class/classes added in the context applying the system prompt @131-java-unit-testing with the behaviour @behaviour-consultative-interaction`
-- **Progressive Learning:** Using the System prompts, you can generate courses about a particular topic in order to understand better the changes generated by Models. Example: `Create a course about @128-java-generics.md using the behavior @behaviour-progressive-learning.md and put the course in @courses`
+## Status
+Accepted
 
-### Java development workflow
+## Context
+The application requires a robust authentication and authorization system 
+to protect sensitive user data and ensure compliance with security standards.
 
-Adding AI tools to the Java development workflow can increase the possibilities of implementing software specifications on time and with quality.
+### Problem Statement
+We need to implement user authentication that supports multiple authentication 
+methods while maintaining security best practices and regulatory compliance.
 
-![](./documentation/workflow.png)
+### Decision Drivers
+- Security compliance requirements (GDPR, SOX)
+- Support for OAuth 2.0 and SAML
+- Integration with existing user directory
+- Development team expertise
+- Long-term maintainability
 
-**Note:** Remember that if you use models and ask questions about recent topics like *Java 25*, it is probable that models will not provide accurate answers.
+## Considered Options
+1. Custom authentication implementation
+2. Spring Security framework
+3. Apache Shiro
+4. Third-party authentication service
 
-## Getting started
+## Decision
+We will adopt Spring Security framework for our authentication needs.
 
-New to this repository? Start with our [comprehensive guide](./GETTING-STARTED.md) for a quick introduction to setting up and using the Cursor rules.
+### Rationale
+Spring Security provides comprehensive security features, excellent documentation, 
+and strong community support. It integrates well with our Spring Boot application 
+and offers the flexibility needed for our authentication requirements.
 
-## How to use a System prompt in your development?
+## Consequences
 
-Learn [how to integrate System prompts](./HOW-TO-USE.md) into your development workflow and maximize their effectiveness in your daily coding tasks.
+### Positive
+- Proven security framework with regular updates
+- Comprehensive feature set (OAuth, SAML, JWT)
+- Strong community and documentation
+- Good integration with Spring ecosystem
 
-## How many System prompts include this repository?
+### Negative
+- Learning curve for team members unfamiliar with Spring Security
+- Potential over-engineering for simple use cases
+- Framework dependency and vendor lock-in
 
-Explore the [complete catalog of available System prompts](./CURSOR-RULES-JAVA.md) to discover the full range of capabilities and find the perfect rules for your specific use cases.
+### Neutral
+- Configuration complexity requires careful planning
+- Regular updates needed to maintain security
 
-## Constraints, Output format & Safety guards
+## Implementation Notes
+- Configure Spring Security using Java configuration
+- Implement custom UserDetailsService for user directory integration
+- Set up OAuth 2.0 client registration for external providers
 
-The cursor rules in this repository follow [The Three-Node Quality Framework for AI Prompts](./docs/articles/prompt-quality-framework.md), which ensures both comprehensive responses and safe execution. This framework consists of three distinct pillars: **constraints**, **output-format** and **safeguards**. Each node operates at different phases of the AI interaction timeline, creating a defense-in-depth strategy.
+## Follow-up Actions
+- [ ] Create Spring Security configuration
+- [ ] Implement custom authentication provider
+- [ ] Set up integration tests
+- [ ] Update documentation
 
-The **constraints** act as gate-keeping mechanisms that define hard requirements and blocking conditions before any work begins - essentially asking "Can I start?" The **output-format** provides prescriptive guidance during execution, ensuring comprehensive coverage and organized responses by defining "What should I deliver?" Finally, **safeguards** implement protective measures throughout and after execution, continuously asking "Did it work safely?" This temporal flow from pre-execution validation to structured execution to continuous monitoring ensures quality at every stage.
+---
+**Date:** 2025-09-15
+**Stakeholders:** Development Team, Security Team, Product Owner
+**Status:** Accepted
+```
 
-This framework transforms AI from a general assistant into a specialized consultant with built-in quality controls and safety measures, making it particularly suitable for critical applications like Java software development. By embedding domain-specific expertise directly into the prompt structure, the cursor rules provide predictable, comprehensive, and safe interactions while reducing cognitive load for developers and ensuring system integrity throughout the development process.
+## File Organization
 
-## Limitations
+The enhanced rule promotes a structured approach to documentation:
 
-### Lack of determinism
+```
+project/
+├── docs/
+│   ├── adrs/
+│   │   ├── README.md                     # ADR index
+│   │   ├── adr-001-technology-stack.md
+│   │   ├── adr-002-database-choice.md
+│   │   └── adr-003-authentication.md
+│   └── api/
+│       └── javadoc/                      # Generated Javadoc
+├── src/
+│   └── main/
+│       └── java/
+│           ├── package-info.java         # Package documentation
+│           └── com/example/
+│               └── service/
+│                   └── AuthenticationService.java
+```
 
-From the beginning, you need to know that results provided by interactions with the different `Cursor rules` are not deterministic due to the nature of the models, but this fact should not be considered negative. Software engineers do not always have the same idea to solve a problem, and you can find an analogy in this fact.
+## Integration with Development Workflow
 
-### Limits of interactions with models
+### Build Integration
+- Integrate ADR generation into build process
+- Validate documentation completeness
+- Generate unified documentation site
 
-Models are able to generate code but they cannot run code with your local data. To address this limitation, you can observe that a few prompts provide scripts to bridge the gap on the model side.
+### Git Hooks
+- Remind developers to update documentation
+- Validate ADR status consistency
+- Check for missing architectural decisions
 
-## Contribute
+### IDE Templates
+- Quick ADR creation templates
+- Javadoc snippet generation
+- Cross-reference helpers
 
-If you have great ideas, [read the following document](./CONTRIBUTING.md) for contributing.
+## Best Practices
 
-## Examples
+### For Javadoc
+- Write from the user's perspective
+- Keep documentation current with code changes
+- Use active voice and present tense
+- Include usage examples for public APIs
 
-The repository includes [a collection of examples](./examples/) where you can explore the possibilities from this collection of System prompts designed for Java.
+### For ADRs
+- Capture decisions when they're fresh
+- Focus on the "why" rather than the "what"
+- Update ADR status as decisions evolve
+- Keep ADRs concise but comprehensive
+- Link related decisions and code
 
-## Architectural decision records, ADR
+### For Integration
+- Reference ADRs in relevant code documentation
+- Maintain consistency between documentation types
+- Create cross-references between related decisions
+- Archive obsolete decisions appropriately
 
-- [ADR-001: Generate Cursor Rules from XML Files](./documentation/adr/ADR-001-generate-cursor-rules-from-xml-files.md)
-- [ADR-002: Configure Cursor Rules Manual Scope](./documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md)
+## Conversational Prompts
 
-## Changelog
+The rule includes guided prompts to help create comprehensive ADRs:
 
-- Review the [CHANGELOG](./CHANGELOG.md) for further details
+1. **Context**: "What specific problem or challenge are you addressing?"
+2. **Drivers**: "What are the key requirements and constraints?"
+3. **Options**: "What alternatives did you consider?"
+4. **Decision**: "What option did you choose and why?"
+5. **Consequences**: "What are the expected benefits and risks?"
 
-## Java JEPS from Java 8
+## Customization
 
-Java uses JEPs as the vehicle to describe new features to be added to the language. The repository continuously reviews which JEPs could improve any of the cursor rules present in this repository.
+The XML rule can be customized by:
+- Modifying templates for specific organizational needs
+- Adding custom ADR statuses
+- Adjusting conversational prompts
+- Extending cross-reference patterns
+- Customizing file organization structure
 
-- [JEPS List](./documentation/jeps/All-JEPS.md)
+## Version History
 
-## Mentions
+- **v2.0**: Added ADR generation capabilities with conversational assistant
+- **v1.0**: Basic Java documentation generation (original rule)
 
-- https://virtuslab.com/blog/ai/providing-library-documentation/
-
-## References
-
-- https://agents.md/
-- https://www.cursor.com/
-- https://cursor.com/cli
-- https://docs.cursor.com/context/rules
-- https://docs.cursor.com/context/@-symbols/@-cursor-rules
-- https://www.anthropic.com/claude-code
-- https://github.com/features/copilot
-- https://www.jetbrains.com/junie/
-- https://openjdk.org/jeps/0
-
-## Cursor rules ecosystem
-
-- https://github.com/jabrena/pml
-- https://github.com/jabrena/cursor-rules-agile
-- https://github.com/jabrena/cursor-rules-java
-- https://github.com/jabrena/cursor-rules-spring-boot
-- https://github.com/jabrena/cursor-rules-examples
-- https://github.com/jabrena/plantuml-to-png-cli
-- https://github.com/jabrena/setup-cli
-
-Powered by [Cursor](https://www.cursor.com/) with ❤️ from [Madrid](https://www.google.com/maps/place/Community+of+Madrid,+Madrid/@40.4983324,-6.3162283,8z/data=!3m1!4b1!4m6!3m5!1s0xd41817a40e033b9:0x10340f3be4bc880!8m2!3d40.4167088!4d-3.5812692!16zL20vMGo0eGc?entry=ttu&g_ep=EgoyMDI1MDgxOC4wIKXMDSoASAFQAw%3D%3D)
+This enhanced rule bridges the gap between code-level documentation and architectural decision documentation, providing a comprehensive approach to technical documentation in Java projects.

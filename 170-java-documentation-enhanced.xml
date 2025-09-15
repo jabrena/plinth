@@ -1,0 +1,313 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rule id="170-java-documentation" name="Java Documentation and ADR Generator" version="2.0">
+    <description>
+        Enhanced Java documentation rule that supports generating comprehensive documentation 
+        including Architecture Decision Records (ADRs) for Java projects. This rule combines 
+        traditional Javadoc generation with modern architectural documentation practices.
+    </description>
+    
+    <triggers>
+        <trigger type="file_extension">java</trigger>
+        <trigger type="keyword">documentation</trigger>
+        <trigger type="keyword">javadoc</trigger>
+        <trigger type="keyword">adr</trigger>
+        <trigger type="keyword">architecture decision</trigger>
+        <trigger type="keyword">decision record</trigger>
+    </triggers>
+    
+    <sections>
+        <!-- Java Documentation Section -->
+        <section id="java-documentation" name="Java Documentation Generation">
+            <instructions>
+                <instruction priority="high">
+                    Generate comprehensive Javadoc comments for Java classes, methods, and fields following these guidelines:
+                    - Use proper Javadoc syntax with /** */ comment blocks
+                    - Include @param, @return, @throws, @since, @author, @version tags where appropriate
+                    - Provide clear, concise descriptions of functionality
+                    - Document complex algorithms and business logic
+                    - Include usage examples for public APIs
+                    - Follow Oracle's Javadoc conventions
+                </instruction>
+                
+                <instruction priority="medium">
+                    For package-level documentation:
+                    - Create package-info.java files with package descriptions
+                    - Document package-level design decisions
+                    - Explain package relationships and dependencies
+                </instruction>
+                
+                <instruction priority="medium">
+                    For class-level documentation:
+                    - Document class purpose and responsibilities
+                    - Explain design patterns used
+                    - Document thread safety considerations
+                    - Include invariants and preconditions
+                </instruction>
+            </instructions>
+            
+            <templates>
+                <template name="class-javadoc">
+                    <![CDATA[
+/**
+ * {CLASS_DESCRIPTION}
+ * 
+ * <p>{DETAILED_DESCRIPTION}</p>
+ * 
+ * <p><strong>Thread Safety:</strong> {THREAD_SAFETY_INFO}</p>
+ * 
+ * @author {AUTHOR}
+ * @since {VERSION}
+ * @see {RELATED_CLASSES}
+ */
+                    ]]>
+                </template>
+                
+                <template name="method-javadoc">
+                    <![CDATA[
+/**
+ * {METHOD_DESCRIPTION}
+ * 
+ * <p>{DETAILED_DESCRIPTION}</p>
+ * 
+ * @param {PARAMETER_NAME} {PARAMETER_DESCRIPTION}
+ * @return {RETURN_DESCRIPTION}
+ * @throws {EXCEPTION_TYPE} {EXCEPTION_DESCRIPTION}
+ * @since {VERSION}
+ */
+                    ]]>
+                </template>
+            </templates>
+        </section>
+        
+        <!-- Architecture Decision Records Section -->
+        <section id="adr-generation" name="Architecture Decision Records Generation">
+            <instructions>
+                <instruction priority="high">
+                    When architectural decisions are discussed or when explicitly requested, 
+                    generate Architecture Decision Records (ADRs) using the conversational 
+                    assistant approach. Guide users through the decision-making process by 
+                    asking relevant questions and structuring their responses into a formal ADR.
+                </instruction>
+                
+                <instruction priority="high">
+                    ADR Generation Process:
+                    1. Identify the architectural decision context
+                    2. Guide user through decision drivers and constraints
+                    3. Help evaluate considered options
+                    4. Document the final decision and rationale
+                    5. Capture consequences and trade-offs
+                    6. Format as structured markdown document
+                </instruction>
+                
+                <instruction priority="medium">
+                    ADR Conversational Prompts:
+                    - "What problem or challenge prompted this architectural decision?"
+                    - "What are the key requirements and constraints?"
+                    - "What options did you consider?"
+                    - "What factors influenced your decision?"
+                    - "What are the expected benefits and risks?"
+                    - "How will this decision impact the system?"
+                </instruction>
+            </instructions>
+            
+            <conversational_assistant>
+                <prompt_sequence>
+                    <prompt id="context-gathering" order="1">
+                        Let me help you create an Architecture Decision Record (ADR). 
+                        
+                        First, let's establish the context:
+                        - What specific problem or challenge are you addressing?
+                        - What triggered the need for this decision?
+                        - What are the key stakeholders involved?
+                    </prompt>
+                    
+                    <prompt id="decision-drivers" order="2">
+                        Now, let's identify the decision drivers:
+                        - What are the functional requirements?
+                        - What are the quality attributes (performance, security, scalability, etc.)?
+                        - What constraints do you have (time, budget, technology, skills)?
+                        - What assumptions are you making?
+                    </prompt>
+                    
+                    <prompt id="options-analysis" order="3">
+                        Let's explore the options you considered:
+                        - What alternatives did you evaluate?
+                        - What are the pros and cons of each option?
+                        - Did you create any prototypes or proof of concepts?
+                        - What criteria did you use to evaluate options?
+                    </prompt>
+                    
+                    <prompt id="decision-rationale" order="4">
+                        Now for the decision itself:
+                        - What option did you choose?
+                        - Why did you choose this option over the others?
+                        - What key factors tipped the balance?
+                        - Who was involved in making this decision?
+                    </prompt>
+                    
+                    <prompt id="consequences" order="5">
+                        Finally, let's document the consequences:
+                        - What are the positive outcomes you expect?
+                        - What risks or negative consequences might occur?
+                        - What follow-up actions are needed?
+                        - How will you measure success?
+                    </prompt>
+                </prompt_sequence>
+            </conversational_assistant>
+            
+            <templates>
+                <template name="adr-template">
+                    <![CDATA[
+# ADR-{NUMBER}: {TITLE}
+
+## Status
+{STATUS}
+
+## Context
+{CONTEXT_DESCRIPTION}
+
+### Problem Statement
+{PROBLEM_STATEMENT}
+
+### Decision Drivers
+{DECISION_DRIVERS_LIST}
+
+## Considered Options
+{OPTIONS_LIST}
+
+## Decision
+{CHOSEN_OPTION}
+
+### Rationale
+{DECISION_RATIONALE}
+
+## Consequences
+
+### Positive
+{POSITIVE_CONSEQUENCES}
+
+### Negative
+{NEGATIVE_CONSEQUENCES}
+
+### Neutral
+{NEUTRAL_CONSEQUENCES}
+
+## Implementation Notes
+{IMPLEMENTATION_NOTES}
+
+## Follow-up Actions
+{FOLLOW_UP_ACTIONS}
+
+---
+**Date:** {DATE}
+**Stakeholders:** {STAKEHOLDERS}
+**Status:** {STATUS}
+                    ]]>
+                </template>
+                
+                <template name="adr-index-entry">
+                    <![CDATA[
+- [ADR-{NUMBER}](./{FILENAME}) - {TITLE} ({STATUS})
+                    ]]>
+                </template>
+            </templates>
+            
+            <adr_statuses>
+                <status value="proposed">Under consideration</status>
+                <status value="accepted">Approved and being implemented</status>
+                <status value="implemented">Fully implemented</status>
+                <status value="deprecated">No longer recommended</status>
+                <status value="superseded">Replaced by a newer decision</status>
+            </adr_statuses>
+        </section>
+        
+        <!-- Integration Section -->
+        <section id="integration" name="Documentation Integration">
+            <instructions>
+                <instruction priority="high">
+                    Integrate ADRs with Java documentation by:
+                    - Referencing relevant ADRs in class and package documentation
+                    - Linking architectural decisions to code implementation
+                    - Maintaining consistency between code comments and ADRs
+                    - Creating cross-references between related decisions
+                </instruction>
+                
+                <instruction priority="medium">
+                    Maintain documentation consistency:
+                    - Update related documentation when ADRs change
+                    - Ensure code comments reflect current architectural decisions
+                    - Keep ADR index updated with new decisions
+                    - Archive obsolete decisions appropriately
+                </instruction>
+            </instructions>
+            
+            <cross_references>
+                <reference_pattern>
+                    <![CDATA[
+/**
+ * Implementation follows architectural decision documented in ADR-{NUMBER}.
+ * @see <a href="../docs/adrs/adr-{NUMBER}-{TITLE_SLUG}.md">ADR-{NUMBER}: {TITLE}</a>
+ */
+                    ]]>
+                </reference_pattern>
+            </cross_references>
+        </section>
+    </sections>
+    
+    <best_practices>
+        <practice category="javadoc">
+            Write documentation from the perspective of someone who needs to use or maintain the code
+        </practice>
+        <practice category="javadoc">
+            Keep documentation up-to-date with code changes
+        </practice>
+        <practice category="javadoc">
+            Use active voice and present tense
+        </practice>
+        <practice category="adr">
+            Capture decisions when they are fresh in your mind
+        </practice>
+        <practice category="adr">
+            Focus on the "why" rather than the "what"
+        </practice>
+        <practice category="adr">
+            Update ADR status as decisions evolve
+        </practice>
+        <practice category="adr">
+            Keep ADRs concise but comprehensive
+        </practice>
+    </best_practices>
+    
+    <file_organization>
+        <structure>
+            <directory name="docs">
+                <directory name="adrs">
+                    <file name="README.md">ADR index and overview</file>
+                    <file pattern="adr-{NUMBER}-{TITLE_SLUG}.md">Individual ADR files</file>
+                </directory>
+                <directory name="api">
+                    <file name="javadoc">Generated Javadoc documentation</file>
+                </directory>
+            </directory>
+            <directory name="src">
+                <directory name="main">
+                    <directory name="java">
+                        <file name="package-info.java">Package documentation</file>
+                    </directory>
+                </directory>
+            </directory>
+        </structure>
+    </file_organization>
+    
+    <automation_suggestions>
+        <suggestion type="build_integration">
+            Integrate ADR generation into build process to ensure documentation stays current
+        </suggestion>
+        <suggestion type="git_hooks">
+            Use git hooks to remind developers to update documentation when making significant changes
+        </suggestion>
+        <suggestion type="template_automation">
+            Create IDE templates for quick ADR and Javadoc generation
+        </suggestion>
+    </automation_suggestions>
+</rule>
