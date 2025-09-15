@@ -14,9 +14,9 @@ Options:
 
 Options:
 
-- Java 17 (LTS - recommended for new projects)
+- Java 17 (LTS - stable for production)
 - Java 21 (LTS - latest LTS version)
-- Java 24 (latest features)
+- Java 24 (latest features - recommended for new projects)
 - Other (specify version)
 
 ---

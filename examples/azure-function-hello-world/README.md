@@ -21,7 +21,7 @@ A simple Java-based Azure Function that demonstrates HTTP-triggered functions wi
 - **Function App Name**: Configured in `pom.xml` as `azure-function-hello-world-${maven.build.timestamp}`
 - **Resource Group**: `java-functions-group`
 - **Region**: `westus`
-- **Runtime**: Java 17 on Linux
+- **Runtime**: Java 24 on Linux
 
 ## Resources
 
