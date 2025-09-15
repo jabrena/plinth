@@ -1217,7 +1217,8 @@ public class VirtualThreadExample {
 
     // Structured concurrency for managing related tasks
     public String fetchUserDataWithStructuredConcurrency(String userId) throws Exception {
-        try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+        // Use static factory method instead of constructor
+        try (var scope = StructuredTaskScope.open()) {
 
             Future<String> profile = scope.fork(() -> fetchUserProfile(userId));
             Future<String> preferences = scope.fork(() -> fetchUserPreferences(userId));
@@ -1356,8 +1357,10 @@ public class BadVirtualThreadUsage {
             <example-description>
                 <![CDATA[
                 Use `StructuredTaskScope` to simplify the management of multiple related concurrent tasks as a single unit of work, improving error handling, cancellation, and resource management.
+                - Use the static `StructuredTaskScope.open()` factory method instead of constructors.
                 - Use `StructuredTaskScope.ShutdownOnFailure()` for fail-fast behavior.
                 - Use `StructuredTaskScope.ShutdownOnSuccess()` for racing tasks.
+                - Implement `Joiner.onTimeout()` method for custom timeout handling.
                 - Ensure proper resource cleanup with try-with-resources.
                 - Handle task results and exceptions appropriately.
                 - Combine structured concurrency with virtual threads for optimal performance.
@@ -1374,7 +1377,8 @@ class StructuredConcurrencyExample {
 
     // Fetch user data from multiple sources
     public UserData fetchCompleteUserData(String userId) throws Exception {
-        try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+        // Use static factory method instead of constructor
+        try (var scope = StructuredTaskScope.open()) {
 
             // Fork multiple related tasks
             Future<String> profileFuture = scope.fork(() -> fetchUserProfile(userId));
@@ -1396,7 +1400,8 @@ class StructuredConcurrencyExample {
 
     // Race multiple service calls and return first success
     public String fetchDataFromAnySource(String query) throws Exception {
-        try (var scope = new StructuredTaskScope.ShutdownOnSuccess<String>()) {
+        // Use static factory method for ShutdownOnSuccess
+        try (var scope = StructuredTaskScope.open()) {
 
             // Fork competing tasks
             scope.fork(() -> fetchFromPrimaryService(query));
@@ -1411,7 +1416,8 @@ class StructuredConcurrencyExample {
 
     // Batch processing with structured concurrency
     public List<String> processBatch(List<String> items) throws Exception {
-        try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+        // Use static factory method instead of constructor
+        try (var scope = StructuredTaskScope.open()) {
 
             List<Future<String>> futures = items.stream()
                 .map(item -> scope.fork(() -> processItem(item)))
@@ -1474,6 +1480,57 @@ class StructuredConcurrencyExample {
             Thread.currentThread().interrupt();
         }
         return "Processed: " + item;
+    }
+
+    // Custom Joiner with timeout handling
+    public String fetchWithTimeoutHandling(String query) throws Exception {
+        try (var scope = StructuredTaskScope.open(new CustomTimeoutJoiner<String>())) {
+
+            scope.fork(() -> {
+                try { Thread.sleep(5000); } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException(e);
+                }
+                return "Slow result for: " + query;
+            });
+
+            scope.fork(() -> {
+                try { Thread.sleep(2000); } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException(e);
+                }
+                return "Fast result for: " + query;
+            });
+
+            scope.join();
+            return scope.result();
+        }
+    }
+
+    // Custom Joiner implementation with timeout handling
+    static class CustomTimeoutJoiner<T> implements StructuredTaskScope.Joiner<T, T> {
+        private volatile T result;
+
+        @Override
+        public boolean onFork(StructuredTaskScope.Subtask<? extends T> subtask) {
+            return true; // Continue with all subtasks
+        }
+
+        @Override
+        public T onJoin() {
+            return result;
+        }
+
+        @Override
+        public T onTimeout() {
+            // Provide default result when timeout occurs
+            return (T) "Default result due to timeout";
+        }
+
+        @Override
+        public boolean needsCompletion() {
+            return result == null;
+        }
     }
 
     record UserData(String profile, String settings, String orders) {}
@@ -1555,12 +1612,14 @@ class BadStructuredConcurrency {
             </example-header>
             <example-description>
                 <![CDATA[
-                Prefer `ScopedValue` over `ThreadLocal` for sharing immutable data robustly and efficiently across tasks within a dynamically bounded scope, especially when working with virtual threads.
+                Prefer `ScopedValue` over `ThreadLocal` for sharing immutable data robustly and efficiently across tasks within a dynamically bounded scope, especially when working with virtual threads. Scoped Values became stable in Java 25 (JEP 506).
                 - Use `ScopedValue.newInstance()` to create scoped value instances.
-                - Use `ScopedValue.where()` to establish scoped bindings.
-                - Prefer scoped values for immutable context data.
-                - Avoid `ThreadLocal` with virtual threads due to potential memory issues.
-                - Use scoped values for request-scoped data in web applications.
+                - Use `ScopedValue.where()` to establish scoped bindings with automatic cleanup.
+                - Combine multiple scoped values using method chaining for complex contexts.
+                - Prefer scoped values for immutable context data that needs to flow through call chains.
+                - Avoid `ThreadLocal` with virtual threads due to potential memory issues and lack of structured cleanup.
+                - Use scoped values for request-scoped data in web applications and distributed tracing.
+                - Leverage automatic inheritance in structured concurrency and virtual threads.
                 ]]>
             </example-description>
             <code-examples>
