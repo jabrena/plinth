@@ -11,7 +11,7 @@
 
     <goal>
         This rule provides a modular, step-based approach to generating comprehensive Java project documentation
-        including README.md files, package-info.java files, Javadoc, UML sequence diagrams, UML class diagrams, and C4 model diagrams.
+        including README.md files, package-info.java files, and Javadoc.
         Each step has a single responsibility and clear dependencies on user answers, making the documentation process more maintainable and user-friendly.
     </goal>
 
@@ -32,7 +32,7 @@
     <instructions>
         <steps>
             <step number="1">
-                <step-title>Documentation &amp; Diagrams Preferences Assessment</step-title>
+                <step-title>Documentation Preferences Assessment</step-title>
                 <step-content>
                     **IMPORTANT**: Ask these questions to understand the documentation requirements before generating any documentation. Based on the answers, you will conditionally execute only relevant subsequent steps.
 
@@ -44,7 +44,7 @@
                     <step-constraint-list>
                         <step-constraint>**GLOBAL ORDERING**: The first user-facing question in this rule MUST be the template's "Question 1: What do you want to generate?" asked at the start of Step 1</step-constraint>
                         <step-constraint>**DEPENDENCIES**: None</step-constraint>
-                        <step-constraint>**CRITICAL**: You MUST ask the exact questions from the template in strict order within each path (Documentation first, then Diagrams)</step-constraint>
+                        <step-constraint>**CRITICAL**: You MUST ask the exact questions from the template in strict order for documentation path only</step-constraint>
                         <step-constraint>**MUST** read template files fresh using file_search and read_file tools before asking questions</step-constraint>
                         <step-constraint>**MUST NOT** use cached or remembered questions from previous interactions</step-constraint>
                         <step-constraint>**MUST** ask questions ONE BY ONE in the exact order specified in the template</step-constraint>
@@ -53,9 +53,10 @@
                         <step-constraint>**MUST** present the EXACT options listed in the template</step-constraint>
                         <step-constraint>**MUST NOT** ask all questions simultaneously</step-constraint>
                         <step-constraint>**MUST NOT** assume answers or provide defaults</step-constraint>
-                        <step-constraint>**MUST NOT** skip questions or change their order, except when a question becomes inapplicable due to a prior "Skip" selection in the same path</step-constraint>
+                        <step-constraint>**MUST NOT** skip questions or change their order, except when a question becomes inapplicable due to a prior "Skip" selection</step-constraint>
                         <step-constraint>**MUST** confirm understanding of user selections before proceeding to Step 2</step-constraint>
                         <step-constraint>**GUARD**: If any non-template question was asked earlier by mistake, RESTART the question flow from "Question 1" and ignore prior answers</step-constraint>
+                        <step-constraint>**FOCUS**: Only ask documentation-related questions, skip any diagram-related questions from the template</step-constraint>
                     </step-constraint-list>
                 </step-constraints>
             </step>
@@ -281,461 +282,137 @@ After generating package-info.java files:
                 </step-constraints>
             </step>
             <step number="4">
-                <step-title>UML Sequence Diagram Generation</step-title>
-                <step-content>
-**Purpose**: Generate UML sequence diagrams to illustrate key application workflows and interactions based on code analysis and user preferences.
+                <step-title>Javadoc Generation Enhancement</step-title>
+                <step-content><![CDATA[
+**Purpose**: Enhance existing Javadoc comments and generate comprehensive Javadoc documentation for public APIs based on code analysis and user preferences.
 
-**Dependencies**: Only execute if the user selected UML sequence diagrams in Step 1. Requires completion of Step 1.
+**Dependencies**: Only execute if user selected Javadoc enhancement in Step 1. Requires completion of Step 1.
 
-**CONDITIONAL EXECUTION**: Execute this step only if the user selected "UML sequence diagrams" in the consolidated diagrams selection question in Step 1.
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Javadoc enhancement" or "All options: README.md, package-info.java & Javadoc files" in Step 1.
 
 ## Implementation Strategy
 
-Use the following template and guidelines:
+1. **Identify classes and methods** that need Javadoc enhancement
+2. **Analyze existing documentation** to understand current state
+3. **Generate comprehensive Javadoc** based on user's detail level preference
+4. **Handle existing documentation** according to user's file handling strategy
 
-<xi:include href="fragments/java-uml-sequence-diagram-template.md" parse="text"/>
+## Javadoc Analysis Process
 
-## Workflow Analysis Process
+**For each Java file found:**
 
-**For each applicable diagram type:**
+1. **Scan for missing or incomplete Javadoc**:
+   - Public classes without class-level documentation
+   - Public methods without method documentation
+   - Parameters without @param tags
+   - Return values without @return tags
+   - Exceptions without @throws tags
 
-1. **Main Application Flows**:
-   - Analyze application entry points and main use cases
-   - Identify authentication and authorization flows
-   - Document core business process workflows
-   - Include user registration, login, and main feature usage
+2. **Analyze method signatures and implementations**:
+   - Understand method purpose from implementation
+   - Identify parameters and their roles
+   - Determine return value meanings
+   - Identify checked and unchecked exceptions
 
-2. **API Interactions**:
-   - Analyze REST endpoints and their implementations
-   - Trace request/response patterns through controllers to services
-   - Document API authentication and error handling
-   - Include typical CRUD operations and data flows
+3. **Generate documentation level** based on user preference:
 
-3. **Complex Business Logic Flows**:
-   - Identify multi-step business processes
-   - Analyze workflow orchestration and state management
-   - Document transaction boundaries and data consistency
-   - Include batch processing and background job flows
+### Basic Level
+```java
+/**
+ * [Brief description of class/method purpose].
+ * 
+ * @param paramName [parameter description]
+ * @return [return value description]
+ * @throws ExceptionType [exception description]
+ */
+```
 
-## Diagram Generation Guidelines
+### Detailed Level
+```java
+/**
+ * [Comprehensive description of class/method purpose and behavior].
+ * 
+ * <p>[Additional context about usage patterns, side effects, or important considerations]
+ * 
+ * <h3>Usage Example:</h3>
+ * <pre>{@code
+ * // Example code showing typical usage
+ * }</pre>
+ * 
+ * @param paramName [detailed parameter description with constraints and expectations]
+ * @return [detailed return value description with possible values and meanings]
+ * @throws ExceptionType [detailed exception description with conditions that trigger it]
+ * @since [version if available]
+ * @see [related classes or methods]
+ */
+```
 
-1. **Use PlantUML syntax** for sequence diagrams to ensure compatibility and renderability
-2. **Analyze actual code paths** using codebase_search to ensure accuracy
-3. **Include realistic method names and parameters** from the actual codebase
-4. **Show alternative flows** (success/failure scenarios) using alt fragments
-5. **Document error handling** and exception flows where appropriate
-6. **Use proper naming conventions** matching the actual codebase
+### Minimal Level
+```java
+/**
+ * [One-line description of purpose].
+ * @param paramName [brief parameter description]
+ * @return [brief return description]
+ */
+```
 
-## Integration Strategy
+## File Handling Strategy
 
-**Based on user documentation preferences:**
+**Based on user selection in Step 1:**
 
-1. **README.md Integration** (if README generation was selected):
-   - Add "Architecture Overview" or "How It Works" section
-   - Include sequence diagrams with contextual explanations
-   - Link diagrams to relevant code sections
-
-2. **Separate Documentation Files**:
-   - Create dedicated diagram files (diagrams.md or architecture.md)
-   - Organize diagrams by workflow type or business domain
-   - Include comprehensive explanations for each diagram
-
-3. **Package Documentation Integration** (if package-info.java generation was selected):
-   - Reference relevant sequence diagrams in package descriptions
-   - Include ASCII art versions for simple flows
-   - Link to external diagram files when appropriate
+- **Overwrite**: Replace existing Javadoc completely (after creating backup)
+- **Add new information**: Enhance existing Javadoc by adding missing tags and descriptions
+- **Create backup**: Save original files with .backup extension before modifying
+- **Skip files**: Only add Javadoc where none exists
 
 ## Content Quality Requirements
 
-1. **Accuracy**: Diagrams must reflect actual code implementation
-2. **Completeness**: Cover main user journeys and critical paths
-3. **Clarity**: Include proper labels, participants, and message descriptions
-4. **Maintainability**: Use consistent naming and formatting conventions
+1. **Each Javadoc comment must accurately describe the actual method/class behavior**
+2. **Include all necessary @param, @return, and @throws tags**
+3. **Provide practical usage examples for complex methods**
+4. **Use proper Javadoc formatting and HTML tags**
+5. **Ensure descriptions help other developers understand the API**
+
+## Implementation Guidelines
+
+1. **Focus on public and protected APIs first**
+2. **Use consistent documentation style across all classes**
+3. **Include cross-references using {@link} tags when appropriate**
+4. **Document preconditions, postconditions, and side effects**
+5. **Validate that all generated Javadoc compiles and renders correctly**
 
 ## Validation
 
-After generating sequence diagrams:
-1. **Verify PlantUML syntax** for proper rendering
-2. **Validate against codebase** to ensure accuracy
-3. **Test diagram readability** and comprehensiveness
-4. **Ensure proper integration** with other documentation
+After enhancing Javadoc:
+- Verify proper Javadoc syntax and HTML formatting
+- Ensure all @param tags match actual parameters
+- Check that @return tags are present for non-void methods
+- Confirm @throws tags match declared exceptions
+- Validate that Javadoc generation works: `./mvnw javadoc:javadoc`
+                ]]>
                 </step-content>
                 <step-constraints>
                     <step-constraint-list>
-                        <step-constraint>**MUST** only execute if "UML sequence diagrams" was selected in Step 1</step-constraint>
-                        <step-constraint>**MUST** use codebase_search extensively to analyze actual code flows</step-constraint>
-                        <step-constraint>**MUST** generate accurate diagrams that reflect real implementation</step-constraint>
-                        <step-constraint>**MUST** use proper PlantUML sequence diagram syntax</step-constraint>
-                        <step-constraint>**MUST** include alternative flows and error handling where appropriate</step-constraint>
-                        <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
-                        <step-constraint>**MUST** integrate diagrams appropriately with other generated documentation</step-constraint>
-                        <step-constraint>**MUST NOT** generate generic or templated diagrams without code analysis</step-constraint>
-                        <step-constraint>**MUST** validate PlantUML syntax for renderability</step-constraint>
+                        <step-constraint>**MUST** only execute if Javadoc enhancement was selected in Step 1</step-constraint>
+                        <step-constraint>**MUST** analyze all public and protected APIs comprehensively</step-constraint>
+                        <step-constraint>**MUST** generate accurate descriptions that reflect actual method behavior</step-constraint>
+                        <step-constraint>**MUST** follow user's detail level preference from Step 1</step-constraint>
+                        <step-constraint>**MUST** follow user's file handling preference from Step 1</step-constraint>
+                        <step-constraint>**MUST** use proper Javadoc formatting and syntax</step-constraint>
+                        <step-constraint>**MUST** create backups if overwriting existing documentation</step-constraint>
+                        <step-constraint>**MUST** include all necessary @param, @return, and @throws tags</step-constraint>
+                        <step-constraint>**MUST** ensure all generated Javadoc compiles without errors</step-constraint>
+                        <step-constraint>**MUST** validate Javadoc generation with `./mvnw javadoc:javadoc`</step-constraint>
+                        <step-constraint>**MUST NOT** use generic or templated descriptions</step-constraint>
                     </step-constraint-list>
                 </step-constraints>
             </step>
             <step number="5">
-                <step-title>UML Class Diagram Generation</step-title>
-                <step-content>
-**Purpose**: Generate UML class diagrams to illustrate the structure, relationships, and design patterns within Java packages and modules based on code analysis and user preferences.
-
-**Dependencies**: Only execute if the user selected UML class diagrams in Step 1. Requires completion of Step 1.
-
-**CONDITIONAL EXECUTION**: Execute this step only if the user selected "UML class diagrams" in the consolidated diagrams selection question in Step 1.
-
-## Implementation Strategy
-
-Use the following template and guidelines:
-
-<xi:include href="fragments/java-uml-class-diagram-template.md" parse="text"/>
-
-## Package Analysis Process
-
-**For each selected package scope:**
-
-1. **All Packages** (if selected):
-   - Analyze complete project structure across all modules
-   - Identify core domain packages and supporting infrastructure
-   - Generate high-level architecture diagrams showing package relationships
-   - Create detailed diagrams for each significant package
-
-2. **Core Business Logic Packages** (if selected):
-   - Focus on domain models and business service classes
-   - Analyze entities, value objects, and business rules
-   - Document service layer patterns and business workflows
-   - Include repository patterns and data access abstractions
-
-3. **Specific Packages** (if selected):
-   - Analyze user-specified packages in detail
-   - Generate focused diagrams showing class relationships within packages
-   - Include cross-package dependencies and interactions
-   - Document package-specific design patterns and architectures
-
-## Class Analysis Guidelines
-
-1. **Identify Class Categories**:
-   - Domain entities and value objects (core business concepts)
-   - Service classes (business logic and orchestration)
-   - Repository classes (data access patterns)
-   - Controller classes (API and presentation layer)
-   - Configuration and infrastructure classes
-   - Utility and helper classes
-
-2. **Analyze Relationships**:
-   - Inheritance hierarchies (extends/implements)
-   - Composition and aggregation relationships
-   - Interface implementations and abstractions
-   - Dependency injection patterns
-   - Design pattern implementations
-
-3. **Determine Appropriate Detail Level**:
-   - Include key methods and attributes for business logic
-   - Show important annotations (@Entity, @Service, @Repository, @Controller)
-   - Document method signatures for public APIs
-   - Include visibility modifiers and type information
-
-## Diagram Generation Strategy
-
-**Based on user documentation preferences:**
-
-1. **README.md Integration** (if README generation was selected):
-   - Add "Architecture" or "System Design" section
-   - Include high-level class diagrams showing main components
-   - Focus on architectural patterns and key relationships
-   - Link diagrams to relevant code sections
-
-2. **Package Documentation Integration** (if package-info.java generation was selected):
-   - Include package-specific class diagrams
-   - Show intra-package relationships and patterns
-   - Document package responsibilities and boundaries
-   - Reference cross-package dependencies
-
-3. **Separate Architecture Documentation**:
-   - Create dedicated architecture.md or design.md files
-   - Organize diagrams by business domain or technical layer
-   - Include both overview and detailed diagrams
-   - Provide comprehensive design documentation
-
-## Content Quality Requirements
-
-1. **Structural Accuracy**: Diagrams must reflect actual class structure and relationships
-2. **Relationship Correctness**: Show accurate inheritance, composition, and dependency relationships
-3. **Appropriate Abstraction**: Include relevant details without overwhelming complexity
-4. **Design Pattern Documentation**: Highlight important architectural and design patterns
-5. **Clear Organization**: Use packages and grouping for logical organization
-
-## Validation
-
-After generating class diagrams:
-1. **Verify PlantUML syntax** for proper rendering
-2. **Validate against codebase** to ensure structural accuracy
-3. **Check relationship correctness** (inheritance, composition, dependencies)
-4. **Ensure appropriate detail level** for intended audience
-5. **Test diagram integration** with other documentation
-                </step-content>
-                <step-constraints>
-                    <step-constraint-list>
-                        <step-constraint>**MUST** only execute if "UML class diagrams" was selected in Step 1</step-constraint>
-                        <step-constraint>**MUST** use codebase_search extensively to analyze class structure and relationships</step-constraint>
-                        <step-constraint>**MUST** generate accurate diagrams that reflect actual class hierarchy and relationships</step-constraint>
-                        <step-constraint>**MUST** use proper PlantUML class diagram syntax</step-constraint>
-                        <step-constraint>**MUST** include appropriate level of detail based on user selection</step-constraint>
-                        <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
-                        <step-constraint>**MUST** integrate diagrams appropriately with other generated documentation</step-constraint>
-                        <step-constraint>**MUST** show accurate inheritance, composition, and association relationships</step-constraint>
-                        <step-constraint>**MUST** include important annotations and design patterns</step-constraint>
-                        <step-constraint>**MUST NOT** generate generic or templated diagrams without actual code analysis</step-constraint>
-                        <step-constraint>**MUST** validate PlantUML syntax for renderability</step-constraint>
-                    </step-constraint-list>
-                </step-constraints>
-            </step>
-            <step number="6">
-                <step-title>C4 Model Diagram Generation</step-title>
-                <step-content>
-**Purpose**: Generate C4 model diagrams to visualize system architecture at different levels of abstraction (Context, Container, Component, and Code) based on code analysis and user preferences.
-
-**Dependencies**: Only execute if the user selected C4 model diagrams in Step 1. Requires completion of Step 1.
-
-**CONDITIONAL EXECUTION**: Execute this step only if the user selected "C4 model diagrams" in the consolidated diagrams selection question in Step 1.
-
-## Implementation Strategy
-
-Use the following template and guidelines:
-
-<xi:include href="fragments/java-c4-diagram-template.md" parse="text"/>
-
-## C4 Model Analysis Process
-
-**For each selected diagram level:**
-
-1. **Complete C4 Model** (if selected):
-   - Generate all four levels of C4 diagrams
-   - Start with System Context for business overview
-   - Create Container diagrams for deployment architecture
-   - Develop Component diagrams for logical structure
-   - Add Code diagrams for critical implementations
-
-2. **High-Level Diagrams Only** (if selected):
-   - Focus on System Context and Container levels
-   - Emphasize business context and system boundaries
-   - Show technology choices and deployment units
-   - Document external integrations and dependencies
-
-3. **Detailed Diagrams Only** (if selected):
-   - Focus on Component and Code levels
-   - Analyze internal system structure
-   - Document component responsibilities and interfaces
-   - Show implementation patterns and key classes
-
-## Architecture Analysis Guidelines
-
-1. **System Context Analysis**:
-   - Identify all external users and personas
-   - Map external systems and third-party integrations
-   - Define clear system boundaries and responsibilities
-   - Document business capabilities and value propositions
-
-2. **Container Analysis**:
-   - Identify deployable units (web apps, services, databases)
-   - Analyze technology stack and framework choices
-   - Document communication protocols and API contracts
-   - Map deployment and infrastructure requirements
-
-3. **Component Analysis**:
-   - Identify logical components within each container
-   - Analyze component responsibilities and boundaries
-   - Document inter-component communication patterns
-   - Map business capabilities to technical components
-
-4. **Code Analysis**:
-   - Focus on architecturally significant components
-   - Show key classes, interfaces, and design patterns
-   - Document important implementation decisions
-   - Illustrate complex algorithmic or business logic
-
-## Integration Strategy
-
-**Based on user documentation preferences:**
-
-1. **README.md Integration** (if README generation was selected):
-   - Add "System Architecture" section with Context diagram
-   - Include "Technical Architecture" with Container diagram
-   - Focus on high-level system overview and business context
-   - Link to detailed architectural documentation
-
-2. **Dedicated Architecture Documentation**:
-   - Create comprehensive architecture.md files
-   - Include complete C4 model with all selected levels
-   - Organize diagrams by abstraction level and business domain
-   - Provide detailed explanations and architectural decisions
-
-3. **Module-Specific Documentation**:
-   - Include Component diagrams in module README files
-   - Show how modules fit into overall system architecture
-   - Document module interfaces and dependencies
-   - Reference Code diagrams for complex implementations
-
-## Content Quality Requirements
-
-1. **Architectural Accuracy**: Diagrams must reflect actual system architecture and deployment
-2. **Business Context**: Include real users, use cases, and business value
-3. **Technical Precision**: Show accurate technology choices, protocols, and integrations
-4. **Appropriate Abstraction**: Each level should provide appropriate detail for its audience
-5. **Clear Relationships**: Document accurate data flows and interaction patterns
-
-## Validation
-
-After generating C4 diagrams:
-1. **Verify PlantUML syntax** with C4-PlantUML library compatibility
-2. **Validate architectural accuracy** against actual system implementation
-3. **Check abstraction appropriateness** for each diagram level
-4. **Ensure business context accuracy** with stakeholder needs
-5. **Test diagram integration** with documentation structure
-6. **Verify visual clarity** and layout effectiveness
-                </step-content>
-                <step-constraints>
-                    <step-constraint-list>
-                        <step-constraint>**MUST** only execute if "C4 model diagrams" was selected in Step 1</step-constraint>
-                        <step-constraint>**MUST** use codebase_search extensively to analyze system architecture</step-constraint>
-                        <step-constraint>**MUST** generate accurate diagrams that reflect actual system structure</step-constraint>
-                        <step-constraint>**MUST** use proper PlantUML syntax with C4-PlantUML library</step-constraint>
-                        <step-constraint>**MUST** include appropriate abstraction level based on user selection</step-constraint>
-                        <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
-                        <step-constraint>**MUST** integrate diagrams appropriately with other generated documentation</step-constraint>
-                        <step-constraint>**MUST** show accurate business context and user scenarios</step-constraint>
-                        <step-constraint>**MUST** include real technology choices and deployment architecture</step-constraint>
-                        <step-constraint>**MUST NOT** generate generic or templated diagrams without actual architectural analysis</step-constraint>
-                        <step-constraint>**MUST** validate C4-PlantUML syntax for renderability</step-constraint>
-                    </step-constraint-list>
-                </step-constraints>
-            </step>
-            <step number="7">
-                <step-title>UML State Machine Diagram Generation</step-title>
-                <step-content>
-**Purpose**: Generate UML state machine diagrams to illustrate the behavior, lifecycle, and workflows of objects, business processes, and system components based on code analysis and user preferences.
-
-**Dependencies**: Only execute if the user selected UML state machine diagrams in Step 1. Requires completion of Step 1.
-
-**CONDITIONAL EXECUTION**: Execute this step only if the user selected "UML state-machine diagrams" in the consolidated diagrams selection question in Step 1.
-
-## Implementation Strategy
-
-Use the following template and guidelines:
-
-<xi:include href="fragments/java-uml-state-machine-diagram-template.md" parse="text"/>
-
-## State Machine Analysis Process
-
-**For each applicable state machine type:**
-
-1. **Entity Lifecycles** (if selected):
-   - Analyze domain entities with clear state transitions
-   - Identify state-changing methods and business rules
-   - Document entity lifecycle from creation to completion/deletion
-   - Include state validation and transition constraints
-
-2. **Business Workflows** (if selected):
-   - Analyze business process implementations
-   - Identify workflow orchestration patterns
-   - Document approval processes, payment flows, and operational workflows
-   - Include decision points and parallel processing paths
-
-3. **System Behaviors** (if selected):
-   - Analyze system components with operational states
-   - Identify connection management, job processing, and transaction states
-   - Document error handling and recovery mechanisms
-   - Include timeout and retry logic patterns
-
-4. **User Interactions** (if selected):
-   - Analyze UI components with interaction states
-   - Identify form wizards, dialog flows, and navigation patterns
-   - Document user journey state transitions
-   - Include validation and error state handling
-
-## State Machine Generation Guidelines
-
-1. **Use PlantUML syntax** for state machine diagrams to ensure compatibility and renderability
-2. **Analyze actual code implementations** using codebase_search to identify:
-   - Enum classes representing states
-   - State pattern implementations
-   - Workflow orchestration code
-   - Business process state management
-   - Entity lifecycle management methods
-
-3. **Include comprehensive state coverage**:
-   - Initial and final states
-   - All intermediate states with clear purposes
-   - Transition triggers, guards, and actions
-   - Concurrent states where applicable
-   - Error and exception states
-
-4. **Document business logic alignment**:
-   - Ensure state machines reflect actual business rules
-   - Include guard conditions from code validation
-   - Show actions performed during state transitions
-   - Reference actual method names and class structures
-
-## Integration Strategy
-
-**Based on user documentation preferences:**
-
-1. **README.md Integration** (if README generation was selected):
-   - Add "Business Logic" or "System Behavior" section
-   - Include key state machine diagrams with explanations
-   - Focus on user-facing workflows and entity lifecycles
-   - Link diagrams to relevant code sections
-
-2. **Package Documentation Integration** (if package-info.java generation was selected):
-   - Include relevant state machine diagrams in package descriptions
-   - Show how package components participate in state transitions
-   - Reference state machines for stateful entities and services
-   - Document state-related design patterns
-
-3. **Separate Behavioral Documentation**:
-   - Create dedicated behavior.md or workflows.md files
-   - Organize diagrams by business domain or system component
-   - Include comprehensive explanations for each state machine
-   - Provide cross-references between related state machines
-
-## Content Quality Requirements
-
-1. **State Accuracy**: Diagrams must reflect actual object and process lifecycles in the codebase
-2. **Transition Completeness**: Include all valid state transitions with proper triggers and guards
-3. **Business Logic Alignment**: Ensure state machines align with business rules and validation logic
-4. **Implementation Consistency**: Reference actual class names, method names, and enum values
-5. **Documentation Clarity**: Include clear state descriptions and transition explanations
-
-## Validation
-
-After generating state machine diagrams:
-1. **Verify PlantUML syntax** for proper rendering
-2. **Validate against codebase** to ensure state and transition accuracy
-3. **Check business logic alignment** with actual implementation
-4. **Test diagram completeness** covering all significant state transitions
-5. **Ensure proper integration** with other documentation
-                </step-content>
-                <step-constraints>
-                    <step-constraint-list>
-                        <step-constraint>**MUST** only execute if "UML state-machine diagrams" was selected in Step 1</step-constraint>
-                        <step-constraint>**MUST** use codebase_search extensively to analyze actual state implementations</step-constraint>
-                        <step-constraint>**MUST** generate accurate diagrams that reflect real state machine behavior</step-constraint>
-                        <step-constraint>**MUST** use proper PlantUML state machine diagram syntax</step-constraint>
-                        <step-constraint>**MUST** include comprehensive state coverage based on user selection</step-constraint>
-                        <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
-                        <step-constraint>**MUST** integrate diagrams appropriately with other generated documentation</step-constraint>
-                        <step-constraint>**MUST** include guard conditions and transition actions where applicable</step-constraint>
-                        <step-constraint>**MUST** reference actual code structures (enums, classes, methods)</step-constraint>
-                        <step-constraint>**MUST NOT** generate generic or templated diagrams without code analysis</step-constraint>
-                        <step-constraint>**MUST** validate PlantUML syntax for renderability</step-constraint>
-                    </step-constraint-list>
-                </step-constraints>
-            </step>
-            <step number="8">
                 <step-title>Documentation Validation and Summary</step-title>
                 <step-content><![CDATA[
 **Purpose**: Validate all generated documentation and provide a comprehensive summary of changes made.
 
-**Dependencies**: Requires completion of applicable steps (2, 3, 4, 5, 6, and/or 7 based on user selections).
+**Dependencies**: Requires completion of applicable steps (2, 3, and/or 4 based on user selections).
 
 ## Validation Process
 
@@ -745,13 +422,19 @@ After generating state machine diagrams:
 ./mvnw clean compile
 ```
 
-2. **Content Validation**:
+2. **Javadoc Validation**:
+```bash
+# Validate that all Javadoc generates correctly
+./mvnw javadoc:javadoc
+```
+
+3. **Content Validation**:
 - Verify README.md files have proper markdown formatting
 - Ensure all links and references are valid
 - Check that software descriptions accurately reflect the codebase
 - Validate that Javadoc in package-info.java files is syntactically correct
 
-3. **Consistency Validation**:
+4. **Consistency Validation**:
 - Ensure consistent documentation style across all generated files
 - Verify that cross-references between files are accurate
 - Check that naming conventions are followed
@@ -763,19 +446,13 @@ After generating state machine diagrams:
 ### Files Modified/Created:
 - **README.md files**: [List locations and actions taken]
 - **package-info.java files**: [List packages and actions taken]
-- **UML sequence diagrams**: [List diagram files created and workflows documented]
-- **UML class diagrams**: [List diagram files created and packages/classes documented]
-- **UML state machine diagrams**: [List diagram files created and state machines documented]
-- **C4 model diagrams**: [List diagram files created and architecture levels documented]
+- **Javadoc enhancements**: [List classes and methods enhanced]
 - **Backup files**: [List any backup files created]
 
 ### Content Generated:
 - **Software descriptions**: [Summary of main functionality documented]
 - **Package documentation**: [Count and brief overview of packages documented]
-- **UML sequence diagrams**: [Count and types of workflows documented]
-- **UML class diagrams**: [Count and packages/classes documented]
-- **UML state machine diagrams**: [Count and types of state machines documented]
-- **C4 model diagrams**: [Count and architecture levels documented]
+- **API documentation**: [Count and types of methods/classes documented]
 - **Additional sections**: [Any additional sections added like Getting Started, API docs, etc.]
 
 ### Actions Taken:
@@ -789,10 +466,13 @@ After generating state machine diagrams:
 # To view generated documentation
 ls -la README.md
 find . -name "package-info.java" -type f
-find . -name "*.puml" -type f
+find . -name "*.java" -exec grep -l "/**" {} \;
 
 # To validate compilation
 ./mvnw clean compile
+
+# To generate Javadoc HTML
+./mvnw javadoc:javadoc
 
 # To regenerate documentation with different settings
 # Re-run this cursor rule with different preferences
@@ -803,6 +483,7 @@ find . -name "*.puml" -type f
 - Consider adding project-specific details that couldn't be auto-generated
 - Update documentation as code evolves
 - Consider integrating documentation generation into CI/CD pipeline
+- Set up automated Javadoc generation and publishing
 
 ## Final Validation
 
@@ -817,9 +498,10 @@ If validation passes, documentation generation is complete and successful.
                 <step-constraints>
                     <step-constraint-list>
                         <step-constraint>**MUST** run `./mvnw clean compile` to validate package-info.java files</step-constraint>
+                        <step-constraint>**MUST** run `./mvnw javadoc:javadoc` to validate Javadoc generation</step-constraint>
                         <step-constraint>**MUST** provide comprehensive summary of all changes made</step-constraint>
                         <step-constraint>**MUST** validate markdown formatting in README.md files</step-constraint>
-                        <step-constraint>**MUST** ensure Javadoc syntax is correct in all package-info.java files</step-constraint>
+                        <step-constraint>**MUST** ensure Javadoc syntax is correct in all enhanced files</step-constraint>
                         <step-constraint>**MUST** document what files were created, modified, or skipped</step-constraint>
                         <step-constraint>**MUST** provide clear usage instructions for accessing generated documentation</step-constraint>
                         <step-constraint>**MUST** run final `./mvnw clean verify` to ensure project builds successfully</step-constraint>
@@ -831,8 +513,8 @@ If validation passes, documentation generation is complete and successful.
 
     <output-format>
         <output-format-list>
-            <output-format-item>Ask questions one by one following the template exactly in Step 1</output-format-item>
-            <output-format-item>Execute steps 2-7 only based on user selections from Step 1</output-format-item>
+            <output-format-item>Ask documentation questions one by one following the template exactly in Step 1</output-format-item>
+            <output-format-item>Execute steps 2-4 only based on user selections from Step 1</output-format-item>
             <output-format-item>Skip entire steps if no relevant documentation types were selected</output-format-item>
             <output-format-item>Generate only requested documentation types based on user selections</output-format-item>
             <output-format-item>Follow template specifications exactly for all documentation generation</output-format-item>
@@ -843,11 +525,11 @@ If validation passes, documentation generation is complete and successful.
 
     <safeguards>
         <safeguards-list>
-
             <safeguards-item>**NEVER remove or replace existing documentation** without explicit user consent and backup</safeguards-item>
             <safeguards-item>**ASK USER before overriding** any existing documentation files</safeguards-item>
             <safeguards-item>**CREATE BACKUPS** when overwriting existing files</safeguards-item>
             <safeguards-item>Verify changes with the command: `mvn compile` for package-info.java validation</safeguards-item>
+            <safeguards-item>Verify changes with the command: `mvn javadoc:javadoc` for Javadoc validation</safeguards-item>
             <safeguards-item>Always read template files fresh using file_search and read_file tools</safeguards-item>
             <safeguards-item>Never proceed to next step without completing dependencies</safeguards-item>
             <safeguards-item>Template adherence is mandatory - no exceptions or simplified versions</safeguards-item>
@@ -855,6 +537,7 @@ If validation passes, documentation generation is complete and successful.
             <safeguards-item>**DOCUMENT what was generated vs what was preserved** in the final summary</safeguards-item>
             <safeguards-item>Ensure all generated package-info.java files compile without errors</safeguards-item>
             <safeguards-item>Validate markdown formatting in all generated README.md files</safeguards-item>
+            <safeguards-item>Ensure all enhanced Javadoc is syntactically correct and generates properly</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>
