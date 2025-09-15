@@ -95,6 +95,10 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 
 - [JEPS List](./documentation/jeps/All-JEPS.md)
 
+## Mentions
+
+- https://virtuslab.com/blog/ai/providing-library-documentation/
+
 ## References
 
 - https://agents.md/
