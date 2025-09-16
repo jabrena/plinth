@@ -40,13 +40,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div>
 </div>
 <#elseif (config.site_avatar)??>
-<div class="avatar-container">
-  <div class="avatar-img-border">
-    <a href="${content.rootpath!}index.html">
-      <img class="avatar-img" src="${content.rootpath!}${config.site_avatar}"/>
-    </a>
-  </div>
-</div>
+
 </#if>
 
 </div>
