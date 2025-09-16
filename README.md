@@ -20,7 +20,7 @@ The repository was designed to offer support for Cursor, but other tools have ev
 
 A system prompt is a set of instructions given to an AI model that defines how it should behave, what role it should take on, and what guidelines it should follow when responding to users. Think of it as the "operating manual" that shapes the AI's personality, capabilities, and boundaries.
 
-![](./documentation/prompts.png)
+![](./documentation/images/prompts.png)
 
 ### Types of System prompts
 
@@ -38,17 +38,17 @@ The repository provides System prompts that can behave interactively or non-inte
 
 Adding AI tools to the Java development workflow can increase the possibilities of implementing software specifications on time and with quality.
 
-![](./documentation/workflow.png)
+![](./documentation/images/workflow.png)
 
 **Note:** Remember that if you use models and ask questions about recent topics like *Java 25*, it is probable that models will not provide accurate answers.
 
 ## Getting started
 
-New to this repository? Start with our [comprehensive guide](./GETTING-STARTED.md) for a quick introduction to setting up and using the Cursor rules.
+New to this repository? Start with our [comprehensive guide](./documentation/GETTING-STARTED.md) for a quick introduction to setting up and using the Cursor rules.
 
 ## How to use a System prompt in your development?
 
-Learn [how to integrate System prompts](./HOW-TO-USE.md) into your development workflow and maximize their effectiveness in your daily coding tasks.
+Learn [how to integrate System prompts](./documentation/HOW-TO-USE.md) into your development workflow and maximize their effectiveness in your daily coding tasks.
 
 ## How many System prompts include this repository?
 
@@ -56,7 +56,7 @@ Explore the [complete catalog of available System prompts](./CURSOR-RULES-JAVA.m
 
 ## Constraints, Output format & Safety guards
 
-The cursor rules in this repository follow [The Three-Node Quality Framework for AI Prompts](./docs/articles/prompt-quality-framework.md), which ensures both comprehensive responses and safe execution. This framework consists of three distinct pillars: **constraints**, **output-format** and **safeguards**. Each node operates at different phases of the AI interaction timeline, creating a defense-in-depth strategy.
+The cursor rules in this repository follow [The Three-Node Quality Framework for AI Prompts](https://jabrena.github.io/cursor-rules-java/blog/2025/prompt-quality-framework.html), which ensures both comprehensive responses and safe execution. This framework consists of three distinct pillars: **constraints**, **output-format** and **safeguards**. Each node operates at different phases of the AI interaction timeline, creating a defense-in-depth strategy.
 
 The **constraints** act as gate-keeping mechanisms that define hard requirements and blocking conditions before any work begins - essentially asking "Can I start?" The **output-format** provides prescriptive guidance during execution, ensuring comprehensive coverage and organized responses by defining "What should I deliver?" Finally, **safeguards** implement protective measures throughout and after execution, continuously asking "Did it work safely?" This temporal flow from pre-execution validation to structured execution to continuous monitoring ensures quality at every stage.
 
