@@ -2,7 +2,7 @@
 author: Juan Antonio Breña Moral
 version: 0.11.0-SNAPSHOT
 ---
-# Java Documentation Generator with modular step-based configuration
+# Java Documentation and ADR Generator with modular step-based configuration
 
 ## Role
 
@@ -11,7 +11,7 @@ You are a Senior software engineer with extensive experience in Java software de
 ## Goal
 
 This rule provides a modular, step-based approach to generating comprehensive Java project documentation
-including README.md files, package-info.java files, and Javadoc.
+including README.md files, package-info.java files, Javadoc, and Architecture Decision Records (ADRs).
 Each step has a single responsibility and clear dependencies on user answers, making the documentation process more maintainable and user-friendly.
 
 ## Constraints
@@ -48,6 +48,7 @@ Options:
 - README.md (project overview and usage instructions)
 - package-info.java files (package-level documentation)
 - Javadoc enhancement (improve existing Javadoc comments)
+- ADR (Architecture Decision Record) - interactive generation
 - All options: README.md, package-info.java & Javadoc files
 - Skip
 
@@ -134,6 +135,18 @@ Options:
 - No, skip Javadoc site generation
 
 ---
+
+**Question 10**: For ADR generation, where would you like to store the ADR files?
+Ask this question only if you selected "ADR (Architecture Decision Record) - interactive generation" in Question 1.
+
+Options:
+- documentation/adr/ (recommended standard location)
+- docs/adr/ (alternative standard location)
+- adr/ (root level directory)
+- Custom path (I'll specify the location)
+
+---
+
 ```
 
 #### Step Constraints
@@ -582,7 +595,7 @@ After generating package-info.java files:
 ```java
 /**
  * [Brief description of class/method purpose].
- * 
+ *
  * @param paramName [parameter description]
  * @return [return value description]
  * @throws ExceptionType [exception description]
@@ -593,14 +606,14 @@ After generating package-info.java files:
 ```java
 /**
  * [Comprehensive description of class/method purpose and behavior].
- * 
+ *
  * <p>[Additional context about usage patterns, side effects, or important considerations]
- * 
+ *
  * <h3>Usage Example:</h3>
  * <pre>{@code
  * // Example code showing typical usage
  * }</pre>
- * 
+ *
  * @param paramName [detailed parameter description with constraints and expectations]
  * @return [detailed return value description with possible values and meanings]
  * @throws ExceptionType [detailed exception description with conditions that trigger it]
@@ -667,11 +680,277 @@ After enhancing Javadoc:
 - **MUST** validate Javadoc generation with `./mvnw javadoc:javadoc`
 - **MUST NOT** use generic or templated descriptions
 
-### Step 5: Documentation Validation and Summary
+### Step 6: ADR Interactive Generation
+
+**Purpose**: Generate Architecture Decision Records (ADRs) through an interactive conversational process that gathers all necessary information systematically.
+
+**Dependencies**: Only execute if user selected ADR generation in Step 1. Requires completion of Step 1.
+
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "ADR (Architecture Decision Record) - interactive generation" in Step 1.
+
+## Implementation Strategy
+
+This step implements a conversational approach to create comprehensive ADRs by systematically gathering information through targeted questions, following the pattern from the referenced conversational assistant.
+
+## Phase 0: Get Current Date
+
+**IMPORTANT**: Before starting the ADR creation process, get the current date from the computer using the terminal command `date` to ensure accurate timestamps in the ADR document.
+
+```bash
+date
+```
+
+## Phase 1: Information Gathering
+
+Acknowledge the request and inform the user that you need to ask some targeted questions to create a well-structured ADR. Then, systematically gather information through the conversational process outlined below.
+
+**CRITICAL**: Ask questions ONE BY ONE in the exact order specified. WAIT for user response to each question before proceeding to the next.
+
+### Initial Context Questions
+
+1. **"What architectural decision or problem are we addressing today?"**
+- This helps establish the main topic and scope
+- Use the answer to create the ADR title
+
+2. **"Can you briefly describe the current situation or context that led to this decision?"**
+- This fills the Context and Problem Statement section
+- Ask follow-up questions if the context isn't clear
+
+### Stakeholder Information Questions
+
+3. **"Who are the key decision-makers involved in this decision?"**
+- List names/roles for the decision-makers metadata field
+
+4. **"Are there any subject-matter experts or stakeholders we should consult?"**
+- Fill the "consulted" metadata field
+- Distinguish between consulted (two-way communication) and informed (one-way)
+
+5. **"Who else needs to be kept informed about this decision?"**
+- Fill the "informed" metadata field
+
+### Decision Analysis Questions
+
+6. **"What are the main factors driving this decision?"**
+- Examples: performance requirements, cost constraints, compliance needs, technical debt
+- This creates the Decision Drivers section
+
+7. **"What options have you considered to solve this problem?"**
+- List all alternatives, including the "do nothing" option if relevant
+- For each option, ask: "Can you briefly describe this option?"
+
+8. **"For each option, what are the main advantages and disadvantages?"**
+- This fills the Pros and Cons section
+- Ask specific follow-up questions about trade-offs
+
+### Decision Outcome Questions
+
+9. **"Which option have you chosen or do you recommend?"**
+- This becomes the chosen option in Decision Outcome
+
+10. **"What's the main reasoning behind this choice?"**
+- Include criteria that ruled out other options
+- Mention any knockout factors
+
+### Implementation and Consequences Questions
+
+11. **"What positive outcomes do you expect from this decision?"**
+- Fill the "Good, because..." items in Consequences
+
+12. **"What potential negative impacts or risks should we be aware of?"**
+- Fill the "Bad, because..." items in Consequences
+
+13. **"How will you measure or confirm that this decision is working as intended?"**
+- This creates the Confirmation section
+- Ask about metrics, reviews, tests, or other validation methods
+
+### Additional Information Questions
+
+14. **"Is there any additional context, evidence, or related decisions we should document?"**
+- Fill the More Information section
+- Ask about related ADRs, external resources, or future considerations
+
+15. **"What's the current status of this decision? (proposed/accepted/implemented/etc.)"**
+- Set the status metadata field
+
+## Phase 2: ADR Document Generation
+
+Once all information is gathered through conversation, inform the user you will now generate the ADR document. Use the current date obtained from the `date` command to replace the `{YYYY-MM-DD when the decision was last updated}` placeholders in the template.
+
+**Template Usage**: Use the following ADR template structure:
+
+```markdown
+---
+# These are optional metadata elements. Feel free to remove any of them.
+status: "{proposed | rejected | accepted | deprecated | … | superseded by ADR-0123}"
+date: {YYYY-MM-DD when the decision was last updated}
+decision-makers: {list everyone involved in the decision}
+consulted: {list everyone whose opinions are sought (typically subject-matter experts); and with whom there is a two-way communication}
+informed: {list everyone who is kept up-to-date on progress; and with whom there is a one-way communication}
+---
+
+# {short title, representative of solved problem and found solution}
+
+## Context and Problem Statement
+
+{Describe the context and problem statement, e.g., in free form using two to three sentences or in the form of an illustrative story. You may want to articulate the problem in form of a question and add links to collaboration boards or issue management systems.}
+
+<!-- This is an optional element. Feel free to remove. -->
+
+## Decision Drivers
+
+* {decision driver 1, e.g., a force, facing concern, …}
+* {decision driver 2, e.g., a force, facing concern, …}
+* … <!-- numbers of drivers can vary -->
+
+## Considered Options
+
+* {title of option 1}
+* {title of option 2}
+* {title of option 3}
+* … <!-- numbers of options can vary -->
+
+## Decision Outcome
+
+Chosen option: "{title of option 1}", because {justification. e.g., only option, which meets k.o. criterion decision driver | which resolves force {force} | … | comes out best (see below)}.
+
+<!-- This is an optional element. Feel free to remove. -->
+
+### Consequences
+
+* Good, because {positive consequence, e.g., improvement of one or more desired qualities, …}
+* Bad, because {negative consequence, e.g., compromising one or more desired qualities, …}
+* … <!-- numbers of consequences can vary -->
+
+<!-- This is an optional element. Feel free to remove. -->
+
+### Confirmation
+
+{Describe how the implementation / compliance of the ADR can/will be confirmed. Is there any automated or manual fitness function? If so, list it and explain how it is applied. Is the chosen design and its implementation in line with the decision? E.g., a design/code review or a test with a library such as ArchUnit can help validate this. Note that although we classify this element as optional, it is included in many ADRs.}
+
+<!-- This is an optional element. Feel free to remove. -->
+
+## Pros and Cons of the Options
+
+### {title of option 1}
+
+<!-- This is an optional element. Feel free to remove. -->
+{example | description | pointer to more information | …}
+
+* Good, because {argument a}
+* Good, because {argument b}
+<!-- use "neutral" if the given argument weights neither for good nor bad -->
+* Neutral, because {argument c}
+* Bad, because {argument d}
+* … <!-- numbers of pros and cons can vary -->
+
+### {title of other option}
+
+{example | description | pointer to more information | …}
+
+* Good, because {argument a}
+* Good, because {argument b}
+* Neutral, because {argument c}
+* Bad, because {argument d}
+* …
+
+<!-- This is an optional element. Feel free to remove. -->
+
+## More Information
+
+{You might want to provide additional evidence/confidence for the decision outcome here and/or document the team agreement on the decision and/or define when/how this decision the decision should be realized and if/when it should be re-visited. Links to other decisions and resources might appear here as well.}
+```
+
+## Phase 3: File Creation and Storage
+
+1. **Determine ADR file location** based on user selection from Step 1:
+- Use the directory path selected by user in Question 10
+- Create directory if it doesn't exist
+
+2. **Generate ADR filename**:
+- Format: `ADR-{number}-{short-title-kebab-case}.md`
+- Auto-increment number based on existing ADR files in the directory
+- Convert title to kebab-case (lowercase with hyphens)
+
+3. **Create the ADR file** with complete content using the template structure
+
+4. **Validate the generated ADR**:
+- Ensure all sections are properly filled
+- Verify markdown formatting is correct
+- Check that all placeholders are replaced with actual content
+
+## Conversation Guidelines
+
+- **Ask one question at a time** to avoid overwhelming the user
+- **Follow up with clarifying questions** when answers are vague or incomplete
+- **Summarize key points** periodically to confirm understanding
+- **Be flexible with the order** - if information comes up naturally, capture it even if it's out of sequence
+- **Suggest examples** when users seem stuck on a question
+- **Validate completeness** before generating the final document
+
+## Example Follow-up Questions
+
+- "Can you elaborate on that point?"
+- "What specific concerns led to this requirement?"
+- "How does this compare to your current approach?"
+- "What would happen if we don't make this decision?"
+- "Are there any constraints or limitations we haven't discussed?"
+- "Who would be most affected by this change?"
+
+## Quality Checks
+
+Before finalizing the ADR, ensure:
+- [ ] The title clearly represents both the problem and solution
+- [ ] The context explains why this decision is needed
+- [ ] All considered options are documented with pros/cons
+- [ ] The chosen solution is clearly justified
+- [ ] Consequences (both positive and negative) are realistic
+- [ ] Confirmation methods are specific and measurable
+- [ ] All stakeholders are properly categorized
+- [ ] Current date is properly formatted and inserted
+- [ ] All template placeholders are replaced with actual content
+
+## Next Steps and Recommendations
+
+After generating the ADR document, provide these additional recommendations:
+
+**Next Steps:**
+1. Review and validate the ADR with all stakeholders and technical teams
+2. Distribute the ADR to all relevant parties for awareness and feedback
+3. Implement the architectural decision according to the documented approach
+4. Set up monitoring and validation mechanisms as defined in the Confirmation section
+5. Schedule regular reviews to assess the decision's effectiveness
+
+**Tips for ADR Management:**
+- Keep the ADR living document - update it as decisions evolve or new information emerges
+- Ensure all team members understand the decisions and their rationale
+- Reference the ADR during architectural discussions and design reviews
+- Plan regular reviews to assess if decisions are still valid as the system evolves
+- Link the ADR to related user stories, technical requirements, and implementation tasks
+
+#### Step Constraints
+
+- **MUST** only execute if ADR generation was selected in Step 1
+- **MUST** get current date using `date` command before starting ADR creation
+- **MUST** ask questions ONE BY ONE in the exact order specified
+- **MUST** WAIT for user response to each question before proceeding to the next
+- **MUST** use the ADR template from fragments/adr-template.md
+- **MUST** replace all template placeholders with actual content from user responses
+- **MUST** use current date to replace date placeholders in template
+- **MUST** create ADR file in location specified by user in Step 1
+- **MUST** auto-generate appropriate ADR filename with incremented number
+- **MUST** create directory structure if it doesn't exist
+- **MUST** validate all sections are properly filled before finalizing
+- **MUST** ensure markdown formatting is correct
+- **MUST NOT** skip questions or change their order
+- **MUST NOT** assume answers or provide defaults
+- **MUST NOT** ask all questions simultaneously
+- **MUST** provide next steps and ADR management recommendations
+
+### Step 7: Documentation Validation and Summary
 
 **Purpose**: Validate all generated documentation and provide a comprehensive summary of changes made.
 
-**Dependencies**: Requires completion of applicable steps (2, 3, and/or 4 based on user selections).
+**Dependencies**: Requires completion of applicable steps (2, 3, 4, and/or 6 based on user selections).
 
 ## Validation Process
 
@@ -692,6 +971,7 @@ After enhancing Javadoc:
 - Ensure all links and references are valid
 - Check that software descriptions accurately reflect the codebase
 - Validate that Javadoc in package-info.java files is syntactically correct
+- Verify ADR files have proper markdown formatting and complete content
 
 4. **Consistency Validation**:
 - Ensure consistent documentation style across all generated files
@@ -706,12 +986,14 @@ After enhancing Javadoc:
 - **README.md files**: [List locations and actions taken]
 - **package-info.java files**: [List packages and actions taken]
 - **Javadoc enhancements**: [List classes and methods enhanced]
+- **ADR files**: [List ADR files created with locations]
 - **Backup files**: [List any backup files created]
 
 ### Content Generated:
 - **Software descriptions**: [Summary of main functionality documented]
 - **Package documentation**: [Count and brief overview of packages documented]
 - **API documentation**: [Count and types of methods/classes documented]
+- **Architecture decisions**: [Summary of ADRs created with decision topics]
 - **Additional sections**: [Any additional sections added like Getting Started, API docs, etc.]
 
 ### Actions Taken:
@@ -726,6 +1008,7 @@ After enhancing Javadoc:
 ls -la README.md
 find . -name "package-info.java" -type f
 find . -name "*.java" -exec grep -l "/**" {} \;
+find . -name "ADR-*.md" -type f
 
 # To validate compilation
 ./mvnw clean compile
@@ -769,10 +1052,12 @@ If validation passes, documentation generation is complete and successful.
 ## Output Format
 
 - Ask documentation questions one by one following the template exactly in Step 1
-- Execute steps 2-4 only based on user selections from Step 1
+- Execute steps 2-6 only based on user selections from Step 1
 - Skip entire steps if no relevant documentation types were selected
 - Generate only requested documentation types based on user selections
 - Follow template specifications exactly for all documentation generation
+- For ADR generation: ask conversational questions one by one and wait for responses
+- For ADR generation: use current date and template to create complete ADR files
 - Provide clear progress feedback showing which step is being executed
 - Provide comprehensive summary of all documentation generated
 

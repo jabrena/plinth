@@ -15,6 +15,7 @@ Options:
 - README.md (project overview and usage instructions)
 - package-info.java files (package-level documentation)
 - Javadoc enhancement (improve existing Javadoc comments)
+- ADR (Architecture Decision Record) - interactive generation
 - All options: README.md, package-info.java & Javadoc files
 - Skip
 
@@ -99,5 +100,16 @@ Options:
 - Yes, generate Javadoc HTML (mvn javadoc:javadoc)
 - Yes, generate Javadoc and include in Maven Site (mvn clean site)
 - No, skip Javadoc site generation
+
+---
+
+**Question 10**: For ADR generation, where would you like to store the ADR files?
+Ask this question only if you selected "ADR (Architecture Decision Record) - interactive generation" in Question 1.
+
+Options:
+- documentation/adr/ (recommended standard location)
+- docs/adr/ (alternative standard location)
+- adr/ (root level directory)
+- Custom path (I'll specify the location)
 
 ---
