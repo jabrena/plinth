@@ -1,6 +1,6 @@
 # Developer notes
 
-```
+```bash
 ./mvnw clean verify
 ./mvnw clean verify -pl system-prompts-generator
 ./mvnw clean install -pl system-prompts-generator

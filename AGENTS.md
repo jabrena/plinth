@@ -6,7 +6,7 @@ A collection of `System prompts` for Java Enterprise development.
 
 ### Repository Layout
 
-- `./cursor/rules`: a collection of `System prompts` for Java Enterprise development. The main outcome of this project.
+- `.cursor/rules`: a collection of `System prompts` for Java Enterprise development. The main outcome of this project.
 - `system-prompts-generator`: a Java project designed to build the System prompts based on XML documents.
 - `examples`: a collection of Java examples designed to test with the different System prompts.
 - `site-generator`: JBake project designed to autogenerate public site in `docs` folder
@@ -29,7 +29,7 @@ Run the tests:
 ./mvnw clean verify -pl system-prompts-generator
 ```
 
-If the tests passes, you could promote the changes to `./cursor/rules`:
+If the tests passes, you could promote the changes to `.cursor/rules`:
 
 ```bash
 ./mvnw clean install -pl system-prompts-generator
@@ -37,7 +37,7 @@ If the tests passes, you could promote the changes to `./cursor/rules`:
 
 ## General Guidance
 
-- Don´t update any file from the path `./cursor/rules`, find the XML file in the path `generator/src/main/resources`.
+- Don´t update any file from the path `.cursor/rules`, find the XML file in the path `generator/src/main/resources`.
 - The project is based on Java 24.
 
 ## Commit Messages and Pull Requests
