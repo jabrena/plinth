@@ -10,7 +10,7 @@ If you have the idea to contribute, review the whole process in detail:
 ```bash
 cd generator
 ./mvnw clean verify # Pass tests
-./mvnw clean install # Pass tests & copy new .md files into ./cursor/rules (The way to promote changes)
+./mvnw clean install # Pass tests & copy new .md files into .cursor/rules (The way to promote changes)
 ```
 
 When you feel confident with the process, fork the repository and try to create new XML documents. Models will help you because an XML file is more rigid than natural language and it has `a common vocabulary` to create prompts.
