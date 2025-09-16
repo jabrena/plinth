@@ -480,7 +480,7 @@ YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-echo -e "${GREEN}Java Application Profiler v4.0 - Interactive Mode${NC}"
+echo -e "${GREEN}Java Application Profiler v4.1 - Interactive Mode${NC}"
 echo "================================================="
 
 # Step 0: Problem Identification
@@ -657,7 +657,7 @@ detect_os_arch() {
 download_profiler() {
     local platform=$1
     local profiler_dir=$2
-    local version="4.0"
+    local version="4.1"
 
     # For macOS, v4.0 uses .zip format, Linux still uses .tar.gz
     if [[ "$platform" == "macos" ]]; then
@@ -668,7 +668,7 @@ download_profiler() {
         local extract_cmd="tar -xzf"
     fi
 
-    local url="https://github.com/jvm-profiling-tools/async-profiler/releases/download/v$version/$filename"
+    local url="https://github.com/async-profiler/async-profiler/releases/download/v$version/$filename"
 
     if [ ! -d "$profiler_dir/current" ]; then
         echo "Downloading async-profiler..."
@@ -749,22 +749,24 @@ check_platform_capabilities() {
         echo -e "${YELLOW}Platform: macOS${NC}"
         echo "✅ CPU profiling (limited to user space)"
         echo "✅ Memory allocation profiling"
+        echo "✅ Native memory profiling (NEW: Full support on macOS in v4.1)"
         echo "✅ Lock contention profiling"
         echo "✅ Wall clock profiling"
-        echo "✅ JFR format"
-        echo "❌ Native memory profiling (requires Linux perf events)"
-        echo "❌ Hardware performance counters"
+        echo "✅ JFR format with OpenTelemetry support"
+        echo "✅ JDK 25 compatibility"
+        echo "❌ Hardware performance counters (Linux only)"
         echo ""
         echo -e "${BLUE}Note: macOS profiling is limited to user-space code only${NC}"
     else
         echo -e "${YELLOW}Platform: Linux${NC}"
         echo "✅ Full CPU profiling (user + kernel space)"
         echo "✅ Memory allocation profiling"
-        echo "✅ Native memory profiling"
+        echo "✅ Native memory profiling (enhanced with jemalloc support)"
         echo "✅ Lock contention profiling"
         echo "✅ Wall clock profiling"
         echo "✅ Hardware performance counters"
-        echo "✅ JFR format"
+        echo "✅ JFR format with OpenTelemetry support"
+        echo "✅ JDK 25 compatibility"
 
         # Check if running as root or with proper permissions
         if [[ $EUID -eq 0 ]]; then
@@ -794,8 +796,9 @@ show_profiling_menu() {
         "Memory")
             echo -e "${GREEN}*** RECOMMENDED FOR MEMORY LEAK DETECTION ***${NC}"
             echo "2. Memory Allocation Profiling (30s) ⭐"
-            echo "10. Memory Leak Detection (5min) ⭐"
-            echo "6. Native Memory Profiling (30s) ⭐"
+            echo "10. Memory Leak Detection (5min) - Enhanced in v4.1 ⭐"
+            echo "6. Native Memory Profiling (30s) - NEW: Full macOS support ⭐"
+            echo "15. All Events Profiling (30s) - NEW comprehensive analysis ⭐"
             echo ""
             echo -e "${BLUE}Other Options:${NC}"
             ;;
@@ -803,6 +806,7 @@ show_profiling_menu() {
             echo -e "${GREEN}*** RECOMMENDED FOR YOUR PROBLEM ***${NC}"
             echo "1. CPU Profiling (30s) ⭐"
             echo "8. Custom Duration CPU Profiling ⭐"
+            echo "15. All Events Profiling (30s) - NEW comprehensive analysis ⭐"
             echo ""
             echo -e "${BLUE}Other Options:${NC}"
             ;;
@@ -835,19 +839,17 @@ show_profiling_menu() {
     echo "3. Lock Contention Profiling (30s)"
     echo "4. Wall Clock Profiling (30s)"
     echo "5. Interactive Heatmap (60s) - NEW in v4.0"
-    if [[ "$OSTYPE" == "darwin"* ]]; then
-        echo "6. Memory Profiling (30s) - macOS compatible"
-    else
-        echo "6. Native Memory Profiling (30s) - NEW in v4.0 (Linux)"
-    fi
+    echo "6. Native Memory Profiling (30s) - NEW: Full macOS support in v4.1"
     echo "7. Inverted Flame Graph (30s) - NEW in v4.0"
     echo "8. Custom Duration CPU Profiling"
     echo "9. View recent results"
-    echo "10. Memory Leak Detection (5min)"
+    echo "10. Memory Leak Detection (5min) - Enhanced in v4.1"
     echo "11. Complete Memory Analysis Workflow"
     echo "12. JFR Recording (custom duration)"
     echo "13. Thread Dump (instant snapshot)"
     echo "14. Garbage Collection Log (custom duration)"
+    echo "15. All Events Profiling (30s) - NEW in v4.1"
+    echo "16. OpenTelemetry OTLP Export - NEW in v4.1"
     echo "0. Exit profiler"
     echo -e "${BLUE}===========================================${NC}"
 }
@@ -886,6 +888,7 @@ execute_profiling() {
     case $option in
         1)
             echo -e "${GREEN}Starting CPU profiling for 30 seconds...${NC}"
+            echo -e "${BLUE}Enhanced in v4.1: Records which CPU core each sample was taken on${NC}"
             # On macOS, add --all-user flag to avoid kernel profiling issues
             if [[ "$OSTYPE" == "darwin"* ]]; then
                 "$PROFILER_DIR/current/bin/asprof" -d 30 --all-user -f "$RESULTS_DIR/cpu-flamegraph-$(date +%Y%m%d-%H%M%S).html" "$PID"
@@ -917,24 +920,18 @@ execute_profiling() {
             "$PROFILER_DIR/current/bin/asprof" -d 60 -o jfr -f "$JFR_FILE" "$PID"
 
             echo -e "${BLUE}Step 2: Converting JFR to heatmap...${NC}"
-            "$PROFILER_DIR/current/bin/jfrconv" --cpu -o heatmap "$JFR_FILE" "$HEATMAP_FILE"
+            # jfrconv is now a shell script in v4.1
+            bash "$PROFILER_DIR/current/bin/jfrconv" --cpu -o heatmap "$JFR_FILE" "$HEATMAP_FILE"
             echo -e "${GREEN}Heatmap generated: $HEATMAP_FILE${NC}"
             ;;
         6)
             echo -e "${GREEN}Starting native memory profiling for 30 seconds...${NC}"
-            # Check if we're on macOS (Darwin)
             if [[ "$OSTYPE" == "darwin"* ]]; then
-                echo -e "${YELLOW}Note: Native memory profiling requires Linux perf events.${NC}"
-                echo -e "${YELLOW}On macOS, using allocation profiling as alternative...${NC}"
-                "$PROFILER_DIR/current/bin/asprof" -e alloc -d 30 --alloc 512k -f "$RESULTS_DIR/allocation-memory-$(date +%Y%m%d-%H%M%S).html" "$PID"
+                echo -e "${BLUE}Using native memory profiling with full macOS support (v4.1)...${NC}"
+                "$PROFILER_DIR/current/bin/asprof" -e nativemem -d 30 -f "$RESULTS_DIR/native-memory-$(date +%Y%m%d-%H%M%S).html" "$PID"
             else
-                # Check if perf events are available on Linux
-                if ! "$PROFILER_DIR/current/bin/asprof" check native "$PID" 2>/dev/null; then
-                    echo -e "${YELLOW}Native memory profiling not available. Using allocation profiling instead...${NC}"
-                    "$PROFILER_DIR/current/bin/asprof" -e alloc -d 30 --alloc 512k -f "$RESULTS_DIR/allocation-memory-$(date +%Y%m%d-%H%M%S).html" "$PID"
-                else
-                    "$PROFILER_DIR/current/bin/asprof" -e native -d 30 -f "$RESULTS_DIR/native-memory-$(date +%Y%m%d-%H%M%S).html" "$PID"
-                fi
+                echo -e "${BLUE}Using native memory profiling with jemalloc support...${NC}"
+                "$PROFILER_DIR/current/bin/asprof" -e nativemem -d 30 -f "$RESULTS_DIR/native-memory-$(date +%Y%m%d-%H%M%S).html" "$PID"
             fi
             ;;
         7)
@@ -953,7 +950,7 @@ execute_profiling() {
             ;;
                 9)
             echo -e "${YELLOW}Recent profiling results in $RESULTS_DIR:${NC}"
-            ls -lat "$RESULTS_DIR"/*.html "$RESULTS_DIR"/*.jfr "$RESULTS_DIR"/*.txt "$RESULTS_DIR"/*.log 2>/dev/null | head -10 || echo "No profiling files found"
+            ls -lat "$RESULTS_DIR"/*.html "$RESULTS_DIR"/*.jfr "$RESULTS_DIR"/*.txt "$RESULTS_DIR"/*.log "$RESULTS_DIR"/*.json 2>/dev/null | head -10 || echo "No profiling files found"
 
             # Show breakdown by file type
             echo ""
@@ -962,17 +959,20 @@ execute_profiling() {
             JFR_COUNT=$(ls "$RESULTS_DIR"/*.jfr 2>/dev/null | wc -l | xargs)
             TXT_COUNT=$(ls "$RESULTS_DIR"/*.txt 2>/dev/null | wc -l | xargs)
             LOG_COUNT=$(ls "$RESULTS_DIR"/*.log 2>/dev/null | wc -l | xargs)
+            JSON_COUNT=$(ls "$RESULTS_DIR"/*.json 2>/dev/null | wc -l | xargs)
 
             echo "  HTML files (flame graphs): $HTML_COUNT"
             echo "  JFR files (recordings): $JFR_COUNT"
             echo "  TXT files (thread dumps): $TXT_COUNT"
             echo "  LOG files (GC logs): $LOG_COUNT"
+            echo "  JSON files (OTLP exports): $JSON_COUNT"
             return
             ;;
         10)
             echo -e "${GREEN}Starting Memory Leak Detection (5 minutes)...${NC}"
             echo -e "${YELLOW}This will run for 5 minutes to capture memory leak patterns${NC}"
-            "$PROFILER_DIR/current/bin/asprof" -e alloc -d 300 --alloc 1m -f "$RESULTS_DIR/memory-leak-$(date +%Y%m%d-%H%M%S).html" "$PID"
+            echo -e "${BLUE}Using enhanced leak detection (v4.1): skips last 10% allocations for better accuracy${NC}"
+            "$PROFILER_DIR/current/bin/asprof" -e alloc -d 300 --alloc 1m --leak -f "$RESULTS_DIR/memory-leak-$(date +%Y%m%d-%H%M%S).html" "$PID"
             ;;
         11)
             echo -e "${GREEN}Starting Complete Memory Analysis Workflow...${NC}"
@@ -984,8 +984,8 @@ execute_profiling() {
             echo -e "${BLUE}Step 2: Heap profiling (60s)...${NC}"
             "$PROFILER_DIR/current/bin/asprof" -e alloc -d 60 -f "$RESULTS_DIR/heap-analysis-$TIMESTAMP.html" "$PID"
 
-            echo -e "${BLUE}Step 3: Memory leak detection (5min)...${NC}"
-            "$PROFILER_DIR/current/bin/asprof" -e alloc -d 300 --alloc 1m -f "$RESULTS_DIR/memory-leak-complete-$TIMESTAMP.html" "$PID"
+            echo -e "${BLUE}Step 3: Memory leak detection (5min) - Enhanced v4.1...${NC}"
+            "$PROFILER_DIR/current/bin/asprof" -e alloc -d 300 --alloc 1m --leak -f "$RESULTS_DIR/memory-leak-complete-$TIMESTAMP.html" "$PID"
 
             echo -e "${GREEN}Complete memory analysis finished! Check these files:${NC}"
             echo "- memory-baseline-$TIMESTAMP.html (30s baseline)"
@@ -1015,6 +1015,7 @@ execute_profiling() {
                 echo "  - VisualVM"
                 echo "  - Mission Control"
                 echo "  - jfrconv (included with async-profiler)"
+                echo "  - NEW in v4.1: Convert to OTLP format for OpenTelemetry integration"
             else
                 echo -e "${RED}JFR recording failed${NC}"
             fi
@@ -1211,6 +1212,35 @@ execute_profiling() {
                 [ -f "$GC_LOG_FILE" ] && [ ! -s "$GC_LOG_FILE" ] && rm -f "$GC_LOG_FILE"
             fi
             ;;
+        15)
+            echo -e "${GREEN}Starting All Events Profiling for 30 seconds...${NC}"
+            echo -e "${BLUE}This will collect all possible events simultaneously (CPU, alloc, lock, wall)${NC}"
+            "$PROFILER_DIR/current/bin/asprof" --all -d 30 -f "$RESULTS_DIR/all-events-$(date +%Y%m%d-%H%M%S).html" "$PID"
+            ;;
+        16)
+            echo -e "${GREEN}Starting OpenTelemetry OTLP Export...${NC}"
+            read -p "Enter duration in seconds (default: 60): " OTLP_DURATION
+            OTLP_DURATION=${OTLP_DURATION:-60}
+
+            if ! [[ "$OTLP_DURATION" =~ ^[0-9]+$ ]] || [ "$OTLP_DURATION" -lt 1 ]; then
+                echo -e "${RED}Invalid duration. Using default 60 seconds.${NC}"
+                OTLP_DURATION=60
+            fi
+
+            TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+            OTLP_FILE="$RESULTS_DIR/otlp-export-$TIMESTAMP.json"
+
+            echo -e "${BLUE}Generating OTLP format for OpenTelemetry integration...${NC}"
+            "$PROFILER_DIR/current/bin/asprof" -d "$OTLP_DURATION" -o otlp -f "$OTLP_FILE" "$PID"
+
+            if [ $? -eq 0 ]; then
+                echo -e "${GREEN}OTLP export completed: $OTLP_FILE${NC}"
+                echo -e "${YELLOW}This file can be imported into OpenTelemetry-compatible systems${NC}"
+                echo -e "${BLUE}File size: $(wc -c < "$OTLP_FILE" 2>/dev/null || echo "unknown") bytes${NC}"
+            else
+                echo -e "${RED}OTLP export failed${NC}"
+            fi
+            ;;
         0)
             echo -e "${GREEN}Exiting profiler. Goodbye!${NC}"
             exit 0
@@ -1224,7 +1254,7 @@ execute_profiling() {
     if [ $option -ne 9 ] && [ $option -ne 0 ]; then
         echo -e "${GREEN}Profiling completed!${NC}"
         echo -e "${YELLOW}Generated files in $RESULTS_DIR:${NC}"
-        ls -lat "$RESULTS_DIR"/*.html "$RESULTS_DIR"/*.jfr "$RESULTS_DIR"/*.txt "$RESULTS_DIR"/*.log 2>/dev/null | head -5 || echo "No profiling files found"
+        ls -lat "$RESULTS_DIR"/*.html "$RESULTS_DIR"/*.jfr "$RESULTS_DIR"/*.txt "$RESULTS_DIR"/*.log "$RESULTS_DIR"/*.json 2>/dev/null | head -5 || echo "No profiling files found"
 
         # Automatically open the latest file if on macOS
         if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -1263,7 +1293,7 @@ while true; do
     fi
 
     show_profiling_menu
-    read -p "Select profiling option (0-14): " PROFILE_TYPE
+    read -p "Select profiling option (0-16): " PROFILE_TYPE
     execute_profiling "$PROFILE_TYPE"
 
     echo ""
