@@ -84,6 +84,7 @@ The repository includes [a collection of examples](./examples/) where you can ex
 
 - [ADR-001: Generate Cursor Rules from XML Files](./documentation/adr/ADR-001-generate-cursor-rules-from-xml-files.md)
 - [ADR-002: Configure Cursor Rules Manual Scope](./documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md)
+- [ADR-003: Website Generation with JBake](./documentation/adr/ADR-003-website-generation-with-jbake.md)
 
 ## Changelog
 
