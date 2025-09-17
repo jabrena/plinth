@@ -173,7 +173,7 @@ This system transforms the repository from a simple rule collection into a **com
 
 ## Build/Test Commands
 
-- Java 24 required
+- Java 25 required
 
 ```bash
 ./mvnw clean verify
