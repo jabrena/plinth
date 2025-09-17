@@ -33,7 +33,8 @@ public final class SystemPromptsInventory {
             "170-java-documentation",
             "171-java-diagrams",
             "behaviour-consultative-interaction",
-            "behaviour-progressive-learning"
+            "behaviour-progressive-learning",
+            "behaviour-article-writer"
         );
     }
 

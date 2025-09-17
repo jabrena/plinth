@@ -13,7 +13,7 @@ jobs:
       - uses: actions/setup-java@v5
         with:
           distribution: 'graalvm' # See 'Supported distributions' for available options
-          java-version: '24'
+          java-version: '25'
       - name: Generate Cursor Rules
         run: ./mvnw --batch-mode --no-transfer-progress verify --file pom.xml
       - name: Archive Cursor Rules
