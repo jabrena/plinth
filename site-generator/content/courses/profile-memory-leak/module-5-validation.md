@@ -612,4 +612,6 @@ Through this course, you've experienced how system prompts (@161, @162, @164) pr
 
 **🎉 You've not just learned to fix memory leaks - you've mastered a systematic approach to performance optimization that will serve you throughout your career!**
 
-**Thank you for completing this comprehensive course. Your dedication to learning systematic performance optimization techniques will make you a more effective developer and a valuable team member. Keep profiling, keep learning, and keep optimizing! [Return to the beginning](index.html) 🚀**
+**Thank you for completing this comprehensive course. Your dedication to learning systematic performance optimization techniques will make you a more effective developer and a valuable team member. Keep profiling, keep learning, and keep optimizing! 🚀**
+
+[Return to the beginning](index.html)

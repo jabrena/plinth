@@ -15,7 +15,7 @@
   </#if>
   <#if (config.author_github)?has_content>
   <li>
-    <a href="https://github.com/${config.author_github}" title="GitHub">
+    <a href="https://github.com/${config.author_github}/cursor-rules-java" title="GitHub">
       <span class="fa-stack fa-lg">
         <i class="fa fa-circle fa-stack-2x"></i>
         <i class="fa fa-github fa-stack-1x fa-inverse"></i>
