@@ -56,8 +56,6 @@ This course is organized into **7 progressive modules** with **25+ hands-on exer
 
 3. **Choose Your Learning Path**: Start with [Module 1: Foundations](module-1-foundations.html)
 
-4. **Join the Community**: Connect with other learners and get support
-
 ### 📈 Progress Tracking
 
 Each module includes:
