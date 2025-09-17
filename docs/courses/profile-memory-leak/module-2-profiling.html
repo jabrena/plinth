@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Module 2: Hands-on Profiling with System Prompts - Cursor Rules for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../feed.xml" title="Cursor Rules for Java"/>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../css/prettify.css">
+  <link rel="shortcut icon" href="../../favicon.ico">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../index.html">Cursor Rules for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../courses/java-generics/index.html">Java Generics</a>
+      <a href="../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
+    </div>
+  </li>
+  <li><a href="../../archive.html">Archive</a></li>
+  <li><a href="../../tags.html">Tags</a></li>
+  <li><a href="../../about.html">About</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="course-heading">
+<h1>Module 2: Hands-on Profiling with System Prompts</h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="course-content">
+
+<div class="course-meta">
+    <i class="fa fa-calendar-o"></i>
+    2025-09-17
+    &nbsp;
+    <i class="fa fa-user"></i>
+    Juan Antonio Breña Moral
+    &nbsp;
+    <i class="fa fa-tag"></i>
+    Version 0.11.0-SNAPSHOT
+  <div class="course-tags">
+    &nbsp;
+    <i class="fa fa-tags"></i>
+      <a href="../../tags/java.html" class="course-tag">java</a>
+      <a href="../../tags/profiling.html" class="course-tag">profiling</a>
+      <a href="../../tags/memory-leak.html" class="course-tag">memory-leak</a>
+      <a href="../../tags/async-profiler.html" class="course-tag">async-profiler</a>
+      <a href="../../tags/flamegraph.html" class="course-tag">flamegraph</a>
+      <a href="../../tags/jmeter.html" class="course-tag">jmeter</a>
+  </div>
+</div>
+<hr>
+
+<h2>Mastering the Interactive Profiling Script and Evidence Collection</h2>
+<p><strong>⏱️ Duration:</strong> 3 hours<br />
+<strong>🎯 Learning Objectives:</strong><br />
+- Master the @161-java-profiling-detect system prompt and its 21 profiling options<br />
+- Learn problem-driven profiling strategies for different performance issues<br />
+- Understand flamegraph interpretation and visual analysis techniques<br />
+- Generate comprehensive profiling evidence under realistic load conditions<br />
+- Integrate JMeter load testing for consistent profiling scenarios</p>
+<hr />
+<h2>🎯 Deep Dive: The Interactive Profiling Script</h2>
+<h3>Understanding the Problem-Driven Approach</h3>
+<p>The profiling script in @161-java-profiling-detect follows a <strong>problem-first methodology</strong>:</p>
+<ol>
+<li><strong>Problem Identification</strong> → 2. <strong>Tool Selection</strong> → 3. <strong>Data Collection</strong> → 4. <strong>Evidence Generation</strong></li>
+</ol>
+<p>This approach ensures you collect the <strong>right data</strong> for the <strong>specific problem</strong> you're investigating.</p>
+<h4><strong>🔍 The 5 Problem Categories</strong></h4>
+<pre><code class="language-bash">./profiler/scripts/profile-java-process.sh
+# Step 0: Problem Identification
+</code></pre>
+<ul>
+<li>Performance Bottlenecks (Focus: CPU hotspots, inefficient algorithms; Recommended tools: CPU profiling, Wall-clock; Memory leak relevance: Medium - may indicate leak symptoms)</li>
+<li>Memory-Related Problems (Focus: Memory leaks, heap usage, retention; Recommended tools: Memory allocation, Leak detection; Memory leak relevance: <strong>HIGH - Primary focus</strong>)</li>
+<li>Concurrency/Threading (Focus: Lock contention, thread pools; Recommended tools: Lock profiling, Thread dumps; Memory leak relevance: High - thread pool leaks)</li>
+<li>Garbage Collection (Focus: GC pressure, long pauses; Recommended tools: GC logs, Allocation profiling; Memory leak relevance: High - GC symptoms of leaks)</li>
+<li>I/O and Network (Focus: Blocking operations, connection leaks; Recommended tools: Wall-clock, I/O analysis; Memory leak relevance: Medium - connection pool leaks)</li>
+</ul>
+<h3>💡 Learning Insight</h3>
+<p><strong>For memory leak detection, we primarily focus on Category 2 (Memory-Related Problems), but Categories 3 and 4 provide crucial supporting evidence!</strong></p>
+<hr />
+<h2>🛠️ The 21 Profiling Options Masterclass</h2>
+<h3><strong>Category A: Essential Memory Leak Detection Tools</strong></h3>
+<h4><strong>🎯 Option 2: Memory Allocation Profiling (30s)</strong></h4>
+<p><strong>When to use:</strong> Initial memory pattern analysis<br />
+<strong>What it shows:</strong> Which methods allocate the most objects</p>
+<pre><code class="language-bash">./profile-java-process.sh
+# Select: 2. Memory Allocation Profiling (30s)
+</code></pre>
+<p><strong>🎯 Practical Exercise 1: Basic Allocation Analysis</strong></p>
+<ol>
+<li><strong>Start profiling with active memory leaks:</strong></li>
+</ol>
+<pre><code class="language-bash"># Ensure coco=true (memory leaks enabled)
+curl http://localhost:8080/actuator/env/coco
+</code></pre>
+<ol>
+<li><strong>Generate consistent load during profiling:</strong></li>
+</ol>
+<pre><code class="language-bash"># In separate terminal - run this DURING profiling
+for i in {1..100}; do
+  curl -X POST http://localhost:8080/api/v1/objects/create
+  sleep 0.5
+done
+</code></pre>
+<ol>
+<li><strong>Analyze the resulting flamegraph:</strong></li>
+</ol>
+<ul>
+<li><strong>Look for:</strong> Wide sections in <code>CocoController.createObject</code></li>
+<li><strong>Measure:</strong> Canvas height and stack complexity</li>
+<li><strong>Document:</strong> Specific allocation patterns</li>
+</ul>
+<p><strong>Expected Results:</strong></p>
+<pre><code>File: allocation-flamegraph-YYYYMMDD-HHMMSS.html
+Key Indicators:
+- CocoController.createObject shows significant width
+- MyPojo allocation patterns clearly visible
+- ArrayList.add operations consume memory
+</code></pre>
+<h4><strong>🎯 Option 8: Memory Leak Detection (5min)</strong></h4>
+<p><strong>When to use:</strong> Comprehensive leak pattern analysis<br />
+<strong>What it shows:</strong> Long-term memory accumulation patterns</p>
+<pre><code class="language-bash">./profile-java-process.sh
+# Select: 8. Memory Leak Detection (5min)
+</code></pre>
+<p><strong>🎯 Practical Exercise 2: Long-term Leak Detection</strong></p>
+<ol>
+<li><strong>Start the 5-minute leak detection:</strong></li>
+</ol>
+<pre><code class="language-bash"># This is a long-running profiling session
+./profile-java-process.sh
+# Select option 8
+</code></pre>
+<ol>
+<li><strong>Create sustained, realistic load:</strong></li>
+</ol>
+<pre><code class="language-bash"># Use JMeter for consistent 5-minute load
+./run-jmeter.sh -t 300 -c 3  # 5 minutes, 3 concurrent users
+</code></pre>
+<ol>
+<li><strong>Monitor progress and system behavior:</strong></li>
+</ol>
+<pre><code class="language-bash"># In another terminal, monitor memory usage
+watch -n 10 'curl -s http://localhost:8080/actuator/metrics/jvm.memory.used'
+</code></pre>
+<p><strong>Expected Results:</strong></p>
+<pre><code>File: memory-leak-YYYYMMDD-HHMMSS.html
+Key Indicators:
+- Continuous memory growth patterns
+- GC retention increasing over time
+- Object accumulation in specific methods
+</code></pre>
+<h4><strong>🎯 Option 9: Complete Memory Analysis Workflow</strong></h4>
+<p><strong>When to use:</strong> Comprehensive memory investigation<br />
+<strong>What it shows:</strong> Multi-phase analysis with baseline, detailed, and leak detection</p>
+<pre><code class="language-bash">./profile-java-process.sh
+# Select: 9. Complete Memory Analysis Workflow
+</code></pre>
+<p>This option generates <strong>three sequential reports:</strong><br />
+1. <strong>30s Baseline</strong>: Quick memory allocation snapshot<br />
+2. <strong>60s Detailed</strong>: In-depth heap analysis<br />
+3. <strong>5min Leak Detection</strong>: Long-term accumulation patterns</p>
+<p><strong>🎯 Practical Exercise 3: Complete Workflow Analysis</strong></p>
+<ol>
+<li><strong>Execute the complete workflow:</strong></li>
+</ol>
+<pre><code class="language-bash"># This will take about 6.5 minutes total
+./profile-java-process.sh
+# Select option 9
+</code></pre>
+<ol>
+<li><strong>Coordinate load testing across all phases:</strong></li>
+</ol>
+<pre><code class="language-bash"># Create a script that matches the profiling phases
+cat &gt; coordinated-load.sh &lt;&lt; 'EOF'
+#!/bin/bash
+echo &quot;Phase 1: Baseline load (30s)&quot;
+timeout 30s bash -c 'while true; do curl -X POST http://localhost:8080/api/v1/objects/create; sleep 1; done' &amp;
+
+echo &quot;Phase 2: Detailed analysis load (60s)&quot;
+sleep 30
+timeout 60s bash -c 'while true; do curl -X POST http://localhost:8080/api/v1/objects/create; curl -X POST http://localhost:8080/api/v1/threads/create; sleep 0.5; done' &amp;
+
+echo &quot;Phase 3: Leak detection load (5min)&quot;
+sleep 90
+timeout 300s bash -c 'while true; do curl -X POST http://localhost:8080/api/v1/objects/create; sleep 0.3; done' &amp;
+
+wait
+echo &quot;All load phases completed&quot;
+EOF
+chmod +x coordinated-load.sh
+</code></pre>
+<ol>
+<li><strong>Execute coordinated load:</strong></li>
+</ol>
+<pre><code class="language-bash">./coordinated-load.sh
+</code></pre>
+<p><strong>Expected Results:</strong></p>
+<pre><code>Files generated:
+- memory-baseline-YYYYMMDD-HHMMSS.html (30s snapshot)
+- heap-analysis-YYYYMMDD-HHMMSS.html (60s detailed)
+- memory-leak-complete-YYYYMMDD-HHMMSS.html (5min comprehensive)
+</code></pre>
+<h3><strong>Category B: Advanced Profiling Techniques</strong></h3>
+<h4><strong>🎯 Option 12: All Events Profiling (30s)</strong></h4>
+<p><strong>When to use:</strong> Comprehensive system analysis<br />
+<strong>What it shows:</strong> CPU, allocation, lock, and wall-clock data simultaneously</p>
+<pre><code class="language-bash">./profile-java-process.sh
+# Select: 12. All Events Profiling (30s)
+</code></pre>
+<p><strong>Expected Results:</strong></p>
+<pre><code>Files generated:
+- all-events-YYYYMMDD-HHMMSS.jfr (JFR recording)
+- all-events-YYYYMMDD-HHMMSS.html (Converted flamegraph)
+</code></pre>
+<h4><strong>🎯 Option 18: JFR Memory Leak Analysis with TLAB tracking</strong></h4>
+<p><strong>When to use:</strong> Advanced memory leak investigation<br />
+<strong>What it shows:</strong> Thread Local Allocation Buffer patterns and object lifecycle</p>
+<p><strong>TLAB (Thread Local Allocation Buffer) Explained:</strong></p>
+<p>TLAB is a JVM optimization technique that provides each thread with its own private allocation buffer in the heap's Eden space. This eliminates contention when multiple threads allocate objects simultaneously.</p>
+<p><strong>Key TLAB Concepts:</strong><br />
+- <strong>Private Buffer</strong>: Each thread gets its own allocation space (typically 1-256KB)<br />
+- <strong>Fast Allocation</strong>: Objects are allocated via simple pointer bumping (no synchronization)<br />
+- <strong>Automatic Management</strong>: JVM automatically manages TLAB size based on allocation patterns<br />
+- <strong>Waste Tracking</strong>: Unused TLAB space is tracked as &quot;waste&quot; for performance tuning</p>
+<p><strong>TLAB and Memory Leaks:</strong><br />
+- <strong>Allocation Patterns</strong>: TLAB tracking reveals which threads allocate the most objects<br />
+- <strong>Leak Detection</strong>: Threads with consistently growing TLAB usage may indicate leaks<br />
+- <strong>Performance Impact</strong>: Memory leaks can cause frequent TLAB allocation/deallocation<br />
+- <strong>GC Pressure</strong>: Excessive TLAB waste increases garbage collection frequency</p>
+<p><strong>Profiling with TLAB:</strong><br />
+- <strong>JFR Events</strong>: <code>jdk.ObjectAllocationInNewTLAB</code> and <code>jdk.ObjectAllocationOutsideTLAB</code><br />
+- <strong>Allocation Tracking</strong>: Monitor allocation rates per thread<br />
+- <strong>Waste Analysis</strong>: Identify threads with high TLAB waste ratios<br />
+- <strong>Correlation</strong>: Cross-reference TLAB data with memory leak patterns</p>
+<pre><code class="language-bash">./profile-java-process.sh
+# Select: 18. JFR Memory Leak Analysis with TLAB tracking
+</code></pre>
+<p><strong>🎯 Practical Exercise 4: Advanced JFR Analysis</strong></p>
+<ol>
+<li><strong>Execute TLAB tracking (10 minutes):</strong></li>
+</ol>
+<pre><code class="language-bash">./profile-java-process.sh
+# Select option 18
+# Enter duration: 10 (minutes)
+</code></pre>
+<ol>
+<li><strong>Generate intensive allocation load:</strong></li>
+</ol>
+<pre><code class="language-bash"># High-frequency allocations to trigger TLAB behavior
+for i in {1..1000}; do
+  curl -X POST http://localhost:8080/api/v1/objects/create
+  if [ $((i % 100)) -eq 0 ]; then
+    echo &quot;Completed $i allocations&quot;
+  fi
+done
+</code></pre>
+<p><strong>Expected Results:</strong></p>
+<pre><code>File: memory-leak-tlab-YYYYMMDD-HHMMSS.jfr
+Analysis tools: JProfiler, VisualVM, Mission Control
+Key insights: TLAB allocation patterns, object aging, GC behavior
+</code></pre>
+<hr />
+<h2>🔥 Flamegraph Interpretation Masterclass</h2>
+<h3>Understanding Flamegraph Anatomy</h3>
+<pre><code>┌─────────────────────────────────────────────────────────────┐
+│  Stack Depth (Y-axis) - Call hierarchy depth                │
+│  ┌─────────────────────────────────────────────────────┐    │
+│  │ main() ──────────────────────────────────────────── │    │
+│  │  └─ CocoController.createObject() ───────────────── │    │
+│  │     └─ ArrayList.add() ──────────────────────────   │    │
+│  │        └─ MyPojo.&lt;init&gt;() ─────────────────────     │    │
+│  │           └─ String repetition ──────────────       │    │
+│  └─────────────────────────────────────────────────────┘    │
+│           Width (X-axis) - Time/Resource consumption        │
+└─────────────────────────────────────────────────────────────┘
+</code></pre>
+<h3><strong>Key Visual Patterns for Memory Leaks</strong></h3>
+<h4><strong>1. Wide Allocation Patterns</strong></h4>
+<pre><code>CocoController.createObject() ████████████████████████████████
+└─ ArrayList.add()           ████████████████████████████████
+   └─ MyPojo.&lt;init&gt;()        ████████████████████████████████
+</code></pre>
+<p><strong>Interpretation:</strong> Consistent, wide sections indicate high-frequency allocations</p>
+<h4><strong>2. Growing Canvas Height</strong></h4>
+<pre><code>Run 1 (Baseline):  Canvas height ~200px
+Run 2 (5 minutes): Canvas height ~400px
+Run 3 (10 minutes): Canvas height ~600px
+</code></pre>
+<p><strong>Interpretation:</strong> Increasing complexity suggests accumulating allocation paths</p>
+<h4><strong>3. Stack Depth Patterns</strong></h4>
+<pre><code>Healthy Application:    3-5 levels deep
+Memory Leak Pattern:    8-12 levels deep
+Critical Leak:          15+ levels deep
+</code></pre>
+<h3>🔍 Knowledge Check</h3>
+<p><strong>Look at your generated flamegraphs and answer:</strong><br />
+1. What is the canvas height of your memory-leak detection report?<br />
+2. Which method shows the widest section?<br />
+3. How many stack levels deep are the main allocation patterns?</p>
+<h3><strong>🎯 Practical Exercise 5: Comparative Flamegraph Analysis</strong></h3>
+<ol>
+<li><strong>Generate multiple flamegraphs with different durations:</strong></li>
+</ol>
+<pre><code class="language-bash"># Short-term (30s)
+./profile-java-process.sh  # Option 2
+
+# Medium-term (60s)
+./profile-java-process.sh  # Option 7, duration: 60
+
+# Long-term (300s)
+./profile-java-process.sh  # Option 8
+</code></pre>
+<ol>
+<li><strong>Create comparison table:</strong></li>
+</ol>
+<pre><code class="language-markdown">| Duration | Canvas Height | Widest Method | Stack Depth | File Size |
+|----------|---------------|---------------|-------------|-----------|
+| 30s      | [measure]     | [identify]    | [count]     | [size]    |
+| 60s      | [measure]     | [identify]    | [count]     | [size]    |
+| 300s     | [measure]     | [identify]    | [count]     | [size]    |
+</code></pre>
+<ol>
+<li><strong>Document visual patterns:</strong></li>
+</ol>
+<ul>
+<li>Take screenshots of key sections</li>
+<li>Note color patterns and distributions</li>
+<li>Identify recurring allocation patterns</li>
+</ul>
+<hr />
+<h2>🎛️ JMeter Integration for Consistent Profiling</h2>
+<h3>Understanding the Load Testing Integration</h3>
+<p>The demo includes sophisticated JMeter integration for realistic profiling scenarios:</p>
+<pre><code class="language-bash"># View available JMeter options
+./run-jmeter.sh --help
+</code></pre>
+<p><strong>Key JMeter Parameters:</strong><br />
+- <code>-t, --time</code>: Test duration in seconds<br />
+- <code>-c, --concurrency</code>: Number of concurrent users<br />
+- <code>-r, --ramp-up</code>: Ramp-up time in seconds<br />
+- <code>-e, --endpoints</code>: Which endpoints to test (objects, threads, both)</p>
+<h3><strong>🎯 Practical Exercise 6: Advanced Load Testing Scenarios</strong></h3>
+<h4><strong>Scenario 1: Burst Load Testing</strong></h4>
+<pre><code class="language-bash"># High concurrency, short duration
+./run-jmeter.sh -t 120 -c 20 -r 10 -e both
+</code></pre>
+<p><strong>Use case:</strong> Simulating peak traffic conditions<br />
+<strong>Profiling pairing:</strong> Use with Option 2 (Memory Allocation) for burst pattern analysis</p>
+<h4><strong>Scenario 2: Sustained Load Testing</strong></h4>
+<pre><code class="language-bash"># Moderate concurrency, long duration
+./run-jmeter.sh -t 600 -c 5 -r 30 -e objects
+</code></pre>
+<p><strong>Use case:</strong> Simulating normal production load<br />
+<strong>Profiling pairing:</strong> Use with Option 8 (Memory Leak Detection) for accumulation patterns</p>
+<h4><strong>Scenario 3: Gradual Ramp Testing</strong></h4>
+<pre><code class="language-bash"># Increasing load over time
+./run-jmeter.sh -t 300 -c 10 -r 120 -e both
+</code></pre>
+<p><strong>Use case:</strong> Simulating growing user base<br />
+<strong>Profiling pairing:</strong> Use with Option 9 (Complete Workflow) for comprehensive analysis</p>
+<h3><strong>Creating Custom Load Patterns</strong></h3>
+<pre><code class="language-bash"># Create custom JMeter test plan
+cat &gt; custom-memory-leak-test.jmx &lt;&lt; 'EOF'
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;jmeterTestPlan version=&quot;1.2&quot;&gt;
+  &lt;!-- Custom test plan for memory leak detection --&gt;
+  &lt;hashTree&gt;
+    &lt;TestPlan testname=&quot;Memory Leak Detection Test&quot;&gt;
+      &lt;elementProp name=&quot;TestPlan.arguments&quot; elementType=&quot;Arguments&quot; guiclass=&quot;ArgumentsPanel&quot;&gt;
+        &lt;collectionProp name=&quot;Arguments.arguments&quot;&gt;
+          &lt;elementProp name=&quot;objects_per_minute&quot; elementType=&quot;Argument&quot;&gt;
+            &lt;stringProp name=&quot;Argument.name&quot;&gt;objects_per_minute&lt;/stringProp&gt;
+            &lt;stringProp name=&quot;Argument.value&quot;&gt;60&lt;/stringProp&gt;
+          &lt;/elementProp&gt;
+        &lt;/collectionProp&gt;
+      &lt;/elementProp&gt;
+    &lt;/TestPlan&gt;
+    &lt;!-- Add your custom test scenarios here --&gt;
+  &lt;/hashTree&gt;
+&lt;/jmeterTestPlan&gt;
+EOF
+</code></pre>
+<hr />
+<h2>📊 Evidence Collection and Documentation</h2>
+<h3>Systematic Evidence Collection Framework</h3>
+<p>For each profiling session, collect:</p>
+<h4><strong>1. Technical Metrics</strong></h4>
+<pre><code class="language-bash"># Create evidence collection script
+cat &gt; collect-evidence.sh &lt;&lt; 'EOF'
+#!/bin/bash
+TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+EVIDENCE_DIR=&quot;profiler/evidence-$TIMESTAMP&quot;
+mkdir -p &quot;$EVIDENCE_DIR&quot;
+
+echo &quot;Collecting evidence at $TIMESTAMP&quot;
+
+# System information
+echo &quot;=== System Info ===&quot; &gt; &quot;$EVIDENCE_DIR/system-info.txt&quot;
+java -version &gt;&gt; &quot;$EVIDENCE_DIR/system-info.txt&quot; 2&gt;&amp;1
+free -h &gt;&gt; &quot;$EVIDENCE_DIR/system-info.txt&quot;
+nproc &gt;&gt; &quot;$EVIDENCE_DIR/system-info.txt&quot;
+
+# Application status
+echo &quot;=== App Status ===&quot; &gt; &quot;$EVIDENCE_DIR/app-status.txt&quot;
+curl -s http://localhost:8080/actuator/health &gt;&gt; &quot;$EVIDENCE_DIR/app-status.txt&quot;
+curl -s http://localhost:8080/actuator/metrics/jvm.memory.used &gt;&gt; &quot;$EVIDENCE_DIR/app-status.txt&quot;
+
+# Configuration
+echo &quot;=== Configuration ===&quot; &gt; &quot;$EVIDENCE_DIR/config.txt&quot;
+curl -s http://localhost:8080/actuator/env/coco &gt;&gt; &quot;$EVIDENCE_DIR/config.txt&quot;
+
+echo &quot;Evidence collected in $EVIDENCE_DIR&quot;
+EOF
+chmod +x collect-evidence.sh
+</code></pre>
+<h4><strong>2. Visual Documentation</strong></h4>
+<ul>
+<li>Screenshot key flamegraph sections</li>
+<li>Document canvas heights and widths</li>
+<li>Note color patterns and distributions</li>
+<li>Capture browser developer tools memory graphs</li>
+</ul>
+<h4><strong>3. Quantitative Measurements</strong></h4>
+<pre><code class="language-bash"># Measure flamegraph characteristics
+cat &gt; measure-flamegraph.sh &lt;&lt; 'EOF'
+#!/bin/bash
+HTML_FILE=&quot;$1&quot;
+if [ -z &quot;$HTML_FILE&quot; ]; then
+    echo &quot;Usage: $0 &lt;flamegraph.html&gt;&quot;
+    exit 1
+fi
+
+echo &quot;Analyzing flamegraph: $HTML_FILE&quot;
+echo &quot;File size: $(wc -c &lt; &quot;$HTML_FILE&quot;) bytes&quot;
+echo &quot;Estimated canvas height: $(grep -o 'height=&quot;[0-9]*&quot;' &quot;$HTML_FILE&quot; | head -1 | grep -o '[0-9]*') pixels&quot;
+echo &quot;Number of stack frames: $(grep -c 'class=&quot;func_g&quot;' &quot;$HTML_FILE&quot;)&quot;
+EOF
+chmod +x measure-flamegraph.sh
+</code></pre>
+<hr />
+<h2>🎯 Module 2 Assessment</h2>
+<h3>Hands-on Proficiency Checklist</h3>
+<p><strong>✅ Interactive Script Mastery:</strong><br />
+- [ ] Successfully navigated all 21 profiling options<br />
+- [ ] Executed memory allocation profiling (Option 2)<br />
+- [ ] Completed 5-minute memory leak detection (Option 8)<br />
+- [ ] Generated complete memory analysis workflow (Option 9)<br />
+- [ ] Used advanced JFR analysis with TLAB tracking (Option 18)</p>
+<p><strong>✅ Flamegraph Interpretation:</strong><br />
+- [ ] Can identify wide allocation patterns<br />
+- [ ] Measures canvas height accurately<br />
+- [ ] Counts stack depth levels<br />
+- [ ] Recognizes memory leak visual signatures</p>
+<p><strong>✅ Load Testing Integration:</strong><br />
+- [ ] Executed coordinated JMeter load testing<br />
+- [ ] Created custom load patterns<br />
+- [ ] Synchronized profiling with realistic load<br />
+- [ ] Generated consistent, reproducible results</p>
+<p><strong>✅ Evidence Collection:</strong><br />
+- [ ] Documented technical metrics for each session<br />
+- [ ] Captured visual evidence of flamegraph patterns<br />
+- [ ] Created quantitative measurements<br />
+- [ ] Organized evidence for systematic analysis</p>
+<h3>🎯 Advanced Challenge: Custom Profiling Strategy</h3>
+<p><strong>Challenge:</strong> Design a custom profiling strategy for a specific memory leak scenario</p>
+<p><strong>Requirements:</strong><br />
+1. <strong>Scenario Definition</strong>: Define a specific memory leak pattern to investigate<br />
+2. <strong>Tool Selection</strong>: Choose appropriate profiling options from the 21 available<br />
+3. <strong>Load Pattern</strong>: Design matching JMeter load testing<br />
+4. <strong>Evidence Plan</strong>: Define what evidence to collect<br />
+5. <strong>Success Criteria</strong>: Establish measurable outcomes</p>
+<p><strong>Example Template:</strong></p>
+<pre><code class="language-markdown"># Custom Profiling Strategy: [Scenario Name]
+
+## Scenario
+- **Leak Type**: [Collection/Thread Pool/Cache/etc.]
+- **Symptoms**: [Expected behavior patterns]
+- **Timeline**: [How long to observe]
+
+## Profiling Plan
+- **Primary Tool**: Option X - [Name and rationale]
+- **Supporting Tools**: Option Y, Z - [Supporting evidence]
+- **Duration Strategy**: [Short/Medium/Long term analysis]
+
+## Load Testing
+- **JMeter Configuration**: [Specific parameters]
+- **Load Pattern**: [Burst/Sustained/Gradual]
+- **Endpoint Focus**: [Which APIs to exercise]
+
+## Evidence Collection
+- **Visual**: [What flamegraph patterns to document]
+- **Quantitative**: [Specific metrics to measure]
+- **Comparative**: [What to compare against]
+
+## Success Criteria
+- [ ] [Measurable outcome 1]
+- [ ] [Measurable outcome 2]
+- [ ] [Measurable outcome 3]
+</code></pre>
+<hr />
+<h2>🚀 Transition to Module 3</h2>
+<p><strong>Excellent progress!</strong> You've successfully:<br />
+- ✅ Mastered the 21-option interactive profiling script<br />
+- ✅ Generated comprehensive memory leak evidence<br />
+- ✅ Integrated realistic load testing with profiling<br />
+- ✅ Developed flamegraph interpretation skills<br />
+- ✅ Created systematic evidence collection processes</p>
+<h3><strong>What's Next?</strong></h3>
+<p>In <strong>Module 3: Analysis and Evidence Collection</strong>, we'll focus on:<br />
+- Systematic analysis using @162-java-profiling-analyze<br />
+- Creating structured documentation from profiling evidence<br />
+- Developing prioritized solution recommendations<br />
+- Cross-correlating multiple profiling results for comprehensive insights</p>
+<h3>💡 Key Takeaway</h3>
+<p><strong>&quot;Effective profiling is not just about collecting data - it's about collecting the RIGHT data under the RIGHT conditions to answer SPECIFIC questions about your application's performance!&quot;</strong></p>
+<p><strong>Ready to transform your profiling data into actionable insights? <a href="module-3-analysis.html">Let's continue to Module 3!</a> 🔍</strong></p>
+
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2025 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../js/jquery-1.11.2.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/prettify.js"></script>
+<script src="../../js/run_prettify.js"></script>
+<script src="../../js/main.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13CV90H4J4');
+</script>
+
+</body>
+</html>

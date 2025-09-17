@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Module 1: Memory Leak Foundations and Detection Setup - Cursor Rules for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../feed.xml" title="Cursor Rules for Java"/>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../css/prettify.css">
+  <link rel="shortcut icon" href="../../favicon.ico">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../index.html">Cursor Rules for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../courses/java-generics/index.html">Java Generics</a>
+      <a href="../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
+    </div>
+  </li>
+  <li><a href="../../archive.html">Archive</a></li>
+  <li><a href="../../tags.html">Tags</a></li>
+  <li><a href="../../about.html">About</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="course-heading">
+<h1>Module 1: Memory Leak Foundations and Detection Setup</h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="course-content">
+
+<div class="course-meta">
+    <i class="fa fa-calendar-o"></i>
+    2025-09-17
+    &nbsp;
+    <i class="fa fa-user"></i>
+    Juan Antonio Breña Moral
+    &nbsp;
+    <i class="fa fa-tag"></i>
+    Version 0.11.0-SNAPSHOT
+  <div class="course-tags">
+    &nbsp;
+    <i class="fa fa-tags"></i>
+      <a href="../../tags/java.html" class="course-tag">java</a>
+      <a href="../../tags/profiling.html" class="course-tag">profiling</a>
+      <a href="../../tags/memory-leak.html" class="course-tag">memory-leak</a>
+      <a href="../../tags/foundations.html" class="course-tag">foundations</a>
+      <a href="../../tags/detection.html" class="course-tag">detection</a>
+      <a href="../../tags/setup.html" class="course-tag">setup</a>
+  </div>
+</div>
+<hr>
+
+<h2>Understanding Memory Leaks and Building Detection Infrastructure</h2>
+<p><strong>⏱️ Duration:</strong> 2 hours<br />
+<strong>🎯 Learning Objectives:</strong><br />
+- Understand what memory leaks are and why they're critical in Java applications<br />
+- Identify different types of memory leak patterns in enterprise applications<br />
+- Explore the Spring Boot memory leak demo architecture<br />
+- Set up automated profiling infrastructure using system prompts<br />
+- Understand the <code>coco=true/false</code> configuration pattern for controlled testing</p>
+<hr />
+<h2>🧠 Conceptual Foundation</h2>
+<h3>What Are Memory Leaks in Java?</h3>
+<p><strong>Definition:</strong> A memory leak in Java occurs when objects that are no longer needed by the application remain referenced and cannot be garbage collected, leading to gradual memory exhaustion.</p>
+<p><strong>🔍 Key Insight:</strong> Unlike languages with manual memory management (C/C++), Java memory leaks are typically caused by <strong>logical errors</strong> where references to unused objects are unintentionally retained.</p>
+<h3>Types of Memory Leaks in Java Applications</h3>
+<h4>1. <strong>Collection Leaks</strong></h4>
+<pre><code class="language-java">// BAD: Unbounded growth
+private final List&lt;RequestData&gt; requests = new ArrayList&lt;&gt;();
+
+public void processRequest(RequestData data) {
+    requests.add(data); // Never removed!
+}
+</code></pre>
+<h4>2. <strong>Thread Pool Leaks</strong></h4>
+<pre><code class="language-java">// BAD: ExecutorService never shutdown
+public void createTask() {
+    ExecutorService executor = Executors.newFixedThreadPool(10);
+    executor.submit(() -&gt; doWork());
+    // Missing: executor.shutdown()!
+}
+</code></pre>
+<h4>3. <strong>Listener/Callback Leaks</strong></h4>
+<pre><code class="language-java">// BAD: Listeners never removed
+public void addListener(EventListener listener) {
+    eventListeners.add(listener); // Accumulates forever
+}
+</code></pre>
+<h4>4. <strong>Cache Leaks</strong></h4>
+<pre><code class="language-java">// BAD: No eviction policy
+private final Map&lt;String, ExpensiveObject&gt; cache = new HashMap&lt;&gt;();
+
+public ExpensiveObject get(String key) {
+    return cache.computeIfAbsent(key, k -&gt; new ExpensiveObject(k));
+    // Cache grows indefinitely!
+}
+</code></pre>
+<h3>💡 Learning Reinforcement</h3>
+<p><strong>Notice how each leak type involves the same pattern: objects being added to collections or caches without corresponding removal logic. This is why systematic profiling is essential - these patterns are often subtle and hard to spot in code reviews!</strong></p>
+<hr />
+<h2>🏗️ Demo Application Architecture</h2>
+<h3>Understanding the Spring Boot Memory Leak Demo</h3>
+<p>The <code>spring-boot-memory-leak-demo</code> project demonstrates controlled memory leak scenarios through two contrasting controller implementations:</p>
+<h4><strong>CocoController (coco=true) - The Problematic Implementation</strong></h4>
+<pre><code class="language-java">@RestController
+@RequestMapping(&quot;/api/v1&quot;)
+@ConditionalOnProperty(name = &quot;coco&quot;, havingValue = &quot;true&quot;, matchIfMissing = true)
+public class CocoController {
+
+    // LEAK 1: Unbounded list growth
+    private final List&lt;MyPojo&gt; objects = new ArrayList&lt;&gt;();
+
+    // LEAK 2: Thread pools created without cleanup
+    @PostMapping(&quot;/threads/create&quot;)
+    public ResponseEntity&lt;String&gt; createThread() {
+        ExecutorService executor = Executors.newFixedThreadPool(5);
+        // Missing shutdown logic!
+        return ResponseEntity.ok(&quot;Thread created&quot;);
+    }
+
+    // LEAK 3: Unbounded object accumulation
+    @PostMapping(&quot;/objects/create&quot;)
+    public ResponseEntity&lt;String&gt; createObject() {
+        objects.add(new MyPojo(/* large data */));
+        return ResponseEntity.ok(&quot;Object created: &quot; + objects.size());
+    }
+}
+</code></pre>
+<h4><strong>NoCocoController (coco=false) - The Fixed Implementation</strong></h4>
+<pre><code class="language-java">@RestController
+@RequestMapping(&quot;/api/v1&quot;)
+@ConditionalOnProperty(name = &quot;coco&quot;, havingValue = &quot;false&quot;)
+public class NoCocoController {
+
+    private static final int MAX_OBJECTS = 10000; // Bounded!
+    private final List&lt;MyPojo&gt; objects = Collections.synchronizedList(new ArrayList&lt;&gt;());
+
+    // Shared, managed thread pool
+    private final ExecutorService sharedExecutorService =
+        Executors.newFixedThreadPool(10, new CustomizableThreadFactory(&quot;shared-pool-&quot;));
+
+    @PostMapping(&quot;/objects/create&quot;)
+    public ResponseEntity&lt;String&gt; createObject() {
+        // Bounds checking prevents unbounded growth
+        if (objects.size() &gt;= MAX_OBJECTS) {
+            return ResponseEntity.badRequest()
+                .body(&quot;Maximum objects limit reached: &quot; + MAX_OBJECTS);
+        }
+        objects.add(new MyPojo(/* same data */));
+        return ResponseEntity.ok(&quot;Object created: &quot; + objects.size());
+    }
+
+    // Proper resource cleanup
+    @PreDestroy
+    public void cleanup() throws InterruptedException {
+        sharedExecutorService.shutdown();
+        if (!sharedExecutorService.awaitTermination(30, TimeUnit.SECONDS)) {
+            sharedExecutorService.shutdownNow();
+        }
+    }
+}
+</code></pre>
+<h3>🔍 Knowledge Check</h3>
+<p><strong>Before we continue, can you identify the three main differences between these implementations that prevent memory leaks?</strong></p>
+<details>
+<summary>Click to reveal answers</summary>
+<ol>
+<li><strong>Bounded Collections</strong>: <code>MAX_OBJECTS</code> constant prevents unbounded list growth</li>
+<li><strong>Shared Thread Pools</strong>: Single managed <code>ExecutorService</code> instead of creating new ones</li>
+<li><strong>Resource Cleanup</strong>: <code>@PreDestroy</code> method ensures proper shutdown of thread pools</li>
+</ol>
+</details>
+<hr />
+<h2>🛠️ Setting Up Profiling Infrastructure</h2>
+<h3>Step 1: Understanding the Configuration Pattern</h3>
+<p>The demo uses Spring Boot's <code>@ConditionalOnProperty</code> to switch between implementations:</p>
+<pre><code class="language-properties"># application.properties (default - enables memory leaks)
+coco=true
+
+# application-vt.properties (virtual threads profile - fixes leaks)
+coco=false
+</code></pre>
+<p><strong>💡 Learning Insight:</strong> This pattern allows us to test the exact same endpoints with different implementations, providing perfect before/after comparison scenarios for profiling!</p>
+<h3>Step 2: Setting Up Detection Scripts using @161-java-profiling-detect</h3>
+<p>Let's set up the profiling infrastructure using the system prompt:</p>
+<h4><strong>🎯 Practical Exercise 1: Initial Setup</strong></h4>
+<ol>
+<li><strong>Navigate to the demo project:</strong></li>
+</ol>
+<pre><code class="language-bash">cd ./cursor-rules-java/examples/spring-boot-memory-leak-demo
+</code></pre>
+<ol>
+<li><strong>Verify the project structure:</strong></li>
+</ol>
+<pre><code class="language-bash">ls -la
+# You should see: run-java-process-for-profiling.sh, profiler/ directory
+</code></pre>
+<ol>
+<li><strong>Check existing profiling setup:</strong></li>
+</ol>
+<pre><code class="language-bash">ls -la profiler/
+# Expected: scripts/, results/, docs/ directories
+</code></pre>
+<h4><strong>🎯 Practical Exercise 2: Baseline Application Startup</strong></h4>
+<ol>
+<li><strong>Start the application with memory leaks enabled (default):</strong></li>
+</ol>
+<pre><code class="language-bash">./run-java-process-for-profiling.sh --help
+</code></pre>
+<ol>
+<li><strong>Verify the application is running:</strong></li>
+</ol>
+<pre><code class="language-bash"># In another terminal
+curl http://localhost:8080/actuator/health
+curl http://localhost:8080/swagger-ui/index.html
+</code></pre>
+<ol>
+<li><strong>Check which controller is active:</strong></li>
+</ol>
+<pre><code class="language-bash">curl -X POST http://localhost:8080/api/v1/objects/create
+# Should respond with &quot;Object created: 1&quot;
+</code></pre>
+<h4><strong>🎯 Practical Exercise 3: Initial Profiling Run</strong></h4>
+<ol>
+<li><strong>Execute the profiling script:</strong></li>
+</ol>
+<pre><code class="language-bash">cd profiler/scripts
+./profile-java-process.sh --help
+</code></pre>
+<ol>
+<li><strong>Follow the interactive prompts:</strong></li>
+</ol>
+<ul>
+<li><strong>Problem Category</strong>: Select &quot;2) Memory-Related Problems&quot;</li>
+<li><strong>Process Selection</strong>: Choose your Spring Boot application</li>
+<li><strong>Profiling Option</strong>: Select &quot;8. Memory Leak Detection (5min)&quot;</li>
+</ul>
+<ol>
+<li><strong>Generate load while profiling:</strong></li>
+</ol>
+<pre><code class="language-bash"># In another terminal, create load
+for i in {1..50}; do
+  curl -X POST http://localhost:8080/api/v1/objects/create
+  curl -X POST http://localhost:8080/api/v1/threads/create
+  sleep 2
+done
+</code></pre>
+<ol>
+<li><strong>Wait for profiling to complete and examine results:</strong></li>
+</ol>
+<pre><code class="language-bash">ls -la profiler/results/
+# Look for: memory-leak-*.html files
+</code></pre>
+<h3>🔍 Understanding Your First Profiling Results</h3>
+<p><strong>Open the generated flamegraph in your browser:</strong></p>
+<pre><code class="language-bash"># macOS
+open profiler/results/memory-leak-*.html
+
+# Linux
+xdg-open profiler/results/memory-leak-*.html
+</code></pre>
+<p><strong>What to look for in the flamegraph:</strong><br />
+- <strong>Canvas Height</strong>: Tall canvas indicates many allocation paths<br />
+- <strong>Wide Sections</strong>: Methods consuming significant memory<br />
+- <strong>Stack Depth</strong>: Deep call stacks may indicate inefficient patterns<br />
+- <strong>Color Patterns</strong>: Different colors represent different allocation types</p>
+<h3>💡 Learning Reinforcement</h3>
+<p><strong>This flamegraph represents the &quot;before&quot; state with active memory leaks. Notice the patterns - we'll compare this exact visualization after implementing fixes in later modules!</strong></p>
+<hr />
+<h2>📊 Baseline Metrics Collection</h2>
+<h3>Establishing Performance Baselines</h3>
+<p>Before we can measure improvements, we need to establish baseline metrics:</p>
+<h4><strong>🎯 Practical Exercise 4: Comprehensive Baseline Collection</strong></h4>
+<ol>
+<li><strong>Generate comprehensive baseline data:</strong></li>
+</ol>
+<pre><code class="language-bash">cd profiler/scripts
+./profile-java-process.sh
+</code></pre>
+<ol>
+<li><strong>Select Option 9: Complete Memory Analysis Workflow</strong></li>
+</ol>
+<ul>
+<li>This will generate three reports:
+<ul>
+<li>30-second baseline</li>
+<li>60-second detailed analysis</li>
+<li>5-minute leak detection</li>
+</ul>
+</li>
+</ul>
+<ol>
+<li><strong>Create sustained load for realistic metrics:</strong></li>
+</ol>
+<pre><code class="language-bash"># Run this in background while profiling
+./run-jmeter.sh --help
+./run-jmeter.sh -t 300 -c 5  # 5 minutes, 5 concurrent users
+</code></pre>
+<ol>
+<li><strong>Document your baseline results:</strong></li>
+</ol>
+<pre><code class="language-bash">ls -la profiler/results/ | grep $(date +%Y%m%d)
+# Record the file names and sizes for later comparison
+</code></pre>
+<h3>Understanding JMeter Integration</h3>
+<p>The demo includes JMeter integration for consistent load testing:</p>
+<pre><code class="language-bash"># View the JMeter test plan
+cat src/test/resources/jmeter/load-test.jmx
+</code></pre>
+<p><strong>Key JMeter Test Scenarios:</strong><br />
+- <strong>Object Creation Load</strong>: Repeatedly calls <code>/api/v1/objects/create</code><br />
+- <strong>Thread Creation Load</strong>: Repeatedly calls <code>/api/v1/threads/create</code><br />
+- <strong>Mixed Workload</strong>: Combines both endpoints with realistic timing</p>
+<h3>🔍 Knowledge Check</h3>
+<p><strong>Why is consistent load testing crucial for memory leak detection?</strong></p>
+<details>
+<summary>Click to reveal answer</summary>
+<p>Memory leaks are often only visible under sustained load because:<br />
+1. <strong>Accumulation Effect</strong>: Leaks compound over time<br />
+2. <strong>GC Masking</strong>: Small leaks may be hidden by normal GC cycles<br />
+3. <strong>Real-world Simulation</strong>: Production applications experience continuous load<br />
+4. <strong>Comparative Analysis</strong>: Consistent load enables accurate before/after comparisons</p>
+</details>
+<hr />
+<h2>🎯 Module 1 Assessment</h2>
+<h3>Hands-on Validation Checklist</h3>
+<p><strong>✅ Conceptual Understanding:</strong><br />
+- [ ] Can explain what causes memory leaks in Java applications<br />
+- [ ] Identified the three main leak patterns in CocoController<br />
+- [ ] Understands the coco=true/false configuration pattern</p>
+<p><strong>✅ Technical Setup:</strong><br />
+- [ ] Successfully started the Spring Boot application<br />
+- [ ] Generated initial profiling reports<br />
+- [ ] Created baseline flamegraph visualizations<br />
+- [ ] Executed JMeter load testing</p>
+<p><strong>✅ Analysis Skills:</strong><br />
+- [ ] Can interpret basic flamegraph patterns<br />
+- [ ] Documented baseline metrics for later comparison<br />
+- [ ] Understands the relationship between load testing and profiling</p>
+<h3>🎯 Practical Challenge</h3>
+<p><strong>Challenge: Custom Load Pattern</strong><br />
+Create a custom load testing script that exercises both problematic endpoints in a pattern that maximizes memory leak detection:</p>
+<pre><code class="language-bash"># Create your custom load script
+cat &gt; custom-load-test.sh &lt;&lt; 'EOF'
+#!/bin/bash
+echo &quot;Starting custom memory leak load test...&quot;
+
+# Your implementation here:
+# 1. Create objects in bursts
+# 2. Create threads periodically
+# 3. Monitor memory growth
+# 4. Report progress
+
+EOF
+chmod +x custom-load-test.sh
+</code></pre>
+<p><strong>Success Criteria:</strong><br />
+- Script runs for at least 5 minutes<br />
+- Generates measurable memory growth<br />
+- Provides progress feedback<br />
+- Creates reproducible load patterns</p>
+<hr />
+<h2>🚀 Transition to Module 2</h2>
+<p><strong>Congratulations!</strong> You've successfully:<br />
+- ✅ Understood the theoretical foundation of Java memory leaks<br />
+- ✅ Explored the demo application architecture<br />
+- ✅ Set up automated profiling infrastructure<br />
+- ✅ Generated baseline profiling data<br />
+- ✅ Established consistent load testing patterns</p>
+<h3><strong>What's Next?</strong></h3>
+<p>In <strong>Module 2: Hands-on Profiling with System Prompts</strong>, we'll dive deep into:<br />
+- Master all 21 profiling options in the interactive script<br />
+- Learn advanced flamegraph interpretation techniques<br />
+- Understand different profiling strategies for different problem types<br />
+- Generate comprehensive evidence for systematic analysis</p>
+<h3>💡 Key Takeaway</h3>
+<p><strong>&quot;The foundation of effective performance optimization is systematic measurement. You've now built the infrastructure to measure, analyze, and validate performance improvements scientifically!&quot;</strong></p>
+<p><strong>Ready to dive deeper into profiling techniques? <a href="module-2-profiling.html">Let's continue to Module 2!</a> 🎯</strong></p>
+
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2025 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../js/jquery-1.11.2.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/prettify.js"></script>
+<script src="../../js/run_prettify.js"></script>
+<script src="../../js/main.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13CV90H4J4');
+</script>
+
+</body>
+</html>

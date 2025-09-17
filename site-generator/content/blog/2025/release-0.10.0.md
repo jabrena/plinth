@@ -2,6 +2,7 @@ title=What's new in Cursor rules for Java 0.10.0?
 date=2025-09-05
 type=post
 tags=blog
+author=Juan Antonio Breña Moral
 status=published
 ~~~~~~
 

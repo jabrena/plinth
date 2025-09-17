@@ -233,6 +233,9 @@ img {
   }
   .navbar-custom .nav .navlinks-children {
     position: absolute;
+    min-width: 200px;
+    width: max-content;
+    white-space: nowrap;
   }
   .navbar-custom .nav .navlinks-container .navlinks-children a {
     padding-left: 10px;

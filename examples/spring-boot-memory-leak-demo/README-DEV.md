@@ -5,7 +5,7 @@
 This demo includes two controllers that can be conditionally enabled based on the `coco` property:
 
 - **CocoController**: Contains intentional memory leaks for demonstration purposes
-- **WithoutCocoController**: Proper implementation with resource management
+- **NoCocoController**: Proper implementation with resource management
 
 ### Configuration Options
 
@@ -15,14 +15,14 @@ Set the `coco` property in your application properties:
 # Enable CocoController (with memory leaks for demo purposes)
 coco=true
 
-# Enable WithoutCocoController (proper resource management)
+# Enable NoCocoController (proper resource management)
 coco=false
 ```
 
 ### Profile-Specific Configuration
 
 - **Default profile** (`application.properties`): `coco=true` (enables CocoController)
-- **Virtual Threads profile** (`application-vt.properties`): `coco=false` (enables WithoutCocoController)
+- **Virtual Threads profile** (`application-vt.properties`): `coco=false` (enables NoCocoController)
 
 ### Usage Examples
 
@@ -30,7 +30,7 @@ coco=false
 # Run with CocoController (memory leaks)
 ./mvnw spring-boot:run
 
-# Run with WithoutCocoController (proper resource management)
+# Run with NoCocoController (proper resource management)
 ./mvnw spring-boot:run -Dspring.profiles.active=vt
 
 # Override property at runtime
