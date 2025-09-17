@@ -32,15 +32,15 @@ The profiling setup uses a clean folder structure with everything contained in t
 
 ```text
 your-project/
-├── run-with-profiler.sh    # ← Step 1: Run main application with profiling JVM flags
-└── profiler/               # ← All profiling-related files
-├── scripts/            # ← Profiling scripts and tools
-│   └── java-profile.sh # ← Step 2: Interactive profiling script
-├── results/            # ← Generated profiling output
-│   ├── *.html          # ← Flamegraph files
-│   └── *.jfr           # ← JFR recording files
-├── current/            # ← Symlink to current profiler version
-└── async-profiler-*/   # ← Downloaded profiler binaries
+├── run-java-process-for-profiling.sh    # ← Step 1: Run main application with profiling JVM flags
+└── profiler/                            # ← All profiling-related files
+├── scripts/                         # ← Profiling scripts and tools
+│   └── profile-java-process.sh      # ← Step 2: Interactive profiling script
+├── results/                         # ← Generated profiling output
+│   ├── *.html                       # ← Flamegraph files
+│   └── *.jfr                        # ← JFR recording files
+├── current/                         # ← Symlink to current profiler version
+└── async-profiler-*/                # ← Downloaded profiler binaries
 ```
 
 ## Instructions
@@ -437,9 +437,9 @@ your-project/
 ```
 
 **Setup Instructions:**
-1. Copy the **EXACT** bash script content from `java-profiling-script-run-app-template.md`
-2. Save it as `run-with-profiler.sh` in your project root
-3. Make it executable: `chmod +x run-with-profiler.sh`
+1. Copy the **EXACT** bash script content from `run-java-process-for-profiling.sh`
+2. Save it as `run-java-process-for-profiling.sh` in your project root
+3. Make it executable: `chmod +x run-java-process-for-profiling.sh`
 4. **NO MODIFICATIONS** to the script content are needed or allowed
 
 **Purpose:**
@@ -450,7 +450,7 @@ your-project/
 **Usage:**
 ```bash
 # Start your application with profiling-ready JVM settings
-./run-with-profiler.sh
+./run-java-process-for-profiling.sh
 ```
                 
 #### Step Constraints
@@ -971,8 +971,8 @@ execute_profiling() {
         10)
             echo -e "${GREEN}Starting Memory Leak Detection (5 minutes)...${NC}"
             echo -e "${YELLOW}This will run for 5 minutes to capture memory leak patterns${NC}"
-            echo -e "${BLUE}Using enhanced leak detection (v4.1): skips last 10% allocations for better accuracy${NC}"
-            "$PROFILER_DIR/current/bin/asprof" -e alloc -d 300 --alloc 1m --leak -f "$RESULTS_DIR/memory-leak-$(date +%Y%m%d-%H%M%S).html" "$PID"
+            echo -e "${BLUE}Using enhanced leak detection: focusing on allocation patterns over time${NC}"
+            "$PROFILER_DIR/current/bin/asprof" -e alloc -d 300 --alloc 1m -f "$RESULTS_DIR/memory-leak-$(date +%Y%m%d-%H%M%S).html" "$PID"
             ;;
         11)
             echo -e "${GREEN}Starting Complete Memory Analysis Workflow...${NC}"
@@ -984,8 +984,8 @@ execute_profiling() {
             echo -e "${BLUE}Step 2: Heap profiling (60s)...${NC}"
             "$PROFILER_DIR/current/bin/asprof" -e alloc -d 60 -f "$RESULTS_DIR/heap-analysis-$TIMESTAMP.html" "$PID"
 
-            echo -e "${BLUE}Step 3: Memory leak detection (5min) - Enhanced v4.1...${NC}"
-            "$PROFILER_DIR/current/bin/asprof" -e alloc -d 300 --alloc 1m --leak -f "$RESULTS_DIR/memory-leak-complete-$TIMESTAMP.html" "$PID"
+            echo -e "${BLUE}Step 3: Memory leak detection (5min) - Long-term allocation analysis...${NC}"
+            "$PROFILER_DIR/current/bin/asprof" -e alloc -d 300 --alloc 1m -f "$RESULTS_DIR/memory-leak-complete-$TIMESTAMP.html" "$PID"
 
             echo -e "${GREEN}Complete memory analysis finished! Check these files:${NC}"
             echo "- memory-baseline-$TIMESTAMP.html (30s baseline)"
@@ -1215,7 +1215,36 @@ execute_profiling() {
         15)
             echo -e "${GREEN}Starting All Events Profiling for 30 seconds...${NC}"
             echo -e "${BLUE}This will collect all possible events simultaneously (CPU, alloc, lock, wall)${NC}"
-            "$PROFILER_DIR/current/bin/asprof" --all -d 30 -f "$RESULTS_DIR/all-events-$(date +%Y%m%d-%H%M%S).html" "$PID"
+            TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+            JFR_FILE="$RESULTS_DIR/all-events-$TIMESTAMP.jfr"
+            HTML_FILE="$RESULTS_DIR/all-events-$TIMESTAMP.html"
+
+            echo -e "${BLUE}Step 1: Recording all events to JFR format...${NC}"
+            "$PROFILER_DIR/current/bin/asprof" --all -d 30 -o jfr -f "$JFR_FILE" "$PID"
+
+            if [ $? -eq 0 ] && [ -f "$JFR_FILE" ]; then
+                echo -e "${BLUE}Step 2: Converting JFR to HTML flame graph...${NC}"
+                # Use the converter tool to create flame graph from JFR
+                if [ -f "$PROFILER_DIR/current/bin/converter.jar" ]; then
+                    java -jar "$PROFILER_DIR/current/bin/converter.jar" jfr2flame "$JFR_FILE" "$HTML_FILE"
+                elif [ -f "$PROFILER_DIR/current/bin/jfrconv" ]; then
+                    bash "$PROFILER_DIR/current/bin/jfrconv" -o html "$JFR_FILE" "$HTML_FILE"
+                else
+                    echo -e "${YELLOW}JFR converter not found, skipping HTML conversion${NC}"
+                    echo -e "${BLUE}You can analyze the JFR file with JProfiler, VisualVM, or Mission Control${NC}"
+                fi
+
+                echo -e "${GREEN}All events profiling completed!${NC}"
+                echo -e "${YELLOW}Generated files:${NC}"
+                echo "  - JFR recording: $JFR_FILE"
+                if [ -f "$HTML_FILE" ]; then
+                    echo "  - HTML flame graph: $HTML_FILE"
+                else
+                    echo "  - HTML conversion skipped (use JFR analysis tools instead)"
+                fi
+            else
+                echo -e "${RED}All events profiling failed${NC}"
+            fi
             ;;
         16)
             echo -e "${GREEN}Starting OpenTelemetry OTLP Export...${NC}"
@@ -1307,13 +1336,13 @@ done
 ```
 └── profiler/               # ← All profiling-related files
     ├── scripts/            # ← Profiling scripts and tools
-    │   └── java-profile.sh # ← Copy exact script from template
+    │   └── profile-java-process.sh # ← Copy exact script from template
 ```
 
 **Setup Instructions:**
 1. Copy the **EXACT** bash script from the template
-2. Save it as `profiler/scripts/java-profile.sh` in your project root
-3. Make it executable: `chmod +x profiler/scripts/java-profile.sh`
+2. Save it as `profiler/scripts/profile-java-process.sh` in your project root
+3. Make it executable: `chmod +x profiler/scripts/profile-java-process.sh`
 4. **NO MODIFICATIONS** to the script content are needed or allowed
 
 **Purpose:**
@@ -1325,7 +1354,7 @@ done
 **Usage:**
 ```bash
 # Execute the interactive profiling script
-./profiler/scripts/java-profile.sh
+./profiler/scripts/profile-java-process.sh
 ```
                 
 #### Step Constraints
@@ -1338,8 +1367,8 @@ done
 - The script is already complete and tested - no improvements needed
 - Create the profiler directory structure: `mkdir -p profiler/scripts profiler/results`
 - Copy the **EXACT** bash script content from `java-profiling-script-template.md`
-- Save it as `profiler/scripts/java-profile.sh`
-- Make it executable: `chmod +x profiler/scripts/java-profile.sh`
+- Save it as `profiler/scripts/profile-java-process.sh`
+- Make it executable: `chmod +x profiler/scripts/profile-java-process.sh`
 - **NO MODIFICATIONS** to the script content are needed or allowed
 
 ### Step 3: Explain how to use the scripts

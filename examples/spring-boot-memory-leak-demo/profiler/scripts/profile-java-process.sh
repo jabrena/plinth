@@ -502,8 +502,8 @@ execute_profiling() {
         10)
             echo -e "${GREEN}Starting Memory Leak Detection (5 minutes)...${NC}"
             echo -e "${YELLOW}This will run for 5 minutes to capture memory leak patterns${NC}"
-            echo -e "${BLUE}Using enhanced leak detection (v4.1): skips last 10% allocations for better accuracy${NC}"
-            "$PROFILER_DIR/current/bin/asprof" -e alloc -d 300 --alloc 1m --leak -f "$RESULTS_DIR/memory-leak-$(date +%Y%m%d-%H%M%S).html" "$PID"
+            echo -e "${BLUE}Using enhanced leak detection: focusing on allocation patterns over time${NC}"
+            "$PROFILER_DIR/current/bin/asprof" -e alloc -d 300 --alloc 1m -f "$RESULTS_DIR/memory-leak-$(date +%Y%m%d-%H%M%S).html" "$PID"
             ;;
         11)
             echo -e "${GREEN}Starting Complete Memory Analysis Workflow...${NC}"
@@ -515,8 +515,8 @@ execute_profiling() {
             echo -e "${BLUE}Step 2: Heap profiling (60s)...${NC}"
             "$PROFILER_DIR/current/bin/asprof" -e alloc -d 60 -f "$RESULTS_DIR/heap-analysis-$TIMESTAMP.html" "$PID"
 
-            echo -e "${BLUE}Step 3: Memory leak detection (5min) - Enhanced v4.1...${NC}"
-            "$PROFILER_DIR/current/bin/asprof" -e alloc -d 300 --alloc 1m --leak -f "$RESULTS_DIR/memory-leak-complete-$TIMESTAMP.html" "$PID"
+            echo -e "${BLUE}Step 3: Memory leak detection (5min) - Long-term allocation analysis...${NC}"
+            "$PROFILER_DIR/current/bin/asprof" -e alloc -d 300 --alloc 1m -f "$RESULTS_DIR/memory-leak-complete-$TIMESTAMP.html" "$PID"
 
             echo -e "${GREEN}Complete memory analysis finished! Check these files:${NC}"
             echo "- memory-baseline-$TIMESTAMP.html (30s baseline)"
@@ -746,7 +746,36 @@ execute_profiling() {
         15)
             echo -e "${GREEN}Starting All Events Profiling for 30 seconds...${NC}"
             echo -e "${BLUE}This will collect all possible events simultaneously (CPU, alloc, lock, wall)${NC}"
-            "$PROFILER_DIR/current/bin/asprof" --all -d 30 -f "$RESULTS_DIR/all-events-$(date +%Y%m%d-%H%M%S).html" "$PID"
+            TIMESTAMP=$(date +%Y%m%d-%H%M%S)
+            JFR_FILE="$RESULTS_DIR/all-events-$TIMESTAMP.jfr"
+            HTML_FILE="$RESULTS_DIR/all-events-$TIMESTAMP.html"
+
+            echo -e "${BLUE}Step 1: Recording all events to JFR format...${NC}"
+            "$PROFILER_DIR/current/bin/asprof" --all -d 30 -o jfr -f "$JFR_FILE" "$PID"
+
+            if [ $? -eq 0 ] && [ -f "$JFR_FILE" ]; then
+                echo -e "${BLUE}Step 2: Converting JFR to HTML flame graph...${NC}"
+                # Use the converter tool to create flame graph from JFR
+                if [ -f "$PROFILER_DIR/current/bin/converter.jar" ]; then
+                    java -jar "$PROFILER_DIR/current/bin/converter.jar" jfr2flame "$JFR_FILE" "$HTML_FILE"
+                elif [ -f "$PROFILER_DIR/current/bin/jfrconv" ]; then
+                    bash "$PROFILER_DIR/current/bin/jfrconv" -o html "$JFR_FILE" "$HTML_FILE"
+                else
+                    echo -e "${YELLOW}JFR converter not found, skipping HTML conversion${NC}"
+                    echo -e "${BLUE}You can analyze the JFR file with JProfiler, VisualVM, or Mission Control${NC}"
+                fi
+
+                echo -e "${GREEN}All events profiling completed!${NC}"
+                echo -e "${YELLOW}Generated files:${NC}"
+                echo "  - JFR recording: $JFR_FILE"
+                if [ -f "$HTML_FILE" ]; then
+                    echo "  - HTML flame graph: $HTML_FILE"
+                else
+                    echo "  - HTML conversion skipped (use JFR analysis tools instead)"
+                fi
+            else
+                echo -e "${RED}All events profiling failed${NC}"
+            fi
             ;;
         16)
             echo -e "${GREEN}Starting OpenTelemetry OTLP Export...${NC}"
