@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Module 2: Code Quality - Testing &amp; Design Principles - Cursor Rules for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../feed.xml" title="Cursor Rules for Java"/>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../css/prettify.css">
+  <link rel="shortcut icon" href="../../favicon.ico">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../index.html">Cursor Rules for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../courses/java-generics/index.html">Java Generics</a>
+      <a href="../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
+    </div>
+  </li>
+  <li><a href="../../archive.html">Archive</a></li>
+  <li><a href="../../about.html">About</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="course-heading">
+<h1>Module 2: Code Quality - Testing & Design Principles</h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="course-content">
+
+<div class="course-meta">
+    <i class="fa fa-calendar-o"></i>
+    2025-09-17
+    &nbsp;
+    <i class="fa fa-user"></i>
+    Juan Antonio Breña Moral
+    &nbsp;
+    <i class="fa fa-tag"></i>
+    Version 0.11.0-SNAPSHOT
+  <div class="course-tags">
+    &nbsp;
+    <i class="fa fa-tags"></i>
+      <a href="../../tags/java.html" class="course-tag">java</a>
+      <a href="../../tags/testing.html" class="course-tag">testing</a>
+      <a href="../../tags/design-patterns.html" class="course-tag">design-patterns</a>
+      <a href="../../tags/oop.html" class="course-tag">oop</a>
+      <a href="../../tags/solid.html" class="course-tag">solid</a>
+      <a href="../../tags/unit-testing.html" class="course-tag">unit-testing</a>
+      <a href="../../tags/system-prompts.html" class="course-tag">system-prompts</a>
+  </div>
+</div>
+<hr>
+
+<h1>Module 2: Code Quality - Testing &amp; Design Principles</h1>
+<h2>🎯 Learning Objectives</h2>
+<p>By the end of this module, you will:</p>
+<ul>
+<li><strong>Generate comprehensive unit tests</strong> using AI-powered system prompts</li>
+<li><strong>Apply object-oriented design principles</strong> systematically</li>
+<li><strong>Implement type-safe design patterns</strong> effectively</li>
+<li><strong>Create maintainable, testable code</strong> following industry standards</li>
+<li><strong>Understand the relationship</strong> between testing and good design</li>
+</ul>
+<h2>📚 Module Overview</h2>
+<p><strong>Duration:</strong> 5 hours<br />
+<strong>Difficulty:</strong> Intermediate<br />
+<strong>Prerequisites:</strong> Module 1 completed, OOP fundamentals</p>
+<p>This module focuses on code quality through automated testing and design principles. You'll learn to use system prompts that not only generate tests but also improve your code's design and maintainability.</p>
+<h2>🗺️ Learning Path</h2>
+<h3><strong>Lesson 2.1: Unit Testing Mastery</strong> (90 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Master unit testing best practices using <code>@131-java-unit-testing</code></li>
+<li>Understand test-driven development workflows</li>
+<li>Generate comprehensive test suites automatically</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>Modern Unit Testing Principles:</strong></p>
+<ol>
+<li><strong>AAA Pattern</strong>: Arrange, Act, Assert</li>
+<li><strong>Test Naming</strong>: Descriptive, behavior-focused names</li>
+<li><strong>Test Independence</strong>: Each test runs in isolation</li>
+<li><strong>Mocking Strategy</strong>: Test units, not dependencies</li>
+<li><strong>Coverage Goals</strong>: Meaningful coverage, not just percentages</li>
+</ol>
+<h4>💡 <strong>Knowledge Check:</strong></h4>
+<p><em>What's the difference between testing implementation details vs. testing behavior?</em></p>
+<p><strong>Answer:</strong> Testing behavior focuses on what the code does (outcomes), while testing implementation focuses on how it does it (internal mechanics). Behavior testing is more resilient to refactoring.</p>
+<h4>🔧 <strong>Hands-on Exercise 2.1:</strong></h4>
+<p><strong>Scenario:</strong> You have a service class that needs comprehensive test coverage.</p>
+<p><strong>Step 1: Analyze the Code</strong></p>
+<pre><code class="language-bash">cd examples/maven-demo/src/main/java/com/example
+</code></pre>
+<p>Look at the <code>Calculator.java</code> class:</p>
+<pre><code class="language-java">public class Calculator {
+    public int add(int a, int b) {
+        return a + b;
+    }
+
+    public double divide(int a, int b) {
+        if (b == 0) {
+            throw new IllegalArgumentException(&quot;Division by zero&quot;);
+        }
+        return (double) a / b;
+    }
+}
+</code></pre>
+<p><strong>Step 2: Apply System Prompt</strong><br />
+Use: <code>Improve the class/classes added in the context applying the system prompt @131-java-unit-testing</code></p>
+<p><strong>Step 3: Interactive Approach</strong><br />
+Try: <code>Improve the class/classes added in the context applying the system prompt @131-java-unit-testing with the behaviour @behaviour-consultative-interaction</code></p>
+<p><strong>Expected Outcomes:</strong><br />
+- Comprehensive test class with JUnit 5<br />
+- Parameterized tests for multiple scenarios<br />
+- Exception testing with proper assertions<br />
+- Mock usage where appropriate<br />
+- Clear, descriptive test names</p>
+<h4>🔍 <strong>Deep Dive: Generated Test Analysis</strong></h4>
+<p>The system prompt should generate tests like:</p>
+<pre><code class="language-java">@Test
+@DisplayName(&quot;Should return sum when adding two positive numbers&quot;)
+void shouldReturnSum_WhenAddingTwoPositiveNumbers() {
+    // Arrange
+    Calculator calculator = new Calculator();
+    int firstNumber = 5;
+    int secondNumber = 3;
+
+    // Act
+    int result = calculator.add(firstNumber, secondNumber);
+
+    // Assert
+    assertThat(result).isEqualTo(8);
+}
+
+@Test
+@DisplayName(&quot;Should throw IllegalArgumentException when dividing by zero&quot;)
+void shouldThrowIllegalArgumentException_WhenDividingByZero() {
+    // Arrange
+    Calculator calculator = new Calculator();
+
+    // Act &amp; Assert
+    assertThatThrownBy(() -&gt; calculator.divide(10, 0))
+        .isInstanceOf(IllegalArgumentException.class)
+        .hasMessage(&quot;Division by zero&quot;);
+}
+</code></pre>
+<p><strong>Why This Approach Works:</strong><br />
+- <strong>Clear Intent</strong>: Test names describe expected behavior<br />
+- <strong>AAA Structure</strong>: Organized, readable test structure<br />
+- <strong>Proper Assertions</strong>: Using AssertJ for fluent assertions<br />
+- <strong>Exception Testing</strong>: Validates error conditions properly</p>
+<hr />
+<h3><strong>Lesson 2.2: Object-Oriented Design Excellence</strong> (75 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Apply OOP principles using <code>@121-java-object-oriented-design</code></li>
+<li>Understand SOLID principles in practice</li>
+<li>Refactor procedural code to object-oriented design</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>SOLID Principles Refresher:</strong></p>
+<ol>
+<li><strong>Single Responsibility</strong>: One reason to change</li>
+<li><strong>Open/Closed</strong>: Open for extension, closed for modification</li>
+<li><strong>Liskov Substitution</strong>: Subtypes must be substitutable</li>
+<li><strong>Interface Segregation</strong>: Many specific interfaces vs. one general</li>
+<li><strong>Dependency Inversion</strong>: Depend on abstractions, not concretions</li>
+</ol>
+<h4>🔧 <strong>Hands-on Exercise 2.2:</strong></h4>
+<p><strong>Scenario:</strong> Refactor a monolithic service class into proper OOP design.</p>
+<p><strong>Step 1: Analyze Problematic Code</strong></p>
+<pre><code class="language-java">public class UserService {
+    public void processUser(String userData) {
+        // Parse user data
+        String[] parts = userData.split(&quot;,&quot;);
+        String name = parts[0];
+        String email = parts[1];
+
+        // Validate email
+        if (!email.contains(&quot;@&quot;)) {
+            throw new IllegalArgumentException(&quot;Invalid email&quot;);
+        }
+
+        // Save to database
+        Connection conn = DriverManager.getConnection(&quot;jdbc:mysql://localhost/users&quot;);
+        PreparedStatement stmt = conn.prepareStatement(&quot;INSERT INTO users VALUES (?, ?)&quot;);
+        stmt.setString(1, name);
+        stmt.setString(2, email);
+        stmt.executeUpdate();
+
+        // Send welcome email
+        EmailClient client = new EmailClient();
+        client.sendEmail(email, &quot;Welcome&quot;, &quot;Welcome to our service!&quot;);
+    }
+}
+</code></pre>
+<p><strong>Problems Identified:</strong><br />
+- Multiple responsibilities (parsing, validation, persistence, notification)<br />
+- Hard dependencies on database and email service<br />
+- Difficult to test<br />
+- Violates Single Responsibility Principle</p>
+<p><strong>Step 2: Apply System Prompt</strong><br />
+Use: <code>Improve the class/classes added in the context applying the system prompt @121-java-object-oriented-design</code></p>
+<p><strong>Step 3: Analyze Improvements</strong><br />
+The system prompt should suggest:</p>
+<pre><code class="language-java">// Separated concerns
+public class User {
+    private final String name;
+    private final String email;
+    // Constructor, getters, validation
+}
+
+public interface UserRepository {
+    void save(User user);
+}
+
+public interface EmailService {
+    void sendWelcomeEmail(String email);
+}
+
+public class UserService {
+    private final UserRepository repository;
+    private final EmailService emailService;
+
+    public UserService(UserRepository repository, EmailService emailService) {
+        this.repository = repository;
+        this.emailService = emailService;
+    }
+
+    public void processUser(String userData) {
+        User user = parseUser(userData);
+        repository.save(user);
+        emailService.sendWelcomeEmail(user.getEmail());
+    }
+}
+</code></pre>
+<h4>💡 <strong>Design Benefits Analysis:</strong></h4>
+<ul>
+<li><strong>Single Responsibility</strong>: Each class has one clear purpose</li>
+<li><strong>Dependency Injection</strong>: Testable, flexible dependencies</li>
+<li><strong>Interface Segregation</strong>: Focused interfaces for specific needs</li>
+<li><strong>Open/Closed</strong>: Easy to extend with new user types or services</li>
+</ul>
+<hr />
+<h3><strong>Lesson 2.3: Type Design Mastery</strong> (90 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Implement type-safe design using <code>@122-java-type-design</code></li>
+<li>Understand value objects and domain modeling</li>
+<li>Apply modern Java type system features</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>Type Safety Principles:</strong></p>
+<ol>
+<li><strong>Make Illegal States Unrepresentable</strong>: Use types to prevent invalid data</li>
+<li><strong>Value Objects</strong>: Immutable objects representing values</li>
+<li><strong>Domain Modeling</strong>: Types that reflect business concepts</li>
+<li><strong>Null Safety</strong>: Avoid NullPointerException through design</li>
+<li><strong>Generic Constraints</strong>: Use bounded type parameters effectively</li>
+</ol>
+<h4>🔧 <strong>Hands-on Exercise 2.3:</strong></h4>
+<p><strong>Scenario:</strong> Design a type-safe e-commerce domain model.</p>
+<p><strong>Step 1: Problematic Primitive-Based Design</strong></p>
+<pre><code class="language-java">public class Order {
+    private String customerId;      // Could be empty or null
+    private String productId;       // Could be empty or null
+    private int quantity;           // Could be negative
+    private double price;           // Could be negative
+    private String status;          // Could be any string
+}
+</code></pre>
+<p><strong>Problems:</strong><br />
+- Primitive obsession<br />
+- No validation at type level<br />
+- Possible invalid states<br />
+- No business meaning in types</p>
+<p><strong>Step 2: Apply System Prompt</strong><br />
+Use: <code>Improve the class/classes added in the context applying the system prompt @122-java-type-design</code></p>
+<p><strong>Step 3: Analyze Type-Safe Design</strong><br />
+Expected improvements:</p>
+<pre><code class="language-java">// Value objects with validation
+public record CustomerId(String value) {
+    public CustomerId {
+        if (value == null || value.trim().isEmpty()) {
+            throw new IllegalArgumentException(&quot;Customer ID cannot be empty&quot;);
+        }
+    }
+}
+
+public record ProductId(String value) {
+    public ProductId {
+        if (value == null || value.trim().isEmpty()) {
+            throw new IllegalArgumentException(&quot;Product ID cannot be empty&quot;);
+        }
+    }
+}
+
+public record Quantity(int value) {
+    public Quantity {
+        if (value &lt;= 0) {
+            throw new IllegalArgumentException(&quot;Quantity must be positive&quot;);
+        }
+    }
+}
+
+public record Price(BigDecimal amount) {
+    public Price {
+        if (amount == null || amount.compareTo(BigDecimal.ZERO) &lt; 0) {
+            throw new IllegalArgumentException(&quot;Price cannot be negative&quot;);
+        }
+    }
+}
+
+public enum OrderStatus {
+    PENDING, CONFIRMED, SHIPPED, DELIVERED, CANCELLED
+}
+
+public record Order(
+    CustomerId customerId,
+    ProductId productId,
+    Quantity quantity,
+    Price price,
+    OrderStatus status
+) {
+    // Impossible to create invalid Order instances
+}
+</code></pre>
+<h4>💡 <strong>Type Safety Benefits:</strong></h4>
+<ul>
+<li><strong>Compile-Time Safety</strong>: Invalid states caught at compile time</li>
+<li><strong>Self-Documenting</strong>: Types express business rules</li>
+<li><strong>Refactoring Safety</strong>: Changes propagate through type system</li>
+<li><strong>Testing Simplicity</strong>: Easier to test valid vs. invalid states</li>
+</ul>
+<hr />
+<h3><strong>Lesson 2.4: Integration Testing Strategies</strong> (45 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Understand testing pyramid concepts</li>
+<li>Learn when to use unit vs. integration tests</li>
+<li>Apply testing strategies to real-world scenarios</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>Testing Pyramid:</strong></p>
+<pre><code>        /\
+       /  \
+      / UI \
+     /______\
+    /        \
+   /Integration\
+  /__________\
+ /            \
+/   Unit Tests  \
+/________________\
+</code></pre>
+<p><strong>Testing Strategy Guidelines:</strong><br />
+- <strong>Unit Tests (70%)</strong>: Fast, isolated, focused<br />
+- <strong>Integration Tests (20%)</strong>: Component interactions<br />
+- <strong>UI Tests (10%)</strong>: End-to-end scenarios</p>
+<h4>🔧 <strong>Hands-on Exercise 2.4:</strong></h4>
+<p><strong>Step 1: Identify Test Scenarios</strong><br />
+For the improved <code>UserService</code>:<br />
+- <strong>Unit Tests</strong>: Individual method behavior<br />
+- <strong>Integration Tests</strong>: Database interactions<br />
+- <strong>Contract Tests</strong>: External service interactions</p>
+<p><strong>Step 2: Generate Test Suite</strong><br />
+Use system prompts to create comprehensive test coverage.</p>
+<hr />
+<h2>🏆 Module Assessment</h2>
+<h3><strong>Knowledge Validation Checkpoint</strong></h3>
+<p><strong>Question 1:</strong> What are the three parts of the AAA testing pattern?</p>
+<p><strong>Question 2:</strong> Which SOLID principle is violated when a class has multiple reasons to change?</p>
+<p><strong>Question 3:</strong> How do value objects improve type safety?</p>
+<p><strong>Question 4:</strong> What's the ideal distribution of tests in the testing pyramid?</p>
+<h3><strong>Practical Assessment Project</strong></h3>
+<p><strong>Project: &quot;E-Commerce Service Refactoring&quot;</strong></p>
+<p><strong>Scenario:</strong> You inherit a poorly designed e-commerce service that needs comprehensive improvement.</p>
+<p><strong>Starting Code:</strong></p>
+<pre><code class="language-java">public class OrderProcessor {
+    public String processOrder(String customerData, String productData, String quantityStr, String priceStr) {
+        // Monolithic method with multiple responsibilities
+        // No validation, no proper types, hard to test
+    }
+}
+</code></pre>
+<p><strong>Requirements:</strong><br />
+1. Apply object-oriented design principles<br />
+2. Implement type-safe domain model<br />
+3. Generate comprehensive unit tests<br />
+4. Create integration test strategy<br />
+5. Document design decisions</p>
+<p><strong>Deliverables:</strong><br />
+- Refactored code with proper OOP design<br />
+- Type-safe domain model using records and enums<br />
+- Complete unit test suite (&gt;90% coverage)<br />
+- Integration test examples<br />
+- Design documentation explaining improvements</p>
+<p><strong>Success Criteria:</strong><br />
+- All SOLID principles properly applied<br />
+- Type safety prevents invalid states<br />
+- Tests are comprehensive and maintainable<br />
+- Code is readable and self-documenting<br />
+- System prompts used effectively throughout</p>
+<h3><strong>Time Investment:</strong></h3>
+<ul>
+<li><strong>Analysis &amp; Planning</strong>: 45 minutes</li>
+<li><strong>Implementation</strong>: 2 hours</li>
+<li><strong>Testing</strong>: 1.5 hours</li>
+<li><strong>Documentation</strong>: 30 minutes</li>
+<li><strong>Total</strong>: 4.5 hours</li>
+</ul>
+<hr />
+<h2>🚀 Next Steps</h2>
+<p><strong>Excellent Progress!</strong> You've mastered code quality fundamentals through automated testing and design principles.</p>
+<p><strong>What You've Accomplished:</strong><br />
+- ✅ Generated comprehensive unit test suites<br />
+- ✅ Applied SOLID principles systematically<br />
+- ✅ Implemented type-safe domain models<br />
+- ✅ Created maintainable, testable code</p>
+<p><strong>Ready for advanced topics?</strong></p>
+<p>👉 <strong><a href="module-3-secure-coding.html">Continue to Module 3: Secure Coding →</a></strong></p>
+<p><strong>In Module 3, you'll learn to:</strong><br />
+- Implement security best practices automatically<br />
+- Handle concurrency safely and efficiently<br />
+- Apply proper logging and exception handling<br />
+- Create robust, production-ready applications</p>
+<hr />
+<h2>📚 Additional Resources</h2>
+<ul>
+<li><strong><a href="https://junit.org/junit5/docs/current/user-guide/">JUnit 5 User Guide</a></strong></li>
+<li><strong><a href="https://assertj.github.io/doc/">AssertJ Documentation</a></strong></li>
+<li><strong><a href="https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882">Clean Code Principles</a></strong></li>
+<li><strong><a href="https://www.amazon.com/Effective-Java-Joshua-Bloch/dp/0134685997">Effective Java by Joshua Bloch</a></strong></li>
+</ul>
+<hr />
+<p><em>Build upon your testing and design foundation with advanced security and concurrency patterns in the next module.</em></p>
+
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena/cursor-rules-java" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2025 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../js/jquery-1.11.2.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/prettify.js"></script>
+<script src="../../js/run_prettify.js"></script>
+<script src="../../js/main.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13CV90H4J4');
+</script>
+
+</body>
+</html>

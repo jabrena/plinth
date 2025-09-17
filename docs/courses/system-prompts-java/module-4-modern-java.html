@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Module 4: Modern Java - Advanced Language Features - Cursor Rules for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../feed.xml" title="Cursor Rules for Java"/>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../css/prettify.css">
+  <link rel="shortcut icon" href="../../favicon.ico">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../index.html">Cursor Rules for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../courses/java-generics/index.html">Java Generics</a>
+      <a href="../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
+    </div>
+  </li>
+  <li><a href="../../archive.html">Archive</a></li>
+  <li><a href="../../about.html">About</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="course-heading">
+<h1>Module 4: Modern Java - Advanced Language Features</h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="course-content">
+
+<div class="course-meta">
+    <i class="fa fa-calendar-o"></i>
+    2025-09-17
+    &nbsp;
+    <i class="fa fa-user"></i>
+    Juan Antonio Breña Moral
+    &nbsp;
+    <i class="fa fa-tag"></i>
+    Version 0.11.0-SNAPSHOT
+  <div class="course-tags">
+    &nbsp;
+    <i class="fa fa-tags"></i>
+      <a href="../../tags/java.html" class="course-tag">java</a>
+      <a href="../../tags/generics.html" class="course-tag">generics</a>
+      <a href="../../tags/functional-programming.html" class="course-tag">functional-programming</a>
+      <a href="../../tags/records.html" class="course-tag">records</a>
+      <a href="../../tags/sealed-types.html" class="course-tag">sealed-types</a>
+      <a href="../../tags/modern-java.html" class="course-tag">modern-java</a>
+      <a href="../../tags/system-prompts.html" class="course-tag">system-prompts</a>
+  </div>
+</div>
+<hr>
+
+<h2>🎯 Learning Objectives</h2>
+<p>By the end of this module, you will:</p>
+<ul>
+<li><strong>Master Java Generics</strong> from basics to advanced patterns using <code>@128-java-generics</code></li>
+<li><strong>Apply functional programming</strong> techniques effectively using <code>@142-java-functional-programming</code></li>
+<li><strong>Implement functional exception handling</strong> with monads using <code>@143-java-functional-exception-handling</code></li>
+<li><strong>Leverage data-oriented programming</strong> with records and sealed types using <code>@144-java-data-oriented-programming</code></li>
+<li><strong>Refactor legacy code</strong> with modern Java features using <code>@141-java-refactoring-with-modern-features</code></li>
+</ul>
+<h2>📚 Module Overview</h2>
+<p><strong>Duration:</strong> 6 hours<br />
+<strong>Difficulty:</strong> Intermediate to Advanced<br />
+<strong>Prerequisites:</strong> Module 3 completed, Java 17+ knowledge</p>
+<p>This module explores the cutting-edge features of modern Java, transforming how you write expressive, type-safe, and maintainable code. You'll learn to leverage the full power of Java's evolution from Java 8 to Java 21+.</p>
+<h2>🗺️ Learning Path</h2>
+<h3><strong>Lesson 4.1: Java Generics Mastery</strong> (120 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Understand generics from fundamentals to advanced patterns</li>
+<li>Master wildcards and the PECS principle</li>
+<li>Implement type-safe generic containers and builders</li>
+<li>Handle type erasure limitations effectively</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>Generics Fundamentals:</strong></p>
+<ol>
+<li><strong>Type Safety</strong>: Compile-time type checking</li>
+<li><strong>Type Erasure</strong>: Runtime behavior and limitations</li>
+<li><strong>Wildcards</strong>: <code>? extends T</code> (producer) and <code>? super T</code> (consumer)</li>
+<li><strong>PECS Principle</strong>: Producer Extends, Consumer Super</li>
+<li><strong>Generic Methods</strong>: Type parameter inference</li>
+<li><strong>Bounded Type Parameters</strong>: Constraining generic types</li>
+</ol>
+<h4>💡 <strong>Knowledge Check:</strong></h4>
+<p><em>Why can't you create an array of parameterized types like <code>new List&lt;String&gt;[10]</code>?</em></p>
+<p><strong>Answer:</strong> Due to type erasure, arrays retain their component type at runtime while generics don't. This would break array store checks and type safety.</p>
+<h4>🔧 <strong>Hands-on Exercise 4.1:</strong></h4>
+<p><strong>Scenario:</strong> Build a type-safe data processing pipeline with proper generic design.</p>
+<p><strong>Step 1: Legacy Non-Generic Code</strong></p>
+<pre><code class="language-java">public class DataProcessor {
+    private List items = new ArrayList(); // Raw type!
+
+    public void addItem(Object item) {
+        items.add(item);
+    }
+
+    public Object getItem(int index) {
+        return items.get(index); // Requires casting!
+    }
+
+    public List processItems(List input) {
+        List result = new ArrayList();
+        for (Object item : input) {
+            result.add(process(item)); // No type safety!
+        }
+        return result;
+    }
+
+    private Object process(Object item) {
+        return item.toString().toUpperCase();
+    }
+}
+</code></pre>
+<p><strong>Problems:</strong><br />
+- Raw types lose compile-time safety<br />
+- Requires explicit casting<br />
+- Runtime ClassCastException risk<br />
+- No API contract clarity</p>
+<p><strong>Step 2: Apply Generics System Prompt</strong><br />
+Use: <code>Improve the class/classes added in the context applying the system prompt @128-java-generics</code></p>
+<p><strong>Step 3: Analyze Generic Improvements</strong><br />
+Expected transformation:</p>
+<pre><code class="language-java">public class GenericDataProcessor&lt;T&gt; {
+    private final List&lt;T&gt; items = new ArrayList&lt;&gt;();
+
+    public void addItem(T item) {
+        Objects.requireNonNull(item, &quot;Item cannot be null&quot;);
+        items.add(item);
+    }
+
+    public Optional&lt;T&gt; getItem(int index) {
+        if (index &lt; 0 || index &gt;= items.size()) {
+            return Optional.empty();
+        }
+        return Optional.of(items.get(index));
+    }
+
+    public &lt;R&gt; List&lt;R&gt; processItems(List&lt;? extends T&gt; input,
+                                   Function&lt;? super T, ? extends R&gt; processor) {
+        return input.stream()
+                   .map(processor)
+                   .collect(Collectors.toList());
+    }
+
+    // Advanced: Builder pattern with generics
+    public static &lt;T&gt; Builder&lt;T&gt; builder() {
+        return new Builder&lt;&gt;();
+    }
+
+    public static class Builder&lt;T&gt; {
+        private final List&lt;T&gt; items = new ArrayList&lt;&gt;();
+
+        public Builder&lt;T&gt; add(T item) {
+            items.add(item);
+            return this;
+        }
+
+        public Builder&lt;T&gt; addAll(Collection&lt;? extends T&gt; items) {
+            this.items.addAll(items);
+            return this;
+        }
+
+        public GenericDataProcessor&lt;T&gt; build() {
+            GenericDataProcessor&lt;T&gt; processor = new GenericDataProcessor&lt;&gt;();
+            processor.items.addAll(this.items);
+            return processor;
+        }
+    }
+}
+
+// Usage examples demonstrating type safety
+public class GenericUsageExamples {
+    public void demonstrateTypeSafety() {
+        // String processor
+        GenericDataProcessor&lt;String&gt; stringProcessor =
+            GenericDataProcessor.&lt;String&gt;builder()
+                .add(&quot;hello&quot;)
+                .add(&quot;world&quot;)
+                .build();
+
+        List&lt;String&gt; upperCase = stringProcessor.processItems(
+            Arrays.asList(&quot;java&quot;, &quot;generics&quot;),
+            String::toUpperCase
+        );
+
+        // Integer processor with different transformation
+        GenericDataProcessor&lt;Integer&gt; intProcessor =
+            GenericDataProcessor.&lt;Integer&gt;builder()
+                .add(1)
+                .add(2)
+                .build();
+
+        List&lt;String&gt; stringified = intProcessor.processItems(
+            Arrays.asList(10, 20, 30),
+            Object::toString
+        );
+    }
+}
+</code></pre>
+<h4>🔍 <strong>Advanced Generics Patterns:</strong></h4>
+<p><strong>1. Self-Bounded Types (Curiously Recurring Template Pattern)</strong></p>
+<pre><code class="language-java">public abstract class Comparable&lt;T extends Comparable&lt;T&gt;&gt; {
+    public abstract int compareTo(T other);
+}
+
+public class Person implements Comparable&lt;Person&gt; {
+    @Override
+    public int compareTo(Person other) {
+        // Type-safe comparison
+        return this.name.compareTo(other.name);
+    }
+}
+</code></pre>
+<p><strong>2. Type Tokens for Runtime Type Information</strong></p>
+<pre><code class="language-java">public class TypeSafeContainer {
+    private final Map&lt;Class&lt;?&gt;, Object&gt; data = new HashMap&lt;&gt;();
+
+    public &lt;T&gt; void put(Class&lt;T&gt; type, T instance) {
+        data.put(type, instance);
+    }
+
+    @SuppressWarnings(&quot;unchecked&quot;)
+    public &lt;T&gt; Optional&lt;T&gt; get(Class&lt;T&gt; type) {
+        return Optional.ofNullable((T) data.get(type));
+    }
+}
+</code></pre>
+<hr />
+<h3><strong>Lesson 4.2: Functional Programming Excellence</strong> (90 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Apply functional programming principles using <code>@142-java-functional-programming</code></li>
+<li>Master Stream API and lambda expressions</li>
+<li>Implement immutable data structures</li>
+<li>Use higher-order functions effectively</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>Functional Programming Principles:</strong></p>
+<ol>
+<li><strong>Immutability</strong>: Prefer immutable objects</li>
+<li><strong>Pure Functions</strong>: No side effects, deterministic</li>
+<li><strong>Higher-Order Functions</strong>: Functions as parameters/return values</li>
+<li><strong>Function Composition</strong>: Combining simple functions</li>
+<li><strong>Lazy Evaluation</strong>: Compute only when needed</li>
+</ol>
+<h4>🔧 <strong>Hands-on Exercise 4.2:</strong></h4>
+<p><strong>Scenario:</strong> Transform imperative data processing to functional style.</p>
+<p><strong>Step 1: Imperative Style Code</strong></p>
+<pre><code class="language-java">public class OrderProcessor {
+    public List&lt;OrderSummary&gt; processOrders(List&lt;Order&gt; orders) {
+        List&lt;OrderSummary&gt; summaries = new ArrayList&lt;&gt;();
+
+        for (Order order : orders) {
+            if (order.getStatus() == OrderStatus.COMPLETED &amp;&amp;
+                order.getTotal().compareTo(BigDecimal.valueOf(100)) &gt; 0) {
+
+                OrderSummary summary = new OrderSummary();
+                summary.setOrderId(order.getId());
+                summary.setCustomerName(order.getCustomer().getName());
+                summary.setTotal(order.getTotal());
+                summary.setDiscountedTotal(calculateDiscount(order.getTotal()));
+
+                summaries.add(summary);
+            }
+        }
+
+        // Sort by total descending
+        summaries.sort((a, b) -&gt; b.getTotal().compareTo(a.getTotal()));
+
+        return summaries;
+    }
+
+    private BigDecimal calculateDiscount(BigDecimal total) {
+        return total.multiply(BigDecimal.valueOf(0.9)); // 10% discount
+    }
+}
+</code></pre>
+<p><strong>Step 2: Apply Functional Programming System Prompt</strong><br />
+Use: <code>Improve the class/classes added in the context applying the system prompt @142-java-functional-programming</code></p>
+<p><strong>Expected Functional Transformation:</strong></p>
+<pre><code class="language-java">public class FunctionalOrderProcessor {
+
+    private static final Predicate&lt;Order&gt; IS_COMPLETED =
+        order -&gt; order.getStatus() == OrderStatus.COMPLETED;
+
+    private static final Predicate&lt;Order&gt; IS_HIGH_VALUE =
+        order -&gt; order.getTotal().compareTo(BigDecimal.valueOf(100)) &gt; 0;
+
+    private static final Function&lt;BigDecimal, BigDecimal&gt; APPLY_DISCOUNT =
+        total -&gt; total.multiply(BigDecimal.valueOf(0.9));
+
+    private static final Function&lt;Order, OrderSummary&gt; TO_SUMMARY =
+        order -&gt; OrderSummary.builder()
+            .orderId(order.getId())
+            .customerName(order.getCustomer().getName())
+            .total(order.getTotal())
+            .discountedTotal(APPLY_DISCOUNT.apply(order.getTotal()))
+            .build();
+
+    private static final Comparator&lt;OrderSummary&gt; BY_TOTAL_DESC =
+        Comparator.comparing(OrderSummary::getTotal).reversed();
+
+    public List&lt;OrderSummary&gt; processOrders(List&lt;Order&gt; orders) {
+        return orders.stream()
+            .filter(IS_COMPLETED)
+            .filter(IS_HIGH_VALUE)
+            .map(TO_SUMMARY)
+            .sorted(BY_TOTAL_DESC)
+            .collect(Collectors.toUnmodifiableList());
+    }
+
+    // Advanced: Functional composition
+    public Function&lt;List&lt;Order&gt;, List&lt;OrderSummary&gt;&gt; createProcessor(
+            Predicate&lt;Order&gt; additionalFilter,
+            Function&lt;BigDecimal, BigDecimal&gt; discountStrategy) {
+
+        return orders -&gt; orders.stream()
+            .filter(IS_COMPLETED)
+            .filter(IS_HIGH_VALUE)
+            .filter(additionalFilter)
+            .map(order -&gt; TO_SUMMARY.compose(
+                o -&gt; o.withTotal(discountStrategy.apply(o.getTotal()))
+            ).apply(order))
+            .sorted(BY_TOTAL_DESC)
+            .collect(Collectors.toUnmodifiableList());
+    }
+}
+</code></pre>
+<h4>💡 <strong>Functional Benefits:</strong></h4>
+<ul>
+<li><strong>Declarative</strong>: Focus on what, not how</li>
+<li><strong>Composable</strong>: Combine functions easily</li>
+<li><strong>Testable</strong>: Pure functions are easy to test</li>
+<li><strong>Parallel</strong>: Stream operations can be parallelized</li>
+<li><strong>Readable</strong>: Intent is clear from function names</li>
+</ul>
+<hr />
+<h3><strong>Lesson 4.3: Functional Exception Handling</strong> (75 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Implement monadic error handling using <code>@143-java-functional-exception-handling</code></li>
+<li>Master Optional and Either types</li>
+<li>Apply Railway-Oriented Programming</li>
+<li>Eliminate null pointer exceptions</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>Functional Error Handling:</strong></p>
+<ol>
+<li><strong>Optional</strong>: Handle absence of values</li>
+<li><strong>Either</strong>: Handle success/failure scenarios</li>
+<li><strong>Try</strong>: Exception handling as values</li>
+<li><strong>Railway-Oriented Programming</strong>: Chain operations safely</li>
+<li><strong>Monadic Composition</strong>: Flatmap for chaining</li>
+</ol>
+<h4>🔧 <strong>Hands-on Exercise 4.3:</strong></h4>
+<p><strong>Step 1: Traditional Exception-Based Code</strong></p>
+<pre><code class="language-java">public class UserService {
+    public User getUserProfile(String userId) throws UserNotFoundException,
+                                                   DatabaseException,
+                                                   ValidationException {
+        if (userId == null || userId.trim().isEmpty()) {
+            throw new ValidationException(&quot;User ID cannot be empty&quot;);
+        }
+
+        User user = userRepository.findById(userId);
+        if (user == null) {
+            throw new UserNotFoundException(&quot;User not found: &quot; + userId);
+        }
+
+        return user;
+    }
+
+    public UserProfile enrichUserProfile(User user) throws ExternalServiceException {
+        ExternalUserData externalData = externalService.getUserData(user.getId());
+        if (externalData == null) {
+            throw new ExternalServiceException(&quot;Failed to fetch external data&quot;);
+        }
+
+        return new UserProfile(user, externalData);
+    }
+}
+</code></pre>
+<p><strong>Step 2: Apply Functional Exception Handling</strong><br />
+Use: <code>Improve the class/classes added in the context applying the system prompt @143-java-functional-exception-handling</code></p>
+<p><strong>Expected Monadic Transformation:</strong></p>
+<pre><code class="language-java">public class FunctionalUserService {
+
+    public Either&lt;UserError, User&gt; getUserProfile(String userId) {
+        return validateUserId(userId)
+            .flatMap(this::findUser);
+    }
+
+    public Either&lt;UserError, UserProfile&gt; enrichUserProfile(String userId) {
+        return getUserProfile(userId)
+            .flatMap(this::fetchExternalData)
+            .map(this::createUserProfile);
+    }
+
+    // Railway-Oriented Programming: chain operations safely
+    public Either&lt;UserError, UserProfile&gt; getCompleteUserProfile(String userId) {
+        return validateUserId(userId)
+            .flatMap(this::findUser)
+            .flatMap(this::fetchExternalData)
+            .map(this::createUserProfile)
+            .mapLeft(this::logError); // Log errors without breaking the chain
+    }
+
+    private Either&lt;UserError, String&gt; validateUserId(String userId) {
+        if (userId == null || userId.trim().isEmpty()) {
+            return Either.left(UserError.VALIDATION_ERROR(&quot;User ID cannot be empty&quot;));
+        }
+        return Either.right(userId.trim());
+    }
+
+    private Either&lt;UserError, User&gt; findUser(String userId) {
+        return Try.of(() -&gt; userRepository.findById(userId))
+            .toEither()
+            .mapLeft(throwable -&gt; UserError.DATABASE_ERROR(&quot;Database error: &quot; + throwable.getMessage()))
+            .flatMap(optionalUser -&gt; optionalUser
+                .map(Either::&lt;UserError, User&gt;right)
+                .orElse(Either.left(UserError.NOT_FOUND(&quot;User not found: &quot; + userId))));
+    }
+
+    private Either&lt;UserError, UserWithExternalData&gt; fetchExternalData(User user) {
+        return Try.of(() -&gt; externalService.getUserData(user.getId()))
+            .toEither()
+            .mapLeft(throwable -&gt; UserError.EXTERNAL_SERVICE_ERROR(&quot;External service error: &quot; + throwable.getMessage()))
+            .map(externalData -&gt; new UserWithExternalData(user, externalData));
+    }
+
+    private UserProfile createUserProfile(UserWithExternalData data) {
+        return UserProfile.builder()
+            .user(data.user())
+            .externalData(data.externalData())
+            .build();
+    }
+
+    private UserError logError(UserError error) {
+        logger.warn(&quot;User service error: {}&quot;, error.getMessage());
+        return error;
+    }
+}
+
+// Error type hierarchy
+public sealed interface UserError permits
+    UserError.ValidationError,
+    UserError.NotFoundError,
+    UserError.DatabaseError,
+    UserError.ExternalServiceError {
+
+    String getMessage();
+
+    record ValidationError(String message) implements UserError {
+        @Override
+        public String getMessage() { return message; }
+    }
+
+    record NotFoundError(String message) implements UserError {
+        @Override
+        public String getMessage() { return message; }
+    }
+
+    record DatabaseError(String message) implements UserError {
+        @Override
+        public String getMessage() { return message; }
+    }
+
+    record ExternalServiceError(String message) implements UserError {
+        @Override
+        public String getMessage() { return message; }
+    }
+
+    static UserError VALIDATION_ERROR(String message) { return new ValidationError(message); }
+    static UserError NOT_FOUND(String message) { return new NotFoundError(message); }
+    static UserError DATABASE_ERROR(String message) { return new DatabaseError(message); }
+    static UserError EXTERNAL_SERVICE_ERROR(String message) { return new ExternalServiceError(message); }
+}
+</code></pre>
+<h4>💡 <strong>Monadic Benefits:</strong></h4>
+<ul>
+<li><strong>No Exceptions</strong>: Errors are values, not control flow</li>
+<li><strong>Composable</strong>: Chain operations without nested try-catch</li>
+<li><strong>Type Safe</strong>: Compiler enforces error handling</li>
+<li><strong>Testable</strong>: Easy to test success and failure paths</li>
+<li><strong>Readable</strong>: Intent is clear from types</li>
+</ul>
+<hr />
+<h3><strong>Lesson 4.4: Data-Oriented Programming</strong> (75 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Leverage records and sealed types using <code>@144-java-data-oriented-programming</code></li>
+<li>Model domain data effectively</li>
+<li>Implement pattern matching</li>
+<li>Create immutable data structures</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>Data-Oriented Programming Principles:</strong></p>
+<ol>
+<li><strong>Records</strong>: Immutable data carriers</li>
+<li><strong>Sealed Types</strong>: Controlled inheritance</li>
+<li><strong>Pattern Matching</strong>: Structural matching (Java 17+)</li>
+<li><strong>Algebraic Data Types</strong>: Sum and product types</li>
+<li><strong>Immutability</strong>: Prefer immutable structures</li>
+</ol>
+<h4>🔧 <strong>Hands-on Exercise 4.4:</strong></h4>
+<p><strong>Step 1: Traditional Class-Heavy Design</strong></p>
+<pre><code class="language-java">public class PaymentMethod {
+    private String type;
+    private String cardNumber;
+    private String bankAccount;
+    private String digitalWallet;
+
+    // Complex constructor logic
+    // Lots of null checks
+    // Mutable state issues
+}
+</code></pre>
+<p><strong>Step 2: Apply Data-Oriented Programming</strong><br />
+Use: <code>Improve the class/classes added in the context applying the system prompt @144-java-data-oriented-programming</code></p>
+<p><strong>Expected Data-Oriented Design:</strong></p>
+<pre><code class="language-java">// Sealed interface for payment methods
+public sealed interface PaymentMethod
+    permits CreditCard, BankTransfer, DigitalWallet {
+
+    Money getAmount();
+
+    // Pattern matching method (Java 17+)
+    default String getDisplayName() {
+        return switch (this) {
+            case CreditCard(var number, var amount) -&gt;
+                &quot;Credit Card ending in &quot; + number.substring(number.length() - 4);
+            case BankTransfer(var account, var amount) -&gt;
+                &quot;Bank Transfer from &quot; + account.getBankName();
+            case DigitalWallet(var provider, var amount) -&gt;
+                provider + &quot; Wallet&quot;;
+        };
+    }
+
+    default PaymentProcessingFee calculateFee() {
+        return switch (this) {
+            case CreditCard cc -&gt; PaymentProcessingFee.percentage(cc.amount(), 2.9);
+            case BankTransfer bt -&gt; PaymentProcessingFee.fixed(Money.of(1.50));
+            case DigitalWallet dw -&gt; PaymentProcessingFee.percentage(dw.amount(), 1.5);
+        };
+    }
+}
+
+// Record implementations
+public record CreditCard(
+    CardNumber number,
+    Money amount,
+    ExpiryDate expiry
+) implements PaymentMethod {
+
+    public CreditCard {
+        Objects.requireNonNull(number, &quot;Card number cannot be null&quot;);
+        Objects.requireNonNull(amount, &quot;Amount cannot be null&quot;);
+        Objects.requireNonNull(expiry, &quot;Expiry date cannot be null&quot;);
+
+        if (amount.isNegativeOrZero()) {
+            throw new IllegalArgumentException(&quot;Amount must be positive&quot;);
+        }
+
+        if (expiry.isExpired()) {
+            throw new IllegalArgumentException(&quot;Card is expired&quot;);
+        }
+    }
+
+    @Override
+    public Money getAmount() {
+        return amount;
+    }
+}
+
+public record BankTransfer(
+    BankAccount account,
+    Money amount
+) implements PaymentMethod {
+
+    public BankTransfer {
+        Objects.requireNonNull(account, &quot;Bank account cannot be null&quot;);
+        Objects.requireNonNull(amount, &quot;Amount cannot be null&quot;);
+
+        if (amount.isNegativeOrZero()) {
+            throw new IllegalArgumentException(&quot;Amount must be positive&quot;);
+        }
+    }
+
+    @Override
+    public Money getAmount() {
+        return amount;
+    }
+}
+
+public record DigitalWallet(
+    WalletProvider provider,
+    Money amount,
+    WalletId walletId
+) implements PaymentMethod {
+
+    @Override
+    public Money getAmount() {
+        return amount;
+    }
+}
+
+// Value objects as records
+public record Money(BigDecimal amount, Currency currency) {
+    public Money {
+        Objects.requireNonNull(amount, &quot;Amount cannot be null&quot;);
+        Objects.requireNonNull(currency, &quot;Currency cannot be null&quot;);
+    }
+
+    public boolean isNegativeOrZero() {
+        return amount.compareTo(BigDecimal.ZERO) &lt;= 0;
+    }
+
+    public Money add(Money other) {
+        if (!currency.equals(other.currency)) {
+            throw new IllegalArgumentException(&quot;Cannot add different currencies&quot;);
+        }
+        return new Money(amount.add(other.amount), currency);
+    }
+
+    public static Money of(double amount) {
+        return new Money(BigDecimal.valueOf(amount), Currency.getInstance(&quot;USD&quot;));
+    }
+}
+
+// Usage with pattern matching
+public class PaymentProcessor {
+
+    public ProcessingResult process(PaymentMethod payment) {
+        return switch (payment) {
+            case CreditCard(var number, var amount, var expiry) -&gt; {
+                validateCreditCard(number, expiry);
+                yield processCreditCardPayment(number, amount);
+            }
+            case BankTransfer(var account, var amount) -&gt; {
+                validateBankAccount(account);
+                yield processBankTransfer(account, amount);
+            }
+            case DigitalWallet(var provider, var amount, var walletId) -&gt; {
+                validateWallet(provider, walletId);
+                yield processDigitalWallet(provider, amount, walletId);
+            }
+        };
+    }
+}
+</code></pre>
+<h4>💡 <strong>Data-Oriented Benefits:</strong></h4>
+<ul>
+<li><strong>Immutability</strong>: Thread-safe by default</li>
+<li><strong>Pattern Matching</strong>: Exhaustive case handling</li>
+<li><strong>Type Safety</strong>: Impossible states are unrepresentable</li>
+<li><strong>Conciseness</strong>: Less boilerplate code</li>
+<li><strong>Performance</strong>: Efficient memory layout</li>
+</ul>
+<hr />
+<h2>🏆 Module Assessment</h2>
+<h3><strong>Knowledge Validation Checkpoint</strong></h3>
+<p><strong>Question 1:</strong> What is the PECS principle in Java generics?</p>
+<p><strong>Question 2:</strong> How does functional exception handling with Either improve upon traditional try-catch?</p>
+<p><strong>Question 3:</strong> What are the benefits of sealed interfaces over regular inheritance?</p>
+<p><strong>Question 4:</strong> Why are records preferable to traditional classes for data carriers?</p>
+<h3><strong>Practical Assessment Project</strong></h3>
+<p><strong>Project: &quot;Modern E-Commerce Order Processing System&quot;</strong></p>
+<p><strong>Scenario:</strong> Build a modern order processing system using all advanced Java features learned.</p>
+<p><strong>Requirements:</strong><br />
+1. Generic order processing pipeline with type safety<br />
+2. Functional data transformations using streams<br />
+3. Monadic error handling with Either types<br />
+4. Data-oriented domain model with records and sealed types<br />
+5. Pattern matching for order state transitions</p>
+<p><strong>Deliverables:</strong><br />
+- Type-safe generic order processor<br />
+- Functional pipeline for order transformations<br />
+- Monadic error handling throughout<br />
+- Complete domain model using records and sealed types<br />
+- Comprehensive test suite demonstrating all patterns</p>
+<p><strong>Success Criteria:</strong><br />
+- No raw types or unchecked warnings<br />
+- Functional style with no mutable state<br />
+- All errors handled monadically<br />
+- Domain model uses modern Java features effectively<br />
+- Code is expressive and maintainable</p>
+<h3><strong>Time Investment:</strong></h3>
+<ul>
+<li><strong>Design &amp; Planning</strong>: 1 hour</li>
+<li><strong>Generic Implementation</strong>: 2 hours</li>
+<li><strong>Functional &amp; Monadic Patterns</strong>: 2 hours</li>
+<li><strong>Data-Oriented Modeling</strong>: 1.5 hours</li>
+<li><strong>Testing &amp; Validation</strong>: 1.5 hours</li>
+<li><strong>Total</strong>: 8 hours</li>
+</ul>
+<hr />
+<h2>🚀 Next Steps</h2>
+<p><strong>Exceptional Progress!</strong> You've mastered modern Java's most powerful features and programming paradigms.</p>
+<p><strong>What You've Accomplished:</strong><br />
+- ✅ Mastered generics from basics to advanced patterns<br />
+- ✅ Applied functional programming principles<br />
+- ✅ Implemented monadic error handling<br />
+- ✅ Leveraged data-oriented programming</p>
+<p><strong>Ready for performance optimization?</strong></p>
+<p>👉 <strong><a href="module-5-performance.html">Continue to Module 5: Performance →</a></strong></p>
+<p><strong>In Module 5, you'll learn to:</strong><br />
+- Profile applications with async-profiler<br />
+- Create JMeter performance tests<br />
+- Benchmark code with JMH<br />
+- Optimize performance systematically</p>
+<hr />
+<h2>📚 Additional Resources</h2>
+<ul>
+<li><strong><a href="https://docs.oracle.com/javase/tutorial/java/generics/">Java Generics Tutorial</a></strong></li>
+<li><strong><a href="https://www.amazon.com/Functional-Programming-Java-Harnessing-Expressions/dp/1937785467">Functional Programming in Java</a></strong></li>
+<li><strong><a href="https://www.vavr.io/">VAVR Library Documentation</a></strong></li>
+<li><strong><a href="https://openjdk.java.net/jeps/394">Pattern Matching in Java</a></strong></li>
+</ul>
+<hr />
+<p><em>Transform your applications with performance optimization and profiling techniques in the next module.</em></p>
+
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena/cursor-rules-java" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2025 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../js/jquery-1.11.2.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/prettify.js"></script>
+<script src="../../js/run_prettify.js"></script>
+<script src="../../js/main.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13CV90H4J4');
+</script>
+
+</body>
+</html>

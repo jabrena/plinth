@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Module 1: Foundations - Project Setup &amp; Build Systems - Cursor Rules for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../feed.xml" title="Cursor Rules for Java"/>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../css/prettify.css">
+  <link rel="shortcut icon" href="../../favicon.ico">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../index.html">Cursor Rules for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../courses/java-generics/index.html">Java Generics</a>
+      <a href="../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
+    </div>
+  </li>
+  <li><a href="../../archive.html">Archive</a></li>
+  <li><a href="../../about.html">About</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="course-heading">
+<h1>Module 1: Foundations - Project Setup & Build Systems</h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="course-content">
+
+<div class="course-meta">
+    <i class="fa fa-calendar-o"></i>
+    2025-09-17
+    &nbsp;
+    <i class="fa fa-user"></i>
+    Juan Antonio Breña Moral
+    &nbsp;
+    <i class="fa fa-tag"></i>
+    Version 0.11.0-SNAPSHOT
+  <div class="course-tags">
+    &nbsp;
+    <i class="fa fa-tags"></i>
+      <a href="../../tags/java.html" class="course-tag">java</a>
+      <a href="../../tags/profiling.html" class="course-tag">profiling</a>
+      <a href="../../tags/memory-leak.html" class="course-tag">memory-leak</a>
+      <a href="../../tags/performance.html" class="course-tag">performance</a>
+      <a href="../../tags/system-prompts.html" class="course-tag">system-prompts</a>
+      <a href="../../tags/async-profiler.html" class="course-tag">async-profiler</a>
+  </div>
+</div>
+<hr>
+
+<h2>🎯 Learning Objectives</h2>
+<p>By the end of this module, you will:</p>
+<ul>
+<li><strong>Master Maven best practices</strong> using automated system prompts</li>
+<li><strong>Configure quality dependencies</strong> for enterprise-grade projects</li>
+<li><strong>Generate professional documentation</strong> automatically</li>
+<li><strong>Understand the fundamentals</strong> of AI-powered development workflows</li>
+<li><strong>Apply system prompts effectively</strong> in real-world scenarios</li>
+</ul>
+<h2>📚 Module Overview</h2>
+<p><strong>Duration:</strong> 4 hours<br />
+<strong>Difficulty:</strong> Beginner to Intermediate<br />
+<strong>Prerequisites:</strong> Basic Maven knowledge, Java 21+</p>
+<p>This foundational module introduces you to the core system prompts that automate project setup and build system configuration. You'll learn to transform manual, error-prone tasks into automated, consistent workflows.</p>
+<h2>🗺️ Learning Path</h2>
+<h3><strong>Lesson 1.1: Understanding System Prompts</strong> (45 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Understand what system prompts are and why they matter</li>
+<li>Learn the anatomy of effective Cursor Rules</li>
+<li>Explore the benefits of AI-powered development workflows</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>What are System Prompts?</strong></p>
+<p>System prompts are structured instructions that guide AI assistants to perform specific development tasks consistently and professionally. Think of them as &quot;expert consultants&quot; embedded in your IDE.</p>
+<p><strong>Key Benefits:</strong><br />
+- <strong>Consistency</strong>: Same high-quality output every time<br />
+- <strong>Efficiency</strong>: Automate repetitive tasks<br />
+- <strong>Learning</strong>: Built-in best practices and explanations<br />
+- <strong>Scalability</strong>: Apply across teams and projects</p>
+<h4>💡 <strong>Knowledge Check:</strong></h4>
+<p><em>Before we continue, can you think of 3 repetitive tasks in Java development that could benefit from automation?</em></p>
+<p><strong>Example System Prompt Structure:</strong></p>
+<pre><code class="language-markdown">## Role
+You are a Senior Java Developer...
+
+## Goal
+Your task is to...
+
+## Constraints
+- Follow Maven best practices
+- Use Java 21+ features
+- Ensure backward compatibility
+
+## Output Format
+- Generate pom.xml modifications
+- Provide explanation of changes
+- Include validation steps
+</code></pre>
+<h4>🔧 <strong>Hands-on Exercise 1.1:</strong></h4>
+<p><strong>Scenario:</strong> You've joined a new team and need to understand their system prompt approach.</p>
+<ol>
+<li><strong>Explore the System Prompt:</strong> Open <code>.cursor/rules/100-java-cursor-rules-list.md</code></li>
+<li><strong>Analyze Structure:</strong> Identify the Role, Goal, and Constraints sections</li>
+<li><strong>Test the Prompt:</strong> Use it to generate the main project documentation</li>
+</ol>
+<p><strong>Expected Outcome:</strong> Understanding of how system prompts structure AI interactions for consistent results.</p>
+<hr />
+<h3><strong>Lesson 1.2: Maven Best Practices Automation</strong> (75 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Apply Maven best practices using <code>@110-java-maven-best-practices</code></li>
+<li>Understand modern Maven project structure</li>
+<li>Learn to validate and optimize <code>pom.xml</code> configurations</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>Maven Best Practices Include:</strong><br />
+- <strong>Project Structure</strong>: Standard directory layout<br />
+- <strong>Dependency Management</strong>: Version control and scope optimization<br />
+- <strong>Plugin Configuration</strong>: Essential plugins with proper versions<br />
+- <strong>Property Management</strong>: Centralized configuration<br />
+- <strong>Profile Usage</strong>: Environment-specific builds</p>
+<h4>🔧 <strong>Hands-on Exercise 1.2:</strong></h4>
+<p><strong>Scenario:</strong> You inherit a legacy Maven project with outdated practices.</p>
+<p><strong>Step 1: Assessment</strong></p>
+<pre><code class="language-bash"># Navigate to the problematic project
+cd examples/maven-demo-ko
+</code></pre>
+<p><strong>Step 2: Apply System Prompt</strong><br />
+Use the prompt: <code>Apply in the pom.xml the rule @110-java-maven-best-practices</code></p>
+<p><strong>Step 3: Interactive Mode</strong><br />
+Try: <code>Apply in the pom.xml the rule @110-java-maven-best-practices with the behaviour @behaviour-consultative-interaction</code></p>
+<p><strong>Expected Improvements:</strong><br />
+- Updated Java version to 21+<br />
+- Proper plugin versions<br />
+- Dependency scope optimization<br />
+- Property consolidation</p>
+<h4>💡 <strong>Knowledge Check:</strong></h4>
+<p><em>What's the difference between using a system prompt in &quot;purist way&quot; vs. with consultative behavior?</em></p>
+<p><strong>Answer:</strong> Purist way applies changes automatically, while consultative behavior asks questions and provides options for customization.</p>
+<hr />
+<h3><strong>Lesson 1.3: Quality Dependencies Integration</strong> (60 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Add essential quality dependencies using <code>@111-java-maven-dependencies</code></li>
+<li>Understand the purpose of JSpecify, Error Prone, NullAway, and VAVR</li>
+<li>Learn interactive vs. non-interactive prompt usage</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>Essential Quality Dependencies:</strong></p>
+<ol>
+<li><strong>JSpecify</strong>: Null safety annotations</li>
+<li><strong>Error Prone</strong>: Compile-time bug detection</li>
+<li><strong>NullAway</strong>: Fast null pointer analysis</li>
+<li><strong>VAVR</strong>: Functional programming utilities</li>
+</ol>
+<h4>🔧 <strong>Hands-on Exercise 1.3:</strong></h4>
+<p><strong>Scenario:</strong> Enhance a working project with quality dependencies.</p>
+<p><strong>Step 1: Setup</strong></p>
+<pre><code class="language-bash">cd examples/maven-demo
+</code></pre>
+<p><strong>Step 2: Interactive Approach</strong><br />
+Use: <code>Add essential Maven dependencies for code quality using @111-java-maven-dependencies</code></p>
+<p><strong>Step 3: Specific Addition</strong><br />
+Try: <code>Add VAVR dependency with the help of @111-java-maven-dependencies and not make any question</code></p>
+<p><strong>Step 4: Validation</strong></p>
+<pre><code class="language-bash">./mvnw clean compile
+</code></pre>
+<h4>💡 <strong>Deep Dive: Why These Dependencies?</strong></h4>
+<ul>
+<li><strong>JSpecify</strong>: Prevents NullPointerException at compile time</li>
+<li><strong>Error Prone</strong>: Catches common Java mistakes (e.g., string comparison with ==)</li>
+<li><strong>NullAway</strong>: Fast static analysis for null safety</li>
+<li><strong>VAVR</strong>: Immutable collections and functional programming patterns</li>
+</ul>
+<hr />
+<h3><strong>Lesson 1.4: Maven Plugins Mastery</strong> (45 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Configure essential Maven plugins using <code>@112-java-maven-plugins</code></li>
+<li>Understand plugin lifecycle and execution</li>
+<li>Learn selective plugin application</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>Essential Maven Plugins:</strong><br />
+- <strong>Maven Compiler Plugin</strong>: Java compilation configuration<br />
+- <strong>Maven Surefire Plugin</strong>: Unit test execution<br />
+- <strong>Maven Enforcer Plugin</strong>: Build environment validation<br />
+- <strong>JaCoCo Plugin</strong>: Code coverage analysis<br />
+- <strong>SpotBugs Plugin</strong>: Static analysis</p>
+<h4>🔧 <strong>Hands-on Exercise 1.4:</strong></h4>
+<p><strong>Step 1: Interactive Enhancement</strong><br />
+Use: <code>Improve the pom.xml using the cursor rule @112-java-maven-plugins</code></p>
+<p><strong>Step 2: Selective Application</strong><br />
+Try: <code>Add Maven Enforcer plugin only from the rule @112-java-maven-plugins without any question</code></p>
+<p><strong>Step 3: Validation</strong></p>
+<pre><code class="language-bash">./mvnw clean verify
+</code></pre>
+<hr />
+<h3><strong>Lesson 1.5: Professional Documentation Generation</strong> (75 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Generate developer documentation using <code>@113-java-maven-documentation</code></li>
+<li>Create comprehensive README-DEV.md files</li>
+<li>Understand documentation-driven development</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>Professional Documentation Includes:</strong><br />
+- <strong>Project Overview</strong>: Purpose and architecture<br />
+- <strong>Build Commands</strong>: Development workflow<br />
+- <strong>Testing Strategy</strong>: How to run and write tests<br />
+- <strong>Deployment Guide</strong>: Production considerations<br />
+- <strong>Contributing Guidelines</strong>: Team collaboration</p>
+<h4>🔧 <strong>Hands-on Exercise 1.5:</strong></h4>
+<p><strong>Step 1: Generate Documentation</strong><br />
+Use: <code>Generate developer documentation with essential Maven commands using @113-java-maven-documentation</code></p>
+<p><strong>Step 2: Review Generated Content</strong><br />
+- Examine the generated <code>README-DEV.md</code><br />
+- Understand the Maven command explanations<br />
+- Note the professional formatting</p>
+<p><strong>Step 3: Customization</strong><br />
+- Add project-specific sections<br />
+- Include team-specific workflows</p>
+<hr />
+<h2>🏆 Module Assessment</h2>
+<h3><strong>Knowledge Validation Checkpoint</strong></h3>
+<p><strong>Question 1:</strong> What are the three main benefits of using system prompts in Java development?</p>
+<p><strong>Question 2:</strong> Which system prompt would you use to add Error Prone dependency to a project?</p>
+<p><strong>Question 3:</strong> What's the difference between interactive and non-interactive system prompt usage?</p>
+<h3><strong>Practical Assessment Project</strong></h3>
+<p><strong>Project: &quot;Enterprise Project Setup&quot;</strong></p>
+<p><strong>Scenario:</strong> You're tasked with setting up a new Java microservice project for your team.</p>
+<p><strong>Requirements:</strong><br />
+1. Create a new Maven project structure<br />
+2. Apply Maven best practices using system prompts<br />
+3. Add all quality dependencies<br />
+4. Configure essential plugins<br />
+5. Generate comprehensive documentation</p>
+<p><strong>Deliverables:</strong><br />
+- Working <code>pom.xml</code> with all enhancements<br />
+- Generated <code>README-DEV.md</code> with build instructions<br />
+- Validation that project builds successfully</p>
+<p><strong>Success Criteria:</strong><br />
+- Project builds without warnings<br />
+- All quality tools are properly configured<br />
+- Documentation is comprehensive and professional<br />
+- System prompts were used effectively throughout</p>
+<h3><strong>Time Investment:</strong></h3>
+<ul>
+<li><strong>Setup</strong>: 30 minutes</li>
+<li><strong>Implementation</strong>: 90 minutes</li>
+<li><strong>Validation &amp; Documentation</strong>: 30 minutes</li>
+<li><strong>Total</strong>: 2.5 hours</li>
+</ul>
+<hr />
+<h2>🚀 Next Steps</h2>
+<p><strong>Congratulations!</strong> You've mastered the foundational system prompts for Java project setup and build systems.</p>
+<p><strong>What You've Accomplished:</strong><br />
+- ✅ Automated Maven project configuration<br />
+- ✅ Integrated quality dependencies and plugins<br />
+- ✅ Generated professional documentation<br />
+- ✅ Established efficient development workflows</p>
+<p><strong>Ready for the next level?</strong></p>
+<p>👉 <strong><a href="module-2-code-quality.html">Continue to Module 2: Code Quality →</a></strong></p>
+<p><strong>In Module 2, you'll learn to:</strong><br />
+- Generate comprehensive unit tests automatically<br />
+- Apply object-oriented design principles<br />
+- Implement type-safe design patterns<br />
+- Create robust, maintainable code structures</p>
+<hr />
+<h2>📚 Additional Resources</h2>
+<ul>
+<li><strong><a href="https://maven.apache.org/guides/best-practices.html">Maven Best Practices Guide</a></strong></li>
+</ul>
+<hr />
+<p><em>Continue your learning journey with structured, progressive modules that build upon these foundational concepts.</em></p>
+
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena/cursor-rules-java" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2025 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../js/jquery-1.11.2.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/prettify.js"></script>
+<script src="../../js/run_prettify.js"></script>
+<script src="../../js/main.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13CV90H4J4');
+</script>
+
+</body>
+</html>

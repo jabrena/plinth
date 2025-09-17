@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Module 6: Documentation - Professional Documentation &amp; Diagrams - Cursor Rules for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../feed.xml" title="Cursor Rules for Java"/>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../css/prettify.css">
+  <link rel="shortcut icon" href="../../favicon.ico">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../index.html">Cursor Rules for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../courses/java-generics/index.html">Java Generics</a>
+      <a href="../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
+    </div>
+  </li>
+  <li><a href="../../archive.html">Archive</a></li>
+  <li><a href="../../about.html">About</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="course-heading">
+<h1>Module 6: Documentation - Professional Documentation & Diagrams</h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="course-content">
+
+<div class="course-meta">
+    <i class="fa fa-calendar-o"></i>
+    2025-09-17
+    &nbsp;
+    <i class="fa fa-user"></i>
+    Juan Antonio Breña Moral
+    &nbsp;
+    <i class="fa fa-tag"></i>
+    Version 0.11.0-SNAPSHOT
+  <div class="course-tags">
+    &nbsp;
+    <i class="fa fa-tags"></i>
+      <a href="../../tags/java.html" class="course-tag">java</a>
+      <a href="../../tags/documentation.html" class="course-tag">documentation</a>
+      <a href="../../tags/uml-diagrams.html" class="course-tag">uml-diagrams</a>
+      <a href="../../tags/javadoc.html" class="course-tag">javadoc</a>
+      <a href="../../tags/plantuml.html" class="course-tag">plantuml</a>
+      <a href="../../tags/technical-writing.html" class="course-tag">technical-writing</a>
+      <a href="../../tags/system-prompts.html" class="course-tag">system-prompts</a>
+  </div>
+</div>
+<hr>
+
+<h2>🎯 Learning Objectives</h2>
+<p>By the end of this module, you will:</p>
+<ul>
+<li><strong>Generate comprehensive project documentation</strong> using <code>@170-java-documentation</code></li>
+<li><strong>Create professional UML diagrams</strong> using <code>@171-java-diagrams</code></li>
+<li><strong>Master documentation-driven development</strong> practices</li>
+<li><strong>Apply modular, step-based documentation</strong> approaches</li>
+<li><strong>Create maintainable, professional documentation</strong> that scales with projects</li>
+</ul>
+<h2>📚 Module Overview</h2>
+<p><strong>Duration:</strong> 3 hours<br />
+<strong>Difficulty:</strong> Intermediate<br />
+<strong>Prerequisites:</strong> Module 5 completed, basic documentation awareness</p>
+<p>This module focuses on creating professional, comprehensive documentation that enhances project maintainability and team collaboration. You'll learn to use AI-powered tools that generate documentation and diagrams automatically while following industry best practices.</p>
+<h2>🗺️ Learning Path</h2>
+<h3><strong>Lesson 6.1: Technical Documentation Generation</strong> (105 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Generate complete project documentation using <code>@170-java-documentation</code></li>
+<li>Create README.md, package-info.java, and Javadoc</li>
+<li>Apply modular documentation strategies</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>Professional Documentation Components:</strong></p>
+<ol>
+<li><strong>README.md</strong>: Project overview and quick start</li>
+<li><strong>README-DEV.md</strong>: Developer-focused documentation</li>
+<li><strong>package-info.java</strong>: Package-level documentation</li>
+<li><strong>Javadoc</strong>: API documentation</li>
+<li><strong>Architecture Documentation</strong>: High-level system design</li>
+</ol>
+<h4>💡 <strong>Knowledge Check:</strong></h4>
+<p><em>What's the difference between user documentation and developer documentation?</em></p>
+<p><strong>Answer:</strong> User documentation focuses on how to use the software (features, workflows), while developer documentation focuses on how to build, modify, and maintain the software (APIs, architecture, setup).</p>
+<h4>🔧 <strong>Hands-on Exercise 6.1:</strong></h4>
+<p><strong>Scenario:</strong> Generate comprehensive documentation for a Spring Boot project.</p>
+<p><strong>Step 1: Analyze Existing Project</strong></p>
+<pre><code class="language-bash">cd examples/spring-boot-demo
+</code></pre>
+<p><strong>Step 2: Interactive Documentation Generation</strong><br />
+Use: <code>Generate technical documentation about the project with the cursor rule @170-java-documentation</code></p>
+<p><strong>Step 3: Specific Documentation Type</strong><br />
+Try: <code>Generate README.md with @170-java-documentation without any question</code></p>
+<p><strong>Expected Generated Documentation Structure:</strong></p>
+<p><strong>README.md:</strong></p>
+<pre><code class="language-markdown"># Spring Boot Demo Application
+
+## Overview
+A comprehensive Spring Boot demonstration application showcasing enterprise-grade development practices including REST APIs, data persistence, security, and testing.
+
+## Features
+- RESTful API endpoints for user management
+- JPA-based data persistence with H2 database
+- Spring Security integration
+- Comprehensive test coverage
+- Docker support for containerization
+
+## Quick Start
+
+### Prerequisites
+- Java 21 or higher
+- Maven 3.8+
+- Docker (optional)
+
+### Running the Application
+```bash
+# Clone the repository
+git clone &lt;repository-url&gt;
+cd spring-boot-demo
+
+# Run with Maven
+./mvnw spring-boot:run
+
+# Or build and run JAR
+./mvnw clean package
+java -jar target/spring-boot-demo-*.jar
+</code></pre>
+<h3>API Documentation</h3>
+<p>The application exposes REST endpoints at <code>http://localhost:8080</code>:</p>
+<ul>
+<li><code>GET /api/users</code> - List all users</li>
+<li><code>POST /api/users</code> - Create new user</li>
+<li><code>GET /api/users/{id}</code> - Get user by ID</li>
+<li><code>PUT /api/users/{id}</code> - Update user</li>
+<li><code>DELETE /api/users/{id}</code> - Delete user</li>
+</ul>
+<h2>Configuration</h2>
+<p>Key configuration properties in <code>application.yml</code>:</p>
+<pre><code class="language-yaml">server:
+  port: 8080
+spring:
+  datasource:
+    url: jdbc:h2:mem:testdb
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+</code></pre>
+<h2>Testing</h2>
+<pre><code class="language-bash"># Run all tests
+./mvnw test
+
+# Run integration tests
+./mvnw verify
+
+# Generate test coverage report
+./mvnw jacoco:report
+</code></pre>
+<h2>Contributing</h2>
+<p>See <a href="CONTRIBUTING.md">CONTRIBUTING.md</a> for development guidelines.</p>
+<pre><code>
+**README-DEV.md:**
+```markdown
+# Developer Documentation - Spring Boot Demo
+
+## Development Environment Setup
+
+### Required Tools
+- **Java**: OpenJDK 21+ (recommended: Eclipse Temurin)
+- **Maven**: 3.8+ (wrapper included)
+- **IDE**: IntelliJ IDEA or Eclipse with Spring Boot plugin
+- **Database**: H2 (embedded) or PostgreSQL for production
+
+### Project Structure
+</code></pre>
+<p>spring-boot-demo/<br />
+├── src/main/java/com/example/demo/<br />
+│   ├── DemoApplication.java          # Main application class<br />
+│   ├── controller/                   # REST controllers<br />
+│   ├── service/                      # Business logic<br />
+│   ├── repository/                   # Data access layer<br />
+│   ├── model/                        # Domain entities<br />
+│   └── config/                       # Configuration classes<br />
+├── src/main/resources/<br />
+│   ├── application.yml               # Main configuration<br />
+│   └── db/migration/                 # Database migrations<br />
+└── src/test/java/                    # Test classes</p>
+<pre><code>
+## Build Commands
+
+### Essential Maven Commands
+```bash
+# Clean and compile
+./mvnw clean compile
+
+# Run tests with coverage
+./mvnw clean test jacoco:report
+
+# Package application
+./mvnw clean package
+
+# Run application locally
+./mvnw spring-boot:run
+
+# Run with specific profile
+./mvnw spring-boot:run -Dspring-boot.run.profiles=dev
+</code></pre>
+<h3>Quality Checks</h3>
+<pre><code class="language-bash"># Run static analysis
+./mvnw spotbugs:check
+
+# Check code style
+./mvnw checkstyle:check
+
+# Dependency vulnerability check
+./mvnw dependency-check:check
+</code></pre>
+<h2>Database Management</h2>
+<h3>H2 Console (Development)</h3>
+<ul>
+<li>URL: <a href="http://localhost:8080/h2-console">http://localhost:8080/h2-console</a></li>
+<li>JDBC URL: jdbc:h2:mem:testdb</li>
+<li>Username: sa</li>
+<li>Password: (empty)</li>
+</ul>
+<h3>Migration Scripts</h3>
+<p>Database migrations are located in <code>src/main/resources/db/migration/</code>:<br />
+- <code>V1__Create_users_table.sql</code><br />
+- <code>V2__Add_user_roles.sql</code></p>
+<h2>Testing Strategy</h2>
+<h3>Test Categories</h3>
+<ol>
+<li><strong>Unit Tests</strong>: <code>*Test.java</code> - Fast, isolated tests</li>
+<li><strong>Integration Tests</strong>: <code>*IT.java</code> - Component integration</li>
+<li><strong>End-to-End Tests</strong>: <code>*E2ETest.java</code> - Full application flow</li>
+</ol>
+<h3>Test Data</h3>
+<ul>
+<li>Test fixtures in <code>src/test/resources/fixtures/</code></li>
+<li>TestContainers for integration testing</li>
+<li>MockMvc for web layer testing</li>
+</ul>
+<h2>Deployment</h2>
+<h3>Docker</h3>
+<pre><code class="language-bash"># Build image
+docker build -t spring-boot-demo .
+
+# Run container
+docker run -p 8080:8080 spring-boot-demo
+</code></pre>
+<h3>Production Considerations</h3>
+<ul>
+<li>Use PostgreSQL instead of H2</li>
+<li>Configure proper logging levels</li>
+<li>Set up health checks and metrics</li>
+<li>Configure SSL/TLS certificates</li>
+</ul>
+<pre><code>
+**package-info.java Files:**
+```java
+/**
+ * Spring Boot Demo Application - Controller Layer
+ *
+ * &lt;p&gt;This package contains REST controllers that handle HTTP requests
+ * and provide JSON responses. All controllers follow RESTful conventions
+ * and include comprehensive error handling.
+ *
+ * &lt;h2&gt;Key Controllers:&lt;/h2&gt;
+ * &lt;ul&gt;
+ *   &lt;li&gt;{@link com.example.demo.controller.UserController} - User management operations&lt;/li&gt;
+ *   &lt;li&gt;{@link com.example.demo.controller.HealthController} - Health check endpoints&lt;/li&gt;
+ * &lt;/ul&gt;
+ *
+ * &lt;h2&gt;Error Handling:&lt;/h2&gt;
+ * Global exception handling is provided by {@link com.example.demo.controller.GlobalExceptionHandler}
+ * which ensures consistent error response format across all endpoints.
+ *
+ * @author Development Team
+ * @version 1.0
+ * @since 1.0
+ */
+package com.example.demo.controller;
+</code></pre>
+<h4>🔍 <strong>Documentation Benefits:</strong></h4>
+<ul>
+<li><strong>Consistency</strong>: Standardized format across projects</li>
+<li><strong>Completeness</strong>: Covers all essential aspects</li>
+<li><strong>Maintainability</strong>: Easy to update and extend</li>
+<li><strong>Onboarding</strong>: New team members can start quickly</li>
+<li><strong>Professional</strong>: Industry-standard documentation quality</li>
+</ul>
+<hr />
+<h3><strong>Lesson 6.2: UML Diagram Generation</strong> (75 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Create comprehensive UML diagrams using <code>@171-java-diagrams</code></li>
+<li>Generate class, sequence, and state diagrams</li>
+<li>Apply C4 model for architecture documentation</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>Diagram Types:</strong></p>
+<ol>
+<li><strong>UML Class Diagrams</strong>: Static structure relationships</li>
+<li><strong>UML Sequence Diagrams</strong>: Interaction flows</li>
+<li><strong>UML State Machine Diagrams</strong>: State transitions</li>
+<li><strong>C4 Model Diagrams</strong>: Architecture at different levels</li>
+</ol>
+<h4>🔧 <strong>Hands-on Exercise 6.2:</strong></h4>
+<p><strong>Step 1: Interactive Diagram Generation</strong><br />
+Use: <code>Generate diagrams about the project with the cursor rule @171-java-diagrams</code></p>
+<p><strong>Step 2: Specific Diagram Type</strong><br />
+Try: <code>Create UML class diagrams with @171-java-diagrams without any question</code></p>
+<p><strong>Expected Generated Diagrams:</strong></p>
+<p><strong>1. UML Class Diagram (PlantUML):</strong></p>
+<pre><code class="language-plantuml">@startuml
+!define RECTANGLE class
+
+RECTANGLE User {
+  -Long id
+  -String username
+  -String email
+  -String password
+  -LocalDateTime createdAt
+  -LocalDateTime updatedAt
+  +getId(): Long
+  +getUsername(): String
+  +getEmail(): String
+  +setUsername(String): void
+  +setEmail(String): void
+}
+
+RECTANGLE UserController {
+  -UserService userService
+  +getAllUsers(): ResponseEntity&lt;List&lt;User&gt;&gt;
+  +getUserById(Long): ResponseEntity&lt;User&gt;
+  +createUser(User): ResponseEntity&lt;User&gt;
+  +updateUser(Long, User): ResponseEntity&lt;User&gt;
+  +deleteUser(Long): ResponseEntity&lt;Void&gt;
+}
+
+RECTANGLE UserService {
+  -UserRepository userRepository
+  -PasswordEncoder passwordEncoder
+  +findAll(): List&lt;User&gt;
+  +findById(Long): Optional&lt;User&gt;
+  +save(User): User
+  +update(Long, User): User
+  +deleteById(Long): void
+}
+
+RECTANGLE UserRepository {
+  +findAll(): List&lt;User&gt;
+  +findById(Long): Optional&lt;User&gt;
+  +save(User): User
+  +deleteById(Long): void
+  +findByUsername(String): Optional&lt;User&gt;
+  +findByEmail(String): Optional&lt;User&gt;
+}
+
+UserController --&gt; UserService : uses
+UserService --&gt; UserRepository : uses
+UserService --&gt; User : manages
+UserRepository --&gt; User : persists
+
+@enduml
+</code></pre>
+<p><strong>2. UML Sequence Diagram:</strong></p>
+<pre><code class="language-plantuml">@startuml
+actor Client
+participant UserController
+participant UserService
+participant UserRepository
+database Database
+
+Client -&gt; UserController: POST /api/users
+activate UserController
+
+UserController -&gt; UserService: save(user)
+activate UserService
+
+UserService -&gt; UserService: validateUser(user)
+UserService -&gt; UserService: encodePassword(user)
+
+UserService -&gt; UserRepository: save(user)
+activate UserRepository
+
+UserRepository -&gt; Database: INSERT INTO users
+activate Database
+Database --&gt; UserRepository: user_id
+deactivate Database
+
+UserRepository --&gt; UserService: saved_user
+deactivate UserRepository
+
+UserService --&gt; UserController: saved_user
+deactivate UserService
+
+UserController --&gt; Client: 201 Created + user_data
+deactivate UserController
+
+@enduml
+</code></pre>
+<p><strong>3. C4 Context Diagram:</strong></p>
+<pre><code class="language-plantuml">@startuml
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+Person(user, &quot;User&quot;, &quot;Application user&quot;)
+System(demo_app, &quot;Spring Boot Demo&quot;, &quot;Manages users and provides REST API&quot;)
+System_Ext(database, &quot;Database&quot;, &quot;Stores user data&quot;)
+System_Ext(email_service, &quot;Email Service&quot;, &quot;Sends notifications&quot;)
+
+Rel(user, demo_app, &quot;Uses&quot;, &quot;HTTPS&quot;)
+Rel(demo_app, database, &quot;Reads/Writes&quot;, &quot;JPA/Hibernate&quot;)
+Rel(demo_app, email_service, &quot;Sends emails&quot;, &quot;SMTP&quot;)
+
+@enduml
+</code></pre>
+<h4>💡 <strong>Diagram Generation Workflow:</strong></h4>
+<p><strong>Step 1: Generate PlantUML Files</strong><br />
+The system prompt creates <code>.puml</code> files in <code>docs/diagrams/</code></p>
+<p><strong>Step 2: Convert to Images (Optional)</strong></p>
+<pre><code class="language-bash"># Install PlantUML to PNG converter
+jbang puml-to-png@jabrena --watch .
+
+# Or use online converter
+# Copy .puml content to http://www.plantuml.com/plantuml/
+</code></pre>
+<p><strong>Step 3: Include in Documentation</strong></p>
+<pre><code class="language-markdown">## Architecture Overview
+
+### System Context
+![Context Diagram](diagrams/context-diagram.png)
+
+### Class Structure
+![Class Diagram](diagrams/class-diagram.png)
+
+### User Creation Flow
+![Sequence Diagram](diagrams/user-creation-sequence.png)
+</code></pre>
+<hr />
+<h2>🏆 Module Assessment</h2>
+<h3><strong>Knowledge Validation Checkpoint</strong></h3>
+<p><strong>Question 1:</strong> What are the key components of professional project documentation?</p>
+<p><strong>Question 2:</strong> When should you use sequence diagrams vs. class diagrams?</p>
+<p><strong>Question 3:</strong> How does the C4 model help with architecture documentation?</p>
+<p><strong>Question 4:</strong> What's the purpose of package-info.java files?</p>
+<h3><strong>Practical Assessment Project</strong></h3>
+<p><strong>Project: &quot;Complete Documentation Suite&quot;</strong></p>
+<p><strong>Scenario:</strong> Create comprehensive documentation for a Java microservice project.</p>
+<p><strong>Requirements:</strong><br />
+1. Generate complete project documentation using system prompts<br />
+2. Create UML diagrams covering all architectural aspects<br />
+3. Ensure documentation follows professional standards<br />
+4. Include both user and developer documentation<br />
+5. Validate documentation completeness and accuracy</p>
+<p><strong>Deliverables:</strong><br />
+- Complete README.md and README-DEV.md files<br />
+- Package-level documentation with package-info.java<br />
+- Comprehensive Javadoc for all public APIs<br />
+- UML class, sequence, and architecture diagrams<br />
+- Documentation maintenance guidelines</p>
+<p><strong>Success Criteria:</strong><br />
+- Documentation covers all project aspects<br />
+- Diagrams accurately represent system architecture<br />
+- Professional formatting and structure<br />
+- Easy onboarding for new team members<br />
+- Maintainable and updatable documentation</p>
+<h3><strong>Time Investment:</strong></h3>
+<ul>
+<li><strong>Documentation Generation</strong>: 1.5 hours</li>
+<li><strong>Diagram Creation</strong>: 1 hour</li>
+<li><strong>Review and Refinement</strong>: 1 hour</li>
+<li><strong>Validation</strong>: 30 minutes</li>
+<li><strong>Total</strong>: 4 hours</li>
+</ul>
+<hr />
+<h2>🚀 Next Steps</h2>
+<p><strong>Excellent Work!</strong> You've mastered professional documentation and diagram generation.</p>
+<p><strong>What You've Accomplished:</strong><br />
+- ✅ Generated comprehensive project documentation<br />
+- ✅ Created professional UML diagrams<br />
+- ✅ Applied modular documentation strategies<br />
+- ✅ Established maintainable documentation practices</p>
+<p><strong>Ready for the final advanced module?</strong></p>
+<p>👉 <strong><a href="module-7-advanced-patterns.html">Continue to Module 7: Advanced Patterns →</a></strong></p>
+<p><strong>In Module 7, you'll learn to:</strong><br />
+- Create custom system prompts<br />
+- Apply progressive learning behaviors<br />
+- Design educational content from technical prompts<br />
+- Master advanced AI-powered development workflows</p>
+<hr />
+<h2>📚 Additional Resources</h2>
+<ul>
+<li><strong><a href="https://plantuml.com/">PlantUML Documentation</a></strong></li>
+<li><strong><a href="https://c4model.com/">C4 Model Guide</a></strong></li>
+<li><strong><a href="https://www.oracle.com/technical-resources/articles/java/javadoc-tool.html">Javadoc Guidelines</a></strong></li>
+<li><strong><a href="https://documentation.divio.com/">Documentation Best Practices</a></strong></li>
+</ul>
+<hr />
+<p><em>Complete your journey with advanced system prompt creation and educational content generation.</em></p>
+
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena/cursor-rules-java" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2025 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../js/jquery-1.11.2.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/prettify.js"></script>
+<script src="../../js/run_prettify.js"></script>
+<script src="../../js/main.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13CV90H4J4');
+</script>
+
+</body>
+</html>

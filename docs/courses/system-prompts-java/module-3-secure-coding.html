@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Module 3: Secure Coding - Security &amp; Best Practices - Cursor Rules for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../feed.xml" title="Cursor Rules for Java"/>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../css/prettify.css">
+  <link rel="shortcut icon" href="../../favicon.ico">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../index.html">Cursor Rules for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../courses/java-generics/index.html">Java Generics</a>
+      <a href="../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
+    </div>
+  </li>
+  <li><a href="../../archive.html">Archive</a></li>
+  <li><a href="../../about.html">About</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="course-heading">
+<h1>Module 3: Secure Coding - Security & Best Practices</h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="course-content">
+
+<div class="course-meta">
+    <i class="fa fa-calendar-o"></i>
+    2025-09-17
+    &nbsp;
+    <i class="fa fa-user"></i>
+    Juan Antonio Breña Moral
+    &nbsp;
+    <i class="fa fa-tag"></i>
+    Version 0.11.0-SNAPSHOT
+  <div class="course-tags">
+    &nbsp;
+    <i class="fa fa-tags"></i>
+      <a href="../../tags/java.html" class="course-tag">java</a>
+      <a href="../../tags/security.html" class="course-tag">security</a>
+      <a href="../../tags/concurrency.html" class="course-tag">concurrency</a>
+      <a href="../../tags/logging.html" class="course-tag">logging</a>
+      <a href="../../tags/exception-handling.html" class="course-tag">exception-handling</a>
+      <a href="../../tags/owasp.html" class="course-tag">owasp</a>
+      <a href="../../tags/system-prompts.html" class="course-tag">system-prompts</a>
+  </div>
+</div>
+<hr>
+
+<h2>🎯 Learning Objectives</h2>
+<p>By the end of this module, you will:</p>
+<ul>
+<li><strong>Implement security best practices</strong> using automated system prompts</li>
+<li><strong>Handle concurrency safely</strong> with modern Java patterns</li>
+<li><strong>Apply proper logging strategies</strong> for production applications</li>
+<li><strong>Master exception handling</strong> techniques for robust applications</li>
+<li><strong>Create secure, resilient code</strong> that follows industry standards</li>
+</ul>
+<h2>📚 Module Overview</h2>
+<p><strong>Duration:</strong> 4 hours<br />
+<strong>Difficulty:</strong> Intermediate to Advanced<br />
+<strong>Prerequisites:</strong> Module 2 completed, basic security awareness</p>
+<p>This module focuses on creating production-ready, secure applications. You'll learn to use system prompts that automatically apply security best practices, handle concurrency correctly, and implement robust error handling.</p>
+<h2>🗺️ Learning Path</h2>
+<h3><strong>Lesson 3.1: Security Best Practices</strong> (75 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Apply secure coding practices using <code>@124-java-secure-coding</code></li>
+<li>Understand common security vulnerabilities</li>
+<li>Implement input validation and sanitization</li>
+<li>Apply the principle of least privilege</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>OWASP Top 10 for Java Applications:</strong></p>
+<ol>
+<li><strong>Injection Attacks</strong>: SQL injection, command injection</li>
+<li><strong>Broken Authentication</strong>: Session management, password storage</li>
+<li><strong>Sensitive Data Exposure</strong>: Encryption, data protection</li>
+<li><strong>XML External Entities (XXE)</strong>: XML parsing vulnerabilities</li>
+<li><strong>Broken Access Control</strong>: Authorization flaws</li>
+<li><strong>Security Misconfiguration</strong>: Default settings, unnecessary features</li>
+<li><strong>Cross-Site Scripting (XSS)</strong>: Input validation, output encoding</li>
+<li><strong>Insecure Deserialization</strong>: Object serialization risks</li>
+<li><strong>Known Vulnerabilities</strong>: Dependency management</li>
+<li><strong>Insufficient Logging</strong>: Security monitoring</li>
+</ol>
+<h4>💡 <strong>Knowledge Check:</strong></h4>
+<p><em>What's the difference between authentication and authorization?</em></p>
+<p><strong>Answer:</strong> Authentication verifies who you are (identity), while authorization determines what you can do (permissions).</p>
+<h4>🔧 <strong>Hands-on Exercise 3.1:</strong></h4>
+<p><strong>Scenario:</strong> Secure a vulnerable user authentication service.</p>
+<p><strong>Step 1: Analyze Vulnerable Code</strong></p>
+<pre><code class="language-java">public class UserAuthService {
+    private Connection connection;
+
+    public boolean authenticate(String username, String password) {
+        String sql = &quot;SELECT * FROM users WHERE username = '&quot; + username +
+                    &quot;' AND password = '&quot; + password + &quot;'&quot;;
+        // Direct SQL concatenation - SQL injection risk!
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery(sql);
+            return rs.next();
+        } catch (Exception e) {
+            e.printStackTrace(); // Sensitive information leakage!
+            return false;
+        }
+    }
+
+    public void updatePassword(String username, String newPassword) {
+        // Storing plain text password - security risk!
+        String sql = &quot;UPDATE users SET password = '&quot; + newPassword +
+                    &quot;' WHERE username = '&quot; + username + &quot;'&quot;;
+        // More SQL injection risks...
+    }
+}
+</code></pre>
+<p><strong>Security Issues Identified:</strong><br />
+- SQL injection vulnerabilities<br />
+- Plain text password storage<br />
+- Information leakage through stack traces<br />
+- No input validation<br />
+- No rate limiting or brute force protection</p>
+<p><strong>Step 2: Apply Security System Prompt</strong><br />
+Use: <code>Improve the class/classes added in the context applying the system prompt @124-java-secure-coding</code></p>
+<p><strong>Step 3: Interactive Security Review</strong><br />
+Try: <code>Improve the class/classes added in the context applying the system prompt @124-java-secure-coding with the behaviour @behaviour-consultative-interaction</code></p>
+<p><strong>Expected Security Improvements:</strong></p>
+<pre><code class="language-java">@Service
+public class SecureUserAuthService {
+    private final UserRepository userRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final RateLimitService rateLimitService;
+    private static final Logger logger = LoggerFactory.getLogger(SecureUserAuthService.class);
+
+    public SecureUserAuthService(UserRepository userRepository,
+                               PasswordEncoder passwordEncoder,
+                               RateLimitService rateLimitService) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.rateLimitService = rateLimitService;
+    }
+
+    public AuthResult authenticate(@Valid @NotBlank String username,
+                                 @Valid @NotBlank String password) {
+        // Input validation
+        if (!isValidInput(username) || !isValidInput(password)) {
+            logger.warn(&quot;Invalid input detected for authentication attempt&quot;);
+            return AuthResult.INVALID_INPUT;
+        }
+
+        // Rate limiting
+        if (!rateLimitService.isAllowed(username)) {
+            logger.warn(&quot;Rate limit exceeded for user: {}&quot;, username);
+            return AuthResult.RATE_LIMITED;
+        }
+
+        try {
+            Optional&lt;User&gt; userOpt = userRepository.findByUsername(username);
+            if (userOpt.isEmpty()) {
+                logger.info(&quot;Authentication failed: user not found&quot;);
+                return AuthResult.AUTHENTICATION_FAILED;
+            }
+
+            User user = userOpt.get();
+            if (passwordEncoder.matches(password, user.getHashedPassword())) {
+                logger.info(&quot;Successful authentication for user: {}&quot;, username);
+                return AuthResult.SUCCESS;
+            } else {
+                logger.warn(&quot;Authentication failed: incorrect password for user: {}&quot;, username);
+                return AuthResult.AUTHENTICATION_FAILED;
+            }
+
+        } catch (Exception e) {
+            logger.error(&quot;Authentication error occurred&quot;, e);
+            return AuthResult.SYSTEM_ERROR;
+        }
+    }
+
+    public void updatePassword(@Valid @NotBlank String username,
+                             @Valid @NotBlank String newPassword) {
+        // Password strength validation
+        if (!isStrongPassword(newPassword)) {
+            throw new WeakPasswordException(&quot;Password does not meet security requirements&quot;);
+        }
+
+        String hashedPassword = passwordEncoder.encode(newPassword);
+        userRepository.updatePassword(username, hashedPassword);
+
+        logger.info(&quot;Password updated for user: {}&quot;, username);
+    }
+
+    private boolean isValidInput(String input) {
+        return input != null &amp;&amp;
+               input.length() &lt;= 100 &amp;&amp;
+               input.matches(&quot;^[a-zA-Z0-9@._-]+$&quot;);
+    }
+
+    private boolean isStrongPassword(String password) {
+        return password.length() &gt;= 12 &amp;&amp;
+               password.matches(&quot;.*[A-Z].*&quot;) &amp;&amp;
+               password.matches(&quot;.*[a-z].*&quot;) &amp;&amp;
+               password.matches(&quot;.*[0-9].*&quot;) &amp;&amp;
+               password.matches(&quot;.*[!@#$%^&amp;*].*&quot;);
+    }
+}
+</code></pre>
+<h4>🔍 <strong>Security Improvements Analysis:</strong></h4>
+<ul>
+<li><strong>SQL Injection Prevention</strong>: Using parameterized queries through repository</li>
+<li><strong>Password Security</strong>: Bcrypt hashing instead of plain text</li>
+<li><strong>Input Validation</strong>: Sanitization and length limits</li>
+<li><strong>Rate Limiting</strong>: Brute force attack prevention</li>
+<li><strong>Secure Logging</strong>: No sensitive data in logs</li>
+<li><strong>Error Handling</strong>: Generic error responses to prevent information leakage</li>
+</ul>
+<hr />
+<h3><strong>Lesson 3.2: Concurrency Mastery</strong> (60 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Implement thread-safe code using <code>@125-java-concurrency</code></li>
+<li>Understand modern Java concurrency utilities</li>
+<li>Apply concurrent design patterns safely</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>Concurrency Challenges:</strong></p>
+<ol>
+<li><strong>Race Conditions</strong>: Multiple threads accessing shared data</li>
+<li><strong>Deadlocks</strong>: Circular waiting for resources</li>
+<li><strong>Memory Visibility</strong>: Changes not visible across threads</li>
+<li><strong>Performance</strong>: Balancing safety with efficiency</li>
+</ol>
+<p><strong>Modern Java Concurrency Tools:</strong><br />
+- <strong>CompletableFuture</strong>: Asynchronous programming<br />
+- <strong>Virtual Threads</strong>: Lightweight threading (Java 21+)<br />
+- <strong>Concurrent Collections</strong>: Thread-safe data structures<br />
+- <strong>Locks and Synchronizers</strong>: Advanced synchronization</p>
+<h4>🔧 <strong>Hands-on Exercise 3.2:</strong></h4>
+<p><strong>Scenario:</strong> Fix concurrency issues in a shared counter service.</p>
+<p><strong>Step 1: Problematic Concurrent Code</strong></p>
+<pre><code class="language-java">public class CounterService {
+    private int counter = 0;
+    private List&lt;String&gt; operations = new ArrayList&lt;&gt;();
+
+    public void increment(String operation) {
+        counter++; // Race condition!
+        operations.add(operation); // Not thread-safe!
+    }
+
+    public int getCounter() {
+        return counter; // Visibility issue!
+    }
+
+    public List&lt;String&gt; getOperations() {
+        return operations; // Returning mutable reference!
+    }
+}
+</code></pre>
+<p><strong>Step 2: Apply Concurrency System Prompt</strong><br />
+Use: <code>Improve the class/classes added in the context applying the system prompt @125-java-concurrency</code></p>
+<p><strong>Expected Improvements:</strong></p>
+<pre><code class="language-java">@Service
+public class ThreadSafeCounterService {
+    private final AtomicInteger counter = new AtomicInteger(0);
+    private final ConcurrentLinkedQueue&lt;String&gt; operations = new ConcurrentLinkedQueue&lt;&gt;();
+    private final ReadWriteLock lock = new ReentrantReadWriteLock();
+
+    public void increment(String operation) {
+        counter.incrementAndGet();
+        operations.offer(operation);
+    }
+
+    public int getCounter() {
+        return counter.get();
+    }
+
+    public List&lt;String&gt; getOperations() {
+        return List.copyOf(operations);
+    }
+
+    // Advanced: Batch operations with proper synchronization
+    public CompletableFuture&lt;Void&gt; batchIncrement(List&lt;String&gt; operationBatch) {
+        return CompletableFuture.runAsync(() -&gt; {
+            operationBatch.forEach(this::increment);
+        });
+    }
+}
+</code></pre>
+<h4>💡 <strong>Concurrency Benefits:</strong></h4>
+<ul>
+<li><strong>Atomic Operations</strong>: Thread-safe counter updates</li>
+<li><strong>Concurrent Collections</strong>: Safe multi-threaded access</li>
+<li><strong>Immutable Returns</strong>: Defensive copying prevents external modification</li>
+<li><strong>Asynchronous Processing</strong>: Non-blocking batch operations</li>
+</ul>
+<hr />
+<h3><strong>Lesson 3.3: Logging Excellence</strong> (45 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Implement proper logging using <code>@126-java-logging</code></li>
+<li>Understand logging levels and structured logging</li>
+<li>Apply security considerations in logging</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>Logging Best Practices:</strong></p>
+<ol>
+<li><strong>Appropriate Levels</strong>: ERROR, WARN, INFO, DEBUG, TRACE</li>
+<li><strong>Structured Logging</strong>: Consistent format, searchable</li>
+<li><strong>Security</strong>: No sensitive data in logs</li>
+<li><strong>Performance</strong>: Lazy evaluation, proper configuration</li>
+<li><strong>Monitoring</strong>: Integration with observability tools</li>
+</ol>
+<h4>🔧 <strong>Hands-on Exercise 3.3:</strong></h4>
+<p><strong>Step 1: Poor Logging Example</strong></p>
+<pre><code class="language-java">public class PaymentService {
+    public void processPayment(String cardNumber, double amount) {
+        System.out.println(&quot;Processing payment: &quot; + cardNumber + &quot; for $&quot; + amount);
+        // Sensitive data in logs!
+
+        try {
+            // Payment processing logic
+        } catch (Exception e) {
+            e.printStackTrace(); // Poor error handling!
+        }
+    }
+}
+</code></pre>
+<p><strong>Step 2: Apply Logging System Prompt</strong><br />
+Use: <code>Improve the class/classes added in the context applying the system prompt @126-java-logging</code></p>
+<p><strong>Expected Improvements:</strong></p>
+<pre><code class="language-java">@Service
+public class SecurePaymentService {
+    private static final Logger logger = LoggerFactory.getLogger(SecurePaymentService.class);
+    private static final Marker SECURITY_MARKER = MarkerFactory.getMarker(&quot;SECURITY&quot;);
+
+    public PaymentResult processPayment(String cardNumber, BigDecimal amount) {
+        String maskedCardNumber = maskCardNumber(cardNumber);
+
+        logger.info(&quot;Processing payment for card ending in {} for amount {}&quot;,
+                   maskedCardNumber, amount);
+
+        try {
+            validatePaymentRequest(cardNumber, amount);
+            PaymentResult result = executePayment(cardNumber, amount);
+
+            logger.info(&quot;Payment processed successfully for card ending in {}, transaction ID: {}&quot;,
+                       maskedCardNumber, result.getTransactionId());
+
+            return result;
+
+        } catch (PaymentValidationException e) {
+            logger.warn(&quot;Payment validation failed for card ending in {}: {}&quot;,
+                       maskedCardNumber, e.getMessage());
+            throw e;
+
+        } catch (PaymentProcessingException e) {
+            logger.error(&quot;Payment processing failed for card ending in {}: {}&quot;,
+                        maskedCardNumber, e.getMessage(), e);
+            throw e;
+
+        } catch (Exception e) {
+            logger.error(SECURITY_MARKER, &quot;Unexpected error during payment processing&quot;, e);
+            throw new PaymentSystemException(&quot;Payment processing unavailable&quot;, e);
+        }
+    }
+
+    private String maskCardNumber(String cardNumber) {
+        if (cardNumber.length() &lt; 4) return &quot;****&quot;;
+        return &quot;****-****-****-&quot; + cardNumber.substring(cardNumber.length() - 4);
+    }
+}
+</code></pre>
+<hr />
+<h3><strong>Lesson 3.4: Exception Handling Mastery</strong> (60 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Implement robust exception handling using <code>@127-java-exception-handling</code></li>
+<li>Design exception hierarchies effectively</li>
+<li>Apply error recovery strategies</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>Exception Handling Principles:</strong></p>
+<ol>
+<li><strong>Fail Fast</strong>: Detect errors early</li>
+<li><strong>Specific Exceptions</strong>: Meaningful exception types</li>
+<li><strong>Recovery Strategies</strong>: Graceful degradation</li>
+<li><strong>Resource Management</strong>: try-with-resources</li>
+<li><strong>Documentation</strong>: Clear exception contracts</li>
+</ol>
+<h4>🔧 <strong>Hands-on Exercise 3.4:</strong></h4>
+<p><strong>Step 1: Poor Exception Handling</strong></p>
+<pre><code class="language-java">public class FileProcessor {
+    public String processFile(String filename) {
+        try {
+            // File processing logic
+            return &quot;processed&quot;;
+        } catch (Exception e) {
+            return null; // Lost error information!
+        }
+    }
+}
+</code></pre>
+<p><strong>Step 2: Apply Exception Handling System Prompt</strong><br />
+Use: <code>Improve the class/classes added in the context applying the system prompt @127-java-exception-handling</code></p>
+<p><strong>Expected Improvements:</strong></p>
+<pre><code class="language-java">public class RobustFileProcessor {
+    private static final Logger logger = LoggerFactory.getLogger(RobustFileProcessor.class);
+
+    public ProcessingResult processFile(Path filePath) throws FileProcessingException {
+        validateInput(filePath);
+
+        try (BufferedReader reader = Files.newBufferedReader(filePath, StandardCharsets.UTF_8)) {
+
+            String content = reader.lines()
+                .collect(Collectors.joining(&quot;\n&quot;));
+
+            ProcessedContent result = processContent(content);
+
+            logger.info(&quot;Successfully processed file: {}&quot;, filePath);
+            return ProcessingResult.success(result);
+
+        } catch (IOException e) {
+            logger.error(&quot;IO error processing file: {}&quot;, filePath, e);
+            throw new FileProcessingException(&quot;Failed to read file: &quot; + filePath, e);
+
+        } catch (ContentValidationException e) {
+            logger.warn(&quot;Content validation failed for file: {}&quot;, filePath, e);
+            throw new FileProcessingException(&quot;Invalid file content: &quot; + filePath, e);
+
+        } catch (Exception e) {
+            logger.error(&quot;Unexpected error processing file: {}&quot;, filePath, e);
+            throw new FileProcessingException(&quot;Unexpected processing error: &quot; + filePath, e);
+        }
+    }
+
+    private void validateInput(Path filePath) throws FileProcessingException {
+        if (filePath == null) {
+            throw new FileProcessingException(&quot;File path cannot be null&quot;);
+        }
+
+        if (!Files.exists(filePath)) {
+            throw new FileProcessingException(&quot;File does not exist: &quot; + filePath);
+        }
+
+        if (!Files.isReadable(filePath)) {
+            throw new FileProcessingException(&quot;File is not readable: &quot; + filePath);
+        }
+    }
+}
+
+// Custom exception hierarchy
+public class FileProcessingException extends Exception {
+    public FileProcessingException(String message) {
+        super(message);
+    }
+
+    public FileProcessingException(String message, Throwable cause) {
+        super(message, cause);
+    }
+}
+</code></pre>
+<hr />
+<h2>🏆 Module Assessment</h2>
+<h3><strong>Knowledge Validation Checkpoint</strong></h3>
+<p><strong>Question 1:</strong> What are the top 3 OWASP security risks for Java applications?</p>
+<p><strong>Question 2:</strong> Why should you avoid using <code>synchronized</code> keyword for all concurrency needs?</p>
+<p><strong>Question 3:</strong> What sensitive information should never appear in application logs?</p>
+<p><strong>Question 4:</strong> When should you use checked vs. unchecked exceptions?</p>
+<h3><strong>Practical Assessment Project</strong></h3>
+<p><strong>Project: &quot;Secure Banking Service&quot;</strong></p>
+<p><strong>Scenario:</strong> Build a secure, concurrent banking service that handles multiple account operations safely.</p>
+<p><strong>Requirements:</strong><br />
+1. Implement secure authentication and authorization<br />
+2. Handle concurrent account operations safely<br />
+3. Apply comprehensive logging without exposing sensitive data<br />
+4. Implement robust exception handling with recovery strategies<br />
+5. Include security audit trails</p>
+<p><strong>Deliverables:</strong><br />
+- Secure authentication service with rate limiting<br />
+- Thread-safe account operations service<br />
+- Comprehensive logging configuration<br />
+- Custom exception hierarchy<br />
+- Security audit and testing report</p>
+<p><strong>Success Criteria:</strong><br />
+- No security vulnerabilities (verified by static analysis)<br />
+- Thread-safe under concurrent load testing<br />
+- Proper logging without sensitive data exposure<br />
+- Graceful error handling and recovery<br />
+- System prompts used effectively throughout</p>
+<h3><strong>Time Investment:</strong></h3>
+<ul>
+<li><strong>Security Implementation</strong>: 2 hours</li>
+<li><strong>Concurrency Testing</strong>: 1.5 hours</li>
+<li><strong>Logging &amp; Exception Handling</strong>: 1 hour</li>
+<li><strong>Security Audit</strong>: 1 hour</li>
+<li><strong>Total</strong>: 5.5 hours</li>
+</ul>
+<hr />
+<h2>🚀 Next Steps</h2>
+<p><strong>Outstanding Work!</strong> You've mastered secure coding practices and production-ready development techniques.</p>
+<p><strong>What You've Accomplished:</strong><br />
+- ✅ Implemented comprehensive security measures<br />
+- ✅ Created thread-safe, concurrent applications<br />
+- ✅ Applied professional logging practices<br />
+- ✅ Mastered robust exception handling</p>
+<p><strong>Ready for modern Java features?</strong></p>
+<p>👉 <strong><a href="module-4-modern-java.html">Continue to Module 4: Modern Java →</a></strong></p>
+<p><strong>In Module 4, you'll learn to:</strong><br />
+- Master Java Generics and type safety<br />
+- Apply functional programming patterns<br />
+- Leverage modern Java language features<br />
+- Create elegant, expressive code</p>
+<hr />
+<h2>📚 Additional Resources</h2>
+<ul>
+<li><strong><a href="https://owasp.org/www-project-java-security-guide/">OWASP Java Security Guide</a></strong></li>
+<li><strong><a href="https://www.amazon.com/Java-Concurrency-Practice-Brian-Goetz/dp/0321349601">Java Concurrency in Practice</a></strong></li>
+<li><strong><a href="http://www.slf4j.org/manual.html">SLF4J Manual</a></strong></li>
+<li><strong><a href="https://stackify.com/best-practices-exceptions-java/">Java Exception Handling Best Practices</a></strong></li>
+</ul>
+<hr />
+<p><em>Continue your journey with advanced Java language features and modern programming paradigms.</em></p>
+
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena/cursor-rules-java" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2025 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../js/jquery-1.11.2.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/prettify.js"></script>
+<script src="../../js/run_prettify.js"></script>
+<script src="../../js/main.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13CV90H4J4');
+</script>
+
+</body>
+</html>

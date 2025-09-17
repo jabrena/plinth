@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Module 5: Performance - Optimization &amp; Profiling - Cursor Rules for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../feed.xml" title="Cursor Rules for Java"/>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../css/prettify.css">
+  <link rel="shortcut icon" href="../../favicon.ico">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../index.html">Cursor Rules for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../courses/java-generics/index.html">Java Generics</a>
+      <a href="../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
+    </div>
+  </li>
+  <li><a href="../../archive.html">Archive</a></li>
+  <li><a href="../../about.html">About</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="course-heading">
+<h1>Module 5: Performance - Optimization & Profiling</h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="course-content">
+
+<div class="course-meta">
+    <i class="fa fa-calendar-o"></i>
+    2025-09-17
+    &nbsp;
+    <i class="fa fa-user"></i>
+    Juan Antonio Breña Moral
+    &nbsp;
+    <i class="fa fa-tag"></i>
+    Version 0.11.0-SNAPSHOT
+  <div class="course-tags">
+    &nbsp;
+    <i class="fa fa-tags"></i>
+      <a href="../../tags/java.html" class="course-tag">java</a>
+      <a href="../../tags/performance.html" class="course-tag">performance</a>
+      <a href="../../tags/profiling.html" class="course-tag">profiling</a>
+      <a href="../../tags/jmeter.html" class="course-tag">jmeter</a>
+      <a href="../../tags/async-profiler.html" class="course-tag">async-profiler</a>
+      <a href="../../tags/jmh.html" class="course-tag">jmh</a>
+      <a href="../../tags/optimization.html" class="course-tag">optimization</a>
+      <a href="../../tags/system-prompts.html" class="course-tag">system-prompts</a>
+  </div>
+</div>
+<hr>
+
+<h2>🎯 Learning Objectives</h2>
+<p>By the end of this module, you will:</p>
+<ul>
+<li><strong>Create JMeter performance tests</strong> using <code>@151-java-performance-jmeter</code></li>
+<li><strong>Profile applications comprehensively</strong> using <code>@161-java-profiling-detect</code></li>
+<li><strong>Analyze performance bottlenecks</strong> using <code>@162-java-profiling-analyze</code></li>
+<li><strong>Compare performance improvements</strong> using <code>@164-java-profiling-compare</code></li>
+<li><strong>Benchmark code with JMH</strong> for micro-optimizations</li>
+<li><strong>Apply systematic performance optimization</strong> strategies</li>
+</ul>
+<h2>📚 Module Overview</h2>
+<p><strong>Duration:</strong> 8 hours<br />
+<strong>Difficulty:</strong> Advanced<br />
+<strong>Prerequisites:</strong> Module 4 completed, basic performance concepts</p>
+<p>This module focuses on systematic performance optimization using AI-powered profiling and testing tools. You'll learn to identify bottlenecks, create comprehensive performance tests, and validate improvements scientifically.</p>
+<h2>🗺️ Learning Path</h2>
+<h3><strong>Lesson 5.1: JMeter Performance Testing</strong> (90 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Create comprehensive JMeter test plans using <code>@151-java-performance-jmeter</code></li>
+<li>Design realistic load testing scenarios</li>
+<li>Analyze performance metrics and identify bottlenecks</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>Performance Testing Types:</strong><br />
+1. <strong>Load Testing</strong>: Normal expected load<br />
+2. <strong>Stress Testing</strong>: Beyond normal capacity<br />
+3. <strong>Spike Testing</strong>: Sudden load increases<br />
+4. <strong>Volume Testing</strong>: Large amounts of data<br />
+5. <strong>Endurance Testing</strong>: Extended periods</p>
+<h4>🔧 <strong>Hands-on Exercise 5.1:</strong></h4>
+<p><strong>Scenario:</strong> Create performance tests for a Spring Boot REST API.</p>
+<p><strong>Step 1: Setup Test Environment</strong></p>
+<pre><code class="language-bash">cd examples/spring-boot-jmeter-demo
+</code></pre>
+<p><strong>Step 2: Apply JMeter System Prompt</strong><br />
+Use: <code>Add JMeter performance testing to this project using @151-java-performance-jmeter</code></p>
+<p><strong>Step 3: Create Specific Test Plan</strong><br />
+Try: <code>Can you create a Jmeter file based on the restcontroller in the path src/test/resources/jmeter/load-test.jmx?</code></p>
+<p><strong>Expected JMeter Configuration:</strong><br />
+- Thread groups for different load scenarios<br />
+- HTTP request samplers for all endpoints<br />
+- Listeners for metrics collection<br />
+- Assertions for response validation<br />
+- Test data management</p>
+<h4>💡 <strong>Performance Metrics to Monitor:</strong></h4>
+<ul>
+<li><strong>Response Time</strong>: Average, median, 95th percentile</li>
+<li><strong>Throughput</strong>: Requests per second</li>
+<li><strong>Error Rate</strong>: Percentage of failed requests</li>
+<li><strong>Resource Utilization</strong>: CPU, memory, I/O</li>
+</ul>
+<hr />
+<h3><strong>Lesson 5.2: Application Profiling Setup</strong> (120 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Set up comprehensive profiling using <code>@161-java-profiling-detect</code></li>
+<li>Configure JVM for optimal profiling</li>
+<li>Collect runtime performance data</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>Profiling Tools:</strong><br />
+1. <strong>Async Profiler</strong>: Low-overhead sampling profiler<br />
+2. <strong>JFR</strong>: Java Flight Recorder<br />
+3. <strong>JVM Tools</strong>: jps, jstack, jcmd, jstat<br />
+4. <strong>Memory Analysis</strong>: Heap dumps, GC logs</p>
+<h4>🔧 <strong>Hands-on Exercise 5.2:</strong></h4>
+<p><strong>Scenario:</strong> Profile a memory-leak prone application.</p>
+<p><strong>Step 1: Setup Profiling Environment</strong></p>
+<pre><code class="language-bash">cd examples/spring-boot-memory-leak-demo
+</code></pre>
+<p><strong>Step 2: Apply Profiling Detection Prompt</strong><br />
+Use: <code>My Java application has performance issues - help me set up comprehensive profiling process using @161-java-profiling-detect and use the location examples/spring-boot-memory-leak-demo/profiler</code></p>
+<p><strong>Expected Generated Scripts:</strong></p>
+<p><strong>1. run-with-profiler.sh:</strong></p>
+<pre><code class="language-bash">#!/bin/bash
+# Generated script with optimal JVM flags for profiling
+
+JAVA_OPTS=&quot;-XX:+UnlockDiagnosticVMOptions&quot;
+JAVA_OPTS=&quot;$JAVA_OPTS -XX:+DebugNonSafepoints&quot;
+JAVA_OPTS=&quot;$JAVA_OPTS -XX:+FlightRecorder&quot;
+JAVA_OPTS=&quot;$JAVA_OPTS -XX:StartFlightRecording=duration=300s,filename=app-profile.jfr&quot;
+JAVA_OPTS=&quot;$JAVA_OPTS -Xms512m -Xmx2g&quot;
+
+./mvnw spring-boot:run -Dspring-boot.run.jvmArguments=&quot;$JAVA_OPTS&quot;
+</code></pre>
+<p><strong>2. java-profile.sh:</strong></p>
+<pre><code class="language-bash">#!/bin/bash
+# Interactive profiling script
+
+echo &quot;Available Java processes:&quot;
+jps -l
+
+read -p &quot;Enter PID to profile: &quot; PID
+
+echo &quot;Profiling options:&quot;
+echo &quot;1. CPU profiling&quot;
+echo &quot;2. Memory allocation profiling&quot;
+echo &quot;3. Lock contention profiling&quot;
+echo &quot;4. Full profiling (CPU + allocations)&quot;
+
+read -p &quot;Select option: &quot; OPTION
+
+case $OPTION in
+    1) java -jar async-profiler.jar -e cpu -d 60 -f cpu-profile.html $PID ;;
+    2) java -jar async-profiler.jar -e alloc -d 60 -f alloc-profile.html $PID ;;
+    3) java -jar async-profiler.jar -e lock -d 60 -f lock-profile.html $PID ;;
+    4) java -jar async-profiler.jar -e cpu,alloc -d 60 -f full-profile.html $PID ;;
+esac
+</code></pre>
+<p><strong>Step 3: Execute Profiling Workflow</strong></p>
+<pre><code class="language-bash"># Step 1: Run application with profiling flags
+./run-with-profiler.sh --help
+
+# Step 2: Start load testing
+./run-jmeter.sh --help
+
+# Step 3: Collect profiling data
+./profiler/scripts/java-profile.sh
+</code></pre>
+<hr />
+<h3><strong>Lesson 5.3: Performance Analysis</strong> (150 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Analyze profiling results using <code>@162-java-profiling-analyze</code></li>
+<li>Identify performance bottlenecks systematically</li>
+<li>Generate actionable optimization recommendations</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>Analysis Focus Areas:</strong><br />
+1. <strong>CPU Hotspots</strong>: Methods consuming most CPU time<br />
+2. <strong>Memory Allocation</strong>: Objects causing GC pressure<br />
+3. <strong>I/O Bottlenecks</strong>: Database and network operations<br />
+4. <strong>Lock Contention</strong>: Thread synchronization issues<br />
+5. <strong>GC Impact</strong>: Garbage collection overhead</p>
+<h4>🔧 <strong>Hands-on Exercise 5.3:</strong></h4>
+<p><strong>Step 1: Analyze Collected Data</strong><br />
+Use: <code>Analyze the results located in examples/spring-boot-memory-leak-demo/profiler and use the cursor rule @162-java-profiling-analyze</code></p>
+<p><strong>Expected Analysis Report:</strong></p>
+<pre><code class="language-markdown"># Performance Analysis Report - 2025-01-XX
+
+## Executive Summary
+- **Application**: Spring Boot Memory Leak Demo
+- **Profiling Duration**: 5 minutes under load
+- **Key Finding**: Memory leak in UserService causing 200MB/minute growth
+
+## CPU Analysis
+### Top Hotspots
+1. `UserService.processUser()` - 45% CPU time
+   - **Issue**: Inefficient string concatenation in loop
+   - **Recommendation**: Use StringBuilder or String.format()
+
+2. `DatabaseRepository.findAll()` - 23% CPU time
+   - **Issue**: N+1 query problem
+   - **Recommendation**: Implement batch fetching
+
+### Method-Level Analysis
+```java
+// BEFORE (45% CPU time)
+public String processUsers(List&lt;User&gt; users) {
+    String result = &quot;&quot;;
+    for (User user : users) {
+        result += user.getName() + &quot;, &quot;; // String concatenation in loop
+    }
+    return result;
+}
+
+// RECOMMENDED OPTIMIZATION
+public String processUsers(List&lt;User&gt; users) {
+    return users.stream()
+        .map(User::getName)
+        .collect(Collectors.joining(&quot;, &quot;));
+}
+</code></pre>
+<h2>Memory Analysis</h2>
+<h3>Allocation Hotspots</h3>
+<ol>
+<li><code>String</code> objects - 67% of allocations</li>
+</ol>
+<ul>
+<li><strong>Source</strong>: String concatenation in processUsers()</li>
+<li><strong>Impact</strong>: 150MB/minute allocation rate</li>
+<li><strong>Solution</strong>: Use efficient string building</li>
+</ul>
+<ol>
+<li><code>ArrayList</code> growth - 18% of allocations</li>
+</ol>
+<ul>
+<li><strong>Source</strong>: Dynamic list resizing</li>
+<li><strong>Solution</strong>: Pre-size collections when possible</li>
+</ul>
+<h3>Memory Leak Detection</h3>
+<ul>
+<li><strong>Leak Source</strong>: <code>UserCache.cache</code> HashMap growing unboundedly</li>
+<li><strong>Growth Rate</strong>: 200MB/minute</li>
+<li><strong>Root Cause</strong>: No cache eviction policy</li>
+<li><strong>Fix</strong>: Implement LRU cache with size limits</li>
+</ul>
+<h2>I/O Analysis</h2>
+<h3>Database Performance</h3>
+<ul>
+<li><strong>Query Count</strong>: 2,450 queries in 5 minutes</li>
+<li><strong>Slowest Query</strong>: <code>SELECT * FROM users WHERE status = ?</code> (avg 45ms)</li>
+<li><strong>N+1 Problem</strong>: UserService.loadUserDetails() method</li>
+<li><strong>Recommendation</strong>: Use @EntityGraph or batch loading</li>
+</ul>
+<h2>Recommendations Priority</h2>
+<ol>
+<li><strong>HIGH</strong>: Fix memory leak in UserCache (immediate)</li>
+<li><strong>HIGH</strong>: Optimize string concatenation in processUsers()</li>
+<li><strong>MEDIUM</strong>: Implement batch database loading</li>
+<li><strong>LOW</strong>: Pre-size ArrayList collections</li>
+</ol>
+<h2>Next Steps</h2>
+<ol>
+<li>Apply recommended code changes</li>
+<li>Re-run profiling to validate improvements</li>
+<li>Monitor production metrics for 24 hours</li>
+</ol>
+<pre><code>
+---
+
+### **Lesson 5.4: JMH Micro-Benchmarking** (90 minutes)
+
+#### 🎯 **Learning Objectives:**
+- Create JMH benchmarks for micro-optimizations
+- Analyze benchmark results scientifically
+- Apply JMH best practices
+
+#### 🔧 **Hands-on Exercise 5.4:**
+
+**Scenario:** Benchmark different string concatenation approaches.
+
+**Step 1: Add JMH Support**
+Use: `Add JMH support using the cursor rule @112-java-maven-plugins and not make any question`
+
+**Step 2: Create Benchmark**
+Use: `Can you create a JMH benchmark in order to know what is the best implementation?`
+
+**Expected JMH Benchmark:**
+
+```java
+@BenchmarkMode(Mode.AverageTime)
+@OutputTimeUnit(TimeUnit.NANOSECONDS)
+@State(Scope.Benchmark)
+public class StringConcatenationBenchmark {
+
+    @Param({&quot;10&quot;, &quot;100&quot;, &quot;1000&quot;})
+    private int size;
+
+    private List&lt;String&gt; strings;
+
+    @Setup
+    public void setup() {
+        strings = IntStream.range(0, size)
+            .mapToObj(i -&gt; &quot;String&quot; + i)
+            .collect(Collectors.toList());
+    }
+
+    @Benchmark
+    public String concatenationWithPlus() {
+        String result = &quot;&quot;;
+        for (String s : strings) {
+            result += s;
+        }
+        return result;
+    }
+
+    @Benchmark
+    public String concatenationWithStringBuilder() {
+        StringBuilder sb = new StringBuilder();
+        for (String s : strings) {
+            sb.append(s);
+        }
+        return sb.toString();
+    }
+
+    @Benchmark
+    public String concatenationWithStringJoiner() {
+        StringJoiner joiner = new StringJoiner(&quot;&quot;);
+        for (String s : strings) {
+            joiner.add(s);
+        }
+        return joiner.toString();
+    }
+
+    @Benchmark
+    public String concatenationWithStreams() {
+        return strings.stream()
+            .collect(Collectors.joining(&quot;&quot;));
+    }
+}
+</code></pre>
+<p><strong>Step 3: Analyze Results</strong><br />
+After running the benchmark, use: <code>Can you explain the JMH results and advice about the best implementation?</code></p>
+<hr />
+<h3><strong>Lesson 5.5: Performance Comparison</strong> (60 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Compare before/after performance using <code>@164-java-profiling-compare</code></li>
+<li>Validate optimization effectiveness</li>
+<li>Create performance improvement reports</li>
+</ul>
+<h4>🔧 <strong>Hands-on Exercise 5.5:</strong></h4>
+<p><strong>Step 1: Apply Optimizations</strong><br />
+Implement the recommended changes from the analysis report.</p>
+<p><strong>Step 2: Re-run Profiling</strong><br />
+Collect new performance data with the same load conditions.</p>
+<p><strong>Step 3: Compare Results</strong><br />
+Use: <code>Review if the problems was solved with last refactoring using the reports located in @/results with the cursor rule @164-java-profiling-compare</code></p>
+<p><strong>Expected Comparison Report:</strong></p>
+<pre><code class="language-markdown"># Performance Improvement Validation Report
+
+## Summary
+- **Memory leak**: FIXED ✅ (0MB/minute growth vs. 200MB/minute before)
+- **CPU optimization**: 67% improvement ✅ (processUsers() now 15% vs. 45% CPU time)
+- **Database queries**: 45% reduction ✅ (1,350 queries vs. 2,450 before)
+
+## Detailed Comparison
+
+### Memory Usage
+| Metric | Before | After | Improvement |
+|--------|--------|-------|-------------|
+| Heap Growth Rate | 200MB/min | 0MB/min | 100% ✅ |
+| GC Frequency | 12/min | 3/min | 75% ✅ |
+| Max Heap Usage | 1.8GB | 512MB | 71% ✅ |
+
+### CPU Performance
+| Method | Before CPU% | After CPU% | Improvement |
+|--------|-------------|------------|-------------|
+| processUsers() | 45% | 15% | 67% ✅ |
+| findAll() | 23% | 12% | 48% ✅ |
+
+## Recommendations
+✅ All high-priority issues resolved
+✅ Performance targets met
+✅ Ready for production deployment
+</code></pre>
+<hr />
+<h2>🏆 Module Assessment</h2>
+<h3><strong>Practical Assessment Project</strong></h3>
+<p><strong>Project: &quot;E-Commerce Performance Optimization&quot;</strong></p>
+<p><strong>Scenario:</strong> Optimize a slow e-commerce application using systematic profiling.</p>
+<p><strong>Requirements:</strong><br />
+1. Create comprehensive JMeter test plans<br />
+2. Set up profiling infrastructure<br />
+3. Identify and analyze performance bottlenecks<br />
+4. Implement optimizations<br />
+5. Validate improvements with comparison reports</p>
+<p><strong>Deliverables:</strong><br />
+- JMeter test suite covering all scenarios<br />
+- Profiling setup scripts and configuration<br />
+- Performance analysis reports with recommendations<br />
+- Optimized code implementation<br />
+- Before/after comparison validation</p>
+<p><strong>Success Criteria:</strong><br />
+- 50% reduction in response times<br />
+- Memory leak elimination<br />
+- 90% reduction in database queries<br />
+- Comprehensive profiling documentation</p>
+<hr />
+<h2>🚀 Next Steps</h2>
+<p><strong>Outstanding Achievement!</strong> You've mastered systematic performance optimization and profiling.</p>
+<p><strong>What You've Accomplished:</strong><br />
+- ✅ Created comprehensive performance tests<br />
+- ✅ Set up professional profiling infrastructure<br />
+- ✅ Analyzed and fixed performance bottlenecks<br />
+- ✅ Validated improvements scientifically</p>
+<p><strong>Ready for documentation mastery?</strong></p>
+<p>👉 <strong><a href="module-6-documentation.html">Continue to Module 6: Documentation →</a></strong></p>
+<hr />
+<p><em>Master professional documentation and diagram generation in the next module.</em></p>
+
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena/cursor-rules-java" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2025 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../js/jquery-1.11.2.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/prettify.js"></script>
+<script src="../../js/run_prettify.js"></script>
+<script src="../../js/main.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13CV90H4J4');
+</script>
+
+</body>
+</html>

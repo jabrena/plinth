@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Module 7: Advanced Patterns - System Prompt Creation &amp; Progressive Learning - Cursor Rules for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../feed.xml" title="Cursor Rules for Java"/>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../css/prettify.css">
+  <link rel="shortcut icon" href="../../favicon.ico">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../index.html">Cursor Rules for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../courses/java-generics/index.html">Java Generics</a>
+      <a href="../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
+    </div>
+  </li>
+  <li><a href="../../archive.html">Archive</a></li>
+  <li><a href="../../about.html">About</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="course-heading">
+<h1>Module 7: Advanced Patterns - System Prompt Creation & Progressive Learning</h1>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="course-content">
+
+<div class="course-meta">
+    <i class="fa fa-calendar-o"></i>
+    2025-09-17
+    &nbsp;
+    <i class="fa fa-user"></i>
+    Juan Antonio Breña Moral
+    &nbsp;
+    <i class="fa fa-tag"></i>
+    Version 0.11.0-SNAPSHOT
+  <div class="course-tags">
+    &nbsp;
+    <i class="fa fa-tags"></i>
+      <a href="../../tags/java.html" class="course-tag">java</a>
+      <a href="../../tags/system-prompts.html" class="course-tag">system-prompts</a>
+      <a href="../../tags/ai-development.html" class="course-tag">ai-development</a>
+      <a href="../../tags/progressive-learning.html" class="course-tag">progressive-learning</a>
+      <a href="../../tags/prompt-engineering.html" class="course-tag">prompt-engineering</a>
+      <a href="../../tags/educational-design.html" class="course-tag">educational-design</a>
+  </div>
+</div>
+<hr>
+
+<h2>🎯 Learning Objectives</h2>
+<p>By the end of this module, you will:</p>
+<ul>
+<li><strong>Create custom system prompts</strong> following proven patterns and structures</li>
+<li><strong>Apply progressive learning behaviors</strong> using <code>@behaviour-progressive-learning</code></li>
+<li><strong>Transform technical rules into educational content</strong> systematically</li>
+<li><strong>Design interactive learning experiences</strong> with assessments and exercises</li>
+<li><strong>Master advanced AI-powered development workflows</strong> for team knowledge sharing</li>
+</ul>
+<h2>📚 Module Overview</h2>
+<p><strong>Duration:</strong> 4 hours<br />
+<strong>Difficulty:</strong> Advanced<br />
+<strong>Prerequisites:</strong> All previous modules completed, understanding of learning design</p>
+<p>This capstone module teaches you to create your own system prompts and educational content. You'll learn the meta-skills of prompt engineering and instructional design, enabling you to build AI-powered learning systems for any technical domain.</p>
+<h2>🗺️ Learning Path</h2>
+<h3><strong>Lesson 7.1: System Prompt Architecture</strong> (60 minutes)</h3>
+<h4>🎯 <strong>Learning Objectives:</strong></h4>
+<ul>
+<li>Understand the anatomy of effective system prompts</li>
+<li>Learn prompt engineering best practices</li>
+<li>Design reusable prompt templates</li>
+</ul>
+<h4>📖 <strong>Core Concepts:</strong></h4>
+<p><strong>System Prompt Structure:</strong></p>
+<ol>
+<li><strong>Metadata</strong>: Author, version, purpose</li>
+<li><strong>Role Definition</strong>: AI persona and expertise level</li>
+<li><strong>Goal Statement</strong>: Clear, actionable objectives</li>
+<li><strong>Constraints</strong>: Boundaries and limitations</li>
+<li><strong>Output Format</strong>: Structured response requirements</li>
+<li><strong>Examples</strong>: Concrete demonstrations</li>
+</ol>
+<h4>💡 <strong>Knowledge Check:</strong></h4>
+<p><em>What makes a system prompt effective vs. ineffective?</em></p>
+<p><strong>Answer:</strong> Effective prompts are specific, structured, include constraints, provide examples, and have clear success criteria. Ineffective prompts are vague, lack structure, have no constraints, and don't specify desired outputs.</p>
+<h4>🔧 <strong>Hands-on Exercise 7.1:</strong></h4>
+<p><strong>Scenario:</strong> Create a system prompt for automated code review.</p>
+<p><strong>Step 1: Analyze Existing Prompts</strong><br />
+Study the structure of existing prompts like <code>@124-java-secure-coding.md</code>:</p>
+<pre><code class="language-markdown">---
+author: Juan Antonio Breña Moral
+version: 0.11.0-SNAPSHOT
+---
+# Java Secure Coding
+
+## Role
+You are a Senior software engineer with extensive experience in Java security
+
+## Goal
+Review Java code for security vulnerabilities and apply OWASP best practices
+
+## Constraints
+- Focus only on security issues
+- Provide specific code examples
+- Include severity ratings (HIGH/MEDIUM/LOW)
+- Reference OWASP guidelines
+
+## Output Format
+- **Security Issues Found**: List with severity
+- **Recommended Fixes**: Code examples
+- **Prevention Strategies**: Best practices
+</code></pre>
+<p><strong>Step 2: Create Custom System Prompt</strong></p>
+<p><strong>Template: Code Review System Prompt</strong></p>
+<pre><code class="language-markdown">---
+author: [Your Name]
+version: 1.0.0
+---
+# Java Code Review Assistant
+
+## Role
+You are a Senior Java Developer and Code Review Expert with 10+ years of experience in enterprise software development, specializing in code quality, maintainability, and best practices.
+
+## Goal
+Perform comprehensive code reviews focusing on:
+- Code quality and maintainability
+- Design pattern application
+- Performance considerations
+- Testing adequacy
+- Documentation completeness
+
+## Constraints
+- **MANDATORY**: Provide specific line-by-line feedback
+- **FOCUS**: Constructive criticism with actionable improvements
+- **SCOPE**: Java code only (exclude configuration files unless critical)
+- **STYLE**: Professional, educational tone
+- **EXAMPLES**: Include before/after code samples for major suggestions
+
+## Analysis Framework
+
+### 1. Code Quality Assessment
+- **Readability**: Clear variable names, method structure
+- **Maintainability**: SOLID principles, low coupling
+- **Consistency**: Code style, naming conventions
+- **Complexity**: Cyclomatic complexity, method length
+
+### 2. Design Evaluation
+- **Architecture**: Layer separation, dependency injection
+- **Patterns**: Appropriate design pattern usage
+- **Abstraction**: Interface vs. implementation
+- **Extensibility**: Future modification ease
+
+### 3. Performance Review
+- **Efficiency**: Algorithm complexity, resource usage
+- **Memory**: Object creation, garbage collection impact
+- **Concurrency**: Thread safety, synchronization
+- **Database**: Query optimization, N+1 problems
+
+### 4. Testing Analysis
+- **Coverage**: Unit test completeness
+- **Quality**: Test readability, assertion clarity
+- **Strategy**: Test pyramid adherence
+- **Mocking**: Appropriate mock usage
+
+## Output Format
+
+### Executive Summary
+- **Overall Rating**: Excellent/Good/Needs Improvement/Poor
+- **Key Strengths**: Top 3 positive aspects
+- **Critical Issues**: Must-fix problems (if any)
+- **Improvement Priority**: High/Medium/Low categorized suggestions
+
+### Detailed Review
+
+#### 🔍 Code Quality Issues
+For each issue:
+- **Location**: File:LineNumber
+- **Severity**: HIGH/MEDIUM/LOW
+- **Issue**: Clear description
+- **Impact**: Why this matters
+- **Recommendation**: Specific fix with code example
+
+#### 💡 Suggestions for Improvement
+- **Design Improvements**: Architecture suggestions
+- **Performance Optimizations**: Efficiency gains
+- **Testing Enhancements**: Coverage and quality improvements
+- **Documentation**: Missing or unclear documentation
+
+#### ✅ Positive Observations
+- **Good Practices**: What's working well
+- **Effective Patterns**: Well-implemented solutions
+- **Quality Code**: Examples of excellent implementation
+
+### Code Examples
+
+#### Before (Current Code)
+```java
+// Original code with issues
+</code></pre>
+<h4>After (Recommended Improvement)</h4>
+<pre><code class="language-java">// Improved version with explanations
+</code></pre>
+<h3>Next Steps</h3>
+<ol>
+<li><strong>Immediate Actions</strong>: Critical fixes required</li>
+<li><strong>Short-term Improvements</strong>: Next sprint considerations</li>
+<li><strong>Long-term Enhancements</strong>: Future architectural improvements</li>
+<li><strong>Learning Resources</strong>: Relevant documentation/articles</li>
+</ol>
+<h2>Validation Checklist</h2>
+<ul>
+<li>[ ] All major issues identified and explained</li>
+<li>[ ] Constructive feedback provided</li>
+<li>[ ] Code examples included for significant changes</li>
+<li>[ ] Priority levels assigned to recommendations</li>
+<li>[ ] Educational value included (explain the &quot;why&quot;)</li>
+</ul>
+<pre><code>
+#### 🔍 **Prompt Design Principles:**
+- **Specificity**: Clear, unambiguous instructions
+- **Structure**: Organized, scannable format
+- **Examples**: Concrete demonstrations
+- **Constraints**: Clear boundaries and limitations
+- **Validation**: Success criteria and checkpoints
+
+---
+
+### **Lesson 7.2: Progressive Learning Behavior Application** (90 minutes)
+
+#### 🎯 **Learning Objectives:**
+- Apply the `@behaviour-progressive-learning` behavior effectively
+- Transform technical system prompts into educational content
+- Design interactive learning experiences
+
+#### 📖 **Core Concepts:**
+
+**Progressive Learning Structure:**
+
+1. **Extract**: Core concepts from technical content
+2. **Structure**: Learning modules with prerequisites
+3. **Create**: Interactive exercises and examples
+4. **Generate**: Comprehensive courses with assessments
+5. **Provide**: Knowledge validation checkpoints
+
+#### 🔧 **Hands-on Exercise 7.2:**
+
+**Scenario:** Transform the code review system prompt into a learning course.
+
+**Step 1: Apply Progressive Learning Behavior**
+Use: `Create a course about the code review system prompt using the behavior @behaviour-progressive-learning and put the course here @site-generator/content/courses/system-prompts-java/module-7-advanced-patterns/`
+
+**Expected Course Structure:**
+
+```markdown
+# Mastering Java Code Reviews - From Checklist to Expertise
+
+## 🎯 Course Overview
+
+**Transform your code review skills** from basic checklist-following to expert-level analysis that improves code quality, team knowledge sharing, and software maintainability.
+
+### 🎓 Learning Objectives
+- Perform systematic code quality assessments
+- Identify design pattern opportunities and anti-patterns
+- Evaluate performance implications of code changes
+- Provide constructive, educational feedback
+- Build team code review culture
+
+### 📚 Module Breakdown
+
+#### Module 1: Code Review Foundations (2 hours)
+- **Learning Objectives**: Understand code review purpose and benefits
+- **Core Concepts**: Quality metrics, review types, feedback principles
+- **Exercise**: Review a simple method with guided checklist
+- **Assessment**: Identify 5 code quality issues in sample code
+
+#### Module 2: Design Pattern Recognition (2.5 hours)
+- **Learning Objectives**: Identify design patterns and anti-patterns
+- **Core Concepts**: SOLID principles, common patterns, refactoring opportunities
+- **Exercise**: Suggest design improvements for tightly coupled code
+- **Assessment**: Propose design pattern solutions for 3 scenarios
+
+#### Module 3: Performance Analysis (2 hours)
+- **Learning Objectives**: Evaluate performance implications
+- **Core Concepts**: Algorithm complexity, memory usage, concurrency
+- **Exercise**: Identify performance bottlenecks in data processing code
+- **Assessment**: Optimize code for better performance
+
+#### Module 4: Effective Feedback (1.5 hours)
+- **Learning Objectives**: Provide constructive, actionable feedback
+- **Core Concepts**: Communication principles, educational feedback
+- **Exercise**: Rewrite harsh feedback to be constructive
+- **Assessment**: Create comprehensive review for complex class
+
+### 🔄 Learning Progression
+
+#### Foundation Level (Beginner)
+- Focus on obvious issues (syntax, basic patterns)
+- Use checklists and templates
+- Practice with guided examples
+
+#### Intermediate Level
+- Recognize design patterns and anti-patterns
+- Evaluate architectural decisions
+- Provide educational explanations
+
+#### Expert Level
+- Anticipate future maintenance issues
+- Suggest architectural improvements
+- Mentor others through reviews
+
+### 📊 Assessment Strategy
+
+#### Knowledge Checks
+- &quot;What's the difference between code review and code inspection?&quot;
+- &quot;How do you balance thoroughness with review velocity?&quot;
+- &quot;When should you suggest refactoring vs. accepting current implementation?&quot;
+
+#### Practical Exercises
+- **Exercise 1**: Review calculator class for basic issues
+- **Exercise 2**: Analyze service layer for design patterns
+- **Exercise 3**: Evaluate data processing pipeline for performance
+- **Exercise 4**: Provide comprehensive review for complete feature
+
+#### Capstone Project
+**&quot;Complete Code Review Portfolio&quot;**
+- Review 5 different types of Java classes
+- Demonstrate all review aspects (quality, design, performance, testing)
+- Create educational feedback that helps junior developers learn
+- Document review methodology and rationale
+
+### 💡 Interactive Elements
+
+#### Before/After Comparisons
+```java
+// BEFORE: What issues do you see?
+public class UserService {
+    public String processUser(String data) {
+        String[] parts = data.split(&quot;,&quot;);
+        // ... problematic implementation
+    }
+}
+
+// AFTER: Improved version
+public class UserService {
+    public ProcessingResult processUser(UserData userData) {
+        // ... improved implementation with explanation
+    }
+}
+</code></pre>
+<h4>Guided Analysis</h4>
+<ul>
+<li>&quot;Notice how this method violates Single Responsibility - it's parsing, validating, and persisting data&quot;</li>
+<li>&quot;This connects to our earlier lesson on SOLID principles - remember the 'S' in SOLID?&quot;</li>
+</ul>
+<h4>Real-World Scenarios</h4>
+<ul>
+<li>&quot;You're reviewing a junior developer's first Spring Boot controller. How do you provide feedback that's educational but not overwhelming?&quot;</li>
+<li>&quot;The code works but uses deprecated APIs. How do you prioritize this feedback?&quot;</li>
+</ul>
+<h3>🎯 Learning Paths</h3>
+<h4>Quick Professional (4 hours)</h4>
+<ul>
+<li>Module 1: Foundations (1 hour)</li>
+<li>Module 4: Effective Feedback (1 hour)</li>
+<li>Practical exercises (2 hours)</li>
+</ul>
+<h4>Comprehensive Mastery (8 hours)</h4>
+<ul>
+<li>All modules with deep exercises</li>
+<li>Capstone project completion</li>
+<li>Peer review practice</li>
+</ul>
+<h4>Team Lead Track (6 hours)</h4>
+<ul>
+<li>Focus on building review culture</li>
+<li>Mentoring through reviews</li>
+<li>Process optimization</li>
+</ul>
+<p>Which path matches your current needs and available time?</p>
+<pre><code>
+#### 💡 **Educational Transformation Benefits:**
+- **Systematic Learning**: Structured progression from basics to advanced
+- **Interactive Practice**: Hands-on exercises with real code
+- **Assessment Validation**: Knowledge checkpoints ensure understanding
+- **Multiple Paths**: Different learning styles and time constraints
+- **Real-World Application**: Immediately applicable skills
+
+---
+
+### **Lesson 7.3: Custom Learning Experience Design** (90 minutes)
+
+#### 🎯 **Learning Objectives:**
+- Design complete learning experiences from scratch
+- Create interactive exercises and assessments
+- Apply instructional design principles to technical content
+
+#### 🔧 **Hands-on Exercise 7.3:**
+
+**Project:** Create a complete learning module for &quot;Java Memory Management&quot;
+
+**Step 1: Define Learning Objectives**
+```markdown
+## Learning Objectives
+By the end of this module, learners will:
+- Understand JVM memory structure (heap, stack, metaspace)
+- Identify memory leaks and their causes
+- Apply memory optimization techniques
+- Use profiling tools to analyze memory usage
+- Implement memory-efficient coding patterns
+</code></pre>
+<p><strong>Step 2: Design Progressive Structure</strong></p>
+<pre><code class="language-markdown">### Module Structure
+
+#### Lesson 1: JVM Memory Fundamentals (45 minutes)
+- **Concept**: Heap vs Stack vs Metaspace
+- **Exercise**: Analyze memory allocation for different object types
+- **Assessment**: Diagram memory layout for sample program
+
+#### Lesson 2: Garbage Collection (60 minutes)
+- **Concept**: GC algorithms and tuning
+- **Exercise**: Compare GC logs from different collectors
+- **Assessment**: Recommend GC settings for specific scenarios
+
+#### Lesson 3: Memory Leak Detection (75 minutes)
+- **Concept**: Common leak patterns and detection
+- **Exercise**: Find and fix memory leaks in sample applications
+- **Assessment**: Create comprehensive leak detection checklist
+
+#### Lesson 4: Optimization Techniques (60 minutes)
+- **Concept**: Memory-efficient coding patterns
+- **Exercise**: Refactor memory-intensive code
+- **Assessment**: Design memory-efficient data processing pipeline
+</code></pre>
+<p><strong>Step 3: Create Interactive Elements</strong></p>
+<pre><code class="language-markdown">### Interactive Learning Components
+
+#### 🔍 Knowledge Checks
+- &quot;What happens to objects when they go out of scope?&quot;
+- &quot;Why might a HashMap cause memory leaks?&quot;
+- &quot;When should you use WeakReference vs SoftReference?&quot;
+
+#### 💡 Visual Learning
+```ascii
+JVM Memory Structure:
+┌─────────────────────────────────────┐
+│              Heap Memory            │
+│  ┌─────────────┐  ┌─────────────┐  │
+│  │ Young Gen   │  │  Old Gen    │  │
+│  │ (Eden+S0+S1)│  │             │  │
+│  └─────────────┘  └─────────────┘  │
+└─────────────────────────────────────┘
+┌─────────────────────────────────────┐
+│            Stack Memory             │
+│  ┌─────────────┐  ┌─────────────┐  │
+│  │ Thread 1    │  │ Thread 2    │  │
+│  │ Stack       │  │ Stack       │  │
+│  └─────────────┘  └─────────────┘  │
+└─────────────────────────────────────┘
+</code></pre>
+<h4>🎯 Practical Challenges</h4>
+<p><strong>Challenge 1: Memory Leak Detective</strong></p>
+<pre><code class="language-java">// Find the memory leak in this code
+public class UserCache {
+    private static final Map&lt;String, User&gt; cache = new HashMap&lt;&gt;();
+
+    public static void cacheUser(User user) {
+        cache.put(user.getId(), user);
+    }
+
+    public static User getUser(String id) {
+        return cache.get(id);
+    }
+}
+</code></pre>
+<p><strong>Challenge 2: Optimization Opportunity</strong></p>
+<pre><code class="language-java">// Optimize this code for better memory usage
+public List&lt;String&gt; processLargeFile(String filename) {
+    List&lt;String&gt; allLines = Files.readAllLines(Paths.get(filename));
+    List&lt;String&gt; processed = new ArrayList&lt;&gt;();
+
+    for (String line : allLines) {
+        if (line.startsWith(&quot;ERROR&quot;)) {
+            processed.add(line.toUpperCase());
+        }
+    }
+
+    return processed;
+}
+</code></pre>
+<h4>🏆 Capstone Project</h4>
+<p><strong>&quot;Memory-Efficient Data Pipeline&quot;</strong><br />
+- Design a system that processes 1GB+ files with &lt;512MB heap<br />
+- Implement streaming processing with backpressure<br />
+- Add memory monitoring and alerting<br />
+- Create comprehensive documentation</p>
+<pre><code>
+---
+
+### **Lesson 7.4: Advanced AI Workflow Integration** (60 minutes)
+
+#### 🎯 **Learning Objectives:**
+- Integrate multiple system prompts into cohesive workflows
+- Create compound AI-powered development processes
+- Design team collaboration patterns with AI assistance
+
+#### 📖 **Core Concepts:**
+
+**AI Workflow Patterns:**
+
+1. **Sequential Processing**: Chain prompts for complex tasks
+2. **Parallel Analysis**: Multiple prompts analyze different aspects
+3. **Iterative Refinement**: Feedback loops with AI assistance
+4. **Collaborative Review**: Team + AI collaborative workflows
+
+#### 🔧 **Hands-on Exercise 7.4:**
+
+**Scenario:** Design a complete AI-powered development workflow.
+
+**Workflow: &quot;Feature Development Pipeline&quot;**
+
+```markdown
+## AI-Powered Feature Development Workflow
+
+### Phase 1: Requirements Analysis
+1. **Prompt**: `@170-java-documentation` - Generate feature specification
+2. **Input**: User story and acceptance criteria
+3. **Output**: Detailed technical specification with API design
+
+### Phase 2: Design &amp; Architecture
+1. **Prompt**: `@171-java-diagrams` - Create architecture diagrams
+2. **Prompt**: `@121-java-object-oriented-design` - Design class structure
+3. **Output**: UML diagrams and detailed design document
+
+### Phase 3: Implementation
+1. **Prompt**: `@128-java-generics` - Implement type-safe components
+2. **Prompt**: `@142-java-functional-programming` - Add functional processing
+3. **Prompt**: `@124-java-secure-coding` - Apply security best practices
+
+### Phase 4: Testing &amp; Quality
+1. **Prompt**: `@131-java-unit-testing` - Generate comprehensive tests
+2. **Prompt**: `@151-java-performance-jmeter` - Create performance tests
+3. **Prompt**: Custom code review prompt - Automated code review
+
+### Phase 5: Performance &amp; Optimization
+1. **Prompt**: `@161-java-profiling-detect` - Set up profiling
+2. **Prompt**: `@162-java-profiling-analyze` - Analyze results
+3. **Prompt**: `@164-java-profiling-compare` - Validate improvements
+
+### Phase 6: Documentation &amp; Knowledge Sharing
+1. **Prompt**: `@170-java-documentation` - Generate final documentation
+2. **Prompt**: `@behaviour-progressive-learning` - Create learning materials
+3. **Output**: Complete feature with documentation and training materials
+</code></pre>
+<h4>💡 <strong>Advanced Integration Patterns:</strong></h4>
+<p><strong>1. Conditional Workflows</strong></p>
+<pre><code class="language-markdown">IF performance_requirements_high THEN
+  USE @161-java-profiling-detect AND @162-java-profiling-analyze
+ELSE
+  USE @131-java-unit-testing ONLY
+</code></pre>
+<p><strong>2. Feedback Loops</strong></p>
+<pre><code class="language-markdown">1. Generate code with @142-java-functional-programming
+2. Review with custom code review prompt
+3. IF issues_found THEN refine and repeat
+4. ELSE proceed to testing phase
+</code></pre>
+<p><strong>3. Team Collaboration</strong></p>
+<pre><code class="language-markdown">Developer A: Uses @128-java-generics for core implementation
+Developer B: Uses @131-java-unit-testing for test coverage
+Tech Lead: Uses custom code review prompt for final review
+Team: Uses @behaviour-progressive-learning for knowledge sharing
+</code></pre>
+<hr />
+<h2>🏆 Module Assessment</h2>
+<h3><strong>Capstone Project: &quot;Complete AI-Powered Learning System&quot;</strong></h3>
+<p><strong>Project:</strong> Create a comprehensive learning system for a Java topic of your choice.</p>
+<p><strong>Requirements:</strong><br />
+1. <strong>Custom System Prompt</strong>: Design a specialized system prompt for your topic<br />
+2. <strong>Progressive Learning Course</strong>: Transform your prompt into a complete course<br />
+3. <strong>Interactive Elements</strong>: Include exercises, assessments, and knowledge checks<br />
+4. <strong>AI Workflow Integration</strong>: Design a development workflow using multiple prompts<br />
+5. <strong>Team Enablement</strong>: Create materials for team knowledge sharing</p>
+<p><strong>Deliverables:</strong><br />
+- Custom system prompt following best practices<br />
+- Complete learning course with 4+ modules<br />
+- Interactive exercises and assessments<br />
+- AI workflow documentation<br />
+- Team adoption guide</p>
+<p><strong>Success Criteria:</strong><br />
+- System prompt generates consistent, high-quality outputs<br />
+- Course follows progressive learning principles<br />
+- Interactive elements engage learners effectively<br />
+- Workflow integrates multiple AI capabilities<br />
+- Materials enable effective team knowledge transfer</p>
+<h3><strong>Time Investment:</strong></h3>
+<ul>
+<li><strong>System Prompt Design</strong>: 2 hours</li>
+<li><strong>Course Creation</strong>: 3 hours</li>
+<li><strong>Interactive Elements</strong>: 2 hours</li>
+<li><strong>Workflow Integration</strong>: 1.5 hours</li>
+<li><strong>Team Materials</strong>: 1.5 hours</li>
+<li><strong>Total</strong>: 10 hours</li>
+</ul>
+<hr />
+<h2>🎓 Course Completion</h2>
+<p><strong>Congratulations!</strong> You've completed the comprehensive Java System Prompts course.</p>
+<h3>🏆 What You've Mastered</h3>
+<p><strong>Technical Skills:</strong><br />
+- ✅ Automated Maven project setup and configuration<br />
+- ✅ Comprehensive unit testing and design principles<br />
+- ✅ Security, concurrency, and production-ready coding<br />
+- ✅ Modern Java features and functional programming<br />
+- ✅ Performance optimization and systematic profiling<br />
+- ✅ Professional documentation and diagram generation<br />
+- ✅ Advanced system prompt creation and learning design</p>
+<p><strong>AI-Powered Workflows:</strong><br />
+- ✅ 25+ production-ready system prompts<br />
+- ✅ Interactive and non-interactive prompt usage<br />
+- ✅ Behavioral customization with consultative interaction<br />
+- ✅ Progressive learning content generation<br />
+- ✅ Complex workflow orchestration<br />
+- ✅ Team knowledge sharing automation</p>
+<p><strong>Meta-Skills:</strong><br />
+- ✅ Prompt engineering and AI collaboration<br />
+- ✅ Instructional design for technical content<br />
+- ✅ Systematic problem-solving approaches<br />
+- ✅ Quality-first development mindset<br />
+- ✅ Continuous learning and improvement</p>
+<h3>🚀 Your Next Steps</h3>
+<p><strong>Immediate Application:</strong><br />
+1. <strong>Apply in Current Projects</strong>: Use learned system prompts in your daily work<br />
+2. <strong>Team Introduction</strong>: Share knowledge with your development team<br />
+3. <strong>Custom Prompts</strong>: Create specialized prompts for your domain<br />
+4. <strong>Continuous Learning</strong>: Stay updated with new Java features and AI capabilities</p>
+<p><strong>Advanced Exploration:</strong><br />
+- <strong>Contribute</strong>: Add new system prompts to the community repository<br />
+- <strong>Mentor</strong>: Teach others using progressive learning techniques<br />
+- <strong>Innovate</strong>: Develop new AI-powered development workflows<br />
+- <strong>Research</strong>: Explore emerging AI tools and integration patterns</p>
+<h3>📚 Continued Learning Resources</h3>
+<ul>
+<li><strong><a href="https://github.com/jabrena/cursor-rules-java">Cursor Rules Java Repository</a></strong></li>
+<li><strong><a href="https://github.com/jabrena/cursor-rules-java/discussions">Community Discussions</a></strong></li>
+<li><strong><a href="https://openjdk.java.net/">Latest Java Features</a></strong></li>
+<li><strong><a href="https://jabrena.github.io/cursor-rules-java/">AI-Powered Development Blog</a></strong></li>
+</ul>
+<hr />
+<h2>🌟 Final Reflection</h2>
+<p>You've transformed from using basic system prompts to creating comprehensive AI-powered learning systems. This meta-skill of teaching AI to teach others is incredibly valuable in our rapidly evolving technological landscape.</p>
+<p><strong>Remember:</strong><br />
+- <strong>Quality over Quantity</strong>: Focus on creating valuable, reusable prompts<br />
+- <strong>Team First</strong>: Share knowledge and build collective capabilities<br />
+- <strong>Continuous Improvement</strong>: Iterate and refine based on real-world usage<br />
+- <strong>Community Contribution</strong>: Share your innovations with the broader community</p>
+<p><strong>Welcome to the future of AI-powered Java development!</strong> 🎉</p>
+<p><a href="index.html">Return to the beginning</a></p>
+<hr />
+<p><em>Thank you for completing this comprehensive journey. Continue building amazing software with AI assistance, and remember to share your knowledge with others.</em></p>
+
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena/cursor-rules-java" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2025 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../js/jquery-1.11.2.min.js"></script>
+<script src="../../js/bootstrap.min.js"></script>
+<script src="../../js/prettify.js"></script>
+<script src="../../js/run_prettify.js"></script>
+<script src="../../js/main.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13CV90H4J4');
+</script>
+
+</body>
+</html>
