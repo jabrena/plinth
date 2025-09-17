@@ -20,6 +20,9 @@ tags=java, profiling, memory-leak, performance, system-prompts, async-profiler
 - [Module 5: Validation](module-5-validation.html) - 1 hour (Focus: Before/after comparison; Key learning: Quantitative validation; success measurement)
 
 **Total Duration:** 8-12 hours (depending on learning path)
+
+### 📚 Course details
+
 ### **Module 1: Memory Leak Foundations and Detection Setup** (2 hours)
 **Learning Focus:** Understanding memory leaks and setting up detection infrastructure
 

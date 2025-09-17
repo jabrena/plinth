@@ -7,8 +7,6 @@ version=0.11.0-SNAPSHOT
 tags=java, testing, design-patterns, oop, solid, unit-testing, system-prompts
 ~~~~~~
 
-# Module 2: Code Quality - Testing & Design Principles
-
 ## 🎯 Learning Objectives
 
 By the end of this module, you will:
