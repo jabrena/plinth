@@ -2052,6 +2052,172 @@ class PinningSafeExample {
                 </bad-example>
             </code-examples>
         </example>
+        <example number="15" id="phaser-phased-execution">
+            <example-header>
+                <example-title>Phased Execution with Phaser</example-title>
+                <example-subtitle>Coordinate tasks in phases with dynamic party registration</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use Phaser for coordinating tasks that proceed in phases, allowing dynamic registration and deregistration of parties.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.concurrent.Phaser;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+class PhaserExample {
+    private final Phaser phaser = new Phaser(1); // main thread
+
+    public void runPhasedTasks(int taskCount) {
+        ExecutorService executor = Executors.newFixedThreadPool(taskCount);
+
+        for (int i = 0; i < taskCount; i++) {
+            phaser.register(); // dynamic registration
+            executor.submit(() -> {
+                try {
+                    // Phase 0 work
+                    Thread.sleep(100);
+                    phaser.arriveAndAwaitAdvance(); // wait for all
+
+                    // Phase 1 work
+                    Thread.sleep(200);
+                    phaser.arriveAndDeregister(); // done
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        }
+
+        phaser.arriveAndAwaitAdvance(); // advance phase 0
+        phaser.arriveAndAwaitAdvance(); // advance phase 1
+        phaser.arriveAndDeregister(); // main done
+
+        executor.shutdown();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[class BadPhaser {
+    public void misusePhaser() {
+        Phaser phaser = new Phaser(3);
+        // BAD: forgetting to arrive/deregister
+        // leads to deadlock
+        phaser.awaitAdvance(0); // hangs forever
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="16" id="cyclic-barrier-sync">
+            <example-header>
+                <example-title>Synchronization with CyclicBarrier</example-title>
+                <example-subtitle>Wait for threads to reach common barrier points</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use CyclicBarrier for synchronizing threads at barrier points, reusable across multiple cycles.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+class BarrierExample {
+    public void coordinate(int parties) throws Exception {
+        CyclicBarrier barrier = new CyclicBarrier(parties, () -> System.out.println("All arrived!"));
+
+        ExecutorService executor = Executors.newFixedThreadPool(parties);
+        for (int i = 0; i < parties; i++) {
+            executor.submit(() -> {
+                try {
+                    // Work
+                    Thread.sleep(100);
+                    barrier.await(); // sync point 1
+
+                    // More work
+                    Thread.sleep(200);
+                    barrier.await(); // sync point 2 (reusable)
+                } catch (Exception e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        }
+        executor.shutdown();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[class BadBarrier {
+    public void misuse() throws Exception {
+        CyclicBarrier barrier = new CyclicBarrier(3);
+        barrier.await(); // BAD: not enough parties, hangs
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="17" id="exchanger-data-exchange">
+            <example-header>
+                <example-title>Data Exchange with Exchanger</example-title>
+                <example-subtitle>Safely exchange data between two threads</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use Exchanger for point-to-point data exchange between exactly two threads.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.concurrent.Exchanger;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+class ExchangerExample {
+    public void exchangeData() {
+        Exchanger<String> exchanger = new Exchanger<>();
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+
+        executor.submit(() -> {
+            try {
+                String data = "From Thread 1";
+                String received = exchanger.exchange(data);
+                System.out.println("Thread 1 received: " + received);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        executor.submit(() -> {
+            try {
+                String data = "From Thread 2";
+                String received = exchanger.exchange(data);
+                System.out.println("Thread 2 received: " + received);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        executor.shutdown();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[class BadExchanger {
+    public void misuse() throws InterruptedException {
+        Exchanger<String> exchanger = new Exchanger<>();
+        exchanger.exchange("data"); // BAD: no partner, hangs forever
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
     </examples>
 
     <output-format>
@@ -2067,6 +2233,7 @@ class PinningSafeExample {
             <output-format-item>**BACKPRESSURE/OVERLOAD**: Detect unbounded producers and queues; introduce bounded queues, rejection policies, semaphores/bulkheads, and when streaming, prefer `Flow`/Reactive Streams to enforce backpressure.</output-format-item>
             <output-format-item>**FORKJOIN/PARALLEL STREAMS USAGE**: Flag blocking operations in common pool, migrate to dedicated executors or `ManagedBlocker`, verify tasks are CPU-bound and side-effect-free, and gate `parallelStream()` usage behind measurements.</output-format-item>
             <output-format-item>**PINNING WITH VIRTUAL THREADS**: Inspect `synchronized` blocks around blocking I/O; replace with cooperative locks, shrink critical sections, and recommend JFR pinning analysis.</output-format-item>
+            <output-format-item>**COORDINATION PRIMITIVES**: Identify opportunities for Phaser (phased tasks), CyclicBarrier (reusable barriers), and Exchanger (pairwise exchange); ensure proper usage with interruption handling and resource cleanup.</output-format-item>
         </output-format-list>
     </output-format>
 
@@ -2086,6 +2253,7 @@ class PinningSafeExample {
             <safeguards-item>**VIRTUAL-THREAD PINNING GUARD**: Audit for intrinsic locks around blocking calls; prefer lock implementations compatible with parking. Use JFR to detect pinning.</safeguards-item>
             <safeguards-item>**OVERLOAD/BACKPRESSURE PROTECTION**: Avoid unbounded queues; enforce bounded capacity, sane rejection policies, and rate/concurrency limits to prevent cascading failures.</safeguards-item>
             <safeguards-item>**TIMEOUTS/RETRIES/IDEMPOTENCY**: Bound external calls with timeouts, use bounded-jittered retries only for idempotent operations, and validate no duplicate side effects occur.</safeguards-item>
+            <safeguards-item>**COORDINATION SAFETY**: For Phaser/Barrier/Exchanger, validate party counts, handle interruptions, and prevent hangs from mismatched arrivals.</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>

@@ -64,6 +64,9 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 12: Overload Protection and Backpressure
 - Example 13: ForkJoin and ManagedBlocker for Blocking Operations
 - Example 14: Avoid Pinning with Virtual Threads
+- Example 15: Phased Execution with Phaser
+- Example 16: Synchronization with CyclicBarrier
+- Example 17: Data Exchange with Exchanger
 
 ### Example 1: Thread Safety Fundamentals
 
@@ -1985,6 +1988,165 @@ class PinningBadExample {
 }
 ```
 
+
+### Example 15: Phased Execution with Phaser
+
+Title: Coordinate tasks in phases with dynamic party registration
+Description: Use Phaser for coordinating tasks that proceed in phases, allowing dynamic registration and deregistration of parties.
+
+**Good example:**
+
+```java
+import java.util.concurrent.Phaser;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+class PhaserExample {
+    private final Phaser phaser = new Phaser(1); // main thread
+
+    public void runPhasedTasks(int taskCount) {
+        ExecutorService executor = Executors.newFixedThreadPool(taskCount);
+
+        for (int i = 0; i < taskCount; i++) {
+            phaser.register(); // dynamic registration
+            executor.submit(() -> {
+                try {
+                    // Phase 0 work
+                    Thread.sleep(100);
+                    phaser.arriveAndAwaitAdvance(); // wait for all
+
+                    // Phase 1 work
+                    Thread.sleep(200);
+                    phaser.arriveAndDeregister(); // done
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        }
+
+        phaser.arriveAndAwaitAdvance(); // advance phase 0
+        phaser.arriveAndAwaitAdvance(); // advance phase 1
+        phaser.arriveAndDeregister(); // main done
+
+        executor.shutdown();
+    }
+}
+```
+
+**Bad example:**
+
+```java
+class BadPhaser {
+    public void misusePhaser() {
+        Phaser phaser = new Phaser(3);
+        // BAD: forgetting to arrive/deregister
+        // leads to deadlock
+        phaser.awaitAdvance(0); // hangs forever
+    }
+}
+```
+
+### Example 16: Synchronization with CyclicBarrier
+
+Title: Wait for threads to reach common barrier points
+Description: Use CyclicBarrier for synchronizing threads at barrier points, reusable across multiple cycles.
+
+**Good example:**
+
+```java
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+class BarrierExample {
+    public void coordinate(int parties) throws Exception {
+        CyclicBarrier barrier = new CyclicBarrier(parties, () -> System.out.println("All arrived!"));
+
+        ExecutorService executor = Executors.newFixedThreadPool(parties);
+        for (int i = 0; i < parties; i++) {
+            executor.submit(() -> {
+                try {
+                    // Work
+                    Thread.sleep(100);
+                    barrier.await(); // sync point 1
+
+                    // More work
+                    Thread.sleep(200);
+                    barrier.await(); // sync point 2 (reusable)
+                } catch (Exception e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        }
+        executor.shutdown();
+    }
+}
+```
+
+**Bad example:**
+
+```java
+class BadBarrier {
+    public void misuse() throws Exception {
+        CyclicBarrier barrier = new CyclicBarrier(3);
+        barrier.await(); // BAD: not enough parties, hangs
+    }
+}
+```
+
+### Example 17: Data Exchange with Exchanger
+
+Title: Safely exchange data between two threads
+Description: Use Exchanger for point-to-point data exchange between exactly two threads.
+
+**Good example:**
+
+```java
+import java.util.concurrent.Exchanger;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+class ExchangerExample {
+    public void exchangeData() {
+        Exchanger<String> exchanger = new Exchanger<>();
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+
+        executor.submit(() -> {
+            try {
+                String data = "From Thread 1";
+                String received = exchanger.exchange(data);
+                System.out.println("Thread 1 received: " + received);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        executor.submit(() -> {
+            try {
+                String data = "From Thread 2";
+                String received = exchanger.exchange(data);
+                System.out.println("Thread 2 received: " + received);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        executor.shutdown();
+    }
+}
+```
+
+**Bad example:**
+
+```java
+class BadExchanger {
+    public void misuse() throws InterruptedException {
+        Exchanger<String> exchanger = new Exchanger<>();
+        exchanger.exchange("data"); // BAD: no partner, hangs forever
+    }
+}
+```
+
 ## Output Format
 
 - **ANALYZE** Java code to identify specific concurrency issues and categorize them by impact (CRITICAL, PERFORMANCE, DEADLOCK_RISK, SCALABILITY, THREAD_SAFETY) and concurrency area (thread safety, synchronization, thread pools, async operations, modern concurrency)
@@ -1998,6 +2160,7 @@ class PinningBadExample {
 - **BACKPRESSURE/OVERLOAD**: Detect unbounded producers and queues; introduce bounded queues, rejection policies, semaphores/bulkheads, and when streaming, prefer `Flow`/Reactive Streams to enforce backpressure.
 - **FORKJOIN/PARALLEL STREAMS USAGE**: Flag blocking operations in common pool, migrate to dedicated executors or `ManagedBlocker`, verify tasks are CPU-bound and side-effect-free, and gate `parallelStream()` usage behind measurements.
 - **PINNING WITH VIRTUAL THREADS**: Inspect `synchronized` blocks around blocking I/O; replace with cooperative locks, shrink critical sections, and recommend JFR pinning analysis.
+- **COORDINATION PRIMITIVES**: Identify opportunities for Phaser (phased tasks), CyclicBarrier (reusable barriers), and Exchanger (pairwise exchange); ensure proper usage with interruption handling and resource cleanup.
 
 ## Safeguards
 
@@ -2015,3 +2178,4 @@ class PinningBadExample {
 - **VIRTUAL-THREAD PINNING GUARD**: Audit for intrinsic locks around blocking calls; prefer lock implementations compatible with parking. Use JFR to detect pinning.
 - **OVERLOAD/BACKPRESSURE PROTECTION**: Avoid unbounded queues; enforce bounded capacity, sane rejection policies, and rate/concurrency limits to prevent cascading failures.
 - **TIMEOUTS/RETRIES/IDEMPOTENCY**: Bound external calls with timeouts, use bounded-jittered retries only for idempotent operations, and validate no duplicate side effects occur.
+- **COORDINATION SAFETY**: For Phaser/Barrier/Exchanger, validate party counts, handle interruptions, and prevent hangs from mismatched arrivals.
