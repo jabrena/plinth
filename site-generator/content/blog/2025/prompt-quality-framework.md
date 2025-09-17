@@ -2,6 +2,7 @@ title=The Three-Node Quality Framework for AI Prompts
 date=2025-07-20
 type=post
 tags=blog
+author=Juan Antonio Breña Moral
 status=published
 ~~~~~~
 

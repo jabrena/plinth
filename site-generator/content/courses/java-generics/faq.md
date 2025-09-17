@@ -6,8 +6,6 @@ author=Juan Antonio Breña Moral
 tags=java, generics, faq, help, support
 ~~~~~~
 
-# ❓ Frequently Asked Questions
-
 ## 📚 Course Content
 
 ### Q: What Java version do I need for this course?

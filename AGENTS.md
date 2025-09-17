@@ -7,7 +7,7 @@ A collection of `System prompts` for Java Enterprise development.
 ### Repository Layout
 
 ```
-java-cursor-rules/
+cursor-rules-java/
 ├── .cursor/rules/                    # 🎯 25 System prompts for Java Enterprise development (main output)
 ├── system-prompts-generator/         # 🏗️ Java transformation engine (XML → Markdown cursor rules)
 │   ├── src/main/resources/          # XML rule definitions + XSLT stylesheets

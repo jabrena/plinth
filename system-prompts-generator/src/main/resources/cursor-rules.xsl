@@ -24,6 +24,8 @@ version: </xsl:text><xsl:value-of select="normalize-space(metadata/version)"/>
 ## Role
 
 </xsl:text><xsl:value-of select="role"/>
+        <!-- Process tone if present -->
+        <xsl:apply-templates select="tone"/>
         <!-- Process goal (Instructions for AI) after role -->
         <xsl:apply-templates select="goal"/>
         <!-- Apply constraints template if present -->
@@ -126,6 +128,16 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
         <xsl:call-template name="trim-goal-content">
             <xsl:with-param name="content" select="."/>
         </xsl:call-template>
+    </xsl:template>
+
+    <!-- Tone template -->
+    <xsl:template match="tone">
+        <xsl:text>
+
+## Tone
+
+</xsl:text>
+        <xsl:value-of select="normalize-space(.)"/>
     </xsl:template>
 
     <!-- Instructions template -->
