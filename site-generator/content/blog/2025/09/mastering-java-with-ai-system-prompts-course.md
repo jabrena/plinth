@@ -26,22 +26,6 @@ Most Java training follows a predictable pattern:
 
 **The Result?** Developers who understand concepts in isolation but struggle to apply them systematically in enterprise contexts.
 
-### The AI-Powered Learning Revolution
-
-The system prompts course represents a fundamental shift in how we approach Java education:
-
-**Traditional Learning:**
-```
-Learn Theory → Practice on Toy Examples → Struggle with Real Projects
-```
-
-**AI-Powered System Prompts Learning:**
-```
-Apply AI-Guided Practices → Learn Through Real Examples → Master Systematic Workflows
-```
-
-This approach leverages **25+ specialized system prompts** that act as expert consultants embedded directly in your development environment, providing consistent, production-ready guidance across all aspects of Java enterprise development.
-
 ## Course Architecture: A Systematic Approach to Java Mastery
 
 ### The Seven-Module Progressive Journey
@@ -118,7 +102,6 @@ public record CustomerId(String value) {
 
 #### Module 3: Secure Coding - Security & Best Practices (4 hours)
 **Production-Ready Security and Concurrency**
-
 Security and concurrency are often afterthoughts in Java education. This module makes them first-class concerns through systematic application of industry standards.
 
 **OWASP-Compliant Security:**
@@ -342,64 +325,6 @@ System prompts integrate with real enterprise toolchains:
 - **PlantUML**: Architecture documentation
 - **Docker**: Containerization best practices
 
-## The Future of Java Education: AI as Learning Partner
-
-### Beyond Tool Usage: AI as Collaborative Intelligence
-
-The course represents a paradigm shift from using AI as a code generator to leveraging it as an **intelligent learning partner**:
-
-- **Contextual Guidance**: AI provides situational advice based on specific code contexts
-- **Progressive Complexity**: Learning experiences adapt to developer skill levels
-- **Systematic Application**: Consistent application of best practices across projects
-- **Knowledge Transfer**: AI-powered creation of educational content for team sharing
-
-### Emerging Patterns in AI-Powered Development
-
-The course prepares developers for the future of software engineering:
-
-**Prompt Engineering as Core Skill**: Understanding how to communicate effectively with AI systems becomes as important as traditional programming skills.
-
-**Compound AI Workflows**: Complex development tasks decompose into orchestrated AI interactions, each specialized for specific aspects of software development.
-
-**Continuous Learning Integration**: AI systems provide real-time learning opportunities during development, transforming coding from execution to exploration.
-
-## Getting Started: Your Journey to AI-Powered Java Mastery
-
-### Prerequisites and Setup
-
-**Technical Requirements**:
-- Java 21+ (recommended: Eclipse Temurin)
-- Maven 3.8+ (wrapper included)
-- Cursor IDE or compatible environment
-- Git for repository access
-
-**Knowledge Prerequisites**:
-- Basic Java programming experience
-- Familiarity with Maven build concepts
-- Understanding of object-oriented programming principles
-
-### Recommended Learning Schedule
-
-**Week 1-2: Foundations and Quality**
-- Module 1: Foundations (4 hours)
-- Module 2: Code Quality (5 hours)
-- Practice exercises and knowledge validation
-
-**Week 3-4: Security and Modern Java**
-- Module 3: Secure Coding (4 hours)
-- Module 4: Modern Java (6 hours)
-- Intermediate capstone project
-
-**Week 5-6: Performance and Documentation**
-- Module 5: Performance (8 hours)
-- Module 6: Documentation (3 hours)
-- Advanced optimization exercises
-
-**Week 7: Advanced Patterns and Integration**
-- Module 7: Advanced Patterns (4 hours)
-- Final capstone project
-- Team knowledge sharing preparation
-
 ## Conclusion: Transforming Java Development Through AI Partnership
 
 The "Mastering Java Enterprise Development with AI-Powered System Prompts" course represents more than just another Java training program—it's a comprehensive transformation of how we approach software development education and practice.
@@ -434,8 +359,6 @@ The future of Java development is here, and it's powered by intelligent AI colla
 **Ready to transform your Java development workflow?**
 
 1. **Start Your Journey**: Clone the [cursor-rules-java repository](https://github.com/jabrena/cursor-rules-java) and begin with Module 1
-2. **Join the Community**: Engage with other learners and contribute to the evolving system prompt ecosystem
-3. **Share Your Experience**: Help expand the knowledge base by creating custom prompts for your domain
 4. **Lead the Transformation**: Bring AI-powered development practices to your team and organization
 
 The revolution in Java development has begun. The question isn't whether AI will transform how we build software—it's whether you'll be leading that transformation or following it.
