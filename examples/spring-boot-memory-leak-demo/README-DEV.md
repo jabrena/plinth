@@ -1,4 +1,43 @@
-# Essential Maven Goals:
+# Spring Boot Memory Leak Demo
+
+## Controller Configuration
+
+This demo includes two controllers that can be conditionally enabled based on the `coco` property:
+
+- **CocoController**: Contains intentional memory leaks for demonstration purposes
+- **WithoutCocoController**: Proper implementation with resource management
+
+### Configuration Options
+
+Set the `coco` property in your application properties:
+
+```properties
+# Enable CocoController (with memory leaks for demo purposes)
+coco=true
+
+# Enable WithoutCocoController (proper resource management)
+coco=false
+```
+
+### Profile-Specific Configuration
+
+- **Default profile** (`application.properties`): `coco=true` (enables CocoController)
+- **Virtual Threads profile** (`application-vt.properties`): `coco=false` (enables WithoutCocoController)
+
+### Usage Examples
+
+```bash
+# Run with CocoController (memory leaks)
+./mvnw spring-boot:run
+
+# Run with WithoutCocoController (proper resource management)
+./mvnw spring-boot:run -Dspring.profiles.active=vt
+
+# Override property at runtime
+./mvnw spring-boot:run -Dcoco=false
+```
+
+## Essential Maven Goals:
 
 ```bash
 # Analyze dependencies
@@ -41,6 +80,29 @@ http://localhost:8080/swagger-ui/index.html
 
 jwebserver -p 8005 -d "$(pwd)/examples/spring-boot-memory-leak-demo/profiler/results"
 
+## Enhanced Profiling with Java 25 JFR Support
+
+The profiler script has been enhanced with comprehensive Java 25 JFR support. See `profiler/JAVA25-JFR-FEATURES.md` for details.
+
+### New Profiling Options (v4.2):
+- **Option 17**: Enhanced JFR Memory Profiling (Java 21+)
+- **Option 18**: Java 25 CPU-Time Profiling (Linux only)
+- **Option 19**: Java 25 Method Tracing
+- **Option 20**: Advanced JFR with Custom Events
+- **Option 21**: JFR Memory Leak Analysis with TLAB tracking
+
+### Usage:
+```bash
+# Run the enhanced profiler
+./profiler/scripts/profile-java-process.sh
+
+# Start the application first
+./mvnw spring-boot:run
+
+# Then in another terminal, run the profiler and select from 21 options
+```
+
+### Cursor Rules Integration:
 My Java application has performance issues - help me set up comprehensive profiling process using @151-java-profiling-detect.md and use the location examples/spring-boot-memory-leak-demo/profiler
 
 Analyze the results located in examples/spring-boot-memory-leak-demo/profiler and use the cursor rule @152-java-profiling-analyze
