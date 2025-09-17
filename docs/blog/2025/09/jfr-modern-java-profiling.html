@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Beyond Traditional Profiling: Mastering JFR for Modern Java Applications - Cursor Rules for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../../feed.xml" title="Cursor Rules for Java"/>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../../css/prettify.css">
+  <link rel="shortcut icon" href="../../../favicon.ico">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../../index.html">Cursor Rules for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../../courses/java-generics/index.html">Java Generics</a>
+      <a href="../../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
+    </div>
+  </li>
+  <li><a href="../../../archive.html">Archive</a></li>
+  <li><a href="../../../about.html">About</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="post-heading">
+<h1>Beyond Traditional Profiling: Mastering JFR for Modern Java Applications</h1>
+<span class="post-meta">
+  <i class="fa fa-calendar-o"></i>
+  2025-09-17
+    &nbsp;
+    <i class="fa fa-pencil"></i>
+    MyRobot
+</span>
+<span class="blog-tags">
+  &nbsp;
+  <i class="fa fa-tags"></i>
+    <a href="../../../tags/blog.html">blog</a>
+    <a href="../../../tags/profiling.html">profiling</a>
+    <a href="../../../tags/jfr.html">jfr</a>
+    <a href="../../../tags/java.html">java</a>
+    <a href="../../../tags/performance.html">performance</a>
+    <a href="../../../tags/java-25.html">java-25</a>
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="blog-post">
+<h2>The 3 AM Production Alert That Changed Everything</h2>
+<p>Picture this: It's 3 AM, your phone buzzes with production alerts, and your Java application is consuming 90% more memory than usual. Users are experiencing timeouts, and the traditional profiling tools you've been relying on are either too intrusive for production use or simply can't capture the granular detail you need to identify the root cause.</p>
+<p>This scenario highlights a critical gap in many Java teams' toolkits: while developers are comfortable with basic profiling concepts, few have mastered <strong>Java Flight Recorder (JFR)</strong> - the low-overhead, production-ready profiling solution that's been quietly revolutionizing how we diagnose performance issues in modern Java applications.</p>
+<h2>Why JFR Matters in the Modern Java Landscape</h2>
+<h3>The Evolution of Java Profiling</h3>
+<p>Traditional Java profiling has long been dominated by tools that introduce significant overhead, making them unsuitable for production environments. The typical workflow looked like this:</p>
+<p><strong>The Old Way:</strong><br />
+1. Reproduce issues in development environments<br />
+2. Attach heavyweight profilers that impact performance<br />
+3. Hope the development environment mirrors production behavior<br />
+4. Analyze limited data that may not represent real-world conditions</p>
+<p><strong>The JFR Revolution:</strong><br />
+1. Enable continuous profiling in production with &lt;2% overhead<br />
+2. Collect comprehensive runtime data without impacting user experience<br />
+3. Analyze real production workloads and edge cases<br />
+4. Correlate performance data with actual business metrics</p>
+<h3>What Makes JFR Special</h3>
+<p>Java Flight Recorder isn't just another profiling tool—it's a <strong>built-in, always-available data collection framework</strong> that's been part of the JDK since Java 11 (and available commercially since Java 7). Here's what sets it apart:</p>
+<ul>
+<li><strong>Ultra-Low Overhead</strong>: Typically less than 2% performance impact in production</li>
+<li><strong>Comprehensive Data</strong>: Captures CPU usage, memory allocation, GC behavior, I/O operations, and custom application events</li>
+<li><strong>Production-Ready</strong>: Designed from the ground up for continuous production monitoring</li>
+<li><strong>Time-Series Data</strong>: Provides temporal context that static profiling tools miss</li>
+<li><strong>Integration-Friendly</strong>: Works seamlessly with modern observability stacks</li>
+</ul>
+<h2>The Java 25 JFR Renaissance</h2>
+<h3>Revolutionary Enhancements in Modern Java</h3>
+<p>With Java 21, 24, and 25, JFR has undergone significant enhancements that transform it from a diagnostic tool into a comprehensive application intelligence platform:</p>
+<h4>JEP 518: JFR Cooperative Sampling</h4>
+<p>Java 25 introduces <strong>cooperative sampling</strong>, a breakthrough that reduces profiling overhead even further while improving measurement accuracy:</p>
+<pre><code class="language-bash"># Traditional CPU profiling (higher overhead)
+jcmd &lt;pid&gt; JFR.start duration=60s events=jdk.ExecutionSample
+
+# Java 25 cooperative sampling (minimal overhead)
+jcmd &lt;pid&gt; JFR.start duration=60s \
+  &quot;jdk.CPUTimeSample#enabled=true&quot; \
+  &quot;jdk.ExecutionSample#enabled=true&quot; \
+  &quot;jdk.NativeMethodSample#enabled=true&quot;
+</code></pre>
+<h4>JEP 520: Enhanced Method Timing &amp; Tracing</h4>
+<p>The new method timing capabilities provide unprecedented visibility into application behavior:</p>
+<pre><code class="language-bash"># Enable detailed method tracing for specific packages
+jcmd &lt;pid&gt; JFR.start duration=30s \
+  &quot;jdk.MethodSample#enabled=true&quot; \
+  &quot;jdk.MethodEntry#enabled=true,threshold=1ms&quot; \
+  &quot;jdk.MethodExit#enabled=true,threshold=1ms&quot; \
+  filename=method-trace.jfr
+</code></pre>
+<h3>Native Memory Profiling Evolution</h3>
+<p>Java 25 enhances native memory profiling with better integration and reduced overhead:</p>
+<pre><code class="language-bash"># Enhanced native memory tracking with JFR integration
+jcmd &lt;pid&gt; JFR.start duration=120s \
+  &quot;jdk.ObjectAllocationInNewTLAB#enabled=true,stackTrace=true&quot; \
+  &quot;jdk.ObjectAllocationOutsideTLAB#enabled=true,stackTrace=true&quot; \
+  &quot;jdk.NativeMemoryUsage#enabled=true&quot; \
+  filename=native-memory-analysis.jfr
+</code></pre>
+<h2>Practical JFR Mastery: From Basics to Production</h2>
+<h3>The Modern JFR Workflow</h3>
+<p>Let's walk through a comprehensive approach to JFR profiling that leverages both traditional techniques and Java 25 enhancements:</p>
+<h4>1. Problem-Driven Profiling Strategy</h4>
+<p>Before starting any profiling session, identify your specific performance concern:</p>
+<pre><code class="language-bash"># Memory leak detection (long-running analysis)
+jcmd &lt;pid&gt; JFR.start name=memory-leak-analysis duration=600s \
+  disk=true maxsize=&quot;1GB&quot; maxage=&quot;30m&quot; \
+  &quot;jdk.ObjectAllocationInNewTLAB#enabled=true,stackTrace=true&quot; \
+  &quot;jdk.ObjectAllocationOutsideTLAB#enabled=true,stackTrace=true&quot; \
+  &quot;jdk.TLABAllocation#enabled=true&quot; \
+  &quot;jdk.OldObjectSample#enabled=true,cutoff=0ms&quot; \
+  filename=memory-leak-analysis.jfr
+
+# CPU hotspot identification (focused analysis)
+jcmd &lt;pid&gt; JFR.start name=cpu-analysis duration=60s \
+  &quot;jdk.ExecutionSample#enabled=true&quot; \
+  &quot;jdk.CPUTimeSample#enabled=true&quot; \
+  &quot;jdk.ThreadCPULoad#enabled=true&quot; \
+  filename=cpu-hotspots.jfr
+
+# I/O bottleneck detection (comprehensive I/O analysis)
+jcmd &lt;pid&gt; JFR.start name=io-analysis duration=120s \
+  &quot;jdk.SocketRead#enabled=true,threshold=10ms&quot; \
+  &quot;jdk.SocketWrite#enabled=true,threshold=10ms&quot; \
+  &quot;jdk.FileRead#enabled=true,threshold=10ms&quot; \
+  &quot;jdk.FileWrite#enabled=true,threshold=10ms&quot; \
+  filename=io-bottlenecks.jfr
+</code></pre>
+<h4>2. Advanced Event Configuration</h4>
+<p>Modern JFR allows fine-grained control over what data to collect:</p>
+<pre><code class="language-bash"># Custom event configuration for microservices
+jcmd &lt;pid&gt; JFR.start name=microservice-analysis duration=300s \
+  &quot;jdk.ObjectAllocationSample#enabled=true,throttle=1000/s&quot; \
+  &quot;jdk.JavaMonitorEnter#enabled=true,threshold=10ms&quot; \
+  &quot;jdk.JavaMonitorWait#enabled=true,threshold=10ms&quot; \
+  &quot;jdk.ThreadPark#enabled=true,threshold=10ms&quot; \
+  &quot;jdk.GCHeapSummary#enabled=true,period=10s&quot; \
+  &quot;jdk.ThreadContextSwitchRate#enabled=true&quot; \
+  filename=microservice-comprehensive.jfr
+</code></pre>
+<h4>3. Integration with Modern Tooling</h4>
+<p>JFR recordings integrate seamlessly with analysis tools:</p>
+<pre><code class="language-bash"># Convert JFR to flame graphs using async-profiler
+java -jar converter.jar jfr2flame recording.jfr flamegraph.html
+
+# Export to OpenTelemetry format (Java 25)
+asprof -d 60 -o otlp -f telemetry-data.json &lt;pid&gt;
+
+# Generate interactive heatmaps
+jfrconv --cpu -o heatmap recording.jfr heatmap.html
+</code></pre>
+<h3>Real-World Case Study: Diagnosing a Memory Leak</h3>
+<p>Let's examine how modern JFR techniques solve a real production issue:</p>
+<h4>The Problem</h4>
+<p>A Spring Boot microservice was experiencing gradual memory growth, eventually leading to OutOfMemoryErrors after several hours of operation.</p>
+<h4>The JFR Investigation</h4>
+<p><strong>Step 1: Long-term Memory Allocation Tracking</strong></p>
+<pre><code class="language-bash"># Start comprehensive memory leak detection
+jcmd 12345 JFR.start name=memory-leak-investigation duration=1800s \
+  disk=true maxsize=&quot;2GB&quot; maxage=&quot;60m&quot; \
+  &quot;jdk.ObjectAllocationInNewTLAB#enabled=true,stackTrace=true&quot; \
+  &quot;jdk.ObjectAllocationOutsideTLAB#enabled=true,stackTrace=true&quot; \
+  &quot;jdk.ObjectAllocationSample#enabled=true,stackTrace=true&quot; \
+  &quot;jdk.TLABAllocation#enabled=true&quot; \
+  &quot;jdk.TLABWaste#enabled=true&quot; \
+  &quot;jdk.OldObjectSample#enabled=true,cutoff=0ms&quot; \
+  &quot;jdk.GCHeapSummary#enabled=true,period=30s&quot; \
+  &quot;jdk.ClassLoaderStatistics#enabled=true,period=60s&quot; \
+  filename=memory-leak-30min.jfr
+</code></pre>
+<p><strong>Step 2: Analysis Results</strong><br />
+The JFR recording revealed:<br />
+- 85% of allocations were <code>HashMap</code> objects in a specific service method<br />
+- Objects were being retained in a static cache without proper cleanup<br />
+- TLAB allocation patterns showed consistent growth without corresponding deallocation</p>
+<p><strong>Step 3: The Fix</strong></p>
+<pre><code class="language-java">// Before: Unbounded cache causing memory leak
+private static final Map&lt;String, CacheEntry&gt; cache = new ConcurrentHashMap&lt;&gt;();
+
+// After: Bounded cache with proper cleanup
+private static final Map&lt;String, CacheEntry&gt; cache =
+    Caffeine.newBuilder()
+        .maximumSize(10_000)
+        .expireAfterWrite(Duration.ofHours(1))
+        .build()
+        .asMap();
+</code></pre>
+<h2>Best Practices for Production JFR</h2>
+<h3>1. Continuous Monitoring Strategy</h3>
+<p>Implement JFR as part of your observability stack:</p>
+<pre><code class="language-bash"># Production-safe continuous profiling
+jcmd &lt;pid&gt; JFR.start name=continuous-monitoring \
+  disk=true maxsize=&quot;100MB&quot; maxage=&quot;1h&quot; \
+  &quot;jdk.CPULoad#enabled=true,period=10s&quot; \
+  &quot;jdk.GCHeapSummary#enabled=true,period=30s&quot; \
+  &quot;jdk.ObjectAllocationSample#enabled=true,throttle=100/s&quot; \
+  filename=continuous-monitoring.jfr
+</code></pre>
+<h3>2. Event Filtering and Throttling</h3>
+<p>Optimize data collection for production environments:</p>
+<pre><code class="language-bash"># Throttled allocation tracking (production-safe)
+&quot;jdk.ObjectAllocationSample#enabled=true,throttle=1000/s,stackTrace=false&quot;
+
+# Threshold-based I/O monitoring (focus on slow operations)
+&quot;jdk.FileRead#enabled=true,threshold=50ms&quot;
+&quot;jdk.SocketRead#enabled=true,threshold=100ms&quot;
+</code></pre>
+<h3>3. Automated Analysis Pipeline</h3>
+<p>Create automated JFR analysis workflows:</p>
+<pre><code class="language-bash">#!/bin/bash
+# Automated JFR analysis script
+JFR_FILE=&quot;production-$(date +%Y%m%d-%H%M%S).jfr&quot;
+
+# Collect JFR data
+jcmd $(pgrep java) JFR.start duration=300s filename=&quot;$JFR_FILE&quot;
+
+# Wait for completion
+sleep 305
+
+# Convert to analysis formats
+java -jar converter.jar jfr2flame &quot;$JFR_FILE&quot; &quot;analysis-$(date +%Y%m%d-%H%M%S).html&quot;
+
+# Upload to monitoring system
+curl -X POST -F &quot;file=@$JFR_FILE&quot; https://monitoring.company.com/jfr-upload
+</code></pre>
+<h2>Advanced JFR Techniques</h2>
+<h3>Custom Event Creation</h3>
+<p>Extend JFR with application-specific events:</p>
+<pre><code class="language-java">@Name(&quot;com.example.BusinessTransaction&quot;)
+@Label(&quot;Business Transaction&quot;)
+@Category(&quot;Application&quot;)
+public class BusinessTransactionEvent extends Event {
+    @Label(&quot;Transaction Type&quot;)
+    String transactionType;
+
+    @Label(&quot;Customer ID&quot;)
+    String customerId;
+
+    @Label(&quot;Processing Time&quot;)
+    @Timespan(Timespan.MILLISECONDS)
+    long processingTime;
+}
+
+// Usage in application code
+public void processTransaction(String type, String customerId) {
+    BusinessTransactionEvent event = new BusinessTransactionEvent();
+    event.transactionType = type;
+    event.customerId = customerId;
+    event.begin();
+
+    try {
+        // Business logic here
+        performTransaction(type, customerId);
+    } finally {
+        event.end();
+        if (event.shouldCommit()) {
+            event.commit();
+        }
+    }
+}
+</code></pre>
+<h3>JFR with Containerized Applications</h3>
+<p>Optimize JFR for Kubernetes environments:</p>
+<pre><code class="language-yaml"># Kubernetes deployment with JFR
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-with-jfr
+spec:
+  template:
+    spec:
+      containers:
+      - name: java-app
+        image: openjdk:21-jre
+        env:
+        - name: JAVA_OPTS
+          value: &gt;-
+            -XX:+FlightRecorder
+            -XX:StartFlightRecording=duration=0,filename=/tmp/continuous.jfr,maxsize=100m,maxage=1h
+            -XX:FlightRecorderOptions=disk=true
+        volumeMounts:
+        - name: jfr-data
+          mountPath: /tmp
+      volumes:
+      - name: jfr-data
+        emptyDir: {}
+</code></pre>
+<h2>The Future of Java Performance Analysis</h2>
+<h3>Emerging Trends</h3>
+<p>JFR continues to evolve with the Java platform:</p>
+<ol>
+<li><strong>Enhanced Integration</strong>: Deeper integration with cloud-native monitoring platforms</li>
+<li><strong>Machine Learning</strong>: AI-powered anomaly detection in JFR data streams</li>
+<li><strong>Real-time Analysis</strong>: Streaming JFR data analysis for immediate insights</li>
+<li><strong>Cross-Language Profiling</strong>: JFR integration with GraalVM native images</li>
+</ol>
+<h3>Getting Started Today</h3>
+<p>To begin mastering JFR in your organization:</p>
+<ol>
+<li><strong>Start Small</strong>: Begin with development environment profiling</li>
+<li><strong>Educate Teams</strong>: Train developers on JFR basics and interpretation</li>
+<li><strong>Integrate Gradually</strong>: Add JFR to staging environments first</li>
+<li><strong>Automate Analysis</strong>: Build automated JFR analysis into CI/CD pipelines</li>
+<li><strong>Monitor Continuously</strong>: Implement continuous JFR profiling in production</li>
+</ol>
+<h2>Conclusion: JFR as Your Performance Intelligence Platform</h2>
+<p>Java Flight Recorder represents a fundamental shift in how we approach application performance. It's not just a profiling tool—it's a comprehensive performance intelligence platform that enables:</p>
+<ul>
+<li><strong>Proactive Performance Management</strong>: Identify issues before they impact users</li>
+<li><strong>Data-Driven Optimization</strong>: Make performance improvements based on real production data</li>
+<li><strong>Reduced MTTR</strong>: Diagnose production issues faster with comprehensive runtime data</li>
+<li><strong>Cost Optimization</strong>: Optimize resource usage based on actual application behavior</li>
+</ul>
+<p>The enhancements in Java 21, 24, and 25 make JFR even more powerful, with cooperative sampling reducing overhead and enhanced method tracing providing unprecedented visibility into application behavior.</p>
+<p><strong>Your Next Steps:</strong><br />
+1. Experiment with JFR in your development environment using the examples in this article<br />
+2. Identify one production performance issue and create a JFR-based investigation plan<br />
+3. Implement continuous JFR monitoring for your most critical applications<br />
+4. Build JFR analysis into your team's performance review processes</p>
+<p>The future of Java performance optimization is already here—it's time to make JFR a cornerstone of your performance engineering toolkit.</p>
+<hr />
+<p><em>Ready to dive deeper into JFR? Check out the <a href="https://github.com/jabrena/cursor-rules-java">java-cursor-rules</a> project for automated JFR profiling workflows and interactive profiling scripts that implement the techniques described in this article.</em></p>
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena/cursor-rules-java" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2025 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../../js/jquery-1.11.2.min.js"></script>
+<script src="../../../js/bootstrap.min.js"></script>
+<script src="../../../js/prettify.js"></script>
+<script src="../../../js/run_prettify.js"></script>
+<script src="../../../js/main.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13CV90H4J4');
+</script>
+
+</body>
+</html>

@@ -2,14 +2,52 @@
 <feed xmlns='http://www.w3.org/2005/Atom' xml:lang='en'>
   <id>https://jabrena.github.io/cursor-rules-java/</id>
   <title>Cursor Rules for Java</title>
-  <updated>2025-09-17T21:14:46+0200</updated>
+  <updated>2025-09-17T21:57:03+0200</updated>
   <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java/" />
   <link rel='self' type='application/atom+xml' href='https://jabrena.github.io/cursor-rules-java//feed.xml' />
   <entry>
-    <id>https://jabrena.github.io/cursor-rules-java//blog/2025/release-0.10.0.html</id>
+    <id>https://jabrena.github.io/cursor-rules-java//blog/2025/09/mastering-memory-leak-detection-comprehensive-course.html</id>
+    <title>From Flamegraphs to Production: Mastering Java Memory Leak Detection Through Systematic Profiling</title>
+    <link></link>
+    <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/09/mastering-memory-leak-detection-comprehensive-course.html" />
+    <updated>2025-09-17T00:00:00+0200</updated>
+    <summary>The 3 AM Production Alert That Every Java Developer Dreads
+Picture this familiar nightmare: It&apos;s 3 AM, your phone buzzes with production alerts, and your Spring Boot microservice is consuming 90% more memory than usual. Users are experiencing timeouts, response times are degrading, and the traditional profiling tools you&apos;ve been relying on are either too intrusive for production use or simply can&apos;t...</summary>
+  </entry>
+  <entry>
+    <id>https://jabrena.github.io/cursor-rules-java//blog/2025/09/mastering-java-with-ai-system-prompts-course.html</id>
+    <title>The Complete Guide to Java Enterprise Development with System Prompts</title>
+    <link></link>
+    <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/09/mastering-java-with-ai-system-prompts-course.html" />
+    <updated>2025-09-17T00:00:00+0200</updated>
+    <summary>The Developer&apos;s Dilemma: Drowning in Best Practices
+Picture this familiar scenario: You&apos;re a Java developer tasked with setting up a new microservice. You know you need Maven configuration, comprehensive testing, security hardening, performance optimization, and thorough documentation. You&apos;ve bookmarked dozens of articles about best practices, but each project becomes a time-consuming exercise in r...</summary>
+  </entry>
+  <entry>
+    <id>https://jabrena.github.io/cursor-rules-java//blog/2025/09/mastering-java-generics-comprehensive-course-guide.html</id>
+    <title>Mastering Java Generics: The Complete Developer&apos;s Journey from Type Safety to Advanced Patterns</title>
+    <link></link>
+    <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/09/mastering-java-generics-comprehensive-course-guide.html" />
+    <updated>2025-09-17T00:00:00+0200</updated>
+    <summary>The ClassCastException That Changed Everything
+Picture this: It&apos;s 2 AM, your production system is down, and you&apos;re staring at a stack trace that reads ClassCastException: Integer cannot be cast to String. The bug is buried deep in a legacy codebase where List inventory = new ArrayList(); seemed perfectly reasonable when it was written in 2005. Sound familiar?
+This scenario represents one of the mos...</summary>
+  </entry>
+  <entry>
+    <id>https://jabrena.github.io/cursor-rules-java//blog/2025/09/jfr-modern-java-profiling.html</id>
+    <title>Beyond Traditional Profiling: Mastering JFR for Modern Java Applications</title>
+    <link></link>
+    <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/09/jfr-modern-java-profiling.html" />
+    <updated>2025-09-17T00:00:00+0200</updated>
+    <summary>The 3 AM Production Alert That Changed Everything
+Picture this: It&apos;s 3 AM, your phone buzzes with production alerts, and your Java application is consuming 90% more memory than usual. Users are experiencing timeouts, and the traditional profiling tools you&apos;ve been relying on are either too intrusive for production use or simply can&apos;t capture the granular detail you need to identify the root cause.
+...</summary>
+  </entry>
+  <entry>
+    <id>https://jabrena.github.io/cursor-rules-java//blog/2025/09/release-0.10.0.html</id>
     <title>What&apos;s new in Cursor rules for Java 0.10.0?</title>
     <link></link>
-    <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/release-0.10.0.html" />
+    <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/09/release-0.10.0.html" />
     <updated>2025-09-05T00:00:00+0200</updated>
     <summary>What are Cursor rules for Java?
 The project provides a collection of System prompts for Java that help software engineers in their daily programming work.
@@ -18,10 +56,10 @@ The available System prompts for Java cover aspects like Build system based on M
 What...</summary>
   </entry>
   <entry>
-    <id>https://jabrena.github.io/cursor-rules-java//blog/2025/release-0.9.0.html</id>
+    <id>https://jabrena.github.io/cursor-rules-java//blog/2025/07/release-0.9.0.html</id>
     <title>What&apos;s new in Cursor rules for Java 0.9.0?</title>
     <link></link>
-    <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/release-0.9.0.html" />
+    <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/07/release-0.9.0.html" />
     <updated>2025-07-23T00:00:00+0200</updated>
     <summary>What are Cursor rules for Java?
 Cursor Rules for Java is an Open Source project that provides a set of interactive system prompts for Java that help software engineers in their daily work.
@@ -32,10 +70,10 @@ Added a new rule about 127-java-functional-exception-handling
 Added Consultative Interaction Technique in the majority of R...</summary>
   </entry>
   <entry>
-    <id>https://jabrena.github.io/cursor-rules-java//blog/2025/prompt-quality-framework.html</id>
+    <id>https://jabrena.github.io/cursor-rules-java//blog/2025/07/prompt-quality-framework.html</id>
     <title>The Three-Node Quality Framework for AI Prompts</title>
     <link></link>
-    <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/prompt-quality-framework.html" />
+    <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/07/prompt-quality-framework.html" />
     <updated>2025-07-20T00:00:00+0200</updated>
     <summary>Overview
 When designing AI prompts for complex tasks like code generation and software development, a structured quality framework ensures both comprehensive responses and safe execution. This document outlines the three-node quality framework that combines prerequisites, content structure, and ongoing safety measures.
@@ -44,10 +82,10 @@ The Three Pillars
 Purpo...</summary>
   </entry>
   <entry>
-    <id>https://jabrena.github.io/cursor-rules-java//blog/2025/release-0.8.0.html</id>
+    <id>https://jabrena.github.io/cursor-rules-java//blog/2025/07/release-0.8.0.html</id>
     <title>What&apos;s new in Cursor rules for Java 0.8.0?</title>
     <link></link>
-    <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/release-0.8.0.html" />
+    <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/07/release-0.8.0.html" />
     <updated>2025-07-12T00:00:00+0200</updated>
     <summary>New interactive behaviors in the Cursor rules
 In the previous release, the project added interactive behavior to a few complex rules to improve the developer experience, but in this release, new rules have evolved to add more interactive behavior regardless of complexity. The motivation behind this change: now the rules suggest alternatives to the software engineer to improve development at the pac...</summary>
