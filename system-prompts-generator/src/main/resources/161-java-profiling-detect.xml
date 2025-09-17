@@ -32,15 +32,15 @@
 
         ```text
         your-project/
-        ├── run-with-profiler.sh    # ← Step 1: Run main application with profiling JVM flags
-        └── profiler/               # ← All profiling-related files
-            ├── scripts/            # ← Profiling scripts and tools
-            │   └── java-profile.sh # ← Step 2: Interactive profiling script
-            ├── results/            # ← Generated profiling output
-            │   ├── *.html          # ← Flamegraph files
-            │   └── *.jfr           # ← JFR recording files
-            ├── current/            # ← Symlink to current profiler version
-            └── async-profiler-*/   # ← Downloaded profiler binaries
+        ├── run-java-process-for-profiling.sh    # ← Step 1: Run main application with profiling JVM flags
+        └── profiler/                            # ← All profiling-related files
+            ├── scripts/                         # ← Profiling scripts and tools
+            │   └── profile-java-process.sh      # ← Step 2: Interactive profiling script
+            ├── results/                         # ← Generated profiling output
+            │   ├── *.html                       # ← Flamegraph files
+            │   └── *.jfr                        # ← JFR recording files
+            ├── current/                         # ← Symlink to current profiler version
+            └── async-profiler-*/                # ← Downloaded profiler binaries
         ```
     </goal>
 
@@ -52,7 +52,7 @@
 **IMPORTANT**: Use the exact bash script from the template without any modification or interpretation.
 
 ```bash
-<xi:include href="fragments/run-with-profiler.sh" parse="text"/>
+<xi:include href="fragments/run-java-process-for-profiling.sh" parse="text"/>
 ```
 
 **Script Location:**
@@ -62,9 +62,9 @@ your-project/
 ```
 
 **Setup Instructions:**
-1. Copy the **EXACT** bash script content from `java-profiling-script-run-app-template.md`
-2. Save it as `run-with-profiler.sh` in your project root
-3. Make it executable: `chmod +x run-with-profiler.sh`
+1. Copy the **EXACT** bash script content from `run-java-process-for-profiling.sh`
+2. Save it as `run-java-process-for-profiling.sh` in your project root
+3. Make it executable: `chmod +x run-java-process-for-profiling.sh`
 4. **NO MODIFICATIONS** to the script content are needed or allowed
 
 **Purpose:**
@@ -75,7 +75,7 @@ your-project/
 **Usage:**
 ```bash
 # Start your application with profiling-ready JVM settings
-./run-with-profiler.sh
+./run-java-process-for-profiling.sh
 ```
                 </step-content>
                 <step-constraints>
@@ -95,20 +95,20 @@ your-project/
 **IMPORTANT**: Use the exact bash script from the template without any modification or interpretation.
 
 ```bash
-<xi:include href="fragments/java-profile.sh" parse="text"/>
+<xi:include href="fragments/profile-java-process.sh" parse="text"/>
 ```
 
 **Script Location:**
 ```
 └── profiler/               # ← All profiling-related files
     ├── scripts/            # ← Profiling scripts and tools
-    │   └── java-profile.sh # ← Copy exact script from template
+    │   └── profile-java-process.sh # ← Copy exact script from template
 ```
 
 **Setup Instructions:**
 1. Copy the **EXACT** bash script from the template
-2. Save it as `profiler/scripts/java-profile.sh` in your project root
-3. Make it executable: `chmod +x profiler/scripts/java-profile.sh`
+2. Save it as `profiler/scripts/profile-java-process.sh` in your project root
+3. Make it executable: `chmod +x profiler/scripts/profile-java-process.sh`
 4. **NO MODIFICATIONS** to the script content are needed or allowed
 
 **Purpose:**
@@ -120,7 +120,7 @@ your-project/
 **Usage:**
 ```bash
 # Execute the interactive profiling script
-./profiler/scripts/java-profile.sh
+./profiler/scripts/profile-java-process.sh
 ```
                 </step-content>
                 <step-constraints>
@@ -133,8 +133,8 @@ your-project/
                         <step-constraint>The script is already complete and tested - no improvements needed</step-constraint>
                         <step-constraint>Create the profiler directory structure: `mkdir -p profiler/scripts profiler/results`</step-constraint>
                         <step-constraint>Copy the **EXACT** bash script content from `java-profiling-script-template.md`</step-constraint>
-                        <step-constraint>Save it as `profiler/scripts/java-profile.sh`</step-constraint>
-                        <step-constraint>Make it executable: `chmod +x profiler/scripts/java-profile.sh`</step-constraint>
+                        <step-constraint>Save it as `profiler/scripts/profile-java-process.sh`</step-constraint>
+                        <step-constraint>Make it executable: `chmod +x profiler/scripts/profile-java-process.sh`</step-constraint>
                         <step-constraint>**NO MODIFICATIONS** to the script content are needed or allowed</step-constraint>
                     </step-constraint-list>
                 </step-constraints>

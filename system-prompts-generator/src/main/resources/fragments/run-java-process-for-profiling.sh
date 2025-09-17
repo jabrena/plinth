@@ -1,7 +1,8 @@
 #!/bin/bash
 
-# Java Application Runner with Async-Profiler Support
+# Java Application Runner with Async-Profiler Support (Java 21-25 Enhanced)
 # This script runs Spring Boot or Quarkus applications with JVM flags optimized for async-profiler
+# Enhanced for Java 21-25 with virtual threads, modern GC, and improved profiling support
 
 set -e
 
@@ -12,8 +13,11 @@ APP_CLASS="info.jab.ms.MainApplication"
 HEAP_SIZE="512m"
 PROFILE_NAME="default"
 FRAMEWORK="auto"
-ENABLE_JFR="false"
 ENABLE_GC_LOG="false"
+ENABLE_VIRTUAL_THREADS="false"
+JAVA_VERSION=""
+GC_ALGORITHM="auto"
+ENABLE_PREVIEW_FEATURES="false"
 
 # Colors for output
 RED='\033[0;31m'
@@ -55,8 +59,10 @@ OPTIONS:
     -p, --profile PROFILE   Profile to activate (default: default)
                            For Spring Boot: sets spring.profiles.active
                            For Quarkus: sets quarkus.profile
-    --jfr                   Enable Java Flight Recorder (disabled by default)
     --gc-log                Enable GC logging (disabled by default)
+    --virtual-threads       Enable virtual threads (Java 21+, disabled by default)
+    --gc GC_TYPE           GC algorithm: auto, g1, zgc, parallel, serial (default: auto)
+    --preview               Enable preview features for newer Java versions
     --help                  Show this help message
 
 FRAMEWORK DETECTION:
@@ -74,20 +80,23 @@ EXAMPLES:
     # Force Quarkus with custom heap size and profile
     $0 -f quarkus -h 1g -p dev
 
-    # Run Spring Boot with virtual threads profile
-    $0 -f springboot -p vt
+    # Run Spring Boot with virtual threads (Java 21+)
+    $0 -f springboot --virtual-threads
 
-    # Run Spring Boot with development profile
-    $0 -f springboot -p dev
+    # Run with ZGC for low-latency applications (Java 21+)
+    $0 -f springboot --gc zgc -h 2g
 
-    # Run with wall-clock profiling
-    $0 -m wall
+    # Run with preview features enabled (Java 21+)
+    $0 -f springboot --preview
 
-    # Run with JFR enabled for detailed profiling
-    $0 -m cpu --jfr
+    # Run with wall-clock profiling and virtual threads
+    $0 -m wall --virtual-threads
 
-    # Run with both JFR and GC logging enabled
-    $0 -m alloc --jfr --gc-log
+    # Run with comprehensive GC logging
+    $0 -m cpu --gc-log
+
+    # Run with modern GC, virtual threads, and comprehensive logging
+    $0 -m alloc --gc-log --virtual-threads --gc g1
 
 EOF
 }
@@ -119,12 +128,20 @@ while [[ $# -gt 0 ]]; do
             PROFILE_NAME="$2"
             shift 2
             ;;
-        --jfr)
-            ENABLE_JFR="true"
-            shift
-            ;;
         --gc-log)
             ENABLE_GC_LOG="true"
+            shift
+            ;;
+        --virtual-threads)
+            ENABLE_VIRTUAL_THREADS="true"
+            shift
+            ;;
+        --gc)
+            GC_ALGORITHM="$2"
+            shift 2
+            ;;
+        --preview)
+            ENABLE_PREVIEW_FEATURES="true"
             shift
             ;;
         --help)
@@ -155,6 +172,16 @@ case $FRAMEWORK in
         ;;
     *)
         log_error "Invalid framework: $FRAMEWORK. Use: auto, springboot, quarkus"
+        exit 1
+        ;;
+esac
+
+# Validate GC algorithm
+case $GC_ALGORITHM in
+    auto|g1|zgc|parallel|serial)
+        ;;
+    *)
+        log_error "Invalid GC algorithm: $GC_ALGORITHM. Use: auto, g1, zgc, parallel, serial"
         exit 1
         ;;
 esac
@@ -234,8 +261,54 @@ set_default_jar() {
     fi
 }
 
-# Detect framework and set defaults
+# Function to detect Java version
+detect_java_version() {
+    if command -v java >/dev/null 2>&1; then
+        JAVA_VERSION=$(java -version 2>&1 | head -n 1 | cut -d'"' -f2 | cut -d'.' -f1)
+        if [[ "$JAVA_VERSION" == "1" ]]; then
+            # Handle Java 8 version format (1.8.x)
+            JAVA_VERSION=$(java -version 2>&1 | head -n 1 | cut -d'"' -f2 | cut -d'.' -f2)
+        fi
+        log_info "Detected Java version: $JAVA_VERSION"
+
+        # Validate virtual threads support
+        if [[ "$ENABLE_VIRTUAL_THREADS" == "true" ]] && [[ "$JAVA_VERSION" -lt 21 ]]; then
+            log_warn "Virtual threads require Java 21+. Current version: $JAVA_VERSION. Disabling virtual threads."
+            ENABLE_VIRTUAL_THREADS="false"
+        fi
+
+        # Validate preview features
+        if [[ "$ENABLE_PREVIEW_FEATURES" == "true" ]] && [[ "$JAVA_VERSION" -lt 21 ]]; then
+            log_warn "Preview features flag requires Java 21+. Current version: $JAVA_VERSION. Disabling preview features."
+            ENABLE_PREVIEW_FEATURES="false"
+        fi
+    else
+        log_error "Java not found in PATH"
+        exit 1
+    fi
+}
+
+# Function to select optimal GC algorithm based on Java version
+select_gc_algorithm() {
+    if [[ "$GC_ALGORITHM" == "auto" ]]; then
+        if [[ "$JAVA_VERSION" -ge 21 ]]; then
+            # For Java 21+, prefer G1GC for balanced performance
+            GC_ALGORITHM="g1"
+            log_info "Auto-selected G1GC for Java $JAVA_VERSION"
+        elif [[ "$JAVA_VERSION" -ge 17 ]]; then
+            GC_ALGORITHM="g1"
+            log_info "Auto-selected G1GC for Java $JAVA_VERSION"
+        else
+            GC_ALGORITHM="parallel"
+            log_info "Auto-selected Parallel GC for Java $JAVA_VERSION"
+        fi
+    fi
+}
+
+# Detect framework, Java version, and set defaults
 detect_framework
+detect_java_version
+select_gc_algorithm
 set_default_jar
 
 # Generate timestamp for output files
@@ -245,8 +318,10 @@ log_info "Starting $FRAMEWORK application"
 log_info "Profile mode: $PROFILE_MODE"
 log_info "Framework: $FRAMEWORK"
 log_info "Profile: $PROFILE_NAME"
+log_info "Java version: $JAVA_VERSION"
+log_info "GC algorithm: $GC_ALGORITHM"
 
-# JVM flags for optimal profiling with async-profiler
+# JVM flags for optimal profiling with async-profiler (Java 21-25 enhanced)
 JVM_FLAGS=(
     # Memory settings
     "-Xms$HEAP_SIZE"
@@ -259,29 +334,120 @@ JVM_FLAGS=(
 
     # Security settings for profiler attachment
     "-Djdk.attach.allowAttachSelf=true"
-
-    # Optional: Disable C2 compiler for more accurate profiling (uncomment if needed)
-    # "-XX:TieredStopAtLevel=1"
 )
 
-# Add JFR settings if enabled
-if [[ "$ENABLE_JFR" == "true" ]]; then
+# Add GC-specific flags
+case $GC_ALGORITHM in
+    g1)
+        JVM_FLAGS+=(
+            "-XX:+UseG1GC"
+            "-XX:MaxGCPauseMillis=200"
+            "-XX:G1HeapRegionSize=16m"
+        )
+        if [[ "$JAVA_VERSION" -ge 21 ]]; then
+            JVM_FLAGS+=(
+                "-XX:G1MixedGCCountTarget=8"
+                "-XX:G1HeapWastePercent=10"
+            )
+        fi
+        ;;
+    zgc)
+        if [[ "$JAVA_VERSION" -ge 21 ]]; then
+            JVM_FLAGS+=(
+                "-XX:+UseZGC"
+            )
+        elif [[ "$JAVA_VERSION" -ge 17 ]]; then
+            JVM_FLAGS+=(
+                "-XX:+UseZGC"
+                "-XX:+UnlockExperimentalVMOptions"
+            )
+        else
+            log_warn "ZGC requires Java 17+. Falling back to G1GC"
+            JVM_FLAGS+=(
+                "-XX:+UseG1GC"
+                "-XX:MaxGCPauseMillis=200"
+            )
+        fi
+        ;;
+    parallel)
+        JVM_FLAGS+=(
+            "-XX:+UseParallelGC"
+        )
+        ;;
+    serial)
+        JVM_FLAGS+=(
+            "-XX:+UseSerialGC"
+        )
+        ;;
+esac
+
+# Add Java version-specific optimizations
+if [[ "$JAVA_VERSION" -ge 21 ]]; then
     JVM_FLAGS+=(
-        "-XX:+FlightRecorder"
-        "-XX:StartFlightRecording=filename=flight-recording-${TIMESTAMP}.jfr"
+        # Enhanced performance flags for Java 21+
+        "-XX:+UseStringDeduplication"
     )
-    log_info "JFR enabled: flight-recording-${TIMESTAMP}.jfr"
 fi
 
-# Add GC logging if enabled
-if [[ "$ENABLE_GC_LOG" == "true" ]]; then
+# Function to get CPU core count (cross-platform)
+get_cpu_cores() {
+    if command -v nproc >/dev/null 2>&1; then
+        # Linux
+        nproc
+    elif [[ -f /proc/cpuinfo ]]; then
+        # Linux fallback
+        grep -c ^processor /proc/cpuinfo
+    elif command -v sysctl >/dev/null 2>&1; then
+        # macOS
+        sysctl -n hw.ncpu
+    else
+        # Default fallback
+        echo "4"
+    fi
+}
+
+# Add virtual threads support (Java 21+)
+if [[ "$ENABLE_VIRTUAL_THREADS" == "true" ]]; then
+    CPU_CORES=$(get_cpu_cores)
     JVM_FLAGS+=(
-        "-Xlog:gc*:gc-${TIMESTAMP}.log:time,tags"
+        "-Djdk.virtualThreadScheduler.parallelism=$CPU_CORES"
+        "-Djdk.virtualThreadScheduler.maxPoolSize=$((CPU_CORES * 256))"
     )
+    log_info "Virtual threads enabled with optimized scheduler settings (CPU cores: $CPU_CORES)"
+fi
+
+# Add preview features if enabled
+if [[ "$ENABLE_PREVIEW_FEATURES" == "true" ]]; then
+    JVM_FLAGS+=(
+        "--enable-preview"
+    )
+    log_info "Preview features enabled"
+fi
+
+# Add GC logging if enabled (enhanced for Java 21-25)
+if [[ "$ENABLE_GC_LOG" == "true" ]]; then
+    if [[ "$JAVA_VERSION" -ge 21 ]]; then
+        JVM_FLAGS+=(
+            "-Xlog:gc*,heap*,ergo*:gc-${TIMESTAMP}.log:time,tags,level"
+            "-Xlog:gc+heap=info"
+        )
+    elif [[ "$JAVA_VERSION" -ge 11 ]]; then
+        JVM_FLAGS+=(
+            "-Xlog:gc*:gc-${TIMESTAMP}.log:time,tags"
+        )
+    else
+        # Legacy GC logging for Java 8
+        JVM_FLAGS+=(
+            "-XX:+PrintGC"
+            "-XX:+PrintGCDetails"
+            "-XX:+PrintGCTimeStamps"
+            "-Xloggc:gc-${TIMESTAMP}.log"
+        )
+    fi
     log_info "GC logging enabled: gc-${TIMESTAMP}.log"
 fi
 
-# Framework-specific arguments
+# Framework-specific arguments (enhanced for Java 21-25)
 get_app_args() {
     case $FRAMEWORK in
         springboot)
@@ -290,6 +456,14 @@ get_app_args() {
                 "--logging.level.info.jab.ms=DEBUG"
                 "--server.port=8080"
             )
+
+            # Add virtual threads support for Spring Boot 3.2+ with Java 21+
+            if [[ "$ENABLE_VIRTUAL_THREADS" == "true" ]] && [[ "$JAVA_VERSION" -ge 21 ]]; then
+                APP_ARGS+=(
+                    "--spring.threads.virtual.enabled=true"
+                )
+                log_info "Spring Boot virtual threads enabled"
+            fi
             ;;
         quarkus)
             APP_ARGS=(
@@ -297,6 +471,14 @@ get_app_args() {
                 "-Dquarkus.log.category.\"info.jab.ms\".level=DEBUG"
                 "-Dquarkus.http.port=8080"
             )
+
+            # Add virtual threads support for Quarkus with Java 21+
+            if [[ "$ENABLE_VIRTUAL_THREADS" == "true" ]] && [[ "$JAVA_VERSION" -ge 21 ]]; then
+                APP_ARGS+=(
+                    "-Dquarkus.virtual-threads.enabled=true"
+                )
+                log_info "Quarkus virtual threads enabled"
+            fi
             ;;
     esac
 }
@@ -375,3 +557,12 @@ else
 fi
 
 log_success "Application completed!"
+
+# Enhanced Java 21-25 Features Summary:
+# - Automatic Java version detection with compatibility warnings
+# - Virtual threads support (Java 21+) with optimized scheduler settings
+# - Modern GC algorithms (G1GC, ZGC) with version-specific optimizations
+# - Enhanced GC logging with detailed heap and ergonomics information
+# - Preview features support for experimental Java features
+# - Framework-specific virtual threads integration (Spring Boot 3.2+, Quarkus)
+# - Backward compatibility maintained for Java 8+ versions

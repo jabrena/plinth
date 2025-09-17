@@ -1,4 +1,4 @@
-package info.jab.ms;
+package info.jab.ms.controllers;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 import java.util.stream.IntStream;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequestMapping("/api/v1")
+@ConditionalOnProperty(name = "coco", havingValue = "true", matchIfMissing = false)
 public class CocoController {
 
     private static final Logger logger = LoggerFactory.getLogger(CocoController.class);
