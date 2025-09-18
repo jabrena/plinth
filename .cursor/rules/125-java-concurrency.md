@@ -1770,8 +1770,13 @@ Description: Design tasks to be cancellable and responsive to interruption. Use 
 **Good example:**
 
 ```java
-import java.util.concurrent.*;
-import java.util.concurrent.locks.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
 
 class CancellationService {
     private final BlockingQueue<String> queue = new ArrayBlockingQueue<>(100);
@@ -1816,7 +1821,10 @@ class CancellationService {
 **Bad example:**
 
 ```java
-import java.util.concurrent.*;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 
 class BadCancellationService {
     private final BlockingQueue<String> queue = new LinkedBlockingQueue<>(); // unbounded
@@ -1847,7 +1855,13 @@ Description: Prevent unbounded growth and cascading failures using bounded queue
 **Good example:**
 
 ```java
-import java.util.concurrent.*;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 class BackpressureExample {
     private final Semaphore dbBulkhead = new Semaphore(20); // cap concurrent DB calls
@@ -1875,7 +1889,8 @@ class BackpressureExample {
 **Bad example:**
 
 ```java
-import java.util.concurrent.*;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 class BadBackpressureExample {
     // Unbounded queue behind fixed pool can accumulate unbounded work
@@ -1897,7 +1912,7 @@ Description: Avoid blocking the ForkJoin common pool. If blocking is unavoidable
 **Good example:**
 
 ```java
-import java.util.concurrent.*;
+import java.util.concurrent.ForkJoinPool;
 
 class ManagedBlockerExample {
     static String blockingIO() throws InterruptedException {
@@ -1925,7 +1940,7 @@ class ManagedBlockerExample {
 **Bad example:**
 
 ```java
-import java.util.*;
+import java.util.List;
 
 class BadParallelBlocking {
     public List<String> doWork(List<String> inputs) {
@@ -1951,8 +1966,7 @@ Description: With virtual threads, `synchronized` around blocking calls can pin 
 **Good example:**
 
 ```java
-import java.util.concurrent.*;
-import java.util.concurrent.locks.*;
+import java.util.concurrent.locks.ReentrantLock;
 
 class PinningSafeExample {
     private final ReentrantLock lock = new ReentrantLock();

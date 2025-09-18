@@ -79,6 +79,7 @@ Description: Validate input parameters at method entry points and throw specific
 // GOOD: Specific input validation with descriptive exceptions
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class UserService {
 
@@ -206,7 +207,12 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
+import java.util.Map;
 import java.util.Properties;
+import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ResourceManager {
     private static final Logger logger = LoggerFactory.getLogger(ResourceManager.class);
