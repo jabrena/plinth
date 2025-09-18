@@ -2,7 +2,7 @@ title=Module 3: Secure Coding - Security & Best Practices
 type=course
 status=published
 date=2025-09-17
-author=Juan Antonio Breña Moral
+author=MyRobot
 version=0.11.0-SNAPSHOT
 tags=java, security, concurrency, logging, exception-handling, owasp, system-prompts
 ~~~~~~

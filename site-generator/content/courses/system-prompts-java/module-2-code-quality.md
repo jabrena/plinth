@@ -2,7 +2,7 @@ title=Module 2: Code Quality - Testing & Design Principles
 type=course
 status=published
 date=2025-09-17
-author=Juan Antonio Breña Moral
+author=MyRobot
 version=0.11.0-SNAPSHOT
 tags=java, testing, design-patterns, oop, solid, unit-testing, system-prompts
 ~~~~~~
