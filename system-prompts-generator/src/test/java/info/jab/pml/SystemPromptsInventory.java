@@ -21,6 +21,7 @@ public final class SystemPromptsInventory {
             "126-java-logging",
             "127-java-exception-handling",
             "128-java-generics",
+            "130-java-docker-best-practices",
             "131-java-unit-testing",
             "141-java-refactoring-with-modern-features",
             "142-java-functional-programming",
