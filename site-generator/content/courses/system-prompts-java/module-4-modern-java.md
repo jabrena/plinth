@@ -2,7 +2,7 @@ title=Module 4: Modern Java - Advanced Language Features
 type=course
 status=published
 date=2025-09-17
-author=Juan Antonio Breña Moral
+author=MyRobot
 version=0.11.0-SNAPSHOT
 tags=java, generics, functional-programming, records, sealed-types, modern-java, system-prompts
 ~~~~~~

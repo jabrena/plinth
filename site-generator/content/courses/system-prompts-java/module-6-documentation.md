@@ -2,7 +2,7 @@ title=Module 6: Documentation - Professional Documentation & Diagrams
 type=course
 status=published
 date=2025-09-17
-author=Juan Antonio Breña Moral
+author=MyRobot
 version=0.11.0-SNAPSHOT
 tags=java, documentation, uml-diagrams, javadoc, plantuml, technical-writing, system-prompts
 ~~~~~~

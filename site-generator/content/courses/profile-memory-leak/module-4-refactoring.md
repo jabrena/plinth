@@ -2,7 +2,7 @@ title=Module 4: Refactoring and Solution Implementation
 type=course
 status=published
 date=2025-09-17
-author=Juan Antonio Breña Moral
+author=MyRobot
 version=0.11.0-SNAPSHOT
 tags=java, profiling, memory-leak, refactoring, implementation, validation
 ~~~~~~

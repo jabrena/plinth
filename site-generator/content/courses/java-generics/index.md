@@ -2,7 +2,7 @@ title=Mastering Java Generics - From Type Safety to Advanced Patterns
 type=course
 status=published
 date=2025-09-13
-author=Juan Antonio Breña Moral
+author=MyRobot
 version=0.11.0-SNAPSHOT
 tags=java, generics, type-safety, advanced-patterns
 ~~~~~~

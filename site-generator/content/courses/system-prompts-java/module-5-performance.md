@@ -2,7 +2,7 @@ title=Module 5: Performance - Optimization & Profiling
 type=course
 status=published
 date=2025-09-17
-author=Juan Antonio Breña Moral
+author=MyRobot
 version=0.11.0-SNAPSHOT
 tags=java, performance, profiling, jmeter, async-profiler, jmh, optimization, system-prompts
 ~~~~~~
