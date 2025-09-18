@@ -21,6 +21,9 @@ These guidelines are built upon the following core principles:
 3.  **Attack Surface Minimization**: Adhere to the principle of least privilege for users, processes, and code. Reduce the exposure of system components by running with minimal necessary permissions, exposing only essential functionalities and network ports, and regularly reviewing and removing unused features, libraries, and accounts.
 4.  **Strong Cryptographic Practices**: Employ current, robust, and industry-standard cryptographic algorithms and libraries for all sensitive operations, including hashing (especially for passwords), encryption, and digital signatures. Avoid deprecated or weak algorithms. Ensure cryptographic keys are generated securely, stored safely, and managed properly throughout their lifecycle.
 5.  **Secure Exception Handling**: Manage exceptions in a way that does not expose sensitive information to users or attackers. Log detailed, non-sensitive diagnostic information for developers to aid in debugging, but provide generic, non-revealing error messages to clients. Avoid direct exposure of stack traces or internal system details in error outputs.
+6.  **Secrets Management and Configuration Security**: Never hardcode secrets (passwords, API keys, tokens) in source code. Load secrets at runtime from secure sources (environment variables, secret managers, container/Docker/Kubernetes secrets), enforce least-privilege for credentials, rotate regularly, and prevent secrets from appearing in logs or error messages.
+7.  **Safe Serialization and Deserialization**: Avoid Java native serialization for untrusted data. Prefer data binding to explicit DTOs (e.g., JSON/XML) without permissive polymorphic typing. If deserialization is necessary, implement strict allow-lists of types and validate content before use.
+8. **Output Encoding for XSS Prevention**: Always encode user input when outputting to prevent cross-site scripting attacks.
 
 ## Constraints
 
@@ -41,6 +44,9 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 3: Minimize Attack Surface
 - Example 4: Use Strong Cryptography
 - Example 5: Handle Exceptions Securely
+- Example 6: Secrets Management
+- Example 7: Safe Deserialization
+- Example 8: Prevent Cross-Site Scripting (XSS)
 
 ### Example 1: Input Validation
 
@@ -130,6 +136,7 @@ Description: To prevent SQL Injection and other injection attacks, always use pa
 
 ```java
 // GOOD: Using PreparedStatement to prevent SQL Injection
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -237,6 +244,7 @@ Description: Grant only necessary permissions to code and users. Avoid running p
 
 ```java
 // GOOD: Minimal privileges and controlled access
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -303,6 +311,7 @@ public interface AdminService extends UserService {
 ```java
 // AVOID: Excessive privileges and exposure
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 
 public class UnsafeFileManager {
@@ -350,6 +359,7 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import java.security.SecureRandom;
+import java.util.Base64;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
@@ -520,8 +530,6 @@ Description: Catch exceptions appropriately, but do not reveal sensitive system 
 // GOOD: Secure exception handling
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 public class SecureExceptionHandler {
     private static final Logger logger = LoggerFactory.getLogger(SecureExceptionHandler.class);
@@ -551,38 +559,22 @@ public class SecureExceptionHandler {
             throw new ServiceException("System error", ErrorCode.INTERNAL_ERROR);
         }
     }
-
-    // Secure error response helper
-    public void handleError(HttpServletResponse response, ServiceException e) throws IOException {
-        response.setStatus(e.getErrorCode().getHttpStatus());
-        response.setContentType("application/json");
-
-        String errorResponse = String.format(
-            "{\"error\": \"%s\", \"code\": \"%s\", \"timestamp\": \"%s\"}",
-            e.getMessage(), e.getErrorCode().name(), Instant.now()
-        );
-
-        response.getWriter().write(errorResponse);
-    }
 }
 
 // Secure error codes without sensitive details
 public enum ErrorCode {
-    INVALID_REQUEST(400, "Invalid request"),
-    UNAUTHORIZED(401, "Unauthorized"),
-    FORBIDDEN(403, "Forbidden"),
-    NOT_FOUND(404, "Not found"),
-    INTERNAL_ERROR(500, "Internal server error");
+    INVALID_REQUEST("Invalid request"),
+    UNAUTHORIZED("Unauthorized"),
+    FORBIDDEN("Forbidden"),
+    NOT_FOUND("Not found"),
+    INTERNAL_ERROR("Internal server error");
 
-    private final int httpStatus;
     private final String message;
 
-    ErrorCode(int httpStatus, String message) {
-        this.httpStatus = httpStatus;
+    ErrorCode(String message) {
         this.message = message;
     }
 
-    public int getHttpStatus() { return httpStatus; }
     public String getMessage() { return message; }
 }
 ```
@@ -591,8 +583,8 @@ public enum ErrorCode {
 
 ```java
 // AVOID: Exposing sensitive information
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
+import java.io.StringWriter;
+import java.io.PrintWriter;
 
 public class InsecureExceptionHandler {
 
@@ -609,16 +601,13 @@ public class InsecureExceptionHandler {
     }
 
     // BAD: Exposing stack traces to users
-    public void handleError(HttpServletResponse response, Exception e) throws IOException {
-        response.setStatus(500);
-        response.setContentType("text/plain");
-
+    public String handleError(Exception e) {
         // TERRIBLE: Exposing full stack trace to client
         StringWriter sw = new StringWriter();
         PrintWriter pw = new PrintWriter(sw);
         e.printStackTrace(pw);
 
-        response.getWriter().write("Error occurred:\n" + sw.toString());
+        return "Error occurred:\n" + sw.toString();
     }
 
     // BAD: Logging sensitive data
@@ -648,15 +637,161 @@ public class InsecureExceptionHandler {
 }
 ```
 
+### Example 6: Secrets Management
+
+Title: Avoid Hardcoded Secrets and Prevent Leakage
+Description: Never hardcode credentials or sensitive tokens. Load secrets at runtime from secure sources (environment variables, secret stores, container secrets), validate presence, and avoid logging them. Enforce least-privilege credentials and rotate regularly.
+
+**Good example:**
+
+```java
+// GOOD: Load secrets securely at runtime
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Objects;
+
+public class SecretLoader {
+    public static String requireEnv(String name) {
+        String value = System.getenv(name);
+        if (Objects.isNull(value) || value.isBlank()) {
+            throw new IllegalStateException("Missing required secret: " + name);
+        }
+        return value;
+    }
+
+    public static String readDockerSecret(Path mountPath) throws Exception {
+        if (!Files.isRegularFile(mountPath)) {
+            throw new IllegalStateException("Secret file not found: " + mountPath);
+        }
+        // Files.readString avoids exposing content in logs; caller must not log it
+        return Files.readString(mountPath).trim();
+    }
+
+    public static DbConfig buildDbConfig() throws Exception {
+        // Prefer env or mounted secrets; never hardcode
+        String username = requireEnv("DB_USERNAME");
+        String password = readDockerSecret(Path.of("/run/secrets/db_password"));
+        String url = requireEnv("DB_URL");
+        return new DbConfig(url, username, password);
+    }
+}
+
+final class DbConfig {
+    final String url;
+    final String user;
+    final String pass;
+    DbConfig(String url, String user, String pass) { this.url = url; this.user = user; this.pass = pass; }
+}
+```
+
+**Bad example:**
+
+```java
+// AVOID: Hardcoded and leaked secrets
+public class InsecureSecrets {
+    // TERRIBLE: committed to VCS
+    private static final String DB_PASSWORD = "P@ssw0rd!";
+
+    public void connect() {
+        String url = "jdbc:postgresql://db.internal:5432/app";
+        String user = "appuser";
+        // BAD: Printing secrets to logs
+        System.out.println("Connecting with password: " + DB_PASSWORD);
+        // ... use DB_PASSWORD ...
+    }
+}
+```
+
+### Example 7: Safe Deserialization
+
+Title: Avoid Native Serialization; Use Strict DTO Binding
+Description: Do not deserialize untrusted data using Java native serialization. Prefer JSON/XML binding to explicit DTOs and avoid permissive polymorphic typing. If polymorphism is needed, enforce an allow-list of subtypes and validate inputs before use.
+
+**Good example:**
+
+```java
+// GOOD: Bind to explicit DTO without default typing
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class SafeJsonBinder {
+    private final ObjectMapper mapper = new ObjectMapper()
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+
+    public UserProfile parseProfile(String json) throws Exception {
+        // Bind to a concrete DTO; no polymorphic/DefaultTyping enabled
+        return mapper.readValue(json, UserProfile.class);
+    }
+}
+
+final class UserProfile {
+    public String name;
+    public String email;
+}
+```
+
+**Bad example:**
+
+```java
+// AVOID: Insecure deserialization
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
+
+public class InsecureDeserializer {
+    public Object fromBytes(byte[] data) throws Exception {
+        // DANGEROUS: Native deserialization of untrusted data
+        try (ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(data))) {
+            return ois.readObject();
+        }
+    }
+}
+
+// Also dangerous: enabling permissive default typing in JSON mappers
+// ObjectMapper mapper = new ObjectMapper();
+// mapper.enableDefaultTyping(); // deprecated and unsafe for untrusted data
+```
+
+### Example 8: Prevent Cross-Site Scripting (XSS)
+
+Title: Use Output Encoding
+Description: Always encode user-controlled data when outputting to HTML, JavaScript, or other contexts to prevent XSS attacks.
+
+**Good example:**
+
+```java
+// GOOD: Output encoding to prevent XSS
+import org.apache.commons.text.StringEscapeUtils;
+
+public class SecureOutput {
+    public String renderUserInput(String input) {
+        String encoded = StringEscapeUtils.escapeHtml4(input);
+        return "<p>" + encoded + "</p>";
+    }
+}
+```
+
+**Bad example:**
+
+```java
+// AVOID: No encoding, vulnerable to XSS
+public class InsecureOutput {
+    public String renderUserInput(String input) {
+        return "<p>" + input + "</p>";
+    }
+}
+```
+
 ## Output Format
 
-- **ANALYZE** Java code to identify specific security vulnerabilities and categorize them by severity (CRITICAL, HIGH, MEDIUM, LOW) and vulnerability type (injection, authentication, authorization, cryptography, data exposure)
-- **CATEGORIZE** security improvements found: Input Validation Issues (missing validation vs robust input checking, insufficient sanitization vs comprehensive filtering), Injection Vulnerabilities (dynamic SQL vs parameterized queries, command injection vs safe execution, XSS risks vs proper encoding), Authentication/Authorization Gaps (weak permissions vs principle of least privilege, excessive access vs role-based control), Cryptographic Weaknesses (deprecated algorithms vs modern cryptography, weak key management vs secure key handling), and Exception Handling Problems (information disclosure vs secure error messages, sensitive data exposure vs protected logging)
+- **ANALYZE** Java code to identify specific security vulnerabilities and categorize them by severity (CRITICAL, HIGH, MEDIUM, LOW) and vulnerability type (injection, authentication, authorization, cryptography, data exposure, secrets management, deserialization, configuration, supply-chain)
+- **CATEGORIZE** security improvements found: Input Validation Issues (missing validation vs robust input checking, insufficient sanitization vs comprehensive filtering), Injection Vulnerabilities (dynamic SQL vs parameterized queries, command injection vs safe execution, XSS risks vs proper encoding), Authentication/Authorization Gaps (weak permissions vs principle of least privilege, excessive access vs role-based control), Cryptographic Weaknesses (deprecated algorithms vs modern cryptography, weak key management vs secure key handling), Exception Handling Problems (information disclosure vs secure error messages, sensitive data exposure vs protected logging), Secrets and Configuration Issues (hardcoded credentials vs secret managers, debug modes off in prod), and Deserialization Risks (native Java serialization vs DTO binding)
 - **APPLY** secure coding best practices directly by implementing the most appropriate security improvements for each identified vulnerability: Implement comprehensive input validation with whitelisting and sanitization, replace dynamic SQL with parameterized queries, establish proper authentication and authorization controls, upgrade to modern cryptographic algorithms and secure key management, implement secure exception handling that prevents information disclosure, and add proper logging and monitoring for security events
-- **IMPLEMENT** comprehensive security hardening using proven patterns: Establish defense-in-depth security layers (input validation, output encoding, access controls), implement secure authentication and session management, apply principle of least privilege throughout the application, upgrade cryptographic implementations to current standards (AES-256, SHA-256, secure random generation), implement secure error handling and logging practices, and integrate security testing and validation frameworks
+- **IMPLEMENT** comprehensive security hardening using proven patterns: Establish defense-in-depth security layers (input validation, output encoding, access controls), apply principle of least privilege throughout the application, upgrade cryptographic implementations to current standards (AES-256, SHA-256, secure random generation), implement secure error handling and logging practices, and integrate security testing and validation frameworks
 - **REFACTOR** code systematically following the security improvement roadmap: First address critical injection vulnerabilities through parameterized queries and input validation, then strengthen authentication and authorization mechanisms, upgrade cryptographic implementations to modern algorithms, implement secure exception handling and logging practices, apply principle of least privilege to access controls, and integrate comprehensive security testing and monitoring
 - **EXPLAIN** the applied security improvements and their benefits: Vulnerability elimination through proper input validation and parameterized queries, access control strengthening via authentication and authorization improvements, data protection enhancement through modern cryptography and secure key management, information security gains from secure exception handling and logging, and overall security posture improvement through defense-in-depth implementation
 - **VALIDATE** that all applied security changes compile successfully, maintain existing functionality, eliminate identified vulnerabilities, follow security best practices, and do not introduce new security risks through comprehensive testing and security verification
+- **SUPPLY-CHAIN** include dependency and build pipeline considerations: pin and verify dependency versions, remove unused dependencies, scan for known CVEs (e.g., OWASP Dependency-Check), and verify artifact integrity (checksums/signatures).
+- **CONFIGURE** secure defaults: ensure debug features and detailed error pages are disabled in production, and protect management interfaces with authentication and network policies.
 
 ## Safeguards
 
@@ -668,3 +803,6 @@ public class InsecureExceptionHandler {
 - **SECURITY VALIDATION**: Verify that security improvements don't introduce new vulnerabilities or break existing security controls
 - **DEPENDENCY SAFETY**: Validate that any new security libraries or dependencies don't conflict with existing project requirements
 - **PERFORMANCE IMPACT**: Monitor that security enhancements don't significantly degrade application performance
+- **SECRET HYGIENE**: Verify no secrets are committed to VCS, run a secrets scanner, and confirm logs do not expose sensitive values.
+- **SUPPLY-CHAIN CHECKS**: Scan dependencies for CVEs and ensure pinned/signed artifacts in CI before release.
+- **PRODUCTION CONFIG**: Ensure debug features, verbose errors, and open management interfaces are disabled or properly secured in production.

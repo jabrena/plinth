@@ -27,6 +27,14 @@ These guidelines are built upon the following core principles:
 *   **Virtual Threads (Project Loom)**: Embrace virtual threads via `Executors.newVirtualThreadPerTaskExecutor()` for I/O-bound tasks to dramatically increase scalability with minimal resource overhead. Avoid pooling virtual threads.
 *   **Structured Concurrency**: Use `StructuredTaskScope` to simplify the management of multiple related concurrent tasks as a single unit of work, improving error handling, cancellation, and resource management.
 *   **Scoped Values**: Prefer `ScopedValue` over `ThreadLocal` for sharing immutable data robustly and efficiently across tasks within a dynamically bounded scope, especially when working with virtual threads.
+9.  **Cooperative Cancellation and Interruption Discipline**: Design tasks to be cancellable; always respond to interruption promptly. Do not swallow `InterruptedException`; either propagate it or restore the interrupt flag with `Thread.currentThread().interrupt()`. Prefer time-bounded operations (`orTimeout`, `completeOnTimeout`, timeouts on blocking calls), use `Future.cancel(true)`, prefer `Lock.lockInterruptibly()`/`tryLock(timeout, unit)` where applicable, and ensure cleanup on cancellation.
+10. **Backpressure and Overload Protection**: Prevent unbounded work queues and cascading failures by using bounded queues, appropriate rejection policies (e.g., `CallerRunsPolicy` for graceful shedding), semaphores/bulkheads to cap concurrency, request rate limiting, and the `Flow` (Reactive Streams) API when stream backpressure is needed.
+11. **Deadlock Avoidance and Lock Hygiene**: Establish global lock ordering, minimize lock scope, avoid holding locks while calling out to untrusted code, favor non-blocking algorithms or `tryLock` with timeouts where practical, and avoid nested synchronization across unrelated components.
+12. **Correct Use of ForkJoin and Parallel Streams**: Reserve ForkJoin/parallel streams for CPU-bound, short-lived, side-effect-free tasks. Avoid blocking I/O within the common pool; if blocking is unavoidable, use `ForkJoinPool.ManagedBlocker` or a dedicated executor. Do not rely on `parallelStream()` in request-scoped code paths unless measured and justified.
+13. **Avoid Virtual-Thread Pinning**: With virtual threads, avoid holding intrinsic locks (`synchronized`) around blocking calls that may pin to a carrier thread. Prefer `ReentrantLock` (which cooperates with parking), keep critical sections small, and use JFR (VirtualThreadPinned) to detect pinning hot spots.
+14. **Observability for Concurrency**: Name threads consistently, set `UncaughtExceptionHandler`s, expose metrics (queue depths, pool sizes, task latencies, rejection counts), propagate contextual data with `ScopedValue` instead of `ThreadLocal`, and instrument with Thread dumps and JFR for diagnosis.
+15. **Timeouts, Retries, and Idempotency**: Always bound remote calls with timeouts; implement bounded, jittered retries where appropriate and ensure operations are idempotent to avoid duplicate side effects under retries/cancellation.
+16. **Use Fit-for-Purpose Concurrency Primitives**: Prefer `LongAdder/LongAccumulator` under high contention counters, `CopyOnWriteArrayList` for read-mostly observer lists, `StampedLock`/`ReadWriteLock` for read-heavy data, and high-level utilities (`Semaphore`, `CountDownLatch`, `Phaser`) where they model coordination more clearly than manual `wait/notify`.
 
 ## Constraints
 
@@ -52,6 +60,13 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 8: Embrace Virtual Threads for Enhanced Scalability
 - Example 9: Simplify Concurrent Code with Structured Concurrency
 - Example 10: Manage Thread-Shared Data with Scoped Values
+- Example 11: Cooperative Cancellation and Interruption
+- Example 12: Overload Protection and Backpressure
+- Example 13: ForkJoin and ManagedBlocker for Blocking Operations
+- Example 14: Avoid Pinning with Virtual Threads
+- Example 15: Phased Execution with Phaser
+- Example 16: Synchronization with CyclicBarrier
+- Example 17: Data Exchange with Exchanger
 
 ### Example 1: Thread Safety Fundamentals
 
@@ -1747,6 +1762,405 @@ class BadScopedValueUsage {
 }
 ```
 
+### Example 11: Cooperative Cancellation and Interruption
+
+Title: Propagate interruption, bound waits, and cleanup safely
+Description: Design tasks to be cancellable and responsive to interruption. Use timeouts on blocking calls, avoid swallowing `InterruptedException`, and ensure resources are cleaned up after cancellation.
+
+**Good example:**
+
+```java
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantLock;
+
+class CancellationService {
+    private final BlockingQueue<String> queue = new ArrayBlockingQueue<>(100);
+    private final ExecutorService executor = Executors.newFixedThreadPool(2);
+    private final ReentrantLock lock = new ReentrantLock();
+
+    public Future<?> startWorker() {
+        return executor.submit(() -> {
+            while (!Thread.currentThread().isInterrupted()) {
+                try {
+                    String item = queue.poll(500, TimeUnit.MILLISECONDS); // timed wait
+                    if (item != null) process(item);
+                } catch (InterruptedException ie) {
+                    Thread.currentThread().interrupt(); // restore and exit loop
+                }
+            }
+            cleanup();
+        });
+    }
+
+    public boolean tryUpdateStateSafely() throws InterruptedException {
+        if (lock.tryLock(200, TimeUnit.MILLISECONDS)) { // time-bounded acquisition
+            try {
+                // update state
+                return true;
+            } finally {
+                lock.unlock();
+            }
+        }
+        return false;
+    }
+
+    private void process(String s) { /* ... */ }
+    private void cleanup() { /* close resources */ }
+
+    public void shutdown() {
+        executor.shutdownNow(); // interrupt workers
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+
+class BadCancellationService {
+    private final BlockingQueue<String> queue = new LinkedBlockingQueue<>(); // unbounded
+    private final ExecutorService executor = Executors.newSingleThreadExecutor();
+
+    public void startWorker() {
+        executor.submit(() -> {
+            for (;;) {
+                try {
+                    String item = queue.take(); // indefinite block
+                    process(item);
+                } catch (InterruptedException ignored) { // SWALLOWED
+                    // continues running forever
+                }
+            }
+        });
+    }
+
+    private void process(String s) { /* ... */ }
+}
+```
+
+### Example 12: Overload Protection and Backpressure
+
+Title: Bound queues, reject sanely, and limit concurrency
+Description: Prevent unbounded growth and cascading failures using bounded queues, appropriate rejection policies, and bulkheads (semaphores) for scarce resources.
+
+**Good example:**
+
+```java
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Callable;
+import java.util.concurrent.Future;
+import java.util.concurrent.RejectedExecutionException;
+import java.util.concurrent.Semaphore;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
+class BackpressureExample {
+    private final Semaphore dbBulkhead = new Semaphore(20); // cap concurrent DB calls
+    private final ThreadPoolExecutor executor = new ThreadPoolExecutor(
+        4, 8, 60, TimeUnit.SECONDS,
+        new ArrayBlockingQueue<>(200), // bounded
+        new ThreadPoolExecutor.CallerRunsPolicy() // graceful shedding
+    );
+
+    public Future<String> handleRequest(Callable<String> task) {
+        return executor.submit(() -> {
+            if (!dbBulkhead.tryAcquire(500, TimeUnit.MILLISECONDS)) {
+                throw new RejectedExecutionException("Overloaded");
+            }
+            try {
+                return task.call();
+            } finally {
+                dbBulkhead.release();
+            }
+        });
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+class BadBackpressureExample {
+    // Unbounded queue behind fixed pool can accumulate unbounded work
+    private final ExecutorService pool = Executors.newFixedThreadPool(8); // LinkedBlockingQueue (unbounded)
+
+    public void flood(Runnable task) {
+        for (int i = 0; i < 1_000_000; i++) {
+            pool.submit(task); // no bounds, no rejection
+        }
+    }
+}
+```
+
+### Example 13: ForkJoin and ManagedBlocker for Blocking Operations
+
+Title: Cooperate with the common pool when blocking
+Description: Avoid blocking the ForkJoin common pool. If blocking is unavoidable, use `ForkJoinPool.ManagedBlocker` or a dedicated executor.
+
+**Good example:**
+
+```java
+import java.util.concurrent.ForkJoinPool;
+
+class ManagedBlockerExample {
+    static String blockingIO() throws InterruptedException {
+        Thread.sleep(200); // simulate blocking
+        return "ok";
+    }
+
+    static String callBlockingSafely() throws InterruptedException {
+        ForkJoinPool.managedBlock(new ForkJoinPool.ManagedBlocker() {
+            volatile boolean done;
+            @Override public boolean block() throws InterruptedException {
+                if (!done) {
+                    blockingIO();
+                    done = true;
+                }
+                return true;
+            }
+            @Override public boolean isReleasable() { return done; }
+        });
+        return "ok";
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import java.util.List;
+
+class BadParallelBlocking {
+    public List<String> doWork(List<String> inputs) {
+        return inputs.parallelStream() // uses common pool
+            .map(x -> {
+                try {
+                    Thread.sleep(200); // BLOCKS common pool worker
+                    return x + "!";
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+            })
+            .toList();
+    }
+}
+```
+
+### Example 14: Avoid Pinning with Virtual Threads
+
+Title: Keep blocking out of intrinsic locks
+Description: With virtual threads, `synchronized` around blocking calls can pin to a carrier thread. Prefer cooperative locks or move blocking outside critical sections.
+
+**Good example:**
+
+```java
+import java.util.concurrent.locks.ReentrantLock;
+
+class PinningSafeExample {
+    private final ReentrantLock lock = new ReentrantLock();
+    private int shared = 0;
+
+    public void doWork() {
+        // Keep critical section minimal, non-blocking
+        lock.lock();
+        try {
+            shared++;
+        } finally {
+            lock.unlock();
+        }
+        // Perform blocking outside lock (ok with virtual threads)
+        try { Thread.sleep(100); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
+    }
+}
+```
+
+**Bad example:**
+
+```java
+class PinningBadExample {
+    private int shared;
+    public synchronized void doWork() {
+        shared++;
+        try {
+            Thread.sleep(100); // pins virtual thread to carrier thread
+        } catch (InterruptedException e) {
+            // swallowed
+        }
+    }
+}
+```
+
+
+### Example 15: Phased Execution with Phaser
+
+Title: Coordinate tasks in phases with dynamic party registration
+Description: Use Phaser for coordinating tasks that proceed in phases, allowing dynamic registration and deregistration of parties.
+
+**Good example:**
+
+```java
+import java.util.concurrent.Phaser;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+class PhaserExample {
+    private final Phaser phaser = new Phaser(1); // main thread
+
+    public void runPhasedTasks(int taskCount) {
+        ExecutorService executor = Executors.newFixedThreadPool(taskCount);
+
+        for (int i = 0; i < taskCount; i++) {
+            phaser.register(); // dynamic registration
+            executor.submit(() -> {
+                try {
+                    // Phase 0 work
+                    Thread.sleep(100);
+                    phaser.arriveAndAwaitAdvance(); // wait for all
+
+                    // Phase 1 work
+                    Thread.sleep(200);
+                    phaser.arriveAndDeregister(); // done
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        }
+
+        phaser.arriveAndAwaitAdvance(); // advance phase 0
+        phaser.arriveAndAwaitAdvance(); // advance phase 1
+        phaser.arriveAndDeregister(); // main done
+
+        executor.shutdown();
+    }
+}
+```
+
+**Bad example:**
+
+```java
+class BadPhaser {
+    public void misusePhaser() {
+        Phaser phaser = new Phaser(3);
+        // BAD: forgetting to arrive/deregister
+        // leads to deadlock
+        phaser.awaitAdvance(0); // hangs forever
+    }
+}
+```
+
+### Example 16: Synchronization with CyclicBarrier
+
+Title: Wait for threads to reach common barrier points
+Description: Use CyclicBarrier for synchronizing threads at barrier points, reusable across multiple cycles.
+
+**Good example:**
+
+```java
+import java.util.concurrent.CyclicBarrier;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+class BarrierExample {
+    public void coordinate(int parties) throws Exception {
+        CyclicBarrier barrier = new CyclicBarrier(parties, () -> System.out.println("All arrived!"));
+
+        ExecutorService executor = Executors.newFixedThreadPool(parties);
+        for (int i = 0; i < parties; i++) {
+            executor.submit(() -> {
+                try {
+                    // Work
+                    Thread.sleep(100);
+                    barrier.await(); // sync point 1
+
+                    // More work
+                    Thread.sleep(200);
+                    barrier.await(); // sync point 2 (reusable)
+                } catch (Exception e) {
+                    Thread.currentThread().interrupt();
+                }
+            });
+        }
+        executor.shutdown();
+    }
+}
+```
+
+**Bad example:**
+
+```java
+class BadBarrier {
+    public void misuse() throws Exception {
+        CyclicBarrier barrier = new CyclicBarrier(3);
+        barrier.await(); // BAD: not enough parties, hangs
+    }
+}
+```
+
+### Example 17: Data Exchange with Exchanger
+
+Title: Safely exchange data between two threads
+Description: Use Exchanger for point-to-point data exchange between exactly two threads.
+
+**Good example:**
+
+```java
+import java.util.concurrent.Exchanger;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+class ExchangerExample {
+    public void exchangeData() {
+        Exchanger<String> exchanger = new Exchanger<>();
+        ExecutorService executor = Executors.newFixedThreadPool(2);
+
+        executor.submit(() -> {
+            try {
+                String data = "From Thread 1";
+                String received = exchanger.exchange(data);
+                System.out.println("Thread 1 received: " + received);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        executor.submit(() -> {
+            try {
+                String data = "From Thread 2";
+                String received = exchanger.exchange(data);
+                System.out.println("Thread 2 received: " + received);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+            }
+        });
+
+        executor.shutdown();
+    }
+}
+```
+
+**Bad example:**
+
+```java
+class BadExchanger {
+    public void misuse() throws InterruptedException {
+        Exchanger<String> exchanger = new Exchanger<>();
+        exchanger.exchange("data"); // BAD: no partner, hangs forever
+    }
+}
+```
+
 ## Output Format
 
 - **ANALYZE** Java code to identify specific concurrency issues and categorize them by impact (CRITICAL, PERFORMANCE, DEADLOCK_RISK, SCALABILITY, THREAD_SAFETY) and concurrency area (thread safety, synchronization, thread pools, async operations, modern concurrency)
@@ -1756,6 +2170,11 @@ class BadScopedValueUsage {
 - **REFACTOR** code systematically following the concurrency improvement roadmap: First eliminate critical thread safety issues through atomic operations and concurrent collections, then optimize synchronization mechanisms to reduce contention and deadlock risks, configure proper thread pool management and lifecycle, refactor blocking operations to asynchronous alternatives, integrate modern concurrency features for improved scalability, and implement comprehensive testing strategies for concurrent code validation
 - **EXPLAIN** the applied concurrency improvements and their benefits: Thread safety enhancements through proper synchronization and atomic operations, performance improvements via optimized thread pool management and non-blocking operations, scalability gains from modern concurrency features like virtual threads, deadlock prevention through lock-free algorithms and proper synchronization patterns, and maintainability improvements from structured concurrency and clear async composition
 - **VALIDATE** that all applied concurrency refactoring compiles successfully, maintains thread safety guarantees, eliminates race conditions and deadlock risks, preserves or improves performance characteristics, and achieves the intended concurrency improvements through comprehensive testing and verification
+- **CANCELLATION/INTERRUPTION**: Identify blocking calls and long-running tasks; ensure interruption is propagated/restored, add timeouts (`orTimeout`, `completeOnTimeout`, timed `poll/take/tryLock`), and verify `Future.cancel(true)` paths release resources.
+- **BACKPRESSURE/OVERLOAD**: Detect unbounded producers and queues; introduce bounded queues, rejection policies, semaphores/bulkheads, and when streaming, prefer `Flow`/Reactive Streams to enforce backpressure.
+- **FORKJOIN/PARALLEL STREAMS USAGE**: Flag blocking operations in common pool, migrate to dedicated executors or `ManagedBlocker`, verify tasks are CPU-bound and side-effect-free, and gate `parallelStream()` usage behind measurements.
+- **PINNING WITH VIRTUAL THREADS**: Inspect `synchronized` blocks around blocking I/O; replace with cooperative locks, shrink critical sections, and recommend JFR pinning analysis.
+- **COORDINATION PRIMITIVES**: Identify opportunities for Phaser (phased tasks), CyclicBarrier (reusable barriers), and Exchanger (pairwise exchange); ensure proper usage with interruption handling and resource cleanup.
 
 ## Safeguards
 
@@ -1769,3 +2188,8 @@ class BadScopedValueUsage {
 - **RESOURCE LEAK PROTECTION**: Ensure proper cleanup of thread pools, executors, and other concurrent resources
 - **MEMORY CONSISTENCY CHECK**: Validate proper synchronization and memory visibility semantics
 - **PERFORMANCE REGRESSION GUARD**: Monitor for performance degradation after concurrency changes
+- **INTERRUPTION/CANCELLATION DISCIPLINE**: Never swallow interruptions; propagate or restore interrupt flags. Ensure timeouts on blocking operations and verify cancellation paths free resources safely.
+- **VIRTUAL-THREAD PINNING GUARD**: Audit for intrinsic locks around blocking calls; prefer lock implementations compatible with parking. Use JFR to detect pinning.
+- **OVERLOAD/BACKPRESSURE PROTECTION**: Avoid unbounded queues; enforce bounded capacity, sane rejection policies, and rate/concurrency limits to prevent cascading failures.
+- **TIMEOUTS/RETRIES/IDEMPOTENCY**: Bound external calls with timeouts, use bounded-jittered retries only for idempotent operations, and validate no duplicate side effects occur.
+- **COORDINATION SAFETY**: For Phaser/Barrier/Exchanger, validate party counts, handle interruptions, and prevent hangs from mismatched arrivals.
