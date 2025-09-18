@@ -17,7 +17,7 @@
     <properties>
         <!-- Module-specific plugin versions -->
         <maven-plugin-compiler.version>3.14.0</maven-plugin-compiler.version>
-        <maven-plugin-surefire.version>3.5.3</maven-plugin-surefire.version>
+        <maven-plugin-surefire.version>3.5.4</maven-plugin-surefire.version>
 
         <!-- Logging dependency versions -->
         <slf4j.version>2.0.17</slf4j.version>
