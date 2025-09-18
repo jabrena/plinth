@@ -683,7 +683,7 @@ public class UserService {
                 ]]>
             </example-description>
             <code-examples>
-                <good-example last-item="true">
+                <good-example>
                     <code-block language="java"><![CDATA[
 import java.util.List;
 import java.util.stream.Stream;
@@ -718,6 +718,390 @@ public class StreamGathererExample {
                 </good-example>
             </code-examples>
         </example>
+
+        <example number="14" id="optional-best-practices">
+            <example-header>
+                <example-title>Use Optional Idiomatically</example-title>
+                <example-subtitle>Prefer map/flatMap/filter over isPresent/get</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Prefer `map`, `flatMap`, `filter`, `orElseGet`, and `orElseThrow` to express transformations and defaults declaratively. Avoid `isPresent()` + `get()` imperative patterns. Use `Optional` for return types to signal absence; avoid using it for fields and method parameters in most cases.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import java.util.Optional;
+
+public class OptionalExamples {
+    record User(String id, String email) {}
+
+    public static Optional<String> normalizedEmail(Optional<User> maybeUser) {
+        return maybeUser
+                .map(User::email)
+                .filter(email -> !email.isBlank())
+                .map(String::trim)
+                .map(String::toLowerCase);
+    }
+
+    public static String emailOrThrow(Optional<User> maybeUser) {
+        return maybeUser
+                .map(User::email)
+                .filter(e -> !e.isBlank())
+                .orElseThrow(() -> new IllegalStateException("Missing email"));
+    }
+
+    public static String emailOrDefault(Optional<User> maybeUser) {
+        return maybeUser
+                .map(User::email)
+                .filter(e -> !e.isBlank())
+                .orElseGet(() -> "unknown@example.com");
+    }
+}
+                    ]]></code-block>
+                </good-example>
+            </code-examples>
+        </example>
+
+        <example number="15" id="currying-partial-application">
+            <example-header>
+                <example-title>Currying and Partial Application</example-title>
+                <example-subtitle>Build specialized functions from generic ones</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use higher-order helpers to transform `BiFunction` into chains of `Function` (currying) or to bind the first argument (partial application). This enables composition and reuse without mutable state.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import java.util.function.BiFunction;
+import java.util.function.Function;
+
+public class CurryingExamples {
+    public static <A, B, R> Function<A, Function<B, R>> curry(BiFunction<A, B, R> bi) {
+        return a -> b -> bi.apply(a, b);
+    }
+
+    public static <A, B, R> Function<B, R> partial(BiFunction<A, B, R> bi, A a) {
+        return b -> bi.apply(a, b);
+    }
+
+    public static void main(String[] args) {
+        BiFunction<Integer, Integer, Integer> add = Integer::sum;
+
+        Function<Integer, Function<Integer, Integer>> curriedAdd = curry(add);
+        int six = curriedAdd.apply(1).apply(5);
+
+        Function<Integer, Integer> addTen = partial(add, 10);
+        int thirteen = addTen.apply(3);
+
+        System.out.println(six + ", " + thirteen);
+    }
+}
+                    ]]></code-block>
+                </good-example>
+            </code-examples>
+        </example>
+
+        <example number="16" id="effect-boundaries">
+            <example-header>
+                <example-title>Separate Effects from Pure Logic</example-title>
+                <example-subtitle>Model I/O as Suppliers and keep cores pure</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Isolate side effects at the edges. Pass `Supplier`/`Function` for effectful operations and keep transformation pipelines pure. This improves testability and reasoning.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import java.util.List;
+import java.util.function.Supplier;
+import java.util.stream.Collectors;
+
+public class EffectBoundaries {
+    record Order(String id, double amount) {}
+
+    // Pure transformation
+    public static List<String> highValueOrderIds(List<Order> orders, double min) {
+        return orders.stream()
+                .filter(o -> o.amount() >= min)
+                .map(Order::id)
+                .collect(Collectors.toUnmodifiableList());
+    }
+
+    // Effect boundary
+    public static List<String> fetchAndFilter(Supplier<List<Order>> fetchOrders, double min) {
+        List<Order> orders = fetchOrders.get(); // side-effect here only
+        return highValueOrderIds(orders, min);  // pure
+    }
+}
+                    ]]></code-block>
+                </good-example>
+            </code-examples>
+        </example>
+
+        <example number="17" id="collectors-best-practices">
+            <example-header>
+                <example-title>Collectors Best Practices</example-title>
+                <example-subtitle>Use downstream, merging, and unmodifiable collectors</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Prefer `toUnmodifiable*` or `collectingAndThen(..., List::copyOf)` for immutability. With `toMap`, always provide a merge function when keys may collide. Use downstream collectors like `mapping`, `flatMapping`, `filtering`, and `teeing` to express logic declaratively.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+public class CollectorPatterns {
+    public static Map<String, Long> wordFrequencies(List<String> words) {
+        return words.stream()
+                .collect(Collectors.toMap(
+                        w -> w,
+                        w -> 1L,
+                        Long::sum,
+                        LinkedHashMap::new)); // stable order
+    }
+
+    public static Map<Character, List<String>> groupedByInitial(List<String> names) {
+        return names.stream()
+                .collect(Collectors.groupingBy(
+                        s -> s.charAt(0),
+                        Collectors.collectingAndThen(
+                                Collectors.mapping(String::toUpperCase, Collectors.toList()),
+                                List::copyOf)));
+    }
+
+    public static double averageOfDistinct(List<Integer> numbers) {
+        return numbers.stream()
+                .distinct()
+                .collect(Collectors.teeing(
+                        Collectors.summingDouble(Integer::doubleValue),
+                        Collectors.counting(),
+                        (sum, count) -> count == 0 ? 0.0 : sum / count));
+    }
+}
+                    ]]></code-block>
+                </good-example>
+            </code-examples>
+        </example>
+
+        <example number="18" id="record-patterns">
+            <example-header>
+                <example-title>Use Record Patterns in Switch</example-title>
+                <example-subtitle>Deconstruct records directly in pattern switches</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Record patterns (Java 21) allow deconstruction directly in `switch`, improving expressiveness and type safety. Combine with sealed hierarchies for exhaustiveness.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+sealed interface Shape2 permits Circle2, Rect2 {}
+record Circle2(double radius) implements Shape2 {}
+record Rect2(double width, double height) implements Shape2 {}
+
+public class RecordPatternDemo {
+    public static double perimeter(Shape2 s) {
+        return switch (s) {
+            case Circle2(double r) -> 2 * Math.PI * r;
+            case Rect2(double w, double h) -> 2 * (w + h);
+        };
+    }
+}
+                    ]]></code-block>
+                </good-example>
+            </code-examples>
+        </example>
+
+        <example number="19" id="completablefuture-functional-composition">
+            <example-header>
+                <example-title>Compose Async Pipelines Functionally</example-title>
+                <example-subtitle>Prefer thenApply/thenCompose and allOf</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use `CompletableFuture` combinators to build non-blocking, declarative pipelines. Avoid premature `join()`/`get()` in the middle of the flow; keep blocking at the outer boundary if needed.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.stream.Collectors;
+
+public class AsyncComposition {
+    static final ExecutorService pool = Executors.newFixedThreadPool(4);
+
+    public static CompletableFuture<Integer> fetchPrice(String sku) {
+        return CompletableFuture.supplyAsync(() -> sku.length() * 10, pool);
+    }
+
+    public static CompletableFuture<Double> applyDiscount(CompletableFuture<Integer> price, double discount) {
+        return price.thenApply(p -> p * (1 - discount));
+    }
+
+    public static CompletableFuture<List<Double>> pricesForSkus(List<String> skus, double discount) {
+        List<CompletableFuture<Double>> futures = skus.stream()
+                .map(AsyncComposition::fetchPrice)
+                .map(p -> applyDiscount(p, discount))
+                .collect(Collectors.toList());
+
+        return CompletableFuture.allOf(futures.toArray(CompletableFuture[]::new))
+                .thenApply(v -> futures.stream().map(CompletableFuture::join).collect(Collectors.toList()));
+    }
+}
+                    ]]></code-block>
+                </good-example>
+            </code-examples>
+        </example>
+
+        <example number="20" id="laziness-and-infinite-streams">
+            <example-header>
+                <example-title>Leverage Laziness and Infinite Streams</example-title>
+                <example-subtitle>Generate values on-demand with iterate/generate</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Streams are lazy; nothing runs until a terminal operation. Model infinite sequences with `iterate`/`generate` and bound them with `limit`/`takeWhile`. Keep operations stateless and side-effect free.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import java.util.stream.Stream;
+
+public class LazyStreams {
+    public static Stream<Long> fibonacci() {
+        return Stream.iterate(new long[]{0, 1}, p -> new long[]{p[1], p[0] + p[1]})
+                .map(p -> p[0]);
+    }
+
+    public static void main(String[] args) {
+        System.out.println(fibonacci().limit(10).toList());
+        System.out.println(Stream.generate(Math::random).limit(3).toList());
+    }
+}
+                    ]]></code-block>
+                </good-example>
+            </code-examples>
+        </example>
+
+        <example number="21" id="functional-error-handling">
+            <example-header>
+                <example-title>Functional Error Handling</example-title>
+                <example-subtitle>Use Either for Value or Error</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Model computations that may fail using an Either type, where Left represents error and Right represents success. This allows functional composition without throwing exceptions, improving flow and testability.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+sealed interface Either<L, R> permits Left, Right {}
+record Left<L, R>(L value) implements Either<L, R> {}
+record Right<L, R>(R value) implements Either<L, R> {}
+
+public class ErrorHandling {
+    public static Either<String, Integer> safeDivide(int a, int b) {
+        return (b == 0) ? new Left<>("Division by zero") : new Right<>(a / b);
+    }
+
+    public static Either<String, Integer> divideAndAdd(int a, int b, int add) {
+        return safeDivide(a, b).flatMap(res -> safeDivide(res, add));
+    }
+
+    // Extension method for flatMap (would be in a utility class)
+    public static <L, R, T> Either<L, T> flatMap(Either<L, R> either, Function<R, Either<L, T>> mapper) {
+        return switch (either) {
+            case Left<L, R> left -> new Left<>(left.value());
+            case Right<L, R> right -> mapper.apply(right.value());
+        };
+    }
+}
+                    ]]></code-block>
+                </good-example>
+            </code-examples>
+        </example>
+
+        <example number="22" id="immutable-collections">
+            <example-header>
+                <example-title>Immutable Collections</example-title>
+                <example-subtitle>Use Factory Methods and Unmodifiable Wrappers</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Create immutable collections using factory methods like List.of() or Collectors.toUnmodifiableList(). For existing collections, use Collections.unmodifiableList() to prevent modifications.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import java.util.List;
+import java.util.Collections;
+
+public class ImmutableCollections {
+    public static List<String> getImmutableList() {
+        return List.of("apple", "banana", "cherry"); // Immutable by design
+    }
+
+    public static List<String> makeImmutable(List<String> mutable) {
+        return Collections.unmodifiableList(mutable); // Wrapper prevents changes
+    }
+}
+                    ]]></code-block>
+                </good-example>
+            </code-examples>
+        </example>
+
+        <example number="23" id="concurrent-functional">
+            <example-header>
+                <example-title>Avoid Shared Mutable State in Concurrency</example-title>
+                <example-subtitle>Use Immutable Data and Pure Functions</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                In concurrent code, avoid shared mutable state by using immutable objects and pure functions. Prefer concurrent collections only when necessary, and favor functional transformations.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example last-item="true">
+                    <code-block language="java"><![CDATA[
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.stream.Collectors;
+
+public class ConcurrentFunctional {
+    private final List<String> sharedData = new CopyOnWriteArrayList<>(); // Thread-safe but mutable
+
+    public List<String> processConcurrently() {
+        // Prefer functional transformation without mutating shared state
+        return sharedData.parallelStream()
+                .map(String::toUpperCase)
+                .collect(Collectors.toUnmodifiableList()); // Returns new immutable list
+    }
+}
+                    ]]></code-block>
+                </good-example>
+            </code-examples>
+        </example>
     </examples>
 
     <output-format>
@@ -725,10 +1109,13 @@ public class StreamGathererExample {
             <output-format-item>**ANALYZE** Java code to identify specific functional programming opportunities and categorize them by impact (CRITICAL, MAINTAINABILITY, PERFORMANCE, EXPRESSIVENESS) and area (immutability violations, side effects, imperative patterns, non-functional constructs, type safety gaps)</output-format-item>
             <output-format-item>**CATEGORIZE** functional programming improvements found: Immutability Issues (mutable objects vs immutable Records/classes, state mutation vs functional transformation, defensive copying vs inherent immutability), Purity Problems (side effects in functions vs pure functions, external state dependencies vs self-contained operations, non-deterministic behavior vs predictable functional logic), Imperative Code Patterns (traditional loops vs Stream API, null checks vs Optional chaining, imperative exception handling vs functional error handling), and Type Safety Opportunities (primitive obsession vs domain-specific functional types, unsafe casting vs pattern matching, weak type boundaries vs strong functional type systems)</output-format-item>
             <output-format-item>**APPLY** functional programming best practices directly by implementing the most appropriate improvements for each identified opportunity: Convert mutable objects to immutable Records or classes, extract pure functions from methods with side effects, replace imperative loops with Stream API operations, adopt Optional for null-safe functional programming, implement functional composition patterns, establish immutable data structures throughout the codebase, apply higher-order functions for reusable logic, and integrate pattern matching for type-safe functional operations</output-format-item>
-            <output-format-item>**IMPLEMENT** comprehensive functional programming refactoring using proven patterns: Establish immutability through Records and immutable collections, extract pure functions with no side effects and predictable outputs, integrate Stream API with functional operations (map, filter, reduce, collect), adopt Optional for monadic null handling and chaining, implement function composition for modular and reusable logic, apply higher-order functions for abstraction and code reuse, utilize pattern matching for type-safe conditional logic, and establish functional error handling patterns with Either/Result types where appropriate</output-format-item>
+            <output-format-item>**IMPLEMENT** comprehensive functional programming refactoring using proven patterns: Establish immutability through Records and immutable data structures, extract pure functions from methods containing side effects, replace imperative loops with declarative Stream API operations, integrate Optional for monadic null handling and chaining, implement function composition for modular logic design, apply higher-order functions for abstraction and reusability, and establish consistent functional programming idioms throughout the codebase</output-format-item>
             <output-format-item>**REFACTOR** code systematically following the functional programming improvement roadmap: First establish immutability by converting mutable objects to Records and immutable data structures, then extract pure functions from methods containing side effects, replace imperative loops with declarative Stream API operations, integrate Optional for null-safe functional programming patterns, implement functional composition for modular logic design, apply higher-order functions for abstraction and reusability, and establish consistent functional programming idioms throughout the codebase</output-format-item>
             <output-format-item>**EXPLAIN** the applied functional programming improvements and their benefits: Code expressiveness enhancements through declarative Stream API and functional composition, maintainability improvements via immutability and pure functions, concurrency safety gains from immutable data structures and side-effect-free operations, reasoning simplification through predictable functional logic, and overall code quality improvements through functional programming principles and patterns</output-format-item>
             <output-format-item>**VALIDATE** that all applied functional programming refactoring compiles successfully, maintains behavioral equivalence, preserves business logic correctness, achieves expected expressiveness benefits, and follows functional programming best practices through comprehensive testing and verification</output-format-item>
+            <output-format-item>**STANDARDIZE** idiomatic `Optional` usage: prefer map/flatMap/filter/orElse*; avoid `isPresent()` + `get()` patterns; encode absence explicitly in return types</output-format-item>
+            <output-format-item>**HARDEN** Stream collectors: specify merge functions for `toMap`, use downstream collectors (`mapping`, `flatMapping`, `filtering`, `teeing`), and return unmodifiable results</output-format-item>
+            <output-format-item>**VERIFY LANGUAGE LEVEL** for used features (records, sealed types, switch/record patterns, gatherers) and provide alternatives if the project's Java version is lower</output-format-item>
         </output-format-list>
     </output-format>
 
@@ -744,6 +1131,8 @@ public class StreamGathererExample {
             <safeguards-item>**INCREMENTAL SAFETY**: Apply functional programming patterns incrementally, validating compilation and tests after each significant transformation step</safeguards-item>
             <safeguards-item>**DEPENDENCY VALIDATION**: Check that functional programming patterns are compatible with existing frameworks and don't break dependency injection or serialization requirements</safeguards-item>
             <safeguards-item>**FINAL VERIFICATION**: After completing all functional programming improvements, perform a final full project compilation, test run, and verification that functional invariants are maintained</safeguards-item>
+            <safeguards-item>**LANGUAGE LEVEL CHECK**: Ensure the project's `maven-compiler-plugin` source/target support the used language features; if not, avoid those features or guide an upgrade</safeguards-item>
+            <safeguards-item>**PARALLEL STREAM SAFETY**: For parallel operations, guarantee stateless lambdas and avoid shared mutable state or non-thread-safe collectors</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>

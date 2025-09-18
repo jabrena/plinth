@@ -14,10 +14,228 @@
     <maven.version>3.9.10</maven.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <!-- Feature-specific plugin versions -->
+    <maven-plugin-enforcer.version>3.6.1</maven-plugin-enforcer.version>
+    <extra-enforcer-rules.version>1.10.0</extra-enforcer-rules.version>
+    <maven-plugin-spotless.version>2.46.1</maven-plugin-spotless.version>
+    <maven-plugin-dependency-check.version>12.1.1</maven-plugin-dependency-check.version>
+    <maven-plugin-spotbugs.version>4.9.6.0</maven-plugin-spotbugs.version>
+    <maven-plugin-pmd.version>3.27.0</maven-plugin-pmd.version>
+    <maven-plugin-versions.version>2.19.0</maven-plugin-versions.version>
   </properties>
 
   <modules>
     <module>system-prompts-generator</module>
     <module>site-generator</module>
   </modules>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <!-- Maven Enforcer Plugin -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-enforcer-plugin</artifactId>
+          <version>${maven-plugin-enforcer.version}</version>
+          <dependencies>
+            <dependency>
+              <groupId>org.codehaus.mojo</groupId>
+              <artifactId>extra-enforcer-rules</artifactId>
+              <version>${extra-enforcer-rules.version}</version>
+            </dependency>
+          </dependencies>
+        </plugin>
+
+        <!-- Spotless Code Formatting -->
+        <plugin>
+          <groupId>com.diffplug.spotless</groupId>
+          <artifactId>spotless-maven-plugin</artifactId>
+          <version>${maven-plugin-spotless.version}</version>
+        </plugin>
+
+        <!-- Versions Maven Plugin -->
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>versions-maven-plugin</artifactId>
+          <version>${maven-plugin-versions.version}</version>
+        </plugin>
+
+        <!-- SpotBugs Static Analysis -->
+        <plugin>
+          <groupId>com.github.spotbugs</groupId>
+          <artifactId>spotbugs-maven-plugin</artifactId>
+          <version>${maven-plugin-spotbugs.version}</version>
+        </plugin>
+
+        <!-- PMD Static Analysis -->
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-pmd-plugin</artifactId>
+          <version>${maven-plugin-pmd.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+
+    <plugins>
+      <!-- Maven Enforcer Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>enforce</id>
+            <configuration>
+              <rules>
+                <banCircularDependencies/>
+                <dependencyConvergence />
+                <banDuplicatePomDependencyVersions />
+                <requireMavenVersion>
+                  <version>${maven.version}</version>
+                </requireMavenVersion>
+                <requireJavaVersion>
+                  <version>${java.version}</version>
+                </requireJavaVersion>
+                <bannedDependencies>
+                  <excludes>
+                    <exclude>org.projectlombok:lombok</exclude>
+                  </excludes>
+                </bannedDependencies>
+              </rules>
+              <fail>true</fail>
+            </configuration>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Spotless Code Formatting -->
+      <plugin>
+        <groupId>com.diffplug.spotless</groupId>
+        <artifactId>spotless-maven-plugin</artifactId>
+        <configuration>
+          <encoding>UTF-8</encoding>
+          <java>
+            <removeUnusedImports />
+            <importOrder>
+              <order>,\#</order>
+            </importOrder>
+            <endWithNewline />
+            <trimTrailingWhitespace />
+            <indent>
+              <spaces>true</spaces>
+              <spacesPerTab>4</spacesPerTab>
+            </indent>
+          </java>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+            <phase>process-sources</phase>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Versions Maven Plugin -->
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>versions-maven-plugin</artifactId>
+        <configuration>
+          <allowSnapshots>false</allowSnapshots>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <profiles>
+    <!-- Security Vulnerability Scanning Profile -->
+    <profile>
+      <id>security</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.owasp</groupId>
+            <artifactId>dependency-check-maven</artifactId>
+            <version>${maven-plugin-dependency-check.version}</version>
+            <configuration>
+              <outputDirectory>${project.build.directory}/dependency-check</outputDirectory>
+              <format>ALL</format>
+              <failBuildOnCVSS>7</failBuildOnCVSS>
+              <skipProvidedScope>false</skipProvidedScope>
+              <skipRuntimeScope>false</skipRuntimeScope>
+              <skipSystemScope>false</skipSystemScope>
+              <skipTestScope>false</skipTestScope>
+              <!-- Performance and reliability improvements -->
+              <nvdApiDelay>4000</nvdApiDelay>
+              <nvdMaxRetryCount>3</nvdMaxRetryCount>
+              <nvdValidForHours>24</nvdValidForHours>
+              <!-- Skip analyzers that might cause issues -->
+              <nodeAnalyzerEnabled>false</nodeAnalyzerEnabled>
+              <retireJsAnalyzerEnabled>false</retireJsAnalyzerEnabled>
+            </configuration>
+            <executions>
+              <execution>
+                <id>dependency-check</id>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+                <phase>verify</phase>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- Static Code Analysis Profile -->
+    <profile>
+      <id>find-bugs</id>
+      <activation>
+        <activeByDefault>false</activeByDefault>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-pmd-plugin</artifactId>
+          </plugin>
+          <plugin>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-maven-plugin</artifactId>
+            <configuration>
+              <effort>Max</effort>
+              <threshold>Low</threshold>
+              <failOnError>true</failOnError>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+      <reporting>
+        <plugins>
+          <!-- SpotBugs reporting for Maven site -->
+          <plugin>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-maven-plugin</artifactId>
+            <configuration>
+              <effort>Max</effort>
+              <threshold>Low</threshold>
+              <includeFilterFile>src/main/spotbugs/spotbugs-include.xml</includeFilterFile>
+              <excludeFilterFile>src/main/spotbugs/spotbugs-exclude.xml</excludeFilterFile>
+            </configuration>
+          </plugin>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-pmd-plugin</artifactId>
+          </plugin>
+        </plugins>
+      </reporting>
+    </profile>
+  </profiles>
 </project>
