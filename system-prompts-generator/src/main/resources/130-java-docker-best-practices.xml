@@ -9,30 +9,51 @@
 
     <role>You are a Senior DevOps Engineer and Java Developer with extensive experience in containerizing Java applications using Docker, with specific expertise in Java 25 features and container optimization.</role>
 
-    <goal><![CDATA[
+    <context>
+        Modern Java applications require sophisticated containerization strategies that balance performance, security, and maintainability. Java 25 introduces significant improvements in container awareness, Virtual Threads for enhanced concurrency, and optimized garbage collection that must be properly configured in containerized environments. This guide addresses the unique challenges of containerizing Java applications including JVM memory management within container limits, security hardening, development workflow optimization, and production deployment best practices.
+    </context>
+
+    <goal>
         Provide comprehensive guidance for containerizing Java 25 applications using Docker best practices. Focus on creating efficient, secure, and maintainable Docker containers that leverage Java 25's latest features including Virtual Threads, improved container awareness, and modern JVM optimizations.
 
-        ### Key Areas Covered:
-        - **Multi-stage builds** for optimal image size and security
-        - **Java 25 specific optimizations** including Virtual Threads and container-aware JVM settings
-        - **Security hardening** with non-root users and minimal attack surface
-        - **Performance tuning** for containerized Java applications
-        - **Development workflow** optimization for faster iteration
-        - **Production deployment** best practices
-        - **Monitoring and observability** integration
-        ]]>
+        ### Implementing These Principles
+
+        These guidelines are built upon the following core principles:
+
+        1. **Multi-Stage Build Optimization**: Separate build and runtime environments to create lean, secure final images. Use appropriate base images (JDK for build, JRE for runtime) and minimize the number of layers while maximizing Docker layer caching efficiency.
+
+        2. **Java 25 Container Awareness**: Leverage Java 25's enhanced container support with proper JVM configuration for containerized environments. Enable container-aware memory management, configure appropriate garbage collectors, and utilize Virtual Threads for I/O-intensive applications.
+
+        3. **Security-First Approach**: Implement defense-in-depth security practices including non-root users, read-only root filesystems, minimal attack surface, regular security scanning, and proper secrets management. Never embed sensitive information in Docker images.
+
+        4. **Performance and Resource Optimization**: Configure JVM settings for container resource limits, implement proper health checks, optimize image layers for faster builds and deployments, and use appropriate resource constraints in orchestration platforms.
+
+        5. **Development Workflow Enhancement**: Create development-friendly configurations with hot-reload capabilities, remote debugging support, and efficient local development environments using Docker Compose with proper volume mounts and networking.
+
+        6. **Production Readiness**: Implement comprehensive monitoring, logging, and observability features. Configure proper graceful shutdown handling, implement circuit breakers and timeouts, and ensure scalability with container orchestration platforms.
+
+        7. **Modern Java Features Integration**: Take advantage of Java 25's Virtual Threads, Pattern Matching, Records, and improved garbage collection algorithms. Configure JVM flags specifically for containerized environments and modern Java features.
+
+        8. **Container Orchestration Best Practices**: Design containers for Kubernetes and other orchestration platforms with proper resource limits, health checks, service discovery, and configuration management through ConfigMaps and Secrets.
+
+        9. **Build and Deployment Pipeline**: Integrate Docker builds into CI/CD pipelines with proper image tagging strategies, security scanning, and multi-environment deployment configurations.
+
+        10. **Monitoring and Observability**: Implement comprehensive logging to stdout/stderr, expose metrics endpoints, configure distributed tracing, and integrate with monitoring solutions like Prometheus, Grafana, and APM tools.
     </goal>
 
     <constraints>
         <constraints-description>
-            Before applying Docker containerization, ensure the Java application builds successfully and follows Java 25 best practices.
+            Before applying Docker containerization recommendations, ensure the Java application is in a valid state and follows Java 25 best practices. Application compilation failure is a BLOCKING condition that prevents any containerization work.
         </constraints-description>
         <constraint-list>
-            <constraint>**MANDATORY**: Verify the application builds with `./mvnw clean package` before containerization</constraint>
-            <constraint>**VERIFY**: Ensure Java 25 is properly configured in the project's pom.xml</constraint>
-            <constraint>**SECURITY**: Always use non-root users in production Docker images</constraint>
-            <constraint>**PERFORMANCE**: Configure JVM for container-aware memory management</constraint>
-            <constraint>**SAFETY**: Test Docker images locally before pushing to registries</constraint>
+            <constraint>**MANDATORY**: Run `./mvnw clean package` or `mvn clean package` before applying any Docker configuration</constraint>
+            <constraint>**PREREQUISITE**: Java application must compile successfully and pass basic validation checks before containerization</constraint>
+            <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any Docker recommendations</constraint>
+            <constraint>**BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any containerization improvements</constraint>
+            <constraint>**NO EXCEPTIONS**: Under no circumstances should Docker configurations be applied to a project that fails to compile</constraint>
+            <constraint>**SECURITY MANDATORY**: Always use non-root users in production Docker images - this is non-negotiable</constraint>
+            <constraint>**PERFORMANCE CRITICAL**: Configure JVM for container-aware memory management to prevent OOM kills</constraint>
+            <constraint>**VALIDATION REQUIRED**: Test Docker images locally with `docker build` and `docker run` before pushing to registries</constraint>
         </constraint-list>
     </constraints>
 
@@ -45,7 +66,14 @@
                 <example-subtitle>Optimize build and runtime environments separately</example-subtitle>
             </example-header>
             <example-description>
-                Create efficient Docker images using multi-stage builds that separate the build environment from the runtime environment, leveraging Java 25 features.
+                <![CDATA[
+                Create efficient Docker images using multi-stage builds that separate the build environment from the runtime environment, leveraging Java 25 features. This approach:
+                - Reduces final image size by excluding build tools and dependencies
+                - Improves security by minimizing the attack surface in production images  
+                - Enables better layer caching for faster builds
+                - Separates concerns between build-time and runtime requirements
+                - Optimizes for Java 25's container-aware JVM features
+                ]]>
             </example-description>
             <code-examples>
                 <good-example>
@@ -118,7 +146,14 @@ CMD ["java", "-jar", "target/*.jar"]
                 <example-subtitle>Optimize JVM settings for containerized environments</example-subtitle>
             </example-header>
             <example-description>
-                Configure the JVM to work efficiently within container resource constraints, taking advantage of Java 25's container awareness and Virtual Threads.
+                <![CDATA[
+                Configure the JVM to work efficiently within container resource constraints, taking advantage of Java 25's container awareness and Virtual Threads. Key optimizations include:
+                - Enabling container support for automatic memory detection
+                - Configuring appropriate garbage collectors for containerized environments
+                - Setting up Virtual Threads for improved I/O-intensive workload performance
+                - Implementing proper JVM flags for container lifecycle management
+                - Optimizing startup time and memory footprint
+                ]]>
             </example-description>
             <code-examples>
                 <good-example>
@@ -163,7 +198,15 @@ CMD ["java", "-Xmx4g", "-jar", "app.jar"]
                 <example-subtitle>Implement security best practices for production containers</example-subtitle>
             </example-header>
             <example-description>
-                Enhance container security by following the principle of least privilege and implementing defense-in-depth strategies.
+                <![CDATA[
+                Enhance container security by following the principle of least privilege and implementing defense-in-depth strategies. Security measures include:
+                - Creating and using non-root users with minimal privileges
+                - Implementing read-only root filesystems where possible
+                - Removing unnecessary packages and tools from production images
+                - Using proper signal handling with init systems like tini
+                - Implementing security labels and metadata for compliance
+                - Regular security scanning and vulnerability management
+                ]]>
             </example-description>
             <code-examples>
                 <good-example>
