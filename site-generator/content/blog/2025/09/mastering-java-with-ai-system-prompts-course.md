@@ -12,18 +12,6 @@ Baseline today: new services often start with copy‑pasted `pom.xml`, ad‑hoc 
 
 This course shows how AI‑powered system prompts turn setup, testing, security, performance, and documentation into guided, standardized workflows. The result is faster delivery, higher quality, and a team that learns while shipping.
 
-## The Revolution in Developer Education: Beyond Traditional Learning
-
-### The Problem with Traditional Java Training
-
-Most Java training follows a predictable pattern:
-1. **Theory-Heavy Approach**: Hours of conceptual learning before practical application
-2. **Fragmented Knowledge**: Separate courses for testing, security, performance, documentation
-3. **Static Examples**: Contrived scenarios that don't reflect real-world complexity
-4. **No Automation**: Manual application of learned concepts in every project
-
-**The Result?** Developers who understand concepts in isolation but struggle to apply them systematically in enterprise contexts.
-
 ## Course Architecture: A Systematic Approach to Java Mastery
 
 ### The Seven-Module Progressive Journey
