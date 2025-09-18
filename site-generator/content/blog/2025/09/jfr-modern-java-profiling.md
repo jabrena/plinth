@@ -8,9 +8,9 @@ status=published
 
 ## Discovering JFR: A Journey into Modern Java Profiling Excellence
 
-Imagine discovering a profiling tool that's been quietly transforming how Java developers understand application performance. Your Java application shows interesting memory usage patterns, and you're curious about what's happening under the hood. Traditional profiling tools offer insights, but they often come with overhead that makes them impractical for production environments.
+Symptom: memory usage drifts under real production load. Constraint: profiling cannot degrade latency or throughput. Solution: **Java Flight Recorder (JFR)** — the built‑in, low‑overhead recorder that captures CPU, memory, GC, I/O, and custom events from live systems with typically under 2% impact.
 
-This presents an exciting opportunity to explore **Java Flight Recorder (JFR)** - a sophisticated, low-overhead profiling solution that opens up new possibilities for understanding and optimizing Java applications. JFR has been revolutionizing how developers diagnose performance characteristics in modern Java applications, offering insights that were previously difficult to obtain.
+With JFR, production evidence replaces guesswork. You can analyze true workloads, correlate behavior with business metrics, and turn performance tuning into a routine, low‑risk activity.
 
 ## Why JFR Matters in the Modern Java Landscape
 

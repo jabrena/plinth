@@ -12,6 +12,16 @@
 ./mvnw clean generate-resources -pl site-generator -P site-update
 ```
 
+## Development Servers
+
+```bash
+# Serve generated documentation
+jwebserver -p 8000 -d "$(pwd)/docs"
+
+# Serve presentation
+jwebserver -p 8000 -d "$(pwd)/documentation/dvbe25/"
+```
+
 ## Code Quality and Security Profiles
 
 ### Code Formatting with Spotless
@@ -71,23 +81,3 @@ open target/site/pmd.html
 # Full quality pipeline with formatting
 ./mvnw spotless:apply clean verify -Psecurity,find-bugs
 ```
-
-## Development Servers
-
-```bash
-# Serve generated documentation
-jwebserver -p 8000 -d "$(pwd)/docs"
-
-# Serve presentation
-jwebserver -p 8000 -d "$(pwd)/documentation/dvbe25/"
-```
-
-## Quality Gates
-
-The project now enforces:
-- **Java 25** version requirement
-- **Maven 3.9.10+** version requirement
-- **Code formatting** standards via Spotless
-- **Security scanning** with CVSS ≥ 7 failure threshold
-- **Static analysis** with SpotBugs and PMD
-- **Dependency convergence** and circular dependency prevention
