@@ -96,7 +96,14 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 
 - [JEPS List](./documentation/jeps/All-JEPS.md)
 
-## Mentions
+
+## Meetups, Conferences & Mentions
+
+### Devoxx BE / Antwerp (2025/10/07 - 18:20 - 18:50)
+
+- https://m.devoxx.com/events/dvbe25/talks/4715/the-power-of-cursor-rules-in-java-enterprise-development
+
+### Blogs
 
 - https://virtuslab.com/blog/ai/providing-library-documentation/
 
@@ -114,6 +121,7 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 
 ## Cursor rules ecosystem
 
+- https://github.com/jabrena/101-cursor
 - https://github.com/jabrena/pml
 - https://github.com/jabrena/cursor-rules-agile
 - https://github.com/jabrena/cursor-rules-java
