@@ -15,8 +15,9 @@
     <packaging>pom</packaging>
 
     <properties>
-        <jbake.version>2.7.0-rc.7</jbake.version>
+        <maven-plugin-jbake.version>2.7.0-rc.7</maven-plugin-jbake.version>
         <maven-plugin-clean.version>3.4.0</maven-plugin-clean.version>
+        <maven-plugin-resources.version>3.3.1</maven-plugin-resources.version>
     </properties>
 
     <build>
@@ -25,7 +26,7 @@
                 <plugin>
                     <groupId>org.jbake</groupId>
                     <artifactId>jbake-maven-plugin</artifactId>
-                    <version>${jbake.version}</version>
+                    <version>${maven-plugin-jbake.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
@@ -64,7 +65,7 @@
                     <plugin>
                         <groupId>org.jbake</groupId>
                         <artifactId>jbake-maven-plugin</artifactId>
-                        <version>${jbake.version}</version>
+                        <version>${maven-plugin-jbake.version}</version>
                         <executions>
                             <execution>
                                 <phase>generate-resources</phase>
@@ -77,6 +78,29 @@
                             <inputDirectory>${project.basedir}</inputDirectory>
                             <outputDirectory>${project.basedir}/../docs/</outputDirectory>
                         </configuration>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <version>${maven-plugin-resources.version}</version>
+                        <executions>
+                            <execution>
+                                <id>copy-dvbe25-to-docs</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.basedir}/../docs/dvbe25</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${project.basedir}/../documentation/dvbe25</directory>
+                                            <filtering>false</filtering>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
                     </plugin>
                 </plugins>
             </build>
