@@ -1,0 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cursor_rules>
+    <title>Docker Best Practices for Java 25 Applications</title>
+    <description>
+        Comprehensive guidelines for containerizing Java 25 applications using Docker, focusing on performance optimization, security enhancements, and efficient resource utilization.
+    </description>
+    
+    <rules>
+        <rule>
+            <title>Use Appropriate Base Images</title>
+            <description>
+                Select the most suitable base image for your Java 25 application, considering size, security, and compatibility requirements.
+            </description>
+            <guidelines>
+                <guideline>Use `eclipse-temurin:25-jre-alpine` for minimal production images</guideline>
+                <guideline>Use `eclipse-temurin:25-jdk-alpine` only when JDK tools are required at runtime</guideline>
+                <guideline>Prefer Alpine Linux variants for smaller image sizes</guideline>
+                <guideline>Use specific version tags instead of `latest` for reproducible builds</guideline>
+            </guidelines>
+            <example>
+                <![CDATA[
+# Production runtime image
+FROM eclipse-temurin:25-jre-alpine
+
+# Development/build image
+FROM eclipse-temurin:25-jdk-alpine AS build
+                ]]>
+            </example>
+        </rule>
+
+        <rule>
+            <title>Implement Multi-Stage Builds</title>
+            <description>
+                Separate the build environment from the runtime environment to create lean, secure final images by excluding unnecessary build tools and dependencies.
+            </description>
+            <guidelines>
+                <guideline>Use a build stage with JDK for compilation</guideline>
+                <guideline>Use a runtime stage with JRE for execution</guideline>
+                <guideline>Copy only necessary artifacts between stages</guideline>
+                <guideline>Minimize the number of layers in the final image</guideline>
+            </guidelines>
+            <example>
+                <![CDATA[
+# Build stage
+FROM eclipse-temurin:25-jdk-alpine AS build
+WORKDIR /app
+COPY pom.xml .
+COPY src ./src
+RUN ./mvnw clean package -DskipTests
+
+# Runtime stage
+FROM eclipse-temurin:25-jre-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
+                ]]>
+            </example>
+        </rule>
+
+        <rule>
+            <title>Optimize JVM Configuration for Containers</title>
+            <description>
+                Configure the JVM to work efficiently within container resource constraints, taking advantage of Java 25's container awareness features.
+            </description>
+            <guidelines>
+                <guideline>Use `-XX:+UseContainerSupport` to enable container awareness (enabled by default in Java 25)</guideline>
+                <guideline>Set appropriate heap size using `-Xms` and `-Xmx` based on container memory limits</guideline>
+                <guideline>Use `-XX:+UseG1GC` for better performance in containerized environments</guideline>
+                <guideline>Enable JVM ergonomics with `-XX:+UnlockExperimentalVMOptions` for Java 25 features</guideline>
+                <guideline>Use `-XX:+ExitOnOutOfMemoryError` to ensure container restart on OOM</guideline>
+            </guidelines>
+            <example>
+                <![CDATA[
+ENV JAVA_OPTS="-Xms512m -Xmx1024m -XX:+UseG1GC -XX:+UseContainerSupport -XX:+ExitOnOutOfMemoryError"
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+                ]]>
+            </example>
+        </rule>
+
+        <rule>
+            <title>Implement Security Best Practices</title>
+            <description>
+                Enhance container security by following the principle of least privilege and implementing defense-in-depth strategies.
+            </description>
+            <guidelines>
+                <guideline>Create and use a non-root user for running the application</guideline>
+                <guideline>Use read-only root filesystem when possible</guideline>
+                <guideline>Minimize the attack surface by removing unnecessary packages</guideline>
+                <guideline>Scan images for vulnerabilities regularly</guideline>
+                <guideline>Use secrets management for sensitive data</guideline>
+            </guidelines>
+            <example>
+                <![CDATA[
+# Create non-root user
+RUN adduser --disabled-password --gecos "" --uid 1001 appuser
+
+# Set ownership and permissions
+COPY --chown=appuser:appuser app.jar /app/app.jar
+
+# Switch to non-root user
+USER appuser
+
+# Use read-only filesystem
+# docker run --read-only --tmpfs /tmp myapp:latest
+                ]]>
+            </example>
+        </rule>
+
+        <rule>
+            <title>Optimize Image Layers and Caching</title>
+            <description>
+                Structure Dockerfile commands to maximize Docker layer caching and minimize image size.
+            </description>
+            <guidelines>
+                <guideline>Order commands from least to most frequently changing</guideline>
+                <guideline>Copy dependency files before source code to leverage cache</guideline>
+                <guideline>Combine related RUN commands to reduce layers</guideline>
+                <guideline>Use `.dockerignore` to exclude unnecessary files</guideline>
+                <guideline>Clean up package caches and temporary files in the same layer</guideline>
+            </guidelines>
+            <example>
+                <![CDATA[
+# Copy dependency files first for better caching
+COPY pom.xml ./
+COPY mvnw ./
+COPY .mvn ./.mvn
+
+# Download dependencies (cached layer)
+RUN ./mvnw dependency:resolve
+
+# Copy source code (changes more frequently)
+COPY src ./src
+
+# Build application
+RUN ./mvnw clean package -DskipTests && \
+    rm -rf ~/.m2/repository && \
+    rm -rf target/classes target/generated-sources
+                ]]>
+            </example>
+        </rule>
+
+        <rule>
+            <title>Configure Health Checks and Monitoring</title>
+            <description>
+                Implement comprehensive health checking and monitoring to ensure application reliability and observability.
+            </description>
+            <guidelines>
+                <guideline>Define Docker health checks for container orchestration</guideline>
+                <guideline>Implement application health endpoints</guideline>
+                <guideline>Configure proper logging to stdout/stderr</guideline>
+                <guideline>Use structured logging formats (JSON) for better parsing</guideline>
+                <guideline>Include JVM metrics and garbage collection monitoring</guideline>
+            </guidelines>
+            <example>
+                <![CDATA[
+# Docker health check
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost:8080/actuator/health || exit 1
+
+# Application health endpoint (Spring Boot example)
+# management.endpoints.web.exposure.include=health,metrics,info
+# management.endpoint.health.show-details=always
+
+# JVM monitoring flags
+ENV JAVA_OPTS="$JAVA_OPTS -XX:+PrintGCDetails -XX:+PrintGCTimeStamps"
+                ]]>
+            </example>
+        </rule>
+
+        <rule>
+            <title>Manage Configuration and Secrets</title>
+            <description>
+                Externalize configuration and handle secrets securely to support different deployment environments.
+            </description>
+            <guidelines>
+                <guideline>Use environment variables for configuration</guideline>
+                <guideline>Support configuration files mounted as volumes</guideline>
+                <guideline>Never embed secrets in Docker images</guideline>
+                <guideline>Use Docker secrets or external secret management</guideline>
+                <guideline>Implement configuration validation at startup</guideline>
+            </guidelines>
+            <example>
+                <![CDATA[
+# Environment-based configuration
+ENV SPRING_PROFILES_ACTIVE=production
+ENV SERVER_PORT=8080
+ENV MANAGEMENT_PORT=9090
+
+# Support for external configuration
+VOLUME ["/app/config"]
+
+# Configuration precedence: env vars > mounted files > defaults
+ENTRYPOINT ["java", "-Dspring.config.location=classpath:/,file:/app/config/", "-jar", "app.jar"]
+                ]]>
+            </example>
+        </rule>
+
+        <rule>
+            <title>Optimize for Different Deployment Scenarios</title>
+            <description>
+                Create flexible Docker configurations that work well across development, testing, and production environments.
+            </description>
+            <guidelines>
+                <guideline>Use build arguments for environment-specific customization</guideline>
+                <guideline>Support both standalone and orchestrated deployments</guideline>
+                <guideline>Implement graceful shutdown handling</guideline>
+                <guideline>Configure appropriate resource limits and requests</guideline>
+                <guideline>Use init systems for proper signal handling in containers</guideline>
+            </guidelines>
+            <example>
+                <![CDATA[
+# Build arguments for flexibility
+ARG JAVA_OPTS_BUILD=""
+ARG APP_VERSION="latest"
+
+# Graceful shutdown support
+ENV JAVA_OPTS="$JAVA_OPTS -Dserver.shutdown=graceful"
+
+# Signal handling for proper shutdown
+RUN apk add --no-cache tini
+ENTRYPOINT ["tini", "--"]
+CMD ["java", "-jar", "app.jar"]
+
+# Resource limits in deployment
+# resources:
+#   limits:
+#     memory: "1Gi"
+#     cpu: "1000m"
+#   requests:
+#     memory: "512Mi"
+#     cpu: "500m"
+                ]]>
+            </example>
+        </rule>
+
+        <rule>
+            <title>Leverage Java 25 Specific Features</title>
+            <description>
+                Take advantage of Java 25's latest features and improvements for better container performance and developer experience.
+            </description>
+            <guidelines>
+                <guideline>Use Virtual Threads for improved scalability in I/O-intensive applications</guideline>
+                <guideline>Leverage Pattern Matching and Switch Expressions for cleaner code</guideline>
+                <guideline>Use Record Classes for data transfer objects</guideline>
+                <guideline>Take advantage of improved garbage collection algorithms</guideline>
+                <guideline>Use Text Blocks for embedded configuration or SQL</guideline>
+            </guidelines>
+            <example>
+                <![CDATA[
+# Enable Virtual Threads (if using frameworks that support them)
+ENV JAVA_OPTS="$JAVA_OPTS -Djdk.virtualThreadScheduler.parallelism=1"
+
+# Example of Java 25 features in application code:
+# public record UserRequest(String name, int age) {}
+# 
+# public String processUser(Object obj) {
+#     return switch (obj) {
+#         case UserRequest(var name, var age) when age >= 18 -> 
+#             "Adult user: " + name;
+#         case UserRequest(var name, var age) -> 
+#             "Minor user: " + name;
+#         default -> "Unknown type";
+#     };
+# }
+                ]]>
+            </example>
+        </rule>
+
+        <rule>
+            <title>Implement Efficient Development Workflow</title>
+            <description>
+                Create Docker configurations that support efficient development cycles and debugging capabilities.
+            </description>
+            <guidelines>
+                <guideline>Use Docker Compose for local development environments</guideline>
+                <guideline>Implement hot-reload capabilities for development</guideline>
+                <guideline>Support remote debugging configurations</guideline>
+                <guideline>Create separate profiles for development and production</guideline>
+                <guideline>Use volume mounts for rapid iteration during development</guideline>
+            </guidelines>
+            <example>
+                <![CDATA[
+# Development Dockerfile
+FROM eclipse-temurin:25-jdk-alpine AS development
+WORKDIR /app
+COPY pom.xml .
+RUN ./mvnw dependency:resolve
+VOLUME ["/app/src", "/app/target"]
+EXPOSE 8080 5005
+ENV JAVA_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
+CMD ["./mvnw", "spring-boot:run"]
+
+# docker-compose.yml for development
+# version: '3.8'
+# services:
+#   app:
+#     build:
+#       context: .
+#       target: development
+#     ports:
+#       - "8080:8080"
+#       - "5005:5005"
+#     volumes:
+#       - ./src:/app/src
+#       - ./target:/app/target
+                ]]>
+            </example>
+        </rule>
+    </rules>
+
+    <anti_patterns>
+        <anti_pattern>
+            <title>Using Root User in Production</title>
+            <description>Running applications as root user increases security risks</description>
+            <example>USER root # AVOID THIS</example>
+        </anti_pattern>
+        
+        <anti_pattern>
+            <title>Installing Unnecessary Packages</title>
+            <description>Including development tools and unnecessary packages in production images</description>
+            <example>RUN apk add --no-cache curl wget vim git # AVOID UNNECESSARY TOOLS</example>
+        </anti_pattern>
+        
+        <anti_pattern>
+            <title>Hardcoding Configuration</title>
+            <description>Embedding environment-specific configuration in Docker images</description>
+            <example>ENV DATABASE_URL=prod.db.example.com # AVOID HARDCODING</example>
+        </anti_pattern>
+        
+        <anti_pattern>
+            <title>Ignoring JVM Container Settings</title>
+            <description>Not configuring JVM for container resource limits</description>
+            <example>java -Xmx4g -jar app.jar # AVOID FIXED HEAP SIZES</example>
+        </anti_pattern>
+        
+        <anti_pattern>
+            <title>Using Latest Tags in Production</title>
+            <description>Using unstable or latest tags for base images in production</description>
+            <example>FROM eclipse-temurin:latest # AVOID LATEST TAG</example>
+        </anti_pattern>
+    </anti_patterns>
+
+    <best_practices_summary>
+        <practice>Use multi-stage builds with appropriate base images</practice>
+        <practice>Configure JVM for container environments</practice>
+        <practice>Implement security best practices with non-root users</practice>
+        <practice>Optimize Docker layers and caching strategies</practice>
+        <practice>Configure comprehensive health checks and monitoring</practice>
+        <practice>Externalize configuration and manage secrets properly</practice>
+        <practice>Leverage Java 25 specific features and improvements</practice>
+        <practice>Support efficient development workflows</practice>
+    </best_practices_summary>
+</cursor_rules>
