@@ -32,7 +32,7 @@
 
         6. **Production Readiness**: Implement comprehensive monitoring, logging, and observability features. Configure proper graceful shutdown handling, implement circuit breakers and timeouts, and ensure scalability with container orchestration platforms.
 
-        7. **Modern Java Features Integration**: Take advantage of Java 25's Virtual Threads, Pattern Matching, Records, and improved garbage collection algorithms. Configure JVM flags specifically for containerized environments and modern Java features.
+        7. **Modern Java Features Integration**: Take advantage of Java 25's Virtual Threads, Pattern Matching, Records, and improved garbage collection algorithms. Configure JVM flags specifically for containerized environments using `JDK_JAVA_OPTIONS` environment variable for automatic application to all Java processes.
 
         8. **Container Orchestration Best Practices**: Design containers for Kubernetes and other orchestration platforms with proper resource limits, health checks, service discovery, and configuration management through ConfigMaps and Secrets.
 
@@ -110,15 +110,15 @@ COPY --from=build --chown=appuser:appuser /app/target/*.jar app.jar
 # Switch to non-root user
 USER appuser
 
-# Configure JVM for containers and Java 25
-ENV JAVA_OPTS="-Xms512m -Xmx1024m -XX:+UseG1GC -XX:+UseContainerSupport -XX:+ExitOnOutOfMemoryError"
+# Configure JVM for containers and Java 25 - automatically applied to all Java processes
+ENV JDK_JAVA_OPTIONS="-Xms512m -Xmx1024m -XX:+UseG1GC -XX:+UseContainerSupport -XX:+ExitOnOutOfMemoryError"
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:8080/actuator/health || exit 1
 
 EXPOSE 8080
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
                     </code-block>
                 </good-example>
                 <bad-example>
@@ -158,25 +158,15 @@ CMD ["java", "-jar", "target/*.jar"]
             <code-examples>
                 <good-example>
                     <code-block language="dockerfile">
-# Java 25 optimized JVM configuration
-ENV JAVA_OPTS="\
-    -Xms512m \
-    -Xmx1024m \
-    -XX:+UseG1GC \
-    -XX:+UseContainerSupport \
-    -XX:+ExitOnOutOfMemoryError \
-    -XX:+UnlockExperimentalVMOptions \
-    -Djdk.virtualThreadScheduler.parallelism=1 \
-    -XX:+PrintGCDetails \
-    -XX:+PrintGCTimeStamps \
-    -Dfile.encoding=UTF-8"
+# Java 25 optimized JVM configuration - automatically applied to all Java processes
+ENV JDK_JAVA_OPTIONS="-Xms512m -Xmx1024m -XX:+UseG1GC -XX:+UseContainerSupport -XX:+ExitOnOutOfMemoryError -XX:+UnlockExperimentalVMOptions -Djdk.virtualThreadScheduler.parallelism=1 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -Dfile.encoding=UTF-8"
 
 # Application-specific configuration
 ENV SPRING_PROFILES_ACTIVE=production
 ENV SERVER_PORT=8080
 ENV MANAGEMENT_PORT=9090
 
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
                     </code-block>
                 </good-example>
                 <bad-example>
@@ -185,7 +175,8 @@ ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
 ENV JAVA_OPTS="-Xmx4g"
 
 # Bad: No container awareness
-# Bad: No Virtual Threads optimization
+# Bad: No Virtual Threads optimization  
+# Bad: Using JAVA_OPTS instead of JDK_JAVA_OPTIONS
 CMD ["java", "-Xmx4g", "-jar", "app.jar"]
                     </code-block>
                 </bad-example>
@@ -284,15 +275,14 @@ RUN ./mvnw dependency:resolve
 # Create volumes for source code and target
 VOLUME ["/app/src", "/app/target"]
 
-# Enable remote debugging
-ENV JAVA_DEBUG_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
-ENV JAVA_OPTS="$JAVA_DEBUG_OPTS -XX:+UseG1GC"
+# Enable remote debugging and development optimizations
+ENV JDK_JAVA_OPTIONS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -XX:+UseG1GC"
 
 # Expose application and debug ports
 EXPOSE 8080 5005
 
 # Use Spring Boot DevTools for hot reload
-CMD ["./mvnw", "spring-boot:run", "-Dspring-boot.run.jvmArguments='$JAVA_OPTS'"]
+CMD ["./mvnw", "spring-boot:run"]
                     </code-block>
                 </good-example>
                 <bad-example>
@@ -427,7 +417,7 @@ spec:
         - containerPort: 8080
         - containerPort: 9090  # Management port
         env:
-        - name: JAVA_OPTS
+        - name: JDK_JAVA_OPTIONS
           value: "-Xms512m -Xmx1024m -XX:+UseG1GC -XX:+UseContainerSupport"
         - name: SPRING_PROFILES_ACTIVE
           value: "production"
@@ -506,6 +496,7 @@ spec:
             <safeguards-item>Implement proper resource limits to prevent resource exhaustion</safeguards-item>
             <safeguards-item>Configure health checks for all production deployments</safeguards-item>
             <safeguards-item>Use read-only root filesystems when possible for enhanced security</safeguards-item>
+            <safeguards-item>Prefer JDK_JAVA_OPTIONS over JAVA_OPTS for automatic JVM configuration in containers</safeguards-item>
         </safeguards-list>
     </safeguards>
 

@@ -12,25 +12,42 @@ You are a Senior DevOps Engineer and Java Developer with extensive experience in
 
 Provide comprehensive guidance for containerizing Java 25 applications using Docker best practices. Focus on creating efficient, secure, and maintainable Docker containers that leverage Java 25's latest features including Virtual Threads, improved container awareness, and modern JVM optimizations.
 
-### Key Areas Covered:
-- **Multi-stage builds** for optimal image size and security
-- **Java 25 specific optimizations** including Virtual Threads and container-aware JVM settings
-- **Security hardening** with non-root users and minimal attack surface
-- **Performance tuning** for containerized Java applications
-- **Development workflow** optimization for faster iteration
-- **Production deployment** best practices
-- **Monitoring and observability** integration
+### Implementing These Principles
 
+These guidelines are built upon the following core principles:
+
+1. **Multi-Stage Build Optimization**: Separate build and runtime environments to create lean, secure final images. Use appropriate base images (JDK for build, JRE for runtime) and minimize the number of layers while maximizing Docker layer caching efficiency.
+
+2. **Java 25 Container Awareness**: Leverage Java 25's enhanced container support with proper JVM configuration for containerized environments. Enable container-aware memory management, configure appropriate garbage collectors, and utilize Virtual Threads for I/O-intensive applications.
+
+3. **Security-First Approach**: Implement defense-in-depth security practices including non-root users, read-only root filesystems, minimal attack surface, regular security scanning, and proper secrets management. Never embed sensitive information in Docker images.
+
+4. **Performance and Resource Optimization**: Configure JVM settings for container resource limits, implement proper health checks, optimize image layers for faster builds and deployments, and use appropriate resource constraints in orchestration platforms.
+
+5. **Development Workflow Enhancement**: Create development-friendly configurations with hot-reload capabilities, remote debugging support, and efficient local development environments using Docker Compose with proper volume mounts and networking.
+
+6. **Production Readiness**: Implement comprehensive monitoring, logging, and observability features. Configure proper graceful shutdown handling, implement circuit breakers and timeouts, and ensure scalability with container orchestration platforms.
+
+7. **Modern Java Features Integration**: Take advantage of Java 25's Virtual Threads, Pattern Matching, Records, and improved garbage collection algorithms. Configure JVM flags specifically for containerized environments using `JDK_JAVA_OPTIONS` environment variable for automatic application to all Java processes.
+
+8. **Container Orchestration Best Practices**: Design containers for Kubernetes and other orchestration platforms with proper resource limits, health checks, service discovery, and configuration management through ConfigMaps and Secrets.
+
+9. **Build and Deployment Pipeline**: Integrate Docker builds into CI/CD pipelines with proper image tagging strategies, security scanning, and multi-environment deployment configurations.
+
+10. **Monitoring and Observability**: Implement comprehensive logging to stdout/stderr, expose metrics endpoints, configure distributed tracing, and integrate with monitoring solutions like Prometheus, Grafana, and APM tools.
 
 ## Constraints
 
-Before applying Docker containerization, ensure the Java application builds successfully and follows Java 25 best practices.
+Before applying Docker containerization recommendations, ensure the Java application is in a valid state and follows Java 25 best practices. Application compilation failure is a BLOCKING condition that prevents any containerization work.
 
-- **MANDATORY**: Verify the application builds with `./mvnw clean package` before containerization
-- **VERIFY**: Ensure Java 25 is properly configured in the project's pom.xml
-- **SECURITY**: Always use non-root users in production Docker images
-- **PERFORMANCE**: Configure JVM for container-aware memory management
-- **SAFETY**: Test Docker images locally before pushing to registries
+- **MANDATORY**: Run `./mvnw clean package` or `mvn clean package` before applying any Docker configuration
+- **PREREQUISITE**: Java application must compile successfully and pass basic validation checks before containerization
+- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any Docker recommendations
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any containerization improvements
+- **NO EXCEPTIONS**: Under no circumstances should Docker configurations be applied to a project that fails to compile
+- **SECURITY MANDATORY**: Always use non-root users in production Docker images - this is non-negotiable
+- **PERFORMANCE CRITICAL**: Configure JVM for container-aware memory management to prevent OOM kills
+- **VALIDATION REQUIRED**: Test Docker images locally with `docker build` and `docker run` before pushing to registries
 
 ## Examples
 
@@ -46,7 +63,7 @@ Before applying Docker containerization, ensure the Java application builds succ
 ### Example 1: Multi-Stage Dockerfile for Java 25 Applications
 
 Title: Optimize build and runtime environments separately
-Description: Create efficient Docker images using multi-stage builds that separate the build environment from the runtime environment, leveraging Java 25 features.
+Description: Create efficient Docker images using multi-stage builds that separate the build environment from the runtime environment, leveraging Java 25 features. This approach: - Reduces final image size by excluding build tools and dependencies - Improves security by minimizing the attack surface in production images - Enables better layer caching for faster builds - Separates concerns between build-time and runtime requirements - Optimizes for Java 25's container-aware JVM features
 
 **Good example:**
 
@@ -83,15 +100,15 @@ COPY --from=build --chown=appuser:appuser /app/target/*.jar app.jar
 # Switch to non-root user
 USER appuser
 
-# Configure JVM for containers and Java 25
-ENV JAVA_OPTS="-Xms512m -Xmx1024m -XX:+UseG1GC -XX:+UseContainerSupport -XX:+ExitOnOutOfMemoryError"
+# Configure JVM for containers and Java 25 - automatically applied to all Java processes
+ENV JDK_JAVA_OPTIONS="-Xms512m -Xmx1024m -XX:+UseG1GC -XX:+UseContainerSupport -XX:+ExitOnOutOfMemoryError"
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
     CMD curl -f http://localhost:8080/actuator/health || exit 1
 
 EXPOSE 8080
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
 
 ```
 
@@ -116,30 +133,20 @@ CMD ["java", "-jar", "target/*.jar"]
 ### Example 2: Java 25 JVM Configuration for Containers
 
 Title: Optimize JVM settings for containerized environments
-Description: Configure the JVM to work efficiently within container resource constraints, taking advantage of Java 25's container awareness and Virtual Threads.
+Description: Configure the JVM to work efficiently within container resource constraints, taking advantage of Java 25's container awareness and Virtual Threads. Key optimizations include: - Enabling container support for automatic memory detection - Configuring appropriate garbage collectors for containerized environments - Setting up Virtual Threads for improved I/O-intensive workload performance - Implementing proper JVM flags for container lifecycle management - Optimizing startup time and memory footprint
 
 **Good example:**
 
 ```dockerfile
-# Java 25 optimized JVM configuration
-ENV JAVA_OPTS="\
-    -Xms512m \
-    -Xmx1024m \
-    -XX:+UseG1GC \
-    -XX:+UseContainerSupport \
-    -XX:+ExitOnOutOfMemoryError \
-    -XX:+UnlockExperimentalVMOptions \
-    -Djdk.virtualThreadScheduler.parallelism=1 \
-    -XX:+PrintGCDetails \
-    -XX:+PrintGCTimeStamps \
-    -Dfile.encoding=UTF-8"
+# Java 25 optimized JVM configuration - automatically applied to all Java processes
+ENV JDK_JAVA_OPTIONS="-Xms512m -Xmx1024m -XX:+UseG1GC -XX:+UseContainerSupport -XX:+ExitOnOutOfMemoryError -XX:+UnlockExperimentalVMOptions -Djdk.virtualThreadScheduler.parallelism=1 -XX:+PrintGCDetails -XX:+PrintGCTimeStamps -Dfile.encoding=UTF-8"
 
 # Application-specific configuration
 ENV SPRING_PROFILES_ACTIVE=production
 ENV SERVER_PORT=8080
 ENV MANAGEMENT_PORT=9090
 
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+ENTRYPOINT ["java", "-jar", "app.jar"]
 
 ```
 
@@ -151,6 +158,7 @@ ENV JAVA_OPTS="-Xmx4g"
 
 # Bad: No container awareness
 # Bad: No Virtual Threads optimization
+# Bad: Using JAVA_OPTS instead of JDK_JAVA_OPTIONS
 CMD ["java", "-Xmx4g", "-jar", "app.jar"]
 
 ```
@@ -158,7 +166,7 @@ CMD ["java", "-Xmx4g", "-jar", "app.jar"]
 ### Example 3: Security Hardening for Docker Images
 
 Title: Implement security best practices for production containers
-Description: Enhance container security by following the principle of least privilege and implementing defense-in-depth strategies.
+Description: Enhance container security by following the principle of least privilege and implementing defense-in-depth strategies. Security measures include: - Creating and using non-root users with minimal privileges - Implementing read-only root filesystems where possible - Removing unnecessary packages and tools from production images - Using proper signal handling with init systems like tini - Implementing security labels and metadata for compliance - Regular security scanning and vulnerability management
 
 **Good example:**
 
@@ -233,15 +241,14 @@ RUN ./mvnw dependency:resolve
 # Create volumes for source code and target
 VOLUME ["/app/src", "/app/target"]
 
-# Enable remote debugging
-ENV JAVA_DEBUG_OPTS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005"
-ENV JAVA_OPTS="$JAVA_DEBUG_OPTS -XX:+UseG1GC"
+# Enable remote debugging and development optimizations
+ENV JDK_JAVA_OPTIONS="-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005 -XX:+UseG1GC"
 
 # Expose application and debug ports
 EXPOSE 8080 5005
 
 # Use Spring Boot DevTools for hot reload
-CMD ["./mvnw", "spring-boot:run", "-Dspring-boot.run.jvmArguments='$JAVA_OPTS'"]
+CMD ["./mvnw", "spring-boot:run"]
 
 ```
 
@@ -370,7 +377,7 @@ spec:
         - containerPort: 8080
         - containerPort: 9090  # Management port
         env:
-        - name: JAVA_OPTS
+        - name: JDK_JAVA_OPTIONS
           value: "-Xms512m -Xmx1024m -XX:+UseG1GC -XX:+UseContainerSupport"
         - name: SPRING_PROFILES_ACTIVE
           value: "production"
@@ -445,3 +452,4 @@ spec:
 - Implement proper resource limits to prevent resource exhaustion
 - Configure health checks for all production deployments
 - Use read-only root filesystems when possible for enhanced security
+- Prefer JDK_JAVA_OPTIONS over JAVA_OPTS for automatic JVM configuration in containers
