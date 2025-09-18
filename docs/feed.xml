@@ -2,7 +2,7 @@
 <feed xmlns='http://www.w3.org/2005/Atom' xml:lang='en'>
   <id>https://jabrena.github.io/cursor-rules-java/</id>
   <title>Cursor Rules for Java</title>
-  <updated>2025-09-17T22:21:04+0200</updated>
+  <updated>2025-09-18T10:18:24+0200</updated>
   <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java/" />
   <link rel='self' type='application/atom+xml' href='https://jabrena.github.io/cursor-rules-java//feed.xml' />
   <entry>
@@ -11,8 +11,8 @@
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/09/mastering-memory-leak-detection-comprehensive-course.html" />
     <updated>2025-09-17T00:00:00+0200</updated>
-    <summary>The 3 AM Production Alert That Every Java Developer Dreads
-Picture this familiar nightmare: It&apos;s 3 AM, your phone buzzes with production alerts, and your Spring Boot microservice is consuming 90% more memory than usual. Users are experiencing timeouts, response times are degrading, and the traditional profiling tools you&apos;ve been relying on are either too intrusive for production use or simply can&apos;t...</summary>
+    <summary>Mastering Memory Analysis: Your Journey to Performance Excellence
+Imagine having the confidence to analyze and optimize memory usage in any Java application. Your Spring Boot microservice shows interesting memory consumption patterns, and you&apos;re excited to dive deep into understanding what&apos;s happening. You have access to sophisticated profiling tools that can provide detailed insights without impac...</summary>
   </entry>
   <entry>
     <id>https://jabrena.github.io/cursor-rules-java//blog/2025/09/mastering-java-with-ai-system-prompts-course.html</id>
@@ -20,8 +20,9 @@ Picture this familiar nightmare: It&apos;s 3 AM, your phone buzzes with producti
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/09/mastering-java-with-ai-system-prompts-course.html" />
     <updated>2025-09-17T00:00:00+0200</updated>
-    <summary>The Developer&apos;s Dilemma: Drowning in Best Practices
-Picture this familiar scenario: You&apos;re a Java developer tasked with setting up a new microservice. You know you need Maven configuration, comprehensive testing, security hardening, performance optimization, and thorough documentation. You&apos;ve bookmarked dozens of articles about best practices, but each project becomes a time-consuming exercise in r...</summary>
+    <summary>The Developer&apos;s Opportunity: Mastering Enterprise Patterns with AI
+Baseline today: new services often start with copy‑pasted pom.xml, ad‑hoc testing, inconsistent security, and missing documentation. Outcome: uneven quality and avoidable rework. A better path is repeatable automation that encodes enterprise patterns while teaching the reasoning behind each choice.
+This course shows how AI‑powered s...</summary>
   </entry>
   <entry>
     <id>https://jabrena.github.io/cursor-rules-java//blog/2025/09/mastering-java-generics-comprehensive-course-guide.html</id>
@@ -29,9 +30,9 @@ Picture this familiar scenario: You&apos;re a Java developer tasked with setting
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/09/mastering-java-generics-comprehensive-course-guide.html" />
     <updated>2025-09-17T00:00:00+0200</updated>
-    <summary>The ClassCastException That Changed Everything
-Picture this: It&apos;s 2 AM, your production system is down, and you&apos;re staring at a stack trace that reads ClassCastException: Integer cannot be cast to String. The bug is buried deep in a legacy codebase where List inventory = new ArrayList(); seemed perfectly reasonable when it was written in 2005. Sound familiar?
-This scenario represents one of the mos...</summary>
+    <summary>Discovering the Power of Type-Safe Java Development
+Start from a familiar legacy snippet: List inventory = new ArrayList();. It compiles, ships, and eventually bites back with ClassCastException. The fix is not a one‑off cast; it’s a mindset: design APIs that express intent through types and let the compiler enforce correctness.
+Generics have been in Java for years, but deep fluency—wildcards, vari...</summary>
   </entry>
   <entry>
     <id>https://jabrena.github.io/cursor-rules-java//blog/2025/09/jfr-modern-java-profiling.html</id>
@@ -39,9 +40,9 @@ This scenario represents one of the mos...</summary>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/09/jfr-modern-java-profiling.html" />
     <updated>2025-09-17T00:00:00+0200</updated>
-    <summary>The 3 AM Production Alert That Changed Everything
-Picture this: It&apos;s 3 AM, your phone buzzes with production alerts, and your Java application is consuming 90% more memory than usual. Users are experiencing timeouts, and the traditional profiling tools you&apos;ve been relying on are either too intrusive for production use or simply can&apos;t capture the granular detail you need to identify the root cause.
-...</summary>
+    <summary>Discovering JFR: A Journey into Modern Java Profiling Excellence
+Symptom: memory usage drifts under real production load. Constraint: profiling cannot degrade latency or throughput. Solution: Java Flight Recorder (JFR) — the built‑in, low‑overhead recorder that captures CPU, memory, GC, I/O, and custom events from live systems with typically under 2% impact.
+With JFR, production evidence replaces g...</summary>
   </entry>
   <entry>
     <id>https://jabrena.github.io/cursor-rules-java//blog/2025/09/release-0.10.0.html</id>
