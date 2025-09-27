@@ -160,6 +160,8 @@ by applying the system prompt @128-java-generics
 <li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/behaviour-consultative-interaction.md"><code>@behaviour-consultative-interaction</code></a></li>
 <li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/behaviour-progressive-learning.md"><code>@behaviour-progressive-learning</code></a></li>
 </ul>
+<p>Using specialized behaviours like <code>@behaviour-progressive-learning</code> in a Creative way in your repositories could increase <code>the collective ownership</code> and spread easily the <code>Code Standards</code>implemented in the code.</p>
+<p><a href="http://www.extremeprogramming.org/"><img src="/cursor-rules-java/images/xp.png" alt="" /></a></p>
 <hr />
 <p>After this design change applied into the different system prompts, you can use them in your <code>Data pipelines</code> for different use cases such as <code>automatic coding</code>, <code>code refactoring</code>, <code>continuous profiling</code>, and more.</p>
 <p><img src="/cursor-rules-java/images/data-pipeline-workflow.png" alt="" /></p>
@@ -176,7 +178,14 @@ https://github.com/jabrena/kafka/tree/trunk/clients/src/main/java/org/apache/kaf
 <h2>Profiling improvements</h2>
 <p>In this release, the script <code>profile-java-process.sh</code>, included in  <code>@161-java-profiling-detect</code>, was updated to include the latest release (v4.1) of the popular profiling tool <code>Async-profiler</code>. In addition, the script added new <code>JFR</code> options available in <code>Java 25</code> and earlier.</p>
 <p><img src="/cursor-rules-java/images/0.11.0-profiling-menu.png" alt="" /></p>
-<p>In recent months, I have been inspired by the work of outstanding engineers in this field: <a href="https://x.com/forked_franz">Francesco Nigro</a>, <a href="https://x.com/jerrinot">Jaromir Hamala</a>, and <a href="https://x.com/parttimen3rd">Johannes Bechberger</a>. I highly recommend following them.</p>
+<p>In recent months, I have been inspired by the work of outstanding engineers in this field: <a href="https://x.com/forked_franz">Francesco Nigro</a>, <a href="https://x.com/jerrinot">Jaromir Hamala</a>, <a href="https://x.com/parttimen3rd">Johannes Bechberger</a> &amp; <a href="https://x.com/brendangregg">Brendan Gregg</a>. I highly recommend following them.</p>
+<p>If you are interested in the Profiling model <code>Detect, Analyze, Refactor &amp; Compare</code> implemented with the following set of System prompts:</p>
+<ul>
+<li><code>@161-java-profiling-detect</code></li>
+<li><code>@162-java-profiling-analyze</code></li>
+<li><code>@164-java-profiling-compare</code></li>
+</ul>
+<p>You could review the course about <a href="https://jabrena.github.io/cursor-rules-java/courses/profile-memory-leak/index.html">Detecting memory leaks with System prompts</a>.</p>
 <h2>A new website</h2>
 <p>In recent releases, the project published an article summarizing its evolution and shared it across channels like Twitter, Reddit, and LinkedIn. To unify the source of truth, and leveraging <a href="https://docs.github.com/es/pages">GitHub Pages</a>, the project now has <a href="https://jabrena.github.io/cursor-rules-java/index.html">a dedicated website</a>.</p>
 <p>The website includes information about releases, technical articles you can apply in your projects, and courses.</p>

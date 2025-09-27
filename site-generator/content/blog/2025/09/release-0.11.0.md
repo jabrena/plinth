@@ -100,9 +100,14 @@ With this evolution, software engineers now can combine pure system prompts and 
 - [`@behaviour-consultative-interaction`](https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/behaviour-consultative-interaction.md)
 - [`@behaviour-progressive-learning`](https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/behaviour-progressive-learning.md)
 
+Using specialized behaviours like `@behaviour-progressive-learning` in a Creative way in your repositories could increase `the collective ownership` and spread easily the `Code Standards`implemented in the code.
+
+[![](/cursor-rules-java/images/xp.png)](http://www.extremeprogramming.org/)
+
 ---
 
 After this design change applied into the different system prompts, you can use them in your `Data pipelines` for different use cases such as `automatic coding`, `code refactoring`, `continuous profiling`, and more.
+
 
 ![](/cursor-rules-java/images/data-pipeline-workflow.png)
 
@@ -131,7 +136,15 @@ In this release, the script `profile-java-process.sh`, included in  `@161-java-p
 
 ![](/cursor-rules-java/images/0.11.0-profiling-menu.png)
 
-In recent months, I have been inspired by the work of outstanding engineers in this field: [Francesco Nigro](https://x.com/forked_franz), [Jaromir Hamala](https://x.com/jerrinot), and [Johannes Bechberger](https://x.com/parttimen3rd). I highly recommend following them.
+In recent months, I have been inspired by the work of outstanding engineers in this field: [Francesco Nigro](https://x.com/forked_franz), [Jaromir Hamala](https://x.com/jerrinot), [Johannes Bechberger](https://x.com/parttimen3rd) & [Brendan Gregg](https://x.com/brendangregg). I highly recommend following them.
+
+If you are interested in the Profiling model `Detect, Analyze, Refactor & Compare` implemented with the following set of System prompts:
+
+- `@161-java-profiling-detect`
+- `@162-java-profiling-analyze`
+- `@164-java-profiling-compare`
+
+You could review the course about [Detecting memory leaks with System prompts](https://jabrena.github.io/cursor-rules-java/courses/profile-memory-leak/index.html).
 
 ## A new website
 
