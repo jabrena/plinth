@@ -7,7 +7,7 @@
 
 ## Goal
 
-The project provides a collection of `System prompts` for Java Enterprise development that help software engineers in their daily programming work.
+The project provides a collection of `System prompts` for Java Enterprise development that help software engineers in their daily programming work & data pipelines.
 The [available System prompts for Java](./CURSOR-RULES-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation` & `Diagrams`.
 
 ### Compatibility with Modern IDEs, CLI & Others
