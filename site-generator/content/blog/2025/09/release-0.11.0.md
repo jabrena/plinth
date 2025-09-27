@@ -127,7 +127,7 @@ With this visualization, you can see whether something is missing in your Java i
 
 ## Profiling improvements
 
-In this release, the script `profile-java-process.sh`, included in  `@161-java-profiling-detect`, was updated to include the latest release (v4.1) of the popular profiling tool Async-profiler. In addition, the script added new JFR options available in Java 25 and earlier.
+In this release, the script `profile-java-process.sh`, included in  `@161-java-profiling-detect`, was updated to include the latest release (v4.1) of the popular profiling tool `Async-profiler`. In addition, the script added new `JFR` options available in `Java 25` and earlier.
 
 ![](/cursor-rules-java/images/0.11.0-profiling-menu.png)
 
