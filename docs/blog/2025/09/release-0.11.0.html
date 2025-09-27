@@ -93,43 +93,49 @@
 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 <article role="main" class="blog-post">
 <h2>What are Cursor rules for Java?</h2>
-<p>The project provides a collection of System prompts for Java Enterprise development that help software engineers in their daily programming work. The <a href="https://github.com/jabrena/cursor-rules-java/blob/main/CURSOR-RULES-JAVA.md">available System prompts for Java</a> cover aspects like <code>Build system based on Maven</code>, <code>Design</code>, <code>Coding</code>, <code>Testing</code>, <code>Refactoring &amp; JMH Benchmarking</code>, <code>Performance testing with JMeter</code>, <code>Profiling with Async profiler/JDK tools</code> &amp; <code>Documentation</code> &amp; <code>Diagrams</code>.</p>
-<h2>What is new in this release?</h2>
-<p>In this release, the project has released several features:</p>
-<p><strong>Improvements in System prompts:</strong></p>
+<p>The project provides a collection of System prompts for Java Enterprise development that help software engineers in their daily programming work. The <a href="https://github.com/jabrena/cursor-rules-java/blob/main/CURSOR-RULES-JAVA.md">available System prompts for Java</a> cover areas such as <code>Build system based on Maven</code>, <code>Design</code>, <code>Coding</code>, <code>Testing</code>, <code>Refactoring &amp; JMH Benchmarking</code>, <code>Performance testing with JMeter</code>, <code>Profiling with async-profiler/JDK tools</code>, <code>Documentation</code>, and <code>Diagrams</code>.</p>
+<h2>What's new in this release?</h2>
+<p>In this release, the project introduces several updates:</p>
 <ul>
-<li>Decoupled specifialized behaviours like <code>behaviour-consultative-interaction</code> from System prompts.</li>
-<li>Added specialized behaviours to combine with Pure System prompts.</li>
-<li>Added support for <code>UML State machine diagrams</code> in <code>@170-java-documentation</code>.</li>
-</ul>
-<p><strong>Improvements in the project:</strong></p>
-<ul>
-<li>Added Website based on JBake</li>
-<li>Added Initial support for AGENTS.md</li>
-</ul>
-<p><strong>Improvements about Support:</strong></p>
-<ul>
-<li>Added a course about How to use <code>System prompts for Java</code></li>
+<li><strong>Improvements in system prompts:</strong></li>
+<li>Decoupled the specialized behavior <code>behaviour-consultative-interaction</code> from some system prompts.</li>
+<li>Added specialized behaviors (<code>behaviour-consultative-interaction</code> and <code>behaviour-progressive-learning</code>) that can be combined with pure system prompts.</li>
+<li>Added support for <code>UML state machine diagrams</code> in <code>@170-java-documentation</code>.</li>
+<li>Updated <code>@161-java-profiling-detect</code> to add support for<code>Async-profiler 4.1</code> and the latest <code>JFR features</code> included in <code>Java 25</code> and earlier.</li>
+<li><strong>Project improvements:</strong></li>
+<li>Published a dedicated website about System prompts for Java to communicate releases, articles, and courses with the help of JBake.</li>
 </ul>
 <p>Let's explain one by one the different features released.</p>
-<h2> Why decouple Pure System prompts from Specialized behaviours?</h2>
-<p>During the previous months, the System prompts helped Sofware engineers using the  <code>consultative-interaction</code> technique in order to use the System prompts in a way that the execution show a set of alternatives and the software engineer take the decision to update the code in a dynamic way.</p>
-<p>With this idea, we had until <code>v0.10.0</code> this syntax:</p>
-<pre><code>Interactive User prompt: Review my code to show several alternatives to apply Java Generics with the cursor rule @128-java-generics
-User Prompt: Apply Java Generics in the class with @128-java-generics without any question
+<h2> Why decouple Pure System prompts from specialized behaviors?</h2>
+<p>In previous months, the system prompts evolved to present refactoring alternatives using the <code>consultative-interaction technique</code> and then apply the user's decision. However, that design coupled the system prompt with a specific specialized behavior.</p>
+<p>With this approach, until <code>v0.10.0</code> we used this syntax:</p>
+<p><strong>Interactive user prompt:</strong></p>
+<pre><code>Review my code to show several alternatives to apply Java Generics
+with the cursor rule @128-java-generics
 </code></pre>
-<p><a href="https://github.com/jabrena/cursor-rules-java/blob/0.10.0/CURSOR-RULES-JAVA.md">https://github.com/jabrena/cursor-rules-java/blob/0.10.0/CURSOR-RULES-JAVA.md</a></p>
-<p>But from <code>v0.11.0</code>, you have a better and clean syntax:</p>
-<pre><code>User Prompt with Consultative Interactive Behaviour: Improve the class/classes added in the context applying the system prompt @128-java-generics with the behaviour @behaviour-consultative-interaction
-User Prompt with Training behaviour: Create a course about @128-java-generics.md using the behavior @behaviour-progressive-learning.md and put the course here
-User Prompt: Improve the class/classes added in the context applying the system prompt @128-java-generics
+<p><strong>User prompt:</strong></p>
+<pre><code>Apply Java Generics in the class with @128-java-generics
+without any question
 </code></pre>
-<p><a href="https://github.com/jabrena/cursor-rules-java/blob/0.11.0/CURSOR-RULES-JAVA.md">https://github.com/jabrena/cursor-rules-java/blob/0.11.0/CURSOR-RULES-JAVA.md</a></p>
-<p><img src="/cursor-rules-java/images/workflow.png" alt="" /></p>
-<p>but what happen if you System prompts with <code>Data pipelines</code>?</p>
-<p><img src="/cursor-rules-java/images/data-pipeline-workflow.png" alt="" /></p>
-<p>In this situations, it is better provide <code>Pure System prompts</code>.</p>
-<p>What Pure system prompts does exist in the project?</p>
+<hr />
+<p>But now, starting with <code>v0.11.0</code>, you have a cleaner syntax:</p>
+<p><strong>User prompt with consultative interactive behavior:</strong></p>
+<pre><code>Improve the classes provided in the context by applying
+the system prompt @128-java-generics
+with the behavior @behaviour-consultative-interaction
+</code></pre>
+<p><strong>User prompt with training behavior:</strong></p>
+<pre><code>Create a course for @128-java-generics.md
+using the behavior @behaviour-progressive-learning.md
+and place the course here
+</code></pre>
+<p><strong>User prompt:</strong></p>
+<pre><code>Improve the classes provided in the context
+by applying the system prompt @128-java-generics
+</code></pre>
+<p>Further information: <a href="https://github.com/jabrena/cursor-rules-java/blob/0.11.0/CURSOR-RULES-JAVA.md">https://github.com/jabrena/cursor-rules-java/blob/0.11.0/CURSOR-RULES-JAVA.md</a></p>
+<p>With this evolution, software engineers now can combine pure system prompts and specialized behaviors in <code>16^3 = 4096</code> combinations by design.</p>
+<p><strong>Pure system prompts:</strong></p>
 <ul>
 <li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/100-java-cursor-rules-list.md"><code>@100-java-cursor-rules-list</code></a></li>
 <li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/110-java-maven-best-practices.md"><code>@110-java-maven-best-practices</code></a></li>
@@ -148,17 +154,39 @@ User Prompt: Improve the class/classes added in the context applying the system 
 <li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/143-java-functional-exception-handling.md"><code>@143-java-functional-exception-handling</code></a></li>
 <li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/144-java-data-oriented-programming.md"><code>@144-java-data-oriented-programming</code></a></li>
 </ul>
-<p>What Specialized behaviour does exist?</p>
+<p><strong>Specialized behaviors:</strong></p>
 <ul>
-<li>Default behaviour</li>
+<li>Default behavior</li>
 <li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/behaviour-consultative-interaction.md"><code>@behaviour-consultative-interaction</code></a></li>
 <li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/behaviour-progressive-learning.md"><code>@behaviour-progressive-learning</code></a></li>
 </ul>
-<p>Now, you have <code>16^3=4096</code> alternatives to interact with them by design.</p>
-<h2>Added UML State machine diagrams to understand better complex Dependencies.</h2>
+<p>With this design change applied into the different system prompts, you can use them in your <code>Data pipelines</code> for different use cases such as <code>automatic coding</code>, <code>code refactoring</code>, <code>continuous profiling</code>, and more.</p>
+<p><img src="/cursor-rules-java/images/data-pipeline-workflow.png" alt="" /></p>
+<h2>New UML state machine diagrams for better understanding in complex dependencies.</h2>
+<p>Sometimes you need to use complex dependencies in your projects, like Apache Kafka clients, and the team may not be strong enough in the early stages. If you don't have much experience with them, a good practice is to run a spike and review how the client works under the hood to mitigate risks.</p>
+<p>During the spike, you may need to visualize internal aspects of the clients, so why not generate a <code>UML state machine diagram</code> to gain more insights.</p>
+<p><strong>Examples:</strong></p>
+<pre><code>Create UML class diagrams with @171-java-diagrams without any questions from
+https://github.com/jabrena/kafka/tree/trunk/clients/src/main/java/org/apache/kafka/clients/producer
+</code></pre>
+<p><strong>Result:</strong></p>
 <p><img src="/cursor-rules-java/images/0.11.0-uml-state-machine-diagram-example.png" alt="" /></p>
-<h2>Do you still have doubts about the project?</h2>
-<p>If you feel stuck using this project or you have any doubts, you could attend the following talks at Devoxx BE in October:</p>
+<p>With this visualization, you can see whether something is missing in your Java integration.</p>
+<h2>Profiling improvements</h2>
+<p>In this release, the script <code>profile-java-process.sh</code>, included in  <code>@161-java-profiling-detect</code>, was updated to include the latest release (v4.1) of the popular profiling tool Async-profiler. In addition, the script added new JFR options available in Java 25 and earlier.</p>
+<p><img src="/cursor-rules-java/images/0.11.0-profiling-menu.png" alt="" /></p>
+<p>In recent months, I have been inspired by the work of outstanding engineers in this field: <a href="https://x.com/forked_franz">Francesco Nigro</a>, <a href="https://x.com/jerrinot">Jaromir Hamala</a>, and <a href="https://x.com/parttimen3rd">Johannes Bechberger</a>. I highly recommend following them.</p>
+<h2>A new website</h2>
+<p>In recent releases, the project published an article summarizing its evolution and shared it across channels like Twitter, Reddit, and LinkedIn. To unify the source of truth, and leveraging <a href="https://docs.github.com/es/pages">GitHub Pages</a>, the project now has <a href="https://jabrena.github.io/cursor-rules-java/index.html">a dedicated website</a>.</p>
+<p>The website includes information about releases, technical articles you can apply in your projects, and courses.</p>
+<p><strong>What courses were created in this release?</strong></p>
+<ul>
+<li><a href="https://jabrena.github.io/cursor-rules-java/courses/system-prompts-java/index.html">Learn to use System prompts for Java</a></li>
+<li><a href="https://jabrena.github.io/cursor-rules-java/courses/java-generics/index.html">Learn to improve your development with Java Generics</a></li>
+<li><a href="https://jabrena.github.io/cursor-rules-java/courses/profile-memory-leak/index.html">Learn how to detect memory leaks with System prompts</a></li>
+</ul>
+<h2>Do you still have questions about the project?</h2>
+<p>If you feel stuck using this project or have questions, you can attend the following talks at Devoxx BE in October:</p>
 <ul>
 <li><a href="https://devoxx.be/app/talk/4715/the-power-of-cursor-rules-in-java-enterprise-development">https://devoxx.be/app/talk/4715/the-power-of-cursor-rules-in-java-enterprise-development</a></li>
 <li><a href="https://devoxx.be/app/talk/4708/101-cursor-ai-learning-to-use-for-java-enterprise-projects/">https://devoxx.be/app/talk/4708/101-cursor-ai-learning-to-use-for-java-enterprise-projects/</a></li>

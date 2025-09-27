@@ -50,13 +50,9 @@ Adding AI tools in your Data Pipeline could offer new opportunties to offer more
 
 ## Getting started
 
-New to this repository? Start with our [comprehensive guide](./documentation/GETTING-STARTED.md) for a quick introduction to setting up and using the Cursor rules.
+New to this repository? Start with our [comprehensive guide](./documentation/GETTING-STARTED.md) for a quick introduction to setting up and using the Cursor rules and later you could read about [how to integrate System prompts](./documentation/HOW-TO-USE.md) into your development workflow and maximize their effectiveness in your daily coding tasks. For full understanding about this project, follow this course about [Mastering System Prompts for Java](https://jabrena.github.io/cursor-rules-java/courses/system-prompts-java/index.html)
 
-## How to use a System prompt in your development?
-
-Learn [how to integrate System prompts](./documentation/HOW-TO-USE.md) into your development workflow and maximize their effectiveness in your daily coding tasks.
-
-## How many System prompts include this repository?
+## How many System prompts for Java include this project?
 
 Explore the [complete catalog of available System prompts](./CURSOR-RULES-JAVA.md) to discover the full range of capabilities and find the perfect rules for your specific use cases.
 
