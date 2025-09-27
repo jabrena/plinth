@@ -34,6 +34,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Extensive refinements across multiple rules (dependencies, plugins, secure coding, concurrency, exception handling, functional programming, documentation, diagrams) (#309, #341).
   - Decoupled system prompts from behaviours and added learning behaviour; reorganized generator templates and inventory (#309).
   - All examples use single imports without using wildcard *
+  - Updated profiling Script to add support for Async-profiler 4.1 https://github.com/async-profiler/async-profiler/releases/tag/v4.1
+  - Improved JFR support
 
 ### Removed
 

@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>What&apos;s new in Cursor rules for Java 0.11.0? - Cursor Rules for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../../feed.xml" title="Cursor Rules for Java"/>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../../css/prettify.css">
+  <link rel="shortcut icon" href="../../../favicon.ico">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../../index.html">Cursor Rules for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../../courses/java-generics/index.html">Java Generics</a>
+      <a href="../../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
+    </div>
+  </li>
+  <li><a href="../../../archive.html">Archive</a></li>
+  <li><a href="../../../about.html">About</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="post-heading">
+<h1>What's new in Cursor rules for Java 0.11.0?</h1>
+<span class="post-meta">
+  <i class="fa fa-calendar-o"></i>
+  2025-09-29
+    &nbsp;
+    <i class="fa fa-pencil"></i>
+    Juan Antonio Breña Moral
+</span>
+<span class="blog-tags">
+  &nbsp;
+  <i class="fa fa-tags"></i>
+    <a href="../../../tags/blog.html">blog</a>
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="blog-post">
+<h2>What are Cursor rules for Java?</h2>
+<p>The project provides a collection of System prompts for Java Enterprise development that help software engineers in their daily programming work. The <a href="https://github.com/jabrena/cursor-rules-java/blob/main/CURSOR-RULES-JAVA.md">available System prompts for Java</a> cover aspects like <code>Build system based on Maven</code>, <code>Design</code>, <code>Coding</code>, <code>Testing</code>, <code>Refactoring &amp; JMH Benchmarking</code>, <code>Performance testing with JMeter</code>, <code>Profiling with Async profiler/JDK tools</code> &amp; <code>Documentation</code> &amp; <code>Diagrams</code>.</p>
+<h2>What is new in this release?</h2>
+<p>In this release, the project has released several features:</p>
+<ul>
+<li>Improvements in System prompts</li>
+<li>Decoupled specifialized behaviours like <code>behaviour-consultative-interaction</code> from System prompts</li>
+<li>Added specialized behaviours to combine with Pure System prompts</li>
+<li>Added support for <code>UML State machine diagrams</code> in <code>@170-java-documentation</code></li>
+<li>Improvements in the project</li>
+<li>Added Website based on JBake</li>
+<li>Added Initial support for AGENTS.md</li>
+<li>Improvements about Support</li>
+<li>Added a course about How to use <code>System prompts for Java</code></li>
+</ul>
+<p>Let's explain one by one the different features released</p>
+<h2> Why decouple Pure System prompts from Specialized behaviours?</h2>
+<p>During the previous months, the System prompts helped Sofware engineers using the  <code>consultative-interaction</code> technique in order to use the System prompts in a way that the execution show a set of alternatives and the software engineer take the decision to update the code in a dynamic way.</p>
+<p>With this idea, we had until <code>v0.10.0</code> this syntax:</p>
+<pre><code>Interactive User prompt: Review my code to show several alternatives to apply Java Generics with the cursor rule @128-java-generics
+User Prompt: Apply Java Generics in the class with @128-java-generics without any question
+</code></pre>
+<p><a href="https://github.com/jabrena/cursor-rules-java/blob/0.10.0/CURSOR-RULES-JAVA.md">https://github.com/jabrena/cursor-rules-java/blob/0.10.0/CURSOR-RULES-JAVA.md</a></p>
+<p>But from <code>v0.11.0</code>, you have a better and clean syntax:</p>
+<pre><code>User Prompt with Consultative Interactive Behaviour: Improve the class/classes added in the context applying the system prompt @128-java-generics with the behaviour @behaviour-consultative-interaction
+User Prompt with Training behaviour: Create a course about @128-java-generics.md using the behavior @behaviour-progressive-learning.md and put the course here
+User Prompt: Improve the class/classes added in the context applying the system prompt @128-java-generics
+</code></pre>
+<p><a href="https://github.com/jabrena/cursor-rules-java/blob/0.11.0/CURSOR-RULES-JAVA.md">https://github.com/jabrena/cursor-rules-java/blob/0.11.0/CURSOR-RULES-JAVA.md</a></p>
+<p><img src="/cursor-rules-java/images/workflow.png" alt="" /></p>
+<p>, but what happen if you System prompts in <code>Data pipelines</code>?</p>
+<p><img src="/cursor-rules-java/images/data-pipeline-workflow.png" alt="" /></p>
+<h2>Do you still have doubts about the project?</h2>
+<p>If you feel stuck using this project or you have any doubts, you could attend the following talks at Devoxx BE in October:</p>
+<ul>
+<li><a href="https://devoxx.be/app/talk/4715/the-power-of-cursor-rules-in-java-enterprise-development">https://devoxx.be/app/talk/4715/the-power-of-cursor-rules-in-java-enterprise-development</a></li>
+<li><a href="https://devoxx.be/app/talk/4708/101-cursor-ai-learning-to-use-for-java-enterprise-projects/">https://devoxx.be/app/talk/4708/101-cursor-ai-learning-to-use-for-java-enterprise-projects/</a></li>
+</ul>
+<p><a href="https://devoxx.be/"><img src="/cursor-rules-java/images/devoxx-logo.png" alt="" /></a></p>
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena/cursor-rules-java" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2025 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../../js/jquery-1.11.2.min.js"></script>
+<script src="../../../js/bootstrap.min.js"></script>
+<script src="../../../js/prettify.js"></script>
+<script src="../../../js/run_prettify.js"></script>
+<script src="../../../js/main.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13CV90H4J4');
+</script>
+
+</body>
+</html>
