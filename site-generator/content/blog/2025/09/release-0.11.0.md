@@ -8,7 +8,7 @@ status=published
 
 ## What are Cursor rules for Java?
 
-The project provides a collection of System prompts for Java Enterprise development that help software engineers in their daily programming work. The [available System prompts for Java](https://github.com/jabrena/cursor-rules-java/blob/main/CURSOR-RULES-JAVA.md) cover areas such as `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with async-profiler/JDK tools`, `Documentation`, and `Diagrams`.
+The project provides a collection of System prompts for Java Enterprise development that help software engineers in their daily programming work & data pipelines. The [available System prompts for Java](https://github.com/jabrena/cursor-rules-java/blob/main/CURSOR-RULES-JAVA.md) cover areas such as `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with async-profiler/JDK tools`, `Documentation`, and `Diagrams`.
 
 ## What's new in this release?
 
