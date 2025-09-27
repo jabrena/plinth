@@ -96,18 +96,22 @@
 <p>The project provides a collection of System prompts for Java Enterprise development that help software engineers in their daily programming work. The <a href="https://github.com/jabrena/cursor-rules-java/blob/main/CURSOR-RULES-JAVA.md">available System prompts for Java</a> cover aspects like <code>Build system based on Maven</code>, <code>Design</code>, <code>Coding</code>, <code>Testing</code>, <code>Refactoring &amp; JMH Benchmarking</code>, <code>Performance testing with JMeter</code>, <code>Profiling with Async profiler/JDK tools</code> &amp; <code>Documentation</code> &amp; <code>Diagrams</code>.</p>
 <h2>What is new in this release?</h2>
 <p>In this release, the project has released several features:</p>
+<p><strong>Improvements in System prompts:</strong></p>
 <ul>
-<li>Improvements in System prompts</li>
-<li>Decoupled specifialized behaviours like <code>behaviour-consultative-interaction</code> from System prompts</li>
-<li>Added specialized behaviours to combine with Pure System prompts</li>
-<li>Added support for <code>UML State machine diagrams</code> in <code>@170-java-documentation</code></li>
-<li>Improvements in the project</li>
+<li>Decoupled specifialized behaviours like <code>behaviour-consultative-interaction</code> from System prompts.</li>
+<li>Added specialized behaviours to combine with Pure System prompts.</li>
+<li>Added support for <code>UML State machine diagrams</code> in <code>@170-java-documentation</code>.</li>
+</ul>
+<p><strong>Improvements in the project:</strong></p>
+<ul>
 <li>Added Website based on JBake</li>
 <li>Added Initial support for AGENTS.md</li>
-<li>Improvements about Support</li>
+</ul>
+<p><strong>Improvements about Support:</strong></p>
+<ul>
 <li>Added a course about How to use <code>System prompts for Java</code></li>
 </ul>
-<p>Let's explain one by one the different features released</p>
+<p>Let's explain one by one the different features released.</p>
 <h2> Why decouple Pure System prompts from Specialized behaviours?</h2>
 <p>During the previous months, the System prompts helped Sofware engineers using the  <code>consultative-interaction</code> technique in order to use the System prompts in a way that the execution show a set of alternatives and the software engineer take the decision to update the code in a dynamic way.</p>
 <p>With this idea, we had until <code>v0.10.0</code> this syntax:</p>
@@ -122,8 +126,37 @@ User Prompt: Improve the class/classes added in the context applying the system 
 </code></pre>
 <p><a href="https://github.com/jabrena/cursor-rules-java/blob/0.11.0/CURSOR-RULES-JAVA.md">https://github.com/jabrena/cursor-rules-java/blob/0.11.0/CURSOR-RULES-JAVA.md</a></p>
 <p><img src="/cursor-rules-java/images/workflow.png" alt="" /></p>
-<p>, but what happen if you System prompts in <code>Data pipelines</code>?</p>
+<p>but what happen if you System prompts with <code>Data pipelines</code>?</p>
 <p><img src="/cursor-rules-java/images/data-pipeline-workflow.png" alt="" /></p>
+<p>In this situations, it is better provide <code>Pure System prompts</code>.</p>
+<p>What Pure system prompts does exist in the project?</p>
+<ul>
+<li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/100-java-cursor-rules-list.md"><code>@100-java-cursor-rules-list</code></a></li>
+<li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/110-java-maven-best-practices.md"><code>@110-java-maven-best-practices</code></a></li>
+<li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/111-java-maven-dependencies.md"><code>@111-java-maven-dependencies</code></a></li>
+<li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/113-java-maven-documentation.md"><code>@113-java-maven-documentation</code></a></li>
+<li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/121-java-object-oriented-design.md"><code>@121-java-object-oriented-design</code></a></li>
+<li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/122-java-type-design.md"><code>@122-java-type-design</code></a></li>
+<li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/124-java-secure-coding.md"><code>@124-java-secure-coding</code></a></li>
+<li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/125-java-concurrency.md"><code>@125-java-concurrency</code></a></li>
+<li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/126-java-logging.md"><code>@126-java-logging</code></a></li>
+<li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/127-java-exception-handling.md"><code>@127-java-exception-handling</code></a></li>
+<li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/128-java-generics.md"><code>@128-java-generics</code></a></li>
+<li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/131-java-unit-testing.md"><code>@131-java-unit-testing</code></a></li>
+<li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/141-java-refactoring-with-modern-features.md"><code>@141-java-refactoring-with-modern-features</code></a></li>
+<li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/142-java-functional-programming.md"><code>@142-java-functional-programming</code></a></li>
+<li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/143-java-functional-exception-handling.md"><code>@143-java-functional-exception-handling</code></a></li>
+<li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/144-java-data-oriented-programming.md"><code>@144-java-data-oriented-programming</code></a></li>
+</ul>
+<p>What Specialized behaviour does exist?</p>
+<ul>
+<li>Default behaviour</li>
+<li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/behaviour-consultative-interaction.md"><code>@behaviour-consultative-interaction</code></a></li>
+<li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/behaviour-progressive-learning.md"><code>@behaviour-progressive-learning</code></a></li>
+</ul>
+<p>Now, you have <code>16^3=4096</code> alternatives to interact with them by design.</p>
+<h2>Added UML State machine diagrams to understand better complex Dependencies.</h2>
+<p><img src="/cursor-rules-java/images/0.11.0-uml-state-machine-diagram-example.png" alt="" /></p>
 <h2>Do you still have doubts about the project?</h2>
 <p>If you feel stuck using this project or you have any doubts, you could attend the following talks at Devoxx BE in October:</p>
 <ul>
