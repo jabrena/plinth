@@ -10,14 +10,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Behaviours**:
-  - Added tone variations to consultative and progressive learning behaviours (#330).
+  - Added Tone variations to consultative and progressive learning behaviours (#330).
+  - Added Tone to Interactive prompts
+
+- **Website**:
+  - Added Website to communicate about System prompts for Java. https://jabrena.github.io/cursor-rules-java/
 
 - **Educational content**:
-  - New "System Prompts for Java" course and pages, plus a course about this project (#335). https://jabrena.github.io/cursor-rules-java/
+  - New "System Prompts for Java" course (#335). https://jabrena.github.io/cursor-rules-java/courses/system-prompts-java/index.html
 
 - **Documentation & Diagrams**:
   - ADR-003 documenting JBake website generation strategy (#326).
   - Added UML State Machine diagram support to documentation rule `@170-java-documentation` (#310).
+
+- Added initial support for AGENTS.md https://agents.md/
 
 ### Changed
 
@@ -27,6 +33,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Cursor rules**:
   - Extensive refinements across multiple rules (dependencies, plugins, secure coding, concurrency, exception handling, functional programming, documentation, diagrams) (#309, #341).
   - Decoupled system prompts from behaviours and added learning behaviour; reorganized generator templates and inventory (#309).
+  - All examples use single imports without using wildcard *
 
 ### Removed
 

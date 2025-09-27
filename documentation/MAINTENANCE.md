@@ -21,10 +21,10 @@ Can you update the current changelog for 0.10.0 comparing git commits in relatio
 - [ ] Update changelog
 - [ ] Remove SNAPSHOT from .xml, .md & pom.xml
 - [ ] Last review in docs (Manual)
-- [ ] Review git changes for hidden issues (Manual)
+- [ ] Review git changes for hidden issues (Manual) https://github.com/jabrena/cursor-rules-java/compare/0.10.0...feature/release-0110
 - [ ] Tag repository
 - [ ] Create article
-- [ ] communicate
+- [ ] Communicate in social media
 
 ---
 
