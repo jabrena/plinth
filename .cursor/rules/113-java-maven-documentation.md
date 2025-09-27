@@ -1,6 +1,6 @@
 ---
 author: Juan Antonio Breña Moral
-version: 0.11.0-SNAPSHOT
+version: 0.11.0
 ---
 # Create README-DEV.md with information about how to use the Maven project
 
