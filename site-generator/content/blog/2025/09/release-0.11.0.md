@@ -100,13 +100,15 @@ With this evolution, software engineers now can combine pure system prompts and 
 - [`@behaviour-consultative-interaction`](https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/behaviour-consultative-interaction.md)
 - [`@behaviour-progressive-learning`](https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/behaviour-progressive-learning.md)
 
-With this design change applied into the different system prompts, you can use them in your `Data pipelines` for different use cases such as `automatic coding`, `code refactoring`, `continuous profiling`, and more.
+---
+
+After this design change applied into the different system prompts, you can use them in your `Data pipelines` for different use cases such as `automatic coding`, `code refactoring`, `continuous profiling`, and more.
 
 ![](/cursor-rules-java/images/data-pipeline-workflow.png)
 
 ## New UML state machine diagrams for better understanding in complex dependencies.
 
-Sometimes you need to use complex dependencies in your projects, like Apache Kafka clients, and the team may not be strong enough in the early stages. If you don't have much experience with them, a good practice is to run a spike and review how the client works under the hood to mitigate risks.
+Sometimes you need to use complex dependencies in your projects, like Apache Kafka clients, and the team may not be strong enough in the early stages. If you don't have much experience with them, a good practice is to run a `spike` and review how the client works under the hood to mitigate risks.
 
 During the spike, you may need to visualize internal aspects of the clients, so why not generate a `UML state machine diagram` to gain more insights.
 
