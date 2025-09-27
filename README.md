@@ -42,6 +42,12 @@ Adding AI tools to the Java development workflow can increase the possibilities 
 
 **Note:** Remember that if you use models and ask questions about recent topics like *Java 25*, it is probable that models will not provide accurate answers.
 
+### Data pipelines workflow
+
+Adding AI tools in your Data Pipeline could offer new opportunties to offer more value. (Examples: Code Refactoring, Continous profiling, Code automation, others...)
+
+![](./documentation/images/data-pipeline-workflow.png)
+
 ## Getting started
 
 New to this repository? Start with our [comprehensive guide](./documentation/GETTING-STARTED.md) for a quick introduction to setting up and using the Cursor rules.
