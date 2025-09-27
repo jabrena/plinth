@@ -1,6 +1,6 @@
 ---
 author: Juan Antonio Breña Moral
-version: 0.11.0-SNAPSHOT
+version: 0.11.0
 ---
 # Update pom.xml to add Maven plugins with modular step-based configuration
 

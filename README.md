@@ -14,7 +14,7 @@ The [available System prompts for Java](./CURSOR-RULES-JAVA.md) cover aspects li
 
 The repository was designed to offer support for Cursor, but other tools have evolved and now offer better support for System prompts. The repository executes regular regression testing for IDEs like *Cursor*, *Cursor CLI*, *Claude Code*, *GitHub Copilot* & *JetBrains Junie*.
 
-⚠️ **Note:** Currently, the best environments to use this repository are: *Cursor*, *Cursor CLI* & *Claude Code*. If you use *JetBrains IntelliJ IDEA*, you could combine it with *Cursor CLI* or *Claude Code*. Further information about the latest review [here](./documentation/reviews/review-20250829.md).
+⚠️ **Note:** Currently, the best environments to use this repository are: *Cursor*, *Cursor CLI* & *Claude Code*. If you use *JetBrains IntelliJ IDEA*, you could combine it with *Cursor CLI* or *Claude Code*. Further information about the latest review [here](./documentation/reviews/review-20250829.md) (**Last Update:** 2025/08/29).
 
 ## What is a System prompt?
 
@@ -41,6 +41,12 @@ Adding AI tools to the Java development workflow can increase the possibilities 
 ![](./documentation/images/workflow.png)
 
 **Note:** Remember that if you use models and ask questions about recent topics like *Java 25*, it is probable that models will not provide accurate answers.
+
+### Data pipelines workflow
+
+Adding AI tools in your Data Pipeline could offer new opportunties to offer more value. (Examples: Code Refactoring, Continous profiling, Code automation, others...)
+
+![](./documentation/images/data-pipeline-workflow.png)
 
 ## Getting started
 
