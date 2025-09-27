@@ -40,8 +40,6 @@ Adding AI tools to the Java development workflow can increase the likelihood of 
 
 ![](./documentation/images/workflow.png)
 
-**Note:** Remember that if you use models and ask questions about recent topics like *Java 25*, it is likely that the models will not provide accurate answers.
-
 ### Data pipelines workflow
 
 Adding AI tools to your data pipeline can provide new opportunities to deliver more value (examples: automatic coding, code refactoring, continuous profiling, and others).
