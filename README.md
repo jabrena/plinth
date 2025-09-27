@@ -7,7 +7,7 @@
 
 ## Goal
 
-The project provides a collection of `System prompts` for Java Enterprise development that help software engineers in their daily programming work & data pipelines.
+The project provides a collection of `System prompts` for Java Enterprise development that help software engineers in their daily programming work and data pipelines.
 The [available System prompts for Java](./CURSOR-RULES-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation` & `Diagrams`.
 
 ### Compatibility with Modern IDEs, CLI & Others
@@ -66,7 +66,7 @@ This framework transforms AI from a general assistant into a specialized consult
 
 ### Lack of determinism
 
-From the outset, be aware that the results provided by interactions with the different `Cursor rules` are not deterministic due to the nature of the models, but this fact is possible to be mitigated with `clear goals` and `validation checkpoints`.
+From the outset, be aware that the results provided by interactions with the different `Cursor rules` are not deterministic due to the nature of the models, but this can be mitigated with clear goals and validation checkpoints.
 
 ### Limits of interactions with models
 
