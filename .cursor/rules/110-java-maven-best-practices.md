@@ -10,7 +10,7 @@ You are a Senior software engineer with extensive experience in Java software de
 
 ## Goal
 
-Effective Maven usage involves robust dependency management via `<dependencyManagement>` and BOMs, adherence to the standard directory layout, and centralized plugin management. Build profiles should be used for environment-specific configurations. POMs must be kept readable and maintainable with logical structure and properties for versions. Custom repositories should be declared explicitly and their use minimized, preferably managed via a central repository manager.
+Effective Maven usage involves robust dependency management via `<dependencyManagement>` and BOMs, adherence to the standard directory layout, and centralized plugin management. Build profiles should be used for environment-specific configurations. POMs must be kept readable and maintainable with logical structure and properties for versions. Custom repositories should be declared explicitly and their use minimized, preferably managed via a central repository manager. Modern Maven practices include comprehensive security scanning with OWASP dependency checks, build performance optimization through parallel execution and JVM tuning, and regular dependency analysis to maintain clean and secure dependency trees.
 
 ### Core Principles Behind Maven
 
@@ -45,6 +45,10 @@ Before applying Maven best practices recommendations, ensure the project is in a
 - Example 5: Keep POMs Readable and Maintainable
 - Example 6: Manage Repositories Explicitly
 - Example 7: Centralize Version Management with Properties
+- Example 8: Security Best Practices
+- Example 9: Build Performance Optimization
+- Example 10: Dependency Analysis and Cleanup
+- Example 11: Modern Java Features Configuration
 
 ### Example 1: Effective Dependency Management
 
@@ -467,25 +471,28 @@ Description: Define all dependency and plugin versions in the `<properties>` sec
 
   <properties>
     <!-- Core build properties -->
-    <java.version>17</java.version>
+    <java.version>25</java.version>
     <maven.version>3.9.10</maven.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
     <!-- Dependency versions -->
-    <jackson.version>2.15.3</jackson.version>
-    <junit.version>5.10.1</junit.version>
-    <mockito.version>5.7.0</mockito.version>
-    <logback.version>1.4.11</logback.version>
+    <jackson.version>2.18.2</jackson.version>
+    <junit.version>5.11.3</junit.version>
+    <mockito.version>5.14.2</mockito.version>
+    <logback.version>1.5.15</logback.version>
 
     <!-- Maven plugin versions -->
     <maven-plugin-compiler.version>3.14.0</maven-plugin-compiler.version>
     <maven-plugin-surefire.version>3.5.3</maven-plugin-surefire.version>
     <maven-plugin-failsafe.version>3.5.3</maven-plugin-failsafe.version>
     <maven-plugin-enforcer.version>3.5.0</maven-plugin-enforcer.version>
+    <maven-plugin-dependency.version>3.8.1</maven-plugin-dependency.version>
 
     <!-- Third-party plugin versions -->
     <maven-plugin-jacoco.version>0.8.13</maven-plugin-jacoco.version>
+    <maven-plugin-owasp.version>11.1.1</maven-plugin-owasp.version>
+    <extra-enforcer-rules.version>1.8.0</extra-enforcer-rules.version>
 
     <!-- Quality thresholds -->
     <coverage.level>80</coverage.level>
@@ -606,14 +613,870 @@ Description: Define all dependency and plugin versions in the `<properties>` sec
 
 ```
 
+
+### Example 8: Security Best Practices
+
+Title: Implement Comprehensive Security Scanning and Vulnerability Management
+Description: Implement security best practices including OWASP dependency vulnerability scanning, secure repository management, and dependency verification. Use the OWASP Dependency-Check plugin to identify known vulnerabilities in project dependencies and establish security gates in your build process.
+
+**Good example:**
+
+```xml
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>secure-app</artifactId>
+  <version>1.0.0</version>
+
+  <properties>
+    <java.version>25</java.version>
+    <maven.version>3.9.10</maven.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <!-- Security plugin versions -->
+    <maven-plugin-owasp.version>11.1.1</maven-plugin-owasp.version>
+    <maven-plugin-enforcer.version>3.5.0</maven-plugin-enforcer.version>
+    <extra-enforcer-rules.version>1.8.0</extra-enforcer-rules.version>
+
+    <!-- Security thresholds -->
+    <security.cvss.threshold>7.0</security.cvss.threshold>
+  </properties>
+
+  <build>
+    <plugins>
+      <!-- OWASP Dependency Check Plugin -->
+      <plugin>
+        <groupId>org.owasp</groupId>
+        <artifactId>dependency-check-maven</artifactId>
+        <version>${maven-plugin-owasp.version}</version>
+        <configuration>
+          <failBuildOnCVSS>${security.cvss.threshold}</failBuildOnCVSS>
+          <suppressionFiles>
+            <suppressionFile>owasp-suppressions.xml</suppressionFile>
+          </suppressionFiles>
+          <formats>
+            <format>HTML</format>
+            <format>JSON</format>
+          </formats>
+          <assemblyAnalyzerEnabled>false</assemblyAnalyzerEnabled>
+          <nodeAnalyzerEnabled>false</nodeAnalyzerEnabled>
+          <retireJsAnalyzerEnabled>false</retireJsAnalyzerEnabled>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Enhanced Maven Enforcer Plugin with Security Rules -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>${maven-plugin-enforcer.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>extra-enforcer-rules</artifactId>
+            <version>${extra-enforcer-rules.version}</version>
+          </dependency>
+        </dependencies>
+        <executions>
+          <execution>
+            <id>enforce-security</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <!-- Basic security rules -->
+                <requireMavenVersion>
+                  <version>${maven.version}</version>
+                </requireMavenVersion>
+                <requireJavaVersion>
+                  <version>${java.version}</version>
+                </requireJavaVersion>
+
+                <!-- Dependency security rules -->
+                <banCircularDependencies/>
+                <dependencyConvergence/>
+                <banDuplicatePomDependencyVersions/>
+
+                <!-- Ban insecure dependencies -->
+                <bannedDependencies>
+                  <excludes>
+                    <!-- Ban old/insecure versions -->
+                    <exclude>commons-collections:commons-collections:[,3.2.1]</exclude>
+                    <exclude>org.apache.struts:struts2-core:[,2.3.37)</exclude>
+                    <exclude>org.springframework:spring-core:[,4.3.18)</exclude>
+                    <!-- Ban problematic logging implementations -->
+                    <exclude>log4j:log4j:[,1.2.17]</exclude>
+                    <exclude>org.apache.logging.log4j:log4j-core:[2.0,2.17.0)</exclude>
+                  </excludes>
+                </bannedDependencies>
+
+                <!-- Require secure repositories -->
+                <requireProperty>
+                  <property>project.build.sourceEncoding</property>
+                  <message>Source encoding must be specified for security</message>
+                </requireProperty>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <!-- Secure repository configuration -->
+  <repositories>
+    <repository>
+      <id>central</id>
+      <url>https://repo1.maven.org/maven2</url>
+      <releases>
+        <enabled>true</enabled>
+        <checksumPolicy>fail</checksumPolicy>
+      </releases>
+      <snapshots>
+        <enabled>false</enabled>
+      </snapshots>
+    </repository>
+  </repositories>
+
+  <!-- Security profile for enhanced checks -->
+  <profiles>
+    <profile>
+      <id>security-scan</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.owasp</groupId>
+            <artifactId>dependency-check-maven</artifactId>
+            <executions>
+              <execution>
+                <id>security-scan-detailed</id>
+                <goals>
+                  <goal>check</goal>
+                </goals>
+                <configuration>
+                  <failBuildOnCVSS>0.0</failBuildOnCVSS>
+                  <formats>
+                    <format>ALL</format>
+                  </formats>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>
+<!-- Usage: mvn clean verify -P security-scan -->
+
+```
+
+**Bad example:**
+
+```xml
+<!-- No security scanning or vulnerability management -->
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>insecure-app</artifactId>
+  <version>1.0.0</version>
+
+  <dependencies>
+    <!-- Using old, vulnerable versions -->
+    <dependency>
+      <groupId>commons-collections</groupId>
+      <artifactId>commons-collections</artifactId>
+      <version>3.2</version> <!-- Known security vulnerability -->
+    </dependency>
+    <dependency>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-core</artifactId>
+      <version>2.14.1</version> <!-- Vulnerable to Log4Shell -->
+    </dependency>
+  </dependencies>
+
+  <!-- Insecure repository without checksum validation -->
+  <repositories>
+    <repository>
+      <id>unsecure-repo</id>
+      <url>http://insecure.example.com/maven2</url> <!-- HTTP instead of HTTPS -->
+      <releases>
+        <checksumPolicy>ignore</checksumPolicy> <!-- No checksum validation -->
+      </releases>
+    </repository>
+  </repositories>
+</project>
+
+```
+
+### Example 9: Build Performance Optimization
+
+Title: Optimize Build Speed with Parallel Execution and JVM Tuning
+Description: Optimize Maven build performance through parallel execution, JVM tuning, incremental compilation, and build caching. Configure plugins for parallel test execution and optimize memory usage for faster builds, especially important in CI/CD environments.
+
+**Good example:**
+
+```xml
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>optimized-build</artifactId>
+  <version>1.0.0</version>
+
+  <properties>
+    <java.version>25</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <!-- Plugin versions -->
+    <maven-plugin-compiler.version>3.14.0</maven-plugin-compiler.version>
+    <maven-plugin-surefire.version>3.5.3</maven-plugin-surefire.version>
+    <maven-plugin-failsafe.version>3.5.3</maven-plugin-failsafe.version>
+
+    <!-- Performance tuning properties -->
+    <parallel.test.threads>4</parallel.test.threads>
+    <surefire.reuseForks>true</surefire.reuseForks>
+  </properties>
+
+  <build>
+    <plugins>
+      <!-- Optimized Compiler Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-plugin-compiler.version}</version>
+        <configuration>
+          <release>${java.version}</release>
+          <useIncrementalCompilation>false</useIncrementalCompilation>
+          <compilerArgs>
+            <arg>-Xlint:all</arg>
+            <arg>-parameters</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
+
+      <!-- Optimized Surefire Plugin for Unit Tests -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-plugin-surefire.version}</version>
+        <configuration>
+          <!-- Parallel test execution -->
+          <parallel>all</parallel>
+          <threadCount>${parallel.test.threads}</threadCount>
+          <perCoreThreadCount>true</perCoreThreadCount>
+
+          <!-- JVM optimization -->
+          <forkCount>1</forkCount>
+          <reuseForks>${surefire.reuseForks}</reuseForks>
+          <argLine>
+            -Xmx1024m
+            -XX:+UseG1GC
+            -XX:+UseStringDeduplication
+            -XX:TieredStopAtLevel=1
+            -XX:-TieredCompilation
+          </argLine>
+
+          <!-- Test output optimization -->
+          <trimStackTrace>false</trimStackTrace>
+          <runOrder>filesystem</runOrder>
+        </configuration>
+      </plugin>
+
+      <!-- Optimized Failsafe Plugin for Integration Tests -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>${maven-plugin-failsafe.version}</version>
+        <configuration>
+          <parallel>classes</parallel>
+          <threadCount>2</threadCount>
+          <forkCount>1</forkCount>
+          <reuseForks>true</reuseForks>
+          <argLine>
+            -Xmx2048m
+            -XX:+UseG1GC
+            -XX:+UseStringDeduplication
+          </argLine>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <!-- Performance optimization profiles -->
+  <profiles>
+    <profile>
+      <id>fast-build</id>
+      <properties>
+        <maven.test.skip>true</maven.test.skip>
+        <maven.javadoc.skip>true</maven.javadoc.skip>
+        <checkstyle.skip>true</checkstyle.skip>
+        <spotbugs.skip>true</spotbugs.skip>
+      </properties>
+    </profile>
+
+    <profile>
+      <id>parallel-build</id>
+      <properties>
+        <parallel.test.threads>8</parallel.test.threads>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+              <parallel>all</parallel>
+              <threadCount>8</threadCount>
+              <forkCount>2</forkCount>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>
+
+<!-- Create .mvn/jvm.config file with: -->
+<!-- -Xmx4g -->
+<!-- -XX:+UseG1GC -->
+<!-- -XX:+UseStringDeduplication -->
+<!-- -XX:TieredStopAtLevel=1 -->
+<!-- -XX:-TieredCompilation -->
+
+<!-- Usage: -->
+<!-- mvn clean install -T 4 (parallel module builds) -->
+<!-- mvn clean install -P fast-build (skip non-essential tasks) -->
+<!-- mvn clean install -P parallel-build (maximum parallelization) -->
+
+```
+
+**Bad example:**
+
+```xml
+<!-- Non-optimized build configuration -->
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>slow-build</artifactId>
+  <version>1.0.0</version>
+
+  <build>
+    <plugins>
+      <!-- Basic compiler without optimization -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.0</version> <!-- Outdated version -->
+        <configuration>
+          <source>11</source> <!-- Hardcoded, old Java version -->
+          <target>11</target>
+        </configuration>
+      </plugin>
+
+      <!-- Surefire without parallel execution -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.2</version> <!-- Very outdated -->
+        <configuration>
+          <!-- No parallel execution -->
+          <!-- No JVM optimization -->
+          <!-- No fork reuse -->
+          <forkCount>0</forkCount> <!-- Forces single JVM, slower -->
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+</project>
+
+```
+
+### Example 10: Dependency Analysis and Cleanup
+
+Title: Analyze and Optimize Dependency Usage
+Description: Use Maven's dependency analysis tools to identify unused dependencies, detect version conflicts, and optimize the dependency tree. Regular dependency cleanup reduces build size, improves security, and eliminates potential conflicts.
+
+**Good example:**
+
+```xml
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>clean-dependencies</artifactId>
+  <version>1.0.0</version>
+
+  <properties>
+    <java.version>25</java.version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+    <!-- Plugin versions -->
+    <maven-plugin-dependency.version>3.8.1</maven-plugin-dependency.version>
+    <maven-plugin-enforcer.version>3.5.0</maven-plugin-enforcer.version>
+    <extra-enforcer-rules.version>1.8.0</extra-enforcer-rules.version>
+  </properties>
+
+  <build>
+    <plugins>
+      <!-- Maven Dependency Plugin for Analysis -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <version>${maven-plugin-dependency.version}</version>
+        <executions>
+          <!-- Analyze dependencies for unused/undeclared -->
+          <execution>
+            <id>analyze-dependencies</id>
+            <goals>
+              <goal>analyze-only</goal>
+            </goals>
+            <configuration>
+              <failOnWarning>true</failOnWarning>
+              <ignoreNonCompile>true</ignoreNonCompile>
+              <outputXML>true</outputXML>
+            </configuration>
+          </execution>
+
+          <!-- Generate dependency tree -->
+          <execution>
+            <id>dependency-tree</id>
+            <phase>validate</phase>
+            <goals>
+              <goal>tree</goal>
+            </goals>
+            <configuration>
+              <outputFile>target/dependency-tree.txt</outputFile>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Enforcer Plugin with Dependency Rules -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-enforcer-plugin</artifactId>
+        <version>${maven-plugin-enforcer.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>extra-enforcer-rules</artifactId>
+            <version>${extra-enforcer-rules.version}</version>
+          </dependency>
+        </dependencies>
+        <executions>
+          <execution>
+            <id>enforce-dependency-rules</id>
+            <goals>
+              <goal>enforce</goal>
+            </goals>
+            <configuration>
+              <rules>
+                <!-- Prevent circular dependencies -->
+                <banCircularDependencies/>
+
+                <!-- Ensure dependency convergence -->
+                <dependencyConvergence/>
+
+                <!-- Ban duplicate dependency versions -->
+                <banDuplicatePomDependencyVersions/>
+
+                <!-- Ban transitive dependencies -->
+                <banTransitiveDependencies>
+                  <excludes>
+                    <!-- Allow common transitive dependencies -->
+                    <exclude>org.slf4j:*</exclude>
+                    <exclude>org.springframework:*</exclude>
+                  </excludes>
+                </banTransitiveDependencies>
+
+                <!-- Require explicit dependency declarations -->
+                <requireUpperBoundDeps/>
+              </rules>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <!-- Dependency analysis profiles -->
+  <profiles>
+    <profile>
+      <id>dependency-analysis</id>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <!-- Copy dependencies for analysis -->
+              <execution>
+                <id>copy-dependencies</id>
+                <phase>package</phase>
+                <goals>
+                  <goal>copy-dependencies</goal>
+                </goals>
+                <configuration>
+                  <outputDirectory>target/dependencies</outputDirectory>
+                  <includeScope>compile</includeScope>
+                </configuration>
+              </execution>
+
+              <!-- List all dependencies -->
+              <execution>
+                <id>list-dependencies</id>
+                <phase>validate</phase>
+                <goals>
+                  <goal>list</goal>
+                </goals>
+                <configuration>
+                  <outputFile>target/dependency-list.txt</outputFile>
+                  <sort>true</sort>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>
+
+<!-- Dependency Analysis Commands: -->
+<!-- mvn dependency:analyze - Find unused/undeclared dependencies -->
+<!-- mvn dependency:tree - Show dependency tree -->
+<!-- mvn dependency:resolve-sources - Download source JARs -->
+<!-- mvn clean verify -P dependency-analysis - Full dependency analysis -->
+
+```
+
+**Bad example:**
+
+```xml
+<!-- No dependency analysis or cleanup -->
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>messy-dependencies</artifactId>
+  <version>1.0.0</version>
+
+  <dependencies>
+    <!-- Unused dependency -->
+    <dependency>
+      <groupId>org.apache.commons</groupId>
+      <artifactId>commons-lang3</artifactId>
+      <version>3.12.0</version>
+    </dependency>
+
+    <!-- Different versions of same library -->
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.15.2</version>
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-core</artifactId>
+      <version>2.14.1</version> <!-- Different version, potential conflict -->
+    </dependency>
+
+    <!-- Missing explicit dependency for used classes -->
+    <!-- Using classes from transitive dependencies without declaring them -->
+  </dependencies>
+
+  <!-- No dependency analysis plugins -->
+  <!-- No enforcer rules -->
+  <!-- No dependency management -->
+</project>
+
+```
+
+
+### Example 11: Modern Java Features Configuration
+
+Title: Configure Maven for Java 21+ Features and Module System
+Description: Configure Maven to leverage modern Java features including preview features, the module system (JPMS), and modern JVM arguments. Properly configure the compiler and runtime for Java 21+ features while maintaining backward compatibility and build reproducibility.
+
+**Good example:**
+
+```xml
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>modern-java-app</artifactId>
+  <version>1.0.0</version>
+
+  <properties>
+    <!-- Modern Java configuration -->
+    <java.version>25</java.version>
+    <maven.compiler.release>${java.version}</maven.compiler.release>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+
+    <!-- Plugin versions -->
+    <maven-plugin-compiler.version>3.14.0</maven-plugin-compiler.version>
+    <maven-plugin-surefire.version>3.5.3</maven-plugin-surefire.version>
+    <maven-plugin-failsafe.version>3.5.3</maven-plugin-failsafe.version>
+
+    <!-- Modern Java features -->
+    <enable.preview.features>false</enable.preview.features>
+    <enable.modules>true</enable.modules>
+  </properties>
+
+  <dependencies>
+    <!-- Modern testing with JUnit 5 -->
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <version>5.11.3</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
+  <build>
+    <plugins>
+      <!-- Modern Maven Compiler Plugin Configuration -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>${maven-plugin-compiler.version}</version>
+        <configuration>
+          <release>${java.version}</release>
+          <compilerArgs>
+            <!-- Enable all warnings -->
+            <arg>-Xlint:all</arg>
+            <!-- Include parameter names in compiled bytecode -->
+            <arg>-parameters</arg>
+            <!-- Modern compiler optimizations -->
+            <arg>-Xmaxerrs</arg>
+            <arg>1000</arg>
+            <arg>-Xmaxwarns</arg>
+            <arg>1000</arg>
+          </compilerArgs>
+          <!-- Enable preview features conditionally -->
+          <compilerArgs>
+            <arg>${enable.preview.features}</arg>
+          </compilerArgs>
+        </configuration>
+      </plugin>
+
+      <!-- Surefire Plugin with Modern JVM Arguments -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>${maven-plugin-surefire.version}</version>
+        <configuration>
+          <argLine>
+            <!-- Modern GC and memory management -->
+            -XX:+UseZGC
+            -XX:+UnlockExperimentalVMOptions
+            -Xmx2g
+            <!-- Enable preview features in tests if needed -->
+            ${enable.preview.features}
+            <!-- Modern JVM monitoring -->
+            -XX:+FlightRecorder
+            -XX:StartFlightRecording=duration=60s,filename=target/test-recording.jfr
+          </argLine>
+          <!-- Modern test execution -->
+          <parallel>all</parallel>
+          <threadCount>4</threadCount>
+          <forkCount>1</forkCount>
+          <reuseForks>true</reuseForks>
+        </configuration>
+      </plugin>
+
+      <!-- Failsafe Plugin for Integration Tests -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>${maven-plugin-failsafe.version}</version>
+        <configuration>
+          <argLine>
+            -XX:+UseZGC
+            -Xmx4g
+            ${enable.preview.features}
+          </argLine>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+
+  <!-- Profiles for different Java feature sets -->
+  <profiles>
+    <!-- Profile for enabling preview features -->
+    <profile>
+      <id>preview-features</id>
+      <properties>
+        <enable.preview.features>--enable-preview</enable.preview.features>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <compilerArgs combine.children="append">
+                <arg>--enable-preview</arg>
+              </compilerArgs>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- Profile for module system development -->
+    <profile>
+      <id>modules</id>
+      <activation>
+        <property>
+          <name>enable.modules</name>
+          <value>true</value>
+        </property>
+      </activation>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <configuration>
+              <compilerArgs combine.children="append">
+                <!-- Module path instead of classpath -->
+                <arg>--module-path</arg>
+                <arg>${project.build.directory}/modules</arg>
+              </compilerArgs>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+
+    <!-- Profile for different JVM implementations -->
+    <profile>
+      <id>graalvm</id>
+      <properties>
+        <graalvm.version>21.0.0</graalvm.version>
+      </properties>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.graalvm.buildtools</groupId>
+            <artifactId>native-maven-plugin</artifactId>
+            <version>0.10.3</version>
+            <extensions>true</extensions>
+            <executions>
+              <execution>
+                <id>build-native</id>
+                <goals>
+                  <goal>compile-no-fork</goal>
+                </goals>
+                <phase>package</phase>
+              </execution>
+            </executions>
+            <configuration>
+              <imageName>${project.artifactId}</imageName>
+              <buildArgs>
+                <buildArg>--no-fallback</buildArg>
+                <buildArg>--enable-preview</buildArg>
+              </buildArgs>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
+</project>
+
+<!-- Usage Examples: -->
+<!-- mvn clean compile (standard compilation) -->
+<!-- mvn clean compile -P preview-features (with preview features) -->
+<!-- mvn clean compile -P modules (with module system) -->
+<!-- mvn clean package -P graalvm (native image compilation) -->
+
+```
+
+**Bad example:**
+
+```xml
+<!-- Outdated Java configuration -->
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>legacy-java-app</artifactId>
+  <version>1.0.0</version>
+
+  <properties>
+    <!-- Old Java version -->
+    <maven.compiler.source>11</maven.compiler.source>
+    <maven.compiler.target>11</maven.compiler.target>
+  </properties>
+
+  <build>
+    <plugins>
+      <!-- Outdated compiler plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.8.0</version> <!-- Very outdated -->
+        <configuration>
+          <source>11</source> <!-- Hardcoded, doesn't use properties -->
+          <target>11</target>
+          <!-- No modern compiler arguments -->
+          <!-- No preview features support -->
+          <!-- No module system support -->
+        </configuration>
+      </plugin>
+
+      <!-- Basic Surefire without modern JVM settings -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-plugin</artifactId>
+        <version>2.22.2</version> <!-- Very outdated -->
+        <configuration>
+          <!-- No modern GC settings -->
+          <!-- No JFR recording -->
+          <!-- No parallel execution -->
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+  <!-- No profiles for different Java feature sets -->
+  <!-- No modern JVM optimization -->
+  <!-- No support for preview features -->
+</project>
+
+```
+
 ## Output Format
 
 - **ANALYZE** Maven POM files to identify specific best practices violations and categorize them by impact (CRITICAL, MAINTENANCE, PERFORMANCE, STRUCTURE) and area (dependency management, plugin configuration, project structure, repository management, version control)
-- **CATEGORIZE** Maven configuration improvements found: Dependency Management Issues (missing dependencyManagement vs centralized version control, hardcoded versions vs property-based management, version conflicts vs resolution strategies, unused dependencies vs clean dependency trees), Plugin Configuration Problems (outdated versions vs current releases, missing configurations vs optimal settings, suboptimal configurations vs performance-tuned setups), Project Structure Opportunities (non-standard layouts vs Maven conventions, poor POM organization vs structured sections, missing properties vs centralized configuration)
-- **APPLY** Maven best practices directly by implementing the most appropriate improvements for each identified issue: Introduce dependencyManagement sections for version centralization, extract version properties for consistency, configure essential plugins with optimal settings, organize POM sections following Maven conventions, add missing repository declarations, optimize dependency scopes, and eliminate unused dependencies through analysis
-- **IMPLEMENT** comprehensive Maven configuration optimization using proven patterns: Establish centralized dependency management through BOMs or parent POMs, standardize plugin versions and configurations across modules, organize POM structure with clear sections (properties, dependencyManagement, dependencies, build), implement security best practices for repositories, apply dependency scope optimization, and integrate build lifecycle enhancements
-- **REFACTOR** Maven configuration systematically following the improvement roadmap: First centralize version management through properties and dependencyManagement, then standardize plugin configurations with current versions, organize POM structure following Maven conventions, optimize dependency scopes and eliminate unused dependencies, secure repository configurations, and enhance build profiles for different environments
-- **EXPLAIN** the applied Maven improvements and their benefits: Build reliability enhancements through centralized dependency management, maintenance simplification via property-based versioning, performance improvements from optimized plugin configurations, security strengthening through proper repository management, and development productivity gains from standardized build practices
+- **CATEGORIZE** Maven configuration improvements found: Dependency Management Issues (missing dependencyManagement vs centralized version control, hardcoded versions vs property-based management, version conflicts vs resolution strategies, unused dependencies vs clean dependency trees), Plugin Configuration Problems (outdated versions vs current releases, missing configurations vs optimal settings, suboptimal configurations vs performance-tuned setups), Project Structure Opportunities (non-standard layouts vs Maven conventions, poor POM organization vs structured sections, missing properties vs centralized configuration), Security Vulnerabilities (missing OWASP dependency scanning, insecure repository configurations, vulnerable dependency versions, missing enforcer security rules), Performance Bottlenecks (sequential builds vs parallel execution, unoptimized JVM settings, missing build caching, inefficient test configurations)
+- **APPLY** Maven best practices directly by implementing the most appropriate improvements for each identified issue: Introduce dependencyManagement sections for version centralization, extract version properties for consistency, configure essential plugins with optimal settings, organize POM sections following Maven conventions, add missing repository declarations, optimize dependency scopes, eliminate unused dependencies through analysis, implement OWASP security scanning, configure parallel build execution, and optimize JVM settings for performance
+- **IMPLEMENT** comprehensive Maven configuration optimization using proven patterns: Establish centralized dependency management through BOMs or parent POMs, standardize plugin versions and configurations across modules, organize POM structure with clear sections (properties, dependencyManagement, dependencies, build), implement security best practices with OWASP dependency scanning and enforcer rules, apply dependency scope optimization, integrate build lifecycle enhancements, configure parallel test execution, and establish performance monitoring
+- **REFACTOR** Maven configuration systematically following the improvement roadmap: First centralize version management through properties and dependencyManagement, then standardize plugin configurations with current versions, organize POM structure following Maven conventions, optimize dependency scopes and eliminate unused dependencies, secure repository configurations with HTTPS and checksum validation, implement vulnerability scanning, enhance build profiles for different environments, and optimize build performance through parallelization
+- **EXPLAIN** the applied Maven improvements and their benefits: Build reliability enhancements through centralized dependency management, maintenance simplification via property-based versioning, performance improvements from optimized plugin configurations and parallel execution, security strengthening through OWASP vulnerability scanning and proper repository management, dependency cleanup benefits through automated analysis, and development productivity gains from standardized build practices and faster build times
 - **VALIDATE** that all applied Maven changes compile successfully, maintain existing build behavior, preserve dependency compatibility, follow Maven best practices, and achieve the intended build improvements through comprehensive testing and verification
 
 ## Safeguards
@@ -622,6 +1485,10 @@ Description: Define all dependency and plugin versions in the `<properties>` sec
 - **NEVER remove or replace existing plugins** - only add new plugins that don't already exist
 - **NEVER remove or replace existing properties** - only add new properties that don't conflict
 - **ASK USER before overriding** any existing configuration element
+- **SECURITY**: Always validate security plugin configurations before applying OWASP dependency scanning
+- **PERFORMANCE**: Test performance optimizations in non-production environments first
 - Verify changes with the command: `./mvnw clean verify`
 - Preserve existing dependency versions unless explicitly requested to update
 - Maintain backward compatibility with existing build process
+- **VALIDATE**: Run dependency analysis after changes to ensure no unused dependencies introduced
+- **CAUTION**: Parallel build settings should be tested with project-specific test suites
