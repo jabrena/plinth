@@ -100,14 +100,11 @@ With this evolution, software engineers now can combine pure system prompts and 
 - [`@behaviour-consultative-interaction`](https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/behaviour-consultative-interaction.md)
 - [`@behaviour-progressive-learning`](https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/behaviour-progressive-learning.md)
 
-Using specialized behaviours like `@behaviour-progressive-learning` in a Creative way in your repositories could increase `the collective ownership` and spread easily the `Code Standards`implemented in the code.
+Using specialized behaviours such as `@behaviour-progressive-learning` creatively in your repositories can increase collective ownership and help spread the code standards implemented in the codebase.
 
-[![](/cursor-rules-java/images/xp.png)](http://www.extremeprogramming.org/)
+### Using Pure System Prompts in Data Pipelines
 
----
-
-After this design change applied into the different system prompts, you can use them in your `Data pipelines` for different use cases such as `automatic coding`, `code refactoring`, `continuous profiling`, and more.
-
+Little by little, organizations will evolve current `data pipeline` adding new features combining multiple system prompts for different use cases such as `automatic coding`, `code refactoring`, `continuous profiling`, and more.
 
 ![](/cursor-rules-java/images/data-pipeline-workflow.png)
 
