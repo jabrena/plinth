@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.11.0] 2025-09-29
+
+### Added
+
+- **Behaviours**:
+  - Added tone variations to consultative and progressive learning behaviours (#330).
+
+- **Educational content**:
+  - New "System Prompts for Java" course and pages, plus a course about this project (#335). https://jabrena.github.io/cursor-rules-java/
+
+- **Documentation & Diagrams**:
+  - ADR-003 documenting JBake website generation strategy (#326).
+  - Added UML State Machine diagram support to documentation rule `@170-java-documentation` (#310).
+
+### Changed
+
+- **Platform & Build**:
+  - Upgraded project to Java 25; updated Maven Java version in builds (#315, #343).
+
+- **Cursor rules**:
+  - Extensive refinements across multiple rules (dependencies, plugins, secure coding, concurrency, exception handling, functional programming, documentation, diagrams) (#309, #341).
+  - Decoupled system prompts from behaviours and added learning behaviour; reorganized generator templates and inventory (#309).
+
+### Removed
+
+- **Cursor rules**:
+  - Removed `@123-java-general-guidelines` (superseded by specialized rules) (#301).
+
 ## [0.10.0] 2025-09-04
 
 ### Added
