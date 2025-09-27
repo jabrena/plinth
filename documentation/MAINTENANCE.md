@@ -36,4 +36,9 @@ Can you update the current changelog for 0.11.0 comparing git commits in relatio
 Update xml files from @resources/ and update the version to 0.11.0 removing snapshot. Update @pom.xml with the new version 0.11.0 Generate system prompts again with ./mvnw clean install -pl system-prompts-generator
 
 ## Note: Refactor a bit more to include all pom.xml
+
+## Tagging process
+git tag --list
+git tag 0.11.0
+git push --tags
 ```

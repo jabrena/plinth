@@ -18,7 +18,7 @@
 # Serve generated documentation
 jwebserver -p 8000 -d "$(pwd)/docs"
 
-# Serve presentation
+# Serve deck about Devoxx BE 2025
 jwebserver -p 8000 -d "$(pwd)/documentation/dvbe25/"
 ```
 
