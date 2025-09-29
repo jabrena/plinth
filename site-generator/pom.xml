@@ -8,7 +8,7 @@
     <parent>
         <groupId>info.jab</groupId>
         <artifactId>cursor-rules-java</artifactId>
-        <version>0.11.0</version>
+        <version>0.12.0-SNAPSHOT</version>
     </parent>
 
     <artifactId>cursor-rules-java-site</artifactId>
@@ -94,7 +94,7 @@
                                     <outputDirectory>${project.basedir}/../docs/dvbe25</outputDirectory>
                                     <resources>
                                         <resource>
-                                            <directory>${project.basedir}/../documentation/dvbe25</directory>
+                                            <directory>${project.basedir}/../documentation/conferences/dvbe25</directory>
                                             <filtering>false</filtering>
                                         </resource>
                                     </resources>

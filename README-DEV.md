@@ -19,7 +19,7 @@
 jwebserver -p 8000 -d "$(pwd)/docs"
 
 # Serve deck about Devoxx BE 2025
-jwebserver -p 8000 -d "$(pwd)/documentation/dvbe25/"
+jwebserver -p 8000 -d "$(pwd)/documentation/conferences/dvbe25/"
 ```
 
 ## Code Quality and Security Profiles
