@@ -106,6 +106,7 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 ### Blogs
 
 - https://virtuslab.com/blog/ai/providing-library-documentation/
+- https://www.linkedin.com/pulse/september-rest-story-jvm-weekly-vol-146-artur-skowro%C5%84ski-82lif/?trackingId=wbWPSL65TpCCbdg5ksAWjw%3D%3D
 
 ## References
 
