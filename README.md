@@ -5,7 +5,7 @@
 
 [![CI Builds](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml/badge.svg)](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml)
 
-## Feedback
+## Share feedback
 
 ```bash
 ╔═══════════════════════════════════════════════════════╗
