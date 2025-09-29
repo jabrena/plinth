@@ -1,0 +1,20 @@
+# Hide any shell scripts from language detection
+*.sh linguist-detectable=false
+*.bash linguist-detectable=false
+
+# Mark documentation appropriately
+*.md linguist-documentation=true
+docs/** linguist-documentation=true
+documentation/** linguist-documentation=true
+site-generator/** linguist-documentation=true
+
+# Ensure Java examples are properly detected
+examples/**/*.java linguist-language=Java
+*.java linguist-detectable=true
+system-prompts-generator/** linguist-language=Java
+
+# Mark XML files as part of Java ecosystem (transformation definitions)
+system-prompts-generator/**/*.xml linguist-language=Java
+*.xsl linguist-language=Java
+*.xslt linguist-language=Java
+
