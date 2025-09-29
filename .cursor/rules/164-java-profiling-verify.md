@@ -2,7 +2,7 @@
 author: Juan Antonio Breña Moral
 version: 0.12.0-SNAPSHOT
 ---
-# Java Profiling Workflow / Step 4 / Compare results after refactoring
+# Java Profiling Workflow / Step 4 / Verify results
 
 ## Role
 

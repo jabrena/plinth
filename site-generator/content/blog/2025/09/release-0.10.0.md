@@ -9,7 +9,7 @@ status=published
 ## What are Cursor rules for Java?
 
 The project provides a collection of System prompts for Java that help software engineers in their daily programming work.
-The [available System prompts for Java](https://github.com/jabrena/cursor-rules-java/blob/main/CURSOR-RULES-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/JDK tools` & `Documentation`.
+The [available System prompts for Java](https://github.com/jabrena/cursor-rules-java/blob/main/SYSTEM-PROMPTS-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/JDK tools` & `Documentation`.
 
 ![](/cursor-rules-java/images/workflow.png)
 
@@ -282,7 +282,7 @@ Add Maven Enforcer plugin only from the rule @112-java-maven-plugins without any
 Add tests for the following classes with  @131-java-unit-testing
 ```
 
-Additional examples in the [documentation](https://github.com/jabrena/cursor-rules-java/blob/main/CURSOR-RULES-JAVA.md).
+Additional examples in the [documentation](https://github.com/jabrena/cursor-rules-java/blob/main/SYSTEM-PROMPTS-JAVA.md).
 
 ### Improve readability in system prompts
 

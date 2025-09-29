@@ -8,7 +8,7 @@
 ## Goal
 
 The project provides a collection of `System prompts` for Java Enterprise development that help software engineers in their daily programming work and data pipelines.
-The [available System prompts for Java](./CURSOR-RULES-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation` & `Diagrams`.
+The [available System prompts for Java](./SYSTEM-PROMPTS-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation` & `Diagrams`.
 
 ### Compatibility with Modern IDEs, CLI & Others
 
@@ -52,7 +52,7 @@ New to this repository? Start with our [comprehensive guide](./documentation/GET
 
 ## How many system prompts for Java does this project include?
 
-Explore the [complete catalog of available System prompts](./CURSOR-RULES-JAVA.md) to discover the full range of capabilities and find the perfect rules for your specific use cases.
+Explore the [complete catalog of available System prompts](./SYSTEM-PROMPTS-JAVA.md) to discover the full range of capabilities and find the perfect rules for your specific use cases.
 
 ## Constraints, Output format & Safety guards
 
