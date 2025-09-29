@@ -14,6 +14,9 @@ Review that the list doesn´t any broken link to @/.cursor with .md files
 
 # Prompt to provide a release changelog
 Can you update the current changelog for 0.10.0 comparing git commits in relation to 0.9.0 tag. Use  @https://keepachangelog.com/en/1.1.0/  rules
+
+#Bump to a new snapshot
+@resources/ update version to 0.12.0-SNAPSHOT and pom.xml and maven modules
 ```
 
 ## Release process

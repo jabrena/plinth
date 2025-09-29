@@ -1,6 +1,6 @@
 ---
 author: Juan Antonio Breña Moral
-version: 0.11.0
+version: 0.12.0-SNAPSHOT
 ---
 # Java rules to apply data oriented programming style
 

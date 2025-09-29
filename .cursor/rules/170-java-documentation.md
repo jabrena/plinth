@@ -1,6 +1,6 @@
 ---
 author: Juan Antonio Breña Moral
-version: 0.11.0
+version: 0.12.0-SNAPSHOT
 ---
 # Java Documentation and ADR Generator with modular step-based configuration
 
