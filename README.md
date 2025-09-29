@@ -5,13 +5,13 @@
 
 [![CI Builds](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml/badge.svg)](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml)
 
-## [Feedback](https://forms.gle/TpNXENjmu45wuXoi6 )
+## Feedback
 
 ```bash
 ╔═══════════════════════════════════════════════════════╗
 ║ ┌───────────────────────────────────────────────────┐ ║
 ║ │ Your feedback is important to evolve this project │ ║
-║ │ https://forms.gle/TpNXENjmu45wuXoi6               │ ║
+║ │      https://forms.gle/TpNXENjmu45wuXoi6          │ ║
 ║ └───────────────────────────────────────────────────┘ ║
 ╚═══════════════════════════════════════════════════════╝
 ```
