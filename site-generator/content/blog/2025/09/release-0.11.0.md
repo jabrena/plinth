@@ -163,3 +163,5 @@ If you feel stuck using this project or have questions, you can attend the follo
 - https://devoxx.be/app/talk/4708/101-cursor-ai-learning-to-use-for-java-enterprise-projects/
 
 [![](/cursor-rules-java/images/devoxx-logo.png)](https://devoxx.be/)
+
+![](/cursor-rules-java/images/0.11.0-github-stats.png)

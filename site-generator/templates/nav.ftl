@@ -19,6 +19,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
 <div class="collapse navbar-collapse" id="main-navbar">
 <ul class="nav navbar-nav navbar-right">
+  <li><a href="https://forms.gle/TpNXENjmu45wuXoi6" target="_blank">Share feedback</a></li>
   <li class="navlinks-container">
     <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
     <div class="navlinks-children">
