@@ -5,6 +5,15 @@
 
 [![CI Builds](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml/badge.svg)](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml)
 
+```bash
+╔═══════════════════════════════════════════════════════╗
+║ ┌───────────────────────────────────────────────────┐ ║
+║ │ Your feedback is important to evolve this project │ ║
+║ │ https://forms.gle/TpNXENjmu45wuXoi6               │ ║
+║ └───────────────────────────────────────────────────┘ ║
+╚═══════════════════════════════════════════════════════╝
+```
+
 ## Goal
 
 The project provides a collection of `System prompts` for Java Enterprise development that help software engineers in their daily programming work and data pipelines.
