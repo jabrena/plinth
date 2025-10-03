@@ -133,7 +133,7 @@ In this release, the script `profile-java-process.sh`, included in  `@161-java-p
 
 ![](/cursor-rules-java/images/0.11.0-profiling-menu.png)
 
-In recent months, I have been inspired by the work of outstanding engineers in this field: [Francesco Nigro](https://x.com/forked_franz), [Jaromir Hamala](https://x.com/jerrinot), [Johannes Bechberger](https://x.com/parttimen3rd) & [Brendan Gregg](https://x.com/brendangregg). I highly recommend following them.
+In recent months, I have been inspired by the work of outstanding engineers in this field: [Francesco Nigro](https://x.com/forked_franz), [Jaromir Hamala](https://x.com/jerrinot), [Johannes Bechberger](https://x.com/parttimen3rd), [Erik Gahlin](https://x.com/ErikGahlin), [Marcus Hirt](https://x.com/hirt) & [Brendan Gregg](https://x.com/brendangregg). I highly recommend following them.
 
 If you are interested in the Profiling model `Detect, Analyze, Refactor & Compare` implemented with the following set of System prompts:
 
