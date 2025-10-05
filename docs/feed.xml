@@ -2,7 +2,7 @@
 <feed xmlns='http://www.w3.org/2005/Atom' xml:lang='en'>
   <id>https://jabrena.github.io/cursor-rules-java/</id>
   <title>Cursor Rules for Java</title>
-  <updated>2025-09-29T23:18:42+0100</updated>
+  <updated>2025-10-05T17:23:13+0200</updated>
   <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java/" />
   <link rel='self' type='application/atom+xml' href='https://jabrena.github.io/cursor-rules-java//feed.xml' />
   <entry>
@@ -10,45 +10,16 @@
     <title>What&apos;s new in Cursor rules for Java 0.11.0?</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/09/release-0.11.0.html" />
-    <updated>2025-09-29T00:00:00+0100</updated>
+    <updated>2025-09-29T00:00:00+0200</updated>
     <summary>What are Cursor rules for Java?
 The project provides a collection of System prompts for Java Enterprise development that help software engineers in their daily programming work &amp;amp; data pipelines. The available System prompts for Java cover areas such as Build system based on Maven, Design, Coding, Testing, Refactoring &amp;amp; JMH Benchmarking, Performance testing with JMeter, Profiling with async-...</summary>
-  </entry>
-  <entry>
-    <id>https://jabrena.github.io/cursor-rules-java//blog/2025/09/mastering-memory-leak-detection-comprehensive-course.html</id>
-    <title>From Flamegraphs to Production: Mastering Java Memory Leak Detection Through Systematic Profiling</title>
-    <link></link>
-    <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/09/mastering-memory-leak-detection-comprehensive-course.html" />
-    <updated>2025-09-17T00:00:00+0100</updated>
-    <summary>Mastering Memory Analysis: Your Journey to Performance Excellence
-Imagine having the confidence to analyze and optimize memory usage in any Java application. Your Spring Boot microservice shows interesting memory consumption patterns, and you&apos;re excited to dive deep into understanding what&apos;s happening. You have access to sophisticated profiling tools that can provide detailed insights without impac...</summary>
-  </entry>
-  <entry>
-    <id>https://jabrena.github.io/cursor-rules-java//blog/2025/09/mastering-java-with-ai-system-prompts-course.html</id>
-    <title>The Complete Guide to Java Enterprise Development with System Prompts</title>
-    <link></link>
-    <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/09/mastering-java-with-ai-system-prompts-course.html" />
-    <updated>2025-09-17T00:00:00+0100</updated>
-    <summary>The Developer&apos;s Opportunity: Mastering Enterprise Patterns with AI
-Baseline today: new services often start with copy‑pasted pom.xml, ad‑hoc testing, inconsistent security, and missing documentation. Outcome: uneven quality and avoidable rework. A better path is repeatable automation that encodes enterprise patterns while teaching the reasoning behind each choice.
-This course shows how AI‑powered s...</summary>
-  </entry>
-  <entry>
-    <id>https://jabrena.github.io/cursor-rules-java//blog/2025/09/mastering-java-generics-comprehensive-course-guide.html</id>
-    <title>Mastering Java Generics: The Complete Developer&apos;s Journey from Type Safety to Advanced Patterns</title>
-    <link></link>
-    <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/09/mastering-java-generics-comprehensive-course-guide.html" />
-    <updated>2025-09-17T00:00:00+0100</updated>
-    <summary>Discovering the Power of Type-Safe Java Development
-Start from a familiar legacy snippet: List inventory = new ArrayList();. It compiles, ships, and eventually bites back with ClassCastException. The fix is not a one‑off cast; it’s a mindset: design APIs that express intent through types and let the compiler enforce correctness.
-Generics have been in Java for years, but deep fluency—wildcards, vari...</summary>
   </entry>
   <entry>
     <id>https://jabrena.github.io/cursor-rules-java//blog/2025/09/jfr-modern-java-profiling.html</id>
     <title>Beyond Traditional Profiling: Mastering JFR for Modern Java Applications</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/09/jfr-modern-java-profiling.html" />
-    <updated>2025-09-17T00:00:00+0100</updated>
+    <updated>2025-09-17T00:00:00+0200</updated>
     <summary>Discovering JFR: A Journey into Modern Java Profiling Excellence
 Symptom: memory usage drifts under real production load. Constraint: profiling cannot degrade latency or throughput. Solution: Java Flight Recorder (JFR) — the built‑in, low‑overhead recorder that captures CPU, memory, GC, I/O, and custom events from live systems with typically under 2% impact.
 With JFR, production evidence replaces g...</summary>
@@ -58,7 +29,7 @@ With JFR, production evidence replaces g...</summary>
     <title>What&apos;s new in Cursor rules for Java 0.10.0?</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/09/release-0.10.0.html" />
-    <updated>2025-09-05T00:00:00+0100</updated>
+    <updated>2025-09-05T00:00:00+0200</updated>
     <summary>What are Cursor rules for Java?
 The project provides a collection of System prompts for Java that help software engineers in their daily programming work.
 The available System prompts for Java cover aspects like Build system based on Maven, Design, Coding, Testing, Refactoring &amp;amp; JMH Benchmarking, Performance testing with JMeter, Profiling with Async profiler/JDK tools &amp;amp; Documentation.
@@ -70,7 +41,7 @@ What...</summary>
     <title>What&apos;s new in Cursor rules for Java 0.9.0?</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/07/release-0.9.0.html" />
-    <updated>2025-07-23T00:00:00+0100</updated>
+    <updated>2025-07-23T00:00:00+0200</updated>
     <summary>What are Cursor rules for Java?
 Cursor Rules for Java is an Open Source project that provides a set of interactive system prompts for Java that help software engineers in their daily work.
 
@@ -84,7 +55,7 @@ Added Consultative Interaction Technique in the majority of R...</summary>
     <title>The Three-Node Quality Framework for AI Prompts</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/07/prompt-quality-framework.html" />
-    <updated>2025-07-20T00:00:00+0100</updated>
+    <updated>2025-07-20T00:00:00+0200</updated>
     <summary>Overview
 When designing AI prompts for complex tasks like code generation and software development, a structured quality framework ensures both comprehensive responses and safe execution. This document outlines the three-node quality framework that combines prerequisites, content structure, and ongoing safety measures.
 The Three Pillars
@@ -96,7 +67,7 @@ Purpo...</summary>
     <title>What&apos;s new in Cursor rules for Java 0.8.0?</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2025/07/release-0.8.0.html" />
-    <updated>2025-07-12T00:00:00+0100</updated>
+    <updated>2025-07-12T00:00:00+0200</updated>
     <summary>New interactive behaviors in the Cursor rules
 In the previous release, the project added interactive behavior to a few complex rules to improve the developer experience, but in this release, new rules have evolved to add more interactive behavior regardless of complexity. The motivation behind this change: now the rules suggest alternatives to the software engineer to improve development at the pac...</summary>
   </entry>
