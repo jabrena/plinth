@@ -83,7 +83,7 @@ This project hast good traction in the JVM community with a special popularity i
 
 Recently, this technique was identified in the latest Radar #33 from `Thoughtworks`: `Curated shared instructions for software teams`
 
-[![](/cursor-rules-java/images/11/thoughtworks-radar-system-prompts.png)](https://www.thoughtworks.com/radar/techniques/curated-shared-instructions-for-software-teams)
+[![](/cursor-rules-java/images/11/thoughtworks-radar-system-prompts.jpg)](https://www.thoughtworks.com/radar/techniques/curated-shared-instructions-for-software-teams)
 
 **Problem which try to solve:** Maintain a specialized collection of system prompts for Software development in Java.
 
