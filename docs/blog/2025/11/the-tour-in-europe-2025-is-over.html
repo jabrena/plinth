@@ -56,7 +56,7 @@
     </div>
   </li>
   <li><a href="../../../archive.html">Archive</a></li>
-  <li><a href="../../../about.html">About</a></li>
+  <li><a href="https://jabrena-github-io.translate.goog/cursor-rules-java/?_x_tr_sl=en&_x_tr_tl=cn&_x_tr_hl=en-US&_x_tr_pto=wapp">Translate</a></li>
 </ul>
 </div>
 
@@ -114,9 +114,9 @@
 <h2>Emerging new solutions from the Gemba</h2>
 <p>During the last 9 months using the previous tools mentioned before, a few ideas emerged which little by little are evolving and were introduced in the latest talks.</p>
 <h3>PML</h3>
-<p><code>PML, Prompt Markup Language</code>, an <code>XML Schema</code>, which is able to help software engineers in modeling User prompts &amp; System prompts. Once the prompt is modelled in XML, it can be converted into a regular format frontier models use, Markdown or Text plan. Using the guidelines by PML Schema, it is easier to not miss something important to be defined in a production prompt. Recently, a new XML Schema was added to model Workflows.</p>
+<p><code>PML, Prompt Markup Language</code>, an <code>XML Schema</code>, which is able to help software engineers in modeling User prompts &amp; System prompts. Once the prompt is modelled in XML, it can be converted into a regular format frontier models use, Markdown. Using the guidelines by PML Schema, it is easier to not miss something important to be defined in a prompt for production environments. Recently, a new XML Schema was added to model Workflows.</p>
 <p><strong>Problem it tries to solve:</strong> Design good <code>User Prompts</code> &amp; <code>System prompts</code> to mitigate ambiguity in Models' execution.</p>
-<p>PML project has 2 different schemas, one schema which defines parts to model Prompts:</p>
+<p>PML project has 2 different schemas, one schema which defines the diferent parts of any Prompt:</p>
 <pre><code class="language-xml">&lt;!-- Root element for a prompt --&gt;
 &lt;xs:element name=&quot;prompt&quot;&gt;
     &lt;xs:complexType&gt;
@@ -137,7 +137,8 @@
     &lt;/xs:complexType&gt;
 &lt;/xs:element&gt;
 </code></pre>
-<p>You can see PML in action <a href="https://github.com/jabrena/cursor-rules-java/tree/main/system-prompts-generator/src/main/resources">here</a>. Finally, here is a novel Schema dedicated to Workflows:</p>
+<p>You can see PML in action <a href="https://github.com/jabrena/cursor-rules-java/tree/main/system-prompts-generator/src/main/resources">here</a>.</p>
+<p>Finally, here is a novel Schema dedicated to Workflows:</p>
 <pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;pml-workflow xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
     xsi:noNamespaceSchemaLocation=&quot;https://jabrena.github.io/pml/schemas/0.3.0-SNAPSHOT/pml-workflow.xsd&quot;&gt;
@@ -169,8 +170,8 @@
 <p><img src="/cursor-rules-java/images/11/devoxx-be-room-4.jpg" alt="" /></p>
 <p>In 2025, the entire JVM industry is moving around AI and if you attended the different sessions in Devoxx, you may feel it. In the conference, I listened to the different proposals from the most used frameworks <code>Spring</code> &amp; <code>Quarkus</code> in the Java industry and in this year, I observed that there exists a real parity between Spring ecosystem and Quarkus ecosystem. Congratulations to <code>Mario Fusco</code>, <code>Georgios Andrianakis</code>, <code>Clement Escoffier</code>, <code>Rod Johnson</code> &amp; <code>Christian Tzolov</code> for their hard work. I would not like to forget the nice proposal from <code>Akka</code> which shared the new features oriented to <code>Agents</code>.</p>
 <p><img src="/cursor-rules-java/images/11/devoxx-quarkus-agentic-talk.png" alt="" /></p>
-<p><strong>Can Spring AI or Langchain4j use something that I am building?</strong></p>
-<p>Yes, PML for sure.</p>
+<p><strong>Can Spring AI or Langchain4j use PML or Cursor rules for Java?</strong></p>
+<p>Yes, for sure. Happy to talk with <code>Spring AI</code> team or <code>Quarkus</code> team in the future.</p>
 <h3>What talks I loved in Devoxx BE 2025?</h3>
 <p><strong>Agentic AI:</strong></p>
 <ul>
@@ -227,7 +228,7 @@
 </ul>
 <p><strong>Note:</strong> Remember that you can register <a href="https://entwickler.de/reader/player/w-jax-2025">here</a> to watch the sessions.</p>
 <h2>Conclusions</h2>
-<p>It was a great experience to talk to more than 600 Java Software engineers in Benelux &amp; Germany about Java &amp; AI. In the different sessions, I was able to receive useful feedback on the talks, topics, and the open source project. Now it is time to return to the desk to think and evolve.</p>
+<p>It was a great experience to talk to more than 600 Java Software engineers in Benelux &amp; Germany about Java &amp; AI. In the different sessions, I was able to receive useful feedback about the talks, topics, and the related open source projects. Now it is time to return to the desk to think and evolve the different solutions.</p>
 <p>Many thanks 🙏🙏🙏</p>
 <h2>References</h2>
 <ul>

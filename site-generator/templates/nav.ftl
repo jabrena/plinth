@@ -36,7 +36,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </li>
   <li><a href="${content.rootpath!}archive.html">Archive</a></li>
-  <li><a href="${content.rootpath!}about.html">About</a></li>
+  <li><a href="https://jabrena-github-io.translate.goog/cursor-rules-java/?_x_tr_sl=en&_x_tr_tl=cn&_x_tr_hl=en-US&_x_tr_pto=wapp">Translate</a></li>
 </ul>
 </div>
 
