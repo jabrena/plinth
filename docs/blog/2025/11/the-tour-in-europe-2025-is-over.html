@@ -101,10 +101,10 @@
 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 <article role="main" class="blog-post">
 <h2>Introduction</h2>
-<p>Over the last few weeks, I had the privilege of sharing with the <code>Java community</code> a few ideas that they could be very useful for <code>Java Software engineers</code> in their daily work or for organizations enhancing their <code>pipelines</code>.</p>
-<p>Using this lines, I would like to acknowledge <code>Stephan Janssen</code> from <code>Devoxx</code>, <code>Luis Fabrício De Llamas</code> from <code>DevConverge</code>, <code>Christina Bergh</code> from <code>W-JAX</code> and the entire <code>Madrid JUG</code> team for their guidance during this tour 2025.</p>
-<p>During those events, I presented ideas about a new generation of developer tools powered by AI and new concepts related to the development.</p>
-<p>In the different sessions, I talked in general about the <code>Cursor portfolio</code> and specifically about some products/services like <code>Cursor AI Desktop</code>, <code>Cursor Web</code>, <code>Cursor Cloud Agents API</code>, <code>Cursor Rules</code>, and the new frontier model <code>Cursor Composer 1</code> and I would like to not miss the opportunity to mention <code>Claude Code</code> as CLI tool and the models <code>Claude Sonnet 4</code> &amp; <code>Claude Sonnet 4.5</code> which I used almost all time during 2025.</p>
+<p>Over the last few weeks, I had the privilege of sharing with the <code>Java community</code> a few ideas that could be very useful for <code>Java Software engineers</code> in their daily work or for organizations enhancing their <code>pipelines</code>.</p>
+<p>Using these lines, I would like to acknowledge <code>Stephan Janssen</code> from <code>Devoxx</code>, <code>Luis Fabrício De Llamas</code> from <code>DevConverge</code>, <code>Christina Bergh</code> from <code>W-JAX</code> and the entire <code>Madrid JUG</code> team for their guidance during this tour 2025.</p>
+<p>During those events, I presented ideas about a new generation of developer tools powered by AI and new concepts related to development.</p>
+<p>In the different sessions, I talked generally about the <code>Cursor portfolio</code> and specifically about some products/services like <code>Cursor AI Desktop</code>, <code>Cursor Web</code>, <code>Cursor Cloud Agents API</code>, <code>Cursor Rules</code>, and the new frontier model <code>Cursor Composer 1</code> and I would not like to miss the opportunity to mention <code>Claude Code</code> as CLI tool and the models <code>Claude Sonnet 4</code> &amp; <code>Claude Sonnet 4.5</code> which I used almost all the time during 2025.</p>
 <p>You can watch the different sessions here:</p>
 <ul>
 <li><a href="https://www.youtube.com/watch?v=UJPWIz8eobc">https://www.youtube.com/watch?v=UJPWIz8eobc</a> (30 Min)</li>
@@ -112,11 +112,11 @@
 <li><a href="https://entwickler.de/reader/player/w-jax-2025">https://entwickler.de/reader/player/w-jax-2025</a> (60 min)</li>
 </ul>
 <h2>Emerging new solutions from the Gemba</h2>
-<p>During the last 9 months using the previous tools mentioned before, emerged few ideas which little by little are evolving and they were introduced in the latest talks.</p>
+<p>During the last 9 months using the previous tools mentioned before, a few ideas emerged which little by little are evolving and were introduced in the latest talks.</p>
 <h3>PML</h3>
-<p><code>PML, Prompt Markup Language</code>, a <code>XML Schema</code>, which is able to help the Software engineer in the process to model User prompts &amp; System prompts. Once the prompt is modelled in XML. It is possible to be converted into a regular format frontier models use, Markdown or Text plan. Using the guidelines by PML Schema, it is more easier to not miss something important to be defined in a production prompt. Recently, it was added a new XML Schema to model Workflows.</p>
-<p><strong>Problem which try to solve:</strong> Design good <code>User Prompts</code> &amp; <code>System prompts</code> to mitigate ambiguity in Models`s execution.</p>
-<p>PML project has 2 different schemas, one schema which define parts to model Prompts:</p>
+<p><code>PML, Prompt Markup Language</code>, an <code>XML Schema</code>, which is able to help software engineers in modeling User prompts &amp; System prompts. Once the prompt is modelled in XML, it can be converted into a regular format frontier models use, Markdown or Text plan. Using the guidelines by PML Schema, it is easier to not miss something important to be defined in a production prompt. Recently, a new XML Schema was added to model Workflows.</p>
+<p><strong>Problem it tries to solve:</strong> Design good <code>User Prompts</code> &amp; <code>System prompts</code> to mitigate ambiguity in Models' execution.</p>
+<p>PML project has 2 different schemas, one schema which defines parts to model Prompts:</p>
 <pre><code class="language-xml">&lt;!-- Root element for a prompt --&gt;
 &lt;xs:element name=&quot;prompt&quot;&gt;
     &lt;xs:complexType&gt;
@@ -137,7 +137,7 @@
     &lt;/xs:complexType&gt;
 &lt;/xs:element&gt;
 </code></pre>
-<p>You can see PML in action <a href="https://github.com/jabrena/cursor-rules-java/tree/main/system-prompts-generator/src/main/resources">here</a> and finally a novel Schema dedicated to Workflows:</p>
+<p>You can see PML in action <a href="https://github.com/jabrena/cursor-rules-java/tree/main/system-prompts-generator/src/main/resources">here</a>. Finally, here is a novel Schema dedicated to Workflows:</p>
 <pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;pml-workflow xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
     xsi:noNamespaceSchemaLocation=&quot;https://jabrena.github.io/pml/schemas/0.3.0-SNAPSHOT/pml-workflow.xsd&quot;&gt;
@@ -151,22 +151,23 @@
 <p>This second Schema was designed as a consequence of the evolution of Churrera`s project.</p>
 <p><a href="https://github.com/jabrena/pml">https://github.com/jabrena/pml</a></p>
 <h3>Cursor rules for Java</h3>
-<p><code>System prompts for Java (Aka Cursor rules for Java)</code> is a collection of System prompts for Java that help software engineers in their daily programming work &amp; pipelines. The available System prompts for Java cover aspects like Build system based on Maven, Design, Coding, Testing, Refactoring &amp; JMH Benchmarking, Performance testing with JMeter, Profiling with Async profiler/OpenJDK tools, Documentation &amp; Diagrams.</p>
-<p>This project hast good traction in the JVM community with a special popularity in Asia.</p>
-<p>Recently, this technique was identified in the latest Radar #33 from <code>Thoughtworks</code>: <code>Curated shared instructions for software teams</code></p>
+<p><code>System prompts for Java (Aka Cursor rules for Java)</code> is a collection of System prompts for Java that help software engineers in their daily programming work &amp; pipelines. The available System prompts for Java cover aspects like Maven-based build systems, Design, Coding, Testing, Refactoring &amp; JMH Benchmarking, Performance testing with JMeter, Profiling with Async profiler/OpenJDK tools, Documentation &amp; Diagrams.</p>
+<p>This project has good traction in the JVM community with a special popularity in Asia.</p>
+<p>Recently, this technique was identified in the latest <code>Thoughtworks Radar #33</code>: <strong>Curated shared instructions for software teams</strong></p>
 <p><a href="https://www.thoughtworks.com/radar/techniques/curated-shared-instructions-for-software-teams"><img src="/cursor-rules-java/images/11/thoughtworks-radar-system-prompts.jpg" alt="" /></a></p>
-<p><strong>Problem which try to solve:</strong> Maintain a specialized collection of system prompts for Software development in Java.</p>
-<p>This project uses under the hood, uses PML to model all System prompts in homogeneus Markdown syntax. Read the file <a href="https://github.com/jabrena/cursor-rules-java/blob/main/CURSOR-RULES-JAVA.md">CURSOR-RULES-JAVA.md</a> to understand all possibilities.</p>
+<p><strong>Problem it tries to solve:</strong> Maintain a specialized collection of system prompts for Software development in Java.</p>
+<p>This project uses PML under the hood to model all System prompts in homogeneous Markdown syntax. Read the file <a href="https://github.com/jabrena/cursor-rules-java/blob/main/CURSOR-RULES-JAVA.md">CURSOR-RULES-JAVA.md</a> to understand all possibilities.</p>
 <p><a href="https://github.com/jabrena/cursor-rules-java">https://github.com/jabrena/cursor-rules-java</a></p>
 <h3>Churrera, tasks like churros!</h3>
-<p>Churrera is a CLI tool designed to operate with <code>Cursor Cloud Agents API</code> in an easy way. The Cloud Agents API (Beta) allows you to programmatically create and manage AI-powered coding agents that work autonomously on your repositories.</p>
+<p>Churrera is a CLI tool designed to operate with <code>Cursor Cloud Agents API</code> easily. The Cloud Agents API (Beta) allows you to programmatically create and manage AI-powered coding agents that work autonomously on your repositories.</p>
 <p><img src="/cursor-rules-java/images/11/churrera-2.png" alt="" /></p>
-<p><strong>Problem which try to solve:</strong> Enhance your pipelines with <code>AI Glue</code>.</p>
-<p><strong>Use cases:</strong> <code>Automate repetitive Java coding tasks</code> (with TDD if required), <code>Continous documentation</code>, <code>Continous Profiling</code>. You could refactor the results using <code>System prompts</code> from the project <code>Cursor rules for Java</code> or use your own System prompts. Your creativity define your limits.</p>
-<p><strong>Note:</strong> At the moment, the unique service which provide this kind of APIs is <code>Cursor Cloud agents API</code>. If in the future exist new alternatives, happy to offer to implement a factory to support more alternatives.</p>
+<p><strong>Problem it tries to solve:</strong> Enhance your pipelines with <code>AI Glue</code>.</p>
+<p><strong>Use cases:</strong> <code>Automate repetitive Java coding tasks</code> (with TDD if required), <code>Continuous documentation</code>, <code>Continuous Profiling</code>. You could refactor the results using <code>System prompts</code> from the project <code>Cursor rules for Java</code> or use your own System prompts. Your creativity defines your limits.</p>
+<p><strong>Note:</strong> At the moment, the unique service which provides this kind of APIs is <code>Cursor Cloud agents API</code>. If new alternatives exist in the future, I would be happy to implement a factory to support more alternatives.</p>
 <p><a href="https://github.com/jabrena/churrera">https://github.com/jabrena/churrera</a></p>
 <h2>Observations in Devoxx 2025</h2>
-<p>In 2025, the entire JVM industry is moving around AI and if you attended the different sessions in Devoxx, you may feel it. In the conference, I listened the different proposals from the most used frameworks <code>Spring</code> &amp; <code>Quarkus</code> in the Java industry and in this year, I observed that exist a real parity between Spring ecosystem and Quarkus ecosystem. Congratulations to <code>Mario Fusco</code>, <code>Georgios Andrianakis</code>, <code>Clement Escoffier</code>, <code>Rod Johnson</code> &amp; <code>Christian Tzolov</code> for their hard work. I would like to not forget the nice proposal from <code>Akka</code> which shared the new features oriented to <code>Agents</code>.</p>
+<p><img src="/cursor-rules-java/images/11/devoxx-be-room-4.jpg" alt="" /></p>
+<p>In 2025, the entire JVM industry is moving around AI and if you attended the different sessions in Devoxx, you may feel it. In the conference, I listened to the different proposals from the most used frameworks <code>Spring</code> &amp; <code>Quarkus</code> in the Java industry and in this year, I observed that there exists a real parity between Spring ecosystem and Quarkus ecosystem. Congratulations to <code>Mario Fusco</code>, <code>Georgios Andrianakis</code>, <code>Clement Escoffier</code>, <code>Rod Johnson</code> &amp; <code>Christian Tzolov</code> for their hard work. I would not like to forget the nice proposal from <code>Akka</code> which shared the new features oriented to <code>Agents</code>.</p>
 <p><img src="/cursor-rules-java/images/11/devoxx-quarkus-agentic-talk.png" alt="" /></p>
 <p><strong>Can Spring AI or Langchain4j use something that I am building?</strong></p>
 <p>Yes, PML for sure.</p>
@@ -194,8 +195,8 @@
 <li><a href="https://m.devoxx.com/events/dvbe25/talks/6238/whats-new-in-spring-modulith">https://m.devoxx.com/events/dvbe25/talks/6238/whats-new-in-spring-modulith</a></li>
 </ul>
 <h2>Observations in W-JAX-2025</h2>
-<p>In this case, I visited the conference for shorter time so my observations were limited but in the conference the talks put focus on AI,<br />
-I observed less presence of Quarkus talks. Collecting feedback from my talk, many <code>Java Software engineers</code> in Germany are start using this kind of modern tools but in general, the usage is not massive.</p>
+<p><img src="/cursor-rules-java/images/11/wjax-atlanta-room.png" alt="" /></p>
+<p>In this case, I visited the conference for a shorter time so my observations were limited, but in the conference the talks put focus on AI. I observed less presence of Quarkus talks. Collecting feedback from my talk, many <code>Java Software engineers</code> in Germany are starting to use this kind of modern tools but in general, the usage is not massive.</p>
 <p><img src="/cursor-rules-java/images/11/crossing-the-chasm.png" alt="" /></p>
 <h3>What talks I loved in W-JAX 2025?</h3>
 <p><strong>Cloud:</strong></p>
@@ -225,6 +226,8 @@ I observed less presence of Quarkus talks. Collecting feedback from my talk, man
 <li><a href="https://jax.de/core-java-jvm-languages/virtual-threads-java-workshop">https://jax.de/core-java-jvm-languages/virtual-threads-java-workshop</a></li>
 </ul>
 <p><strong>Note:</strong> Remember that you can register <a href="https://entwickler.de/reader/player/w-jax-2025">here</a> to watch the sessions.</p>
+<h2>Conclusions</h2>
+<p>It was a nice experience to talk with other colleagues in Benelux &amp; Germany about Java &amp; AI. Thinking about the talks in the conference, it was nice to talk to more than 600 Java Software engineers about these topics.</p>
 <h2>References</h2>
 <ul>
 <li><a href="https://m.devoxx.com/events/dvbe25/schedule">https://m.devoxx.com/events/dvbe25/schedule</a></li>
@@ -233,6 +236,7 @@ I observed less presence of Quarkus talks. Collecting feedback from my talk, man
 <li><a href="https://www.devconvergeeurope.com/">https://www.devconvergeeurope.com/</a></li>
 <li><a href="https://jax.de/munich/program-munich/">https://jax.de/munich/program-munich/</a></li>
 <li><a href="https://jax.de/generative-ai-ecosystem/cursor-ai-101-java-enterprise/">https://jax.de/generative-ai-ecosystem/cursor-ai-101-java-enterprise/</a></li>
+<li><a href="https://www.thoughtworks.com/radar/techniques/curated-shared-instructions-for-software-teams">https://www.thoughtworks.com/radar/techniques/curated-shared-instructions-for-software-teams</a></li>
 </ul>
 
 </article>
