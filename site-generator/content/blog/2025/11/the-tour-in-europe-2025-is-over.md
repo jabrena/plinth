@@ -199,7 +199,7 @@ In this case, I visited the conference for a shorter time so my observations wer
 
 ## Conclusions
 
-It was a great experience to talk to more than 600 Java Software engineers in Benelux & Germany about Java & AI. In the different sessions, I was able to receive useful feedback about the talks, topics, and the related open source projects. Now it is time to return to the desk to think and evolve the different solutions.
+It was a great experience to talk to approximately 600 Java software engineers in Benelux & Germany about Java & AI. Throughout the different sessions, I was able to receive useful feedback about the talks, topics, and the related open source projects. Now it is time to return to the desk to think and evolve these solutions.
 
 Many thanks 🙏🙏🙏
 
