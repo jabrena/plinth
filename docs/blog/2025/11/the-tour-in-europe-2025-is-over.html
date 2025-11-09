@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>The European tour 2025 is over - Cursor Rules for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../../feed.xml" title="Cursor Rules for Java"/>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../../css/prettify.css">
+  <link rel="shortcut icon" href="../../../favicon.ico">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../../index.html">Cursor Rules for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li><a href="https://forms.gle/TpNXENjmu45wuXoi6" target="_blank">Share feedback</a></li>
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Conferences</a>
+    <div class="navlinks-children">
+      <a href="https://jabrena.github.io/cursor-rules-java/dvbe25/index.html" target="_blank">Devoxx BE 2025</a>
+      <a href="https://jabrena.github.io/101-cursor/" target="_blank">WJAX-2025</a>
+    </div>
+  </li>
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../../courses/java-generics/index.html">Java Generics</a>
+      <a href="../../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
+    </div>
+  </li>
+  <li><a href="../../../archive.html">Archive</a></li>
+  <li><a href="../../../about.html">About</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="post-heading">
+<h1>The European tour 2025 is over</h1>
+<span class="post-meta">
+  <i class="fa fa-calendar-o"></i>
+  2025-11-10
+    &nbsp;
+    <i class="fa fa-pencil"></i>
+    Juan Antonio Breña Moral
+</span>
+<span class="blog-tags">
+  &nbsp;
+  <i class="fa fa-tags"></i>
+    <a href="../../../tags/blog.html">blog</a>
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="blog-post">
+<h2>Introduction</h2>
+<p>Over the last few weeks, I had the privilege of sharing with the <code>Java community</code> a few ideas that they could be very useful for <code>Java Software engineers</code> in their daily work or for organizations enhancing their <code>pipelines</code>.</p>
+<p>Using this lines, I would like to acknowledge <code>Stephan Janssen</code> from <code>Devoxx</code>, <code>Luis Fabrício De Llamas</code> from <code>DevConverge</code>, <code>Christina Bergh</code> from <code>W-JAX</code> and the entire <code>Madrid JUG</code> team for their guidance during this tour 2025.</p>
+<p>During those events, I presented ideas about a new generation of developer tools powered by AI and new concepts related to the development.</p>
+<p>In the different sessions, I talked in general about the <code>Cursor portfolio</code> and specifically about some products/services like <code>Cursor AI Desktop</code>, <code>Cursor Web</code>, <code>Cursor Cloud Agents API</code>, <code>Cursor Rules</code>, and the new frontier model <code>Cursor Composer 1</code> and I would like to not miss the opportunity to mention <code>Claude Code</code> as CLI tool and the models <code>Claude Sonnet 4</code> &amp; <code>Claude Sonnet 4.5</code> which I used almost all time during 2025.</p>
+<p>You can watch the different sessions here:</p>
+<ul>
+<li><a href="https://www.youtube.com/watch?v=UJPWIz8eobc">https://www.youtube.com/watch?v=UJPWIz8eobc</a> (30 Min)</li>
+<li><a href="https://www.youtube.com/watch?v=-OSYyY17VzE">https://www.youtube.com/watch?v=-OSYyY17VzE</a> (30 Min)</li>
+<li><a href="https://entwickler.de/reader/player/w-jax-2025">https://entwickler.de/reader/player/w-jax-2025</a> (60 min)</li>
+</ul>
+<h2>Emerging new solutions from the Gemba</h2>
+<p>During the last 9 months using the previous tools mentioned before, emerged few ideas which little by little are evolving and they were introduced in the latest talks.</p>
+<h3>PML</h3>
+<p><code>PML, Prompt Markup Language</code>, a <code>XML Schema</code>, which is able to help the Software engineer in the process to model User prompts &amp; System prompts. Once the prompt is modelled in XML. It is possible to be converted into a regular format frontier models use, Markdown or Text plan. Using the guidelines by PML Schema, it is more easier to not miss something important to be defined in a production prompt. Recently, it was added a new XML Schema to model Workflows.</p>
+<p><strong>Problem which try to solve:</strong> Design good <code>User Prompts</code> &amp; <code>System prompts</code> to mitigate ambiguity in Models`s execution.</p>
+<p>PML project has 2 different schemas, one schema which define parts to model Prompts:</p>
+<pre><code class="language-xml">&lt;!-- Root element for a prompt --&gt;
+&lt;xs:element name=&quot;prompt&quot;&gt;
+    &lt;xs:complexType&gt;
+        &lt;xs:sequence&gt;
+            &lt;xs:element ref=&quot;metadata&quot; minOccurs=&quot;0&quot;/&gt;
+            &lt;xs:element ref=&quot;title&quot; minOccurs=&quot;0&quot;/&gt;
+            &lt;xs:element ref=&quot;role&quot; minOccurs=&quot;0&quot;/&gt;
+            &lt;xs:element ref=&quot;tone&quot; minOccurs=&quot;0&quot;/&gt;
+            &lt;xs:element ref=&quot;context&quot; minOccurs=&quot;0&quot;/&gt;
+            &lt;xs:element ref=&quot;goal&quot;/&gt;
+            &lt;xs:element ref=&quot;constraints&quot; minOccurs=&quot;0&quot;/&gt;
+            &lt;xs:element ref=&quot;steps&quot; minOccurs=&quot;0&quot; /&gt;
+            &lt;xs:element ref=&quot;examples&quot; minOccurs=&quot;0&quot;/&gt;
+            &lt;xs:element ref=&quot;output-format&quot; minOccurs=&quot;0&quot;/&gt;
+            &lt;xs:element ref=&quot;safeguards&quot; minOccurs=&quot;0&quot;/&gt;
+            &lt;xs:element ref=&quot;acceptance-criteria&quot; minOccurs=&quot;0&quot;/&gt;
+        &lt;/xs:sequence&gt;
+    &lt;/xs:complexType&gt;
+&lt;/xs:element&gt;
+</code></pre>
+<p>You can see PML in action <a href="https://github.com/jabrena/cursor-rules-java/tree/main/system-prompts-generator/src/main/resources">here</a> and finally a novel Schema dedicated to Workflows:</p>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;pml-workflow xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+    xsi:noNamespaceSchemaLocation=&quot;https://jabrena.github.io/pml/schemas/0.3.0-SNAPSHOT/pml-workflow.xsd&quot;&gt;
+    model=&quot;default&quot; repository=&quot;https://github.com/jabrena/wjax25-demos&quot;
+    timeout=&quot;5m&quot; fallback-src=&quot;fallback-prompt.xml&quot;&gt;
+        &lt;prompt src=&quot;pml-java25-installation.xml&quot; /&gt;
+        &lt;prompt src=&quot;pml-hello-world-java.xml&quot; /&gt;
+    &lt;/sequence&gt;
+&lt;/pml-workflow&gt;
+</code></pre>
+<p>This second Schema was designed as a consequence of the evolution of Churrera`s project.</p>
+<p><a href="https://github.com/jabrena/pml">https://github.com/jabrena/pml</a></p>
+<h3>Cursor rules for Java</h3>
+<p><code>System prompts for Java (Aka Cursor rules for Java)</code> is a collection of System prompts for Java that help software engineers in their daily programming work &amp; pipelines. The available System prompts for Java cover aspects like Build system based on Maven, Design, Coding, Testing, Refactoring &amp; JMH Benchmarking, Performance testing with JMeter, Profiling with Async profiler/OpenJDK tools, Documentation &amp; Diagrams.</p>
+<p>This project hast good traction in the JVM community with a special popularity in Asia.</p>
+<p>Recently, this technique was identified in the latest Radar #33 from <code>Thoughtworks</code>: <code>Curated shared instructions for software teams</code></p>
+<p><a href="https://www.thoughtworks.com/radar/techniques/curated-shared-instructions-for-software-teams"><img src="/cursor-rules-java/images/11/thoughtworks-radar-system-prompts.png" alt="" /></a></p>
+<p><strong>Problem which try to solve:</strong> Maintain a specialized collection of system prompts for Software development in Java.</p>
+<p>This project uses under the hood, uses PML to model all System prompts in homogeneus Markdown syntax. Read the file <a href="https://github.com/jabrena/cursor-rules-java/blob/main/CURSOR-RULES-JAVA.md">CURSOR-RULES-JAVA.md</a> to understand all possibilities.</p>
+<p><a href="https://github.com/jabrena/cursor-rules-java">https://github.com/jabrena/cursor-rules-java</a></p>
+<h3>Churrera, tasks like churros!</h3>
+<p>Churrera is a CLI tool designed to operate with <code>Cursor Cloud Agents API</code> in an easy way. The Cloud Agents API (Beta) allows you to programmatically create and manage AI-powered coding agents that work autonomously on your repositories.</p>
+<p><img src="/cursor-rules-java/images/11/churrera-2.png" alt="" /></p>
+<p><strong>Problem which try to solve:</strong> Enhance your pipelines with <code>AI Glue</code>.</p>
+<p><strong>Use cases:</strong> <code>Automate repetitive Java coding tasks</code> (with TDD if required), <code>Continous documentation</code>, <code>Continous Profiling</code>. You could refactor the results using <code>System prompts</code> from the project <code>Cursor rules for Java</code> or use your own System prompts. Your creativity define your limits.</p>
+<p><strong>Note:</strong> At the moment, the unique service which provide this kind of APIs is <code>Cursor Cloud agents API</code>. If in the future exist new alternatives, happy to offer to implement a factory to support more alternatives.</p>
+<p><a href="https://github.com/jabrena/churrera">https://github.com/jabrena/churrera</a></p>
+<h2>Observations in Devoxx 2025</h2>
+<p>In 2025, the entire JVM industry is moving around AI and if you attended the different sessions in Devoxx, you may feel it. In the conference, I listened the different proposals from the most used frameworks <code>Spring</code> &amp; <code>Quarkus</code> in the Java industry and in this year, I observed that exist a real parity between Spring ecosystem and Quarkus ecosystem. Congratulations to <code>Mario Fusco</code>, <code>Georgios Andrianakis</code>, <code>Clement Escoffier</code>, <code>Rod Johnson</code> &amp; <code>Christian Tzolov</code> for their hard work. I would like to not forget the nice proposal from <code>Akka</code> which shared the new features oriented to <code>Agents</code>.</p>
+<p><img src="/cursor-rules-java/images/11/devoxx-quarkus-agentic-talk.png" alt="" /></p>
+<p><strong>Can Spring AI or Langchain4j use something that I am building?</strong></p>
+<p>Yes, PML for sure.</p>
+<h3>What talks I loved in Devoxx BE 2025?</h3>
+<p><strong>Agentic AI:</strong></p>
+<ul>
+<li><a href="https://m.devoxx.com/events/dvbe25/talks/6211/from-llm-orchestration-to-autonomous-agents-agentic-ai-patterns-with-langchain4j">https://m.devoxx.com/events/dvbe25/talks/6211/from-llm-orchestration-to-autonomous-agents-agentic-ai-patterns-with-langchain4j</a></li>
+<li><a href="https://m.devoxx.com/events/dvbe25/talks/6210/agentic-ai-patterns">https://m.devoxx.com/events/dvbe25/talks/6210/agentic-ai-patterns</a></li>
+<li><a href="https://m.devoxx.com/events/dvbe25/talks/5912/panel-discussion-langchain4j-turns-two-what-weve-learned-and-whats-next">https://m.devoxx.com/events/dvbe25/talks/5912/panel-discussion-langchain4j-turns-two-what-weve-learned-and-whats-next</a></li>
+<li><a href="https://m.devoxx.com/events/dvbe25/talks/24552/build-an-mcp-server-with-java">https://m.devoxx.com/events/dvbe25/talks/24552/build-an-mcp-server-with-java</a></li>
+<li><a href="https://m.devoxx.com/events/dvbe25/talks/4715/the-power-of-cursor-rules-in-java-enterprise-development">https://m.devoxx.com/events/dvbe25/talks/4715/the-power-of-cursor-rules-in-java-enterprise-development</a></li>
+<li><a href="https://m.devoxx.com/events/dvbe25/talks/47103/akka-an-enterprise-runtime-for-resilient-agentic-ai">https://m.devoxx.com/events/dvbe25/talks/47103/akka-an-enterprise-runtime-for-resilient-agentic-ai</a></li>
+<li><a href="https://m.devoxx.com/events/dvbe25/talks/3261/bootiful-spring-ai">https://m.devoxx.com/events/dvbe25/talks/3261/bootiful-spring-ai</a></li>
+</ul>
+<p><strong>Java:</strong></p>
+<ul>
+<li><a href="https://m.devoxx.com/events/dvbe25/talks/22144/loom-in-jdk-25-virtual-threads-structured-concurrency-and-scoped-values">https://m.devoxx.com/events/dvbe25/talks/22144/loom-in-jdk-25-virtual-threads-structured-concurrency-and-scoped-values</a></li>
+<li><a href="https://m.devoxx.com/events/dvbe25/talks/23186/weather-the-storm-how-value-classes-will-enhance-java-performance">https://m.devoxx.com/events/dvbe25/talks/23186/weather-the-storm-how-value-classes-will-enhance-java-performance</a></li>
+<li><a href="https://m.devoxx.com/events/dvbe25/talks/23195/pattern-matching-under-the-microscope">https://m.devoxx.com/events/dvbe25/talks/23195/pattern-matching-under-the-microscope</a></li>
+<li><a href="https://m.devoxx.com/events/dvbe25/talks/46055/serialization-20-a-marshalling-update">https://m.devoxx.com/events/dvbe25/talks/46055/serialization-20-a-marshalling-update</a></li>
+<li><a href="https://m.devoxx.com/events/dvbe25/talks/4716/structured-concurrency-in-action">https://m.devoxx.com/events/dvbe25/talks/4716/structured-concurrency-in-action</a></li>
+</ul>
+<p><strong>Frameworks:</strong></p>
+<ul>
+<li><a href="https://m.devoxx.com/events/dvbe25/talks/6238/whats-new-in-spring-modulith">https://m.devoxx.com/events/dvbe25/talks/6238/whats-new-in-spring-modulith</a></li>
+</ul>
+<h2>Observations in W-JAX-2025</h2>
+<p>In this case, I visited the conference for shorter time so my observations were limited but in the conference the talks put focus on AI,<br />
+I observed less presence of Quarkus talks. Collecting feedback from my talk, many <code>Java Software engineers</code> in Germany are start using this kind of modern tools but in general, the usage is not massive.</p>
+<p><img src="/cursor-rules-java/images/11/crossing-the-chasm.png" alt="" /></p>
+<h3>What talks I loved in W-JAX 2025?</h3>
+<p><strong>Cloud:</strong></p>
+<ul>
+<li><a href="https://jax.de/cloud-container-serverless/ingress-istio-kubernetes-gateway-api/">https://jax.de/cloud-container-serverless/ingress-istio-kubernetes-gateway-api/</a></li>
+</ul>
+<p><strong>Observability:</strong></p>
+<ul>
+<li><a href="https://jax.de/serverside-enterprise-java/observability-spring-boot-actuator-micrometer-opentelemetry/">https://jax.de/serverside-enterprise-java/observability-spring-boot-actuator-micrometer-opentelemetry/</a></li>
+</ul>
+<p><strong>Security:</strong></p>
+<ul>
+<li><a href="https://jax.de/performance-security/spring-authorization-server/">https://jax.de/performance-security/spring-authorization-server/</a></li>
+<li><a href="https://jax.de/performance-security/saml-oauth-openid-connect">https://jax.de/performance-security/saml-oauth-openid-connect</a></li>
+</ul>
+<p><strong>Web:</strong></p>
+<ul>
+<li><a href="https://jax.de/web-development-javascript/server-side-web-applications-htmx-spring-boot">https://jax.de/web-development-javascript/server-side-web-applications-htmx-spring-boot</a></li>
+</ul>
+<p><strong>Testing:</strong></p>
+<ul>
+<li><a href="https://jax.de/performance-security/test-doubles-mocking-frameworks">https://jax.de/performance-security/test-doubles-mocking-frameworks</a></li>
+</ul>
+<p><strong>Java:</strong></p>
+<ul>
+<li><a href="https://jax.de/core-java-jvm-languages/exploring-java-util-concurrent">https://jax.de/core-java-jvm-languages/exploring-java-util-concurrent</a></li>
+<li><a href="https://jax.de/core-java-jvm-languages/virtual-threads-java-workshop">https://jax.de/core-java-jvm-languages/virtual-threads-java-workshop</a></li>
+</ul>
+<p><strong>Note:</strong> Remember that you can register <a href="https://entwickler.de/reader/player/w-jax-2025">here</a> to watch the sessions.</p>
+<h2>References</h2>
+<ul>
+<li><a href="https://m.devoxx.com/events/dvbe25/schedule">https://m.devoxx.com/events/dvbe25/schedule</a></li>
+<li><a href="https://m.devoxx.com/events/dvbe25/talks/4708/101-cursor-ai-learning-to-use-for-java-enterprise-projects">https://m.devoxx.com/events/dvbe25/talks/4708/101-cursor-ai-learning-to-use-for-java-enterprise-projects</a></li>
+<li><a href="https://m.devoxx.com/events/dvbe25/talks/4715/the-power-of-cursor-rules-in-java-enterprise-development">https://m.devoxx.com/events/dvbe25/talks/4715/the-power-of-cursor-rules-in-java-enterprise-development</a></li>
+<li><a href="https://www.devconvergeeurope.com/">https://www.devconvergeeurope.com/</a></li>
+<li><a href="https://jax.de/munich/program-munich/">https://jax.de/munich/program-munich/</a></li>
+<li><a href="https://jax.de/generative-ai-ecosystem/cursor-ai-101-java-enterprise/">https://jax.de/generative-ai-ecosystem/cursor-ai-101-java-enterprise/</a></li>
+</ul>
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena/cursor-rules-java" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2025 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../../js/jquery-1.11.2.min.js"></script>
+<script src="../../../js/bootstrap.min.js"></script>
+<script src="../../../js/prettify.js"></script>
+<script src="../../../js/run_prettify.js"></script>
+<script src="../../../js/main.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13CV90H4J4');
+</script>
+
+</body>
+</html>

@@ -18,7 +18,7 @@
 
 ## Goal
 
-The project provides a collection of `System prompts` for Java Enterprise development that help software engineers in their daily programming work and data pipelines.
+The project provides a collection of `System prompts` for Java Enterprise development that help software engineers in their daily programming work and pipelines.
 The [available System prompts for Java](./CURSOR-RULES-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation` & `Diagrams`.
 
 ### Compatibility with Modern IDEs, CLI & Others
@@ -51,11 +51,11 @@ Adding AI tools to the Java development workflow can increase the likelihood of 
 
 ![](./documentation/images/workflow.png)
 
-### Data pipelines workflow
+### Pipelines workflow
 
-Adding AI tools to your data pipeline can provide new opportunities to deliver more value (examples: automatic coding, code refactoring, continuous profiling, and others).
+Adding AI tools to your pipeline can provide new opportunities to deliver more value (examples: automatic coding, code refactoring, continuous profiling, and others).
 
-![](./documentation/images/data-pipeline-workflow.png)
+![](./documentation/images/pipeline-workflow.png)
 
 ## Getting started
 
