@@ -110,6 +110,10 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 
 ## Meetups, Conferences & Mentions
 
+### W-JAX / Munich (2025/11/06 - 10:30 - 11:30)
+
+- https://jax.de/generative-ai-ecosystem/cursor-ai-101-java-enterprise/
+
 ### Devoxx BE / Antwerp (2025/10/07 - 18:20 - 18:50)
 
 - https://m.devoxx.com/events/dvbe25/talks/4715/the-power-of-cursor-rules-in-java-enterprise-development
