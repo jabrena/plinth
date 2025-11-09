@@ -83,6 +83,17 @@ https://github.com/jabrena/pml
 
 This project has good traction in the JVM community with a special popularity in Asia.
 
+```bash
+╔══════════════════════════════════════════════════════════════╗
+║ ┌──────────────────────────────────────────────────────────┐ ║
+║ │ Tu feedback es importante para evolucionar este proyecto │ ║
+║ │    Your feedback is important to evolve this project     │ ║
+║ │                您的反馈对本项目的发展至关重要                 │ ║
+║ │           https://forms.gle/TpNXENjmu45wuXoi6            │ ║
+║ └──────────────────────────────────────────────────────────┘ ║
+╚══════════════════════════════════════════════════════════════╝
+```
+
 Recently, this technique was identified in the latest `Thoughtworks Radar #33`: **Curated shared instructions for software teams**
 
 [![](/cursor-rules-java/images/11/thoughtworks-radar-system-prompts.jpg)](https://www.thoughtworks.com/radar/techniques/curated-shared-instructions-for-software-teams)
