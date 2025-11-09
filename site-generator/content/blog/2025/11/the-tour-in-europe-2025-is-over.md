@@ -29,11 +29,11 @@ During the last 9 months using the previous tools mentioned before, a few ideas 
 
 ### PML
 
-`PML, Prompt Markup Language`, an `XML Schema`, which is able to help software engineers in modeling User prompts & System prompts. Once the prompt is modelled in XML, it can be converted into a regular format frontier models use, Markdown or Text plan. Using the guidelines by PML Schema, it is easier to not miss something important to be defined in a production prompt. Recently, a new XML Schema was added to model Workflows.
+`PML, Prompt Markup Language`, an `XML Schema`, which is able to help software engineers in modeling User prompts & System prompts. Once the prompt is modelled in XML, it can be converted into a regular format frontier models use, Markdown. Using the guidelines by PML Schema, it is easier to not miss something important to be defined in a prompt for production environments. Recently, a new XML Schema was added to model Workflows.
 
 **Problem it tries to solve:** Design good `User Prompts` & `System prompts` to mitigate ambiguity in Models' execution.
 
-PML project has 2 different schemas, one schema which defines parts to model Prompts:
+PML project has 2 different schemas, one schema which defines the diferent parts of any Prompt:
 
 ```xml
 <!-- Root element for a prompt -->
@@ -57,7 +57,9 @@ PML project has 2 different schemas, one schema which defines parts to model Pro
 </xs:element>
 ```
 
-You can see PML in action [here](https://github.com/jabrena/cursor-rules-java/tree/main/system-prompts-generator/src/main/resources). Finally, here is a novel Schema dedicated to Workflows:
+You can see PML in action [here](https://github.com/jabrena/cursor-rules-java/tree/main/system-prompts-generator/src/main/resources).
+
+Finally, here is a novel Schema dedicated to Workflows:
 
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
@@ -113,9 +115,9 @@ In 2025, the entire JVM industry is moving around AI and if you attended the dif
 
 ![](/cursor-rules-java/images/11/devoxx-quarkus-agentic-talk.png)
 
-**Can Spring AI or Langchain4j use something that I am building?**
+**Can Spring AI or Langchain4j use PML or Cursor rules for Java?**
 
-Yes, PML for sure.
+Yes, for sure. Happy to talk with `Spring AI` team or `Quarkus` team in the future.
 
 ### What talks I loved in Devoxx BE 2025?
 
@@ -181,7 +183,7 @@ In this case, I visited the conference for a shorter time so my observations wer
 
 ## Conclusions
 
-It was a great experience to talk to more than 600 Java Software engineers in Benelux & Germany about Java & AI. In the different sessions, I was able to receive useful feedback on the talks, topics, and the open source project. Now it is time to return to the desk to think and evolve.
+It was a great experience to talk to more than 600 Java Software engineers in Benelux & Germany about Java & AI. In the different sessions, I was able to receive useful feedback about the talks, topics, and the related open source projects. Now it is time to return to the desk to think and evolve the different solutions.
 
 Many thanks 🙏🙏🙏
 
