@@ -16,12 +16,16 @@ During those events, I presented ideas about a new generation of developer tools
 
 In the different sessions, I talked generally about the `Cursor portfolio` and specifically about some products/services like `Cursor AI Desktop`, `Cursor Web`, `Cursor Cloud Agents API`, `Cursor Rules`, and the new frontier model `Cursor Composer 1` and I would not like to miss the opportunity to mention `Claude Code` as CLI tool and the models `Claude Sonnet 4` & `Claude Sonnet 4.5` which I used almost all the time during 2025.
 
-You can watch the different sessions here:
+Videos about the talks:
 
 - https://www.youtube.com/watch?v=UJPWIz8eobc (30 Min)
 - https://www.youtube.com/watch?v=-OSYyY17VzE (30 Min)
 - https://entwickler.de/reader/player/w-jax-2025 (60 min)
 
+and the associated Slides:
+
+- https://jabrena.github.io/cursor-rules-java/dvbe25/index.html
+- https://jabrena.github.io/101-cursor/
 
 ## Emerging new solutions from the Gemba
 
