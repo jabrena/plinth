@@ -181,7 +181,9 @@ In this case, I visited the conference for a shorter time so my observations wer
 
 ## Conclusions
 
-It was a nice experience to talk with other colleagues in Benelux & Germany about Java & AI. Thinking about the talks in the conference, it was nice to talk to more than 600 Java Software engineers about these topics.
+It was a great experience to talk to more than 600 Java Software engineers in Benelux & Germany about Java & AI. In the different sessions, I was able to receive useful feedback on the talks, topics, and the open source project. Now it is time to return to the desk to think and evolve.
+
+Many thanks 🙏🙏🙏
 
 ## References
 
