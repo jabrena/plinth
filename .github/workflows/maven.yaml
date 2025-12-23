@@ -21,7 +21,7 @@ jobs:
           zip -r cursor-rules.zip .cursor/
           echo "Created cursor-rules.zip with $(du -h cursor-rules.zip | cut -f1) size"
       - name: Upload Cursor Rules Archive
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: cursor-rules
           path: cursor-rules.zip
