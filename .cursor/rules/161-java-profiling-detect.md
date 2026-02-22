@@ -43,7 +43,7 @@ your-project/
 └── async-profiler-*/                # ← Downloaded profiler binaries
 ```
 
-## Instructions
+## Steps
 
 ### Step 1: Setup Application Runner Script
 
@@ -643,7 +643,7 @@ your-project/
 # Start your application with profiling-ready JVM settings
 ./run-java-process-for-profiling.sh
 ```
-                
+            
 #### Step Constraints
 
 - **CRITICAL INSTRUCTION FOR AI ASSISTANTS:**
@@ -2031,8 +2031,8 @@ done
 **Script Location:**
 ```
 └── profiler/               # ← All profiling-related files
-    ├── scripts/            # ← Profiling scripts and tools
-    │   └── profile-java-process.sh # ← Copy exact script from template
+├── scripts/            # ← Profiling scripts and tools
+│   └── profile-java-process.sh # ← Copy exact script from template
 ```
 
 **Setup Instructions:**
@@ -2052,7 +2052,7 @@ done
 # Execute the interactive profiling script
 ./profiler/scripts/profile-java-process.sh
 ```
-                
+            
 #### Step Constraints
 
 - **CRITICAL INSTRUCTION FOR AI ASSISTANTS:**

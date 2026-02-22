@@ -14,7 +14,7 @@ This cursor rule provides a systematic approach to refactoring Java code based o
 
 The rule establishes a comprehensive refactoring framework that guides users through systematically analyzing profiling data, identifying specific performance bottlenecks, and implementing targeted code changes to address them.
 
-## Instructions
+## Steps
 
 ### Step 1: Review notes from the analysis step
 

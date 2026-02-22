@@ -26,7 +26,7 @@ Before applying This Maven plugins recommendations, ensure the project is in a v
 - **CRITICAL SAFETY**: If validation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any plugin configuration steps. Ask the user to fix ALL validation errors first before proceeding
 - **ENFORCEMENT**: Never proceed to Step 1 or any subsequent steps if `mvn validate` or `./mvnw validate` command fails or returns errors
 
-## Instructions
+## Steps
 
 ### Step 1: MANDATORY: Existing Configuration Preservation and Analysis
 
@@ -375,7 +375,7 @@ The final `<properties>` section will look like this (example with common select
 3. **Quality Properties**: Add coverage and threshold properties if quality features selected
 
 **Property Naming Convention**: Use `maven-plugin-*` format for consistency (e.g., `maven-plugin-compiler.version`)
-                
+            
 #### Step Constraints
 
 - **MUST** use `maven-plugin-*` format for property naming (e.g., `maven-plugin-compiler.version`, NOT `maven-compiler-plugin.version`)
@@ -408,43 +408,43 @@ If user says "y": Proceed with adding missing configuration elements only.
 
 ```xml
 <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-enforcer-plugin</artifactId>
-    <version>${maven-plugin-enforcer.version}</version>
-    <dependencies>
-        <dependency>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>extra-enforcer-rules</artifactId>
-            <version>${extra-enforcer-rules.version}</version>
-        </dependency>
-    </dependencies>
-    <executions>
-        <execution>
-            <id>enforce</id>
-            <configuration>
-                <rules>
-                    <banCircularDependencies/>
-                    <dependencyConvergence />
-                    <banDuplicatePomDependencyVersions />
-                    <requireMavenVersion>
-                        <version>${maven.version}</version>
-                    </requireMavenVersion>
-                    <requireJavaVersion>
-                        <version>${java.version}</version>
-                    </requireJavaVersion>
-                    <bannedDependencies>
-                        <excludes>
-                            <exclude>org.projectlombok:lombok</exclude>
-                        </excludes>
-                    </bannedDependencies>
-                </rules>
-                <fail>true</fail>
-            </configuration>
-            <goals>
-                <goal>enforce</goal>
-            </goals>
-        </execution>
-    </executions>
+<groupId>org.apache.maven.plugins</groupId>
+<artifactId>maven-enforcer-plugin</artifactId>
+<version>${maven-plugin-enforcer.version}</version>
+<dependencies>
+    <dependency>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>extra-enforcer-rules</artifactId>
+        <version>${extra-enforcer-rules.version}</version>
+    </dependency>
+</dependencies>
+<executions>
+    <execution>
+        <id>enforce</id>
+        <configuration>
+            <rules>
+                <banCircularDependencies/>
+                <dependencyConvergence />
+                <banDuplicatePomDependencyVersions />
+                <requireMavenVersion>
+                    <version>${maven.version}</version>
+                </requireMavenVersion>
+                <requireJavaVersion>
+                    <version>${java.version}</version>
+                </requireJavaVersion>
+                <bannedDependencies>
+                    <excludes>
+                        <exclude>org.projectlombok:lombok</exclude>
+                    </excludes>
+                </bannedDependencies>
+            </rules>
+            <fail>true</fail>
+        </configuration>
+        <goals>
+            <goal>enforce</goal>
+        </goals>
+    </execution>
+</executions>
 </plugin>
 ```
 
@@ -456,8 +456,8 @@ After adding this plugin, verify the configuration:
 # Validate plugin configuration
 ./mvnw validate
 ```
-                    
                 
+            
 #### Step Constraints
 
 - **MUST** include `extra-enforcer-rules` dependency and all specified rules
@@ -490,18 +490,18 @@ If user says "y": Proceed with adding missing configuration elements only.
 
 ```xml
 <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-surefire-plugin</artifactId>
-    <version>${maven-plugin-surefire.version}</version>
-    <configuration>
-        <skipAfterFailureCount>1</skipAfterFailureCount>
-        <includes>
-            <include>**/*Test.java</include>
-        </includes>
-        <excludes>
-            <exclude>**/*IT.java</exclude>
-        </excludes>
-    </configuration>
+<groupId>org.apache.maven.plugins</groupId>
+<artifactId>maven-surefire-plugin</artifactId>
+<version>${maven-plugin-surefire.version}</version>
+<configuration>
+    <skipAfterFailureCount>1</skipAfterFailureCount>
+    <includes>
+        <include>**/*Test.java</include>
+    </includes>
+    <excludes>
+        <exclude>**/*IT.java</exclude>
+    </excludes>
+</configuration>
 </plugin>
 ```
 
@@ -513,8 +513,8 @@ After adding this plugin, verify the configuration:
 # Run unit tests
 ./mvnw test
 ```
-                    
                 
+            
 #### Step Constraints
 
 - **MUST** only add surefire plugin if "Unit Testing (Surefire)" was selected in Step 3
@@ -549,24 +549,24 @@ If user says "y": Proceed with adding missing configuration elements only.
 
 ```xml
 <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-failsafe-plugin</artifactId>
-    <version>${maven-plugin-failsafe.version}</version>
-    <configuration>
-        <includes>
-            <include>**/*IT.java</include>
-        </includes>
-        <excludes>
-            <exclude>**/*Test.java</exclude>
-        </excludes>
-    </configuration>
-    <executions>
-        <execution>
-            <goals>
-                <goal>integration-test</goal>
-            </goals>
-        </execution>
-    </executions>
+<groupId>org.apache.maven.plugins</groupId>
+<artifactId>maven-failsafe-plugin</artifactId>
+<version>${maven-plugin-failsafe.version}</version>
+<configuration>
+    <includes>
+        <include>**/*IT.java</include>
+    </includes>
+    <excludes>
+        <exclude>**/*Test.java</exclude>
+    </excludes>
+</configuration>
+<executions>
+    <execution>
+        <goals>
+            <goal>integration-test</goal>
+        </goals>
+    </execution>
+</executions>
 </plugin>
 ```
 
@@ -597,8 +597,8 @@ After adding this plugin, verify the configuration:
 # Run tests to verify configuration
 ./mvnw clean verify
 ```
-                    
                 
+            
 #### Step Constraints
 
 - **MUST** only add failsafe plugin if integration testing was selected in Step 3
@@ -633,25 +633,25 @@ If user says "y": Proceed with adding missing reporting plugins only.
 
 ```xml
 <reporting>
-    <plugins>
-        <!-- Generates HTML test reports -->
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-surefire-report-plugin</artifactId>
-            <version>${maven-plugin-surefire.version}</version>
-            <configuration>
-                <outputName>junit-report</outputName>
-                <showSuccess>true</showSuccess>
-            </configuration>
-        </plugin>
+<plugins>
+    <!-- Generates HTML test reports -->
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-surefire-report-plugin</artifactId>
+        <version>${maven-plugin-surefire.version}</version>
+        <configuration>
+            <outputName>junit-report</outputName>
+            <showSuccess>true</showSuccess>
+        </configuration>
+    </plugin>
 
-        <!-- Adds links to source code in reports -->
-        <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-jxr-plugin</artifactId>
-            <version>${maven-plugin-jxr.version}</version>
-        </plugin>
-    </plugins>
+    <!-- Adds links to source code in reports -->
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <version>${maven-plugin-jxr.version}</version>
+    </plugin>
+</plugins>
 </reporting>
 ```
 
@@ -683,8 +683,8 @@ After adding this reporting configuration, verify it:
 # Generate reports to verify configuration
 ./mvnw clean test site
 ```
-                    
                 
+            
 #### Step Constraints
 
 - **MUST** only add reporting section if HTML reports were selected in Step 3
@@ -718,80 +718,80 @@ If user says "y": Proceed with adding missing configuration elements only.
 
 ```xml
 <profile>
-    <id>jacoco</id>
-    <activation>
-        <activeByDefault>false</activeByDefault>
-    </activation>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.jacoco</groupId>
-                <artifactId>jacoco-maven-plugin</artifactId>
-                <version>${maven-plugin-jacoco.version}</version>
-                <executions>
-                    <execution>
-                        <id>prepare-agent</id>
-                        <goals>
-                            <goal>prepare-agent</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>report</id>
-                        <phase>test</phase>
-                        <goals>
-                            <goal>report</goal>
-                        </goals>
-                    </execution>
-                    <execution>
-                        <id>check</id>
-                        <phase>verify</phase>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <configuration>
-                            <rules>
-                                <rule>
-                                    <element>BUNDLE</element>
-                                    <limits>
-                                        <limit>
-                                            <counter>LINE</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>${coverage.level}%</minimum>
-                                        </limit>
-                                        <limit>
-                                            <counter>BRANCH</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>${coverage.level}%</minimum>
-                                        </limit>
-                                        <limit>
-                                            <counter>METHOD</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>${coverage.level}%</minimum>
-                                        </limit>
-                                        <limit>
-                                            <counter>CLASS</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>${coverage.level}%</minimum>
-                                        </limit>
-                                        <limit>
-                                            <counter>INSTRUCTION</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>${coverage.level}%</minimum>
-                                        </limit>
-                                        <limit>
-                                            <counter>COMPLEXITY</counter>
-                                            <value>COVEREDRATIO</value>
-                                            <minimum>${coverage.level}%</minimum>
-                                        </limit>
-                                    </limits>
-                                </rule>
-                            </rules>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+<id>jacoco</id>
+<activation>
+    <activeByDefault>false</activeByDefault>
+</activation>
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.jacoco</groupId>
+            <artifactId>jacoco-maven-plugin</artifactId>
+            <version>${maven-plugin-jacoco.version}</version>
+            <executions>
+                <execution>
+                    <id>prepare-agent</id>
+                    <goals>
+                        <goal>prepare-agent</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>report</id>
+                    <phase>test</phase>
+                    <goals>
+                        <goal>report</goal>
+                    </goals>
+                </execution>
+                <execution>
+                    <id>check</id>
+                    <phase>verify</phase>
+                    <goals>
+                        <goal>check</goal>
+                    </goals>
+                    <configuration>
+                        <rules>
+                            <rule>
+                                <element>BUNDLE</element>
+                                <limits>
+                                    <limit>
+                                        <counter>LINE</counter>
+                                        <value>COVEREDRATIO</value>
+                                        <minimum>${coverage.level}%</minimum>
+                                    </limit>
+                                    <limit>
+                                        <counter>BRANCH</counter>
+                                        <value>COVEREDRATIO</value>
+                                        <minimum>${coverage.level}%</minimum>
+                                    </limit>
+                                    <limit>
+                                        <counter>METHOD</counter>
+                                        <value>COVEREDRATIO</value>
+                                        <minimum>${coverage.level}%</minimum>
+                                    </limit>
+                                    <limit>
+                                        <counter>CLASS</counter>
+                                        <value>COVEREDRATIO</value>
+                                        <minimum>${coverage.level}%</minimum>
+                                    </limit>
+                                    <limit>
+                                        <counter>INSTRUCTION</counter>
+                                        <value>COVEREDRATIO</value>
+                                        <minimum>${coverage.level}%</minimum>
+                                    </limit>
+                                    <limit>
+                                        <counter>COMPLEXITY</counter>
+                                        <value>COVEREDRATIO</value>
+                                        <minimum>${coverage.level}%</minimum>
+                                    </limit>
+                                </limits>
+                            </rule>
+                        </rules>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
 </profile>
 ```
 
@@ -813,8 +813,8 @@ After adding this profile, verify the configuration:
 # Test JaCoCo profile
 ./mvnw clean verify -Pjacoco
 ```
-                    
                 
+            
 #### Step Constraints
 
 - **MUST** only add JaCoCo profile if code coverage was selected in Step 3
@@ -849,51 +849,51 @@ If user says "y": Proceed with adding missing configuration elements only.
 
 ```xml
 <profile>
-    <id>pitest</id>
-    <activation>
-        <activeByDefault>false</activeByDefault>
-    </activation>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.pitest</groupId>
-                <artifactId>pitest-maven</artifactId>
-                <version>${maven-plugin-pitest.version}</version>
-                <configuration>
-                    <targetClasses>
-                        <param>REPLACE_WITH_ACTUAL_PACKAGE.*</param>
-                    </targetClasses>
-                    <targetTests>
-                        <param>REPLACE_WITH_ACTUAL_PACKAGE.*</param>
-                    </targetTests>
-                    <outputFormats>
-                        <outputFormat>HTML</outputFormat>
-                        <outputFormat>XML</outputFormat>
-                    </outputFormats>
-                    <mutationThreshold>${coverage.level}</mutationThreshold>
-                    <coverageThreshold>${coverage.level}</coverageThreshold>
-                    <timestampedReports>false</timestampedReports>
-                    <verbose>false</verbose>
-                </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>org.pitest</groupId>
-                        <artifactId>pitest-junit5-plugin</artifactId>
-                        <version>${maven-plugin-pitest-junit5.version}</version>
-                    </dependency>
-                </dependencies>
-                <executions>
-                    <execution>
-                        <id>pitest-mutation-testing</id>
-                        <goals>
-                            <goal>mutationCoverage</goal>
-                        </goals>
-                        <phase>verify</phase>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+<id>pitest</id>
+<activation>
+    <activeByDefault>false</activeByDefault>
+</activation>
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-maven</artifactId>
+            <version>${maven-plugin-pitest.version}</version>
+            <configuration>
+                <targetClasses>
+                    <param>REPLACE_WITH_ACTUAL_PACKAGE.*</param>
+                </targetClasses>
+                <targetTests>
+                    <param>REPLACE_WITH_ACTUAL_PACKAGE.*</param>
+                </targetTests>
+                <outputFormats>
+                    <outputFormat>HTML</outputFormat>
+                    <outputFormat>XML</outputFormat>
+                </outputFormats>
+                <mutationThreshold>${coverage.level}</mutationThreshold>
+                <coverageThreshold>${coverage.level}</coverageThreshold>
+                <timestampedReports>false</timestampedReports>
+                <verbose>false</verbose>
+            </configuration>
+            <dependencies>
+                <dependency>
+                    <groupId>org.pitest</groupId>
+                    <artifactId>pitest-junit5-plugin</artifactId>
+                    <version>${maven-plugin-pitest-junit5.version}</version>
+                </dependency>
+            </dependencies>
+            <executions>
+                <execution>
+                    <id>pitest-mutation-testing</id>
+                    <goals>
+                        <goal>mutationCoverage</goal>
+                    </goals>
+                    <phase>verify</phase>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
 </profile>
 ```
 
@@ -920,8 +920,8 @@ After adding this profile, verify the configuration:
 # Test PiTest profile
 ./mvnw clean verify -Ppitest
 ```
-                    
                 
+            
 #### Step Constraints
 
 - **MUST** only add PiTest profile if mutation testing was selected in Step 3
@@ -957,44 +957,44 @@ If user says "y": Proceed with adding missing configuration elements only.
 
 ```xml
 <profile>
-    <id>security</id>
-    <activation>
-        <activeByDefault>false</activeByDefault>
-    </activation>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.owasp</groupId>
-                <artifactId>dependency-check-maven</artifactId>
-                <version>${maven-plugin-dependency-check.version}</version>
-                <configuration>
-                    <outputDirectory>${project.build.directory}/dependency-check</outputDirectory>
-                    <format>ALL</format>
-                    <failBuildOnCVSS>7</failBuildOnCVSS>
-                    <skipProvidedScope>false</skipProvidedScope>
-                    <skipRuntimeScope>false</skipRuntimeScope>
-                    <skipSystemScope>false</skipSystemScope>
-                    <skipTestScope>false</skipTestScope>
-                    <!-- Performance and reliability improvements -->
-                    <nvdApiDelay>4000</nvdApiDelay>
-                    <nvdMaxRetryCount>3</nvdMaxRetryCount>
-                    <nvdValidForHours>24</nvdValidForHours>
-                    <!-- Skip analyzers that might cause issues -->
-                    <nodeAnalyzerEnabled>false</nodeAnalyzerEnabled>
-                    <retireJsAnalyzerEnabled>false</retireJsAnalyzerEnabled>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>dependency-check</id>
-                        <goals>
-                            <goal>check</goal>
-                        </goals>
-                        <phase>verify</phase>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+<id>security</id>
+<activation>
+    <activeByDefault>false</activeByDefault>
+</activation>
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.owasp</groupId>
+            <artifactId>dependency-check-maven</artifactId>
+            <version>${maven-plugin-dependency-check.version}</version>
+            <configuration>
+                <outputDirectory>${project.build.directory}/dependency-check</outputDirectory>
+                <format>ALL</format>
+                <failBuildOnCVSS>7</failBuildOnCVSS>
+                <skipProvidedScope>false</skipProvidedScope>
+                <skipRuntimeScope>false</skipRuntimeScope>
+                <skipSystemScope>false</skipSystemScope>
+                <skipTestScope>false</skipTestScope>
+                <!-- Performance and reliability improvements -->
+                <nvdApiDelay>4000</nvdApiDelay>
+                <nvdMaxRetryCount>3</nvdMaxRetryCount>
+                <nvdValidForHours>24</nvdValidForHours>
+                <!-- Skip analyzers that might cause issues -->
+                <nodeAnalyzerEnabled>false</nodeAnalyzerEnabled>
+                <retireJsAnalyzerEnabled>false</retireJsAnalyzerEnabled>
+            </configuration>
+            <executions>
+                <execution>
+                    <id>dependency-check</id>
+                    <goals>
+                        <goal>check</goal>
+                    </goals>
+                    <phase>verify</phase>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
 </profile>
 ```
 
@@ -1016,8 +1016,8 @@ After adding this profile, verify the configuration:
 # Test Security profile
 ./mvnw clean verify -Psecurity
 ```
-                    
                 
+            
 #### Step Constraints
 
 - **MUST** only add Security profile if security scanning was selected in Step 3
@@ -1051,50 +1051,50 @@ If user says "y": Proceed with adding missing configuration elements only.
 
 ```xml
 <profile>
-    <id>find-bugs</id>
-    <activation>
-        <activeByDefault>false</activeByDefault>
-    </activation>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>${maven-plugin-pmd.version}</version>
-            </plugin>
-            <plugin>
-                <groupId>com.github.spotbugs</groupId>
-                <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>${maven-plugin-spotbugs.version}</version>
-                <configuration>
-                    <effort>Max</effort>
-                    <threshold>Low</threshold>
-                    <failOnError>true</failOnError>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-    <reporting>
-        <plugins>
-            <!-- SpotBugs reporting for Maven site -->
-            <plugin>
-                <groupId>com.github.spotbugs</groupId>
-                <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>${maven-plugin-spotbugs.version}</version>
-                <configuration>
-                    <effort>Max</effort>
-                    <threshold>Low</threshold>
-                    <includeFilterFile>src/main/spotbugs/spotbugs-include.xml</includeFilterFile>
-                    <excludeFilterFile>src/main/spotbugs/spotbugs-exclude.xml</excludeFilterFile>
-                </configuration>
-            </plugin>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>${maven-plugin-pmd.version}</version>
-            </plugin>
-        </plugins>
-    </reporting>
+<id>find-bugs</id>
+<activation>
+    <activeByDefault>false</activeByDefault>
+</activation>
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-pmd-plugin</artifactId>
+            <version>${maven-plugin-pmd.version}</version>
+        </plugin>
+        <plugin>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-maven-plugin</artifactId>
+            <version>${maven-plugin-spotbugs.version}</version>
+            <configuration>
+                <effort>Max</effort>
+                <threshold>Low</threshold>
+                <failOnError>true</failOnError>
+            </configuration>
+        </plugin>
+    </plugins>
+</build>
+<reporting>
+    <plugins>
+        <!-- SpotBugs reporting for Maven site -->
+        <plugin>
+            <groupId>com.github.spotbugs</groupId>
+            <artifactId>spotbugs-maven-plugin</artifactId>
+            <version>${maven-plugin-spotbugs.version}</version>
+            <configuration>
+                <effort>Max</effort>
+                <threshold>Low</threshold>
+                <includeFilterFile>src/main/spotbugs/spotbugs-include.xml</includeFilterFile>
+                <excludeFilterFile>src/main/spotbugs/spotbugs-exclude.xml</excludeFilterFile>
+            </configuration>
+        </plugin>
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-pmd-plugin</artifactId>
+            <version>${maven-plugin-pmd.version}</version>
+        </plugin>
+    </plugins>
+</reporting>
 </profile>
 ```
 
@@ -1120,8 +1120,8 @@ After adding this profile, verify the configuration:
 # Test Static Analysis profile
 ./mvnw clean verify -Pfind-bugs
 ```
-                    
                 
+            
 #### Step Constraints
 
 - **MUST** only add Static Analysis profile if static analysis was selected in Step 3
@@ -1155,45 +1155,45 @@ If user says "y": Proceed with adding missing configuration elements only.
 
 ```xml
 <profile>
-    <id>sonar</id>
-    <activation>
-        <activeByDefault>false</activeByDefault>
-    </activation>
-    <properties>
-        <!-- SonarCloud configuration -->
-        <sonar.host.url>REPLACE_WITH_SONAR_HOST_URL</sonar.host.url>
-        <sonar.organization>REPLACE_WITH_SONAR_ORGANIZATION</sonar.organization>
-        <sonar.projectKey>REPLACE_WITH_SONAR_PROJECT_KEY</sonar.projectKey>
-        <sonar.projectName>REPLACE_WITH_SONAR_PROJECT_NAME</sonar.projectName>
-        <sonar.projectVersion>${project.version}</sonar.projectVersion>
-        <sonar.sources>src/main/java</sonar.sources>
-        <sonar.tests>src/test/java</sonar.tests>
-        <sonar.java.binaries>target/classes</sonar.java.binaries>
-        <sonar.java.test.binaries>target/test-classes</sonar.java.test.binaries>
-        <sonar.jacoco.reportPath>target/jacoco.exec</sonar.jacoco.reportPath>
-        <sonar.junit.reportPaths>target/surefire-reports</sonar.junit.reportPaths>
-        <sonar.coverage.exclusions>**/*Test.java,**/*IT.java</sonar.coverage.exclusions>
-        <sonar.java.source>${java.version}</sonar.java.source>
-    </properties>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>${maven-plugin-sonar.version}</version>
-            </plugin>
-        </plugins>
-    </build>
+<id>sonar</id>
+<activation>
+    <activeByDefault>false</activeByDefault>
+</activation>
+<properties>
+    <!-- SonarCloud configuration -->
+    <sonar.host.url>REPLACE_WITH_SONAR_HOST_URL</sonar.host.url>
+    <sonar.organization>REPLACE_WITH_SONAR_ORGANIZATION</sonar.organization>
+    <sonar.projectKey>REPLACE_WITH_SONAR_PROJECT_KEY</sonar.projectKey>
+    <sonar.projectName>REPLACE_WITH_SONAR_PROJECT_NAME</sonar.projectName>
+    <sonar.projectVersion>${project.version}</sonar.projectVersion>
+    <sonar.sources>src/main/java</sonar.sources>
+    <sonar.tests>src/test/java</sonar.tests>
+    <sonar.java.binaries>target/classes</sonar.java.binaries>
+    <sonar.java.test.binaries>target/test-classes</sonar.java.test.binaries>
+    <sonar.jacoco.reportPath>target/jacoco.exec</sonar.jacoco.reportPath>
+    <sonar.junit.reportPaths>target/surefire-reports</sonar.junit.reportPaths>
+    <sonar.coverage.exclusions>**/*Test.java,**/*IT.java</sonar.coverage.exclusions>
+    <sonar.java.source>${java.version}</sonar.java.source>
+</properties>
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.sonarsource.scanner.maven</groupId>
+            <artifactId>sonar-maven-plugin</artifactId>
+            <version>${maven-plugin-sonar.version}</version>
+        </plugin>
+    </plugins>
+</build>
 </profile>
 ```
 
 ## Implementation Guidelines
 
 1. **Replace Sonar placeholders** with actual values from Step 3:
-    - `REPLACE_WITH_SONAR_HOST_URL`
-    - `REPLACE_WITH_SONAR_ORGANIZATION`
-    - `REPLACE_WITH_SONAR_PROJECT_KEY`
-    - `REPLACE_WITH_SONAR_PROJECT_NAME`
+- `REPLACE_WITH_SONAR_HOST_URL`
+- `REPLACE_WITH_SONAR_ORGANIZATION`
+- `REPLACE_WITH_SONAR_PROJECT_KEY`
+- `REPLACE_WITH_SONAR_PROJECT_NAME`
 
 ## Usage Examples
 
@@ -1216,8 +1216,8 @@ After adding this profile, verify the configuration:
 # Validate Sonar profile (requires token)
 ./mvnw clean verify sonar:sonar -Psonar -Dsonar.login=YOUR_TOKEN
 ```
-                    
                 
+            
 #### Step Constraints
 
 - **MUST** only add Sonar profile if Sonar integration was selected in Step 3
@@ -1252,32 +1252,32 @@ If user says "y": Proceed with adding missing configuration elements only.
 
 ```xml
 <plugin>
-    <groupId>com.diffplug.spotless</groupId>
-    <artifactId>spotless-maven-plugin</artifactId>
-    <version>${maven-plugin-spotless.version}</version>
-    <configuration>
-        <encoding>UTF-8</encoding>
-        <java>
-            <removeUnusedImports />
-            <importOrder>
-                <order>,\#</order>
-            </importOrder>
-            <endWithNewline />
-            <trimTrailingWhitespace />
-            <indent>
-                <spaces>true</spaces>
-                <spacesPerTab>4</spacesPerTab>
-            </indent>
-        </java>
-    </configuration>
-    <executions>
-        <execution>
-            <goals>
-                <goal>check</goal>
-            </goals>
-            <phase>process-sources</phase>
-        </execution>
-    </executions>
+<groupId>com.diffplug.spotless</groupId>
+<artifactId>spotless-maven-plugin</artifactId>
+<version>${maven-plugin-spotless.version}</version>
+<configuration>
+    <encoding>UTF-8</encoding>
+    <java>
+        <removeUnusedImports />
+        <importOrder>
+            <order>,\#</order>
+        </importOrder>
+        <endWithNewline />
+        <trimTrailingWhitespace />
+        <indent>
+            <spaces>true</spaces>
+            <spacesPerTab>4</spacesPerTab>
+        </indent>
+    </java>
+</configuration>
+<executions>
+    <execution>
+        <goals>
+            <goal>check</goal>
+        </goals>
+        <phase>process-sources</phase>
+    </execution>
+</executions>
 </plugin>
 ```
 
@@ -1302,8 +1302,8 @@ After adding this plugin, verify the configuration:
 # Test Spotless configuration
 ./mvnw spotless:check
 ```
-                    
                 
+            
 #### Step Constraints
 
 - **MUST** only add Spotless plugin if code formatting was selected in Step 3
@@ -1337,12 +1337,12 @@ If user says "y": Proceed with adding missing configuration elements only.
 
 ```xml
 <plugin>
-    <groupId>org.codehaus.mojo</groupId>
-    <artifactId>versions-maven-plugin</artifactId>
-    <version>${maven-plugin-versions.version}</version>
-    <configuration>
-        <allowSnapshots>false</allowSnapshots>
-    </configuration>
+<groupId>org.codehaus.mojo</groupId>
+<artifactId>versions-maven-plugin</artifactId>
+<version>${maven-plugin-versions.version}</version>
+<configuration>
+    <allowSnapshots>false</allowSnapshots>
+</configuration>
 </plugin>
 ```
 
@@ -1373,8 +1373,8 @@ After adding this plugin, verify the configuration:
 # Test Versions plugin configuration
 ./mvnw versions:display-plugin-updates
 ```
-                    
                 
+            
 #### Step Constraints
 
 - **MUST** only add Versions plugin if version management was selected in Step 3
@@ -1408,23 +1408,23 @@ If user says "y": Proceed with adding missing configuration elements only.
 
 ```xml
 <plugin>
-    <groupId>pl.project13.maven</groupId>
-    <artifactId>git-commit-id-plugin</artifactId>
-    <version>${maven-plugin-git-commit-id.version}</version>
-    <executions>
-        <execution>
-            <id>get-the-git-infos</id>
-            <goals>
-                <goal>revision</goal>
-            </goals>
-            <phase>initialize</phase>
-        </execution>
-    </executions>
-    <configuration>
-        <generateGitPropertiesFile>true</generateGitPropertiesFile>
-        <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
-        <commitIdGenerationMode>full</commitIdGenerationMode>
-    </configuration>
+<groupId>pl.project13.maven</groupId>
+<artifactId>git-commit-id-plugin</artifactId>
+<version>${maven-plugin-git-commit-id.version}</version>
+<executions>
+    <execution>
+        <id>get-the-git-infos</id>
+        <goals>
+            <goal>revision</goal>
+        </goals>
+        <phase>initialize</phase>
+    </execution>
+</executions>
+<configuration>
+    <generateGitPropertiesFile>true</generateGitPropertiesFile>
+    <generateGitPropertiesFilename>${project.build.outputDirectory}/git.properties</generateGitPropertiesFilename>
+    <commitIdGenerationMode>full</commitIdGenerationMode>
+</configuration>
 </plugin>
 ```
 
@@ -1455,8 +1455,8 @@ After adding this plugin, verify the configuration:
 ./mvnw clean package
 cat target/classes/git.properties
 ```
-                    
                 
+            
 #### Step Constraints
 
 - **MUST** only add Git Commit ID plugin if build information tracking was selected in Step 3
@@ -1491,27 +1491,27 @@ If user says "y": Proceed with adding missing configuration elements only.
 
 ```xml
 <plugin>
-    <groupId>org.codehaus.mojo</groupId>
-    <artifactId>flatten-maven-plugin</artifactId>
-    <version>${maven-plugin-flatten.version}</version>
-    <configuration>
-    </configuration>
-    <executions>
-        <execution>
-            <id>flatten</id>
-            <phase>process-resources</phase>
-            <goals>
-                <goal>flatten</goal>
-            </goals>
-        </execution>
-        <execution>
-            <id>flatten.clean</id>
-            <phase>clean</phase>
-            <goals>
-                <goal>clean</goal>
-            </goals>
-        </execution>
-    </executions>
+<groupId>org.codehaus.mojo</groupId>
+<artifactId>flatten-maven-plugin</artifactId>
+<version>${maven-plugin-flatten.version}</version>
+<configuration>
+</configuration>
+<executions>
+    <execution>
+        <id>flatten</id>
+        <phase>process-resources</phase>
+        <goals>
+            <goal>flatten</goal>
+        </goals>
+    </execution>
+    <execution>
+        <id>flatten.clean</id>
+        <phase>clean</phase>
+        <goals>
+            <goal>clean</goal>
+        </goals>
+    </execution>
+</executions>
 </plugin>
 ```
 
@@ -1540,8 +1540,8 @@ After adding this plugin, verify the configuration:
 ./mvnw clean package
 ls target/.flattened-pom.xml
 ```
-                    
                 
+            
 #### Step Constraints
 
 - **MUST** only add Flatten plugin if "Java Library" was selected as project nature in Step 3
@@ -1566,14 +1566,14 @@ ls target/.flattened-pom.xml
 
 1. **Check for multi-module configuration**: Scan pom.xml for `<modules>` section
 
-   If `<modules>` section exists: **STOP IMMEDIATELY** and inform user: "JMH profile cannot be added to multi-module Maven projects. JMH requires a single-module project structure for proper benchmark execution. Please configure JMH in individual modules instead."
+If `<modules>` section exists: **STOP IMMEDIATELY** and inform user: "JMH profile cannot be added to multi-module Maven projects. JMH requires a single-module project structure for proper benchmark execution. Please configure JMH in individual modules instead."
 
 2. **Check for existing JMH profile**:
 
-   If `<profiles>` section with `jmh` profile already exists: Ask user "JMH profile already exists. Do you want to enhance the existing configuration? (y/n)"
+If `<profiles>` section with `jmh` profile already exists: Ask user "JMH profile already exists. Do you want to enhance the existing configuration? (y/n)"
 
-   If user says "n": Skip this step entirely.
-   If user says "y": Proceed with adding missing configuration elements only.
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing configuration elements only.
 
 **CONDITIONAL EXECUTION**: Only execute this step if user selected "JMH" in Step 3 AND project is single-module.
 
@@ -1583,100 +1583,100 @@ ls target/.flattened-pom.xml
 
 ```xml
 <profile>
-    <id>jmh</id>
-    <activation>
-        <activeByDefault>false</activeByDefault>
-    </activation>
-    <dependencies>
-        <dependency>
-            <groupId>org.openjdk.jmh</groupId>
-            <artifactId>jmh-core</artifactId>
-            <version>${jmh.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.openjdk.jmh</groupId>
-            <artifactId>jmh-generator-annprocess</artifactId>
-            <version>${jmh.version}</version>
-            <scope>provided</scope>
-        </dependency>
-    </dependencies>
-    <build>
-        <plugins>
-            <!-- Add benchmark source directory -->
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>${maven-plugin-build-helper.version}</version>
-                <executions>
-                    <execution>
-                        <id>add-jmh-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>src/jmh/java</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+<id>jmh</id>
+<activation>
+    <activeByDefault>false</activeByDefault>
+</activation>
+<dependencies>
+    <dependency>
+        <groupId>org.openjdk.jmh</groupId>
+        <artifactId>jmh-core</artifactId>
+        <version>${jmh.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.openjdk.jmh</groupId>
+        <artifactId>jmh-generator-annprocess</artifactId>
+        <version>${jmh.version}</version>
+        <scope>provided</scope>
+    </dependency>
+</dependencies>
+<build>
+    <plugins>
+        <!-- Add benchmark source directory -->
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>${maven-plugin-build-helper.version}</version>
+            <executions>
+                <execution>
+                    <id>add-jmh-source</id>
+                    <phase>generate-sources</phase>
+                    <goals>
+                        <goal>add-source</goal>
+                    </goals>
+                    <configuration>
+                        <sources>
+                            <source>src/jmh/java</source>
+                        </sources>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
 
-            <!-- Compile JMH benchmarks -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven-plugin-compiler.version}</version>
-                <configuration>
-                    <release>${java.version}</release>
-                    <annotationProcessorPaths>
-                        <path>
-                            <groupId>org.openjdk.jmh</groupId>
-                            <artifactId>jmh-generator-annprocess</artifactId>
-                            <version>${jmh.version}</version>
-                        </path>
-                    </annotationProcessorPaths>
-                </configuration>
-            </plugin>
+        <!-- Compile JMH benchmarks -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>${maven-plugin-compiler.version}</version>
+            <configuration>
+                <release>${java.version}</release>
+                <annotationProcessorPaths>
+                    <path>
+                        <groupId>org.openjdk.jmh</groupId>
+                        <artifactId>jmh-generator-annprocess</artifactId>
+                        <version>${jmh.version}</version>
+                    </path>
+                </annotationProcessorPaths>
+            </configuration>
+        </plugin>
 
-            <!-- Create executable benchmark JAR -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-shade-plugin</artifactId>
-                <version>${maven-plugin-shade.version}</version>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>shade</goal>
-                        </goals>
-                        <configuration>
-                            <finalName>jmh-benchmarks</finalName>
-                            <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>org.openjdk.jmh.Main</mainClass>
-                                </transformer>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
-                            </transformers>
-                            <filters>
-                                <filter>
-                                    <!-- Exclude signatures -->
-                                    <artifact>*:*</artifact>
-                                    <excludes>
-                                        <exclude>META-INF/*.SF</exclude>
-                                        <exclude>META-INF/*.DSA</exclude>
-                                        <exclude>META-INF/*.RSA</exclude>
-                                        <exclude>META-INF/MANIFEST.MF</exclude>
-                                    </excludes>
-                                </filter>
-                            </filters>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
+        <!-- Create executable benchmark JAR -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>${maven-plugin-shade.version}</version>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>shade</goal>
+                    </goals>
+                    <configuration>
+                        <finalName>jmh-benchmarks</finalName>
+                        <transformers>
+                            <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <mainClass>org.openjdk.jmh.Main</mainClass>
+                            </transformer>
+                            <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                        </transformers>
+                        <filters>
+                            <filter>
+                                <!-- Exclude signatures -->
+                                <artifact>*:*</artifact>
+                                <excludes>
+                                    <exclude>META-INF/*.SF</exclude>
+                                    <exclude>META-INF/*.DSA</exclude>
+                                    <exclude>META-INF/*.RSA</exclude>
+                                    <exclude>META-INF/MANIFEST.MF</exclude>
+                                </excludes>
+                            </filter>
+                        </filters>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
 </profile>
 ```
 
@@ -1731,70 +1731,70 @@ import java.util.concurrent.TimeUnit;
 @Measurement(iterations = 5)
 public class FibonacciBenchmark {
 
-    private static final int FIBONACCI_N = 20;
+private static final int FIBONACCI_N = 20;
 
-    @Benchmark
-    public long testFibonacciRecursive() {
-        return FibonacciCalculator.fibonacciRecursive(FIBONACCI_N);
-    }
+@Benchmark
+public long testFibonacciRecursive() {
+    return FibonacciCalculator.fibonacciRecursive(FIBONACCI_N);
+}
 
-    @Benchmark
-    public long testFibonacciIterative() {
-        return FibonacciCalculator.fibonacciIterative(FIBONACCI_N);
+@Benchmark
+public long testFibonacciIterative() {
+    return FibonacciCalculator.fibonacciIterative(FIBONACCI_N);
+}
+
+/**
+    * Inner class that implements Fibonacci calculation in two different ways
+    */
+static class FibonacciCalculator {
+
+    /**
+        * Recursive implementation of Fibonacci sequence
+        * Time complexity: O(2^n) - exponential
+        * Space complexity: O(n) - due to call stack
+        */
+    public static long fibonacciRecursive(int n) {
+        if (n <= 1) {
+            return n;
+        }
+        return fibonacciRecursive(n - 1) + fibonacciRecursive(n - 2);
     }
 
     /**
-     * Inner class that implements Fibonacci calculation in two different ways
-     */
-    static class FibonacciCalculator {
-
-        /**
-         * Recursive implementation of Fibonacci sequence
-         * Time complexity: O(2^n) - exponential
-         * Space complexity: O(n) - due to call stack
-         */
-        public static long fibonacciRecursive(int n) {
-            if (n <= 1) {
-                return n;
-            }
-            return fibonacciRecursive(n - 1) + fibonacciRecursive(n - 2);
+        * Iterative implementation of Fibonacci sequence
+        * Time complexity: O(n) - linear
+        * Space complexity: O(1) - constant
+        */
+    public static long fibonacciIterative(int n) {
+        if (n <= 1) {
+            return n;
         }
 
-        /**
-         * Iterative implementation of Fibonacci sequence
-         * Time complexity: O(n) - linear
-         * Space complexity: O(1) - constant
-         */
-        public static long fibonacciIterative(int n) {
-            if (n <= 1) {
-                return n;
-            }
+        long prev = 0;
+        long curr = 1;
 
-            long prev = 0;
-            long curr = 1;
-
-            for (int i = 2; i <= n; i++) {
-                long next = prev + curr;
-                prev = curr;
-                curr = next;
-            }
-
-            return curr;
+        for (int i = 2; i <= n; i++) {
+            long next = prev + curr;
+            prev = curr;
+            curr = next;
         }
-    }
 
-    /**
-     * Main method to run benchmarks with JSON output configuration
-     */
-    public static void main(String[] args) throws RunnerException {
-        Options options = new OptionsBuilder()
-                .include(FibonacciBenchmark.class.getSimpleName())
-                .resultFormat(ResultFormatType.JSON)
-                .result("jmh-fibonacci-benchmark-results.json")
-                .build();
-
-        new Runner(options).run();
+        return curr;
     }
+}
+
+/**
+    * Main method to run benchmarks with JSON output configuration
+    */
+public static void main(String[] args) throws RunnerException {
+    Options options = new OptionsBuilder()
+            .include(FibonacciBenchmark.class.getSimpleName())
+            .resultFormat(ResultFormatType.JSON)
+            .result("jmh-fibonacci-benchmark-results.json")
+            .build();
+
+    new Runner(options).run();
+}
 }
 ```
 
@@ -1829,8 +1829,8 @@ ls jmh-fibonacci-benchmark-results.json
 - https://openjdk.org/projects/code-tools/jmh/
 - https://jmh.morethan.io
 ```
-                    
                 
+            
 #### Step Constraints
 
 - **MUST** only add JMH profile if "JMH" was selected in Step 3

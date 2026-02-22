@@ -21,105 +21,103 @@
         </constraint-list>
     </constraints>
 
-    <instructions>
-        <steps>
-            <step number="1">
-                <step-title>Create Script File</step-title>
-                <step-content>
-                    When a user requests JMeter performance testing setup:
+    <steps>
+        <step number="1">
+            <step-title>Create Script File</step-title>
+            <step-content>
+                When a user requests JMeter performance testing setup:
 
-                    1. **Create the file** as `run-jmeter.sh` in the project root
-                    2. **Make it executable**: `chmod +x run-jmeter.sh`
-                    3. **Verify permissions**: Ensure the script has execute permissions
+                1. **Create the file** as `run-jmeter.sh` in the project root
+                2. **Make it executable**: `chmod +x run-jmeter.sh`
+                3. **Verify permissions**: Ensure the script has execute permissions
 
-                    **Required Project Structure:**
-                    ```
-                    project-root/
-                    ├── run-jmeter.sh                          # The performance script
-                    ├── src/test/resources/jmeter/
-                    │   └── load-test.jmx                      # JMeter test plan
-                    └── target/                                # Generated reports (auto-created)
-                        ├── jmeter-results.jtl                 # Raw results
-                        ├── jmeter-report/                     # HTML dashboard
-                        │   └── index.html                     # Main report
-                        └── jmeter.log                         # Execution log
-                    ```
+                **Required Project Structure:**
+                ```
+                project-root/
+                ├── run-jmeter.sh                          # The performance script
+                ├── src/test/resources/jmeter/
+                │   └── load-test.jmx                      # JMeter test plan
+                └── target/                                # Generated reports (auto-created)
+                    ├── jmeter-results.jtl                 # Raw results
+                    ├── jmeter-report/                     # HTML dashboard
+                    │   └── index.html                     # Main report
+                    └── jmeter.log                         # Execution log
+                ```
 
-                </step-content>
-            </step>
+            </step-content>
+        </step>
 
-            <step number="2">
-                <step-title>Copy Template Content</step-title>
-                <step-content>
+        <step number="2">
+            <step-title>Copy Template Content</step-title>
+            <step-content>
 Create the entire script with the following content:
 
 ```bash
 <xi:include href="fragments/run-jmeter.sh" parse="text"/>
 ```
-                </step-content>
-                <step-constraints>
-                    <step-constraint-list>
-                        <step-constraint>**DO NOT** create your own version of the performance script</step-constraint>
-                        <step-constraint>**DO NOT** modify the template logic, structure, or features</step-constraint>
-                        <step-constraint>**DO NOT** add enhancements or interpretations</step-constraint>
-                        <step-constraint>**ONLY** use the exact template provided</step-constraint>
-                        <step-constraint>**ONLY** copy the script verbatim without any changes</step-constraint>
-                    </step-constraint-list>
-                </step-constraints>
-            </step>
+            </step-content>
+            <step-constraints>
+                <step-constraint-list>
+                    <step-constraint>**DO NOT** create your own version of the performance script</step-constraint>
+                    <step-constraint>**DO NOT** modify the template logic, structure, or features</step-constraint>
+                    <step-constraint>**DO NOT** add enhancements or interpretations</step-constraint>
+                    <step-constraint>**ONLY** use the exact template provided</step-constraint>
+                    <step-constraint>**ONLY** copy the script verbatim without any changes</step-constraint>
+                </step-constraint-list>
+            </step-constraints>
+        </step>
 
-            <step number="3">
-                <step-title>Provide Usage Information</step-title>
-                <step-content>
-                    **Basic Usage:**
-                    ```bash
-                    # Run with default settings (1000 loops, 1 thread, 1s ramp-up)
-                    ./run-jmeter.sh
+        <step number="3">
+            <step-title>Provide Usage Information</step-title>
+            <step-content>
+                **Basic Usage:**
+                ```bash
+                # Run with default settings (1000 loops, 1 thread, 1s ramp-up)
+                ./run-jmeter.sh
 
-                    # Custom configuration
-                    ./run-jmeter.sh -l 500 -t 10 -r 30
+                # Custom configuration
+                ./run-jmeter.sh -l 500 -t 10 -r 30
 
-                    # Open JMeter GUI
-                    ./run-jmeter.sh -g
-                    ```
+                # Open JMeter GUI
+                ./run-jmeter.sh -g
+                ```
 
-                    **Available Options:**
-                    - `-l, --loops LOOPS`: Number of loops per thread (default: 1000)
-                    - `-t, --threads THREADS`: Number of concurrent threads (default: 1)
-                    - `-r, --ramp-up SECONDS`: Ramp-up period in seconds (default: 1)
-                    - `-g, --gui`: Open JMeter GUI instead of running in non-GUI mode
-                    - `-h, --help`: Show detailed help message
+                **Available Options:**
+                - `-l, --loops LOOPS`: Number of loops per thread (default: 1000)
+                - `-t, --threads THREADS`: Number of concurrent threads (default: 1)
+                - `-r, --ramp-up SECONDS`: Ramp-up period in seconds (default: 1)
+                - `-g, --gui`: Open JMeter GUI instead of running in non-GUI mode
+                - `-h, --help`: Show detailed help message
 
-                    **Environment Variables:**
-                    ```bash
-                    # Override defaults using environment variables
-                    JMETER_LOOPS=500 JMETER_THREADS=5 ./run-jmeter.sh
+                **Environment Variables:**
+                ```bash
+                # Override defaults using environment variables
+                JMETER_LOOPS=500 JMETER_THREADS=5 ./run-jmeter.sh
 
-                    # Or export them
-                    export JMETER_LOOPS=1000
-                    export JMETER_THREADS=10
-                    export JMETER_RAMP_UP=30
-                    ./run-jmeter.sh
-                    ```
+                # Or export them
+                export JMETER_LOOPS=1000
+                export JMETER_THREADS=10
+                export JMETER_RAMP_UP=30
+                ./run-jmeter.sh
+                ```
 
-                    **Example Scenarios:**
-                    ```bash
-                    # Light load test
-                    ./run-jmeter.sh -l 100 -t 1 -r 1
+                **Example Scenarios:**
+                ```bash
+                # Light load test
+                ./run-jmeter.sh -l 100 -t 1 -r 1
 
-                    # Medium load test
-                    ./run-jmeter.sh -l 500 -t 5 -r 10
+                # Medium load test
+                ./run-jmeter.sh -l 500 -t 5 -r 10
 
-                    # Heavy load test
-                    ./run-jmeter.sh -l 1000 -t 20 -r 60
+                # Heavy load test
+                ./run-jmeter.sh -l 1000 -t 20 -r 60
 
-                    # Quick GUI setup
-                    ./run-jmeter.sh -g
-                    ```
-                </step-content>
-            </step>
-        </steps>
-    </instructions>
+                # Quick GUI setup
+                ./run-jmeter.sh -g
+                ```
+            </step-content>
+        </step>
+    </steps>
 
     <output-format>
         <output-format-list>

@@ -3,7 +3,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xi="http://www.w3.org/2001/XInclude">
     <xsl:output method="text" encoding="UTF-8"/>
-    <xsl:strip-space elements="prompt metadata tags example code-examples good-example bad-example output-format instructions steps step"/>
+    <xsl:strip-space elements="prompt metadata tags example code-examples good-example bad-example output-format steps step"/>
 
     <xsl:template match="/prompt">
         <!-- Common frontmatter and header -->
@@ -30,8 +30,8 @@ version: </xsl:text><xsl:value-of select="normalize-space(metadata/version)"/>
         <xsl:apply-templates select="goal"/>
         <!-- Apply constraints template if present -->
         <xsl:apply-templates select="constraints"/>
-        <!-- Process instructions if present -->
-        <xsl:apply-templates select="instructions"/>
+        <!-- Process steps if present -->
+        <xsl:apply-templates select="steps"/>
 
         <!-- Examples section with auto-generated table of contents -->
         <xsl:if test="examples/toc[@auto-generate='true']">
@@ -140,17 +140,12 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
         <xsl:value-of select="normalize-space(.)"/>
     </xsl:template>
 
-    <!-- Instructions template -->
-    <xsl:template match="instructions">
-        <xsl:text>
-## Instructions
-
-</xsl:text>
-        <xsl:apply-templates select="steps"/>
-    </xsl:template>
-
     <!-- Steps template -->
     <xsl:template match="steps">
+        <xsl:text>
+## Steps
+
+</xsl:text>
         <xsl:apply-templates select="step"/>
     </xsl:template>
 

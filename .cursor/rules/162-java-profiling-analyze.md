@@ -48,7 +48,7 @@ When analyzing profiling results, follow this systematic approach:
 
 This comprehensive approach ensures thorough analysis of profiling data and actionable solutions for performance optimization.
 
-## Instructions
+## Steps
 
 ### Step 1: Inventory Available Results
 

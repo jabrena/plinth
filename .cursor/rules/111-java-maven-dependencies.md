@@ -25,7 +25,7 @@ Before applying This Maven dependencies recommendations, ensure the project is i
 - **PREREQUISITE**: Project must compile and pass basic validation checks before optimization
 - **SAFETY**: If validation fails, NOT CONTINUE and ask the user to fix the issues before continuing
 
-## Instructions
+## Steps
 
 ### Step 1: Maven Wrapper Check and Installation
 
@@ -134,18 +134,18 @@ Based on user responses, implement the dependency configuration following this o
 
 ```xml
 <properties>
-    <!-- Core Java Properties -->
-    <java.version>24</java.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+<!-- Core Java Properties -->
+<java.version>24</java.version>
+<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <maven-plugin-compiler.version>3.14.0</maven-plugin-compiler.version>
+<maven-plugin-compiler.version>3.14.0</maven-plugin-compiler.version>
 
-    <!-- Dependency Versions (add only if selected) -->
-    <jspecify.version>1.0.0</jspecify.version>
-    <error-prone.version>2.35.1</error-prone.version>
-    <nullaway.version>0.12.0</nullaway.version>
-    <vavr.version>0.10.6</vavr.version>
+<!-- Dependency Versions (add only if selected) -->
+<jspecify.version>1.0.0</jspecify.version>
+<error-prone.version>2.35.1</error-prone.version>
+<nullaway.version>0.12.0</nullaway.version>
+<vavr.version>0.10.6</vavr.version>
 </properties>
 ```
 
@@ -154,23 +154,23 @@ Based on user responses, implement the dependency configuration following this o
 **JSpecify Dependency** (add only if selected):
 ```xml
 <dependencies>
-    <dependency>
-        <groupId>org.jspecify</groupId>
-        <artifactId>jspecify</artifactId>
-        <version>${jspecify.version}</version>
-        <scope>provided</scope>
-    </dependency>
+<dependency>
+    <groupId>org.jspecify</groupId>
+    <artifactId>jspecify</artifactId>
+    <version>${jspecify.version}</version>
+    <scope>provided</scope>
+</dependency>
 </dependencies>
 ```
 
 **VAVR Dependency** (add only if selected):
 ```xml
 <dependencies>
-    <dependency>
-        <groupId>io.vavr</groupId>
-        <artifactId>vavr</artifactId>
-        <version>${vavr.version}</version>
-    </dependency>
+<dependency>
+    <groupId>io.vavr</groupId>
+    <artifactId>vavr</artifactId>
+    <version>${vavr.version}</version>
+</dependency>
 </dependencies>
 ```
 
@@ -179,40 +179,40 @@ If user wants enhanced compiler analysis, update the maven-compiler-plugin confi
 
 ```xml
 <plugin>
-    <groupId>org.apache.maven.plugins</groupId>
-    <artifactId>maven-compiler-plugin</artifactId>
-    <version>${maven-plugin-compiler.version}</version>
-    <configuration>
-        <release>${java.version}</release>
-        <compilerArgs>
-            <arg>-Xlint:all</arg>
-            <arg>-Werror</arg>
-            <!-- Error prone settings-->
-            <arg>-XDcompilePolicy=simple</arg>
-            <arg>--should-stop=ifError=FLOW</arg>
-            <arg>-Xplugin:ErrorProne \
-                -Xep:NullAway:ERROR \
-                -XepOpt:NullAway:JSpecifyMode=true \
-                -XepOpt:NullAway:TreatGeneratedAsUnannotated=true \
-                -XepOpt:NullAway:CheckOptionalEmptiness=true \
-                -XepOpt:NullAway:HandleTestAssertionLibraries=true \
-                -XepOpt:NullAway:AssertsEnabled=true \
-                -XepOpt:NullAway:AnnotatedPackages=info.jab.cli
-            </arg>
-        </compilerArgs>
-        <annotationProcessorPaths>
-            <path>
-                <groupId>com.google.errorprone</groupId>
-                <artifactId>error_prone_core</artifactId>
-                <version>${error-prone.version}</version>
-            </path>
-            <path>
-                <groupId>com.uber.nullaway</groupId>
-                <artifactId>nullaway</artifactId>
-                <version>${nullaway.version}</version>
-            </path>
-        </annotationProcessorPaths>
-    </configuration>
+<groupId>org.apache.maven.plugins</groupId>
+<artifactId>maven-compiler-plugin</artifactId>
+<version>${maven-plugin-compiler.version}</version>
+<configuration>
+    <release>${java.version}</release>
+    <compilerArgs>
+        <arg>-Xlint:all</arg>
+        <arg>-Werror</arg>
+        <!-- Error prone settings-->
+        <arg>-XDcompilePolicy=simple</arg>
+        <arg>--should-stop=ifError=FLOW</arg>
+        <arg>-Xplugin:ErrorProne \
+            -Xep:NullAway:ERROR \
+            -XepOpt:NullAway:JSpecifyMode=true \
+            -XepOpt:NullAway:TreatGeneratedAsUnannotated=true \
+            -XepOpt:NullAway:CheckOptionalEmptiness=true \
+            -XepOpt:NullAway:HandleTestAssertionLibraries=true \
+            -XepOpt:NullAway:AssertsEnabled=true \
+            -XepOpt:NullAway:AnnotatedPackages=info.jab.cli
+        </arg>
+    </compilerArgs>
+    <annotationProcessorPaths>
+        <path>
+            <groupId>com.google.errorprone</groupId>
+            <artifactId>error_prone_core</artifactId>
+            <version>${error-prone.version}</version>
+        </path>
+        <path>
+            <groupId>com.uber.nullaway</groupId>
+            <artifactId>nullaway</artifactId>
+            <version>${nullaway.version}</version>
+        </path>
+    </annotationProcessorPaths>
+</configuration>
 </plugin>
 ```
 
@@ -232,7 +232,7 @@ Create `.mvn/jvm.config` file with:
 ```
 
 **Package Name Update**: Update the `AnnotatedPackages` configuration in the compiler plugin to match your actual project package structure.
-                
+            
 #### Step Constraints
 
 - **MUST** add only dependencies that were selected by the user
@@ -258,24 +258,24 @@ import java.util.Objects;
 import org.jspecify.annotations.NonNull;
 
 public class ConstructorSimple {
-    private final String property1;
+private final String property1;
 
-    public ConstructorSimple(@NonNull String property1) {
-        //Preconditions
-        preconditions(property1);
+public ConstructorSimple(@NonNull String property1) {
+    //Preconditions
+    preconditions(property1);
 
-        this.property1 = property1;
+    this.property1 = property1;
+}
+
+private void preconditions(String property1) {
+    if(Objects.isNull(property1)) {
+        throw new IllegalArgumentException("Not valid property1");
     }
+}
 
-    private void preconditions(String property1) {
-        if(Objects.isNull(property1)) {
-            throw new IllegalArgumentException("Not valid property1");
-        }
-    }
-
-    public @NonNull String getProperty1() {
-        return property1;
-    }
+public @NonNull String getProperty1() {
+    return property1;
+}
 }
 ```
 
@@ -288,35 +288,35 @@ import io.vavr.collection.List;
 
 public class VavrExamples {
 
-    // Try monad for error handling
-    public static void tryExample() {
-        Try<Integer> success = Try.of(() -> 10 / 2);
-        success.onSuccess(System.out::println);
-        success.onFailure(System.err::println);
+// Try monad for error handling
+public static void tryExample() {
+    Try<Integer> success = Try.of(() -> 10 / 2);
+    success.onSuccess(System.out::println);
+    success.onFailure(System.err::println);
 
-        Try<Integer> failure = Try.of(() -> 10 / 0);
-        failure.onSuccess(System.out::println);
-        failure.onFailure(System.err::println);
+    Try<Integer> failure = Try.of(() -> 10 / 0);
+    failure.onSuccess(System.out::println);
+    failure.onFailure(System.err::println);
+}
+
+// Either monad for functional error handling
+public static Either<String, Integer> divide(int a, int b) {
+    if (b == 0) {
+        return Either.left("Division by zero");
     }
+    return Either.right(a / b);
+}
 
-    // Either monad for functional error handling
-    public static Either<String, Integer> divide(int a, int b) {
-        if (b == 0) {
-            return Either.left("Division by zero");
-        }
-        return Either.right(a / b);
-    }
+// Immutable collections
+public static void collectionsExample() {
+    List<Integer> numbers = List.of(1, 2, 3, 4, 5);
+    List<Integer> doubled = numbers.map(x -> x * 2);
+    List<Integer> evens = numbers.filter(x -> x % 2 == 0);
 
-    // Immutable collections
-    public static void collectionsExample() {
-        List<Integer> numbers = List.of(1, 2, 3, 4, 5);
-        List<Integer> doubled = numbers.map(x -> x * 2);
-        List<Integer> evens = numbers.filter(x -> x % 2 == 0);
-
-        System.out.println("Original: " + numbers);
-        System.out.println("Doubled: " + doubled);
-        System.out.println("Evens: " + evens);
-    }
+    System.out.println("Original: " + numbers);
+    System.out.println("Doubled: " + doubled);
+    System.out.println("Evens: " + evens);
+}
 }
 ```
 
@@ -328,7 +328,7 @@ public class VavrExamples {
 # Compile will fail with nullness violations
 ./mvnw clean compile -Dmaven.compiler.showWarnings=true
 ```
-                
+            
 ## Output Format
 
 - Ask questions one by one following the template exactly
