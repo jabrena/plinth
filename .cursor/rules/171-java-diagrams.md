@@ -28,7 +28,7 @@ Before applying diagram generation, ensure the project is in a valid state by ru
 - **CRITICAL SAFETY**: If validation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any diagram steps. Ask the user to fix ALL validation errors first before proceeding
 - **ENFORCEMENT**: Never proceed to Step 1 or any subsequent steps if `mvn validate` or `./mvnw validate` command fails or returns errors
 
-## Instructions
+## Steps
 
 ### Step 1: Diagrams Preferences Assessment
 

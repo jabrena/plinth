@@ -28,7 +28,7 @@ Before applying documentation generation, ensure the project is in a valid state
 - **CRITICAL SAFETY**: If validation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any documentation steps. Ask the user to fix ALL validation errors first before proceeding
 - **ENFORCEMENT**: Never proceed to Step 1 or any subsequent steps if `mvn validate` or `./mvnw validate` command fails or returns errors
 
-## Instructions
+## Steps
 
 ### Step 1: Documentation Preferences Assessment
 
@@ -365,34 +365,34 @@ package [package.name];
 **For single module projects:**
 
 1. **Analyze the src/main/java directory** using codebase_search to understand:
-   - Main application classes and entry points
-   - Package structure and organization
-   - Key business logic and functionality
-   - Framework usage (Spring, etc.)
-   - Dependencies and integrations
+- Main application classes and entry points
+- Package structure and organization
+- Key business logic and functionality
+- Framework usage (Spring, etc.)
+- Dependencies and integrations
 
 2. **Generate comprehensive README.md** in project root with:
-   - **Software Description section**: Detailed analysis of the codebase functionality
-   - **Getting Started section**: Build and run instructions
-   - **Configuration section**: If config files detected
-   - **API Documentation section**: If REST controllers found
-   - **Additional sections**: Based on user preferences from Step 1
+- **Software Description section**: Detailed analysis of the codebase functionality
+- **Getting Started section**: Build and run instructions
+- **Configuration section**: If config files detected
+- **API Documentation section**: If REST controllers found
+- **Additional sections**: Based on user preferences from Step 1
 
 ## Multi-Module Project Implementation
 
 **For multi-module Maven projects:**
 
 1. **Generate root README.md** with:
-   - High-level project overview
-   - Module descriptions and links
-   - Common build instructions
-   - Project-wide configuration
+- High-level project overview
+- Module descriptions and links
+- Common build instructions
+- Project-wide configuration
 
 2. **Generate module-specific README.md files** for each module:
-   - Module-specific software description
-   - Module's role in the larger project
-   - Module-specific build and usage instructions
-   - Dependencies specific to that module
+- Module-specific software description
+- Module's role in the larger project
+- Module-specific build and usage instructions
+- Dependencies specific to that module
 
 ## File Handling Strategy
 
@@ -418,7 +418,7 @@ After generating README.md files, verify they contain:
 - Correct build and run instructions
 - Proper formatting and structure
 - No placeholder text or generic content
-                
+            
 #### Step Constraints
 
 - **MUST** only execute if README.md generation was selected in Step 1
@@ -451,66 +451,66 @@ After generating README.md files, verify they contain:
 **For each package found:**
 
 1. **Scan package contents** using codebase_search:
-   - Identify all classes in the package
-   - Understand class responsibilities and relationships
-   - Detect design patterns and architectural roles
-   - Identify main public APIs and entry points
+- Identify all classes in the package
+- Understand class responsibilities and relationships
+- Detect design patterns and architectural roles
+- Identify main public APIs and entry points
 
 2. **Categorize package purpose**:
-   - Application entry points
-   - Business logic/domain models
-   - Data access/repositories
-   - Web controllers/REST APIs
-   - Utilities/helpers
-   - Configuration classes
-   - External integrations
+- Application entry points
+- Business logic/domain models
+- Data access/repositories
+- Web controllers/REST APIs
+- Utilities/helpers
+- Configuration classes
+- External integrations
 
 3. **Generate documentation level** based on user preference:
 
 ### Basic Level
 ```java
 /**
- * [Package name] - [Brief description of package purpose]
- *
- * This package contains [main functionality description].
- * Key classes: [list main classes with brief descriptions]
- */
+* [Package name] - [Brief description of package purpose]
+*
+* This package contains [main functionality description].
+* Key classes: [list main classes with brief descriptions]
+*/
 package [package.name];
 ```
 
 ### Detailed Level
 ```java
 /**
- * [Package name] - [Comprehensive description]
- *
- * <h2>Purpose</h2>
- * [Detailed explanation of what this package does and its role in the application]
- *
- * <h2>Main Components</h2>
- * <ul>
- * <li>{@link ClassName1} - [Description of purpose and key responsibilities]</li>
- * <li>{@link ClassName2} - [Description of purpose and key responsibilities]</li>
- * </ul>
- *
- * <h2>Usage Example</h2>
- * <pre>{@code
- * // Example code showing typical usage pattern
- * }</pre>
- *
- * <h2>Dependencies</h2>
- * [Description of key external dependencies this package uses]
- *
- * @since [version if available]
- * @author [author info if available from git or existing docs]
- */
+* [Package name] - [Comprehensive description]
+*
+* <h2>Purpose</h2>
+* [Detailed explanation of what this package does and its role in the application]
+*
+* <h2>Main Components</h2>
+* <ul>
+* <li>{@link ClassName1} - [Description of purpose and key responsibilities]</li>
+* <li>{@link ClassName2} - [Description of purpose and key responsibilities]</li>
+* </ul>
+*
+* <h2>Usage Example</h2>
+* <pre>{@code
+* // Example code showing typical usage pattern
+* }</pre>
+*
+* <h2>Dependencies</h2>
+* [Description of key external dependencies this package uses]
+*
+* @since [version if available]
+* @author [author info if available from git or existing docs]
+*/
 package [package.name];
 ```
 
 ### Minimal Level
 ```java
 /**
- * [Brief one-line description of package purpose and main functionality].
- */
+* [Brief one-line description of package purpose and main functionality].
+*/
 package [package.name];
 ```
 
@@ -546,8 +546,8 @@ After generating package-info.java files:
 - Ensure all class references are valid
 - Check that package declarations match directory structure
 - Confirm documentation accurately describes package contents
-                
-                
+            
+            
 #### Step Constraints
 
 - **MUST** only execute if package-info.java generation was selected in Step 1
@@ -581,58 +581,58 @@ After generating package-info.java files:
 **For each Java file found:**
 
 1. **Scan for missing or incomplete Javadoc**:
-   - Public classes without class-level documentation
-   - Public methods without method documentation
-   - Parameters without @param tags
-   - Return values without @return tags
-   - Exceptions without @throws tags
+- Public classes without class-level documentation
+- Public methods without method documentation
+- Parameters without @param tags
+- Return values without @return tags
+- Exceptions without @throws tags
 
 2. **Analyze method signatures and implementations**:
-   - Understand method purpose from implementation
-   - Identify parameters and their roles
-   - Determine return value meanings
-   - Identify checked and unchecked exceptions
+- Understand method purpose from implementation
+- Identify parameters and their roles
+- Determine return value meanings
+- Identify checked and unchecked exceptions
 
 3. **Generate documentation level** based on user preference:
 
 ### Basic Level
 ```java
 /**
- * [Brief description of class/method purpose].
- *
- * @param paramName [parameter description]
- * @return [return value description]
- * @throws ExceptionType [exception description]
- */
+* [Brief description of class/method purpose].
+*
+* @param paramName [parameter description]
+* @return [return value description]
+* @throws ExceptionType [exception description]
+*/
 ```
 
 ### Detailed Level
 ```java
 /**
- * [Comprehensive description of class/method purpose and behavior].
- *
- * <p>[Additional context about usage patterns, side effects, or important considerations]
- *
- * <h3>Usage Example:</h3>
- * <pre>{@code
- * // Example code showing typical usage
- * }</pre>
- *
- * @param paramName [detailed parameter description with constraints and expectations]
- * @return [detailed return value description with possible values and meanings]
- * @throws ExceptionType [detailed exception description with conditions that trigger it]
- * @since [version if available]
- * @see [related classes or methods]
- */
+* [Comprehensive description of class/method purpose and behavior].
+*
+* <p>[Additional context about usage patterns, side effects, or important considerations]
+*
+* <h3>Usage Example:</h3>
+* <pre>{@code
+* // Example code showing typical usage
+* }</pre>
+*
+* @param paramName [detailed parameter description with constraints and expectations]
+* @return [detailed return value description with possible values and meanings]
+* @throws ExceptionType [detailed exception description with conditions that trigger it]
+* @since [version if available]
+* @see [related classes or methods]
+*/
 ```
 
 ### Minimal Level
 ```java
 /**
- * [One-line description of purpose].
- * @param paramName [brief parameter description]
- * @return [brief return description]
- */
+* [One-line description of purpose].
+* @param paramName [brief parameter description]
+* @return [brief return description]
+*/
 ```
 
 ## File Handling Strategy
@@ -668,8 +668,8 @@ After enhancing Javadoc:
 - Check that @return tags are present for non-void methods
 - Confirm @throws tags match declared exceptions
 - Validate that Javadoc generation works: `./mvnw javadoc:javadoc`
-                
-                
+            
+            
 #### Step Constraints
 
 - **MUST** only execute if Javadoc enhancement was selected in Step 1

@@ -15,24 +15,22 @@
         The rule establishes a comprehensive refactoring framework that guides users through systematically analyzing profiling data, identifying specific performance bottlenecks, and implementing targeted code changes to address them.
     </goal>
 
-    <instructions>
-        <steps>
-            <step number="1">
-                <step-title>Review notes from the analysis step</step-title>
-                <step-content>
-                    Review the notes from the analysis step to identify the specific performance bottlenecks.
+    <steps>
+        <step number="1">
+            <step-title>Review notes from the analysis step</step-title>
+            <step-content>
+                Review the notes from the analysis step to identify the specific performance bottlenecks.
 
-                    The files to review are: `docs/profiling-problem-analysis-YYYYMMDD.md` and `docs/profiling-solutions-YYYYMMDD.md`
-                </step-content>
-            </step>
-            <step number="2">
-                <step-title>Refactor the code to fix the performance bottlenecks</step-title>
-                <step-content>
-                    Refactor the code to fix the performance bottlenecks.
-                </step-content>
-            </step>
-        </steps>
-    </instructions>
+                The files to review are: `docs/profiling-problem-analysis-YYYYMMDD.md` and `docs/profiling-solutions-YYYYMMDD.md`
+            </step-content>
+        </step>
+        <step number="2">
+            <step-title>Refactor the code to fix the performance bottlenecks</step-title>
+            <step-content>
+                Refactor the code to fix the performance bottlenecks.
+            </step-content>
+        </step>
+    </steps>
 
     <safeguards>
         <safeguards-list>
