@@ -21,6 +21,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <ul class="nav navbar-nav navbar-right">
   <li><a href="https://forms.gle/TpNXENjmu45wuXoi6" target="_blank">Share feedback</a></li>
   <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Conferences</a>
+    <div class="navlinks-children">
+      <a href="https://jabrena.github.io/cursor-rules-java/dvbe25/index.html" target="_blank">Devoxx BE 2025</a>
+      <a href="https://jabrena.github.io/101-cursor/" target="_blank">WJAX-2025</a>
+    </div>
+  </li>
+  <li class="navlinks-container">
     <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
     <div class="navlinks-children">
       <a href="${content.rootpath!}courses/system-prompts-java/index.html">System prompts for Java</a>
@@ -29,7 +36,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </div>
   </li>
   <li><a href="${content.rootpath!}archive.html">Archive</a></li>
-  <li><a href="${content.rootpath!}about.html">About</a></li>
+  <li><a href="https://jabrena-github-io.translate.goog/cursor-rules-java/?_x_tr_sl=en&_x_tr_tl=cn&_x_tr_hl=en-US&_x_tr_pto=wapp">Translate</a></li>
 </ul>
 </div>
 
