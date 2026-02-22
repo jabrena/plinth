@@ -14,7 +14,9 @@ Treats the user as a knowledgeable partner in solving problems rather than presc
 
 ## Goal
 
-This rule provides a modular, step-based approach to updating Maven pom.xml files with plugins and profiles. Each step has a single responsibility and clear dependencies on user answers, making the configuration process more maintainable and user-friendly.
+This rule provides a modular, step-based approach to updating Maven pom.xml files with
+plugins and profiles. Each step has a single responsibility and clear dependencies on user
+answers, making the configuration process more maintainable and user-friendly.
 
 ## Constraints
 
@@ -63,11 +65,14 @@ Before applying This Maven plugins recommendations, ensure the project is in a v
 
 **If Maven Wrapper is NOT present:**
 
-**STOP HERE** and ask the user: "I notice this project doesn't have Maven Wrapper configured.
-The Maven Wrapper ensures everyone uses the same Maven version, improving build consistency across different environments.
+**STOP HERE** and ask the user: "I notice this project doesn't have Maven Wrapper
+configured.
+The Maven Wrapper ensures everyone uses the same Maven version, improving build
+consistency across different environments.
 Would you like me to install it? (y/n)"
 
-**WAIT for the user's response. Do NOT proceed to any other questions or steps until this is resolved.**
+**WAIT for the user's response. Do NOT proceed to any other questions or steps until
+this is resolved.**
 
 if the user says "y", then install the Maven Wrapper.
 
@@ -77,10 +82,9 @@ mvn wrapper:wrapper
 
 ### Step 3: Project Assessment Questions
 
-**IMPORTANT**: Ask these questions to understand the project needs before making any changes to the pom.xml. Based on the answers, you will conditionally add only relevant dependencies and plugins.
-
-```markdown
-**Question 1**: What type of Java project is this?
+**IMPORTANT**: Ask these questions to understand the project needs before
+making any changes to the pom.xml. Based on the answers, you will conditionally add
+only relevant dependencies and plugins. ```markdown **Question 1**: What type of Java project is this?
 
 Options:
 - Java Library (for publishing to Maven Central/Nexus)
@@ -179,7 +183,6 @@ Options:
 ---
 
 ```
-
 #### Step Constraints
 
 - **DEPENDENCIES**: Requires completion of Step 1 (existing configuration analysis)
@@ -202,13 +205,9 @@ Options:
 
 ### Step 4: Properties Configuration
 
-**Purpose**: Configure Maven properties based on user selections from Step 3.
-
-**Dependencies**: Requires completion of Step 3 questions.
-
-Use the following template to add properties to the pom.xml file:
-
-Build properties incrementally based on user's actual needs and project requirements. This template provides a comprehensive, conversational approach to configuring Maven properties.
+ **Purpose**: Configure Maven properties based on user selections from
+                Step 3. **Dependencies**: Requires completion of Step 3 questions. Use the following
+                template to add properties to the pom.xml file: Build properties incrementally based on user's actual needs and project requirements. This template provides a comprehensive, conversational approach to configuring Maven properties.
 
 **CRITICAL PRESERVATION RULE**: Only ADD properties that don't already exist. Never REPLACE or REMOVE existing properties.
 
@@ -368,14 +367,12 @@ The final `<properties>` section will look like this (example with common select
 </properties>
 ```
 
-
-**Implementation Strategy:**
-1. **Core Properties**: Always add Java version, Maven version, and encoding properties
-2. **Plugin Version Properties**: Add version properties ONLY for plugins that were selected in Step 3
-3. **Quality Properties**: Add coverage and threshold properties if quality features selected
-
-**Property Naming Convention**: Use `maven-plugin-*` format for consistency (e.g., `maven-plugin-compiler.version`)
-                
+                **Implementation Strategy:** 1. **Core Properties**: Always add Java version, Maven
+                version, and encoding properties 2. **Plugin Version Properties**: Add version
+                properties ONLY for plugins that were selected in Step 3 3. **Quality Properties**:
+                Add coverage and threshold properties if quality features selected **Property Naming
+                Convention**: Use `maven-plugin-*` format for consistency (e.g.,
+                `maven-plugin-compiler.version`) 
 #### Step Constraints
 
 - **MUST** use `maven-plugin-*` format for property naming (e.g., `maven-plugin-compiler.version`, NOT `maven-compiler-plugin.version`)

@@ -10,40 +10,56 @@ You are a Senior software engineer with extensive experience in Java software de
 
 ## Goal
 
-This cursor rule provides a comprehensive methodology for comparing Java profiling results before and after performance optimizations or refactoring efforts. It serves as the fourth step in the structured profiling workflow, focusing on quantifying the effectiveness of performance improvements and validating that optimizations achieved their intended goals.
+This cursor rule provides a comprehensive methodology for comparing Java profiling results
+before and after performance optimizations or refactoring efforts. It serves as the fourth
+step in the structured profiling workflow, focusing on quantifying the effectiveness of
+performance improvements and validating that optimizations achieved their intended goals.
 
-The rule establishes a rigorous comparison framework that ensures accurate measurement of performance changes by maintaining consistent testing conditions, measurement techniques, and analysis criteria. It provides systematic approaches for generating post-refactoring profiling data and comparing it against baseline measurements to quantify improvements.
+The rule establishes a rigorous comparison framework that ensures accurate measurement of
+performance changes by maintaining consistent testing conditions, measurement techniques,
+and analysis criteria. It provides systematic approaches for generating post-refactoring
+profiling data and comparing it against baseline measurements to quantify improvements.
 
 Key capabilities include:
-- **Baseline Validation**: Ensures proper baseline profiling data collection before implementing changes
-- **Controlled Re-testing**: Standardized process for generating comparable post-refactoring profiling data under identical conditions
-- **Quantitative Comparison**: Structured metrics for measuring performance improvements across CPU usage, memory allocation, GC pressure, and threading efficiency
-- **Visual Analysis Framework**: Systematic approach to comparing flamegraphs side-by-side to identify resolved hotspots and remaining issues
-- **Documentation Templates**: Standardized formats for documenting comparison results, including before/after metrics, visual evidence, and improvement validation
-- **Regression Detection**: Methods for identifying unintended performance regressions introduced during optimization efforts
-- **Success Validation**: Clear criteria for determining whether performance optimization goals were achieved
+- **Baseline Validation**: Ensures proper baseline profiling data collection before
+implementing changes
+- **Controlled Re-testing**: Standardized process for generating comparable post-refactoring
+profiling data under identical conditions
+- **Quantitative Comparison**: Structured metrics for measuring performance improvements
+across CPU usage, memory allocation, GC pressure, and threading efficiency
+- **Visual Analysis Framework**: Systematic approach to comparing flamegraphs side-by-side
+to identify resolved hotspots and remaining issues
+- **Documentation Templates**: Standardized formats for documenting comparison results,
+including before/after metrics, visual evidence, and improvement validation
+- **Regression Detection**: Methods for identifying unintended performance regressions
+introduced during optimization efforts
+- **Success Validation**: Clear criteria for determining whether performance optimization
+goals were achieved
 
-The rule ensures that performance optimization efforts are properly validated through rigorous before/after comparison, providing quantifiable evidence of improvements and identifying areas that may require additional attention or follow-up optimization work.
+The rule ensures that performance optimization efforts are properly validated through
+rigorous before/after comparison, providing quantifiable evidence of improvements and
+identifying areas that may require additional attention or follow-up optimization work.
 
 ### Project Organization
 
-The profiling setup uses a clean folder structure with everything contained in the profiler directory:
+The profiling setup uses a clean folder structure with everything contained in the profiler
+directory:
 
 ```
 your-project/
-└── profiler/               # All profiling-related files
-├── scripts/            # Profiling scripts and tools
-│   └── java-profile.sh # Main profiling script
-├── results/            # Generated profiling output
-│   ├── *.html          # Flamegraph files
-│   ├── *.jfr           # JFR recording files
-│   ├── *.log           # Garbage Collection Log files
-│   └── *.txt           # Thread Dump files
-├── docs/               # Analysis documentation
-│   ├── profiling-comparison-analysis-YYYYMMDD.md
-│   └── profiling-final-results-YYYYMMDD.md
-├── current/            # Symlink to current profiler version
-└── async-profiler-*/   # Downloaded profiler binaries
+└── profiler/ # All profiling-related files
+├── scripts/ # Profiling scripts and tools
+│ └── java-profile.sh # Main profiling script
+├── results/ # Generated profiling output
+│ ├── *.html # Flamegraph files
+│ ├── *.jfr # JFR recording files
+│ ├── *.log # Garbage Collection Log files
+│ └── *.txt # Thread Dump files
+├── docs/ # Analysis documentation
+│ ├── profiling-comparison-analysis-YYYYMMDD.md
+│ └── profiling-final-results-YYYYMMDD.md
+├── current/ # Symlink to current profiler version
+└── async-profiler-*/ # Downloaded profiler binaries
 ```
 
 ## Instructions
@@ -51,7 +67,8 @@ your-project/
 ### Step Pre-Refactoring Baseline (Already Done)
 
 Ask the user if they have captured baseline results yet.
-For this purpose use the script `profiler/run-with-profiler.sh` to run the application with the right JVM flags for profiling.
+For this purpose use the script `profiler/run-with-profiler.sh` to run the
+application with the right JVM flags for profiling.
 
 **Example:**
 ```bash
@@ -59,16 +76,18 @@ cd profiler
 ./run-with-profiler.sh --mode (cpu, alloc, wall, lock)
 ```
 
-After this task, send load to the application to capture the new behavior afte the refactoring.
+After this task, send load to the application to capture the new behavior afte the
+refactoring.
 ### Step Post-Refactoring Report Generation (CRITICAL STEP)
 
-Ask the user if they have generated the post-refactoring data from profiling tools yet.
+Ask the user if they have generated the post-refactoring data from profiling tools
+yet.
 
 **Step 1: Validate Your Refactoring Changes**
 ```bash
 # Ensure your code changes are applied
 git status
-git diff HEAD~1  # Review recent changes
+git diff HEAD~1 # Review recent changes
 ```
 
 **Step 2: Generate New Profiling Reports**
@@ -93,17 +112,19 @@ wc -c profiler/results/*.html
 
 
 **Memory Analysis Checklist**
-- [ ] **Memory leak detection**: Compare heap usage patterns between before/after flamegraphs
-- [ ] **Allocation patterns**: Analyze allocation flamegraphs for reduced object creation
+- [ ] **Memory leak detection**: Compare heap usage patterns between before/after
+flamegraphs
+- [ ] **Allocation patterns**: Analyze allocation flamegraphs for reduced object
+creation
 - [ ] **GC pressure**: Compare garbage collection frequency and duration
 - [ ] **Peak memory usage**: Identify improvements in maximum heap utilization
 - [ ] **Stack depth**: Compare flamegraph complexity (canvas height, levels)
 
 **CPU Performance Checklist**
-- [ ] **Hot spots identification**: Compare CPU flamegraphs to identify resolved bottlenecks
+- [ ] **Hot spots identification**: Compare CPU flamegraphs to identify resolved
+bottlenecks
 - [ ] **Method execution time**: Analyze improvements in critical path performance
 - [ ] **Thread contention**: Look for reduced blocking or improved concurrency
-
 **Visual Comparison Process**
 ```bash
 # Open reports side by side for comparison

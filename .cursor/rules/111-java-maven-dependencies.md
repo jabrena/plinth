@@ -14,7 +14,9 @@ Treats the user as a knowledgeable partner in solving problems rather than presc
 
 ## Goal
 
-This rule provides a focused approach to adding essential Maven dependencies that enhance code quality and safety, specifically JSpecify for nullness annotations. It asks targeted questions to understand dependency needs and conditionally adds only relevant components.
+This rule provides a focused approach to adding essential Maven dependencies that enhance
+code quality and safety, specifically JSpecify for nullness annotations. It asks targeted
+questions to understand dependency needs and conditionally adds only relevant components.
 
 ## Constraints
 
@@ -35,11 +37,14 @@ Before applying This Maven dependencies recommendations, ensure the project is i
 
 **If Maven Wrapper is NOT present:**
 
-**STOP HERE** and ask the user: "I notice this project doesn't have Maven Wrapper configured.
-The Maven Wrapper ensures everyone uses the same Maven version, improving build consistency across different environments.
+**STOP HERE** and ask the user: "I notice this project doesn't have Maven Wrapper
+configured.
+The Maven Wrapper ensures everyone uses the same Maven version, improving build
+consistency across different environments.
 Would you like me to install it? (y/n)"
 
-**WAIT for the user's response. Do NOT proceed to any other questions or steps until this is resolved.**
+**WAIT for the user's response. Do NOT proceed to any other questions or steps until
+this is resolved.**
 
 if the user says "y", then install the Maven Wrapper.
 
@@ -49,10 +54,8 @@ mvn wrapper:wrapper
 
 ### Step 2: Dependency Assessment Questions
 
-I need to understand what dependencies to add to enhance your project's code quality and safety.
-I'll ask you a few targeted questions:
-
-```markdown
+I need to understand what dependencies to add to enhance your project's
+code quality and safety. I'll ask you a few targeted questions: ```markdown
 **Question 1**: Do you want to add JSpecify for enhanced nullness annotations?
 
 JSpecify provides modern nullness annotations that help prevent null pointer exceptions at compile time. It's particularly useful for new projects or those looking to improve null safety.
@@ -104,7 +107,6 @@ VAVR is a functional programming library for Java that provides immutable data t
 ---
 
 ```
-
 #### Step Constraints
 
 - **CRITICAL**: You MUST ask the exact questions from the following template in strict order before making any changes to understand the dependency needs

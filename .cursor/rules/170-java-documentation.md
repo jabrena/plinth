@@ -6,7 +6,8 @@ version: 0.12.0-SNAPSHOT
 
 ## Role
 
-You are a Senior software engineer with extensive experience in Java software development and technical documentation
+You are a Senior software engineer with extensive experience in Java software development
+        and technical documentation
 
 ## Tone
 
@@ -14,9 +15,12 @@ Treats the user as a knowledgeable partner in solving problems rather than presc
 
 ## Goal
 
-This rule provides a modular, step-based approach to generating comprehensive Java project documentation
-including README.md files, package-info.java files, Javadoc, and Architecture Decision Records (ADRs).
-Each step has a single responsibility and clear dependencies on user answers, making the documentation process more maintainable and user-friendly.
+This rule provides a modular, step-based approach to generating comprehensive Java project
+documentation
+including README.md files, package-info.java files, Javadoc, and Architecture Decision
+Records (ADRs).
+Each step has a single responsibility and clear dependencies on user answers, making the
+documentation process more maintainable and user-friendly.
 
 ## Constraints
 
@@ -32,10 +36,9 @@ Before applying documentation generation, ensure the project is in a valid state
 
 ### Step 1: Documentation Preferences Assessment
 
-**IMPORTANT**: Ask these questions to understand the documentation requirements before generating any documentation. Based on the answers, you will conditionally execute only relevant subsequent steps.
-
-```markdown
-IMPORTANT: You MUST ask these questions in the exact order and wording shown here. The very first question to the user MUST be "Question 1: What documentation do you want to generate?". Do not ask any other questions prior to it.
+**IMPORTANT**: Ask these questions to understand the documentation
+requirements before generating any documentation. Based on the answers, you will
+conditionally execute only relevant subsequent steps. ```markdown IMPORTANT: You MUST ask these questions in the exact order and wording shown here. The very first question to the user MUST be "Question 1: What documentation do you want to generate?". Do not ask any other questions prior to it.
 
 Documentation Selection
 
@@ -152,7 +155,6 @@ Options:
 ---
 
 ```
-
 #### Step Constraints
 
 - **GLOBAL ORDERING**: The first user-facing question in this rule MUST be the template's "Question 1: What do you want to generate?" asked at the start of Step 1
@@ -173,17 +175,13 @@ Options:
 
 ### Step 2: README.md Generation
 
-**Purpose**: Generate comprehensive README.md files based on project structure and user preferences.
-
-**Dependencies**: Only execute if user selected README.md generation in Step 1. Requires completion of Step 1.
-
-**CONDITIONAL EXECUTION**: Only execute this step if user selected "README.md", "Both README.md and package-info.java files", or "All options: README.md, package-info.java & Javadoc files" in Step 1.
-
-## Implementation Strategy
-
-Use the following template and guidelines:
-
-# Java Documentation Implementation Guide
+ **Purpose**: Generate comprehensive README.md files based on project
+                structure and user preferences. **Dependencies**: Only execute if user selected
+                README.md generation in Step 1. Requires completion of Step 1. **CONDITIONAL
+                EXECUTION**: Only execute this step if user selected "README.md", "Both README.md
+                and package-info.java files", or "All options: README.md, package-info.java &
+                Javadoc files" in Step 1. ## Implementation Strategy Use the following template and
+                guidelines: # Java Documentation Implementation Guide
 
 ## README.md Generation
 
@@ -359,66 +357,34 @@ package [package.name];
 - Only create documentation for files that don't already exist
 - Safe option to avoid modifying existing documentation
 
-
-## Single Module Project Implementation
-
-**For single module projects:**
-
-1. **Analyze the src/main/java directory** using codebase_search to understand:
-   - Main application classes and entry points
-   - Package structure and organization
-   - Key business logic and functionality
-   - Framework usage (Spring, etc.)
-   - Dependencies and integrations
-
-2. **Generate comprehensive README.md** in project root with:
-   - **Software Description section**: Detailed analysis of the codebase functionality
-   - **Getting Started section**: Build and run instructions
-   - **Configuration section**: If config files detected
-   - **API Documentation section**: If REST controllers found
-   - **Additional sections**: Based on user preferences from Step 1
-
-## Multi-Module Project Implementation
-
-**For multi-module Maven projects:**
-
-1. **Generate root README.md** with:
-   - High-level project overview
-   - Module descriptions and links
-   - Common build instructions
-   - Project-wide configuration
-
-2. **Generate module-specific README.md files** for each module:
-   - Module-specific software description
-   - Module's role in the larger project
-   - Module-specific build and usage instructions
-   - Dependencies specific to that module
-
-## File Handling Strategy
-
-**Based on user selection in Step 1:**
-
-- **Overwrite**: Replace existing README.md completely (after creating backup)
-- **Add new information**: Intelligently merge with existing content, adding missing sections
-- **Create backup**: Save original as README.md.backup before modifying
-- **Skip files**: Only generate README.md if it doesn't already exist
-
-## Content Quality Requirements
-
-1. **Software Description must be comprehensive and accurate**
-2. **Include practical examples and usage patterns** if user requested
-3. **Follow chosen documentation style** (Professional/Developer-friendly/Minimal/Educational)
-4. **Ensure all generated content is technically accurate**
-5. **Include appropriate Maven commands and build instructions**
-
-## Validation
-
-After generating README.md files, verify they contain:
-- Accurate software description based on code analysis
-- Correct build and run instructions
-- Proper formatting and structure
-- No placeholder text or generic content
-                
+                ## Single Module Project Implementation **For single module projects:** 1. **Analyze
+                the src/main/java directory** using codebase_search to understand: - Main
+                application classes and entry points - Package structure and organization - Key
+                business logic and functionality - Framework usage (Spring, etc.) - Dependencies and
+                integrations 2. **Generate comprehensive README.md** in project root with: -
+                **Software Description section**: Detailed analysis of the codebase functionality -
+                **Getting Started section**: Build and run instructions - **Configuration section**:
+                If config files detected - **API Documentation section**: If REST controllers found
+                - **Additional sections**: Based on user preferences from Step 1 ## Multi-Module
+                Project Implementation **For multi-module Maven projects:** 1. **Generate root
+                README.md** with: - High-level project overview - Module descriptions and links -
+                Common build instructions - Project-wide configuration 2. **Generate module-specific
+                README.md files** for each module: - Module-specific software description - Module's
+                role in the larger project - Module-specific build and usage instructions -
+                Dependencies specific to that module ## File Handling Strategy **Based on user
+                selection in Step 1:** - **Overwrite**: Replace existing README.md completely (after
+                creating backup) - **Add new information**: Intelligently merge with existing
+                content, adding missing sections - **Create backup**: Save original as
+                README.md.backup before modifying - **Skip files**: Only generate README.md if it
+                doesn't already exist ## Content Quality Requirements 1. **Software Description must
+                be comprehensive and accurate** 2. **Include practical examples and usage patterns**
+                if user requested 3. **Follow chosen documentation style**
+                (Professional/Developer-friendly/Minimal/Educational) 4. **Ensure all generated
+                content is technically accurate** 5. **Include appropriate Maven commands and build
+                instructions** ## Validation After generating README.md files, verify they contain:
+                - Accurate software description based on code analysis - Correct build and run
+                instructions - Proper formatting and structure - No placeholder text or generic
+                content 
 #### Step Constraints
 
 - **MUST** only execute if README.md generation was selected in Step 1
@@ -692,9 +658,11 @@ After enhancing Javadoc:
 
 **CONDITIONAL EXECUTION**: Only execute this step if user selected "ADR (Architecture Decision Record) - interactive generation" in Step 1.
 
+
 ## Implementation Strategy
 
 This step implements a conversational approach to create comprehensive ADRs by systematically gathering information through targeted questions, following the pattern from the referenced conversational assistant.
+
 
 ## Phase 0: Get Current Date
 
@@ -703,6 +671,7 @@ This step implements a conversational approach to create comprehensive ADRs by s
 ```bash
 date
 ```
+
 
 ## Phase 1: Information Gathering
 
@@ -776,6 +745,7 @@ Acknowledge the request and inform the user that you need to ask some targeted q
 15. **"What's the current status of this decision? (proposed/accepted/implemented/etc.)"**
 - Set the status metadata field
 
+
 ## Phase 2: ADR Document Generation
 
 Once all information is gathered through conversation, inform the user you will now generate the ADR document. Use the current date obtained from the `date` command to replace the `{YYYY-MM-DD when the decision was last updated}` placeholders in the template.
@@ -794,11 +764,13 @@ informed: {list everyone who is kept up-to-date on progress; and with whom there
 
 # {short title, representative of solved problem and found solution}
 
+
 ## Context and Problem Statement
 
 {Describe the context and problem statement, e.g., in free form using two to three sentences or in the form of an illustrative story. You may want to articulate the problem in form of a question and add links to collaboration boards or issue management systems.}
 
 <!-- This is an optional element. Feel free to remove. -->
+
 
 ## Decision Drivers
 
@@ -806,12 +778,14 @@ informed: {list everyone who is kept up-to-date on progress; and with whom there
 * {decision driver 2, e.g., a force, facing concern, …}
 * … <!-- numbers of drivers can vary -->
 
+
 ## Considered Options
 
 * {title of option 1}
 * {title of option 2}
 * {title of option 3}
 * … <!-- numbers of options can vary -->
+
 
 ## Decision Outcome
 
@@ -832,6 +806,7 @@ Chosen option: "{title of option 1}", because {justification. e.g., only option,
 {Describe how the implementation / compliance of the ADR can/will be confirmed. Is there any automated or manual fitness function? If so, list it and explain how it is applied. Is the chosen design and its implementation in line with the decision? E.g., a design/code review or a test with a library such as ArchUnit can help validate this. Note that although we classify this element as optional, it is included in many ADRs.}
 
 <!-- This is an optional element. Feel free to remove. -->
+
 
 ## Pros and Cons of the Options
 
@@ -859,10 +834,12 @@ Chosen option: "{title of option 1}", because {justification. e.g., only option,
 
 <!-- This is an optional element. Feel free to remove. -->
 
+
 ## More Information
 
 {You might want to provide additional evidence/confidence for the decision outcome here and/or document the team agreement on the decision and/or define when/how this decision the decision should be realized and if/when it should be re-visited. Links to other decisions and resources might appear here as well.}
 ```
+
 
 ## Phase 3: File Creation and Storage
 
@@ -882,6 +859,7 @@ Chosen option: "{title of option 1}", because {justification. e.g., only option,
 - Verify markdown formatting is correct
 - Check that all placeholders are replaced with actual content
 
+
 ## Conversation Guidelines
 
 - **Ask one question at a time** to avoid overwhelming the user
@@ -891,6 +869,7 @@ Chosen option: "{title of option 1}", because {justification. e.g., only option,
 - **Suggest examples** when users seem stuck on a question
 - **Validate completeness** before generating the final document
 
+
 ## Example Follow-up Questions
 
 - "Can you elaborate on that point?"
@@ -899,6 +878,7 @@ Chosen option: "{title of option 1}", because {justification. e.g., only option,
 - "What would happen if we don't make this decision?"
 - "Are there any constraints or limitations we haven't discussed?"
 - "Who would be most affected by this change?"
+
 
 ## Quality Checks
 
@@ -912,6 +892,7 @@ Before finalizing the ADR, ensure:
 - [ ] All stakeholders are properly categorized
 - [ ] Current date is properly formatted and inserted
 - [ ] All template placeholders are replaced with actual content
+
 
 ## Next Steps and Recommendations
 
@@ -956,6 +937,7 @@ After generating the ADR document, provide these additional recommendations:
 
 **Dependencies**: Requires completion of applicable steps (2, 3, 4, and/or 6 based on user selections).
 
+
 ## Validation Process
 
 1. **Compile Validation**:
@@ -981,6 +963,7 @@ After generating the ADR document, provide these additional recommendations:
 - Ensure consistent documentation style across all generated files
 - Verify that cross-references between files are accurate
 - Check that naming conventions are followed
+
 
 ## Summary Report
 
@@ -1030,6 +1013,7 @@ find . -name "ADR-*.md" -type f
 - Update documentation as code evolves
 - Consider integrating documentation generation into CI/CD pipeline
 - Set up automated Javadoc generation and publishing
+
 
 ## Final Validation
 

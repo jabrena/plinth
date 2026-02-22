@@ -6,11 +6,13 @@ version: 0.12.0-SNAPSHOT
 
 ## Role
 
-You are a Senior software engineer with extensive experience in Java software development and performance testing
+You are a Senior software engineer with extensive experience in Java software development
+        and performance testing
 
 ## Goal
 
-When a user requests JMeter performance testing setup, follow the instructions steps to provide a complete performance testing solution.
+When a user requests JMeter performance testing setup, follow the instructions steps to
+provide a complete performance testing solution.
 
 ## Constraints
 
@@ -32,22 +34,19 @@ When a user requests JMeter performance testing setup:
 **Required Project Structure:**
 ```
 project-root/
-├── run-jmeter.sh                          # The performance script
+├── run-jmeter.sh # The performance script
 ├── src/test/resources/jmeter/
-│   └── load-test.jmx                      # JMeter test plan
-└── target/                                # Generated reports (auto-created)
-├── jmeter-results.jtl                 # Raw results
-├── jmeter-report/                     # HTML dashboard
-│   └── index.html                     # Main report
-└── jmeter.log                         # Execution log
+│ └── load-test.jmx # JMeter test plan
+└── target/ # Generated reports (auto-created)
+├── jmeter-results.jtl # Raw results
+├── jmeter-report/ # HTML dashboard
+│ └── index.html # Main report
+└── jmeter.log # Execution log
 ```
 
 ### Step 2: Copy Template Content
 
-Create the entire script with the following content:
-
-```bash
-#!/bin/bash
+ Create the entire script with the following content: ```bash #!/bin/bash
 
 # JMeter Load Test Script
 # This script runs JMeter tests and generates HTML reports
@@ -297,9 +296,7 @@ main() {
 }
 
 # Execute main function
-main "$@" 
-```
-                
+main "$@"  ``` 
 #### Step Constraints
 
 - **DO NOT** create your own version of the performance script

@@ -10,43 +10,61 @@ You are a Senior software engineer with extensive experience in Java software de
 
 ## Goal
 
-This cursor rule provides a systematic approach to analyzing Java profiling data collected during the detection phase. It serves as the second step in the structured profiling workflow, focusing on interpreting profiling results, identifying root causes, and documenting findings with actionable solutions.
+This cursor rule provides a systematic approach to analyzing Java profiling data collected
+during the detection phase. It serves as the second step in the structured profiling
+workflow, focusing on interpreting profiling results, identifying root causes, and
+documenting findings with actionable solutions.
 
-The rule establishes a comprehensive analysis framework that transforms raw profiling data into meaningful insights. It guides users through systematically examining flamegraphs, memory allocation patterns, CPU hotspots, and threading issues to identify performance bottlenecks and their underlying causes.
+The rule establishes a comprehensive analysis framework that transforms raw profiling data
+into meaningful insights. It guides users through systematically examining flamegraphs,
+memory allocation patterns, CPU hotspots, and threading issues to identify performance
+bottlenecks and their underlying causes.
 
 Key capabilities include:
-- **Systematic Analysis Framework**: Structured approach to examining different types of profiling data (CPU, memory, threading, GC)
-- **Problem Categorization**: Clear methodology for classifying issues by severity, impact, and type (memory leaks, CPU hotspots, threading problems)
-- **Evidence Documentation**: Standardized templates for documenting findings with specific references to profiling files and quantitative metrics
-- **Solution Development**: Framework for creating prioritized, actionable recommendations with implementation effort estimates
-- **Cross-Correlation Analysis**: Techniques for correlating multiple profiling results and identifying patterns across different time periods
-- **Impact Assessment**: Scoring system for prioritizing fixes based on performance impact and implementation effort
+- **Systematic Analysis Framework**: Structured approach to examining different types of
+profiling data (CPU, memory, threading, GC)
+- **Problem Categorization**: Clear methodology for classifying issues by severity, impact,
+and type (memory leaks, CPU hotspots, threading problems)
+- **Evidence Documentation**: Standardized templates for documenting findings with specific
+references to profiling files and quantitative metrics
+- **Solution Development**: Framework for creating prioritized, actionable recommendations
+with implementation effort estimates
+- **Cross-Correlation Analysis**: Techniques for correlating multiple profiling results and
+identifying patterns across different time periods
+- **Impact Assessment**: Scoring system for prioritizing fixes based on performance impact
+and implementation effort
 
-The rule ensures that profiling data is analyzed consistently and thoroughly, with findings documented in a format that enables effective communication with development teams and systematic tracking of performance improvements.
+The rule ensures that profiling data is analyzed consistently and thoroughly, with findings
+documented in a format that enables effective communication with development teams and
+systematic tracking of performance improvements.
+
 
 ## Project Organization
 
-The profiling setup uses a clean folder structure with everything contained in the profiler directory:
+The profiling setup uses a clean folder structure with everything contained in the profiler
+directory:
 
 ```
 your-project/
-└── profiler/               # ← All profiling-related files
-├── scripts/            # ← Profiling scripts and tools
-│   └── java-profile.sh # ← Main profiling script
-├── results/            # Generated profiling output
-│   ├── *.html          # Flamegraph files
-│   ├── *.jfr           # JFR recording files
-│   ├── *.log           # Garbage Collection Log files
-│   └── *.txt           # Thread Dump files
-├── current/            # ← Symlink to current profiler version
-└── async-profiler-*/   # ← Downloaded profiler binaries
+└── profiler/ # ← All profiling-related files
+├── scripts/ # ← Profiling scripts and tools
+│ └── java-profile.sh # ← Main profiling script
+├── results/ # Generated profiling output
+│ ├── *.html # Flamegraph files
+│ ├── *.jfr # JFR recording files
+│ ├── *.log # Garbage Collection Log files
+│ └── *.txt # Thread Dump files
+├── current/ # ← Symlink to current profiler version
+└── async-profiler-*/ # ← Downloaded profiler binaries
 ```
+
 
 ## Profiling Results Analysis Workflow
 
 When analyzing profiling results, follow this systematic approach:
 
-This comprehensive approach ensures thorough analysis of profiling data and actionable solutions for performance optimization.
+This comprehensive approach ensures thorough analysis of profiling data and actionable
+solutions for performance optimization.
 
 ## Instructions
 
@@ -87,7 +105,8 @@ For each profiling result file, analyze and document:
 
 ### Step 3: Problem Identification Process
 
-Generate the following documents in the `*/profiler/docs/` (According with Project organization) folder:
+Generate the following documents in the `*/profiler/docs/` (According with Project
+organization) folder:
 
 **Problem Analysis Document:**
 Create: `docs/profiling-problem-analysis-YYYYMMDD.md`
@@ -97,10 +116,12 @@ Structure:
 ```markdown
 # Profiling Problem Analysis - [Date]
 
+
 ## Executive Summary
 - Brief overview of identified issues
 - Severity classification
 - Impact assessment
+
 
 ## Detailed Findings
 
@@ -113,10 +134,12 @@ Structure:
 ### [Problem Category 2]
 [Repeat structure]
 
+
 ## Methodology
 - Profiling tools used
 - Data collection approach
 - Analysis techniques applied
+
 
 ## Recommendations Priority
 1. Critical issues requiring immediate attention
@@ -132,6 +155,7 @@ Structure:
 ```markdown
 # Profiling Solutions and Recommendations - [Date]
 
+
 ## Quick Wins (Low effort, High impact)
 ### Solution 1
 - **Problem**: Reference to specific issue
@@ -140,18 +164,22 @@ Structure:
 - **Implementation Effort**: Time/complexity estimate
 - **Code Changes**: Specific files/methods to modify
 
+
 ## Medium-term Improvements
 ### Solution 2
 [Repeat structure]
+
 
 ## Long-term Optimizations
 ### Solution 3
 [Repeat structure]
 
+
 ## Implementation Plan
 1. **Phase 1**: Critical fixes (Week 1-2)
 2. **Phase 2**: Performance optimizations (Week 3-4)
 3. **Phase 3**: Architecture improvements (Month 2+)
+
 
 ## Monitoring and Validation
 - Key metrics to track

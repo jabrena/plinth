@@ -19,11 +19,13 @@ and structure defined in the embedded template below. Create a markdown file nam
 
 Use the following collection of System prompts of Java to improve your Java development.
 
+
 ## Generate this list of System prompts for Java
 
 | Cursor Rule | Description | User Prompt | Notes |
 |----|----|-----|-----|
 | [100-java-cursor-rules-list](.cursor/rules/100-java-cursor-rules-list.md) | Generate list of System Prompts for Java | **User Prompt:** `Create a document with all System prompts for Java using @100-java-cursor-rules-list` | |
+
 
 ## Build system rules (Maven)
 
@@ -34,12 +36,14 @@ Use the following collection of System prompts of Java to improve your Java deve
 | [112-java-maven-plugins](.cursor/rules/112-java-maven-plugins.md) | Update your `pom.xml` with Maven Dependencies & Plugins | **Interactive User Prompt:** `Improve the pom.xml using the cursor rule @112-java-maven-plugins` **User Prompt:** `Add Maven Enforcer plugin only from the rule @112-java-maven-plugins without any question` (Example) **Note:** Add in the context the `pom.xml` which you want to generate the documentation. |  It is possible to apply the System prompt in an interactive and non interactive way. Using the interactive approach, the Software engineer will interact with the cursor rule to update the `pom.xml`. |
 | [113-java-maven-documentation](.cursor/rules/113-java-maven-documentation.md) | Create a Maven Documentation with the file `README-DEV.md` | **User Prompt:** `Generate developer documentation with essential Maven commands using @113-java-maven-documentation` **Note:** Add in the context the `pom.xml` which you want to generate the documentation. | This cursor rule is applied automatically without any interaction with the Software engineer. |
 
+
 ## Design rules
 
 | Cursor Rule | Description | Prompt | Notes |
 |----|----|-----|----|
 | [121-java-object-oriented-design](.cursor/rules/121-java-object-oriented-design.md) | Take another point of view with an Object Oriented Design of your development | **User prompt:** `Improve the class/classes added in the context applying the system prompt @121-java-object-oriented-design`(Example) **Note:** Add in the context a class/classes to improve the design. **User Prompt with Consultative Interactive Behaviour:** `Improve the class/classes added in the context applying the system prompt @121-java-object-oriented-design with the behaviour @behaviour-consultative-interaction` | You can use the System prompt in a purist way or add the Behaviours to customize the final behaviour. |
 | [122-java-type-design](.cursor/rules/122-java-type-design.md) | Review the Type Design in your development | **User prompt:** `Improve the class/classes added in the context applying the system prompt @122-java-type-design` (Example) **Note:** Add in the context a class/classes to improve the design. **User Prompt with Consultative Interactive Behaviour:** `Improve the class/classes added in the context applying the system prompt @122-java-type-design with the behaviour @behaviour-consultative-interaction` | You can use the System prompt in a purist way or add the Behaviours to customize the final behaviour.  |
+
 
 ## Coding rules
 
@@ -52,11 +56,13 @@ Use the following collection of System prompts of Java to improve your Java deve
 | [127-java-exception-handling](.cursor/rules/127-java-exception-handling.md) | Add Exception handling | **User Prompt:** `Improve the class/classes added in the context applying the system prompt @127-java-exception-handling` (Example) **Note:** Add in the context a class/classes. **User Prompt with Consultative Interactive Behaviour:** `Improve the class/classes added in the context applying the system prompt @127-java-exception-handling with the behaviour @behaviour-consultative-interaction` | You can use the System prompt in a purist way or add the Behaviours to customize the final behaviour. |
 | [128-java-generics](.cursor/rules/128-java-generics.md) | Apply generics in a class | **User Prompt:** `Improve the class/classes added in the context applying the system prompt @128-java-generics` (Example) **Note:** Add in the context a class/classes. **User Prompt with Consultative Interactive Behaviour:** `Improve the class/classes added in the context applying the system prompt @128-java-generics with the behaviour @behaviour-consultative-interaction` **User Prompt with Training behaviour:** `Create a course about @128-java-generics.md using the behavior @behaviour-progressive-learning.md and put the course here` **Note:** Add in the context the location to add the course. | You can use the System prompt in a purist way or add the Behaviours to customize the final behaviour. |
 
+
 ## Unit Testing rules
 
 | Cursor Rule | Description | Prompt | Notes |
 |----|----|-----|----|
 | [131-java-unit-testing](.cursor/rules/131-java-unit-testing.md) | Apply Unit Testing best practices | **User Prompt:** `Improve the class/classes added in the context applying the system prompt @131-java-unit-testing` (Example) **Note:** Add in the context a class/classes. **User Prompt with Consultative Interactive Behaviour:** `Improve the class/classes added in the context applying the system prompt @131-java-unit-testing with the behaviour @behaviour-consultative-interaction` | You can use the System prompt in a purist way or add the Behaviours to customize the final behaviour. |
+
 
 ## Refactoring rules
 
@@ -68,11 +74,13 @@ Use the following collection of System prompts of Java to improve your Java deve
 | [144-java-data-oriented-programming](.cursor/rules/144-java-data-oriented-programming.md) | Add Data Oriented Programming in your development |  **User Prompt:** `Improve the class/classes added in the context applying the system prompt @144-java-data-oriented-programming` (Example) **Note:** Add in the context a class/classes. **User Prompt with Consultative Interactive Behaviour:** `Improve the class/classes added in the context applying the system prompt @144-java-data-oriented-programming with the behaviour @behaviour-consultative-interaction` | You can use the System prompt in a purist way or add the Behaviours to customize the final behaviour. |
 | - | Improve a Java class method using results from a JMH analysis | **User Prompt:** `Add JMH support using the cursor rule @112-java-maven-plugins and not make any question` (For Maven projects without modules). In Order to design a JMH Benchmark use the following **User Prompt:** `Can you create a JMH benchmark in order to know what is the best implementation?` **Note:** add in the context the Java class that you want to benchmark. Once you execute the Benchmark and you have generated the JSON file, you can analyze the results with the following **User Prompt:** `Can you explain the JMH results and advice about the best implementation?` Add in the context the JMH report in JSON format **Note:** | User prompts |
 
+
 ## Performance rule (Jmeter)
 
 | Activity | Description | Prompt | Notes |
 |----|---|-----|----|
 | [151-java-performance-jmeter](.cursor/rules/151-java-performance-jmeter.md) | Run a performance test with Jmeter | **User Prompt:** `Add JMeter performance testing to this project using @151-java-performance-jmeter` **Note:** You could ask the model to create a JMeter based on a RestController/Resource. Example: `Can you create a Jmeter file based on the restcontroller in the path src/test/resources/jmeter/load-test.jmx?` | This cursor rule is applied automatically without any interaction with the Software engineer. If you create a Jmeter file with the model, review the generation, sometimes it is necessary to hammer a bit. |
+
 
 ## Profiling rules (Async profiler, jps, jstack, jcmd & jstat)
 
@@ -83,6 +91,7 @@ Use the following collection of System prompts of Java to improve your Java deve
 | [163-java-profiling-refactor](.cursor/rules/163-java-profiling-refactor.md) | Refactor code based on profiling analysis findings to fix performance bottlenecks | **Prompt:** `Apply refactoring from profiling analysis using @163-java-profiling-refactor` **Note:** Review `docs/profiling-problem-analysis-YYYYMMDD.md` and `docs/profiling-solutions-YYYYMMDD.md` before refactoring. Replace YYYYMMDD with the analysis date. | Step 3 of profiling workflow. Non conversational. Verifies changes with `./mvnw clean verify`. |
 | - | Code Refactoring from suggestions from analysis | `Can you apply the solutions from @profiling-solutions-yyyymmdd.md in @/info to mitigate bottlenecks` | Make a refactoring with the notes from the analysis |
 | [164-java-profiling-verify](.cursor/rules/164-java-profiling-verify.md) | Compare results comparing results before and after applying changes in the code | **Prompt:** `Review if the problems was solved with last refactoring using the reports located in @/results with the cursor rule @164-java-profiling-verify` **Note:**  Put in the context the folder with the results | This cursor rule is applied automatically without any interaction with the Software engineer. |
+
 
 ## Documentation rules
 

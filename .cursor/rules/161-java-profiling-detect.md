@@ -10,47 +10,63 @@ You are a Senior software engineer with extensive experience in Java software de
 
 ## Goal
 
-This cursor rule provides a comprehensive Java application profiling framework designed to detect and measure performance issues systematically.
-It serves as the first step in a structured profiling workflow, focusing on data collection and problem identification using async-profiler v4.0.
+This cursor rule provides a comprehensive Java application profiling framework designed to
+detect and measure performance issues systematically.
+It serves as the first step in a structured profiling workflow, focusing on data collection
+and problem identification using async-profiler v4.0.
 
-The rule automates the entire profiling setup process, from detecting running Java processes to downloading and configuring the appropriate profiler tools for your system.
-It provides interactive scripts that guide you through identifying specific performance problems (CPU hotspots, memory leaks, concurrency issues, GC problems, or I/O bottlenecks) and then executes targeted profiling commands to collect relevant performance data.
+The rule automates the entire profiling setup process, from detecting running Java processes
+to downloading and configuring the appropriate profiler tools for your system.
+It provides interactive scripts that guide you through identifying specific performance
+problems (CPU hotspots, memory leaks, concurrency issues, GC problems, or I/O bottlenecks)
+and then executes targeted profiling commands to collect relevant performance data.
 
 Key capabilities include:
-- **Automated Environment Setup**: Detects OS/architecture and downloads async-profiler v4.0 automatically
-- **Problem-Driven Profiling**: Guides users through identifying specific performance issues before profiling
-- **Interactive Workflow**: Provides menu-driven interface for selecting appropriate profiling strategies
-- **Comprehensive Data Collection**: Supports CPU profiling, memory allocation tracking, lock contention analysis, GC monitoring, and I/O bottleneck detection
-- **Modern Tooling**: Leverages async-profiler v4.0 features including interactive heatmaps, native memory leak detection, and enhanced JFR conversion
-- **Enhanced JFR Integration (Java 25)**: Utilizes JEP 518 (JFR Cooperative Sampling) and JEP 520 (JFR Method Timing & Tracing) for improved profiling accuracy and reduced overhead
-- **Advanced Sampling**: Benefits from cooperative sampling techniques that minimize profiling impact while maintaining measurement precision
-- **Organized Results**: Maintains clean directory structure with timestamped results for easy analysis and comparison
+- **Automated Environment Setup**: Detects OS/architecture and downloads async-profiler v4.0
+automatically
+- **Problem-Driven Profiling**: Guides users through identifying specific performance issues
+before profiling
+- **Interactive Workflow**: Provides menu-driven interface for selecting appropriate
+profiling strategies
+- **Comprehensive Data Collection**: Supports CPU profiling, memory allocation tracking,
+lock contention analysis, GC monitoring, and I/O bottleneck detection
+- **Modern Tooling**: Leverages async-profiler v4.0 features including interactive heatmaps,
+native memory leak detection, and enhanced JFR conversion
+- **Enhanced JFR Integration (Java 25)**: Utilizes JEP 518 (JFR Cooperative Sampling) and
+JEP 520 (JFR Method Timing & Tracing) for improved profiling accuracy and reduced
+overhead
+- **Advanced Sampling**: Benefits from cooperative sampling techniques that minimize
+profiling impact while maintaining measurement precision
+- **Organized Results**: Maintains clean directory structure with timestamped results for
+easy analysis and comparison
 
-The rule ensures consistent, repeatable profiling procedures while providing the flexibility to target specific performance concerns based on your application's behavior and suspected issues.
+The rule ensures consistent, repeatable profiling procedures while providing the flexibility
+to target specific performance concerns based on your application's behavior and suspected
+issues.
 
-The profiling setup uses a clean folder structure with everything contained in the profiler directory:
+The profiling setup uses a clean folder structure with everything contained in the profiler
+directory:
 
 ```text
 your-project/
-├── run-java-process-for-profiling.sh    # ← Step 1: Run main application with profiling JVM flags
-└── profiler/                            # ← All profiling-related files
-├── scripts/                         # ← Profiling scripts and tools
-│   └── profile-java-process.sh      # ← Step 2: Interactive profiling script
-├── results/                         # ← Generated profiling output
-│   ├── *.html                       # ← Flamegraph files
-│   └── *.jfr                        # ← JFR recording files
-├── current/                         # ← Symlink to current profiler version
-└── async-profiler-*/                # ← Downloaded profiler binaries
+├── run-java-process-for-profiling.sh # ← Step 1: Run main application with profiling JVM
+flags
+└── profiler/ # ← All profiling-related files
+├── scripts/ # ← Profiling scripts and tools
+│ └── profile-java-process.sh # ← Step 2: Interactive profiling script
+├── results/ # ← Generated profiling output
+│ ├── *.html # ← Flamegraph files
+│ └── *.jfr # ← JFR recording files
+├── current/ # ← Symlink to current profiler version
+└── async-profiler-*/ # ← Downloaded profiler binaries
 ```
 
 ## Instructions
 
 ### Step 1: Setup Application Runner Script
 
-**IMPORTANT**: Use the exact bash script from the template without any modification or interpretation.
-
-```bash
-#!/bin/bash
+ **IMPORTANT**: Use the exact bash script from the template without any
+                modification or interpretation. ```bash #!/bin/bash
 
 # Java Application Runner with Async-Profiler Support (Java 21-25 Enhanced)
 # This script runs Spring Boot or Quarkus applications with JVM flags optimized for async-profiler
@@ -618,32 +634,16 @@ log_success "Application completed!"
 # - Preview features support for experimental Java features
 # - Framework-specific virtual threads integration (Spring Boot 3.2+, Quarkus)
 # - Backward compatibility maintained for Java 8+ versions
-
-```
-
-**Script Location:**
-```
-your-project/
-└── run-with-profiler.sh    # ← Run main application with the right JVM flags for profiling
-```
-
-**Setup Instructions:**
-1. Copy the **EXACT** bash script content from `run-java-process-for-profiling.sh`
-2. Save it as `run-java-process-for-profiling.sh` in your project root
-3. Make it executable: `chmod +x run-java-process-for-profiling.sh`
-4. **NO MODIFICATIONS** to the script content are needed or allowed
-
-**Purpose:**
-- Configures JVM with profiling-friendly flags
-- Ensures proper async-profiler compatibility
-- Starts your application ready for profiling
-
-**Usage:**
-```bash
-# Start your application with profiling-ready JVM settings
-./run-java-process-for-profiling.sh
-```
-                
+ ``` **Script
+                Location:** ``` your-project/ └── run-with-profiler.sh # ← Run main application with
+                the right JVM flags for profiling ``` **Setup Instructions:** 1. Copy the **EXACT**
+                bash script content from `run-java-process-for-profiling.sh` 2. Save it as
+                `run-java-process-for-profiling.sh` in your project root 3. Make it executable:
+                `chmod +x run-java-process-for-profiling.sh` 4. **NO MODIFICATIONS** to the script
+                content are needed or allowed **Purpose:** - Configures JVM with profiling-friendly
+                flags - Ensures proper async-profiler compatibility - Starts your application ready
+                for profiling **Usage:** ```bash # Start your application with profiling-ready JVM
+                settings ./run-java-process-for-profiling.sh ``` 
 #### Step Constraints
 
 - **CRITICAL INSTRUCTION FOR AI ASSISTANTS:**
@@ -655,10 +655,8 @@ your-project/
 
 ### Step 2: Setup Interactive Profiling Script
 
-**IMPORTANT**: Use the exact bash script from the template without any modification or interpretation.
-
-```bash
-#!/bin/bash
+ **IMPORTANT**: Use the exact bash script from the template without any
+                modification or interpretation. ```bash #!/bin/bash
 
 # java-profile.sh - Automated Java profiling script
 
@@ -2025,34 +2023,17 @@ while true; do
     echo -e "${BLUE}Press Enter to continue or Ctrl+C to exit...${NC}"
     read -p ""
 done
-
-```
-
-**Script Location:**
-```
-└── profiler/               # ← All profiling-related files
-    ├── scripts/            # ← Profiling scripts and tools
-    │   └── profile-java-process.sh # ← Copy exact script from template
-```
-
-**Setup Instructions:**
-1. Copy the **EXACT** bash script from the template
-2. Save it as `profiler/scripts/profile-java-process.sh` in your project root
-3. Make it executable: `chmod +x profiler/scripts/profile-java-process.sh`
-4. **NO MODIFICATIONS** to the script content are needed or allowed
-
-**Purpose:**
-- Detects running Java processes automatically
-- Downloads and configures async-profiler v4.0
-- Provides interactive menu for different profiling scenarios
-- Generates flamegraphs and analysis reports
-
-**Usage:**
-```bash
-# Execute the interactive profiling script
-./profiler/scripts/profile-java-process.sh
-```
-                
+ ``` **Script
+                Location:** ``` └── profiler/ # ← All profiling-related files ├── scripts/ # ←
+                Profiling scripts and tools │ └── profile-java-process.sh # ← Copy exact script from
+                template ``` **Setup Instructions:** 1. Copy the **EXACT** bash script from the
+                template 2. Save it as `profiler/scripts/profile-java-process.sh` in your project
+                root 3. Make it executable: `chmod +x profiler/scripts/profile-java-process.sh` 4.
+                **NO MODIFICATIONS** to the script content are needed or allowed **Purpose:** -
+                Detects running Java processes automatically - Downloads and configures
+                async-profiler v4.0 - Provides interactive menu for different profiling scenarios -
+                Generates flamegraphs and analysis reports **Usage:** ```bash # Execute the
+                interactive profiling script ./profiler/scripts/profile-java-process.sh ``` 
 #### Step Constraints
 
 - **CRITICAL INSTRUCTION FOR AI ASSISTANTS:**
