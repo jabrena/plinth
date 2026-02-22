@@ -44,11 +44,10 @@
         ```
     </goal>
 
-    <instructions>
-        <steps>
-            <step number="1">
-                <step-title>Setup Application Runner Script</step-title>
-                <step-content>
+    <steps>
+        <step number="1">
+            <step-title>Setup Application Runner Script</step-title>
+            <step-content>
 **IMPORTANT**: Use the exact bash script from the template without any modification or interpretation.
 
 ```bash
@@ -77,21 +76,21 @@ your-project/
 # Start your application with profiling-ready JVM settings
 ./run-java-process-for-profiling.sh
 ```
-                </step-content>
-                <step-constraints>
-                    <step-constraint-list>
-                        <step-constraint>**CRITICAL INSTRUCTION FOR AI ASSISTANTS:**</step-constraint>
-                        <step-constraint>**COPY THE BASH SCRIPT EXACTLY** from the template file</step-constraint>
-                        <step-constraint>**DO NOT MODIFY, INTERPRET, OR ENHANCE** the script content</step-constraint>
-                        <step-constraint>**DO NOT ADD NEW FEATURES** or change the logic</step-constraint>
-                        <step-constraint>**USE THE SCRIPT VERBATIM** - every line, comment, and function exactly as provided</step-constraint>
-                        <step-constraint>The script is already complete and tested - no improvements needed</step-constraint>
-                    </step-constraint-list>
-                </step-constraints>
-            </step>
-            <step number="2">
-                <step-title>Setup Interactive Profiling Script</step-title>
-                <step-content>
+            </step-content>
+            <step-constraints>
+                <step-constraint-list>
+                    <step-constraint>**CRITICAL INSTRUCTION FOR AI ASSISTANTS:**</step-constraint>
+                    <step-constraint>**COPY THE BASH SCRIPT EXACTLY** from the template file</step-constraint>
+                    <step-constraint>**DO NOT MODIFY, INTERPRET, OR ENHANCE** the script content</step-constraint>
+                    <step-constraint>**DO NOT ADD NEW FEATURES** or change the logic</step-constraint>
+                    <step-constraint>**USE THE SCRIPT VERBATIM** - every line, comment, and function exactly as provided</step-constraint>
+                    <step-constraint>The script is already complete and tested - no improvements needed</step-constraint>
+                </step-constraint-list>
+            </step-constraints>
+        </step>
+        <step number="2">
+            <step-title>Setup Interactive Profiling Script</step-title>
+            <step-content>
 **IMPORTANT**: Use the exact bash script from the template without any modification or interpretation.
 
 ```bash
@@ -101,8 +100,8 @@ your-project/
 **Script Location:**
 ```
 └── profiler/               # ← All profiling-related files
-    ├── scripts/            # ← Profiling scripts and tools
-    │   └── profile-java-process.sh # ← Copy exact script from template
+├── scripts/            # ← Profiling scripts and tools
+│   └── profile-java-process.sh # ← Copy exact script from template
 ```
 
 **Setup Instructions:**
@@ -122,32 +121,31 @@ your-project/
 # Execute the interactive profiling script
 ./profiler/scripts/profile-java-process.sh
 ```
-                </step-content>
-                <step-constraints>
-                    <step-constraint-list>
-                        <step-constraint>**CRITICAL INSTRUCTION FOR AI ASSISTANTS:**</step-constraint>
-                        <step-constraint>**COPY THE BASH SCRIPT EXACTLY** from the template file</step-constraint>
-                        <step-constraint>**DO NOT MODIFY, INTERPRET, OR ENHANCE** the script content</step-constraint>
-                        <step-constraint>**DO NOT ADD NEW FEATURES** or change the logic</step-constraint>
-                        <step-constraint>**USE THE SCRIPT VERBATIM** - every line, comment, and function exactly as provided</step-constraint>
-                        <step-constraint>The script is already complete and tested - no improvements needed</step-constraint>
-                        <step-constraint>Create the profiler directory structure: `mkdir -p profiler/scripts profiler/results`</step-constraint>
-                        <step-constraint>Copy the **EXACT** bash script content from `java-profiling-script-template.md`</step-constraint>
-                        <step-constraint>Save it as `profiler/scripts/profile-java-process.sh`</step-constraint>
-                        <step-constraint>Make it executable: `chmod +x profiler/scripts/profile-java-process.sh`</step-constraint>
-                        <step-constraint>**NO MODIFICATIONS** to the script content are needed or allowed</step-constraint>
-                    </step-constraint-list>
-                </step-constraints>
-            </step>
-            <step number="3">
-                <step-title>Explain how to use the scripts</step-title>
-                <step-content>
-                    - Run the script to start the application with profiling support
-                    - Run the script to start the interactive profiling script
-                </step-content>
-            </step>
-        </steps>
-    </instructions>
+            </step-content>
+            <step-constraints>
+                <step-constraint-list>
+                    <step-constraint>**CRITICAL INSTRUCTION FOR AI ASSISTANTS:**</step-constraint>
+                    <step-constraint>**COPY THE BASH SCRIPT EXACTLY** from the template file</step-constraint>
+                    <step-constraint>**DO NOT MODIFY, INTERPRET, OR ENHANCE** the script content</step-constraint>
+                    <step-constraint>**DO NOT ADD NEW FEATURES** or change the logic</step-constraint>
+                    <step-constraint>**USE THE SCRIPT VERBATIM** - every line, comment, and function exactly as provided</step-constraint>
+                    <step-constraint>The script is already complete and tested - no improvements needed</step-constraint>
+                    <step-constraint>Create the profiler directory structure: `mkdir -p profiler/scripts profiler/results`</step-constraint>
+                    <step-constraint>Copy the **EXACT** bash script content from `java-profiling-script-template.md`</step-constraint>
+                    <step-constraint>Save it as `profiler/scripts/profile-java-process.sh`</step-constraint>
+                    <step-constraint>Make it executable: `chmod +x profiler/scripts/profile-java-process.sh`</step-constraint>
+                    <step-constraint>**NO MODIFICATIONS** to the script content are needed or allowed</step-constraint>
+                </step-constraint-list>
+            </step-constraints>
+        </step>
+        <step number="3">
+            <step-title>Explain how to use the scripts</step-title>
+            <step-content>
+                - Run the script to start the application with profiling support
+                - Run the script to start the interactive profiling script
+            </step-content>
+        </step>
+    </steps>
 
     <output-format>
         <output-format-list>

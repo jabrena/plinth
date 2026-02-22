@@ -31,40 +31,39 @@
         </constraint-list>
     </constraints>
 
-    <instructions>
-        <steps>
-            <step number="1">
-                <step-title>Diagrams Preferences Assessment</step-title>
-                <step-content>
-                    **IMPORTANT**: Ask these questions to understand the diagram requirements before generating any diagrams. Based on the answers, you will conditionally execute only relevant subsequent steps.
+    <steps>
+        <step number="1">
+            <step-title>Diagrams Preferences Assessment</step-title>
+            <step-content>
+                **IMPORTANT**: Ask these questions to understand the diagram requirements before generating any diagrams. Based on the answers, you will conditionally execute only relevant subsequent steps.
 
-                    ```markdown
-                    <xi:include href="fragments/java-diagrams-questions-template.md" parse="text"/>
-                    ```
-                </step-content>
-                <step-constraints>
-                    <step-constraint-list>
-                        <step-constraint>**GLOBAL ORDERING**: The first user-facing question in this rule MUST be the template's "Question 1: What diagrams do you want to generate?" asked at the start of Step 1</step-constraint>
-                        <step-constraint>**DEPENDENCIES**: None</step-constraint>
-                        <step-constraint>**CRITICAL**: You MUST ask the exact questions from the template in strict order for diagrams path only</step-constraint>
-                        <step-constraint>**MUST** read template files fresh using file_search and read_file tools before asking questions</step-constraint>
-                        <step-constraint>**MUST NOT** use cached or remembered questions from previous interactions</step-constraint>
-                        <step-constraint>**MUST** ask questions ONE BY ONE in the exact order specified in the template</step-constraint>
-                        <step-constraint>**MUST** WAIT for user response to each question before proceeding to the next</step-constraint>
-                        <step-constraint>**MUST** use the EXACT wording from the template questions</step-constraint>
-                        <step-constraint>**MUST** present the EXACT options listed in the template</step-constraint>
-                        <step-constraint>**MUST NOT** ask all questions simultaneously</step-constraint>
-                        <step-constraint>**MUST NOT** assume answers or provide defaults</step-constraint>
-                        <step-constraint>**MUST NOT** skip questions or change their order, except when a question becomes inapplicable due to a prior "Skip" selection</step-constraint>
-                        <step-constraint>**MUST** confirm understanding of user selections before proceeding to Step 2</step-constraint>
-                        <step-constraint>**GUARD**: If any non-template question was asked earlier by mistake, RESTART the question flow from "Question 1" and ignore prior answers</step-constraint>
-                        <step-constraint>**FOCUS**: Only ask diagram-related questions, skip any documentation-related questions from the template</step-constraint>
-                    </step-constraint-list>
-                </step-constraints>
-            </step>
-            <step number="2">
-                <step-title>UML Sequence Diagram Generation</step-title>
-                <step-content>
+                ```markdown
+                <xi:include href="fragments/java-diagrams-questions-template.md" parse="text"/>
+                ```
+            </step-content>
+            <step-constraints>
+                <step-constraint-list>
+                    <step-constraint>**GLOBAL ORDERING**: The first user-facing question in this rule MUST be the template's "Question 1: What diagrams do you want to generate?" asked at the start of Step 1</step-constraint>
+                    <step-constraint>**DEPENDENCIES**: None</step-constraint>
+                    <step-constraint>**CRITICAL**: You MUST ask the exact questions from the template in strict order for diagrams path only</step-constraint>
+                    <step-constraint>**MUST** read template files fresh using file_search and read_file tools before asking questions</step-constraint>
+                    <step-constraint>**MUST NOT** use cached or remembered questions from previous interactions</step-constraint>
+                    <step-constraint>**MUST** ask questions ONE BY ONE in the exact order specified in the template</step-constraint>
+                    <step-constraint>**MUST** WAIT for user response to each question before proceeding to the next</step-constraint>
+                    <step-constraint>**MUST** use the EXACT wording from the template questions</step-constraint>
+                    <step-constraint>**MUST** present the EXACT options listed in the template</step-constraint>
+                    <step-constraint>**MUST NOT** ask all questions simultaneously</step-constraint>
+                    <step-constraint>**MUST NOT** assume answers or provide defaults</step-constraint>
+                    <step-constraint>**MUST NOT** skip questions or change their order, except when a question becomes inapplicable due to a prior "Skip" selection</step-constraint>
+                    <step-constraint>**MUST** confirm understanding of user selections before proceeding to Step 2</step-constraint>
+                    <step-constraint>**GUARD**: If any non-template question was asked earlier by mistake, RESTART the question flow from "Question 1" and ignore prior answers</step-constraint>
+                    <step-constraint>**FOCUS**: Only ask diagram-related questions, skip any documentation-related questions from the template</step-constraint>
+                </step-constraint-list>
+            </step-constraints>
+        </step>
+        <step number="2">
+            <step-title>UML Sequence Diagram Generation</step-title>
+            <step-content>
 **Purpose**: Generate UML sequence diagrams to illustrate key application workflows and interactions based on code analysis and user preferences.
 
 **Dependencies**: Only execute if the user selected UML sequence diagrams in Step 1. Requires completion of Step 1.
@@ -82,22 +81,22 @@ Use the following template and guidelines:
 **For each applicable diagram type:**
 
 1. **Main Application Flows**:
-   - Analyze application entry points and main use cases
-   - Identify authentication and authorization flows
-   - Document core business process workflows
-   - Include user registration, login, and main feature usage
+- Analyze application entry points and main use cases
+- Identify authentication and authorization flows
+- Document core business process workflows
+- Include user registration, login, and main feature usage
 
 2. **API Interactions**:
-   - Analyze REST endpoints and their implementations
-   - Trace request/response patterns through controllers to services
-   - Document API authentication and error handling
-   - Include typical CRUD operations and data flows
+- Analyze REST endpoints and their implementations
+- Trace request/response patterns through controllers to services
+- Document API authentication and error handling
+- Include typical CRUD operations and data flows
 
 3. **Complex Business Logic Flows**:
-   - Identify multi-step business processes
-   - Analyze workflow orchestration and state management
-   - Document transaction boundaries and data consistency
-   - Include batch processing and background job flows
+- Identify multi-step business processes
+- Analyze workflow orchestration and state management
+- Document transaction boundaries and data consistency
+- Include batch processing and background job flows
 
 ## Diagram Generation Guidelines
 
@@ -113,19 +112,19 @@ Use the following template and guidelines:
 **Based on user preferences:**
 
 1. **Single File Approach**:
-   - Create comprehensive diagrams.md or architecture.md file
-   - Include all sequence diagrams with contextual explanations
-   - Organize diagrams by workflow type or business domain
+- Create comprehensive diagrams.md or architecture.md file
+- Include all sequence diagrams with contextual explanations
+- Organize diagrams by workflow type or business domain
 
 2. **Separate Files Approach**:
-   - Create individual .puml files for each diagram
-   - Generate accompanying markdown files with explanations
-   - Organize in diagrams/ directory structure
+- Create individual .puml files for each diagram
+- Generate accompanying markdown files with explanations
+- Organize in diagrams/ directory structure
 
 3. **Integration with Existing Documentation**:
-   - Reference diagrams in existing README.md files
-   - Link diagrams to relevant code sections
-   - Include ASCII art versions for simple flows
+- Reference diagrams in existing README.md files
+- Link diagrams to relevant code sections
+- Include ASCII art versions for simple flows
 
 ## Content Quality Requirements
 
@@ -141,24 +140,24 @@ After generating sequence diagrams:
 2. **Validate against codebase** to ensure accuracy
 3. **Test diagram readability** and comprehensiveness
 4. **Ensure proper file organization** according to user preferences
-                </step-content>
-                <step-constraints>
-                    <step-constraint-list>
-                        <step-constraint>**MUST** only execute if "UML sequence diagrams" was selected in Step 1</step-constraint>
-                        <step-constraint>**MUST** use codebase_search extensively to analyze actual code flows</step-constraint>
-                        <step-constraint>**MUST** generate accurate diagrams that reflect real implementation</step-constraint>
-                        <step-constraint>**MUST** use proper PlantUML sequence diagram syntax</step-constraint>
-                        <step-constraint>**MUST** include alternative flows and error handling where appropriate</step-constraint>
-                        <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
-                        <step-constraint>**MUST** organize files according to user preferences from Step 1</step-constraint>
-                        <step-constraint>**MUST NOT** generate generic or templated diagrams without code analysis</step-constraint>
-                        <step-constraint>**MUST** validate PlantUML syntax for renderability</step-constraint>
-                    </step-constraint-list>
-                </step-constraints>
-            </step>
-            <step number="3">
-                <step-title>UML Class Diagram Generation</step-title>
-                <step-content>
+            </step-content>
+            <step-constraints>
+                <step-constraint-list>
+                    <step-constraint>**MUST** only execute if "UML sequence diagrams" was selected in Step 1</step-constraint>
+                    <step-constraint>**MUST** use codebase_search extensively to analyze actual code flows</step-constraint>
+                    <step-constraint>**MUST** generate accurate diagrams that reflect real implementation</step-constraint>
+                    <step-constraint>**MUST** use proper PlantUML sequence diagram syntax</step-constraint>
+                    <step-constraint>**MUST** include alternative flows and error handling where appropriate</step-constraint>
+                    <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
+                    <step-constraint>**MUST** organize files according to user preferences from Step 1</step-constraint>
+                    <step-constraint>**MUST NOT** generate generic or templated diagrams without code analysis</step-constraint>
+                    <step-constraint>**MUST** validate PlantUML syntax for renderability</step-constraint>
+                </step-constraint-list>
+            </step-constraints>
+        </step>
+        <step number="3">
+            <step-title>UML Class Diagram Generation</step-title>
+            <step-content>
 **Purpose**: Generate UML class diagrams to illustrate the structure, relationships, and design patterns within Java packages and modules based on code analysis and user preferences.
 
 **Dependencies**: Only execute if the user selected UML class diagrams in Step 1. Requires completion of Step 1.
@@ -176,64 +175,64 @@ Use the following template and guidelines:
 **For each selected package scope:**
 
 1. **All Packages** (if selected):
-   - Analyze complete project structure across all modules
-   - Identify core domain packages and supporting infrastructure
-   - Generate high-level architecture diagrams showing package relationships
-   - Create detailed diagrams for each significant package
+- Analyze complete project structure across all modules
+- Identify core domain packages and supporting infrastructure
+- Generate high-level architecture diagrams showing package relationships
+- Create detailed diagrams for each significant package
 
 2. **Core Business Logic Packages** (if selected):
-   - Focus on domain models and business service classes
-   - Analyze entities, value objects, and business rules
-   - Document service layer patterns and business workflows
-   - Include repository patterns and data access abstractions
+- Focus on domain models and business service classes
+- Analyze entities, value objects, and business rules
+- Document service layer patterns and business workflows
+- Include repository patterns and data access abstractions
 
 3. **Specific Packages** (if selected):
-   - Analyze user-specified packages in detail
-   - Generate focused diagrams showing class relationships within packages
-   - Include cross-package dependencies and interactions
-   - Document package-specific design patterns and architectures
+- Analyze user-specified packages in detail
+- Generate focused diagrams showing class relationships within packages
+- Include cross-package dependencies and interactions
+- Document package-specific design patterns and architectures
 
 ## Class Analysis Guidelines
 
 1. **Identify Class Categories**:
-   - Domain entities and value objects (core business concepts)
-   - Service classes (business logic and orchestration)
-   - Repository classes (data access patterns)
-   - Controller classes (API and presentation layer)
-   - Configuration and infrastructure classes
-   - Utility and helper classes
+- Domain entities and value objects (core business concepts)
+- Service classes (business logic and orchestration)
+- Repository classes (data access patterns)
+- Controller classes (API and presentation layer)
+- Configuration and infrastructure classes
+- Utility and helper classes
 
 2. **Analyze Relationships**:
-   - Inheritance hierarchies (extends/implements)
-   - Composition and aggregation relationships
-   - Interface implementations and abstractions
-   - Dependency injection patterns
-   - Design pattern implementations
+- Inheritance hierarchies (extends/implements)
+- Composition and aggregation relationships
+- Interface implementations and abstractions
+- Dependency injection patterns
+- Design pattern implementations
 
 3. **Determine Appropriate Detail Level**:
-   - Include key methods and attributes for business logic
-   - Show important annotations (@Entity, @Service, @Repository, @Controller)
-   - Document method signatures for public APIs
-   - Include visibility modifiers and type information
+- Include key methods and attributes for business logic
+- Show important annotations (@Entity, @Service, @Repository, @Controller)
+- Document method signatures for public APIs
+- Include visibility modifiers and type information
 
 ## File Organization Strategy
 
 **Based on user preferences:**
 
 1. **Package-Based Organization**:
-   - Create separate class diagrams for each package
-   - Generate overview diagram showing package relationships
-   - Use consistent naming conventions for diagram files
+- Create separate class diagrams for each package
+- Generate overview diagram showing package relationships
+- Use consistent naming conventions for diagram files
 
 2. **Layer-Based Organization**:
-   - Organize diagrams by architectural layers (controller, service, repository)
-   - Show cross-layer dependencies and interactions
-   - Include infrastructure and configuration diagrams
+- Organize diagrams by architectural layers (controller, service, repository)
+- Show cross-layer dependencies and interactions
+- Include infrastructure and configuration diagrams
 
 3. **Domain-Based Organization**:
-   - Group related classes by business domain
-   - Show domain boundaries and relationships
-   - Include supporting infrastructure for each domain
+- Group related classes by business domain
+- Show domain boundaries and relationships
+- Include supporting infrastructure for each domain
 
 ## Content Quality Requirements
 
@@ -251,26 +250,26 @@ After generating class diagrams:
 3. **Check relationship correctness** (inheritance, composition, dependencies)
 4. **Ensure appropriate detail level** for intended audience
 5. **Test file organization** according to user preferences
-                </step-content>
-                <step-constraints>
-                    <step-constraint-list>
-                        <step-constraint>**MUST** only execute if "UML class diagrams" was selected in Step 1</step-constraint>
-                        <step-constraint>**MUST** use codebase_search extensively to analyze class structure and relationships</step-constraint>
-                        <step-constraint>**MUST** generate accurate diagrams that reflect actual class hierarchy and relationships</step-constraint>
-                        <step-constraint>**MUST** use proper PlantUML class diagram syntax</step-constraint>
-                        <step-constraint>**MUST** include appropriate level of detail based on user selection</step-constraint>
-                        <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
-                        <step-constraint>**MUST** organize files according to user preferences from Step 1</step-constraint>
-                        <step-constraint>**MUST** show accurate inheritance, composition, and association relationships</step-constraint>
-                        <step-constraint>**MUST** include important annotations and design patterns</step-constraint>
-                        <step-constraint>**MUST NOT** generate generic or templated diagrams without actual code analysis</step-constraint>
-                        <step-constraint>**MUST** validate PlantUML syntax for renderability</step-constraint>
-                    </step-constraint-list>
-                </step-constraints>
-            </step>
-            <step number="4">
-                <step-title>C4 Model Diagram Generation</step-title>
-                <step-content>
+            </step-content>
+            <step-constraints>
+                <step-constraint-list>
+                    <step-constraint>**MUST** only execute if "UML class diagrams" was selected in Step 1</step-constraint>
+                    <step-constraint>**MUST** use codebase_search extensively to analyze class structure and relationships</step-constraint>
+                    <step-constraint>**MUST** generate accurate diagrams that reflect actual class hierarchy and relationships</step-constraint>
+                    <step-constraint>**MUST** use proper PlantUML class diagram syntax</step-constraint>
+                    <step-constraint>**MUST** include appropriate level of detail based on user selection</step-constraint>
+                    <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
+                    <step-constraint>**MUST** organize files according to user preferences from Step 1</step-constraint>
+                    <step-constraint>**MUST** show accurate inheritance, composition, and association relationships</step-constraint>
+                    <step-constraint>**MUST** include important annotations and design patterns</step-constraint>
+                    <step-constraint>**MUST NOT** generate generic or templated diagrams without actual code analysis</step-constraint>
+                    <step-constraint>**MUST** validate PlantUML syntax for renderability</step-constraint>
+                </step-constraint-list>
+            </step-constraints>
+        </step>
+        <step number="4">
+            <step-title>C4 Model Diagram Generation</step-title>
+            <step-content>
 **Purpose**: Generate C4 model diagrams to visualize system architecture at different levels of abstraction (Context, Container, Component, and Code) based on code analysis and user preferences.
 
 **Dependencies**: Only execute if the user selected C4 model diagrams in Step 1. Requires completion of Step 1.
@@ -288,68 +287,68 @@ Use the following template and guidelines:
 **For each selected diagram level:**
 
 1. **Complete C4 Model** (if selected):
-   - Generate all four levels of C4 diagrams
-   - Start with System Context for business overview
-   - Create Container diagrams for deployment architecture
-   - Develop Component diagrams for logical structure
-   - Add Code diagrams for critical implementations
+- Generate all four levels of C4 diagrams
+- Start with System Context for business overview
+- Create Container diagrams for deployment architecture
+- Develop Component diagrams for logical structure
+- Add Code diagrams for critical implementations
 
 2. **High-Level Diagrams Only** (if selected):
-   - Focus on System Context and Container levels
-   - Emphasize business context and system boundaries
-   - Show technology choices and deployment units
-   - Document external integrations and dependencies
+- Focus on System Context and Container levels
+- Emphasize business context and system boundaries
+- Show technology choices and deployment units
+- Document external integrations and dependencies
 
 3. **Detailed Diagrams Only** (if selected):
-   - Focus on Component and Code levels
-   - Analyze internal system structure
-   - Document component responsibilities and interfaces
-   - Show implementation patterns and key classes
+- Focus on Component and Code levels
+- Analyze internal system structure
+- Document component responsibilities and interfaces
+- Show implementation patterns and key classes
 
 ## Architecture Analysis Guidelines
 
 1. **System Context Analysis**:
-   - Identify all external users and personas
-   - Map external systems and third-party integrations
-   - Define clear system boundaries and responsibilities
-   - Document business capabilities and value propositions
+- Identify all external users and personas
+- Map external systems and third-party integrations
+- Define clear system boundaries and responsibilities
+- Document business capabilities and value propositions
 
 2. **Container Analysis**:
-   - Identify deployable units (web apps, services, databases)
-   - Analyze technology stack and framework choices
-   - Document communication protocols and API contracts
-   - Map deployment and infrastructure requirements
+- Identify deployable units (web apps, services, databases)
+- Analyze technology stack and framework choices
+- Document communication protocols and API contracts
+- Map deployment and infrastructure requirements
 
 3. **Component Analysis**:
-   - Identify logical components within each container
-   - Analyze component responsibilities and boundaries
-   - Document inter-component communication patterns
-   - Map business capabilities to technical components
+- Identify logical components within each container
+- Analyze component responsibilities and boundaries
+- Document inter-component communication patterns
+- Map business capabilities to technical components
 
 4. **Code Analysis**:
-   - Focus on architecturally significant components
-   - Show key classes, interfaces, and design patterns
-   - Document important implementation decisions
-   - Illustrate complex algorithmic or business logic
+- Focus on architecturally significant components
+- Show key classes, interfaces, and design patterns
+- Document important implementation decisions
+- Illustrate complex algorithmic or business logic
 
 ## File Organization Strategy
 
 **Based on user preferences:**
 
 1. **Hierarchical Organization**:
-   - Create separate files for each C4 level
-   - Use consistent naming (context.puml, container.puml, etc.)
-   - Generate comprehensive architecture.md with all levels
+- Create separate files for each C4 level
+- Use consistent naming (context.puml, container.puml, etc.)
+- Generate comprehensive architecture.md with all levels
 
 2. **Domain-Based Organization**:
-   - Organize C4 diagrams by business domain or module
-   - Show how domains interact at different abstraction levels
-   - Include cross-domain dependency diagrams
+- Organize C4 diagrams by business domain or module
+- Show how domains interact at different abstraction levels
+- Include cross-domain dependency diagrams
 
 3. **Single Comprehensive File**:
-   - Include all selected C4 levels in one document
-   - Provide clear navigation and cross-references
-   - Use consistent styling and formatting
+- Include all selected C4 levels in one document
+- Provide clear navigation and cross-references
+- Use consistent styling and formatting
 
 ## Content Quality Requirements
 
@@ -368,26 +367,26 @@ After generating C4 diagrams:
 4. **Ensure business context accuracy** with stakeholder needs
 5. **Test file organization** according to user preferences
 6. **Verify visual clarity** and layout effectiveness
-                </step-content>
-                <step-constraints>
-                    <step-constraint-list>
-                        <step-constraint>**MUST** only execute if "C4 model diagrams" was selected in Step 1</step-constraint>
-                        <step-constraint>**MUST** use codebase_search extensively to analyze system architecture</step-constraint>
-                        <step-constraint>**MUST** generate accurate diagrams that reflect actual system structure</step-constraint>
-                        <step-constraint>**MUST** use proper PlantUML syntax with C4-PlantUML library</step-constraint>
-                        <step-constraint>**MUST** include appropriate abstraction level based on user selection</step-constraint>
-                        <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
-                        <step-constraint>**MUST** organize files according to user preferences from Step 1</step-constraint>
-                        <step-constraint>**MUST** show accurate business context and user scenarios</step-constraint>
-                        <step-constraint>**MUST** include real technology choices and deployment architecture</step-constraint>
-                        <step-constraint>**MUST NOT** generate generic or templated diagrams without actual architectural analysis</step-constraint>
-                        <step-constraint>**MUST** validate C4-PlantUML syntax for renderability</step-constraint>
-                    </step-constraint-list>
-                </step-constraints>
-            </step>
-            <step number="5">
-                <step-title>UML State Machine Diagram Generation</step-title>
-                <step-content>
+            </step-content>
+            <step-constraints>
+                <step-constraint-list>
+                    <step-constraint>**MUST** only execute if "C4 model diagrams" was selected in Step 1</step-constraint>
+                    <step-constraint>**MUST** use codebase_search extensively to analyze system architecture</step-constraint>
+                    <step-constraint>**MUST** generate accurate diagrams that reflect actual system structure</step-constraint>
+                    <step-constraint>**MUST** use proper PlantUML syntax with C4-PlantUML library</step-constraint>
+                    <step-constraint>**MUST** include appropriate abstraction level based on user selection</step-constraint>
+                    <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
+                    <step-constraint>**MUST** organize files according to user preferences from Step 1</step-constraint>
+                    <step-constraint>**MUST** show accurate business context and user scenarios</step-constraint>
+                    <step-constraint>**MUST** include real technology choices and deployment architecture</step-constraint>
+                    <step-constraint>**MUST NOT** generate generic or templated diagrams without actual architectural analysis</step-constraint>
+                    <step-constraint>**MUST** validate C4-PlantUML syntax for renderability</step-constraint>
+                </step-constraint-list>
+            </step-constraints>
+        </step>
+        <step number="5">
+            <step-title>UML State Machine Diagram Generation</step-title>
+            <step-content>
 **Purpose**: Generate UML state machine diagrams to illustrate the behavior, lifecycle, and workflows of objects, business processes, and system components based on code analysis and user preferences.
 
 **Dependencies**: Only execute if the user selected UML state machine diagrams in Step 1. Requires completion of Step 1.
@@ -405,70 +404,70 @@ Use the following template and guidelines:
 **For each applicable state machine type:**
 
 1. **Entity Lifecycles** (if selected):
-   - Analyze domain entities with clear state transitions
-   - Identify state-changing methods and business rules
-   - Document entity lifecycle from creation to completion/deletion
-   - Include state validation and transition constraints
+- Analyze domain entities with clear state transitions
+- Identify state-changing methods and business rules
+- Document entity lifecycle from creation to completion/deletion
+- Include state validation and transition constraints
 
 2. **Business Workflows** (if selected):
-   - Analyze business process implementations
-   - Identify workflow orchestration patterns
-   - Document approval processes, payment flows, and operational workflows
-   - Include decision points and parallel processing paths
+- Analyze business process implementations
+- Identify workflow orchestration patterns
+- Document approval processes, payment flows, and operational workflows
+- Include decision points and parallel processing paths
 
 3. **System Behaviors** (if selected):
-   - Analyze system components with operational states
-   - Identify connection management, job processing, and transaction states
-   - Document error handling and recovery mechanisms
-   - Include timeout and retry logic patterns
+- Analyze system components with operational states
+- Identify connection management, job processing, and transaction states
+- Document error handling and recovery mechanisms
+- Include timeout and retry logic patterns
 
 4. **User Interactions** (if selected):
-   - Analyze UI components with interaction states
-   - Identify form wizards, dialog flows, and navigation patterns
-   - Document user journey state transitions
-   - Include validation and error state handling
+- Analyze UI components with interaction states
+- Identify form wizards, dialog flows, and navigation patterns
+- Document user journey state transitions
+- Include validation and error state handling
 
 ## State Machine Generation Guidelines
 
 1. **Use PlantUML syntax** for state machine diagrams to ensure compatibility and renderability
 2. **Analyze actual code implementations** using codebase_search to identify:
-   - Enum classes representing states
-   - State pattern implementations
-   - Workflow orchestration code
-   - Business process state management
-   - Entity lifecycle management methods
+- Enum classes representing states
+- State pattern implementations
+- Workflow orchestration code
+- Business process state management
+- Entity lifecycle management methods
 
 3. **Include comprehensive state coverage**:
-   - Initial and final states
-   - All intermediate states with clear purposes
-   - Transition triggers, guards, and actions
-   - Concurrent states where applicable
-   - Error and exception states
+- Initial and final states
+- All intermediate states with clear purposes
+- Transition triggers, guards, and actions
+- Concurrent states where applicable
+- Error and exception states
 
 4. **Document business logic alignment**:
-   - Ensure state machines reflect actual business rules
-   - Include guard conditions from code validation
-   - Show actions performed during state transitions
-   - Reference actual method names and class structures
+- Ensure state machines reflect actual business rules
+- Include guard conditions from code validation
+- Show actions performed during state transitions
+- Reference actual method names and class structures
 
 ## File Organization Strategy
 
 **Based on user preferences:**
 
 1. **Entity-Based Organization**:
-   - Create separate state machine diagrams for each stateful entity
-   - Use consistent naming conventions (EntityName-states.puml)
-   - Generate overview showing entity relationships
+- Create separate state machine diagrams for each stateful entity
+- Use consistent naming conventions (EntityName-states.puml)
+- Generate overview showing entity relationships
 
 2. **Workflow-Based Organization**:
-   - Organize diagrams by business process or workflow
-   - Show how different entities participate in workflows
-   - Include process orchestration and coordination diagrams
+- Organize diagrams by business process or workflow
+- Show how different entities participate in workflows
+- Include process orchestration and coordination diagrams
 
 3. **System-Based Organization**:
-   - Group state machines by system component or service
-   - Show interactions between different system states
-   - Include error handling and recovery workflows
+- Group state machines by system component or service
+- Show interactions between different system states
+- Include error handling and recovery workflows
 
 ## Content Quality Requirements
 
@@ -486,26 +485,26 @@ After generating state machine diagrams:
 3. **Check business logic alignment** with actual implementation
 4. **Test diagram completeness** covering all significant state transitions
 5. **Ensure proper file organization** according to user preferences
-                </step-content>
-                <step-constraints>
-                    <step-constraint-list>
-                        <step-constraint>**MUST** only execute if "UML state-machine diagrams" was selected in Step 1</step-constraint>
-                        <step-constraint>**MUST** use codebase_search extensively to analyze actual state implementations</step-constraint>
-                        <step-constraint>**MUST** generate accurate diagrams that reflect real state machine behavior</step-constraint>
-                        <step-constraint>**MUST** use proper PlantUML state machine diagram syntax</step-constraint>
-                        <step-constraint>**MUST** include comprehensive state coverage based on user selection</step-constraint>
-                        <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
-                        <step-constraint>**MUST** organize files according to user preferences from Step 1</step-constraint>
-                        <step-constraint>**MUST** include guard conditions and transition actions where applicable</step-constraint>
-                        <step-constraint>**MUST** reference actual code structures (enums, classes, methods)</step-constraint>
-                        <step-constraint>**MUST NOT** generate generic or templated diagrams without code analysis</step-constraint>
-                        <step-constraint>**MUST** validate PlantUML syntax for renderability</step-constraint>
-                    </step-constraint-list>
-                </step-constraints>
-            </step>
-            <step number="6">
-                <step-title>Diagrams Validation and Summary</step-title>
-                <step-content><![CDATA[
+            </step-content>
+            <step-constraints>
+                <step-constraint-list>
+                    <step-constraint>**MUST** only execute if "UML state-machine diagrams" was selected in Step 1</step-constraint>
+                    <step-constraint>**MUST** use codebase_search extensively to analyze actual state implementations</step-constraint>
+                    <step-constraint>**MUST** generate accurate diagrams that reflect real state machine behavior</step-constraint>
+                    <step-constraint>**MUST** use proper PlantUML state machine diagram syntax</step-constraint>
+                    <step-constraint>**MUST** include comprehensive state coverage based on user selection</step-constraint>
+                    <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
+                    <step-constraint>**MUST** organize files according to user preferences from Step 1</step-constraint>
+                    <step-constraint>**MUST** include guard conditions and transition actions where applicable</step-constraint>
+                    <step-constraint>**MUST** reference actual code structures (enums, classes, methods)</step-constraint>
+                    <step-constraint>**MUST NOT** generate generic or templated diagrams without code analysis</step-constraint>
+                    <step-constraint>**MUST** validate PlantUML syntax for renderability</step-constraint>
+                </step-constraint-list>
+            </step-constraints>
+        </step>
+        <step number="6">
+            <step-title>Diagrams Validation and Summary</step-title>
+            <step-content><![CDATA[
 **Purpose**: Validate all generated diagrams and provide a comprehensive summary of changes made.
 
 **Dependencies**: Requires completion of applicable steps (2, 3, 4, and/or 5 based on user selections).
@@ -609,22 +608,21 @@ java -jar plantuml.jar -checkonly $(find . -name "*.puml")
 ```
 
 If syntax validation passes, diagram generation is complete and successful.
-                ]]></step-content>
-                <step-constraints>
-                    <step-constraint-list>
-                        <step-constraint>**MUST** validate PlantUML syntax for all generated diagram files</step-constraint>
-                        <step-constraint>**MUST** provide comprehensive summary of all diagrams generated</step-constraint>
-                        <step-constraint>**MUST** document file organization and naming conventions used</step-constraint>
-                        <step-constraint>**MUST** verify that all diagrams accurately reflect analyzed codebase</step-constraint>
-                        <step-constraint>**MUST** document what diagram types were created and their coverage</step-constraint>
-                        <step-constraint>**MUST** provide clear usage instructions for viewing and rendering diagrams</step-constraint>
-                        <step-constraint>**MUST** include recommendations for diagram maintenance and updates</step-constraint>
-                        <step-constraint>**MUST** document integration options with documentation tools</step-constraint>
-                    </step-constraint-list>
-                </step-constraints>
-            </step>
-        </steps>
-    </instructions>
+            ]]></step-content>
+            <step-constraints>
+                <step-constraint-list>
+                    <step-constraint>**MUST** validate PlantUML syntax for all generated diagram files</step-constraint>
+                    <step-constraint>**MUST** provide comprehensive summary of all diagrams generated</step-constraint>
+                    <step-constraint>**MUST** document file organization and naming conventions used</step-constraint>
+                    <step-constraint>**MUST** verify that all diagrams accurately reflect analyzed codebase</step-constraint>
+                    <step-constraint>**MUST** document what diagram types were created and their coverage</step-constraint>
+                    <step-constraint>**MUST** provide clear usage instructions for viewing and rendering diagrams</step-constraint>
+                    <step-constraint>**MUST** include recommendations for diagram maintenance and updates</step-constraint>
+                    <step-constraint>**MUST** document integration options with documentation tools</step-constraint>
+                </step-constraint-list>
+            </step-constraints>
+        </step>
+    </steps>
 
     <output-format>
         <output-format-list>

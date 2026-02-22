@@ -19,7 +19,7 @@ Prerequisites and requirements that must be met before proceeding with JMeter pe
 - Verify that JMeter is installed and available in PATH before proceeding
 - If JMeter is not available, show a message and exit
 
-## Instructions
+## Steps
 
 ### Step 1: Create Script File
 
@@ -299,7 +299,7 @@ main() {
 # Execute main function
 main "$@" 
 ```
-                
+            
 #### Step Constraints
 
 - **DO NOT** create your own version of the performance script

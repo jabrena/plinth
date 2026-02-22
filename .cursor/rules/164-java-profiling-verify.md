@@ -46,7 +46,7 @@ your-project/
 └── async-profiler-*/   # Downloaded profiler binaries
 ```
 
-## Instructions
+## Steps
 
 ### Step Pre-Refactoring Baseline (Already Done)
 
@@ -261,9 +261,9 @@ echo "Test scenarios used:" > profiler/docs/test-scenarios.md
 cat > profiler/scripts/load-test.sh << 'EOF'
 #!/bin/bash
 for i in {1..10}; do
-    curl http://localhost:8080/api/v1/objects/create
-    curl http://localhost:8080/api/v1/threads/create
-    sleep 5
+curl http://localhost:8080/api/v1/objects/create
+curl http://localhost:8080/api/v1/threads/create
+sleep 5
 done
 EOF
 chmod +x profiler/scripts/load-test.sh
@@ -324,7 +324,7 @@ echo "Analysis docs: $(ls profiler/docs/profiling-comparison-analysis-[0-9][0-9]
 echo "Final results: $(ls profiler/docs/profiling-final-results-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].md 2>/dev/null | wc -l)"
 ```
 
-                
+            
 ## Output Format
 
 - Generate post-refactoring profiling reports using identical test conditions as baseline

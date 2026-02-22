@@ -47,91 +47,90 @@
         ```
     </goal>
 
-    <instructions>
-        <steps>
-            <step>
-                <step-title>Pre-Refactoring Baseline (Already Done)</step-title>
-                <step-content>
-                    Ask the user if they have captured baseline results yet.
-                    For this purpose use the script `profiler/run-with-profiler.sh` to run the application with the right JVM flags for profiling.
+    <steps>
+        <step>
+            <step-title>Pre-Refactoring Baseline (Already Done)</step-title>
+            <step-content>
+                Ask the user if they have captured baseline results yet.
+                For this purpose use the script `profiler/run-with-profiler.sh` to run the application with the right JVM flags for profiling.
 
-                    **Example:**
-                    ```bash
-                    cd profiler
-                    ./run-with-profiler.sh --mode (cpu, alloc, wall, lock)
-                    ```
+                **Example:**
+                ```bash
+                cd profiler
+                ./run-with-profiler.sh --mode (cpu, alloc, wall, lock)
+                ```
 
-                    After this task, send load to the application to capture the new behavior afte the refactoring.
-                </step-content>
-            </step>
-            <step>
-                <step-title>Post-Refactoring Report Generation (CRITICAL STEP)</step-title>
-                <step-content>
-                    Ask the user if they have generated the post-refactoring data from profiling tools yet.
+                After this task, send load to the application to capture the new behavior afte the refactoring.
+            </step-content>
+        </step>
+        <step>
+            <step-title>Post-Refactoring Report Generation (CRITICAL STEP)</step-title>
+            <step-content>
+                Ask the user if they have generated the post-refactoring data from profiling tools yet.
 
-                    **Step 1: Validate Your Refactoring Changes**
-                    ```bash
-                    # Ensure your code changes are applied
-                    git status
-                    git diff HEAD~1  # Review recent changes
-                    ```
+                **Step 1: Validate Your Refactoring Changes**
+                ```bash
+                # Ensure your code changes are applied
+                git status
+                git diff HEAD~1  # Review recent changes
+                ```
 
-                    **Step 2: Generate New Profiling Reports**
-                    cd profiler/scripts
-                    ./java-profile.sh --mode memory --duration 60
+                **Step 2: Generate New Profiling Reports**
+                cd profiler/scripts
+                ./java-profile.sh --mode memory --duration 60
 
-                    **Step 3: Verify the reports were generated**
-                    review the files in the `profiler/results` directory.
+                **Step 3: Verify the reports were generated**
+                review the files in the `profiler/results` directory.
 
-                    ```bash
-                    # Check that you have both sets of reports
-                    echo "=== BASELINE REPORTS ==="
-                    ls -la profiler/results/*baseline* || ls -la profiler/results/*before*
+                ```bash
+                # Check that you have both sets of reports
+                echo "=== BASELINE REPORTS ==="
+                ls -la profiler/results/*baseline* || ls -la profiler/results/*before*
 
-                    echo "=== POST-REFACTORING REPORTS ==="
-                    ls -la profiler/results/*after* || ls -la profiler/results/*$(date +%Y%m%d)*
+                echo "=== POST-REFACTORING REPORTS ==="
+                ls -la profiler/results/*after* || ls -la profiler/results/*$(date +%Y%m%d)*
 
-                    # Verify reports are not empty
-                    wc -c profiler/results/*.html
-                    ```
-                </step-content>
-            </step>
-            <step>
-                <step-title>Performance Metrics Comparison</step-title>
-                <step-content>
+                # Verify reports are not empty
+                wc -c profiler/results/*.html
+                ```
+            </step-content>
+        </step>
+        <step>
+            <step-title>Performance Metrics Comparison</step-title>
+            <step-content>
 
-                    **Memory Analysis Checklist**
-                    - [ ] **Memory leak detection**: Compare heap usage patterns between before/after flamegraphs
-                    - [ ] **Allocation patterns**: Analyze allocation flamegraphs for reduced object creation
-                    - [ ] **GC pressure**: Compare garbage collection frequency and duration
-                    - [ ] **Peak memory usage**: Identify improvements in maximum heap utilization
-                    - [ ] **Stack depth**: Compare flamegraph complexity (canvas height, levels)
+                **Memory Analysis Checklist**
+                - [ ] **Memory leak detection**: Compare heap usage patterns between before/after flamegraphs
+                - [ ] **Allocation patterns**: Analyze allocation flamegraphs for reduced object creation
+                - [ ] **GC pressure**: Compare garbage collection frequency and duration
+                - [ ] **Peak memory usage**: Identify improvements in maximum heap utilization
+                - [ ] **Stack depth**: Compare flamegraph complexity (canvas height, levels)
 
-                    **CPU Performance Checklist**
-                    - [ ] **Hot spots identification**: Compare CPU flamegraphs to identify resolved bottlenecks
-                    - [ ] **Method execution time**: Analyze improvements in critical path performance
-                    - [ ] **Thread contention**: Look for reduced blocking or improved concurrency
+                **CPU Performance Checklist**
+                - [ ] **Hot spots identification**: Compare CPU flamegraphs to identify resolved bottlenecks
+                - [ ] **Method execution time**: Analyze improvements in critical path performance
+                - [ ] **Thread contention**: Look for reduced blocking or improved concurrency
 
-                    **Visual Comparison Process**
-                    ```bash
-                    # Open reports side by side for comparison
-                    # Browser tab 1: Baseline report
-                    open profiler/results/memory-leak-*baseline*.html
+                **Visual Comparison Process**
+                ```bash
+                # Open reports side by side for comparison
+                # Browser tab 1: Baseline report
+                open profiler/results/memory-leak-*baseline*.html
 
-                    # Browser tab 2: After refactoring report
-                    open profiler/results/memory-leak-*after*.html
+                # Browser tab 2: After refactoring report
+                open profiler/results/memory-leak-*after*.html
 
-                    # Compare:
-                    # - Canvas height (lower = better)
-                    # - Stack depth (fewer levels = better)
-                    # - Hot spot patterns (reduced width = better)
-                    ```
+                # Compare:
+                # - Canvas height (lower = better)
+                # - Stack depth (fewer levels = better)
+                # - Hot spot patterns (reduced width = better)
+                ```
 
-                </step-content>
-            </step>
-            <step>
-                <step-title>Documentation Creation</step-title>
-                <step-content>
+            </step-content>
+        </step>
+        <step>
+            <step-title>Documentation Creation</step-title>
+            <step-content>
 <![CDATA[
 **Note**: All documentation files are created with date suffixes (YYYYMMDD format) to enable tracking multiple profiling sessions and maintain historical analysis records.
 
@@ -273,9 +272,9 @@ echo "Test scenarios used:" > profiler/docs/test-scenarios.md
 cat > profiler/scripts/load-test.sh << 'EOF'
 #!/bin/bash
 for i in {1..10}; do
-    curl http://localhost:8080/api/v1/objects/create
-    curl http://localhost:8080/api/v1/threads/create
-    sleep 5
+curl http://localhost:8080/api/v1/objects/create
+curl http://localhost:8080/api/v1/threads/create
+sleep 5
 done
 EOF
 chmod +x profiler/scripts/load-test.sh
@@ -336,10 +335,9 @@ echo "Analysis docs: $(ls profiler/docs/profiling-comparison-analysis-[0-9][0-9]
 echo "Final results: $(ls profiler/docs/profiling-final-results-[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9].md 2>/dev/null | wc -l)"
 ```
 ]]>
-                </step-content>
-            </step>
-        </steps>
-    </instructions>
+            </step-content>
+        </step>
+    </steps>
 
     <output-format>
         <output-format-list>
