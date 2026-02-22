@@ -9,7 +9,7 @@ public final class SystemPromptsInventory {
 
     public static final Stream<String> baseNames() {
         return Stream.of(
-            "100-java-cursor-rules-list",
+            "100-java-system-prompt-java-list",
             "110-java-maven-best-practices",
             "111-java-maven-dependencies",
             "112-java-maven-plugins",
@@ -29,7 +29,8 @@ public final class SystemPromptsInventory {
             "151-java-performance-jmeter",
             "161-java-profiling-detect",
             "162-java-profiling-analyze",
-            "164-java-profiling-compare",
+            "163-java-profiling-refactor",
+            "164-java-profiling-verify",
             "170-java-documentation",
             "171-java-diagrams",
             "behaviour-consultative-interaction",

@@ -130,7 +130,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Architecture Decision Records (ADRs)**: Added formal documentation for architectural decisions
   - ADR-001: Generate cursor rules from XML files
   - ADR-002: Configure cursor rules with manual scope
-- **Comprehensive User Guide**: Added `CURSOR-RULES-JAVA.md` as a complete reference guide for all cursor rules
+- **Comprehensive User Guide**: Added `SYSTEM-PROMPTS-JAVA.md` as a complete reference guide for all cursor rules
 - **Build Infrastructure Improvements**:
   - JBang script for markdown validation
   - GitHub workflow artifact upload for generated cursor rules
