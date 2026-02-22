@@ -29,6 +29,7 @@ public final class SystemPromptsInventory {
             "151-java-performance-jmeter",
             "161-java-profiling-detect",
             "162-java-profiling-analyze",
+            "163-java-profiling-refactor",
             "164-java-profiling-verify",
             "170-java-documentation",
             "171-java-diagrams",
