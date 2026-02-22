@@ -2,7 +2,7 @@
 author: Juan Antonio Breña Moral
 version: 0.12.0-SNAPSHOT
 ---
-# Create a Checklist with all Java steps to use with cursor rules for Java
+# Create a Checklist with all Java steps to use with system prompts for Java
 
 ## Role
 
@@ -12,7 +12,7 @@ You are a Senior software engineer with extensive experience in Java software de
 
 Your task is to create a comprehensive step-by-step guide that follows the exact format
 and structure defined in the embedded template below. Create a markdown file named
-`CURSOR-RULES-JAVA.md` with the following content:
+`SYSTEM-PROMPTS-JAVA.md` with the following content:
 
 ```markdown
 # Cursor rules Java
@@ -80,8 +80,9 @@ Use the following collection of System prompts of Java to improve your Java deve
 |----|----|-----|----|
 | [161-java-profiling-detect](.cursor/rules/161-java-profiling-detect.md) | Profile your development in runtime and collect evidences to be analyzed later. | **Prompt:** `My Java application has performance issues - help me set up comprehensive profiling process using @161-java-profiling-detect and use the location YOUR-DEVELOPMENT/profiler` **Note:** Replace YOUR-DEVELOPMENT with your actual development path. Example: examples/spring-boot-memory-leak-demo/profiler | Non conversational cursor rule. The Cursor rule will generate 2 scripts. One script designed to run your development with the right JVM flags for profiling and the second scripts will ask few questions about what problem do you want to solve/analyze over one particular PID. **Step 1:** execute `./run-with-profiler.sh --help` **Step2:** execute `./run-jmeter.sh --help` **Step 3:** execute `./profiler/scripts/java-profile.sh` |
 | [162-java-profiling-analyze](.cursor/rules/162-java-profiling-analyze.md) | Analyze results from previous step and generate reports with the analysis results.| **Prompt:** `Analyze the results located in YOUR-DEVELOPMENT/profiler and use the cursor rule @162-java-profiling-analyze` **Note:** Replace YOUR-DEVELOPMENT with your actual development path. Example: examples/spring-boot-memory-leak-demo/profiler | Non conversational cursor rule. |
+| [163-java-profiling-refactor](.cursor/rules/163-java-profiling-refactor.md) | Refactor code based on profiling analysis findings to fix performance bottlenecks | **Prompt:** `Apply refactoring from profiling analysis using @163-java-profiling-refactor` **Note:** Review `docs/profiling-problem-analysis-YYYYMMDD.md` and `docs/profiling-solutions-YYYYMMDD.md` before refactoring. Replace YYYYMMDD with the analysis date. | Step 3 of profiling workflow. Non conversational. Verifies changes with `./mvnw clean verify`. |
 | - | Code Refactoring from suggestions from analysis | `Can you apply the solutions from @profiling-solutions-yyyymmdd.md in @/info to mitigate bottlenecks` | Make a refactoring with the notes from the analysis |
-| [164-java-profiling-compare](.cursor/rules/164-java-profiling-compare.md) | Compare results comparing results before and after applying changes in the code | **Prompt:** `Review if the problems was solved with last refactoring using the reports located in @/results with the cursor rule @164-java-profiling-compare` **Note:**  Put in the context the folder with the results | This cursor rule is applied automatically without any interaction with the Software engineer. |
+| [164-java-profiling-verify](.cursor/rules/164-java-profiling-verify.md) | Compare results comparing results before and after applying changes in the code | **Prompt:** `Review if the problems was solved with last refactoring using the reports located in @/results with the cursor rule @164-java-profiling-verify` **Note:**  Put in the context the folder with the results | This cursor rule is applied automatically without any interaction with the Software engineer. |
 
 ## Documentation rules
 
@@ -109,6 +110,6 @@ Use the following collection of System prompts of Java to improve your Java deve
 
 ## Output Format
 
-- **File Creation**: Generate the complete markdown file named `CURSOR-RULES-JAVA.md` in the project root directory
+- **File Creation**: Generate the complete markdown file named `SYSTEM-PROMPTS-JAVA.md` in the project root directory
 - **Template Adherence**: Follow the embedded template structure and content exactly - no additions, modifications, or omissions
-- **File Handling**: If `CURSOR-RULES-JAVA.md` already exists, overwrite it completely with the new generated content
+- **File Handling**: If `SYSTEM-PROMPTS-JAVA.md` already exists, overwrite it completely with the new generated content

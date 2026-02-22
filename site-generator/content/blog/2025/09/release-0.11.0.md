@@ -8,7 +8,7 @@ status=published
 
 ## What are Cursor rules for Java?
 
-The project provides a collection of System prompts for Java Enterprise development that help software engineers in their daily programming work & data pipelines. The [available System prompts for Java](https://github.com/jabrena/cursor-rules-java/blob/main/CURSOR-RULES-JAVA.md) cover areas such as `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with async-profiler/JDK tools`, `Documentation`, and `Diagrams`.
+The project provides a collection of System prompts for Java Enterprise development that help software engineers in their daily programming work & data pipelines. The [available System prompts for Java](https://github.com/jabrena/cursor-rules-java/blob/main/SYSTEM-PROMPTS-JAVA.md) cover areas such as `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with async-profiler/JDK tools`, `Documentation`, and `Diagrams`.
 
 ## What's new in this release?
 
@@ -71,7 +71,7 @@ Improve the classes provided in the context
 by applying the system prompt @128-java-generics
 ```
 
-Further information: https://github.com/jabrena/cursor-rules-java/blob/0.11.0/CURSOR-RULES-JAVA.md
+Further information: https://github.com/jabrena/cursor-rules-java/blob/0.11.0/SYSTEM-PROMPTS-JAVA.md
 
 With this evolution, software engineers now can combine pure system prompts and specialized behaviors in `16^3 = 4096` combinations by design.
 
@@ -133,7 +133,7 @@ In this release, the script `profile-java-process.sh`, included in  `@161-java-p
 
 ![](/cursor-rules-java/images/0.11.0-profiling-menu.png)
 
-In recent months, I have been inspired by the work of outstanding engineers in this field: [Francesco Nigro](https://x.com/forked_franz), [Jaromir Hamala](https://x.com/jerrinot), [Johannes Bechberger](https://x.com/parttimen3rd) & [Brendan Gregg](https://x.com/brendangregg). I highly recommend following them.
+In recent months, I have been inspired by the work of outstanding engineers in this field: [Francesco Nigro](https://x.com/forked_franz), [Jaromir Hamala](https://x.com/jerrinot), [Johannes Bechberger](https://x.com/parttimen3rd), [Erik Gahlin](https://x.com/ErikGahlin), [Marcus Hirt](https://x.com/hirt) & [Brendan Gregg](https://x.com/brendangregg). I highly recommend following them.
 
 If you are interested in the Profiling model `Detect, Analyze, Refactor & Compare` implemented with the following set of System prompts:
 
