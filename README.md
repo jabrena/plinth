@@ -24,6 +24,7 @@ https://forms.gle/TpNXENjmu45wuXoi6
 The project provides a collection of `System prompts` for Java Enterprise development that help software engineers in their daily programming work and data pipelines.
 The [available System prompts for Java](./SYSTEM-PROMPTS-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation` & `Diagrams`.
 
+⚠️ **Note:** In the future will provide `Skills` support also.
 
 ### Compatibility with Modern IDEs, CLI & Others
 
@@ -59,7 +60,7 @@ Adding AI tools to the Java development workflow can increase the likelihood of 
 
 Adding AI tools to your pipeline can provide new opportunities to deliver more value (examples: automatic coding, code refactoring, continuous profiling, and others).
 
-![](./documentation/images/pipeline-workflow.png)
+![](./documentation/images/workflow-pipelines.png)
 
 ## Getting started
 
