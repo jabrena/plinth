@@ -45,6 +45,18 @@ jobs:
       - name: Validate Markdown Files
         run: jbang .github/scripts/MarkdownValidator.java --verbose .
 
+  validate-skills:
+    name: Validate Agent Skills
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: true
+      - name: Validate SKILL.md files
+        run: npx skill-check@latest .agents/skills --no-security-scan --format github
+        env:
+          SKILL_CHECK_NO_BANNER: 1
+
   examples:
     name: Build Examples
     runs-on: ubuntu-latest

@@ -187,6 +187,7 @@ This system transforms the repository from a simple rule collection into a **com
 - Adding new cursor rule: Edit XML in system-prompts-generator/src/main/resources/
 - Updating website: Modify content in site-generator/content/
 - Running examples: Each example has its own README-DEV.md
+- Validate agent skills: `.github/scripts/validate-skills.sh` or `npx skill-check .agents/skills`
 
 ## File Editing Guidelines
 - Don't edit .cursor/rules/ directly - edit XML sources in system-prompts-generator/src/main/resources/
