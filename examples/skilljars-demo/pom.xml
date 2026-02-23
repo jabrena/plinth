@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>info.jab.demo</groupId>
+    <artifactId>skilljars-demo</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <name>skilljars-demo</name>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.release>17</maven.compiler.release>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit</groupId>
+                <artifactId>junit-bom</artifactId>
+                <version>5.11.0</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <!-- Optionally: parameterized tests support -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+
+        <!-- Skilljars dependencies -->
+        <!-- Using provided scope is better to not appear in the classpath -->
+        <dependency>
+            <groupId>com.skillsjars</groupId>
+            <artifactId>jabrena__cursor-rules-java__110-java-maven-best-practices</artifactId>
+            <version>2026_02_23-96a0bd2</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.skillsjars</groupId>
+            <artifactId>jabrena__cursor-rules-java__111-java-maven-dependencies</artifactId>
+            <version>2026_02_23-96a0bd2</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>com.skillsjars</groupId>
+                <artifactId>maven-plugin</artifactId>
+                <version>0.0.2</version>
+                <configuration>
+                    <scopes>
+                        <scope>provided</scope>
+                    </scopes>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+</project>
