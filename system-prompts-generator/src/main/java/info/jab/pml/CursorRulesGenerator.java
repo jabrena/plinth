@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.Objects;
 import java.util.Optional;
 import javax.xml.parsers.DocumentBuilder;
@@ -49,7 +50,7 @@ public final class CursorRulesGenerator {
      */
     public String generate(String xmlFileName, String xslFileName) {
         return loadTransformationSources(xmlFileName, xslFileName)
-            .map(sources -> createSaxSource(sources))
+            .map(sources -> createSaxSource(sources, xmlFileName))
             .flatMap(saxSource -> performTransformation(saxSource, xslFileName))
             .orElseThrow(() -> new RuntimeException(
                 "Failed to generate cursor rules for: " + xmlFileName + ", " + xslFileName));
@@ -85,7 +86,7 @@ public final class CursorRulesGenerator {
      * Step 2: Creates SAXSource with XInclude support.
      * Pure function that creates immutable SAXSource with XInclude processing.
      */
-    private SAXSource createSaxSource(TransformationSources sources) {
+    private SAXSource createSaxSource(TransformationSources sources, String xmlFileName) {
         try {
             // First, process XInclude using DOM
             DocumentBuilderFactory domFactory = DocumentBuilderFactory.newInstance();
@@ -94,15 +95,9 @@ public final class CursorRulesGenerator {
 
             DocumentBuilder builder = domFactory.newDocumentBuilder();
 
-            // Set a proper base URI for XInclude resolution
+            // Set base URI from XML resource location so XInclude resolves relative to the XML's directory (or jar root).
             InputSource inputSource = new InputSource(sources.xmlStream());
-            // Use the resource root path as the base URI for XInclude resolution
-            // Point to the classes directory where resources are actually located
-            String baseURI = getClass().getClassLoader().getResource("").toString();
-            // Ensure we're pointing to the classes directory, not test-classes
-            if (baseURI.contains("test-classes")) {
-                baseURI = baseURI.replace("test-classes", "classes");
-            }
+            String baseURI = resolveBaseUri(xmlFileName);
             inputSource.setSystemId(baseURI);
 
             Document document = builder.parse(inputSource);
@@ -134,6 +129,28 @@ public final class CursorRulesGenerator {
         } catch (Exception e) {
             throw new RuntimeException("Failed to create SAX source with XInclude support", e);
         }
+    }
+
+    /**
+     * Resolves base URI for XInclude from the XML resource URL.
+     * Ensures fragments resolve correctly when CursorRulesGenerator is used from another module (e.g. skills-generator).
+     */
+    private String resolveBaseUri(String xmlFileName) {
+        URL xmlUrl = getClass().getClassLoader().getResource(xmlFileName);
+        if (xmlUrl != null) {
+            String urlStr = xmlUrl.toString();
+            int lastSlash = urlStr.lastIndexOf('/');
+            if (lastSlash > 0) {
+                return urlStr.substring(0, lastSlash + 1);
+            }
+        }
+        // Fallback: use classloader resource root
+        URL rootUrl = getClass().getClassLoader().getResource("");
+        String baseURI = rootUrl != null ? rootUrl.toString() : "";
+        if (baseURI.contains("test-classes")) {
+            baseURI = baseURI.replace("test-classes", "classes");
+        }
+        return baseURI;
     }
 
     /**

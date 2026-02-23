@@ -5,6 +5,7 @@
         <author>Juan Antonio Breña Moral</author>
         <version>0.12.0-SNAPSHOT</version>
         <title>Maven Best Practices</title>
+        <description>Use when you need to improve your Maven pom.xml using best practices.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Java software development</role>

@@ -27,6 +27,7 @@
 
   <modules>
     <module>system-prompts-generator</module>
+    <module>skills-generator</module>
     <module>site-generator</module>
   </modules>
 
