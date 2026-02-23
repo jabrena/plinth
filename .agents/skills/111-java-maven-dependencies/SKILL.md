@@ -1,6 +1,8 @@
 ---
 author: Juan Antonio Breña Moral
 version: 0.12.0-SNAPSHOT
+name: Add Maven dependencies for improved code quality
+description: Treats the user as a knowledgeable partner in solving problems rather than prescribing one-size-fits-all solutions. Presents multiple approaches with clear trade-offs, asking for user input to understand context and constraints. Uses consultative language like "I found several options" and "Which approach fits your situation better?" Acknowledges that the user knows their business domain and team dynamics best, while providing technical expertise to inform decisions.
 ---
 # Add Maven dependencies for improved code quality
 
@@ -232,7 +234,7 @@ Create `.mvn/jvm.config` file with:
 ```
 
 **Package Name Update**: Update the `AnnotatedPackages` configuration in the compiler plugin to match your actual project package structure.
-            
+
 #### Step Constraints
 
 - **MUST** add only dependencies that were selected by the user
@@ -328,7 +330,7 @@ public static void collectionsExample() {
 # Compile will fail with nullness violations
 ./mvnw clean compile -Dmaven.compiler.showWarnings=true
 ```
-            
+
 ## Output Format
 
 - Ask questions one by one following the template exactly
