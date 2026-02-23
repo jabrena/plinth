@@ -27,6 +27,18 @@ jobs:
           path: cursor-rules.zip
           retention-days: 90
 
+  validate-skills:
+    name: Validate Agent Skills
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: true
+      - name: Validate SKILL.md files
+        run: npx skill-check@latest .agents/skills --no-security-scan --format github
+        env:
+          SKILL_CHECK_NO_BANNER: 1
+
   validate-markdown:
     name: Validate Markdown Files
     runs-on: ubuntu-latest

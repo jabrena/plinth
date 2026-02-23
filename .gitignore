@@ -3,5 +3,4 @@ target/
 .idea/
 .vscode/
 .classpath
-.claude
 dependency-reduced-pom.xml
