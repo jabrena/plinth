@@ -180,12 +180,14 @@ This system transforms the repository from a simple rule collection into a **com
 ./mvnw clean verify -pl system-prompts-generator
 ./mvnw clean install -pl system-prompts-generator
 ./mvnw clean generate-resources -pl site-generator -P site-update
+./mvnw clean install -pl skills-generator
 ```
 
 ## Common Tasks
 
 - Adding new cursor rule: Edit XML in system-prompts-generator/src/main/resources/
 - Updating website: Modify content in site-generator/content/
+- Generating skills to .agents/skills/: Run `./mvnw clean verify -pl skills-generator` (skills are generated during verify, no profile required)
 - Running examples: Each example has its own README-DEV.md
 - Validate agent skills: `.github/scripts/validate-skills.sh` or `npx skill-check .agents/skills`
 
