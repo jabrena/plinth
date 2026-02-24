@@ -1,6 +1,9 @@
 ---
-author: Juan Antonio Breña Moral
-version: 0.12.0-SNAPSHOT
+name: 162-java-profiling-analyze
+license: Apache-2.0
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.12.0-SNAPSHOT
 ---
 # Java Profiling Workflow / Step 2 / Analyze profiling data
 

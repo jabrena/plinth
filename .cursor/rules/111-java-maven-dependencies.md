@@ -1,6 +1,10 @@
 ---
-author: Juan Antonio Breña Moral
-version: 0.12.0-SNAPSHOT
+name: 111-java-maven-dependencies
+description: Use when you need to think to add maven dependencies to your project.
+license: Apache-2.0
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.12.0-SNAPSHOT
 ---
 # Add Maven dependencies for improved code quality
 

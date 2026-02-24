@@ -1,6 +1,9 @@
 ---
-author: Juan Antonio Breña Moral
-version: 0.12.0-SNAPSHOT
+name: 144-java-data-oriented-programming
+license: Apache-2.0
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.12.0-SNAPSHOT
 ---
 # Java rules to apply data oriented programming style
 

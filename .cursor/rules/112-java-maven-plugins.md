@@ -1,6 +1,9 @@
 ---
-author: Juan Antonio Breña Moral
-version: 0.12.0-SNAPSHOT
+name: 112-java-maven-plugins
+license: Apache-2.0
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.12.0-SNAPSHOT
 ---
 # Update pom.xml to add Maven plugins with modular step-based configuration
 
