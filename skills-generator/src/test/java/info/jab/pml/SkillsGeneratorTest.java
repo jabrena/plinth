@@ -1,9 +1,12 @@
 package info.jab.pml;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -33,26 +36,18 @@ class SkillsGeneratorTest {
         @MethodSource("provideSkillIds")
         @DisplayName("Should generate valid SKILL.md and reference for each skill")
         void should_generateValidSkill_when_skillIdProvided(String skillId) throws IOException {
-            // Given
+            // Given - skill-summary in resources/skills/ is the source of truth
+            String expectedSkillSummary = loadSkillSummaryFromResources(skillId);
             SkillsGenerator generator = new SkillsGenerator();
 
             // When
             SkillsGenerator.SkillOutput output = generator.generateSkill(skillId);
 
-            // Then - Validate SKILL.md
+            // Then - Generated SKILL.md must exactly match the skill-summary source (user-editable)
             assertThat(output.skillMd())
-                .contains("---")
-                .contains("author: Juan Antonio Breña Moral")
-                .contains("version: 0.12.0-SNAPSHOT")
-                .contains("name: " + skillId)
-                .contains("## Reference")
-                .contains("[references/" + skillId + ".md](references/" + skillId + ".md)");
-
-            String[] skillLines = output.skillMd().split("\n");
-            boolean hasMainHeading = Stream.of(skillLines).anyMatch(line -> line.startsWith("# ") && !line.startsWith("## "));
-            assertThat(hasMainHeading)
-                .withFailMessage("SKILL.md should have a main title (# heading)")
-                .isTrue();
+                .withFailMessage("Generated SKILL.md must match skills/%s-skill-summary.md. "
+                    + "Update the skill-summary file and run the build to promote changes.", skillId)
+                .isEqualTo(expectedSkillSummary);
 
             // Then - Validate reference content
             assertThat(output.referenceMd())
@@ -70,6 +65,31 @@ class SkillsGeneratorTest {
     }
 
     @Nested
+    @DisplayName("SkillsInventory and skills directory sync")
+    class SkillsInventorySyncTests {
+
+        @Test
+        @DisplayName("SkillsInventory must have matching skill-summary file for each skill")
+        void should_haveMatchingSkillSummary_forEachSkillInInventory() {
+            List<String> skillIds = SkillsInventory.skillIds().toList();
+            assertThat(skillIds).isNotEmpty();
+
+            for (String skillId : skillIds) {
+                String resourceName = "skills/" + skillId + "-skill-summary.md";
+                try (InputStream stream = SkillsGeneratorTest.class.getClassLoader()
+                    .getResourceAsStream(resourceName)) {
+                    assertThat(stream)
+                        .withFailMessage("SkillsInventory contains '%s' but skills/%s-skill-summary.md not found. "
+                            + "Add the skill-summary file for each skill in the inventory.", skillId, skillId)
+                        .isNotNull();
+                } catch (IOException e) {
+                    throw new RuntimeException("Failed to verify skill-summary for " + skillId, e);
+                }
+            }
+        }
+    }
+
+    @Nested
     @DisplayName("Exception Handling Tests")
     class ExceptionHandlingTests {
 
@@ -81,6 +101,16 @@ class SkillsGeneratorTest {
             assertThatThrownBy(() -> generator.generateSkill("non-existent-skill"))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("non-existent-skill");
+        }
+    }
+
+    private String loadSkillSummaryFromResources(String skillId) throws IOException {
+        String resourceName = "skills/" + skillId + "-skill-summary.md";
+        try (InputStream stream = SkillsGeneratorTest.class.getClassLoader().getResourceAsStream(resourceName)) {
+            if (stream == null) {
+                throw new IllegalArgumentException("Skill-summary not found: " + resourceName);
+            }
+            return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
         }
     }
 
