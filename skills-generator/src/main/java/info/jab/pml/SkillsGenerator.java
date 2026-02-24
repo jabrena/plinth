@@ -9,10 +9,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 /**
- * Generator for Agent Skills (SKILL.md and references) from XML rule definitions.
+ * Generator for Agent Skills (SKILL.md and references) from XML rule definitions and skill-summary files.
  * <p>
- * Reuses CursorRulesGenerator for full rule content and parses XML metadata for
- * skill-specific frontmatter and SKILL.md generation.
+ * Reuses CursorRulesGenerator for full rule content. SKILL.md is sourced from
+ * {@code skills/{skillId}-skill-summary.md} (user-editable). SkillsInventory defines which skills exist;
+ * each must have a matching skill-summary file in {@code skills/}.
  */
 public final class SkillsGenerator {
 
@@ -32,7 +33,7 @@ public final class SkillsGenerator {
     public SkillOutput generateSkill(String skillId) {
         SkillMetadata metadata = parseMetadata(skillId);
         String referenceContent = generateReferenceContent(skillId, metadata);
-        String skillMdContent = generateSkillMd(skillId, metadata);
+        String skillMdContent = loadSkillSummary(skillId);
         return new SkillOutput(skillId, skillMdContent, referenceContent);
     }
 
@@ -102,22 +103,16 @@ public final class SkillsGenerator {
         return cursorRulesGenerator.generate(skillId + ".xml", "cursor-rules.xsl");
     }
 
-    private String generateSkillMd(String skillId, SkillMetadata metadata) {
-        String template = loadTemplate();
-        return template
-            .replace("{{skillId}}", skillId)
-            .replace("{{description}}", metadata.description())
-            .replace("{{title}}", metadata.displayTitle());
-    }
-
-    private String loadTemplate() {
-        try (InputStream stream = getResource("skill-template.md")) {
+    private String loadSkillSummary(String skillId) {
+        String resourceName = "skills/" + skillId + "-skill-summary.md";
+        try (InputStream stream = getResource(resourceName)) {
             if (stream == null) {
-                throw new RuntimeException("skill-template.md not found");
+                throw new RuntimeException("Skill-summary resource not found: " + resourceName
+                    + ". Each skill in SkillsInventory must have a matching file in skills/.");
             }
             return new String(stream.readAllBytes());
         } catch (Exception e) {
-            throw new RuntimeException("Failed to load skill-template.md", e);
+            throw new RuntimeException("Failed to load skill-summary: " + resourceName, e);
         }
     }
 
