@@ -10,3 +10,5 @@ metadata:
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/111-java-maven-dependencies.md](references/111-java-maven-dependencies.md).
+
+DEMO2
