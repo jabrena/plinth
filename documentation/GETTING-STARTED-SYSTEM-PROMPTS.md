@@ -1,4 +1,4 @@
-# Getting started
+# Getting started for System prompts for Java
 
 If you are interested in getting the benefits of these cursor rules for Java, you have different alternatives such as: `Using this Git repository`, `Using the zipped rules from the latest release` or using a `JBang CLI` specialized in this task.
 
