@@ -99,17 +99,7 @@ public final class SkillsGenerator {
     }
 
     private String generateReferenceContent(String skillId, SkillMetadata metadata) {
-        String cursorRulesOutput = cursorRulesGenerator.generate(skillId + ".xml", "cursor-rules.xsl");
-        return injectReferenceFrontmatter(cursorRulesOutput, metadata.displayTitle(), metadata.goalLongDescription());
-    }
-
-    private String injectReferenceFrontmatter(String content, String name, String description) {
-        int closingFrontmatter = content.indexOf("\n---", 1);
-        if (closingFrontmatter < 0) {
-            return content;
-        }
-        String frontmatterAddition = "\nname: " + name + "\ndescription: " + description;
-        return content.substring(0, closingFrontmatter) + frontmatterAddition + content.substring(closingFrontmatter);
+        return cursorRulesGenerator.generate(skillId + ".xml", "cursor-rules.xsl");
     }
 
     private String generateSkillMd(String skillId, SkillMetadata metadata) {

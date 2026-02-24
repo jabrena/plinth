@@ -5,16 +5,34 @@
     <xsl:output method="text" encoding="UTF-8"/>
     <xsl:strip-space elements="prompt metadata tags example code-examples good-example bad-example output-format steps step"/>
 
+    <xsl:param name="ruleName" select="''"/>
+
     <xsl:template match="/prompt">
         <!-- Common frontmatter and header -->
         <xsl:text>---</xsl:text>
-        <xsl:if test="normalize-space(metadata/author)">
+        <xsl:if test="$ruleName != ''">
             <xsl:text>
-author: </xsl:text><xsl:value-of select="normalize-space(metadata/author)"/>
+name: </xsl:text><xsl:value-of select="$ruleName"/>
         </xsl:if>
-        <xsl:if test="normalize-space(metadata/version)">
+        <xsl:if test="normalize-space(metadata/description)">
             <xsl:text>
-version: </xsl:text><xsl:value-of select="normalize-space(metadata/version)"/>
+description: </xsl:text><xsl:value-of select="normalize-space(metadata/description)"/>
+        </xsl:if>
+        <xsl:if test="normalize-space(metadata/license)">
+            <xsl:text>
+license: </xsl:text><xsl:value-of select="normalize-space(metadata/license)"/>
+        </xsl:if>
+        <xsl:if test="normalize-space(metadata/author) or normalize-space(metadata/version)">
+            <xsl:text>
+metadata:</xsl:text>
+            <xsl:if test="normalize-space(metadata/author)">
+                <xsl:text>
+  author: </xsl:text><xsl:value-of select="normalize-space(metadata/author)"/>
+            </xsl:if>
+            <xsl:if test="normalize-space(metadata/version)">
+                <xsl:text>
+  version: </xsl:text><xsl:value-of select="normalize-space(metadata/version)"/>
+            </xsl:if>
         </xsl:if>
         <xsl:text>
 ---

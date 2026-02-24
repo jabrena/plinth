@@ -4,6 +4,7 @@
     <metadata>
         <author>Juan Antonio Breña Moral</author>
         <version>0.12.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
         <title>Java rules to apply data oriented programming style</title>
     </metadata>
 
