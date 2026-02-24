@@ -51,7 +51,7 @@ public final class CursorRulesGenerator {
     public String generate(String xmlFileName, String xslFileName) {
         return loadTransformationSources(xmlFileName, xslFileName)
             .map(sources -> createSaxSource(sources, xmlFileName))
-            .flatMap(saxSource -> performTransformation(saxSource, xslFileName))
+            .flatMap(saxSource -> performTransformation(saxSource, xslFileName, xmlFileName))
             .orElseThrow(() -> new RuntimeException(
                 "Failed to generate cursor rules for: " + xmlFileName + ", " + xslFileName));
     }
@@ -157,19 +157,22 @@ public final class CursorRulesGenerator {
      * Step 3: Performs the actual XSLT transformation.
      * Returns Optional to handle transformation failures gracefully.
      */
-    private Optional<String> performTransformation(SAXSource xmlSource, String xslFileName) {
+    private Optional<String> performTransformation(SAXSource xmlSource, String xslFileName, String xmlFileName) {
         return loadResource(xslFileName)
-            .flatMap(xslStream -> executeTransformation(xmlSource, xslStream));
+            .flatMap(xslStream -> executeTransformation(xmlSource, xslStream, xmlFileName));
     }
 
     /**
      * Step 4: Executes the transformation and returns the result.
      * Encapsulates the transformation logic in a pure function.
      */
-    private Optional<String> executeTransformation(SAXSource xmlSource, InputStream xslStream) {
+    private Optional<String> executeTransformation(SAXSource xmlSource, InputStream xslStream, String xmlFileName) {
         try {
             TransformerFactory factory = TransformerFactory.newInstance();
             Transformer transformer = factory.newTransformer(new StreamSource(xslStream));
+
+            String ruleName = xmlFileName.replaceAll("\\.xml$", "");
+            transformer.setParameter("ruleName", ruleName);
 
             StringWriter stringWriter = new StringWriter();
             Result result = new StreamResult(stringWriter);

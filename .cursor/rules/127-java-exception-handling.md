@@ -1,6 +1,9 @@
 ---
-author: Juan Antonio Breña Moral
-version: 0.12.0-SNAPSHOT
+name: 127-java-exception-handling
+license: Apache-2.0
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.12.0-SNAPSHOT
 ---
 # Java Exception Handling Guidelines
 

@@ -1,8 +1,9 @@
 ---
-author: Juan Antonio Breña Moral
-version: 0.12.0-SNAPSHOT
 name: {{skillId}}
 description: {{description}}
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.12.0-SNAPSHOT
 ---
 # {{title}}
 
