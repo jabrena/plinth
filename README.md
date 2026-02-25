@@ -106,7 +106,7 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 
 - [JEPS List](./documentation/jeps/All-JEPS.md)
 
-## Meetups, Conferences, Workshops & Mentions
+## Meetups, Conferences, Workshops & Articles
 
 ### Codemotion / Madrid (2026/04/20)
 
