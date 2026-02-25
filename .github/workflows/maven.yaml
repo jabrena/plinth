@@ -71,7 +71,7 @@ jobs:
           - { name: "Spring Boot Performance Bottleneck", path: "examples/spring-boot-performance-bottleneck-demo", goal: "package" }
           - { name: "Spring Boot JMeter", path: "examples/spring-boot-jmeter-demo", goal: "package" }
           - { name: "Quarkus", path: "examples/quarkus-demo", goal: "package" }
-          - { name: "Skilljars", path: "examples/skilljars-demo", goal: "verify" }
+          - { name: "Skillsjars", path: "examples/skillsjars-demo", goal: "verify" }
     steps:
       - uses: actions/checkout@v6
         with:
