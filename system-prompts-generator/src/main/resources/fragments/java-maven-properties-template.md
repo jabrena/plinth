@@ -132,6 +132,11 @@ Start with essential build properties that every project needs (use the Java ver
 <maven-plugin-compiler.version>3.13.0</maven-plugin-compiler.version>
 ```
 
+**If Maven Compiler selected**:
+```xml
+<maven-plugin-compiler.version>3.13.0</maven-plugin-compiler.version>
+```
+
 The final `<properties>` section will look like this (example with common selections):
 
 ```xml
@@ -151,6 +156,7 @@ The final `<properties>` section will look like this (example with common select
   <maven-plugin-pitest.version>1.19.4</maven-plugin-pitest.version>
   <maven-plugin-pitest-junit5.version>1.2.3</maven-plugin-pitest-junit5.version>
   <maven-plugin-spotbugs.version>4.9.3.0</maven-plugin-spotbugs.version>
+  <maven-plugin-compiler.version>3.13.0</maven-plugin-compiler.version>
 
   <!-- Quality thresholds (if configured) -->
   <coverage.level>80</coverage.level>

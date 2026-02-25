@@ -101,7 +101,7 @@ Options:
 
 - Java 17 (LTS - recommended for new projects)
 - Java 21 (LTS - latest LTS version)
-- Java 24 (latest features)
+- Java 25 (LTS - latest LTS version)
 - Other (specify version)
 
 ---
@@ -121,6 +121,7 @@ Options:
 - Sonar
 - Version management
 - JMH (Java Microbenchmark Harness)
+- Maven Compiler
 
 ---
 
@@ -345,6 +346,11 @@ Start with essential build properties that every project needs (use the Java ver
 <maven-plugin-compiler.version>3.13.0</maven-plugin-compiler.version>
 ```
 
+**If Maven Compiler selected**:
+```xml
+<maven-plugin-compiler.version>3.13.0</maven-plugin-compiler.version>
+```
+
 The final `<properties>` section will look like this (example with common selections):
 
 ```xml
@@ -364,6 +370,7 @@ The final `<properties>` section will look like this (example with common select
   <maven-plugin-pitest.version>1.19.4</maven-plugin-pitest.version>
   <maven-plugin-pitest-junit5.version>1.2.3</maven-plugin-pitest-junit5.version>
   <maven-plugin-spotbugs.version>4.9.3.0</maven-plugin-spotbugs.version>
+  <maven-plugin-compiler.version>3.13.0</maven-plugin-compiler.version>
 
   <!-- Quality thresholds (if configured) -->
   <coverage.level>80</coverage.level>
@@ -378,7 +385,7 @@ The final `<properties>` section will look like this (example with common select
 3. **Quality Properties**: Add coverage and threshold properties if quality features selected
 
 **Property Naming Convention**: Use `maven-plugin-*` format for consistency (e.g., `maven-plugin-compiler.version`)
-            
+
 #### Step Constraints
 
 - **MUST** use `maven-plugin-*` format for property naming (e.g., `maven-plugin-compiler.version`, NOT `maven-compiler-plugin.version`)
@@ -459,8 +466,8 @@ After adding this plugin, verify the configuration:
 # Validate plugin configuration
 ./mvnw validate
 ```
-                
-            
+
+
 #### Step Constraints
 
 - **MUST** include `extra-enforcer-rules` dependency and all specified rules
@@ -516,8 +523,8 @@ After adding this plugin, verify the configuration:
 # Run unit tests
 ./mvnw test
 ```
-                
-            
+
+
 #### Step Constraints
 
 - **MUST** only add surefire plugin if "Unit Testing (Surefire)" was selected in Step 3
@@ -600,8 +607,8 @@ After adding this plugin, verify the configuration:
 # Run tests to verify configuration
 ./mvnw clean verify
 ```
-                
-            
+
+
 #### Step Constraints
 
 - **MUST** only add failsafe plugin if integration testing was selected in Step 3
@@ -686,8 +693,8 @@ After adding this reporting configuration, verify it:
 # Generate reports to verify configuration
 ./mvnw clean test site
 ```
-                
-            
+
+
 #### Step Constraints
 
 - **MUST** only add reporting section if HTML reports were selected in Step 3
@@ -816,8 +823,8 @@ After adding this profile, verify the configuration:
 # Test JaCoCo profile
 ./mvnw clean verify -Pjacoco
 ```
-                
-            
+
+
 #### Step Constraints
 
 - **MUST** only add JaCoCo profile if code coverage was selected in Step 3
@@ -923,8 +930,8 @@ After adding this profile, verify the configuration:
 # Test PiTest profile
 ./mvnw clean verify -Ppitest
 ```
-                
-            
+
+
 #### Step Constraints
 
 - **MUST** only add PiTest profile if mutation testing was selected in Step 3
@@ -1019,8 +1026,8 @@ After adding this profile, verify the configuration:
 # Test Security profile
 ./mvnw clean verify -Psecurity
 ```
-                
-            
+
+
 #### Step Constraints
 
 - **MUST** only add Security profile if security scanning was selected in Step 3
@@ -1123,8 +1130,8 @@ After adding this profile, verify the configuration:
 # Test Static Analysis profile
 ./mvnw clean verify -Pfind-bugs
 ```
-                
-            
+
+
 #### Step Constraints
 
 - **MUST** only add Static Analysis profile if static analysis was selected in Step 3
@@ -1219,8 +1226,8 @@ After adding this profile, verify the configuration:
 # Validate Sonar profile (requires token)
 ./mvnw clean verify sonar:sonar -Psonar -Dsonar.login=YOUR_TOKEN
 ```
-                
-            
+
+
 #### Step Constraints
 
 - **MUST** only add Sonar profile if Sonar integration was selected in Step 3
@@ -1305,8 +1312,8 @@ After adding this plugin, verify the configuration:
 # Test Spotless configuration
 ./mvnw spotless:check
 ```
-                
-            
+
+
 #### Step Constraints
 
 - **MUST** only add Spotless plugin if code formatting was selected in Step 3
@@ -1376,8 +1383,8 @@ After adding this plugin, verify the configuration:
 # Test Versions plugin configuration
 ./mvnw versions:display-plugin-updates
 ```
-                
-            
+
+
 #### Step Constraints
 
 - **MUST** only add Versions plugin if version management was selected in Step 3
@@ -1458,8 +1465,8 @@ After adding this plugin, verify the configuration:
 ./mvnw clean package
 cat target/classes/git.properties
 ```
-                
-            
+
+
 #### Step Constraints
 
 - **MUST** only add Git Commit ID plugin if build information tracking was selected in Step 3
@@ -1543,8 +1550,8 @@ After adding this plugin, verify the configuration:
 ./mvnw clean package
 ls target/.flattened-pom.xml
 ```
-                
-            
+
+
 #### Step Constraints
 
 - **MUST** only add Flatten plugin if "Java Library" was selected as project nature in Step 3
@@ -1832,8 +1839,8 @@ ls jmh-fibonacci-benchmark-results.json
 - https://openjdk.org/projects/code-tools/jmh/
 - https://jmh.morethan.io
 ```
-                
-            
+
+
 #### Step Constraints
 
 - **MUST** only add JMH profile if "JMH" was selected in Step 3
@@ -1848,11 +1855,84 @@ ls jmh-fibonacci-benchmark-results.json
 - **MUST** configure maven-shade-plugin to create executable benchmark JAR
 - **MUST** verify that JSON report is generated by executing benchmark and checking for `jmh-fibonacci-benchmark-results.json fil`
 
+### Step 19: Maven Compiler Plugin Configuration
+
+**Purpose**: Configure maven-compiler-plugin with explicit Java release, strict lint options, and treat warnings as errors for code quality.
+
+**Dependencies**: Only execute if user selected "Maven Compiler" in Step 3. Requires completion of Steps 3 and 4.
+
+**CRITICAL PRESERVATION RULE**: Only ADD this plugin if it doesn't already exist. Never REPLACE or REMOVE existing configuration.
+
+## Pre-Implementation Check
+
+**BEFORE adding maven-compiler-plugin, check if it already exists in the pom.xml:**
+
+If maven-compiler-plugin already exists: Ask user "maven-compiler-plugin already exists. Do you want to enhance the existing configuration? (y/n)"
+
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing configuration elements only.
+
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Maven Compiler" in Step 3.
+
+## Maven Compiler Plugin Configuration
+
+**ADD this plugin to the `<build><plugins>` section ONLY if it doesn't already exist:**
+
+```xml
+<!-- Maven Compiler Plugin -->
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <version>${maven-plugin-compiler.version}</version>
+    <configuration>
+        <release>${java.version}</release>
+        <compilerArgs>
+            <arg>-Xlint:all</arg>
+            <arg>-Werror</arg>
+        </compilerArgs>
+    </configuration>
+</plugin>
+```
+
+## Implementation Guidelines
+
+1. **release**: Uses `${java.version}` from properties - ensures consistent Java target across the build
+2. **-Xlint:all**: Enables all compiler warnings for potential code quality issues
+3. **-Werror**: Treats compiler warnings as errors - prevents shipping code with warnings
+
+## Usage Examples
+
+```bash
+# Compile with strict settings
+./mvnw clean compile
+
+# Verify compilation succeeds (warnings will fail the build)
+./mvnw clean package
+```
+
+## Validation
+
+After adding this plugin, verify the configuration:
+
+```bash
+# Test Maven Compiler plugin
+./mvnw clean compile
+```
+
+
+#### Step Constraints
+
+- **MUST** only add maven-compiler-plugin if "Maven Compiler" was selected in Step 3
+- **MUST** check if plugin already exists before adding
+- **MUST** ask user permission before modifying existing plugin configuration
+- **MUST** use properties configured in Step 4 for plugin version and java.version
+- **MUST** skip this step entirely if Maven Compiler was not selected
+
 
 ## Output Format
 
 - Ask questions one by one following the template exactly in Step 3
-- Execute steps 4-18 only based on user selections from Step 3
+- Execute steps 4-19 only based on user selections from Step 3
 - Skip entire steps if no relevant features were selected
 - Implement only requested features based on user selections
 - Follow template specifications exactly for all configurations

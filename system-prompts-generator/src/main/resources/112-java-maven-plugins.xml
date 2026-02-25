@@ -1646,12 +1646,88 @@ ls jmh-fibonacci-benchmark-results.json
                 </step-constraint-list>
             </step-constraints>
         </step>
+        <step number="19">
+            <step-title>Maven Compiler Plugin Configuration</step-title>
+            <step-content><![CDATA[
+**Purpose**: Configure maven-compiler-plugin with explicit Java release, strict lint options, and treat warnings as errors for code quality.
+
+**Dependencies**: Only execute if user selected "Maven Compiler" in Step 3. Requires completion of Steps 3 and 4.
+
+**CRITICAL PRESERVATION RULE**: Only ADD this plugin if it doesn't already exist. Never REPLACE or REMOVE existing configuration.
+
+## Pre-Implementation Check
+
+**BEFORE adding maven-compiler-plugin, check if it already exists in the pom.xml:**
+
+If maven-compiler-plugin already exists: Ask user "maven-compiler-plugin already exists. Do you want to enhance the existing configuration? (y/n)"
+
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing configuration elements only.
+
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Maven Compiler" in Step 3.
+
+## Maven Compiler Plugin Configuration
+
+**ADD this plugin to the `<build><plugins>` section ONLY if it doesn't already exist:**
+
+```xml
+<!-- Maven Compiler Plugin -->
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <version>${maven-plugin-compiler.version}</version>
+    <configuration>
+        <release>${java.version}</release>
+        <compilerArgs>
+            <arg>-Xlint:all</arg>
+            <arg>-Werror</arg>
+        </compilerArgs>
+    </configuration>
+</plugin>
+```
+
+## Implementation Guidelines
+
+1. **release**: Uses `${java.version}` from properties - ensures consistent Java target across the build
+2. **-Xlint:all**: Enables all compiler warnings for potential code quality issues
+3. **-Werror**: Treats compiler warnings as errors - prevents shipping code with warnings
+
+## Usage Examples
+
+```bash
+# Compile with strict settings
+./mvnw clean compile
+
+# Verify compilation succeeds (warnings will fail the build)
+./mvnw clean package
+```
+
+## Validation
+
+After adding this plugin, verify the configuration:
+
+```bash
+# Test Maven Compiler plugin
+./mvnw clean compile
+```
+                ]]>
+            </step-content>
+            <step-constraints>
+                <step-constraint-list>
+                    <step-constraint>**MUST** only add maven-compiler-plugin if "Maven Compiler" was selected in Step 3</step-constraint>
+                    <step-constraint>**MUST** check if plugin already exists before adding</step-constraint>
+                    <step-constraint>**MUST** ask user permission before modifying existing plugin configuration</step-constraint>
+                    <step-constraint>**MUST** use properties configured in Step 4 for plugin version and java.version</step-constraint>
+                    <step-constraint>**MUST** skip this step entirely if Maven Compiler was not selected</step-constraint>
+                </step-constraint-list>
+            </step-constraints>
+        </step>
     </steps>
 
     <output-format>
         <output-format-list>
             <output-format-item>Ask questions one by one following the template exactly in Step 3</output-format-item>
-            <output-format-item>Execute steps 4-18 only based on user selections from Step 3</output-format-item>
+            <output-format-item>Execute steps 4-19 only based on user selections from Step 3</output-format-item>
             <output-format-item>Skip entire steps if no relevant features were selected</output-format-item>
             <output-format-item>Implement only requested features based on user selections</output-format-item>
             <output-format-item>Follow template specifications exactly for all configurations</output-format-item>
