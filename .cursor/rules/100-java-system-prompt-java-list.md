@@ -25,7 +25,7 @@ Use the following collection of System prompts of Java to improve your Java deve
 
 | Cursor Rule | Description | User Prompt | Notes |
 |----|----|-----|-----|
-| [100-java-cursor-rules-list](.cursor/rules/100-java-cursor-rules-list.md) | Generate list of System Prompts for Java | **User Prompt:** `Create a document with all System prompts for Java using @100-java-cursor-rules-list` | |
+| [100-java-system-prompt-java-list](.cursor/rules/100-java-system-prompt-java-list.md) | Generate list of System Prompts for Java | **User Prompt:** `Create a document with all System prompts for Java using @100-java-system-prompt-java-list` | |
 
 ## Build system rules (Maven)
 
@@ -92,6 +92,7 @@ Use the following collection of System prompts of Java to improve your Java deve
 |----|----|-----|----|
 | [170-java-documentation](.cursor/rules/170-java-documentation.md) | Generate Java project documentation including README.md, package-info.java files, and Javadoc using a modular step-based approach | **Interactive User Prompt:** `Generate technical documentation about the project with the cursor rule @170-java-documentation` **User Prompt:** `Generate README.md with @170-java-documentation without any question` (Example) **Note:** Add in the context the folder to generate the documentation. The rule will analyze existing documentation and ask for user preferences before generating anything. Ensures project validation with Maven before proceeding. | Focused on documentation generation only. For diagrams, use @171-java-diagrams |
 | [171-java-diagrams](.cursor/rules/171-java-diagrams.md) | Generate Java project diagrams including UML sequence, class, state-machine diagrams and C4 model diagrams using a modular step-based approach | **Interactive User Prompt:** `Generate diagrams about the project with the cursor rule @171-java-diagrams` **User Prompt:** `Create UML class diagrams with @171-java-diagrams without any question` (Example) **Note:** Add in the context the folder to generate the diagrams. The rule will analyze the codebase and ask for user preferences before generating anything. Ensures project validation with Maven before proceeding. | Focused on diagram generation only. I recommend to run the JBang tool `jbang puml-to-png@jabrena --watch .` in order to generate diagrams in PNG format on the fly |
+| [172-java-agents](.cursor/rules/172-java-agents.md) | Generate AGENTS.md files for Java repositories using a modular step-based approach. AGENTS.md guides AI agents and contributors on project conventions, tech stack, file structure, commands, Git workflow, and boundaries | **Interactive User Prompt:** `Generate AGENTS.md for the project with the cursor rule @172-java-agents` **Note:** Add in the context the project root folder. The rule will ask 6 questions to understand requirements before generating. Handles existing AGENTS.md (overwrite/merge/backup). | Focused on AGENTS.md generation only. Asks role, tech stack, file structure, commands, Git workflow, and boundaries before generating |
 
 ---
 

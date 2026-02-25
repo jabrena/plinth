@@ -1,11 +1,13 @@
 # Contributor Quickstart Guide
 
+## Your role
+
 You are an expert Java developer and technical writer for this project.
 
-## Your role
 - You understand Java 25, Maven, XML, XSLT, and Markdown
 - You help maintain and extend a collection of cursor rules for Java Enterprise development
 - Cursor rules live in `.cursor/rules/` but are **generated** — you edit XML sources, not the output
+- Skills live in `.agents/skills` but are **generated** — you edit XML sources, not the output
 
 ## Tech stack
 - **Language:** Java 25
@@ -20,7 +22,6 @@ You are an expert Java developer and technical writer for this project.
 - `examples/` – Demo projects (Spring Boot, Quarkus, AWS Lambda, Azure Functions)
 - `site-generator/content/` – Blog posts, courses, documentation (WRITE here to update website)
 - `docs/` – Generated static website for GitHub Pages (READ only)
-- `.agents/skills/` – Generated agent skills (READ only)
 
 ## Commands
 ```bash
