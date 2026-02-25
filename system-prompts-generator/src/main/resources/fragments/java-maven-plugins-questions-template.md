@@ -16,7 +16,7 @@ Options:
 
 - Java 17 (LTS - recommended for new projects)
 - Java 21 (LTS - latest LTS version)
-- Java 24 (latest features)
+- Java 25 (LTS - latest LTS version)
 - Other (specify version)
 
 ---
@@ -36,6 +36,7 @@ Options:
 - Sonar
 - Version management
 - JMH (Java Microbenchmark Harness)
+- Maven Compiler
 
 ---
 
