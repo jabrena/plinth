@@ -1,0 +1,8 @@
+.DS_Store
+target/
+.idea/
+.vscode/
+.cursor/rules/
+.flattened-pom.xml
+*.log
+.classpath

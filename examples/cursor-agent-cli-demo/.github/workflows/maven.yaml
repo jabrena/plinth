@@ -1,0 +1,20 @@
+name: CI Builds
+
+on: [push]
+
+jobs:
+  run:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: true  # Fetches all submodules
+
+      - uses: actions/setup-java@v5
+        with:
+          distribution: 'graalvm' # See 'Supported distributions' for available options
+          java-version: '25'
+
+      - name: Maven build
+        run: ./mvnw --batch-mode --no-transfer-progress test --file pom.xml
