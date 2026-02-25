@@ -7,12 +7,10 @@
 ./mvnw clean verify
 ./mvnw clean verify -pl system-prompts-generator
 ./mvnw clean install -pl system-prompts-generator
+./mvnw clean install -pl skills-generator
 
 # Site generation
 ./mvnw clean generate-resources -pl site-generator -P site-update
-
-# Generate skills to .agents/skills (runs during verify)
-./mvnw clean install -pl skills-generator
 ```
 
 ## Development Servers
