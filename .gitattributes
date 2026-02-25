@@ -12,6 +12,7 @@ site-generator/** linguist-documentation=true
 examples/**/*.java linguist-language=Java
 *.java linguist-detectable=true
 system-prompts-generator/** linguist-language=Java
+skills-generator/** linguist-language=Java
 
 # Mark XML files as part of Java ecosystem (transformation definitions)
 system-prompts-generator/**/*.xml linguist-language=Java
