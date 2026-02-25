@@ -57,6 +57,7 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 16: Key Questions to Guide Test Creation (RIGHT-BICEP)
 - Example 17: Characteristics of Good Tests (A-TRIP)
 - Example 18: Verifying CORRECT Boundary Conditions
+- Example 19: Avoid Reflection in Unit Tests
 
 ### Example 1: Use JUnit 5 Annotations
 
@@ -792,6 +793,94 @@ public class UserValidationPoorTest {
         assertThat(validator.isValidEmailFormat("test@example.com")).isTrue(); // No invalid formats, no nulls
     }
 }
+```
+
+### Example 19: Avoid Reflection in Unit Tests
+
+Title: Test through public API or extract logic to testable components instead of using reflection
+Description: Avoid using reflection (`getDeclaredMethod`, `setAccessible`, `invoke`) to test private or package-private methods. Reflection creates brittle tests that tie to implementation details, break when methods are renamed or refactored, and bypass access modifiers that exist for a reason. Instead, either test through the class's public API (verify the observable behavior that depends on the internal logic) or extract the logic into a separate, testable component (e.g., a utility class or a collaborator) that can be tested directly.
+
+**Good example:**
+
+```java
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+
+// Option A: Extract terminal status logic to a testable component
+class AgentStatusHelperTest {
+
+    @Test
+    @DisplayName("Should identify terminal status COMPLETED")
+    void should_identifyTerminalStatus_when_completed() {
+        // Given
+        AgentStatusHelper helper = new AgentStatusHelper();
+
+        // When
+        boolean result = helper.isTerminalStatus(Agent.StatusEnum.COMPLETED);
+
+        // Then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    @DisplayName("Should identify terminal status FAILED")
+    void should_identifyTerminalStatus_when_failed() {
+        assertThat(new AgentStatusHelper().isTerminalStatus(Agent.StatusEnum.FAILED)).isTrue();
+    }
+
+    @Test
+    @DisplayName("Should not identify RUNNING as terminal")
+    void should_notIdentifyTerminalStatus_when_running() {
+        assertThat(new AgentStatusHelper().isTerminalStatus(Agent.StatusEnum.RUNNING)).isFalse();
+    }
+}
+
+// Option B: Test through public API - verify behavior that uses the logic
+class CursorAgentTest {
+
+    @Test
+    @DisplayName("Should complete when status reaches COMPLETED")
+    void should_complete_when_statusIsTerminal() {
+        // Given - mock API returns COMPLETED status
+        CursorAgent agent = new CursorAgent(mockApiReturningCompleted());
+
+        // When
+        Agent.Result result = agent.waitForCompletion("task-id");
+
+        // Then - verify observable outcome, not internal isTerminalStatus
+        assertThat(result.getStatus()).isEqualTo(Agent.StatusEnum.COMPLETED);
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import java.lang.reflect.Method;
+import static org.assertj.core.api.Assertions.assertThat;
+
+class CursorAgentReflectionTest {
+
+    @Test
+    @DisplayName("Should identify terminal status COMPLETED")
+    void should_identifyTerminalStatus_when_completed() throws Exception {
+        // Given - Using reflection to bypass encapsulation
+        CursorAgent agent = new CursorAgent(TEST_API_KEY, TEST_BASE_URL);
+        Method method = CursorAgent.class.getDeclaredMethod("isTerminalStatus", Agent.StatusEnum.class);
+        method.setAccessible(true);
+
+        // When
+        Boolean result = (Boolean) method.invoke(agent, Agent.StatusEnum.COMPLETED);
+
+        // Then
+        assertThat(result).isTrue();
+    }
+}
+// Problems: Brittle (breaks on rename/refactor), tests implementation details,
+// bypasses access modifiers, requires reflection boilerplate and exception handling
 ```
 
 ## Output Format
