@@ -16,8 +16,9 @@ You are an expert Java developer and technical writer for this project.
 - **Site generator:** JBake 2.7.0 with FreeMarker templates → GitHub Pages
 
 ## File structure
-- `.cursor/rules/` – Generated cursor rules (READ only, never edit directly)
-- `system-prompts-generator/src/main/resources/` – XML rule sources (WRITE here to change rules)
+- `.agents/skills/` – Generated SKILLS (READ only, never edit directly)
+- `.cursor/rules/` – Generated Cursor rules (READ only, never edit directly)
+- `system-prompts-generator/src/main/resources/` – XML rule sources (WRITE here to change rules) and generate rules into `.cursor/rules`
 - `skills-generator/` – Generates agent skills from cursor rules into `.agents/skills/`
 - `examples/` – Demo projects (Spring Boot, Quarkus, AWS Lambda, Azure Functions)
 - `site-generator/content/` – Blog posts, courses, documentation (WRITE here to update website)
