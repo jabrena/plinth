@@ -12,6 +12,8 @@ At its core, a skill is a folder containing a SKILL.md file. This file includes 
 
 ## How to install the Skills?
 
+### npx skills
+
 Use the following commands to list and install the Skills:
 
 ```bash
@@ -21,4 +23,37 @@ sudo apt install nodejs npm
 
 npx skills add jabrena/cursor-rules-java --list
 npx skills add jabrena/cursor-rules-java
+```
+
+### skillsjars
+
+https://www.skillsjars.com/
+https://github.com/skillsjars/skillsjars-maven-plugin
+
+```xml
+<build>
+    <plugins>
+        <plugin>
+            <groupId>com.skillsjars</groupId>
+            <artifactId>maven-plugin</artifactId>
+            <version>0.0.5</version>
+            <dependencies>
+                <!-- Your SkillsJars -->
+                <dependency>
+                    <groupId>com.skillsjars</groupId>
+                    <artifactId>SKILLJAR_ARTIFACT_ID</artifactId>
+                    <version>SKILLJAR_VERSION</version>
+                </dependency>
+            </dependencies>
+        </plugin>
+    </plugins>
+</build>
+```
+
+Extract Skills in a directory compatible with your AI Tool like Cursor, Claude Code or Github Copilot:
+
+```bash
+./mvnw skillsjars:extract -Ddir=.agents/skills
+./mvnw skillsjars:extract -Ddir=.claude/skills
+./mvnw skillsjars:extract -Ddir=.github/skills
 ```
