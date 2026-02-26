@@ -47,3 +47,15 @@ VAVR is a functional programming library for Java that provides immutable data t
 **Recommendation**: Choose 'y' if you want to use functional programming patterns, immutable data structures, or need better error handling with Try/Either monads.
 
 ---
+
+**Question 5**: Do you want to add ArchUnit for architecture testing?
+
+ArchUnit lets you write unit tests that enforce architectural constraints — such as layering rules, naming conventions, dependency directions, and package structure — directly in your test suite. It integrates with JUnit 5 and runs as part of the normal test lifecycle.
+
+**Options**:
+- **y** - Add ArchUnit JUnit 5 dependency (recommended for architecture governance)
+- **n** - Skip ArchUnit dependency
+
+**Recommendation**: Choose 'y' if you want to prevent architecture erosion and enforce design rules automatically on every build.
+
+---
