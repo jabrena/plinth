@@ -22,6 +22,7 @@ public final class SystemPromptsInventory {
             "127-java-exception-handling",
             "128-java-generics",
             "131-java-unit-testing",
+            "132-java-integration-testing",
             "141-java-refactoring-with-modern-features",
             "142-java-functional-programming",
             "143-java-functional-exception-handling",

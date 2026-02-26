@@ -17,9 +17,11 @@
 
     <!-- Dependency versions -->
     <assertj.version>3.27.3</assertj.version>
+    <wiremock.version>3.5.4</wiremock.version>
 
     <!-- Plugin versions -->
     <maven-plugin-spotless.version>2.44.5</maven-plugin-spotless.version>
+    <maven-failsafe-plugin.version>3.5.3</maven-failsafe-plugin.version>
 
   </properties>
 
@@ -29,6 +31,13 @@
         <groupId>org.junit</groupId>
         <artifactId>junit-bom</artifactId>
         <version>5.11.0</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+      <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>testcontainers-bom</artifactId>
+        <version>1.19.8</version>
         <type>pom</type>
         <scope>import</scope>
       </dependency>
@@ -52,6 +61,14 @@
       <groupId>org.assertj</groupId>
       <artifactId>assertj-core</artifactId>
       <version>${assertj.version}</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- WireMock — stub outbound HTTP calls at the network level -->
+    <dependency>
+      <groupId>org.wiremock</groupId>
+      <artifactId>wiremock-standalone</artifactId>
+      <version>${wiremock.version}</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -83,6 +100,19 @@
               <goal>check</goal>
             </goals>
             <phase>process-sources</phase>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-failsafe-plugin</artifactId>
+        <version>${maven-failsafe-plugin.version}</version>
+        <executions>
+          <execution>
+            <goals>
+              <goal>integration-test</goal>
+              <goal>verify</goal>
+            </goals>
           </execution>
         </executions>
       </plugin>
