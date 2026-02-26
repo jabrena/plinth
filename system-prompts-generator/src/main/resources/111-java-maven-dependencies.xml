@@ -14,7 +14,7 @@
     <tone>Treats the user as a knowledgeable partner in solving problems rather than prescribing one-size-fits-all solutions. Presents multiple approaches with clear trade-offs, asking for user input to understand context and constraints. Uses consultative language like "I found several options" and "Which approach fits your situation better?" Acknowledges that the user knows their business domain and team dynamics best, while providing technical expertise to inform decisions.</tone>
 
     <goal>
-        This rule provides a focused approach to adding essential Maven dependencies that enhance code quality and safety, specifically JSpecify for nullness annotations. It asks targeted questions to understand dependency needs and conditionally adds only relevant components.
+        This rule provides a focused approach to adding essential Maven dependencies that enhance code quality and safety: JSpecify for nullness annotations, Error Prone and NullAway for static analysis, VAVR for functional programming, and ArchUnit for architecture testing. It asks targeted questions to understand dependency needs and conditionally adds only relevant components.
     </goal>
 
     <constraints>
@@ -77,7 +77,7 @@
                     <step-constraint>**MUST NOT** ask all questions simultaneously</step-constraint>
                     <step-constraint>**MUST NOT** assume answers or provide defaults</step-constraint>
                     <step-constraint>**MUST NOT** skip questions or change their order</step-constraint>
-                    <step-constraint>**MUST** follow question sequence: JSpecify → Enhanced Compiler Analysis (conditional)</step-constraint>
+                    <step-constraint>**MUST** follow question sequence: JSpecify → Enhanced Compiler Analysis (conditional) → VAVR → ArchUnit</step-constraint>
                     <step-constraint>**MUST** verify that ALL options from the template are included before asking questions</step-constraint>
                     <step-constraint>**MUST** cross-check question content against the freshly read template file</step-constraint>
                     <step-constraint>**MUST** re-read the template and correct questions if there are discrepancies</step-constraint>
@@ -108,6 +108,7 @@ Based on user responses, implement the dependency configuration following this o
 <error-prone.version>2.35.1</error-prone.version>
 <nullaway.version>0.12.0</nullaway.version>
 <vavr.version>0.10.6</vavr.version>
+<archunit.version>1.4.1</archunit.version>
 </properties>
 ```
 
@@ -132,6 +133,18 @@ Based on user responses, implement the dependency configuration following this o
     <groupId>io.vavr</groupId>
     <artifactId>vavr</artifactId>
     <version>${vavr.version}</version>
+</dependency>
+</dependencies>
+```
+
+**ArchUnit Dependency** (add only if selected):
+```xml
+<dependencies>
+<dependency>
+    <groupId>com.tngtech.archunit</groupId>
+    <artifactId>archunit-junit5</artifactId>
+    <version>${archunit.version}</version>
+    <scope>test</scope>
 </dependency>
 </dependencies>
 ```
@@ -200,6 +213,8 @@ Create `.mvn/jvm.config` file with:
                     <step-constraint>**MUST** add only dependencies that were selected by the user</step-constraint>
                     <step-constraint>**MUST** use `provided` scope for JSpecify dependency</step-constraint>
                     <step-constraint>**MUST** use `compile` scope for VAVR dependency (default scope)</step-constraint>
+                    <step-constraint>**MUST** use `test` scope for ArchUnit dependency</step-constraint>
+                    <step-constraint>**MUST** use `archunit-junit5` artifact when JUnit 5 is the test framework</step-constraint>
                     <step-constraint>**MUST** include full Error Prone and NullAway configuration when selected</step-constraint>
                     <step-constraint>**MUST** include `-Xlint:all` and `-Werror` compiler arguments</step-constraint>
                     <step-constraint>**MUST** include `--should-stop=ifError=FLOW` configuration</step-constraint>
@@ -285,6 +300,41 @@ public static void collectionsExample() {
 }
 ```
 
+**ArchUnit Usage Example** (if added):
+
+```java
+import com.tngtech.archunit.core.domain.JavaClasses;
+import com.tngtech.archunit.core.importer.ClassFileImporter;
+import com.tngtech.archunit.lang.ArchRule;
+import com.tngtech.archunit.junit.AnalyzeClasses;
+import com.tngtech.archunit.junit.ArchTest;
+
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
+
+@AnalyzeClasses(packages = "com.example.myproject")
+public class ArchitectureTest {
+
+    @ArchTest
+    static final ArchRule services_should_not_depend_on_controllers =
+        noClasses()
+            .that().resideInAPackage("..service..")
+            .should().dependOnClassesThat()
+            .resideInAPackage("..controller..");
+
+    @ArchTest
+    static final ArchRule layered_architecture_is_respected =
+        layeredArchitecture()
+            .consideringAllDependencies()
+            .layer("Controller").definedBy("..controller..")
+            .layer("Service").definedBy("..service..")
+            .layer("Repository").definedBy("..repository..")
+            .whereLayer("Controller").mayNotBeAccessedByAnyLayer()
+            .whereLayer("Service").mayOnlyBeAccessedByLayers("Controller")
+            .whereLayer("Repository").mayOnlyBeAccessedByLayers("Service");
+}
+```
+
 **Build Command Examples** (if enhanced compiler analysis added):
 ```bash
 # Run with enhanced analysis
@@ -292,6 +342,15 @@ public static void collectionsExample() {
 
 # Compile will fail with nullness violations
 ./mvnw clean compile -Dmaven.compiler.showWarnings=true
+```
+
+**Build Command Examples** (if ArchUnit added):
+```bash
+# Run architecture tests together with unit tests
+./mvnw test
+
+# Run only architecture tests
+./mvnw test -Dtest="*ArchitectureTest"
 ```
             ]]></step-content>
         </step>
@@ -304,8 +363,9 @@ public static void collectionsExample() {
             <output-format-item>Add only requested dependencies based on user selections</output-format-item>
             <output-format-item>Follow configuration specifications exactly</output-format-item>
             <output-format-item>Update package names in NullAway configuration</output-format-item>
-            <output-format-item>Add VAVR dependency only if user selected functional programming support</output-format-item>
-            <output-format-item>Provide usage examples only for features that were added</output-format-item>
+        <output-format-item>Add VAVR dependency only if user selected functional programming support</output-format-item>
+        <output-format-item>Add ArchUnit dependency only if user selected architecture testing</output-format-item>
+        <output-format-item>Provide usage examples only for features that were added</output-format-item>
         </output-format-list>
     </output-format>
 
@@ -315,8 +375,10 @@ public static void collectionsExample() {
             <safeguards-item>Always read template files fresh using file_search and read_file tools</safeguards-item>
             <safeguards-item>Never proceed without user confirmation for each step</safeguards-item>
             <safeguards-item>Ensure JSpecify dependency uses `provided` scope</safeguards-item>
-            <safeguards-item>Ensure VAVR dependency uses default `compile` scope</safeguards-item>
-            <safeguards-item>Test enhanced compiler analysis with a simple build</safeguards-item>
+        <safeguards-item>Ensure VAVR dependency uses default `compile` scope</safeguards-item>
+        <safeguards-item>Ensure ArchUnit dependency uses `test` scope</safeguards-item>
+        <safeguards-item>Test enhanced compiler analysis with a simple build</safeguards-item>
+        <safeguards-item>Verify architecture tests pass with `./mvnw test` after adding ArchUnit</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>
