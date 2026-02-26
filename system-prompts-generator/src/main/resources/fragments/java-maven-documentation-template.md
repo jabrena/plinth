@@ -1,4 +1,6 @@
-# Essential Maven Goals:
+# Developer commands
+
+## Essential maven commands
 
 ```bash
 # Analyze dependencies
@@ -16,11 +18,14 @@
 # Clean the project
 ./mvnw clean
 
-# Clean and package in one command
-./mvnw clean package
+# Run unit tests
+./mvnw clean test
 
 # Run integration tests
 ./mvnw clean verify
+
+# Clean and package in one command
+./mvnw clean package
 
 # Check for dependency updates
 ./mvnw versions:display-property-updates

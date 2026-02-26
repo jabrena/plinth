@@ -59,6 +59,6 @@ jwebserver -p 8000 -d "$(pwd)/docs"
   - `docs(readme): update installation instructions`
 
 ## Boundaries
-- ✅ **Always do:** Edit XML in `system-prompts-generator/src/main/resources/` to change rules, run `./mvnw clean verify` before promoting changes
+- ✅ **Always do:** Edit XML in `system-prompts-generator/src/main/resources/` to change rules, run `./mvnw clean verify` before promoting changes. When edit XML, follow PML Schema: https://jabrena.github.io/pml/schemas/0.5.0/pml.xsd
 - ⚠️ **Ask first:** Adding new XML rule files, modifying the XSLT stylesheet, changing site templates
 - 🚫 **Never do:** Edit `.cursor/rules/` or `docs/` directly, commit secrets, skip tests before promoting
