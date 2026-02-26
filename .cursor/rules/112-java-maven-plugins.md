@@ -122,6 +122,9 @@ Options:
 - Version management
 - JMH (Java Microbenchmark Harness)
 - Maven Compiler
+- Cyclomatic Complexity
+
+**Note**: When "Cyclomatic Complexity" is selected, Step 20 will create a PMD ruleset file and profile. The ruleset location depends on project structure: `src/main/pmd/pmd-cyclomatic-complexity.xml` (mono-module) or `pmd/pmd-cyclomatic-complexity.xml` (multi-module).
 
 ---
 
@@ -351,6 +354,12 @@ Start with essential build properties that every project needs (use the Java ver
 <maven-plugin-compiler.version>3.13.0</maven-plugin-compiler.version>
 ```
 
+**If Cyclomatic complexity selected**:
+```xml
+<maven-plugin-pmd.version>3.28.0</maven-plugin-pmd.version>
+<maven-plugin-jxr.version>3.6.0</maven-plugin-jxr.version>
+```
+
 The final `<properties>` section will look like this (example with common selections):
 
 ```xml
@@ -371,6 +380,7 @@ The final `<properties>` section will look like this (example with common select
   <maven-plugin-pitest-junit5.version>1.2.3</maven-plugin-pitest-junit5.version>
   <maven-plugin-spotbugs.version>4.9.3.0</maven-plugin-spotbugs.version>
   <maven-plugin-compiler.version>3.13.0</maven-plugin-compiler.version>
+  <!-- If Cyclomatic complexity: maven-plugin-pmd.version, maven-plugin-jxr.version -->
 
   <!-- Quality thresholds (if configured) -->
   <coverage.level>80</coverage.level>
@@ -1928,11 +1938,171 @@ After adding this plugin, verify the configuration:
 - **MUST** use properties configured in Step 4 for plugin version and java.version
 - **MUST** skip this step entirely if Maven Compiler was not selected
 
+### Step 20: Cyclomatic Complexity Analysis Profile Configuration
+
+**Purpose**: Configure PMD-based cyclomatic complexity analysis profile to detect and report overly complex methods and classes.
+
+**Dependencies**: Only execute if user selected "Cyclomatic Complexity" in Step 3. Requires completion of core plugin steps (3, 4, 5).
+
+**CRITICAL PRESERVATION RULE**: Only ADD this profile if it doesn't already exist. Never REPLACE or REMOVE existing profiles.
+
+## Pre-Implementation Check
+
+**BEFORE adding Cyclomatic Complexity profile, check if it already exists in the pom.xml:**
+
+If `<profiles>` section with `cyclomatic-complexity` profile already exists: Ask user "Cyclomatic Complexity profile already exists. Do you want to enhance the existing configuration? (y/n)"
+
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing configuration elements only.
+
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Cyclomatic Complexity" in Step 3.
+
+## PMD Ruleset Configuration File
+
+**CREATE the PMD ruleset file BEFORE adding the profile.** Location depends on project structure:
+
+**Mono-module projects** (no `<modules>` in pom.xml): Create `src/main/pmd/pmd-cyclomatic-complexity.xml`
+**Multi-module projects** (has `<modules>` in pom.xml): Create `pmd/pmd-cyclomatic-complexity.xml` at project root
+
+**File content** (`pmd-cyclomatic-complexity.xml`):
+
+```xml
+<?xml version="1.0"?>
+<ruleset name="Cyclomatic Complexity Ruleset"
+    xmlns="http://pmd.sourceforge.net/ruleset/2.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://pmd.sourceforge.net/ruleset/2.0.0 https://pmd.sourceforge.io/ruleset_2_0_0.xsd">
+
+    <description>
+        Custom ruleset for cyclomatic complexity analysis only
+    </description>
+
+    <!-- https://pmd.github.io/pmd/pmd_rules_java_design.html#cyclomaticcomplexity -->
+    <rule ref="category/java/design.xml/CyclomaticComplexity">
+        <properties>
+            <property name="classReportLevel" value="70" />
+            <property name="methodReportLevel" value="25" />
+            <property name="cycloOptions" value="" />
+        </properties>
+    </rule>
+
+</ruleset>
+```
+
+## Cyclomatic Complexity Profile Configuration
+
+**Use the correct ruleset path** when adding the profile:
+- Mono-module: `src/main/pmd/pmd-cyclomatic-complexity.xml`
+- Multi-module: `pmd/pmd-cyclomatic-complexity.xml`
+
+**ADD this profile to the `<profiles>` section in pom.xml ONLY if it doesn't already exist:**
+
+```xml
+<!-- Cyclomatic Complexity Analysis Profile -->
+<profile>
+  <id>cyclomatic-complexity</id>
+  <activation>
+    <activeByDefault>false</activeByDefault>
+  </activation>
+  <build>
+    <plugins>
+      <!-- PMD Plugin for Cyclomatic Complexity Analysis -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>${maven-plugin-pmd.version}</version>
+        <configuration>
+          <rulesets>
+            <ruleset>src/main/pmd/pmd-cyclomatic-complexity.xml</ruleset>
+          </rulesets>
+          <printFailingErrors>true</printFailingErrors>
+          <linkXRef>true</linkXRef>
+          <minimumTokens>100</minimumTokens>
+        </configuration>
+        <executions>
+          <execution>
+            <id>pmd-check</id>
+            <phase>verify</phase>
+            <goals>
+              <goal>check</goal>
+            </goals>
+          </execution>
+          <execution>
+            <id>pmd-report</id>
+            <phase>site</phase>
+            <goals>
+              <goal>pmd</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
+  <reporting>
+    <plugins>
+      <!-- PMD Report Plugin -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-pmd-plugin</artifactId>
+        <version>${maven-plugin-pmd.version}</version>
+        <configuration>
+          <rulesets>
+            <ruleset>src/main/pmd/pmd-cyclomatic-complexity.xml</ruleset>
+          </rulesets>
+          <linkXRef>true</linkXRef>
+        </configuration>
+      </plugin>
+      <!-- JXR Plugin for Source Cross-Reference -->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-jxr-plugin</artifactId>
+        <version>${maven-plugin-jxr.version}</version>
+      </plugin>
+    </plugins>
+  </reporting>
+</profile>
+```
+
+**For multi-module projects**: Replace `src/main/pmd/pmd-cyclomatic-complexity.xml` with `pmd/pmd-cyclomatic-complexity.xml` in both build and reporting plugin configurations.
+
+## Usage Examples
+
+```bash
+# Run cyclomatic complexity analysis
+./mvnw clean verify -Pcyclomatic-complexity
+
+# Generate PMD reports
+./mvnw site -Pcyclomatic-complexity
+
+# View reports
+open target/site/pmd.html
+```
+
+## Validation
+
+After adding this profile, verify the configuration:
+
+```bash
+# Test Cyclomatic Complexity profile
+./mvnw clean verify -Pcyclomatic-complexity
+```
+                
+            
+#### Step Constraints
+
+- **MUST** only add Cyclomatic Complexity profile if "Cyclomatic Complexity" was selected in Step 3
+- **MUST** create PMD ruleset file before adding the profile
+- **MUST** use mono-module path (src/main/pmd/) or multi-module path (pmd/) based on project structure
+- **MUST** check if profile already exists before adding
+- **MUST** ask user permission before modifying existing profile configuration
+- **MUST** use properties configured in Step 4 for plugin versions
+- **MUST** skip this step entirely if Cyclomatic Complexity was not selected
+
 
 ## Output Format
 
 - Ask questions one by one following the template exactly in Step 3
-- Execute steps 4-19 only based on user selections from Step 3
+- Execute steps 4-20 only based on user selections from Step 3
 - Skip entire steps if no relevant features were selected
 - Implement only requested features based on user selections
 - Follow template specifications exactly for all configurations

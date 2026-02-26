@@ -137,6 +137,12 @@ Start with essential build properties that every project needs (use the Java ver
 <maven-plugin-compiler.version>3.13.0</maven-plugin-compiler.version>
 ```
 
+**If Cyclomatic complexity selected**:
+```xml
+<maven-plugin-pmd.version>3.28.0</maven-plugin-pmd.version>
+<maven-plugin-jxr.version>3.6.0</maven-plugin-jxr.version>
+```
+
 The final `<properties>` section will look like this (example with common selections):
 
 ```xml
@@ -157,6 +163,7 @@ The final `<properties>` section will look like this (example with common select
   <maven-plugin-pitest-junit5.version>1.2.3</maven-plugin-pitest-junit5.version>
   <maven-plugin-spotbugs.version>4.9.3.0</maven-plugin-spotbugs.version>
   <maven-plugin-compiler.version>3.13.0</maven-plugin-compiler.version>
+  <!-- If Cyclomatic complexity: maven-plugin-pmd.version, maven-plugin-jxr.version -->
 
   <!-- Quality thresholds (if configured) -->
   <coverage.level>80</coverage.level>
