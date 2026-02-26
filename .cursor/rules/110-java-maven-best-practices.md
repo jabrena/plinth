@@ -29,14 +29,18 @@ Maven is built on several foundational principles that guide its design and usag
 **7. Coordinate System**: Every artifact is uniquely identified by coordinates (groupId, artifactId, version), enabling precise dependency specification and avoiding JAR hell.
 **8. Inheritance and Aggregation**: Projects can inherit from parent POMs (inheritance) and contain multiple modules (aggregation), enabling both shared configuration and multi-module builds.
 
+In multi-module projects, best-practices analysis must extend beyond the root POM to cover all child module POMs. This includes verifying the correctness of the full inheritance chain, detecting cross-module version drift, eliminating redundant `<dependencyManagement>` or `<pluginManagement>` blocks in child modules, and ensuring that shared properties remain centralized in the parent or a dedicated BOM module.
+
 ## Constraints
 
-Before applying Maven best practices recommendations, ensure the project is in a valid state by running Maven validation. This helps identify any existing configuration issues that need to be resolved first.
+Before applying Maven best practices recommendations, ensure the project is in a valid state by running Maven validation. This helps identify any existing configuration issues that need to be resolved first. For multi-module projects, scope analysis must cover every child module POM — not just the root.
 
 - **MANDATORY**: Run `./mvnw validate` or `mvn validate` before applying any Maven best practices recommendations
 - **VERIFY**: Ensure all validation errors are resolved before proceeding with POM modifications
 - **PREREQUISITE**: Project must compile and pass basic validation checks before optimization
 - **SAFETY**: If validation fails, not continue and ask the user to fix the issues before continuing
+- **MULTI-MODULE DISCOVERY**: After reading the root `pom.xml`, check whether it contains a `<modules>` section. If it does, read every child module's `pom.xml` before making any recommendations — analysis scope is the full module tree, not only the root
+- **CROSS-MODULE SCOPE**: When child modules exist, check each one for: hardcoded dependency versions that duplicate `<dependencyManagement>` in the parent, plugin configurations that duplicate `<pluginManagement>`, properties that should be centralized in the parent, and version drift (same artifact declared at different versions across sibling modules)
 
 ## Examples
 
@@ -49,6 +53,8 @@ Before applying Maven best practices recommendations, ensure the project is in a
 - Example 5: Keep POMs Readable and Maintainable
 - Example 6: Manage Repositories Explicitly
 - Example 7: Centralize Version Management with Properties
+- Example 8: Multi-Module Project Structure
+- Example 9: Cross-Module Version Consistency
 
 ### Example 1: Effective Dependency Management
 
@@ -610,8 +616,234 @@ Description: Define all dependency and plugin versions in the `<properties>` sec
 
 ```
 
+
+### Example 8: Multi-Module Project Structure
+
+Title: Organize a Multi-Module Build with a Root Aggregator POM and Proper Inheritance
+Description: In a multi-module project the root POM acts as both aggregator (via `<modules>`) and parent (via inheritance). All shared dependency versions and plugin configurations belong in the root POM's `<dependencyManagement>` and `<pluginManagement>` sections. Child module POMs declare `<parent>` and reference managed artifacts without specifying versions. A dedicated BOM module can be introduced to decouple version management from build orchestration in large projects.
+
+**Good example:**
+
+```xml
+<!-- Root aggregator / parent POM -->
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>my-parent</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+
+  <!-- Declare all child modules -->
+  <modules>
+    <module>my-api</module>
+    <module>my-service</module>
+    <module>my-web</module>
+  </modules>
+
+  <properties>
+    <java.version>21</java.version>
+    <jackson.version>2.17.0</jackson.version>
+    <junit.version>5.11.0</junit.version>
+    <maven-plugin-compiler.version>3.14.0</maven-plugin-compiler.version>
+    <maven-plugin-surefire.version>3.5.3</maven-plugin-surefire.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>${jackson.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.junit.jupiter</groupId>
+        <artifactId>junit-jupiter</artifactId>
+        <version>${junit.version}</version>
+        <scope>test</scope>
+      </dependency>
+      <!-- Cross-module dependency managed here -->
+      <dependency>
+        <groupId>com.example</groupId>
+        <artifactId>my-api</artifactId>
+        <version>${project.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
+  <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-compiler-plugin</artifactId>
+          <version>${maven-plugin-compiler.version}</version>
+          <configuration>
+            <release>${java.version}</release>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>${maven-plugin-surefire.version}</version>
+        </plugin>
+      </plugins>
+    </pluginManagement>
+  </build>
+</project>
+
+<!-- Child module POM (my-service/pom.xml) -->
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.example</groupId>
+    <artifactId>my-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <!-- relativePath tells Maven where to find the parent without a repository lookup -->
+    <relativePath>../pom.xml</relativePath>
+  </parent>
+  <artifactId>my-service</artifactId>
+  <!-- No <groupId> or <version> — inherited from parent -->
+
+  <dependencies>
+    <dependency>
+      <groupId>com.example</groupId>
+      <artifactId>my-api</artifactId>
+      <!-- Version managed centrally in root dependencyManagement -->
+    </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <!-- Version managed centrally in root dependencyManagement -->
+    </dependency>
+    <dependency>
+      <groupId>org.junit.jupiter</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <!-- Version and scope managed centrally -->
+    </dependency>
+  </dependencies>
+</project>
+
+```
+
+**Bad example:**
+
+```xml
+<!-- Root POM without <modules> declaration -->
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>
+  <artifactId>my-parent</artifactId>
+  <version>1.0.0-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <!-- Missing <modules> — child modules won't be built with the root -->
+</project>
+
+<!-- Child module POM (my-service/pom.xml) with redundant management -->
+<project>
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.example</groupId>          <!-- Duplicated from parent -->
+  <artifactId>my-service</artifactId>
+  <version>1.0.0-SNAPSHOT</version>       <!-- Not inherited — version drift risk -->
+  <parent>
+    <groupId>com.example</groupId>
+    <artifactId>my-parent</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <!-- Missing <relativePath> — forces Maven to look in local repository -->
+  </parent>
+
+  <!-- Redundant dependencyManagement duplicated across child modules -->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.fasterxml.jackson.core</groupId>
+        <artifactId>jackson-databind</artifactId>
+        <version>2.16.0</version> <!-- Differs from sibling module's 2.17.0 — version drift! -->
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+</project>
+
+```
+
+### Example 9: Cross-Module Version Consistency
+
+Title: Detect and Fix Version Drift Across Sibling Modules
+Description: Version drift occurs when the same artifact is declared at different versions in sibling module POMs. This leads to non-reproducible builds and subtle runtime errors. The fix is to move all version declarations into the root POM's `<dependencyManagement>` (or a BOM module) and remove versions from every child POM. When performing multi-module analysis, read all sibling `pom.xml` files and compare declared dependency versions before recommending changes.
+
+**Good example:**
+
+```xml
+<!-- Root POM: single source of truth for all versions -->
+<project>
+  <!-- ... -->
+  <properties>
+    <logback.version>1.5.6</logback.version>
+    <slf4j.version>2.0.13</slf4j.version>
+  </properties>
+
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>ch.qos.logback</groupId>
+        <artifactId>logback-classic</artifactId>
+        <version>${logback.version}</version>
+      </dependency>
+      <dependency>
+        <groupId>org.slf4j</groupId>
+        <artifactId>slf4j-api</artifactId>
+        <version>${slf4j.version}</version>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+</project>
+
+<!-- my-service/pom.xml — no version, inherits from root -->
+<dependencies>
+  <dependency>
+    <groupId>ch.qos.logback</groupId>
+    <artifactId>logback-classic</artifactId>
+  </dependency>
+</dependencies>
+
+<!-- my-web/pom.xml — no version, inherits from root (same version guaranteed) -->
+<dependencies>
+  <dependency>
+    <groupId>ch.qos.logback</groupId>
+    <artifactId>logback-classic</artifactId>
+  </dependency>
+</dependencies>
+
+```
+
+**Bad example:**
+
+```xml
+<!-- my-service/pom.xml — hardcodes version -->
+<dependencies>
+  <dependency>
+    <groupId>ch.qos.logback</groupId>
+    <artifactId>logback-classic</artifactId>
+    <version>1.4.11</version> <!-- Version A -->
+  </dependency>
+</dependencies>
+
+<!-- my-web/pom.xml — different hardcoded version for same artifact -->
+<dependencies>
+  <dependency>
+    <groupId>ch.qos.logback</groupId>
+    <artifactId>logback-classic</artifactId>
+    <version>1.5.6</version> <!-- Version B — version drift! -->
+  </dependency>
+</dependencies>
+
+<!-- Result: Maven resolves each module independently.
+     Depending on classpath ordering, the wrong version may be used at runtime. -->
+
+```
+
 ## Output Format
 
+- **DISCOVER** the full project scope before analysis: read the root `pom.xml` and check for a `<modules>` section; if present, read every child module's `pom.xml` recursively. List all discovered modules and their paths at the start of the response so the user knows the analysis covers the complete build
 - **ANALYZE** Maven POM files to identify specific best practices violations and categorize them by impact (CRITICAL, MAINTENANCE, PERFORMANCE, STRUCTURE) and area (dependency management, plugin configuration, project structure, repository management, version control)
 - **CATEGORIZE** Maven configuration improvements found: Dependency Management Issues (missing dependencyManagement vs centralized version control, hardcoded versions vs property-based management, version conflicts vs resolution strategies, unused dependencies vs clean dependency trees), Plugin Configuration Problems (outdated versions vs current releases, missing configurations vs optimal settings, suboptimal configurations vs performance-tuned setups), Project Structure Opportunities (non-standard layouts vs Maven conventions, poor POM organization vs structured sections, missing properties vs centralized configuration)
 - **APPLY** Maven best practices directly by implementing the most appropriate improvements for each identified issue: Introduce dependencyManagement sections for version centralization, extract version properties for consistency, configure essential plugins with optimal settings, organize POM sections following Maven conventions, add missing repository declarations, optimize dependency scopes, and eliminate unused dependencies through analysis
@@ -629,3 +861,6 @@ Description: Define all dependency and plugin versions in the `<properties>` sec
 - Verify changes with the command: `./mvnw clean verify`
 - Preserve existing dependency versions unless explicitly requested to update
 - Maintain backward compatibility with existing build process
+- **MULTI-MODULE SCOPE**: When root POM contains `<modules>`, always read and analyze ALL child module POMs before making any recommendations — never base advice on the root POM alone
+- **VALIDATE ALL MODULES**: After any change to the root or a child POM in a multi-module project, run `./mvnw clean verify` from the project root to confirm the full reactor build still passes
+- **PRESERVE MODULE OVERRIDES**: Some child modules intentionally override parent-managed versions or plugin configurations for valid reasons (e.g., a module requiring a different Java release). Before removing an override from a child POM, confirm with the user that the override is unintentional
