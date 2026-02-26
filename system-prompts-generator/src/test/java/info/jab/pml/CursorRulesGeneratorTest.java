@@ -48,7 +48,7 @@ class CursorRulesGeneratorTest {
             CursorRulesGenerator generator = new CursorRulesGenerator();
 
             // When & Then - Updated for functional API exception handling
-            assertThatThrownBy(() -> generator.generate("112-java-maven-documentation.xml", "non-existent.xsl"))
+            assertThatThrownBy(() -> generator.generate("system-prompts/112-java-maven-documentation.xml", "non-existent.xsl"))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Failed to generate cursor rules for")
                 .hasMessageContaining("112-java-maven-documentation.xml")
@@ -77,7 +77,7 @@ class CursorRulesGeneratorTest {
 
             // When - Generate content (no schema validation)
             String generatedContent = generator.generate(
-                baseFileName + ".xml",
+                "system-prompts/" + baseFileName + ".xml",
                 "cursor-rules.xsl"
             );
 

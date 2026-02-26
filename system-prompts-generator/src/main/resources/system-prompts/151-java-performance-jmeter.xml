@@ -54,7 +54,7 @@
 Create the entire script with the following content:
 
 ```bash
-<xi:include href="fragments/run-jmeter.sh" parse="text"/>
+<xi:include href="scripts/run-jmeter.sh" parse="text"/>
 ```
             </step-content>
             <step-constraints>

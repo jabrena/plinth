@@ -90,7 +90,7 @@
                 **IMPORTANT**: Ask these questions to understand the project needs before making any changes to the pom.xml. Based on the answers, you will conditionally add only relevant dependencies and plugins.
 
                 ```markdown
-                <xi:include href="fragments/java-maven-plugins-questions-template.md" parse="text"/>
+                <xi:include href="assets/questions/java-maven-plugins-questions-template.md" parse="text"/>
                 ```
             </step-content>
             <step-constraints>
@@ -124,7 +124,7 @@
 
 Use the following template to add properties to the pom.xml file:
 
-<xi:include href="fragments/java-maven-properties-template.md" parse="text"/>
+<xi:include href="assets/java-maven-properties-template.md" parse="text"/>
 
 **Implementation Strategy:**
 1. **Core Properties**: Always add Java version, Maven version, and encoding properties

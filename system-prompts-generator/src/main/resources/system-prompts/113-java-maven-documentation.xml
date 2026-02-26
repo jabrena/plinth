@@ -34,7 +34,7 @@
 Copy the following base template verbatim as the first section of `DEVELOPER.md`:
 
 ```markdown
-<xi:include href="fragments/java-maven-documentation-template.md" parse="text"/>
+<xi:include href="assets/java-maven-documentation-template.md" parse="text"/>
 ```
             </step-content>
             <step-constraints>
@@ -68,7 +68,7 @@ Each row should show a `./mvnw artifactId:goal` command and a one-line descripti
 
 Use the following catalog as a reference for known plugins:
 ]]>
-<xi:include href="fragments/java-maven-documentation-plugin-catalog.md" parse="text"/>
+<xi:include href="assets/java-maven-documentation-plugin-catalog.md" parse="text"/>
             </step-content>
             <step-constraints>
                 <step-constraint-list>
