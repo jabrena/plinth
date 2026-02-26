@@ -30,7 +30,7 @@ The [available System prompts for Java](./SYSTEM-PROMPTS-JAVA.md) cover aspects 
 The project generates a set of deliverables at the end of any iteration.
 
 - System prompts for Java located in `.cursor/rules`
-- Skills for Java located in `.agents/skills`
+- Skills for Java located in `skills`
 
 ### How many System prompts for Java does this project include?
 
@@ -38,7 +38,7 @@ Explore the [complete catalog of available System prompts](./SYSTEM-PROMPTS-JAVA
 
 ### How many AI Skills for Java does this project include?
 
-Explore the folder [.agents/skills](.agents/skills) for further details.
+Explore the folder [skills](./skills) for further details.
 
 ## Getting started
 
