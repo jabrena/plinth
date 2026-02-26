@@ -38,7 +38,7 @@ Explore the [complete catalog of available System prompts](./SYSTEM-PROMPTS-JAVA
 
 ### How many AI Skills for Java does this project include?
 
-Explore the folder [.agents/skills](.agents/skills) for further details.
+Explore the folder [skills](./skills) for further details.
 
 ## Getting started
 
