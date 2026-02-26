@@ -67,7 +67,7 @@
                 For every infrastructure dimension that was NOT resolved by Phase A, ask the corresponding question from the template below in strict order:
 
                 ```markdown
-                <xi:include href="fragments/java-integration-testing-questions-template.md" parse="text"/>
+                <xi:include href="assets/questions/java-integration-testing-questions-template.md" parse="text"/>
                 ```
             </step-content>
             <step-constraints>

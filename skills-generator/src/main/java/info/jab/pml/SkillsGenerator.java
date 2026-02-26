@@ -38,7 +38,7 @@ public final class SkillsGenerator {
     }
 
     private SkillMetadata parseMetadata(String skillId) {
-        String xmlFileName = skillId + ".xml";
+        String xmlFileName = "system-prompts/" + skillId + ".xml";
         try (InputStream xmlStream = getResource(xmlFileName)) {
             if (xmlStream == null) {
                 throw new RuntimeException("XML resource not found: " + xmlFileName);
@@ -100,7 +100,7 @@ public final class SkillsGenerator {
     }
 
     private String generateReferenceContent(String skillId, SkillMetadata metadata) {
-        return cursorRulesGenerator.generate(skillId + ".xml", "cursor-rules.xsl");
+        return cursorRulesGenerator.generate("system-prompts/" + skillId + ".xml", "cursor-rules.xsl");
     }
 
     private String loadSkillSummary(String skillId) {

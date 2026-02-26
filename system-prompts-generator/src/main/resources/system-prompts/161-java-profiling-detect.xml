@@ -52,7 +52,7 @@
 **IMPORTANT**: Use the exact bash script from the template without any modification or interpretation.
 
 ```bash
-<xi:include href="fragments/run-java-process-for-profiling.sh" parse="text"/>
+<xi:include href="scripts/run-java-process-for-profiling.sh" parse="text"/>
 ```
 
 **Script Location:**
@@ -95,7 +95,7 @@ your-project/
 **IMPORTANT**: Use the exact bash script from the template without any modification or interpretation.
 
 ```bash
-<xi:include href="fragments/profile-java-process.sh" parse="text"/>
+<xi:include href="scripts/profile-java-process.sh" parse="text"/>
 ```
 
 **Script Location:**

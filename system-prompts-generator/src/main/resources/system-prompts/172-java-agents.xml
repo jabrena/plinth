@@ -25,7 +25,7 @@
                 **IMPORTANT**: Ask these questions to understand the project requirements before generating AGENTS.md. Based on the answers, you will generate a tailored AGENTS.md file.
 
                 ```markdown
-                <xi:include href="fragments/java-agents-md-questions-template.md" parse="text"/>
+                <xi:include href="assets/questions/java-agents-md-questions-template.md" parse="text"/>
                 ```
             </step-content>
             <step-constraints>
@@ -64,7 +64,7 @@
 
 Use the following template and guidelines:
 
-<xi:include href="fragments/java-agents-md-implementation-template.md" parse="text"/>
+<xi:include href="assets/java-agents-md-implementation-template.md" parse="text"/>
 
 ## Mapping Answers to AGENTS.md Sections
 
