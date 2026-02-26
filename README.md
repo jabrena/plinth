@@ -23,7 +23,7 @@
 ## Goal
 
 The project provides a collection of `System prompts` & `Skills` for Java Enterprise development that help software engineers in their daily programming work and data pipelines.
-The [available System prompts for Java](./SYSTEM-PROMPTS-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation` & `Diagrams`.
+The [available System prompts for Java](./SYSTEM-PROMPTS-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation`, `Diagrams` & `AGENTS.md`.
 
 ## Deliverables
 
@@ -106,7 +106,7 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 
 - [JEPS List](./documentation/jeps/All-JEPS.md)
 
-## Meetups, Conferences, Workshops & Mentions
+## Meetups, Conferences, Workshops & Articles
 
 ### Codemotion / Madrid (2026/04/20)
 

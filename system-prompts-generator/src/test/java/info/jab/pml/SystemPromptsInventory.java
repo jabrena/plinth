@@ -33,6 +33,7 @@ public final class SystemPromptsInventory {
             "164-java-profiling-verify",
             "170-java-documentation",
             "171-java-diagrams",
+            "172-java-agents",
             "behaviour-consultative-interaction",
             "behaviour-progressive-learning",
             "behaviour-article-writer"
