@@ -385,7 +385,7 @@ The final `<properties>` section will look like this (example with common select
 3. **Quality Properties**: Add coverage and threshold properties if quality features selected
 
 **Property Naming Convention**: Use `maven-plugin-*` format for consistency (e.g., `maven-plugin-compiler.version`)
-
+            
 #### Step Constraints
 
 - **MUST** use `maven-plugin-*` format for property naming (e.g., `maven-plugin-compiler.version`, NOT `maven-compiler-plugin.version`)
@@ -466,8 +466,8 @@ After adding this plugin, verify the configuration:
 # Validate plugin configuration
 ./mvnw validate
 ```
-
-
+                
+            
 #### Step Constraints
 
 - **MUST** include `extra-enforcer-rules` dependency and all specified rules
@@ -523,8 +523,8 @@ After adding this plugin, verify the configuration:
 # Run unit tests
 ./mvnw test
 ```
-
-
+                
+            
 #### Step Constraints
 
 - **MUST** only add surefire plugin if "Unit Testing (Surefire)" was selected in Step 3
@@ -607,8 +607,8 @@ After adding this plugin, verify the configuration:
 # Run tests to verify configuration
 ./mvnw clean verify
 ```
-
-
+                
+            
 #### Step Constraints
 
 - **MUST** only add failsafe plugin if integration testing was selected in Step 3
@@ -693,8 +693,8 @@ After adding this reporting configuration, verify it:
 # Generate reports to verify configuration
 ./mvnw clean test site
 ```
-
-
+                
+            
 #### Step Constraints
 
 - **MUST** only add reporting section if HTML reports were selected in Step 3
@@ -823,8 +823,8 @@ After adding this profile, verify the configuration:
 # Test JaCoCo profile
 ./mvnw clean verify -Pjacoco
 ```
-
-
+                
+            
 #### Step Constraints
 
 - **MUST** only add JaCoCo profile if code coverage was selected in Step 3
@@ -930,8 +930,8 @@ After adding this profile, verify the configuration:
 # Test PiTest profile
 ./mvnw clean verify -Ppitest
 ```
-
-
+                
+            
 #### Step Constraints
 
 - **MUST** only add PiTest profile if mutation testing was selected in Step 3
@@ -1026,8 +1026,8 @@ After adding this profile, verify the configuration:
 # Test Security profile
 ./mvnw clean verify -Psecurity
 ```
-
-
+                
+            
 #### Step Constraints
 
 - **MUST** only add Security profile if security scanning was selected in Step 3
@@ -1130,8 +1130,8 @@ After adding this profile, verify the configuration:
 # Test Static Analysis profile
 ./mvnw clean verify -Pfind-bugs
 ```
-
-
+                
+            
 #### Step Constraints
 
 - **MUST** only add Static Analysis profile if static analysis was selected in Step 3
@@ -1226,8 +1226,8 @@ After adding this profile, verify the configuration:
 # Validate Sonar profile (requires token)
 ./mvnw clean verify sonar:sonar -Psonar -Dsonar.login=YOUR_TOKEN
 ```
-
-
+                
+            
 #### Step Constraints
 
 - **MUST** only add Sonar profile if Sonar integration was selected in Step 3
@@ -1312,8 +1312,8 @@ After adding this plugin, verify the configuration:
 # Test Spotless configuration
 ./mvnw spotless:check
 ```
-
-
+                
+            
 #### Step Constraints
 
 - **MUST** only add Spotless plugin if code formatting was selected in Step 3
@@ -1383,8 +1383,8 @@ After adding this plugin, verify the configuration:
 # Test Versions plugin configuration
 ./mvnw versions:display-plugin-updates
 ```
-
-
+                
+            
 #### Step Constraints
 
 - **MUST** only add Versions plugin if version management was selected in Step 3
@@ -1465,8 +1465,8 @@ After adding this plugin, verify the configuration:
 ./mvnw clean package
 cat target/classes/git.properties
 ```
-
-
+                
+            
 #### Step Constraints
 
 - **MUST** only add Git Commit ID plugin if build information tracking was selected in Step 3
@@ -1550,8 +1550,8 @@ After adding this plugin, verify the configuration:
 ./mvnw clean package
 ls target/.flattened-pom.xml
 ```
-
-
+                
+            
 #### Step Constraints
 
 - **MUST** only add Flatten plugin if "Java Library" was selected as project nature in Step 3
@@ -1839,8 +1839,8 @@ ls jmh-fibonacci-benchmark-results.json
 - https://openjdk.org/projects/code-tools/jmh/
 - https://jmh.morethan.io
 ```
-
-
+                
+            
 #### Step Constraints
 
 - **MUST** only add JMH profile if "JMH" was selected in Step 3
@@ -1918,8 +1918,8 @@ After adding this plugin, verify the configuration:
 # Test Maven Compiler plugin
 ./mvnw clean compile
 ```
-
-
+                
+            
 #### Step Constraints
 
 - **MUST** only add maven-compiler-plugin if "Maven Compiler" was selected in Step 3
