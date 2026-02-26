@@ -49,9 +49,14 @@ jwebserver -p 8000 -d "$(pwd)/docs"
 ```
 
 ## Git workflow
-- Follow [Chris Beams](http://chris.beams.io/posts/git-commit/) style for commit messages
-- Every pull request must answer: **What changed?**, **Why?**, **Breaking changes?**
-- Comments must be complete sentences ending with a period
+
+- **Conventional Commits**: Use conventional commit format for all commit messages
+- Format: `type(scope): description`
+- Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
+- Examples:
+  - `feat(rules): add new Java testing system prompt`
+  - `fix(generator): resolve template parsing issue`
+  - `docs(readme): update installation instructions`
 
 ## Boundaries
 - ✅ **Always do:** Edit XML in `system-prompts-generator/src/main/resources/` to change rules, run `./mvnw clean verify` before promoting changes
