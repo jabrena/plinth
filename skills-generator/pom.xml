@@ -87,7 +87,7 @@
                             <goal>copy-resources</goal>
                         </goals>
                         <configuration>
-                            <outputDirectory>${project.basedir}/../.agents/skills</outputDirectory>
+                            <outputDirectory>${project.basedir}/../skills</outputDirectory>
                             <resources>
                                 <resource>
                                     <directory>${project.build.directory}/skills</directory>
