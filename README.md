@@ -22,7 +22,7 @@
 
 ## Goal
 
-The project provides a collection of `System prompts` & `Skills` for Java Enterprise development that help software engineers and pipelinesin their daily programming work.
+The project provides a collection of `System prompts` & `Skills` for Java Enterprise development that help software engineers and pipelines in their daily programming work.
 The [available System prompts for Java](./SYSTEM-PROMPTS-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation`, `Diagrams` & `AGENTS.md`.
 
 ## Deliverables
