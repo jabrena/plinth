@@ -37,6 +37,9 @@ Options:
 - Version management
 - JMH (Java Microbenchmark Harness)
 - Maven Compiler
+- Cyclomatic Complexity
+
+**Note**: When "Cyclomatic Complexity" is selected, Step 20 will create a PMD ruleset file and profile. The ruleset location depends on project structure: `src/main/pmd/pmd-cyclomatic-complexity.xml` (mono-module) or `pmd/pmd-cyclomatic-complexity.xml` (multi-module).
 
 ---
 
