@@ -1,0 +1,17 @@
+{
+  "name": "Get data - success scenario",
+  "request": {
+    "method": "GET",
+    "url": "/data",
+    "headers": {
+      "Content-Type": { "equalTo": "application/json" }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "bodyFileName": "example-api/get-data-response.json"
+  }
+}
