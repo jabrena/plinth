@@ -18,7 +18,7 @@ Treats the user as a knowledgeable partner in solving problems rather than presc
 
 ## Goal
 
-This rule provides a focused approach to adding essential Maven dependencies that enhance code quality and safety, specifically JSpecify for nullness annotations. It asks targeted questions to understand dependency needs and conditionally adds only relevant components.
+This rule provides a focused approach to adding essential Maven dependencies that enhance code quality and safety: JSpecify for nullness annotations, Error Prone and NullAway for static analysis, VAVR for functional programming, and ArchUnit for architecture testing. It asks targeted questions to understand dependency needs and conditionally adds only relevant components.
 
 ## Constraints
 
@@ -107,6 +107,18 @@ VAVR is a functional programming library for Java that provides immutable data t
 
 ---
 
+**Question 5**: Do you want to add ArchUnit for architecture testing?
+
+ArchUnit lets you write unit tests that enforce architectural constraints — such as layering rules, naming conventions, dependency directions, and package structure — directly in your test suite. It integrates with JUnit 5 and runs as part of the normal test lifecycle.
+
+**Options**:
+- **y** - Add ArchUnit JUnit 5 dependency (recommended for architecture governance)
+- **n** - Skip ArchUnit dependency
+
+**Recommendation**: Choose 'y' if you want to prevent architecture erosion and enforce design rules automatically on every build.
+
+---
+
 ```
 
 #### Step Constraints
@@ -122,7 +134,7 @@ VAVR is a functional programming library for Java that provides immutable data t
 - **MUST NOT** ask all questions simultaneously
 - **MUST NOT** assume answers or provide defaults
 - **MUST NOT** skip questions or change their order
-- **MUST** follow question sequence: JSpecify → Enhanced Compiler Analysis (conditional)
+- **MUST** follow question sequence: JSpecify → Enhanced Compiler Analysis (conditional) → VAVR → ArchUnit
 - **MUST** verify that ALL options from the template are included before asking questions
 - **MUST** cross-check question content against the freshly read template file
 - **MUST** re-read the template and correct questions if there are discrepancies
@@ -150,6 +162,7 @@ Based on user responses, implement the dependency configuration following this o
 <error-prone.version>2.35.1</error-prone.version>
 <nullaway.version>0.12.0</nullaway.version>
 <vavr.version>0.10.6</vavr.version>
+<archunit.version>1.4.1</archunit.version>
 </properties>
 ```
 
@@ -174,6 +187,18 @@ Based on user responses, implement the dependency configuration following this o
     <groupId>io.vavr</groupId>
     <artifactId>vavr</artifactId>
     <version>${vavr.version}</version>
+</dependency>
+</dependencies>
+```
+
+**ArchUnit Dependency** (add only if selected):
+```xml
+<dependencies>
+<dependency>
+    <groupId>com.tngtech.archunit</groupId>
+    <artifactId>archunit-junit5</artifactId>
+    <version>${archunit.version}</version>
+    <scope>test</scope>
 </dependency>
 </dependencies>
 ```
@@ -242,6 +267,8 @@ Create `.mvn/jvm.config` file with:
 - **MUST** add only dependencies that were selected by the user
 - **MUST** use `provided` scope for JSpecify dependency
 - **MUST** use `compile` scope for VAVR dependency (default scope)
+- **MUST** use `test` scope for ArchUnit dependency
+- **MUST** use `archunit-junit5` artifact when JUnit 5 is the test framework
 - **MUST** include full Error Prone and NullAway configuration when selected
 - **MUST** include `-Xlint:all` and `-Werror` compiler arguments
 - **MUST** include `--should-stop=ifError=FLOW` configuration
@@ -324,6 +351,41 @@ public static void collectionsExample() {
 }
 ```
 
+**ArchUnit Usage Example** (if added):
+
+```java
+import com.tngtech.archunit.core.domain.JavaClasses;
+import com.tngtech.archunit.core.importer.ClassFileImporter;
+import com.tngtech.archunit.lang.ArchRule;
+import com.tngtech.archunit.junit.AnalyzeClasses;
+import com.tngtech.archunit.junit.ArchTest;
+
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+import static com.tngtech.archunit.library.Architectures.layeredArchitecture;
+
+@AnalyzeClasses(packages = "com.example.myproject")
+public class ArchitectureTest {
+
+    @ArchTest
+    static final ArchRule services_should_not_depend_on_controllers =
+        noClasses()
+            .that().resideInAPackage("..service..")
+            .should().dependOnClassesThat()
+            .resideInAPackage("..controller..");
+
+    @ArchTest
+    static final ArchRule layered_architecture_is_respected =
+        layeredArchitecture()
+            .consideringAllDependencies()
+            .layer("Controller").definedBy("..controller..")
+            .layer("Service").definedBy("..service..")
+            .layer("Repository").definedBy("..repository..")
+            .whereLayer("Controller").mayNotBeAccessedByAnyLayer()
+            .whereLayer("Service").mayOnlyBeAccessedByLayers("Controller")
+            .whereLayer("Repository").mayOnlyBeAccessedByLayers("Service");
+}
+```
+
 **Build Command Examples** (if enhanced compiler analysis added):
 ```bash
 # Run with enhanced analysis
@@ -331,6 +393,15 @@ public static void collectionsExample() {
 
 # Compile will fail with nullness violations
 ./mvnw clean compile -Dmaven.compiler.showWarnings=true
+```
+
+**Build Command Examples** (if ArchUnit added):
+```bash
+# Run architecture tests together with unit tests
+./mvnw test
+
+# Run only architecture tests
+./mvnw test -Dtest="*ArchitectureTest"
 ```
             
 ## Output Format
@@ -341,6 +412,7 @@ public static void collectionsExample() {
 - Follow configuration specifications exactly
 - Update package names in NullAway configuration
 - Add VAVR dependency only if user selected functional programming support
+- Add ArchUnit dependency only if user selected architecture testing
 - Provide usage examples only for features that were added
 
 ## Safeguards
@@ -350,4 +422,6 @@ public static void collectionsExample() {
 - Never proceed without user confirmation for each step
 - Ensure JSpecify dependency uses `provided` scope
 - Ensure VAVR dependency uses default `compile` scope
+- Ensure ArchUnit dependency uses `test` scope
 - Test enhanced compiler analysis with a simple build
+- Verify architecture tests pass with `./mvnw test` after adding ArchUnit
