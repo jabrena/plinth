@@ -171,7 +171,7 @@ public final class CursorRulesGenerator {
             TransformerFactory factory = TransformerFactory.newInstance();
             Transformer transformer = factory.newTransformer(new StreamSource(xslStream));
 
-            String ruleName = xmlFileName.replaceAll("\\.xml$", "");
+            String ruleName = xmlFileName.replaceAll(".*/", "").replaceAll("\\.xml$", "");
             transformer.setParameter("ruleName", ruleName);
 
             StringWriter stringWriter = new StringWriter();

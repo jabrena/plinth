@@ -61,7 +61,7 @@
                 I'll ask you a few targeted questions:
 
                 ```markdown
-                <xi:include href="fragments/java-maven-dependencies-questions-template.md" parse="text"/>
+                <xi:include href="assets/questions/java-maven-dependencies-questions-template.md" parse="text"/>
                 ```
             </step-content>
             <step-constraints>

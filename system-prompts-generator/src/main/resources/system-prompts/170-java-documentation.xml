@@ -39,7 +39,7 @@
                 **IMPORTANT**: Ask these questions to understand the documentation requirements before generating any documentation. Based on the answers, you will conditionally execute only relevant subsequent steps.
 
                 ```markdown
-                <xi:include href="fragments/java-documentation-questions-template.md" parse="text"/>
+                <xi:include href="assets/questions/java-documentation-questions-template.md" parse="text"/>
                 ```
             </step-content>
             <step-constraints>
@@ -75,7 +75,7 @@
 
 Use the following template and guidelines:
 
-<xi:include href="fragments/java-documentation-implementation-template.md" parse="text"/>
+<xi:include href="assets/java-documentation-implementation-template.md" parse="text"/>
 
 ## Single Module Project Implementation
 
@@ -663,7 +663,7 @@ After generating the ADR document, provide these additional recommendations:
                     <step-constraint>**MUST** get current date using `date` command before starting ADR creation</step-constraint>
                     <step-constraint>**MUST** ask questions ONE BY ONE in the exact order specified</step-constraint>
                     <step-constraint>**MUST** WAIT for user response to each question before proceeding to the next</step-constraint>
-                    <step-constraint>**MUST** use the ADR template from fragments/adr-template.md</step-constraint>
+                    <step-constraint>**MUST** use the ADR template from assets/architecture/adr-template.md</step-constraint>
                     <step-constraint>**MUST** replace all template placeholders with actual content from user responses</step-constraint>
                     <step-constraint>**MUST** use current date to replace date placeholders in template</step-constraint>
                     <step-constraint>**MUST** create ADR file in location specified by user in Step 1</step-constraint>

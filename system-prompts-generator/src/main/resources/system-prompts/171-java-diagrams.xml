@@ -39,7 +39,7 @@
                 **IMPORTANT**: Ask these questions to understand the diagram requirements before generating any diagrams. Based on the answers, you will conditionally execute only relevant subsequent steps.
 
                 ```markdown
-                <xi:include href="fragments/java-diagrams-questions-template.md" parse="text"/>
+                <xi:include href="assets/questions/java-diagrams-questions-template.md" parse="text"/>
                 ```
             </step-content>
             <step-constraints>
@@ -75,7 +75,7 @@
 
 Use the following template and guidelines:
 
-<xi:include href="fragments/java-uml-sequence-diagram-template.md" parse="text"/>
+<xi:include href="assets/architecture/java-uml-sequence-diagram-template.md" parse="text"/>
 
 ## Workflow Analysis Process
 
@@ -169,7 +169,7 @@ After generating sequence diagrams:
 
 Use the following template and guidelines:
 
-<xi:include href="fragments/java-uml-class-diagram-template.md" parse="text"/>
+<xi:include href="assets/architecture/java-uml-class-diagram-template.md" parse="text"/>
 
 ## Package Analysis Process
 
@@ -281,7 +281,7 @@ After generating class diagrams:
 
 Use the following template and guidelines:
 
-<xi:include href="fragments/java-c4-diagram-template.md" parse="text"/>
+<xi:include href="assets/architecture/java-c4-diagram-template.md" parse="text"/>
 
 ## C4 Model Analysis Process
 
@@ -398,7 +398,7 @@ After generating C4 diagrams:
 
 Use the following template and guidelines:
 
-<xi:include href="fragments/java-uml-state-machine-diagram-template.md" parse="text"/>
+<xi:include href="assets/architecture/java-uml-state-machine-diagram-template.md" parse="text"/>
 
 ## State Machine Analysis Process
 

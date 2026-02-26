@@ -42,6 +42,6 @@ public final class SystemPromptsInventory {
     }
 
     public static Stream<String> xmlFilenames() {
-        return baseNames().map(name -> name + ".xml");
+        return baseNames().map(name -> "system-prompts/" + name + ".xml");
     }
 }
