@@ -9,11 +9,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 /**
- * Generator for Agent Skills (SKILL.md and references) from XML rule definitions and skill-summary files.
+ * Generator for Agent Skills (SKILL.md and references) from XML rule definitions and skill files.
  * <p>
  * Reuses CursorRulesGenerator for full rule content. SKILL.md is sourced from
- * {@code skills/{skillId}-skill-summary.md} (user-editable). SkillsInventory defines which skills exist;
- * each must have a matching skill-summary file in {@code skills/}.
+ * {@code skills/{numericId}-skill.md} (user-editable), where numericId is extracted from skillId (e.g. 110 from 110-java-maven-best-practices).
+ * SkillsInventory defines which skills exist; each must have a matching skill file in {@code skills/}.
  */
 public final class SkillsGenerator {
 
@@ -104,16 +104,22 @@ public final class SkillsGenerator {
     }
 
     private String loadSkillSummary(String skillId) {
-        String resourceName = "skills/" + skillId + "-skill-summary.md";
+        String numericId = extractNumericId(skillId);
+        String resourceName = "skills/" + numericId + "-skill.md";
         try (InputStream stream = getResource(resourceName)) {
             if (stream == null) {
-                throw new RuntimeException("Skill-summary resource not found: " + resourceName
+                throw new RuntimeException("Skill resource not found: " + resourceName
                     + ". Each skill in SkillsInventory must have a matching file in skills/.");
             }
             return new String(stream.readAllBytes());
         } catch (Exception e) {
-            throw new RuntimeException("Failed to load skill-summary: " + resourceName, e);
+            throw new RuntimeException("Failed to load skill: " + resourceName, e);
         }
+    }
+
+    private static String extractNumericId(String skillId) {
+        int dash = skillId.indexOf('-');
+        return dash > 0 ? skillId.substring(0, dash) : skillId;
     }
 
     private InputStream getResource(String name) {

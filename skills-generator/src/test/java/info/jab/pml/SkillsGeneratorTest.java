@@ -36,18 +36,18 @@ class SkillsGeneratorTest {
         @MethodSource("provideSkillIds")
         @DisplayName("Should generate valid SKILL.md and reference for each skill")
         void should_generateValidSkill_when_skillIdProvided(String skillId) throws IOException {
-            // Given - skill-summary in resources/skills/ is the source of truth
-            String expectedSkillSummary = loadSkillSummaryFromResources(skillId);
+            // Given - skill file in resources/skills/ is the source of truth
+            String expectedSkillMd = loadSkillFromResources(skillId);
             SkillsGenerator generator = new SkillsGenerator();
 
             // When
             SkillsGenerator.SkillOutput output = generator.generateSkill(skillId);
 
-            // Then - Generated SKILL.md must exactly match the skill-summary source (user-editable)
+            // Then - Generated SKILL.md must exactly match the skill source (user-editable)
             assertThat(output.skillMd())
-                .withFailMessage("Generated SKILL.md must match skills/%s-skill-summary.md. "
-                    + "Update the skill-summary file and run the build to promote changes.", skillId)
-                .isEqualTo(expectedSkillSummary);
+                .withFailMessage("Generated SKILL.md must match skills/%s-skill.md. "
+                    + "Update the skill file and run the build to promote changes.", numericId(skillId))
+                .isEqualTo(expectedSkillMd);
 
             // Then - Validate reference content
             assertThat(output.referenceMd())
@@ -69,21 +69,22 @@ class SkillsGeneratorTest {
     class SkillsInventorySyncTests {
 
         @Test
-        @DisplayName("SkillsInventory must have matching skill-summary file for each skill")
-        void should_haveMatchingSkillSummary_forEachSkillInInventory() {
+        @DisplayName("SkillsInventory must have matching skill file for each skill")
+        void should_haveMatchingSkillFile_forEachSkillInInventory() {
             List<String> skillIds = SkillsInventory.skillIds().toList();
             assertThat(skillIds).isNotEmpty();
 
             for (String skillId : skillIds) {
-                String resourceName = "skills/" + skillId + "-skill-summary.md";
+                String numId = numericId(skillId);
+                String resourceName = "skills/" + numId + "-skill.md";
                 try (InputStream stream = SkillsGeneratorTest.class.getClassLoader()
                     .getResourceAsStream(resourceName)) {
                     assertThat(stream)
-                        .withFailMessage("SkillsInventory contains '%s' but skills/%s-skill-summary.md not found. "
-                            + "Add the skill-summary file for each skill in the inventory.", skillId, skillId)
+                        .withFailMessage("SkillsInventory contains '%s' but skills/%s-skill.md not found. "
+                            + "Add the skill file for each skill in the inventory.", skillId, numId)
                         .isNotNull();
                 } catch (IOException e) {
-                    throw new RuntimeException("Failed to verify skill-summary for " + skillId, e);
+                    throw new RuntimeException("Failed to verify skill file for " + skillId, e);
                 }
             }
         }
@@ -104,14 +105,20 @@ class SkillsGeneratorTest {
         }
     }
 
-    private String loadSkillSummaryFromResources(String skillId) throws IOException {
-        String resourceName = "skills/" + skillId + "-skill-summary.md";
+    private String loadSkillFromResources(String skillId) throws IOException {
+        String numId = numericId(skillId);
+        String resourceName = "skills/" + numId + "-skill.md";
         try (InputStream stream = SkillsGeneratorTest.class.getClassLoader().getResourceAsStream(resourceName)) {
             if (stream == null) {
-                throw new IllegalArgumentException("Skill-summary not found: " + resourceName);
+                throw new IllegalArgumentException("Skill file not found: " + resourceName);
             }
             return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
         }
+    }
+
+    private static String numericId(String skillId) {
+        int dash = skillId.indexOf('-');
+        return dash > 0 ? skillId.substring(0, dash) : skillId;
     }
 
     private void saveToTarget(SkillsGenerator.SkillOutput output) throws IOException {
