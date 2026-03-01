@@ -23,6 +23,7 @@
   {"name": "163-java-profiling-refactor"},
   {"name": "164-java-profiling-verify"},
   {"name": "170-java-documentation"},
+  {"name": "171-java-adr"},
   {"name": "172-java-diagrams"},
   {"name": "173-java-agents"},
   {"name": "behaviour-consultative-interaction"},
