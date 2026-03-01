@@ -7,6 +7,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -99,7 +100,10 @@ class SkillsGeneratorTest {
             if (stream == null) {
                 throw new IllegalArgumentException("Skill file not found: " + resourceName);
             }
-            return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+            String content = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+            return content.lines()
+                .map(line -> line.startsWith("description:") ? line + " Part of the skills-for-java project" : line)
+                .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
         }
     }
 

@@ -19,6 +19,8 @@ import org.w3c.dom.NodeList;
  */
 public final class SkillsGenerator {
 
+    private static final String PROJECT_TAG = " Part of the skills-for-java project";
+
     private final CursorRulesGenerator cursorRulesGenerator;
 
     public SkillsGenerator() {
@@ -124,10 +126,17 @@ public final class SkillsGenerator {
                 throw new RuntimeException("Skill resource not found: " + resourceName
                     + ". Each skill in SkillsInventory must have a matching file in skills/.");
             }
-            return new String(stream.readAllBytes());
+            String content = new String(stream.readAllBytes());
+            return appendProjectTagToDescription(content);
         } catch (Exception e) {
             throw new RuntimeException("Failed to load skill: " + resourceName, e);
         }
+    }
+
+    private String appendProjectTagToDescription(String content) {
+        return content.lines()
+            .map(line -> line.startsWith("description:") ? line + PROJECT_TAG : line)
+            .collect(java.util.stream.Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
     }
 
     private static String extractNumericId(String skillId) {
