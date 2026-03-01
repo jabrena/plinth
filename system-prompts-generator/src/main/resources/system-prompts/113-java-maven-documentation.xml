@@ -5,7 +5,8 @@
         <author>Juan Antonio Breña Moral</author>
         <version>0.12.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
-        <title>Create DEVELOPER.md with information about how to use the Maven project</title>
+        <title>Create DEVELOPER.md for the Maven projects</title>
+        <description>Use when you need to create a DEVELOPER.md file for a Maven project documenting plugin goals, Maven profiles, and submodules.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Java software development and Maven build systems</role>

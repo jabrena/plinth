@@ -9,6 +9,8 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -16,6 +18,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -75,6 +80,55 @@ class SkillsGeneratorTest {
             // skillIds() validates each entry has skills/{id}-skill.md and system-prompt with prefix {id}-
             List<String> skillIds = SkillsInventory.skillIds().toList();
             assertThat(skillIds).isNotEmpty();
+        }
+    }
+
+    @Nested
+    @DisplayName("Title consistency between skill markdown and system-prompt XML")
+    class TitleConsistencyTests {
+
+        private static Stream<String> provideSkillIds() {
+            return SkillsInventory.skillIds();
+        }
+
+        @ParameterizedTest
+        @MethodSource("provideSkillIds")
+        @DisplayName("Skill markdown H1 title must match system-prompt XML title element")
+        void should_haveMatchingTitle_when_comparingSkillMdAndSystemPromptXml(String skillId) throws Exception {
+            String numId = numericId(skillId);
+            String skillMdResource = "skills/" + numId + "-skill.md";
+            String markdownTitle;
+            try (InputStream stream = SkillsGeneratorTest.class.getClassLoader().getResourceAsStream(skillMdResource)) {
+                assertThat(stream).withFailMessage("Skill file not found: %s", skillMdResource).isNotNull();
+                String content = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+                markdownTitle = content.lines()
+                    .filter(line -> line.startsWith("# "))
+                    .findFirst()
+                    .map(line -> line.substring(2).trim())
+                    .orElseThrow(() -> new AssertionError("No H1 heading found in " + skillMdResource));
+            }
+
+            String xmlResource = "system-prompts/" + skillId + ".xml";
+            String xmlTitle;
+            try (InputStream stream = SkillsGeneratorTest.class.getClassLoader().getResourceAsStream(xmlResource)) {
+                assertThat(stream).withFailMessage("System-prompt XML not found: %s", xmlResource).isNotNull();
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                Document doc = builder.parse(stream);
+                Element metadata = (Element) doc.getElementsByTagName("metadata").item(0);
+                assertThat(metadata).withFailMessage("No <metadata> element in %s", xmlResource).isNotNull();
+                NodeList titleNodes = metadata.getElementsByTagName("title");
+                assertThat(titleNodes.getLength())
+                    .withFailMessage("No <title> element in <metadata> of %s", xmlResource)
+                    .isGreaterThan(0);
+                xmlTitle = titleNodes.item(0).getTextContent().trim();
+            }
+
+            assertThat(markdownTitle)
+                .withFailMessage(
+                    "Skill markdown H1 '%s' in %s does not match XML <title> '%s' in %s",
+                    markdownTitle, skillMdResource, xmlTitle, xmlResource)
+                .isEqualTo(xmlTitle);
         }
     }
 
