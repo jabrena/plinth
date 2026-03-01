@@ -2,6 +2,7 @@ package info.jab.pml;
 
 import java.io.InputStream;
 import java.util.Optional;
+import java.util.stream.Stream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import org.w3c.dom.Document;
@@ -13,7 +14,8 @@ import org.w3c.dom.NodeList;
  * <p>
  * Reuses CursorRulesGenerator for full rule content. SKILL.md is sourced from
  * {@code skills/{numericId}-skill.md} (user-editable), where numericId is extracted from skillId (e.g. 110 from 110-java-maven-best-practices).
- * SkillsInventory defines which skills exist; each must have a matching skill file in {@code skills/}.
+ * The list of skills to generate is defined in {@code skill-inventory.json}; each must have a
+ * matching skill summary in {@code skills/} and a matching system-prompt in {@code system-prompts/}.
  */
 public final class SkillsGenerator {
 
@@ -21,6 +23,17 @@ public final class SkillsGenerator {
 
     public SkillsGenerator() {
         this.cursorRulesGenerator = new CursorRulesGenerator();
+    }
+
+    /**
+     * Generates SKILL.md and reference content for all skills in the inventory.
+     * Validates that each skill has a summary in {@code skills/} and a matching system-prompt.
+     *
+     * @return stream of generated skill outputs
+     */
+    public Stream<SkillOutput> generateAllSkills() {
+        return SkillsInventory.skillIds()
+            .map(this::generateSkill);
     }
 
     /**

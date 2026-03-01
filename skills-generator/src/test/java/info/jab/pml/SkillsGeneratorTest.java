@@ -65,28 +65,15 @@ class SkillsGeneratorTest {
     }
 
     @Nested
-    @DisplayName("SkillsInventory and skills directory sync")
-    class SkillsInventorySyncTests {
+    @DisplayName("Skill inventory and resources sync")
+    class SkillInventorySyncTests {
 
         @Test
-        @DisplayName("SkillsInventory must have matching skill file for each skill")
-        void should_haveMatchingSkillFile_forEachSkillInInventory() {
+        @DisplayName("skill-inventory.json entries must have matching skill summary and system-prompt")
+        void should_validateInventoryMatchesSkillsAndSystemPrompts() {
+            // skillIds() validates each entry has skills/{id}-skill.md and system-prompt with prefix {id}-
             List<String> skillIds = SkillsInventory.skillIds().toList();
             assertThat(skillIds).isNotEmpty();
-
-            for (String skillId : skillIds) {
-                String numId = numericId(skillId);
-                String resourceName = "skills/" + numId + "-skill.md";
-                try (InputStream stream = SkillsGeneratorTest.class.getClassLoader()
-                    .getResourceAsStream(resourceName)) {
-                    assertThat(stream)
-                        .withFailMessage("SkillsInventory contains '%s' but skills/%s-skill.md not found. "
-                            + "Add the skill file for each skill in the inventory.", skillId, numId)
-                        .isNotNull();
-                } catch (IOException e) {
-                    throw new RuntimeException("Failed to verify skill file for " + skillId, e);
-                }
-            }
         }
     }
 
