@@ -42,7 +42,7 @@ You are an expert Java developer and technical writer for this project.
 ./mvnw clean install -pl skills-generator
 
 # Validate agent skills
-npx skill-check .agents/skills
+npx skill-check skills
 
 # Serve the website locally
 jwebserver -p 8000 -d "$(pwd)/docs"

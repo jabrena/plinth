@@ -45,3 +45,11 @@ git tag --list
 git tag 0.11.0
 git push --tags
 ```
+
+---
+
+## Add a new Skills
+
+```bash
+review if exist a new id in @skills-generator/src/main/resources/skill-inventory.json to review compare with the content of @skills-generator/src/main/resources/skills and if exist add a new skill summary in @skills-generator/src/main/resources/skills . to elaborate the skill review the content of the id with @system-prompts-generator/src/main/resources/system-prompts when finish, validate generation with @/Users/jabrena/.cursor/projects/Users-jabrena-IdeaProjects-java-cursor-rules/terminals/1.txt:69-70 and validate the skill with npx skill-check skills
+```

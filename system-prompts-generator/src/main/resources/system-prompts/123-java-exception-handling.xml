@@ -1,85 +1,71 @@
----
-name: 127-java-exception-handling
-license: Apache-2.0
-metadata:
-  author: Juan Antonio Breña Moral
-  version: 0.12.0-SNAPSHOT
----
-# Java Exception Handling Guidelines
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
 
-## Role
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.12.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Java Exception Handling Guidelines</title>
+        <description>Use when you need to apply Java exception handling best practices — including using specific exception types, managing resources with try-with-resources, securing exception messages, preserving error context via exception chaining, validating inputs early with fail-fast principles, handling thread interruption correctly, documenting exceptions with @throws, enforcing logging policy, translating exceptions at API boundaries, managing retries and idempotency, enforcing timeouts, attaching suppressed exceptions, and propagating failures in async/reactive code.</description>
+    </metadata>
 
-You are a Senior software engineer with extensive experience in Java software development
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
-## Goal
+    <goal>
+        This document provides comprehensive guidelines for robust Java exception handling practices. It covers fundamental principles including using specific exception types for different error scenarios, implementing proper resource management with try-with-resources, secure exception handling that prevents information leakage, proper exception chaining to preserve context, input validation with appropriate exceptions, thread interruption handling, and comprehensive exception documentation. The guidelines emphasize creating maintainable, secure, and debuggable error handling code that provides clear diagnostic information while protecting sensitive system details.
 
-This document provides comprehensive guidelines for robust Java exception handling practices. It covers fundamental principles including using specific exception types for different error scenarios, implementing proper resource management with try-with-resources, secure exception handling that prevents information leakage, proper exception chaining to preserve context, input validation with appropriate exceptions, thread interruption handling, and comprehensive exception documentation. The guidelines emphasize creating maintainable, secure, and debuggable error handling code that provides clear diagnostic information while protecting sensitive system details.
+        ### Implementing These Principles
 
-### Implementing These Principles
+        These guidelines are built upon the following core principles:
 
-These guidelines are built upon the following core principles:
+        1. **Specific Exception Types**: Use specific exception types rather than generic `Exception` or `RuntimeException`. Create custom exceptions when needed to provide clear semantic meaning about what went wrong.
+        2. **Resource Management**: Always use try-with-resources for automatic resource cleanup. Ensure resources are properly closed even in exception scenarios.
+        3. **Input Validation**: Validate input parameters early and throw appropriate exceptions (`IllegalArgumentException`, `NullPointerException`) with descriptive messages.
+        4. **Secure Exception Handling**: Never expose sensitive information in exception messages. Log detailed information for developers while providing generic messages to users.
+        5. **Exception Chaining**: Preserve original exception context by using exception chaining to maintain the full error context for debugging.
+        6. **Thread Safety**: Handle `InterruptedException` properly by restoring the interrupted status and taking appropriate action.
+        7. **Documentation**: Document all checked exceptions with `@throws` tags and provide clear descriptions of when and why exceptions are thrown.
+        8. **Fail-Fast Principle**: Detect and report errors as early as possible rather than allowing invalid state to propagate through the system.
+        9. **Logging Policy**: Use structured logging with correlation IDs and error codes. Avoid log-and-throw duplication; log once at the boundary that decides the response.
+        10. **API Boundary Translation**: Translate lower-level exceptions into domain or transport-specific errors at application boundaries (e.g., controllers, message handlers) using centralized mappers/handlers.
+        11. **Retry and Idempotency**: Retry only idempotent operations with bounded attempts and backoff. Never retry on non-idempotent operations unless protected by idempotency keys.
+        12. **Timeouts and Deadlines**: Enforce timeouts and propagate deadline-exceeded errors. Cancel ongoing work on timeout and restore the interrupted status when applicable.
+        13. **Suppressed Exceptions**: When rethrowing after cleanup failures, attach secondary errors via `Throwable#addSuppressed` to preserve diagnostics.
+        14. **Do Not Catch Throwable/Error**: Catch specific exceptions. Do not catch `Throwable` or `Error` types; let fatal JVM errors propagate.
+        15. **Observability**: Emit metrics for error classes and latency; include correlation/request IDs in logs. Ensure error categorization supports SLO/SLA monitoring.
+        16. **Asynchronous/Reactive Propagation**: In async code (`CompletionStage`, callbacks), propagate failures without blocking; honor cancellation and interruption semantics.
+    </goal>
 
-1. **Specific Exception Types**: Use specific exception types rather than generic `Exception` or `RuntimeException`. Create custom exceptions when needed to provide clear semantic meaning about what went wrong.
-2. **Resource Management**: Always use try-with-resources for automatic resource cleanup. Ensure resources are properly closed even in exception scenarios.
-3. **Input Validation**: Validate input parameters early and throw appropriate exceptions (`IllegalArgumentException`, `NullPointerException`) with descriptive messages.
-4. **Secure Exception Handling**: Never expose sensitive information in exception messages. Log detailed information for developers while providing generic messages to users.
-5. **Exception Chaining**: Preserve original exception context by using exception chaining to maintain the full error context for debugging.
-6. **Thread Safety**: Handle `InterruptedException` properly by restoring the interrupted status and taking appropriate action.
-7. **Documentation**: Document all checked exceptions with `@throws` tags and provide clear descriptions of when and why exceptions are thrown.
-8. **Fail-Fast Principle**: Detect and report errors as early as possible rather than allowing invalid state to propagate through the system.
-9. **Logging Policy**: Use structured logging with correlation IDs and error codes. Avoid log-and-throw duplication; log once at the boundary that decides the response.
-10. **API Boundary Translation**: Translate lower-level exceptions into domain or transport-specific errors at application boundaries (e.g., controllers, message handlers) using centralized mappers/handlers.
-11. **Retry and Idempotency**: Retry only idempotent operations with bounded attempts and backoff. Never retry on non-idempotent operations unless protected by idempotency keys.
-12. **Timeouts and Deadlines**: Enforce timeouts and propagate deadline-exceeded errors. Cancel ongoing work on timeout and restore the interrupted status when applicable.
-13. **Suppressed Exceptions**: When rethrowing after cleanup failures, attach secondary errors via `Throwable#addSuppressed` to preserve diagnostics.
-14. **Do Not Catch Throwable/Error**: Catch specific exceptions. Do not catch `Throwable` or `Error` types; let fatal JVM errors propagate.
-15. **Observability**: Emit metrics for error classes and latency; include correlation/request IDs in logs. Ensure error categorization supports SLO/SLA monitoring.
-16. **Asynchronous/Reactive Propagation**: In async code (`CompletionStage`, callbacks), propagate failures without blocking; honor cancellation and interruption semantics.
+    <constraints>
+        <constraints-description>
+            Before applying any recommendations, ensure the project is in a valid state by running Maven compilation.
+            Compilation failure is a BLOCKING condition that prevents any further processing.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization</constraint>
+            <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations</constraint>
+            <constraint>**BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any exception handling improvements</constraint>
+            <constraint>**NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile</constraint>
+        </constraint-list>
+    </constraints>
 
-## Constraints
+    <examples>
+        <toc auto-generate="true" />
 
-Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
-
-- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
-- **PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization
-- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
-- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with any exception handling improvements
-- **NO EXCEPTIONS**: Under no circumstances should design recommendations be applied to a project that fails to compile
-
-## Examples
-
-### Table of contents
-
-- Example 1: Input Validation with Specific Exceptions
-- Example 2: Resource Management with Try-With-Resources
-- Example 3: Secure Exception Handling
-- Example 4: Exception Chaining and Context Preservation
-- Example 5: Thread Interruption and Concurrent Exception Handling
-- Example 6: Custom Exception Design and Documentation
-- Example 7: Use Exceptions Only for Exceptional Conditions
-- Example 8: Use Checked Exceptions for Recoverable Conditions and Runtime Exceptions for Programming Errors
-- Example 9: Favor the Use of Standard Exceptions
-- Example 10: Include Failure-Capture Information in Detail Messages
-- Example 11: Don't Ignore Exceptions
-- Example 12: Testing Exception Scenarios Effectively
-- Example 13: Logging Policy: Structured, De-duplicated Logging
-- Example 14: Exception Translation at API Boundaries
-- Example 15: Retry with Backoff Only for Idempotent Operations
-- Example 16: Timeouts, Deadlines and Cancellation
-- Example 17: Preserve Secondary Failures with Suppressed Exceptions
-- Example 18: Do Not Catch Throwable or Error
-- Example 19: Exception Handling in Lambda Expressions and Streams
-- Example 20: Exception Handling in Constructors
-
-### Example 1: Input Validation with Specific Exceptions
-
-Title: Validate Early and Fail Fast with Descriptive Exceptions
-Description: Validate input parameters at method entry points and throw specific, descriptive exceptions immediately when validation fails. This prevents invalid data from propagating through the system and makes debugging easier.
-
-**Good example:**
-
-```java
-// GOOD: Specific input validation with descriptive exceptions
+        <example number="1" id="input-validation-exceptions">
+            <example-header>
+                <example-title>Input Validation with Specific Exceptions</example-title>
+                <example-subtitle>Validate Early and Fail Fast with Descriptive Exceptions</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Validate input parameters at method entry points and throw specific, descriptive exceptions immediately when validation fails. This prevents invalid data from propagating through the system and makes debugging easier.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Specific input validation with descriptive exceptions
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -146,13 +132,10 @@ public class UserService {
     private boolean isValidEmail(String email) {
         return email.contains("@") && email.contains(".");
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Poor input validation and generic exceptions
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Poor input validation and generic exceptions
 public class BadUserService {
 
     // BAD: No validation, allows invalid state
@@ -185,18 +168,24 @@ public class BadUserService {
         return items.stream() // NullPointerException if items is null
             .collect(Collectors.toList());
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 2: Resource Management with Try-With-Resources
-
-Title: Ensure Proper Resource Cleanup in All Scenarios
-Description: Use try-with-resources for automatic resource management. This ensures resources are properly closed even when exceptions occur, preventing resource leaks and improving application reliability.
-
-**Good example:**
-
-```java
-// GOOD: Proper resource management with try-with-resources
+        <example number="2" id="resource-management">
+            <example-header>
+                <example-title>Resource Management with Try-With-Resources</example-title>
+                <example-subtitle>Ensure Proper Resource Cleanup in All Scenarios</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use try-with-resources for automatic resource management. This ensures resources are properly closed even when exceptions occur, preventing resource leaks and improving application reliability.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Proper resource management with try-with-resources
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -300,13 +289,10 @@ public class ResourceManager {
             throw new ConfigurationException("Failed to write configuration", e);
         }
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Poor resource management
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Poor resource management
 public class BadResourceManager {
 
     // BAD: Manual resource management prone to leaks
@@ -363,18 +349,24 @@ public class BadResourceManager {
         props.store(fos, "Config");
         fos.close(); // Only closed on success path
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 3: Secure Exception Handling
-
-Title: Protect Sensitive Information While Enabling Debugging
-Description: Handle exceptions securely by logging detailed diagnostic information for developers while providing only generic, safe error messages to users. Never expose sensitive system details, file paths, database schemas, or internal implementation details in user-facing error messages.
-
-**Good example:**
-
-```java
-// GOOD: Secure exception handling with proper information separation
+        <example number="3" id="secure-exception-handling">
+            <example-header>
+                <example-title>Secure Exception Handling</example-title>
+                <example-subtitle>Protect Sensitive Information While Enabling Debugging</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Handle exceptions securely by logging detailed diagnostic information for developers while providing only generic, safe error messages to users. Never expose sensitive system details, file paths, database schemas, or internal implementation details in user-facing error messages.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Secure exception handling with proper information separation
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -492,13 +484,10 @@ public enum ErrorCode {
     public int getHttpStatus() { return httpStatus; }
     public String getMessage() { return message; }
     public String getCode() { return name(); }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Insecure exception handling that exposes sensitive information
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Insecure exception handling that exposes sensitive information
 public class InsecureService {
 
     // BAD: Exposing sensitive system information
@@ -577,18 +566,24 @@ public class InsecureService {
         // This reveals information about system state and database structure
         return user.getProfile();
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 4: Exception Chaining and Context Preservation
-
-Title: Maintain Full Error Context for Effective Debugging
-Description: Use exception chaining to preserve the original exception context while adding higher-level semantic meaning. This provides the full error context needed for debugging while allowing different layers of the application to handle errors appropriately.
-
-**Good example:**
-
-```java
-// GOOD: Proper exception chaining with context preservation
+        <example number="4" id="exception-chaining">
+            <example-header>
+                <example-title>Exception Chaining and Context Preservation</example-title>
+                <example-subtitle>Maintain Full Error Context for Effective Debugging</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use exception chaining to preserve the original exception context while adding higher-level semantic meaning. This provides the full error context needed for debugging while allowing different layers of the application to handle errors appropriately.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Proper exception chaining with context preservation
 public class LayeredService {
     private static final Logger logger = LoggerFactory.getLogger(LayeredService.class);
 
@@ -718,13 +713,10 @@ public class LayeredService {
             throw new ProcessingException("Failed to save user data: " + user.getId(), e);
         }
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Poor exception handling that loses context
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Poor exception handling that loses context
 public class BadLayeredService {
 
     // BAD: Losing original exception context
@@ -811,18 +803,24 @@ public class BadLayeredService {
             return Result.failure("Operation failed");
         }
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 5: Thread Interruption and Concurrent Exception Handling
-
-Title: Handle InterruptedException and Concurrent Operations Properly
-Description: Handle InterruptedException correctly by restoring the interrupted status and taking appropriate action. In concurrent code, ensure exception handling doesn't break thread safety or leave threads in inconsistent states.
-
-**Good example:**
-
-```java
-// GOOD: Proper thread interruption and concurrent exception handling
+        <example number="5" id="thread-interruption-handling">
+            <example-header>
+                <example-title>Thread Interruption and Concurrent Exception Handling</example-title>
+                <example-subtitle>Handle InterruptedException and Concurrent Operations Properly</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Handle InterruptedException correctly by restoring the interrupted status and taking appropriate action. In concurrent code, ensure exception handling doesn't break thread safety or leave threads in inconsistent states.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Proper thread interruption and concurrent exception handling
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -1017,13 +1015,10 @@ public class ConcurrentProcessor {
         // Simulate critical processing
         logger.debug("Processing data in critical section: {}", data);
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Poor thread interruption and concurrent exception handling
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Poor thread interruption and concurrent exception handling
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -1133,18 +1128,24 @@ public class BadConcurrentProcessor {
             }
         }
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 6: Custom Exception Design and Documentation
-
-Title: Create Meaningful Exception Hierarchies with Proper Documentation
-Description: Design custom exception hierarchies that provide semantic meaning and enable appropriate handling at different application layers. Document exceptions thoroughly with @throws tags and provide clear guidance on when and why they are thrown.
-
-**Good example:**
-
-```java
-// GOOD: Well-designed custom exception hierarchy with proper documentation
+        <example number="6" id="custom-exceptions">
+            <example-header>
+                <example-title>Custom Exception Design and Documentation</example-title>
+                <example-subtitle>Create Meaningful Exception Hierarchies with Proper Documentation</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Design custom exception hierarchies that provide semantic meaning and enable appropriate handling at different application layers. Document exceptions thoroughly with @throws tags and provide clear guidance on when and why they are thrown.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Well-designed custom exception hierarchy with proper documentation
 /**
  * Base exception for all business-related errors in the user management system.
  * This is a checked exception to force explicit handling of business logic failures.
@@ -1418,13 +1419,10 @@ public enum ErrorCode {
 
     public String getCode() { return code; }
     public String getDescription() { return description; }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Poor custom exception design and documentation
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// AVOID: Poor custom exception design and documentation
 // BAD: Generic exception without semantic meaning
 public class UserException extends Exception {
     public UserException(String message) {
@@ -1552,18 +1550,24 @@ public class BadUserService {
         return user;
     }
 }
-```
+]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-
-### Example 7: Use Exceptions Only for Exceptional Conditions
-
-Title: Don't use exceptions for ordinary control flow
-Description: Exceptions should be used for exceptional conditions, not for normal program flow. They are expensive and make code harder to understand. Use regular control structures for predictable conditions.
-
-**Good example:**
-
-```java
-// GOOD: Normal control flow for array processing
+        <example number="7" id="exception-control-flow">
+            <example-header>
+                <example-title>Use Exceptions Only for Exceptional Conditions</example-title>
+                <example-subtitle>Don't use exceptions for ordinary control flow</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Exceptions should be used for exceptional conditions, not for normal program flow. They are expensive and make code harder to understand. Use regular control structures for predictable conditions.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Normal control flow for array processing
 public class NumberProcessor {
     public void processNumbers(int[] numbers) {
         for (int number : numbers) {  // Normal iteration
@@ -1583,13 +1587,10 @@ public class NumberProcessor {
         // Process the number
         logger.info("Processing: {}", number);
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Using exceptions for normal control flow
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Using exceptions for normal control flow
 public class NumberProcessor {
     public void processNumbers(int[] numbers) {
         try {
@@ -1605,18 +1606,24 @@ public class NumberProcessor {
     private void process(int number) {
         System.out.println("Processing: " + number);
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 8: Use Checked Exceptions for Recoverable Conditions and Runtime Exceptions for Programming Errors
-
-Title: Choose the right type of exception for the situation
-Description: Checked exceptions force the caller to handle recoverable conditions, while runtime exceptions indicate programming errors that should be fixed in code. Use checked exceptions for conditions the caller can reasonably recover from.
-
-**Good example:**
-
-```java
-// GOOD: Appropriate exception types for different scenarios
+        <example number="8" id="checked-vs-unchecked-exceptions">
+            <example-header>
+                <example-title>Use Checked Exceptions for Recoverable Conditions and Runtime Exceptions for Programming Errors</example-title>
+                <example-subtitle>Choose the right type of exception for the situation</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Checked exceptions force the caller to handle recoverable conditions, while runtime exceptions indicate programming errors that should be fixed in code. Use checked exceptions for conditions the caller can reasonably recover from.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Appropriate exception types for different scenarios
 public class FileProcessor {
 
     /**
@@ -1664,13 +1671,10 @@ class FileProcessingException extends Exception {
     public FileProcessingException(String message, Throwable cause) {
         super(message, cause);
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Wrong exception types for the situation
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Wrong exception types for the situation
 public class FileProcessor {
 
     // BAD: Using checked exception for programming error
@@ -1689,18 +1693,24 @@ public class FileProcessor {
             throw new RuntimeException("File processing failed", e);
         }
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 9: Favor the Use of Standard Exceptions
-
-Title: Use standard Java exceptions when appropriate
-Description: Standard exceptions are familiar to developers and have clear semantics. Don't create custom exceptions when standard ones sufficiently express the error condition.
-
-**Good example:**
-
-```java
-// GOOD: Using standard exceptions with descriptive messages
+        <example number="9" id="favor-standard-exceptions">
+            <example-header>
+                <example-title>Favor the Use of Standard Exceptions</example-title>
+                <example-subtitle>Use standard Java exceptions when appropriate</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Standard exceptions are familiar to developers and have clear semantics. Don't create custom exceptions when standard ones sufficiently express the error condition.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Using standard exceptions with descriptive messages
 public class Calculator {
 
     public double divide(double dividend, double divisor) {
@@ -1727,13 +1737,10 @@ public class Calculator {
         }
         // Process the number
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Custom exceptions when standard ones would suffice
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Custom exceptions when standard ones would suffice
 public class Calculator {
 
     public double divide(double dividend, double divisor) {
@@ -1765,18 +1772,24 @@ class ListIsNullException extends RuntimeException {
 
 class InvalidIndexException extends RuntimeException {
     public InvalidIndexException(String message) { super(message); }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 10: Include Failure-Capture Information in Detail Messages
-
-Title: Provide detailed, actionable information in exception messages
-Description: Exception messages should provide enough context to understand what went wrong and how to fix it. Include relevant parameter values, expected ranges, and specific failure conditions.
-
-**Good example:**
-
-```java
-// GOOD: Detailed exception messages with context
+        <example number="10" id="detailed-exception-messages">
+            <example-header>
+                <example-title>Include Failure-Capture Information in Detail Messages</example-title>
+                <example-subtitle>Provide detailed, actionable information in exception messages</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Exception messages should provide enough context to understand what went wrong and how to fix it. Include relevant parameter values, expected ranges, and specific failure conditions.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Detailed exception messages with context
 public class BankAccount {
     private double balance;
     private final String accountNumber;
@@ -1835,13 +1848,10 @@ public class BankAccount {
         }
         balance += amount;
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Vague exception messages without context
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Vague exception messages without context
 public class BankAccount {
     private double balance;
     private final String accountNumber;
@@ -1866,18 +1876,24 @@ public class BankAccount {
         withdraw(amount);
         toAccount.deposit(amount);
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 11: Don't Ignore Exceptions
-
-Title: Always handle exceptions appropriately, never ignore them silently
-Description: Ignoring exceptions can hide bugs and make debugging extremely difficult. Always log exceptions appropriately, handle them meaningfully, or re-throw them with additional context.
-
-**Good example:**
-
-```java
-// GOOD: Proper exception handling without ignoring
+        <example number="11" id="dont-ignore-exceptions">
+            <example-header>
+                <example-title>Don't Ignore Exceptions</example-title>
+                <example-subtitle>Always handle exceptions appropriately, never ignore them silently</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Ignoring exceptions can hide bugs and make debugging extremely difficult. Always log exceptions appropriately, handle them meaningfully, or re-throw them with additional context.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Proper exception handling without ignoring
 public class FileManager {
     private static final Logger logger = LoggerFactory.getLogger(FileManager.class);
 
@@ -1922,13 +1938,10 @@ class FileOperationException extends Exception {
     public FileOperationException(String message, Throwable cause) {
         super(message, cause);
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Ignoring exceptions
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Ignoring exceptions
 public class FileManager {
 
     public String readFileContent(String filename) {
@@ -1958,18 +1971,24 @@ public class FileManager {
             }
         }
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 12: Testing Exception Scenarios Effectively
-
-Title: Comprehensive patterns for testing exception handling
-Description: Test exception scenarios thoroughly using AssertJ's fluent API for clear, maintainable test code. Verify both that exceptions are thrown when expected and that they contain appropriate messages and context.
-
-**Good example:**
-
-```java
-// GOOD: Comprehensive exception testing with AssertJ
+        <example number="12" id="exception-testing-patterns">
+            <example-header>
+                <example-title>Testing Exception Scenarios Effectively</example-title>
+                <example-subtitle>Comprehensive patterns for testing exception handling</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Test exception scenarios thoroughly using AssertJ's fluent API for clear, maintainable test code. Verify both that exceptions are thrown when expected and that they contain appropriate messages and context.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Comprehensive exception testing with AssertJ
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.DisplayName;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -2065,13 +2084,10 @@ class FileManagerTest {
         assertThat(result).isEmpty();
         // Verify that exception was logged (would need log capture in real test)
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Poor exception testing practices
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// AVOID: Poor exception testing practices
 class CalculatorTestBad {
 
     @Test
@@ -2102,19 +2118,23 @@ class CalculatorTestBad {
         FileProcessor processor = new FileProcessor();
         // Only testing happy path, ignoring error conditions
     }
-}
-```
-
-
-### Example 13: Logging Policy: Structured, De-duplicated Logging
-
-Title: Log once at boundaries with correlation IDs and error codes
-Description: Centralize logging at application boundaries (e.g., controllers, message consumers, batch drivers). Lower layers should attach context and rethrow without logging to avoid duplicate log entries. Use structured logging fields like correlationId, errorCode, and userId.
-
-**Good example:**
-
-```java
-// GOOD: Log once at the boundary with structured context
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="13" id="logging-policy">
+            <example-header>
+                <example-title>Logging Policy: Structured, De-duplicated Logging</example-title>
+                <example-subtitle>Log once at boundaries with correlation IDs and error codes</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Centralize logging at application boundaries (e.g., controllers, message consumers, batch drivers). Lower layers should attach context and rethrow without logging to avoid duplicate log entries. Use structured logging fields like correlationId, errorCode, and userId.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Log once at the boundary with structured context
 public class OrdersController {
     private static final Logger logger = LoggerFactory.getLogger(OrdersController.class);
 
@@ -2144,13 +2164,10 @@ public class OrderService {
             throw new OrderSystemException("Database failure", ErrorCode.SYSTEM_ERROR, e).withCorrelationId(correlationId);
         }
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Duplicate logging across layers (log-and-throw)
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Duplicate logging across layers (log-and-throw)
 public class NoisyService {
     private static final Logger logger = LoggerFactory.getLogger(NoisyService.class);
 
@@ -2175,18 +2192,24 @@ public class NoisyController {
             return Response.serverError();
         }
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 14: Exception Translation at API Boundaries
-
-Title: Use centralized handlers to map domain errors to responses
-Description: Translate internal exceptions into transport-appropriate error responses using centralized handlers. Keep domain exceptions expressive and map them to HTTP/problem-details (or messaging error contracts) at the boundary.
-
-**Good example:**
-
-```java
-// GOOD: Centralized translation to ProblemDetails
+        <example number="14" id="api-boundary-translation">
+            <example-header>
+                <example-title>Exception Translation at API Boundaries</example-title>
+                <example-subtitle>Use centralized handlers to map domain errors to responses</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Translate internal exceptions into transport-appropriate error responses using centralized handlers. Keep domain exceptions expressive and map them to HTTP/problem-details (or messaging error contracts) at the boundary.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Centralized translation to ProblemDetails
 public final class ProblemDetails {
     public final String type; // URI identifying error type
     public final String title;
@@ -2211,13 +2234,10 @@ public class ApiErrorHandler {
         return Response.status(500).body(new ProblemDetails(
             "urn:problem:internal", "Internal Server Error", 500, "Unexpected error", correlationId));
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Ad-hoc translation scattered across controllers
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Ad-hoc translation scattered across controllers
 public class UsersController {
     public Response get(String id) {
         try {
@@ -2226,18 +2246,24 @@ public class UsersController {
             return Response.status(500).body(e.getMessage()); // Leaks internals
         }
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 15: Retry with Backoff Only for Idempotent Operations
-
-Title: Bounded retries, interruption-aware, transient-only
-Description: Apply retries only to operations that are safe to repeat. Use bounded attempts, backoff, and transient error filtering. Preserve interruption and stop on non-transient errors.
-
-**Good example:**
-
-```java
-// GOOD: Interruption-aware retry with backoff for idempotent fetch
+        <example number="15" id="retry-and-idempotency">
+            <example-header>
+                <example-title>Retry with Backoff Only for Idempotent Operations</example-title>
+                <example-subtitle>Bounded retries, interruption-aware, transient-only</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Apply retries only to operations that are safe to repeat. Use bounded attempts, backoff, and transient error filtering. Preserve interruption and stop on non-transient errors.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Interruption-aware retry with backoff for idempotent fetch
 public class RetryingClient {
     private static final Logger logger = LoggerFactory.getLogger(RetryingClient.class);
 
@@ -2260,13 +2286,10 @@ public class RetryingClient {
     }
 
     private boolean isTransient(IOException e) { return e instanceof java.net.SocketTimeoutException; }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Blind retries on non-idempotent operations, swallowing interrupts
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Blind retries on non-idempotent operations, swallowing interrupts
 public class RiskyClient {
     public String createOrder(String body) {
         for (int i = 0; i < 10; i++) {
@@ -2279,18 +2302,24 @@ public class RiskyClient {
         }
         throw new RuntimeException("Failed");
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 16: Timeouts, Deadlines and Cancellation
-
-Title: Propagate deadline exceeded and cancel ongoing work
-Description: Enforce time limits for blocking calls and asynchronous operations. On timeout, cancel the work, restore interrupted status if applicable, and translate to a domain-specific timeout error.
-
-**Good example:**
-
-```java
-// GOOD: Enforce deadline with cancellation
+        <example number="16" id="timeouts-and-deadlines">
+            <example-header>
+                <example-title>Timeouts, Deadlines and Cancellation</example-title>
+                <example-subtitle>Propagate deadline exceeded and cancel ongoing work</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Enforce time limits for blocking calls and asynchronous operations. On timeout, cancel the work, restore interrupted status if applicable, and translate to a domain-specific timeout error.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Enforce deadline with cancellation
 public class DeadlineService {
     private final ExecutorService executor = Executors.newCachedThreadPool();
 
@@ -2308,13 +2337,10 @@ public class DeadlineService {
             throw e;
         }
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: No timeout, no cancellation, blocks indefinitely
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: No timeout, no cancellation, blocks indefinitely
 public class SlowService {
     public Result compute() {
         try {
@@ -2323,18 +2349,24 @@ public class SlowService {
             throw new RuntimeException(e);
         }
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 17: Preserve Secondary Failures with Suppressed Exceptions
-
-Title: Use addSuppressed when cleanup also fails
-Description: When manual cleanup fails after a primary exception, attach the cleanup exception using `Throwable#addSuppressed` before rethrowing to retain both diagnostics. Note: try-with-resources does this automatically.
-
-**Good example:**
-
-```java
-// GOOD: Keep both primary and cleanup failures
+        <example number="17" id="suppressed-exceptions">
+            <example-header>
+                <example-title>Preserve Secondary Failures with Suppressed Exceptions</example-title>
+                <example-subtitle>Use addSuppressed when cleanup also fails</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                When manual cleanup fails after a primary exception, attach the cleanup exception using `Throwable#addSuppressed` before rethrowing to retain both diagnostics. Note: try-with-resources does this automatically.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Keep both primary and cleanup failures
 public void copy(Path src, Path dst) throws FileOperationException {
     FileChannel in = null, out = null;
     try {
@@ -2348,13 +2380,10 @@ public void copy(Path src, Path dst) throws FileOperationException {
         if (cleanupError != null) primary.addSuppressed(cleanupError);
         throw new FileOperationException("Copy failed", primary);
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Losing cleanup failure
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Losing cleanup failure
 public void write(Path dst) throws Exception {
     OutputStream out = null;
     try {
@@ -2364,46 +2393,54 @@ public void write(Path dst) throws Exception {
         try { if (out != null) out.close(); } catch (IOException ignored) {}
         throw e; // Cleanup error lost
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 18: Do Not Catch Throwable or Error
-
-Title: Catch specific exceptions; let fatal errors propagate
-Description: Catching `Throwable` or `Error` can mask fatal conditions (e.g., `OutOfMemoryError`). Restrict catch blocks to expected, recoverable exceptions.
-
-**Good example:**
-
-```java
-// GOOD: Catch only expected exceptions
+        <example number="18" id="dont-catch-throwable">
+            <example-header>
+                <example-title>Do Not Catch Throwable or Error</example-title>
+                <example-subtitle>Catch specific exceptions; let fatal errors propagate</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Catching `Throwable` or `Error` can mask fatal conditions (e.g., `OutOfMemoryError`). Restrict catch blocks to expected, recoverable exceptions.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Catch only expected exceptions
 try {
     persist(entity);
 } catch (SQLException e) {
     throw new RepositoryException("Persist failed", e);
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Catching Throwable masks fatal errors
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// AVOID: Catching Throwable masks fatal errors
 try {
     run();
 } catch (Throwable t) { // Too broad
     log.error("failure", t);
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-
-### Example 19: Exception Handling in Lambda Expressions and Streams
-
-Title: Properly manage exceptions in functional constructs
-Description: In functional programming with lambdas and streams, wrap throwing operations in try-catch or use checked-exception wrappers to maintain proper error handling without losing functional style.
-
-**Good example:**
-
-```java
-// GOOD: Proper exception handling in streams
+        <example number="19" id="lambda-exception-handling">
+            <example-header>
+                <example-title>Exception Handling in Lambda Expressions and Streams</example-title>
+                <example-subtitle>Properly manage exceptions in functional constructs</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                In functional programming with lambdas and streams, wrap throwing operations in try-catch or use checked-exception wrappers to maintain proper error handling without losing functional style.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Proper exception handling in streams
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -2428,13 +2465,10 @@ public class LambdaProcessor {
         }
         return Result.success(input);
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Unhandled exceptions in lambdas
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// AVOID: Unhandled exceptions in lambdas
 public class BadLambdaProcessor {
     public List<Result> process(List<Input> inputs) {
         return inputs.stream()
@@ -2448,18 +2482,24 @@ public class BadLambdaProcessor {
         }
         return Result.success(input);
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
 
-### Example 20: Exception Handling in Constructors
-
-Title: Properly handle initialization failures
-Description: In constructors, validate parameters and throw exceptions for invalid states to prevent creation of invalid objects. Use factory methods for complex initialization that may fail.
-
-**Good example:**
-
-```java
-// GOOD: Validation in constructor with factory method
+        <example number="20" id="constructor-exceptions">
+            <example-header>
+                <example-title>Exception Handling in Constructors</example-title>
+                <example-subtitle>Properly handle initialization failures</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                In constructors, validate parameters and throw exceptions for invalid states to prevent creation of invalid objects. Use factory methods for complex initialization that may fail.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// GOOD: Validation in constructor with factory method
 public class User {
     private final String name;
     private final int age;
@@ -2479,13 +2519,10 @@ public class User {
     public static User create(String name, int age) {
         return new User(name, age);
     }
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: No validation in constructor, creates invalid objects
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// AVOID: No validation in constructor, creates invalid objects
 public class BadUser {
     private String name;
     private int age;
@@ -2494,26 +2531,34 @@ public class BadUser {
         this.name = name; // Could be null or empty
         this.age = age;   // Could be negative
     }
-}
-```
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
 
-## Output Format
+    <output-format>
+        <output-format-list>
+            <output-format-item>**ANALYZE** Java code to identify specific exception handling issues and categorize them by severity (CRITICAL, HIGH, MEDIUM, LOW) and exception handling area (validation, resource management, security, thread safety, documentation, exception design)</output-format-item>
+            <output-format-item>**CATEGORIZE** exception handling improvements found: Input Validation Issues (missing validation vs comprehensive parameter checking, inadequate sanitization vs proper input validation), Resource Management Problems (missing try-with-resources vs automatic resource management, resource leaks vs proper cleanup), Security Vulnerabilities (information disclosure vs secure error messages, sensitive data exposure vs protected exception handling), Thread Safety Problems (improper InterruptedException handling vs correct interruption patterns, concurrent access issues vs thread-safe exception handling), Exception Design Flaws (generic exceptions vs specific exception types, poor hierarchy design vs well-structured exception hierarchies), and Documentation Deficiencies (missing @throws tags vs comprehensive documentation, unclear exception descriptions vs detailed error information)</output-format-item>
+            <output-format-item>**APPLY** exception handling best practices directly by implementing the most appropriate improvements for each identified issue: Implement comprehensive input validation with early parameter checking and proper sanitization, establish automatic resource management using try-with-resources patterns, secure exception handling through generic error messages and protected logging, implement proper thread safety with correct InterruptedException handling, design specific exception hierarchies with meaningful exception types, and provide comprehensive exception documentation with detailed @throws annotations</output-format-item>
+            <output-format-item>**IMPLEMENT** comprehensive exception handling refactoring using proven patterns: Establish robust input validation with null checks, range validation, and format validation, implement automatic resource management with try-with-resources for all closeable resources, apply security-focused exception handling with sanitized error messages and secure logging, design proper exception hierarchies with domain-specific exceptions, implement thread-safe exception handling with proper interruption support, and integrate comprehensive exception documentation with detailed error descriptions and recovery guidance</output-format-item>
+            <output-format-item>**REFACTOR** code systematically following the exception handling improvement roadmap: First implement critical input validation to prevent invalid state and security vulnerabilities, then establish automatic resource management to prevent resource leaks, apply security measures to protect sensitive information in exceptions, implement proper thread safety in exception handling, design and apply well-structured exception hierarchies, and complete comprehensive exception documentation for maintainability and debugging support</output-format-item>
+            <output-format-item>**EXPLAIN** the applied exception handling improvements and their benefits: Reliability enhancements through comprehensive input validation and resource management, security improvements via protected error messages and secure exception handling, maintainability gains from well-structured exception hierarchies and comprehensive documentation, thread safety improvements through proper interruption handling, and debugging capabilities enhancement through detailed exception information and recovery guidance</output-format-item>
+            <output-format-item>**VALIDATE** that all applied exception handling refactoring compiles successfully, maintains existing functionality, improves error handling robustness, eliminates security vulnerabilities, and achieves the intended reliability and maintainability improvements through comprehensive testing and verification</output-format-item>
+        </output-format-list>
+    </output-format>
 
-- **ANALYZE** Java code to identify specific exception handling issues and categorize them by severity (CRITICAL, HIGH, MEDIUM, LOW) and exception handling area (validation, resource management, security, thread safety, documentation, exception design)
-- **CATEGORIZE** exception handling improvements found: Input Validation Issues (missing validation vs comprehensive parameter checking, inadequate sanitization vs proper input validation), Resource Management Problems (missing try-with-resources vs automatic resource management, resource leaks vs proper cleanup), Security Vulnerabilities (information disclosure vs secure error messages, sensitive data exposure vs protected exception handling), Thread Safety Problems (improper InterruptedException handling vs correct interruption patterns, concurrent access issues vs thread-safe exception handling), Exception Design Flaws (generic exceptions vs specific exception types, poor hierarchy design vs well-structured exception hierarchies), and Documentation Deficiencies (missing @throws tags vs comprehensive documentation, unclear exception descriptions vs detailed error information)
-- **APPLY** exception handling best practices directly by implementing the most appropriate improvements for each identified issue: Implement comprehensive input validation with early parameter checking and proper sanitization, establish automatic resource management using try-with-resources patterns, secure exception handling through generic error messages and protected logging, implement proper thread safety with correct InterruptedException handling, design specific exception hierarchies with meaningful exception types, and provide comprehensive exception documentation with detailed @throws annotations
-- **IMPLEMENT** comprehensive exception handling refactoring using proven patterns: Establish robust input validation with null checks, range validation, and format validation, implement automatic resource management with try-with-resources for all closeable resources, apply security-focused exception handling with sanitized error messages and secure logging, design proper exception hierarchies with domain-specific exceptions, implement thread-safe exception handling with proper interruption support, and integrate comprehensive exception documentation with detailed error descriptions and recovery guidance
-- **REFACTOR** code systematically following the exception handling improvement roadmap: First implement critical input validation to prevent invalid state and security vulnerabilities, then establish automatic resource management to prevent resource leaks, apply security measures to protect sensitive information in exceptions, implement proper thread safety in exception handling, design and apply well-structured exception hierarchies, and complete comprehensive exception documentation for maintainability and debugging support
-- **EXPLAIN** the applied exception handling improvements and their benefits: Reliability enhancements through comprehensive input validation and resource management, security improvements via protected error messages and secure exception handling, maintainability gains from well-structured exception hierarchies and comprehensive documentation, thread safety improvements through proper interruption handling, and debugging capabilities enhancement through detailed exception information and recovery guidance
-- **VALIDATE** that all applied exception handling refactoring compiles successfully, maintains existing functionality, improves error handling robustness, eliminates security vulnerabilities, and achieves the intended reliability and maintainability improvements through comprehensive testing and verification
-
-## Safeguards
-
-- **BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` before ANY exception handling recommendations to ensure project stability
-- **CRITICAL VALIDATION**: Execute `./mvnw clean verify` to ensure all tests pass after each exception handling improvement
-- **MANDATORY VERIFICATION**: Confirm all existing functionality remains intact through comprehensive test execution
-- **ROLLBACK REQUIREMENT**: Ensure all exception handling changes can be easily reverted using version control checkpoints
-- **INCREMENTAL SAFETY**: Apply exception handling improvements incrementally, validating after each modification to isolate potential issues
-- **SECURITY VALIDATION**: Verify that exception handling improvements don't introduce information disclosure vulnerabilities or expose sensitive system details
-- **THREAD SAFETY VERIFICATION**: Ensure that concurrent exception handling changes don't introduce race conditions or deadlocks
-- **BACKWARD COMPATIBILITY**: Maintain API compatibility when changing exception types or adding new exception handling patterns
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` before ANY exception handling recommendations to ensure project stability</safeguards-item>
+            <safeguards-item>**CRITICAL VALIDATION**: Execute `./mvnw clean verify` to ensure all tests pass after each exception handling improvement</safeguards-item>
+            <safeguards-item>**MANDATORY VERIFICATION**: Confirm all existing functionality remains intact through comprehensive test execution</safeguards-item>
+            <safeguards-item>**ROLLBACK REQUIREMENT**: Ensure all exception handling changes can be easily reverted using version control checkpoints</safeguards-item>
+            <safeguards-item>**INCREMENTAL SAFETY**: Apply exception handling improvements incrementally, validating after each modification to isolate potential issues</safeguards-item>
+            <safeguards-item>**SECURITY VALIDATION**: Verify that exception handling improvements don't introduce information disclosure vulnerabilities or expose sensitive system details</safeguards-item>
+            <safeguards-item>**THREAD SAFETY VERIFICATION**: Ensure that concurrent exception handling changes don't introduce race conditions or deadlocks</safeguards-item>
+            <safeguards-item>**BACKWARD COMPATIBILITY**: Maintain API compatibility when changing exception types or adding new exception handling patterns</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>
