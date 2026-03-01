@@ -5,7 +5,8 @@
         <author>Juan Antonio Breña Moral</author>
         <version>0.12.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
-        <title>Update pom.xml to add Maven plugins with modular step-based configuration</title>
+        <title>Maven Plugins: pom.xml Configuration Best Practices</title>
+        <description>Use when you need to add or configure Maven plugins in your pom.xml using a modular, step-based approach.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Java software development</role>
