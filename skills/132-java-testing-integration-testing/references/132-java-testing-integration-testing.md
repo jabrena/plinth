@@ -1,5 +1,5 @@
 ---
-name: 132-java-integration-testing
+name: 132-java-testing-integration-testing
 description: Use when you need to set up, review, or improve Java integration tests — including generating a BaseIntegrationTest.java with WireMock for HTTP stubs, detecting HTTP client infrastructure from import signals, injecting service coordinates dynamically via System.setProperty(), creating WireMock JSON mapping files with bodyFileName, isolating stubs per test method, verifying HTTP interactions, or eliminating anti-patterns such as Mockito-mocked HTTP clients or globally registered WireMock stubs.
 license: Apache-2.0
 metadata:
