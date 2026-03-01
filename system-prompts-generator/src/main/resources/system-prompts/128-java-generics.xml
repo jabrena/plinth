@@ -5,6 +5,7 @@
         <version>0.12.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
         <title>Java Generics Best Practices</title>
+        <description>Use when you need to review, improve, or refactor Java code for generics quality — including avoiding raw types, applying PECS wildcards, using bounded type parameters, designing effective generic methods, leveraging type inference with the diamond operator, handling type erasure, preventing heap pollution with @SafeVarargs, and integrating generics with Records, sealed types, and pattern matching.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Java software development</role>
