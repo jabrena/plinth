@@ -59,7 +59,8 @@
                     <step-constraint>**MUST NOT** skip questions or change their order, except when a question becomes inapplicable due to a prior "Skip" selection</step-constraint>
                     <step-constraint>**MUST** confirm understanding of user selections before proceeding to Step 2</step-constraint>
                     <step-constraint>**GUARD**: If any non-template question was asked earlier by mistake, RESTART the question flow from "Question 1" and ignore prior answers</step-constraint>
-                    <step-constraint>**FOCUS**: Only ask documentation-related questions (README.md, package-info.java, Javadoc)</step-constraint>
+                    <step-constraint>**FOCUS**: Only ask documentation-related questions (README.md,
+                        package-info.java, Javadoc) from the template</step-constraint>
                 </step-constraint-list>
             </step-constraints>
         </step>
