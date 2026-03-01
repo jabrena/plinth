@@ -1,5 +1,5 @@
 ---
-name: 171-java-diagrams
+name: 172-java-diagrams
 description: Use when you need to generate Java project diagrams — including UML sequence diagrams, UML class diagrams, C4 model diagrams, and UML state machine diagrams — through a modular, step-based interactive process that adapts to your specific visualization needs. Part of the skills-for-java project
 metadata:
   author: Juan Antonio Breña Moral
@@ -19,4 +19,4 @@ Generate comprehensive Java project diagrams through a modular, step-based inter
 
 ## Reference
 
-For detailed guidance, examples, and constraints, see [references/171-java-diagrams.md](references/171-java-diagrams.md).
+For detailed guidance, examples, and constraints, see [references/172-java-diagrams.md](references/172-java-diagrams.md).
