@@ -173,7 +173,7 @@ Options:
 - **MUST NOT** skip questions or change their order, except when a question becomes inapplicable due to a prior "Skip" selection
 - **MUST** confirm understanding of user selections before proceeding to Step 2
 - **GUARD**: If any non-template question was asked earlier by mistake, RESTART the question flow from "Question 1" and ignore prior answers
-- **FOCUS**: Only ask documentation-related questions (README.md, package-info.java, Javadoc), skip any diagram-related or ADR-related questions from the template
+- **FOCUS**: Only ask documentation-related questions (README.md, package-info.java, Javadoc)
 
 ### Step 2: README.md Generation
 
