@@ -115,7 +115,7 @@ public final class SkillsGenerator {
     }
 
     private String generateReferenceContent(String skillId, SkillMetadata metadata) {
-        return cursorRulesGenerator.generate("system-prompts/" + skillId + ".xml", "cursor-rules.xsl");
+        return cursorRulesGenerator.generate("system-prompts/" + skillId + ".xml", "system-prompts.xsl");
     }
 
     private String loadSkillSummary(String skillId) {

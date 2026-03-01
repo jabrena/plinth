@@ -1,22 +1,22 @@
 ---
-name: 172-java-agents
-description: Use when you need to generate an AGENTS.md file for a Java repository — covering project conventions, tech stack, file structure, commands, Git workflow, and contributor boundaries — through a modular, step-based interactive process that adapts to your specific project needs.
+name: 172-java-diagrams
+description: Use when you need to generate Java project diagrams — including UML sequence diagrams, UML class diagrams, C4 model diagrams, and UML state machine diagrams — through a modular, step-based interactive process that adapts to your specific visualization needs.
 metadata:
   author: Juan Antonio Breña Moral
   version: 0.12.0-SNAPSHOT
 ---
-# AGENTS.md Generator for Java repositories
+# Java Diagrams Generator with modular step-based configuration
 
-Generate a comprehensive AGENTS.md file for Java repositories through a modular, step-based interactive process that covers role definition, tech stack, file structure, commands, Git workflow, and contributor boundaries.
+Generate comprehensive Java project diagrams through a modular, step-based interactive process that covers UML sequence diagrams, UML class diagrams, C4 model diagrams, and UML state machine diagrams using PlantUML syntax.
 
-**Core areas:** AGENTS.md generation for Java repositories of any complexity, role and expertise definition for AI agents and contributors, tech stack documentation (language, build tool, frameworks, pipelines), file structure mapping with read/write boundaries, command catalogue for build/test/deploy/run workflows, Git workflow conventions (branching strategy, commit message format), and contributor boundaries using ✅ Always do / ⚠️ Ask first / 🚫 Never do formatting.
+**Core areas:** UML sequence diagram generation for application workflows and API interactions, UML class diagram generation for package structure and class relationships, C4 model diagram generation at Context/Container/Component/Code abstraction levels, UML state machine diagram generation for entity lifecycles and business workflows, PlantUML syntax for all diagram types, file organization strategies (single-file, separate-files, or integrated with existing documentation), and final diagram validation with PlantUML syntax checking.
 
-**Prerequisites:** No Maven validation is required before generating AGENTS.md. However, review the project structure and existing documentation before starting to provide accurate answers during Step 1.
+**Prerequisites:** Run `./mvnw validate` or `mvn validate` before applying any diagram generation. If validation fails, **stop immediately** — do not proceed until all validation errors are resolved.
 
-**Multi-step scope:** Step 1 assesses project requirements through 6 targeted questions covering role/expertise, tech stack, directory layout, key commands, Git workflow, and contributor boundaries — all questions must be answered in strict order before proceeding. Step 2 generates the AGENTS.md file in the project root by mapping each answer to the corresponding section, handles existing files via overwrite/merge/backup strategies, validates that all 6 sections are present and correctly formatted, and confirms that boundaries use the required ✅ / ⚠️ / 🚫 icons.
+**Multi-step scope:** Step 1 assesses diagram preferences through targeted questions to determine which subsequent steps to execute. Step 2 generates UML sequence diagrams for main application flows, API interactions, and complex business logic — conditionally executed if selected. Step 3 generates UML class diagrams for all packages, core business logic packages, or specific packages, showing inheritance, composition, and dependency relationships — conditionally executed if selected. Step 4 generates C4 model diagrams covering System Context, Container, Component, and Code levels — conditionally executed if selected. Step 5 generates UML state machine diagrams for entity lifecycles, business workflows, system behaviors, and user interactions — conditionally executed if selected. Step 6 validates all generated diagrams and produces a comprehensive summary of files created, directory structure, content coverage, and usage instructions for rendering with PlantUML.
 
-**Before applying changes:** Read the reference for detailed good/bad examples, constraints, and safeguards for each AGENTS.md generation pattern.
+**Before applying changes:** Read the reference for detailed good/bad examples, constraints, and safeguards for each diagram generation pattern.
 
 ## Reference
 
-For detailed guidance, examples, and constraints, see [references/172-java-agents.md](references/172-java-agents.md).
+For detailed guidance, examples, and constraints, see [references/172-java-diagrams.md](references/172-java-diagrams.md).

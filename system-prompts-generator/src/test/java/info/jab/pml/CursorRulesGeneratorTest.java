@@ -34,11 +34,11 @@ class CursorRulesGeneratorTest {
             CursorRulesGenerator generator = new CursorRulesGenerator();
 
             // When & Then - Updated for functional API exception handling
-            assertThatThrownBy(() -> generator.generate("non-existent.xml", "cursor-rules.xsl"))
+            assertThatThrownBy(() -> generator.generate("non-existent.xml", "system-prompts.xsl"))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Failed to generate cursor rules for")
                 .hasMessageContaining("non-existent.xml")
-                .hasMessageContaining("cursor-rules.xsl");
+                .hasMessageContaining("system-prompts.xsl");
         }
 
         @Test
@@ -78,7 +78,7 @@ class CursorRulesGeneratorTest {
             // When - Generate content (no schema validation)
             String generatedContent = generator.generate(
                 "system-prompts/" + baseFileName + ".xml",
-                "cursor-rules.xsl"
+                "system-prompts.xsl"
             );
 
             // Save generated content to target for inspection

@@ -80,9 +80,9 @@ public final class SkillsInventory {
     private static List<String> listSystemPromptBaseNames() {
         try {
             // Use a known resource from cursor-rules-java-generator to locate the JAR
-            URL anchor = getResourceUrl("cursor-rules.xsl");
+            URL anchor = getResourceUrl("system-prompts.xsl");
             if (anchor == null) {
-                throw new RuntimeException("cursor-rules.xsl not found on classpath");
+                throw new RuntimeException("system-prompts.xsl not found on classpath");
             }
             if ("jar".equals(anchor.getProtocol())) {
                 JarURLConnection conn = (JarURLConnection) anchor.openConnection();

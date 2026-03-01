@@ -1,5 +1,5 @@
 ---
-name: 171-java-diagrams
+name: 172-java-diagrams
 description: Use when you need to generate Java project diagrams — including UML sequence diagrams, UML class diagrams, C4 model diagrams, and UML state machine diagrams — through a modular, step-based interactive process that adapts to your specific visualization needs.
 license: Apache-2.0
 metadata:
