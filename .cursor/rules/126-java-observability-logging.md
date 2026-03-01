@@ -1,5 +1,5 @@
 ---
-name: 126-java-logging
+name: 126-java-observability-logging
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
