@@ -55,6 +55,7 @@ Options:
 - documentation/adr/ (recommended standard location)
 - docs/adr/ (alternative standard location)
 - adr/ (root level directory)
+- .adr/ (root level directory)
 - Custom path (I'll specify the location)
 - Skip
 
