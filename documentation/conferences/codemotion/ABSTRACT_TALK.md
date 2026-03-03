@@ -13,6 +13,8 @@ Este taller está diseñado para todos los niveles e intenta cubrir las principa
 - ¿Que valor aporta el uso de este tipo de herramientas?
 - Usando los modos de Agente (Ask, Plan, Agent)
 - Usando Skills
+- ¿Que es Spec-Driven?
+- Definiendo un buen Agent.md
 - Usando Servidores MCP en el dia a dia
 - Usando SubAgentes en tu desarrollo
 - Usando AI Tooling en tus pipelines
