@@ -3,7 +3,7 @@ name: 111-java-maven-dependencies
 description: Use when you need to add or evaluate Maven dependencies that improve code quality — including nullness annotations (JSpecify), static analysis (Error Prone + NullAway), functional programming (VAVR), or architecture testing (ArchUnit) — and want a consultative, question-driven approach that adds only what you actually need. Part of the skills-for-java project
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.12.0-SNAPSHOT
+  version: 0.12.0
 ---
 # Add Maven dependencies for improved code quality
 

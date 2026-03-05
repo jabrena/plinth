@@ -3,7 +3,7 @@ name: 142-java-functional-programming
 description: Use when you need to apply functional programming principles in Java — including writing immutable objects and Records, pure functions, functional interfaces, lambda expressions, Stream API pipelines, Optional for null safety, function composition, higher-order functions, pattern matching for instanceof and switch, sealed classes/interfaces for controlled hierarchies, Stream Gatherers for custom operations, currying/partial application, effect boundary separation, and concurrent-safe functional patterns. Part of the skills-for-java project
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.12.0-SNAPSHOT
+  version: 0.12.0
 ---
 # Java Functional Programming rules
 

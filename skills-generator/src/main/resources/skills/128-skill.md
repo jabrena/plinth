@@ -3,7 +3,7 @@ name: 128-java-generics
 description: Use when you need to review, improve, or refactor Java code for generics quality — including avoiding raw types, applying the PECS (Producer Extends Consumer Super) principle for wildcards, using bounded type parameters, designing effective generic methods, leveraging the diamond operator, understanding type erasure implications, handling generic inheritance correctly, preventing heap pollution with @SafeVarargs, and integrating generics with modern Java features like Records, sealed types, and pattern matching.
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.12.0-SNAPSHOT
+  version: 0.12.0
 ---
 # Java Generics Best Practices
 

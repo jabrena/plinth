@@ -35,8 +35,14 @@ Can you update the current changelog for 0.10.0 comparing git commits in relatio
 # Prompt to provide a release changelog
 Can you update the current changelog for 0.12.0 comparing git commits in relation to 0.11.0 tag. Use  @https://keepachangelog.com/en/1.1.0/  rules
 
+# Maven command to update the maven version to next minor version
+./mvnw versions:set -DnewVersion=0.12.0
+./mvnw versions:commit
+
 # Prompt to update the project to a new version
-Update xml files from @resources/ and update the version to 0.11.0 removing snapshot. Update @pom.xml with the new version 0.11.0 Generate system prompts again with ./mvnw clean install -pl system-prompts-generator
+Update xml files from @resources/ and update the version to 0.12.0 removing Snapshot. Update @pom.xml with the new version 0.12.0 Generate system prompts again with ./mvnw clean install -pl system-prompts-generator
+
+Update md files from @resources/ and update the version to 0.12.0 removing Snapshot. Update @pom.xml with the new version 0.12.0 Generate system prompts again with ./mvnw clean install -pl skils-generator
 
 ## Note: Refactor a bit more to include all pom.xml
 
