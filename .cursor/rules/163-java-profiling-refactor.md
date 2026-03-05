@@ -3,7 +3,7 @@ name: 163-java-profiling-refactor
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.12.0-SNAPSHOT
+  version: 0.12.0
 ---
 # Java Profiling Workflow / Step 3 / Refactor code to fix issues
 

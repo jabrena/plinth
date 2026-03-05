@@ -72,7 +72,7 @@ Your task is to...
 
 **Scenario:** You've joined a new team and need to understand their system prompt approach.
 
-1. **Explore the System Prompt:** Open `.cursor/rules/100-java-cursor-rules-list.md`
+1. **Explore the System Prompt:** Open `.cursor/rules/100-java-system-prompt-java-list.md`
 2. **Analyze Structure:** Identify the Role, Goal, and Constraints sections
 3. **Test the Prompt:** Use it to generate the main project documentation
 

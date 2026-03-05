@@ -77,7 +77,7 @@ With this evolution, software engineers now can combine pure system prompts and 
 
 **Pure system prompts:**
 
-- [`@100-java-cursor-rules-list`](https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/100-java-cursor-rules-list.md)
+- [`@100-java-system-prompt-java-list`](https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/100-java-system-prompt-java-list.md)
 - [`@110-java-maven-best-practices`](https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/110-java-maven-best-practices.md)
 - [`@111-java-maven-dependencies`](https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/111-java-maven-dependencies.md)
 - [`@113-java-maven-documentation`](https://github.com/jabrena/cursor-rules-java/blob/main/.cursor/rules/113-java-maven-documentation.md)

@@ -5,6 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.12.0] 2026-03-08
+
+### Added
+
+- **Skills & Agent system**:
+  - SKILL generator for Cursor agent skills (#421).
+  - Skills support evolution (v1–v4) with skilljars and validation pipeline (#416, #418, #420, #423, #424).
+  - Improved skill generation and minimum requirements (#417, #427, #451).
+
+- **New Cursor Rules**:
+  - `@132-java-testing-integration-testing` with WireMock support (#443).
+  - Arch Unit support in `@111-java-maven-dependencies` (#445).
+
+- **Maven rules & docs**:
+  - Centralized version management and best practices for multi-module POM in `@110-java-maven-best-practices` (#441).
+  - Cyclomatic complexity analysis support in `@112-java-maven-plugins` (#439).
+  - `DEVELOPER.md` and plugin catalog in `@113-java-maven-documentation` (#438).
+  - Minimum Maven compiler support in `@112-java-maven-plugins` (#433).
+
+- **Documentation & ADRs**:
+  - System prompt to generate AGENTS.md files: `@173-java-agents` (#436).
+  - Split Java documentation into ADR capabilities in `@170-java-documentation` and `@171-java-adr` (#455).
+
+### Changed
+
+- **PML migration**:
+  - Migrated XML rule sources to PML Schema 0.5.0; generator validates against https://jabrena.github.io/pml/schemas/0.5.0/pml.xsd.
+
 ## [0.11.0] 2025-09-29
 
 ### Added
@@ -261,3 +289,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - Added initial cursor rules (Java, Effective Java, Concurrency, Functional programming, Data-Oriented programming & Spring Boot)
+
+[0.12.0]: https://github.com/jabrena/cursor-rules-java/compare/0.11.0...0.12.0
+[0.11.0]: https://github.com/jabrena/cursor-rules-java/compare/0.10.0...0.11.0
+[0.10.0]: https://github.com/jabrena/cursor-rules-java/compare/0.9.0...0.10.0
+[0.9.0]: https://github.com/jabrena/cursor-rules-java/compare/0.8.0...0.9.0
+[0.8.0]: https://github.com/jabrena/cursor-rules-java/compare/0.7.0...0.8.0
+[0.7.0]: https://github.com/jabrena/cursor-rules-java/compare/0.6.0...0.7.0
+[0.6.0]: https://github.com/jabrena/cursor-rules-java/compare/0.5.0...0.6.0
+[0.5.0]: https://github.com/jabrena/cursor-rules-java/compare/0.4.0...0.5.0
+[0.4.0]: https://github.com/jabrena/cursor-rules-java/compare/0.3.0...0.4.0
+[0.3.0]: https://github.com/jabrena/cursor-rules-java/compare/0.2.0...0.3.0
+[0.2.0]: https://github.com/jabrena/cursor-rules-java/compare/0.1.0...0.2.0
+[0.1.0]: https://github.com/jabrena/cursor-rules-java/releases/tag/0.1.0

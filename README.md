@@ -29,16 +29,10 @@ The project covers aspects like `Build system based on Maven`, `Design`, `Coding
 
 The project generates a set of deliverables at the end of any iteration.
 
-- System prompts for Java located in `.cursor/rules`
-- Skills for Java located in `skills`
-
-### How many System prompts for Java does this project include?
-
-Explore the [complete catalog of available System prompts](./SYSTEM-PROMPTS-JAVA.md) to discover the full range of capabilities and find the perfect rules for your specific use cases.
-
-### How many AI Skills for Java does this project include?
-
-Explore the folder [skills](./skills) for further details.
+| Deliverable | Location |
+|-------------|----------|
+| System prompts for Java | [Catalog](./SYSTEM-PROMPTS-JAVA.md) (`.cursor/rules`) |
+| Skills for Java | https://skills.sh/?q=jabrena |
 
 ## Getting started
 
@@ -126,8 +120,9 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 ### Blogs
 
 - [Delegating Java tasks to Supervised AI Dev Pipelines](https://www.javaadvent.com/2025/12/delegating-java-tasks-to-supervised-ai-dev-pipelines.html)
-- https://virtuslab.com/blog/ai/providing-library-documentation/
+- https://vibekode.it/blog/cursor-ai-developer-cloud-platform/
 - https://www.linkedin.com/pulse/september-rest-story-jvm-weekly-vol-146-artur-skowro%C5%84ski-82lif/?trackingId=wbWPSL65TpCCbdg5ksAWjw%3D%3D
+- https://virtuslab.com/blog/ai/providing-library-documentation/
 
 ## References
 
@@ -139,6 +134,7 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 - https://agentskills.io/home
 - https://github.com/anthropics/skills
 - https://skills.sh/
+- https://skillsmp.com/
 - https://cursor.com/docs/cli/github-actions
 - https://code.claude.com/docs/en/github-actions
 - [https://www.anthropic.com/claude-code](https://www.anthropic.com/claude-code)

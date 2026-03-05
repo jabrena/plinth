@@ -142,5 +142,5 @@ This is a multi-module project. The following modules are declared in the root `
 | Module | Artifact ID | Commands | Description |
 |--------|-------------|----------|-------------|
 | `system-prompts-generator` | `cursor-rules-java-generator` | `./mvnw clean verify -pl system-prompts-generator`<br>`./mvnw clean install -pl system-prompts-generator` | Transforms XML rule sources via XInclude and XSLT into Markdown cursor rules, then deploys them to `.cursor/rules/`. |
-| `skills-generator` | `cursor-rules-java-skills-generator` | `./mvnw clean verify -pl skills-generator`<br>`./mvnw clean install -pl skills-generator` | Generates agent skills from the cursor rules and deploys them to `.agents/skills/`. |
+| `skills-generator` | `cursor-rules-java-skills-generator` | `./mvnw clean verify -pl skills-generator`<br>`./mvnw clean install -pl skills-generator` | Generates agent skills from the cursor rules and deploys them to `skills/`. |
 | `site-generator` | `cursor-rules-java-site` | `./mvnw clean verify -pl site-generator`<br>`./mvnw clean generate-resources -pl site-generator -P site-update` | Generates the project's GitHub Pages static website using JBake and publishes output to `docs/`. |
