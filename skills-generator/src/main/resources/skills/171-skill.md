@@ -7,7 +7,7 @@ metadata:
 ---
 # Java ADR Generator with interactive conversational approach
 
-Generate Architecture Decision Records (ADRs) for Java projects through an interactive, conversational process that systematically gathers all necessary context to produce well-structured ADR documents.
+Generate Architecture Decision Records (ADRs) for Java projects through an interactive, conversational process that systematically gathers all necessary context to produce well-structured ADR documents. **This is an interactive SKILL**
 
 **Core areas:** ADR file storage configuration, conversational information gathering (context, stakeholders, decision drivers, options with pros/cons, outcome, consequences), MADR template generation, and validation with `./mvnw validate` before proceeding.
 

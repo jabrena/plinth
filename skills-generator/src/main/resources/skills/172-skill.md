@@ -7,7 +7,7 @@ metadata:
 ---
 # Java Diagrams Generator with modular step-based configuration
 
-Generate comprehensive Java project diagrams through a modular, step-based interactive process that covers UML sequence diagrams, UML class diagrams, C4 model diagrams, and UML state machine diagrams using PlantUML syntax.
+Generate comprehensive Java project diagrams through a modular, step-based interactive process that covers UML sequence diagrams, UML class diagrams, C4 model diagrams, and UML state machine diagrams using PlantUML syntax. **This is an interactive SKILL**
 
 **Core areas:** UML sequence diagram generation for application workflows and API interactions, UML class diagram generation for package structure and class relationships, C4 model diagram generation at Context/Container/Component/Code abstraction levels, UML state machine diagram generation for entity lifecycles and business workflows, PlantUML syntax for all diagram types, file organization strategies (single-file, separate-files, or integrated with existing documentation), and final diagram validation with PlantUML syntax checking.
 

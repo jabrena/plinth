@@ -7,7 +7,7 @@ metadata:
 ---
 # Maven Plugins: pom.xml Configuration Best Practices
 
-Configure Maven plugins and profiles in pom.xml using a structured, question-driven process that preserves existing configuration.
+Configure Maven plugins and profiles in pom.xml using a structured, question-driven process that preserves existing configuration. **This is an interactive SKILL**
 
 **Core areas:** Existing configuration analysis and preservation, Maven Wrapper verification, project assessment questions (project nature, Java version, build and quality aspects), properties configuration, Maven Enforcer, Surefire, Failsafe, HTML test reports, JaCoCo coverage, PiTest mutation testing, OWASP security scanning, SpotBugs/PMD static analysis, SonarQube/SonarCloud, Spotless code formatting, Versions plugin, Git Commit ID, Flatten plugin, JMH benchmarking, Maven Compiler, and cyclomatic complexity analysis.
 

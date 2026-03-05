@@ -7,7 +7,7 @@ metadata:
 ---
 # AGENTS.md Generator for Java repositories
 
-Generate a comprehensive AGENTS.md file for Java repositories through a modular, step-based interactive process that covers role definition, tech stack, file structure, commands, Git workflow, and contributor boundaries.
+Generate a comprehensive AGENTS.md file for Java repositories through a modular, step-based interactive process that covers role definition, tech stack, file structure, commands, Git workflow, and contributor boundaries. **This is an interactive SKILL**
 
 **Core areas:** AGENTS.md generation for Java repositories of any complexity, role and expertise definition for AI agents and contributors, tech stack documentation (language, build tool, frameworks, pipelines), file structure mapping with read/write boundaries, command catalogue for build/test/deploy/run workflows, Git workflow conventions (branching strategy, commit message format), and contributor boundaries using ✅ Always do / ⚠️ Ask first / 🚫 Never do formatting.
 
