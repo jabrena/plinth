@@ -9,9 +9,9 @@ metadata:
 
 Add essential Maven dependencies that enhance code quality and safety through a consultative, question-driven approach. **This is an interactive SKILL**.
 
-**Components:** **JSpecify** (nullness annotations, `provided` scope), **Error Prone + NullAway** (enhanced static analysis with compile-time null checking), **VAVR** (functional programming with Try/Either and immutable collections), and **ArchUnit** (architecture rule enforcement, `test` scope).
-
 **Prerequisites:** Run `./mvnw validate` or `mvn validate` before any changes. If validation fails, **stop** and ask the user to fix issues—do not proceed until resolved.
+
+**Components:** **JSpecify** (nullness annotations, `provided` scope), **Error Prone + NullAway** (enhanced static analysis with compile-time null checking), **VAVR** (functional programming with Try/Either and immutable collections), and **ArchUnit** (architecture rule enforcement, `test` scope).
 
 **Before asking questions:** Read the reference to use the exact wording and options from the template. Ask questions one-by-one in strict order (JSpecify → Enhanced Compiler Analysis (conditional) → VAVR → ArchUnit) and add only what the user selects. Use consultative language, present trade-offs, and wait for user responses before implementing.
 
