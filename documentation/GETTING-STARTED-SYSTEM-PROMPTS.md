@@ -56,17 +56,17 @@ jbang --fresh setup@jabrena init --cursor https://github.com/jabrena/cursor-rule
 
 | Cursor Rule | Description | Prompt | Notes |
 |-------------|-------------|--------|-------|
-| [100-java-cursor-rules-list](.cursor/rules/100-java-cursor-rules-list.md) | Create a comprehensive step-by-step guide for using cursor rules for Java | `Create a Java development guide using the cursor rule @100-java-cursor-rules-list` | This cursor rule is applied automatically without any interaction with the software engineer. |
+| [100-java-system-prompt-java-list](.cursor/rules/100-java-system-prompt-java-list.md) | Create a comprehensive step-by-step guide for using cursor rules for Java | `Create a Java development guide using the cursor rule @100-java-system-prompt-java-list` | This cursor rule is applied automatically without any interaction with the software engineer. |
 
 Once you have installed the cursor rules in the path `.cursor/rules`, type the following prompt in the cursor chat:
 
 ![](./images/getting-started-prompt.png)
 
 ```bash
-Create a document with all cursor rules for Java using the cursor rule @100-java-cursor-rules-list
+Create a document with all cursor rules for Java using the cursor rule @100-java-system-prompt-java-list
 ```
 
-**Note:** ⚠️ Drag and drop the file @100-java-cursor-rules-list into the chat area to apply the cursor rule.
+**Note:** ⚠️ Drag and drop the file @100-java-system-prompt-java-list into the chat area to apply the cursor rule.
 
 ## Do you want to learn more?
 
