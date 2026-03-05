@@ -7,7 +7,7 @@ metadata:
 ---
 # Add Maven dependencies for improved code quality
 
-Add essential Maven dependencies that enhance code quality and safety through a consultative, question-driven approach. **This is an interactive SKILL**
+Add essential Maven dependencies that enhance code quality and safety through a consultative, question-driven approach. .
 
 **Components:** **JSpecify** (nullness annotations, `provided` scope), **Error Prone + NullAway** (enhanced static analysis with compile-time null checking), **VAVR** (functional programming with Try/Either and immutable collections), and **ArchUnit** (architecture rule enforcement, `test` scope).
 

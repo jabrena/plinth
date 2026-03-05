@@ -7,7 +7,7 @@ metadata:
 ---
 # Java Documentation Generator with modular step-based configuration
 
-Generate comprehensive Java project documentation through a modular, step-based interactive process that covers README.md, package-info.java, and Javadoc. **This is an interactive SKILL**
+Generate comprehensive Java project documentation through a modular, step-based interactive process that covers README.md, package-info.java, and Javadoc. **This is an interactive SKILL**.
 
 **Core areas:** README.md generation for single-module and multi-module Maven projects, package-info.java creation with basic/detailed/minimal documentation levels, Javadoc enhancement with comprehensive `@param`/`@return`/`@throws` tags, file handling strategies (overwrite/add/backup/skip), and final documentation validation with `./mvnw clean compile` and `./mvnw javadoc:javadoc`.
 
