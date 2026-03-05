@@ -19,4 +19,4 @@ Identify and apply robust Java exception handling practices to improve error cla
 
 ## Reference
 
-For detailed guidance, examples, and constraints, see [references/127-java-exception-handling.md](references/127-java-exception-handling.md).
+For detailed guidance, examples, and constraints, see [references/123-java-exception-handling.md](references/123-java-exception-handling.md).

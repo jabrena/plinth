@@ -19,4 +19,4 @@ Set up robust integration-test infrastructure for Java services using WireMock t
 
 ## Reference
 
-For detailed guidance, examples, and constraints, see [references/132-java-integration-testing.md](references/132-java-integration-testing.md).
+For detailed guidance, examples, and constraints, see [references/132-java-testing-integration-testing.md](references/132-java-testing-integration-testing.md).

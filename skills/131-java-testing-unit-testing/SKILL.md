@@ -19,4 +19,4 @@ Review and improve Java unit tests using modern JUnit 5, AssertJ, and Mockito be
 
 ## Reference
 
-For detailed guidance, examples, and constraints, see [references/131-java-unit-testing.md](references/131-java-unit-testing.md).
+For detailed guidance, examples, and constraints, see [references/131-java-testing-unit-testing.md](references/131-java-testing-unit-testing.md).
