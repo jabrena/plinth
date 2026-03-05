@@ -28,6 +28,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - System prompt to generate AGENTS.md files: `@173-java-agents` (#436).
   - Split Java documentation into ADR capabilities in `@170-java-documentation` and `@171-java-adr` (#455).
 
+### Changed
+
+- **PML migration**:
+  - Migrated XML rule sources to PML Schema 0.5.0; generator validates against https://jabrena.github.io/pml/schemas/0.5.0/pml.xsd.
+
 ## [0.11.0] 2025-09-29
 
 ### Added
