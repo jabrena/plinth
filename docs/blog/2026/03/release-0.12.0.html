@@ -105,71 +105,161 @@
 <h2>What's new in this release?</h2>
 <p>In this release, the project introduces several updates:</p>
 <ul>
-<li><strong>Added SKILL Support:</strong></li>
+<li><strong>Added Skill Support:</strong></li>
 <li>Added initial release with 20 <code>SKILL</code>s for Java Enterprise development</li>
-<li><strong>Improvements in system prompts:</strong></li>
-<li>Added <code>@132-java-testing-integration-testing</code> with WireMock support</li>
-<li>Added <code>ArchUnit</code> support in <code>@111-java-maven-dependencies</code></li>
+<li><strong>Improvements in System Prompts:</strong></li>
 <li>Centralized version management and best practices for multi-module POM in <code>@110-java-maven-best-practices</code></li>
+<li>Added <code>ArchUnit</code> support in <code>@111-java-maven-dependencies</code></li>
 <li>Cyclomatic complexity analysis support in <code>@112-java-maven-plugins</code></li>
-<li><code>DEVELOPER.md</code> and plugin catalog in <code>@113-java-maven-documentation</code></li>
-<li>Added support to generate <code>AGENTS.md</code> with <code>@173-java-agents</code></li>
-<li>Split Java documentation into ADR capabilities in <code>@170-java-documentation</code> and <code>@171-java-adr</code></li>
 <li>Minimum Maven compiler support in <code>@112-java-maven-plugins</code></li>
+<li><code>@DEVELOPER.md</code> and plugin catalog in <code>@113-java-maven-documentation</code></li>
+<li>Added <code>@132-java-testing-integration-testing</code> with WireMock support</li>
+<li>Split Java documentation into ADR capabilities in <code>@170-java-documentation</code> and <code>@171-java-adr</code></li>
+<li>Added support to generate <code>AGENTS.md</code> with <code>@173-java-agents</code></li>
 <li><strong>Project improvements:</strong></li>
 <li>Added a new generator to manage <code>SKILL</code> generation</li>
-<li>Added a validator to ensure good quality in <code>SKILL</code> valitation against Specification</li>
+<li>Added a validator to ensure good quality in <code>SKILL</code> validation against the <a href="https://agentskills.io/specification">Skill Specification</a></li>
 </ul>
-<p>Let's explain one by one the different features released.</p>
+<p>Let's explain each of the released features one by one.</p>
 <h2>Why Skills?</h2>
-<p>When the market about <a href="https://aws.amazon.com/es/blogs/devops/aws-named-as-a-leader-in-the-2025-gartner-magic-quadrant-for-ai-code-assistants/"><code>AI Assistants</code></a> grow and Software engineers has multiple ways to enrich the experience using models, it is necessary to define a standard for extending AI agent capabilities with specialized knowledge and workflows.</p>
-<p>In the past, this project put focus on the concept about <code>Prompting engineering</code> and we developed nice <code>System prompts</code> (formerly Cursor rules) but after understanding the <code>SKILL</code>'s scafolding:</p>
+<p>When the market for <a href="https://aws.amazon.com/es/blogs/devops/aws-named-as-a-leader-in-the-2025-gartner-magic-quadrant-for-ai-code-assistants/"><code>AI Assistants</code></a> grew and software engineers had multiple ways to enrich the experience using models, it was necessary to define a standard for extending AI agent capabilities with specialized knowledge and workflows to be used by multiple products.</p>
+<p>In the past, this project focused on the concept of <code>Prompt engineering</code> and developed a useful collection of <code>System prompts</code> (formerly Cursor rules), but after a period of time observing Skills' adoption rate and popularity, it became clear that it is necessary to understand the <code>SKILL</code> scaffolding:</p>
 <pre><code class="language-bash">my-skill/
 ├── SKILL.md          # Required: instructions + metadata
 ├── scripts/          # Optional: executable code
 ├── references/       # Optional: documentation
 └── assets/           # Optional: templates, resources
 </code></pre>
-<p>It was possible to generate Skills but reusing the previous work from the past.</p>
-<p><strong>What Skills was generated in this release?</strong></p>
+<p>The goal is to generate Skills while reusing the previous work from the past.</p>
+<p>Any Skill developed in this project follows the <a href="https://agentskills.io/specification">Skill specification</a>, and a pipeline task exists to validate that fact.</p>
+<h3>What Skills were generated in this release?</h3>
 <p>Currently, the project has released 20 Skills:</p>
 <ul>
-<li><code>110-java-maven-best-practices</code></li>
-<li><code>111-java-maven-dependencies</code></li>
-<li><code>112-java-maven-plugins</code></li>
-<li><code>113-java-maven-documentation</code></li>
-<li><code>121-java-object-oriented-design</code></li>
-<li><code>122-java-type-design</code></li>
-<li><code>123-java-exception-handling</code></li>
-<li><code>124-java-secure-coding</code></li>
-<li><code>125-java-concurrency</code></li>
-<li><code>128-java-generics</code></li>
-<li><code>131-java-testing-unit-testing</code></li>
-<li><code>132-java-testing-integration-testing</code></li>
-<li><code>141-java-refactoring-with-modern-features</code></li>
-<li><code>142-java-functional-programming</code></li>
-<li><code>143-java-functional-exception-handling</code></li>
-<li><code>144-java-data-oriented-programming</code></li>
-<li><code>170-java-documentation</code></li>
-<li><code>171-java-adr</code></li>
-<li><code>172-java-diagrams</code></li>
-<li><code>173-java-agents</code></li>
+<li><code>@110-java-maven-best-practices</code></li>
+<li><code>@111-java-maven-dependencies</code></li>
+<li><code>@112-java-maven-plugins</code></li>
+<li><code>@113-java-maven-documentation</code></li>
+<li><code>@121-java-object-oriented-design</code></li>
+<li><code>@122-java-type-design</code></li>
+<li><code>@123-java-exception-handling</code></li>
+<li><code>@124-java-secure-coding</code></li>
+<li><code>@125-java-concurrency</code></li>
+<li><code>@128-java-generics</code></li>
+<li><code>@131-java-testing-unit-testing</code></li>
+<li><code>@132-java-testing-integration-testing</code></li>
+<li><code>@141-java-refactoring-with-modern-features</code></li>
+<li><code>@142-java-functional-programming</code></li>
+<li><code>@143-java-functional-exception-handling</code></li>
+<li><code>@144-java-data-oriented-programming</code></li>
+<li><code>@170-java-documentation</code></li>
+<li><code>@171-java-adr</code></li>
+<li><code>@172-java-diagrams</code></li>
+<li><code>@173-java-agents</code></li>
 </ul>
 <p>In the next release, the project will generate the pending ones:</p>
 <ul>
-<li><code>126-java-observability-logging</code></li>
-<li><code>151-java-performance-jmeter</code></li>
-<li><code>161-java-profiling-detect</code></li>
-<li><code>162-java-profiling-analyze</code></li>
-<li><code>163-java-profiling-refactor</code></li>
-<li><code>164-java-profiling-compare</code></li>
-<li><code>164-java-profiling-verify</code></li>
+<li><code>@126-java-observability-logging</code></li>
+<li><code>@151-java-performance-jmeter</code></li>
+<li><code>@161-java-profiling-detect</code></li>
+<li><code>@162-java-profiling-analyze</code></li>
+<li><code>@163-java-profiling-refactor</code></li>
+<li><code>@164-java-profiling-compare</code></li>
+<li><code>@164-java-profiling-verify</code></li>
 </ul>
-<h2>Why Agents.md?</h2>
-<h2>Improvements in System prompts</h2>
-<h2>What is the next steps?</h2>
+<p>In previous months, the project created a CLI to install the <code>System prompts</code>:</p>
+<pre><code class="language-bash">jbang setup@jabrena init \
+--cursor https://github.com/jabrena/cursor-rules-java
+</code></pre>
+<p>But with Skills, big tech companies like <code>Vercel</code> provide better solutions at <a href="https://skills.sh/">https://skills.sh/</a></p>
+<p>Now, you can browse all skills generated by this project here: <a href="https://skills.sh/?q=jabrena">https://skills.sh/?q=jabrena</a></p>
+<p>and download any skill or all of them in the following easy way:</p>
+<pre><code class="language-bash">npx skills add jabrena/cursor-rules-java --list
+npx skills add jabrena/cursor-rules-java
+npx skills install jabrena/cursor-rules-java --all
+npx skills add https://github.com/jabrena/cursor-rules-java \
+--skill 110-java-maven-best-practices
+</code></pre>
+<h3>What is SkillsJars?</h3>
+<p>When you develop a website using the Java stack, one popular solution is <a href="https://www.webjars.org/">WebJars</a><br />
+to handle web libraries on the Java side. Using the same criteria, for your AI development with the JVM, when you need to use a particular Skill, you can load the SKILL from the classpath.</p>
+<p>With this idea in mind, <code>James Ward</code> created <a href="https://www.skillsjars.com/">SkillsJars</a></p>
+<p>The project has tested this approach with success:</p>
+<pre><code class="language-bash">wget https://repo.maven.apache.org/maven2/com/skillsjars/jabrena__cursor-rules-java__111-java-maven-dependencies/2026_02_23-96a0bd2/jabrena__cursor-rules-java__111-java-maven-dependencies-2026_02_23-96a0bd2.jar
+jar tf jabrena__cursor-rules-java__111-java-maven-dependencies-2026_02_23-96a0bd2.jar
+
+META-INF/
+META-INF/skills/
+META-INF/skills/jabrena/
+META-INF/skills/jabrena/cursor-rules-java/
+META-INF/maven/
+META-INF/maven/com.skillsjars/
+META-INF/MANIFEST.MF
+META-INF/maven/com.skillsjars/jabrena__cursor-rules-java__111-java-maven-dependencies/pom.xml
+META-INF/maven/com.skillsjars/jabrena__cursor-rules-java__111-java-maven-dependencies/pom.properties
+META-INF/skills/jabrena/cursor-rules-java/111-java-maven-dependencies/SKILL.md
+META-INF/skills/jabrena/cursor-rules-java/111-java-maven-dependencies/references/
+META-INF/skills/jabrena/cursor-rules-java/111-java-maven-dependencies/references/111-java-maven-dependencies.md
+</code></pre>
+<pre><code class="language-xml">&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;com.skillsjars&lt;/groupId&gt;
+            &lt;artifactId&gt;maven-plugin&lt;/artifactId&gt;
+            &lt;version&gt;0.0.5&lt;/version&gt;
+            &lt;dependencies&gt;
+                &lt;!-- Your SkillsJars --&gt;
+                &lt;dependency&gt;
+                    &lt;groupId&gt;com.skillsjars&lt;/groupId&gt;
+                    &lt;artifactId&gt;SKILLJAR_ARTIFACT_ID&lt;/artifactId&gt;
+                    &lt;version&gt;SKILLJAR_VERSION&lt;/version&gt;
+                &lt;/dependency&gt;
+            &lt;/dependencies&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre>
+<pre><code class="language-bash">./mvnw skillsjars:extract -Ddir=.agents/skills
+</code></pre>
+<p>If you are interested in Skills and Spring AI, you can review the following examples:</p>
 <ul>
-<li>Sub Agents</li>
+<li><a href="https://github.com/skillsjars/skillsjars-maven-plugin">https://github.com/skillsjars/skillsjars-maven-plugin</a></li>
+<li><a href="https://github.com/skillsjars/skillsjars-example-spring-ai">https://github.com/skillsjars/skillsjars-example-spring-ai</a></li>
+<li><a href="https://spring.io/blog/2026/01/13/spring-ai-generic-agent-skills">https://spring.io/blog/2026/01/13/spring-ai-generic-agent-skills</a></li>
+</ul>
+<h3>How to use Skills in your development?</h3>
+<p>Read the following documentation for further information: <a href="https://github.com/jabrena/cursor-rules-java/blob/main/documentation/GETTING-STARTED-SKILLS.md">https://github.com/jabrena/cursor-rules-java/blob/main/documentation/GETTING-STARTED-SKILLS.md</a></p>
+<h2>Why Agents.md?</h2>
+<p>In general, any Git repository includes a file named <code>README.md</code> where authors explain the purpose of the repository.<br />
+From a developer's perspective, this project includes a Skill to generate technical documentation named <code>@113-java-maven-documentation</code>, which generates a file <code>DEVELOPER.md</code> with technical details about how to use the build system and profiles, but what happens when you interact with models?</p>
+<p>For this purpose <code>Agents.md</code> was designed. This project includes an interactive Skill <code>@173-java-agents</code> designed to create a <code>AGENTS.md</code> for Java projects.</p>
+<h2>Improvements in System prompts</h2>
+<p><strong>Improvements in Maven:</strong></p>
+<ul>
+<li>Centralized version management and best practices for multi-module POM in <code>@110-java-maven-best-practices</code></li>
+<li>Added <code>ArchUnit</code> support in <code>@111-java-maven-dependencies</code></li>
+<li>Cyclomatic complexity analysis support in <code>@112-java-maven-plugins</code></li>
+<li>Minimum Maven compiler support in <code>@112-java-maven-plugins</code></li>
+<li><code>@DEVELOPER.md</code> and plugin catalog in <code>@113-java-maven-documentation</code></li>
+</ul>
+<p><strong>Improvements in Testing:</strong></p>
+<ul>
+<li>Added <code>@132-java-testing-integration-testing</code> with WireMock support</li>
+</ul>
+<p><strong>Improvements in Architecture:</strong></p>
+<ul>
+<li>Split Java documentation into ADR capabilities in <code>@170-java-documentation</code> and <code>@171-java-adr</code></li>
+</ul>
+<p><strong>Improvements in the interactions with LLMs:</strong></p>
+<ul>
+<li>Added support to generate <code>AGENTS.md</code> with <code>@173-java-agents</code></li>
+</ul>
+<h2>What are the next steps?</h2>
+<p><strong>Subagents:</strong></p>
+<ul>
+<li><a href="https://code.claude.com/docs/en/sub-agents">https://code.claude.com/docs/en/sub-agents</a></li>
+<li><a href="https://code.claude.com/docs/en/agent-teams">https://code.claude.com/docs/en/agent-teams</a></li>
+<li><a href="https://cursor.com/docs/context/subagents">https://cursor.com/docs/context/subagents</a></li>
+<li><a href="https://block.github.io/goose/docs/guides/subagents/">https://block.github.io/goose/docs/guides/subagents/</a></li>
 </ul>
 
 </article>
