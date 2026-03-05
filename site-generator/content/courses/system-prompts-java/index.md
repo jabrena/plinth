@@ -4,7 +4,7 @@ status=published
 date=2025-09-17
 author=MyRobot
 version=0.11.0-SNAPSHOT
-tags=java, system-prompts, ai-development, enterprise, maven, testing, security, performance
+tags=java, system-prompts
 ~~~~~~
 
 ## 🎯 Course Overview

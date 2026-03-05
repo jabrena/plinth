@@ -120,7 +120,57 @@
 <li>Added a new generator to manage <code>SKILL</code> generation</li>
 <li>Added a validator to ensure good quality in <code>SKILL</code> valitation against Specification</li>
 </ul>
+<p>Let's explain one by one the different features released.</p>
 <h2>Why Skills?</h2>
+<p>When the market about <a href="https://aws.amazon.com/es/blogs/devops/aws-named-as-a-leader-in-the-2025-gartner-magic-quadrant-for-ai-code-assistants/"><code>AI Assistants</code></a> grow and Software engineers has multiple ways to enrich the experience using models, it is necessary to define a standard for extending AI agent capabilities with specialized knowledge and workflows.</p>
+<p>In the past, this project put focus on the concept about <code>Prompting engineering</code> and we developed nice <code>System prompts</code> (formerly Cursor rules) but after understanding the <code>SKILL</code>'s scafolding:</p>
+<pre><code class="language-bash">my-skill/
+├── SKILL.md          # Required: instructions + metadata
+├── scripts/          # Optional: executable code
+├── references/       # Optional: documentation
+└── assets/           # Optional: templates, resources
+</code></pre>
+<p>It was possible to generate Skills but reusing the previous work from the past.</p>
+<p><strong>What Skills was generated in this release?</strong></p>
+<p>Currently, the project has released 20 Skills:</p>
+<ul>
+<li><code>110-java-maven-best-practices</code></li>
+<li><code>111-java-maven-dependencies</code></li>
+<li><code>112-java-maven-plugins</code></li>
+<li><code>113-java-maven-documentation</code></li>
+<li><code>121-java-object-oriented-design</code></li>
+<li><code>122-java-type-design</code></li>
+<li><code>123-java-exception-handling</code></li>
+<li><code>124-java-secure-coding</code></li>
+<li><code>125-java-concurrency</code></li>
+<li><code>128-java-generics</code></li>
+<li><code>131-java-testing-unit-testing</code></li>
+<li><code>132-java-testing-integration-testing</code></li>
+<li><code>141-java-refactoring-with-modern-features</code></li>
+<li><code>142-java-functional-programming</code></li>
+<li><code>143-java-functional-exception-handling</code></li>
+<li><code>144-java-data-oriented-programming</code></li>
+<li><code>170-java-documentation</code></li>
+<li><code>171-java-adr</code></li>
+<li><code>172-java-diagrams</code></li>
+<li><code>173-java-agents</code></li>
+</ul>
+<p>In the next release, the project will generate the pending ones:</p>
+<ul>
+<li><code>126-java-observability-logging</code></li>
+<li><code>151-java-performance-jmeter</code></li>
+<li><code>161-java-profiling-detect</code></li>
+<li><code>162-java-profiling-analyze</code></li>
+<li><code>163-java-profiling-refactor</code></li>
+<li><code>164-java-profiling-compare</code></li>
+<li><code>164-java-profiling-verify</code></li>
+</ul>
+<h2>Why Agents.md?</h2>
+<h2>Improvements in System prompts</h2>
+<h2>What is the next steps?</h2>
+<ul>
+<li>Sub Agents</li>
+</ul>
 
 </article>
 </div>

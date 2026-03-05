@@ -4,7 +4,7 @@ status=published
 date=2025-09-17
 author=MyRobot
 version=0.11.0-SNAPSHOT
-tags=java, profiling, memory-leak, async-profiler, flamegraph, jmeter
+tags=java, profiling
 ~~~~~~
 
 ## Mastering the Interactive Profiling Script and Evidence Collection

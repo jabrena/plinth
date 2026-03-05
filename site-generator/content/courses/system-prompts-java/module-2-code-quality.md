@@ -4,7 +4,7 @@ status=published
 date=2025-09-17
 author=MyRobot
 version=0.11.0-SNAPSHOT
-tags=java, testing, design-patterns, oop, solid, unit-testing, system-prompts
+tags=java, system-prompts
 ~~~~~~
 
 ## 🎯 Learning Objectives

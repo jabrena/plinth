@@ -4,7 +4,7 @@ status=published
 date=2025-09-17
 author=MyRobot
 version=0.11.0-SNAPSHOT
-tags=java, profiling, memory-leak, validation, comparison, before-after
+tags=java, profiling
 ~~~~~~
 
 ## Rigorous Before/After Analysis using @164-java-profiling-compare
