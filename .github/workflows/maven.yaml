@@ -53,7 +53,7 @@ jobs:
         with:
           submodules: true
       - name: Validate SKILL.md files
-        run: npx skill-check@latest .agents/skills --no-security-scan --format github
+        run: npx skill-check@latest skills --no-security-scan --format github
         env:
           SKILL_CHECK_NO_BANNER: 1
 

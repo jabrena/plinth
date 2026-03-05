@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Validate SKILL.md files in .agents/skills against the Agent Skills specification.
+# Validate SKILL.md files in skills/ against the Agent Skills specification.
 # Uses skill-check (https://github.com/thedaviddias/skill-check).
 #
 # Usage:
@@ -13,12 +13,12 @@ set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
-SKILLS_DIR="$REPO_ROOT/.agents/skills"
+SKILLS_DIR="$REPO_ROOT/skills"
 
 if [[ ! -d "$SKILLS_DIR" ]]; then
-  echo "Error: .agents/skills directory not found at $SKILLS_DIR"
+  echo "Error: skills directory not found at $SKILLS_DIR"
   exit 1
 fi
 
 cd "$REPO_ROOT"
-npx skill-check@latest .agents/skills "$@"
+npx skill-check@latest skills "$@"

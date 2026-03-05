@@ -108,7 +108,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Copy generated skills to .agents/skills during package (runs as part of verify) -->
+            <!-- Copy generated skills to skills/ during install -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
