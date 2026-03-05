@@ -29,16 +29,10 @@ The project covers aspects like `Build system based on Maven`, `Design`, `Coding
 
 The project generates a set of deliverables at the end of any iteration.
 
-- System prompts for Java located in `.cursor/rules`
-- Skills for Java located in `skills`
-
-### How many System prompts for Java does this project include?
-
-Explore the [complete catalog of available System prompts](./SYSTEM-PROMPTS-JAVA.md) to discover the full range of capabilities and find the perfect rules for your specific use cases.
-
-### How many AI Skills for Java does this project include?
-
-Explore the folder [skills](./skills) for further details.
+| Deliverable | Location |
+|-------------|----------|
+| System prompts for Java | [Catalog](./SYSTEM-PROMPTS-JAVA.md) (`.cursor/rules`) |
+| Skills for Java | https://skills.sh/?q=jabrena |
 
 ## Getting started
 
