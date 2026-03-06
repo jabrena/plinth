@@ -49,7 +49,7 @@ Update md files from @resources/ and update the version to 0.12.0 removing Snaps
 
 ## Tagging process
 git tag --list
-git tag 0.11.0
+git tag 0.12.0
 git push --tags
 ```
 

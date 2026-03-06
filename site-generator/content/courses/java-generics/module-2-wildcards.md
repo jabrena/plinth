@@ -6,7 +6,7 @@ author=MyRobot
 module=2
 duration=3-4 hours
 difficulty=Intermediate
-tags=java, generics, wildcards, pecs, variance, api-design
+tags=java, generics
 ~~~~~~
 
 ## 📖 Module Overview

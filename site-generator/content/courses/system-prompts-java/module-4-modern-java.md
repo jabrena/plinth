@@ -4,7 +4,7 @@ status=published
 date=2025-09-17
 author=MyRobot
 version=0.11.0-SNAPSHOT
-tags=java, generics, functional-programming, records, sealed-types, modern-java, system-prompts
+tags=java, system-prompts
 ~~~~~~
 
 ## 🎯 Learning Objectives

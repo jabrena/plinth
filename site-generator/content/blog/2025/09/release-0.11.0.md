@@ -24,7 +24,7 @@ In this release, the project introduces several updates:
 
 Let's explain one by one the different features released.
 
-## Why decouple Pure System prompts from specialized behaviors?
+## Why decouple Pure System prompts from specialized behaviors?
 
 In previous months, the system prompts evolved to present refactoring alternatives using the `consultative-interaction technique` and then apply the user's decision. However, that design coupled the system prompt with a specific specialized behavior.
 

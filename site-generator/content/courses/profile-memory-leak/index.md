@@ -4,7 +4,7 @@ status=published
 date=2025-09-17
 author=MyRobot
 version=0.11.0-SNAPSHOT
-tags=java, profiling, memory-leak, performance, system-prompts, async-profiler
+tags=java, profiling
 ~~~~~~
 
 🎯 **Master Java memory leak detection through hands-on profiling with the Spring Boot memory leak demo**
