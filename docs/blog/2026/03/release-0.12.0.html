@@ -250,6 +250,39 @@ META-INF/skills/jabrena/cursor-rules-java/111-java-maven-dependencies/references
 <p>In general, any <code>Git repository</code> includes a <code>README.md</code> file where authors explain the purpose of the repository from a product's perspective. From a developer's perspective, this project includes a Skill named <code>@113-java-maven-documentation</code> which was designed to generate a file <code>DEVELOPER.md</code> with technical details about how to use the build system and profiles, but what happens when you interact with models? Maybe a document explaining a few details about the project could be useful for models.</p>
 <p>For this purpose, the skill <code>@173-java-agents</code> was designed to generate an <code>AGENTS.md</code> file after an interactive set of interactions with the Skill.</p>
 <p>Interesting article: <a href="https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/">https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/</a></p>
+<h2>Awesomes MCP Servers &amp; Cli tools</h2>
+<p>PENDING</p>
+<pre><code class="language-json">{
+    &quot;mcpServers&quot;: {
+        &quot;maven-tools&quot;: {
+            &quot;command&quot;: &quot;docker&quot;,
+            &quot;args&quot;: [
+                &quot;run&quot;,
+                &quot;-i&quot;,
+                &quot;--rm&quot;,
+                &quot;arvindand/maven-tools-mcp:latest&quot;
+            ]
+        },
+        &quot;javadocs&quot;: {
+            &quot;url&quot;: &quot;https://www.javadocs.dev/mcp&quot;
+        },
+        &quot;github&quot;: {
+            &quot;command&quot;: &quot;docker&quot;,
+            &quot;args&quot;: [
+                &quot;run&quot;,
+                &quot;-i&quot;,
+                &quot;--rm&quot;,
+                &quot;-e&quot;,
+                &quot;GITHUB_PERSONAL_ACCESS_TOKEN&quot;,
+                &quot;ghcr.io/github/github-mcp-server:latest&quot;
+            ],
+            &quot;env&quot;: {
+                &quot;GITHUB_PERSONAL_ACCESS_TOKEN&quot;: &quot;YOUR_TOKEN_HERE&quot;
+            }
+        }
+    }
+}
+</code></pre>
 <h2>How to use Prompts, Agents.md, Skills &amp; MCP/Cli tools in your daily work?</h2>
 <p>In 2026, the usage of AI tooling is not optional but it is true that it depends on your organization and the nature of your project to select which tools fit better for your area.</p>
 <p>First, create an empty Java project based on your favourite build system like <code>Maven</code> or <code>Gradle</code>. Once you have the pillars in place, ask your <code>Cursor</code>, <code>Claude</code> or other AI assistant to create an <code>AGENTS.md</code> using the Skill <code>@173-java-agents</code>. Once you define that file, in the next interactions the models will understand where the files are and how to interact with your build system and other details.</p>
@@ -261,6 +294,8 @@ META-INF/skills/jabrena/cursor-rules-java/111-java-maven-dependencies/references
 <p>On the other hand, if you are interested in adding <code>AI Capabilities</code> to your pipelines:</p>
 <p><img src="/cursor-rules-java/images/2026/3/workflow-pipelines.png" alt="" /></p>
 <p>I recommend reading the following article: <a href="https://www.javaadvent.com/2025/12/delegating-java-tasks-to-supervised-ai-dev-pipelines.html">https://www.javaadvent.com/2025/12/delegating-java-tasks-to-supervised-ai-dev-pipelines.html</a></p>
+<h2>Not everything is perfect, your repository is full of <code>.FOLDERs</code></h2>
+<p>PENDING</p>
 <h2>Improvements in System prompts</h2>
 <p><strong>Improvements in Maven:</strong></p>
 <ul>

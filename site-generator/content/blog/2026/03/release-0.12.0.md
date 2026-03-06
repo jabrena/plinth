@@ -199,6 +199,43 @@ For this purpose, the skill `@173-java-agents` was designed to generate an `AGEN
 
 Interesting article: https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/
 
+## Awesomes MCP Servers & Cli tools
+
+PENDING
+
+```json
+{
+    "mcpServers": {
+        "maven-tools": {
+            "command": "docker",
+            "args": [
+                "run",
+                "-i",
+                "--rm",
+                "arvindand/maven-tools-mcp:latest"
+            ]
+        },
+        "javadocs": {
+            "url": "https://www.javadocs.dev/mcp"
+        },
+        "github": {
+            "command": "docker",
+            "args": [
+                "run",
+                "-i",
+                "--rm",
+                "-e",
+                "GITHUB_PERSONAL_ACCESS_TOKEN",
+                "ghcr.io/github/github-mcp-server:latest"
+            ],
+            "env": {
+                "GITHUB_PERSONAL_ACCESS_TOKEN": "YOUR_TOKEN_HERE"
+            }
+        }
+    }
+}
+```
+
 ## How to use Prompts, Agents.md, Skills & MCP/Cli tools in your daily work?
 
 In 2026, the usage of AI tooling is not optional but it is true that it depends on your organization and the nature of your project to select which tools fit better for your area.
@@ -220,6 +257,10 @@ On the other hand, if you are interested in adding `AI Capabilities` to your pip
 ![](/cursor-rules-java/images/2026/3/workflow-pipelines.png)
 
 I recommend reading the following article: https://www.javaadvent.com/2025/12/delegating-java-tasks-to-supervised-ai-dev-pipelines.html
+
+## Not everything is perfect, your repository is full of `.FOLDERs`
+
+PENDING
 
 ## Improvements in System prompts
 
