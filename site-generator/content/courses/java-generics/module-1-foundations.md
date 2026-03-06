@@ -6,7 +6,7 @@ author=Juan Antonio Breña Moral
 module=1
 duration=2-3 hours
 difficulty=Beginner to Intermediate
-tags=java, generics, type-safety, foundations
+tags=java, generics
 ~~~~~~
 
 ## 📖 Module Overview

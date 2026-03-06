@@ -4,7 +4,7 @@ status=published
 date=2025-09-17
 author=MyRobot
 version=0.11.0-SNAPSHOT
-tags=java, profiling, memory-leak, analysis, evidence, documentation
+tags=java, profiling
 ~~~~~~
 
 ## Systematic Analysis using @162-java-profiling-analyze

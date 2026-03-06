@@ -6,7 +6,7 @@ author=MyRobot
 module=4
 duration=3-4 hours
 difficulty=Advanced
-tags=java, generics, real-world, records, sealed-types, serialization, performance
+tags=java, generics
 ~~~~~~
 
 ## 📖 Module Overview

@@ -35,6 +35,9 @@
 # Generate project reports
 ./mvnw site
 jwebserver -p 8005 -d "$(pwd)/target/site/"
+
+# Run blog in local
+jwebserver -p 8005 -d "$(pwd)/docs/"
 ```
 
 ## Plugin Goals Reference

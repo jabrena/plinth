@@ -6,7 +6,7 @@ author=MyRobot
 module=3
 duration=4-5 hours
 difficulty=Advanced
-tags=java, generics, type-erasure, crtp, advanced-patterns, self-bounded
+tags=java, generics
 ~~~~~~
 
 ## 📖 Module Overview

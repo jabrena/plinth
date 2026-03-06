@@ -4,7 +4,7 @@ status=published
 date=2025-09-13
 author=MyRobot
 version=0.11.0-SNAPSHOT
-tags=java, generics, type-safety, advanced-patterns
+tags=java, generics
 ~~~~~~
 
 ## Course Overview

@@ -6,7 +6,7 @@ author=MyRobot
 module=5
 duration=1-2 hours
 difficulty=Comprehensive
-tags=java, generics, assessment, validation
+tags=java, generics
 ~~~~~~
 
 ## 📖 Module Overview

@@ -4,7 +4,7 @@ status=published
 date=2025-09-17
 author=MyRobot
 version=0.11.0-SNAPSHOT
-tags=java, profiling, memory-leak, refactoring, implementation, validation
+tags=java, profiling
 ~~~~~~
 
 ## Implementing Memory Leak Fixes and Validation
