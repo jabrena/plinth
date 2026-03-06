@@ -207,7 +207,7 @@ First, create an empty Java project based on your favourite build system like `M
 
 If your approach is based on `Prompting Engineering`:
 
-[![](/cursor-rules-java/images/2026/3/workflow.png)](https://skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices)
+![](/cursor-rules-java/images/2026/3/workflow.png)
 
 You could begin the development by creating an empty unit test and adding a few Java comments. Those comments could be your first prompt in that project. Using this approach and depending on the level of detail of your notes as a prompt, you could send that selection to the context to develop the test and later the implementation following a TDD approach. The model will follow the `User prompt` and the `AGENTS.md` file.
 
@@ -215,7 +215,11 @@ After that, you could continue indicating notes incrementally and maybe triggeri
 
 Read this section carefully and explore this approach. In this repository, you could find some nontrivial problems: https://github.com/jabrena/latency-problems to be solved with this approach.
 
-On the other hand, if you are interested in adding `AI Capabilities` to your pipelines, I recommend reading the following article: https://www.javaadvent.com/2025/12/delegating-java-tasks-to-supervised-ai-dev-pipelines.html
+On the other hand, if you are interested in adding `AI Capabilities` to your pipelines:
+
+![](/cursor-rules-java/images/2026/3/workflow-pipelines.png)
+
+I recommend reading the following article: https://www.javaadvent.com/2025/12/delegating-java-tasks-to-supervised-ai-dev-pipelines.html
 
 ## Improvements in System prompts
 
@@ -241,12 +245,7 @@ On the other hand, if you are interested in adding `AI Capabilities` to your pip
 
 ## What are the next steps?
 
-**Subagents:**
-
-- https://code.claude.com/docs/en/sub-agents
-- https://code.claude.com/docs/en/agent-teams
-- https://cursor.com/docs/context/subagents
-- https://block.github.io/goose/docs/guides/subagents/
+In this article, a few standards were described that AI tools like `Cursor`, `Claude` and others use, but this market continues to evolve and the next topic to explore is **Subagents**.
 
 ## Do you still have questions about the project?
 
