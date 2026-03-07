@@ -123,6 +123,7 @@ But now using Skills, `Vercel` provides a better solution located in https://ski
 You can browse all skills generated in this project [here](https://skills.sh/?q=jabrena) and download any Skill or all of them in the following easy way:
 
 ```bash
+brew install node
 npx skills add jabrena/cursor-rules-java --list
 npx skills add https://github.com/jabrena/cursor-rules-java \
 --skill 110-java-maven-best-practices
