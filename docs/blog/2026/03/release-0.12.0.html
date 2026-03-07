@@ -102,13 +102,13 @@
 <article role="main" class="blog-post">
 <h2>What are Cursor rules for Java?</h2>
 <p>A curated collection of <code>System prompts</code> &amp; <code>Skills</code> for Java Enterprise development that help software engineers and pipelines in their daily programming work.</p>
-<p>Recently, we reached the milestone of <code>300+</code> ⭐ in Github.</p>
+<p>Recently, we reached the milestone of <code>300+</code> ⭐ on GitHub. <a href="https://www.desmos.com/calculator?lang=en">(y = 0.826x + 0.03; R² = 0.99)</a></p>
 <h2>What's new in this release?</h2>
 <p>In this release, the project introduces several updates and improvements:</p>
 <ul>
 <li><strong>Added Skill Support:</strong></li>
 <li>Published an initial set of 20 Skills for Java Enterprise development</li>
-<li>Designed and implemented a Skill generator with the capability to reuse the previous work on System prompts</li>
+<li>Designed and implemented a Skill generator that reuses our existing System prompts</li>
 <li><strong>Improvements in System Prompts:</strong></li>
 <li>Centralized version management and best practices for multi-module POM in <code>@110-java-maven-best-practices</code></li>
 <li>Added <code>ArchUnit</code> support in <code>@111-java-maven-dependencies</code></li>
@@ -122,12 +122,12 @@
 <li>Added a new generator to manage <code>SKILL</code> generation</li>
 <li>Added a validator to ensure good quality in <code>SKILL</code> validation against the <a href="https://agentskills.io/specification">Skill Specification</a></li>
 </ul>
-<p>Let's explain each of the released features one by one.</p>
+<p>Let's walk through each feature. You can also review the <a href="https://github.com/jabrena/cursor-rules-java/blob/main/CHANGELOG.md#0120-2026-03-08">CHANGELOG.md</a></p>
 <h2>Why Skills?</h2>
 <p><img src="/cursor-rules-java/images/2026/3/skills-everywhere.png" alt="" /></p>
-<p>The <a href="https://aws.amazon.com/en/blogs/devops/aws-named-as-a-leader-in-the-2025-gartner-magic-quadrant-for-ai-code-assistants/"><code>AI Assistants</code></a> market is changing the way of work in software development. More and more similar products are providing the same capabilities, but it was not possible to enhance these new services in a unified way. In the past, <code>Cursor</code> released the concept about <code>System prompts</code> but that idea required defining a <code>Standard</code> to be implemented for everyone. A <code>Skill</code> extends the AI agent capabilities with specialized knowledge and workflows that can be used by multiple products.</p>
-<p>In the past, this project focused on the concept of <code>Prompt engineering</code> and released a great curated collection of <code>System prompts</code> (formerly Cursor rules), but after a period of time observing Skills' adoption rate and popularity, it became clear that it was necessary to understand how <code>Skill</code> works—that it is exactly the same as a <code>System prompt</code>—but it was clear that for this project to avoid becoming outdated soon, it was necessary to migrate the development to this new format.</p>
-<p>Any <code>Skill</code> is defined in a file named <code>SKILL.md</code> which, per the specification, allows a maximum of 600 lines per file, but that limitation can be exceeded in files located in the <code>references</code> folder.</p>
+<p>The <a href="https://aws.amazon.com/en/blogs/devops/aws-named-as-a-leader-in-the-2025-gartner-magic-quadrant-for-ai-code-assistants/">AI Assistants</a> market is reshaping how we build software. A growing number of tools offer similar capabilities, yet until recently there was no standard way to extend them across vendors. <code>Cursor</code> pioneered <code>System prompts</code>, but that approach lacked a shared specification for others to adopt. A <code>Skill</code> fills that gap: it extends AI agents with specialized knowledge and workflows that work across different products.</p>
+<p>This project has long focused on <code>Prompt engineering</code> and maintains a curated collection of <code>System prompts</code> (formerly Cursor rules). As Skills gained traction, we recognized that a Skill is essentially a System prompt with a standardized format—and that migrating to this format would keep the project relevant as the ecosystem evolves.</p>
+<p>Each <code>Skill</code> lives in a <code>SKILL.md</code> file. The specification allows up to 600 lines per file, though files in the <code>references</code> folder may exceed that limit.</p>
 <pre><code class="language-bash">my-skill/
 ├── SKILL.md          # Required: instructions + metadata
 ├── scripts/          # Optional: executable code
@@ -135,7 +135,7 @@
 └── assets/           # Optional: templates, resources
 </code></pre>
 <p><strong>Source:</strong> <a href="https://agentskills.io/what-are-skills">https://agentskills.io/what-are-skills</a></p>
-<p>Another detail to be taken into account is the <code>YAML frontmatter</code> which needs to be present in any Skill and defines <code>Metadata</code>. Take a look at the following example from the Skill <code>@110-java-maven-best-practices</code>:</p>
+<p>One more detail: every <code>Skill</code> must include <code>YAML frontmatter</code> that defines its <code>Metadata</code>. Take a look at the following example from the Skill <code>@110-java-maven-best-practices</code>:</p>
 <pre><code class="language-bash">---
 name: 110-java-maven-best-practices
 description: Use when you need to review, improve,
@@ -149,10 +149,10 @@ metadata:
   version: 0.12.0
 ---
 </code></pre>
-<p>If you read <a href="https://agentskills.io/specification"><code>the Skill specification</code></a> in detail, any <code>Skill</code> requires a field <code>name</code> &amp; <code>description</code> in the metadata section. The description is super important because the module will use that information to know when to use that skill or not.</p>
-<p>The project added a new <code>Skill generator</code> and in this release you can see the results of this journey.</p>
+<p>Per the <a href="https://agentskills.io/specification">Skill specification</a>, every <code>Skill</code> requires <code>name</code> and <code>description</code> in the metadata. The description matters: the model uses it to decide when to invoke the skill.</p>
+<p>This release ships a new Skill generator—here are the results.</p>
 <h3>What Skills were generated in this release?</h3>
-<p>Currently, the project has released the following 20 Skills:</p>
+<p>This release includes 20 Skills:</p>
 <ul>
 <li><code>@110-java-maven-best-practices</code></li>
 <li><code>@111-java-maven-dependencies</code></li>
@@ -175,7 +175,7 @@ metadata:
 <li><code>@172-java-diagrams</code></li>
 <li><code>@173-java-agents</code></li>
 </ul>
-<p>But in the next release, the project will generate the pending ones:</p>
+<p>Planned for the next release:</p>
 <ul>
 <li><code>@126-java-observability-logging</code></li>
 <li><code>@151-java-performance-jmeter</code></li>
@@ -185,28 +185,29 @@ metadata:
 <li><code>@164-java-profiling-compare</code></li>
 <li><code>@164-java-profiling-verify</code></li>
 </ul>
-<p>And others that are identified in the <a href="https://github.com/jabrena/cursor-rules-java/issues"><code>Backlog</code></a>.</p>
-<p>In previous months, the project created a CLI to help engineers install the <code>System prompts</code> from this project or any project that has the <code>System prompts</code> located in <code>.cursor/rules</code> or contains a symbolic link for it:</p>
+<p>Plus others tracked in the <a href="https://github.com/jabrena/cursor-rules-java/issues"><code>Backlog</code></a>.</p>
+<p>Previously, the project offered a CLI to install System prompts from this repo or any repo with <code>.cursor/rules</code> (or a symlink to it):</p>
 <pre><code class="language-bash">jbang setup@jabrena init \
 --cursor https://github.com/jabrena/cursor-rules-java
 </code></pre>
-<p>But now using Skills, <code>Vercel</code> provides a better solution located in <a href="https://skills.sh/">https://skills.sh/</a>. Using this website, it is very easy to find and install Skills.</p>
-<p>You can browse all skills generated in this project <a href="https://skills.sh/?q=jabrena">here</a> and download any Skill or all of them in the following easy way:</p>
-<pre><code class="language-bash">npx skills add jabrena/cursor-rules-java --list
+<p>With Skills, <a href="https://vercel.com/"><code>Vercel</code></a> offers a better option at <a href="https://skills.sh/">https://skills.sh/</a>, where you can find and install Skills easily.</p>
+<p>Browse this project's Skills <a href="https://skills.sh/?q=jabrena">here</a> and install them with:</p>
+<pre><code class="language-bash">brew install node
+npx skills add jabrena/cursor-rules-java --list
 npx skills add https://github.com/jabrena/cursor-rules-java \
 --skill 110-java-maven-best-practices
-npx skills install jabrena/cursor-rules-java --all
+npx skills install jabrena/cursor-rules-java --all --agent cursor
 </code></pre>
-<p>Something that I like about <a href="https://skills.sh/">https://skills.sh/</a> is the new <code>Security pipelines</code> to audit that our work is safe as usual:</p>
+<p>One feature I like: Security pipelines that audit Skills for safety.</p>
 <p><a href="https://skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices"><img src="/cursor-rules-java/images/2026/3/skill-security-audit.png" alt="" /></a></p>
 <p><strong>Source:</strong> <a href="https://skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices">https://skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices</a></p>
-<p><strong>Note:</strong> I recommend using websites like <a href="https://skills.sh/">https://skills.sh/</a> because any Skill available from it passed the security audits. A Skill can include a Script and it could be an <code>Attack vector</code>.</p>
-<h3>What is SkillsJars?</h3>
-<p>When you develop a website using any Java stack, one popular solution is the usage of <a href="https://www.webjars.org/">WebJars</a>, which encapsulates popular web libraries using the Java way. Using the same criteria but for Skills, your JVM agents can now use Skills in an easy way. If you understood the previous ideas, now you understand the motivation behind <a href="https://www.skillsjars.com/">SkillsJars</a>, a new creation by <a href="https://x.com/JamesWard"><code>James Ward</code></a>.</p>
-<p>This project published a few Skills on SkillsJars to test the approach and capabilities, and in the future the whole collection will be published using that approach.</p>
-<p>Using <a href="https://skills.sh/">https://skills.sh/</a>, you download the Skill directly from a Git repository but using <code>SkillsJars</code> goes beyond—you download the Skill from a Maven artifact previously published in <code>Sonatype</code>, which adds immutability to this process.</p>
+<p><strong>Note:</strong> I recommend skills.sh and similar sites—Skills there have passed security audits. Be aware that Skills can include scripts, which may be an attack vector.</p>
+<h3>What are SkillsJars?</h3>
+<p><a href="https://www.webjars.org/">WebJars</a> package popular web libraries for the JVM. <a href="https://www.skillsjars.com/">SkillsJars</a> applies the same idea to Skills: JVM agents can consume Skills as Maven artifacts. It was created by <a href="https://x.com/JamesWard">James Ward</a>.</p>
+<p>We've published a few Skills on SkillsJars to validate the approach; the full collection will follow.</p>
+<p>skills.sh serves Skills from Git repos. SkillsJars goes further: Skills come from versioned Maven artifacts on Sonatype, which adds immutability.</p>
 <p><strong>Examples:</strong></p>
-<p>If you unpackage a Skill delivered as a JAR, it has the following layout:</p>
+<p>A Skill packaged as a JAR has this layout:</p>
 <pre><code class="language-bash">META-INF/
 META-INF/skills/
 META-INF/skills/jabrena/
@@ -240,7 +241,7 @@ META-INF/skills/jabrena/cursor-rules-java/111-java-maven-dependencies/references
     &lt;/plugins&gt;
 &lt;/build&gt;
 </code></pre>
-<p>Or you could define the available skills to be used by your JVM agents in this way:</p>
+<p>Or declare Skills for your JVM agents like this:</p>
 <pre><code class="language-xml">&lt;build&gt;
     &lt;plugins&gt;
         &lt;plugin&gt;
@@ -259,17 +260,17 @@ META-INF/skills/jabrena/cursor-rules-java/111-java-maven-dependencies/references
     &lt;/plugins&gt;
 &lt;/build&gt;
 </code></pre>
-<p>Once you have defined the <code>SkillsJars</code> in your build system, you could extract them for the daily work with your favorite <code>AI Tool</code> in this way:</p>
+<p>After adding SkillsJars to your build, extract them for use with your AI tool:</p>
 <pre><code class="language-bash">./mvnw skillsjars:extract -Ddir=.agents/skills
 </code></pre>
-<p>If you are interested in <code>SkillsJars</code> and <code>Spring AI</code>, the following links could be interesting for you:</p>
+<p>For more on SkillsJars and Spring AI:</p>
 <ul>
 <li><a href="https://www.skillsjars.com/?bt=maven&amp;q=maven">https://www.skillsjars.com/?bt=maven&amp;q=maven</a></li>
 <li><a href="https://github.com/skillsjars/skillsjars-maven-plugin">https://github.com/skillsjars/skillsjars-maven-plugin</a></li>
 <li><a href="https://github.com/skillsjars/skillsjars-example-spring-ai">https://github.com/skillsjars/skillsjars-example-spring-ai</a></li>
 <li><a href="https://spring.io/blog/2026/01/13/spring-ai-generic-agent-skills">https://spring.io/blog/2026/01/13/spring-ai-generic-agent-skills</a></li>
 </ul>
-<p><strong>Note:</strong> I suppose that <code>Quarkus</code> &amp; <code>Micronaut</code> will add support soon.</p>
+<p><strong>Note:</strong> Quarkus and Micronaut will likely add support soon.</p>
 <h3>Awesome third party Skills</h3>
 <h4>Good design practices</h4>
 <p>The design catalog offers skills for collaborative design, event modeling, hexagonal architecture, and modern CLI design. These skills guide agents toward structured, domain-driven design decisions and clean architectural boundaries.</p>
@@ -287,33 +288,33 @@ META-INF/skills/jabrena/cursor-rules-java/111-java-maven-dependencies/references
 <li><a href="https://github.com/tech-leads-club/agent-skills/blob/main/packages/skills-catalog/skills/(architecture)/">https://github.com/tech-leads-club/agent-skills/blob/main/packages/skills-catalog/skills/(architecture)/</a></li>
 </ul>
 <h4>PreCommit</h4>
-<p>A comprehensive skill for managing pre-commit hooks - the framework for multi-language pre-commit hook management that automates code quality, formatting, linting, and security scanning.</p>
+<p>A skill for managing pre-commit hooks—the multi-language framework that automates code quality, formatting, linting, and security scanning.</p>
 <ul>
 <li><a href="https://github.com/julianobarbosa/claude-code-skills/blob/main/skills/pre-commit-skill/SKILL.md">https://github.com/julianobarbosa/claude-code-skills/blob/main/skills/pre-commit-skill/SKILL.md</a></li>
 </ul>
 <h4>JDB Agentic Debugger</h4>
-<p>Agent Skill for debugging Java applications in real time using JDB (Java Debugger CLI)</p>
+<p>An agent skill for debugging Java applications in real time with JDB (Java Debugger CLI).</p>
 <ul>
 <li><a href="https://github.com/brunoborges/jdb-agentic-debugger">https://github.com/brunoborges/jdb-agentic-debugger</a></li>
 </ul>
 <h2>Why Agents.md?</h2>
-<p>In general, any <code>Git repository</code> includes a <code>README.md</code> file where the authors explain the purpose of the repository from a product's perspective. In many cases, <code>README.md</code> includes technical information about the development lifecycle, mixing technical and non-technical information, for this purpose, this project includes a Skill named <code>@113-java-maven-documentation</code> which was designed to generate a file <code>DEVELOPER.md</code> to include technical details about how to use the build system and profiles, but <code>what happens when you interact with Models</code>? Maybe a document dedicated to Models should be required and this is the motivation for <code>AGENTS.md</code>.</p>
-<p>The skill <code>@173-java-agents</code> could be useful for you because it was designed to generate an <code>AGENTS.md</code> file after an interactive set of interactions with the Skill.</p>
-<p>If you remain interested in this topic, I share the following links:</p>
+<p>Most Git repos have a <code>README.md</code> that explains the product. Often it mixes product and technical details. <code>@113-java-maven-documentation</code> generates <code>DEVELOPER.md</code> for Maven build commands and Maven profile details. But what about when you work with AI models? That gap is what <code>AGENTS.md</code> fills.</p>
+<p>The <code>@173-java-agents</code> Skill generates an <code>AGENTS.md</code> file through an interactive workflow.</p>
+<p>Further reading:</p>
 <ul>
 <li><a href="https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/">https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/</a></li>
 </ul>
 <h2>Awesome MCP Servers &amp; CLI tools for Java</h2>
-<p>As you know, Models are disconnected from the Internet and they require third-party tools for security reasons. <code>AI Tools</code> like <code>Cursor</code> or <code>Claude</code> maintain the configuration in <code>mcp.json</code> files which has the following structure:</p>
+<p>AI models run offline and rely on third-party tools for external access. Cursor and Claude store MCP config in <code>mcp.json</code>:</p>
 <pre><code class="language-json">{
     &quot;mcpServers&quot;: {
         ...
     }
 }
 </code></pre>
-<p>The third-party MCP/CLI tools recommended in this period:</p>
+<p>Recommended MCP and CLI tools in this article:</p>
 <h3>Maven tools</h3>
-<p>MCP server providing AI assistants with Maven Central dependency intelligence for all JVM build tools (Maven, Gradle, SBT, Mill). Features Context7 integration for documentation support.</p>
+<p>An MCP server that provides AI assistants with Maven Central dependency intelligence for all JVM build tools (Maven, Gradle, SBT, Mill). It features Context7 integration for documentation support.</p>
 <pre><code class="language-json">{
     &quot;mcpServers&quot;: {
         &quot;maven-tools&quot;: {
@@ -328,7 +329,7 @@ META-INF/skills/jabrena/cursor-rules-java/111-java-maven-dependencies/references
     }
 }
 </code></pre>
-<p>This MCP tool is a good alternative to the usage of the classic Maven plugin:</p>
+<p>This MCP tool is a strong alternative to the Versions Maven plugin:</p>
 <pre><code class="language-xml">&lt;!-- Versions Maven Plugin --&gt;
 &lt;plugin&gt;
     &lt;groupId&gt;org.codehaus.mojo&lt;/groupId&gt;
@@ -336,7 +337,7 @@ META-INF/skills/jabrena/cursor-rules-java/111-java-maven-dependencies/references
     &lt;version&gt;${maven-plugin-versions.version}&lt;/version&gt;
 &lt;/plugin&gt;
 </code></pre>
-<p>Because it is true that using the <code>Maven plugin</code> you can be aware if one dependency could be updated with:</p>
+<p>Using the <code>Maven plugin</code>, you can check whether a dependency can be updated with:</p>
 <pre><code class="language-bash"># Check for dependency updates
 ./mvnw versions:display-dependency-updates
 # Check for plugin updates
@@ -344,13 +345,13 @@ META-INF/skills/jabrena/cursor-rules-java/111-java-maven-dependencies/references
 # Check for property updates
 ./mvnw versions:display-property-updates
 </code></pre>
-<p>But using the <code>MCP Tool</code> you could apply the changes, so this tool goes beyond the Maven plugin.</p>
+<p>The MCP tool goes further: it can apply updates, not just report them.</p>
 <ul>
 <li><a href="https://github.com/arvindand/maven-tools-mcp">https://github.com/arvindand/maven-tools-mcp</a></li>
 <li><a href="https://hub.docker.com/mcp/server/maven-tools-mcp/overview">https://hub.docker.com/mcp/server/maven-tools-mcp/overview</a></li>
 </ul>
 <h3>Javadocs</h3>
-<p>Artifacts in Maven Central typically provide a JavaDoc Jar that contains the versioned documentation for the artifact. While IDEs use this to display the docs for a library, it is also sometimes nice to browse the docs in a web browser. This project is a simple web app that allows you to view the JavaDoc for any artifact in Maven Central or be integrated with Models using a MCP.</p>
+<p>Maven Central artifacts ship JavaDoc Jars. IDEs show them inline, but sometimes you want to browse in a browser. This web app lets you view JavaDocs for any artifact or connect via MCP.</p>
 <pre><code class="language-json">{
     &quot;mcpServers&quot;: {
         &quot;javadocs&quot;: {
@@ -434,26 +435,26 @@ META-INF/skills/jabrena/cursor-rules-java/111-java-maven-dependencies/references
 <li><a href="https://effectorientedprogramming.com/mcp/">https://effectorientedprogramming.com/mcp/</a></li>
 </ul>
 <p><strong>Note:</strong> I like this <code>MCP</code> because it is a nice and honest way to monetize the author's effort.</p>
-<p>If you observe, several MCP tools are delivered as Docker images to mitigate pain points related to installation and security. Take a look at the current Docker MCP Catalog to discover new possibilities:</p>
+<p>Many MCP tools ship as Docker images to simplify installation and improve security. Browse the Docker MCP Catalog for more:</p>
 <ul>
 <li><a href="https://hub.docker.com/mcp">https://hub.docker.com/mcp</a></li>
 </ul>
-<h2>How to use Prompts, Agents.md, Skills &amp; MCP/Cli tools in your daily workflow?</h2>
-<p>In 2026, the usage of AI tools is not optional but it is true that it depends on your organization and the nature of your project to select which tools fit better for your purpose. Get in touch with your <code>Platform engineering teams</code> to learn which <code>AI tools</code> are compliant and which <code>Skills</code> and <code>MCP/CLI tools</code> are supported as part of the good engineering practices.</p>
-<p>If you are using <code>Agile methodologies</code> and your team organizes the product evolution based on Agile concepts like <code>Intents</code>, <code>Epics</code>, <code>User Stories</code> &amp; <code>Tasks</code>, your first step should be to analyze your backlog and review if the tasks are <code>Ready for development</code>.</p>
+<h2>How to use Prompts, Agents.md, Skills &amp; MCP/CLI tools in your daily workflow?</h2>
+<p>In 2026, AI tools are essential—but which ones you use depends on your organization and project. Check with your <code>Platform Engineering team</code> to see which AI tools, Skills, and MCP/CLI tools are approved.</p>
+<p>With Agile (Intents, Epics, User Stories, Tasks), start by reviewing your backlog and ensuring tasks are ready for development.</p>
 <p><a href="https://learn.microsoft.com/en-us/azure/devops/boards/backlogs/define-features-epics?view=azure-devops&amp;tabs=agile-process"><img src="/cursor-rules-java/images/2026/3/agile.png" alt="" /></a></p>
 <p><strong>Source:</strong> <a href="https://learn.microsoft.com/en-us/azure/devops/boards/backlogs/define-features-epics?view=azure-devops&amp;tabs=agile-process">https://learn.microsoft.com/en-us/azure/devops/boards/backlogs/define-features-epics?view=azure-devops&amp;tabs=agile-process</a></p>
-<p>You could improve the analysis and design phase using the <a href="https://github.com/jabrena/cursor-rules-agile"><code>System prompts for Agile</code></a> which provides support for defining tasks about <code>Epics</code>, <code>Features</code> &amp; <code>User Stories</code> (with Gherkin acceptance criteria), <code>Diagrams</code>, Solutions for <code>functional</code> and <code>non-functional</code> requirements (ISO-25010) and others.</p>
-<p>Using this kind of tools, your team will increase the delivery capacity but in order maintain the pace defining good User Stories, one alternative that you could apply is the usage of <code>Double Agile Loop</code>:</p>
+<p>Use <a href="https://github.com/jabrena/cursor-rules-agile"><code>System prompts for Agile</code></a> to improve analysis and design: Epics, Features, User Stories (with Gherkin), diagrams, and solutions for functional and non-functional requirements (ISO-25010).</p>
+<p>These tools boost delivery. To keep pace, consider a Double Agile Loop for defining User Stories:</p>
 <p><a href="https://www.stride.build/blog/what-is-dual-track-agile-and-how-does-it-work"><img src="/cursor-rules-java/images/2026/3/double-agile-loop.png" alt="" /></a></p>
 <p><strong>Source:</strong> <a href="https://www.stride.build/blog/what-is-dual-track-agile-and-how-does-it-work">https://www.stride.build/blog/what-is-dual-track-agile-and-how-does-it-work</a></p>
-<h3>Solving an User Story with a Prompting Engineering approach</h3>
-<p>Imagine that you pick up the following <a href="https://github.com/jabrena/latency-problems/blob/master/docs/problem1/README.md">User Story</a> from your Backlog and you start reading the details:</p>
+<h3>Solving a User Story with a Prompt Engineering approach</h3>
+<p>Suppose you pick up this <a href="https://github.com/jabrena/latency-problems/blob/master/docs/problem1/README.md">User Story</a> from the backlog:</p>
 <pre><code>As an API consumer / data analyst
 I want to consume God APIs (Greek, Roman &amp; Nordic), filter gods whose names start with 'n', convert each filtered god name into a decimal representation, and return the sum of those values
 So that I can perform cross-pantheon analysis and aggregate mythology data for research, reporting, or educational applications.
 </code></pre>
-<p>including the following Acceptance criteria:</p>
+<p>and it includes acceptance criteria:</p>
 <pre><code class="language-gherkin">Feature: God Analysis API
 # REST API: GET /api/v1/gods/stats/sum
 # Notes:
@@ -475,7 +476,7 @@ So that I can perform cross-pantheon analysis and aggregate mythology data for r
     And the response body should contain a JSON object with a &quot;sum&quot; field
     And the value of &quot;sum&quot; should be &quot;78179288397447443426&quot;
 </code></pre>
-<p>and finally you review that the <code>User story</code> includes details about the Stack to be used:</p>
+<p>and finally you see that the development requires this stack:</p>
 <pre><code>- Java 25
 - Spring Boot 4.0.x
 - Spring Boot Modulith
@@ -484,46 +485,55 @@ So that I can perform cross-pantheon analysis and aggregate mythology data for r
 - Wiremock
 - RestAssured
 </code></pre>
-<p>So, lets clone the repository to implement the feature and when you you have the repo in the local dev environment, review that Build system works and review if the repository has any <code>AGENTS.md</code> file to help in the interactions with models. If the repo doesn´t have that file, you could use the following Skill <code>@173-java-agents</code> focused on this kind of files.</p>
-<p>Once you have the repository ready, the next step is to create a <code>Plan</code>. The most popular AI tools like <code>Cursor</code> &amp; <code>Claude</code> have support to generates Plan.</p>
+<p>Clone the repo and verify the build. Check for an <code>AGENTS.md</code> file—if missing, use <code>@173-java-agents</code> to generate one.</p>
+<p>Next, create a Plan. Cursor and Claude both support plan generation.</p>
 <ul>
 <li><a href="https://cursor.com/docs/agent/plan-mode">https://cursor.com/docs/agent/plan-mode</a></li>
 <li><a href="https://code.claude.com/docs/en/common-workflows#use-plan-mode-for-safe-code-analysis">https://code.claude.com/docs/en/common-workflows#use-plan-mode-for-safe-code-analysis</a></li>
 </ul>
-<p>review and iterate the document created and when the Plan is stable, pass to the model. Include in the context the different files created in design phase, OAS files and Gherkin files to enhance the process.</p>
+<p>Review and iterate until the Plan is stable, then hand it to the model. Include design artifacts, OAS files, and Gherkin in the context.</p>
 <p><img src="/cursor-rules-java/images/2026/3/workflow.png" alt="" /></p>
-<p>Using a <code>Prompting engineering</code> aproach, it is necessary to iterate over the development. In any iteration, it is important that model verify changes it self and not the Software engineer, for this verification step, it is nice to count with the file <code>AGENTS.md</code> because it explain that kind of technical details.</p>
-<p>PENDING</p>
-<p>Read this section carefully and explore this approach. In this repository, you could find some nontrivial problems: <a href="https://github.com/jabrena/latency-problems">https://github.com/jabrena/latency-problems</a> to be solved with this approach.</p>
+<p>Expect to iterate. Have the model verify its own changes rather than doing it manually. <code>AGENTS.md</code> helps here—it documents the technical details the model needs.</p>
+<p>When executing the plan, you can choose:</p>
+<ul>
+<li>Use a TDD approach</li>
+<li>Implement using Chicago style (inside-out)</li>
+<li>Implement using London style (outside-in)</li>
+</ul>
+<p>Depending on your preferences, you can build a plan that includes a task list like this:</p>
+<p><img src="/cursor-rules-java/images/2026/3/plan-task-list-example.png" alt="" /></p>
+<p>Read this section carefully and explore this approach. In the following Git repository, you could find other non-trivial problems: <a href="https://github.com/jabrena/latency-problems">https://github.com/jabrena/latency-problems</a> that you could solve with this approach.</p>
 <h3>Enhance your pipeline with AI Tools</h3>
-<p>On the other hand, if you are interested in adding <code>AI Capabilities</code> to your pipelines:</p>
+<p>If you are interested in adding <code>AI Capabilities</code> to your pipelines:</p>
 <p><img src="/cursor-rules-java/images/2026/3/workflow-pipelines.png" alt="" /></p>
 <p>I recommend reading the following article: <a href="https://www.javaadvent.com/2025/12/delegating-java-tasks-to-supervised-ai-dev-pipelines.html">https://www.javaadvent.com/2025/12/delegating-java-tasks-to-supervised-ai-dev-pipelines.html</a></p>
-<h2>Not everything is perfect, your repository is full of <code>.FOLDERs</code></h2>
-<p>PENDING</p>
+<h2>But not everything is perfect—your repository is full of configuration folders</h2>
+<p>Currently, every product has a particular folder like <code>.cursor</code>, <code>.claude</code>, <code>.agents</code>, <code>.ai</code>, etc. This is horrible, but it is part of the game. At some point, these kinds of configuration folders should be unified, meanwhile, we need to have patience.</p>
 <h2>Improvements in System prompts</h2>
+<p>Since the previous version, the project has invested time improving the current System prompts, which are part of the new Skills under the hood.</p>
 <p><strong>Improvements in Maven:</strong></p>
 <ul>
-<li>Centralized version management and best practices for multi-module POM in <code>@110-java-maven-best-practices</code></li>
-<li>Added <code>ArchUnit</code> support in <code>@111-java-maven-dependencies</code></li>
-<li>Cyclomatic complexity analysis support in <code>@112-java-maven-plugins</code></li>
-<li>Minimum Maven compiler support in <code>@112-java-maven-plugins</code></li>
-<li><code>@DEVELOPER.md</code> and plugin catalog in <code>@113-java-maven-documentation</code></li>
+<li>Centralized version management and best practices for multi-module POM in <code>@110-java-maven-best-practices</code>: Added support for multi-module projects with Maven.</li>
+<li>Added <code>ArchUnit</code> support in <code>@111-java-maven-dependencies</code>: Makes this popular dependency available for addition to any project.</li>
+<li>Cyclomatic complexity analysis support in <code>@112-java-maven-plugins</code>: This new profile helps models offer hints to reduce complexity in development.</li>
+<li>Minimum Maven compiler support in <code>@112-java-maven-plugins</code>: Added a minimum configuration for this essential Maven plugin.</li>
+<li><code>@DEVELOPER.md</code> and plugin catalog in <code>@113-java-maven-documentation</code>: Renamed the file <code>README-DEV.md</code> to <code>DEVELOPER.md</code>. On the other hand, the generation is now dynamic.</li>
 </ul>
 <p><strong>Improvements in Testing:</strong></p>
 <ul>
-<li>Added <code>@132-java-testing-integration-testing</code> with WireMock support</li>
+<li>Added <code>@132-java-testing-integration-testing</code> with WireMock support: Initial support for integration test scenarios without framework usage. In the future, support will be added for databases, Kafka, and others.</li>
 </ul>
 <p><strong>Improvements in Architecture:</strong></p>
 <ul>
-<li>Split Java documentation into ADR capabilities in <code>@170-java-documentation</code> and <code>@171-java-adr</code></li>
+<li>Split Java documentation into ADR capabilities in <code>@170-java-documentation</code> and <code>@171-java-adr</code>: Decoupled the documentation for Java development from documentation about Architecture tasks.</li>
 </ul>
 <p><strong>Improvements in the interactions with LLMs:</strong></p>
 <ul>
-<li>Added support to generate <code>AGENTS.md</code> with <code>@173-java-agents</code></li>
+<li>Added support to generate <code>AGENTS.md</code> with <code>@173-java-agents</code>: Added this specific missing feature.</li>
 </ul>
 <h2>What are the next steps?</h2>
-<p>In this article, a few standards were described that AI tools like <code>Cursor</code>, <code>Claude</code> and others use, but this market continues to evolve and the next topic to explore is <strong>Subagents</strong>.</p>
+<p>In this article, you learned about standards that you can use with <code>Cursor</code>, <code>Claude</code>, and others, but this market continues to evolve and the next topic to explore is <strong>Subagents</strong>.</p>
+<p><img src="/cursor-rules-java/images/2026/3/subagents.png" alt="" /></p>
 <h2>Do you still have questions about the project?</h2>
 <p>If you feel stuck using this project or have questions, you can attend the following Workshop at <code>Codemotion Madrid 2026</code>:</p>
 <p><a href="https://conferences.codemotion.com/madrid/"><img src="/cursor-rules-java/images/2026/3/codemotion-madrid-2026.jpg" alt="" /></a></p>
