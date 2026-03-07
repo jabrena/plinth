@@ -10,6 +10,8 @@ status=published
 
 A curated collection of `System prompts` & `Skills` for Java Enterprise development that help software engineers and pipelines in their daily programming work.
 
+Recently, we reached the milestone of `300+` ⭐ in Github.
+
 ## What's new in this release?
 
 In this release, the project introduces several updates and improvements:
@@ -436,22 +438,77 @@ If you are using `Agile methodologies` and your team organizes the product evolu
 
 [![](/cursor-rules-java/images/2026/3/agile.png)](https://learn.microsoft.com/en-us/azure/devops/boards/backlogs/define-features-epics?view=azure-devops&tabs=agile-process)
 
+**Source:** https://learn.microsoft.com/en-us/azure/devops/boards/backlogs/define-features-epics?view=azure-devops&tabs=agile-process
+
 You could improve the analysis and design phase using the [`System prompts for Agile`](https://github.com/jabrena/cursor-rules-agile) which provides support for defining tasks about `Epics`, `Features` & `User Stories` (with Gherkin acceptance criteria), `Diagrams`, Solutions for `functional` and `non-functional` requirements (ISO-25010) and others.
 
-### Solving an issue with a Prompt Engineering approach
+Using this kind of tools, your team will increase the delivery capacity but in order maintain the pace defining good User Stories, one alternative that you could apply is the usage of `Double Agile Loop`:
 
-First, create an empty Java project based on your favourite build system like `Maven` or `Gradle`. Once you have the pillars in place, ask your `Cursor`, `Claude` or other AI assistant to create an `AGENTS.md` using the Skill `@173-java-agents`. Once you define that file, in the next interactions the models will understand where the files are and how to interact with your build system and other details.
+[![](/cursor-rules-java/images/2026/3/double-agile-loop.png)](https://www.stride.build/blog/what-is-dual-track-agile-and-how-does-it-work)
 
-If your approach is based on `Prompt Engineering`:
+**Source:** https://www.stride.build/blog/what-is-dual-track-agile-and-how-does-it-work
 
-![](/cursor-rules-java/images/2026/3/workflow.png)
+### Solving an User Story with a Prompting Engineering approach
+
+Imagine that you pick up the following [User Story](https://github.com/jabrena/latency-problems/blob/master/docs/problem1/README.md) from your Backlog and you start reading the details:
+
+```
+As an API consumer / data analyst
+I want to consume God APIs (Greek, Roman & Nordic), filter gods whose names start with 'n', convert each filtered god name into a decimal representation, and return the sum of those values
+So that I can perform cross-pantheon analysis and aggregate mythology data for research, reporting, or educational applications.
+```
+
+including the following Acceptance criteria:
+
+```gherkin
+Feature: God Analysis API
+# REST API: GET /api/v1/gods/stats/sum
+# Notes:
+# - Decimal Conversion Rule: Name then each char to its Unicode int value, then concatenate these ints as strings.
+# (e.g., "Zeus" -> Z(90)e(101)u(117)s(115) -> "90101117115").
+# - If in the process to load the list, the timeout is reached, the process will calculate with the rest of the lists.
+# - Filtering for gods starting with 'n' is case-sensitive (only lowercase 'n').
+# - Greek API: https://my-json-server.typicode.com/jabrena/latency-problems/greek
+# - Roman API: https://my-json-server.typicode.com/jabrena/latency-problems/roman
+# - Nordic API: https://my-json-server.typicode.com/jabrena/latency-problems/nordic
+
+  Background:
+    Given the God Analysis API is available at "/api/v1"
+    And the system is configured with an API call timeout of 5 seconds
+
+  Scenario: Happy path - Get sum with explicit sources
+    When the client sends a GET request to "/gods/stats/sum" with query parameters "filter" = "n" and "sources" = "greek,roman,nordic"
+    Then the response status code should be 200
+    And the response body should contain a JSON object with a "sum" field
+    And the value of "sum" should be "78179288397447443426"
+```
+
+and finally you review that the `User story` includes details about the Stack to be used:
+
+```
+- Java 25
+- Spring Boot 4.0.x
+- Spring Boot Modulith
+- RestClient
+- Junit
+- Wiremock
+- RestAssured
+```
+
+So, lets clone the repository to implement the feature and when you you have the repo in the local dev environment, review that Build system works and review if the repository has any `AGENTS.md` file to help in the interactions with models. If the repo doesn´t have that file, you could use the following Skill `@173-java-agents` focused on this kind of files.
+
+Once you have the repository ready, the next step is to create a `Plan`. The most popular AI tools like `Cursor` & `Claude` have support to generates Plan.
 
 - https://cursor.com/docs/agent/plan-mode
 - https://code.claude.com/docs/en/common-workflows#use-plan-mode-for-safe-code-analysis
 
-You could begin the development by creating an empty unit test and adding a few Java comments. Those comments could be your first prompt in that project. Using this approach and depending on the level of detail of your notes as a prompt, you could send that selection to the context to develop the test and later the implementation following a TDD approach. The model will follow the `User prompt` and the `AGENTS.md` file.
+review and iterate the document created and when the Plan is stable, pass to the model. Include in the context the different files created in design phase, OAS files and Gherkin files to enhance the process.
 
-After that, you could continue indicating notes incrementally and maybe triggering some Skills to improve the development.
+![](/cursor-rules-java/images/2026/3/workflow.png)
+
+Using a `Prompting engineering` aproach, it is necessary to iterate over the development. In any iteration, it is important that model verify changes it self and not the Software engineer, for this verification step, it is nice to count with the file `AGENTS.md` because it explain that kind of technical details.
+
+PENDING
 
 Read this section carefully and explore this approach. In this repository, you could find some nontrivial problems: https://github.com/jabrena/latency-problems to be solved with this approach.
 

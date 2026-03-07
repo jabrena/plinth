@@ -102,6 +102,7 @@
 <article role="main" class="blog-post">
 <h2>What are Cursor rules for Java?</h2>
 <p>A curated collection of <code>System prompts</code> &amp; <code>Skills</code> for Java Enterprise development that help software engineers and pipelines in their daily programming work.</p>
+<p>Recently, we reached the milestone of <code>300+</code> ⭐ in Github.</p>
 <h2>What's new in this release?</h2>
 <p>In this release, the project introduces several updates and improvements:</p>
 <ul>
@@ -441,17 +442,58 @@ META-INF/skills/jabrena/cursor-rules-java/111-java-maven-dependencies/references
 <p>In 2026, the usage of AI tools is not optional but it is true that it depends on your organization and the nature of your project to select which tools fit better for your purpose. Get in touch with your <code>Platform engineering teams</code> to learn which <code>AI tools</code> are compliant and which <code>Skills</code> and <code>MCP/CLI tools</code> are supported as part of the good engineering practices.</p>
 <p>If you are using <code>Agile methodologies</code> and your team organizes the product evolution based on Agile concepts like <code>Intents</code>, <code>Epics</code>, <code>User Stories</code> &amp; <code>Tasks</code>, your first step should be to analyze your backlog and review if the tasks are <code>Ready for development</code>.</p>
 <p><a href="https://learn.microsoft.com/en-us/azure/devops/boards/backlogs/define-features-epics?view=azure-devops&amp;tabs=agile-process"><img src="/cursor-rules-java/images/2026/3/agile.png" alt="" /></a></p>
+<p><strong>Source:</strong> <a href="https://learn.microsoft.com/en-us/azure/devops/boards/backlogs/define-features-epics?view=azure-devops&amp;tabs=agile-process">https://learn.microsoft.com/en-us/azure/devops/boards/backlogs/define-features-epics?view=azure-devops&amp;tabs=agile-process</a></p>
 <p>You could improve the analysis and design phase using the <a href="https://github.com/jabrena/cursor-rules-agile"><code>System prompts for Agile</code></a> which provides support for defining tasks about <code>Epics</code>, <code>Features</code> &amp; <code>User Stories</code> (with Gherkin acceptance criteria), <code>Diagrams</code>, Solutions for <code>functional</code> and <code>non-functional</code> requirements (ISO-25010) and others.</p>
-<h3>Solving an issue with a Prompt Engineering approach</h3>
-<p>First, create an empty Java project based on your favourite build system like <code>Maven</code> or <code>Gradle</code>. Once you have the pillars in place, ask your <code>Cursor</code>, <code>Claude</code> or other AI assistant to create an <code>AGENTS.md</code> using the Skill <code>@173-java-agents</code>. Once you define that file, in the next interactions the models will understand where the files are and how to interact with your build system and other details.</p>
-<p>If your approach is based on <code>Prompt Engineering</code>:</p>
-<p><img src="/cursor-rules-java/images/2026/3/workflow.png" alt="" /></p>
+<p>Using this kind of tools, your team will increase the delivery capacity but in order maintain the pace defining good User Stories, one alternative that you could apply is the usage of <code>Double Agile Loop</code>:</p>
+<p><a href="https://www.stride.build/blog/what-is-dual-track-agile-and-how-does-it-work"><img src="/cursor-rules-java/images/2026/3/double-agile-loop.png" alt="" /></a></p>
+<p><strong>Source:</strong> <a href="https://www.stride.build/blog/what-is-dual-track-agile-and-how-does-it-work">https://www.stride.build/blog/what-is-dual-track-agile-and-how-does-it-work</a></p>
+<h3>Solving an User Story with a Prompting Engineering approach</h3>
+<p>Imagine that you pick up the following <a href="https://github.com/jabrena/latency-problems/blob/master/docs/problem1/README.md">User Story</a> from your Backlog and you start reading the details:</p>
+<pre><code>As an API consumer / data analyst
+I want to consume God APIs (Greek, Roman &amp; Nordic), filter gods whose names start with 'n', convert each filtered god name into a decimal representation, and return the sum of those values
+So that I can perform cross-pantheon analysis and aggregate mythology data for research, reporting, or educational applications.
+</code></pre>
+<p>including the following Acceptance criteria:</p>
+<pre><code class="language-gherkin">Feature: God Analysis API
+# REST API: GET /api/v1/gods/stats/sum
+# Notes:
+# - Decimal Conversion Rule: Name then each char to its Unicode int value, then concatenate these ints as strings.
+# (e.g., &quot;Zeus&quot; -&gt; Z(90)e(101)u(117)s(115) -&gt; &quot;90101117115&quot;).
+# - If in the process to load the list, the timeout is reached, the process will calculate with the rest of the lists.
+# - Filtering for gods starting with 'n' is case-sensitive (only lowercase 'n').
+# - Greek API: https://my-json-server.typicode.com/jabrena/latency-problems/greek
+# - Roman API: https://my-json-server.typicode.com/jabrena/latency-problems/roman
+# - Nordic API: https://my-json-server.typicode.com/jabrena/latency-problems/nordic
+
+  Background:
+    Given the God Analysis API is available at &quot;/api/v1&quot;
+    And the system is configured with an API call timeout of 5 seconds
+
+  Scenario: Happy path - Get sum with explicit sources
+    When the client sends a GET request to &quot;/gods/stats/sum&quot; with query parameters &quot;filter&quot; = &quot;n&quot; and &quot;sources&quot; = &quot;greek,roman,nordic&quot;
+    Then the response status code should be 200
+    And the response body should contain a JSON object with a &quot;sum&quot; field
+    And the value of &quot;sum&quot; should be &quot;78179288397447443426&quot;
+</code></pre>
+<p>and finally you review that the <code>User story</code> includes details about the Stack to be used:</p>
+<pre><code>- Java 25
+- Spring Boot 4.0.x
+- Spring Boot Modulith
+- RestClient
+- Junit
+- Wiremock
+- RestAssured
+</code></pre>
+<p>So, lets clone the repository to implement the feature and when you you have the repo in the local dev environment, review that Build system works and review if the repository has any <code>AGENTS.md</code> file to help in the interactions with models. If the repo doesn´t have that file, you could use the following Skill <code>@173-java-agents</code> focused on this kind of files.</p>
+<p>Once you have the repository ready, the next step is to create a <code>Plan</code>. The most popular AI tools like <code>Cursor</code> &amp; <code>Claude</code> have support to generates Plan.</p>
 <ul>
 <li><a href="https://cursor.com/docs/agent/plan-mode">https://cursor.com/docs/agent/plan-mode</a></li>
 <li><a href="https://code.claude.com/docs/en/common-workflows#use-plan-mode-for-safe-code-analysis">https://code.claude.com/docs/en/common-workflows#use-plan-mode-for-safe-code-analysis</a></li>
 </ul>
-<p>You could begin the development by creating an empty unit test and adding a few Java comments. Those comments could be your first prompt in that project. Using this approach and depending on the level of detail of your notes as a prompt, you could send that selection to the context to develop the test and later the implementation following a TDD approach. The model will follow the <code>User prompt</code> and the <code>AGENTS.md</code> file.</p>
-<p>After that, you could continue indicating notes incrementally and maybe triggering some Skills to improve the development.</p>
+<p>review and iterate the document created and when the Plan is stable, pass to the model. Include in the context the different files created in design phase, OAS files and Gherkin files to enhance the process.</p>
+<p><img src="/cursor-rules-java/images/2026/3/workflow.png" alt="" /></p>
+<p>Using a <code>Prompting engineering</code> aproach, it is necessary to iterate over the development. In any iteration, it is important that model verify changes it self and not the Software engineer, for this verification step, it is nice to count with the file <code>AGENTS.md</code> because it explain that kind of technical details.</p>
+<p>PENDING</p>
 <p>Read this section carefully and explore this approach. In this repository, you could find some nontrivial problems: <a href="https://github.com/jabrena/latency-problems">https://github.com/jabrena/latency-problems</a> to be solved with this approach.</p>
 <h3>Enhance your pipeline with AI Tools</h3>
 <p>On the other hand, if you are interested in adding <code>AI Capabilities</code> to your pipelines:</p>
