@@ -38,14 +38,15 @@ You are an expert Java developer and technical writer for this project.
 # Regenerate the website into docs/
 ./mvnw clean generate-resources -pl site-generator -P site-update
 
+# Serve the website locally (mirrors GitHub Pages path: http://localhost:8820/)
+./mvnw clean generate-resources jbake:inline -pl site-generator -P local-preview
+
 # Regenerate agent skills into skills/
 ./mvnw clean install -pl skills-generator
 
 # Validate agent skills
 npx skill-check skills
 
-# Serve the website locally
-jwebserver -p 8000 -d "$(pwd)/docs"
 ```
 
 ## Git workflow

@@ -5,3 +5,4 @@ target/
 .classpath
 .claude
 dependency-reduced-pom.xml
+docs-local/
