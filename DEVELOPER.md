@@ -38,6 +38,9 @@ jwebserver -p 8005 -d "$(pwd)/target/site/"
 
 # Run blog in local
 ./mvnw clean generate-resources jbake:inline -pl site-generator -P local-preview
+
+# Promote blog changes to Prod
+./mvnw clean generate-resources -pl site-generator -P site-update
 ```
 
 ## Plugin Goals Reference

@@ -22,7 +22,7 @@
 
 ## Goal
 
-The project provides a collection of `System prompts` & `Skills` for Java Enterprise development that help software engineers and pipelines in their daily programming work.
+The project provides a curated collection of `System prompts` & `Skills` for Java Enterprise development that help software engineers and pipelines in their daily programming work.
 The project covers aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation`, `ADRs`, `Diagrams` & `AGENTS.md`.
 
 ## Deliverables
@@ -141,6 +141,7 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 - [https://github.com/features/copilot](https://github.com/features/copilot)
 - [https://www.jetbrains.com/junie/](https://www.jetbrains.com/junie/)
 - [https://openjdk.org/jeps/0](https://openjdk.org/jeps/0)
+- https://jbake.org/docs/latest/
 
 ## Cursor rules ecosystem
 
