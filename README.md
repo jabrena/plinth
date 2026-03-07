@@ -88,10 +88,10 @@ The repository includes [a collection of examples](./examples/) where you can ex
 
 | Date | ID | Name |
 |---|---|---|
-| 2025-07-08 | ADR-001 | [Cursor Rules generation from XML Files](./documentation/adr/ADR-001-generate-cursor-rules-from-xml-files.md) |
-| 2025-07-10 | ADR-002 | [Cursor Rules scope configuration](./documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md) |
-| 2025-09-16 | ADR-003 | [Website Generation](./documentation/adr/ADR-003-website-generation.md) |
 | 2026-03-01 | ADR-004 | [Skill Generation](./documentation/adr/ADR-004-skill-generation.md) |
+| 2025-09-16 | ADR-003 | [Website Generation](./documentation/adr/ADR-003-website-generation.md) |
+| 2025-07-10 | ADR-002 | [Cursor Rules scope configuration](./documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md) |
+| 2025-07-08 | ADR-001 | [Cursor Rules generation from XML Files](./documentation/adr/ADR-001-generate-cursor-rules-from-xml-files.md) |
 
 ## Changelog
 
