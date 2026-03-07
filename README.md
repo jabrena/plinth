@@ -134,6 +134,7 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 - https://agentskills.io/home
 - https://github.com/anthropics/skills
 - https://skills.sh/
+- https://github.com/vercel-labs/skills/issues
 - https://skillsmp.com/
 - https://cursor.com/docs/cli/github-actions
 - https://code.claude.com/docs/en/github-actions

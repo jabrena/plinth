@@ -15,8 +15,8 @@ A curated collection of `System prompts` & `Skills` for Java Enterprise developm
 In this release, the project introduces several updates and improvements:
 
 - **Added Skill Support:**
-- Published an initial set of 20 `SKILLs` for Java Enterprise development
-- Designed and implemented a Skill generator with the capability to reuse the previous work about System prompts
+- Published an initial set of 20 Skills for Java Enterprise development
+- Designed and implemented a Skill generator with the capability to reuse the previous work on System prompts
 - **Improvements in System Prompts:**
 - Centralized version management and best practices for multi-module POM in `@110-java-maven-best-practices`
 - Added `ArchUnit` support in `@111-java-maven-dependencies`
@@ -36,9 +36,9 @@ Let's explain each of the released features one by one.
 
 ![](/cursor-rules-java/images/2026/3/skills-everywhere.png)
 
-The [`AI Assistants`](https://aws.amazon.com/en/blogs/devops/aws-named-as-a-leader-in-the-2025-gartner-magic-quadrant-for-ai-code-assistants/) market is changing the way of work in software development. More and more similar products are providing the same capabilities, but it was not possible to enhance these new services in a unified way. In the past, `Cursor` released the concept about `System prompts` but that idea required to define a `Standard` to be implemented for everyone. A `Skill` extends the AI agent capabilities with specialized knowledge and workflows that can be used by multiple products.
+The [`AI Assistants`](https://aws.amazon.com/en/blogs/devops/aws-named-as-a-leader-in-the-2025-gartner-magic-quadrant-for-ai-code-assistants/) market is changing the way of work in software development. More and more similar products are providing the same capabilities, but it was not possible to enhance these new services in a unified way. In the past, `Cursor` released the concept about `System prompts` but that idea required defining a `Standard` to be implemented for everyone. A `Skill` extends the AI agent capabilities with specialized knowledge and workflows that can be used by multiple products.
 
-In the past, this project focused on the concept of `Prompting engineering` and released a great curated collection of `System prompts` (formerly Cursor rules), but after a period of time observing the Skill's adoption rate and popularity, it became clear that it was necessary to understand how `Skill` works, that it is exactly the same than a `System prompt` but it was clear that this project in order to be outdated soon, it was necessary to migrate the development to this new format.
+In the past, this project focused on the concept of `Prompt engineering` and released a great curated collection of `System prompts` (formerly Cursor rules), but after a period of time observing Skills' adoption rate and popularity, it became clear that it was necessary to understand how `Skill` works—that it is exactly the same as a `System prompt`—but it was clear that for this project to avoid becoming outdated soon, it was necessary to migrate the development to this new format.
 
 Any `Skill` is defined in a file named `SKILL.md` which, per the specification, allows a maximum of 600 lines per file, but that limitation can be exceeded in files located in the `references` folder.
 
@@ -70,7 +70,7 @@ metadata:
 
 If you read [`the Skill specification`](https://agentskills.io/specification) in detail, any `Skill` requires a field `name` & `description` in the metadata section. The description is super important because the module will use that information to know when to use that skill or not.
 
-The project added a new `Skill generator` and in this release you appears the results of this journey.
+The project added a new `Skill generator` and in this release you can see the results of this journey.
 
 ### What Skills were generated in this release?
 
@@ -107,7 +107,7 @@ But in the next release, the project will generate the pending ones:
 - `@164-java-profiling-compare`
 - `@164-java-profiling-verify`
 
-And others that they are identified in the [`Backlog`](https://github.com/jabrena/cursor-rules-java/issues).
+And others that are identified in the [`Backlog`](https://github.com/jabrena/cursor-rules-java/issues).
 
 In previous months, the project created a CLI to help engineers install the `System prompts` from this project or any project that has the `System prompts` located in `.cursor/rules` or contains a symbolic link for it:
 
@@ -118,7 +118,7 @@ jbang setup@jabrena init \
 
 But now using Skills, `Vercel` provides a better solution located in https://skills.sh/. Using this website, it is very easy to find and install Skills.
 
-You can browse all skills generated in this project [here](https://skills.sh/?q=jabrena) and download any Skill or All of them in the following easy way:
+You can browse all skills generated in this project [here](https://skills.sh/?q=jabrena) and download any Skill or all of them in the following easy way:
 
 ```bash
 npx skills add jabrena/cursor-rules-java --list
@@ -133,19 +133,19 @@ Something that I like about https://skills.sh/ is the new `Security pipelines` t
 
 **Source:** https://skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices
 
-**Note:** I recommend to use webistes like https://skills.sh/ because any Skill available from it passed the security audits. An Skill can include a Script and it could be a `Attack vector`.
+**Note:** I recommend using websites like https://skills.sh/ because any Skill available from it passed the security audits. A Skill can include a Script and it could be an `Attack vector`.
 
 ### What is SkillsJars?
 
-When you develop a website using any Java stack, one popular solution is the usage of [WebJars](https://www.webjars.org/), which encapsulates popular web libraries using the Java way. Using the same criteria but for Skills, your JVM agents can now use Skills in an easy way. If you understood the previous ideas, now you understand the motivation behind [SkillsJars](https://www.skillsjars.com/) a new creation by [`James Ward`](https://x.com/JamesWard).
+When you develop a website using any Java stack, one popular solution is the usage of [WebJars](https://www.webjars.org/), which encapsulates popular web libraries using the Java way. Using the same criteria but for Skills, your JVM agents can now use Skills in an easy way. If you understood the previous ideas, now you understand the motivation behind [SkillsJars](https://www.skillsjars.com/), a new creation by [`James Ward`](https://x.com/JamesWard).
 
 This project published a few Skills on SkillsJars to test the approach and capabilities, and in the future the whole collection will be published using that approach.
 
-Using https://skills.sh/, you download the Skill directly from a Git repository but using `Skillsjars` go beyond and you download the Skill from a Maven artifact previously published in `Sonatype` which add immutability in this process.
+Using https://skills.sh/, you download the Skill directly from a Git repository but using `SkillsJars` goes beyond—you download the Skill from a Maven artifact previously published in `Sonatype`, which adds immutability to this process.
 
 **Examples:**
 
-If you Unpackage a Skill delivered as Jar, it has the following layout:
+If you unpackage a Skill delivered as a JAR, it has the following layout:
 
 ```bash
 META-INF/
@@ -165,7 +165,7 @@ META-INF/skills/jabrena/cursor-rules-java/111-java-maven-dependencies/references
 **Source:** https://central.sonatype.com/artifact/com.skillsjars/jabrena__cursor-rules-java__111-java-maven-dependencies
 **Skill:** `@111-java-maven-dependencies`
 
-Using Skillsjars, You could publish your skills as Jars in your Artifactory:
+Using SkillsJars, you could publish your skills as JARs in your Artifactory:
 
 ```xml
 <build>
@@ -208,13 +208,13 @@ Or you could define the available skills to be used by your JVM agents in this w
 </build>
 ```
 
-Once you have defined the `Skillsjars` in your build system, you could extract them for the daily work with your favorite `AI Tool` in this way:
+Once you have defined the `SkillsJars` in your build system, you could extract them for the daily work with your favorite `AI Tool` in this way:
 
 ```bash
 ./mvnw skillsjars:extract -Ddir=.agents/skills
 ```
 
-If you are interested in `Skillsjars` and `Spring AI`, the following links could be interesting for you:
+If you are interested in `SkillsJars` and `Spring AI`, the following links could be interesting for you:
 
 - https://www.skillsjars.com/?bt=maven&q=maven
 - https://github.com/skillsjars/skillsjars-maven-plugin
@@ -227,11 +227,21 @@ If you are interested in `Skillsjars` and `Spring AI`, the following links could
 
 #### Good design practices
 
-- https://github.com/eferro/skill-factory/tree/main/output_skills/testing
+The design catalog offers skills for collaborative design, event modeling, hexagonal architecture, and modern CLI design. These skills guide agents toward structured, domain-driven design decisions and clean architectural boundaries.
+
+- https://github.com/eferro/skill-factory/tree/main/output_skills/design
 
 #### Good testing practices
 
+The testing catalog covers TDD, approval tests, BDD with approvals, mutation testing, nullables handling, and test desiderata. Agents can follow disciplined red-green-refactor workflows and write behavior-focused tests.
+
 - https://github.com/eferro/skill-factory/tree/main/output_skills/testing
+
+#### Architecture skills
+
+The tech-leads-club architecture catalog provides skills for domain analysis, component identification, coupling analysis, decomposition planning, legacy migration, and frontend blueprints. Agents can support modular design, bounded contexts, and migration roadmaps.
+
+- https://github.com/tech-leads-club/agent-skills/blob/main/packages/skills-catalog/skills/(architecture)/
 
 #### PreCommit
 
@@ -247,17 +257,17 @@ Agent Skill for debugging Java applications in real time using JDB (Java Debugge
 
 ## Why Agents.md?
 
-In general, any `Git repository` includes a `README.md` file where the Authors explains the purpose of the repository from a product's perspective. In many cases, `README.md` include technical information about the Development lifecycle mixing technical and non-tecnical information, for this purpose, this project includes a Skill named `@113-java-maven-documentation` which was designed to generate a file `DEVELOPER.md` to include technical details about how to use the build system and profiles, but `what happens when you interact with Models`? Maybe a document dedicated to Models should be required and this is the motivation to `AGENTS.md`.
+In general, any `Git repository` includes a `README.md` file where the authors explain the purpose of the repository from a product's perspective. In many cases, `README.md` includes technical information about the development lifecycle, mixing technical and non-technical information, for this purpose, this project includes a Skill named `@113-java-maven-documentation` which was designed to generate a file `DEVELOPER.md` to include technical details about how to use the build system and profiles, but `what happens when you interact with Models`? Maybe a document dedicated to Models should be required and this is the motivation for `AGENTS.md`.
 
 The skill `@173-java-agents` could be useful for you because it was designed to generate an `AGENTS.md` file after an interactive set of interactions with the Skill.
 
-If you continue interested in this topic, I share the following links:
+If you remain interested in this topic, I share the following links:
 
 - https://github.blog/ai-and-ml/github-copilot/how-to-write-a-great-agents-md-lessons-from-over-2500-repositories/
 
-## Awesomes MCP Servers & Cli tools for Java
+## Awesome MCP Servers & CLI tools for Java
 
-As you know, Models are disconnected to Internet and they require the third party tools by Security reasons. `AI Tools` like `Cursor` or `Claude` maintain the configuration in `mcp.json` files which it has the following structure:
+As you know, Models are disconnected from the Internet and they require third-party tools for security reasons. `AI Tools` like `Cursor` or `Claude` maintain the configuration in `mcp.json` files which has the following structure:
 
 ```json
 {
@@ -267,7 +277,7 @@ As you know, Models are disconnected to Internet and they require the third part
 }
 ```
 
-MCP/Cli tools recommend in this period:
+The third-party MCP/CLI tools recommended in this period:
 
 ### Maven tools
 
@@ -289,7 +299,7 @@ MCP server providing AI assistants with Maven Central dependency intelligence fo
 }
 ```
 
-This MCP tool is good alternative to the usage of the classic Maven plugin:
+This MCP tool is a good alternative to the usage of the classic Maven plugin:
 
 ```xml
 <!-- Versions Maven Plugin -->
@@ -300,7 +310,7 @@ This MCP tool is good alternative to the usage of the classic Maven plugin:
 </plugin>
 ```
 
-Because it is true that using the `Maven plugin` you can be aware if one depenendecy could be updated with:
+Because it is true that using the `Maven plugin` you can be aware if one dependency could be updated with:
 
 ```bash
 # Check for dependency updates
@@ -311,7 +321,7 @@ Because it is true that using the `Maven plugin` you can be aware if one depenen
 ./mvnw versions:display-property-updates
 ```
 
-But using the `MCP Tool` you could apply the changes, so this tool go beyond the maven tool.
+But using the `MCP Tool` you could apply the changes, so this tool goes beyond the Maven plugin.
 
 - https://github.com/arvindand/maven-tools-mcp
 - https://hub.docker.com/mcp/server/maven-tools-mcp/overview
@@ -360,6 +370,41 @@ The GitHub MCP Server connects AI tools directly to GitHub's platform. This give
 
 - https://github.com/github/github-mcp-server
 
+### SonarQube MCP Server
+
+The SonarQube MCP Server is designed to integrate code quality and code security tools with your favorite MCP clients.
+
+```json
+{
+  "mcpServers": {
+    "sonarqube": {
+      "command": "docker",
+      "args": [
+        "run",
+        "-i",
+        "--rm",
+        "--init",
+        "--pull=always",
+        "-e",
+        "SONARQUBE_TOKEN",
+        "-e",
+        "SONARQUBE_ORG",
+        //"-e",
+        //"SONARQUBE_URL",
+        "mcp/sonarqube"
+      ],
+      "env": {
+        "SONARQUBE_TOKEN": "<YourSonarQubeUserToken>",
+        "SONARQUBE_ORG": "<YourOrganizationName>",
+        //"SONARQUBE_URL": "https://sonarqube.us"
+      }
+    }
+  }
+}
+```
+
+- https://docs.sonarsource.com/sonarqube-mcp-server
+
 ### Effect Oriented Programming book as MCP
 
 The Effect Oriented Programming book is available as an MCP (Model Context Protocol) server, enabling you to use AI assistants to explore and interact with the book's content directly within your development environment.
@@ -377,23 +422,40 @@ The Effect Oriented Programming book is available as an MCP (Model Context Proto
 - https://effectorientedprogramming.com/
 - https://effectorientedprogramming.com/mcp/
 
-**Note:** I like this `MCP` because it is a nice and honest way to monetize the Author`s effort.
+**Note:** I like this `MCP` because it is a nice and honest way to monetize the author's effort.
 
-## How to use Prompts, Agents.md, Skills & MCP/Cli tools in your daily work?
+If you observe, several MCP tools are delivered as Docker images to mitigate pain points related to installation and security. Take a look at the current Docker MCP Catalog to discover new possibilities:
 
-In 2026, the usage of AI tooling is not optional but it is true that it depends on your organization and the nature of your project to select which tools fit better for your area.
+- https://hub.docker.com/mcp
+
+## How to use Prompts, Agents.md, Skills & MCP/Cli tools in your daily workflow?
+
+In 2026, the usage of AI tools is not optional but it is true that it depends on your organization and the nature of your project to select which tools fit better for your purpose. Get in touch with your `Platform engineering teams` to learn which `AI tools` are compliant and which `Skills` and `MCP/CLI tools` are supported as part of the good engineering practices.
+
+If you are using `Agile methodologies` and your team organizes the product evolution based on Agile concepts like `Intents`, `Epics`, `User Stories` & `Tasks`, your first step should be to analyze your backlog and review if the tasks are `Ready for development`.
+
+[![](/cursor-rules-java/images/2026/3/agile.png)](https://learn.microsoft.com/en-us/azure/devops/boards/backlogs/define-features-epics?view=azure-devops&tabs=agile-process)
+
+You could improve the analysis and design phase using the [`System prompts for Agile`](https://github.com/jabrena/cursor-rules-agile) which provides support for defining tasks about `Epics`, `Features` & `User Stories` (with Gherkin acceptance criteria), `Diagrams`, Solutions for `functional` and `non-functional` requirements (ISO-25010) and others.
+
+### Solving an issue with a Prompt Engineering approach
 
 First, create an empty Java project based on your favourite build system like `Maven` or `Gradle`. Once you have the pillars in place, ask your `Cursor`, `Claude` or other AI assistant to create an `AGENTS.md` using the Skill `@173-java-agents`. Once you define that file, in the next interactions the models will understand where the files are and how to interact with your build system and other details.
 
-If your approach is based on `Prompting Engineering`:
+If your approach is based on `Prompt Engineering`:
 
 ![](/cursor-rules-java/images/2026/3/workflow.png)
+
+- https://cursor.com/docs/agent/plan-mode
+- https://code.claude.com/docs/en/common-workflows#use-plan-mode-for-safe-code-analysis
 
 You could begin the development by creating an empty unit test and adding a few Java comments. Those comments could be your first prompt in that project. Using this approach and depending on the level of detail of your notes as a prompt, you could send that selection to the context to develop the test and later the implementation following a TDD approach. The model will follow the `User prompt` and the `AGENTS.md` file.
 
 After that, you could continue indicating notes incrementally and maybe triggering some Skills to improve the development.
 
 Read this section carefully and explore this approach. In this repository, you could find some nontrivial problems: https://github.com/jabrena/latency-problems to be solved with this approach.
+
+### Enhance your pipeline with AI Tools
 
 On the other hand, if you are interested in adding `AI Capabilities` to your pipelines:
 
