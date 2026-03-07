@@ -563,6 +563,8 @@ In this article, you learned about standards that you can use with `Cursor`, `Cl
 
 ![](/cursor-rules-java/images/2026/3/subagents.png)
 
+**Source:** https://code.claude.com/docs/en/agent-teams
+
 ## Do you still have questions about the project?
 
 If you feel stuck using this project or have questions, you can attend the following Workshop at `Codemotion Madrid 2026`:
