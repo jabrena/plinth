@@ -16,6 +16,51 @@
 
     <profiles>
         <profile>
+            <id>local-preview</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.jbake</groupId>
+                        <artifactId>jbake-maven-plugin</artifactId>
+                        <configuration>
+                            <inputDirectory>${project.basedir}</inputDirectory>
+                            <outputDirectory>${project.build.directory}/docs-local</outputDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-resources-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>copy-images-for-local-preview</id>
+                                <phase>generate-resources</phase>
+                                <goals>
+                                    <goal>copy-resources</goal>
+                                </goals>
+                                <configuration>
+                                    <outputDirectory>${project.build.directory}/docs-local/cursor-rules-java/images</outputDirectory>
+                                    <resources>
+                                        <resource>
+                                            <directory>${project.basedir}/assets/images</directory>
+                                            <filtering>false</filtering>
+                                        </resource>
+                                    </resources>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+        <profile>
             <id>site-update</id>
             <build>
                 <plugins>
@@ -46,6 +91,10 @@
                     <plugin>
                         <groupId>org.jbake</groupId>
                         <artifactId>jbake-maven-plugin</artifactId>
+                        <configuration>
+                            <inputDirectory>${project.basedir}</inputDirectory>
+                            <outputDirectory>${project.basedir}/../docs</outputDirectory>
+                        </configuration>
                         <executions>
                             <execution>
                                 <phase>generate-resources</phase>
@@ -54,10 +103,6 @@
                                 </goals>
                             </execution>
                         </executions>
-                        <configuration>
-                            <inputDirectory>${project.basedir}</inputDirectory>
-                            <outputDirectory>${project.basedir}/../docs/</outputDirectory>
-                        </configuration>
                     </plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>

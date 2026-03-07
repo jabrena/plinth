@@ -34,6 +34,8 @@ Let's explain each of the released features one by one.
 
 ## Why Skills?
 
+![](/cursor-rules-java/images/2026/3/skills-everywhere.png)
+
 The [`AI Assistants`](https://aws.amazon.com/en/blogs/devops/aws-named-as-a-leader-in-the-2025-gartner-magic-quadrant-for-ai-code-assistants/) market is changing the way software engineers work worldwide. More and more similar products are providing the same capabilities, but it was not possible to enhance these new services in a unified way. Therefore, it became necessary to define a `standard` for extending AI agent capabilities with specialized knowledge and workflows that can be used by multiple products.
 
 In the past, this project focused on the concept of `Prompting engineering` and released a great collection of `System prompts` (formerly Cursor rules), but after a period of time observing Skills' adoption rate and popularity, it became clear that it is necessary to understand how `SKILL` works.
@@ -106,6 +108,8 @@ But in the next release, the project will generate the pending ones:
 - `@163-java-profiling-refactor`
 - `@164-java-profiling-compare`
 - `@164-java-profiling-verify`
+
+And others that they are described in the [`Backlog`](https://github.com/jabrena/cursor-rules-java/issues).
 
 In previous months, the project created a CLI to help engineers install the `System prompts` from this project or any project that has the `System prompts` located in `.cursor/rules` or contains a symbolic link for it:
 
@@ -293,3 +297,5 @@ In this article, a few standards were described that AI tools like `Cursor`, `Cl
 If you feel stuck using this project or have questions, you can attend the following Workshop at `Codemotion Madrid 2026`:
 
 [![](/cursor-rules-java/images/2026/3/codemotion-madrid-2026.jpg)](https://conferences.codemotion.com/madrid/)
+
+https://conferences.codemotion.com/madrid/workshop/
