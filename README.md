@@ -133,6 +133,7 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 - [https://docs.cursor.com/context/@-symbols/@-cursor-rules](https://docs.cursor.com/context/@-symbols/@-cursor-rules)
 - https://agentskills.io/home
 - https://github.com/anthropics/skills
+- https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf
 - https://skills.sh/
 - https://github.com/vercel-labs/skills/issues
 - https://skillsmp.com/
