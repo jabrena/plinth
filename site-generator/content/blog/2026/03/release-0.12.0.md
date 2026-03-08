@@ -18,7 +18,6 @@ In this release, the project introduces several updates and improvements:
 
 - **Added Skill Support:**
 - Published an initial set of 20 Skills for Java Enterprise development
-- Designed and implemented a Skill generator that reuses our existing System prompts
 - **Improvements in System Prompts:**
 - Centralized version management and best practices for multi-module POM in `@110-java-maven-best-practices`
 - Added `ArchUnit` support in `@111-java-maven-dependencies`
