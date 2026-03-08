@@ -227,31 +227,33 @@ For more on SkillsJars and Spring AI:
 
 ### Awesome third party Skills
 
-#### Good design practices
+On the Internet, several awesome Skills exist that complement this project—take a look and, if you like, use them!
+
+#### Good design practices by [`@eferro`](https://x.com/eferro)
 
 The design catalog offers skills for collaborative design, event modeling, hexagonal architecture, and modern CLI design. These skills guide agents toward structured, domain-driven design decisions and clean architectural boundaries.
 
 - https://github.com/eferro/skill-factory/tree/main/output_skills/design
 
-#### Good testing practices
+#### Good testing practices by [`@eferro`](https://x.com/eferro)
 
 The testing catalog covers TDD, approval tests, BDD with approvals, mutation testing, nullables handling, and test desiderata. Agents can follow disciplined red-green-refactor workflows and write behavior-focused tests.
 
 - https://github.com/eferro/skill-factory/tree/main/output_skills/testing
 
-#### Architecture skills
+#### Architecture skills by [`@tech-leads-club`](https://github.com/tech-leads-club)
 
 The tech-leads-club architecture catalog provides skills for domain analysis, component identification, coupling analysis, decomposition planning, legacy migration, and frontend blueprints. Agents can support modular design, bounded contexts, and migration roadmaps.
 
 - https://github.com/tech-leads-club/agent-skills/blob/main/packages/skills-catalog/skills/(architecture)/
 
-#### PreCommit
+#### PreCommit by [`@julianobarbosa`](https://github.com/julianobarbosa)
 
 A skill for managing pre-commit hooks—the multi-language framework that automates code quality, formatting, linting, and security scanning.
 
 - https://github.com/julianobarbosa/claude-code-skills/blob/main/skills/pre-commit-skill/SKILL.md
 
-#### JDB Agentic Debugger
+#### JDB Agentic Debugger [`@brunoborges`](https://x.com/brunoborges)
 
 An agent skill for debugging Java applications in real time with JDB (Java Debugger CLI).
 
@@ -372,6 +374,22 @@ The GitHub MCP Server connects AI tools directly to GitHub's platform. This give
 
 - https://github.com/github/github-mcp-server
 
+### Atlassian MCP Server
+
+Remote MCP Server that securely connects Jira and Confluence with your LLM, IDE, or agent platform of choice.
+
+```json
+{
+    "mcpServers": {
+        "atlassian": {
+            "url": "https://mcp.atlassian.com/v1/mcp"
+        }
+    }
+}
+```
+
+- https://github.com/atlassian/atlassian-mcp-server
+
 ### SonarQube MCP Server
 
 The SonarQube MCP Server is designed to integrate code quality and code security tools with your favorite MCP clients.
@@ -413,11 +431,11 @@ The Effect Oriented Programming book is available as an MCP (Model Context Proto
 
 ```json
 {
-  "mcpServers": {
-    "eop-book": {
-      "url": "https://mcp.effectorientedprogramming.com"
+    "mcpServers": {
+        "eop-book": {
+            "url": "https://mcp.effectorientedprogramming.com"
+        }
     }
-  }
 }
 ```
 
@@ -440,7 +458,7 @@ With Agile (Intents, Epics, User Stories, Tasks), start by reviewing your backlo
 
 **Source:** https://learn.microsoft.com/en-us/azure/devops/boards/backlogs/define-features-epics?view=azure-devops&tabs=agile-process
 
-Use [`System prompts for Agile`](https://github.com/jabrena/cursor-rules-agile) to improve analysis and design: Epics, Features, User Stories (with Gherkin), diagrams, and solutions for functional and non-functional requirements (ISO-25010).
+Use [`System prompts for Agile`](https://github.com/jabrena/cursor-rules-agile) to improve analysis and design: Epics, Features, User Stories (with [Gherkin](https://cucumber.io/docs/gherkin/reference)), diagrams, and solutions for functional and non-functional requirements ([ISO-25010](https://iso25000.com/index.php/en/iso-25000-standards/iso-25010)).
 
 These tools boost delivery. To keep pace, consider a Double Agile Loop for defining User Stories:
 
@@ -556,13 +574,25 @@ Since the previous version, the project has invested time improving the current 
 
 - Added support to generate `AGENTS.md` with `@173-java-agents`: Added this specific missing feature.
 
-## What are the next steps?
+## Conclusions
 
-In this article, you learned about standards that you can use with `Cursor`, `Claude`, and others, but this market continues to evolve and the next topic to explore is **Subagents**.
+If you followed the article, the project is evolving from `System prompts` to `Skills`, but during the time between [`v0.11.0`](https://github.com/jabrena/cursor-rules-java/releases/tag/0.11.0) to [`v0.12.0`](https://github.com/jabrena/cursor-rules-java/releases/tag/0.12.0), new elements have appeared in the market, such as: `Subagents`, `Commands`, `Hooks`, `Plugins`, `Spec-driven`. The project will continue evolving its current scope plus **Subagents**.
 
 ![](/cursor-rules-java/images/2026/3/subagents.png)
 
 **Source:** https://code.claude.com/docs/en/agent-teams
+
+When you talk with people using these technologies, you notice that software delivery has increased—but design and requirements gathering must keep pace on quality too. If you accelerate delivery without investing in requirements, you end up with fast products that conceal potential design flaws.
+
+```
+------------- Design phase ----------- | Planning  | ------ Delivery -----
+
+Jira / Github / Azure Devops / RedMine > Plan Mode > Agent Mode to deliver
+
+             EA, PO, BA, SA            |  TL, SWE  |        SWE, SE
+```
+
+Reviewing in perspective, this kind of products has improved so much the performance, now you can pick a complex feature and if the requirements are complete, the execution using techniques like `Plan mode` will help so much in the execution without the bad experience from the [past (Madrid Jug - May 2025)](https://jabrena.github.io/101-cursor/v010/index.html#/10/15).
 
 ## Do you still have questions about the project?
 
