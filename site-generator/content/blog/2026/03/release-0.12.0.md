@@ -589,7 +589,7 @@ When you talk with people using these technologies, you notice that software del
 
 Jira / Github / Azure Devops / RedMine > Plan Mode > Agent Mode to deliver
 
-             EA, PO, BA, SA            |  TL, SWE  |        SWE, SE
+           EA, PO, BA, SA, TL          |  TL, SWE  |       TL, SWE, SE
 ```
 
 Reviewing in perspective, this kind of products has improved so much the performance, now you can pick a complex feature and if the requirements are complete, the execution using techniques like `Plan mode` will help so much in the execution without the bad experience from the [past (Madrid Jug - May 2025)](https://jabrena.github.io/101-cursor/v010/index.html#/10/15).
