@@ -585,7 +585,7 @@ If you followed the article, the project is evolving from `System prompts` to `S
 When you talk with people using these technologies, you notice that software delivery has increased—but design and requirements gathering must keep pace on quality too. If you accelerate delivery without investing in requirements, you end up with fast products that conceal potential design flaws.
 
 ```
-------------- Design phase ----------- | Planning  | ------ Delivery -----
+------------- Design phase ----------- | Planning  | ----- Development -----
 
 Jira / Github / Azure Devops / RedMine > Plan Mode > Agent Mode to deliver
 
