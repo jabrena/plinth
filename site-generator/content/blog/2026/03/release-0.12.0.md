@@ -10,7 +10,7 @@ status=published
 
 A curated collection of `System prompts` & `Skills` for Java Enterprise development that help software engineers and pipelines in their daily programming work.
 
-Recently, we reached the milestone of `300+` ⭐ on GitHub.
+Recently, we reached the milestone of `300+` ⭐ on GitHub. Many thanks to the users in Lanzhou, Singapore, Pontiac, Boardman, and Shanghai. 👋👋👋
 
 ## What's new in this release?
 
