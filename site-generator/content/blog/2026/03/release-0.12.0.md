@@ -10,7 +10,7 @@ status=published
 
 A curated collection of `System prompts` & `Skills` for Java Enterprise development that help software engineers and pipelines in their daily programming work.
 
-Recently, we reached the milestone of `300+` ⭐ on GitHub. [(y = 0.826x + 0.03; R² = 0.99)](https://www.desmos.com/calculator?lang=en)
+Recently, we reached the milestone of `300+` ⭐ on GitHub.
 
 ## What's new in this release?
 
