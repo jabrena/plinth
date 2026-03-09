@@ -576,7 +576,7 @@ Since the previous version, the project has invested time improving the current 
 
 ## Conclusions
 
-If you followed the article, the project is evolving from `System prompts` to `Skills`, but during the time between [`v0.11.0`](https://github.com/jabrena/cursor-rules-java/releases/tag/0.11.0) to [`v0.12.0`](https://github.com/jabrena/cursor-rules-java/releases/tag/0.12.0), new elements have appeared in the market, such as: `Subagents`, `Commands`, `Hooks`, `Plugins`, `Spec-driven`. The project will continue evolving its current scope plus **Subagents**.
+If you followed the article, the project is evolving from `System prompts` to `Skills`—and continues to advance practices such as curated shared instructions for software teams and `AGENTS.md`, both recognized in the [Thoughtworks Technology Radar](https://www.thoughtworks.com/radar/techniques). During the time between [`v0.11.0`](https://github.com/jabrena/cursor-rules-java/releases/tag/0.11.0) to [`v0.12.0`](https://github.com/jabrena/cursor-rules-java/releases/tag/0.12.0), new elements have appeared in the market, such as: `Subagents`, `Commands`, `Hooks`, `Plugins`, `Spec-driven`. In the next release, the project will review how to use `Skills` with **Subagents**.
 
 ![](/cursor-rules-java/images/2026/3/subagents.png)
 
@@ -592,7 +592,7 @@ Jira / Github / Azure Devops / RedMine > Plan Mode > Agent Mode to deliver
            EA, PO, BA, SA, TL          |  TL, SWE  |       TL, SWE, SE
 ```
 
-Reviewing in perspective, this kind of products has improved so much the performance, now you can pick a complex feature and if the requirements are complete, the execution using techniques like `Plan mode` will help so much in the execution without the bad experience from the [past (Madrid Jug - May 2025)](https://jabrena.github.io/101-cursor/v010/index.html#/10/15).
+Putting this in perspective, this kind of product has improved performance so much that you can now pick a complex feature and, if the requirements are complete, execution using techniques like `Plan mode` will help greatly—without the poor experience from the [past (Madrid Jug - May 2025)](https://jabrena.github.io/101-cursor/v010/index.html#/10/15). Using `Plan Mode` doesn't require you to change how you organize your requirements, unlike new SDD tools such as Spec-kit.
 
 ## Do you still have questions about the project?
 
