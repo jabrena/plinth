@@ -1,5 +1,9 @@
 [
-  {"id": "010", "requiresSystemPrompt": false, "skillId": "010-java-design-plans"},
+  {"id": "014", "requiresSystemPrompt": false, "skillId": "014-agile-create-user-story"},
+  {"id": "020", "requiresSystemPrompt": false, "skillId": "020-architecture-functional-requirements-cli"},
+  {"id": "021", "requiresSystemPrompt": false, "skillId": "021-architecture-functional-requirements-rest"},
+  {"id": "030", "requiresSystemPrompt": false, "skillId": "030-architecture-non-functional-requirements"},
+  {"id": "040", "requiresSystemPrompt": false, "skillId": "040-planning-enhance-ai-plan-mode"},
   {"id": 110},
   {"id": 111},
   {"id": 112},

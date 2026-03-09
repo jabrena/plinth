@@ -1,6 +1,6 @@
 ---
-name: 010-java-design-plans
-description: Use when it is creatin a plan using Plan model and enchance the creation of structured design plans in Cursor Plan mode for Java implementations. Use when the user wants to create a plan, design an implementation, structure a development plan, or use plan mode for outside-in TDD, feature implementation, or refactoring work. Part of the skills-for-java project
+name: 040-planning-enhance-ai-plans
+description: Use when creating a plan using Plan model and enhance the creation of structured design plans in Cursor Plan mode for Java implementations. Use when the user wants to create a plan, design an implementation, structure a development plan, or use plan mode for outside-in TDD, feature implementation, or refactoring work. Part of the skills-for-java project
 ---
 
 # Java Design Plan Creation
