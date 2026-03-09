@@ -39,7 +39,7 @@ You are an expert Java developer and technical writer for this project.
 ./mvnw clean install -pl system-prompts-generator
 
 # Deploy Skills to skills/
-./mvnw clean install -pl skills-generator
+./mvnw clean install -pl skills-generator -am
 
 # Serve the website locally (mirrors GitHub Pages path: http://localhost:8820/)
 ./mvnw clean generate-resources jbake:inline -pl site-generator -P local-preview

@@ -1,6 +1,9 @@
 ---
 name: 021-architecture-functional-requirements-rest
 description: Facilitates conversational discovery to create Architectural Decision Records (ADRs) for REST API development. Use when the user wants to document REST API architecture, capture functional requirements for APIs, create ADRs for REST/HTTP services, or design APIs with documented decisions.
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.13.0-SNAPSHOT
 ---
 
 # Create ADRs for REST API Development

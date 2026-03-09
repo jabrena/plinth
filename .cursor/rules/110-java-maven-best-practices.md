@@ -4,7 +4,7 @@ description: Use when you need to improve your Maven pom.xml using best practice
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.12.0
+  version: 0.13.0-SNAPSHOT
 ---
 # Maven Best Practices
 

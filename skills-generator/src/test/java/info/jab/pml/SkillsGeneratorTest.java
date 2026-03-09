@@ -7,6 +7,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.xml.parsers.DocumentBuilder;
@@ -135,6 +138,67 @@ class SkillsGeneratorTest {
                     "Skill markdown H1 '%s' in %s does not match XML <title> '%s' in %s",
                     markdownTitle, skillMdResource, xmlTitle, xmlResource)
                 .isEqualTo(xmlTitle);
+        }
+    }
+
+    @Nested
+    @DisplayName("Version Consistency Tests")
+    class VersionConsistencyTests {
+
+        private static final Pattern VERSION_PATTERN = Pattern.compile("^\\s*version:\\s*(\\S+)\\s*$");
+
+        private static Stream<SkillsInventory.SkillDescriptor> provideSkillDescriptors() {
+            return SkillsInventory.skillDescriptors();
+        }
+
+        @ParameterizedTest
+        @MethodSource("provideSkillDescriptors")
+        @DisplayName("Should have metadata version matching project version from parent pom.xml when version is present")
+        void should_haveMetadataVersionMatchingProjectVersion_when_versionPresent(SkillsInventory.SkillDescriptor descriptor) throws Exception {
+            String numId = numericId(descriptor.skillId());
+            String resourceName = "skills/" + numId + "-skill.md";
+
+            try (InputStream stream = SkillsGeneratorTest.class.getClassLoader().getResourceAsStream(resourceName)) {
+                assertThat(stream).withFailMessage("Skill file not found: %s", resourceName).isNotNull();
+                String content = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+                Optional<String> skillVersion = extractVersionFromFrontmatter(content);
+
+                if (skillVersion.isEmpty()) {
+                    return;
+                }
+
+                String expectedVersion = readProjectVersionFromParentPom();
+                assertThat(skillVersion.get())
+                    .withFailMessage(
+                        "Skill %s has metadata version '%s' but project version is '%s'. "
+                            + "Update the version in skills/%s-skill.md to match pom.xml.",
+                        resourceName, skillVersion.get(), expectedVersion, numId)
+                    .isEqualTo(expectedVersion);
+            }
+        }
+
+        private Optional<String> extractVersionFromFrontmatter(String content) {
+            return content.lines()
+                .map(VERSION_PATTERN::matcher)
+                .filter(Matcher::matches)
+                .findFirst()
+                .map(m -> m.group(1));
+        }
+
+        private String readProjectVersionFromParentPom() throws Exception {
+            Path parentPom = Paths.get("..", "pom.xml").normalize();
+            if (!Files.exists(parentPom)) {
+                throw new IllegalStateException("Parent pom.xml not found at " + parentPom.toAbsolutePath());
+            }
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            Document doc = factory.newDocumentBuilder().parse(Files.newInputStream(parentPom));
+            Element project = doc.getDocumentElement();
+            NodeList versionNodes = project.getElementsByTagName("version");
+            if (versionNodes.getLength() == 0) {
+                throw new IllegalStateException("No <version> element in parent pom.xml");
+            }
+            String version = versionNodes.item(0).getTextContent();
+            return version != null ? version.trim() : null;
         }
     }
 

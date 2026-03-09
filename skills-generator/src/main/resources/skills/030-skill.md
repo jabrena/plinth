@@ -1,6 +1,9 @@
 ---
 name: 030-architecture-non-functional-requirements
 description: Facilitates conversational discovery to create Architectural Decision Records (ADRs) for non-functional requirements using the ISO/IEC 25010:2023 quality model. Use when the user wants to document quality attributes, NFR decisions, security/performance/scalability architecture, or design systems with measurable quality criteria.
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.13.0-SNAPSHOT
 ---
 
 # Create ADRs for Non-Functional Requirements

@@ -3,7 +3,7 @@ name: 173-java-agents
 description: Use when you need to generate an AGENTS.md file for a Java repository — covering project conventions, tech stack, file structure, commands, Git workflow, and contributor boundaries — through a modular, step-based interactive process that adapts to your specific project needs.
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.12.0
+  version: 0.13.0-SNAPSHOT
 ---
 # AGENTS.md Generator for Java repositories
 

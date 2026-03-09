@@ -1,6 +1,9 @@
 ---
 name: 014-agile-create-user-story
 description: Guides the creation of agile user stories and Gherkin feature files. Use when the user wants to create a user story, write acceptance criteria, define Gherkin scenarios, or author BDD feature files.
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.13.0-SNAPSHOT
 ---
 
 # Create Agile User Stories
