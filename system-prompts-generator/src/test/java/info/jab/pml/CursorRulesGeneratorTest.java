@@ -1,12 +1,15 @@
 package info.jab.pml;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -14,6 +17,9 @@ import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -467,5 +473,63 @@ class CursorRulesGeneratorTest {
             logger.info("Generated content saved to: {}", outputPath.toAbsolutePath());
         }
 
+    }
+
+    @Nested
+    @DisplayName("Version Consistency Tests")
+    class VersionConsistencyTests {
+
+        @ParameterizedTest
+        @MethodSource("info.jab.pml.SystemPromptsInventory#baseNames")
+        @DisplayName("Should have metadata version matching project version from parent pom.xml")
+        void should_haveMetadataVersionMatchingProjectVersion(String baseFileName) throws Exception {
+            String expectedVersion = readProjectVersionFromParentPom();
+            String xmlVersion = readVersionFromXmlMetadata("system-prompts/" + baseFileName + ".xml");
+
+            assertThat(xmlVersion)
+                .withFailMessage(
+                    "System prompt %s.xml has metadata version '%s' but project version is '%s'. "
+                        + "Update the <version> in the XML metadata to match pom.xml.",
+                    baseFileName, xmlVersion, expectedVersion)
+                .isEqualTo(expectedVersion);
+        }
+
+        private String readProjectVersionFromParentPom() throws Exception {
+            Path parentPom = Paths.get("..", "pom.xml").normalize();
+            if (!Files.exists(parentPom)) {
+                throw new IllegalStateException("Parent pom.xml not found at " + parentPom.toAbsolutePath());
+            }
+            Document doc = parseXml(Files.newInputStream(parentPom));
+            return getElementText(doc.getDocumentElement(), "version");
+        }
+
+        private String readVersionFromXmlMetadata(String resourceName) throws Exception {
+            try (InputStream stream = getClass().getClassLoader().getResourceAsStream(resourceName)) {
+                if (stream == null) {
+                    throw new IllegalStateException("Resource not found: " + resourceName);
+                }
+                Document doc = parseXml(stream);
+                Element metadata = (Element) doc.getElementsByTagName("metadata").item(0);
+                if (metadata == null) {
+                    throw new IllegalStateException("No metadata element in " + resourceName);
+                }
+                return getElementText(metadata, "version");
+            }
+        }
+
+        private Document parseXml(InputStream stream) throws Exception {
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            return builder.parse(stream);
+        }
+
+        private String getElementText(Element parent, String tagName) {
+            NodeList nodes = parent.getElementsByTagName(tagName);
+            if (nodes.getLength() == 0) {
+                return null;
+            }
+            String text = nodes.item(0).getTextContent();
+            return text != null ? text.trim() : null;
+        }
     }
 }

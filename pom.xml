@@ -7,7 +7,7 @@
 
     <groupId>info.jab</groupId>
     <artifactId>cursor-rules-java</artifactId>
-    <version>0.12.0</version>
+    <version>0.13.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>cursor-rules-java</name>
     <description>The project provides a curated collection of `System prompts` and `Skills` for Java Enterprise

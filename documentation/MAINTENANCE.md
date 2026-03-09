@@ -37,7 +37,7 @@ Can you update the current changelog for 0.10.0 comparing git commits in relatio
 Can you update the current changelog for 0.12.0 comparing git commits in relation to 0.11.0 tag. Use  @https://keepachangelog.com/en/1.1.0/  rules
 
 # Maven command to update the maven version to next minor version
-./mvnw versions:set -DnewVersion=0.12.0
+./mvnw versions:set -DnewVersion=0.13.0-SNAPSHOT
 ./mvnw versions:commit
 
 # Prompt to update the project to a new version

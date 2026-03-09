@@ -2,7 +2,7 @@
 name: behaviour-progressive-learning
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.12.0
+  version: 0.13.0-SNAPSHOT
 ---
 # Behaviour Progressive Learning
 
