@@ -1,6 +1,7 @@
 ---
 name: 171-java-adr
 description: Use when you need to generate Architecture Decision Records (ADRs) for a Java project through an interactive, conversational process that systematically gathers context, stakeholders, options, and outcomes to produce well-structured ADR documents. Part of the skills-for-java project
+license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
   version: 0.13.0-SNAPSHOT

@@ -1,6 +1,7 @@
 ---
 name: 121-java-object-oriented-design
 description: Use when you need to review, improve, or refactor Java code for object-oriented design quality — including applying SOLID, DRY, and YAGNI principles, improving class and interface design, fixing OOP concept misuse (encapsulation, inheritance, polymorphism), identifying and resolving code smells (God Class, Feature Envy, Data Clumps), or improving object creation patterns, method design, and exception handling. Part of the skills-for-java project
+license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
   version: 0.13.0-SNAPSHOT

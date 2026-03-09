@@ -1,6 +1,7 @@
 ---
 name: 110-java-maven-best-practices
 description: Use when you need to review, improve, or troubleshoot a Maven pom.xml file — including dependency management with BOMs, plugin configuration, version centralization, multi-module project structure, build profiles, or any situation where you want to align your Maven setup with industry best practices. Part of the skills-for-java project
+license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
   version: 0.13.0-SNAPSHOT

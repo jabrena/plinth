@@ -1,6 +1,7 @@
 ---
 name: 125-java-concurrency
 description: Use when you need to apply Java concurrency best practices — including thread safety fundamentals, ExecutorService thread pool management, concurrent design patterns like Producer-Consumer, asynchronous programming with CompletableFuture, immutability and safe publication, deadlock avoidance, virtual threads and structured concurrency, scoped values, backpressure, cancellation discipline, and observability for concurrent systems. Part of the skills-for-java project
+license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
   version: 0.13.0-SNAPSHOT

@@ -20,6 +20,7 @@ import org.w3c.dom.NodeList;
 public final class SkillsGenerator {
 
     private static final String PROJECT_TAG = " Part of the skills-for-java project";
+    private static final String LICENSE_FIELD = "license: Apache-2.0";
 
     private final CursorRulesGenerator cursorRulesGenerator;
 
@@ -146,8 +147,17 @@ public final class SkillsGenerator {
     }
 
     private String appendProjectTagToDescription(String content) {
+        boolean hasLicense = content.contains("license:");
         return content.lines()
-            .map(line -> line.startsWith("description:") ? line + PROJECT_TAG : line)
+            .map(line -> {
+                if (line.startsWith("description:") && !line.endsWith(PROJECT_TAG)) {
+                    return line + PROJECT_TAG;
+                }
+                if (!hasLicense && line.startsWith("metadata:")) {
+                    return LICENSE_FIELD + System.lineSeparator() + line;
+                }
+                return line;
+            })
             .collect(java.util.stream.Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
     }
 

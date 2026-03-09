@@ -1,6 +1,7 @@
 ---
 name: 020-architecture-functional-requirements-cli
 description: Facilitates conversational discovery to create Architectural Decision Records (ADRs) for CLI development. Use when the user wants to document CLI architecture, capture functional requirements for a command-line tool, create ADRs for CLI projects, or design CLI applications with documented decisions. Part of the skills-for-java project
+license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
   version: 0.13.0-SNAPSHOT
