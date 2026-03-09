@@ -34,20 +34,23 @@ class SkillsGeneratorTest {
     @DisplayName("Parameterized Generate Skill Tests")
     class ParameterizedGenerateSkillTests {
 
-        private static Stream<String> provideSkillIds() {
-            return SkillsInventory.skillIds();
+        private static Stream<SkillsInventory.SkillDescriptor> provideSkillDescriptors() {
+            return SkillsInventory.skillDescriptors();
         }
 
         @ParameterizedTest
-        @MethodSource("provideSkillIds")
+        @MethodSource("provideSkillDescriptors")
         @DisplayName("Should generate valid SKILL.md and reference for each skill")
-        void should_generateValidSkill_when_skillIdProvided(String skillId) throws IOException {
+        void should_generateValidSkill_when_skillIdProvided(SkillsInventory.SkillDescriptor descriptor) throws IOException {
+            String skillId = descriptor.skillId();
+            boolean requiresSystemPrompt = descriptor.requiresSystemPrompt();
+
             // Given - skill file in resources/skills/ is the source of truth
             String expectedSkillMd = loadSkillFromResources(skillId);
             SkillsGenerator generator = new SkillsGenerator();
 
             // When
-            SkillsGenerator.SkillOutput output = generator.generateSkill(skillId);
+            SkillsGenerator.SkillOutput output = generator.generateSkill(skillId, requiresSystemPrompt);
 
             // Then - Generated SKILL.md must exactly match the skill source (user-editable)
             assertThat(output.skillMd())
@@ -55,15 +58,17 @@ class SkillsGeneratorTest {
                     + "Update the skill file and run the build to promote changes.", numericId(skillId))
                 .isEqualTo(expectedSkillMd);
 
-            // Then - Validate reference content
-            assertThat(output.referenceMd())
-                .startsWith("---")
-                .contains("## Role")
-                .contains("## Goal");
-
-            assertThat(output.referenceMd())
-                .contains("name:")
-                .contains("description:");
+            // Then - Validate reference content (only for skills with system prompt)
+            if (requiresSystemPrompt) {
+                assertThat(output.referenceMd())
+                    .startsWith("---")
+                    .contains("## Role")
+                    .contains("## Goal")
+                    .contains("name:")
+                    .contains("description:");
+            } else {
+                assertThat(output.referenceMd()).isEmpty();
+            }
 
             // Save to target for promotion
             saveToTarget(output);
@@ -75,11 +80,10 @@ class SkillsGeneratorTest {
     class SkillInventorySyncTests {
 
         @Test
-        @DisplayName("skill-inventory.json entries must have matching skill summary and system-prompt")
+        @DisplayName("skill-inventory.json entries must have matching skill summary (and system-prompt when required)")
         void should_validateInventoryMatchesSkillsAndSystemPrompts() {
-            // skillIds() validates each entry has skills/{id}-skill.md and system-prompt with prefix {id}-
-            List<String> skillIds = SkillsInventory.skillIds().toList();
-            assertThat(skillIds).isNotEmpty();
+            List<SkillsInventory.SkillDescriptor> descriptors = SkillsInventory.skillDescriptors().toList();
+            assertThat(descriptors).isNotEmpty();
         }
     }
 
@@ -87,14 +91,16 @@ class SkillsGeneratorTest {
     @DisplayName("Title consistency between skill markdown and system-prompt XML")
     class TitleConsistencyTests {
 
-        private static Stream<String> provideSkillIds() {
-            return SkillsInventory.skillIds();
+        private static Stream<SkillsInventory.SkillDescriptor> provideSkillDescriptorsWithSystemPrompt() {
+            return SkillsInventory.skillDescriptors()
+                .filter(SkillsInventory.SkillDescriptor::requiresSystemPrompt);
         }
 
         @ParameterizedTest
-        @MethodSource("provideSkillIds")
+        @MethodSource("provideSkillDescriptorsWithSystemPrompt")
         @DisplayName("Skill markdown H1 title must match system-prompt XML title element")
-        void should_haveMatchingTitle_when_comparingSkillMdAndSystemPromptXml(String skillId) throws Exception {
+        void should_haveMatchingTitle_when_comparingSkillMdAndSystemPromptXml(SkillsInventory.SkillDescriptor descriptor) throws Exception {
+            String skillId = descriptor.skillId();
             String numId = numericId(skillId);
             String skillMdResource = "skills/" + numId + "-skill.md";
             String markdownTitle;
@@ -168,15 +174,18 @@ class SkillsGeneratorTest {
 
     private void saveToTarget(SkillsGenerator.SkillOutput output) throws IOException {
         Path targetDir = Paths.get("target", "skills", output.skillId());
-        Path referencesDir = targetDir.resolve("references");
-        Files.createDirectories(referencesDir);
+        Files.createDirectories(targetDir);
 
         Path skillMdPath = targetDir.resolve("SKILL.md");
         Files.writeString(skillMdPath, output.skillMd());
         logger.info("Generated SKILL.md saved to: {}", skillMdPath.toAbsolutePath());
 
-        Path referencePath = referencesDir.resolve(output.skillId() + ".md");
-        Files.writeString(referencePath, output.referenceMd());
-        logger.info("Generated reference saved to: {}", referencePath.toAbsolutePath());
+        if (!output.referenceMd().isEmpty()) {
+            Path referencesDir = targetDir.resolve("references");
+            Files.createDirectories(referencesDir);
+            Path referencePath = referencesDir.resolve(output.skillId() + ".md");
+            Files.writeString(referencePath, output.referenceMd());
+            logger.info("Generated reference saved to: {}", referencePath.toAbsolutePath());
+        }
     }
 }
