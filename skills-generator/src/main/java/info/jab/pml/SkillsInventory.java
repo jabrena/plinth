@@ -20,10 +20,10 @@ import java.util.stream.Stream;
 /**
  * Inventory of skills to generate, loaded from {@code skill-inventory.json}.
  * <p>
- * Each entry has an {@code id}. The corresponding skillId is derived by matching
- * system-prompts with prefix {@code {id}-} (e.g. id 110 matches 110-java-maven-best-practices.xml).
- * Each skill must have a summary in {@code skills/{id}-skill.md} and a matching
- * system-prompt in {@code system-prompts/}.
+ * Each entry has an {@code id} (numeric or string like "010"). When {@code requiresSystemPrompt}
+ * is true (default), the skillId is derived by matching system-prompts with prefix {@code {id}-}.
+ * When false, the entry must specify {@code skillId} and no system-prompt is required.
+ * Each skill must have a summary in {@code skills/{id}-skill.md}.
  */
 public final class SkillsInventory {
 
@@ -33,9 +33,9 @@ public final class SkillsInventory {
     private SkillsInventory() {}
 
     /**
-     * Returns the skill IDs from the inventory. For each id, resolves the skillId
-     * by matching system-prompts with prefix {@code {id}-}. Validates that each
-     * skill has a summary in {@code skills/} and a matching system-prompt.
+     * Returns the skill IDs from the inventory. For each entry, validates the skill summary
+     * exists. When {@code requiresSystemPrompt} is true, resolves skillId from system-prompts;
+     * when false, uses the provided {@code skillId}.
      *
      * @return stream of skill IDs (e.g. 110-java-maven-best-practices)
      * @throws RuntimeException if the inventory cannot be loaded or validation fails
@@ -45,13 +45,38 @@ public final class SkillsInventory {
         List<String> skillIds = new ArrayList<>();
 
         for (InventoryEntry entry : entries) {
-            validateSkillSummaryExists(entry.id());
-            String skillId = resolveSkillIdFromPrefix(entry.id());
+            String numericId = entry.numericId();
+            validateSkillSummaryExists(numericId);
+            String skillId = entry.requiresSystemPrompt()
+                ? resolveSkillIdFromPrefix(Integer.parseInt(numericId))
+                : entry.skillId();
             skillIds.add(skillId);
         }
 
         return skillIds.stream();
     }
+
+    /**
+     * Returns skill descriptors (skillId + requiresSystemPrompt) for generator use.
+     */
+    public static Stream<SkillDescriptor> skillDescriptors() {
+        List<InventoryEntry> entries = loadInventory();
+        List<SkillDescriptor> descriptors = new ArrayList<>();
+        for (InventoryEntry entry : entries) {
+            String numericId = entry.numericId();
+            validateSkillSummaryExists(numericId);
+            String skillId = entry.requiresSystemPrompt()
+                ? resolveSkillIdFromPrefix(Integer.parseInt(numericId))
+                : entry.skillId();
+            descriptors.add(new SkillDescriptor(skillId, entry.requiresSystemPrompt()));
+        }
+        return descriptors.stream();
+    }
+
+    /**
+     * Skill ID and whether it requires a system prompt for reference generation.
+     */
+    public record SkillDescriptor(String skillId, boolean requiresSystemPrompt) {}
 
     /**
      * Resolves skillId by finding the system-prompt XML that starts with {@code {id}-}.
@@ -149,8 +174,19 @@ public final class SkillsInventory {
 
             List<InventoryEntry> entries = new ArrayList<>();
             for (JsonNode node : root) {
-                int id = node.required("id").asInt();
-                entries.add(new InventoryEntry(id));
+                String numericId = node.get("id").isTextual()
+                    ? node.get("id").asText()
+                    : String.valueOf(node.get("id").asInt());
+                boolean requiresSystemPrompt = node.has("requiresSystemPrompt")
+                    ? node.get("requiresSystemPrompt").asBoolean()
+                    : true;
+                String skillId = node.has("skillId") ? node.get("skillId").asText() : null;
+
+                if (!requiresSystemPrompt && (skillId == null || skillId.isBlank())) {
+                    throw new RuntimeException("Entry with id " + numericId
+                        + " has requiresSystemPrompt=false but no skillId specified.");
+                }
+                entries.add(new InventoryEntry(numericId, requiresSystemPrompt, skillId));
             }
             return entries;
         } catch (Exception e) {
@@ -158,12 +194,12 @@ public final class SkillsInventory {
         }
     }
 
-    private static void validateSkillSummaryExists(int id) {
-        String resourceName = "skills/" + id + "-skill.md";
+    private static void validateSkillSummaryExists(String numericId) {
+        String resourceName = "skills/" + numericId + "-skill.md";
         try (InputStream stream = getResource(resourceName)) {
             if (stream == null) {
                 throw new RuntimeException("Skill summary not found: " + resourceName
-                    + ". Add skills/" + id + "-skill.md for each skill in the inventory.");
+                    + ". Add skills/" + numericId + "-skill.md for each skill in the inventory.");
             }
         } catch (Exception e) {
             if (e instanceof RuntimeException re) {
@@ -186,8 +222,9 @@ public final class SkillsInventory {
     }
 
     /**
-     * Single entry from skill-inventory.json: numeric id only. skillId is derived
-     * by matching system-prompts with prefix {@code {id}-}.
+     * Single entry from skill-inventory.json. When requiresSystemPrompt is true,
+     * skillId is derived by matching system-prompts with prefix {@code {numericId}-}.
+     * When false, skillId must be provided and no system-prompt is required.
      */
-    public record InventoryEntry(int id) {}
+    public record InventoryEntry(String numericId, boolean requiresSystemPrompt, String skillId) {}
 }

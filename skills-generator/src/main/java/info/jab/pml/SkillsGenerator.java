@@ -29,13 +29,13 @@ public final class SkillsGenerator {
 
     /**
      * Generates SKILL.md and reference content for all skills in the inventory.
-     * Validates that each skill has a summary in {@code skills/} and a matching system-prompt.
+     * Skills with {@code requiresSystemPrompt=false} get SKILL.md only (no reference content).
      *
      * @return stream of generated skill outputs
      */
     public Stream<SkillOutput> generateAllSkills() {
-        return SkillsInventory.skillIds()
-            .map(this::generateSkill);
+        return SkillsInventory.skillDescriptors()
+            .map(d -> generateSkill(d.skillId(), d.requiresSystemPrompt()));
     }
 
     /**
@@ -46,8 +46,20 @@ public final class SkillsGenerator {
      * @throws RuntimeException if resources cannot be loaded or generation fails
      */
     public SkillOutput generateSkill(String skillId) {
-        SkillMetadata metadata = parseMetadata(skillId);
-        String referenceContent = generateReferenceContent(skillId, metadata);
+        return generateSkill(skillId, true);
+    }
+
+    /**
+     * Generates SKILL.md and reference content for a given skill.
+     *
+     * @param skillId the skill identifier (e.g. 110-java-maven-best-practices)
+     * @param requiresSystemPrompt when false, skips system-prompt XML and reference generation
+     * @return the generated skill output
+     */
+    public SkillOutput generateSkill(String skillId, boolean requiresSystemPrompt) {
+        String referenceContent = requiresSystemPrompt
+            ? generateReferenceContent(skillId, parseMetadata(skillId))
+            : "";
         String skillMdContent = loadSkillSummary(skillId);
         return new SkillOutput(skillId, skillMdContent, referenceContent);
     }

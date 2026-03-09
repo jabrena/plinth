@@ -1,4 +1,5 @@
 [
+  {"id": "010", "requiresSystemPrompt": false, "skillId": "010-java-design-plans"},
   {"id": 110},
   {"id": 111},
   {"id": 112},
