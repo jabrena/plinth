@@ -35,8 +35,9 @@ metadata:
     <xsl:apply-templates select="reference"/>
   </xsl:template>
 
+  <!-- Preserve line breaks: do not use normalize-space() which collapses newlines -->
   <xsl:template match="goal">
-    <xsl:value-of select="normalize-space(.)"/>
+    <xsl:value-of select="."/>
     <xsl:text>
 
 </xsl:text>

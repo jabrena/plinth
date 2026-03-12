@@ -4,7 +4,7 @@
   {"id": "021", "requiresSystemPrompt": false, "skillId": "021-architecture-functional-requirements-rest"},
   {"id": "030", "requiresSystemPrompt": false, "skillId": "030-architecture-non-functional-requirements"},
   {"id": "040", "requiresSystemPrompt": false, "skillId": "040-planning-enhance-ai-plan-mode"},
-  {"id": 110},
+  {"id": 110, "xml": true},
   {"id": 111},
   {"id": 112},
   {"id": 113},

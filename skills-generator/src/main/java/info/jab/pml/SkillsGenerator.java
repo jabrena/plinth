@@ -1,10 +1,17 @@
 package info.jab.pml;
 
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
+import javax.xml.validation.Schema;
+import javax.xml.validation.SchemaFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -36,7 +43,7 @@ public final class SkillsGenerator {
      */
     public Stream<SkillOutput> generateAllSkills() {
         return SkillsInventory.skillDescriptors()
-            .map(d -> generateSkill(d.skillId(), d.requiresSystemPrompt()));
+            .map(d -> generateSkill(d.skillId(), d.requiresSystemPrompt(), d.useXml()));
     }
 
     /**
@@ -47,7 +54,7 @@ public final class SkillsGenerator {
      * @throws RuntimeException if resources cannot be loaded or generation fails
      */
     public SkillOutput generateSkill(String skillId) {
-        return generateSkill(skillId, true);
+        return generateSkill(skillId, true, false);
     }
 
     /**
@@ -58,10 +65,24 @@ public final class SkillsGenerator {
      * @return the generated skill output
      */
     public SkillOutput generateSkill(String skillId, boolean requiresSystemPrompt) {
+        return generateSkill(skillId, requiresSystemPrompt, false);
+    }
+
+    /**
+     * Generates SKILL.md and reference content for a given skill.
+     *
+     * @param skillId the skill identifier (e.g. 110-java-maven-best-practices)
+     * @param requiresSystemPrompt when false, skips system-prompt XML and reference generation
+     * @param useXml when true, loads skill from skills/{numericId}-skill.xml, validates against schema, transforms via XSLT
+     * @return the generated skill output
+     */
+    public SkillOutput generateSkill(String skillId, boolean requiresSystemPrompt, boolean useXml) {
         String referenceContent = requiresSystemPrompt
             ? generateReferenceContent(skillId, parseMetadata(skillId))
             : "";
-        String skillMdContent = loadSkillSummary(skillId);
+        String skillMdContent = useXml
+            ? loadSkillSummaryFromXml(skillId)
+            : loadSkillSummary(skillId);
         return new SkillOutput(skillId, skillMdContent, referenceContent);
     }
 
@@ -143,6 +164,49 @@ public final class SkillsGenerator {
             return appendProjectTagToDescription(content);
         } catch (Exception e) {
             throw new RuntimeException("Failed to load skill: " + resourceName, e);
+        }
+    }
+
+    private String loadSkillSummaryFromXml(String skillId) {
+        String numericId = extractNumericId(skillId);
+        String xmlResource = "skills/" + numericId + "-skill.xml";
+        String xsltResource = "schemas/skill-to-markdown.xslt";
+        String schemaResource = "schemas/skill.xsd";
+        try (
+            InputStream xmlStream = getResource(xmlResource);
+            InputStream xsltStream = getResource(xsltResource);
+            InputStream schemaStream = getResource(schemaResource)
+        ) {
+            if (xmlStream == null) {
+                throw new RuntimeException("Skill XML not found: " + xmlResource);
+            }
+            if (xsltStream == null) {
+                throw new RuntimeException("XSLT not found: " + xsltResource);
+            }
+            if (schemaStream == null) {
+                throw new RuntimeException("Schema not found: " + schemaResource);
+            }
+            SchemaFactory factory = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
+            Schema schema = factory.newSchema(new StreamSource(schemaStream));
+            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+            docFactory.setSchema(schema);
+            docFactory.setNamespaceAware(true);
+            DocumentBuilder builder = docFactory.newDocumentBuilder();
+            builder.parse(xmlStream);
+
+            TransformerFactory tf = TransformerFactory.newInstance();
+            Transformer transformer = tf.newTransformer(new StreamSource(xsltStream));
+            StringWriter writer = new StringWriter();
+            try (InputStream xmlStreamForTransform = getResource(xmlResource)) {
+                if (xmlStreamForTransform == null) {
+                    throw new RuntimeException("Skill XML not found: " + xmlResource);
+                }
+                transformer.transform(new StreamSource(xmlStreamForTransform), new StreamResult(writer));
+            }
+            String content = writer.toString();
+            return appendProjectTagToDescription(content);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load and transform skill XML: " + xmlResource, e);
         }
     }
 
