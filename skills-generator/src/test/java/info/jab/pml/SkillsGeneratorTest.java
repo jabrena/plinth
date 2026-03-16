@@ -2,6 +2,7 @@ package info.jab.pml;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringWriter;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -14,6 +15,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -44,21 +49,23 @@ class SkillsGeneratorTest {
         @ParameterizedTest
         @MethodSource("provideSkillDescriptors")
         @DisplayName("Should generate valid SKILL.md and reference for each skill")
-        void should_generateValidSkill_when_skillIdProvided(SkillsInventory.SkillDescriptor descriptor) throws IOException {
+        void should_generateValidSkill_when_skillIdProvided(SkillsInventory.SkillDescriptor descriptor) throws Exception {
             String skillId = descriptor.skillId();
             boolean requiresSystemPrompt = descriptor.requiresSystemPrompt();
+            boolean useXml = descriptor.useXml();
 
-            // Given - skill file in resources/skills/ is the source of truth
-            String expectedSkillMd = loadSkillFromResources(skillId);
+            // Given - skill file in resources/skills/ is the source of truth (.md or .xml when useXml)
+            String expectedSkillMd = useXml ? loadSkillFromXmlResources(skillId) : loadSkillFromResources(skillId);
             SkillsGenerator generator = new SkillsGenerator();
 
             // When
-            SkillsGenerator.SkillOutput output = generator.generateSkill(skillId, requiresSystemPrompt);
+            SkillsGenerator.SkillOutput output = generator.generateSkill(skillId, requiresSystemPrompt, useXml);
 
             // Then - Generated SKILL.md must exactly match the skill source (user-editable)
             assertThat(output.skillMd())
-                .withFailMessage("Generated SKILL.md must match skills/%s-skill.md. "
-                    + "Update the skill file and run the build to promote changes.", numericId(skillId))
+                .withFailMessage("Generated SKILL.md must match skills/%s-skill.%s. "
+                    + "Update the skill file and run the build to promote changes.",
+                    numericId(skillId), useXml ? "xml" : "md")
                 .isEqualTo(expectedSkillMd);
 
             // Then - Validate reference content (only for skills with system prompt)
@@ -105,17 +112,7 @@ class SkillsGeneratorTest {
         void should_haveMatchingTitle_when_comparingSkillMdAndSystemPromptXml(SkillsInventory.SkillDescriptor descriptor) throws Exception {
             String skillId = descriptor.skillId();
             String numId = numericId(skillId);
-            String skillMdResource = "skills/" + numId + "-skill.md";
-            String markdownTitle;
-            try (InputStream stream = SkillsGeneratorTest.class.getClassLoader().getResourceAsStream(skillMdResource)) {
-                assertThat(stream).withFailMessage("Skill file not found: %s", skillMdResource).isNotNull();
-                String content = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
-                markdownTitle = content.lines()
-                    .filter(line -> line.startsWith("# "))
-                    .findFirst()
-                    .map(line -> line.substring(2).trim())
-                    .orElseThrow(() -> new AssertionError("No H1 heading found in " + skillMdResource));
-            }
+            String markdownTitle = loadSkillTitle(numId);
 
             String xmlResource = "system-prompts/" + skillId + ".xml";
             String xmlTitle;
@@ -135,9 +132,33 @@ class SkillsGeneratorTest {
 
             assertThat(markdownTitle)
                 .withFailMessage(
-                    "Skill markdown H1 '%s' in %s does not match XML <title> '%s' in %s",
-                    markdownTitle, skillMdResource, xmlTitle, xmlResource)
+                    "Skill title '%s' does not match system-prompt XML <title> '%s' in %s",
+                    markdownTitle, xmlTitle, xmlResource)
                 .isEqualTo(xmlTitle);
+        }
+
+        private String loadSkillTitle(String numId) throws Exception {
+            String mdResource = "skills/" + numId + "-skill.md";
+            try (InputStream stream = SkillsGeneratorTest.class.getClassLoader().getResourceAsStream(mdResource)) {
+                if (stream != null) {
+                    String content = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+                    return content.lines()
+                        .filter(line -> line.startsWith("# "))
+                        .findFirst()
+                        .map(line -> line.substring(2).trim())
+                        .orElseThrow(() -> new AssertionError("No H1 heading found in " + mdResource));
+                }
+            }
+            String xmlResource = "skills/" + numId + "-skill.xml";
+            try (InputStream stream = SkillsGeneratorTest.class.getClassLoader().getResourceAsStream(xmlResource)) {
+                assertThat(stream).withFailMessage("Skill file not found: %s or %s", mdResource, xmlResource).isNotNull();
+                Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream);
+                NodeList titleNodes = doc.getElementsByTagName("title");
+                assertThat(titleNodes.getLength())
+                    .withFailMessage("No <title> element in %s", xmlResource)
+                    .isGreaterThan(0);
+                return titleNodes.item(0).getTextContent().trim();
+            }
         }
     }
 
@@ -156,24 +177,46 @@ class SkillsGeneratorTest {
         @DisplayName("Should have metadata version matching project version from parent pom.xml when version is present")
         void should_haveMetadataVersionMatchingProjectVersion_when_versionPresent(SkillsInventory.SkillDescriptor descriptor) throws Exception {
             String numId = numericId(descriptor.skillId());
-            String resourceName = "skills/" + numId + "-skill.md";
+            Optional<String> skillVersion = loadSkillVersion(numId);
 
-            try (InputStream stream = SkillsGeneratorTest.class.getClassLoader().getResourceAsStream(resourceName)) {
-                assertThat(stream).withFailMessage("Skill file not found: %s", resourceName).isNotNull();
-                String content = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
-                Optional<String> skillVersion = extractVersionFromFrontmatter(content);
+            if (skillVersion.isEmpty()) {
+                return;
+            }
 
-                if (skillVersion.isEmpty()) {
-                    return;
+            String expectedVersion = readProjectVersionFromParentPom();
+            assertThat(skillVersion.get())
+                .withFailMessage(
+                    "Skill %s has metadata version '%s' but project version is '%s'. "
+                        + "Update the version in skills/%s-skill.md or skills/%s-skill.xml to match pom.xml.",
+                    numId, skillVersion.get(), expectedVersion, numId, numId)
+                .isEqualTo(expectedVersion);
+        }
+
+        private Optional<String> loadSkillVersion(String numId) throws Exception {
+            String mdResource = "skills/" + numId + "-skill.md";
+            try (InputStream stream = SkillsGeneratorTest.class.getClassLoader().getResourceAsStream(mdResource)) {
+                if (stream != null) {
+                    String content = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+                    return extractVersionFromFrontmatter(content);
                 }
-
-                String expectedVersion = readProjectVersionFromParentPom();
-                assertThat(skillVersion.get())
-                    .withFailMessage(
-                        "Skill %s has metadata version '%s' but project version is '%s'. "
-                            + "Update the version in skills/%s-skill.md to match pom.xml.",
-                        resourceName, skillVersion.get(), expectedVersion, numId)
-                    .isEqualTo(expectedVersion);
+            }
+            String xmlResource = "skills/" + numId + "-skill.xml";
+            try (InputStream stream = SkillsGeneratorTest.class.getClassLoader().getResourceAsStream(xmlResource)) {
+                if (stream == null) {
+                    throw new AssertionError("Skill file not found: " + mdResource + " or " + xmlResource);
+                }
+                Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream);
+                NodeList metadataNodes = doc.getElementsByTagName("metadata");
+                if (metadataNodes.getLength() == 0) {
+                    return Optional.empty();
+                }
+                Element metadata = (Element) metadataNodes.item(0);
+                NodeList versionNodes = metadata.getElementsByTagName("version");
+                if (versionNodes.getLength() == 0) {
+                    return Optional.empty();
+                }
+                String version = versionNodes.item(0).getTextContent();
+                return Optional.ofNullable(version != null ? version.trim() : null);
             }
         }
 
@@ -225,10 +268,41 @@ class SkillsGeneratorTest {
                 throw new IllegalArgumentException("Skill file not found: " + resourceName);
             }
             String content = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
-            return content.lines()
-                .map(line -> line.startsWith("description:") ? line + " Part of the skills-for-java project" : line)
-                .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
+            return appendProjectTagToDescription(content);
         }
+    }
+
+    private String loadSkillFromXmlResources(String skillId) throws Exception {
+        String numId = numericId(skillId);
+        String xmlResource = "skills/" + numId + "-skill.xml";
+        String xsltResource = "schemas/skill-to-markdown.xslt";
+        try (
+            InputStream xmlStream = getTestResource(xmlResource);
+            InputStream xsltStream = getTestResource(xsltResource)
+        ) {
+            if (xmlStream == null) {
+                throw new IllegalArgumentException("Skill XML not found: " + xmlResource);
+            }
+            if (xsltStream == null) {
+                throw new IllegalArgumentException("XSLT not found: " + xsltResource);
+            }
+            Transformer transformer = TransformerFactory.newInstance().newTransformer(new StreamSource(xsltStream));
+            StringWriter writer = new StringWriter();
+            transformer.transform(new StreamSource(xmlStream), new StreamResult(writer));
+            return appendProjectTagToDescription(writer.toString());
+        }
+    }
+
+    private String appendProjectTagToDescription(String content) {
+        return content.lines()
+            .map(line -> line.startsWith("description:") && !line.endsWith(" Part of the skills-for-java project")
+                ? line + " Part of the skills-for-java project"
+                : line)
+            .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
+    }
+
+    private InputStream getTestResource(String name) {
+        return SkillsGeneratorTest.class.getClassLoader().getResourceAsStream(name);
     }
 
     private static String numericId(String skillId) {

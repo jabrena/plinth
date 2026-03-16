@@ -10,13 +10,29 @@ metadata:
 
 Identify and apply modern Java (Java 8+) refactoring opportunities to improve readability, maintainability, and performance.
 
-**Prerequisites:** Run `./mvnw compile` or `mvn compile` before applying any changes. If compilation fails, **stop immediately** — do not proceed until the project compiles successfully.
+**What is covered in this Skill?**
 
-**Core areas:** Lambda expressions and method references (over anonymous classes), Stream API for declarative collection processing, `Optional` for null-safe APIs, `java.time` API (replacing `Date`/`Calendar`), default interface methods, `var` type inference, unmodifiable collection factory methods (`List.of()`, `Set.of()`, `Map.of()`), `CompletableFuture` for composable async programming, text blocks for multi-line strings, Java 25 Flexible Constructor Bodies (JEP 513), and Java 25 Module Import Declarations (JEP 511).
+- Lambda expressions and method references (over anonymous classes)
+- Stream API for declarative collection processing
+- `Optional` for null-safe APIs
+- `java.time` API (replacing `Date`/`Calendar`)
+- Default interface methods, `var` type inference
+- Unmodifiable collection factory methods (`List.of()`, `Set.of()`, `Map.of()`)
+- `CompletableFuture` for composable async programming
+- Text blocks for multi-line strings
+- Java 25 Flexible Constructor Bodies (JEP 513)
+- Java 25 Module Import Declarations (JEP 511)
 
-**Scope:** The reference is organized by examples (with good/bad code patterns) for each core area. Apply recommendations based on applicable examples; validate compilation before changes and run `./mvnw clean verify` or `mvn clean verify` after applying improvements.
+**Scope:** The reference is organized by examples (good/bad code patterns) for each core area. Apply recommendations based on applicable examples.
 
-**Before applying changes:** Read the reference for detailed good/bad examples, constraints, and safeguards for each modern Java feature.
+## Constraints
+
+Before applying any modern Java refactoring, ensure the project compiles. If compilation fails, stop immediately — do not proceed until the project compiles successfully. After applying improvements, run full verification.
+
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any changes
+- **SAFETY**: If compilation fails, stop immediately — do not proceed until the project compiles successfully
+- **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
+- **BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each modern Java feature
 
 ## Reference
 

@@ -10,13 +10,24 @@ metadata:
 
 Configure Maven plugins and profiles in pom.xml using a structured, question-driven process that preserves existing configuration. **This is an interactive SKILL**.
 
-**Prerequisites:** Run `./mvnw validate` or `mvn validate` before applying any plugin recommendations. If validation fails, **stop** and ask the user to fix issues — do not proceed until resolved.
+**What is covered in this Skill?**
 
-**Core areas:** Existing configuration analysis and preservation, Maven Wrapper verification, project assessment questions (project nature, Java version, build and quality aspects), properties configuration, Maven Enforcer, Surefire, Failsafe, HTML test reports, JaCoCo coverage, PiTest mutation testing, OWASP security scanning, SpotBugs/PMD static analysis, SonarQube/SonarCloud, Spotless code formatting, Versions plugin, Git Commit ID, Flatten plugin, JMH benchmarking, Maven Compiler, and cyclomatic complexity analysis.
+- Existing configuration analysis and preservation, Maven Wrapper verification
+- Project assessment questions: project nature, Java version, build and quality aspects
+- Properties configuration, Maven Enforcer, Surefire, Failsafe, HTML test reports
+- JaCoCo coverage, PiTest mutation testing, OWASP security scanning
+- SpotBugs/PMD static analysis, SonarQube/SonarCloud
+- Spotless code formatting, Versions plugin, Git Commit ID, Flatten plugin
+- JMH benchmarking, Maven Compiler, cyclomatic complexity analysis
 
-**Multi-step scope:** Begin with Step 1 (existing configuration analysis) before any changes. Ask project assessment questions one-by-one in Step 3, then execute only the plugin steps relevant to user selections. Never remove or replace existing plugins; only add new ones that do not conflict.
+## Constraints
 
-**Before applying changes:** Read the reference for detailed plugin configurations, XML templates, and constraints for each step.
+Before applying plugin recommendations, ensure the project is in a valid state. Use a structured, question-driven process that preserves existing configuration and adds only what the user selects.
+
+- **MANDATORY**: Run `./mvnw validate` or `mvn validate` before applying any plugin recommendations
+- **SAFETY**: If validation fails, stop and ask the user to fix issues—do not proceed until resolved
+- **SCOPE**: Begin with Step 1 (existing configuration analysis) before any changes. Never remove or replace existing plugins; only add new ones that do not conflict
+- **BEFORE APPLYING**: Read the reference for detailed plugin configurations, XML templates, and constraints for each step
 
 ## Reference
 
