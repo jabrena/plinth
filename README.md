@@ -1,9 +1,10 @@
 # Cursor AI rules for Java
 
 ## Stargazers over time
-[![Stargazers over time](https://starchart.cc/jabrena/cursor-rules-java.svg?variant=light)](https://starchart.cc/jabrena/cursor-rules-java)
 
-[![CI Builds](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml/badge.svg)](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml)
+[Stargazers over time](https://starchart.cc/jabrena/cursor-rules-java)
+
+[CI Builds](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml)
 
 ## Share your feedback
 
@@ -23,24 +24,26 @@
 ## Goal
 
 The project provides a curated collection of `System prompts` & `Skills` for Java Enterprise development that help software engineers and pipelines in their daily programming work.
-The project covers aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation`, `ADRs`, `Diagrams` & `AGENTS.md`.
+The project covers aspects like `Agile tasks for Java projects`, ``, `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation`, `ADRs`, `Diagrams` & `AGENTS.md`.
 
 ## Deliverables
 
 The project generates a set of deliverables at the end of any iteration.
 
-| Deliverable | Location |
-|-------------|----------|
-| System prompts for Java | [Catalog](./SYSTEM-PROMPTS-JAVA.md) (`.cursor/rules`) |
-| Skills for Java | https://skills.sh/?q=jabrena |
+
+| Deliverable             | Location                                                     |
+| ----------------------- | ------------------------------------------------------------ |
+| System prompts for Java | [Catalog](./SYSTEM-PROMPTS-JAVA.md) (`.cursor/rules`)        |
+| Skills for Java         | [https://skills.sh/?q=jabrena](https://skills.sh/?q=jabrena) |
+
 
 ## Getting started
 
 Read the following comprehensive guides to use this project today.
 
-- [Getting started with `System prompts for Java`](./documentation/GETTING-STARTED-SYSTEM-PROMPTS.md)
-- [Getting started with `Skills for Java`](./documentation/GETTING-STARTED-SKILLS.md)
-- [Getting started with `Pipelines and AI`](./documentation/GETTING-STARTED-PIPELINES.md)
+- [Getting started with `System prompts for Java](./documentation/GETTING-STARTED-SYSTEM-PROMPTS.md)`
+- [Getting started with `Skills for Java](./documentation/GETTING-STARTED-SKILLS.md)`
+- [Getting started with `Pipelines and AI](./documentation/GETTING-STARTED-PIPELINES.md)`
 
 ## How to use them?
 
@@ -50,7 +53,7 @@ The SLDC has evolved with the arrival of this new set of AI tooling, enhancing t
 
 Adding AI tools to the Java development workflow can increase the likelihood of implementing software specifications on time and with quality.
 
-![](./documentation/images/workflow.png)
+
 
 In this workflow, you could delegate completely a task or ask help in certain moments. You could use this project to refactor the code generated or delegate the task and associate a System prompt / Skills to that task
 
@@ -58,7 +61,7 @@ In this workflow, you could delegate completely a task or ask help in certain mo
 
 Adding AI tools to your pipeline can provide new opportunities to deliver more value (examples: automatic coding, code refactoring, continuous profiling, and others).
 
-![](./documentation/images/workflow-pipelines.png)
+
 
 ## Limitations
 
@@ -86,12 +89,14 @@ The repository includes [a collection of examples](./examples/) where you can ex
 
 ## Architectural decision records, ADR
 
-| Date | ID | Name |
-|---|---|---|
-| 2026-03-01 | ADR-004 | [Skill Generation](./documentation/adr/ADR-004-skill-generation.md) |
-| 2025-09-16 | ADR-003 | [Website Generation](./documentation/adr/ADR-003-website-generation.md) |
-| 2025-07-10 | ADR-002 | [Cursor Rules scope configuration](./documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md) |
+
+| Date       | ID      | Name                                                                                                          |
+| ---------- | ------- | ------------------------------------------------------------------------------------------------------------- |
+| 2026-03-01 | ADR-004 | [Skill Generation](./documentation/adr/ADR-004-skill-generation.md)                                           |
+| 2025-09-16 | ADR-003 | [Website Generation](./documentation/adr/ADR-003-website-generation.md)                                       |
+| 2025-07-10 | ADR-002 | [Cursor Rules scope configuration](./documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md)        |
 | 2025-07-08 | ADR-001 | [Cursor Rules generation from XML Files](./documentation/adr/ADR-001-generate-cursor-rules-from-xml-files.md) |
+
 
 ## Changelog
 
@@ -120,9 +125,9 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 ### Blogs
 
 - [Delegating Java tasks to Supervised AI Dev Pipelines](https://www.javaadvent.com/2025/12/delegating-java-tasks-to-supervised-ai-dev-pipelines.html)
-- https://vibekode.it/blog/cursor-ai-developer-cloud-platform/
-- https://www.linkedin.com/pulse/september-rest-story-jvm-weekly-vol-146-artur-skowro%C5%84ski-82lif/?trackingId=wbWPSL65TpCCbdg5ksAWjw%3D%3D
-- https://virtuslab.com/blog/ai/providing-library-documentation/
+- [https://vibekode.it/blog/cursor-ai-developer-cloud-platform/](https://vibekode.it/blog/cursor-ai-developer-cloud-platform/)
+- [https://www.linkedin.com/pulse/september-rest-story-jvm-weekly-vol-146-artur-skowro%C5%84ski-82lif/?trackingId=wbWPSL65TpCCbdg5ksAWjw%3D%3D](https://www.linkedin.com/pulse/september-rest-story-jvm-weekly-vol-146-artur-skowro%C5%84ski-82lif/?trackingId=wbWPSL65TpCCbdg5ksAWjw%3D%3D)
+- [https://virtuslab.com/blog/ai/providing-library-documentation/](https://virtuslab.com/blog/ai/providing-library-documentation/)
 
 ## References
 
@@ -131,27 +136,25 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 - [https://cursor.com/cli](https://cursor.com/cli)
 - [https://docs.cursor.com/context/rules](https://docs.cursor.com/context/rules)
 - [https://docs.cursor.com/context/@-symbols/@-cursor-rules](https://docs.cursor.com/context/@-symbols/@-cursor-rules)
-- https://agentskills.io/home
-- https://github.com/anthropics/skills
-- https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf
-- https://skills.sh/
-- https://github.com/vercel-labs/skills/issues
-- https://skillsmp.com/
-- https://cursor.com/docs/cli/github-actions
-- https://code.claude.com/docs/en/github-actions
+- [https://agentskills.io/home](https://agentskills.io/home)
+- [https://github.com/anthropics/skills](https://github.com/anthropics/skills)
+- [https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf](https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf)
+- [https://skills.sh/](https://skills.sh/)
+- [https://github.com/vercel-labs/skills/issues](https://github.com/vercel-labs/skills/issues)
+- [https://skillsmp.com/](https://skillsmp.com/)
+- [https://cursor.com/docs/cli/github-actions](https://cursor.com/docs/cli/github-actions)
+- [https://code.claude.com/docs/en/github-actions](https://code.claude.com/docs/en/github-actions)
 - [https://www.anthropic.com/claude-code](https://www.anthropic.com/claude-code)
 - [https://github.com/features/copilot](https://github.com/features/copilot)
 - [https://www.jetbrains.com/junie/](https://www.jetbrains.com/junie/)
 - [https://openjdk.org/jeps/0](https://openjdk.org/jeps/0)
-- https://jbake.org/docs/latest/
+- [https://jbake.org/docs/latest/](https://jbake.org/docs/latest/)
 
 ## Cursor rules ecosystem
 
 - [https://github.com/jabrena/101-cursor](https://github.com/jabrena/101-cursor)
 - [https://github.com/jabrena/pml](https://github.com/jabrena/pml)
-- [https://github.com/jabrena/cursor-rules-agile](https://github.com/jabrena/cursor-rules-agile)
 - [https://github.com/jabrena/cursor-rules-java](https://github.com/jabrena/cursor-rules-java)
-- [https://github.com/jabrena/cursor-rules-spring-boot](https://github.com/jabrena/cursor-rules-spring-boot)
 - [https://github.com/jabrena/cursor-rules-examples](https://github.com/jabrena/cursor-rules-examples)
 - [https://github.com/jabrena/plantuml-to-png-cli](https://github.com/jabrena/plantuml-to-png-cli)
 - [https://github.com/jabrena/setup-cli](https://github.com/jabrena/setup-cli)
