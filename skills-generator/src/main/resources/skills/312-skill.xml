@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+      id="312-frameworks-spring-boot-integration-testing">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.13.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+  </metadata>
+
+  <title>Java Integration Testing Guidelines</title>
+  <description>Use when you need to write or improve integration tests — including Testcontainers, TestRestTemplate, data management, test structure, and performance optimization for integration tests.</description>
+  <goal><![CDATA[
+Apply Java integration testing guidelines.
+
+**What is covered in this Skill?**
+
+- Integration test scope and purpose
+- Testcontainers for dependencies
+- TestRestTemplate for API testing
+- Data management strategies
+- Test structure and assertions
+- Performance and cleanup
+
+**Scope:** Apply recommendations based on the reference rules and good/bad code examples.
+]]></goal>
+
+  <constraints>
+    <constraints-description>Before applying any integration test changes, ensure the project compiles. If compilation fails, stop immediately. After applying improvements, run full verification.</constraints-description>
+    <constraint-list>
+      <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+      <constraint>**SAFETY**: If compilation fails, stop immediately</constraint>
+      <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+      <constraint>**BEFORE APPLYING**: Read the reference for detailed rules and good/bad patterns</constraint>
+    </constraint-list>
+  </constraints>
+
+  <reference path="references/312-frameworks-spring-boot-integration-testing.md" />
+</skill>

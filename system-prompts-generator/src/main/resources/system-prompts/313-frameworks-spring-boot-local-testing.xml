@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.13.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Spring Boot Local Testing with Docker Compose</title>
+        <description>Use when you need to configure local testing with spring-boot-docker-compose — including dependency setup, compose service definitions, profiles, integration test setup, service connections, health checks, test data, and performance optimization.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Spring Boot and containerized development</role>
+
+    <goal>
+        Apply the following Spring Boot local testing guidelines when using Docker Compose for local development and testing. Follow the rules, good/bad examples, and best practices described below.
+
+        <xi:include href="assets/frameworks/313-spring-boot-local-testing-guidelines.md" parse="text"/>
+    </goal>
+
+    <constraints>
+        <constraints-description>
+            Before applying any recommendations, ensure the project is in a valid state by running Maven compilation.
+            Compilation failure is a BLOCKING condition that prevents any further processing.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**PREREQUISITE**: Project must compile successfully before any configuration refactoring</constraint>
+            <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+        </constraint-list>
+    </constraints>
+
+</prompt>
