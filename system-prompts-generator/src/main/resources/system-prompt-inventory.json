@@ -31,6 +31,12 @@
   {"name": "171-java-adr"},
   {"name": "172-java-diagrams"},
   {"name": "173-java-agents"},
+  {"name": "301-frameworks-spring-boot-core"},
+  {"name": "302-frameworks-spring-boot-rest"},
+  {"name": "303-frameworks-spring-data-jdbc"},
+  {"name": "311-frameworks-spring-boot-slice-testing"},
+  {"name": "312-frameworks-spring-boot-integration-testing"},
+  {"name": "313-frameworks-spring-boot-local-testing"},
   {"name": "behaviour-consultative-interaction"},
   {"name": "behaviour-progressive-learning"},
   {"name": "behaviour-article-writer"}

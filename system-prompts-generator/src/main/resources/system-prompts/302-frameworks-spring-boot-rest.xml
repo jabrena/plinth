@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.13.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Java REST API Design Principles</title>
+        <description>Use when you need to design, review, or improve REST APIs with Spring Boot — including HTTP methods, resource URIs, status codes, DTOs, versioning, error handling, security, API documentation, controller advice, and problem details for errors.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in REST API design and Spring Boot</role>
+
+    <goal>
+        Apply the following Java REST API design principles when building or refactoring Spring Boot REST APIs. Follow the rules, good/bad examples, and best practices described below.
+
+        <xi:include href="assets/frameworks/302-spring-boot-rest-guidelines.md" parse="text"/>
+    </goal>
+
+    <constraints>
+        <constraints-description>
+            Before applying any recommendations, ensure the project is in a valid state by running Maven compilation.
+            Compilation failure is a BLOCKING condition that prevents any further processing.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**PREREQUISITE**: Project must compile successfully before any REST API refactoring</constraint>
+            <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+        </constraint-list>
+    </constraints>
+
+</prompt>
