@@ -46,9 +46,9 @@ public final class SkillsInventory {
 
         for (InventoryEntry entry : entries) {
             String numericId = entry.numericId();
-            validateSkillSummaryExists(numericId);
+            validateSkillSummaryExists(numericId, entry.useXml());
             String skillId = entry.requiresSystemPrompt()
-                ? resolveSkillIdFromPrefix(Integer.parseInt(numericId))
+                ? resolveSkillIdFromPrefix(numericId)
                 : entry.skillId();
             skillIds.add(skillId);
         }
@@ -57,47 +57,47 @@ public final class SkillsInventory {
     }
 
     /**
-     * Returns skill descriptors (skillId + requiresSystemPrompt) for generator use.
+     * Returns skill descriptors (skillId + requiresSystemPrompt + useXml) for generator use.
      */
     public static Stream<SkillDescriptor> skillDescriptors() {
         List<InventoryEntry> entries = loadInventory();
         List<SkillDescriptor> descriptors = new ArrayList<>();
         for (InventoryEntry entry : entries) {
             String numericId = entry.numericId();
-            validateSkillSummaryExists(numericId);
+            validateSkillSummaryExists(numericId, entry.useXml());
             String skillId = entry.requiresSystemPrompt()
-                ? resolveSkillIdFromPrefix(Integer.parseInt(numericId))
+                ? resolveSkillIdFromPrefix(numericId)
                 : entry.skillId();
-            descriptors.add(new SkillDescriptor(skillId, entry.requiresSystemPrompt()));
+            descriptors.add(new SkillDescriptor(skillId, entry.requiresSystemPrompt(), entry.useXml()));
         }
         return descriptors.stream();
     }
 
     /**
-     * Skill ID and whether it requires a system prompt for reference generation.
+     * Skill ID, whether it requires a system prompt for reference generation, and whether to use XML source.
      */
-    public record SkillDescriptor(String skillId, boolean requiresSystemPrompt) {}
+    public record SkillDescriptor(String skillId, boolean requiresSystemPrompt, boolean useXml) {}
 
     /**
-     * Resolves skillId by finding the system-prompt XML that starts with {@code {id}-}.
+     * Resolves skillId by finding the system-prompt XML that starts with {@code {numericId}-}.
      *
-     * @param id numeric id from inventory
+     * @param numericId numeric id from inventory (e.g. "111" or "014")
      * @return full skillId (e.g. 110-java-maven-best-practices)
      * @throws RuntimeException if none or multiple system-prompts match
      */
-    public static String resolveSkillIdFromPrefix(int id) {
-        String prefix = id + "-";
+    public static String resolveSkillIdFromPrefix(String numericId) {
+        String prefix = numericId + "-";
         List<String> matches = listSystemPromptBaseNames().stream()
             .filter(name -> name.startsWith(prefix) && name.endsWith(".xml"))
             .map(name -> name.substring(0, name.length() - 4))
             .toList();
 
         if (matches.isEmpty()) {
-            throw new RuntimeException("No system-prompt found for id " + id
+            throw new RuntimeException("No system-prompt found for id " + numericId
                 + ". Add a system-prompts/" + prefix + "*.xml file in system-prompts-generator.");
         }
         if (matches.size() > 1) {
-            throw new RuntimeException("Multiple system-prompts match id " + id + ": " + matches);
+            throw new RuntimeException("Multiple system-prompts match id " + numericId + ": " + matches);
         }
         return matches.getFirst();
     }
@@ -186,7 +186,8 @@ public final class SkillsInventory {
                     throw new RuntimeException("Entry with id " + numericId
                         + " has requiresSystemPrompt=false but no skillId specified.");
                 }
-                entries.add(new InventoryEntry(numericId, requiresSystemPrompt, skillId));
+                boolean useXml = parseXmlFlag(node);
+                entries.add(new InventoryEntry(numericId, requiresSystemPrompt, skillId, useXml));
             }
             return entries;
         } catch (Exception e) {
@@ -194,12 +195,30 @@ public final class SkillsInventory {
         }
     }
 
-    private static void validateSkillSummaryExists(String numericId) {
-        String resourceName = "skills/" + numericId + "-skill.md";
+    private static boolean parseXmlFlag(JsonNode node) {
+        if (!node.has("xml")) {
+            return false;
+        }
+        JsonNode xmlNode = node.get("xml");
+        if (xmlNode.isBoolean()) {
+            return xmlNode.asBoolean();
+        }
+        if (xmlNode.isTextual()) {
+            String s = xmlNode.asText().toLowerCase();
+            return "true".equals(s) || "yes".equals(s) || "1".equals(s);
+        }
+        return false;
+    }
+
+    private static void validateSkillSummaryExists(String numericId, boolean useXml) {
+        String resourceName = useXml
+            ? "skills/" + numericId + "-skill.xml"
+            : "skills/" + numericId + "-skill.md";
         try (InputStream stream = getResource(resourceName)) {
             if (stream == null) {
                 throw new RuntimeException("Skill summary not found: " + resourceName
-                    + ". Add skills/" + numericId + "-skill.md for each skill in the inventory.");
+                    + ". Add skills/" + numericId + (useXml ? "-skill.xml" : "-skill.md")
+                    + " for each skill in the inventory.");
             }
         } catch (Exception e) {
             if (e instanceof RuntimeException re) {
@@ -225,6 +244,8 @@ public final class SkillsInventory {
      * Single entry from skill-inventory.json. When requiresSystemPrompt is true,
      * skillId is derived by matching system-prompts with prefix {@code {numericId}-}.
      * When false, skillId must be provided and no system-prompt is required.
+     * When useXml is true, skill summary is loaded from skills/{numericId}-skill.xml
+     * and transformed via schema validation and XSLT; otherwise from skills/{numericId}-skill.md.
      */
-    public record InventoryEntry(String numericId, boolean requiresSystemPrompt, String skillId) {}
+    public record InventoryEntry(String numericId, boolean requiresSystemPrompt, String skillId, boolean useXml) {}
 }

@@ -10,13 +10,35 @@ metadata:
 
 Identify and apply Java concurrency best practices to improve thread safety, scalability, and maintainability by using modern `java.util.concurrent` utilities, virtual threads, and structured concurrency.
 
-**Prerequisites:** Run `./mvnw compile` or `mvn compile` before applying any change. If compilation fails, **stop immediately** — compilation failure is a blocking condition that prevents any further processing.
+**What is covered in this Skill?**
 
-**Core areas:** Thread safety fundamentals (`ConcurrentHashMap`, `AtomicInteger`, `ReentrantLock`, `ReadWriteLock`, Java Memory Model), `ExecutorService` thread pool configuration (sizing, keep-alive, bounded queues, rejection policies, graceful shutdown), Producer-Consumer and Publish-Subscribe concurrent design patterns (`BlockingQueue`), `CompletableFuture` for non-blocking async composition (`thenApply`/`thenCompose`/`exceptionally`/`orTimeout`), immutability and safe publication (`volatile`, static initializers), lock contention and false-sharing performance optimization, virtual threads (`Executors.newVirtualThreadPerTaskExecutor()`) for I/O-bound scalability, `StructuredTaskScope` for lifecycle-scoped task management, `ScopedValue` over `ThreadLocal` for immutable cross-task data, cooperative cancellation and `InterruptedException` discipline, backpressure with bounded queues and `CallerRunsPolicy`, deadlock avoidance via global lock ordering and `tryLock` with timeouts, `ForkJoin`/parallel-stream discipline for CPU-bound work, virtual-thread pinning detection (JFR `VirtualThreadPinned`), thread naming and `UncaughtExceptionHandler` observability, and fit-for-purpose primitives (`LongAdder`, `CopyOnWriteArrayList`, `StampedLock`, `Semaphore`, `CountDownLatch`, `Phaser`).
+- Thread safety fundamentals: `ConcurrentHashMap`, `AtomicInteger`, `ReentrantLock`, `ReadWriteLock`, Java Memory Model
+- `ExecutorService` thread pool configuration: sizing, keep-alive, bounded queues, rejection policies, graceful shutdown
+- Producer-Consumer and Publish-Subscribe patterns with `BlockingQueue`
+- `CompletableFuture` for non-blocking async composition (`thenApply`/`thenCompose`/`exceptionally`/`orTimeout`)
+- Immutability and safe publication (`volatile`, static initializers)
+- Lock contention and false-sharing performance optimization
+- Virtual threads (`Executors.newVirtualThreadPerTaskExecutor()`) for I/O-bound scalability
+- `StructuredTaskScope` for lifecycle-scoped task management
+- `ScopedValue` over `ThreadLocal` for immutable cross-task data
+- Cooperative cancellation and `InterruptedException` discipline
+- Backpressure with bounded queues and `CallerRunsPolicy`
+- Deadlock avoidance via global lock ordering and `tryLock` with timeouts
+- ForkJoin/parallel-stream discipline for CPU-bound work
+- Virtual-thread pinning detection (JFR `VirtualThreadPinned`)
+- Thread naming and `UncaughtExceptionHandler` observability
+- Fit-for-purpose primitives: `LongAdder`, `CopyOnWriteArrayList`, `StampedLock`, `Semaphore`, `CountDownLatch`, `Phaser`
 
-**Scope:** The reference is organized by examples (with good/bad code patterns) for each core area. Apply recommendations based on applicable examples; validate compilation before changes and run `./mvnw clean verify` or `mvn clean verify` after applying improvements.
+**Scope:** The reference is organized by examples (good/bad code patterns) for each core area. Apply recommendations based on applicable examples.
 
-**Before applying changes:** Read the reference for detailed good/bad examples, constraints, and safeguards for each concurrency pattern.
+## Constraints
+
+Before applying any concurrency changes, ensure the project compiles. If compilation fails, stop immediately — compilation failure is a blocking condition. After applying improvements, run full verification.
+
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **SAFETY**: If compilation fails, stop immediately — compilation failure is a blocking condition that prevents any further processing
+- **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
+- **BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each concurrency pattern
 
 ## Reference
 

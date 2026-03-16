@@ -1,4 +1,9 @@
 [
+  {"name": "014-agile-user-story"},
+  {"name": "020-architecture-functional-requirements-cli"},
+  {"name": "021-architecture-functional-requirements-rest"},
+  {"name": "030-architecture-non-functional-requirements"},
+  {"name": "040-planning-enhance-ai-plan-mode"},
   {"name": "100-java-system-prompt-java-list"},
   {"name": "110-java-maven-best-practices"},
   {"name": "111-java-maven-dependencies"},

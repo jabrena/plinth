@@ -37,7 +37,6 @@ Before applying Maven best practices recommendations, ensure the project is in a
 
 - **MANDATORY**: Run `./mvnw validate` or `mvn validate` before applying any Maven best practices recommendations
 - **VERIFY**: Ensure all validation errors are resolved before proceeding with POM modifications
-- **PREREQUISITE**: Project must compile and pass basic validation checks before optimization
 - **SAFETY**: If validation fails, not continue and ask the user to fix the issues before continuing
 - **MULTI-MODULE DISCOVERY**: After reading the root `pom.xml`, check whether it contains a `<modules>` section. If it does, read every child module's `pom.xml` before making any recommendations — analysis scope is the full module tree, not only the root
 - **CROSS-MODULE SCOPE**: When child modules exist, check each one for: hardcoded dependency versions that duplicate `<dependencyManagement>` in the parent, plugin configurations that duplicate `<pluginManagement>`, properties that should be centralized in the parent, and version drift (same artifact declared at different versions across sibling modules)
