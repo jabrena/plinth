@@ -14,7 +14,7 @@ Generate comprehensive Java project diagrams through a modular, step-based inter
 
 - UML sequence diagram generation for application workflows and API interactions
 - UML class diagram generation for package structure and class relationships
-- C4 model diagram generation at Context/Container/Component/Code abstraction levels
+- C4 model diagram generation at Context/Container/Component levels only (levels 1–3; Code/Level 4 not generated)
 - UML state machine diagram generation for entity lifecycles and business workflows
 - PlantUML syntax for all diagram types
 - File organization strategies: single-file, separate-files, or integrated with existing documentation
@@ -27,6 +27,7 @@ Before applying any diagram generation, ensure the project validates. If validat
 - **MANDATORY**: Run `./mvnw validate` or `mvn validate` before applying any diagram generation
 - **SAFETY**: If validation fails, stop immediately — do not proceed until all validation errors are resolved
 - **BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each diagram generation pattern
+- **C4 LIMIT**: C4 diagrams restricted to levels 1, 2, 3 only (Context, Container, Component); never generate Level 4 (Code) diagrams
 
 ## Reference
 
