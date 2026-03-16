@@ -8,7 +8,6 @@ metadata:
 ---
 # Maven Best Practices
 
-
 Improve Maven POM configuration using industry-standard best practices.
 
 **What is covered in this Skill?**
@@ -24,7 +23,6 @@ Improve Maven POM configuration using industry-standard best practices.
 - Cross-module version consistency
 - Multi-module scope: After reading the root `pom.xml`, check for a `<modules>` section. If present, read **every** child module's `pom.xml` before making any recommendations.
 - Check each child for hardcoded versions that duplicate parent `<dependencyManagement>`, redundant `<pluginManagement>` blocks, properties that should be centralized, and version drift across sibling modules.
-
 
 ## Constraints
 

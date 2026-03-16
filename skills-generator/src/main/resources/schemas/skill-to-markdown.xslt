@@ -28,7 +28,6 @@ metadata:
 # </xsl:text>
     <xsl:value-of select="normalize-space(title)"/>
     <xsl:text>
-
 </xsl:text>
     <xsl:apply-templates select="goal"/>
     <xsl:apply-templates select="constraints"/>
@@ -36,10 +35,10 @@ metadata:
   </xsl:template>
 
   <!-- Preserve line breaks: do not use normalize-space() which collapses newlines -->
+  <!-- Single trailing newline: goal CDATA already ends with \n, so one more = one blank line before constraints -->
   <xsl:template match="goal">
     <xsl:value-of select="."/>
     <xsl:text>
-
 </xsl:text>
   </xsl:template>
 

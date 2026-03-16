@@ -40,7 +40,5 @@ Improve Maven POM configuration using industry-standard best practices.
     </constraint-list>
   </constraints>
 
-  <reference path="references/110-java-maven-best-practices.md" >
-    For detailed guidance, examples, and constraints, see [references/110-java-maven-best-practices.md](references/110-java-maven-best-practices.md)
-  </reference>
+  <reference path="references/110-java-maven-best-practices.md" />
 </skill>
