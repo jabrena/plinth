@@ -1011,11 +1011,13 @@ After generating class diagrams:
 
 ### Step 4: C4 Model Diagram Generation
 
-**Purpose**: Generate C4 model diagrams to visualize system architecture at different levels of abstraction (Context, Container, Component, and Code) based on code analysis and user preferences.
+**Purpose**: Generate C4 model diagrams to visualize system architecture at levels 1, 2, and 3 only (System Context, Container, Component) based on code analysis and user preferences. **Level 4 (Code) is NOT generated**—use UML class diagrams for implementation details.
 
 **Dependencies**: Only execute if the user selected C4 model diagrams in Step 1. Requires completion of Step 1.
 
 **CONDITIONAL EXECUTION**: Execute this step only if the user selected "C4 model diagrams" in Step 1.
+
+**LEVEL LIMITATION**: C4 diagram generation is restricted to levels 1, 2, and 3 only. Do NOT generate Level 4 (Code) diagrams.
 
 ## Implementation Strategy
 
@@ -1377,61 +1379,55 @@ After generating C4 diagrams:
 
 ## C4 Model Analysis Process
 
-**For each selected diagram level:**
+**For each selected diagram level (levels 1–3 only):**
 
 1. **Complete C4 Model** (if selected):
-- Generate all four levels of C4 diagrams
-- Start with System Context for business overview
-- Create Container diagrams for deployment architecture
-- Develop Component diagrams for logical structure
-- Add Code diagrams for critical implementations
+- Generate levels 1, 2, and 3 of C4 diagrams only
+- Start with System Context (Level 1) for business overview
+- Create Container diagrams (Level 2) for deployment architecture
+- Develop Component diagrams (Level 3) for logical structure
+- Do NOT generate Code (Level 4) diagrams
 
 2. **High-Level Diagrams Only** (if selected):
-- Focus on System Context and Container levels
+- Focus on System Context (Level 1) and Container (Level 2) levels
 - Emphasize business context and system boundaries
 - Show technology choices and deployment units
 - Document external integrations and dependencies
 
 3. **Detailed Diagrams Only** (if selected):
-- Focus on Component and Code levels
+- Focus on Component level (Level 3) only
 - Analyze internal system structure
 - Document component responsibilities and interfaces
-- Show implementation patterns and key classes
+- Do NOT generate Code (Level 4) diagrams—use UML class diagrams for implementation details
 
 ## Architecture Analysis Guidelines
 
-1. **System Context Analysis**:
+1. **System Context Analysis (Level 1)**:
 - Identify all external users and personas
 - Map external systems and third-party integrations
 - Define clear system boundaries and responsibilities
 - Document business capabilities and value propositions
 
-2. **Container Analysis**:
+2. **Container Analysis (Level 2)**:
 - Identify deployable units (web apps, services, databases)
 - Analyze technology stack and framework choices
 - Document communication protocols and API contracts
 - Map deployment and infrastructure requirements
 
-3. **Component Analysis**:
+3. **Component Analysis (Level 3)**:
 - Identify logical components within each container
 - Analyze component responsibilities and boundaries
 - Document inter-component communication patterns
 - Map business capabilities to technical components
 
-4. **Code Analysis**:
-- Focus on architecturally significant components
-- Show key classes, interfaces, and design patterns
-- Document important implementation decisions
-- Illustrate complex algorithmic or business logic
-
 ## File Organization Strategy
 
-**Based on user preferences:**
+**Based on user preferences (levels 1–3 only):**
 
 1. **Hierarchical Organization**:
-- Create separate files for each C4 level
-- Use consistent naming (context.puml, container.puml, etc.)
-- Generate comprehensive architecture.md with all levels
+- Create separate files for each C4 level (context.puml, container.puml, component.puml)
+- Do NOT create code-level diagram files
+- Generate comprehensive architecture.md with selected levels
 
 2. **Domain-Based Organization**:
 - Organize C4 diagrams by business domain or module
@@ -1439,7 +1435,7 @@ After generating C4 diagrams:
 - Include cross-domain dependency diagrams
 
 3. **Single Comprehensive File**:
-- Include all selected C4 levels in one document
+- Include all selected C4 levels (1–3) in one document
 - Provide clear navigation and cross-references
 - Use consistent styling and formatting
 
@@ -1464,6 +1460,7 @@ After generating C4 diagrams:
 #### Step Constraints
 
 - **MUST** only execute if "C4 model diagrams" was selected in Step 1
+- **MUST** limit C4 diagrams to levels 1, 2, and 3 only—never generate Level 4 (Code) diagrams
 - **MUST** use codebase_search extensively to analyze system architecture
 - **MUST** generate accurate diagrams that reflect actual system structure
 - **MUST** use proper PlantUML syntax with C4-PlantUML library
