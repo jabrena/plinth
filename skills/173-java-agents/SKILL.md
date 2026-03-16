@@ -10,13 +10,24 @@ metadata:
 
 Generate a comprehensive AGENTS.md file for Java repositories through a modular, step-based interactive process that covers role definition, tech stack, file structure, commands, Git workflow, and contributor boundaries. **This is an interactive SKILL**.
 
-**Prerequisites:** No Maven validation is required before generating AGENTS.md. However, review the project structure and existing documentation before starting to provide accurate answers during Step 1.
+**What is covered in this Skill?**
 
-**Core areas:** AGENTS.md generation for Java repositories of any complexity, role and expertise definition for AI agents and contributors, tech stack documentation (language, build tool, frameworks, pipelines), file structure mapping with read/write boundaries, command catalogue for build/test/deploy/run workflows, Git workflow conventions (branching strategy, commit message format), and contributor boundaries using ✅ Always do / ⚠️ Ask first / 🚫 Never do formatting.
+- AGENTS.md generation for Java repositories of any complexity
+- Role and expertise definition for AI agents and contributors
+- Tech stack documentation: language, build tool, frameworks, pipelines
+- File structure mapping with read/write boundaries
+- Command catalogue for build/test/deploy/run workflows
+- Git workflow conventions: branching strategy, commit message format
+- Contributor boundaries using ✅ Always do / ⚠️ Ask first / 🚫 Never do formatting
 
-**Multi-step scope:** Step 1 assesses project requirements through 6 targeted questions covering role/expertise, tech stack, directory layout, key commands, Git workflow, and contributor boundaries — all questions must be answered in strict order before proceeding. Step 2 generates the AGENTS.md file in the project root by mapping each answer to the corresponding section, handles existing files via overwrite/merge/backup strategies, validates that all 6 sections are present and correctly formatted, and confirms that boundaries use the required ✅ / ⚠️ / 🚫 icons.
+**Multi-step scope:** Step 1 assesses project requirements through 6 targeted questions (role/expertise, tech stack, directory layout, key commands, Git workflow, contributor boundaries) — all questions must be answered in strict order. Step 2 generates the AGENTS.md by mapping each answer to the corresponding section, handles existing files via overwrite/merge/backup strategies, validates all 6 sections, and confirms boundaries use ✅/⚠️/🚫 icons.
 
-**Before applying changes:** Read the reference for detailed good/bad examples, constraints, and safeguards for each AGENTS.md generation pattern.
+## Constraints
+
+No Maven validation is required before generating AGENTS.md. Review the project structure and existing documentation before starting to provide accurate answers during Step 1.
+
+- **BEFORE STARTING**: Review the project structure and existing documentation to provide accurate answers during Step 1
+- **BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each AGENTS.md generation pattern
 
 ## Reference
 

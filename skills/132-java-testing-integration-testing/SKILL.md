@@ -10,13 +10,30 @@ metadata:
 
 Set up robust integration-test infrastructure for Java services using WireMock to stub outbound HTTP dependencies.
 
-**Prerequisites:** Run `./mvnw compile` or `mvn compile` before applying any change. If compilation fails, **stop immediately** and do not proceed — compilation failure is a blocking condition.
+**What is covered in this Skill?**
 
-**Core areas:** Infrastructure topology detection (scanning imports for `HttpClient`, `feign.*`, `retrofit2.*`, `RestTemplate`, etc.), abstract `BaseIntegrationTest` base class, `WireMockExtension` with `@RegisterExtension`, dynamic port allocation (`dynamicPort()`), `usingFilesUnderClasspath("wiremock")`, `@BeforeAll` + `System.setProperty()` for coordinate propagation, concrete test classes extending the base class, WireMock JSON mapping files (`bodyFileName` referencing `wiremock/files/`), programmatic stub registration via WireMock DSL, per-test stub isolation (register stubs inside each test method), fault injection (503 service unavailable, network latency with `withFixedDelay`), request verification (`WIREMOCK.verify`), `wiremock-standalone` Maven dependency (test scope), and anti-patterns (global `@BeforeAll` stubs causing order-dependent failures, Mockito-mocked HTTP clients bypassing the real HTTP pipeline, hardcoded ports or URLs in property files).
+- Infrastructure topology detection: scanning imports for `HttpClient`, `feign.*`, `retrofit2.*`, `RestTemplate`
+- Abstract `BaseIntegrationTest` base class
+- `WireMockExtension` with `@RegisterExtension`, dynamic port allocation (`dynamicPort()`)
+- `usingFilesUnderClasspath("wiremock")`, `@BeforeAll` + `System.setProperty()` for coordinate propagation
+- WireMock JSON mapping files (`bodyFileName` referencing `wiremock/files/`)
+- Programmatic stub registration via WireMock DSL
+- Per-test stub isolation: register stubs inside each test method
+- Fault injection: 503 service unavailable, network latency with `withFixedDelay`
+- Request verification via `WIREMOCK.verify`
+- `wiremock-standalone` Maven dependency (test scope)
+- Anti-patterns: global `@BeforeAll` stubs, Mockito-mocked HTTP clients, hardcoded ports or URLs
 
-**Scope:** The reference is organized by examples (with good/bad code patterns) for each core area. Apply recommendations based on applicable examples; validate compilation before changes and run `./mvnw clean verify` or `mvn clean verify` after applying improvements.
+**Scope:** The reference is organized by examples (good/bad code patterns) for each core area. Apply recommendations based on applicable examples.
 
-**Before applying changes:** Read the reference for detailed examples, good/bad patterns, and constraints.
+## Constraints
+
+Before applying any integration test changes, ensure the project compiles. If compilation fails, stop immediately — do not proceed until resolved. After applying improvements, run full verification.
+
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **SAFETY**: If compilation fails, stop immediately and do not proceed — compilation failure is a blocking condition
+- **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
+- **BEFORE APPLYING**: Read the reference for detailed examples, good/bad patterns, and constraints
 
 ## Reference
 

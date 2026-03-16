@@ -10,13 +10,29 @@ metadata:
 
 Identify and apply functional exception handling best practices in Java to improve error clarity, maintainability, and performance by eliminating exception overuse in favour of monadic error types.
 
-**Prerequisites:** Run `./mvnw validate` or `mvn validate` before applying any changes. If validation fails, **stop immediately** — do not proceed until the project is in a valid state. Also confirm the VAVR dependency (`io.vavr:vavr`) and SLF4J are present when introducing `Either` types.
+**What is covered in this Skill?**
 
-**Core areas:** `Optional<T>` for nullable values over throwing `NullPointerException` or `NotFoundException`, VAVR `Either<L,R>` for predictable business-logic failures, `CompletableFuture<T>` for async error handling, sealed classes and records for rich error type hierarchies with exhaustive pattern matching, enum-based error types for simple failure cases, functional composition with `flatMap`/`map`/`peek`/`peekLeft` for chaining operations that can fail, structured logging at appropriate severity levels (warn/info for business failures, error for system failures), checked vs unchecked exception discipline, and exception chaining with full causal context when exceptions are unavoidable.
+- `Optional<T>` for nullable values over throwing `NullPointerException` or `NotFoundException`
+- VAVR `Either<L,R>` for predictable business-logic failures
+- `CompletableFuture<T>` for async error handling
+- Sealed classes and records for rich error type hierarchies with exhaustive pattern matching
+- Enum-based error types for simple failure cases
+- Functional composition: `flatMap`/`map`/`peek`/`peekLeft` for chaining operations that can fail
+- Structured logging: warn/info for business failures, error for system failures
+- Checked vs unchecked exception discipline
+- Exception chaining with full causal context when exceptions are unavoidable
 
-**Scope:** The reference is organized by examples (with good/bad code patterns) for each core area. Apply recommendations based on applicable examples; validate compilation before changes and run `./mvnw clean verify` or `mvn clean verify` after applying improvements.
+**Scope:** The reference is organized by examples (good/bad code patterns) for each core area. Apply recommendations based on applicable examples.
 
-**Before applying changes:** Read the reference for detailed good/bad examples, constraints, and safeguards for each functional exception handling pattern.
+## Constraints
+
+Before applying any functional exception handling changes, ensure the project validates. When introducing Either types, confirm the VAVR dependency (io.vavr:vavr) and SLF4J are present.
+
+- **MANDATORY**: Run `./mvnw validate` or `mvn validate` before applying any changes
+- **SAFETY**: If validation fails, stop immediately — do not proceed until the project is in a valid state
+- **DEPENDENCY**: When introducing `Either` types, confirm VAVR (`io.vavr:vavr`) and SLF4J are present
+- **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
+- **BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each functional exception handling pattern
 
 ## Reference
 

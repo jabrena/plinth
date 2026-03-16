@@ -10,13 +10,31 @@ metadata:
 
 Review and improve Java code using comprehensive type design principles that apply typography concepts to code structure and organization for maximum clarity and maintainability.
 
-**Prerequisites:** Run `./mvnw compile` or `mvn compile` before applying any change. If compilation fails, **stop immediately** and do not proceed — compilation failure is a blocking condition.
+**What is covered in this Skill?**
 
-**Core areas:** Clear type hierarchies (nested static classes, logical structure), consistent naming conventions (domain-driven patterns, uniform interface/implementation naming), strategic whitespace for readability, type-safe wrappers (value objects replacing primitive obsession, EmailAddress, Money), generic type parameters (flexible reusable types, bounded parameters), domain-specific fluent interfaces (builder pattern, method chaining), type "weights" (conceptual importance assignment — core domain vs supporting vs utility), type contrast through interfaces (contract vs implementation separation), aligned method signatures (consistent parameter and return types across related classes), self-documenting code (clear descriptive names), BigDecimal for precision-sensitive calculations (financial/monetary operations), and strategic type selection (Optional, Set vs List, interfaces over concrete types).
+- Clear type hierarchies: nested static classes, logical structure
+- Consistent naming conventions: domain-driven patterns, uniform interface/implementation naming
+- Strategic whitespace for readability
+- Type-safe wrappers: value objects replacing primitive obsession (EmailAddress, Money)
+- Generic type parameters: flexible reusable types, bounded parameters
+- Domain-specific fluent interfaces: builder pattern, method chaining
+- Type "weights": conceptual importance — core domain vs supporting vs utility
+- Type contrast through interfaces: contract vs implementation separation
+- Aligned method signatures: consistent parameter and return types across related classes
+- Self-documenting code: clear descriptive names
+- BigDecimal for precision-sensitive calculations (financial/monetary operations)
+- Strategic type selection: Optional, Set vs List, interfaces over concrete types
 
-**Scope:** The reference is organized by examples (with good/bad code patterns) for each core area. Apply recommendations based on applicable examples; validate compilation before changes and run `./mvnw clean verify` or `mvn clean verify` after applying improvements.
+**Scope:** The reference is organized by examples (good/bad code patterns) for each core area. Apply recommendations based on applicable examples.
 
-**Before applying changes:** Read the reference for detailed examples, good/bad patterns, and constraints.
+## Constraints
+
+Before applying any type design changes, ensure the project compiles. If compilation fails, stop immediately — do not proceed until resolved. After applying improvements, run full verification.
+
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **SAFETY**: If compilation fails, stop immediately and do not proceed — compilation failure is a blocking condition
+- **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
+- **BEFORE APPLYING**: Read the reference for detailed examples, good/bad patterns, and constraints
 
 ## Reference
 

@@ -10,13 +10,30 @@ metadata:
 
 Review and improve Java unit tests using modern JUnit 5, AssertJ, and Mockito best practices.
 
-**Prerequisites:** Run `./mvnw compile` or `mvn compile` before applying any change. If compilation fails, **stop immediately** and do not proceed — compilation failure is a blocking condition.
+**What is covered in this Skill?**
 
-**Core areas:** JUnit 5 annotations (`@Test`, `@BeforeEach`, `@AfterEach`, `@DisplayName`, `@Nested`, `@ParameterizedTest`), AssertJ fluent assertions (`assertThat`, `assertThatThrownBy`), Given-When-Then test structure, descriptive test naming, single-responsibility tests, test independence and isolated state, parameterized tests with `@ValueSource`/`@CsvSource`/`@MethodSource`, Mockito dependency mocking (`@Mock`, `@InjectMocks`, `MockitoExtension`), code coverage guidance (JaCoCo), package-private test visibility, code-splitting strategies (small methods, helper functions), testing anti-patterns (reflection, shared state, hard-coded values, testing implementation details), state management (immutable objects, `@BeforeEach` reset), error handling (`assertThatThrownBy`, exception messages), JSpecify null-safety (`@NullMarked`, `@Nullable`), RIGHT-BICEP coverage principles, A-TRIP test quality characteristics, and CORRECT boundary condition verification.
+- JUnit 5 annotations: `@Test`, `@BeforeEach`, `@AfterEach`, `@DisplayName`, `@Nested`, `@ParameterizedTest`
+- AssertJ fluent assertions: `assertThat`, `assertThatThrownBy`
+- Given-When-Then test structure, descriptive test naming, single-responsibility tests
+- Test independence and isolated state
+- Parameterized tests: `@ValueSource`/`@CsvSource`/`@MethodSource`
+- Mockito dependency mocking: `@Mock`, `@InjectMocks`, `MockitoExtension`
+- Code coverage guidance (JaCoCo), package-private test visibility
+- Testing anti-patterns: reflection, shared state, hard-coded values, testing implementation details
+- Error handling: `assertThatThrownBy`, exception messages
+- JSpecify null-safety: `@NullMarked`, `@Nullable`
+- RIGHT-BICEP coverage principles, A-TRIP test quality, CORRECT boundary condition verification
 
-**Scope:** The reference is organized by examples (with good/bad code patterns) for each core area. Apply recommendations based on applicable examples; validate compilation before changes and run `./mvnw clean verify` or `mvn clean verify` after applying improvements.
+**Scope:** The reference is organized by examples (good/bad code patterns) for each core area. Apply recommendations based on applicable examples.
 
-**Before applying changes:** Read the reference for detailed examples, good/bad patterns, and constraints.
+## Constraints
+
+Before applying any unit test changes, ensure the project compiles. If compilation fails, stop immediately — do not proceed until resolved. After applying improvements, run full verification.
+
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **SAFETY**: If compilation fails, stop immediately and do not proceed — compilation failure is a blocking condition
+- **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
+- **BEFORE APPLYING**: Read the reference for detailed examples, good/bad patterns, and constraints
 
 ## Reference
 

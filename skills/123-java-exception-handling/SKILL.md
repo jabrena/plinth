@@ -10,13 +10,34 @@ metadata:
 
 Identify and apply robust Java exception handling practices to improve error clarity, security, debuggability, and system reliability.
 
-**Prerequisites:** Run `./mvnw compile` or `mvn compile` before applying any changes. If compilation fails, **stop immediately** — do not proceed until the project is in a valid state.
+**What is covered in this Skill?**
 
-**Core areas:** Specific exception types instead of generic `Exception`/`RuntimeException`, try-with-resources for automatic resource cleanup, secure exception messages that avoid information leakage, exception chaining to preserve full error context, early input validation with `IllegalArgumentException`/`NullPointerException`, `InterruptedException` handling with interrupted-status restoration, `@throws` JavaDoc documentation, fail-fast principle, structured logging with correlation IDs avoiding log-and-throw duplication, API boundary translation via centralized exception mappers, bounded retry with backoff for idempotent operations only, timeout enforcement with deadline propagation, `Throwable#addSuppressed` for secondary cleanup failures, never catching `Throwable`/`Error`, observability via error metrics, and failure propagation in async `CompletionStage` code.
+- Specific exception types instead of generic `Exception`/`RuntimeException`
+- try-with-resources for automatic resource cleanup
+- Secure exception messages that avoid information leakage
+- Exception chaining to preserve full error context
+- Early input validation with `IllegalArgumentException`/`NullPointerException`
+- `InterruptedException` handling with interrupted-status restoration
+- `@throws` JavaDoc documentation, fail-fast principle
+- Structured logging with correlation IDs, avoiding log-and-throw duplication
+- API boundary translation via centralized exception mappers
+- Bounded retry with backoff for idempotent operations only
+- Timeout enforcement with deadline propagation
+- `Throwable#addSuppressed` for secondary cleanup failures
+- Never catching `Throwable`/`Error`
+- Observability via error metrics
+- Failure propagation in async `CompletionStage` code
 
-**Scope:** The reference is organized by examples (with good/bad code patterns) for each core area. Apply recommendations based on applicable examples; validate compilation before changes and run `./mvnw clean verify` or `mvn clean verify` after applying improvements.
+**Scope:** The reference is organized by examples (good/bad code patterns) for each core area. Apply recommendations based on applicable examples.
 
-**Before applying changes:** Read the reference for detailed good/bad examples, constraints, and safeguards for each exception handling pattern.
+## Constraints
+
+Before applying any exception handling changes, ensure the project compiles. If compilation fails, stop immediately — do not proceed until resolved. After applying improvements, run full verification.
+
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any changes
+- **SAFETY**: If compilation fails, stop immediately — do not proceed until the project is in a valid state
+- **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
+- **BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each exception handling pattern
 
 ## Reference
 
