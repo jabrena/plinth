@@ -20,8 +20,6 @@ Generate a comprehensive AGENTS.md file for Java repositories through a modular,
 - Git workflow conventions: branching strategy, commit message format
 - Contributor boundaries using ✅ Always do / ⚠️ Ask first / 🚫 Never do formatting
 
-**Multi-step scope:** Step 1 assesses project requirements through 6 targeted questions (role/expertise, tech stack, directory layout, key commands, Git workflow, contributor boundaries) — all questions must be answered in strict order. Step 2 generates the AGENTS.md by mapping each answer to the corresponding section, handles existing files via overwrite/merge/backup strategies, validates all 6 sections, and confirms boundaries use ✅/⚠️/🚫 icons.
-
 ## Constraints
 
 No Maven validation is required before generating AGENTS.md. Review the project structure and existing documentation before starting to provide accurate answers during Step 1.

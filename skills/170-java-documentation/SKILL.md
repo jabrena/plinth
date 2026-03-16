@@ -18,8 +18,6 @@ Generate comprehensive Java project documentation through a modular, step-based 
 - File handling strategies: overwrite/add/backup/skip
 - Final documentation validation with `./mvnw clean compile` and `./mvnw javadoc:javadoc`
 
-**Multi-step scope:** Step 1 assesses documentation preferences (README.md, package-info.java, Javadoc). Step 2 generates README.md based on code analysis — conditionally executed if selected. Step 3 generates package-info.java for every package in `src/main/java` — conditionally executed if selected. Step 4 enhances Javadoc for public/protected APIs — conditionally executed if selected. Step 5 validates all generated documentation and produces a summary of files created, modified, and skipped.
-
 ## Constraints
 
 Before applying any documentation generation, ensure the project validates. If validation fails, stop immediately — do not proceed until all validation errors are resolved.

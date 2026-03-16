@@ -20,8 +20,6 @@ Generate comprehensive Java project diagrams through a modular, step-based inter
 - File organization strategies: single-file, separate-files, or integrated with existing documentation
 - Final diagram validation with PlantUML syntax checking
 
-**Multi-step scope:** Step 1 assesses diagram preferences. Step 2 generates UML sequence diagrams — conditionally executed if selected. Step 3 generates UML class diagrams — conditionally executed if selected. Step 4 generates C4 model diagrams — conditionally executed if selected. Step 5 generates UML state machine diagrams — conditionally executed if selected. Step 6 validates all generated diagrams and produces a comprehensive summary.
-
 ## Constraints
 
 Before applying any diagram generation, ensure the project validates. If validation fails, stop immediately — do not proceed until all validation errors are resolved.

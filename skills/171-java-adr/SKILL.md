@@ -17,8 +17,6 @@ Generate Architecture Decision Records (ADRs) for Java projects through an inter
 - MADR template generation
 - Validation with `./mvnw validate` or `mvn validate` before proceeding
 
-**Multi-step scope:** Step 1 assesses ADR preferences (storage location, template format). Step 2 generates the ADR through conversation: Phase 0 retrieves current date; Phase 1 gathers information one question at a time (decision topic, context, stakeholders — deciders/consulted/informed, decision drivers, options with pros and cons, chosen option with rationale, implementation consequences); Phase 2 produces the final ADR using the MADR template. Step 3 validates the ADR and produces a summary.
-
 ## Constraints
 
 Before applying any ADR generation, ensure the project validates. If validation fails, stop immediately — do not proceed until all validation errors are resolved.

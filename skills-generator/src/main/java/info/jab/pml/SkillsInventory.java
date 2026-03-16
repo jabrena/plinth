@@ -48,7 +48,7 @@ public final class SkillsInventory {
             String numericId = entry.numericId();
             validateSkillSummaryExists(numericId, entry.useXml());
             String skillId = entry.requiresSystemPrompt()
-                ? resolveSkillIdFromPrefix(Integer.parseInt(numericId))
+                ? resolveSkillIdFromPrefix(numericId)
                 : entry.skillId();
             skillIds.add(skillId);
         }
@@ -66,7 +66,7 @@ public final class SkillsInventory {
             String numericId = entry.numericId();
             validateSkillSummaryExists(numericId, entry.useXml());
             String skillId = entry.requiresSystemPrompt()
-                ? resolveSkillIdFromPrefix(Integer.parseInt(numericId))
+                ? resolveSkillIdFromPrefix(numericId)
                 : entry.skillId();
             descriptors.add(new SkillDescriptor(skillId, entry.requiresSystemPrompt(), entry.useXml()));
         }
@@ -79,25 +79,25 @@ public final class SkillsInventory {
     public record SkillDescriptor(String skillId, boolean requiresSystemPrompt, boolean useXml) {}
 
     /**
-     * Resolves skillId by finding the system-prompt XML that starts with {@code {id}-}.
+     * Resolves skillId by finding the system-prompt XML that starts with {@code {numericId}-}.
      *
-     * @param id numeric id from inventory
+     * @param numericId numeric id from inventory (e.g. "111" or "014")
      * @return full skillId (e.g. 110-java-maven-best-practices)
      * @throws RuntimeException if none or multiple system-prompts match
      */
-    public static String resolveSkillIdFromPrefix(int id) {
-        String prefix = id + "-";
+    public static String resolveSkillIdFromPrefix(String numericId) {
+        String prefix = numericId + "-";
         List<String> matches = listSystemPromptBaseNames().stream()
             .filter(name -> name.startsWith(prefix) && name.endsWith(".xml"))
             .map(name -> name.substring(0, name.length() - 4))
             .toList();
 
         if (matches.isEmpty()) {
-            throw new RuntimeException("No system-prompt found for id " + id
+            throw new RuntimeException("No system-prompt found for id " + numericId
                 + ". Add a system-prompts/" + prefix + "*.xml file in system-prompts-generator.");
         }
         if (matches.size() > 1) {
-            throw new RuntimeException("Multiple system-prompts match id " + id + ": " + matches);
+            throw new RuntimeException("Multiple system-prompts match id " + numericId + ": " + matches);
         }
         return matches.getFirst();
     }

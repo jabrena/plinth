@@ -333,7 +333,7 @@ After generating the ADR document, provide these additional recommendations:
 - **MUST** get current date using `date` command before starting ADR creation
 - **MUST** ask questions ONE BY ONE in the exact order specified
 - **MUST** WAIT for user response to each question before proceeding to the next
-- **MUST** use the ADR template from assets/architecture/adr-template.md
+- **MUST** use the ADR template from assets/architecture/adr-general-purpose-template.md
 - **MUST** replace all template placeholders with actual content from user responses
 - **MUST** use current date to replace date placeholders in template
 - **MUST** create ADR file in location specified by user in Step 1

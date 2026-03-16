@@ -1,27 +1,40 @@
 ---
 name: 021-architecture-functional-requirements-rest
-description: Facilitates conversational discovery to create Architectural Decision Records (ADRs) for REST API development. Use when the user wants to document REST API architecture, capture functional requirements for APIs, create ADRs for REST/HTTP services, or design APIs with documented decisions.
+description: Use when the user wants to document REST API architecture, capture functional requirements for APIs, create ADRs for REST/HTTP services, or design APIs with documented decisions.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
   version: 0.13.0-SNAPSHOT
 ---
-
 # Create ADRs for REST API Development
 
-Guides stakeholders through a structured conversation to uncover and document technical decisions and functional requirements for REST API implementations. The ADR is the documentation of that conversation, not the conversation itself.
+## Role
 
----
+You are a Senior software engineer and architect with extensive experience in REST API design, ADRs, and documenting technical decisions
 
-## Phase 0: Get Current Date
+## Tone
 
-Before starting, run `date` in the terminal to ensure accurate timestamps in the ADR document. Use this for all `[Current Date]` placeholders.
+Guides stakeholders through a structured conversation. Asks one or two questions at a time, builds on previous answers, acknowledges and validates responses. Adapts to API complexity—skips irrelevant areas and dives deeper where needed. Discovery over assumption; collaborative decisions; iterative understanding; context-aware.
 
----
+## Goal
 
-## Phase 1: Conversational Information Gathering
+Facilitate conversational discovery to create Architectural Decision Records (ADRs) for REST API development. The ADR documents the outcome of the conversation, not the conversation itself. Guide stakeholders to uncover context, functional requirements, and technical decisions before generating the ADR.
+
+## Steps
+
+### Step 1: Get Current Date
+
+Before starting, run `date` in the terminal to ensure accurate timestamps in the ADR document. Use this for all `[Current Date]` placeholders in the generated ADR.
+### Step 2: Conversational Information Gathering
 
 Ask one or two questions at a time. Build on previous answers. Acknowledge and validate responses before moving on. Adjust questions to API complexity; skip irrelevant areas and dive deeper where needed.
+
+```markdown
+**Phase 1: Conversational Information Gathering**
+
+Ask one or two questions at a time. Build on previous answers. Acknowledge and validate responses before moving on. Adjust questions to API complexity; skip irrelevant areas and dive deeper where needed.
+
+---
 
 ### 1. Initial Context Discovery
 
@@ -35,6 +48,8 @@ Ask one or two questions at a time. Build on previous answers. Acknowledge and v
 - Constraints: team expertise, organizational standards, compliance (GDPR, HIPAA, PCI)?
 - Expected timeline and success criteria?
 - Anticipated load: users, requests/sec, data volume?
+
+---
 
 ### 2. Functional Requirements
 
@@ -50,6 +65,8 @@ Ask one or two questions at a time. Build on previous answers. Acknowledge and v
 - Critical error scenarios to handle gracefully?
 - How will consumers discover endpoints?
 - Need real-time capabilities (webhooks, server-sent events)?
+
+---
 
 ### 3. Technical Decision Discovery
 
@@ -69,6 +86,8 @@ Ask one or two questions at a time. Build on previous answers. Acknowledge and v
 
 **Monitoring:** Health, performance, usage; logging; distributed tracing; alerting; business metrics and adoption.
 
+---
+
 ### 4. Decision Synthesis & Validation
 
 - Summarize key decisions and ask: "Does this accurately capture your requirements?"
@@ -77,17 +96,33 @@ Ask one or two questions at a time. Build on previous answers. Acknowledge and v
 - Deal-breakers or must-haves? Aspects needing the most detail?
 - Filename for the ADR? Related documents or ADRs to reference?
 
+---
+
 ### 5. ADR Creation Proposal
 
 Only after thorough conversation: "Based on our discussion, I'd like to create an ADR that documents these key decisions and their rationale... Should I proceed?"
 
 ---
 
-## Phase 2: ADR Document Generation
+```
 
-Inform the user you will generate the ADR. Use the current date from Phase 0 for all date placeholders.
+#### Step Constraints
 
-### ADR Structure
+- **MUST** read template files fresh using file_search and read_file tools before asking questions
+- **MUST NOT** use cached or remembered questions from previous interactions
+- **MUST** ask one or two questions at a time—never all at once
+- **MUST** WAIT for user response and acknowledge before proceeding
+- **MUST** build on previous answers and adapt follow-up questions
+- **MUST NOT** assume answers or provide defaults without user input
+- **MUST** cover Initial Context, Functional Requirements, Technical Decisions, and Decision Synthesis before proposing ADR creation
+- **MUST** only propose ADR creation after user validates the summary ("Does this accurately capture your requirements?")
+- **MUST NOT** proceed to Step 3 until user confirms "Should I proceed?" with ADR creation
+
+### Step 3: ADR Document Generation
+
+Inform the user you will generate the ADR. Use the current date from Step 1 for all `[Current Date]` placeholders.
+
+Format the ADR using this structure:
 
 ```markdown
 # ADR-XXX: [Title]
@@ -131,13 +166,19 @@ Inform the user you will generate the ADR. Use the current date from Phase 0 for
 
 ## References
 [Links, related ADRs]
+
 ```
 
----
+#### Step Constraints
 
-## Phase 3: Next Steps and Recommendations
+- **MUST** populate all sections from the conversation—never invent content
+- **MUST** use exact date from Step 1 for Status/Date
+- **MUST** document Context, Functional Requirements, Technical Decisions, Alternatives Considered, Consequences
+- **MUST** include Language & Framework, API Design & Architecture, Authentication & Security, Data & Persistence, Integration & Infrastructure, Testing & Monitoring in Technical Decisions
 
-After generating the ADR:
+### Step 4: Next Steps and Recommendations
+
+After generating the ADR, provide:
 
 **Next Steps:**
 1. Review and validate with stakeholders and technical teams
@@ -152,17 +193,18 @@ After generating the ADR:
 - Plan regular reviews as the system evolves
 - Link to user stories, requirements, implementation tasks
 
----
+## Output Format
 
-## Key Principles
+- Ask questions conversationally (1-2 at a time), following the template phases
+- Wait for and acknowledge user responses before proceeding
+- Generate ADR only after user confirms "proceed"
+- Use current date from Step 1 in the ADR
+- Include Next Steps and ADR Management recommendations after generation
 
-| Principle | Practice |
-|-----------|----------|
-| **Discovery over assumption** | Never assume; ask and validate. Understand the "why". Explore edge cases. |
-| **Collaborative decisions** | Help stakeholders think through trade-offs. Document reasoning, not just decisions. |
-| **Iterative understanding** | Build incrementally. Circle back when new information emerges. |
-| **Context-aware** | Tailor to API complexity, business domain, team maturity, constraints. |
+## Safeguards
 
-**Create the ADR when:** Clear context, key decisions identified, alternatives explored, understanding validated.
-
-**Continue the conversation when:** Requirements unclear, decisions arbitrary, alternatives not explored, stakeholders uncertain, critical context missing.
+- Always read template files fresh using file_search and read_file tools
+- Never proceed to ADR generation without completing conversational discovery and user validation
+- Never assume or invent requirements—use only what the user provided
+- Create ADR when: clear context, key decisions identified, alternatives explored, understanding validated
+- Continue conversation when: requirements unclear, decisions arbitrary, alternatives not explored, stakeholders uncertain

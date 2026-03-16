@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+      id="020-architecture-functional-requirements-cli"
+      interactive="true">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.13.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+  </metadata>
+
+  <title>Create ADRs for CLI Development</title>
+  <description>Facilitates conversational discovery to create Architectural Decision Records (ADRs) for CLI development. Use when the user wants to document CLI architecture, capture functional requirements for a command-line tool, create ADRs for CLI projects, or design CLI applications with documented decisions.</description>
+  <goal><![CDATA[
+Guide stakeholders through a structured conversation to uncover and document technical decisions and functional requirements for CLI applications. **This is an interactive SKILL**. The ADR is the documentation of that conversation, not the conversation itself.
+
+**What is covered in this Skill?**
+
+- Initial context: CLI purpose, users, constraints, timeline
+- Functional requirements: workflows, commands, input/output, UX
+- Technical decisions: language/framework, architecture, data, integration, testing, distribution
+- Decision synthesis and validation before ADR creation
+- ADR document generation and next steps
+]]></goal>
+
+  <constraints>
+    <constraints-description>Use conversational discovery—ask 1-2 questions at a time, build on answers, validate before proceeding. Only create ADR after thorough conversation and user confirmation.</constraints-description>
+    <constraint-list>
+      <constraint>**MANDATORY**: Run `date` before starting to get accurate timestamps for the ADR</constraint>
+      <constraint>**MUST**: Read the reference template fresh—do not use cached questions</constraint>
+      <constraint>**MUST**: Ask one or two questions at a time; never all at once</constraint>
+      <constraint>**MUST**: Validate summary with user ("Does this sound accurate?") before proposing ADR creation</constraint>
+      <constraint>**MUST**: Wait for user to confirm "proceed" before generating the ADR</constraint>
+    </constraint-list>
+  </constraints>
+
+  <reference path="references/020-architecture-functional-requirements-cli.md" />
+</skill>
