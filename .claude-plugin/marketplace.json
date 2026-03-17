@@ -13,8 +13,8 @@
     },
     "plugins": [
         {
-            "name": "014-agile-user-story",
-            "source": "./skills/014-agile-user-story",
+            "name": "014-agile-create-user-story",
+            "source": "./skills/014-agile-create-user-story",
             "description": "Guides the creation of agile user stories and Gherkin feature files. Use when the user wants to create a user story, write acceptance criteria, define Gherkin scenarios, or author BDD feature files.",
             "version": "0.13.0"
         },

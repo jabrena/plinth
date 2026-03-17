@@ -12,7 +12,7 @@ The project provides a curated collection of `System prompts` & `Skills` for mod
 
 The project add support for:
 
-- **AI-Driven Agile:** `User Stories` & `AI Planning`
+- **AI-Driven Agile:** `User Stories`, `Gherkin` & `AI Planning`
 - **Architecture:** `ADRs`& `UML/C4/ER Diagrams`
 - **Java development:** `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation` & `Spring Boot`
 - **AI Tooling:** `AGENTS.md`
