@@ -21,8 +21,9 @@ Use the following commands to list and install the Skills:
 brew install node
 sudo apt install nodejs npm
 
+npx skills --help
 npx skills add jabrena/cursor-rules-java --list
-npx skills add jabrena/cursor-rules-java
+npx skills add jabrena/cursor-rules-java --all --agent cursor
 ```
 
 ### skillsjars
