@@ -22,6 +22,10 @@ spring:
       repositories:
         enabled: true
 
+  flyway:
+    baseline-on-migrate: true
+    baseline-version: 2
+
 # OpenAPI Documentation
 springdoc:
   api-docs:
