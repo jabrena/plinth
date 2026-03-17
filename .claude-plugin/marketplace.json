@@ -1,0 +1,202 @@
+{
+    "name": "cursor-rules-java",
+    "owner": {
+        "name": "Juan Antonio Breña Moral",
+        "email": "bren@juanantonio.info"
+    },
+    "metadata": {
+        "description": "Curated collection of System prompts & Skills for moden SDLC that help software engineers and pipelines in their daily work for Java Enterprise development.",
+        "homepage": "https://jabrena.github.io/cursor-rules-java/",
+        "repository": "https://github.com/jabrena/cursor-rules-java",
+        "version": "0.13.0",
+        "license": "Apache-2.0"
+    },
+    "plugins": [
+        {
+            "name": "014-agile-user-story",
+            "source": "./skills/014-agile-user-story",
+            "description": "Guides the creation of agile user stories and Gherkin feature files. Use when the user wants to create a user story, write acceptance criteria, define Gherkin scenarios, or author BDD feature files.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "020-architecture-functional-requirements-cli",
+            "source": "./skills/020-architecture-functional-requirements-cli",
+            "description": "Create ADRs for CLI development. Use when the user wants to document CLI architecture, capture functional requirements for a command-line tool, create ADRs for CLI projects, or design CLI applications with documented decisions.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "021-architecture-functional-requirements-rest",
+            "source": "./skills/021-architecture-functional-requirements-rest",
+            "description": "Create ADRs for REST API development. Use when the user wants to document REST API architecture, capture functional requirements for APIs, create ADRs for REST/HTTP services, or design APIs with documented decisions.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "030-architecture-non-functional-requirements",
+            "source": "./skills/030-architecture-non-functional-requirements",
+            "description": "Create ADRs for Non-Functional Requirements using the ISO/IEC 25010:2023 quality model. Use when documenting quality attributes, NFR decisions, security/performance/scalability architecture, or designing systems with measurable quality criteria.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "040-planning-enhance-ai-plan-mode",
+            "source": "./skills/040-planning-enhance-ai-plan-mode",
+            "description": "Java Design Plan Creation for Cursor Plan Mode. Use when creating a plan, designing an implementation, structuring a development plan, or using plan mode for outside-in TDD, feature implementation, or refactoring work.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "110-java-maven-best-practices",
+            "source": "./skills/110-java-maven-best-practices",
+            "description": "Review, improve, or troubleshoot Maven pom.xml — dependency management with BOMs, plugin configuration, version centralization, multi-module project structure, build profiles.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "111-java-maven-dependencies",
+            "source": "./skills/111-java-maven-dependencies",
+            "description": "Add Maven dependencies for improved code quality — nullness annotations (JSpecify), static analysis (Error Prone + NullAway), functional programming (VAVR), or architecture testing (ArchUnit).",
+            "version": "0.13.0"
+        },
+        {
+            "name": "112-java-maven-plugins",
+            "source": "./skills/112-java-maven-plugins",
+            "description": "Add or configure Maven plugins — enforcer, surefire, failsafe, jacoco, pitest, spotbugs, pmd, OWASP, Spotless, JMH — through a consultative, modular step-by-step approach.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "113-java-maven-documentation",
+            "source": "./skills/113-java-maven-documentation",
+            "description": "Create DEVELOPER.md for Maven projects — combining a fixed base template with dynamic sections from pom.xml, including Plugin Goals Reference, Maven Profiles table, and Submodules table.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "121-java-object-oriented-design",
+            "source": "./skills/121-java-object-oriented-design",
+            "description": "Review, improve, or refactor Java code for OOP quality — SOLID, DRY, YAGNI, class/interface design, code smells (God Class, Feature Envy, Data Clumps), exception handling.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "122-java-type-design",
+            "source": "./skills/122-java-type-design",
+            "description": "Review or refactor Java code for type design quality — type hierarchies, naming conventions, value objects, generic type parameters, fluent interfaces, precision-appropriate numeric types.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "123-java-exception-handling",
+            "source": "./skills/123-java-exception-handling",
+            "description": "Apply Java exception handling best practices — specific exception types, try-with-resources, exception chaining, fail-fast validation, @throws documentation, logging policy, API boundary translation.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "124-java-secure-coding",
+            "source": "./skills/124-java-secure-coding",
+            "description": "Apply Java secure coding best practices — input validation, injection defence, least privilege, strong crypto, secure exception handling, secrets management, avoiding unsafe deserialization.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "125-java-concurrency",
+            "source": "./skills/125-java-concurrency",
+            "description": "Apply Java concurrency best practices — thread safety, ExecutorService, Producer-Consumer patterns, CompletableFuture, immutability, virtual threads, structured concurrency, scoped values.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "128-java-generics",
+            "source": "./skills/128-java-generics",
+            "description": "Review or refactor Java code for generics quality — avoiding raw types, PECS principle, bounded type parameters, diamond operator, type erasure, Records/sealed types integration.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "131-java-testing-unit-testing",
+            "source": "./skills/131-java-testing-unit-testing",
+            "description": "Review, improve, or write Java unit tests — JUnit 5, AssertJ, Given-When-Then, parameterized tests, Mockito, boundary conditions (RIGHT-BICEP, CORRECT, A-TRIP), JSpecify null-safety.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "132-java-testing-integration-testing",
+            "source": "./skills/132-java-testing-integration-testing",
+            "description": "Set up or improve Java integration tests — BaseIntegrationTest with WireMock, HTTP client detection, JSON mapping files, stub isolation, HTTP interaction verification.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "141-java-refactoring-with-modern-features",
+            "source": "./skills/141-java-refactoring-with-modern-features",
+            "description": "Refactor Java code to adopt modern features (Java 8+) — lambdas, Stream API, Optional, java.time, collection factory methods, CompletableFuture, text blocks, var, Java 25 features.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "142-java-functional-programming",
+            "source": "./skills/142-java-functional-programming",
+            "description": "Apply functional programming principles in Java — Records, pure functions, lambdas, Stream API, Optional, pattern matching, sealed classes, Stream Gatherers, effect boundary separation.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "143-java-functional-exception-handling",
+            "source": "./skills/143-java-functional-exception-handling",
+            "description": "Apply functional exception handling — Optional and VAVR Either, error type hierarchies with sealed classes, monadic pipelines, reserving exceptions for system-level failures.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "144-java-data-oriented-programming",
+            "source": "./skills/144-java-data-oriented-programming",
+            "description": "Apply data-oriented programming in Java — separating code from data with records, immutable data, pure transformation functions, flat denormalized structures, generic data access layers.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "170-java-documentation",
+            "source": "./skills/170-java-documentation",
+            "description": "Generate or improve Java project documentation — README.md, package-info.java, Javadoc — through a modular, step-based interactive process.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "171-java-adr",
+            "source": "./skills/171-java-adr",
+            "description": "Generate Architecture Decision Records (ADRs) through an interactive, conversational process that gathers context, stakeholders, options, and outcomes.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "172-java-diagrams",
+            "source": "./skills/172-java-diagrams",
+            "description": "Generate Java project diagrams — UML sequence, class, state machine, C4 model, ER — through a modular, step-based interactive process.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "173-java-agents",
+            "source": "./skills/173-java-agents",
+            "description": "Generate AGENTS.md for Java repositories — project conventions, tech stack, file structure, commands, Git workflow, contributor boundaries — through a modular, step-based interactive process.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "301-frameworks-spring-boot-core",
+            "source": "./skills/301-frameworks-spring-boot-core",
+            "description": "Review, improve, or build Spring Boot applications — @SpringBootApplication, component annotations, bean management, @ConfigurationProperties, constructor injection, scheduled tasks.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "302-frameworks-spring-boot-rest",
+            "source": "./skills/302-frameworks-spring-boot-rest",
+            "description": "Design, review, or improve REST APIs with Spring Boot — HTTP methods, resource URIs, status codes, DTOs, versioning, error handling, API documentation, problem details.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "303-frameworks-spring-data-jdbc",
+            "source": "./skills/303-frameworks-spring-data-jdbc",
+            "description": "Use Spring Data JDBC with Java records — entity design, repository pattern, immutable updates, aggregate relationships, custom queries, transaction management.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "311-frameworks-spring-boot-slice-testing",
+            "source": "./skills/311-frameworks-spring-boot-slice-testing",
+            "description": "Write slice tests for Spring Boot — @WebMvcTest, @JdbcTest, @JsonTest, @MockBean, test profiles, @TestConfiguration for focused layer testing.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "312-frameworks-spring-boot-integration-testing",
+            "source": "./skills/312-frameworks-spring-boot-integration-testing",
+            "description": "Write or improve integration tests — Testcontainers, TestRestTemplate, data management, test structure, performance optimization.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "313-frameworks-spring-boot-local-testing",
+            "source": "./skills/313-frameworks-spring-boot-local-testing",
+            "description": "Configure local testing with spring-boot-docker-compose — dependency setup, compose services, profiles, integration test setup, service connections, health checks.",
+            "version": "0.13.0"
+        }
+    ]
+}

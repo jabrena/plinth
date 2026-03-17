@@ -1,0 +1,29 @@
+{
+    "name": "cursor-rules-java",
+    "displayName": "Cursor Rules for Java",
+    "version": "0.13.0-SNAPSHOT",
+    "description": "Curated collection of `System prompts` & `Skills` for moden `SDLC` that help software engineers and pipelines in their daily work for Java Enterprise development.",
+    "author": {
+        "name": "Juan Antonio Breña Moral",
+        "email": "bren@juanantonio.info"
+    },
+    "homepage": "https://jabrena.github.io/cursor-rules-java/",
+    "repository": "https://github.com/jabrena/cursor-rules-java",
+    "license": "Apache-2.0",
+    "keywords": [
+        "system-prompts",
+        "skills",
+        "java",
+        "enterprise",
+        "development"
+    ],
+    "category": "developer-tools",
+    "tags": [
+        "ai-driven-agile",
+        "architecture",
+        "java",
+        "enterprise",
+        "development"
+    ],
+    "skills": "./skills/"
+}
