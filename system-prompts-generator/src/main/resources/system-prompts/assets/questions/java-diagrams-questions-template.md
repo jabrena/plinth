@@ -16,6 +16,7 @@ Options:
 - UML class diagrams
 - UML state-machine diagrams
 - C4 model diagrams (Context, Container & Component diagrams)
+- ER diagrams (Entity Relationship)
 - All diagrams
 - Skip
 
@@ -78,7 +79,18 @@ Options:
 
 ---
 
-**Question 7**: How would you like to organize the generated diagram files?
+**Question 7**: For ER diagrams, which schema scope would you like to cover?
+Ask this question only if you selected "ER diagrams (Entity Relationship)" or "All diagrams" in Question 1.
+
+Options:
+- Complete database schema (all tables)
+- Core domain tables only
+- Specific tables (I'll specify which ones)
+- Skip
+
+---
+
+**Question 8**: How would you like to organize the generated diagram files?
 
 Options:
 - Single directory (all diagrams in /diagrams folder)
@@ -88,7 +100,7 @@ Options:
 
 ---
 
-**Question 8**: What file format would you prefer for the diagrams?
+**Question 9**: What file format would you prefer for the diagrams?
 
 Options:
 - PlantUML source files (.puml) only
@@ -98,7 +110,7 @@ Options:
 
 ---
 
-**Question 9**: Would you like to include explanatory documentation with the diagrams?
+**Question 10**: Would you like to include explanatory documentation with the diagrams?
 
 Options:
 - Yes, comprehensive explanations for each diagram

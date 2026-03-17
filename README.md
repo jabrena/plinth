@@ -8,12 +8,12 @@
 
 ## Goal
 
-The project provides a curated collection of `System prompts` & `Skills` for moden `SDLC` that help software engineers and pipelines in their daily work for Java Enterprise development. 
+The project provides a curated collection of `System prompts` & `Skills` for moden `SDLC` that help software engineers and pipelines in their daily work for Java Enterprise development.
 
 The project add support for:
 
 - **AI-Driven Agile:** `User Stories` & `AI Planning`
-- **Architecture:** `ADRs`& `UML/C4 Diagrams`
+- **Architecture:** `ADRs`& `UML/C4/ER Diagrams`
 - **Java development:** `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation` & `Spring Boot`
 - **AI Tooling:** `AGENTS.md`
 
