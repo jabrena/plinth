@@ -1,6 +1,6 @@
 ---
 name: 172-java-diagrams
-description: Use when you need to generate Java project diagrams — including UML sequence diagrams, UML class diagrams, C4 model diagrams, and UML state machine diagrams — through a modular, step-based interactive process that adapts to your specific visualization needs. Part of the skills-for-java project
+description: Use when you need to generate Java project diagrams — including UML sequence diagrams, UML class diagrams, C4 model diagrams, UML state machine diagrams, and ER (Entity Relationship) diagrams — through a modular, step-based interactive process that adapts to your specific visualization needs. Part of the skills-for-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -8,7 +8,7 @@ metadata:
 ---
 # Java Diagrams Generator with modular step-based configuration
 
-Generate comprehensive Java project diagrams through a modular, step-based interactive process that covers UML sequence diagrams, UML class diagrams, C4 model diagrams, and UML state machine diagrams using PlantUML syntax. **This is an interactive SKILL**.
+Generate comprehensive Java project diagrams through a modular, step-based interactive process that covers UML sequence diagrams, UML class diagrams, C4 model diagrams, UML state machine diagrams, and ER (Entity Relationship) diagrams using PlantUML syntax. **This is an interactive SKILL**.
 
 **What is covered in this Skill?**
 
@@ -16,6 +16,7 @@ Generate comprehensive Java project diagrams through a modular, step-based inter
 - UML class diagram generation for package structure and class relationships
 - C4 model diagram generation at Context/Container/Component levels only (levels 1–3; Code/Level 4 not generated)
 - UML state machine diagram generation for entity lifecycles and business workflows
+- ER diagram generation from SQL schema (DDL, migrations) using PlantUML Chen notation
 - PlantUML syntax for all diagram types
 - File organization strategies: single-file, separate-files, or integrated with existing documentation
 - Final diagram validation with PlantUML syntax checking

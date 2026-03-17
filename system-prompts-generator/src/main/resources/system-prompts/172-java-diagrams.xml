@@ -6,7 +6,7 @@
         <version>0.13.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
         <title>Java Diagrams Generator with modular step-based configuration</title>
-        <description>Use when you need to generate Java project diagrams — including UML sequence diagrams, UML class diagrams, C4 model diagrams, and UML state machine diagrams — through a modular, step-based interactive process that adapts to your specific visualization needs.</description>
+        <description>Use when you need to generate Java project diagrams — including UML sequence diagrams, UML class diagrams, C4 model diagrams, UML state machine diagrams, and ER (Entity Relationship) diagrams — through a modular, step-based interactive process that adapts to your specific visualization needs.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Java software development and system architecture visualization</role>
@@ -15,7 +15,7 @@
 
     <goal>
         This rule provides a modular, step-based approach to generating comprehensive Java project diagrams
-        including UML sequence diagrams, UML class diagrams, C4 model diagrams, and UML state machine diagrams.
+        including UML sequence diagrams, UML class diagrams, C4 model diagrams, UML state machine diagrams, and ER (Entity Relationship) diagrams.
         Each step has a single responsibility and clear dependencies on user answers, making the diagram generation process more maintainable and user-friendly.
     </goal>
 
@@ -502,20 +502,211 @@ After generating state machine diagrams:
             </step-constraints>
         </step>
         <step number="6">
+            <step-title>ER Diagram Generation</step-title>
+            <step-content>
+**Purpose**: Generate ER (Entity Relationship) diagrams using PlantUML Chen's notation to illustrate database schema — tables, columns, primary keys, foreign keys, and relationships — derived from SQL DDL, migration scripts, or schema definitions.
+
+**Dependencies**: Only execute if the user selected ER diagrams in Step 1. Requires completion of Step 1.
+
+**CONDITIONAL EXECUTION**: Execute this step only if the user selected "ER diagrams (Entity Relationship)" or "All diagrams" in Step 1.
+
+## JDBC Access Solution Review
+
+**MANDATORY FIRST SUBSTEP**: Before generating any ER diagrams, explicitly review and identify the JDBC access solution used in the project to ensure correct annotation syntax in documentation examples.
+
+### Step 6.1: Identify JDBC Access Framework
+
+**Purpose**: Determine which data access framework is used in the project to ensure accurate code examples in ER diagram documentation.
+
+**Process**:
+
+1. **Analyze Project Dependencies**:
+   ```bash
+   # Check Maven dependencies
+   grep -r "spring-boot-starter-data-jpa\|spring-boot-starter-data-jdbc\|hibernate\|eclipselink" pom.xml */pom.xml
+
+   # Check Gradle dependencies
+   grep -r "spring-boot-starter-data-jpa\|spring-boot-starter-data-jdbc\|hibernate\|eclipselink" build.gradle */build.gradle
+   ```
+
+2. **Examine Existing Entity Classes**:
+   ```bash
+   # Look for entity annotations in Java files
+   find . -name "*.java" -exec grep -l "@Entity\|@Table\|@Column\|@Id" {} \;
+
+   # Check specific annotation imports
+   grep -r "javax.persistence\|jakarta.persistence\|org.springframework.data.relational\|org.springframework.data.annotation" --include="*.java" .
+   ```
+
+3. **Identify Framework Type**:
+
+   **Spring Data JPA Indicators**:
+   - Dependencies: `spring-boot-starter-data-jpa`, `hibernate-core`, `eclipselink`
+   - Imports: `jakarta.persistence.*` or `javax.persistence.*`
+   - Annotations: `@Entity`, `@Table(name = "...")`, `@Column(name = "...")`
+   - Repository: `extends JpaRepository&lt;Entity, ID&gt;`
+
+   **Spring Data JDBC Indicators**:
+   - Dependencies: `spring-boot-starter-data-jdbc`
+   - Imports: `org.springframework.data.relational.core.mapping.*`, `org.springframework.data.annotation.*`
+   - Annotations: `@Table("...")`, `@Column("...")`, `@Id` (from Spring Data)
+   - Repository: `extends CrudRepository&lt;Entity, ID&gt;` or `ListCrudRepository&lt;Entity, ID&gt;`
+
+   **Plain JDBC Indicators**:
+   - Dependencies: `spring-jdbc`, database drivers only
+   - Manual SQL queries with `JdbcTemplate`, `NamedParameterJdbcTemplate`
+   - No entity annotations
+
+4. **Document Findings**:
+   - **Framework Identified**: [Spring Data JPA | Spring Data JDBC | Plain JDBC | Hibernate | Other]
+   - **Version**: [Framework version if identifiable]
+   - **Entity Example**: [Show actual entity class from codebase]
+   - **Repository Pattern**: [Show actual repository interface from codebase]
+
+5. **Set Documentation Standards**:
+   Based on the identified framework, use the appropriate annotation syntax in all ER diagram documentation:
+
+   **For Spring Data JDBC**:
+   ```java
+   import org.springframework.data.annotation.Id;
+   import org.springframework.data.relational.core.mapping.Column;
+   import org.springframework.data.relational.core.mapping.Table;
+
+   @Table("table_name")
+   public record EntityName(
+       @Id @Column("id") Long id,
+       @Column("field_name") String fieldName
+   ) {}
+   ```
+
+   **For Spring Data JPA**:
+   ```java
+   import jakarta.persistence.*;
+
+   @Entity
+   @Table(name = "table_name")
+   public record EntityName(
+       @Id @Column(name = "id") Long id,
+       @Column(name = "field_name") String fieldName
+   ) {}
+   ```
+
+   **For Plain JDBC**:
+   ```java
+   // No entity annotations - show SQL mapping approach
+   public record EntityName(Long id, String fieldName) {}
+
+   // With JdbcTemplate usage example
+   ```
+
+**Validation**: Confirm the identified framework matches the actual project setup by examining at least one existing entity class and repository interface.
+
+**Output**: Clear statement of which framework is used and the annotation syntax to use in all subsequent ER diagram documentation.
+
+## Implementation Strategy
+
+Use the following template and guidelines:
+
+<xi:include href="assets/architecture/java-er-diagram-template.md" parse="text"/>
+
+## Schema Analysis Process
+
+**For each selected schema scope:**
+
+1. **Complete Database Schema** (if selected):
+- Scan SQL DDL, migration scripts (Flyway/Liquibase), or schema definitions
+- Extract tables, columns, constraints, and relationships
+- Generate complete ER diagram with all tables
+- Include join tables and association tables
+
+2. **Core Domain Tables Only** (if selected):
+- Focus on core business tables (e.g., users, orders, products)
+- Exclude technical tables (audit logs, sessions, flyway_schema_history, etc.)
+- Show core domain tables and their relationships
+- Document domain boundaries
+
+3. **Specific Tables** (if selected):
+- Analyze user-specified table names
+- Generate focused ER diagram for selected tables
+- Include related tables for foreign key context
+- Show table-specific columns and constraints
+
+## SQL to ER Mapping Guidelines
+
+1. **Identify Tables**: Schema tables as ER entities
+2. **Extract Columns**: Map table columns to ER attributes with SQL types (VARCHAR, BIGINT, DECIMAL, TIMESTAMP, etc.)
+3. **Map Relationships**: Primary keys (&lt;&lt;key&gt;&gt;), foreign keys, and referential integrity to cardinality
+4. **Mark Keys**: Primary keys from CREATE TABLE, foreign keys from REFERENCES or join tables
+
+## File Organization Strategy
+
+**Based on user preferences:**
+
+1. **Schema-Based Organization**: Single er-schema.puml or split by module
+2. **Domain-Based Organization**: Separate er-domain-name.puml per domain
+3. **Integrated Documentation**: Include in architecture.md or database docs
+
+## Content Quality Requirements
+
+1. **Schema Accuracy**: ER diagrams must reflect actual SQL schema structure
+2. **Relationship Correctness**: Cardinality must match foreign key constraints
+3. **Key Identification**: Primary and foreign keys clearly marked
+4. **Readable Layout**: Use left to right direction for wide schemas
+
+## Validation
+
+After generating ER diagrams:
+1. **Verify PlantUML Chen syntax** (@startchen / @endchen)
+2. **Validate against SQL schema** for structural accuracy
+3. **Check cardinality** matches foreign key relationships
+4. **Ensure proper file organization** according to user preferences
+            </step-content>
+            <step-constraints>
+                <step-constraint-list>
+                    <step-constraint>**MUST** only execute if "ER diagrams (Entity Relationship)" or "All diagrams" was selected in Step 1</step-constraint>
+                    <step-constraint>**MANDATORY FIRST**: Execute Step 6.1 JDBC Access Solution Review before any ER diagram generation</step-constraint>
+                    <step-constraint>**MUST** analyze project dependencies and existing entity classes to identify JDBC access framework</step-constraint>
+                    <step-constraint>**MUST** document the identified framework (Spring Data JPA, Spring Data JDBC, Plain JDBC, etc.) and use appropriate annotation syntax</step-constraint>
+                    <step-constraint>**MUST** use codebase_search to find SQL DDL, migrations, or schema definitions</step-constraint>
+                    <step-constraint>**MUST** generate accurate ER diagrams that reflect actual database schema from SQL</step-constraint>
+                    <step-constraint>**MUST** use PlantUML Chen notation (@startchen / @endchen)</step-constraint>
+                    <step-constraint>**MUST** map foreign keys and references to correct cardinality notation</step-constraint>
+                    <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
+                    <step-constraint>**MUST** organize files according to user preferences from Step 1</step-constraint>
+                    <step-constraint>**MUST NOT** generate generic diagrams without analyzing actual SQL schema</step-constraint>
+                    <step-constraint>**MUST** validate PlantUML Chen syntax for renderability</step-constraint>
+                </step-constraint-list>
+            </step-constraints>
+        </step>
+        <step number="7">
             <step-title>Diagrams Validation and Summary</step-title>
             <step-content><![CDATA[
 **Purpose**: Validate all generated diagrams and provide a comprehensive summary of changes made.
 
-**Dependencies**: Requires completion of applicable steps (2, 3, 4, and/or 5 based on user selections).
+**Dependencies**: Requires completion of applicable steps (2, 3, 4, 5, and/or 6 based on user selections).
 
 ## Validation Process
 
-1. **PlantUML Syntax Validation**:
+1. **PlantUML Syntax Validation and PNG Generation**:
 ```bash
-# If you have PlantUML installed locally, validate syntax
+# Method 1: Using PlantUML JAR (recommended)
+# Download PlantUML JAR if not available
+curl -L -o plantuml.jar https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar
+
+# Validate syntax
 java -jar plantuml.jar -checkonly *.puml
 
-# Or use online validation tools to verify diagram syntax
+# Generate PNG files
+java -jar plantuml.jar *.puml
+
+# Method 2: Using official Docker image
+# Validate syntax
+docker run --rm -v $(pwd):/work plantuml/plantuml:latest -checkonly *.puml
+
+# Generate PNG files
+docker run --rm -v $(pwd):/work plantuml/plantuml:latest *.puml
+
+# Alternative: Use online validation tools for quick syntax checks only
 ```
 
 2. **File Organization Validation**:
@@ -543,6 +734,7 @@ java -jar plantuml.jar -checkonly *.puml
 - **UML class diagrams**: [List diagram files created and packages/classes documented]
 - **C4 model diagrams**: [List diagram files created and architecture levels documented]
 - **UML state machine diagrams**: [List diagram files created and state machines documented]
+- **ER diagrams**: [List diagram files created and tables/schema documented]
 - **Supporting files**: [List any markdown or documentation files created]
 
 ### File Organization:
@@ -555,6 +747,7 @@ java -jar plantuml.jar -checkonly *.puml
 - **Workflows documented**: [List business processes in sequence diagrams]
 - **Architecture levels**: [List C4 model abstraction levels generated]
 - **State machines**: [List entities/processes with state diagrams]
+- **ER tables**: [List tables/schema covered in ER diagrams]
 
 ### Actions Taken:
 - **New files created**: [Count and list]
@@ -567,34 +760,76 @@ java -jar plantuml.jar -checkonly *.puml
 find . -name "*.puml" -type f
 ls -la diagrams/ # if using diagrams directory
 
-# To render PlantUML diagrams to PNG/SVG (requires PlantUML)
+# To render PlantUML diagrams to PNG/SVG
+# Method 1: Using PlantUML JAR (recommended for reliability)
+curl -L -o plantuml.jar https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar
 java -jar plantuml.jar *.puml
 
-# To use with JBang PlantUML tool (recommended)
-jbang puml-to-png@jabrena --watch .
+# Method 2: Using official PlantUML Docker image
+docker run --rm -v $(pwd):/work plantuml/plantuml:latest *.puml
 
-# To validate PlantUML syntax
+# Generate specific formats
+java -jar plantuml.jar -tpng *.puml    # PNG format (default)
+java -jar plantuml.jar -tsvg *.puml    # SVG format (scalable)
+java -jar plantuml.jar -tpdf *.puml    # PDF format
+
+# Docker equivalents
+docker run --rm -v $(pwd):/work plantuml/plantuml:latest -tpng *.puml
+docker run --rm -v $(pwd):/work plantuml/plantuml:latest -tsvg *.puml
+
+# To validate PlantUML syntax before rendering
 java -jar plantuml.jar -checkonly *.puml
+docker run --rm -v $(pwd):/work plantuml/plantuml:latest -checkonly *.puml
+```
+
+### PNG Generation Methods:
+
+#### Method 1: PlantUML JAR (Recommended)
+```bash
+# Download latest PlantUML JAR
+curl -L -o plantuml.jar https://github.com/plantuml/plantuml/releases/latest/download/plantuml.jar
+
+# Generate PNG files
+java -jar plantuml.jar diagram.puml
+
+# Batch process all diagrams
+java -jar plantuml.jar *.puml
+
+# Generate with specific output directory
+java -jar plantuml.jar -o output/ *.puml
+```
+
+#### Method 2: Official Docker Image
+```bash
+# Generate PNG files using Docker
+docker run --rm -v $(pwd):/work plantuml/plantuml:latest diagram.puml
+
+# Batch process with Docker
+docker run --rm -v $(pwd):/work plantuml/plantuml:latest *.puml
+
+# Generate with specific format
+docker run --rm -v $(pwd):/work plantuml/plantuml:latest -tsvg *.puml
 ```
 
 ### Integration with Documentation Tools:
-- **JBang PlantUML**: Use `jbang puml-to-png@jabrena --watch .` for automatic PNG generation
+- **Local JAR**: Reliable rendering with `java -jar plantuml.jar *.puml`
+- **Docker Integration**: Use official `plantuml/plantuml:latest` image for containerized environments
 - **IDE Integration**: Most IDEs support PlantUML preview plugins
-- **CI/CD Integration**: Consider adding diagram generation to build pipeline
-- **Documentation Sites**: Diagrams can be embedded in GitBook, GitHub Pages, etc.
+- **CI/CD Integration**: Add PlantUML rendering to build pipeline using JAR or Docker
+- **Documentation Sites**: Generated PNG/SVG files can be embedded in GitBook, GitHub Pages, etc.
 
 ### Next Steps Recommendations:
 - Review generated diagrams for accuracy and completeness
-- Consider setting up automated diagram rendering in CI/CD
+- Set up automated diagram rendering in CI/CD using PlantUML JAR or Docker
 - Update diagrams as code evolves to maintain accuracy
 - Share diagrams with team for architectural discussions
 - Consider generating additional diagram types for specific needs
 
 ### Diagram Rendering Options:
-1. **Local Rendering**: Install PlantUML jar and render locally
-2. **Online Rendering**: Use PlantUML online server for quick previews
-3. **JBang Tool**: Use the recommended `jbang puml-to-png@jabrena` for automatic rendering
-4. **IDE Plugins**: Install PlantUML plugins for real-time preview
+1. **PlantUML JAR**: Most reliable method, works offline, supports all features
+2. **Docker Image**: Containerized rendering, good for CI/CD and consistent environments
+3. **Online Rendering**: Use PlantUML online server for quick previews only
+4. **IDE Plugins**: Install PlantUML plugins for real-time preview during development
 5. **Build Integration**: Add PlantUML Maven/Gradle plugins for automated generation
 
 ## Final Validation
@@ -602,11 +837,19 @@ java -jar plantuml.jar -checkonly *.puml
 Verify that all generated diagrams can be rendered successfully:
 
 ```bash
-# Test PlantUML syntax validation
+# Method 1: Test PlantUML syntax validation with JAR
 java -jar plantuml.jar -checkonly $(find . -name "*.puml")
+
+# Method 2: Test PlantUML syntax validation with Docker
+docker run --rm -v $(pwd):/work plantuml/plantuml:latest -checkonly $(find . -name "*.puml")
+
+# Generate PNG files to confirm rendering works
+java -jar plantuml.jar *.puml
+# OR
+docker run --rm -v $(pwd):/work plantuml/plantuml:latest *.puml
 ```
 
-If syntax validation passes, diagram generation is complete and successful.
+If syntax validation passes and PNG files are generated successfully, diagram generation is complete and successful.
             ]]></step-content>
             <step-constraints>
                 <step-constraint-list>
@@ -626,7 +869,7 @@ If syntax validation passes, diagram generation is complete and successful.
     <output-format>
         <output-format-list>
             <output-format-item>Ask diagram questions one by one following the template exactly in Step 1</output-format-item>
-            <output-format-item>Execute steps 2-5 only based on user selections from Step 1</output-format-item>
+            <output-format-item>Execute steps 2-6 only based on user selections from Step 1</output-format-item>
             <output-format-item>Skip entire steps if no relevant diagram types were selected</output-format-item>
             <output-format-item>Generate only requested diagram types based on user selections</output-format-item>
             <output-format-item>Follow template specifications exactly for all diagram generation</output-format-item>

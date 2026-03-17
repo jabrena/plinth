@@ -1,0 +1,49 @@
+@startchen
+
+title Sakila Database Schema - ER Diagram
+note top : Spring Boot Demo Implementation\nSimplified Sakila Database Schema
+
+entity Film {
+  film_id : SERIAL <<key>>
+  title : VARCHAR(255)
+  description : TEXT
+  release_year : YEAR
+  language_id : SMALLINT
+  original_language_id : SMALLINT
+  rental_duration : SMALLINT
+  rental_rate : NUMERIC(4,2)
+  length : SMALLINT
+  replacement_cost : NUMERIC(5,2)
+  rating : MPAA_RATING
+  last_update : TIMESTAMP
+  special_features : TEXT[]
+  fulltext : TSVECTOR
+}
+
+entity Language {
+  language_id : SERIAL <<key>>
+  name : CHAR(20)
+  last_update : TIMESTAMP
+}
+
+relationship SPOKEN_IN {
+}
+
+relationship ORIGINAL_LANGUAGE {
+}
+
+Film -N- SPOKEN_IN
+SPOKEN_IN -1- Language
+
+Film -(0,1)- ORIGINAL_LANGUAGE
+ORIGINAL_LANGUAGE -1- Language
+
+note right of Film : Contains film catalog information\nwith rating, rental details,\nand full-text search capability
+
+note right of Language : Defines available languages\nfor films (spoken and original)
+
+note right of SPOKEN_IN : Primary language relationship\n(required - NOT NULL)
+
+note right of ORIGINAL_LANGUAGE : Original language relationship\n(optional - can be NULL)
+
+@endchen
