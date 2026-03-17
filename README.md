@@ -32,9 +32,9 @@ The project generates a set of deliverables at the end of any iteration.
 
 Read the following comprehensive guides to use this project today.
 
-- [Getting started with `System prompts for Java](./documentation/GETTING-STARTED-SYSTEM-PROMPTS.md)`
-- [Getting started with `Skills for Java](./documentation/GETTING-STARTED-SKILLS.md)`
-- [Getting started with `Pipelines and AI](./documentation/GETTING-STARTED-PIPELINES.md)`
+- [Getting started with `System prompts for Java`](./documentation/GETTING-STARTED-SYSTEM-PROMPTS.md)
+- [Getting started with `Skills for Java`](./documentation/GETTING-STARTED-SKILLS.md)
+- [Getting started with `Pipelines and AI`](./documentation/GETTING-STARTED-PIPELINES.md)
 
 ## How to use them?
 
@@ -44,7 +44,7 @@ The SLDC has evolved with the arrival of this new set of AI tooling, enhancing t
 
 Adding AI tools to the Java development workflow can increase the likelihood of implementing software specifications on time and with quality.
 
-
+![](./documentation/images/workflow.png)
 
 In this workflow, you could delegate completely a task or ask help in certain moments. You could use this project to refactor the code generated or delegate the task and associate a System prompt / Skills to that task
 
@@ -52,7 +52,7 @@ In this workflow, you could delegate completely a task or ask help in certain mo
 
 Adding AI tools to your pipeline can provide new opportunities to deliver more value (examples: automatic coding, code refactoring, continuous profiling, and others).
 
-
+![](./documentation/images/workflow-pipelines.png)
 
 ## Limitations
 
