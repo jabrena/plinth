@@ -6,6 +6,7 @@
         <version>0.13.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
         <title>Java Profiling Workflow / Step 3 / Refactor code to fix issues</title>
+        <description>Use when you need to refactor Java code based on profiling analysis findings — including reviewing profiling-problem-analysis and profiling-solutions documents, identifying specific performance bottlenecks, and implementing targeted code changes to address them.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Java software development</role>
