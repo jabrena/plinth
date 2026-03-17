@@ -1,5 +1,5 @@
--- Test Data for Film Query Acceptance Tests
--- This file contains only the data inserts - schema is loaded separately from 1-postgres-sakila-schema.sql
+-- Sakila film data for PostgreSQL
+-- Flyway migration V2: film and language test data
 
 -- Insert required language record (required by foreign key constraint)
 INSERT INTO language (language_id, name) VALUES (1, 'English') ON CONFLICT (language_id) DO NOTHING;
@@ -59,12 +59,3 @@ INSERT INTO film (title, description, release_year, language_id, length, rating)
 ('CHICAGO NORTH', 'A Fateful Yarn of a Mad Cow And a Waitress', 2006, 1, 185, 'PG-13'),
 ('DOOR PAINT', 'A Thrilling Story of a Woman And a Boat', 2006, 1, 109, 'PG'),
 ('ZORRO ARK', 'A Intrepid Panorama of a Mad Scientist And a Boy', 2006, 1, 50, 'NC-17');
-
--- Verify data integrity
-SELECT 
-    COUNT(*) as total_films,
-    COUNT(CASE WHEN title LIKE 'A%' THEN 1 END) as films_starting_with_a
-FROM film;
-
--- Print completion message for TestContainer waiting
-SELECT 'Test film database with Sakila schema initialized successfully' as initialization_status; 

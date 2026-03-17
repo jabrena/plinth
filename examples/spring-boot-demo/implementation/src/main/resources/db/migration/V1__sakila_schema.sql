@@ -1,5 +1,5 @@
--- Compatible Sakila Schema for TestContainers
--- Simplified version removing postgres user dependencies and complex ownership
+-- Sakila schema for PostgreSQL
+-- Flyway migration V1: schema (film, language tables, types, indexes)
 
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = off;
@@ -96,6 +96,3 @@ CREATE TRIGGER last_updated
     BEFORE UPDATE ON language
     FOR EACH ROW
     EXECUTE PROCEDURE last_updated();
-
--- Print schema completion message
-SELECT 'Sakila compatible schema created successfully' as schema_status; 
