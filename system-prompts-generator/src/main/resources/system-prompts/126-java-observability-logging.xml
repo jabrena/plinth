@@ -6,6 +6,7 @@
         <version>0.13.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
         <title>Java Logging Best Practices</title>
+        <description>Use when you need to implement or improve Java logging and observability — including selecting SLF4J with Logback/Log4j2, applying proper log levels, parameterized logging, secure logging without sensitive data exposure, environment-specific configuration, log aggregation and monitoring, or validating logging through tests.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Java software development</role>
