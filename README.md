@@ -34,7 +34,7 @@ The project generates a set of deliverables at the end of any iteration.
 | Deliverable             | Location                                                     |
 | ----------------------- | ------------------------------------------------------------ |
 | System prompts for Java | [Catalog](./SYSTEM-PROMPTS-JAVA.md) (`.cursor/rules`)        |
-| Skills for Java         | [https://skills.sh/?q=jabrena](https://skills.sh/?q=jabrena) |
+| Skills for Java         | [https://skills.sh/jabrena/cursor-rules-java](https://skills.sh/jabrena/cursor-rules-java) |
 
 
 ## Getting started
