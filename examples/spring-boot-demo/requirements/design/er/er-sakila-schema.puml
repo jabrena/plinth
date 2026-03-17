@@ -1,0 +1,76 @@
+@startuml
+!theme plain
+title Sakila Database Schema - Complete ER Diagram
+
+entity Film {
+  * film_id : SERIAL <<PK>>
+  --
+  * title : VARCHAR(255)
+  description : TEXT
+  release_year : YEAR
+  * language_id : SMALLINT <<FK>>
+  original_language_id : SMALLINT <<FK>>
+  rental_duration : SMALLINT
+  rental_rate : NUMERIC(4,2)
+  length : SMALLINT
+  replacement_cost : NUMERIC(5,2)
+  rating : MPAA_RATING
+  last_update : TIMESTAMP
+  special_features : TEXT[]
+  fulltext : TSVECTOR
+}
+
+entity Language {
+  * language_id : SERIAL <<PK>>
+  --
+  * name : CHAR(20)
+  last_update : TIMESTAMP
+}
+
+Film }|--|| Language : language_id
+Film }o--o| Language : original_language_id
+
+note right of Film
+Database Features:
+• Primary Key: film_id (SERIAL)
+• Required FK: language_id
+• Optional FK: original_language_id
+• Custom Type: rating (MPAA_RATING)
+• Custom Domain: release_year (1901-2155)
+• Full-text Search: fulltext (TSVECTOR)
+• Auto-timestamp trigger
+
+Indexes:
+• idx_title (B-tree on title)
+• film_fulltext_idx (GiST on fulltext)
+
+Constraints:
+• ON UPDATE CASCADE, ON DELETE RESTRICT
+end note
+
+note right of Language
+Database Features:
+• Primary Key: language_id (SERIAL)
+• Reference table for film languages
+• Auto-timestamp trigger
+
+Usage:
+• Supports both spoken and original languages
+• Minimal structure for language metadata
+end note
+
+note bottom
+Custom PostgreSQL Types:
+• mpaa_rating ENUM: 'G', 'PG', 'PG-13', 'R', 'NC-17'
+• year DOMAIN: INTEGER CHECK (1901-2155)
+
+Spring Data JDBC Mapping:
+• Film entity maps only film_id and title
+• Immutable record design for thread safety
+
+Flyway Migrations:
+• V1__sakila_schema.sql: Complete schema
+• V2__sakila_film_data.sql: Sample data
+end note
+
+@enduml
