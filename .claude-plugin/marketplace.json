@@ -5,7 +5,7 @@
         "email": "bren@juanantonio.info"
     },
     "metadata": {
-        "description": "Curated collection of System prompts & Skills for moden SDLC that help software engineers and pipelines in their daily work for Java Enterprise development.",
+        "description": "Curated collection of System prompts & Skills for modern SDLC that help software engineers and pipelines in their daily work for Java Enterprise development.",
         "homepage": "https://jabrena.github.io/cursor-rules-java/",
         "repository": "https://github.com/jabrena/cursor-rules-java",
         "version": "0.13.0",
@@ -19,27 +19,39 @@
             "version": "0.13.0"
         },
         {
-            "name": "020-architecture-functional-requirements-cli",
-            "source": "./skills/020-architecture-functional-requirements-cli",
+            "name": "020-planning-enhance-ai-plan-mode",
+            "source": "./skills/020-planning-enhance-ai-plan-mode",
+            "description": "Java Design Plan Creation for Cursor Plan Mode. Use when creating a plan, designing an implementation, structuring a development plan, or using plan mode for outside-in TDD, feature implementation, or refactoring work.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "030-architecture-adr-general",
+            "source": "./skills/030-architecture-adr-general",
+            "description": "Generate Architecture Decision Records (ADRs) for Java projects through an interactive, conversational process that gathers context, stakeholders, options, and outcomes.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "031-architecture-adr-functional-requirements-cli",
+            "source": "./skills/031-architecture-adr-functional-requirements-cli",
             "description": "Create ADRs for CLI development. Use when the user wants to document CLI architecture, capture functional requirements for a command-line tool, create ADRs for CLI projects, or design CLI applications with documented decisions.",
             "version": "0.13.0"
         },
         {
-            "name": "021-architecture-functional-requirements-rest",
-            "source": "./skills/021-architecture-functional-requirements-rest",
+            "name": "032-architecture-adr-functional-requirements-rest",
+            "source": "./skills/032-architecture-adr-functional-requirements-rest",
             "description": "Create ADRs for REST API development. Use when the user wants to document REST API architecture, capture functional requirements for APIs, create ADRs for REST/HTTP services, or design APIs with documented decisions.",
             "version": "0.13.0"
         },
         {
-            "name": "030-architecture-non-functional-requirements",
-            "source": "./skills/030-architecture-non-functional-requirements",
+            "name": "033-architecture-adr-non-functional-requirements",
+            "source": "./skills/033-architecture-adr-non-functional-requirements",
             "description": "Create ADRs for Non-Functional Requirements using the ISO/IEC 25010:2023 quality model. Use when documenting quality attributes, NFR decisions, security/performance/scalability architecture, or designing systems with measurable quality criteria.",
             "version": "0.13.0"
         },
         {
-            "name": "040-planning-enhance-ai-plan-mode",
-            "source": "./skills/040-planning-enhance-ai-plan-mode",
-            "description": "Java Design Plan Creation for Cursor Plan Mode. Use when creating a plan, designing an implementation, structuring a development plan, or using plan mode for outside-in TDD, feature implementation, or refactoring work.",
+            "name": "034-architecture-diagrams",
+            "source": "./skills/034-architecture-diagrams",
+            "description": "Generate Java project diagrams — UML sequence, class, state machine, C4 model, ER — through a modular, step-based interactive process.",
             "version": "0.13.0"
         },
         {
@@ -139,26 +151,50 @@
             "version": "0.13.0"
         },
         {
+            "name": "151-java-performance-jmeter",
+            "source": "./skills/151-java-performance-jmeter",
+            "description": "Set up JMeter performance testing for a Java project — creating run-jmeter.sh, configuring load tests with loops, threads, and ramp-up, or running performance tests from the project root.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "161-java-profiling-detect",
+            "source": "./skills/161-java-profiling-detect",
+            "description": "Set up Java application profiling to detect and measure performance issues — async-profiler, problem-driven profiling (CPU, memory, threading, GC, I/O), JFR integration with Java 25.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "162-java-profiling-analyze",
+            "source": "./skills/162-java-profiling-analyze",
+            "description": "Analyze Java profiling data — interpret flamegraphs, memory allocation patterns, CPU hotspots, threading issues, systematic problem categorization, evidence documentation, Impact/Effort prioritization.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "163-java-profiling-refactor",
+            "source": "./skills/163-java-profiling-refactor",
+            "description": "Refactor Java code based on profiling analysis — review profiling-problem-analysis and profiling-solutions, identify bottlenecks, implement targeted fixes for CPU, memory, or threading issues.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "164-java-profiling-verify",
+            "source": "./skills/164-java-profiling-verify",
+            "description": "Verify Java performance optimizations — baseline validation, post-refactoring report generation, before/after metrics comparison, flamegraph analysis, regression detection, profiling-comparison-analysis documentation.",
+            "version": "0.13.0"
+        },
+        {
             "name": "170-java-documentation",
             "source": "./skills/170-java-documentation",
             "description": "Generate or improve Java project documentation — README.md, package-info.java, Javadoc — through a modular, step-based interactive process.",
             "version": "0.13.0"
         },
         {
-            "name": "171-java-adr",
-            "source": "./skills/171-java-adr",
-            "description": "Generate Architecture Decision Records (ADRs) through an interactive, conversational process that gathers context, stakeholders, options, and outcomes.",
+            "name": "180-java-observability-logging",
+            "source": "./skills/180-java-observability-logging",
+            "description": "Implement or improve Java logging and observability — SLF4J with Logback/Log4j2, log levels, parameterized logging, secure logging, environment-specific configuration, log aggregation and monitoring.",
             "version": "0.13.0"
         },
         {
-            "name": "172-java-diagrams",
-            "source": "./skills/172-java-diagrams",
-            "description": "Generate Java project diagrams — UML sequence, class, state machine, C4 model, ER — through a modular, step-based interactive process.",
-            "version": "0.13.0"
-        },
-        {
-            "name": "173-java-agents",
-            "source": "./skills/173-java-agents",
+            "name": "200-agents-md",
+            "source": "./skills/200-agents-md",
             "description": "Generate AGENTS.md for Java repositories — project conventions, tech stack, file structure, commands, Git workflow, contributor boundaries — through a modular, step-based interactive process.",
             "version": "0.13.0"
         },
@@ -175,8 +211,8 @@
             "version": "0.13.0"
         },
         {
-            "name": "303-frameworks-spring-data-jdbc",
-            "source": "./skills/303-frameworks-spring-data-jdbc",
+            "name": "304-frameworks-spring-data-jdbc",
+            "source": "./skills/304-frameworks-spring-data-jdbc",
             "description": "Use Spring Data JDBC with Java records — entity design, repository pattern, immutable updates, aggregate relationships, custom queries, transaction management.",
             "version": "0.13.0"
         },
