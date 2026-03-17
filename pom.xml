@@ -10,7 +10,7 @@
     <version>0.13.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>cursor-rules-java</name>
-    <description>The project provides a curated collection of System prompts and Skills for moden
+    <description>The project provides a curated collection of System prompts and Skills for modern
         SDLC that help software engineers and pipelines in their daily work for Java Enterprise
         development.</description>
 

@@ -8,7 +8,7 @@
 
 ## Goal
 
-The project provides a curated collection of `System prompts` & `Skills` for moden `SDLC` that help software engineers and pipelines in their daily work for Java Enterprise development.
+The project provides a curated collection of `System prompts` & `Skills` for modern `SDLC` that help software engineers and pipelines in their daily work for Java Enterprise development.
 
 The project add support for:
 

@@ -6,6 +6,7 @@
         <version>0.13.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
         <title>Java Profiling Workflow / Step 4 / Verify results</title>
+        <description>Use when you need to verify Java performance optimizations by comparing profiling results before and after refactoring — including baseline validation, post-refactoring report generation, quantitative before/after metrics comparison, side-by-side flamegraph analysis, or creating profiling-comparison-analysis and profiling-final-results documentation.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Java software development</role>
