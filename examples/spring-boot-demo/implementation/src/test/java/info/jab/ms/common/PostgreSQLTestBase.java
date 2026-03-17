@@ -5,7 +5,6 @@ import org.springframework.boot.testcontainers.service.connection.ServiceConnect
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.MountableFile;
 
 /**
  * PostgreSQLTestBase - Base class for integration tests with PostgreSQL TestContainer
@@ -15,12 +14,12 @@ import org.testcontainers.utility.MountableFile;
  *
  * Features:
  * - Shared PostgreSQL TestContainer for all test classes
- * - Pre-loaded with Sakila schema and data
+ * - Schema and data applied via Flyway migrations (db/migration) on context startup
  * - Automatic Spring Boot configuration via @ServiceConnection
  * - Proper startup and shutdown lifecycle management
  * - Works with Spring Boot slice testing (@JdbcTest, @WebMvcTest, etc.)
  */
-@Testcontainers
+@Testcontainers(disabledWithoutDocker = true)
 public abstract class PostgreSQLTestBase {
 
     @Container
@@ -29,14 +28,6 @@ public abstract class PostgreSQLTestBase {
             .withDatabaseName("testdb")
             .withUsername("testuser")
             .withPassword("testpass")
-            .withCopyFileToContainer(
-                MountableFile.forClasspathResource("1.1-postgress-sakila-schema-compatible.sql"),
-                "/docker-entrypoint-initdb.d/01-schema.sql"
-            )
-            .withCopyFileToContainer(
-                MountableFile.forClasspathResource("2.1-postgres-sakila-film-data.sql"),
-                "/docker-entrypoint-initdb.d/02-data.sql"
-            )
             .withStartupTimeout(Duration.ofMinutes(2))
             .withLogConsumer(outputFrame -> {
                 System.out.print("[POSTGRES] " + outputFrame.getUtf8String());

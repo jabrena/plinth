@@ -16,8 +16,6 @@ services:
       start_period: 30s
     volumes:
       - film_data:/var/lib/postgresql/data
-      - ./src/test/resources/1.1-postgress-sakila-schema-compatible.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
-      - ./src/test/resources/2.1-postgres-sakila-film-data.sql:/docker-entrypoint-initdb.d/02-data.sql:ro
     networks:
       - film-network
 
