@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
-      id="021-architecture-adr-functional-requirements-cli"
+      id="022-architecture-adr-functional-requirements-rest"
       interactive="true">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
@@ -9,16 +9,16 @@
     <license>Apache-2.0</license>
   </metadata>
 
-  <title>Create ADRs for CLI Development</title>
-  <description>Facilitates conversational discovery to create Architectural Decision Records (ADRs) for CLI development. Use when the user wants to document CLI architecture, capture functional requirements for a command-line tool, create ADRs for CLI projects, or design CLI applications with documented decisions.</description>
+  <title>Create ADRs for REST API Development</title>
+  <description>Facilitates conversational discovery to create Architectural Decision Records (ADRs) for REST API development. Use when the user wants to document REST API architecture, capture functional requirements for APIs, create ADRs for REST/HTTP services, or design APIs with documented decisions.</description>
   <goal><![CDATA[
-Guide stakeholders through a structured conversation to uncover and document technical decisions and functional requirements for CLI applications. **This is an interactive SKILL**. The ADR is the documentation of that conversation, not the conversation itself.
+Guide stakeholders through a structured conversation to uncover and document technical decisions and functional requirements for REST API implementations. **This is an interactive SKILL**. The ADR is the documentation of that conversation, not the conversation itself.
 
 **What is covered in this Skill?**
 
-- Initial context: CLI purpose, users, constraints, timeline
-- Functional requirements: workflows, commands, input/output, UX
-- Technical decisions: language/framework, architecture, data, integration, testing, distribution
+- Initial context: API purpose, consumers, constraints, load
+- Functional requirements: use cases, resources, operations, response formats, error handling
+- Technical decisions: language/framework, API design, auth/security, data, integration, infrastructure, testing, monitoring
 - Decision synthesis and validation before ADR creation
 - ADR document generation and next steps
 ]]></goal>
@@ -29,10 +29,10 @@ Guide stakeholders through a structured conversation to uncover and document tec
       <constraint>**MANDATORY**: Run `date` before starting to get accurate timestamps for the ADR</constraint>
       <constraint>**MUST**: Read the reference template fresh—do not use cached questions</constraint>
       <constraint>**MUST**: Ask one or two questions at a time; never all at once</constraint>
-      <constraint>**MUST**: Validate summary with user ("Does this sound accurate?") before proposing ADR creation</constraint>
+      <constraint>**MUST**: Validate summary with user ("Does this accurately capture your requirements?") before proposing ADR creation</constraint>
       <constraint>**MUST**: Wait for user to confirm "proceed" before generating the ADR</constraint>
     </constraint-list>
   </constraints>
 
-  <reference path="references/021-architecture-adr-functional-requirements-cli.md" />
+  <reference path="references/022-architecture-adr-functional-requirements-rest.md" />
 </skill>
