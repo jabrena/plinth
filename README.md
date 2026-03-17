@@ -2,9 +2,9 @@
 
 ## Stargazers over time
 
-[Stargazers over time](https://starchart.cc/jabrena/cursor-rules-java)
+[![Stargazers over time](https://starchart.cc/jabrena/cursor-rules-java.svg?variant=adaptive)](https://starchart.cc/jabrena/cursor-rules-java)
 
-[CI Builds](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml)
+[![CI Builds](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml/badge.svg)](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml)
 
 ## Goal
 
