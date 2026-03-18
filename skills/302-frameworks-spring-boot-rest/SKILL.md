@@ -33,6 +33,12 @@ Before applying any REST API changes, ensure the project compiles. If compilatio
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 - **BEFORE APPLYING**: Read the reference for detailed rules and good/bad patterns
 
+## When to use this skill
+
+- Spring Boot REST
+- REST API Spring
+- @RestController
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/302-frameworks-spring-boot-rest.md](references/302-frameworks-spring-boot-rest.md).

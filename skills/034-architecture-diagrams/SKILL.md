@@ -30,6 +30,14 @@ Before applying any diagram generation, ensure the project validates. If validat
 - **BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each diagram generation pattern
 - **C4 LIMIT**: C4 diagrams restricted to levels 1, 2, 3 only (Context, Container, Component); never generate Level 4 (Code) diagrams
 
+## When to use this skill
+
+- Generate UML diagram
+- Create sequence diagram
+- Create class diagram
+- Create C4 diagram
+- Generate ER diagram
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/034-architecture-diagrams.md](references/034-architecture-diagrams.md).

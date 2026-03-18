@@ -37,6 +37,15 @@ Identify and apply Java secure coding practices to reduce vulnerabilities, prote
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Secure coding</trigger>
+        <trigger>Input validation</trigger>
+        <trigger>SQL injection</trigger>
+        <trigger>Parameterized queries</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/124-java-secure-coding.md</reference>

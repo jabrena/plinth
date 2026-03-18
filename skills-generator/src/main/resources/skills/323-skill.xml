@@ -41,6 +41,14 @@ Implement acceptance tests from Gherkin feature files in Spring Boot projects. G
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Spring Boot acceptance tests</trigger>
+        <trigger>Gherkin Spring Boot</trigger>
+        <trigger>Acceptance tests from .feature</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/323-frameworks-spring-boot-testing-acceptance-tests.md</reference>

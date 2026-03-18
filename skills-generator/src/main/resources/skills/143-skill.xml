@@ -39,6 +39,14 @@ Identify and apply functional exception handling best practices in Java to impro
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Functional exception handling</trigger>
+        <trigger>Optional Either</trigger>
+        <trigger>VAVR error handling</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/143-java-functional-exception-handling.md</reference>

@@ -35,6 +35,14 @@ Apply Java integration testing guidelines.
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Spring Boot integration tests</trigger>
+        <trigger>Testcontainers Spring</trigger>
+        <trigger>TestRestTemplate</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/322-frameworks-spring-boot-testing-integration-tests.md</reference>

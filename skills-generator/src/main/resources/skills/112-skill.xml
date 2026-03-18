@@ -50,6 +50,17 @@ Maven profiles:
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Configure Maven plugins</trigger>
+        <trigger>Add Maven plugins</trigger>
+        <trigger>Enforcer Surefire Failsafe</trigger>
+        <trigger>JaCoCo code coverage</trigger>
+        <trigger>Spotless code formatting</trigger>
+        <trigger>OWASP dependency check</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/112-java-maven-plugins.md</reference>

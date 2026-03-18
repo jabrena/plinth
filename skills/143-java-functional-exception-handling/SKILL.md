@@ -34,6 +34,12 @@ Before applying any functional exception handling changes, ensure the project va
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 - **BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each functional exception handling pattern
 
+## When to use this skill
+
+- Functional exception handling
+- Optional Either
+- VAVR error handling
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/143-java-functional-exception-handling.md](references/143-java-functional-exception-handling.md).

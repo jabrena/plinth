@@ -48,6 +48,7 @@ metadata:
 </xsl:text>
     <xsl:apply-templates select="goal"/>
     <xsl:apply-templates select="constraints"/>
+    <xsl:apply-templates select="triggers"/>
     <xsl:call-template name="emit-references">
       <xsl:with-param name="reference-paths" select="$reference-paths"/>
     </xsl:call-template>
@@ -80,6 +81,23 @@ metadata:
     </xsl:for-each>
     <xsl:text>
 </xsl:text>
+  </xsl:template>
+
+  <!-- Triggers: When to use this skill (PML triggers/trigger-list/trigger or legacy equivalent) -->
+  <xsl:template match="triggers">
+    <xsl:if test="trigger-list/trigger[normalize-space(.) != '']">
+      <xsl:text>## When to use this skill
+
+</xsl:text>
+      <xsl:for-each select="trigger-list/trigger[normalize-space(.) != '']">
+        <xsl:text>- </xsl:text>
+        <xsl:value-of select="normalize-space(.)"/>
+        <xsl:text>
+</xsl:text>
+      </xsl:for-each>
+      <xsl:text>
+</xsl:text>
+    </xsl:if>
   </xsl:template>
 
   <!-- Legacy: reference with @path attribute -->

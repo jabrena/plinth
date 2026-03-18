@@ -36,6 +36,15 @@ Implement effective Java logging following standardized frameworks, meaningful l
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Observability</trigger>
+        <trigger>Logging</trigger>
+        <trigger>Structured logging</trigger>
+        <trigger>SLF4J MDC</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/180-java-observability-logging.md</reference>

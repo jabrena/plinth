@@ -29,6 +29,12 @@ JMeter must be installed and available in PATH. If not available, show a message
 - **PERMISSION**: Make the script executable with `chmod +x run-jmeter.sh`
 - **BEFORE APPLYING**: Read the reference for the exact script template and usage instructions
 
+## When to use this skill
+
+- JMeter performance
+- Load testing
+- Performance testing Java
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/151-java-performance-jmeter.md](references/151-java-performance-jmeter.md).

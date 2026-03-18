@@ -41,6 +41,15 @@ Review and improve Java code using comprehensive generics best practices that en
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Java generics</trigger>
+        <trigger>Raw types</trigger>
+        <trigger>PECS wildcards</trigger>
+        <trigger>Bounded type parameters</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/128-java-generics.md</reference>

@@ -28,6 +28,11 @@ Before applying any test changes, ensure the project compiles. If compilation fa
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 - **BEFORE APPLYING**: Read the reference for detailed rules and good/bad patterns
 
+## When to use this skill
+
+- Spring Boot unit tests
+- @SpringBootTest unit
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/321-frameworks-spring-boot-testing-unit-tests.md](references/321-frameworks-spring-boot-testing-unit-tests.md).

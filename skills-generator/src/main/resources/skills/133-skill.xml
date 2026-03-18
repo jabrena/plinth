@@ -40,6 +40,14 @@ Implement acceptance tests from Gherkin feature files. Given a .feature file in 
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Acceptance tests</trigger>
+        <trigger>Gherkin feature file</trigger>
+        <trigger>Framework-agnostic acceptance</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/133-java-testing-acceptance-tests.md</reference>

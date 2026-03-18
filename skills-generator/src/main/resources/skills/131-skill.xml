@@ -40,6 +40,15 @@ Review and improve Java unit tests using modern JUnit 5, AssertJ, and Mockito be
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Unit tests</trigger>
+        <trigger>JUnit 5</trigger>
+        <trigger>AssertJ Mockito</trigger>
+        <trigger>Given When Then test</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/131-java-testing-unit-testing.md</reference>

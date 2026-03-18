@@ -32,6 +32,14 @@ Generate comprehensive Java project documentation through a modular, step-based 
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Java documentation</trigger>
+        <trigger>Javadoc</trigger>
+        <trigger>API documentation</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/170-java-documentation.md</reference>

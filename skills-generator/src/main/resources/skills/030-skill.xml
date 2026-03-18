@@ -31,6 +31,15 @@ Generate Architecture Decision Records (ADRs) for Java projects through an inter
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Generate ADR</trigger>
+        <trigger>Create Architecture Decision Record</trigger>
+        <trigger>Document architecture decision</trigger>
+        <trigger>Architecture Decision Record for Java</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/030-architecture-adr-general.md</reference>

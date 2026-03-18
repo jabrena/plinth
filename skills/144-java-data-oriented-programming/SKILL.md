@@ -31,6 +31,11 @@ Before applying any data-oriented programming recommendations, ensure the projec
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 - **BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each data-oriented programming pattern
 
+## When to use this skill
+
+- Data-oriented programming
+- Records immutable data
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/144-java-data-oriented-programming.md](references/144-java-data-oriented-programming.md).

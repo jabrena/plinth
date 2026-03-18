@@ -44,6 +44,15 @@ Identify and apply robust Java exception handling practices to improve error cla
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Exception handling</trigger>
+        <trigger>Try-with-resources</trigger>
+        <trigger>Exception chaining</trigger>
+        <trigger>Fail-fast validation</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/123-java-exception-handling.md</reference>

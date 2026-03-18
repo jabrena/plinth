@@ -30,6 +30,15 @@ Gather context before drafting. Include Execution Instructions in every plan. Ne
 - **MUST**: Wait for user to confirm "proceed" before generating the plan
 - **MUST**: Include Execution Instructions section in every generated plan
 
+## When to use this skill
+
+- Create a plan
+- Design an implementation
+- Structure a development plan
+- Use plan mode
+- Outside-in TDD
+- Plan for feature implementation
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/020-planning-enhance-ai-plan-mode.md](references/020-planning-enhance-ai-plan-mode.md).

@@ -36,6 +36,14 @@ Before applying any type design changes, ensure the project compiles. If compila
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 - **BEFORE APPLYING**: Read the reference for detailed examples, good/bad patterns, and constraints
 
+## When to use this skill
+
+- Type design
+- Primitive obsession
+- Value objects
+- Type hierarchies
+- Fluent interfaces
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/122-java-type-design.md](references/122-java-type-design.md).

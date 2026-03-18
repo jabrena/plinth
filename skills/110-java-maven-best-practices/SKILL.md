@@ -35,6 +35,15 @@ Before applying Maven best practices recommendations, ensure the project is in a
 - **CROSS-MODULE SCOPE**: When child modules exist, check each one for: hardcoded dependency versions that duplicate `<dependencyManagement>` in the parent, plugin configurations that duplicate `<pluginManagement>`, properties that should be centralized in the parent, and version drift (same artifact declared at different versions across sibling modules)
 - **BEFORE APPLYING**: Read the reference for detailed examples, good/bad patterns, and constraints
 
+## When to use this skill
+
+- Review pom.xml
+- Improve Maven POM
+- Troubleshoot Maven
+- Maven best practices
+- Dependency management BOM
+- Multi-module Maven
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/110-java-maven-best-practices.md](references/110-java-maven-best-practices.md).

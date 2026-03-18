@@ -39,6 +39,13 @@ Before applying any exception handling changes, ensure the project compiles. If 
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 - **BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each exception handling pattern
 
+## When to use this skill
+
+- Exception handling
+- Try-with-resources
+- Exception chaining
+- Fail-fast validation
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/123-java-exception-handling.md](references/123-java-exception-handling.md).

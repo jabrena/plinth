@@ -44,6 +44,15 @@ Before applying plugin recommendations, ensure the project is in a valid state. 
 - **SCOPE**: Begin with Step 1 (existing configuration analysis) before any changes. Never remove or replace existing plugins; only add new ones that do not conflict
 - **BEFORE APPLYING**: Read the reference for detailed plugin configurations, XML templates, and constraints for each step
 
+## When to use this skill
+
+- Configure Maven plugins
+- Add Maven plugins
+- Enforcer Surefire Failsafe
+- JaCoCo code coverage
+- Spotless code formatting
+- OWASP dependency check
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/112-java-maven-plugins.md](references/112-java-maven-plugins.md).

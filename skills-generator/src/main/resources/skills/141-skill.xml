@@ -39,6 +39,15 @@ Identify and apply modern Java (Java 8+) refactoring opportunities to improve re
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Refactor to modern Java</trigger>
+        <trigger>Lambdas streams</trigger>
+        <trigger>Optional java.time</trigger>
+        <trigger>CompletableFuture async</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/141-java-refactoring-with-modern-features.md</reference>

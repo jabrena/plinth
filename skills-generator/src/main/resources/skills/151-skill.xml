@@ -34,6 +34,14 @@ Provide a complete JMeter performance testing solution by creating the run-jmete
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>JMeter performance</trigger>
+        <trigger>Load testing</trigger>
+        <trigger>Performance testing Java</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/151-java-performance-jmeter.md</reference>

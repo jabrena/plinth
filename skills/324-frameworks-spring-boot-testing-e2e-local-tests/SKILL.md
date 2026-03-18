@@ -30,6 +30,12 @@ Before applying any configuration changes, ensure the project compiles. If compi
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 - **BEFORE APPLYING**: Read the reference for detailed rules and good/bad patterns
 
+## When to use this skill
+
+- E2E local testing
+- spring-boot-docker-compose
+- Docker Compose testing
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/324-frameworks-spring-boot-testing-e2e-local-tests.md](references/324-frameworks-spring-boot-testing-e2e-local-tests.md).

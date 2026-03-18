@@ -43,6 +43,14 @@ Identify and apply functional programming principles in Java to improve immutabi
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Functional programming Java</trigger>
+        <trigger>Stream API</trigger>
+        <trigger>Immutability</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/142-java-functional-programming.md</reference>

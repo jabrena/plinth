@@ -38,6 +38,15 @@ Apply Spring Boot Core guidelines for annotations, bean management, configuratio
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Spring Boot application</trigger>
+        <trigger>@SpringBootApplication</trigger>
+        <trigger>Bean configuration</trigger>
+        <trigger>Component scanning</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/301-frameworks-spring-boot-core.md</reference>

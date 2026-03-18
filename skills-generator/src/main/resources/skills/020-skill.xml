@@ -36,6 +36,17 @@ Guide the process of creating a structured plan using Cursor Plan mode. **This i
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Create a plan</trigger>
+        <trigger>Design an implementation</trigger>
+        <trigger>Structure a development plan</trigger>
+        <trigger>Use plan mode</trigger>
+        <trigger>Outside-in TDD</trigger>
+        <trigger>Plan for feature implementation</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/020-planning-enhance-ai-plan-mode.md</reference>

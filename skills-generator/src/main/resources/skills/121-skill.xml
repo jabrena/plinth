@@ -36,6 +36,16 @@ Review and improve Java code using comprehensive object-oriented design guidelin
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Object-oriented design</trigger>
+        <trigger>SOLID principles</trigger>
+        <trigger>Refactor OOP code</trigger>
+        <trigger>Code smells God Class</trigger>
+        <trigger>Improve class design</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/121-java-object-oriented-design.md</reference>

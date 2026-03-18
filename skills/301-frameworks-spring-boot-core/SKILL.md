@@ -33,6 +33,13 @@ Before applying any Spring Boot changes, ensure the project compiles. If compila
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 - **BEFORE APPLYING**: Read the reference for detailed rules, good/bad patterns, and constraints
 
+## When to use this skill
+
+- Spring Boot application
+- @SpringBootApplication
+- Bean configuration
+- Component scanning
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/301-frameworks-spring-boot-core.md](references/301-frameworks-spring-boot-core.md).

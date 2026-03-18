@@ -31,6 +31,13 @@ Before applying any logging recommendations, ensure the project compiles. Compil
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 - **BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each logging pattern
 
+## When to use this skill
+
+- Observability
+- Logging
+- Structured logging
+- SLF4J MDC
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/180-java-observability-logging.md](references/180-java-observability-logging.md).

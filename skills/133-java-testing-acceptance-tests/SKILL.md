@@ -35,6 +35,12 @@ Before applying any acceptance test changes, ensure the Gherkin .feature file is
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 - **BEFORE APPLYING**: Read the reference for detailed examples, good/bad patterns, and constraints
 
+## When to use this skill
+
+- Acceptance tests
+- Gherkin feature file
+- Framework-agnostic acceptance
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/133-java-testing-acceptance-tests.md](references/133-java-testing-acceptance-tests.md).

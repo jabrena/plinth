@@ -38,6 +38,12 @@ Before applying any functional programming changes, ensure the project compiles.
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 - **BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each functional programming pattern
 
+## When to use this skill
+
+- Functional programming Java
+- Stream API
+- Immutability
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/142-java-functional-programming.md](references/142-java-functional-programming.md).

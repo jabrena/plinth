@@ -31,6 +31,15 @@ Apply proven testing strategies (RIGHT-BICEP, A-TRIP, CORRECT) to design and ver
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Testing strategies</trigger>
+        <trigger>RIGHT-BICEP</trigger>
+        <trigger>A-TRIP tests</trigger>
+        <trigger>CORRECT boundary</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/130-java-testing-strategies.md</reference>

@@ -31,6 +31,12 @@ Before applying any Spring Data JDBC changes, ensure the project compiles. If co
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 - **BEFORE APPLYING**: Read the reference for detailed rules and good/bad patterns
 
+## When to use this skill
+
+- Spring Data JDBC
+- JDBC with records
+- Repository pattern JDBC
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/312-frameworks-spring-data-jdbc.md](references/312-frameworks-spring-data-jdbc.md).

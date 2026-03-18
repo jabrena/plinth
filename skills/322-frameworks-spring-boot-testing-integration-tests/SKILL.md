@@ -30,6 +30,12 @@ Before applying any integration test changes, ensure the project compiles. If co
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 - **BEFORE APPLYING**: Read the reference for detailed rules and good/bad patterns
 
+## When to use this skill
+
+- Spring Boot integration tests
+- Testcontainers Spring
+- TestRestTemplate
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/322-frameworks-spring-boot-testing-integration-tests.md](references/322-frameworks-spring-boot-testing-integration-tests.md).

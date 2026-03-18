@@ -32,6 +32,13 @@ Before applying any secure coding changes, ensure the project compiles. If compi
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 - **BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each secure coding pattern
 
+## When to use this skill
+
+- Secure coding
+- Input validation
+- SQL injection
+- Parameterized queries
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/124-java-secure-coding.md](references/124-java-secure-coding.md).

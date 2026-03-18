@@ -34,6 +34,13 @@ Before applying any modern Java refactoring, ensure the project compiles. If com
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 - **BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each modern Java feature
 
+## When to use this skill
+
+- Refactor to modern Java
+- Lambdas streams
+- Optional java.time
+- CompletableFuture async
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/141-java-refactoring-with-modern-features.md](references/141-java-refactoring-with-modern-features.md).

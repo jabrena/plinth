@@ -30,6 +30,13 @@ Use challenge-first, consultative discovery—ask 1-2 questions at a time, build
 - **MUST**: Validate summary with user ("Does this accurately capture your quality needs?") before proposing ADR creation
 - **MUST**: Wait for user to confirm "proceed" before generating the ADR
 
+## When to use this skill
+
+- Document quality attributes
+- Create ADR for NFR
+- Non-functional requirements ADR
+- Security performance scalability architecture
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/033-architecture-adr-non-functional-requirements.md](references/033-architecture-adr-non-functional-requirements.md).
