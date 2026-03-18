@@ -110,9 +110,10 @@
                     <step-constraint>**MUST NOT** ask all questions simultaneously</step-constraint>
                     <step-constraint>**MUST NOT** assume answers or provide defaults</step-constraint>
                     <step-constraint>**MUST NOT** skip questions or change their order</step-constraint>
-                    <step-constraint>**MUST** follow question sequence: Project Nature → Java Version → Build and Quality Aspects → Coverage Threshold (conditional) → Sonar Configuration (conditional) → Sonar Host Configuration (conditional)</step-constraint>
+                    <step-constraint>**MUST** follow question sequence: Project Nature → Java Version → Build and Quality Aspects → Jib Image (conditional) → Coverage Threshold (conditional) → Sonar Configuration (conditional) → Sonar Host Configuration (conditional)</step-constraint>
                     <step-constraint>**MUST** confirm understanding of user selections before proceeding to Step 4</step-constraint>
                     <step-constraint>**MUST NOT** ask about Coverage Threshold if user did not select jacoco coverage</step-constraint>
+                    <step-constraint>**MUST** ask Question 3.1 (target container image) if "Container image build (Jib)" was selected in Question 3</step-constraint>
                 </step-constraint-list>
             </step-constraints>
         </step>
@@ -1886,12 +1887,90 @@ After adding this profile, verify the configuration:
                 </step-constraint-list>
             </step-constraints>
         </step>
+        <step number="21">
+            <step-title>Jib Maven Plugin Configuration</step-title>
+            <step-content><![CDATA[
+**Purpose**: Configure Jib Maven plugin for building container images without Docker daemon, using the image name provided in Step 3.1.
+
+**Dependencies**: Only execute if user selected "Container image build (Jib)" in Step 3. Requires completion of core plugin steps (3, 4, 5).
+
+**CRITICAL PRESERVATION RULE**: Only ADD this plugin if it doesn't already exist. Never REPLACE or REMOVE existing plugins.
+
+## Pre-Implementation Check
+
+**BEFORE adding Jib plugin, check if it already exists in the pom.xml:**
+
+If jib-maven-plugin already exists: Ask user "Jib plugin already exists. Do you want to enhance the existing configuration? (y/n)"
+
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing configuration elements only.
+
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Container image build (Jib)" in Step 3.
+
+## Implementation Guidelines
+
+1. **Replace image placeholder**: Use the target container image from Question 3.1 (e.g., `gcr.io/my-project/my-app`, `docker.io/username/myimage`, or `myimage` for local Docker)
+2. **No Docker daemon required**: Jib builds images directly; useful for CI/CD and local development
+
+## Jib Plugin Configuration
+
+**ADD this plugin to the `<build><plugins>` section ONLY if it doesn't already exist:**
+
+```xml
+<plugin>
+    <groupId>com.google.cloud.tools</groupId>
+    <artifactId>jib-maven-plugin</artifactId>
+    <version>${maven-plugin-jib.version}</version>
+    <configuration>
+        <to>
+            <image>REPLACE_WITH_ACTUAL_IMAGE</image>
+        </to>
+    </configuration>
+</plugin>
+```
+
+**Replace `REPLACE_WITH_ACTUAL_IMAGE`** with the value from Question 3.1 (e.g., `myimage`, `gcr.io/my-project/my-app`).
+
+## Usage Examples
+
+```bash
+# Build container image (no Docker daemon required)
+./mvnw compile jib:build
+
+# Build to Docker daemon (for local testing)
+./mvnw compile jib:dockerBuild
+
+# Build image tarball
+./mvnw compile jib:buildTar
+```
+
+## Validation
+
+After adding this plugin, verify the configuration:
+
+```bash
+# Validate plugin configuration
+./mvnw validate
+```
+                ]]>
+            </step-content>
+            <step-constraints>
+                <step-constraint-list>
+                    <step-constraint>**MUST** only add Jib plugin if "Container image build (Jib)" was selected in Step 3</step-constraint>
+                    <step-constraint>**MUST** check if plugin already exists before adding</step-constraint>
+                    <step-constraint>**MUST** ask user permission before modifying existing plugin configuration</step-constraint>
+                    <step-constraint>**MUST** use properties configured in Step 4 for plugin version</step-constraint>
+                    <step-constraint>**MUST** replace REPLACE_WITH_ACTUAL_IMAGE with the target container image from Question 3.1</step-constraint>
+                    <step-constraint>**MUST** skip this step entirely if Container image build (Jib) was not selected</step-constraint>
+                </step-constraint-list>
+            </step-constraints>
+        </step>
     </steps>
 
     <output-format>
         <output-format-list>
             <output-format-item>Ask questions one by one following the template exactly in Step 3</output-format-item>
-            <output-format-item>Execute steps 4-20 only based on user selections from Step 3</output-format-item>
+            <output-format-item>Execute steps 4-21 only based on user selections from Step 3</output-format-item>
             <output-format-item>Skip entire steps if no relevant features were selected</output-format-item>
             <output-format-item>Implement only requested features based on user selections</output-format-item>
             <output-format-item>Follow template specifications exactly for all configurations</output-format-item>
