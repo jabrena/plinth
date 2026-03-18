@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+      id="324-frameworks-spring-boot-testing-e2e-local-tests">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.13.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+  </metadata>
+
+  <title>Spring Boot E2E local testing with Docker Compose</title>
+  <description>Use when you need to configure E2E local testing with spring-boot-docker-compose — including dependency setup, compose service definitions, profiles, integration test setup, service connections, health checks, test data, and performance optimization.</description>
+  <goal><![CDATA[
+Apply Spring Boot E2E local testing guidelines with Docker Compose.
+
+**What is covered in this Skill?**
+
+- spring-boot-docker-compose dependency
+- Docker Compose service definitions
+- Application profile configuration
+- Integration test setup
+- Service connection management
+- Health checks, test data, performance
+
+**Scope:** Apply recommendations based on the reference rules and good/bad code examples.
+]]></goal>
+
+  <constraints>
+    <constraints-description>Before applying any configuration changes, ensure the project compiles. If compilation fails, stop immediately. After applying improvements, run full verification.</constraints-description>
+    <constraint-list>
+      <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+      <constraint>**SAFETY**: If compilation fails, stop immediately</constraint>
+      <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+      <constraint>**BEFORE APPLYING**: Read the reference for detailed rules and good/bad patterns</constraint>
+    </constraint-list>
+  </constraints>
+
+  <reference path="references/324-frameworks-spring-boot-testing-e2e-local-tests.md" />
+</skill>
