@@ -143,6 +143,11 @@ Start with essential build properties that every project needs (use the Java ver
 <maven-plugin-jxr.version>3.6.0</maven-plugin-jxr.version>
 ```
 
+**If Container image build (Jib) selected**:
+```xml
+<maven-plugin-jib.version>3.5.1</maven-plugin-jib.version>
+```
+
 The final `<properties>` section will look like this (example with common selections):
 
 ```xml
@@ -164,6 +169,7 @@ The final `<properties>` section will look like this (example with common select
   <maven-plugin-spotbugs.version>4.9.3.0</maven-plugin-spotbugs.version>
   <maven-plugin-compiler.version>3.13.0</maven-plugin-compiler.version>
   <!-- If Cyclomatic complexity: maven-plugin-pmd.version, maven-plugin-jxr.version -->
+  <!-- If Jib selected: maven-plugin-jib.version -->
 
   <!-- Quality thresholds (if configured) -->
   <coverage.level>80</coverage.level>
