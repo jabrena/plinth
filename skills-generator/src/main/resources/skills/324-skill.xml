@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
       id="324-frameworks-spring-boot-testing-e2e-local-tests">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
+    <description>Use when you need to configure E2E local testing with spring-boot-docker-compose — including dependency setup, compose service definitions, profiles, integration test setup, service connections, health checks, test data, and performance optimization.</description>
   </metadata>
 
   <title>Spring Boot E2E local testing with Docker Compose</title>
-  <description>Use when you need to configure E2E local testing with spring-boot-docker-compose — including dependency setup, compose service definitions, profiles, integration test setup, service connections, health checks, test data, and performance optimization.</description>
   <goal><![CDATA[
 Apply Spring Boot E2E local testing guidelines with Docker Compose.
 
@@ -35,5 +35,9 @@ Apply Spring Boot E2E local testing guidelines with Docker Compose.
     </constraint-list>
   </constraints>
 
-  <reference path="references/324-frameworks-spring-boot-testing-e2e-local-tests.md" />
-</skill>
+  <references>
+    <reference-list>
+        <reference>references/324-frameworks-spring-boot-testing-e2e-local-tests.md</reference>
+    </reference-list>
+  </references>
+</prompt>

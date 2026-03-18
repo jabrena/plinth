@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
       id="020-planning-enhance-ai-plan-mode"
       interactive="true">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
+    <description>Use when creating a plan using Plan model and enhancing structured design plans in Cursor Plan mode for Java implementations. Use when the user wants to create a plan, design an implementation, structure a development plan, or use plan mode for outside-in TDD, feature implementation, or refactoring work.</description>
   </metadata>
 
   <title>Java Design Plan Creation for Cursor Plan Mode</title>
-  <description>Use when creating a plan using Plan model and enhancing structured design plans in Cursor Plan mode for Java implementations. Use when the user wants to create a plan, design an implementation, structure a development plan, or use plan mode for outside-in TDD, feature implementation, or refactoring work.</description>
   <goal><![CDATA[
 Guide the process of creating a structured plan using Cursor Plan mode. **This is an interactive SKILL**. Plans follow a consistent section structure suitable for Java feature implementation, refactoring, or API design.
 
@@ -36,5 +36,9 @@ Guide the process of creating a structured plan using Cursor Plan mode. **This i
     </constraint-list>
   </constraints>
 
-  <reference path="references/020-planning-enhance-ai-plan-mode.md" />
-</skill>
+  <references>
+    <reference-list>
+        <reference>references/020-planning-enhance-ai-plan-mode.md</reference>
+    </reference-list>
+  </references>
+</prompt>

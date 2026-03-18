@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
       id="170-java-documentation"
       interactive="true">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
+    <description>Use when you need to generate or improve Java project documentation — including README.md files, package-info.java files, and Javadoc enhancements — through a modular, step-based interactive process that adapts to your specific documentation needs.</description>
   </metadata>
 
   <title>Java Documentation Generator with modular step-based configuration</title>
-  <description>Use when you need to generate or improve Java project documentation — including README.md files, package-info.java files, and Javadoc enhancements — through a modular, step-based interactive process that adapts to your specific documentation needs.</description>
   <goal><![CDATA[
 Generate comprehensive Java project documentation through a modular, step-based interactive process that covers README.md, package-info.java, and Javadoc. **This is an interactive SKILL**.
 
@@ -32,5 +32,9 @@ Generate comprehensive Java project documentation through a modular, step-based 
     </constraint-list>
   </constraints>
 
-  <reference path="references/170-java-documentation.md" />
-</skill>
+  <references>
+    <reference-list>
+        <reference>references/170-java-documentation.md</reference>
+    </reference-list>
+  </references>
+</prompt>

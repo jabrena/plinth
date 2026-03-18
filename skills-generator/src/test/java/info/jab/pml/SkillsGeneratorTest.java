@@ -275,7 +275,7 @@ class SkillsGeneratorTest {
     private String loadSkillFromXmlResources(String skillId) throws Exception {
         String numId = numericId(skillId);
         String xmlResource = "skills/" + numId + "-skill.xml";
-        String xsltResource = "schemas/skill-to-markdown.xslt";
+        String xsltResource = "skill-to-markdown.xslt";
         try (
             InputStream xmlStream = getTestResource(xmlResource);
             InputStream xsltStream = getTestResource(xsltResource)

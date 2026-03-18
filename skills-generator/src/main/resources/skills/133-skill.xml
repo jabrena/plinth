@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
       id="133-java-testing-acceptance-tests">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
+    <description>Use when you need to implement acceptance tests from a Gherkin .feature file for framework-agnostic Java (no Spring Boot, Quarkus, Micronaut) — finding @acceptance scenarios, happy path with RestAssured, Testcontainers for DB/Kafka, WireMock for external REST. Requires .feature file in context.</description>
   </metadata>
 
   <title>Java acceptance tests from Gherkin</title>
-  <description>Use when you need to implement acceptance tests from a Gherkin .feature file for framework-agnostic Java (no Spring Boot, Quarkus, Micronaut) — finding @acceptance scenarios, happy path with RestAssured, Testcontainers for DB/Kafka, WireMock for external REST. Requires .feature file in context.</description>
   <goal><![CDATA[
 Implement acceptance tests from Gherkin feature files. Given a .feature file in context, find @acceptance-tagged scenarios and implement happy-path tests with RestAssured, Testcontainers, and WireMock.
 
@@ -40,5 +40,9 @@ Implement acceptance tests from Gherkin feature files. Given a .feature file in 
     </constraint-list>
   </constraints>
 
-  <reference path="references/133-java-testing-acceptance-tests.md" />
-</skill>
+  <references>
+    <reference-list>
+        <reference>references/133-java-testing-acceptance-tests.md</reference>
+    </reference-list>
+  </references>
+</prompt>

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
       id="121-java-object-oriented-design">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
+    <description>Use when you need to review, improve, or refactor Java code for object-oriented design quality — including applying SOLID, DRY, and YAGNI principles, improving class and interface design, fixing OOP concept misuse (encapsulation, inheritance, polymorphism), identifying and resolving code smells (God Class, Feature Envy, Data Clumps), or improving object creation patterns, method design, and exception handling.</description>
   </metadata>
 
   <title>Java Object-Oriented Design Guidelines</title>
-  <description>Use when you need to review, improve, or refactor Java code for object-oriented design quality — including applying SOLID, DRY, and YAGNI principles, improving class and interface design, fixing OOP concept misuse (encapsulation, inheritance, polymorphism), identifying and resolving code smells (God Class, Feature Envy, Data Clumps), or improving object creation patterns, method design, and exception handling.</description>
   <goal><![CDATA[
 Review and improve Java code using comprehensive object-oriented design guidelines and refactoring practices.
 
@@ -36,5 +36,9 @@ Review and improve Java code using comprehensive object-oriented design guidelin
     </constraint-list>
   </constraints>
 
-  <reference path="references/121-java-object-oriented-design.md" />
-</skill>
+  <references>
+    <reference-list>
+        <reference>references/121-java-object-oriented-design.md</reference>
+    </reference-list>
+  </references>
+</prompt>

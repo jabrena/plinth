@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
       id="125-java-concurrency">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
+    <description>Use when you need to apply Java concurrency best practices — including thread safety fundamentals, ExecutorService thread pool management, concurrent design patterns like Producer-Consumer, asynchronous programming with CompletableFuture, immutability and safe publication, deadlock avoidance, virtual threads and structured concurrency, scoped values, backpressure, cancellation discipline, and observability for concurrent systems.</description>
   </metadata>
 
   <title>Java rules for Concurrency objects</title>
-  <description>Use when you need to apply Java concurrency best practices — including thread safety fundamentals, ExecutorService thread pool management, concurrent design patterns like Producer-Consumer, asynchronous programming with CompletableFuture, immutability and safe publication, deadlock avoidance, virtual threads and structured concurrency, scoped values, backpressure, cancellation discipline, and observability for concurrent systems.</description>
   <goal><![CDATA[
 Identify and apply Java concurrency best practices to improve thread safety, scalability, and maintainability by using modern `java.util.concurrent` utilities, virtual threads, and structured concurrency.
 
@@ -45,5 +45,9 @@ Identify and apply Java concurrency best practices to improve thread safety, sca
     </constraint-list>
   </constraints>
 
-  <reference path="references/125-java-concurrency.md" />
-</skill>
+  <references>
+    <reference-list>
+        <reference>references/125-java-concurrency.md</reference>
+    </reference-list>
+  </references>
+</prompt>

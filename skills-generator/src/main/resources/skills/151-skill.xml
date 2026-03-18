@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
       id="151-java-performance-jmeter">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
+    <description>Use when you need to set up JMeter performance testing for a Java project — including creating the run-jmeter.sh script from the exact template, configuring load tests with loops, threads, and ramp-up, or running performance tests from the project root with custom or default settings.</description>
   </metadata>
 
   <title>Run performance tests based on JMeter</title>
-  <description>Use when you need to set up JMeter performance testing for a Java project — including creating the run-jmeter.sh script from the exact template, configuring load tests with loops, threads, and ramp-up, or running performance tests from the project root with custom or default settings.</description>
   <goal><![CDATA[
 Provide a complete JMeter performance testing solution by creating the run-jmeter.sh script from the exact template, making it executable, and configuring the project structure for load testing. Supports custom loops, threads, ramp-up, and environment variable overrides.
 
@@ -34,5 +34,9 @@ Provide a complete JMeter performance testing solution by creating the run-jmete
     </constraint-list>
   </constraints>
 
-  <reference path="references/151-java-performance-jmeter.md" />
-</skill>
+  <references>
+    <reference-list>
+        <reference>references/151-java-performance-jmeter.md</reference>
+    </reference-list>
+  </references>
+</prompt>

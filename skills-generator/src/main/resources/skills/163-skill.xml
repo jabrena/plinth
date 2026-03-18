@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
       id="163-java-profiling-refactor">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
+    <description>Use when you need to refactor Java code based on profiling analysis findings — including reviewing docs/profiling-problem-analysis and docs/profiling-solutions, identifying specific performance bottlenecks, and implementing targeted code changes to address CPU, memory, or threading issues.</description>
   </metadata>
 
   <title>Java Profiling Workflow / Step 3 / Refactor code to fix issues</title>
-  <description>Use when you need to refactor Java code based on profiling analysis findings — including reviewing docs/profiling-problem-analysis and docs/profiling-solutions, identifying specific performance bottlenecks, and implementing targeted code changes to address CPU, memory, or threading issues.</description>
   <goal><![CDATA[
 Implement refactoring based on profiling analysis: review profiling-problem-analysis-YYYYMMDD.md and profiling-solutions-YYYYMMDD.md, identify specific performance bottlenecks, and refactor code to fix them. Ensure all tests pass after changes.
 
@@ -32,5 +32,9 @@ Implement refactoring based on profiling analysis: review profiling-problem-anal
     </constraint-list>
   </constraints>
 
-  <reference path="references/163-java-profiling-refactor.md" />
-</skill>
+  <references>
+    <reference-list>
+        <reference>references/163-java-profiling-refactor.md</reference>
+    </reference-list>
+  </references>
+</prompt>
