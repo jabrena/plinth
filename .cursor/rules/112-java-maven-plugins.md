@@ -121,11 +121,21 @@ Options:
 - Security static code analysis (SpotBugs, PMD)
 - Sonar
 - Version management
+- Container image build (Jib)
 - JMH (Java Microbenchmark Harness)
 - Maven Compiler
 - Cyclomatic Complexity
 
 **Note**: When "Cyclomatic Complexity" is selected, Step 20 will create a PMD ruleset file and profile. The ruleset location depends on project structure: `src/main/pmd/pmd-cyclomatic-complexity.xml` (mono-module) or `pmd/pmd-cyclomatic-complexity.xml` (multi-module).
+
+---
+
+**Question 3.1** (conditional): What is your target container image for Jib?
+
+**Note**: This question is only asked if "Container image build (Jib)" was selected in question 3.
+
+- Example format: `gcr.io/my-project/my-app`, `docker.io/username/myimage`, or `myimage` for local Docker
+- The image name will be used in the Jib plugin `<to><image>` configuration
 
 ---
 
@@ -204,9 +214,10 @@ Options:
 - **MUST NOT** ask all questions simultaneously
 - **MUST NOT** assume answers or provide defaults
 - **MUST NOT** skip questions or change their order
-- **MUST** follow question sequence: Project Nature → Java Version → Build and Quality Aspects → Coverage Threshold (conditional) → Sonar Configuration (conditional) → Sonar Host Configuration (conditional)
+- **MUST** follow question sequence: Project Nature → Java Version → Build and Quality Aspects → Jib Image (conditional) → Coverage Threshold (conditional) → Sonar Configuration (conditional) → Sonar Host Configuration (conditional)
 - **MUST** confirm understanding of user selections before proceeding to Step 4
 - **MUST NOT** ask about Coverage Threshold if user did not select jacoco coverage
+- **MUST** ask Question 3.1 (target container image) if "Container image build (Jib)" was selected in Question 3
 
 ### Step 4: Properties Configuration
 
@@ -361,6 +372,11 @@ Start with essential build properties that every project needs (use the Java ver
 <maven-plugin-jxr.version>3.6.0</maven-plugin-jxr.version>
 ```
 
+**If Container image build (Jib) selected**:
+```xml
+<maven-plugin-jib.version>3.5.1</maven-plugin-jib.version>
+```
+
 The final `<properties>` section will look like this (example with common selections):
 
 ```xml
@@ -382,6 +398,7 @@ The final `<properties>` section will look like this (example with common select
   <maven-plugin-spotbugs.version>4.9.3.0</maven-plugin-spotbugs.version>
   <maven-plugin-compiler.version>3.13.0</maven-plugin-compiler.version>
   <!-- If Cyclomatic complexity: maven-plugin-pmd.version, maven-plugin-jxr.version -->
+  <!-- If Jib selected: maven-plugin-jib.version -->
 
   <!-- Quality thresholds (if configured) -->
   <coverage.level>80</coverage.level>
@@ -2099,11 +2116,86 @@ After adding this profile, verify the configuration:
 - **MUST** use properties configured in Step 4 for plugin versions
 - **MUST** skip this step entirely if Cyclomatic Complexity was not selected
 
+### Step 21: Jib Maven Plugin Configuration
+
+**Purpose**: Configure Jib Maven plugin for building container images without Docker daemon, using the image name provided in Step 3.1.
+
+**Dependencies**: Only execute if user selected "Container image build (Jib)" in Step 3. Requires completion of core plugin steps (3, 4, 5).
+
+**CRITICAL PRESERVATION RULE**: Only ADD this plugin if it doesn't already exist. Never REPLACE or REMOVE existing plugins.
+
+## Pre-Implementation Check
+
+**BEFORE adding Jib plugin, check if it already exists in the pom.xml:**
+
+If jib-maven-plugin already exists: Ask user "Jib plugin already exists. Do you want to enhance the existing configuration? (y/n)"
+
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing configuration elements only.
+
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Container image build (Jib)" in Step 3.
+
+## Implementation Guidelines
+
+1. **Replace image placeholder**: Use the target container image from Question 3.1 (e.g., `gcr.io/my-project/my-app`, `docker.io/username/myimage`, or `myimage` for local Docker)
+2. **No Docker daemon required**: Jib builds images directly; useful for CI/CD and local development
+
+## Jib Plugin Configuration
+
+**ADD this plugin to the `<build><plugins>` section ONLY if it doesn't already exist:**
+
+```xml
+<plugin>
+    <groupId>com.google.cloud.tools</groupId>
+    <artifactId>jib-maven-plugin</artifactId>
+    <version>${maven-plugin-jib.version}</version>
+    <configuration>
+        <to>
+            <image>REPLACE_WITH_ACTUAL_IMAGE</image>
+        </to>
+    </configuration>
+</plugin>
+```
+
+**Replace `REPLACE_WITH_ACTUAL_IMAGE`** with the value from Question 3.1 (e.g., `myimage`, `gcr.io/my-project/my-app`).
+
+## Usage Examples
+
+```bash
+# Build container image (no Docker daemon required)
+./mvnw compile jib:build
+
+# Build to Docker daemon (for local testing)
+./mvnw compile jib:dockerBuild
+
+# Build image tarball
+./mvnw compile jib:buildTar
+```
+
+## Validation
+
+After adding this plugin, verify the configuration:
+
+```bash
+# Validate plugin configuration
+./mvnw validate
+```
+                
+            
+#### Step Constraints
+
+- **MUST** only add Jib plugin if "Container image build (Jib)" was selected in Step 3
+- **MUST** check if plugin already exists before adding
+- **MUST** ask user permission before modifying existing plugin configuration
+- **MUST** use properties configured in Step 4 for plugin version
+- **MUST** replace REPLACE_WITH_ACTUAL_IMAGE with the target container image from Question 3.1
+- **MUST** skip this step entirely if Container image build (Jib) was not selected
+
 
 ## Output Format
 
 - Ask questions one by one following the template exactly in Step 3
-- Execute steps 4-20 only based on user selections from Step 3
+- Execute steps 4-21 only based on user selections from Step 3
 - Skip entire steps if no relevant features were selected
 - Implement only requested features based on user selections
 - Follow template specifications exactly for all configurations

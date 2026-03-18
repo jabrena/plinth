@@ -35,11 +35,21 @@ Options:
 - Security static code analysis (SpotBugs, PMD)
 - Sonar
 - Version management
+- Container image build (Jib)
 - JMH (Java Microbenchmark Harness)
 - Maven Compiler
 - Cyclomatic Complexity
 
 **Note**: When "Cyclomatic Complexity" is selected, Step 20 will create a PMD ruleset file and profile. The ruleset location depends on project structure: `src/main/pmd/pmd-cyclomatic-complexity.xml` (mono-module) or `pmd/pmd-cyclomatic-complexity.xml` (multi-module).
+
+---
+
+**Question 3.1** (conditional): What is your target container image for Jib?
+
+**Note**: This question is only asked if "Container image build (Jib)" was selected in question 3.
+
+- Example format: `gcr.io/my-project/my-app`, `docker.io/username/myimage`, or `myimage` for local Docker
+- The image name will be used in the Jib plugin `<to><image>` configuration
 
 ---
 
