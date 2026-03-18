@@ -67,7 +67,7 @@ npx skill-check skills
 
 ## Boundaries
 
-- ✅ **Always do:** Edit XML in `system-prompts-generator/src/main/resources/` to change rules, run `./mvnw clean verify` before promoting changes. When edit XML, follow PML Schema: [https://jabrena.github.io/pml/schemas/0.5.0/pml.xsd](https://jabrena.github.io/pml/schemas/0.5.0/pml.xsd). After skill changes (add/remove/rename), update `.claude-plugin/marketplace.json` so the plugin index stays in sync with `skills/`.
+- ✅ **Always do:** Edit XML in `system-prompts-generator/src/main/resources/` to change rules, run `./mvnw clean verify` before promoting changes. When edit XML, follow PML Schema: [https://jabrena.github.io/pml/schemas/0.6.0/pml.xsd](https://jabrena.github.io/pml/schemas/0.6.0/pml.xsd). After skill changes (add/remove/rename), update `.claude-plugin/marketplace.json` so the plugin index stays in sync with `skills/`.
 - ⚠️ **Ask first:** Adding new XML rule files, modifying the XSLT stylesheet, changing site templates
 - 🚫 **Never do:** Edit `.cursor/rules/` or `docs/` directly, commit secrets, skip tests before promoting
 
