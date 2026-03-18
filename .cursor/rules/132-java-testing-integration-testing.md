@@ -1,6 +1,6 @@
 ---
 name: 132-java-testing-integration-testing
-description: Use when you need to set up, review, or improve Java integration tests — including generating a BaseIntegrationTest.java with WireMock for HTTP stubs, detecting HTTP client infrastructure from import signals, injecting service coordinates dynamically via System.setProperty(), creating WireMock JSON mapping files with bodyFileName, isolating stubs per test method, verifying HTTP interactions, or eliminating anti-patterns such as Mockito-mocked HTTP clients or globally registered WireMock stubs.
+description: Use when you need to set up, review, or improve Java integration tests for framework-agnostic applications (no Spring Boot, Quarkus, Micronaut) — including generating a BaseIntegrationTest.java with WireMock for HTTP stubs, detecting HTTP client infrastructure from import signals, injecting service coordinates dynamically via System.setProperty(), creating WireMock JSON mapping files with bodyFileName, isolating stubs per test method, verifying HTTP interactions, or eliminating anti-patterns such as Mockito-mocked HTTP clients or globally registered WireMock stubs. For Spring Boot use @322-frameworks-spring-boot-testing-integration-tests.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -37,6 +37,7 @@ Help developers set up a robust integration-test base class for Java services. I
 
 Before generating any code, ensure the project is in a valid state. Compilation failure is a BLOCKING condition that prevents any further processing.
 
+- **PRECONDITION**: The project MUST NOT use Spring Boot, Quarkus, or Micronaut — stop and direct the user to `@322-frameworks-spring-boot-testing-integration-tests` for Spring Boot integration testing
 - **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
 - **PREREQUISITE**: Project must compile successfully before generating integration-test scaffolding
 - **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE
@@ -89,6 +90,7 @@ Options:
 
 #### Step Constraints
 
+- **MUST** abort if the project uses Spring Boot, Quarkus, or Micronaut — direct the user to `@322-frameworks-spring-boot-testing-integration-tests`
 - **DEPENDENCIES**: Requires that the project compiles successfully (run `./mvnw compile` first)
 - **MUST** inspect class(es) in context for infrastructure import signals BEFORE asking any question
 - **MUST** skip a question when the answer is unambiguously determined by code analysis
