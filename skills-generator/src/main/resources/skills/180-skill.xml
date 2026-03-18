@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
       id="180-java-observability-logging">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
+    <description>Use when you need to implement or improve Java logging and observability — including selecting SLF4J with Logback/Log4j2, applying proper log levels (ERROR, WARN, INFO, DEBUG, TRACE), parameterized logging, secure logging without sensitive data exposure, environment-specific configuration, log aggregation and monitoring, or validating logging through tests.</description>
   </metadata>
 
   <title>Java Logging Best Practices</title>
-  <description>Use when you need to implement or improve Java logging and observability — including selecting SLF4J with Logback/Log4j2, applying proper log levels (ERROR, WARN, INFO, DEBUG, TRACE), parameterized logging, secure logging without sensitive data exposure, environment-specific configuration, log aggregation and monitoring, or validating logging through tests.</description>
   <goal><![CDATA[
 Implement effective Java logging following standardized frameworks, meaningful log levels, core practices (parameterized logging, exception handling, no sensitive data), flexible configuration, security-conscious logging, monitoring and alerting, and comprehensive logging validation through testing.
 
@@ -36,5 +36,9 @@ Implement effective Java logging following standardized frameworks, meaningful l
     </constraint-list>
   </constraints>
 
-  <reference path="references/180-java-observability-logging.md" />
-</skill>
+  <references>
+    <reference-list>
+        <reference>references/180-java-observability-logging.md</reference>
+    </reference-list>
+  </references>
+</prompt>

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
       id="113-java-maven-documentation">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
+    <description>Use when you need to create a DEVELOPER.md file for a Maven project — combining a fixed base template with dynamic sections derived from the project pom.xml, including a Plugin Goals Reference, Maven Profiles table, and Submodules table for multi-module projects.</description>
   </metadata>
 
   <title>Create DEVELOPER.md for the Maven projects</title>
-  <description>Use when you need to create a DEVELOPER.md file for a Maven project — combining a fixed base template with dynamic sections derived from the project pom.xml, including a Plugin Goals Reference, Maven Profiles table, and Submodules table for multi-module projects.</description>
   <goal><![CDATA[
 Generate a `DEVELOPER.md` file that combines a fixed base template with dynamic sections derived from analysing the project `pom.xml`.
 
@@ -31,5 +31,9 @@ Generate a `DEVELOPER.md` file that combines a fixed base template with dynamic 
     </constraint-list>
   </constraints>
 
-  <reference path="references/113-java-maven-documentation.md" />
-</skill>
+  <references>
+    <reference-list>
+        <reference>references/113-java-maven-documentation.md</reference>
+    </reference-list>
+  </references>
+</prompt>

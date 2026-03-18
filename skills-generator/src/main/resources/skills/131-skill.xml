@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
       id="131-java-testing-unit-testing">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
+    <description>Use when you need to review, improve, or write Java unit tests — including migrating from JUnit 4 to JUnit 5, adopting AssertJ for fluent assertions, structuring tests with Given-When-Then, ensuring test independence, applying parameterized tests, mocking dependencies with Mockito, verifying boundary conditions (RIGHT-BICEP, CORRECT, A-TRIP), leveraging JSpecify null-safety annotations, or eliminating testing anti-patterns such as reflection-based tests or shared mutable state.</description>
   </metadata>
 
   <title>Java Unit testing guidelines</title>
-  <description>Use when you need to review, improve, or write Java unit tests — including migrating from JUnit 4 to JUnit 5, adopting AssertJ for fluent assertions, structuring tests with Given-When-Then, ensuring test independence, applying parameterized tests, mocking dependencies with Mockito, verifying boundary conditions (RIGHT-BICEP, CORRECT, A-TRIP), leveraging JSpecify null-safety annotations, or eliminating testing anti-patterns such as reflection-based tests or shared mutable state.</description>
   <goal><![CDATA[
 Review and improve Java unit tests using modern JUnit 5, AssertJ, and Mockito best practices.
 
@@ -40,5 +40,9 @@ Review and improve Java unit tests using modern JUnit 5, AssertJ, and Mockito be
     </constraint-list>
   </constraints>
 
-  <reference path="references/131-java-testing-unit-testing.md" />
-</skill>
+  <references>
+    <reference-list>
+        <reference>references/131-java-testing-unit-testing.md</reference>
+    </reference-list>
+  </references>
+</prompt>

@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
       id="312-frameworks-spring-data-jdbc">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
+    <description>Use when you need to use Spring Data JDBC with Java records — including entity design with records, repository pattern, immutable updates, aggregate relationships, custom queries, transaction management, and avoiding N+1 problems.</description>
   </metadata>
 
   <title>Spring Data JDBC with Records</title>
-  <description>Use when you need to use Spring Data JDBC with Java records — including entity design with records, repository pattern, immutable updates, aggregate relationships, custom queries, transaction management, and avoiding N+1 problems.</description>
   <goal><![CDATA[
 Apply Spring Data JDBC guidelines with Java records.
 
@@ -36,5 +36,9 @@ Apply Spring Data JDBC guidelines with Java records.
     </constraint-list>
   </constraints>
 
-  <reference path="references/312-frameworks-spring-data-jdbc.md" />
-</skill>
+  <references>
+    <reference-list>
+        <reference>references/312-frameworks-spring-data-jdbc.md</reference>
+    </reference-list>
+  </references>
+</prompt>

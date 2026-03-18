@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
       id="110-java-maven-best-practices">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
+    <description>Use when you need to review, improve, or troubleshoot a Maven pom.xml file — including dependency management with BOMs, plugin configuration, version centralization, multi-module project structure, build profiles, or any situation where you want to align your Maven setup with industry best practices.</description>
   </metadata>
 
   <title>Maven Best Practices</title>
-  <description>Use when you need to review, improve, or troubleshoot a Maven pom.xml file — including dependency management with BOMs, plugin configuration, version centralization, multi-module project structure, build profiles, or any situation where you want to align your Maven setup with industry best practices.</description>
   <goal><![CDATA[
 Improve Maven POM configuration using industry-standard best practices.
 
@@ -40,5 +40,9 @@ Improve Maven POM configuration using industry-standard best practices.
     </constraint-list>
   </constraints>
 
-  <reference path="references/110-java-maven-best-practices.md" />
-</skill>
+  <references>
+    <reference-list>
+        <reference>references/110-java-maven-best-practices.md</reference>
+    </reference-list>
+  </references>
+</prompt>

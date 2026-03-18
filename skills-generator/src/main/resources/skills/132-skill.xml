@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
       id="132-java-testing-integration-testing">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
+    <description>Use when you need to set up, review, or improve Java integration tests — including generating a BaseIntegrationTest.java with WireMock for HTTP stubs, detecting HTTP client infrastructure from import signals, injecting service coordinates dynamically via System.setProperty(), creating WireMock JSON mapping files with bodyFileName, isolating stubs per test method, verifying HTTP interactions, or eliminating anti-patterns such as Mockito-mocked HTTP clients or globally registered WireMock stubs.</description>
   </metadata>
 
   <title>Java Integration testing guidelines</title>
-  <description>Use when you need to set up, review, or improve Java integration tests — including generating a BaseIntegrationTest.java with WireMock for HTTP stubs, detecting HTTP client infrastructure from import signals, injecting service coordinates dynamically via System.setProperty(), creating WireMock JSON mapping files with bodyFileName, isolating stubs per test method, verifying HTTP interactions, or eliminating anti-patterns such as Mockito-mocked HTTP clients or globally registered WireMock stubs.</description>
   <goal><![CDATA[
 Set up robust integration-test infrastructure for Java services using WireMock to stub outbound HTTP dependencies.
 
@@ -40,5 +40,9 @@ Set up robust integration-test infrastructure for Java services using WireMock t
     </constraint-list>
   </constraints>
 
-  <reference path="references/132-java-testing-integration-testing.md" />
-</skill>
+  <references>
+    <reference-list>
+        <reference>references/132-java-testing-integration-testing.md</reference>
+    </reference-list>
+  </references>
+</prompt>

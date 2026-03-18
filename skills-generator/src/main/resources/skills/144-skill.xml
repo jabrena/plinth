@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
       id="144-java-data-oriented-programming">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
+    <description>Use when you need to apply data-oriented programming best practices in Java — including separating code (behavior) from data structures using records, designing immutable data with pure transformation functions, keeping data flat and denormalized with ID-based references, starting with generic data structures converting to specific types when needed, ensuring data integrity through pure validation functions, and creating flexible generic data access layers.</description>
   </metadata>
 
   <title>Java Data-Oriented Programming Best Practices</title>
-  <description>Use when you need to apply data-oriented programming best practices in Java — including separating code (behavior) from data structures using records, designing immutable data with pure transformation functions, keeping data flat and denormalized with ID-based references, starting with generic data structures converting to specific types when needed, ensuring data integrity through pure validation functions, and creating flexible generic data access layers.</description>
   <goal><![CDATA[
 Apply data-oriented programming in Java: separate data from behavior with records, use immutable data structures, pure functions for transformations, flat denormalized structures with ID references, generic-to-specific type conversion when needed, pure validation functions, and flexible generic data access layers. All transformations should be explicit, traceable, and composed of clear pure functional steps.
 
@@ -36,5 +36,9 @@ Apply data-oriented programming in Java: separate data from behavior with record
     </constraint-list>
   </constraints>
 
-  <reference path="references/144-java-data-oriented-programming.md" />
-</skill>
+  <references>
+    <reference-list>
+        <reference>references/144-java-data-oriented-programming.md</reference>
+    </reference-list>
+  </references>
+</prompt>

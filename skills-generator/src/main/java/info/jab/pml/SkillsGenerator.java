@@ -10,8 +10,6 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -170,12 +168,10 @@ public final class SkillsGenerator {
     private String loadSkillSummaryFromXml(String skillId) {
         String numericId = extractNumericId(skillId);
         String xmlResource = "skills/" + numericId + "-skill.xml";
-        String xsltResource = "schemas/skill-to-markdown.xslt";
-        String schemaResource = "schemas/skill.xsd";
+        String xsltResource = "skill-to-markdown.xslt";
         try (
             InputStream xmlStream = getResource(xmlResource);
-            InputStream xsltStream = getResource(xsltResource);
-            InputStream schemaStream = getResource(schemaResource)
+            InputStream xsltStream = getResource(xsltResource)
         ) {
             if (xmlStream == null) {
                 throw new RuntimeException("Skill XML not found: " + xmlResource);
@@ -183,14 +179,8 @@ public final class SkillsGenerator {
             if (xsltStream == null) {
                 throw new RuntimeException("XSLT not found: " + xsltResource);
             }
-            if (schemaStream == null) {
-                throw new RuntimeException("Schema not found: " + schemaResource);
-            }
-            SchemaFactory factory = SchemaFactory.newInstance(javax.xml.XMLConstants.W3C_XML_SCHEMA_NS_URI);
-            Schema schema = factory.newSchema(new StreamSource(schemaStream));
+            // Parse without schema validation: skills use PML schema (prompt root)
             DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-            docFactory.setSchema(schema);
-            docFactory.setNamespaceAware(true);
             DocumentBuilder builder = docFactory.newDocumentBuilder();
             builder.parse(xmlStream);
 
