@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
       id="031-architecture-adr-functional-requirements-cli"
       interactive="true">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
+    <description>Facilitates conversational discovery to create Architectural Decision Records (ADRs) for CLI development. Use when the user wants to document CLI architecture, capture functional requirements for a command-line tool, create ADRs for CLI projects, or design CLI applications with documented decisions.</description>
   </metadata>
 
   <title>Create ADRs for CLI Development</title>
-  <description>Facilitates conversational discovery to create Architectural Decision Records (ADRs) for CLI development. Use when the user wants to document CLI architecture, capture functional requirements for a command-line tool, create ADRs for CLI projects, or design CLI applications with documented decisions.</description>
   <goal><![CDATA[
 Guide stakeholders through a structured conversation to uncover and document technical decisions and functional requirements for CLI applications. **This is an interactive SKILL**. The ADR is the documentation of that conversation, not the conversation itself.
 
@@ -34,5 +34,9 @@ Guide stakeholders through a structured conversation to uncover and document tec
     </constraint-list>
   </constraints>
 
-  <reference path="references/031-architecture-adr-functional-requirements-cli.md" />
-</skill>
+  <references>
+    <reference-list>
+        <reference>references/031-architecture-adr-functional-requirements-cli.md</reference>
+    </reference-list>
+  </references>
+</prompt>

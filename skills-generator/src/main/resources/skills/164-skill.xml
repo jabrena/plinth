@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
       id="164-java-profiling-verify">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
+    <description>Use when you need to verify Java performance optimizations by comparing profiling results before and after refactoring — including baseline validation, post-refactoring report generation, quantitative before/after metrics comparison, side-by-side flamegraph analysis, regression detection, or creating profiling-comparison-analysis and profiling-final-results documentation.</description>
   </metadata>
 
   <title>Java Profiling Workflow / Step 4 / Verify results</title>
-  <description>Use when you need to verify Java performance optimizations by comparing profiling results before and after refactoring — including baseline validation, post-refactoring report generation, quantitative before/after metrics comparison, side-by-side flamegraph analysis, regression detection, or creating profiling-comparison-analysis and profiling-final-results documentation.</description>
   <goal><![CDATA[
 Verify performance optimizations through rigorous before/after comparison: ensure baseline and post-refactoring profiling data use identical test conditions, generate post-refactoring reports, compare metrics (memory, CPU, GC, threading), perform side-by-side flamegraph analysis, document findings in profiling-comparison-analysis-YYYYMMDD.md and profiling-final-results-YYYYMMDD.md, and validate success criteria.
 
@@ -35,5 +35,9 @@ Verify performance optimizations through rigorous before/after comparison: ensur
     </constraint-list>
   </constraints>
 
-  <reference path="references/164-java-profiling-verify.md" />
-</skill>
+  <references>
+    <reference-list>
+        <reference>references/164-java-profiling-verify.md</reference>
+    </reference-list>
+  </references>
+</prompt>

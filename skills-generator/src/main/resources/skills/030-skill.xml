@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
       id="030-architecture-adr-general"
       interactive="true">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
+    <description>Use when you need to generate Architecture Decision Records (ADRs) for a Java project through an interactive, conversational process that systematically gathers context, stakeholders, options, and outcomes to produce well-structured ADR documents.</description>
   </metadata>
 
   <title>Java ADR Generator with interactive conversational approach</title>
-  <description>Use when you need to generate Architecture Decision Records (ADRs) for a Java project through an interactive, conversational process that systematically gathers context, stakeholders, options, and outcomes to produce well-structured ADR documents.</description>
   <goal><![CDATA[
 Generate Architecture Decision Records (ADRs) for Java projects through an interactive, conversational process that systematically gathers all necessary context to produce well-structured ADR documents. **This is an interactive SKILL**.
 
@@ -31,5 +31,9 @@ Generate Architecture Decision Records (ADRs) for Java projects through an inter
     </constraint-list>
   </constraints>
 
-  <reference path="references/030-architecture-adr-general.md" />
-</skill>
+  <references>
+    <reference-list>
+        <reference>references/030-architecture-adr-general.md</reference>
+    </reference-list>
+  </references>
+</prompt>

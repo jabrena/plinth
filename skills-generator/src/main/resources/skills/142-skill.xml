@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
       id="142-java-functional-programming">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
+    <description>Use when you need to apply functional programming principles in Java — including writing immutable objects and Records, pure functions, functional interfaces, lambda expressions, Stream API pipelines, Optional for null safety, function composition, higher-order functions, pattern matching for instanceof and switch, sealed classes/interfaces for controlled hierarchies, Stream Gatherers for custom operations, currying/partial application, effect boundary separation, and concurrent-safe functional patterns.</description>
   </metadata>
 
   <title>Java Functional Programming rules</title>
-  <description>Use when you need to apply functional programming principles in Java — including writing immutable objects and Records, pure functions, functional interfaces, lambda expressions, Stream API pipelines, Optional for null safety, function composition, higher-order functions, pattern matching for instanceof and switch, sealed classes/interfaces for controlled hierarchies, Stream Gatherers for custom operations, currying/partial application, effect boundary separation, and concurrent-safe functional patterns.</description>
   <goal><![CDATA[
 Identify and apply functional programming principles in Java to improve immutability, expressiveness, and maintainability.
 
@@ -43,5 +43,9 @@ Identify and apply functional programming principles in Java to improve immutabi
     </constraint-list>
   </constraints>
 
-  <reference path="references/142-java-functional-programming.md" />
-</skill>
+  <references>
+    <reference-list>
+        <reference>references/142-java-functional-programming.md</reference>
+    </reference-list>
+  </references>
+</prompt>

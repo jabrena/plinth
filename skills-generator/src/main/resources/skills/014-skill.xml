@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.6.0/pml.xsd"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
       id="014-agile-create-user-story"
       interactive="true">
   <metadata>
@@ -11,6 +11,7 @@
   </metadata>
 
   <title>Create Agile User Stories and Gherkin Feature Files</title>
+
   <goal><![CDATA[
 Guide the agent to ask targeted questions to gather details for a user story and its Gherkin acceptance criteria, then generate a Markdown user story and a separate Gherkin `.feature` file. **This is an interactive SKILL**.
 
@@ -32,5 +33,9 @@ Guide the agent to ask targeted questions to gather details for a user story and
     </constraint-list>
   </constraints>
 
-  <reference path="references/014-agile-create-user-story.md" />
-</project>
+  <references>
+    <reference-list>
+        <reference>references/014-agile-create-user-story.md</reference>
+    </reference-list>
+  </references>
+</prompt>
