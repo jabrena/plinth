@@ -133,6 +133,12 @@
             "version": "0.13.0"
         },
         {
+            "name": "133-java-testing-acceptance-tests",
+            "source": "./skills/133-java-testing-acceptance-tests",
+            "description": "Implement acceptance tests from Gherkin .feature files for framework-agnostic Java (no Spring Boot, Quarkus, Micronaut) — @acceptance scenarios, RestAssured, Testcontainers, WireMock. Requires .feature file in context.",
+            "version": "0.13.0"
+        },
+        {
             "name": "141-java-refactoring-with-modern-features",
             "source": "./skills/141-java-refactoring-with-modern-features",
             "description": "Refactor Java code to adopt modern features (Java 8+) — lambdas, Stream API, Optional, java.time, collection factory methods, CompletableFuture, text blocks, var, Java 25 features.",
@@ -217,27 +223,33 @@
             "version": "0.13.0"
         },
         {
-            "name": "304-frameworks-spring-data-jdbc",
-            "source": "./skills/304-frameworks-spring-data-jdbc",
+            "name": "312-frameworks-spring-data-jdbc",
+            "source": "./skills/312-frameworks-spring-data-jdbc",
             "description": "Use Spring Data JDBC with Java records — entity design, repository pattern, immutable updates, aggregate relationships, custom queries, transaction management.",
             "version": "0.13.0"
         },
         {
-            "name": "311-frameworks-spring-boot-slice-testing",
-            "source": "./skills/311-frameworks-spring-boot-slice-testing",
-            "description": "Write slice tests for Spring Boot — @WebMvcTest, @JdbcTest, @JsonTest, @MockBean, test profiles, @TestConfiguration for focused layer testing.",
+            "name": "321-frameworks-spring-boot-testing-unit-tests",
+            "source": "./skills/321-frameworks-spring-boot-testing-unit-tests",
+            "description": "Write unit tests for Spring Boot with Mockito — pure unit tests for @Service/@Component, @WebMvcTest, @JsonTest. For integration tests use @322.",
             "version": "0.13.0"
         },
         {
-            "name": "312-frameworks-spring-boot-integration-testing",
-            "source": "./skills/312-frameworks-spring-boot-integration-testing",
+            "name": "322-frameworks-spring-boot-testing-integration-tests",
+            "source": "./skills/322-frameworks-spring-boot-testing-integration-tests",
             "description": "Write or improve integration tests — Testcontainers, TestRestTemplate, data management, test structure, performance optimization.",
             "version": "0.13.0"
         },
         {
-            "name": "313-frameworks-spring-boot-local-testing",
-            "source": "./skills/313-frameworks-spring-boot-local-testing",
-            "description": "Configure local testing with spring-boot-docker-compose — dependency setup, compose services, profiles, integration test setup, service connections, health checks.",
+            "name": "323-frameworks-spring-boot-testing-acceptance-tests",
+            "source": "./skills/323-frameworks-spring-boot-testing-acceptance-tests",
+            "description": "Implement acceptance tests from Gherkin .feature files for Spring Boot — @acceptance scenarios, RestAssured, @SpringBootTest, Testcontainers, WireMock. Requires .feature file in context.",
+            "version": "0.13.0"
+        },
+        {
+            "name": "324-frameworks-spring-boot-testing-e2e-local-tests",
+            "source": "./skills/324-frameworks-spring-boot-testing-e2e-local-tests",
+            "description": "Configure E2E local testing with spring-boot-docker-compose — dependency setup, compose services, profiles, integration test setup, service connections, health checks.",
             "version": "0.13.0"
         }
     ]

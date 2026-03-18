@@ -1,33 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <skill xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="../schemas/skill.xsd"
-      id="312-frameworks-spring-data-jdbc">
+      id="322-frameworks-spring-boot-testing-integration-tests">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
   </metadata>
 
-  <title>Spring Data JDBC with Records</title>
-  <description>Use when you need to use Spring Data JDBC with Java records — including entity design with records, repository pattern, immutable updates, aggregate relationships, custom queries, transaction management, and avoiding N+1 problems.</description>
+  <title>Java Integration Testing Guidelines</title>
+  <description>Use when you need to write or improve integration tests — including Testcontainers, TestRestTemplate, data management, test structure, and performance optimization for integration tests.</description>
   <goal><![CDATA[
-Apply Spring Data JDBC guidelines with Java records.
+Apply Java integration testing guidelines.
 
 **What is covered in this Skill?**
 
-- Records for entity classes
-- Repository pattern
-- Immutable updates
-- Aggregate relationships
-- Custom queries
-- Transaction management
-- Single query loading (N+1 avoidance)
+- Integration test scope and purpose
+- Testcontainers for dependencies
+- TestRestTemplate for API testing
+- Data management strategies
+- Test structure and assertions
+- Performance and cleanup
 
 **Scope:** Apply recommendations based on the reference rules and good/bad code examples.
 ]]></goal>
 
   <constraints>
-    <constraints-description>Before applying any Spring Data JDBC changes, ensure the project compiles. If compilation fails, stop immediately. After applying improvements, run full verification.</constraints-description>
+    <constraints-description>Before applying any integration test changes, ensure the project compiles. If compilation fails, stop immediately. After applying improvements, run full verification.</constraints-description>
     <constraint-list>
       <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
       <constraint>**SAFETY**: If compilation fails, stop immediately</constraint>
@@ -36,5 +35,5 @@ Apply Spring Data JDBC guidelines with Java records.
     </constraint-list>
   </constraints>
 
-  <reference path="references/312-frameworks-spring-data-jdbc.md" />
+  <reference path="references/322-frameworks-spring-boot-testing-integration-tests.md" />
 </skill>
