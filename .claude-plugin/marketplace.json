@@ -115,6 +115,12 @@
             "version": "0.13.0"
         },
         {
+            "name": "130-java-testing-strategies",
+            "source": "./skills/130-java-testing-strategies",
+            "description": "Apply Java testing strategies — RIGHT-BICEP, A-TRIP, CORRECT for boundary conditions and test quality.",
+            "version": "0.13.0"
+        },
+        {
             "name": "131-java-testing-unit-testing",
             "source": "./skills/131-java-testing-unit-testing",
             "description": "Review, improve, or write Java unit tests — JUnit 5, AssertJ, Given-When-Then, parameterized tests, Mockito, boundary conditions (RIGHT-BICEP, CORRECT, A-TRIP), JSpecify null-safety.",
