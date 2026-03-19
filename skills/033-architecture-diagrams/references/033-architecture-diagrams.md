@@ -1,5 +1,5 @@
 ---
-name: 034-architecture-diagrams
+name: 033-architecture-diagrams
 description: Use when you need to generate Java project diagrams — including UML sequence diagrams, UML class diagrams, C4 model diagrams, UML state machine diagrams, and ER (Entity Relationship) diagrams — through a modular, step-based interactive process that adapts to your specific visualization needs.
 license: Apache-2.0
 metadata:
