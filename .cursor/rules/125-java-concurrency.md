@@ -1,6 +1,6 @@
 ---
 name: 125-java-concurrency
-description: Use when you need to apply Java concurrency best practices — including thread safety fundamentals, ExecutorService thread pool management, concurrent design patterns like Producer-Consumer, asynchronous programming with CompletableFuture, immutability and safe publication, deadlock avoidance, virtual threads and structured concurrency, scoped values, backpressure, cancellation discipline, and observability for concurrent systems.
+description: Use when you need to apply Java concurrency best practices — including thread safety fundamentals, ExecutorService thread pool management, concurrent design patterns like Producer-Consumer, asynchronous programming with CompletableFuture, immutability and safe publication, deadlock avoidance, virtual threads, scoped values, backpressure, cancellation discipline, and observability for concurrent systems.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -14,7 +14,7 @@ You are a Senior software engineer with extensive experience in Java software de
 
 ## Goal
 
-Effective Java concurrency relies on understanding thread safety fundamentals, using `java.util.concurrent` utilities, and managing thread pools with `ExecutorService`. Key practices include implementing concurrent design patterns like Producer-Consumer, leveraging `CompletableFuture` for asynchronous tasks, and ensuring thread safety through immutability and safe publication. Performance aspects like lock contention and memory consistency must be considered. Thorough testing, including stress tests and thread dump analysis, is crucial. Modern Java offers virtual threads for enhanced scalability, structured concurrency for simplified task management, and scoped values for safer thread-shared data as alternatives to thread-locals.
+Effective Java concurrency relies on understanding thread safety fundamentals, using `java.util.concurrent` utilities, and managing thread pools with `ExecutorService`. Key practices include implementing concurrent design patterns like Producer-Consumer, leveraging `CompletableFuture` for asynchronous tasks, and ensuring thread safety through immutability and safe publication. Performance aspects like lock contention and memory consistency must be considered. Thorough testing, including stress tests and thread dump analysis, is crucial. Modern Java offers virtual threads for enhanced scalability and scoped values for safer thread-shared data as alternatives to thread-locals.
 
 ### Implementing These Principles
 
@@ -29,7 +29,6 @@ These guidelines are built upon the following core principles:
 7.  **Thorough Testing and Debugging**: Rigorously test concurrent code. This includes unit tests for thread-safe components, integration tests for interactions, and stress tests to reveal race conditions or deadlocks. Utilize thread dump analysis, proper logging, and concurrency testing tools.
 8.  **Adopt Modern Java Concurrency Features for Enhanced Development**:
 *   **Virtual Threads (Project Loom)**: Embrace virtual threads via `Executors.newVirtualThreadPerTaskExecutor()` for I/O-bound tasks to dramatically increase scalability with minimal resource overhead. Avoid pooling virtual threads.
-*   **Structured Concurrency**: Use `StructuredTaskScope` to simplify the management of multiple related concurrent tasks as a single unit of work, improving error handling, cancellation, and resource management.
 *   **Scoped Values**: Prefer `ScopedValue` over `ThreadLocal` for sharing immutable data robustly and efficiently across tasks within a dynamically bounded scope, especially when working with virtual threads.
 9.  **Cooperative Cancellation and Interruption Discipline**: Design tasks to be cancellable; always respond to interruption promptly. Do not swallow `InterruptedException`; either propagate it or restore the interrupt flag with `Thread.currentThread().interrupt()`. Prefer time-bounded operations (`orTimeout`, `completeOnTimeout`, timeouts on blocking calls), use `Future.cancel(true)`, prefer `Lock.lockInterruptibly()`/`tryLock(timeout, unit)` where applicable, and ensure cleanup on cancellation.
 10. **Backpressure and Overload Protection**: Prevent unbounded work queues and cascading failures by using bounded queues, appropriate rejection policies (e.g., `CallerRunsPolicy` for graceful shedding), semaphores/bulkheads to cap concurrency, request rate limiting, and the `Flow` (Reactive Streams) API when stream backpressure is needed.
@@ -62,15 +61,14 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 6: Performance Considerations in Concurrency
 - Example 7: Testing and Debugging Concurrent Code
 - Example 8: Embrace Virtual Threads for Enhanced Scalability
-- Example 9: Simplify Concurrent Code with Structured Concurrency
-- Example 10: Manage Thread-Shared Data with Scoped Values
-- Example 11: Cooperative Cancellation and Interruption
-- Example 12: Overload Protection and Backpressure
-- Example 13: ForkJoin and ManagedBlocker for Blocking Operations
-- Example 14: Avoid Pinning with Virtual Threads
-- Example 15: Phased Execution with Phaser
-- Example 16: Synchronization with CyclicBarrier
-- Example 17: Data Exchange with Exchanger
+- Example 9: Manage Thread-Shared Data with Scoped Values
+- Example 10: Cooperative Cancellation and Interruption
+- Example 11: Overload Protection and Backpressure
+- Example 12: ForkJoin and ManagedBlocker for Blocking Operations
+- Example 13: Avoid Pinning with Virtual Threads
+- Example 14: Phased Execution with Phaser
+- Example 15: Synchronization with CyclicBarrier
+- Example 16: Data Exchange with Exchanger
 
 ### Example 1: Thread Safety Fundamentals
 
@@ -1123,7 +1121,7 @@ class PoorConcurrentTesting {
 ### Example 8: Embrace Virtual Threads for Enhanced Scalability
 
 Title: Use Virtual Threads for I/O-bound Tasks
-Description: Leverage virtual threads (Project Loom) for I/O-bound tasks to dramatically increase scalability with minimal resource overhead. Avoid pooling virtual threads and use structured concurrency where appropriate.
+Description: Leverage virtual threads (Project Loom) for I/O-bound tasks to dramatically increase scalability with minimal resource overhead. Avoid pooling virtual threads.
 
 **Good example:**
 
@@ -1134,7 +1132,6 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.concurrent.ScopedValue;
-import java.util.concurrent.StructuredTaskScope;
 import java.util.stream.IntStream;
 
 public class VirtualThreadExample {
@@ -1190,51 +1187,6 @@ public class VirtualThreadExample {
     private void performTaskForUser(String userId, String task) {
         System.out.println("Processing task " + task + " for user " + userId +
                           " on thread " + Thread.currentThread());
-    }
-
-    // Structured concurrency for managing related tasks
-    public String fetchUserDataWithStructuredConcurrency(String userId) throws Exception {
-        // Use static factory method instead of constructor
-        try (var scope = StructuredTaskScope.open()) {
-
-            Future<String> profile = scope.fork(() -> fetchUserProfile(userId));
-            Future<String> preferences = scope.fork(() -> fetchUserPreferences(userId));
-            Future<String> history = scope.fork(() -> fetchUserHistory(userId));
-
-            scope.join();           // Wait for all tasks
-            scope.throwIfFailed();  // Propagate any failures
-
-            // All tasks completed successfully
-            return combineUserData(profile.resultNow(),
-                                 preferences.resultNow(),
-                                 history.resultNow());
-        }
-    }
-
-    private String fetchUserProfile(String userId) {
-        // Simulate I/O operation
-        try { Thread.sleep(100); } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        return "Profile for " + userId;
-    }
-
-    private String fetchUserPreferences(String userId) {
-        try { Thread.sleep(150); } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        return "Preferences for " + userId;
-    }
-
-    private String fetchUserHistory(String userId) {
-        try { Thread.sleep(200); } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        return "History for " + userId;
-    }
-
-    private String combineUserData(String profile, String preferences, String history) {
-        return String.format("User data: %s, %s, %s", profile, preferences, history);
     }
 
     public void shutdown() {
@@ -1327,268 +1279,21 @@ public class BadVirtualThreadUsage {
 }
 ```
 
-### Example 9: Simplify Concurrent Code with Structured Concurrency
-
-Title: Manage Related Tasks as a Single Unit
-Description: Use `StructuredTaskScope` to simplify the management of multiple related concurrent tasks as a single unit of work, improving error handling, cancellation, and resource management. - Use the static `StructuredTaskScope.open()` factory method instead of constructors. - Use `StructuredTaskScope.ShutdownOnFailure()` for fail-fast behavior. - Use `StructuredTaskScope.ShutdownOnSuccess()` for racing tasks. - Implement `Joiner.onTimeout()` method for custom timeout handling. - Ensure proper resource cleanup with try-with-resources. - Handle task results and exceptions appropriately. - Combine structured concurrency with virtual threads for optimal performance.
-
-**Good example:**
-
-```java
-// GOOD: Structured concurrency for managing related tasks
-import java.util.concurrent.StructuredTaskScope;
-import java.util.concurrent.Future;
-import java.util.List;
-
-class StructuredConcurrencyExample {
-
-    // Fetch user data from multiple sources
-    public UserData fetchCompleteUserData(String userId) throws Exception {
-        // Use static factory method instead of constructor
-        try (var scope = StructuredTaskScope.open()) {
-
-            // Fork multiple related tasks
-            Future<String> profileFuture = scope.fork(() -> fetchUserProfile(userId));
-            Future<String> settingsFuture = scope.fork(() -> fetchUserSettings(userId));
-            Future<String> ordersFuture = scope.fork(() -> fetchUserOrders(userId));
-
-            // Wait for all tasks to complete or fail
-            scope.join();
-            scope.throwIfFailed();
-
-            // All tasks completed successfully
-            return new UserData(
-                profileFuture.resultNow(),
-                settingsFuture.resultNow(),
-                ordersFuture.resultNow()
-            );
-        }
-    }
-
-    // Race multiple service calls and return first success
-    public String fetchDataFromAnySource(String query) throws Exception {
-        // Use static factory method for ShutdownOnSuccess
-        try (var scope = StructuredTaskScope.open()) {
-
-            // Fork competing tasks
-            scope.fork(() -> fetchFromPrimaryService(query));
-            scope.fork(() -> fetchFromSecondaryService(query));
-            scope.fork(() -> fetchFromCacheService(query));
-
-            // Wait for first successful completion
-            scope.join();
-            return scope.result();
-        }
-    }
-
-    // Batch processing with structured concurrency
-    public List<String> processBatch(List<String> items) throws Exception {
-        // Use static factory method instead of constructor
-        try (var scope = StructuredTaskScope.open()) {
-
-            List<Future<String>> futures = items.stream()
-                .map(item -> scope.fork(() -> processItem(item)))
-                .toList();
-
-            scope.join();
-            scope.throwIfFailed();
-
-            return futures.stream()
-                .map(Future::resultNow)
-                .toList();
-        }
-    }
-
-    private String fetchUserProfile(String userId) {
-        // Simulate I/O operation
-        try { Thread.sleep(100); } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        return "Profile for " + userId;
-    }
-
-    private String fetchUserSettings(String userId) {
-        try { Thread.sleep(150); } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        return "Settings for " + userId;
-    }
-
-    private String fetchUserOrders(String userId) {
-        try { Thread.sleep(200); } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        return "Orders for " + userId;
-    }
-
-    private String fetchFromPrimaryService(String query) {
-        try { Thread.sleep(300); } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        return "Primary result for: " + query;
-    }
-
-    private String fetchFromSecondaryService(String query) {
-        try { Thread.sleep(200); } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        return "Secondary result for: " + query;
-    }
-
-    private String fetchFromCacheService(String query) {
-        try { Thread.sleep(50); } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        return "Cached result for: " + query;
-    }
-
-    private String processItem(String item) {
-        try { Thread.sleep(100); } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        return "Processed: " + item;
-    }
-
-    // Custom Joiner with timeout handling
-    public String fetchWithTimeoutHandling(String query) throws Exception {
-        try (var scope = StructuredTaskScope.open(new CustomTimeoutJoiner<String>())) {
-
-            scope.fork(() -> {
-                try { Thread.sleep(5000); } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    throw new RuntimeException(e);
-                }
-                return "Slow result for: " + query;
-            });
-
-            scope.fork(() -> {
-                try { Thread.sleep(2000); } catch (InterruptedException e) {
-                    Thread.currentThread().interrupt();
-                    throw new RuntimeException(e);
-                }
-                return "Fast result for: " + query;
-            });
-
-            scope.join();
-            return scope.result();
-        }
-    }
-
-    // Custom Joiner implementation with timeout handling
-    static class CustomTimeoutJoiner<T> implements StructuredTaskScope.Joiner<T, T> {
-        private volatile T result;
-
-        @Override
-        public boolean onFork(StructuredTaskScope.Subtask<? extends T> subtask) {
-            return true; // Continue with all subtasks
-        }
-
-        @Override
-        public T onJoin() {
-            return result;
-        }
-
-        @Override
-        public T onTimeout() {
-            // Provide default result when timeout occurs
-            return (T) "Default result due to timeout";
-        }
-
-        @Override
-        public boolean needsCompletion() {
-            return result == null;
-        }
-    }
-
-    record UserData(String profile, String settings, String orders) {}
-}
-```
-
-**Bad example:**
-
-```java
-// AVOID: Manual task management without structured concurrency
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
-
-class BadStructuredConcurrency {
-
-    // BAD: Manual task management with resource leaks
-    public UserData fetchUserDataManually(String userId) {
-        ExecutorService executor = Executors.newFixedThreadPool(3);
-
-        try {
-            Future<String> profileFuture = executor.submit(() -> fetchUserProfile(userId));
-            Future<String> settingsFuture = executor.submit(() -> fetchUserSettings(userId));
-            Future<String> ordersFuture = executor.submit(() -> fetchUserOrders(userId));
-
-            // BAD: No proper error handling
-            return new UserData(
-                profileFuture.get(),
-                settingsFuture.get(),
-                ordersFuture.get()
-            );
-        } catch (Exception e) {
-            // BAD: Poor error handling
-            throw new RuntimeException(e);
-        } finally {
-            // BAD: Improper shutdown
-            executor.shutdown();
-        }
-    }
-
-    // BAD: No cancellation when one task fails
-    public String fetchFromAnySourceBadly(String query) {
-        ExecutorService executor = Executors.newFixedThreadPool(3);
-
-        try {
-            Future<String> primary = executor.submit(() -> fetchFromPrimaryService(query));
-            Future<String> secondary = executor.submit(() -> fetchFromSecondaryService(query));
-            Future<String> cache = executor.submit(() -> fetchFromCacheService(query));
-
-            // BAD: All tasks continue even if one succeeds
-            while (true) {
-                if (primary.isDone() && !primary.isCancelled()) {
-                    return primary.get();
-                }
-                if (secondary.isDone() && !secondary.isCancelled()) {
-                    return secondary.get();
-                }
-                if (cache.isDone() && !cache.isCancelled()) {
-                    return cache.get();
-                }
-                Thread.sleep(10);
-            }
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        } finally {
-            executor.shutdown();
-        }
-    }
-
-    record UserData(String profile, String settings, String orders) {}
-}
-```
-
-### Example 10: Manage Thread-Shared Data with Scoped Values
+### Example 9: Manage Thread-Shared Data with Scoped Values
 
 Title: Use Scoped Values for Thread-Safe Context Propagation
-Description: Prefer `ScopedValue` over `ThreadLocal` for sharing immutable data robustly and efficiently across tasks within a dynamically bounded scope, especially when working with virtual threads. Scoped Values became stable in Java 25 (JEP 506). - Use `ScopedValue.newInstance()` to create scoped value instances. - Use `ScopedValue.where()` to establish scoped bindings with automatic cleanup. - Combine multiple scoped values using method chaining for complex contexts. - Prefer scoped values for immutable context data that needs to flow through call chains. - Avoid `ThreadLocal` with virtual threads due to potential memory issues and lack of structured cleanup. - Use scoped values for request-scoped data in web applications and distributed tracing. - Leverage automatic inheritance in structured concurrency and virtual threads.
+Description: Prefer `ScopedValue` over `ThreadLocal` for sharing immutable data robustly and efficiently across tasks within a dynamically bounded scope, especially when working with virtual threads. Scoped Values became stable in Java 25 (JEP 506). - Use `ScopedValue.newInstance()` to create scoped value instances. - Use `ScopedValue.where()` to establish scoped bindings with automatic cleanup. - Combine multiple scoped values using method chaining for complex contexts. - Prefer scoped values for immutable context data that needs to flow through call chains. - Avoid `ThreadLocal` with virtual threads due to potential memory issues and lack of structured cleanup. - Use scoped values for request-scoped data in web applications and distributed tracing.
 
 **Good example:**
 
 ```java
 // GOOD: Scoped values for thread-safe context propagation
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.StructuredTaskScope;
-import java.util.concurrent.Future;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 class ScopedValueExample {
 
@@ -1613,27 +1318,19 @@ class ScopedValueExample {
 
         System.out.println("Processing request " + requestId + " for user " + userId);
 
-        // Process in parallel while maintaining context
+        // Process in parallel while maintaining context (scoped values propagate to virtual threads)
         return ScopedValue.where(USER_ID, userId)
             .where(REQUEST_ID, requestId)
             .where(SECURITY_CONTEXT, SECURITY_CONTEXT.get())
             .call(() -> {
-                try (var scope = new StructuredTaskScope.ShutdownOnFailure()) {
+                try {
+                    CompletableFuture<String> businessLogic = CompletableFuture.supplyAsync(this::executeBusinessLogic, virtualExecutor);
+                    CompletableFuture<String> auditLog = CompletableFuture.supplyAsync(this::createAuditLog, virtualExecutor);
+                    CompletableFuture<String> notification = CompletableFuture.supplyAsync(this::sendNotification, virtualExecutor);
 
-                    // All forked tasks inherit the scoped values
-                    Future<String> businessLogic = scope.fork(this::executeBusinessLogic);
-                    Future<String> auditLog = scope.fork(this::createAuditLog);
-                    Future<String> notification = scope.fork(this::sendNotification);
-
-                    scope.join();
-                    scope.throwIfFailed();
-
-                    return combineResults(
-                        businessLogic.resultNow(),
-                        auditLog.resultNow(),
-                        notification.resultNow()
-                    );
-
+                    return CompletableFuture.allOf(businessLogic, auditLog, notification)
+                        .thenApply(v -> combineResults(businessLogic.join(), auditLog.join(), notification.join()))
+                        .join();
                 } catch (Exception e) {
                     throw new RuntimeException("Request processing failed", e);
                 }
@@ -1766,7 +1463,7 @@ class BadScopedValueUsage {
 }
 ```
 
-### Example 11: Cooperative Cancellation and Interruption
+### Example 10: Cooperative Cancellation and Interruption
 
 Title: Propagate interruption, bound waits, and cleanup safely
 Description: Design tasks to be cancellable and responsive to interruption. Use timeouts on blocking calls, avoid swallowing `InterruptedException`, and ensure resources are cleaned up after cancellation.
@@ -1851,7 +1548,7 @@ class BadCancellationService {
 }
 ```
 
-### Example 12: Overload Protection and Backpressure
+### Example 11: Overload Protection and Backpressure
 
 Title: Bound queues, reject sanely, and limit concurrency
 Description: Prevent unbounded growth and cascading failures using bounded queues, appropriate rejection policies, and bulkheads (semaphores) for scarce resources.
@@ -1908,7 +1605,7 @@ class BadBackpressureExample {
 }
 ```
 
-### Example 13: ForkJoin and ManagedBlocker for Blocking Operations
+### Example 12: ForkJoin and ManagedBlocker for Blocking Operations
 
 Title: Cooperate with the common pool when blocking
 Description: Avoid blocking the ForkJoin common pool. If blocking is unavoidable, use `ForkJoinPool.ManagedBlocker` or a dedicated executor.
@@ -1962,7 +1659,7 @@ class BadParallelBlocking {
 }
 ```
 
-### Example 14: Avoid Pinning with Virtual Threads
+### Example 13: Avoid Pinning with Virtual Threads
 
 Title: Keep blocking out of intrinsic locks
 Description: With virtual threads, `synchronized` around blocking calls can pin to a carrier thread. Prefer cooperative locks or move blocking outside critical sections.
@@ -2007,7 +1704,7 @@ class PinningBadExample {
 ```
 
 
-### Example 15: Phased Execution with Phaser
+### Example 14: Phased Execution with Phaser
 
 Title: Coordinate tasks in phases with dynamic party registration
 Description: Use Phaser for coordinating tasks that proceed in phases, allowing dynamic registration and deregistration of parties.
@@ -2064,7 +1761,7 @@ class BadPhaser {
 }
 ```
 
-### Example 16: Synchronization with CyclicBarrier
+### Example 15: Synchronization with CyclicBarrier
 
 Title: Wait for threads to reach common barrier points
 Description: Use CyclicBarrier for synchronizing threads at barrier points, reusable across multiple cycles.
@@ -2112,7 +1809,7 @@ class BadBarrier {
 }
 ```
 
-### Example 17: Data Exchange with Exchanger
+### Example 16: Data Exchange with Exchanger
 
 Title: Safely exchange data between two threads
 Description: Use Exchanger for point-to-point data exchange between exactly two threads.
@@ -2168,11 +1865,11 @@ class BadExchanger {
 ## Output Format
 
 - **ANALYZE** Java code to identify specific concurrency issues and categorize them by impact (CRITICAL, PERFORMANCE, DEADLOCK_RISK, SCALABILITY, THREAD_SAFETY) and concurrency area (thread safety, synchronization, thread pools, async operations, modern concurrency)
-- **CATEGORIZE** concurrency improvements found: Thread Safety Issues (race conditions vs atomic operations, unsafe collections vs concurrent collections, shared mutable state vs immutable objects), Thread Pool Management (improper sizing vs optimal configuration, resource leaks vs proper lifecycle management), Synchronization Problems (deadlock risks vs lock-free algorithms, excessive contention vs efficient synchronization), Performance Issues (blocking operations vs non-blocking alternatives, memory consistency problems vs volatile/final usage), and Modern Concurrency Gaps (platform threads vs virtual threads, callback hell vs CompletableFuture composition, missing structured concurrency vs scoped concurrency patterns)
-- **APPLY** concurrency best practices directly by implementing the most appropriate improvements for each identified issue: Replace unsafe collections with concurrent alternatives, implement proper synchronization using atomic classes and concurrent utilities, configure thread pools with appropriate sizing and lifecycle management, refactor blocking operations to non-blocking alternatives using CompletableFuture, eliminate race conditions through immutability and proper synchronization, and adopt modern concurrency features like virtual threads and structured concurrency where beneficial
-- **IMPLEMENT** comprehensive concurrency refactoring using proven patterns: Establish thread-safe data structures using concurrent collections and atomic classes, implement efficient synchronization with locks, semaphores, and barriers, configure optimal thread pool management with proper ExecutorService usage, apply asynchronous programming patterns with CompletableFuture composition, integrate modern concurrency features (virtual threads, structured concurrency, scoped values), and implement proper error handling and resource management in concurrent contexts
-- **REFACTOR** code systematically following the concurrency improvement roadmap: First eliminate critical thread safety issues through atomic operations and concurrent collections, then optimize synchronization mechanisms to reduce contention and deadlock risks, configure proper thread pool management and lifecycle, refactor blocking operations to asynchronous alternatives, integrate modern concurrency features for improved scalability, and implement comprehensive testing strategies for concurrent code validation
-- **EXPLAIN** the applied concurrency improvements and their benefits: Thread safety enhancements through proper synchronization and atomic operations, performance improvements via optimized thread pool management and non-blocking operations, scalability gains from modern concurrency features like virtual threads, deadlock prevention through lock-free algorithms and proper synchronization patterns, and maintainability improvements from structured concurrency and clear async composition
+- **CATEGORIZE** concurrency improvements found: Thread Safety Issues (race conditions vs atomic operations, unsafe collections vs concurrent collections, shared mutable state vs immutable objects), Thread Pool Management (improper sizing vs optimal configuration, resource leaks vs proper lifecycle management), Synchronization Problems (deadlock risks vs lock-free algorithms, excessive contention vs efficient synchronization), Performance Issues (blocking operations vs non-blocking alternatives, memory consistency problems vs volatile/final usage), and Modern Concurrency Gaps (platform threads vs virtual threads, callback hell vs CompletableFuture composition, ThreadLocal vs ScopedValue for context propagation)
+- **APPLY** concurrency best practices directly by implementing the most appropriate improvements for each identified issue: Replace unsafe collections with concurrent alternatives, implement proper synchronization using atomic classes and concurrent utilities, configure thread pools with appropriate sizing and lifecycle management, refactor blocking operations to non-blocking alternatives using CompletableFuture, eliminate race conditions through immutability and proper synchronization, and adopt modern concurrency features like virtual threads and ScopedValue where beneficial
+- **IMPLEMENT** comprehensive concurrency refactoring using proven patterns: Establish thread-safe data structures using concurrent collections and atomic classes, implement efficient synchronization with locks, semaphores, and barriers, configure optimal thread pool management with proper ExecutorService usage, apply asynchronous programming patterns with CompletableFuture composition, integrate modern concurrency features (virtual threads, scoped values), and implement proper error handling and resource management in concurrent contexts
+- **REFACTOR** code systematically following the concurrency improvement roadmap: First eliminate critical thread safety issues through atomic operations and concurrent collections, then optimize synchronization mechanisms to reduce contention and deadlock risks, configure proper thread pool management and lifecycle, refactor blocking operations to asynchronous alternatives, integrate modern concurrency features (virtual threads, ScopedValue) for improved scalability, and implement comprehensive testing strategies for concurrent code validation
+- **EXPLAIN** the applied concurrency improvements and their benefits: Thread safety enhancements through proper synchronization and atomic operations, performance improvements via optimized thread pool management and non-blocking operations, scalability gains from modern concurrency features like virtual threads, deadlock prevention through lock-free algorithms and proper synchronization patterns, and maintainability improvements from clear async composition and ScopedValue for context propagation
 - **VALIDATE** that all applied concurrency refactoring compiles successfully, maintains thread safety guarantees, eliminates race conditions and deadlock risks, preserves or improves performance characteristics, and achieves the intended concurrency improvements through comprehensive testing and verification
 - **CANCELLATION/INTERRUPTION**: Identify blocking calls and long-running tasks; ensure interruption is propagated/restored, add timeouts (`orTimeout`, `completeOnTimeout`, timed `poll/take/tryLock`), and verify `Future.cancel(true)` paths release resources.
 - **BACKPRESSURE/OVERLOAD**: Detect unbounded producers and queues; introduce bounded queues, rejection policies, semaphores/bulkheads, and when streaming, prefer `Flow`/Reactive Streams to enforce backpressure.

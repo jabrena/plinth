@@ -105,7 +105,7 @@
         {
             "name": "125-java-concurrency",
             "source": "./skills/125-java-concurrency",
-            "description": "Apply Java concurrency best practices — thread safety, ExecutorService, Producer-Consumer patterns, CompletableFuture, immutability, virtual threads, structured concurrency, scoped values.",
+            "description": "Apply Java concurrency best practices — thread safety, ExecutorService, Producer-Consumer patterns, CompletableFuture, immutability, virtual threads, scoped values.",
             "version": "0.13.0"
         },
         {
@@ -141,7 +141,7 @@
         {
             "name": "141-java-refactoring-with-modern-features",
             "source": "./skills/141-java-refactoring-with-modern-features",
-            "description": "Refactor Java code to adopt modern features (Java 8+) — lambdas, Stream API, Optional, java.time, collection factory methods, CompletableFuture, text blocks, var, Java 25 features.",
+            "description": "Refactor Java code to adopt modern features (Java 8+) — lambdas, Stream API, Optional, java.time, collection factory methods, text blocks, var, Java 25 features.",
             "version": "0.13.0"
         },
         {
