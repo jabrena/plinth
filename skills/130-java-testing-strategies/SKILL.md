@@ -28,10 +28,10 @@ Before applying any test strategy changes, ensure the project compiles. If compi
 
 ## When to use this skill
 
-- Testing strategies
-- RIGHT-BICEP
-- A-TRIP tests
-- CORRECT boundary
+- Review Java code for testing strategies
+- Apply RIGHT-BICEP testing strategies in Java code
+- Apply A-TRIP testing strategies in Java code
+- Apply CORRECT boundary condition verification in Java code
 
 ## Reference
 

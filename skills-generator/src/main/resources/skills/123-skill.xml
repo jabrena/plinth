@@ -47,9 +47,9 @@ Identify and apply robust Java exception handling practices to improve error cla
   <triggers>
     <trigger-list>
         <trigger>Exception handling</trigger>
-        <trigger>Try-with-resources</trigger>
-        <trigger>Exception chaining</trigger>
-        <trigger>Fail-fast validation</trigger>
+        <trigger>Use try-with-resources in Java code</trigger>
+        <trigger>Create exception chaining in Java code</trigger>
+        <trigger>Apply fail-fast validation in Java code</trigger>
     </trigger-list>
   </triggers>
 

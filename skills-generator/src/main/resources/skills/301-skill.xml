@@ -40,10 +40,8 @@ Apply Spring Boot Core guidelines for annotations, bean management, configuratio
 
   <triggers>
     <trigger-list>
-        <trigger>Spring Boot application</trigger>
-        <trigger>@SpringBootApplication</trigger>
-        <trigger>Bean configuration</trigger>
-        <trigger>Component scanning</trigger>
+        <trigger>Review Java code for Spring Boot application</trigger>
+        <trigger>Apply best practices for Spring Boot application in Java code</trigger>
     </trigger-list>
   </triggers>
 

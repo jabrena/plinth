@@ -37,9 +37,8 @@ Before applying any acceptance test changes, ensure the Gherkin .feature file is
 
 ## When to use this skill
 
-- Acceptance tests
-- Gherkin feature file
-- Framework-agnostic acceptance
+- Review Java code for acceptance tests
+- Apply best practices for acceptance tests in Java code
 
 ## Reference
 

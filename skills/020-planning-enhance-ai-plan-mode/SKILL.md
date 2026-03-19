@@ -32,12 +32,8 @@ Gather context before drafting. Include Execution Instructions in every plan. Ne
 
 ## When to use this skill
 
-- Create a plan
-- Design an implementation
-- Structure a development plan
-- Use plan mode
-- Outside-in TDD
-- Plan for feature implementation
+- Create a plan with Cursor Plan mode
+- Write a plan with Claude Plan mode
 
 ## Reference
 

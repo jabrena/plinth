@@ -33,11 +33,14 @@ Before applying any OOD changes, ensure the project compiles. If compilation fai
 
 ## When to use this skill
 
-- Object-oriented design
-- SOLID principles
-- Refactor OOP code
-- Code smells God Class
-- Improve class design
+- Review Java code for object-oriented design
+- Refactor Java code for object-oriented design
+- Improve Java code for object-oriented design
+- Fix OOP concept misuse in Java code
+- Identify and resolve code smells in Java code
+- Improve object creation patterns in Java code
+- Improve method design in Java code
+- Improve exception handling in Java code
 
 ## Reference
 

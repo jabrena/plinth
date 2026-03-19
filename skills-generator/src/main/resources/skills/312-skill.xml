@@ -38,9 +38,8 @@ Apply Spring Data JDBC guidelines with Java records.
 
   <triggers>
     <trigger-list>
-        <trigger>Spring Data JDBC</trigger>
-        <trigger>JDBC with records</trigger>
-        <trigger>Repository pattern JDBC</trigger>
+        <trigger>Review Java code for Spring Data JDBC</trigger>
+        <trigger>Apply best practices for Spring Data JDBC in Java code</trigger>
     </trigger-list>
   </triggers>
 

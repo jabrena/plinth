@@ -33,9 +33,8 @@ Before applying any Spring Data JDBC changes, ensure the project compiles. If co
 
 ## When to use this skill
 
-- Spring Data JDBC
-- JDBC with records
-- Repository pattern JDBC
+- Review Java code for Spring Data JDBC
+- Apply best practices for Spring Data JDBC in Java code
 
 ## Reference
 

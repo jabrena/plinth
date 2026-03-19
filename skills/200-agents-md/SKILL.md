@@ -29,9 +29,9 @@ No Maven validation is required before generating AGENTS.md. Review the project 
 
 ## When to use this skill
 
-- AGENTS.md
-- Update AGENTS.md
-- Agent instructions
+- Create AGENTS.md
+- Update AGENTS.md file
+- Add agent instructions
 
 ## Reference
 

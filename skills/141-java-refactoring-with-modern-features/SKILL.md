@@ -36,10 +36,8 @@ Before applying any modern Java refactoring, ensure the project compiles. If com
 
 ## When to use this skill
 
-- Refactor to modern Java
-- Lambdas streams
-- Optional java.time
-- CompletableFuture async
+- Review Java code for modern Java development
+- Apply best practices for modern Java development in Java code
 
 ## Reference
 

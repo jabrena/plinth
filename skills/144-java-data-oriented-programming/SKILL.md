@@ -33,8 +33,8 @@ Before applying any data-oriented programming recommendations, ensure the projec
 
 ## When to use this skill
 
-- Data-oriented programming
-- Records immutable data
+- Review Java code for data-oriented programming
+- Apply best practices for data-oriented programming in Java code
 
 ## Reference
 

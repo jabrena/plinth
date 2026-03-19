@@ -37,10 +37,8 @@ Before applying any integration test changes, ensure the project compiles. If co
 
 ## When to use this skill
 
-- Integration tests
-- Testcontainers
-- RestAssured
-- @SpringBootTest
+- Review Java code for integration tests
+- Apply best practices for integration tests in Java code
 
 ## Reference
 

@@ -43,10 +43,8 @@ Review and improve Java code using comprehensive generics best practices that en
 
   <triggers>
     <trigger-list>
-        <trigger>Java generics</trigger>
-        <trigger>Raw types</trigger>
-        <trigger>PECS wildcards</trigger>
-        <trigger>Bounded type parameters</trigger>
+        <trigger>Review Java code for generics</trigger>
+        <trigger>Apply best practices for generics in Java code</trigger>
     </trigger-list>
   </triggers>
 

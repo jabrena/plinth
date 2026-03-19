@@ -37,9 +37,8 @@ Apply Spring Boot E2E local testing guidelines with Docker Compose.
 
   <triggers>
     <trigger-list>
-        <trigger>E2E local testing</trigger>
-        <trigger>spring-boot-docker-compose</trigger>
-        <trigger>Docker Compose testing</trigger>
+        <trigger>Review Java code for E2E local testing</trigger>
+        <trigger>Apply best practices for E2E local testing in Java code</trigger>
     </trigger-list>
   </triggers>
 

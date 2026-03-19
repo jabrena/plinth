@@ -40,9 +40,8 @@ Before applying any functional programming changes, ensure the project compiles.
 
 ## When to use this skill
 
-- Functional programming Java
-- Stream API
-- Immutability
+- Review Java code for functional programming
+- Apply best practices for functional programming in Java code
 
 ## Reference
 

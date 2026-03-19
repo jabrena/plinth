@@ -35,6 +35,7 @@ Before applying any diagram generation, ensure the project validates. If validat
 - Generate UML diagram
 - Create sequence diagram
 - Create class diagram
+- Create state machine diagram
 - Create C4 diagram
 - Generate ER diagram
 

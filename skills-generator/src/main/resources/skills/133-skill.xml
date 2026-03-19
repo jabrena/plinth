@@ -42,9 +42,8 @@ Implement acceptance tests from Gherkin feature files. Given a .feature file in 
 
   <triggers>
     <trigger-list>
-        <trigger>Acceptance tests</trigger>
-        <trigger>Gherkin feature file</trigger>
-        <trigger>Framework-agnostic acceptance</trigger>
+        <trigger>Review Java code for acceptance tests</trigger>
+        <trigger>Apply best practices for acceptance tests in Java code</trigger>
     </trigger-list>
   </triggers>
 

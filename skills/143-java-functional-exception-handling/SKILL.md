@@ -36,9 +36,8 @@ Before applying any functional exception handling changes, ensure the project va
 
 ## When to use this skill
 
-- Functional exception handling
-- Optional Either
-- VAVR error handling
+- Review Java code for functional exception handling
+- Apply best practices for functional exception handling in Java code
 
 ## Reference
 

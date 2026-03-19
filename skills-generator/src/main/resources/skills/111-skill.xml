@@ -34,10 +34,10 @@ Add essential Maven dependencies that enhance code quality and safety through a 
   <triggers>
     <trigger-list>
         <trigger>Add Maven dependencies</trigger>
-        <trigger>JSpecify nullness</trigger>
-        <trigger>Error Prone NullAway</trigger>
-        <trigger>VAVR functional</trigger>
-        <trigger>ArchUnit architecture testing</trigger>
+        <trigger>Add JSpecify nullness dependencies</trigger>
+        <trigger>Add Error Prone NullAway dependencies</trigger>
+        <trigger>Add VAVR functional dependencies</trigger>
+        <trigger>Add ArchUnit architecture testing dependencies</trigger>
     </trigger-list>
   </triggers>
 

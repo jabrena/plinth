@@ -37,10 +37,8 @@ Before applying any unit test changes, ensure the project compiles. If compilati
 
 ## When to use this skill
 
-- Unit tests
-- JUnit 5
-- AssertJ Mockito
-- Given When Then test
+- Review Java code for unit tests
+- Apply best practices for unit tests in Java code
 
 ## Reference
 

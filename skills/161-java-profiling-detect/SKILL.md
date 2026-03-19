@@ -32,9 +32,8 @@ Copy bash scripts exactly from templates. Ensure JVM flags are applied for profi
 
 ## When to use this skill
 
-- Detect performance bottleneck
-- Java profiling
-- JFR flight recorder
+- Review Java code for profiling
+- Add profiling support
 
 ## Reference
 

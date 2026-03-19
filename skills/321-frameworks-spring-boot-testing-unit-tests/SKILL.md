@@ -30,8 +30,8 @@ Before applying any test changes, ensure the project compiles. If compilation fa
 
 ## When to use this skill
 
-- Spring Boot unit tests
-- @SpringBootTest unit
+- Review Java code for Spring Boot unit tests
+- Apply best practices for Spring Boot unit tests in Java code
 
 ## Reference
 

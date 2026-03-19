@@ -37,9 +37,8 @@ Set up the Java profiling detection phase: automated environment setup with asyn
 
   <triggers>
     <trigger-list>
-        <trigger>Detect performance bottleneck</trigger>
-        <trigger>Java profiling</trigger>
-        <trigger>JFR flight recorder</trigger>
+        <trigger>Review Java code for profiling</trigger>
+        <trigger>Add profiling support</trigger>
     </trigger-list>
   </triggers>
 

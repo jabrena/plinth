@@ -37,12 +37,9 @@ Before applying Maven best practices recommendations, ensure the project is in a
 
 ## When to use this skill
 
-- Review pom.xml
-- Improve Maven POM
-- Troubleshoot Maven
-- Maven best practices
-- Dependency management BOM
-- Multi-module Maven
+- Review pom.xml to improve it
+- Apply Maven best practices to pom.xml
+- Improve Maven POM configuration
 
 ## Reference
 

@@ -35,10 +35,8 @@ Before applying any Spring Boot changes, ensure the project compiles. If compila
 
 ## When to use this skill
 
-- Spring Boot application
-- @SpringBootApplication
-- Bean configuration
-- Component scanning
+- Review Java code for Spring Boot application
+- Apply best practices for Spring Boot application in Java code
 
 ## Reference
 

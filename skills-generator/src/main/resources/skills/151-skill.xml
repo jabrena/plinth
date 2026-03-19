@@ -36,9 +36,8 @@ Provide a complete JMeter performance testing solution by creating the run-jmete
 
   <triggers>
     <trigger-list>
-        <trigger>JMeter performance</trigger>
-        <trigger>Load testing</trigger>
-        <trigger>Performance testing Java</trigger>
+        <trigger>Review Java code for JMeter performance testing</trigger>
+        <trigger>Add JMeter support</trigger>
     </trigger-list>
   </triggers>
 

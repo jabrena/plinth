@@ -38,8 +38,8 @@ Apply data-oriented programming in Java: separate data from behavior with record
 
   <triggers>
     <trigger-list>
-        <trigger>Data-oriented programming</trigger>
-        <trigger>Records immutable data</trigger>
+        <trigger>Review Java code for data-oriented programming</trigger>
+        <trigger>Apply best practices for data-oriented programming in Java code</trigger>
     </trigger-list>
   </triggers>
 

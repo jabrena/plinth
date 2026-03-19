@@ -28,10 +28,10 @@ Before adding Maven dependencies, ensure the project is in a valid state. Use a 
 ## When to use this skill
 
 - Add Maven dependencies
-- JSpecify nullness
-- Error Prone NullAway
-- VAVR functional
-- ArchUnit architecture testing
+- Add JSpecify nullness dependencies
+- Add Error Prone NullAway dependencies
+- Add VAVR functional dependencies
+- Add ArchUnit architecture testing dependencies
 
 ## Reference
 

@@ -28,9 +28,8 @@ Before applying any documentation generation, ensure the project validates. If v
 
 ## When to use this skill
 
-- Java documentation
-- Javadoc
-- API documentation
+- Review Java code for documentation
+- Apply best practices for documentation in Java code
 
 ## Reference
 

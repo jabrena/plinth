@@ -34,10 +34,7 @@ Before applying any secure coding changes, ensure the project compiles. If compi
 
 ## When to use this skill
 
-- Secure coding
-- Input validation
-- SQL injection
-- Parameterized queries
+- Review Java code for secure coding
 
 ## Reference
 

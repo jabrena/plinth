@@ -43,9 +43,8 @@ Implement acceptance tests from Gherkin feature files in Spring Boot projects. G
 
   <triggers>
     <trigger-list>
-        <trigger>Spring Boot acceptance tests</trigger>
-        <trigger>Gherkin Spring Boot</trigger>
-        <trigger>Acceptance tests from .feature</trigger>
+        <trigger>Review Java code for Spring Boot acceptance tests</trigger>
+        <trigger>Apply best practices for Spring Boot acceptance tests in Java code</trigger>
     </trigger-list>
   </triggers>
 

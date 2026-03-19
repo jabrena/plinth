@@ -45,9 +45,8 @@ Identify and apply functional programming principles in Java to improve immutabi
 
   <triggers>
     <trigger-list>
-        <trigger>Functional programming Java</trigger>
-        <trigger>Stream API</trigger>
-        <trigger>Immutability</trigger>
+        <trigger>Review Java code for functional programming</trigger>
+        <trigger>Apply best practices for functional programming in Java code</trigger>
     </trigger-list>
   </triggers>
 

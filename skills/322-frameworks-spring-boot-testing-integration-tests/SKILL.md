@@ -32,9 +32,8 @@ Before applying any integration test changes, ensure the project compiles. If co
 
 ## When to use this skill
 
-- Spring Boot integration tests
-- Testcontainers Spring
-- TestRestTemplate
+- Review Java code for Spring Boot integration tests
+- Apply best practices for Spring Boot integration tests in Java code
 
 ## Reference
 

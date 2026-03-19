@@ -47,10 +47,7 @@ Identify and apply Java concurrency best practices to improve thread safety, sca
 
   <triggers>
     <trigger-list>
-        <trigger>Java concurrency</trigger>
-        <trigger>Thread safety</trigger>
-        <trigger>CompletableFuture</trigger>
-        <trigger>Virtual threads</trigger>
+        <trigger>Review Java code for concurrency</trigger>
     </trigger-list>
   </triggers>
 

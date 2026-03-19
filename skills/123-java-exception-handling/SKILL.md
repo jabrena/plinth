@@ -42,9 +42,9 @@ Before applying any exception handling changes, ensure the project compiles. If 
 ## When to use this skill
 
 - Exception handling
-- Try-with-resources
-- Exception chaining
-- Fail-fast validation
+- Use try-with-resources in Java code
+- Create exception chaining in Java code
+- Apply fail-fast validation in Java code
 
 ## Reference
 

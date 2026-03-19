@@ -35,9 +35,8 @@ Before applying any REST API changes, ensure the project compiles. If compilatio
 
 ## When to use this skill
 
-- Spring Boot REST
-- REST API Spring
-- @RestController
+- Review Java code for Spring Boot REST API
+- Apply best practices for Spring Boot REST API in Java code
 
 ## Reference
 

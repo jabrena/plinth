@@ -37,6 +37,8 @@ Generate a `DEVELOPER.md` file that combines a fixed base template with dynamic 
         <trigger>Generate DEVELOPER.md</trigger>
         <trigger>Maven project documentation</trigger>
         <trigger>Plugin goals reference</trigger>
+        <trigger>Maven Profiles table</trigger>
+        <trigger>Submodules table</trigger>
     </trigger-list>
   </triggers>
 

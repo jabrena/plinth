@@ -37,9 +37,8 @@ Apply Java integration testing guidelines.
 
   <triggers>
     <trigger-list>
-        <trigger>Spring Boot integration tests</trigger>
-        <trigger>Testcontainers Spring</trigger>
-        <trigger>TestRestTemplate</trigger>
+        <trigger>Review Java code for Spring Boot integration tests</trigger>
+        <trigger>Apply best practices for Spring Boot integration tests in Java code</trigger>
     </trigger-list>
   </triggers>
 

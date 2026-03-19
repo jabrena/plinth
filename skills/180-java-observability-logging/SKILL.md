@@ -33,10 +33,8 @@ Before applying any logging recommendations, ensure the project compiles. Compil
 
 ## When to use this skill
 
-- Observability
-- Logging
-- Structured logging
-- SLF4J MDC
+- Review Java code for logging and observability
+- Apply best practices for logging and observability in Java code
 
 ## Reference
 

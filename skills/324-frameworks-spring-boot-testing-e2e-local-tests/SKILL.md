@@ -32,9 +32,8 @@ Before applying any configuration changes, ensure the project compiles. If compi
 
 ## When to use this skill
 
-- E2E local testing
-- spring-boot-docker-compose
-- Docker Compose testing
+- Review Java code for E2E local testing
+- Apply best practices for E2E local testing in Java code
 
 ## Reference
 

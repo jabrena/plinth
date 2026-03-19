@@ -38,9 +38,8 @@ Before applying any acceptance test changes, ensure the Gherkin .feature file is
 
 ## When to use this skill
 
-- Spring Boot acceptance tests
-- Gherkin Spring Boot
-- Acceptance tests from .feature
+- Review Java code for Spring Boot acceptance tests
+- Apply best practices for Spring Boot acceptance tests in Java code
 
 ## Reference
 

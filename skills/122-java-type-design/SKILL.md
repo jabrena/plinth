@@ -38,11 +38,12 @@ Before applying any type design changes, ensure the project compiles. If compila
 
 ## When to use this skill
 
-- Type design
-- Primitive obsession
-- Value objects
-- Type hierarchies
-- Fluent interfaces
+- Review Java code for type design
+- Improve type design in Java code
+- Fix primitive obsession in Java code
+- Create value objects in Java code
+- Create type hierarchies in Java code
+- Create fluent interfaces in Java code
 
 ## Reference
 

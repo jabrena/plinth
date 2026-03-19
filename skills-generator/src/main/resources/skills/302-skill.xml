@@ -40,9 +40,8 @@ Apply REST API design principles for Spring Boot applications.
 
   <triggers>
     <trigger-list>
-        <trigger>Spring Boot REST</trigger>
-        <trigger>REST API Spring</trigger>
-        <trigger>@RestController</trigger>
+        <trigger>Review Java code for Spring Boot REST API</trigger>
+        <trigger>Apply best practices for Spring Boot REST API in Java code</trigger>
     </trigger-list>
   </triggers>
 

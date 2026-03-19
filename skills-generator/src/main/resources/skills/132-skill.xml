@@ -42,10 +42,8 @@ Set up robust integration-test infrastructure for Java services using WireMock t
 
   <triggers>
     <trigger-list>
-        <trigger>Integration tests</trigger>
-        <trigger>Testcontainers</trigger>
-        <trigger>RestAssured</trigger>
-        <trigger>@SpringBootTest</trigger>
+        <trigger>Review Java code for integration tests</trigger>
+        <trigger>Apply best practices for integration tests in Java code</trigger>
     </trigger-list>
   </triggers>
 

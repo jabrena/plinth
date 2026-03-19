@@ -42,10 +42,7 @@ Before applying any concurrency changes, ensure the project compiles. If compila
 
 ## When to use this skill
 
-- Java concurrency
-- Thread safety
-- CompletableFuture
-- Virtual threads
+- Review Java code for concurrency
 
 ## Reference
 

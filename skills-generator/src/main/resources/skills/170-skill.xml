@@ -34,9 +34,8 @@ Generate comprehensive Java project documentation through a modular, step-based 
 
   <triggers>
     <trigger-list>
-        <trigger>Java documentation</trigger>
-        <trigger>Javadoc</trigger>
-        <trigger>API documentation</trigger>
+        <trigger>Review Java code for documentation</trigger>
+        <trigger>Apply best practices for documentation in Java code</trigger>
     </trigger-list>
   </triggers>
 

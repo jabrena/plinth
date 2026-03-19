@@ -52,12 +52,9 @@ Maven profiles:
 
   <triggers>
     <trigger-list>
-        <trigger>Configure Maven plugins</trigger>
-        <trigger>Add Maven plugins</trigger>
-        <trigger>Enforcer Surefire Failsafe</trigger>
-        <trigger>JaCoCo code coverage</trigger>
-        <trigger>Spotless code formatting</trigger>
-        <trigger>OWASP dependency check</trigger>
+        <trigger>Configure Maven plugins in pom.xml</trigger>
+        <trigger>Add Maven plugins to pom.xml</trigger>
+        <trigger>Improve Maven plugins configuration in pom.xml</trigger>
     </trigger-list>
   </triggers>
 

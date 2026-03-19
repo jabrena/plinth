@@ -38,10 +38,8 @@ Before applying any generics changes, ensure the project compiles. If compilatio
 
 ## When to use this skill
 
-- Java generics
-- Raw types
-- PECS wildcards
-- Bounded type parameters
+- Review Java code for generics
+- Apply best practices for generics in Java code
 
 ## Reference
 

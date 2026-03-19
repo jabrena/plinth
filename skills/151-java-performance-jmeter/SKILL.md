@@ -31,9 +31,8 @@ JMeter must be installed and available in PATH. If not available, show a message
 
 ## When to use this skill
 
-- JMeter performance
-- Load testing
-- Performance testing Java
+- Review Java code for JMeter performance testing
+- Add JMeter support
 
 ## Reference
 

@@ -46,12 +46,9 @@ Before applying plugin recommendations, ensure the project is in a valid state. 
 
 ## When to use this skill
 
-- Configure Maven plugins
-- Add Maven plugins
-- Enforcer Surefire Failsafe
-- JaCoCo code coverage
-- Spotless code formatting
-- OWASP dependency check
+- Configure Maven plugins in pom.xml
+- Add Maven plugins to pom.xml
+- Improve Maven plugins configuration in pom.xml
 
 ## Reference
 

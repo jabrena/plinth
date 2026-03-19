@@ -41,9 +41,8 @@ Identify and apply functional exception handling best practices in Java to impro
 
   <triggers>
     <trigger-list>
-        <trigger>Functional exception handling</trigger>
-        <trigger>Optional Either</trigger>
-        <trigger>VAVR error handling</trigger>
+        <trigger>Review Java code for functional exception handling</trigger>
+        <trigger>Apply best practices for functional exception handling in Java code</trigger>
     </trigger-list>
   </triggers>
 

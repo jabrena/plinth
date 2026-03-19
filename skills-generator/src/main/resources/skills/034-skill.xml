@@ -41,6 +41,7 @@ Generate comprehensive Java project diagrams through a modular, step-based inter
         <trigger>Generate UML diagram</trigger>
         <trigger>Create sequence diagram</trigger>
         <trigger>Create class diagram</trigger>
+        <trigger>Create state machine diagram</trigger>
         <trigger>Create C4 diagram</trigger>
         <trigger>Generate ER diagram</trigger>
     </trigger-list>
