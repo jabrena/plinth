@@ -91,9 +91,53 @@ For each plugin declared explicitly inside `<build><plugins>` or `<build><plugin
 - Include plugins from `<profiles>` sections as well
 - For multi-module projects, analyse every module's `pom.xml`
 
-### Step 3: Append a Plugin Goals Reference section
+### Step 3: Append a Submodules section (multi-module projects only)
 
-After the base template content, append a level-2 heading titled **Plugin Goals Reference** followed by the text:
+If the root `pom.xml` contains a `<modules>` element, append a level-2 heading titled **Submodules** followed by the text:
+"This is a multi-module project. The following modules are declared in the root `pom.xml`."
+
+List each submodule as a row in a markdown table with columns **Module**, **Artifact ID**, **Commands**, and **Description**.
+
+- **Module**: the relative path as declared in the `<module>` element
+- **Artifact ID**: the `<artifactId>` from that module's `pom.xml`
+- **Commands**: the most useful `./mvnw` commands scoped to this module using the `-pl <module>` flag; include `./mvnw clean verify -pl <module>` always, and add `./mvnw clean install -pl <module>` when the module produces an artifact consumed by other modules; if the module has a profile that must be activated, add the relevant `-P <profileId>` variant as well
+- **Description**: a one-sentence summary of the module's purpose, inferred from its `<description>` element if present, or from its declared dependencies and plugins otherwise
+
+If the project is not a multi-module build (no `<modules>` element in the root POM), omit this section entirely.
+
+
+#### Step Constraints
+
+- Only list modules explicitly declared in the root `pom.xml` `<modules>` block
+- Read each submodule's `pom.xml` to obtain its `artifactId` and `description`
+- Do not fabricate modules that do not exist in the workspace
+- Place multiple commands for the same module in the same cell, separated by a line break (`<br>`)
+
+### Step 4: Append a Maven Profiles section
+
+After the base template and any Submodules section, append a level-2 heading titled **Maven Profiles** followed by the text:
+"The following profiles are declared in this project. Activate them with `-P <profileId>`."
+
+Scan every `pom.xml` collected in Step 2 for `<profiles><profile>` elements.
+For each profile found, create a row in a markdown table with columns **Profile ID**, **Command**, **Activation**, and **Description**.
+
+- **Profile ID**: the value of `<id>`
+- **Command**: the exact `./mvnw` command to activate the profile — e.g. `./mvnw clean verify -P <profileId>`; use the most representative lifecycle phase for the profile's purpose (e.g. `verify` for analysis/check profiles, `generate-resources` for site generation profiles)
+- **Activation**: describe the activation trigger — e.g. "manual", "default (activeByDefault)", "property: `<name>`=`<value>`", "JDK `<version>`", "OS `<family>`", etc. If no `<activation>` element is present, use "manual"
+- **Description**: a one-sentence summary of what the profile does, inferred from its configuration (plugins, properties, dependencies it adds or overrides)
+
+If no profiles are declared in any `pom.xml`, omit this section entirely.
+
+
+#### Step Constraints
+
+- Only list profiles explicitly declared inside a `<profiles>` block — do not invent profiles
+- Indicate which `pom.xml` file (root or submodule path) each profile comes from when the project is multi-module
+- If a profile has `<activeByDefault>true</activeByDefault>`, reflect that in the Activation column
+
+### Step 5: Append a Plugin Goals Reference section
+
+After the base template and any Submodules or Maven Profiles sections, append a level-2 heading titled **Plugin Goals Reference** followed by the text:
 "The following sections list useful goals for each plugin configured in this project's pom.xml."
 
 For **each** plugin found in Step 2, add a level-3 subsection named after the plugin `artifactId`, containing a markdown table with columns **Goal** and **Description**.
@@ -362,54 +406,10 @@ Only include a plugin subsection if the plugin appears in the project `pom.xml`.
 - For plugins not in the catalog, still add a subsection using your knowledge of the plugin's goals
 - Include a maximum of 8 goals per plugin
 
-### Step 4: Append a Maven Profiles section
-
-After the Plugin Goals Reference section, append a level-2 heading titled **Maven Profiles** followed by the text:
-"The following profiles are declared in this project. Activate them with `-P <profileId>`."
-
-Scan every `pom.xml` collected in Step 2 for `<profiles><profile>` elements.
-For each profile found, create a row in a markdown table with columns **Profile ID**, **Command**, **Activation**, and **Description**.
-
-- **Profile ID**: the value of `<id>`
-- **Command**: the exact `./mvnw` command to activate the profile — e.g. `./mvnw clean verify -P <profileId>`; use the most representative lifecycle phase for the profile's purpose (e.g. `verify` for analysis/check profiles, `generate-resources` for site generation profiles)
-- **Activation**: describe the activation trigger — e.g. "manual", "default (activeByDefault)", "property: `<name>`=`<value>`", "JDK `<version>`", "OS `<family>`", etc. If no `<activation>` element is present, use "manual"
-- **Description**: a one-sentence summary of what the profile does, inferred from its configuration (plugins, properties, dependencies it adds or overrides)
-
-If no profiles are declared in any `pom.xml`, omit this section entirely.
-
-
-#### Step Constraints
-
-- Only list profiles explicitly declared inside a `<profiles>` block — do not invent profiles
-- Indicate which `pom.xml` file (root or submodule path) each profile comes from when the project is multi-module
-- If a profile has `<activeByDefault>true</activeByDefault>`, reflect that in the Activation column
-
-### Step 5: Append a Submodules section (multi-module projects only)
-
-If the root `pom.xml` contains a `<modules>` element, append a level-2 heading titled **Submodules** followed by the text:
-"This is a multi-module project. The following modules are declared in the root `pom.xml`."
-
-List each submodule as a row in a markdown table with columns **Module**, **Artifact ID**, **Commands**, and **Description**.
-
-- **Module**: the relative path as declared in the `<module>` element
-- **Artifact ID**: the `<artifactId>` from that module's `pom.xml`
-- **Commands**: the most useful `./mvnw` commands scoped to this module using the `-pl <module>` flag; include `./mvnw clean verify -pl <module>` always, and add `./mvnw clean install -pl <module>` when the module produces an artifact consumed by other modules; if the module has a profile that must be activated, add the relevant `-P <profileId>` variant as well
-- **Description**: a one-sentence summary of the module's purpose, inferred from its `<description>` element if present, or from its declared dependencies and plugins otherwise
-
-If the project is not a multi-module build (no `<modules>` element in the root POM), omit this section entirely.
-
-
-#### Step Constraints
-
-- Only list modules explicitly declared in the root `pom.xml` `<modules>` block
-- Read each submodule's `pom.xml` to obtain its `artifactId` and `description`
-- Do not fabricate modules that do not exist in the workspace
-- Place multiple commands for the same module in the same cell, separated by a line break (`<br>`)
-
 
 ## Output Format
 
-- Generate the complete markdown file: base template first, then Plugin Goals Reference, then Maven Profiles (if any), then Submodules (if any)
+- Generate the complete markdown file: base template (Essential maven commands) first, then Submodules (if any), then Maven Profiles (if any), then Plugin Goals Reference
 - Use proper markdown formatting with headers, code blocks, and tables
 - Verify that every plugin listed in the Plugin Goals Reference actually exists in the project `pom.xml`
 - Omit the Maven Profiles section if no profiles are declared in any `pom.xml`
