@@ -41,6 +41,17 @@ Review and improve Java code using comprehensive type design principles that app
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Review Java code for type design</trigger>
+        <trigger>Improve type design in Java code</trigger>
+        <trigger>Fix primitive obsession in Java code</trigger>
+        <trigger>Create value objects in Java code</trigger>
+        <trigger>Create type hierarchies in Java code</trigger>
+        <trigger>Create fluent interfaces in Java code</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/122-java-type-design.md</reference>

@@ -34,6 +34,14 @@ Analyze profiling results systematically: inventory results (flamegraphs, JFR, G
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Analyze JFR profile</trigger>
+        <trigger>Profile analysis</trigger>
+        <trigger>Performance analysis</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/162-java-profiling-analyze.md</reference>

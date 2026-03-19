@@ -40,6 +40,13 @@ Set up robust integration-test infrastructure for Java services using WireMock t
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Review Java code for integration tests</trigger>
+        <trigger>Apply best practices for integration tests in Java code</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/132-java-testing-integration-testing.md</reference>

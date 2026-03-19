@@ -41,6 +41,13 @@ Review and improve Java code using comprehensive generics best practices that en
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Review Java code for generics</trigger>
+        <trigger>Apply best practices for generics in Java code</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/128-java-generics.md</reference>

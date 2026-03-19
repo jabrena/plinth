@@ -36,6 +36,13 @@ Apply data-oriented programming in Java: separate data from behavior with record
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Review Java code for data-oriented programming</trigger>
+        <trigger>Apply best practices for data-oriented programming in Java code</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/144-java-data-oriented-programming.md</reference>

@@ -32,6 +32,14 @@ Implement refactoring based on profiling analysis: review profiling-problem-anal
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Refactor performance</trigger>
+        <trigger>Optimize hot path</trigger>
+        <trigger>Performance refactoring</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/163-java-profiling-refactor.md</reference>

@@ -31,6 +31,17 @@ Generate a `DEVELOPER.md` file that combines a fixed base template with dynamic 
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Create DEVELOPER.md</trigger>
+        <trigger>Generate DEVELOPER.md</trigger>
+        <trigger>Maven project documentation</trigger>
+        <trigger>Plugin goals reference</trigger>
+        <trigger>Maven Profiles table</trigger>
+        <trigger>Submodules table</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/113-java-maven-documentation.md</reference>

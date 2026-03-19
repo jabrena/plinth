@@ -36,6 +36,13 @@ Guide the process of creating a structured plan using Cursor Plan mode. **This i
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Create a plan with Cursor Plan mode</trigger>
+        <trigger>Write a plan with Claude Plan mode</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/020-planning-enhance-ai-plan-mode.md</reference>

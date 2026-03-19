@@ -28,6 +28,13 @@ Use conversational discovery—ask 1-2 questions at a time, build on answers, va
 - **MUST**: Validate summary with user ("Does this accurately capture your requirements?") before proposing ADR creation
 - **MUST**: Wait for user to confirm "proceed" before generating the ADR
 
+## When to use this skill
+
+- Document REST API architecture
+- Create ADR for REST API
+- Functional requirements for API
+- ADR for HTTP services
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/032-architecture-adr-functional-requirements-rest.md](references/032-architecture-adr-functional-requirements-rest.md).

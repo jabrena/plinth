@@ -40,6 +40,14 @@ Improve Maven POM configuration using industry-standard best practices.
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Review pom.xml to improve it</trigger>
+        <trigger>Apply Maven best practices to pom.xml</trigger>
+        <trigger>Improve Maven POM configuration</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/110-java-maven-best-practices.md</reference>

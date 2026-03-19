@@ -36,6 +36,13 @@ Implement effective Java logging following standardized frameworks, meaningful l
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Review Java code for logging and observability</trigger>
+        <trigger>Apply best practices for logging and observability in Java code</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/180-java-observability-logging.md</reference>

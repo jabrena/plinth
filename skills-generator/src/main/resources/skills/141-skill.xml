@@ -39,6 +39,13 @@ Identify and apply modern Java (Java 8+) refactoring opportunities to improve re
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Review Java code for modern Java development</trigger>
+        <trigger>Apply best practices for modern Java development in Java code</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/141-java-refactoring-with-modern-features.md</reference>

@@ -33,6 +33,14 @@ Generate a comprehensive AGENTS.md file for Java repositories through a modular,
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Create AGENTS.md</trigger>
+        <trigger>Update AGENTS.md file</trigger>
+        <trigger>Add agent instructions</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/200-agents-md.md</reference>

@@ -38,6 +38,13 @@ Apply Spring Boot Core guidelines for annotations, bean management, configuratio
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Review Java code for Spring Boot application</trigger>
+        <trigger>Apply best practices for Spring Boot application in Java code</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/301-frameworks-spring-boot-core.md</reference>
