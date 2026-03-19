@@ -34,6 +34,15 @@ Guide stakeholders through a structured conversation to uncover and document tec
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Document REST API architecture</trigger>
+        <trigger>Create ADR for REST API</trigger>
+        <trigger>Functional requirements for API</trigger>
+        <trigger>ADR for HTTP services</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/032-architecture-adr-functional-requirements-rest.md</reference>

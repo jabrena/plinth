@@ -33,6 +33,13 @@ Apply Spring Boot unit testing guidelines with Mockito.
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Review Java code for Spring Boot unit tests</trigger>
+        <trigger>Apply best practices for Spring Boot unit tests in Java code</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/321-frameworks-spring-boot-testing-unit-tests.md</reference>

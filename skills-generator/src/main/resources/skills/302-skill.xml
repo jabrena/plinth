@@ -38,6 +38,13 @@ Apply REST API design principles for Spring Boot applications.
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Review Java code for Spring Boot REST API</trigger>
+        <trigger>Apply best practices for Spring Boot REST API in Java code</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/302-frameworks-spring-boot-rest.md</reference>

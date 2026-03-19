@@ -34,6 +34,15 @@ Guide stakeholders through a structured conversation to uncover and document tec
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Document CLI architecture</trigger>
+        <trigger>Create ADR for CLI</trigger>
+        <trigger>ADR for command-line tool</trigger>
+        <trigger>Functional requirements for CLI</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/031-architecture-adr-functional-requirements-cli.md</reference>

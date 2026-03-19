@@ -43,6 +43,13 @@ Identify and apply functional programming principles in Java to improve immutabi
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Review Java code for functional programming</trigger>
+        <trigger>Apply best practices for functional programming in Java code</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/142-java-functional-programming.md</reference>

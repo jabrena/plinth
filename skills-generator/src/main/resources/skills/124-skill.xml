@@ -37,6 +37,12 @@ Identify and apply Java secure coding practices to reduce vulnerabilities, prote
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Review Java code for secure coding</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/124-java-secure-coding.md</reference>

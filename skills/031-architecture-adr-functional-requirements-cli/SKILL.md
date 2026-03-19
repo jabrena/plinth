@@ -28,6 +28,13 @@ Use conversational discovery—ask 1-2 questions at a time, build on answers, va
 - **MUST**: Validate summary with user ("Does this sound accurate?") before proposing ADR creation
 - **MUST**: Wait for user to confirm "proceed" before generating the ADR
 
+## When to use this skill
+
+- Document CLI architecture
+- Create ADR for CLI
+- ADR for command-line tool
+- Functional requirements for CLI
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/031-architecture-adr-functional-requirements-cli.md](references/031-architecture-adr-functional-requirements-cli.md).

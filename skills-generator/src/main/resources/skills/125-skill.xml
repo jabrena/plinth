@@ -45,6 +45,12 @@ Identify and apply Java concurrency best practices to improve thread safety, sca
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Review Java code for concurrency</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/125-java-concurrency.md</reference>

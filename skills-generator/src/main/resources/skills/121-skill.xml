@@ -36,6 +36,19 @@ Review and improve Java code using comprehensive object-oriented design guidelin
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Review Java code for object-oriented design</trigger>
+        <trigger>Refactor Java code for object-oriented design</trigger>
+        <trigger>Improve Java code for object-oriented design</trigger>
+        <trigger>Fix OOP concept misuse in Java code</trigger>
+        <trigger>Identify and resolve code smells in Java code</trigger>
+        <trigger>Improve object creation patterns in Java code</trigger>
+        <trigger>Improve method design in Java code</trigger>
+        <trigger>Improve exception handling in Java code</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/121-java-object-oriented-design.md</reference>

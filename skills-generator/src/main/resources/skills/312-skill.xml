@@ -36,6 +36,13 @@ Apply Spring Data JDBC guidelines with Java records.
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Review Java code for Spring Data JDBC</trigger>
+        <trigger>Apply best practices for Spring Data JDBC in Java code</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/312-frameworks-spring-data-jdbc.md</reference>

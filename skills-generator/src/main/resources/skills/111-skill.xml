@@ -31,6 +31,16 @@ Add essential Maven dependencies that enhance code quality and safety through a 
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Add Maven dependencies</trigger>
+        <trigger>Add JSpecify nullness dependencies</trigger>
+        <trigger>Add Error Prone NullAway dependencies</trigger>
+        <trigger>Add VAVR functional dependencies</trigger>
+        <trigger>Add ArchUnit architecture testing dependencies</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/111-java-maven-dependencies.md</reference>

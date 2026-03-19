@@ -40,6 +40,10 @@ Before applying any concurrency changes, ensure the project compiles. If compila
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 - **BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each concurrency pattern
 
+## When to use this skill
+
+- Review Java code for concurrency
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/125-java-concurrency.md](references/125-java-concurrency.md).

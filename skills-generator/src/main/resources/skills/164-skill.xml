@@ -35,6 +35,13 @@ Verify performance optimizations through rigorous before/after comparison: ensur
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Verify performance fix</trigger>
+        <trigger>Performance benchmark</trigger>
+    </trigger-list>
+  </triggers>
+
   <references>
     <reference-list>
         <reference>references/164-java-profiling-verify.md</reference>
