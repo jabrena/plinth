@@ -1,6 +1,18 @@
-# Java Enhancement Proposals (JEPs) by Version: Java 25 to Java 8
+# Java Enhancement Proposals (JEPs) by Version: Java 26 to Java 8
 
-I'll provide a comprehensive list of JEPs included in each Java release from Java 25 back through Java 8.
+I'll provide a comprehensive list of JEPs included in each Java release from Java 26 back through Java 8.
+
+## Java 26 (March 2026)
+- [JEP 500](https://openjdk.org/jeps/500): Prepare to Make Final Mean Final
+- [JEP 504](https://openjdk.org/jeps/504): Remove the Applet API
+- [JEP 516](https://openjdk.org/jeps/516): Ahead-of-Time Object Caching with Any GC
+- [JEP 517](https://openjdk.org/jeps/517): HTTP/3 for the HTTP Client API
+- [JEP 522](https://openjdk.org/jeps/522): G1 GC: Improve Throughput by Reducing Synchronization
+- [JEP 524](https://openjdk.org/jeps/524): PEM Encodings of Cryptographic Objects (Second Preview)
+- [JEP 525](https://openjdk.org/jeps/525): Structured Concurrency (Sixth Preview)
+- [JEP 526](https://openjdk.org/jeps/526): Lazy Constants (Second Preview)
+- [JEP 529](https://openjdk.org/jeps/529): Vector API (Eleventh Incubator)
+- [JEP 530](https://openjdk.org/jeps/530): Primitive Types in Patterns, instanceof, and switch (Fourth Preview)
 
 ## Java 25 (September 2025)
 - [JEP 470](https://openjdk.org/jeps/470): PEM Encodings of Cryptographic Objects (Preview)
