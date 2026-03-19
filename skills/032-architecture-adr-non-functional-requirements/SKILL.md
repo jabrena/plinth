@@ -1,5 +1,5 @@
 ---
-name: 033-architecture-adr-non-functional-requirements
+name: 032-architecture-adr-non-functional-requirements
 description: Facilitates conversational discovery to create Architectural Decision Records (ADRs) for non-functional requirements using the ISO/IEC 25010:2023 quality model. Use when the user wants to document quality attributes, NFR decisions, security/performance/scalability architecture, or design systems with measurable quality criteria. Part of the skills-for-java project
 license: Apache-2.0
 metadata:
@@ -39,4 +39,4 @@ Use challenge-first, consultative discovery—ask 1-2 questions at a time, build
 
 ## Reference
 
-For detailed guidance, examples, and constraints, see [references/033-architecture-adr-non-functional-requirements.md](references/033-architecture-adr-non-functional-requirements.md).
+For detailed guidance, examples, and constraints, see [references/032-architecture-adr-non-functional-requirements.md](references/032-architecture-adr-non-functional-requirements.md).

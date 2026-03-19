@@ -31,26 +31,20 @@
             "version": "0.13.0"
         },
         {
-            "name": "031-architecture-adr-functional-requirements-cli",
-            "source": "./skills/031-architecture-adr-functional-requirements-cli",
-            "description": "Create ADRs for CLI development. Use when the user wants to document CLI architecture, capture functional requirements for a command-line tool, create ADRs for CLI projects, or design CLI applications with documented decisions.",
+            "name": "031-architecture-adr-functional-requirements",
+            "source": "./skills/031-architecture-adr-functional-requirements",
+            "description": "Create ADRs for functional requirements (CLI and/or REST/HTTP API). Use when documenting CLI or HTTP architecture, capturing functional requirements, or designing interfaces with documented decisions. Infers interface type from context when possible.",
             "version": "0.13.0"
         },
         {
-            "name": "032-architecture-adr-functional-requirements-rest",
-            "source": "./skills/032-architecture-adr-functional-requirements-rest",
-            "description": "Create ADRs for REST API development. Use when the user wants to document REST API architecture, capture functional requirements for APIs, create ADRs for REST/HTTP services, or design APIs with documented decisions.",
-            "version": "0.13.0"
-        },
-        {
-            "name": "033-architecture-adr-non-functional-requirements",
-            "source": "./skills/033-architecture-adr-non-functional-requirements",
+            "name": "032-architecture-adr-non-functional-requirements",
+            "source": "./skills/032-architecture-adr-non-functional-requirements",
             "description": "Create ADRs for Non-Functional Requirements using the ISO/IEC 25010:2023 quality model. Use when documenting quality attributes, NFR decisions, security/performance/scalability architecture, or designing systems with measurable quality criteria.",
             "version": "0.13.0"
         },
         {
-            "name": "034-architecture-diagrams",
-            "source": "./skills/034-architecture-diagrams",
+            "name": "033-architecture-diagrams",
+            "source": "./skills/033-architecture-diagrams",
             "description": "Generate Java project diagrams — UML sequence, class, state machine, C4 model, ER — through a modular, step-based interactive process.",
             "version": "0.13.0"
         },

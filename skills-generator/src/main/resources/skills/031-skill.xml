@@ -1,24 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
-      id="031-architecture-adr-functional-requirements-cli"
+      id="031-architecture-adr-functional-requirements"
       interactive="true">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Facilitates conversational discovery to create Architectural Decision Records (ADRs) for CLI development. Use when the user wants to document CLI architecture, capture functional requirements for a command-line tool, create ADRs for CLI projects, or design CLI applications with documented decisions.</description>
+    <description>Facilitates conversational discovery to create Architectural Decision Records (ADRs) for functional requirements covering CLI, REST/HTTP APIs, or both. Use when the user wants to document command-line or HTTP service architecture, capture functional requirements, create ADRs for CLI or API projects, or design interfaces with documented decisions.</description>
   </metadata>
 
-  <title>Create ADRs for CLI Development</title>
+  <title>Create ADRs for Functional Requirements (CLI and/or REST API)</title>
   <goal><![CDATA[
-Guide stakeholders through a structured conversation to uncover and document technical decisions and functional requirements for CLI applications. **This is an interactive SKILL**. The ADR is the documentation of that conversation, not the conversation itself.
+Guide stakeholders through a structured conversation to uncover and document technical decisions and functional requirements for command-line tools, REST/HTTP APIs, or combined surfaces. **This is an interactive SKILL**. The ADR is the documentation of that conversation, not the conversation itself. Infer CLI vs API from project context when possible; ask a short clarifying question when unclear.
 
 **What is covered in this Skill?**
 
-- Initial context: CLI purpose, users, constraints, timeline
-- Functional requirements: workflows, commands, input/output, UX
-- Technical decisions: language/framework, architecture, data, integration, testing, distribution
+- Surface discovery: CLI, REST/HTTP API, or both (inference + confirmation)
+- Initial context: purpose, users/consumers, constraints, timeline, load (API when relevant)
+- Functional requirements: surface-specific workflows, I/O, resources, errors
+- Technical decisions: language/framework; REST blocks (API design, auth, data, infra, testing/monitoring) and/or CLI blocks (architecture, data/integration, testing/distribution)
 - Decision synthesis and validation before ADR creation
 - ADR document generation and next steps
 ]]></goal>
@@ -29,23 +30,23 @@ Guide stakeholders through a structured conversation to uncover and document tec
       <constraint>**MANDATORY**: Run `date` before starting to get accurate timestamps for the ADR</constraint>
       <constraint>**MUST**: Read the reference template fresh—do not use cached questions</constraint>
       <constraint>**MUST**: Ask one or two questions at a time; never all at once</constraint>
-      <constraint>**MUST**: Validate summary with user ("Does this sound accurate?") before proposing ADR creation</constraint>
+      <constraint>**MUST**: Validate summary with user ("Does this accurately capture your requirements?") before proposing ADR creation</constraint>
       <constraint>**MUST**: Wait for user to confirm "proceed" before generating the ADR</constraint>
     </constraint-list>
   </constraints>
 
   <triggers>
     <trigger-list>
-        <trigger>Document CLI architecture</trigger>
-        <trigger>Create ADR for CLI</trigger>
-        <trigger>ADR for command-line tool</trigger>
-        <trigger>Functional requirements for CLI</trigger>
+        <trigger>Document CLI or REST architecture</trigger>
+        <trigger>Create ADR for functional requirements</trigger>
+        <trigger>ADR for command-line tool or HTTP API</trigger>
+        <trigger>Functional requirements ADR</trigger>
     </trigger-list>
   </triggers>
 
   <references>
     <reference-list>
-        <reference>references/031-architecture-adr-functional-requirements-cli.md</reference>
+        <reference>references/031-architecture-adr-functional-requirements.md</reference>
     </reference-list>
   </references>
 </prompt>
