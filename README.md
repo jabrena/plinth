@@ -64,12 +64,6 @@ From the outset, be aware that the results provided by interactions with the dif
 
 Models are able to generate code, but they cannot run code with your local data. To address this limitation, some prompts provide scripts to bridge this gap on the model side.
 
-## Compatibility with Modern IDEs, CLI & Others
-
-The repository was designed to support Cursor, but other tools have evolved and now offer better support for system prompts. The repository runs regular regression tests for IDEs and tools such as *Cursor*, *Cursor CLI*, *Claude Code*, *GitHub Copilot*, and *JetBrains Junie*.
-
-⚠️ **Note:** Currently, the best environments in which to use this repository are *Cursor*, *Cursor CLI*, and *Claude Code*. If you use *JetBrains IntelliJ IDEA*, you can combine it with *Cursor CLI* or *Claude Code*. Further information is available in the latest review [here](./documentation/reviews/review-20250829.md) (**Last update:** 2025/08/29).
-
 ## Contribute
 
 If you have great ideas, [read the following document](./CONTRIBUTING.md) to contribute.

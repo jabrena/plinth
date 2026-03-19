@@ -1,53 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
-      id="033-architecture-adr-non-functional-requirements"
+      id="033-architecture-diagrams"
       interactive="true">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Facilitates conversational discovery to create Architectural Decision Records (ADRs) for non-functional requirements using the ISO/IEC 25010:2023 quality model. Use when the user wants to document quality attributes, NFR decisions, security/performance/scalability architecture, or design systems with measurable quality criteria.</description>
+    <description>Use when you need to generate Java project diagrams — including UML sequence diagrams, UML class diagrams, C4 model diagrams, UML state machine diagrams, and ER (Entity Relationship) diagrams — through a modular, step-based interactive process that adapts to your specific visualization needs.</description>
   </metadata>
 
-  <title>Create ADRs for Non-Functional Requirements</title>
+  <title>Java Diagrams Generator with modular step-based configuration</title>
   <goal><![CDATA[
-Guide stakeholders through a structured conversation to uncover and document architectural decisions for quality attributes using the ISO/IEC 25010:2023 quality model. **This is an interactive SKILL**. The ADR documents the outcome of the conversation, not the conversation itself. Act as an architecture consultant: challenge-first, consultative, adaptive.
+Generate comprehensive Java project diagrams through a modular, step-based interactive process that covers UML sequence diagrams, UML class diagrams, C4 model diagrams, UML state machine diagrams, and ER (Entity Relationship) diagrams using PlantUML syntax. **This is an interactive SKILL**.
 
 **What is covered in this Skill?**
 
-- Challenge-first opening: ISO 25010:2023 quality characteristics (Functional Suitability, Performance Efficiency, Compatibility, Reliability, Security, Maintainability, Flexibility, Safety)
-- Understanding the challenge: drivers, constraints, system context
-- Quality-specific deep dive tailored to primary NFR category
-- Solution exploration and trade-off preferences
-- Decision synthesis and validation before ADR creation
-- ADR document generation with Quality Metrics &amp; Success Criteria
+- UML sequence diagram generation for application workflows and API interactions
+- UML class diagram generation for package structure and class relationships
+- C4 model diagram generation at Context/Container/Component levels only (levels 1–3; Code/Level 4 not generated)
+- UML state machine diagram generation for entity lifecycles and business workflows
+- ER diagram generation from SQL schema (DDL, migrations) using PlantUML Chen notation
+- PlantUML syntax for all diagram types
+- File organization strategies: single-file, separate-files, or integrated with existing documentation
+- Final diagram validation with PlantUML syntax checking
 ]]></goal>
 
   <constraints>
-    <constraints-description>Use challenge-first, consultative discovery—ask 1-2 questions at a time, build on answers, tailor to NFR category. Only create ADR after thorough conversation and user confirmation.</constraints-description>
+    <constraints-description>Before applying any diagram generation, ensure the project validates. If validation fails, stop immediately — do not proceed until all validation errors are resolved.</constraints-description>
     <constraint-list>
-      <constraint>**MANDATORY**: Run `date` before starting to get accurate timestamps for the ADR</constraint>
-      <constraint>**MUST**: Read the reference template fresh—do not use cached questions</constraint>
-      <constraint>**MUST**: Start with challenge-first opening (ISO 25010:2023 quality characteristics)</constraint>
-      <constraint>**MUST**: Ask one or two questions at a time; never all at once</constraint>
-      <constraint>**MUST**: Validate summary with user ("Does this accurately capture your quality needs?") before proposing ADR creation</constraint>
-      <constraint>**MUST**: Wait for user to confirm "proceed" before generating the ADR</constraint>
+      <constraint>**MANDATORY**: Run `./mvnw validate` or `mvn validate` before applying any diagram generation</constraint>
+      <constraint>**SAFETY**: If validation fails, stop immediately — do not proceed until all validation errors are resolved</constraint>
+      <constraint>**BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each diagram generation pattern</constraint>
+      <constraint>**C4 LIMIT**: C4 diagrams restricted to levels 1, 2, 3 only (Context, Container, Component); never generate Level 4 (Code) diagrams</constraint>
     </constraint-list>
   </constraints>
 
   <triggers>
     <trigger-list>
-        <trigger>Document quality attributes</trigger>
-        <trigger>Create ADR for NFR</trigger>
-        <trigger>Non-functional requirements ADR</trigger>
-        <trigger>Security performance scalability architecture</trigger>
+        <trigger>Generate UML diagram</trigger>
+        <trigger>Create sequence diagram</trigger>
+        <trigger>Create class diagram</trigger>
+        <trigger>Create state machine diagram</trigger>
+        <trigger>Create C4 diagram</trigger>
+        <trigger>Generate ER diagram</trigger>
     </trigger-list>
   </triggers>
 
   <references>
     <reference-list>
-        <reference>references/033-architecture-adr-non-functional-requirements.md</reference>
+        <reference>references/033-architecture-diagrams.md</reference>
     </reference-list>
   </references>
 </prompt>

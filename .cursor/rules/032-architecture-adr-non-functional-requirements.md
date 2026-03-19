@@ -1,5 +1,5 @@
 ---
-name: 033-architecture-adr-non-functional-requirements
+name: 032-architecture-adr-non-functional-requirements
 description: Use when the user wants to document quality attributes, NFR decisions, security/performance/scalability architecture, or design systems with measurable quality criteria using ISO/IEC 25010:2023.
 license: Apache-2.0
 metadata:

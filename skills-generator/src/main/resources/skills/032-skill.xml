@@ -1,51 +1,53 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
-      id="032-architecture-adr-functional-requirements-rest"
+      id="032-architecture-adr-non-functional-requirements"
       interactive="true">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Facilitates conversational discovery to create Architectural Decision Records (ADRs) for REST API development. Use when the user wants to document REST API architecture, capture functional requirements for APIs, create ADRs for REST/HTTP services, or design APIs with documented decisions.</description>
+    <description>Facilitates conversational discovery to create Architectural Decision Records (ADRs) for non-functional requirements using the ISO/IEC 25010:2023 quality model. Use when the user wants to document quality attributes, NFR decisions, security/performance/scalability architecture, or design systems with measurable quality criteria.</description>
   </metadata>
 
-  <title>Create ADRs for REST API Development</title>
+  <title>Create ADRs for Non-Functional Requirements</title>
   <goal><![CDATA[
-Guide stakeholders through a structured conversation to uncover and document technical decisions and functional requirements for REST API implementations. **This is an interactive SKILL**. The ADR is the documentation of that conversation, not the conversation itself.
+Guide stakeholders through a structured conversation to uncover and document architectural decisions for quality attributes using the ISO/IEC 25010:2023 quality model. **This is an interactive SKILL**. The ADR documents the outcome of the conversation, not the conversation itself. Act as an architecture consultant: challenge-first, consultative, adaptive.
 
 **What is covered in this Skill?**
 
-- Initial context: API purpose, consumers, constraints, load
-- Functional requirements: use cases, resources, operations, response formats, error handling
-- Technical decisions: language/framework, API design, auth/security, data, integration, infrastructure, testing, monitoring
+- Challenge-first opening: ISO 25010:2023 quality characteristics (Functional Suitability, Performance Efficiency, Compatibility, Reliability, Security, Maintainability, Flexibility, Safety)
+- Understanding the challenge: drivers, constraints, system context
+- Quality-specific deep dive tailored to primary NFR category
+- Solution exploration and trade-off preferences
 - Decision synthesis and validation before ADR creation
-- ADR document generation and next steps
+- ADR document generation with Quality Metrics &amp; Success Criteria
 ]]></goal>
 
   <constraints>
-    <constraints-description>Use conversational discovery—ask 1-2 questions at a time, build on answers, validate before proceeding. Only create ADR after thorough conversation and user confirmation.</constraints-description>
+    <constraints-description>Use challenge-first, consultative discovery—ask 1-2 questions at a time, build on answers, tailor to NFR category. Only create ADR after thorough conversation and user confirmation.</constraints-description>
     <constraint-list>
       <constraint>**MANDATORY**: Run `date` before starting to get accurate timestamps for the ADR</constraint>
       <constraint>**MUST**: Read the reference template fresh—do not use cached questions</constraint>
+      <constraint>**MUST**: Start with challenge-first opening (ISO 25010:2023 quality characteristics)</constraint>
       <constraint>**MUST**: Ask one or two questions at a time; never all at once</constraint>
-      <constraint>**MUST**: Validate summary with user ("Does this accurately capture your requirements?") before proposing ADR creation</constraint>
+      <constraint>**MUST**: Validate summary with user ("Does this accurately capture your quality needs?") before proposing ADR creation</constraint>
       <constraint>**MUST**: Wait for user to confirm "proceed" before generating the ADR</constraint>
     </constraint-list>
   </constraints>
 
   <triggers>
     <trigger-list>
-        <trigger>Document REST API architecture</trigger>
-        <trigger>Create ADR for REST API</trigger>
-        <trigger>Functional requirements for API</trigger>
-        <trigger>ADR for HTTP services</trigger>
+        <trigger>Document quality attributes</trigger>
+        <trigger>Create ADR for NFR</trigger>
+        <trigger>Non-functional requirements ADR</trigger>
+        <trigger>Security performance scalability architecture</trigger>
     </trigger-list>
   </triggers>
 
   <references>
     <reference-list>
-        <reference>references/032-architecture-adr-functional-requirements-rest.md</reference>
+        <reference>references/032-architecture-adr-non-functional-requirements.md</reference>
     </reference-list>
   </references>
 </prompt>
