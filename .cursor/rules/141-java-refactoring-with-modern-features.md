@@ -1,6 +1,6 @@
 ---
 name: 141-java-refactoring-with-modern-features
-description: Use when you need to refactor Java code to adopt modern Java features (Java 8+) including lambda expressions, Stream API, Optional, java.time API, collection factory methods, CompletableFuture, text blocks, var inference, and Java 25 flexible constructor bodies and module import declarations.
+description: Use when you need to refactor Java code to adopt modern Java features (Java 8+) including lambda expressions, Stream API, Optional, java.time API, collection factory methods, text blocks, var inference, and Java 25 flexible constructor bodies and module import declarations.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -14,7 +14,7 @@ You are a Senior software engineer with extensive experience in Java software de
 
 ## Goal
 
-Modern Java development (Java 8+) emphasizes leveraging lambda expressions and functional interfaces over anonymous classes, and using the Stream API for declarative collection processing. The `Optional` API should be used for handling potentially absent values gracefully, and the `java.time` API for all date/time operations. Default methods allow non-breaking interface evolution. Local Variable Type Inference (`var`) can improve readability when used judiciously. Unmodifiable collection factory methods (`List.of()`, etc.) provide concise immutable collections. `CompletableFuture` facilitates composable asynchronous programming. The Java Platform Module System (JPMS, Java 9+) enables strong encapsulation. Java 25 introduces Flexible Constructor Bodies (JEP 513) for enhanced initialization patterns and Module Import Declarations (JEP 511) for simplified module dependencies. Performance implications of new features should be considered and profiled. Testing strategies need to adapt to these modern features, and text blocks (Java 15+) offer improved readability for multi-line strings.
+Modern Java development (Java 8+) emphasizes leveraging lambda expressions and functional interfaces over anonymous classes, and using the Stream API for declarative collection processing. The `Optional` API should be used for handling potentially absent values gracefully, and the `java.time` API for all date/time operations. Default methods allow non-breaking interface evolution. Local Variable Type Inference (`var`) can improve readability when used judiciously. Unmodifiable collection factory methods (`List.of()`, etc.) provide concise immutable collections. The Java Platform Module System (JPMS, Java 9+) enables strong encapsulation. Java 25 introduces Flexible Constructor Bodies (JEP 513) for enhanced initialization patterns and Module Import Declarations (JEP 511) for simplified module dependencies. Performance implications of new features should be considered and profiled. Testing strategies need to adapt to these modern features, and text blocks (Java 15+) offer improved readability for multi-line strings.
 
 ### Key Principles
 
@@ -45,12 +45,11 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 5: Default Methods in Interfaces
 - Example 6: Local Variable Type Inference (var)
 - Example 7: Collection Factory Methods
-- Example 8: CompletableFuture for Asynchronous Programming
-- Example 9: Module System (Java 9+) with Import Declarations (Java 25)
-- Example 10: Performance Considerations with Modern Features
-- Example 11: Testing Modern Java Code
-- Example 12: Use Text Blocks for Readable Multi-line Strings
-- Example 13: Flexible Constructor Bodies (Java 25)
+- Example 8: Module System (Java 9+) with Import Declarations (Java 25)
+- Example 9: Performance Considerations with Modern Features
+- Example 10: Testing Modern Java Code
+- Example 11: Use Text Blocks for Readable Multi-line Strings
+- Example 12: Flexible Constructor Bodies (Java 25)
 
 ### Example 1: Lambda Expressions and Functional Interfaces
 
@@ -615,128 +614,7 @@ public class CollectionFactoryAntiPattern {
 }
 ```
 
-### Example 8: CompletableFuture for Asynchronous Programming
-
-Title: Employ CompletableFuture for Composable Asynchronous Operations
-Description: Use `CompletableFuture` (Java 8+) for managing sequences of asynchronous operations, avoiding callback hell and enabling a more functional, composable style. Chain asynchronous tasks using methods like `thenApplyAsync()`, `thenComposeAsync()`, `thenAcceptAsync()`, `thenRunAsync()`. Combine results from multiple `CompletableFuture` instances using `allOf()` or `anyOf()`. Handle exceptions gracefully using `exceptionally()` or `handle()`. Be mindful of the `Executor` used for each stage and consider timeout handling for asynchronous operations.
-
-**Good example:**
-
-```java
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.TimeUnit;
-
-public class CompletableFutureExample {
-
-    private static final ExecutorService customExecutor = Executors.newFixedThreadPool(4);
-
-    // Simulate fetching data asynchronously
-    private static String fetchData(String query) {
-        System.out.println("" + Thread.currentThread().getName() + " Fetching data for: " + query);
-        try { Thread.sleep(1000); } catch (InterruptedException e) { Thread.currentThread().interrupt(); return "ERROR_FETCH";}
-        if (query.equals("fail_fetch")) throw new RuntimeException("Simulated fetch failure");
-        return "Data_for_" + query;
-    }
-
-    // Simulate processing data
-    private static String processData(String rawData) {
-        System.out.println("" + Thread.currentThread().getName() + " Processing data: " + rawData);
-        try { Thread.sleep(500); } catch (InterruptedException e) { Thread.currentThread().interrupt(); return "ERROR_PROCESS";}
-        if (rawData.contains("fail_process")) throw new RuntimeException("Simulated process failure");
-        return "Processed_" + rawData;
-    }
-
-    // Simulate saving data
-    private static void saveData(String processedData) {
-        System.out.println("" + Thread.currentThread().getName() + " Saving data: " + processedData);
-        try { Thread.sleep(200); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
-        System.out.println("" + Thread.currentThread().getName() + " Save complete for: " + processedData);
-    }
-
-    public static void main(String[] args) {
-        System.out.println("Starting asynchronous operations...");
-
-        CompletableFuture<Void> futureSuccess = CompletableFuture
-            .supplyAsync(() -> fetchData("query1"), customExecutor)      // Stage 1 on custom executor
-            .thenApplyAsync(data -> processData(data), customExecutor) // Stage 2 on custom executor
-            .thenAcceptAsync(result -> saveData(result), customExecutor) // Stage 3 on custom executor
-            .exceptionally(ex -> { // Handle exceptions from any preceding stage
-                System.err.println("" + Thread.currentThread().getName() + " Error in chain: " + ex.getMessage());
-                return null; // Must return Void (or a compatible type for thenAccept)
-            });
-
-        CompletableFuture<Void> futureFetchFail = CompletableFuture
-            .supplyAsync(() -> fetchData("fail_fetch"), customExecutor)
-            .thenApplyAsync(data -> processData(data), customExecutor)
-            .thenAcceptAsync(result -> saveData(result), customExecutor)
-            .exceptionally(ex -> {
-                System.err.println("" + Thread.currentThread().getName() + " Error in fetch_fail chain: " + ex.getMessage());
-                return null;
-            });
-
-        System.out.println("Futures submitted. Main thread continues...");
-
-        // Wait for futures to complete for demonstration purposes
-        futureSuccess.join();
-        futureFetchFail.join();
-
-        customExecutor.shutdown();
-        try {
-            if (!customExecutor.awaitTermination(5, TimeUnit.SECONDS)) {
-                customExecutor.shutdownNow();
-            }
-        } catch (InterruptedException e) {
-            customExecutor.shutdownNow();
-        }
-        System.out.println("All operations finished.");
-    }
-}
-```
-
-**Bad example:**
-
-```java
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
-
-public class CompletableFutureAntiPattern {
-    public static void main(String[] args) {
-        // Bad: Blocking directly on future.get() without timeout in main/request threads
-        // This negates the benefits of asynchronous programming if not handled carefully.
-        CompletableFuture<String> future = CompletableFuture.supplyAsync(() -> {
-            try { Thread.sleep(2000); } catch (InterruptedException e) {}
-            return "Slow result";
-        });
-
-        String result = null;
-        try {
-            System.out.println("Blocking to get future result...");
-            result = future.get(); // Blocking call - can make application unresponsive
-            System.out.println("Got result: " + result);
-        } catch (InterruptedException | ExecutionException e) {
-            System.err.println("Error getting future result: " + e.getMessage());
-        }
-
-        // Bad: Forgetting to handle exceptions within the CompletableFuture chain
-        CompletableFuture<String> errorFuture = CompletableFuture.supplyAsync(() -> {
-            if (true) throw new RuntimeException("Simulated async error!");
-            return "Won't reach here";
-        }).thenApply(s -> s.toUpperCase()); // This stage might not run, or exception propagates
-
-        try {
-            errorFuture.join(); // Will throw CompletionException here if not handled by .exceptionally()
-        } catch (Exception e) {
-            // assertThat(e.getCause()).isInstanceOf(RuntimeException.class).hasMessage("Processing failed");
-            System.out.println("Error from errorFuture: " + e.getClass().getName() + ": "+ e.getCause().getMessage());
-        }
-        // An .exceptionally() or .handle() should be used in the chain.
-    }
-}
-```
-
-### Example 9: Module System (Java 9+) with Import Declarations (Java 25)
+### Example 8: Module System (Java 9+) with Import Declarations (Java 25)
 
 Title: Leverage the Java Platform Module System (JPMS) for Strong Encapsulation
 Description: For applications built on Java 9 or later, consider designing them as modules to achieve strong encapsulation and reliable configuration. Create a `module-info.java` file at the root of your source code to declare your module. Use `requires` clauses to specify dependencies, `exports` clauses to make packages publicly available, `opens` clauses for reflection access, and `provides ... with ...` for service discovery. Java 25 introduces Module Import Declarations (JEP 511) that allow importing entire modules into the current module's namespace, simplifying access to frequently used types from other modules. Carefully consider which packages to export to maintain good encapsulation.
@@ -817,7 +695,7 @@ public class BadModuleExample {
 }
 ```
 
-### Example 10: Performance Considerations with Modern Features
+### Example 9: Performance Considerations with Modern Features
 
 Title: Be Mindful of Performance Implications of Modern Java Features
 Description: Always profile your application before attempting optimizations. Avoid premature optimization. Choose appropriate data structures for the task. Streams can sometimes have overhead compared to simple loops for very small collections. Parallel streams can improve performance for CPU-bound tasks on large datasets but can degrade performance if misused. `Optional` can add object allocation overhead. Lazy initialization should be implemented correctly using double-checked locking or suppliers.
@@ -923,18 +801,17 @@ public class PerformanceAntiPattern {
 }
 ```
 
-### Example 11: Testing Modern Java Code
+### Example 10: Testing Modern Java Code
 
 Title: Adapt Testing Strategies for Modern Java Features
-Description: Adapt testing strategies to properly test modern Java features. Focus on testing behavior rather than implementation when testing lambda expressions and functional code. Use appropriate mocking strategies for functional interfaces and streams. Test asynchronous code with CompletableFuture properly, including timeout scenarios and exception handling. Ensure proper testing coverage of Optional usage patterns and edge cases. Utilize modern testing frameworks and assertion libraries that integrate well with modern Java features.
+Description: Adapt testing strategies to properly test modern Java features. Focus on testing behavior rather than implementation when testing lambda expressions and functional code. Use appropriate mocking strategies for functional interfaces and streams. Ensure proper testing coverage of Optional usage patterns and edge cases. Utilize modern testing frameworks and assertion libraries that integrate well with modern Java features.
 
 **Good example:**
 
 ```java
-import java.util.List;
+                import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 import java.util.stream.Collectors;
 // For actual tests, use JUnit, TestNG, AssertJ etc.
 // import org.junit.jupiter.api.Test;
@@ -955,14 +832,6 @@ class ModernFeaturesService {
         return input.stream()
             .filter(s -> s != null && s.length() >= minLength)
             .findFirst();
-    }
-
-    public CompletableFuture<String> processDataAsync(String data) {
-        return CompletableFuture.supplyAsync(() -> {
-            try { Thread.sleep(100); } catch (InterruptedException e) { Thread.currentThread().interrupt(); }
-            if (data.equals("fail")) throw new RuntimeException("Processing failed");
-            return "PROCESSED:" + data;
-        });
     }
 }
 
@@ -996,39 +865,12 @@ public class TestingModernCodeExample {
         System.out.println("testFindFirstLongString (not found): " + result); // Expected: Optional.empty
     }
 
-    // @Test
-    void testProcessDataAsync_success() {
-        ModernFeaturesService service = new ModernFeaturesService();
-        CompletableFuture<String> future = service.processDataAsync("test");
-        // In a real test, use Awaitility or future.join() with try-catch for CompletionException
-        try {
-            String result = future.get(); // Blocking for example, use non-blocking in real tests
-            // assertThat(result).isEqualTo("PROCESSED:test");
-             System.out.println("testProcessDataAsync (success): " + result); // Expected: PROCESSED:test
-        } catch (Exception e) { e.printStackTrace(); }
-    }
-
-    // @Test
-    void testProcessDataAsync_failure() {
-        ModernFeaturesService service = new ModernFeaturesService();
-        CompletableFuture<String> future = service.processDataAsync("fail");
-        // assertThatThrownBy(future::join).isInstanceOf(CompletionException.class);
-        try {
-            future.join(); // This will throw CompletionException
-        } catch (Exception e) {
-            // assertThat(e.getCause()).isInstanceOf(RuntimeException.class).hasMessage("Processing failed");
-            System.out.println("testProcessDataAsync (failure expected): " + e.getClass().getName() + " -> " + e.getCause().getMessage());
-        }
-    }
-
     public static void main(String[] args) {
         System.out.println("These are conceptual tests. Use a testing framework for real scenarios.");
         TestingModernCodeExample tests = new TestingModernCodeExample();
         tests.testFilterAndToUpper_withAssertJ();
         tests.testFindFirstLongString_found_withAssertJ();
         tests.testFindFirstLongString_notFound_withAssertJ();
-        tests.testProcessDataAsync_success();
-        tests.testProcessDataAsync_failure();
     }
 }
 ```
@@ -1066,7 +908,7 @@ public class InsufficientTesting {
 }
 ```
 
-### Example 12: Use Text Blocks for Readable Multi-line Strings
+### Example 11: Use Text Blocks for Readable Multi-line Strings
 
 Title: Employ Text Blocks for Clear and Maintainable Multi-line String Literals
 Description: Utilize text blocks (`"""..."""`) to represent multi-line string literals in a way that preserves indentation and formatting, making them easier to read and write, especially for embedded code snippets like JSON, XML, SQL, or HTML. Text blocks automatically handle newline characters and manage indentation. Incidental leading white space is automatically stripped from each line. You can control trailing white space and use escape sequences as needed.
@@ -1148,7 +990,7 @@ public class OldMultiLineStringExample {
 }
 ```
 
-### Example 13: Flexible Constructor Bodies (Java 25)
+### Example 12: Flexible Constructor Bodies (Java 25)
 
 Title: Leverage Enhanced Constructor Initialization Patterns
 Description: Java 25 introduces Flexible Constructor Bodies (JEP 513) that allow statements to appear before explicit constructor invocations (super() or this() calls). This enables validation, preprocessing, and initialization logic to be executed before calling the parent constructor or another constructor in the same class. This feature enhances constructor flexibility while maintaining type safety and initialization guarantees.
@@ -1316,12 +1158,12 @@ public class TraditionalConstructorExample {
 
 ## Output Format
 
-- **ANALYZE** Java code to identify specific modern feature refactoring opportunities and categorize them by impact (CRITICAL, MAINTAINABILITY, PERFORMANCE, READABILITY) and area (lambda expressions, stream API, Optional usage, java.time API, collection factories, CompletableFuture, text blocks, pattern matching, flexible constructor bodies, module import declarations)
-- **CATEGORIZE** modern Java refactoring improvements found: Legacy Code Issues (anonymous classes vs lambda expressions, Iterator loops vs Stream API, null checks vs Optional usage, Date/Calendar vs java.time API), Performance Opportunities (sequential loops vs parallel streams, traditional collections vs factory methods, blocking operations vs CompletableFuture), Readability Enhancements (verbose lambdas vs method references, string concatenation vs text blocks, explicit types vs var inference), Modern API Adoption (legacy async patterns vs CompletableFuture composition, traditional switch vs pattern matching, verbose collection creation vs factory methods), and Java 25 Features (traditional constructor limitations vs flexible constructor bodies, verbose module dependencies vs module import declarations)
-- **APPLY** modern Java features directly by implementing the most appropriate improvements for each identified opportunity: Convert anonymous classes to lambda expressions and method references, replace Iterator loops with Stream API operations, introduce Optional for null-safe method returns, migrate Date/Calendar to java.time API, adopt collection factory methods for immutable collections, refactor blocking operations to CompletableFuture for async processing, replace string concatenation with text blocks for multi-line strings, integrate pattern matching for cleaner conditional logic, apply flexible constructor bodies for enhanced initialization (Java 25), and utilize module import declarations for simplified module dependencies (Java 25)
-- **IMPLEMENT** comprehensive modern Java refactoring using proven patterns: Establish lambda expressions with method references for functional interfaces, integrate Stream API with proper collectors and operations (map, filter, reduce), adopt Optional throughout the codebase for null-safe operations, migrate to java.time API with LocalDate, LocalDateTime, and ZonedDateTime, implement CompletableFuture for asynchronous processing and composition, utilize text blocks for improved string readability, apply var type inference where it enhances readability, integrate pattern matching for switch expressions and instanceof checks, leverage flexible constructor bodies for validation and preprocessing (Java 25), and implement module import declarations for cleaner module organization (Java 25)
-- **REFACTOR** code systematically following the modern Java improvement roadmap: First convert anonymous classes to lambda expressions and method references for immediate readability gains, then replace Iterator loops with Stream API operations for functional programming benefits, introduce Optional for null-safe method signatures and operations, migrate Date/Calendar usage to modern java.time API, adopt collection factory methods and modern collection patterns, integrate CompletableFuture for asynchronous operations, apply text blocks and var inference for code clarity, implement pattern matching where supported for cleaner conditional logic, upgrade constructor patterns with flexible constructor bodies (Java 25), and simplify module dependencies with import declarations (Java 25)
-- **EXPLAIN** the applied modern Java improvements and their benefits: Code readability enhancements through lambda expressions and method references, maintainability improvements via Stream API and functional programming patterns, null-safety gains from Optional adoption, date/time handling improvements through java.time API, performance benefits from parallel streams and async CompletableFuture operations, constructor flexibility gains from flexible constructor bodies (Java 25), module organization improvements through import declarations (Java 25), and overall code modernization through contemporary Java idioms and patterns
+- **ANALYZE** Java code to identify specific modern feature refactoring opportunities and categorize them by impact (CRITICAL, MAINTAINABILITY, PERFORMANCE, READABILITY) and area (lambda expressions, stream API, Optional usage, java.time API, collection factories, text blocks, pattern matching, flexible constructor bodies, module import declarations)
+- **CATEGORIZE** modern Java refactoring improvements found: Legacy Code Issues (anonymous classes vs lambda expressions, Iterator loops vs Stream API, null checks vs Optional usage, Date/Calendar vs java.time API), Performance Opportunities (sequential loops vs parallel streams, traditional collections vs factory methods), Readability Enhancements (verbose lambdas vs method references, string concatenation vs text blocks, explicit types vs var inference), Modern API Adoption (traditional switch vs pattern matching, verbose collection creation vs factory methods), and Java 25 Features (traditional constructor limitations vs flexible constructor bodies, verbose module dependencies vs module import declarations)
+- **APPLY** modern Java features directly by implementing the most appropriate improvements for each identified opportunity: Convert anonymous classes to lambda expressions and method references, replace Iterator loops with Stream API operations, introduce Optional for null-safe method returns, migrate Date/Calendar to java.time API, adopt collection factory methods for immutable collections, replace string concatenation with text blocks for multi-line strings, integrate pattern matching for cleaner conditional logic, apply flexible constructor bodies for enhanced initialization (Java 25), and utilize module import declarations for simplified module dependencies (Java 25)
+- **IMPLEMENT** comprehensive modern Java refactoring using proven patterns: Establish lambda expressions with method references for functional interfaces, integrate Stream API with proper collectors and operations (map, filter, reduce), adopt Optional throughout the codebase for null-safe operations, migrate to java.time API with LocalDate, LocalDateTime, and ZonedDateTime, utilize text blocks for improved string readability, apply var type inference where it enhances readability, integrate pattern matching for switch expressions and instanceof checks, leverage flexible constructor bodies for validation and preprocessing (Java 25), and implement module import declarations for cleaner module organization (Java 25)
+- **REFACTOR** code systematically following the modern Java improvement roadmap: First convert anonymous classes to lambda expressions and method references for immediate readability gains, then replace Iterator loops with Stream API operations for functional programming benefits, introduce Optional for null-safe method signatures and operations, migrate Date/Calendar usage to modern java.time API, adopt collection factory methods and modern collection patterns, apply text blocks and var inference for code clarity, implement pattern matching where supported for cleaner conditional logic, upgrade constructor patterns with flexible constructor bodies (Java 25), and simplify module dependencies with import declarations (Java 25)
+- **EXPLAIN** the applied modern Java improvements and their benefits: Code readability enhancements through lambda expressions and method references, maintainability improvements via Stream API and functional programming patterns, null-safety gains from Optional adoption, date/time handling improvements through java.time API, performance benefits from parallel streams, constructor flexibility gains from flexible constructor bodies (Java 25), module organization improvements through import declarations (Java 25), and overall code modernization through contemporary Java idioms and patterns
 - **VALIDATE** that all applied modern Java refactoring compiles successfully, maintains existing functionality, preserves business logic integrity, achieves expected performance characteristics, and follows modern Java best practices through comprehensive testing and verification
 
 ## Safeguards
