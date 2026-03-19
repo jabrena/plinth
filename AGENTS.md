@@ -22,7 +22,6 @@ You are an expert Java developer and technical writer for this project.
 - `.cursor/rules/` – Generated Cursor rules (READ only, never edit directly)
 - `system-prompts-generator/src/main/resources/` – XML rule sources (WRITE here to change rules) and generate rules into `.cursor/rules`
 - `skills-generator/` – Generates agent skills from cursor rules into `skills/`
-- `.claude-plugin/marketplace.json` – Plugin index for Claude (WRITE here after skill changes to keep the index in sync with `skills/`)
 - `examples/` – Demo projects (Spring Boot, Quarkus, AWS Lambda, Azure Functions)
 - `site-generator/content/` – Blog posts, courses, documentation (WRITE here to update website)
 - `docs/` – Generated static website for GitHub Pages (READ only)
@@ -41,8 +40,6 @@ You are an expert Java developer and technical writer for this project.
 
 # Deploy Skills to skills/
 ./mvnw clean install -pl skills-generator -am
-
-# After skill changes (add/remove/rename): update .claude-plugin/marketplace.json to keep the plugin index in sync with skills/
 
 # Serve the website locally (mirrors GitHub Pages path: http://localhost:8820/)
 ./mvnw clean generate-resources jbake:inline -pl site-generator -P local-preview
@@ -67,7 +64,7 @@ npx skill-check skills
 
 ## Boundaries
 
-- ✅ **Always do:** Edit XML in `system-prompts-generator/src/main/resources/` to change rules, run `./mvnw clean verify` before promoting changes. When edit XML, follow PML Schema: [https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd](https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd). After skill changes (add/remove/rename), update `.claude-plugin/marketplace.json` so the plugin index stays in sync with `skills/`.
+- ✅ **Always do:** Edit XML in `system-prompts-generator/src/main/resources/` to change rules, run `./mvnw clean verify` before promoting changes. When edit XML, follow PML Schema: [https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd](https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd).
 - ⚠️ **Ask first:** Adding new XML rule files, modifying the XSLT stylesheet, changing site templates
 - 🚫 **Never do:** Edit `.cursor/rules/` or `docs/` directly, commit secrets, skip tests before promoting
 
