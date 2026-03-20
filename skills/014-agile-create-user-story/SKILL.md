@@ -30,7 +30,7 @@ Before generating artifacts, gather all required information through structured 
 
 - Create a user story
 - Write a user story
-- I need a user story
+- I need to write a user story
 
 ## Reference
 

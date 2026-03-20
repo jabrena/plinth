@@ -166,23 +166,38 @@ See: [Relative path to Gherkin file]
 
 Format the Gherkin file with proper structure. Use docstrings for JSON/XML or Example tables for structured data when the user provides complex examples.
 
+**Scenario tags (required)**
+
+- **Exactly one** scenario in the feature file MUST be the primary **happy path** and MUST be tagged `@acceptance-test`. There MUST NOT be zero or more than one `@acceptance-test` scenario.
+- **Every other scenario** (additional paths, negative cases, edge cases, data variations as separate scenarios) MUST be tagged `@integration-test`. If the feature has only one scenario, that scenario MUST be `@acceptance-test` (there will be no `@integration-test` scenarios in that file).
+- Place tags on the line immediately above each `Scenario` or `Scenario Outline` (standard Gherkin tag placement).
+
 ```gherkin
 Feature: [Feature Name]
 [Optional background steps if provided]
 
-Scenario: [Scenario Title]
+@acceptance-test
+Scenario: [Happy path — primary success flow]
+Given [context/preconditions]
+When [action]
+Then [observable outcomes]
+
+@integration-test
+Scenario: [Additional scenario — not the single happy path]
 Given [context/preconditions]
 When [action]
 Then [observable outcomes]
 ```
 
-For multiple scenarios, add each as a separate Scenario block. Use Scenario Outline with Examples table when multiple data variations apply to the same scenario structure.
+For multiple scenarios, add each as a separate Scenario block. Use Scenario Outline with Examples table when multiple data variations apply to the same scenario structure; if the outline is not the single happy path, tag the Scenario Outline with `@integration-test` (or `@acceptance-test` only when that outline represents the one agreed happy path).
 
 #### Step Constraints
 
 - **MUST** include user story title, role, goal, and benefit
 - **MUST** link the user story to the Gherkin feature file using the relative path provided by the user
 - **MUST** ensure Gherkin file has Feature line and descriptive scenarios
+- **MUST** tag exactly one scenario with `@acceptance-test` (the primary happy path) and tag every other scenario with `@integration-test`
+- **MUST NOT** include more than one `@acceptance-test` scenario or omit `@acceptance-test` when multiple scenarios exist
 - **MUST** ensure each scenario has Given, When, Then steps
 - **MUST** use docstrings or Example tables for complex data when user provided examples
 - **MUST** use filenames provided by the user for the generated content
@@ -194,6 +209,7 @@ Before finalizing, verify:
 - [ ] User story has title, role, goal, benefit
 - [ ] User story links to the Gherkin feature file
 - [ ] Gherkin file has Feature line and descriptive scenarios
+- [ ] Exactly one scenario is `@acceptance-test` (happy path); all others are `@integration-test`
 - [ ] Each scenario has Given, When, Then
 - [ ] Complex data uses docstrings or Example tables
 
@@ -211,3 +227,4 @@ Before finalizing, verify:
 - Never proceed to artifact generation without completing information gathering
 - Never assume or invent acceptance criteria—use only what the user provided
 - Ensure Gherkin syntax is valid (Feature, Scenario, Given, When, Then)
+- Enforce exactly one `@acceptance-test` scenario and `@integration-test` on all non–happy-path scenarios before finalizing the feature file

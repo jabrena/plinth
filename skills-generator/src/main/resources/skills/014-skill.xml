@@ -37,7 +37,7 @@ Guide the agent to ask targeted questions to gather details for a user story and
     <trigger-list>
         <trigger>Create a user story</trigger>
         <trigger>Write a user story</trigger>
-        <trigger>I need a user story</trigger>
+        <trigger>I need to write a user story</trigger>
     </trigger-list>
   </triggers>
 
