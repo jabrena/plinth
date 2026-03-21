@@ -34,7 +34,7 @@ Use conversational discovery—ask 1-2 questions at a time, build on answers, va
 - Create ADR for functional requirements
 - Document functional requirements
 - Capture functional requirements
-- Generate functional requirements in anADR
+- Generate functional requirements in an ADR
 
 ## Reference
 

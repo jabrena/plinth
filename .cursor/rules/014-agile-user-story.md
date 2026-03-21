@@ -1,5 +1,5 @@
 ---
-name: 014-agile-create-user-story
+name: 014-agile-user-story
 description: Use when the user wants to create a user story, write acceptance criteria, define Gherkin scenarios, or author BDD feature files.
 license: Apache-2.0
 metadata:

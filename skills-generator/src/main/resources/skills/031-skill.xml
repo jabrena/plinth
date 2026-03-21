@@ -40,7 +40,7 @@ Guide stakeholders through a structured conversation to uncover and document tec
         <trigger>Create ADR for functional requirements</trigger>
         <trigger>Document functional requirements</trigger>
         <trigger>Capture functional requirements</trigger>
-        <trigger>Generate functional requirements in anADR</trigger>
+        <trigger>Generate functional requirements in an ADR</trigger>
     </trigger-list>
   </triggers>
 

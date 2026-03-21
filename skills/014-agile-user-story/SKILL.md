@@ -1,5 +1,5 @@
 ---
-name: 014-agile-create-user-story
+name: 014-agile-user-story
 description: Guides the creation of agile user stories and Gherkin feature files. Use when the user wants to create a user story, write acceptance criteria, define Gherkin scenarios, or author BDD feature files. Part of the skills-for-java project
 license: Apache-2.0
 metadata:
@@ -34,4 +34,4 @@ Before generating artifacts, gather all required information through structured 
 
 ## Reference
 
-For detailed guidance, examples, and constraints, see [references/014-agile-create-user-story.md](references/014-agile-create-user-story.md).
+For detailed guidance, examples, and constraints, see [references/014-agile-user-story.md](references/014-agile-user-story.md).
