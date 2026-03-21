@@ -1,5 +1,5 @@
 ---
-name: 020-planning-enhance-ai-plan-mode
+name: 040-planning-plan-mode
 description: Use when creating a plan using Plan model and enhancing structured design plans in Cursor Plan mode for Java implementations. Use when the user wants to create a plan, design an implementation, structure a development plan, or use plan mode for outside-in TDD, feature implementation, or refactoring work. Part of the skills-for-java project
 license: Apache-2.0
 metadata:
@@ -37,4 +37,4 @@ Gather context before drafting. Include Execution Instructions in every plan. Ne
 
 ## Reference
 
-For detailed guidance, examples, and constraints, see [references/020-planning-enhance-ai-plan-mode.md](references/020-planning-enhance-ai-plan-mode.md).
+For detailed guidance, examples, and constraints, see [references/040-planning-plan-mode.md](references/040-planning-plan-mode.md).

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
-      id="020-planning-enhance-ai-plan-mode"
+      id="040-planning-plan-mode"
       interactive="true">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
@@ -45,7 +45,7 @@ Guide the process of creating a structured plan using Cursor Plan mode. **This i
 
   <references>
     <reference-list>
-        <reference>references/020-planning-enhance-ai-plan-mode.md</reference>
+        <reference>references/040-planning-plan-mode.md</reference>
     </reference-list>
   </references>
 </prompt>

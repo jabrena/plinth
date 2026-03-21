@@ -1,11 +1,11 @@
 [
   {"name": "000-system-prompt-list"},
   {"name": "014-agile-user-story"},
-  {"name": "020-planning-enhance-ai-plan-mode"},
   {"name": "030-architecture-adr-general"},
   {"name": "031-architecture-adr-functional-requirements"},
   {"name": "032-architecture-adr-non-functional-requirements"},
   {"name": "033-architecture-diagrams"},
+  {"name": "040-planning-plan-mode"},
   {"name": "110-java-maven-best-practices"},
   {"name": "111-java-maven-dependencies"},
   {"name": "112-java-maven-plugins"},
