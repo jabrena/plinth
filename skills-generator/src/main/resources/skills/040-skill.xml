@@ -40,6 +40,11 @@ Guide the process of creating a structured plan using Cursor Plan mode. **This i
     <trigger-list>
         <trigger>Create a plan with Cursor Plan mode</trigger>
         <trigger>Write a plan with Claude Plan mode</trigger>
+        <trigger>Design an implementation plan</trigger>
+        <trigger>Structure a development plan</trigger>
+        <trigger>Create a structured design plan</trigger>
+        <trigger>Plan before implementing a Java feature</trigger>
+        <trigger>Refactoring plan</trigger>
     </trigger-list>
   </triggers>
 

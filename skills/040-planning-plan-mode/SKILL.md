@@ -34,6 +34,11 @@ Gather context before drafting. Include Execution Instructions in every plan. Ne
 
 - Create a plan with Cursor Plan mode
 - Write a plan with Claude Plan mode
+- Design an implementation plan
+- Structure a development plan
+- Create a structured design plan
+- Plan before implementing a Java feature
+- Refactoring plan
 
 ## Reference
 
