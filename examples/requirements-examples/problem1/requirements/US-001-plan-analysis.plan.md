@@ -57,7 +57,7 @@ flowchart LR
 | 6 | Verify acceptance test passes with controller | Verify | | milestone | A1 | |
 | 7 | Write service layer unit test for aggregation logic | RED | Test | | A2 | |
 | 8 | Implement service with Unicode algorithm | GREEN | Impl | | A2 | |
-| 9 | Add service-level logging and metrics | Refactor | | | A2 | |
+| 9 | Add service-level logging | Refactor | | | A2 | |
 | 10 | Optimize service configuration and error handling | Refactor | | | A2 | |
 | 11 | Verify service unit tests pass | Verify | | milestone | A2 | |
 | 12 | Write HTTP client tests for timeout-bound fetching (single attempt per source) | RED | Test | | A3-timeout | |
@@ -133,7 +133,7 @@ When executing this plan:
 2. **Partial Failure:** Nordic times out → sum from Greek + Roman only
 3. **Filter Edge Case:** `filter=N` → sum equals `"0"`
 
-**ADR-002 vs API contract:** ADR-002 asks for “clear indication of which sources contributed.” The OpenAPI and Gherkin only require `sum`. **Approach:** satisfy the public contract first; meet the ADR via **structured logging** (and optional metrics tags) listing successful vs failed/timed-out sources per request. If product later wants this in JSON, extend OpenAPI in a follow-up.
+**ADR-002 vs API contract:** ADR-002 asks for “clear indication of which sources contributed.” The OpenAPI and Gherkin only require `sum`. **Approach:** satisfy the public contract first; meet the ADR via **structured logging**  listing successful vs failed/timed-out sources per request. If product later wants this in JSON, extend OpenAPI in a follow-up.
 
 ## Runtime stack (reconcile ADR-003 with repo)
 
@@ -168,7 +168,9 @@ flowchart LR
 
 ## Configuration
 
-- **Base URLs** for `greek`, `roman`, `nordic` in `application.yml` (defaults matching ADR-001 URLs).
+- **Single Configuration:** All settings in `application.yml` with production-ready defaults (5s timeout, 4 max attempts, 1s retry delay)
+- **Base URLs** for `greek`, `roman`, `nordic` with defaults matching ADR-001 URLs
+- **Environment Variables:** Runtime customization without profile complexity
 - **Phase 1 — Timeout only:** 5 seconds per HTTP **attempt** (connect + read as appropriate). `max-attempts` / retry settings disabled or set to **1** until the retry phase lands.
 - **Phase 2 — Retries:** After timeout-only client is verified, enable up to **3** additional attempts per source after failure/timeout (**linear** spacing per ADR-002; no exponential backoff). Prefer separate config keys (e.g. `retry.max-attempts`, `retry.delay`) so Phase 1 stays simple.
 - **Parallelism:** fetch selected sources concurrently. During Phase 1, **wait** until each source returns or times out (single attempt). After Phase 2, **wait** until each source returns data or **exhausts retries** (ADR-002 “completeness priority” before declaring partial aggregate).
@@ -212,7 +214,8 @@ Tag tests to mirror Gherkin: e.g. JUnit `@Tag("acceptance-test")` and `@Tag("int
 ## Deliverables checklist
 
 - New Maven project with `spring-boot-starter-web`, `spring-boot-starter-actuator` (ADR-003), **`resilience4j-retry`** plus **Resilience4j Spring Boot integration** (Retry only), `spring-boot-starter-test`, **Rest Assured**, **Testcontainers** (`testcontainers`, `junit-jupiter`, **`toxiproxy`**), and **WireMock on Testcontainers** (or equivalent) per ADR-003.
-- `README` or `DEVELOPER.md` in the new module: how to run, **Docker requirement**, configure URLs/timeouts, run tests.
+- **Single configuration file** `application.yml` with production-ready settings and environment variable support
+- `README` or `DEVELOPER.md` in the new module: how to run, **Docker requirement**, configure URLs/timeouts via environment variables, run tests.
 - `./mvnw clean verify` from the new module passes.
 
 ## Notes

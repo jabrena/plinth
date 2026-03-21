@@ -52,6 +52,11 @@ The primary quality challenge is ensuring reliable service delivery despite the 
 - Linear retry approach without exponential backoff (keeping implementation simple)
 - Individual retry logic per source - failures are isolated
 
+**Configuration Management:**
+- Single default configuration provides production-ready settings
+- Environment variables allow runtime customization without profile complexity
+- Default timeout: 5000ms, retry attempts: 4, retry delay: 1000ms
+
 **Execution Model:**
 - Parallel calls to all three external APIs (Greek, Roman, Nordic)
 - Completeness-prioritized approach: wait for all sources to either succeed or exhaust their retry attempts

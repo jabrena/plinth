@@ -47,13 +47,17 @@ Timeout and retry behavior ([ADR-002](ADR-002-God-Analysis-API-Non-Functional-Re
 
 ## Considered Options (Runtime Platform)
 
-### Option A: Spring Boot 4.0.4 (SELECTED)
+### Option A: Spring Boot 4.0.4 with Spring MVC (SELECTED)
+
+**Architecture Decision: Traditional Servlet Stack (Spring MVC) - No Reactive Dependencies**
+
+This implementation uses **Spring MVC (traditional servlet-based)** architecture exclusively. **No reactive programming dependencies** (Spring WebFlux, Project Reactor, etc.) will be included.
 
 **Pros:**
 
-- **Mature REST Support**: Spring Web provides comprehensive REST API development with `@RestController`, automatic JSON serialization, and query parameter binding
-- **HTTP Client Integration**: First-class support for `RestClient` (synchronous), `WebClient` (reactive), and legacy `RestTemplate` (maintenance mode)
-- **Parallel Processing**: Built-in async support with `@Async`, `CompletableFuture`, and structured concurrency options
+- **Mature REST Support**: Spring Web MVC provides comprehensive REST API development with `@RestController`, automatic JSON serialization, and query parameter binding
+- **Synchronous HTTP Client**: `RestClient` (synchronous) aligns with servlet-based architecture - **no reactive WebClient dependency**
+- **Parallel Processing**: Built-in async support with `@Async`, `CompletableFuture` within traditional thread-per-request model
 - **Testing Excellence**: Spring Boot Test provides `@SpringBootTest`, `@WebMvcTest`, `MockMvc`; integrates with Testcontainers
 - **Auto-Configuration**: Zero-config setup for common patterns (JSON processing, HTTP clients, error handling)
 - **Operational Features**: Built-in actuator endpoints for health checks, metrics, and monitoring
@@ -88,15 +92,41 @@ These decisions apply **within** the chosen Spring Boot stack. They do not chang
 
 ### 1. Outbound HTTP client: `RestClient` (SELECTED)
 
-**Context:** The service performs **blocking** parallel fetches (e.g. `CompletableFuture.supplyAsync` around per-source calls) with **per-attempt timeouts**. Spring Framework 6.1+ provides **RestClient**, a synchronous API designed as the modern successor to `RestTemplate` (`RestTemplate` is in maintenance mode; new code should prefer `RestClient` or `WebClient`).
+**Context:** The service performs **blocking** parallel fetches (e.g. `CompletableFuture.supplyAsync` around per-source calls) with **per-attempt timeouts**. This aligns with the **Spring MVC servlet-based architecture** decision. Spring Framework 6.1+ provides **RestClient**, a synchronous API designed as the modern successor to `RestTemplate`.
+
+**Reactive Programming Exclusion:** This implementation explicitly **excludes WebClient and reactive dependencies** to maintain consistency with the Spring MVC servlet-based approach.
 
 | Option | Assessment |
 |--------|------------|
-| **RestClient** | **Selected.** Same thread model as a classic servlet stack; fluent API; integrates with `ClientHttpRequestFactory` / `JdkClientHttpRequestFactory` for connect/read timeouts; composes cleanly with **Resilience4j** `Retry` around each per-source call; testable with `MockRestServiceServer` or Toxiproxy-backed URLs. |
-| **WebClient** | Valid for non-blocking pipelines; higher overhead if the app is otherwise servlet-based. |
-| **RestTemplate** | **Not recommended** for new code. |
+| **RestClient** | **Selected.** Synchronous API matching servlet stack; fluent API; integrates with `ClientHttpRequestFactory` / `JdkClientHttpRequestFactory` for connect/read timeouts; composes cleanly with **Resilience4j** `Retry` around each per-source call; testable with `MockRestServiceServer` or Toxiproxy-backed URLs. **No reactive dependencies required.** |
+| **WebClient** | **Explicitly rejected.** Requires reactive dependencies (spring-webflux, reactor-core) that conflict with our servlet-only architecture decision. |
+| **RestTemplate** | **Not recommended** for new code (maintenance mode). |
 
 **Decision:** Use **RestClient** for calls to Greek, Roman, and Nordic sources.
+
+### Reactive Programming Exclusion (EXPLICIT)
+
+**Decision:** This implementation **explicitly excludes all reactive programming** dependencies and patterns.
+
+**Rationale:**
+- **Simplicity**: Traditional servlet model is well-understood and sufficient for this use case
+- **Team Expertise**: Existing knowledge of Spring MVC reduces learning curve
+- **Dependency Management**: Avoids potential conflicts between servlet and reactive stacks
+- **Testing**: MockMvc and servlet-based testing tools are mature and well-documented
+- **Performance**: Thread-per-request model with `CompletableFuture` parallelism meets performance requirements
+
+**Excluded Dependencies:**
+- `spring-boot-starter-webflux`
+- `spring-webflux`
+- `reactor-core`
+- `reactor-netty`
+- Any reactive streams implementations
+
+**Excluded Patterns:**
+- Reactive streams (`Mono`, `Flux`)
+- Non-blocking I/O patterns
+- Reactive HTTP clients (`WebClient`)
+- Reactive database drivers
 
 ### 2. Acceptance tests: Rest Assured (SELECTED, scoped)
 
@@ -160,23 +190,29 @@ These decisions apply **within** the chosen Spring Boot stack. They do not chang
 
 ## Decision Outcome
 
-**Chosen platform: Spring Boot 4.0.4 with Java 26** (align module `java.version` with repo standard if not 26).
+**Chosen platform: Spring Boot 4.0.4 with Spring MVC and Java 26** (align module `java.version` with repo standard if not 26).
+
+**Architecture: Traditional Servlet Stack Only** - No reactive programming dependencies.
 
 ### Rationale
 
-1. Spring Boot accelerates delivery and matches team skills
-2. **RestClient** fits synchronous parallel fetches with per-attempt timeouts
+1. **Spring MVC** provides mature servlet-based REST API development without reactive complexity
+2. **RestClient** fits synchronous parallel fetches with per-attempt timeouts (no reactive dependencies)
 3. **Rest Assured** gives readable black-box acceptance tests
 4. **WireMock + Testcontainers + Toxiproxy** provides **isolated**, **realistic** timeout/retry validation aligned with ADR-002
 5. **Resilience4j Retry** implements ADR-002 policy consistently, supports observability, and avoids ad-hoc loops while **other Resilience4j modules stay off** until requirements change
+6. **Servlet-only architecture** eliminates reactive programming complexity and dependency conflicts
 
 ### Implementation Approach
 
+- **Architecture**: **Spring MVC servlet-based** - traditional thread-per-request model, **no reactive programming**
 - **REST Controller**: `@RestController`, `GET /api/v1/gods/stats/sum`
-- **HTTP Client**: **RestClient**, **5s timeout per attempt** (each attempt inside retry is still bound by this timeout)
-- **Parallelism**: `CompletableFuture` (or structured concurrency) per source; **retry boundary per source** (separate `Retry` instance or configuration per pantheon)
+- **HTTP Client**: **RestClient** (synchronous) - **5s timeout per attempt** (each attempt inside retry is still bound by this timeout)
+- **Parallelism**: `CompletableFuture` within servlet thread model per source; **retry boundary per source** (separate `Retry` instance or configuration per pantheon)
 - **Retries**: **Resilience4j Retry**—**4 max attempts**, **fixed delay** between attempts
+- **Configuration**: **Single default configuration** provides production-ready settings with environment variable overrides
 - **Error handling**: `@ControllerAdvice` where needed; partial aggregation per feature
+- **Dependencies**: **No reactive libraries** (spring-webflux, reactor-core, etc.)
 - **Testing**:
   - **Unit tests**: Unicode/filter/sum without containers
   - **Acceptance**: `@SpringBootTest(RANDOM_PORT)` + **Rest Assured**
@@ -186,17 +222,20 @@ These decisions apply **within** the chosen Spring Boot stack. They do not chang
 
 | Scope | Artifact / integration | Role |
 | ----- | ---------------------- | ---- |
-| main | `spring-boot-starter-web` | REST API |
+| main | `spring-boot-starter-web` | **Spring MVC** REST API (servlet-based, **excludes reactive**) |
 | main | `spring-boot-starter-actuator` | Ops |
 | main | `io.github.resilience4j:resilience4j-retry` | ADR-002 retry policy (linear, per source) |
 | main | `io.github.resilience4j:resilience4j-spring-boot3` (or artifact aligned with Spring Boot 4) | Spring configuration for Retry beans and properties |
-| test | `spring-boot-starter-test` | JUnit 5, AssertJ, MockMvc |
+| test | `spring-boot-starter-test` | JUnit 5, AssertJ, **MockMvc** (servlet-based testing) |
 | test | `rest-assured` | Black-box HTTP acceptance tests |
 | test | `org.testcontainers:testcontainers` + `junit-jupiter` | Container lifecycle |
 | test | `org.testcontainers:toxiproxy` | Latency/timeout/toxic control |
 | test | WireMock on Testcontainers (e.g. WireMock Testcontainers module or compatible image) | Deterministic upstream JSON |
 
-**Not used for v1 (by this ADR):** `spring-retry`, broad Resilience4j modules beyond **retry** (unless a future ADR adds them).
+**Not used for v1 (by this ADR):** 
+- `spring-retry` (prefer Resilience4j)
+- Broad Resilience4j modules beyond **retry** (unless a future ADR adds them)
+- **Reactive dependencies**: `spring-boot-starter-webflux`, `reactor-core`, `reactor-netty` (conflicts with servlet-only architecture)
 
 ## Consequences
 
@@ -206,6 +245,7 @@ These decisions apply **within** the chosen Spring Boot stack. They do not chang
 - Clear separation: **WireMock** owns **responses**, **Toxiproxy** owns **faults**
 - Spring stack + Testcontainers is a well-documented industry pattern
 - **Resilience4j Retry** gives uniform policy, testable configuration, and optional metrics without enabling circuit breaking in v1
+- **Single configuration file** provides consistent baseline with environment variable flexibility
 
 ### Negative
 

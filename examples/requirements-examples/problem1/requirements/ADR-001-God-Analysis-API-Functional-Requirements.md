@@ -83,6 +83,16 @@ The primary consumers are educational and research platforms with moderately tec
 **Rejected:** Separate services for each pantheon or processing step
 **Reason:** Single focused use case doesn't justify distributed system complexity. Monolithic approach provides simpler deployment and maintenance.
 
+## Configuration Strategy
+
+**Single Default Profile Approach:**
+- All configuration in `application.yml` with production-ready defaults
+- External API URLs configurable via environment variables with sensible defaults
+- Timeout and retry settings externalized for operational flexibility
+- No profile-specific configuration files - single source of truth
+
+**Rationale:** Simplified configuration management with single default profile reduces complexity while maintaining operational flexibility through environment variables.
+
 ## Consequences
 
 ### Positive Impacts
@@ -90,6 +100,7 @@ The primary consumers are educational and research platforms with moderately tec
 - **Accessibility:** Public API enables easy integration for educational platforms
 - **Resilience:** Timeout handling ensures partial results even with external API issues
 - **Testability:** Well-defined scenarios enable comprehensive testing coverage
+- **Configurability:** Single configuration file with environment variable overrides supports multiple deployment scenarios
 
 ### Trade-offs
 - **Performance:** No caching may result in slower responses and higher external API load
