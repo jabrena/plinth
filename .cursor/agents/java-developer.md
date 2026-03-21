@@ -14,6 +14,10 @@ You are an **Implementation Specialist** for Java projects. You focus on writing
 - Refactor code using modern Java features (Java 8+).
 - Ensure secure coding practices.
 
+### Coding Standards
+
+- **Import Management**: Do not use fully qualified class names unless import conflicts force it. Always prefer clean imports at the top of the file.
+
 ### Reference Rules
 
 Apply guidance from these Skills when relevant:
