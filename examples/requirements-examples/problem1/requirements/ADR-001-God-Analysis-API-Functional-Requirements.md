@@ -36,7 +36,7 @@ The primary consumers are educational and research platforms with moderately tec
 ### Error Handling and Resilience
 - **Timeout Management:** 5-second timeout threshold for external API calls
 - **Graceful Degradation:** Continue processing with partial results when individual sources timeout
-- **Invalid Parameters:** Handle invalid filter criteria (e.g., uppercase filters return sum of "0")
+- **Invalid Parameters:** Return HTTP 400 with error messages for malformed requests (missing parameters, invalid filter length, invalid source names)
 - **Source Unavailability:** Process available sources when others are unreachable
 
 ## Technical Decisions
@@ -62,6 +62,8 @@ The primary consumers are educational and research platforms with moderately tec
 #### Integration & Infrastructure
 **Decision:** Direct HTTP client integration with external god APIs, no specific deployment requirements
 **Rationale:** Straightforward integration pattern sufficient for three well-defined external endpoints. Deployment flexibility maintained for various environments.
+
+**Implementation note:** Retry and HTTP client libraries are specified in [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md) (**Resilience4j Retry** for outbound retries, **RestClient** for HTTP); retry **policy** (counts, timeouts, linear spacing) remains in [ADR-002-God-Analysis-API-Non-Functional-Requirements.md](ADR-002-God-Analysis-API-Non-Functional-Requirements.md).
 
 #### Testing & Monitoring
 **Decision:** Acceptance and integration testing as defined in feature file, basic monitoring approach

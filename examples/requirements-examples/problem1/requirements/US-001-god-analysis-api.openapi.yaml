@@ -78,7 +78,7 @@ paths:
                   value:
                     sum: "0"
         "400":
-          description: Malformed request (e.g. missing required query parameters). Not required by current acceptance tests; reserved for strict validation.
+          description: Malformed request (e.g. missing required query parameters, invalid filter length, invalid source names).
           content:
             application/json:
               schema:

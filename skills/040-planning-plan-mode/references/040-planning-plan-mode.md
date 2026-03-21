@@ -18,13 +18,13 @@ Guides the user through plan creation with clear structure. Asks targeted questi
 
 ## Goal
 
-Guide the process of creating a structured plan using Cursor Plan mode. Plans follow a consistent section structure with YAML frontmatter, Requirements Summary, Approach (with Mermaid diagram), Task List, Execution Instructions, File Checklist, and Notes. Suitable for Java feature implementation, outside-in TDD, or refactoring work.
+Guide the process of creating a structured plan using Cursor Plan mode. Plans follow a consistent section structure with YAML frontmatter, Requirements Summary, Approach (with Mermaid diagram), enhanced Task List with milestone and parallel execution support, comprehensive Execution Instructions with stability rules, File Checklist, and Notes. Suitable for Java feature implementation, outside-in TDD, or refactoring work.
 
 ## Steps
 
-### Step 1: Get Current Date
+### Step 1: Get Current Date and Plan Naming
 
-Before starting, run `date` in the terminal to ensure accurate date prefix for the plan filename. Use format `YYYY-MM-DD` for `.cursor/plans/YYYY-MM-DD_<plan_name>.plan.md`.
+Before starting, run `date` in the terminal to ensure accurate date prefix for the plan filename. Plans must follow the naming convention: `US-XXX-plan-analysis.plan.md` where XXX is the user story number or identifier. Save to `.cursor/plans/US-XXX-plan-analysis.plan.md`.
 ### Step 2: Plan Mode Workflow – Information Gathering
 
 Enter Plan mode (or use plan-related commands) before creating the plan. Gather context by asking targeted questions. Read specs, existing code, and acceptance criteria when available.
@@ -85,7 +85,7 @@ Only after validation: "I'll create the structured plan using this information. 
 
 ### Step 3: Plan Document Generation
 
-Inform the user you will generate the plan. Use the current date from Step 1 for the filename. Save to `.cursor/plans/YYYY-MM-DD_<plan_name>.plan.md`.
+Inform the user you will generate the plan. Use the naming convention from Step 1. Save to `.cursor/plans/US-XXX-plan-analysis.plan.md` where XXX is the user story identifier.
 
 Follow the structure and templates from:
 
@@ -110,9 +110,9 @@ isProject: false
 | **Title** | `# Problem N: [Name] Implementation Plan` |
 | **Requirements Summary** | User story, key business rules, acceptance criteria |
 | **Approach** | Named approach (e.g., London Style TDD), Mermaid diagram |
-| **Task List** | Table: #, Phase, Task, TDD, Status |
+| **Task List** | Table: #, Task, Phase, TDD, Milestone, Parallel, Status |
 | **Execution Instructions** | Update Status after each task before advancing |
-| **File Checklist** | Order, File path, When (TDD phase) |
+| **File Checklist** | Order, File path |
 | **Notes** | Package layout, conventions, edge cases |
 
 ## Execution Instructions (Required)
@@ -124,8 +124,19 @@ isProject: false
 When executing this plan:
 1. Complete the current task.
 2. **Update the Task List**: set the Status column for that task (e.g., ✔ or Done).
-3. Only then proceed to the next task.
-4. Repeat for all tasks. Never advance without updating the plan.
+3. **For GREEN tasks**: MUST complete the associated Verify task before proceeding.
+4. **For Verify tasks**: MUST ensure all tests pass and build succeeds before proceeding.
+5. **Milestone rows** (Milestone column): a milestone is evolving complete software for that slice — complete the pair of Refactor tasks (logging, then optimize config/error handling/log levels) immediately before each milestone Verify.
+6. Only then proceed to the next task.
+7. Repeat for all tasks. Never advance without updating the plan.
+
+**Critical Stability Rules:**
+- After every GREEN implementation task, run the verification step
+- All tests must pass before proceeding to the next implementation
+- If any test fails during verification, fix the issue before advancing
+- Never skip verification steps - they ensure software stability
+
+**Parallel column:** Use grouping identifiers (A1, A2, A3, etc.) to group tasks into the same delivery slice. Use when assigning agents or branches to a milestone scope.
 ```
 
 ## Task Phases
@@ -160,23 +171,27 @@ Setup → RED (write failing test) → GREEN (pass test) → Refactor
 Include an Approach section with strategy description and a Mermaid flowchart (flowchart LR with subgraph).
 
 ### Task List Table
-| # | Phase | Task | TDD | Status |
-|---|-------|------|-----|--------|
-| 1 | Setup | [First task] | | |
-| 2 | RED | [Write failing test] | Test | |
-| 3 | GREEN | [Implement minimal solution] | Impl | |
-| 4 | Refactor | [Polish, verify] | | |
+| # | Task | Phase | TDD | Milestone | Parallel | Status |
+|---|------|-------|-----|-----------|----------|--------|
+| 1 | [Setup task description] | Setup | | | A1 | |
+| 2 | [Write failing test] | RED | Test | | A1 | |
+| 3 | [Implement minimal solution] | GREEN | Impl | | A1 | |
+| 4 | [Add logging and observability] | Refactor | | | A1 | |
+| 5 | [Optimize configuration and error handling] | Refactor | | | A1 | |
+| 6 | [Verify milestone completion] | Verify | | milestone | A1 | |
 
 ### File Checklist Table
-| Order | File | When (TDD) |
-|-------|------|------------|
-| 1 | `path/to/File1.java` | Setup |
-| 2 | `path/to/Test.java` | RED — write first |
-| 3 | `path/to/Impl.java` | GREEN — implement |
+| Order | File |
+|-------|------|
+| 1 | `path/to/File1.java` |
+| 2 | `path/to/Test.java` |
+| 3 | `path/to/Impl.java` |
 
 ## Plan File Path
 
-`.cursor/plans/YYYY-MM-DD_<plan_name>.plan.md`
+`.cursor/plans/US-XXX-plan-analysis.plan.md`
+
+Where XXX is the user story number or identifier (e.g., `US-001-plan-analysis.plan.md`, `US-042-plan-analysis.plan.md`).
 
 ```
 
@@ -185,11 +200,13 @@ Include an Approach section with strategy description and a Mermaid flowchart (f
 - **MUST** include YAML frontmatter with name, overview, todos, isProject
 - **MUST** include Requirements Summary (user story, key business rules)
 - **MUST** include Approach section with strategy name and Mermaid diagram
-- **MUST** include Task List with Phases (Setup, RED, GREEN, Refactor) and Status column
-- **MUST** include Execution Instructions (update Status after each task before advancing)
-- **MUST** include File Checklist mapping files to TDD phases
+- **MUST** include Task List with columns: #, Task, Phase, TDD, Milestone, Parallel, Status
+- **MUST** organize tasks into milestone groups with parallel execution identifiers (A1, A2, etc.)
+- **MUST** include pairs of Refactor tasks (logging, then optimize) before each milestone Verify
+- **MUST** include Execution Instructions with stability rules and milestone workflow
+- **MUST** include File Checklist with Order and File columns (no TDD timing column)
 - **MUST** include Notes for package layout, conventions, edge cases
-- **MUST** use exact date from Step 1 in the filename
+- **MUST** use US-XXX-plan-analysis.plan.md naming convention from Step 1
 
 ### Step 4: Plan Creation Checklist
 
@@ -198,18 +215,19 @@ Before finalizing, verify:
 - [ ] Frontmatter has name, overview, todos, isProject
 - [ ] Requirements Summary includes user story and key business rules
 - [ ] Approach section names the strategy and includes a Mermaid diagram
-- [ ] Task list is ordered (Setup → RED → GREEN → Refactor) with Status column
-- [ ] Execution Instructions section is included
-- [ ] File checklist maps files to TDD phases
+- [ ] Task list has columns: #, Task, Phase, TDD, Milestone, Parallel, Status
+- [ ] Task list includes milestone markers and parallel grouping (A1, A2, etc.)
+- [ ] Execution Instructions include stability rules and milestone workflow
+- [ ] File checklist has Order and File columns (no TDD timing column)
 - [ ] Notes cover package layout, conventions, and constraints
-- [ ] Plan file path is .cursor/plans/YYYY-MM-DD_<name>.plan.md
+- [ ] Plan file path follows .cursor/plans/US-XXX-plan-analysis.plan.md convention
 
 ## Output Format
 
 - Ask questions conversationally (1-2 at a time), following the template phases
 - Wait for and acknowledge user responses before proceeding
 - Generate plan only after user confirms "proceed"
-- Use current date in the plan filename
+- Use US-XXX-plan-analysis.plan.md naming convention
 - Include Execution Instructions in every plan
 
 ## Safeguards
@@ -218,3 +236,5 @@ Before finalizing, verify:
 - Never advance to next task during execution without updating the plan's Status column
 - Never skip the Execution Instructions section—it is required for plan discipline
 - Prefer London Style (outside-in) TDD order for feature implementation
+- Include milestone markers and parallel grouping in task lists for complex implementations
+- Always include stability verification after GREEN implementation tasks

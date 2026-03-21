@@ -1,7 +1,7 @@
 # ADR-002: God Analysis API - Non-Functional Requirements
 
-**Status:** Proposed  
-**Date:** Sat Mar 21 09:39:29 CET 2026  
+**Status:** Proposed
+**Date:** Sat Mar 21 09:39:29 CET 2026
 **ISO 25010:2023 Focus:** Reliability (Fault Tolerance, Availability, Recoverability)
 
 ## Context
@@ -48,7 +48,7 @@ The primary quality challenge is ensuring reliable service delivery despite the 
 - Prevents indefinite blocking while allowing reasonable response time for external services
 
 **Retry Policy:**
-- Up to 3 retry attempts per external source
+- Up to 3 additional retry attempts per external source (4 total attempts: 1 initial + 3 retries)
 - Linear retry approach without exponential backoff (keeping implementation simple)
 - Individual retry logic per source - failures are isolated
 
@@ -60,7 +60,7 @@ The primary quality challenge is ensuring reliable service delivery despite the 
 **Error Handling:**
 - Graceful degradation with partial results when some sources fail after all retries
 - Consistent JSON response format regardless of data completeness
-- Clear indication of which sources contributed to the final result
+- Clear indication of which sources contributed to the final result (via application logging using log.info)
 
 ## Alternatives Considered
 
@@ -73,9 +73,9 @@ The primary quality challenge is ensuring reliable service delivery despite the 
 - Would provide inconsistent data quality to consuming services
 
 **Circuit Breaker Pattern:**
-- Considered but deemed unnecessary for initial implementation
-- External APIs are not under our control, and temporary failures are expected
-- May be added in future iterations if persistent failure patterns emerge
+- Not implemented in v1 because external APIs are not under our control and temporary failures are expected behavior
+- Circuit breakers are designed for protecting downstream services from cascading failures, but our use case expects and handles individual source failures gracefully
+- Will be reconsidered if monitoring reveals persistent failure patterns indicating systematic issues rather than transient network problems
 
 **Caching Strategy:**
 - Considered but rejected for initial implementation
@@ -95,10 +95,11 @@ The primary quality challenge is ensuring reliable service delivery despite the 
 - Retry effectiveness: Track success rate of retry attempts
 
 **Monitoring Approach:**
-- Log all external API call outcomes (success, timeout, failure)
-- Track response completeness (full vs. partial results)
-- Alert on unusual patterns in external source failures
-- Monitor overall service response times and availability
+- Log all external API call outcomes (success, timeout, failure) with structured logging
+- Track response completeness (full vs. partial results) via application logs
+- Basic health checks via Spring Boot Actuator endpoints
+- Logging-based monitoring is sufficient for this User Story scope (educational/research API)
+- Advanced observability stacks (Prometheus, Grafana, ELK) are not required for initial implementation
 
 ## Consequences
 
@@ -115,14 +116,13 @@ The primary quality challenge is ensuring reliable service delivery despite the 
 - Partial results require consuming services to handle variable data completeness
 
 **Follow-up Work:**
-- Implement comprehensive monitoring and alerting for external source health
-- Consider circuit breaker patterns if persistent failure patterns emerge
 - Evaluate caching strategies based on usage patterns and performance requirements
 - Establish SLA agreements with external API providers if possible
+- Advanced monitoring and alerting infrastructure may be added in future iterations based on operational requirements
 
 ## References
 
 - [ADR-001: God Analysis API Functional Requirements](ADR-001-God-Analysis-API-Functional-Requirements.md)
-- [US-001: God Analysis API User Story](US-001_God_Analysis_API.md)
+- [ADR-003: God Analysis API — Technology Stack](ADR-003-God-Analysis-API-Technology-Stack.md) — **Resilience4j Retry** implements this ADR’s retry policy - [US-001: God Analysis API User Story](US-001_God_Analysis_API.md)
 - [Feature Specification](US-001_god_analysis_api.feature)
 - ISO/IEC 25010:2023 Systems and software engineering — Systems and software Quality Requirements and Evaluation (SQuaRE)

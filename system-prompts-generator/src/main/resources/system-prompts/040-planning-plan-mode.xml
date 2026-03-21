@@ -14,14 +14,14 @@
     <tone>Guides the user through plan creation with clear structure. Asks targeted questions to gather context before drafting. Ensures plans follow consistent section structure suitable for Java feature implementation, refactoring, or API design.</tone>
 
     <goal>
-        Guide the process of creating a structured plan using Cursor Plan mode. Plans follow a consistent section structure with YAML frontmatter, Requirements Summary, Approach (with Mermaid diagram), Task List, Execution Instructions, File Checklist, and Notes. Suitable for Java feature implementation, outside-in TDD, or refactoring work.
+        Guide the process of creating a structured plan using Cursor Plan mode. Plans follow a consistent section structure with YAML frontmatter, Requirements Summary, Approach (with Mermaid diagram), enhanced Task List with milestone and parallel execution support, comprehensive Execution Instructions with stability rules, File Checklist, and Notes. Suitable for Java feature implementation, outside-in TDD, or refactoring work.
     </goal>
 
     <steps>
         <step number="1">
-            <step-title>Get Current Date</step-title>
+            <step-title>Get Current Date and Plan Naming</step-title>
             <step-content>
-                Before starting, run `date` in the terminal to ensure accurate date prefix for the plan filename. Use format `YYYY-MM-DD` for `.cursor/plans/YYYY-MM-DD_&lt;plan_name&gt;.plan.md`.
+                Before starting, run `date` in the terminal to ensure accurate date prefix for the plan filename. Plans must follow the naming convention: `US-XXX-plan-analysis.plan.md` where XXX is the user story number or identifier. Save to `.cursor/plans/US-XXX-plan-analysis.plan.md`.
             </step-content>
         </step>
         <step number="2">
@@ -47,7 +47,7 @@
         <step number="3">
             <step-title>Plan Document Generation</step-title>
             <step-content>
-                Inform the user you will generate the plan. Use the current date from Step 1 for the filename. Save to `.cursor/plans/YYYY-MM-DD_&lt;plan_name&gt;.plan.md`.
+                Inform the user you will generate the plan. Use the naming convention from Step 1. Save to `.cursor/plans/US-XXX-plan-analysis.plan.md` where XXX is the user story identifier.
 
                 Follow the structure and templates from:
 
@@ -60,11 +60,13 @@
                     <step-constraint>**MUST** include YAML frontmatter with name, overview, todos, isProject</step-constraint>
                     <step-constraint>**MUST** include Requirements Summary (user story, key business rules)</step-constraint>
                     <step-constraint>**MUST** include Approach section with strategy name and Mermaid diagram</step-constraint>
-                    <step-constraint>**MUST** include Task List with Phases (Setup, RED, GREEN, Refactor) and Status column</step-constraint>
-                    <step-constraint>**MUST** include Execution Instructions (update Status after each task before advancing)</step-constraint>
-                    <step-constraint>**MUST** include File Checklist mapping files to TDD phases</step-constraint>
+                    <step-constraint>**MUST** include Task List with columns: #, Task, Phase, TDD, Milestone, Parallel, Status</step-constraint>
+                    <step-constraint>**MUST** organize tasks into milestone groups with parallel execution identifiers (A1, A2, etc.)</step-constraint>
+                    <step-constraint>**MUST** include pairs of Refactor tasks (logging, then optimize) before each milestone Verify</step-constraint>
+                    <step-constraint>**MUST** include Execution Instructions with stability rules and milestone workflow</step-constraint>
+                    <step-constraint>**MUST** include File Checklist with Order and File columns (no TDD timing column)</step-constraint>
                     <step-constraint>**MUST** include Notes for package layout, conventions, edge cases</step-constraint>
-                    <step-constraint>**MUST** use exact date from Step 1 in the filename</step-constraint>
+                    <step-constraint>**MUST** use US-XXX-plan-analysis.plan.md naming convention from Step 1</step-constraint>
                 </step-constraint-list>
             </step-constraints>
         </step>
@@ -76,11 +78,12 @@ Before finalizing, verify:
 - [ ] Frontmatter has name, overview, todos, isProject
 - [ ] Requirements Summary includes user story and key business rules
 - [ ] Approach section names the strategy and includes a Mermaid diagram
-- [ ] Task list is ordered (Setup → RED → GREEN → Refactor) with Status column
-- [ ] Execution Instructions section is included
-- [ ] File checklist maps files to TDD phases
+- [ ] Task list has columns: #, Task, Phase, TDD, Milestone, Parallel, Status
+- [ ] Task list includes milestone markers and parallel grouping (A1, A2, etc.)
+- [ ] Execution Instructions include stability rules and milestone workflow
+- [ ] File checklist has Order and File columns (no TDD timing column)
 - [ ] Notes cover package layout, conventions, and constraints
-- [ ] Plan file path is .cursor/plans/YYYY-MM-DD_<name>.plan.md
+- [ ] Plan file path follows .cursor/plans/US-XXX-plan-analysis.plan.md convention
             ]]></step-content>
         </step>
     </steps>
@@ -90,7 +93,7 @@ Before finalizing, verify:
             <output-format-item>Ask questions conversationally (1-2 at a time), following the template phases</output-format-item>
             <output-format-item>Wait for and acknowledge user responses before proceeding</output-format-item>
             <output-format-item>Generate plan only after user confirms "proceed"</output-format-item>
-            <output-format-item>Use current date in the plan filename</output-format-item>
+            <output-format-item>Use US-XXX-plan-analysis.plan.md naming convention</output-format-item>
             <output-format-item>Include Execution Instructions in every plan</output-format-item>
         </output-format-list>
     </output-format>
@@ -101,6 +104,8 @@ Before finalizing, verify:
             <safeguards-item>Never advance to next task during execution without updating the plan's Status column</safeguards-item>
             <safeguards-item>Never skip the Execution Instructions section—it is required for plan discipline</safeguards-item>
             <safeguards-item>Prefer London Style (outside-in) TDD order for feature implementation</safeguards-item>
+            <safeguards-item>Include milestone markers and parallel grouping in task lists for complex implementations</safeguards-item>
+            <safeguards-item>Always include stability verification after GREEN implementation tasks</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>
