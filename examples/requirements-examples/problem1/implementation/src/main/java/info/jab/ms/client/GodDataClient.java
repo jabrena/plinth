@@ -11,7 +11,6 @@ import org.springframework.web.client.RestClient;
 
 import java.time.Duration;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 @Component
@@ -24,7 +23,7 @@ public class GodDataClient {
 
     public GodDataClient(GodApiProperties properties, RetryRegistry retryRegistry) {
         this.retryRegistry = retryRegistry;
-        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        var factory = new SimpleClientHttpRequestFactory();
         factory.setConnectTimeout(Duration.ofMillis(properties.getTimeout().getConnect()));
         factory.setReadTimeout(Duration.ofMillis(properties.getTimeout().getRead()));
         this.restClient = RestClient.builder()
@@ -37,7 +36,7 @@ public class GodDataClient {
      * Returns empty list if all retry attempts are exhausted (partial result behavior).
      */
     public List<String> fetchGodNames(String url, String sourceName) {
-        Retry retry = retryRegistry.retry(sourceName);
+        var retry = retryRegistry.retry(sourceName);
         retry.getEventPublisher()
                 .onRetry(e -> logger.warn("Retry attempt #{} for source '{}': {}",
                         e.getNumberOfRetryAttempts(), sourceName, e.getLastThrowable().getMessage()))
@@ -53,7 +52,7 @@ public class GodDataClient {
         } catch (Exception finalException) {
             logger.warn("All {} retry attempts exhausted for source '{}' at {}: {}",
                     retry.getRetryConfig().getMaxAttempts(), sourceName, url, finalException.getMessage());
-            return Collections.emptyList();
+            return List.of();
         }
     }
 
@@ -62,10 +61,10 @@ public class GodDataClient {
      */
     private List<String> doHttpFetch(String url) {
         logger.info("Fetching god names from: {}", url);
-        String[] names = restClient.get()
+        var names = restClient.get()
                 .uri(url)
                 .retrieve()
                 .body(String[].class);
-        return (names != null) ? Arrays.asList(names) : Collections.emptyList();
+        return (names != null) ? Arrays.stream(names).toList() : List.of();
     }
 }

@@ -13,6 +13,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import java.time.Instant;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Global exception handler for the God Analysis API.
@@ -28,12 +29,12 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<Map<String, Object>> handleMissingParameter(MissingServletRequestParameterException ex) {
-        String requestId = MDC.get("requestId");
+        var requestId = MDC.get("requestId");
 
         logger.warn("Missing required parameter - requestId: {}, parameter: {}, type: {}",
             requestId, ex.getParameterName(), ex.getParameterType());
 
-        Map<String, Object> errorResponse = createErrorResponse(
+        var errorResponse = createErrorResponse(
             HttpStatus.BAD_REQUEST,
             "Missing required parameter: " + ex.getParameterName(),
             requestId
@@ -47,12 +48,12 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<Map<String, Object>> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
-        String requestId = MDC.get("requestId");
+        var requestId = MDC.get("requestId");
 
         logger.warn("Invalid parameter type - requestId: {}, parameter: {}, value: {}, expectedType: {}",
             requestId, ex.getName(), ex.getValue(), ex.getRequiredType().getSimpleName());
 
-        Map<String, Object> errorResponse = createErrorResponse(
+        var errorResponse = createErrorResponse(
             HttpStatus.BAD_REQUEST,
             String.format("Invalid value '%s' for parameter '%s'", ex.getValue(), ex.getName()),
             requestId
@@ -66,11 +67,11 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<Map<String, Object>> handleValidationError(IllegalArgumentException ex) {
-        String requestId = MDC.get("requestId");
+        var requestId = MDC.get("requestId");
 
         logger.warn("Validation error - requestId: {}, error: {}", requestId, ex.getMessage());
 
-        Map<String, Object> errorResponse = createErrorResponse(
+        var errorResponse = createErrorResponse(
             HttpStatus.BAD_REQUEST,
             ex.getMessage(),
             requestId
@@ -84,11 +85,11 @@ public class GlobalExceptionHandler {
      */
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Map<String, Object>> handleGenericError(Exception ex) {
-        String requestId = MDC.get("requestId");
+        var requestId = MDC.get("requestId");
 
         logger.error("Unexpected error - requestId: {}, error: {}", requestId, ex.getMessage(), ex);
 
-        Map<String, Object> errorResponse = createErrorResponse(
+        var errorResponse = createErrorResponse(
             HttpStatus.INTERNAL_SERVER_ERROR,
             "An unexpected error occurred",
             requestId
@@ -101,14 +102,12 @@ public class GlobalExceptionHandler {
      * Create a consistent error response structure.
      */
     private Map<String, Object> createErrorResponse(HttpStatus status, String message, String requestId) {
-        Map<String, Object> errorResponse = new LinkedHashMap<>();
+        var errorResponse = new LinkedHashMap<String, Object>();
         errorResponse.put("timestamp", Instant.now().toString());
         errorResponse.put("status", status.value());
         errorResponse.put("error", status.getReasonPhrase());
         errorResponse.put("message", message);
-        if (requestId != null) {
-            errorResponse.put("requestId", requestId);
-        }
+        Optional.ofNullable(requestId).ifPresent(id -> errorResponse.put("requestId", id));
         return errorResponse;
     }
 }

@@ -70,7 +70,7 @@ class GodAnalysisServiceIT {
         // Given: edge case inputs
         List<String> emptyList = List.of();
         List<String> nullContainingList = java.util.Arrays.asList("Zeus", null, "Apollo");
-        List<String> emptyStringList = java.util.Arrays.asList("Zeus", "", "Apollo");
+        List<String> emptyStringList = List.of("Zeus", "", "Apollo");
 
         // When & Then: should handle gracefully without exceptions
         assertThat(godAnalysisService.calculateSum(emptyList, "z")).isEqualTo("0");

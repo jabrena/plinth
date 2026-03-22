@@ -45,7 +45,8 @@ class GodDataClientTest {
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBody("[\"Zeus\",\"Hera\",\"Nike\",\"Nemesis\"]")));
+                        .withBody("""
+                                ["Zeus","Hera","Nike","Nemesis"]""")));
 
         List<String> names = client.fetchGodNames(wireMock.baseUrl() + "/greek", "test");
 
@@ -58,7 +59,8 @@ class GodDataClientTest {
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBody("[\"Zeus\"]")
+                        .withBody("""
+                                ["Zeus"]""")
                         .withFixedDelay(3000)));
 
         List<String> names = client.fetchGodNames(wireMock.baseUrl() + "/greek", "test");

@@ -13,12 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -33,6 +35,9 @@ import java.util.concurrent.Executors;
 public class GodStatsController {
 
     private static final Logger logger = LoggerFactory.getLogger(GodStatsController.class);
+
+    private static final List<String> VALID_SOURCE_NAMES = List.of("greek", "roman", "nordic");
+    private static final Set<String> VALID_SOURCES = Set.copyOf(VALID_SOURCE_NAMES);
 
     private final GodAnalysisService godAnalysisService;
     private final GodDataClient godDataClient;
@@ -58,8 +63,8 @@ public class GodStatsController {
             @RequestParam(value = "filter", defaultValue = "") String filter,
             @RequestParam(value = "sources", defaultValue = "greek,roman,nordic") String sources) {
 
-        String requestId = UUID.randomUUID().toString();
-        long startTime = System.currentTimeMillis();
+        var requestId = UUID.randomUUID().toString();
+        var start = Instant.now();
 
         MDC.put("requestId", requestId);
         MDC.put("operation", "calculateSum");
@@ -80,18 +85,18 @@ public class GodStatsController {
             logger.info("Service calculation completed - requestId: {}, godNamesCount: {}, filter: '{}', result: '{}'",
                     requestId, godNames.size(), filter, calculatedSum);
 
-            GodStatsResponse response = new GodStatsResponse(calculatedSum);
-            long duration = System.currentTimeMillis() - startTime;
+            var response = new GodStatsResponse(calculatedSum);
+            var durationMs = Duration.between(start, Instant.now()).toMillis();
 
             logger.info("Request completed successfully - requestId: {}, sum: '{}', duration: {}ms",
-                    requestId, calculatedSum, duration);
+                    requestId, calculatedSum, durationMs);
 
             return ResponseEntity.ok(response);
 
         } catch (Exception e) {
-            long duration = System.currentTimeMillis() - startTime;
+            var durationMs = Duration.between(start, Instant.now()).toMillis();
             logger.error("Request failed - requestId: {}, error: {}, duration: {}ms",
-                    requestId, e.getMessage(), duration, e);
+                    requestId, e.getMessage(), durationMs, e);
             throw e;
         } finally {
             MDC.clear();
@@ -115,21 +120,21 @@ public class GodStatsController {
     }
 
     private List<String> parseAndValidateSources(String sources, String requestId) {
-        List<String> sourcesList = new ArrayList<>(Arrays.asList(sources.split(",")));
-        List<String> validSources = Arrays.asList("greek", "roman", "nordic");
+        List<String> sourcesList = Arrays.stream(sources.split(","))
+                .map(String::trim)
+                .map(String::toLowerCase)
+                .toList();
 
-        for (int i = 0; i < sourcesList.size(); i++) {
-            String source = sourcesList.get(i).trim().toLowerCase();
-            sourcesList.set(i, source);
-
-            if (!validSources.contains(source)) {
+        for (var source : sourcesList) {
+            if (!VALID_SOURCES.contains(source)) {
                 logger.warn("Invalid source specified - requestId: {}, source: '{}', validSources: {}",
-                        requestId, source, validSources);
-                throw new IllegalArgumentException("Invalid source: '" + source + "'. Valid sources are: " + validSources);
+                        requestId, source, VALID_SOURCE_NAMES);
+                throw new IllegalArgumentException(
+                        "Invalid source: '" + source + "'. Valid sources are: " + VALID_SOURCE_NAMES);
             }
         }
 
-        if (sourcesList.size() != sourcesList.stream().distinct().count()) {
+        if (Set.copyOf(sourcesList).size() != sourcesList.size()) {
             logger.warn("Duplicate sources detected - requestId: {}, sources: {}", requestId, sourcesList);
             throw new IllegalArgumentException("Duplicate sources are not allowed");
         }
@@ -147,9 +152,9 @@ public class GodStatsController {
                 ));
             }
             List<String> allNames = new ArrayList<>();
-            for (Map.Entry<String, CompletableFuture<List<String>>> entry : futures.entrySet()) {
+            for (var entry : futures.entrySet()) {
                 try {
-                    List<String> names = entry.getValue().get();
+                    var names = entry.getValue().get();
                     allNames.addAll(names);
                     logger.info("Source '{}' contributed {} names - requestId: {}", entry.getKey(), names.size(), requestId);
                 } catch (Exception e) {

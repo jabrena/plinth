@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Service for analyzing god names and calculating Unicode-based statistics.
@@ -37,23 +38,14 @@ public class GodAnalysisService {
             return "0";
         }
 
-        BigInteger totalSum = BigInteger.ZERO;
-
-        for (String name : names) {
-            if (name == null || name.isEmpty()) {
-                continue;
-            }
-
-            if (shouldFilterName(name, filter)) {
-                continue;
-            }
-
-            String unicodeDecimalString = convertNameToUnicodeDecimalString(name);
-            if (!unicodeDecimalString.isEmpty()) {
-                BigInteger nameValue = new BigInteger(unicodeDecimalString);
-                totalSum = totalSum.add(nameValue);
-            }
-        }
+        var totalSum = names.stream()
+                .filter(Objects::nonNull)
+                .filter(name -> !name.isEmpty())
+                .filter(name -> !shouldFilterName(name, filter))
+                .map(this::convertNameToUnicodeDecimalString)
+                .filter(s -> !s.isEmpty())
+                .map(BigInteger::new)
+                .reduce(BigInteger.ZERO, BigInteger::add);
 
         logger.debug("calculateSum result: '{}' for filter: '{}'", totalSum, filter);
         return totalSum.toString();
