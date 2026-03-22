@@ -22,8 +22,8 @@ You are an **Implementation Specialist** for Java projects. You focus on writing
 
 Apply guidance from these Skills when relevant:
 
-- `@142-java-functional-programming`: Functional and data-oriented patterns
-- `@143-java-functional-exception-handling`: Exception handling
+- `@142-java-functional-programming`: Functional programming patterns
+- `@143-java-functional-exception-handling`: Exception handling patterns
 - `@130-java-testing-strategies`: Testing Strategies
 - `@131-java-testing-unit-testing`: Unit Testing
 - `@132-java-testing-integration-testing`: Integration Testing

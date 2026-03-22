@@ -2,13 +2,15 @@
 
 **Status:** Accepted
 **Date:** Sat Mar 21 10:12:00 CET 2026
-**Decision:** Adopt a **technology stack** for the God Analysis API covering **runtime framework** (Spring Boot), **outbound HTTP** (`RestClient`), **retry policy implementation** (**Resilience4j Retry**), **acceptance-style testing** (Rest Assured), and **integration testing** with **WireMock + Testcontainers + Toxiproxy** so timeout and retry scenarios run in **isolation** with realistic network behavior.
+**Decision:** Adopt a **technology stack** for the God Analysis API covering **runtime framework** (Spring Boot), **outbound HTTP** (`RestClient`), **retry policy implementation** (**Resilience4j Retry**), **acceptance-style testing** (**Spring `RestClient`** against `@SpringBootTest(webEnvironment = RANDOM_PORT)`), and **integration testing** with **WireMock in-process** so timeout and retry scenarios run in **isolation** with deterministic delay simulation.
+
+**Amendment (2026-03-22):** **Rest Assured** was superseded for **HTTP-level acceptance tests** by **Spring Framework `RestClient`**. Rationale: Rest Assured relies on Groovy internals (`RequestSpecificationImpl.applyProxySettings`); on **Java 21+** this path can throw `NullPointerException` (`ConcurrentHashMap` does not permit null keys) during proxy/meta-property handling—making the stack brittle on current LTS/JDK feature releases. **`RestClient`** is already on the classpath (`spring-web`), matches the **same client API** used for outbound calls, and works with **AssertJ** for assertions—no separate acceptance-test HTTP stack required.
 
 ## Context
 
 The God Analysis API project requires a robust Java framework to implement a REST API that integrates with multiple external mythology data sources, performs complex data transformations, and provides reliable service delivery despite external dependency failures.
 
-Timeout and retry behavior ([ADR-002](ADR-002-God-Analysis-API-Non-Functional-Requirements.md)) is easy to get wrong if tests share static stubs, global delays, or JVM-wide clock tricks. **Containerized** dependencies and a **programmable proxy** keep each scenario reproducible and **isolated**.
+Timeout and retry behavior ([ADR-002](ADR-002-God-Analysis-API-Non-Functional-Requirements.md)) is easy to get wrong if tests share static stubs, global delays, or JVM-wide clock tricks. **WireMock in-process** with **scenario-based testing** and **per-test stub reset** keeps each scenario reproducible and **isolated**.
 
 ### Key Requirements Driving Framework Selection
 
@@ -17,7 +19,7 @@ Timeout and retry behavior ([ADR-002](ADR-002-God-Analysis-API-Non-Functional-Re
 3. **Parallel Processing**: Requires concurrent calls to multiple external services for optimal performance
 4. **Error Handling & Resilience**: Graceful degradation with partial results when external sources fail
 5. **JSON Processing**: Handle JSON serialization/deserialization for API responses and external data
-6. **Testing Support**: Comprehensive testing capabilities for acceptance, integration, and unit tests—with **deterministic** timeout/retry coverage
+6. **Testing Support**: Comprehensive testing capabilities for acceptance, integration, and unit tests—with **deterministic** timeout/retry coverage using WireMock delay simulation
 7. **Development Velocity**: Team expertise and rapid development requirements
 8. **Production Readiness**: Monitoring, health checks, and operational capabilities
 
@@ -27,6 +29,12 @@ Timeout and retry behavior ([ADR-002](ADR-002-God-Analysis-API-Non-Functional-Re
 - Familiarity with Spring ecosystem and conventions
 - Need for rapid prototyping and development
 - Educational/research use case requiring stable, well-documented framework
+
+### Package Structure Requirements
+
+**Decision:** Use `info.jab.ms` as the base package for the God Analysis API implementation.
+
+**Rationale:** Standardized package naming convention aligns with organizational standards and provides clear namespace separation.
 
 ### Relationship to ADR-002
 
@@ -38,7 +46,7 @@ Timeout and retry behavior ([ADR-002](ADR-002-God-Analysis-API-Non-Functional-Re
 - **Team Expertise**: Leverage existing Spring/Java knowledge
 - **REST API Maturity**: Proven patterns for REST endpoint development
 - **HTTP Client Integration**: Built-in or well-integrated HTTP client capabilities
-- **Testing Ecosystem**: Comprehensive testing support including mocking external services **and simulating latency/timeouts at the network edge**
+- **Testing Ecosystem**: Comprehensive testing support including mocking external services **and simulating latency/timeouts with WireMock in-process delays**
 - **Operational Readiness**: Production monitoring and health check capabilities
 - **Community Support**: Active community and extensive documentation
 - **Dependency Management**: Mature ecosystem with curated dependencies
@@ -57,7 +65,7 @@ This implementation uses **Spring MVC (traditional servlet-based)** architecture
 
 - **Mature REST Support**: Spring Web MVC provides comprehensive REST API development with `@RestController`, automatic JSON serialization, and query parameter binding
 - **Synchronous HTTP Client**: `RestClient` (synchronous) aligns with servlet-based architecture - **no reactive WebClient dependency**
-- **Parallel Processing**: Built-in async support with `@Async`, `CompletableFuture` within traditional thread-per-request model
+- **Parallel Processing**: `CompletableFuture` with virtual threads for concurrent processing within traditional thread-per-request model
 - **Testing Excellence**: Spring Boot Test provides `@SpringBootTest`, `@WebMvcTest`, `MockMvc`; integrates with Testcontainers
 - **Auto-Configuration**: Zero-config setup for common patterns (JSON processing, HTTP clients, error handling)
 - **Operational Features**: Built-in actuator endpoints for health checks, metrics, and monitoring
@@ -92,13 +100,13 @@ These decisions apply **within** the chosen Spring Boot stack. They do not chang
 
 ### 1. Outbound HTTP client: `RestClient` (SELECTED)
 
-**Context:** The service performs **blocking** parallel fetches (e.g. `CompletableFuture.supplyAsync` around per-source calls) with **per-attempt timeouts**. This aligns with the **Spring MVC servlet-based architecture** decision. Spring Framework 6.1+ provides **RestClient**, a synchronous API designed as the modern successor to `RestTemplate`.
+**Context:** The service performs **blocking** parallel fetches (e.g. `CompletableFuture.supplyAsync` with virtual threads around per-source calls) with **per-attempt timeouts**. This aligns with the **Spring MVC servlet-based architecture** decision. Spring Framework 6.1+ provides **RestClient**, a synchronous API designed as the modern successor to `RestTemplate`.
 
 **Reactive Programming Exclusion:** This implementation explicitly **excludes WebClient and reactive dependencies** to maintain consistency with the Spring MVC servlet-based approach.
 
 | Option | Assessment |
 |--------|------------|
-| **RestClient** | **Selected.** Synchronous API matching servlet stack; fluent API; integrates with `ClientHttpRequestFactory` / `JdkClientHttpRequestFactory` for connect/read timeouts; composes cleanly with **Resilience4j** `Retry` around each per-source call; testable with `MockRestServiceServer` or Toxiproxy-backed URLs. **No reactive dependencies required.** |
+| **RestClient** | **Selected.** Synchronous API matching servlet stack; fluent API; integrates with `ClientHttpRequestFactory` / `JdkClientHttpRequestFactory` for connect/read timeouts; composes cleanly with **Resilience4j** `Retry` around each per-source call; testable with `MockRestServiceServer` or WireMock-backed URLs. **No reactive dependencies required.** |
 | **WebClient** | **Explicitly rejected.** Requires reactive dependencies (spring-webflux, reactor-core) that conflict with our servlet-only architecture decision. |
 | **RestTemplate** | **Not recommended** for new code (maintenance mode). |
 
@@ -113,7 +121,7 @@ These decisions apply **within** the chosen Spring Boot stack. They do not chang
 - **Team Expertise**: Existing knowledge of Spring MVC reduces learning curve
 - **Dependency Management**: Avoids potential conflicts between servlet and reactive stacks
 - **Testing**: MockMvc and servlet-based testing tools are mature and well-documented
-- **Performance**: Thread-per-request model with `CompletableFuture` parallelism meets performance requirements
+- **Performance**: Thread-per-request model with `CompletableFuture` and virtual threads parallelism meets performance requirements
 
 **Excluded Dependencies:**
 - `spring-boot-starter-webflux`
@@ -127,19 +135,37 @@ These decisions apply **within** the chosen Spring Boot stack. They do not chang
 - Non-blocking I/O patterns
 - Reactive HTTP clients (`WebClient`)
 - Reactive database drivers
+- Structured concurrency (not required for this use case)
 
-### 2. Acceptance tests: Rest Assured (SELECTED, scoped)
+### Virtual Threads (INCLUDED)
+
+**Decision:** Use **virtual threads** with `CompletableFuture` for parallel processing of external API calls.
+
+**Rationale:**
+- **Lightweight Concurrency**: Virtual threads provide efficient concurrent execution without the overhead of platform threads
+- **Simplified Model**: Works seamlessly with existing `CompletableFuture` patterns and blocking I/O operations
+- **Resource Efficiency**: Allows handling many concurrent API calls without thread pool exhaustion
+- **Compatibility**: Integrates well with Spring MVC servlet-based architecture and `RestClient`
+
+**Implementation Approach:**
+- Configure `CompletableFuture.supplyAsync()` to use virtual thread executor for parallel god API fetches
+- Maintain blocking I/O model with `RestClient` while benefiting from virtual thread scalability
+- **No structured concurrency**: Standard `CompletableFuture` composition is sufficient for this use case
+
+**Excluded:**
+- Structured concurrency APIs (not required for simple parallel fetch patterns)
+
+### 2. Acceptance tests: Spring `RestClient` (SELECTED)
 
 **Context:** Acceptance tests should assert behavior aligned with [US-001_god_analysis_api.feature](US-001_god_analysis_api.feature).
 
-
 | Option | Assessment |
 |--------|------------|
-| **MockMvc** | Fast for **slice** tests; less like a real TCP client. |
-| **Rest Assured** | **Selected for black-box AT** over `@SpringBootTest(webEnvironment = RANDOM_PORT)`. Fluent HTTP + JSON assertions; matches how external consumers call the API. |
+| **MockMvc** | Fast for **slice** / controller validation tests; less like a real TCP client. **Retained** for `GodStatsControllerValidationTest`-style tests. |
+| **Rest Assured** | **Rejected for AT** (superseded 2026-03-22). Black-box HTTP + fluent assertions, but **Groovy-based** implementation is **fragile on Java 21+** (see amendment in ADR header). Adds a **test-only** HTTP stack duplicating what Spring already provides. |
+| **Spring `RestClient`** | **Selected for HTTP-level acceptance tests** over `@SpringBootTest(webEnvironment = RANDOM_PORT)`. Build `RestClient.create("http://localhost:" + port)`; use `.get().uri(...).retrieve().toEntity(Dto.class)` for real socket-level calls; assert status and body with **AssertJ**. Aligns acceptance tests with **production outbound HTTP** choice (`RestClient`) and avoids Groovy on the test classpath for AT. |
 
-
-**Decision:** Add **Rest Assured** for **HTTP-level acceptance tests**; retain **MockMvc** where slice tests suffice.
+**Decision:** Use **Spring Framework `RestClient`** for **HTTP-level acceptance tests** tagged `@Tag("acceptance-test")`; retain **MockMvc** where slice tests suffice. **Do not** add or rely on **Rest Assured** for this module’s acceptance suite.
 
 ### 3. Retries: Resilience4j vs Spring Retry vs manual (SELECTED: Resilience4j Retry for v1)
 
@@ -155,38 +181,106 @@ These decisions apply **within** the chosen Spring Boot stack. They do not chang
 
 **Implementation note:** Wrap each per-source `RestClient` call with the appropriate `Retry` (e.g. `Retry.decorateCallable` / registry-backed `Retry.executeCallable`) so **timeouts** still apply **per attempt** inside the retry loop, consistent with ADR-002’s “per-attempt timeout.”
 
-### 4. Integration testing: WireMock + Testcontainers + Toxiproxy (SELECTED)
+### 4. Integration testing: WireMock (SELECTED)
 
 **Problem:** In-process WireMock with fixed delays can work for simple cases, but **timeout and retry** scenarios need:
 
-- **Real TCP and socket timeouts** (closer to production than pure in-memory mocks alone)
+- **Deterministic delay simulation** to trigger client-side timeouts consistently
 - **Per-scenario control** of latency and failure without cross-test leakage
 - **Isolation** so test A’s “slow Nordic” does not affect test B
 
-**Approach:** Run **WireMock** inside **Testcontainers** to serve deterministic JSON for the three god list endpoints. Place **Toxiproxy** (via Testcontainers’ Toxiproxy module) **in front of** each upstream (or use one proxy with multiple listeners—see implementation notes). The Spring application under test is configured (e.g. `@DynamicPropertySource`) so **base URLs point at Toxiproxy-published ports**, not directly at WireMock. Stubs remain in WireMock; **toxics** (latency, timeout, bandwidth) attach to the **proxy** path so each test can:
+**Approach:** Use **WireMock in-process** to serve deterministic JSON for the three god list endpoints. WireMock provides both **response stubs** and **delay/failure simulation** capabilities so each test can:
 
-1. **Reset** toxics in `@BeforeEach` / `@AfterEach` (or equivalent) for **isolation**
-2. Apply **latency only to the Nordic proxy** to exercise **5s timeout + partial results**
-3. After retries are implemented, combine **transient latency** with **short spikes** to force **retry exhaustion** on one source only
+1. **Reset** WireMock stubs and scenarios in `@BeforeEach` / `@AfterEach` (or equivalent) for **isolation**
+2. Apply **delay only to the Nordic endpoint** using `fixedDelayMilliseconds` to exercise **5s timeout + partial results**
+3. After retries are implemented, use **WireMock scenarios** to simulate **transient failures** followed by success to force **retry behavior** on one source only
 
 **Alternatives considered:**
 
 
 | Approach                                      | Why not primary                                                                                                                                                                         |
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| WireMock only (JVM, shared server)            | Global stub state and timing coupling; harder to guarantee **per-test** isolation for parallel CI                                                                                       |
-| WireMock Testcontainers **without** Toxiproxy | Can delay responses in WireMock, but **timeout/retry** tests benefit from a **separate, resettable** network fault layer; Toxiproxy toxics are explicit and easy to clear between tests |
+| WireMock in-process | **Selected approach** - Provides **delay simulation** via `fixedDelayMilliseconds`, **scenario-based retry testing**, and **per-test isolation** through stub reset in `@BeforeEach` |
+| WireMock with Testcontainers | Adds Docker dependency and complexity without significant benefit for client timeout testing; in-process delays are sufficient to trigger RestClient timeouts |
 | Live Typicode                                 | Flaky, non-deterministic sums and latency                                                                                                                                               |
 
 
-**Decision:** Use **Testcontainers** to run **WireMock** (container or official WireMock Testcontainers integration) **together with** **Toxiproxy**. **Every** integration/acceptance test that depends on timeout or retry policy must **start from a clean toxic state** (no shared toxics across tests). Unit tests for pure algorithms remain **without** containers.
+**Decision:** Use **WireMock in-process** for integration testing. **Every** integration/acceptance test that depends on timeout or retry policy must **start from a clean stub state** (no shared stubs across tests) using `@BeforeEach` lifecycle hooks. Unit tests for pure algorithms remain **without** WireMock.
 
 **Implementation notes (non-normative):**
 
-- Use a **Docker-enabled** CI agent; document `DOCKER_HOST` / Colima / Rancher expectations in module README.
-- Prefer **JUnit 5** lifecycle hooks to **remove all toxics** before or after each test method that mutates proxies.
-- Map **one Toxiproxy upstream per pantheon** (greek, roman, nordic) so failures are **isolated** per ADR-002.
-- **Parallel test execution:** If Surefire runs classes in parallel, use **separate container networks** or **synchronized** static container pattern with **per-class** dynamic ports—avoid two classes mutating the same proxy concurrently.
+- Use **JUnit 5** lifecycle hooks to **reset all WireMock stubs** before each test method using `wireMockServer.resetAll()`.
+- Configure **separate WireMock endpoints per pantheon** (greek, roman, nordic) so failures are **isolated** per ADR-002.
+- **Parallel test execution:** If Surefire runs classes in parallel, use **separate WireMock server instances per test class** or **synchronized** static server pattern with **per-class** dynamic ports.
+
+**WireMock File Structure and Mappings:**
+
+WireMock supports two approaches for organizing test data:
+
+1. **Programmatic Stubs** (recommended for dynamic scenarios):
+   ```java
+   wireMockServer.stubFor(get(urlEqualTo("/greek/gods"))
+       .willReturn(aResponse()
+           .withStatus(200)
+           .withHeader("Content-Type", "application/json")
+           .withBodyFile("greek-gods-response.json")
+           .withFixedDelay(2000))); // 2s delay for timeout testing
+   ```
+
+2. **File-based Mappings** (useful for static scenarios):
+   - **Mappings directory**: `src/test/resources/mappings/` - Contains JSON mapping definitions
+   - **Files directory**: `src/test/resources/__files/` - Contains response body files
+   
+   Example mapping file (`src/test/resources/mappings/greek-gods.json`):
+   ```json
+   {
+     "request": {
+       "method": "GET",
+       "url": "/greek/gods"
+     },
+     "response": {
+       "status": 200,
+       "headers": {
+         "Content-Type": "application/json"
+       },
+       "bodyFileName": "greek-gods-response.json",
+       "fixedDelayMilliseconds": 2000
+     }
+   }
+   ```
+   
+   Response body file (`src/test/resources/__files/greek-gods-response.json`):
+   ```json
+   [
+     {"name": "Zeus", "power": 95},
+     {"name": "Athena", "power": 88},
+     {"name": "Poseidon", "power": 92}
+   ]
+   ```
+
+**Recommended Structure for God Analysis API:**
+```
+src/test/resources/
+├── mappings/
+│   ├── greek-gods-success.json
+│   ├── roman-gods-success.json
+│   ├── nordic-gods-success.json
+│   ├── greek-gods-timeout.json      # 6s delay to trigger 5s timeout
+│   └── nordic-gods-retry.json       # Scenario-based for retry testing
+└── __files/
+    ├── greek-gods-response.json
+    ├── roman-gods-response.json
+    ├── nordic-gods-response.json
+    ├── greek-gods-partial.json      # Smaller dataset for partial results
+    └── empty-response.json          # For failure scenarios
+```
+
+**Benefits of `__files` + mappings approach:**
+- **Separation of concerns**: Mapping logic separate from response data
+- **Reusable responses**: Same JSON file can be used across multiple test scenarios
+- **Version control friendly**: JSON files are easy to review and maintain
+- **Test data management**: Clear organization of test fixtures
+- **Scenario flexibility**: Easy to create variations (success, timeout, retry) using same base data
 
 ## Decision Outcome
 
@@ -198,8 +292,8 @@ These decisions apply **within** the chosen Spring Boot stack. They do not chang
 
 1. **Spring MVC** provides mature servlet-based REST API development without reactive complexity
 2. **RestClient** fits synchronous parallel fetches with per-attempt timeouts (no reactive dependencies)
-3. **Rest Assured** gives readable black-box acceptance tests
-4. **WireMock + Testcontainers + Toxiproxy** provides **isolated**, **realistic** timeout/retry validation aligned with ADR-002
+3. **Spring `RestClient`** gives **black-box** acceptance tests over a real port without a separate Groovy-based HTTP DSL
+4. **WireMock in-process** provides **isolated**, **deterministic** timeout/retry validation aligned with ADR-002
 5. **Resilience4j Retry** implements ADR-002 policy consistently, supports observability, and avoids ad-hoc loops while **other Resilience4j modules stay off** until requirements change
 6. **Servlet-only architecture** eliminates reactive programming complexity and dependency conflicts
 
@@ -208,15 +302,15 @@ These decisions apply **within** the chosen Spring Boot stack. They do not chang
 - **Architecture**: **Spring MVC servlet-based** - traditional thread-per-request model, **no reactive programming**
 - **REST Controller**: `@RestController`, `GET /api/v1/gods/stats/sum`
 - **HTTP Client**: **RestClient** (synchronous) - **5s timeout per attempt** (each attempt inside retry is still bound by this timeout)
-- **Parallelism**: `CompletableFuture` within servlet thread model per source; **retry boundary per source** (separate `Retry` instance or configuration per pantheon)
+- **Parallelism**: `CompletableFuture` with virtual threads within servlet thread model per source; **retry boundary per source** (separate `Retry` instance or configuration per pantheon)
 - **Retries**: **Resilience4j Retry**—**4 max attempts**, **fixed delay** between attempts
 - **Configuration**: **Single default configuration** provides production-ready settings with environment variable overrides
 - **Error handling**: `@ControllerAdvice` where needed; partial aggregation per feature
 - **Dependencies**: **No reactive libraries** (spring-webflux, reactor-core, etc.)
 - **Testing**:
   - **Unit tests**: Unicode/filter/sum without containers
-  - **Acceptance**: `@SpringBootTest(RANDOM_PORT)` + **Rest Assured**
-  - **Integration (timeout/retry/isolation)**: **Testcontainers** (**WireMock** + **Toxiproxy**), dynamic base URLs, **reset toxics per test**
+  - **Acceptance**: `@SpringBootTest(RANDOM_PORT)` + **Spring `RestClient`** (real HTTP to `localhost:{port}`; AssertJ assertions)
+  - **Integration (timeout/retry/isolation)**: **WireMock in-process**, **reset stubs per test**
 
 ### Planned Maven coordinates (design-level)
 
@@ -227,10 +321,8 @@ These decisions apply **within** the chosen Spring Boot stack. They do not chang
 | main | `io.github.resilience4j:resilience4j-retry` | ADR-002 retry policy (linear, per source) |
 | main | `io.github.resilience4j:resilience4j-spring-boot3` (or artifact aligned with Spring Boot 4) | Spring configuration for Retry beans and properties |
 | test | `spring-boot-starter-test` | JUnit 5, AssertJ, **MockMvc** (servlet-based testing) |
-| test | `rest-assured` | Black-box HTTP acceptance tests |
-| test | `org.testcontainers:testcontainers` + `junit-jupiter` | Container lifecycle |
-| test | `org.testcontainers:toxiproxy` | Latency/timeout/toxic control |
-| test | WireMock on Testcontainers (e.g. WireMock Testcontainers module or compatible image) | Deterministic upstream JSON |
+| test | *(none extra for AT)* | **Acceptance tests** use **`RestClient`** from **`spring-web`** (already pulled by `spring-boot-starter-web`)—no `rest-assured` dependency |
+| test | `org.wiremock:wiremock` | Deterministic upstream JSON with delay simulation |
 
 **Not used for v1 (by this ADR):** 
 - `spring-retry` (prefer Resilience4j)
@@ -241,16 +333,16 @@ These decisions apply **within** the chosen Spring Boot stack. They do not chang
 
 ### Positive
 
-- Timeout/retry behavior validated under **realistic network conditions** with **per-test isolation**
-- Clear separation: **WireMock** owns **responses**, **Toxiproxy** owns **faults**
+- Timeout/retry behavior validated with **deterministic delay simulation** and **per-test isolation**
+- **WireMock in-process** provides both **response stubs** and **fault simulation** (delays, failures) in one lightweight tool
 - Spring stack + Testcontainers is a well-documented industry pattern
 - **Resilience4j Retry** gives uniform policy, testable configuration, and optional metrics without enabling circuit breaking in v1
 - **Single configuration file** provides consistent baseline with environment variable flexibility
 
 ### Negative
 
-- **Slower tests** than pure MockMvc; requires Docker in dev/CI
-- **More moving parts** to maintain (images, ports, lifecycle)
+- **Fast test execution** - no Docker overhead, pure JVM testing
+- **Simple setup** - no external dependencies or container lifecycle management
 - Higher memory use on developer laptops when running full integration suite
 - **Resilience4j** adds dependencies and configuration surface; team must **discipline** configuration so only **Retry** is active for this service in v1
 
@@ -261,12 +353,61 @@ These decisions apply **within** the chosen Spring Boot stack. They do not chang
 
 ## Follow-up Actions
 
-1. Add Maven dependencies for **Resilience4j Retry** (+ Spring Boot integration), Testcontainers, Toxiproxy, and WireMock-on-containers
-2. Implement a **test support** class (or extension) that **starts** WireMock + Toxiproxy, **wires** `RestClient` base URLs, and **clears toxics** between tests
-3. Register **RestClient** with production timeouts; define **per-source** `Retry` beans or config; override URLs only in tests
-4. Keep **Rest Assured** acceptance suite small and Gherkin-aligned
-5. Document Docker prerequisites in module README
-6. Verify Resilience4j Retry configuration matches ADR-002 requirements
+1. Add Maven dependencies for **Resilience4j Retry** (+ Spring Boot integration) and WireMock (use `org.wiremock:wiremock` - the modern groupId that replaced `com.github.tomakehurst`)
+2. Set up **WireMock file structure** with `src/test/resources/mappings/` and `src/test/resources/__files/` directories for organized test data management
+3. Create **JSON response files** in `__files` for each pantheon (greek, roman, nordic) with realistic god data for testing
+4. Implement a **test support** class (or extension) that **starts** WireMock server, **wires** `RestClient` base URLs, and **resets stubs** between tests
+5. Register **RestClient** with production timeouts; define **per-source** `Retry` beans or config; override URLs only in tests
+6. Keep the **`RestClient`-based** acceptance suite small and Gherkin-aligned; **do not** introduce Rest Assured for this module unless a future ADR revisits the trade-off after Groovy/JVM fixes land upstream
+7. Document WireMock setup, file structure, and stub reset patterns in module README
+8. Verify Resilience4j Retry configuration matches ADR-002 requirements
+
+## Appendix: Rest Assured — issues observed and why it is discarded (2026-03-22)
+
+This appendix records **evidence from this module** so future readers know why **Rest Assured is not** a supported choice for HTTP-level acceptance tests here, even though it remains a common industry tool.
+
+### Symptoms observed
+
+- **Every** black-box acceptance test that called `given()…when().get(…)` failed with:
+  - `java.lang.NullPointerException: Cannot invoke "Object.hashCode()" because "key" is null`
+- Failures occurred **before** response assertions (HTTP call path), so the SUT often logged successful handling—the client side (Rest Assured) was failing, not the controller.
+
+### Representative stack trace (abridged)
+
+Failure originates in Rest Assured’s request pipeline, not in application code:
+
+```
+java.lang.NullPointerException: Cannot invoke "Object.hashCode()" because "key" is null
+    at java.base/java.util.concurrent.ConcurrentHashMap.get(ConcurrentHashMap.java:951)
+    at groovy.lang.MetaClassImpl.getMetaProperty(MetaClassImpl.java:2841)
+    at groovy.lang.MetaClassImpl.setProperty(MetaClassImpl.java:2712)
+    at org.codehaus.groovy.runtime.ScriptBytecodeAdapter.setProperty(ScriptBytecodeAdapter.java:509)
+    at io.restassured.internal.RequestSpecificationImpl.applyProxySettings(RequestSpecificationImpl.groovy:2047)
+    …
+    at io.restassured.internal.RequestSpecificationImpl.get(RequestSpecificationImpl.groovy:172)
+```
+
+### Root cause (technical)
+
+1. **Rest Assured 5.x is implemented in Groovy** (`RequestSpecificationImpl` and related classes).
+2. On **send**, Rest Assured invokes **`applyProxySettings`**, which uses **Groovy metaprogramming** (`MetaClassImpl.setProperty` / `getMetaProperty`).
+3. That path ends up calling **`ConcurrentHashMap.get`** with a **`null` key** (property name resolution yields `null`). **`ConcurrentHashMap` does not permit `null` keys**; the JVM throws `NullPointerException` when computing `hashCode` for the key.
+4. The issue is **not** fixed by “using Java 25 instead of 26” in isolation: it is a **Groovy / Rest Assured internal** interaction with **modern JDKs (Java 21+)** and the way nulls propagate through meta-property lookup—**brittle across JDK updates**.
+
+### Why we discard Rest Assured (instead of mitigating)
+
+| Mitigation idea | Why we reject it for this project |
+|-----------------|-------------------------------------|
+| Pin an older JDK only for tests | Conflicts with **org standard** (Java 25/26) and CI matrix; hides real breakage. |
+| Pin older Groovy / Rest Assured versions | Ongoing **dependency roulette**; security and Boot alignment suffer. |
+| Rely on proxy / env workarounds | **Non-deterministic** across laptops and CI; root cause remains in Groovy layer. |
+| Wait for upstream fix | **Unbounded**; acceptance tests must run **now** on the chosen stack. |
+
+**Decision:** **Do not** depend on Rest Assured for acceptance tests in this module. Use **Spring `RestClient`** (see §2 above)—same stack as production HTTP client choice, **no Groovy test DSL**, **stable on Java 21+**.
+
+### Optional future re-evaluation
+
+If a future Rest Assured + Groovy release **demonstrably** fixes `applyProxySettings` / meta-property paths on **Java 21+** with Spring Boot **4.x**, a **new ADR** may revisit adding Rest Assured **only** if the team wants the fluent DSL; until then, **`RestClient` + AssertJ** remains the recorded standard.
 
 ## References
 
@@ -276,9 +417,6 @@ These decisions apply **within** the chosen Spring Boot stack. They do not chang
 - [Feature Specification](US-001_god_analysis_api.feature)
 - [US-001-plan-analysis.plan.md](US-001-plan-analysis.plan.md)
 - [Spring Boot 4.0.4 Documentation](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/)
-- [Spring Framework — RestClient](https://docs.spring.io/spring-framework/reference/integration/rest-clients.html#rest-restclient)
-- [Rest Assured](https://rest-assured.io/)
-- [Testcontainers](https://java.testcontainers.org/)
-- [Toxiproxy](https://github.com/Shopify/toxiproxy)
+- [Spring Framework — RestClient](https://docs.spring.io/spring-framework/reference/integration/rest-clients.html#rest-restclient) (outbound HTTP and **acceptance tests** in this ADR)
 - [WireMock](https://wiremock.org/) — including Testcontainers integration where applicable
 - [Resilience4j Retry](https://resilience4j.readme.io/docs/retry)

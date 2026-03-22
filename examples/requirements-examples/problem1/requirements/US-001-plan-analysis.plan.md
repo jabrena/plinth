@@ -49,34 +49,32 @@ flowchart LR
 
 | # | Task | Phase | TDD | Milestone | Parallel | Status |
 |---|------|-------|-----|-----------|----------|--------|
-| 1 | Create Maven project structure with dependencies | Setup | | | A1 | |
-| 2 | Write acceptance test for happy path sum calculation | RED | Test | | A1 | |
-| 3 | Create REST controller stub to pass acceptance test | GREEN | Impl | | A1 | |
-| 4 | Add structured logging for request/response | Refactor | | | A1 | |
-| 5 | Optimize controller validation and error handling | Refactor | | | A1 | |
-| 6 | Verify acceptance test passes with controller | Verify | | milestone | A1 | |
-| 7 | Write service layer unit test for aggregation logic | RED | Test | | A2 | |
-| 8 | Implement service with Unicode algorithm | GREEN | Impl | | A2 | |
-| 9 | Add service-level logging | Refactor | | | A2 | |
-| 10 | Optimize service configuration and error handling | Refactor | | | A2 | |
-| 11 | Verify service unit tests pass | Verify | | milestone | A2 | |
-| 12 | Write HTTP client tests for timeout-bound fetching (single attempt per source) | RED | Test | | A3-timeout | |
-| 13 | Implement HTTP client with 5s timeout only (no retries yet) | GREEN | Impl | | A3-timeout | |
-| 14 | Add client-level logging for HTTP outcomes | Refactor | | | A3-timeout | |
-| 15 | Optimize client configuration (timeouts, per-source isolation) | Refactor | | | A3-timeout | |
-| 16 | Verify HTTP client tests pass (timeout phase) | Verify | | milestone | A3-timeout | |
-| 17 | Write HTTP client tests for linear retry policy (1 + 3 attempts per ADR-002) | RED | Test | | A3-retry | |
-| 18 | Add per-source **Resilience4j Retry** around HTTP client calls | GREEN | Impl | | A3-retry | |
-| 19 | Extend client logging for retry attempts and final outcomes | Refactor | | | A3-retry | |
-| 20 | Optimize retry configuration (linear delays, caps) | Refactor | | | A3-retry | |
-| 21 | Verify HTTP client tests pass (with retries) | Verify | | milestone | A3-retry | |
-| 22 | Write integration test for Nordic timeout scenario | RED | Test | | A4 | |
-| 23 | Implement partial result handling in service | GREEN | Impl | | A4 | |
-| 24 | Write integration test for filter=N zero result | RED | Test | | A4 | |
-| 25 | Implement filter logic validation | GREEN | Impl | | A4 | |
-| 26 | Add end-to-end observability and monitoring | Refactor | | | A4 | |
-| 27 | Optimize application configuration and profiles | Refactor | | | A4 | |
-| 28 | Verify all integration tests pass | Verify | | milestone | A4 | |
+| 1 | Create Maven project structure with dependencies | Setup | | | A1 | ✔ |
+| 2 | Write acceptance test for happy path sum calculation | RED | Test | | A1 | ✔ |
+| 3 | Create REST controller stub to pass acceptance test | GREEN | Impl | | A1 | ✔ |
+| 4 | Add structured logging for request/response | Refactor | | | A1 | ✔ |
+| 5 | Optimize controller validation and error handling | Refactor | | | A1 | ✔ |
+| 6 | Verify acceptance test passes with controller | Verify | | milestone | A1 | ✔ |
+| 7 | Write service layer unit test for aggregation logic | RED | Test | | A2 | ✔ |
+| 8 | Implement service with Unicode algorithm | GREEN | Impl | | A2 | ✔ |
+| 9 | Add service-level logging | Refactor | | | A2 | ✔ |
+| 10 | Optimize service configuration and error handling | Refactor | | | A2 | ✔ |
+| 11 | Write integration test for filter=N zero result | RED | Test | | A2 | ✔ |
+| 12 | Implement filter logic validation | GREEN | Impl | | A2 | ✔ |
+| 13 | Verify service unit tests pass | Verify | | milestone | A2 | ✔ |
+| 14 | Write HTTP client tests for timeout-bound fetching (single attempt per source) | RED | Test | | A3 | ✔ |
+| 15 | Implement HTTP client with 5s timeout only (no retries yet) | GREEN | Impl | | A3 | ✔ |
+| 16 | Add client-level logging for HTTP outcomes | Refactor | | | A3 | ✔ |
+| 17 | Optimize client configuration (timeouts, per-source isolation) | Refactor | | | A3 | ✔ |
+| 18 | Write integration test for Nordic timeout scenario | RED | Test | | A3 | ✔ |
+| 19 | Implement partial result handling in service | GREEN | Impl | | A3 | ✔ |
+| 20 | Verify HTTP client tests pass (timeout phase) | Verify | | milestone | A3 | ✔ |
+| 21 | Write HTTP client tests for linear retry policy (1 + 3 attempts per ADR-002) | RED | Test | | A4 | ✔ |
+| 22 | Add per-source **Resilience4j Retry** around HTTP client calls | GREEN | Impl | | A4 | ✔ |
+| 23 | Extend client logging for retry attempts and final outcomes | Refactor | | | A4 | ✔ |
+| 24 | Optimize retry configuration (linear delays, caps) | Refactor | | | A4 | ✔ |
+| 25 | Verify HTTP client tests pass (with retries) | Verify | | milestone | A4 | ✔ |
+| 26 | Verify all integration tests pass | Verify | ✔ | milestone | A5 | |
 
 ## Execution Instructions
 
@@ -95,7 +93,7 @@ When executing this plan:
 - If any test fails during verification, fix the issue before advancing
 - Never skip verification steps - they ensure software stability
 
-**Parallel column:** Use grouping identifiers (A1, A2, `A3-timeout`, `A3-retry`, A4, etc.) to group tasks into the same delivery slice. **`A3-timeout` must complete (including its Verify) before starting `A3-retry`.** Use when assigning agents or branches to a milestone scope.
+**Parallel column:** Use grouping identifiers (A1, A2, A3, A4, A5, etc.) to group tasks into the same delivery slice. **A3 must complete (including its Verify) before starting A4.** Use when assigning agents or branches to a milestone scope.
 
 ## File Checklist
 
@@ -103,20 +101,20 @@ When executing this plan:
 |-------|------|
 | 1 | `god-analysis-api/pom.xml` |
 | 2 | `god-analysis-api/src/main/resources/application.yml` |
-| 3 | `god-analysis-api/src/test/java/com/example/gods/GodAnalysisApiAcceptanceTest.java` |
-| 4 | `god-analysis-api/src/main/java/com/example/gods/controller/GodStatsController.java` |
-| 5 | `god-analysis-api/src/main/java/com/example/gods/dto/GodStatsResponse.java` |
-| 6 | `god-analysis-api/src/test/java/com/example/gods/service/GodAnalysisServiceTest.java` |
-| 7 | `god-analysis-api/src/main/java/com/example/gods/service/GodAnalysisService.java` |
-| 8 | `god-analysis-api/src/main/java/com/example/gods/algorithm/UnicodeAggregator.java` |
-| 9 | `god-analysis-api/src/test/java/com/example/gods/client/GodDataClientTest.java` |
-| 10 | `god-analysis-api/src/main/java/com/example/gods/client/GodDataClient.java` |
-| 11 | `god-analysis-api/src/main/java/com/example/gods/config/HttpClientConfig.java` |
-| 12 | `god-analysis-api/src/test/java/com/example/gods/GodAnalysisApiIntegrationTest.java` |
+| 3 | `god-analysis-api/src/test/java/info/jab/ms/controller/GodAnalysisApiAT.java` |
+| 4 | `god-analysis-api/src/main/java/info/jab/ms/controller/GodStatsController.java` |
+| 5 | `god-analysis-api/src/main/java/info/jab/ms/dto/GodStatsResponse.java` |
+| 6 | `god-analysis-api/src/test/java/info/jab/ms/service/GodAnalysisServiceTest.java` |
+| 7 | `god-analysis-api/src/main/java/info/jab/ms/service/GodAnalysisService.java` |
+| 8 | `god-analysis-api/src/main/java/info/jab/ms/algorithm/UnicodeAggregator.java` |
+| 9 | `god-analysis-api/src/test/java/info/jab/ms/client/GodDataClientTest.java` |
+| 10 | `god-analysis-api/src/main/java/info/jab/ms/client/GodDataClient.java` |
+| 11 | `god-analysis-api/src/main/java/info/jab/ms/config/HttpClientConfig.java` |
+| 12 | `god-analysis-api/src/test/java/info/jab/ms/controller/GodAnalysisApiIT.java` |
 | 13 | `god-analysis-api/src/test/resources/wiremock/greek-gods.json` |
 | 14 | `god-analysis-api/src/test/resources/wiremock/roman-gods.json` |
 | 15 | `god-analysis-api/src/test/resources/wiremock/nordic-gods.json` |
-| 16 | `god-analysis-api/src/test/java/.../support/WireMockToxiproxyExtension.java` (or equivalent) — Testcontainers lifecycle, proxy URLs, **clear toxics between tests** |
+| 16 | `god-analysis-api/src/test/java/info/jab/ms/support/WireMockToxiproxyExtension.java` (or equivalent) — Testcontainers lifecycle, proxy URLs, **clear toxics between tests** |
 | 17 | `god-analysis-api/README.md` |
 
 ## Authoritative Sources
@@ -126,7 +124,7 @@ When executing this plan:
 - [US-001-god-analysis-api.openapi.yaml](US-001-god-analysis-api.openapi.yaml) — API contract with response schema and parameters
 - [ADR-001-God-Analysis-API-Functional-Requirements.md](ADR-001-God-Analysis-API-Functional-Requirements.md) — Architecture decisions (monolith, no auth, direct HTTP)
 - [ADR-002-God-Analysis-API-Non-Functional-Requirements.md](ADR-002-God-Analysis-API-Non-Functional-Requirements.md) — Performance and resilience requirements (5s timeout, 3 retries, parallel calls; **circuit breaker explicitly out of scope** for initial implementation)
-- [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md) — Runtime stack, `RestClient`, **Resilience4j Retry** (retry module only), Rest Assured, and **Testcontainers + WireMock + Toxiproxy** for isolated timeout/retry tests
+- [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md) — Runtime stack, `RestClient` (outbound **and** HTTP acceptance tests), **Resilience4j Retry** (retry module only), and **Testcontainers + WireMock + Toxiproxy** for isolated timeout/retry tests
 
 **Test Scenarios:**
 1. **Happy Path:** All sources respond → exact sum calculation
@@ -140,6 +138,8 @@ When executing this plan:
 [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md) selects **Spring Boot 4.0.4** and **Java 26**. The repo root uses **Java 25** ([pom.xml](../../../pom.xml)). **Recommendation:** use **Spring Boot 4.0.4** with **Java 25** unless you explicitly standardize this example on Java 26—Boot 4 supports Java 17+.
 
 Examples are **not** Maven modules of the root reactor; mirror [examples/spring-boot-demo/implementation/pom.xml](../../spring-boot-demo/implementation/pom.xml) as a **standalone** Maven project (new directory under `examples/requirements-examples/problem1/`, e.g. `god-analysis-api/`).
+
+**Package Structure:** All Java classes must use the base package `info.jab.ms` with appropriate sub-packages (controller, service, dto, client, config, algorithm) as specified in [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md).
 
 ## Domain algorithm (must match acceptance math)
 
@@ -202,7 +202,7 @@ Wire Spring configuration via `@ConfigurationProperties` for testability.
 
 | Goal | Approach |
 |------|----------|
-| Happy path / exact `sum` | `@SpringBootTest` + **Rest Assured** against **RANDOM_PORT**; upstreams via Toxiproxy → WireMock with **JSON fixture files** so `sum` equals **`78179288397447443426`**. No live network in CI. |
+| Happy path / exact `sum` | `@SpringBootTest` + **Spring `RestClient`** against **RANDOM_PORT**; upstreams via Toxiproxy → WireMock with **JSON fixture files** so `sum` equals **`78179288397447443426`**. No live network in CI. |
 | Nordic timeout / partial sum | Apply **Toxiproxy latency (or timeout) toxic** on the **Nordic proxy only** so the client hits **5s per-attempt** timeout while Greek/Roman stay fast; assert partial `sum` from Greek + Roman. With retries enabled, tune toxics so only Nordic exhausts attempts within the test. |
 | `filter=N` → `"0"` | Same container stack; no Nordic toxic required; assert `sum` is `"0"`. |
 | Unit tests | Pure tests for conversion + filter + aggregation with small strings (**no** Docker). |
@@ -213,7 +213,7 @@ Tag tests to mirror Gherkin: e.g. JUnit `@Tag("acceptance-test")` and `@Tag("int
 
 ## Deliverables checklist
 
-- New Maven project with `spring-boot-starter-web`, `spring-boot-starter-actuator` (ADR-003), **`resilience4j-retry`** plus **Resilience4j Spring Boot integration** (Retry only), `spring-boot-starter-test`, **Rest Assured**, **Testcontainers** (`testcontainers`, `junit-jupiter`, **`toxiproxy`**), and **WireMock on Testcontainers** (or equivalent) per ADR-003.
+- New Maven project with `spring-boot-starter-web`, `spring-boot-starter-actuator` (ADR-003), **`resilience4j-retry`** plus **Resilience4j Spring Boot integration** (Retry only), `spring-boot-starter-test` (includes AssertJ; use **`RestClient`** from `spring-web` for acceptance tests—**no** Rest Assured per ADR-003), **Testcontainers** (`testcontainers`, `junit-jupiter`, **`toxiproxy`**), and **WireMock on Testcontainers** (or equivalent) per ADR-003.
 - **Single configuration file** `application.yml` with production-ready settings and environment variable support
 - `README` or `DEVELOPER.md` in the new module: how to run, **Docker requirement**, configure URLs/timeouts via environment variables, run tests.
 - `./mvnw clean verify` from the new module passes.

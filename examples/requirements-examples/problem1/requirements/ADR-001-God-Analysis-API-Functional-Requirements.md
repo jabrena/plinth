@@ -66,8 +66,10 @@ The primary consumers are educational and research platforms with moderately tec
 **Implementation note:** Retry and HTTP client libraries are specified in [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md) (**Resilience4j Retry** for outbound retries, **RestClient** for HTTP); retry **policy** (counts, timeouts, linear spacing) remains in [ADR-002-God-Analysis-API-Non-Functional-Requirements.md](ADR-002-God-Analysis-API-Non-Functional-Requirements.md).
 
 #### Testing & Monitoring
-**Decision:** Acceptance and integration testing as defined in feature file, basic monitoring approach
-**Rationale:** Test scenarios already specified cover critical paths including timeout and filtering behavior. Basic observability sufficient for educational use case.
+**Decision:** Acceptance and integration testing as defined in feature file with fast execution requirements, basic monitoring approach
+**Rationale:** Test scenarios already specified cover critical paths including timeout and filtering behavior. Tests must run fast to support rapid development cycles - timeout and retry scenarios require deterministic simulation rather than real delays. Basic observability sufficient for educational use case.
+
+**HTTP-level acceptance tests:** Use **Spring Framework `RestClient`** against the application bound to a random port (`@SpringBootTest(webEnvironment = RANDOM_PORT)`), as decided in [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md) (supersedes Rest Assured for this module to avoid Groovy/JVM compatibility issues on Java 21+).
 
 ## Alternatives Considered
 
