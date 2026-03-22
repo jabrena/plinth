@@ -4,5 +4,6 @@ target/
 .vscode/
 .classpath
 .claude
+.agents
 dependency-reduced-pom.xml
 docs-local/

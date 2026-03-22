@@ -37,10 +37,10 @@ Guide stakeholders through a structured conversation to uncover and document tec
 
   <triggers>
     <trigger-list>
-        <trigger>Document CLI or REST architecture</trigger>
         <trigger>Create ADR for functional requirements</trigger>
-        <trigger>ADR for command-line tool or HTTP API</trigger>
-        <trigger>Functional requirements ADR</trigger>
+        <trigger>Document functional requirements</trigger>
+        <trigger>Capture functional requirements</trigger>
+        <trigger>Generate functional requirements in an ADR</trigger>
     </trigger-list>
   </triggers>
 

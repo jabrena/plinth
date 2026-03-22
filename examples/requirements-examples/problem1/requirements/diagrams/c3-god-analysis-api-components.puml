@@ -1,0 +1,35 @@
+@startuml c3-god-analysis-api-components
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+
+LAYOUT_WITH_LEGEND()
+
+title Component Diagram — REST application (C4 Level 3)
+
+Person(api_consumer, "API Consumer", "Client calling the statistics endpoint")
+
+Container_Boundary(rest_api, "REST application") {
+    Component(god_stats_controller, "God Stats Controller", "Spring @RestController", "Validates filter and sources; fetches names in parallel (virtual threads); invokes Unicode sum calculation")
+    Component(god_analysis_service, "God Analysis Service", "Spring @Service", "Filters names by first code point; aggregates Unicode values per requirements; returns sum as string")
+    Component(god_data_client, "God Data Client", "Spring @Component, RestClient, Resilience4j", "HTTP GET per source URL; per-source retry; returns name list or empty on exhaustion")
+    Component(god_api_properties, "God API properties", "@ConfigurationProperties", "Per-source URLs and HTTP connect/read timeouts")
+    Component(global_exception_handler, "Global exception handler", "@ControllerAdvice", "Maps validation and framework errors to HTTP 400 and consistent JSON error bodies for controllers")
+    Component(god_stats_response, "God Stats response", "Java record DTO", "Serializes { sum } JSON response body")
+}
+
+System_Ext(greek_data, "Greek mythology data API", "REST JSON")
+System_Ext(roman_data, "Roman mythology data API", "REST JSON")
+System_Ext(nordic_data, "Nordic mythology data API", "REST JSON")
+
+Rel(api_consumer, rest_api, "GET /api/v1/gods/stats/sum", "HTTPS/JSON")
+
+Rel(god_stats_controller, god_api_properties, "Reads source URLs", "")
+Rel(god_stats_controller, god_data_client, "fetchGodNames(url, source)", "")
+Rel(god_stats_controller, god_analysis_service, "calculateSum(names, filter)", "")
+Rel(god_stats_controller, god_stats_response, "Builds OK response", "")
+
+Rel(god_data_client, god_api_properties, "Read timeouts", "")
+Rel(god_data_client, greek_data, "GET JSON array", "HTTPS")
+Rel(god_data_client, roman_data, "GET JSON array", "HTTPS")
+Rel(god_data_client, nordic_data, "GET JSON array", "HTTPS")
+
+@enduml

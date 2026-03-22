@@ -37,6 +37,19 @@ Generate Architecture Decision Records (ADRs) for Java projects through an inter
         <trigger>Create Architecture Decision Record</trigger>
         <trigger>Document architecture decision</trigger>
         <trigger>Architecture Decision Record for Java</trigger>
+        <trigger>Write ADR</trigger>
+        <trigger>Document technical decision</trigger>
+        <trigger>Architecture documentation</trigger>
+        <trigger>Record design decision</trigger>
+        <trigger>Technology choice documentation</trigger>
+        <trigger>Framework selection ADR</trigger>
+        <trigger>Database choice ADR</trigger>
+        <trigger>Architectural trade-offs</trigger>
+        <trigger>Technical alternatives evaluation</trigger>
+        <trigger>Why did we choose</trigger>
+        <trigger>Deployment strategy ADR</trigger>
+        <trigger>Infrastructure choice</trigger>
+        <trigger>Vendor selection ADR</trigger>
     </trigger-list>
   </triggers>
 

@@ -38,10 +38,10 @@ Guide stakeholders through a structured conversation to uncover and document arc
 
   <triggers>
     <trigger-list>
-        <trigger>Document quality attributes</trigger>
-        <trigger>Create ADR for NFR</trigger>
-        <trigger>Non-functional requirements ADR</trigger>
-        <trigger>Security performance scalability architecture</trigger>
+        <trigger>Create ADR for Non-functional requirements</trigger>
+        <trigger>Document Non-functional requirements</trigger>
+        <trigger>Capture Non-functional requirements</trigger>
+        <trigger>Generate Non-functional requirements in an ADR</trigger>
     </trigger-list>
   </triggers>
 

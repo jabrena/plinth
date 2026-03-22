@@ -1,0 +1,13 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "/roman"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "bodyFileName": "roman-gods.json"
+  }
+}
