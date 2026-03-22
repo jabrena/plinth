@@ -18,9 +18,9 @@ isProject: false
 | **Title** | `# Problem N: [Name] Implementation Plan` |
 | **Requirements Summary** | User story, key business rules, acceptance criteria |
 | **Approach** | Named approach (e.g., London Style TDD), Mermaid diagram |
-| **Task List** | Table: #, Phase, Task, TDD, Status |
+| **Task List** | Table: #, Task, Phase, TDD, Milestone, Parallel, Status |
 | **Execution Instructions** | Update Status after each task before advancing |
-| **File Checklist** | Order, File path, When (TDD phase) |
+| **File Checklist** | Order, File path |
 | **Notes** | Package layout, conventions, edge cases |
 
 ## Execution Instructions (Required)
@@ -32,8 +32,19 @@ isProject: false
 When executing this plan:
 1. Complete the current task.
 2. **Update the Task List**: set the Status column for that task (e.g., ✔ or Done).
-3. Only then proceed to the next task.
-4. Repeat for all tasks. Never advance without updating the plan.
+3. **For GREEN tasks**: MUST complete the associated Verify task before proceeding.
+4. **For Verify tasks**: MUST ensure all tests pass and build succeeds before proceeding.
+5. **Milestone rows** (Milestone column): a milestone is evolving complete software for that slice — complete the pair of Refactor tasks (logging, then optimize config/error handling/log levels) immediately before each milestone Verify.
+6. Only then proceed to the next task.
+7. Repeat for all tasks. Never advance without updating the plan.
+
+**Critical Stability Rules:**
+- After every GREEN implementation task, run the verification step
+- All tests must pass before proceeding to the next implementation
+- If any test fails during verification, fix the issue before advancing
+- Never skip verification steps - they ensure software stability
+
+**Parallel column:** Use grouping identifiers (A1, A2, A3, etc.) to group tasks into the same delivery slice. Use when assigning agents or branches to a milestone scope.
 ```
 
 ## Task Phases
@@ -68,20 +79,24 @@ Setup → RED (write failing test) → GREEN (pass test) → Refactor
 Include an Approach section with strategy description and a Mermaid flowchart (flowchart LR with subgraph).
 
 ### Task List Table
-| # | Phase | Task | TDD | Status |
-|---|-------|------|-----|--------|
-| 1 | Setup | [First task] | | |
-| 2 | RED | [Write failing test] | Test | |
-| 3 | GREEN | [Implement minimal solution] | Impl | |
-| 4 | Refactor | [Polish, verify] | | |
+| # | Task | Phase | TDD | Milestone | Parallel | Status |
+|---|------|-------|-----|-----------|----------|--------|
+| 1 | [Setup task description] | Setup | | | A1 | |
+| 2 | [Write failing test] | RED | Test | | A1 | |
+| 3 | [Implement minimal solution] | GREEN | Impl | | A1 | |
+| 4 | [Add logging and observability] | Refactor | | | A1 | |
+| 5 | [Optimize configuration and error handling] | Refactor | | | A1 | |
+| 6 | [Verify milestone completion] | Verify | | milestone | A1 | |
 
 ### File Checklist Table
-| Order | File | When (TDD) |
-|-------|------|------------|
-| 1 | `path/to/File1.java` | Setup |
-| 2 | `path/to/Test.java` | RED — write first |
-| 3 | `path/to/Impl.java` | GREEN — implement |
+| Order | File |
+|-------|------|
+| 1 | `path/to/File1.java` |
+| 2 | `path/to/Test.java` |
+| 3 | `path/to/Impl.java` |
 
 ## Plan File Path
 
-`.cursor/plans/YYYY-MM-DD_<plan_name>.plan.md`
+`.cursor/plans/US-XXX-plan-analysis.plan.md`
+
+Where XXX is the user story number or identifier (e.g., `US-001-plan-analysis.plan.md`, `US-042-plan-analysis.plan.md`).
