@@ -25,6 +25,7 @@ These guidelines are built upon the following core principles:
 3. **Aggregate boundaries**: Treat one aggregate root per repository; use foreign keys between aggregates, `Set` for one-to-many inside the root, and junction/explicit entities for many-to-many—not bidirectional linked collections on both Student and Course (JPA-style).
 4. **SQL and safety**: Use `@Query` with named parameters for non-trivial SQL; avoid concatenating user input into query strings.
 5. **Transactions and performance**: Put `@Transactional` on services (`readOnly` where appropriate); rely on single-query aggregate loading instead of JPA-style N+1 patterns or manual fan-out queries across child repositories.
+6. **Explicit mapping**: Use `@Table` to name the database table when the record name differs from the table name; use `@Embedded` to inline value-object columns into the parent row without a separate table. Understand how `save()` uses `@Id` nullability to choose INSERT vs UPDATE—always use static factories for new rows and `with*` helpers for updates.
 
 ## Constraints
 
@@ -48,6 +49,13 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 5: Custom @Query usage
 - Example 6: Transaction boundaries
 - Example 7: Single-query aggregate loading
+- Example 8: @Table and @Embedded mapping annotations
+- Example 9: INSERT vs UPDATE: how save() decides
+- Example 10: @Version for optimistic locking
+- Example 11: DTO projections for read-only queries
+- Example 12: @DataJdbcTest slice tests
+- Example 13: Transaction propagation
+- Example 14: Self-invocation pitfall
 
 ### Example 1: Records as JDBC entities
 
@@ -550,13 +558,563 @@ record OrderSummary(Long orderId, java.time.LocalDateTime orderDate, java.math.B
 // @Entity class Order { @jakarta.persistence.OneToMany(fetch = jakarta.persistence.FetchType.LAZY) Set<OrderItem> items; }
 ```
 
+### Example 8: @Table and @Embedded mapping annotations
+
+Title: Name the table explicitly; inline value objects with @Embedded
+Description: Use `@Table` to declare the exact SQL table name when it does not match the record name (e.g. `Customer` vs `customers`). Use `@Embedded(onEmpty = USE_NULL)` to inline a value object's columns into the parent table, keeping a rich object model while the schema stays flat. Value objects embedded this way have no independent lifecycle and need no separate repository.
+
+**Good example:**
+
+```java
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Embedded;
+import org.springframework.data.relational.core.mapping.Table;
+
+@Table("customers")
+public record Customer(
+    @Id @Column("customer_id") Long id,
+    @Column("first_name") String firstName,
+    @Column("last_name") String lastName,
+    @Column("email_address") String email,
+    @Embedded(onEmpty = Embedded.OnEmpty.USE_NULL)
+    Address address
+) {
+    public static Customer of(String firstName, String lastName, String email, Address address) {
+        return new Customer(null, firstName, lastName, email, address);
+    }
+}
+
+// Columns street, city, postal_code live in the customers table — no join needed
+public record Address(
+    @Column("street") String street,
+    @Column("city") String city,
+    @Column("postal_code") String postalCode
+) {}
+```
+
+**Bad example:**
+
+```java
+import org.springframework.data.annotation.Id;
+
+// Missing @Table — Spring Data JDBC derives "customer" from class name;
+// breaks silently when the actual table is "customers"
+public record Customer(
+    @Id Long id,
+    String firstName,
+    String email,
+    // Storing address as a JSON blob loses SQL filterability
+    String addressJson
+) {}
+
+// Separate aggregate for Address when it has no independent lifecycle — creates
+// needless foreign-key join and an extra repository in the wrong aggregate boundary
+public record Address(@Id Long id, Long customerId, String street, String city) {}
+interface AddressRepository extends org.springframework.data.repository.CrudRepository<Address, Long> {}
+```
+
+### Example 9: INSERT vs UPDATE: how save() decides
+
+Title: Null @Id triggers INSERT; non-null @Id triggers UPDATE — use factory methods to stay explicit
+Description: Spring Data JDBC checks `isNew()`: if `@Id` is `null` it issues INSERT and returns the saved record with the database-generated id; if `@Id` is non-null it issues UPDATE. Use a static factory (`of(...)`) that leaves id as `null` for new rows. Always use `with*` helpers to carry the existing id when updating so no fields are accidentally dropped.
+
+**Good example:**
+
+```java
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.math.BigDecimal;
+
+@Table("products")
+public record Product(
+    @Id Long id,
+    String name,
+    BigDecimal price
+) {
+    public static Product of(String name, BigDecimal price) {
+        return new Product(null, name, price);  // null id → INSERT
+    }
+
+    public Product withPrice(BigDecimal newPrice) {
+        return new Product(id, name, newPrice);  // same id → UPDATE
+    }
+}
+
+@Service
+class ProductService {
+    private final ProductRepository repository;
+
+    ProductService(ProductRepository repository) { this.repository = repository; }
+
+    @Transactional
+    Product create(String name, BigDecimal price) {
+        Product saved = repository.save(Product.of(name, price));
+        // saved.id() now holds the database-generated value
+        return saved;
+    }
+
+    @Transactional
+    Product updatePrice(Long id, BigDecimal newPrice) {
+        return repository.findById(id)
+            .map(p -> p.withPrice(newPrice))
+            .map(repository::save)
+            .orElseThrow();
+    }
+}
+
+interface ProductRepository extends org.springframework.data.repository.CrudRepository<Product, Long> {}
+```
+
+**Bad example:**
+
+```java
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.math.BigDecimal;
+
+@Table("products")
+public record Product(@Id Long id, String name, BigDecimal price) {}
+
+@Service
+class ProductService {
+    private final ProductRepository repository;
+
+    ProductService(ProductRepository repository) { this.repository = repository; }
+
+    @Transactional
+    Product create(String name, BigDecimal price) {
+        // Hardcoded id=1L triggers UPDATE if a row with id=1 already exists; silent data corruption
+        return repository.save(new Product(1L, name, price));
+    }
+
+    @Transactional
+    Product updatePrice(Long id, BigDecimal newPrice) {
+        // Drops the name field; causes data loss or a NOT NULL constraint violation
+        return repository.save(new Product(id, null, newPrice));
+    }
+}
+
+interface ProductRepository extends org.springframework.data.repository.CrudRepository<Product, Long> {}
+```
+
+### Example 10: @Version for optimistic locking
+
+Title: Prevent lost updates under concurrency by adding a version field to the aggregate root
+Description: Add `@Version Long version` to the aggregate root record. Spring Data JDBC increments it on every `save` and includes a `WHERE version = ?` clause in the UPDATE. If another transaction has already committed a newer version, an `OptimisticLockingFailureException` is thrown, preventing silent lost updates without database-level locking.
+
+**Good example:**
+
+```java
+import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Table("inventory_items")
+public record InventoryItem(
+    @Id @Column("item_id") Long id,
+    String sku,
+    int quantity,
+    @Version Long version
+) {
+    public static InventoryItem of(String sku, int quantity) {
+        return new InventoryItem(null, sku, quantity, null);
+    }
+
+    public InventoryItem deduct(int amount) {
+        if (amount > quantity) throw new IllegalArgumentException("Insufficient stock for: " + sku);
+        return new InventoryItem(id, sku, quantity - amount, version);
+    }
+}
+
+@Service
+class InventoryService {
+    private final InventoryItemRepository repository;
+
+    InventoryService(InventoryItemRepository repository) { this.repository = repository; }
+
+    @Transactional
+    InventoryItem deductStock(Long itemId, int amount) {
+        return repository.findById(itemId)
+            .map(item -> item.deduct(amount))
+            .map(repository::save)  // throws OptimisticLockingFailureException on stale version
+            .orElseThrow();
+    }
+}
+
+interface InventoryItemRepository extends org.springframework.data.repository.CrudRepository<InventoryItem, Long> {}
+```
+
+**Bad example:**
+
+```java
+import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Table;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+// No @Version — two concurrent threads read quantity=10, both deduct 8,
+// both save quantity=2; net stock should be -6 but nothing throws
+@Table("inventory_items")
+public record InventoryItem(@Id Long id, String sku, int quantity) {}
+
+@Service
+class InventoryService {
+    private final InventoryItemRepository repository;
+
+    InventoryService(InventoryItemRepository repository) { this.repository = repository; }
+
+    @Transactional
+    InventoryItem deductStock(Long itemId, int amount) {
+        InventoryItem item = repository.findById(itemId).orElseThrow();
+        return repository.save(new InventoryItem(item.id(), item.sku(), item.quantity() - amount));
+    }
+}
+
+interface InventoryItemRepository extends org.springframework.data.repository.CrudRepository<InventoryItem, Long> {}
+```
+
+### Example 11: DTO projections for read-only queries
+
+Title: Map complex query results to a record DTO via rowMapperClass instead of Object[]
+Description: When a query joins multiple tables or aggregates computed columns, map results to a dedicated DTO record using `rowMapperClass` on `@Query`. This avoids the fragile `Object[]` anti-pattern and keeps the aggregate root free of reporting-only fields. The DTO record lives in the read/query side; it is never saved.
+
+**Good example:**
+
+```java
+import org.springframework.data.jdbc.repository.query.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.jdbc.core.RowMapper;
+import org.springframework.stereotype.Repository;
+import java.math.BigDecimal;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.util.List;
+
+// DTO record — separate from the aggregate root; read-only, never saved
+public record CustomerOrderSummary(
+    Long customerId,
+    String customerName,
+    long orderCount,
+    BigDecimal totalSpent
+) {}
+
+@Repository
+public interface CustomerRepository extends CrudRepository<Customer, Long> {
+
+    @Query(value = """
+        SELECT c.customer_id,
+               c.first_name || ' ' || c.last_name AS customer_name,
+               COUNT(o.order_id)                   AS order_count,
+               COALESCE(SUM(o.total_amount), 0)    AS total_spent
+        FROM customers c
+        LEFT JOIN orders o ON c.customer_id = o.customer_id
+        WHERE c.created_at >= :since
+        GROUP BY c.customer_id, c.first_name, c.last_name
+        ORDER BY total_spent DESC
+        """,
+        rowMapperClass = CustomerOrderSummaryMapper.class)
+    List<CustomerOrderSummary> findTopCustomerSummaries(@Param("since") LocalDate since);
+}
+
+class CustomerOrderSummaryMapper implements RowMapper<CustomerOrderSummary> {
+    @Override
+    public CustomerOrderSummary mapRow(ResultSet rs, int rowNum) throws SQLException {
+        return new CustomerOrderSummary(
+            rs.getLong("customer_id"),
+            rs.getString("customer_name"),
+            rs.getLong("order_count"),
+            rs.getBigDecimal("total_spent")
+        );
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import org.springframework.data.jdbc.repository.query.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import java.time.LocalDate;
+import java.util.List;
+
+// Object[] — column order is an implicit contract; breaks silently when the query changes
+public interface CustomerRepository extends CrudRepository<Customer, Long> {
+
+    @Query("""
+        SELECT c.customer_id, c.first_name || ' ' || c.last_name,
+               COUNT(o.order_id), COALESCE(SUM(o.total_amount), 0)
+        FROM customers c
+        LEFT JOIN orders o ON c.customer_id = o.customer_id
+        WHERE c.created_at >= :since
+        GROUP BY c.customer_id, c.first_name, c.last_name
+        """)
+    List<Object[]> findTopCustomers(@Param("since") LocalDate since);
+    // caller: (Long) row[0], (String) row[1] — fragile position-based access
+}
+```
+
+### Example 12: @DataJdbcTest slice tests
+
+Title: Test repositories in isolation — no web layer, no service beans
+Description: Use `@DataJdbcTest` to spin up only the JDBC slice: the `DataSource`, `JdbcTemplate`, and Spring Data JDBC repositories. Seed fixtures with `@Sql`. Never mock the repository inside this test — the entire point is to exercise real SQL against an embedded database, verifying derived queries, `@Query` statements, and aggregate loading.
+
+**Good example:**
+
+```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
+import org.springframework.test.context.jdbc.Sql;
+import java.util.List;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@DataJdbcTest
+@Sql("/sql/customer-test-data.sql")
+class CustomerRepositoryTest {
+
+    @Autowired
+    CustomerRepository customerRepository;
+
+    @Test
+    void findByEmail_returnsCustomer_whenEmailExists() {
+        Optional<Customer> result = customerRepository.findByEmail("alice@example.com");
+
+        assertThat(result).isPresent();
+        assertThat(result.get().firstName()).isEqualTo("Alice");
+    }
+
+    @Test
+    void save_generatesId_forNewRecord() {
+        Customer saved = customerRepository.save(Customer.of("Bob", "Smith", "bob@example.com"));
+
+        assertThat(saved.id()).isNotNull();
+    }
+
+    @Test
+    void findByLastName_returnsAllMatches() {
+        List<Customer> customers = customerRepository.findByLastName("Smith");
+
+        assertThat(customers).hasSize(2);
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
+// @SpringBootTest loads the full context — web layer, security, services — far too heavy for a repository test
+@SpringBootTest
+class CustomerRepositoryTest {
+
+    @Autowired
+    CustomerRepository customerRepository;
+
+    @Test
+    void findsNothing_becauseMockIsUsed() {
+        // Anti-pattern: mocking the very repository being tested adds no value;
+        // it only verifies Mockito wiring, not SQL correctness
+        CustomerRepository mockRepo = mock(CustomerRepository.class);
+        when(mockRepo.findByEmail("x@example.com")).thenReturn(java.util.Optional.empty());
+        assertThat(mockRepo.findByEmail("x@example.com")).isEmpty();
+    }
+}
+```
+
+### Example 13: Transaction propagation
+
+Title: REQUIRES_NEW for independent audit writes; MANDATORY to enforce caller contract
+Description: The default propagation `REQUIRED` joins an existing transaction or starts a new one. Use `REQUIRES_NEW` when an operation must commit independently — such as audit logging — so it persists even if the outer transaction rolls back. Use `MANDATORY` to assert that a transaction must already exist, failing fast when called without one.
+
+**Good example:**
+
+```java
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.Optional;
+
+public record AuditLog(@org.springframework.data.annotation.Id Long id, String action, long entityId) {
+    static AuditLog of(String action, long entityId) { return new AuditLog(null, action, entityId); }
+}
+
+interface AuditLogRepository extends org.springframework.data.repository.CrudRepository<AuditLog, Long> {}
+
+@Service
+class AuditService {
+
+    private final AuditLogRepository auditLogRepository;
+
+    AuditService(AuditLogRepository auditLogRepository) {
+        this.auditLogRepository = auditLogRepository;
+    }
+
+    // REQUIRES_NEW: always commits audit entry in its own transaction,
+    // even if the caller's transaction is rolled back
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public void record(String action, long entityId) {
+        auditLogRepository.save(AuditLog.of(action, entityId));
+    }
+}
+
+@Service
+@Transactional(readOnly = true)
+class OrderService {
+
+    private final OrderRepository orderRepository;
+    private final AuditService auditService;
+
+    OrderService(OrderRepository orderRepository, AuditService auditService) {
+        this.orderRepository = orderRepository;
+        this.auditService = auditService;
+    }
+
+    @Transactional
+    void cancelOrder(Long orderId) {
+        orderRepository.findById(orderId)
+            .map(Order::cancel)
+            .map(orderRepository::save)
+            .orElseThrow();
+        auditService.record("order-cancelled", orderId); // commits in its own independent tx
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+class AuditService {
+
+    private final AuditLogRepository auditLogRepository;
+
+    AuditService(AuditLogRepository auditLogRepository) {
+        this.auditLogRepository = auditLogRepository;
+    }
+
+    // Bad: default REQUIRED joins the caller's transaction —
+    // if cancelOrder rolls back, the audit entry is also lost
+    @Transactional
+    void record(String action, long entityId) {
+        auditLogRepository.save(AuditLog.of(action, entityId));
+    }
+}
+```
+
+### Example 14: Self-invocation pitfall
+
+Title: Calling @Transactional from within the same bean bypasses the proxy
+Description: Spring applies `@Transactional` through a proxy. Calling a `@Transactional` method via `this.method()` within the same bean bypasses the proxy — no new transaction is opened and no propagation rule is applied. Extract the method to a separate Spring-managed bean to guarantee proxy interception.
+
+**Good example:**
+
+```java
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+// Separate bean — proxy is intercepted correctly
+@Service
+class CustomerEmailService {
+
+    private final CustomerRepository customerRepository;
+
+    CustomerEmailService(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
+
+    @Transactional
+    public void updateEmail(Long customerId, String newEmail) {
+        customerRepository.findById(customerId)
+            .map(c -> c.withEmail(newEmail))
+            .map(customerRepository::save)
+            .orElseThrow();
+    }
+}
+
+@Service
+@Transactional(readOnly = true)
+class CustomerService {
+
+    private final CustomerRepository customerRepository;
+    private final CustomerEmailService customerEmailService;
+
+    CustomerService(CustomerRepository customerRepository,
+                    CustomerEmailService customerEmailService) {
+        this.customerRepository = customerRepository;
+        this.customerEmailService = customerEmailService;
+    }
+
+    @Transactional
+    void onboardCustomer(String firstName, String lastName, String email) {
+        Customer c = customerRepository.save(Customer.of(firstName, lastName, email));
+        customerEmailService.updateEmail(c.id(), email); // proxy intercepted — correct
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+@Service
+@Transactional(readOnly = true)
+class CustomerService {
+
+    private final CustomerRepository customerRepository;
+
+    CustomerService(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
+
+    @Transactional
+    void onboardCustomer(String firstName, String lastName, String email) {
+        Customer c = customerRepository.save(Customer.of(firstName, lastName, email));
+        this.updateEmail(c.id(), email); // Bad: self-invocation — proxy bypassed, no transaction opened
+    }
+
+    @Transactional
+    void updateEmail(Long customerId, String newEmail) {
+        customerRepository.findById(customerId)
+            .map(cu -> cu.withEmail(newEmail))
+            .map(customerRepository::save)
+            .orElseThrow();
+    }
+}
+```
+
 ## Output Format
 
 - **ANALYZE** persistence code: record/entity mapping, repository APIs, aggregate shape, `@Query` safety, transaction placement, and load patterns (single query vs extra round-trips)
 - **CATEGORIZE** issues by impact (CORRECTNESS, PERFORMANCE, MAINTAINABILITY) and by layer (entity mapping, repository, service/transaction, aggregate design)
 - **APPLY** Spring Data JDBC–aligned fixes: add `@Column`/`@Id`, narrow repositories, introduce `with*` updates, reshape aggregates and FKs, parameterize SQL, move `@Transactional` to services with `readOnly` where fit
 - **IMPLEMENT** changes so schema, aggregates, and tests stay consistent; prefer migrations and integration tests for repository behavior
-- **EXPLAIN** trade-offs (aggregate size vs query size, explicit SQL vs derived queries)
+- **EXPLAIN** trade-offs (aggregate size vs query size, explicit SQL vs derived queries, `@Embedded` vs FK reference)
+- **TEST** repository behavior with `@DataJdbcTest` slices seeded via `@Sql`; never mock repositories inside persistence tests
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
 
 ## Safeguards
@@ -567,3 +1125,6 @@ record OrderSummary(Long orderId, java.time.LocalDateTime orderDate, java.math.B
 - **SQL INJECTION**: Never concatenate user input into `@Query` strings; use parameters
 - **INCREMENTAL SAFETY**: Change one aggregate or repository surface at a time when possible
 - **SAFETY PROTOCOL**: Stop if compilation or data tests fail after edits
+- **ROLLBACK RULES**: Default `@Transactional` does not roll back on checked exceptions — declare `rollbackFor` explicitly when checked exceptions must abort the transaction
+- **PROPAGATION**: Use `Propagation.REQUIRES_NEW` for operations that must commit independently (e.g. audit logs) regardless of the outer transaction outcome
+- **SELF-INVOCATION**: Never call a `@Transactional` method via `this.method()` inside the same bean — the Spring proxy is bypassed; extract to a separate Spring-managed bean

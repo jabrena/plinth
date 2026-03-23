@@ -1,6 +1,6 @@
 ---
 name: 301-frameworks-spring-boot-core
-description: Use when you need to review, improve, or build Spring Boot applications — including proper usage of @SpringBootApplication, component annotations (@Controller, @Service, @Repository), bean definition and scoping, configuration classes and @ConfigurationProperties, component scanning, conditional configuration and profiles, constructor injection, bean minimization, and scheduled tasks.
+description: Use when you need to review, improve, or build Spring Boot 4.0.x applications — including proper usage of @SpringBootApplication, component annotations (@Controller, @Service, @Repository), bean definition and scoping, configuration classes and @ConfigurationProperties (with @Validated), component scanning, conditional configuration and profiles, constructor injection, @Primary and @Qualifier for multiple beans of the same type, bean minimization, graceful shutdown, virtual threads, Jakarta EE namespace consistency, scheduled tasks, and @TestConfiguration.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -24,7 +24,9 @@ These guidelines are built upon the following core principles:
 2. **IoC and testability**: Prefer constructor injection, immutable dependencies where possible, and explicit bean definitions (`@Bean`, scope, lifecycle) over field injection and implicit wiring.
 3. **Configuration**: Externalize settings with `@ConfigurationProperties`, validate and bind structured properties, and keep secrets and environment-specific code out of business services.
 4. **Environment awareness**: Model differences with `@Profile`, `@ConditionalOn*`, and feature flags instead of `if (env)` scattered across domain code.
-5. **Operational quality**: Right-size the bean graph (composition over micro-beans), configure `TaskScheduler` / async execution for scheduled work, and observe failures without breaking the scheduler.
+5. **Operational quality**: Right-size the bean graph (composition over micro-beans), configure `TaskScheduler` / async execution for scheduled work, observe failures without breaking the scheduler, enable graceful shutdown so in-flight work can finish, and use virtual threads on supported stacks when concurrency-bound.
+6. **Disambiguation and validation**: Use `@Primary` and `@Qualifier` when several beans share a type; put `@Validated` on `@ConfigurationProperties` types so invalid config fails fast at startup.
+7. **Namespace consistency (Boot 4)**: Prefer `jakarta.*` for Jakarta EE APIs (validation, persistence, servlet, annotation, inject); keep JDK types such as `javax.sql.DataSource` as-is; avoid mixing legacy `javax.annotation` / `javax.validation` imports with Spring Boot 4.
 
 ## Constraints
 
@@ -50,6 +52,12 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 7: Constructor dependency injection
 - Example 8: Bean minimization and composition
 - Example 9: Scheduled tasks and async execution
+- Example 10: Multiple beans of the same type — @Primary and @Qualifier
+- Example 11: Validating configuration — @Validated on @ConfigurationProperties
+- Example 12: Graceful shutdown
+- Example 13: Virtual threads (Spring Boot 4.0.x)
+- Example 14: javax vs jakarta consistency (Spring Boot 4.0.x)
+- Example 15: Test-specific beans and configuration
 
 ### Example 1: Spring Boot main application class
 
@@ -136,7 +144,7 @@ class App {
 ### Example 2: Layer stereotype annotations
 
 Title: Match @RestController, @Service, and @Repository to responsibilities
-Description: Use web stereotypes for HTTP adapters, `@Service` for transactional application logic, and `@Repository` (often Spring Data) for persistence. Avoid generic `@Component` when a more specific stereotype communicates intent.
+Description: Use web stereotypes for HTTP adapters, `@Service` for transactional application logic, and `@Repository` (often Spring Data) for persistence. Avoid generic `@Component` when a more specific stereotype communicates intent. Note: `@Transactional` works through Spring's proxy, so a method that calls another `@Transactional` method **on the same instance** (`this.method()`) bypasses the proxy entirely — the inner transaction boundary is silently ignored. Extract the called method into a separate bean if you need a real nested transaction.
 
 **Good example:**
 
@@ -208,6 +216,7 @@ class User {
 
 ```java
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 // Too generic; should be @RestController for HTTP API
 @Component
@@ -223,6 +232,27 @@ class UserService { }
 // Should be @Repository / Spring Data, not a generic component
 @Component
 class UserRepository { }
+
+// @Transactional self-invocation trap: calling this.processInternal() below goes
+// directly to the method — Spring's proxy is bypassed, so the inner @Transactional
+// has no effect; processInternal runs in the SAME transaction as the outer call
+// (or no transaction at all if the outer call is not transactional)
+@org.springframework.stereotype.Service
+class OrderService {
+
+    @Transactional
+    public void placeOrder(String orderId) {
+        validateOrder(orderId);
+        this.processInternal(orderId); // proxy bypassed — inner @Transactional is ignored
+    }
+
+    @Transactional(propagation = org.springframework.transaction.annotation.Propagation.REQUIRES_NEW)
+    public void processInternal(String orderId) {
+        // intended to run in a new transaction, but self-invocation prevents this
+    }
+
+    private void validateOrder(String orderId) { }
+}
 ```
 
 ### Example 3: Bean definition, scoping, and lifecycle
@@ -233,7 +263,10 @@ Description: Define `@Bean` methods with appropriate scope (singleton vs prototy
 **Good example:**
 
 ```java
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Scope;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -246,13 +279,13 @@ import jakarta.annotation.PreDestroy;
 class AppConfig {
 
     @Bean
-    @Scope(ConfigurableBeanFactory.SCOPE_SINGLETON)
+    // Singleton is the default scope — no annotation needed unless you are overriding another scope
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
     @Bean
-    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
+    @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)  // Non-default: a new instance per injection point
     AuditLogger auditLogger() {
         return new AuditLogger();
     }
@@ -350,6 +383,10 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.cache.CacheManager;
+import org.springframework.validation.annotation.Validated;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
 import javax.sql.DataSource;
 import java.time.Duration;
 import com.zaxxer.hikari.HikariConfig;
@@ -366,12 +403,13 @@ class AppConfig {
     }
 }
 
+@Validated
 @ConfigurationProperties(prefix = "app.database")
 record DatabaseProperties(
-    String url,
-    String username,
-    int maxConnections,
-    Duration connectionTimeout
+    @NotBlank String url,
+    @NotBlank String username,
+    @Min(1) int maxConnections,
+    @Positive Duration connectionTimeout
 ) {}
 
 @Configuration
@@ -422,34 +460,42 @@ class AppConfig {
 
 ### Example 5: Component scanning and package layout
 
-Title: Keep base packages focused and structure code by layer or feature
-Description: Prefer a clear package hierarchy under your application root; use `scanBasePackages` / `@ComponentScan` with explicit packages rather than scanning huge prefixes like `"com"`. Name beans explicitly when multiple implementations exist.
+Title: Rely on default scanning within the application package; override only when you have a genuine reason
+Description: `@SpringBootApplication` already enables `@ComponentScan` for the package of the main class and all sub-packages. Adding explicit `@ComponentScan` on the same class is redundant unless your main class sits outside the package tree you want to scan (e.g. it is in a shared launcher module), or you need to pull in components from an additional library package. When you do override scanning, list precise packages rather than broad prefixes like `"com"`.
 
 **Good example:**
 
 ```java
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
-import org.springframework.stereotype.Component;
 
+// Main class IS inside com.company.app — default scan covers all sub-packages automatically
+// No @ComponentScan needed
 @SpringBootApplication
-@ComponentScan(basePackages = {
-    "com.company.app.controller",
-    "com.company.app.service",
-    "com.company.app.repository",
-    "com.company.app.config"
-})
-@EnableJdbcRepositories("com.company.app.repository")
-class Application {
+public class Application {
 
     public static void main(String[] args) {
-        org.springframework.boot.SpringApplication.run(Application.class, args);
+        SpringApplication.run(Application.class, args);
     }
 }
 
-@Component("userService")
-class UserService { }
+// Only add @ComponentScan when the main class lives outside the scanned package tree,
+// or when you need to include components from a separate library module
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jdbc.repository.config.EnableJdbcRepositories;
+
+@SpringBootApplication
+@ComponentScan(basePackages = {
+    "com.company.app",
+    "com.company.shared.validation"   // external library package, not under com.company.app
+})
+@EnableJdbcRepositories("com.company.app.repository")
+class ApplicationWithExternalScan {
+
+    public static void main(String[] args) {
+        SpringApplication.run(ApplicationWithExternalScan.class, args);
+    }
+}
 ```
 
 **Bad example:**
@@ -459,6 +505,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.stereotype.Component;
 
+// Scanning "com" is dangerously broad: it picks up every @Component in every library
+// on the classpath whose root package starts with "com"
 @SpringBootApplication
 @ComponentScan("com")
 class Application {
@@ -468,10 +516,24 @@ class Application {
     }
 }
 
+// Redundant and noisy: duplicating what @SpringBootApplication already does
+@SpringBootApplication
+@ComponentScan(basePackages = {
+    "com.company.app.controller",
+    "com.company.app.service",
+    "com.company.app.repository"
+})
+class RedundantScanApplication {
+
+    public static void main(String[] args) {
+        org.springframework.boot.SpringApplication.run(RedundantScanApplication.class, args);
+    }
+}
+
 @Component
 class UserService {
     void handleUser() { }
-    void sendEmail() { }
+    void sendEmail() { }     // unrelated concerns — violates Single Responsibility
     void generateReport() { }
 }
 ```
@@ -716,12 +778,17 @@ import java.util.List;
 class UserManagementService {
 
     private final UserRepository userRepository;
-    private final UserValidator userValidator = new UserValidator();
+    private final UserValidator userValidator;
     private final UserNotificationService notifications;
 
-    UserManagementService(UserRepository userRepository) {
+    // All collaborators injected — each can be replaced in tests without reflection
+    UserManagementService(
+            UserRepository userRepository,
+            UserValidator userValidator,
+            UserNotificationService notifications) {
         this.userRepository = userRepository;
-        this.notifications = new UserNotificationService();
+        this.userValidator = userValidator;
+        this.notifications = notifications;
     }
 
     User createUser(CreateUserRequest request) {
@@ -763,8 +830,8 @@ class ApplicationProperties {
 record CreateUserRequest(String email) {}
 class User { User(String email) { } }
 interface UserRepository { User save(User u); }
-class UserValidator { void validate(CreateUserRequest r) { } }
-class UserNotificationService { }
+@org.springframework.stereotype.Component class UserValidator { void validate(CreateUserRequest r) { } }
+@org.springframework.stereotype.Service class UserNotificationService { }
 interface NotificationChannel { }
 class EmailChannel implements NotificationChannel { }
 class SmsChannel implements NotificationChannel { }
@@ -947,11 +1014,364 @@ interface UserRepository {
 }
 ```
 
+### Example 10: Multiple beans of the same type — @Primary and @Qualifier
+
+Title: Disambiguate implementations when several beans share an injection type
+Description: When you register more than one bean of the same type (e.g. two `NotificationSender` implementations), mark the default with `@Primary` or inject by name using `@Qualifier` (or a custom qualifier annotation). Prefer constructor parameters with explicit `@Qualifier` over field injection. Avoid leaving multiple candidates with no `@Primary` and no qualifier — the context will fail to resolve the dependency or pick the wrong bean.
+
+**Good example:**
+
+```java
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.stereotype.Service;
+
+@Configuration
+class NotificationConfig {
+
+    @Bean
+    @Primary
+    LoggingNotificationSender loggingNotificationSender() {
+        return new LoggingNotificationSender();
+    }
+
+    @Bean
+    @Qualifier("metrics")
+    MetricsNotificationSender metricsNotificationSender() {
+        return new MetricsNotificationSender();
+    }
+}
+
+@Service
+class AlertService {
+
+    private final NotificationSender defaultSender;
+    private final NotificationSender metricsSender;
+
+    AlertService(
+            NotificationSender defaultSender,
+            @Qualifier("metrics") NotificationSender metricsSender) {
+        this.defaultSender = defaultSender;
+        this.metricsSender = metricsSender;
+    }
+}
+
+interface NotificationSender {
+    void send(String message);
+}
+
+class LoggingNotificationSender implements NotificationSender {
+    public void send(String message) { }
+}
+
+class MetricsNotificationSender implements NotificationSender {
+    public void send(String message) { }
+}
+```
+
+**Bad example:**
+
+```java
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
+
+@Configuration
+class NotificationConfig {
+
+    @Bean
+    EmailNotificationSender emailSender() {
+        return new EmailNotificationSender();
+    }
+
+    @Bean
+    SmsNotificationSender smsSender() {
+        return new SmsNotificationSender();
+    }
+}
+
+@Service
+class AlertService {
+
+    private final NotificationSender sender;
+
+    // Ambiguous: two NotificationSender beans, no @Primary / @Qualifier — fails at runtime
+    AlertService(NotificationSender sender) {
+        this.sender = sender;
+    }
+}
+
+interface NotificationSender { void send(String m); }
+class EmailNotificationSender implements NotificationSender { public void send(String m) { } }
+class SmsNotificationSender implements NotificationSender { public void send(String m) { } }
+```
+
+### Example 11: Validating configuration — @Validated on @ConfigurationProperties
+
+Title: Fail fast at startup when required properties are missing or invalid
+Description: Annotate `@ConfigurationProperties` types with `@Validated` and use Jakarta Bean Validation constraints (`@NotBlank`, `@Min`, `@NotNull`, etc.) on fields or record components. Register the properties type with `@EnableConfigurationProperties` or `@ConfigurationPropertiesScan`. This surfaces binding errors during context startup instead of after the app is running.
+
+**Good example:**
+
+```java
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.annotation.Validated;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+
+@Configuration
+@EnableConfigurationProperties(ApiClientProperties.class)
+class PropertiesConfig {
+}
+
+@Validated
+@ConfigurationProperties(prefix = "app.api.client")
+public record ApiClientProperties(
+    @NotBlank String baseUrl,
+    @Min(1) @Max(600) int connectTimeoutSeconds
+) {
+}
+```
+
+**Bad example:**
+
+```java
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@EnableConfigurationProperties(ApiClientProperties.class)
+class PropertiesConfig {
+}
+
+@ConfigurationProperties(prefix = "app.api.client")
+public record ApiClientProperties(
+    String baseUrl,
+    int connectTimeoutSeconds
+) {
+}
+
+// No @Validated / no constraints: empty baseUrl and negative timeouts can slip through until runtime
+```
+
+### Example 12: Graceful shutdown
+
+Title: Let web requests and scheduled work finish during termination
+Description: Enable graceful shutdown so the embedded server stops accepting new work and allows in-flight requests to complete. Set `spring.lifecycle.timeout-per-shutdown-phase` to a value that fits your longest tasks. Align with schedulers: use `TaskScheduler.setWaitForTasksToCompleteOnShutdown(true)` (and a reasonable pool shutdown) so scheduled jobs are not cut off abruptly. Prefer this over immediate `SIGKILL` or default instant shutdown in production.
+
+**Good example:**
+
+```text
+# application.yml (Spring Boot 4.0.x)
+server:
+  shutdown: graceful
+
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 30s
+
+# Align schedulers with graceful shutdown (Java)
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
+
+@Configuration
+class GracefulSchedulingConfig {
+
+    @Bean
+    TaskScheduler taskScheduler() {
+        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
+        scheduler.setPoolSize(4);
+        scheduler.setWaitForTasksToCompleteOnShutdown(true);
+        scheduler.setAwaitTerminationSeconds(20);
+        scheduler.initialize();
+        return scheduler;
+    }
+}
+```
+
+**Bad example:**
+
+```yaml
+# Immediate shutdown: in-flight HTTP and scheduled work may be cut off
+server:
+  shutdown: immediate
+
+spring:
+  lifecycle:
+    timeout-per-shutdown-phase: 1s
+```
+
+### Example 13: Virtual threads (Spring Boot 4.0.x)
+
+Title: Use platform virtual threads for servlet and common task execution on Java 21+
+Description: On **Java 21+**, Spring Boot 4.0.x enables **virtual threads** for servlet request handling and related executor-backed work via `spring.threads.virtual.enabled=true`. This helps when the workload is blocked on I/O rather than CPU. Verify behavior under load; not every workload benefits, and native image / some integrations may need extra validation.
+
+**Good example:**
+
+```yaml
+# Requires Java 21+ and Spring Boot 4.0.x
+spring:
+  threads:
+    virtual:
+      enabled: true
+```
+
+**Bad example:**
+
+```java
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
+import org.springframework.core.task.TaskExecutor;
+
+// application.yml has spring.threads.virtual.enabled=true, so Boot already wraps
+// the servlet container and common executors with virtual threads.
+// Creating a fixed-size platform-thread pool on top of that produces a
+// pool-within-pool anti-pattern: virtual threads block waiting for a platform thread,
+// eliminating the scalability benefit of virtual threads entirely.
+@Configuration
+class BadExecutorConfig {
+
+    @Bean
+    TaskExecutor requestExecutor() {
+        ThreadPoolTaskExecutor executor = new ThreadPoolTaskExecutor();
+        executor.setCorePoolSize(50);    // platform-thread pool wrapping virtual threads
+        executor.setMaxPoolSize(200);
+        executor.initialize();
+        return executor;
+    }
+}
+```
+
+### Example 14: javax vs jakarta consistency (Spring Boot 4.0.x)
+
+Title: Use jakarta.* for Jakarta EE APIs; keep javax.sql and other JDK javax types
+Description: **Spring Boot 4.0.x** targets **Jakarta EE 9+** namespaces. Use `jakarta.annotation.PostConstruct`, `jakarta.validation.constraints.*`, `jakarta.persistence.*`, `jakarta.servlet.*`, and `jakarta.inject.Inject` as appropriate. **Do not** import `javax.annotation`, `javax.validation`, or `javax.persistence` for new code — those packages belong to the older Java EE stack and conflict with Boot 4 dependencies. **Exception:** JDK and JDBC types such as `javax.sql.DataSource` remain under `javax.sql` (they are not migrated to `jakarta`). Consistent imports avoid subtle compile errors and duplicate API classes on the classpath.
+
+**Good example:**
+
+```java
+import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import jakarta.validation.constraints.NotBlank;
+import javax.sql.DataSource;
+
+class ExampleBean {
+
+    private final DataSource dataSource;
+
+    ExampleBean(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    @PostConstruct
+    void init() { }
+
+    @PreDestroy
+    void cleanup() { }
+}
+
+record ValidatedInput(@NotBlank String value) { }
+```
+
+**Bad example:**
+
+```java
+// Mixing legacy javax.* EE imports with Spring Boot 4 — wrong API on the classpath
+import javax.annotation.PostConstruct;
+import javax.validation.constraints.NotBlank;
+import javax.sql.DataSource;
+
+class BrokenBean {
+
+    private final DataSource dataSource;
+
+    BrokenBean(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    @PostConstruct
+    void init() { }
+}
+```
+
+### Example 15: Test-specific beans and configuration
+
+Title: Use @TestConfiguration to isolate test doubles and avoid polluting the production context
+Description: When defining beans exclusively for testing (like stubs, fakes, or custom test setup), place them in `src/test/java` and annotate the class with `@TestConfiguration`. Unlike standard `@Configuration`, `@TestConfiguration` is intentionally excluded from component scanning, ensuring it only applies when explicitly imported via `@Import` or nested inside a test class. Avoid putting test beans in `src/main/java` behind `@Profile("test")`.
+
+**Good example:**
+
+```java
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+
+@TestConfiguration
+class ExternalServiceTestConfig {
+
+    @Bean
+    @Primary
+    ExternalServiceClient fakeExternalServiceClient() {
+        return new FakeExternalServiceClient();
+    }
+}
+
+// Usage in test:
+// @org.springframework.boot.test.context.SpringBootTest
+// @org.springframework.context.annotation.Import(ExternalServiceTestConfig.class)
+// class MyIntegrationTest { ... }
+
+interface ExternalServiceClient { }
+class FakeExternalServiceClient implements ExternalServiceClient { }
+```
+
+**Bad example:**
+
+```java
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
+// Anti-pattern 1: Standard @Configuration in src/test/java
+// If component scanning accidentally reaches this package, it might override production beans
+@Configuration
+class BadTestConfig {
+    @Bean
+    ExternalServiceClient mockClient() {
+        return new MockExternalServiceClient();
+    }
+}
+
+// Anti-pattern 2: Test beans in src/main/java hidden behind a profile
+// Pollutes production classpath with test dependencies and logic
+@Configuration
+@Profile("test")
+class ProductionPollutingTestConfig {
+    @Bean
+    ExternalServiceClient testClient() {
+        return new FakeExternalServiceClient();
+    }
+}
+
+interface ExternalServiceClient { }
+class MockExternalServiceClient implements ExternalServiceClient { }
+class FakeExternalServiceClient implements ExternalServiceClient { }
+```
+
 ## Output Format
 
-- **ANALYZE** the Spring Boot codebase for core concerns: main class setup, stereotype usage, bean definitions and scopes, configuration properties, component scanning, profiles and conditionals, injection style, bean granularity, and scheduling/async configuration
-- **CATEGORIZE** findings by impact (CRITICAL, MAINTAINABILITY, OPERATIONAL) and area (entry point, stereotypes, IoC, configuration, environment, scheduling)
-- **APPLY** improvements aligned with these guidelines: fix main class and scanning, use layer-appropriate annotations, consolidate configuration with `@ConfigurationProperties`, replace manual env branching with `@Profile` / `@Conditional*`, migrate to constructor injection, reduce unnecessary beans through composition, and harden schedulers with pools and error handling
+- **ANALYZE** the Spring Boot codebase for core concerns: main class setup, stereotype usage, bean definitions and scopes, configuration properties (including `@Validated`), component scanning, profiles and conditionals, injection style, `@Primary` / `@Qualifier` usage, bean granularity, scheduling/async configuration, graceful shutdown settings, virtual-thread enablement where applicable, jakarta vs javax import consistency, and test configuration isolation
+- **CATEGORIZE** findings by impact (CRITICAL, MAINTAINABILITY, OPERATIONAL) and area (entry point, stereotypes, IoC, configuration, environment, scheduling, shutdown, testing)
+- **APPLY** improvements aligned with these guidelines: fix main class and scanning, use layer-appropriate annotations, consolidate configuration with `@ConfigurationProperties` and validation, replace manual env branching with `@Profile` / `@Conditional*`, disambiguate multiple beans with `@Primary` / `@Qualifier`, migrate to constructor injection, reduce unnecessary beans through composition, align imports with Boot 4.0.x Jakarta namespaces, tune graceful shutdown and scheduler shutdown, harden schedulers with pools and error handling, and isolate test beans with `@TestConfiguration`
 - **IMPLEMENT** changes incrementally with compiling steps: prefer small edits that preserve behavior, then run tests; document notable trade-offs (e.g., profile splits, feature flags)
 - **EXPLAIN** what changed and why: clearer structure, safer configuration, better testability, or more predictable scheduling
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits
@@ -964,4 +1384,6 @@ interface UserRepository {
 - **SAFETY PROTOCOL**: If ANY compilation error occurs, cease recommendations and require user intervention
 - **CONFIGURATION SAFETY**: Do not commit secrets; prefer externalized config and environment variables for sensitive values
 - **SCHEDULING SAFETY**: Changing thread pools or `@Scheduled` methods can alter load and ordering — validate under realistic profiles
+- **SHUTDOWN SAFETY**: Graceful shutdown and lifecycle timeouts must align with longest-running requests and scheduled tasks — avoid timeouts shorter than critical work
+- **VIRTUAL THREADS**: Requires Java 21+ and Spring Boot 4.0.x; re-test concurrency and third-party libraries after enabling
 - **INCREMENTAL SAFETY**: Apply core container and configuration changes in small steps with verification between steps

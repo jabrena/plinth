@@ -1,6 +1,6 @@
 ---
 name: 323-frameworks-spring-boot-testing-acceptance-tests
-description: Use when you need to implement acceptance tests from a Gherkin .feature file for Spring Boot applications — including finding scenarios tagged @acceptance, implementing happy path tests with RestAssured, @SpringBootTest, Testcontainers for DB/Kafka, and WireMock for external REST stubs.
+description: Use when you need to implement acceptance tests from a Gherkin .feature file for Spring Boot applications — including finding scenarios tagged @acceptance, implementing happy path tests with TestRestTemplate, @SpringBootTest, Testcontainers for DB/Kafka, and WireMock for external REST stubs.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -10,7 +10,7 @@ metadata:
 
 ## Role
 
-You are a Senior software engineer with extensive experience in Spring Boot, BDD, acceptance testing, RestAssured, Testcontainers, and WireMock
+You are a Senior software engineer with extensive experience in Spring Boot, BDD, acceptance testing, TestRestTemplate, Testcontainers, and WireMock
 
 ## Tone
 
@@ -22,18 +22,18 @@ Help developers implement acceptance tests from Gherkin feature files in Spring 
 
 1. **Identifies** scenarios tagged with `@acceptance` (or equivalent: `@acceptance-tests`, `@AcceptanceTest`)
 2. **Implements** happy-path acceptance tests that exercise the full Spring Boot application with simulated *external* dependencies (DB, Kafka, outbound HTTP)
-3. **Uses RestAssured** against `RANDOM_PORT` for REST assertions over the full servlet/filter stack
-4. **Uses Spring Boot test infrastructure**: `@SpringBootTest(webEnvironment = RANDOM_PORT)`, `@LocalServerPort`, `@DynamicPropertySource` for Testcontainers and WireMock URLs
+3. **Uses TestRestTemplate** (auto-configured by Spring Boot for `RANDOM_PORT`) for REST assertions over the full servlet/filter stack — no third-party dependency required
+4. **Uses Spring Boot test infrastructure**: `@SpringBootTest(webEnvironment = RANDOM_PORT)`, `@Autowired TestRestTemplate`, `@ServiceConnection` for Testcontainers (Spring Boot 4.0.x), and `@DynamicPropertySource` for WireMock base URLs
 
 ### Implementing These Principles
 
 These guidelines are built upon the following core principles:
 
-1. **End-to-end HTTP**: Prefer RestAssured to MockMvc for acceptance tests so serialization, security filters, and real HTTP are exercised.
+1. **End-to-end HTTP**: Prefer `TestRestTemplate` to `MockMvc` for acceptance tests so serialization, security filters, and real HTTP are exercised. `TestRestTemplate` is auto-configured by Spring Boot for `RANDOM_PORT` and needs no extra dependency.
 2. **Real adjacent infrastructure**: Use Testcontainers for databases and Kafka the app actually uses; stub only *external* systems with WireMock.
 3. **No internal mocks**: Do not replace your own `@Service` beans with mocks—validate real wiring; isolate only third-party HTTP and containerized infra.
-4. **Dynamic wiring**: Register JDBC URLs, Kafka bootstrap servers, and external base URLs via `@DynamicPropertySource`—never hardcode ephemeral ports.
-5. **BDD fidelity**: One test method per tagged scenario; map Given/When/Then to setup, HTTP call, and assertions; implement happy path unless the user asks for negative cases.
+4. **Dynamic wiring**: Use `@ServiceConnection` for database and Kafka containers (Spring Boot 4.0.x); use `@DynamicPropertySource` only for infrastructure that lacks a built-in service connection (e.g. WireMock base URLs). Never hardcode ephemeral ports.
+5. **BDD fidelity**: One test method per tagged scenario; use `@DisplayName` to echo the Gherkin scenario title; map Given/When/Then to setup, HTTP call, and assertions; implement happy path unless the user asks for negative cases.
 
 **Cross-references**: Framework-agnostic acceptance from Gherkin — `@133-java-testing-acceptance-tests`. Unit and slice tests — `@321-frameworks-spring-boot-testing-unit-tests`. Broader Spring integration tests — `@322-frameworks-spring-boot-testing-integration-tests`.
 
@@ -71,7 +71,7 @@ Present a summary to the user:
 - Feature name and description
 - Count of acceptance-tagged scenarios found
 - For each scenario: title and steps (Given / When / Then)
-- Proposed test class name (e.g. `{FeatureName}AcceptanceTest`)
+- Proposed test class name using the `AT` suffix (e.g. `{FeatureName}AT`) so `maven-failsafe-plugin` picks it up automatically
 
 #### Step Constraints
 
@@ -94,10 +94,11 @@ Present a summary to the user:
 ### Base class structure (Spring Boot)
 
 - Use `@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)` to boot the full application
-- Use `@LocalServerPort` to inject the application port for RestAssured
+- Declare `@Autowired protected TestRestTemplate restTemplate;` in the base class — Spring Boot auto-configures it to point at `http://localhost:{randomPort}` with no extra setup
 - Use `@Testcontainers` and `@Container` for each database or Kafka container needed
+- Add `@ServiceConnection` on each database or Kafka `@Container` (Spring Boot 4.0.x) — auto-configures `spring.datasource.*`, `spring.kafka.bootstrap-servers`, etc. with no `@DynamicPropertySource` boilerplate
 - Use `WireMockExtension` with `@RegisterExtension` for external REST stubs
-- Use `@DynamicPropertySource` (static method) to register `spring.datasource.url`, `spring.datasource.username`, `spring.datasource.password`, `spring.kafka.bootstrap-servers`, and any custom property for external service base URLs (e.g. `external.service.base-url`)
+- Use `@DynamicPropertySource` **only** for WireMock base URLs and any other infrastructure that does not have a built-in `@ServiceConnection` support
 - WireMock base URL is available after the extension is initialized — pass it into `DynamicPropertyRegistry.add()`
 
 ### File placement
@@ -109,73 +110,124 @@ Present a summary to the user:
 - **MUST** use `@SpringBootTest(webEnvironment = RANDOM_PORT)` — never `MOCK` or `NONE` for acceptance tests
 - **MUST** use Testcontainers for any database or Kafka the service depends on
 - **MUST** use WireMock for any outbound REST calls the service makes
-- **MUST** propagate coordinates via `@DynamicPropertySource` — never hardcode ports or URLs
+- **MUST** use `@ServiceConnection` for database and Kafka containers (Spring Boot 4.0.x); use `@DynamicPropertySource` for WireMock and unsupported containers — never hardcode ephemeral ports or URLs
 - **MUST** extend or reference the base class from the concrete acceptance test class
 
-### Step 3: Implement acceptance test class with RestAssured
+### Step 3: Implement acceptance test class with TestRestTemplate
 
-**Purpose**: Generate the Java test class that implements each acceptance-tagged scenario using RestAssured.
+**Purpose**: Generate the Java test class that implements each acceptance-tagged scenario using Spring Boot's `TestRestTemplate`.
 
-### RestAssured usage
+### TestRestTemplate usage
 
-- Use `RestAssured.given()` / `.when()` / `.then()` for REST assertions
-- Use `RestAssured.port = port` and `RestAssured.baseURI = "http://localhost"` in `@BeforeEach` (inject `@LocalServerPort` from base class)
-- Assert status codes: `.then().statusCode(200)` (or 201, 204 as appropriate)
-- Assert JSON body: `.body("field.path", equalTo("expected"))` or `JsonPath` for complex structures
-- Set request body: `given().contentType(ContentType.JSON).body(jsonObject)`
+- Inject `TestRestTemplate` via inheritance from `BaseAcceptanceTest` — no `@BeforeEach` port wiring required
+- Use `restTemplate.getForEntity(uri, ResponseType.class)` for GET requests
+- Use `restTemplate.postForEntity(uri, requestEntity, ResponseType.class)` for POST requests
+- Use `restTemplate.exchange(uri, method, requestEntity, ResponseType.class)` for PUT / DELETE or when fine-grained control is needed
+- Build `HttpEntity` with `HttpHeaders` to set `Content-Type: application/json`
+- Assert with AssertJ: `assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED)`
+- Assert body fields: `assertThat(response.getBody().email()).isEqualTo("user@example.com")`
 
 ### Test structure
 
 - One `@Test` method per scenario
 - Method name: `scenario_{scenario_name_with_underscores}` or `{scenario_keyword}_...`
 - Given steps → setup (e.g. WireMock stubs, DB data via repository if needed)
-- When steps → RestAssured request (GET, POST, PUT, DELETE)
-- Then steps → RestAssured assertions (status, body)
+- When steps → `TestRestTemplate` request (GET, POST, PUT, DELETE)
+- Then steps → AssertJ assertions on `ResponseEntity` (status, body)
 
 ### File placement
 
-- Place the test class at `src/test/java/{root-package}/{FeatureName}AcceptanceTest.java`
+- Place the test class at `src/test/java/{root-package}/{FeatureName}AT.java` — the `AT` suffix makes `maven-failsafe-plugin` include it automatically
 - Ensure it extends `BaseAcceptanceTest` for Spring context, container, and WireMock setup
 
 #### Step Constraints
 
-- **MUST** use RestAssured for REST endpoint testing — not MockMvc (MockMvc skips the real HTTP stack)
+- **MUST** use `TestRestTemplate` for REST endpoint testing — not MockMvc (MockMvc skips the real HTTP stack)
 - **MUST** follow Given-When-Then structure in each test method
 - **MUST** implement only happy-path scenarios — skip error/negative paths unless requested
-- **MUST** add RestAssured and Testcontainers/WireMock dependencies if missing from pom.xml
+- **MUST** add Testcontainers and WireMock dependencies if missing from pom.xml; `TestRestTemplate` is provided by `spring-boot-starter-test` — no extra dependency needed
 
 ### Step 4: Provide Maven dependencies and WireMock stubs
 
-**Purpose**: Ensure all required dependencies are declared and WireMock mapping files are created when needed.
+                **Purpose**: Ensure all required dependencies are declared and WireMock mapping files are created when needed.
 
-### Required Maven dependencies (test scope)
+                ### Required Maven dependencies (test scope)
 
-| Dependency | GroupId | ArtifactId | Purpose |
-|------------|---------|------------|---------|
-| RestAssured | `io.rest-assured` | `rest-assured` | REST API testing |
-| Testcontainers JUnit | `org.testcontainers` | `junit-jupiter` | Testcontainers JUnit 5 support |
-| Testcontainers PostgreSQL | `org.testcontainers` | `postgresql` | If DB is PostgreSQL |
-| Testcontainers Kafka | `org.testcontainers` | `kafka` | If service uses Kafka |
-| WireMock JUnit 5 | `org.wiremock` | `wiremock-standalone` | WireMock for REST stubs |
+                | Dependency | GroupId | ArtifactId | Purpose |
+                |------------|---------|------------|---------|
+                | TestRestTemplate | *(via `spring-boot-starter-test`)* | — | REST API testing — **no extra dependency needed** |
+                | Testcontainers JUnit | `org.testcontainers` | `junit-jupiter` | Testcontainers JUnit 5 support |
+                | Testcontainers PostgreSQL | `org.testcontainers` | `postgresql` | If DB is PostgreSQL |
+                | Testcontainers Kafka | `org.testcontainers` | `kafka` | If service uses Kafka |
+                | WireMock JUnit 5 | `org.wiremock` | `wiremock-standalone` | WireMock for REST stubs |
 
-Spring Boot already provides `spring-boot-starter-test`; ensure `rest-assured` is explicitly added (it may be transitively included but version alignment with Spring Boot BOM is recommended).
+                Spring Boot already provides `spring-boot-starter-test`, which includes `TestRestTemplate`. Do **not** add `rest-assured` — it is no longer needed for acceptance tests in this rule.
 
-### WireMock mappings
+                ### WireMock mappings
 
-When the service calls external REST APIs, create WireMock mapping files under:
-`src/test/resources/wiremock/mappings/{service-name}/`
-Use `bodyFileName` for large responses; store bodies in `wiremock/files/`.
+                When the service calls external REST APIs, create WireMock mapping files under:
+                `src/test/resources/wiremock/mappings/{service-name}/`
+                Use `bodyFileName` for large responses; store bodies in `wiremock/files/`.
 
-### Output
+                ### Maven Surefire / Failsafe split
 
-- Display the Maven dependency snippets (with versions from Spring Boot BOM or latest stable)
-- List any WireMock mapping files created
-- Remind the user to run `./mvnw clean verify` and that acceptance tests may run in the failsafe phase (suffix `*IT` or `*AcceptanceTest` in `maven-failsafe-plugin` includes)
+                Use a three-tier naming convention to keep fast unit tests separate from heavier integration and acceptance tests:
 
+                | Suffix | Test type | Maven plugin | Phase |
+                |--------|-----------|--------------|-------|
+                | `*Test` | Unit tests | `maven-surefire-plugin` | `test` |
+                | `*IT` | Integration tests | `maven-failsafe-plugin` | `integration-test` / `verify` |
+                | `*AT` | Acceptance tests | `maven-failsafe-plugin` | `integration-test` / `verify` |
+
+                Configure both plugins explicitly in `pom.xml` so that `./mvnw test` runs only unit tests and `./mvnw verify` runs all three tiers:
+
+                ```xml
+                
+                    org.apache.maven.plugins
+                    maven-surefire-plugin
+                    
+                        
+                        
+                            **/*Test.java
+                        
+                    
+                
+
+                
+                    org.apache.maven.plugins
+                    maven-failsafe-plugin
+                    
+                        
+                        
+                            **/*IT.java
+                            **/*AT.java
+                        
+                    
+                    
+                        
+                            
+                                integration-test
+                                verify
+                            
+                        
+                    
+                
+                ```
+
+                Name acceptance test classes with the `AT` suffix (e.g. `UserRegistrationAT`, `OrderCreationAT`) so Failsafe picks them up automatically without extra configuration.
+
+                ### Output
+
+                - Display the Maven dependency snippets (with versions from Spring Boot BOM or latest stable)
+                - List any WireMock mapping files created
+                - Remind the user to run `./mvnw clean verify` and show the Surefire / Failsafe plugin split above
+            
 #### Step Constraints
 
-- **MUST** list RestAssured, Testcontainers, and WireMock dependencies after generating tests
-- **MUST** ensure Failsafe includes `*AcceptanceTest` or `*IT` if acceptance tests are integration tests
+- **MUST** list Testcontainers and WireMock dependencies after generating tests; note that `TestRestTemplate` requires no extra dependency
+- **MUST** configure `maven-failsafe-plugin` to include both `**/*IT.java` and `**/*AT.java`
+- **MUST** configure `maven-surefire-plugin` to include only `**/*Test.java` so unit tests are not mixed with AT/IT runs
+- **MUST** name acceptance test classes with the `AT` suffix (e.g. `UserRegistrationAT`) for Failsafe auto-detection
 
 
 ## Examples
@@ -183,8 +235,10 @@ Use `bodyFileName` for large responses; store bodies in `wiremock/files/`.
 ### Table of contents
 
 - Example 1: Gherkin feature with @acceptance scenarios
-- Example 2: BaseAcceptanceTest with @SpringBootTest, Testcontainers and WireMock
-- Example 3: Acceptance test with RestAssured
+- Example 2: BaseAcceptanceTest with @SpringBootTest, TestRestTemplate, Testcontainers and WireMock
+- Example 3: Acceptance test with TestRestTemplate
+- Example 4: WireMock stub setup for external REST dependencies
+- Example 5: Acceptance test naming convention (*AT) and Maven Surefire/Failsafe configuration
 
 ### Example 1: Gherkin feature with @acceptance scenarios
 
@@ -219,10 +273,10 @@ Feature: User registration API
     Then the response status is 201
 ```
 
-### Example 2: BaseAcceptanceTest with @SpringBootTest, Testcontainers and WireMock
+### Example 2: BaseAcceptanceTest with @SpringBootTest, TestRestTemplate, Testcontainers and WireMock
 
-Title: Spring Boot base class for acceptance tests
-Description: Uses @SpringBootTest(RANDOM_PORT), @DynamicPropertySource for Testcontainers and WireMock coordinates.
+Title: @ServiceConnection for DB/Kafka; @DynamicPropertySource only for WireMock; TestRestTemplate auto-configured
+Description: Uses `@SpringBootTest(RANDOM_PORT)`. Spring Boot auto-configures `TestRestTemplate` at `http://localhost:{randomPort}` — inject it with `@Autowired` and no port wiring is needed. Annotate each Testcontainers database or Kafka container with `@ServiceConnection` (Spring Boot 4.0.x) — this replaces the entire `@DynamicPropertySource` block for those containers. `@DynamicPropertySource` is still required for WireMock because it has no built-in service connection support.
 
 **Good example:**
 
@@ -231,8 +285,10 @@ package com.example.myapp;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.KafkaContainer;
@@ -247,29 +303,24 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMoc
 @Testcontainers
 abstract class BaseAcceptanceTest {
 
-    @LocalServerPort
-    protected int port;
+    @Autowired
+    protected TestRestTemplate restTemplate;  // auto-configured — no @LocalServerPort needed
 
     @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>(DockerImageName.parse("postgres:16-alpine"))
-        .withDatabaseName("testdb")
-        .withUsername("test")
-        .withPassword("test");
+    @ServiceConnection  // auto-configures spring.datasource.url/username/password
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
 
     @Container
-    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("apache/kafka:3.8"));
+    @ServiceConnection  // auto-configures spring.kafka.bootstrap-servers
+    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("apache/kafka:3.8.0"));
 
     @RegisterExtension
     static WireMockExtension wireMock = WireMockExtension.newInstance()
         .options(wireMockConfig().dynamicPort().usingFilesUnderClasspath("wiremock"))
         .build();
 
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
-        registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers);
+    @DynamicPropertySource  // WireMock has no @ServiceConnection — manual registration still needed
+    static void configureWireMockProperties(DynamicPropertyRegistry registry) {
         registry.add("external.service.base-url", wireMock::baseUrl);
     }
 }
@@ -278,54 +329,93 @@ abstract class BaseAcceptanceTest {
 **Bad example:**
 
 ```java
-// Bad: Using MockMvc — acceptance tests need real HTTP
-@SpringBootTest
-@AutoConfigureMockMvc
+package com.example.myapp;
+
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Testcontainers
 abstract class BaseAcceptanceTest {
-    @Autowired
-    MockMvc mockMvc;
+
+    // Bad: manually injecting the port and constructing the URL in @BeforeEach
+    // — use @Autowired TestRestTemplate instead; it handles the base URL automatically
+    @LocalServerPort
+    protected int port;
+
+    @Container
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine")
+        .withDatabaseName("testdb")    // unnecessary with @ServiceConnection
+        .withUsername("test")
+        .withPassword("test");
+
+    @Container
+    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("apache/kafka:3.8.0"));
+
+    // Verbose manual wiring — all three lines replaced by @ServiceConnection on the container
+    @DynamicPropertySource
+    static void configureProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgres::getJdbcUrl);
+        registry.add("spring.datasource.username", postgres::getUsername);
+        registry.add("spring.datasource.password", postgres::getPassword);
+        registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers);
+        // Missing: WireMock URL — external stubs would be hardcoded or absent
+    }
 }
-// Use @SpringBootTest(webEnvironment = RANDOM_PORT) + RestAssured to test the real HTTP stack
 ```
 
-### Example 3: Acceptance test with RestAssured
+### Example 3: Acceptance test with TestRestTemplate
 
-Title: Implementing Gherkin scenario with RestAssured and @LocalServerPort
-Description: RestAssured targets the booted Spring application via @LocalServerPort.
+Title: @DisplayName echoes the Gherkin scenario; Given/When/Then in test body; no @BeforeEach port setup needed
+Description: Extend `BaseAcceptanceTest`; use the inherited `TestRestTemplate restTemplate` directly — Spring Boot points it at the random port automatically. Annotate each test with `@DisplayName` that echoes the exact Gherkin scenario title for traceability in test reports. Structure the method body as Given (setup stubs/data), When (HTTP request via `TestRestTemplate`), Then (AssertJ assertions on `ResponseEntity`). One test method per `@acceptance`-tagged scenario.
 
 **Good example:**
 
 ```java
 package com.example.myapp;
 
-import io.restassured.RestAssured;
-import io.restassured.http.ContentType;
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 
-import static org.hamcrest.Matchers.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
-class UserRegistrationAcceptanceTest extends BaseAcceptanceTest {
-
-    @BeforeEach
-    void setUp() {
-        RestAssured.port = port;
-        RestAssured.baseURI = "http://localhost";
-    }
+// Class name ends with AT → picked up by maven-failsafe-plugin
+class UserRegistrationAT extends BaseAcceptanceTest {
 
     @Test
+    @DisplayName("Scenario: Successful user registration")  // mirrors Gherkin scenario title
     void scenario_successful_user_registration() {
-        RestAssured.given()
-            .contentType(ContentType.JSON)
-            .body("""
-                {"email": "user@example.com", "name": "John Doe"}
-                """)
-            .when()
-            .post("/api/users")
-            .then()
-            .statusCode(201)
-            .body("id", notNullValue())
-            .body("email", equalTo("user@example.com"));
+        // Given: the system is ready (Spring Boot + containers started by BaseAcceptanceTest)
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        String requestBody = """
+            {"email": "user@example.com", "name": "John Doe"}
+            """;
+
+        // When: POST /api/users with a valid payload
+        ResponseEntity<UserDto> response = restTemplate.postForEntity(
+            "/api/users",
+            new HttpEntity<>(requestBody, headers),
+            UserDto.class
+        );
+
+        // Then: 201 Created with id and email in the response body
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().id()).isNotNull();
+        assertThat(response.getBody().email()).isEqualTo("user@example.com");
     }
 }
 ```
@@ -333,22 +423,173 @@ class UserRegistrationAcceptanceTest extends BaseAcceptanceTest {
 **Bad example:**
 
 ```java
-// Bad: MockMvc skips real HTTP — use RestAssured for acceptance
+// Bad: vague name, no @DisplayName, MockMvc instead of TestRestTemplate
 @Test
-void scenario_registration() {
+void testRegistration() {
+    // MockMvc skips real HTTP — serialization, security filters not exercised
     mockMvc.perform(post("/api/users").contentType(JSON).content("{}"))
         .andExpect(status().isCreated());
+    // No link to Gherkin scenario; test name does not trace back to feature file
 }
-// Acceptance tests must exercise serialization, filters, full HTTP stack
+```
+
+### Example 4: WireMock stub setup for external REST dependencies
+
+Title: Programmatic stubs per test and JSON mapping files for reuse
+Description: When the application calls an external REST service, configure WireMock stubs **before** the HTTP request in the test body (Given phase). Prefer programmatic stubs for scenario-specific responses. Use JSON mapping files under `src/test/resources/wiremock/mappings/` for responses that are shared across many tests. Always inject the WireMock base URL into Spring via `@DynamicPropertySource` in `BaseAcceptanceTest` so the application's `RestClient`/`WebClient` calls hit the stub server. Use `TestRestTemplate` for the outbound call from the test to the application under test.
+
+**Good example:**
+
+```java
+package com.example.myapp;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static org.assertj.core.api.Assertions.assertThat;
+
+// Class name ends with AT → picked up by maven-failsafe-plugin
+class OrderCreationAT extends BaseAcceptanceTest {
+
+    @Test
+    @DisplayName("Scenario: Place order with successful payment authorisation")
+    void scenario_place_order_with_successful_payment() {
+        // Given: external payment service returns authorised
+        wireMock.stubFor(
+            post(urlEqualTo("/payments/authorise"))
+                .willReturn(aResponse()
+                    .withStatus(200)
+                    .withHeader("Content-Type", "application/json")
+                    .withBody("""
+                        {"status": "AUTHORISED", "reference": "PAY-001"}
+                        """)));
+
+        // When: client places an order
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        String requestBody = """
+            {"productId": "SKU-42", "quantity": 1, "paymentToken": "tok_test"}
+            """;
+        ResponseEntity<OrderDto> response = restTemplate.postForEntity(
+            "/api/orders",
+            new HttpEntity<>(requestBody, headers),
+            OrderDto.class
+        );
+
+        // Then: order is accepted; downstream payment call was made
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().status()).isEqualTo("CONFIRMED");
+
+        // Verify the application actually called the payment stub
+        wireMock.verify(postRequestedFor(urlEqualTo("/payments/authorise")));
+    }
+}
+```
+
+**Bad example:**
+
+```java
+package com.example.myapp;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+
+// Bad: mocking the internal PaymentClient bean — acceptance tests must use real wiring
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+class OrderCreationAT {
+
+    @MockitoBean
+    private PaymentClient paymentClient;  // hides real HTTP; filters and serialization untested
+
+    @Test
+    void scenario_place_order() {
+        // Mockito stub replaces the real HTTP call — not an acceptance test any more
+        when(paymentClient.authorise(any())).thenReturn(new AuthResponse("AUTHORISED"));
+        // ...
+    }
+}
+```
+
+
+### Example 5: Acceptance test naming convention (*AT) and Maven Surefire/Failsafe configuration
+
+Title: Three-tier split: *Test → Surefire, *IT + *AT → Failsafe
+Description: Name acceptance test classes with the `AT` suffix so `maven-failsafe-plugin` picks them up automatically alongside `*IT` integration tests, while `maven-surefire-plugin` runs only fast `*Test` unit tests. This keeps `./mvnw test` fast and `./mvnw verify` the gate for the full build.
+
+**Good example:**
+
+```java
+package com.example.myapp;
+
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+// Class name ends with AT → picked up by maven-failsafe-plugin
+class UserRegistrationAT extends BaseAcceptanceTest {
+
+    @Test
+    @DisplayName("Scenario: Successful user registration")
+    void scenario_successful_user_registration() {
+        // Given: Spring Boot + containers started by BaseAcceptanceTest
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        // When
+        ResponseEntity<UserDto> response = restTemplate.postForEntity(
+            "/api/users",
+            new HttpEntity<>("""
+                {"email": "user@example.com", "name": "John Doe"}
+                """, headers),
+            UserDto.class
+        );
+
+        // Then
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().id()).isNotNull();
+        assertThat(response.getBody().email()).isEqualTo("user@example.com");
+    }
+}
+```
+
+**Bad example:**
+
+```java
+// Bad: class name ends with AcceptanceTest — not matched by *AT or *IT Failsafe includes
+// unless you add an extra <include>**/*AcceptanceTest.java</include> entry
+class UserRegistrationAcceptanceTest extends BaseAcceptanceTest {
+    // ...
+}
+
+// Bad: class name ends with Test — Surefire will try to run this as a unit test,
+// but it requires Docker / Testcontainers and will fail or time out in the unit-test phase
+class UserRegistrationTest extends BaseAcceptanceTest {
+    // ...
+}
 ```
 
 ## Output Format
 
 - **ANALYZE** the provided `.feature` file: feature name, scenarios, tags, and steps; confirm Spring Boot and acceptance tags
 - **SUMMARIZE** selected scenarios and proposed Java test class names before coding
-- **IMPLEMENT** `BaseAcceptanceTest` (or equivalent) with `RANDOM_PORT`, Testcontainers, WireMock, and `@DynamicPropertySource` as required by the app
-- **IMPLEMENT** one RestAssured test per acceptance scenario, mapping Given/When/Then
-- **DOCUMENT** Maven test dependencies and WireMock file layout; mention Failsafe patterns for `*AcceptanceTest` / `*IT`
+- **IMPLEMENT** `BaseAcceptanceTest` (or equivalent) with `RANDOM_PORT`, `@Autowired TestRestTemplate`, `@ServiceConnection` for DB/Kafka containers (Spring Boot 4.0.x), WireMock `@RegisterExtension`, and `@DynamicPropertySource` for WireMock URLs as required by the app
+- **IMPLEMENT** one `TestRestTemplate`-based test per acceptance scenario, mapping Given/When/Then; annotate with `@DisplayName` mirroring the Gherkin scenario title; assert with AssertJ on `ResponseEntity`; verify WireMock interactions where external calls are expected
+- **DOCUMENT** Maven test dependencies and WireMock file layout; note that `TestRestTemplate` is included in `spring-boot-starter-test`; show Surefire/Failsafe three-tier split (`*Test` → Surefire, `*IT` + `*AT` → Failsafe) and name acceptance test classes with the `AT` suffix
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
 
 ## Safeguards
@@ -357,6 +598,8 @@ void scenario_registration() {
 - **BLOCKING SAFETY CHECK**: Run `./mvnw compile` or `mvn compile` before generating or refactoring acceptance tests
 - **CRITICAL VALIDATION**: Run `./mvnw clean verify` after changes; acceptance tests need Docker for Testcontainers where used
 - **SCOPE**: Default to happy path only unless the user explicitly asks for negative scenarios
-- **HTTP STACK**: Do not substitute MockMvc for RestAssured when the goal is true acceptance over HTTP
+- **HTTP STACK**: Do not substitute MockMvc for `TestRestTemplate` when the goal is true acceptance over HTTP; `TestRestTemplate` exercises the real servlet/filter stack end-to-end
+- **NO RESTASSURED**: Do not add `io.rest-assured:rest-assured` to the project; `TestRestTemplate` from `spring-boot-starter-test` is the preferred HTTP client for acceptance tests in this rule
 - **SECRETS**: Do not embed real API keys or production URLs in tests—use WireMock and test properties
 - **INCREMENTAL SAFETY**: Keep generated tests compiling after each scenario if adding many
+- **NAMING**: Always use the `AT` suffix for acceptance test classes (e.g. `UserRegistrationAT`) — never `*Test` (claimed by Surefire) or `*AcceptanceTest` (requires extra Failsafe include)

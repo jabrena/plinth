@@ -1,6 +1,6 @@
 ---
 name: 322-frameworks-spring-boot-testing-integration-tests
-description: Use when you need to write or improve integration tests — including Testcontainers, TestRestTemplate, data management, test structure, and performance optimization for integration tests.
+description: Use when you need to write or improve integration tests — including Testcontainers with @ServiceConnection, @DataJdbcTest persistence slices, TestRestTemplate or MockMvcTester for HTTP, data isolation, and container lifecycle management for Spring Boot 4.0.x.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -14,18 +14,20 @@ You are a Senior software engineer with extensive experience in integration test
 
 ## Goal
 
-Integration tests prove real wiring: HTTP boundaries, databases, brokers, and other infrastructure. They should stay independent, reproducible (prefer Testcontainers over shared developer databases), and focused on contracts—not a second copy of exhaustive unit-test logic. Use Spring Boot’s `@SpringBootTest` with `RANDOM_PORT` when exercising HTTP, `TestRestTemplate` with Arrange/Act/Assert, manage data with transactions or explicit cleanup, and reuse containers at class scope when possible for speed.
+Integration tests prove real wiring: HTTP boundaries, databases, brokers, and other infrastructure. They should stay independent, reproducible (prefer Testcontainers over shared developer databases), and focused on contracts—not a second copy of exhaustive unit-test logic. Use `@ServiceConnection` (Spring Boot 4.0.x) for zero-config Testcontainers wiring; fall back to `@DynamicPropertySource` only for containers without built-in service connection support. Use `MockMvcTester` (Spring Boot 4.0.x) for fluent AssertJ-based HTTP assertions, and `@DataJdbcTest`/`@DataJpaTest` slices to test persistence in isolation.
 
 ### Implementing These Principles
 
 These guidelines are built upon the following core principles:
 
 1. **Test isolation**: Each test owns its scenario; no ordering assumptions or shared mutable state between tests.
-2. **Environment reproducibility**: Run dependencies in containers with pinned images; inject URLs and ports via `@DynamicPropertySource` (or equivalent).
+2. **Environment reproducibility**: Run dependencies in containers with pinned images; wire Spring properties with `@ServiceConnection` (preferred) or `@DynamicPropertySource` (fallback for unsupported containers).
 3. **Clear boundaries**: Assert integration points—API status and payloads, repository persistence—not every internal branch already covered by unit tests.
 4. **Performance awareness**: Share static `@Container` instances across methods in a class; avoid starting a new container per method unless necessary.
-5. **Maintainable assertions**: Check HTTP status first; use typed DTOs and AssertJ; avoid brittle full-JSON string equality.
+5. **Maintainable assertions**: Use `MockMvcTester` or `TestRestTemplate` with typed DTOs/records and AssertJ; avoid brittle full-JSON string equality.
 6. **Resource lifecycle**: Rely on Testcontainers JUnit integration for teardown; separate `*IT` / integration tests from fast unit tests in the build when useful.
+7. **Slice tests for persistence**: Prefer `@DataJdbcTest` / `@DataJpaTest` over full `@SpringBootTest` when only testing repository/query logic — they load only the persistence layer and start faster.
+8. **Modern mock registration**: Use `@MockitoBean` (Spring Boot 4.0.x standard); `@MockBean` was removed in Spring Boot 4.
 
 **Cross-references**: Pure unit and slice tests — `@321-frameworks-spring-boot-testing-unit-tests`. Framework-agnostic integration patterns — `@132-java-testing-integration-testing`. Acceptance tests from Gherkin — `@323-frameworks-spring-boot-testing-acceptance-tests`.
 
@@ -50,6 +52,10 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 4: Data management and isolation
 - Example 5: Structure and assertions
 - Example 6: Performance and container cleanup
+- Example 7: @DataJdbcTest persistence slice
+- Example 8: MockMvcTester for HTTP slice tests
+- Example 9: Test naming conventions: *Test, *IT, *AT
+- Example 10: Maven Surefire / Failsafe split for *Test, *IT, *AT
 
 ### Example 1: Scope and purpose of integration tests
 
@@ -67,7 +73,7 @@ class ProductServiceIT {
 
     // @Autowired ProductService productService;
     // @Autowired ProductRepository productRepository;
-    // @MockBean NotificationService notificationService;
+    // @MockitoBean NotificationService notificationService;  // Spring Boot 4.0.x
 
     @Test
     void shouldPersistProductAndTriggerNotificationFlow() {
@@ -100,16 +106,15 @@ class OverlappingProductLogicIT {
 
 ### Example 2: Testcontainers for dependencies
 
-Title: Pin images; wire JDBC with @DynamicPropertySource
-Description: Use Testcontainers for databases, brokers, and similar services. Prefer `static @Container` for reuse within a class. Pin Docker image tags. Expose connection settings to Spring with `@DynamicPropertySource`. Do not rely on a pre-existing database on localhost for CI or teammates.
+Title: @ServiceConnection for zero-config wiring (Spring Boot 4.0.x)
+Description: Use Testcontainers for databases, brokers, and similar services. Prefer `static @Container` for class-scoped reuse. Pin Docker image tags. Use `@ServiceConnection` (Spring Boot 4.0.x) to auto-configure all connection properties — no `@DynamicPropertySource` boilerplate needed for supported containers (PostgreSQL, MySQL, Redis, Kafka, RabbitMQ, and many more). Fall back to `@DynamicPropertySource` only for containers that do not have a built-in service connection. Do not rely on a pre-existing database on localhost for CI or teammates.
 
 **Good example:**
 
 ```java
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.testcontainers.containers.PostgreSQLContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -120,17 +125,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class MyRepositoryIT {
 
     @Container
-    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine")
-        .withDatabaseName("testdb")
-        .withUsername("testuser")
-        .withPassword("testpass");
-
-    @DynamicPropertySource
-    static void configureProperties(DynamicPropertyRegistry registry) {
-        registry.add("spring.datasource.url", postgres::getJdbcUrl);
-        registry.add("spring.datasource.username", postgres::getUsername);
-        registry.add("spring.datasource.password", postgres::getPassword);
-    }
+    @ServiceConnection  // auto-configures spring.datasource.url/username/password — no @DynamicPropertySource needed
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
 
     @Test
     void shouldConnectToPostgres() {
@@ -144,24 +140,40 @@ class MyRepositoryIT {
 ```java
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
 
+@Testcontainers
 @SpringBootTest
-class ReliesOnLocalPostgresIT {
+class MyRepositoryIT {
 
-    // spring.datasource.url=jdbc:postgresql://localhost:5432/mydb_dev
-    // Bad: depends on manual DB, shared state, CI without Docker — flaky and not isolated.
+    @Container
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:15-alpine")
+        .withDatabaseName("testdb")    // unnecessary when using @ServiceConnection
+        .withUsername("testuser")
+        .withPassword("testpass");
+
+    @DynamicPropertySource  // verbose — @ServiceConnection replaces all three lines for supported containers
+    static void configureProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.datasource.url", postgres::getJdbcUrl);
+        registry.add("spring.datasource.username", postgres::getUsername);
+        registry.add("spring.datasource.password", postgres::getPassword);
+    }
 
     @Test
     void shouldFetchData() {
-        // dataService.findAll() — outcome depends on whatever happens to be in dev DB
+        // spring.datasource.* manually wired — error-prone to extend or refactor
     }
 }
 ```
 
 ### Example 3: TestRestTemplate for HTTP integration
 
-Title: Arrange / Act / Assert; assert status before body
-Description: Use `TestRestTemplate` against a running local port (`RANDOM_PORT`). Structure tests in AAA form. Always assert `ResponseEntity.getStatusCode()` before body details. Prefer DTOs and AssertJ over raw JSON string contains for stable assertions.
+Title: Arrange / Act / Assert with records; assert status before body
+Description: Use `TestRestTemplate` against a running local port (`RANDOM_PORT`). Structure tests in AAA form. Always assert `ResponseEntity.getStatusCode()` before body details. Use Java records for DTOs and AssertJ for stable assertions. Avoid raw JSON string matching.
 
 **Good example:**
 
@@ -177,6 +189,9 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 
+// Immutable record DTO — no boilerplate getters/setters/constructors
+record ResourceDto(int id, String name, String data) {}
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class MyApiControllerIT {
 
@@ -184,39 +199,31 @@ class MyApiControllerIT {
     private TestRestTemplate restTemplate;
 
     @Test
-    void getResourceById_shouldReturn200() {
-        ResponseEntity<ResourceDto> response = restTemplate.getForEntity(
-            "/resources/{id}", ResourceDto.class, 123);
+    void shouldReturnResourceById() {
+        // When
+        var response = restTemplate.getForEntity("/resources/{id}", ResourceDto.class, 123);
 
+        // Then — status first, then body fields
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(response.getBody()).isNotNull();
-        assertThat(response.getBody().id).isEqualTo(123);
+        assertThat(response.getBody().id()).isEqualTo(123);  // record accessor, not getter
     }
 
     @Test
-    void createResource_shouldReturn201() {
-        ResourceDto body = new ResourceDto(0, "New Item", "data");
-        HttpHeaders headers = new HttpHeaders();
+    void shouldCreateResourceAndReturn201() {
+        // Arrange
+        var body = new ResourceDto(0, "New Item", "data");
+        var headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<ResourceDto> request = new HttpEntity<>(body, headers);
 
-        ResponseEntity<ResourceDto> response = restTemplate.postForEntity("/resources", request, ResourceDto.class);
+        // Act
+        var response = restTemplate.postForEntity(
+            "/resources", new HttpEntity<>(body, headers), ResourceDto.class);
 
+        // Assert — status, body, and Location header
         assertThat(response.getStatusCode()).isEqualTo(HttpStatus.CREATED);
         assertThat(response.getBody()).isNotNull();
         assertThat(response.getHeaders().getLocation()).isNotNull();
-    }
-}
-
-class ResourceDto {
-    public int id;
-    public String name;
-    public String data;
-    public ResourceDto() {}
-    public ResourceDto(int id, String name, String data) {
-        this.id = id;
-        this.name = name;
-        this.data = data;
     }
 }
 ```
@@ -231,6 +238,15 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 import static org.assertj.core.api.Assertions.assertThat;
 
+// POJO DTO — verbose boilerplate; mutable public fields are fragile
+class ResourceDto {
+    public int id;
+    public String name;
+    public String data;
+    public ResourceDto() {}
+    public ResourceDto(int id, String name, String data) { this.id = id; this.name = name; this.data = data; }
+}
+
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class ApiTestAntiPatternsIT {
 
@@ -240,13 +256,13 @@ class ApiTestAntiPatternsIT {
     @Test
     void getResource_badAssertions() {
         ResponseEntity<String> response = restTemplate.getForEntity("/resources/1", String.class);
-        // Bad: no status check; brittle substring match on JSON
+        // No status check; brittle substring match on raw JSON string
         assertThat(response.getBody()).contains("\"id\":1");
     }
 
     @Test
     void createResource_statusOnly() {
-        // Bad: 201 checked but body and Location ignored — misses contract validation
+        // Only checks 201 — body and Location header ignored; misses contract validation
     }
 }
 ```
@@ -355,13 +371,15 @@ class VagueUserActionsIT {
 
 ### Example 6: Performance and container cleanup
 
-Title: Static @Container per class; avoid per-method starts
-Description: Container startup dominates runtime: use a `static` `@Container` so one container serves all tests in the class. The JUnit Jupiter Testcontainers extension stops containers after the class. Avoid starting and stopping a container in `@BeforeEach`/`@AfterEach` unless you have a rare isolation requirement.
+Title: Static @Container per class with @ServiceConnection; avoid per-method starts
+Description: Container startup dominates runtime: use a `static` `@Container` so one container serves all tests in the class. The JUnit Jupiter Testcontainers extension stops containers after the class. Add `@ServiceConnection` for supported containers so Spring auto-wires connection details. Avoid starting and stopping a container in `@BeforeEach`/`@AfterEach` unless you have a rare isolation requirement.
 
 **Good example:**
 
 ```java
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.testcontainers.containers.GenericContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -369,10 +387,12 @@ import org.testcontainers.utility.DockerImageName;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @Testcontainers
+@SpringBootTest
 class MyServiceWithSharedContainerIT {
 
     @Container
-    static GenericContainer<?> redis = new GenericContainer<>(DockerImageName.parse("redis:6-alpine"))
+    @ServiceConnection  // auto-configures spring.data.redis.host/port
+    static GenericContainer<?> redis = new GenericContainer<>(DockerImageName.parse("redis:7-alpine"))
         .withExposedPorts(6379);
 
     @Test
@@ -382,6 +402,7 @@ class MyServiceWithSharedContainerIT {
 
     @Test
     void testTwo() {
+        // shares the same running container — no restart overhead
         assertThat(redis.isRunning()).isTrue();
     }
 }
@@ -398,12 +419,12 @@ import org.testcontainers.utility.DockerImageName;
 
 class MyServiceWithPerMethodContainerIT {
 
-    private GenericContainer<?> redis;
+    private GenericContainer<?> redis;  // instance field — new container per test method
 
     @BeforeEach
     void startEach() {
         redis = new GenericContainer<>(DockerImageName.parse("redis:6-alpine")).withExposedPorts(6379);
-        redis.start();
+        redis.start();  // Docker pull + startup on every test method — very slow
     }
 
     @Test
@@ -415,18 +436,372 @@ class MyServiceWithPerMethodContainerIT {
     @AfterEach
     void stopEach() {
         if (redis != null) {
-            redis.stop();
+            redis.stop();  // manual lifecycle — container leaks if test throws before AfterEach
         }
     }
-    // Bad: new container per method — very slow; easy to leak if stop fails
 }
+```
+
+### Example 7: @DataJdbcTest persistence slice
+
+Title: Test repositories in isolation with @ServiceConnection
+Description: Use `@DataJdbcTest` (or `@DataJpaTest`) to load only the persistence layer — repositories, JDBC template, and schema initialization — without starting the web layer or full application context. Combine with `@ServiceConnection` and a real containerized database to avoid the in-memory H2 mismatch problem. Add `@AutoConfigureTestDatabase(replace = NONE)` to opt out of the embedded database auto-replacement. Each test runs in a transaction that rolls back after the method by default, keeping the database clean.
+
+**Good example:**
+
+```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.data.jdbc.DataJdbcTest;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import static org.assertj.core.api.Assertions.assertThat;
+
+record Product(Long id, String name, double price) {}
+
+@DataJdbcTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)  // use real DB, not H2
+@Testcontainers
+class ProductRepositoryIT {
+
+    @Container
+    @ServiceConnection
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
+
+    @Autowired
+    private ProductRepository productRepository;
+
+    @Test
+    void shouldSaveAndRetrieveProduct() {
+        // Given
+        var product = new Product(null, "Widget", 9.99);
+
+        // When
+        var saved = productRepository.save(product);
+
+        // Then
+        assertThat(saved.id()).isNotNull();
+        assertThat(productRepository.findById(saved.id()))
+            .isPresent()
+            .get()
+            .extracting(Product::name)
+            .isEqualTo("Widget");
+    }
+
+    @Test
+    void shouldReturnEmptyWhenProductNotFound() {
+        assertThat(productRepository.findById(-1L)).isEmpty();
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import static org.assertj.core.api.Assertions.assertThat;
+
+// Full @SpringBootTest just to test a repository — web layer, security, caches all load unnecessarily
+@SpringBootTest
+class ProductRepositoryIT {
+
+    @Autowired
+    private ProductRepository productRepository;  // injected but web layer also started
+
+    @Test
+    void shouldSaveProduct() {
+        // H2 auto-configured by default — may diverge from production PostgreSQL dialect
+        var saved = productRepository.save(new Product(null, "Widget", 9.99));
+        assertThat(saved.id()).isNotNull();
+    }
+}
+```
+
+### Example 8: MockMvcTester for HTTP slice tests
+
+Title: Fluent AssertJ API without checked exceptions (Spring Boot 4.0.x)
+Description: `MockMvcTester` (introduced in Spring Boot 3.4 / Spring Framework 6.2, standard in Spring Boot 4.0.x / Spring Framework 7) replaces the traditional `MockMvc` + `andExpect()` pattern with a fluent, AssertJ-based API. No checked exceptions to handle, results are fully resolved (including async), and JSON path assertions chain naturally. Use it with `@WebMvcTest` for controller slice tests or with `@AutoConfigureMockMvc` on `@SpringBootTest`. Combine with `@MockitoBean`.
+
+**Good example:**
+
+```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
+import org.springframework.test.web.servlet.assertj.MockMvcTester;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
+record User(Long id, String name, String email) {}
+
+@WebMvcTest(UserController.class)
+class UserControllerIT {
+
+    @Autowired
+    private MockMvcTester mockMvc;  // Spring Boot 4.0.x — fluent AssertJ, no checked exceptions
+
+    @MockitoBean  // Spring Boot 4.0.x standard — @MockBean was removed
+    private UserService userService;
+
+    @Test
+    void shouldReturnUser() {
+        // Given
+        when(userService.findById(1L)).thenReturn(new User(1L, "Alice", "alice@example.com"));
+
+        // When / Then — no andExpect(), no throws clause
+        assertThat(mockMvc.get().uri("/api/users/1"))
+            .hasStatusOk()
+            .hasContentTypeCompatibleWith(MediaType.APPLICATION_JSON)
+            .bodyJson()
+            .extractingPath("$.name").isEqualTo("Alice");
+    }
+
+    @Test
+    void shouldReturn404WhenUserNotFound() {
+        when(userService.findById(99L)).thenThrow(new UserNotFoundException(99L));
+
+        assertThat(mockMvc.get().uri("/api/users/99"))
+            .hasStatus(404);
+    }
+
+    @Test
+    void shouldReturn400WhenRequestBodyIsInvalid() throws Exception {
+        assertThat(mockMvc.post().uri("/api/users")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""{"name": "", "email": "not-an-email"}"""))
+            .hasStatus(400);
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;  // removed in Spring Boot 4 — use @MockitoBean
+import org.springframework.test.web.servlet.MockMvc;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+@WebMvcTest(UserController.class)
+class UserControllerIT {
+
+    @Autowired
+    private MockMvc mockMvc;  // old API — requires checked exceptions and static imports
+
+    @MockBean  // removed in Spring Boot 4 — use @MockitoBean instead
+    private UserService userService;
+
+    @Test
+    void shouldReturnUser() throws Exception {  // checked exception required
+        when(userService.findById(1L)).thenReturn(new User(1L, "Alice", "alice@example.com"));
+
+        mockMvc.perform(get("/api/users/1"))  // verbose static import style
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").value("Alice"));
+    }
+}
+```
+
+### Example 9: Test naming conventions: *Test, *IT, *AT
+
+Title: Consistent suffixes route each class to the right Maven plugin and build phase
+Description: Use suffix conventions that Maven Surefire and Failsafe plugins recognise out of the box: - `*Test` / `*Tests` — pure unit tests; no Spring context, no containers; run by Surefire during the `test` phase (fast feedback). - `*IT` — integration tests; real Spring context, Testcontainers, HTTP; run by Failsafe during the `integration-test` phase. - `*AT` — acceptance / end-to-end tests driven from Gherkin scenarios; full stack; also run by Failsafe during the `integration-test` phase. The suffix determines the build phase, not the test's internal complexity. A controller slice test (`@WebMvcTest`) with a mocked service has no infrastructure cost and belongs in `*Test` (Surefire). A slice test that spins up a real PostgreSQL container belongs in `*IT` (Failsafe).
+
+**Good example:**
+
+```java
+// ── Unit test (*Test) ────────────────────────────────────────────────────────
+// No Spring context; no containers; runs in the fast Surefire "test" phase.
+class OrderPricingTest {
+
+    private final OrderPricingService pricingService = new OrderPricingService();
+
+    @Test
+    void shouldApplyDiscountWhenOrderExceedsThreshold() {
+        var order = new Order(List.of(new OrderItem("SKU-1", 5, 25.00)));
+        assertThat(pricingService.calculate(order).discount()).isEqualTo(0.10);
+    }
+}
+
+// ── Integration test (*IT) ────────────────────────────────────────────────────
+// Spring context + Testcontainers; runs in the Failsafe "integration-test" phase.
+@DataJdbcTest
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
+@Testcontainers
+class OrderRepositoryIT {
+
+    @Container
+    @ServiceConnection
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
+
+    @Autowired
+    private OrderRepository orderRepository;
+
+    @Test
+    void shouldPersistAndRetrieveOrder() {
+        var saved = orderRepository.save(new Order(...));
+        assertThat(orderRepository.findById(saved.id())).isPresent();
+    }
+}
+
+// ── Acceptance test (*AT) ─────────────────────────────────────────────────────
+// Full-stack @SpringBootTest driven from Gherkin; runs in Failsafe "integration-test" phase.
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Testcontainers
+class PlaceOrderAT {
+
+    @Container
+    @ServiceConnection
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
+
+    @Autowired
+    private TestRestTemplate restTemplate;
+
+    @Test
+    @DisplayName("Customer places an order — happy path")
+    void customerPlacesOrder_shouldReturn201AndPersistOrder() {
+        // full end-to-end flow validated here
+    }
+}
+```
+
+**Bad example:**
+
+```java
+// Bad: suffix is "IntegrationTest" — Surefire matches *Test and runs this class
+// during the fast unit-test phase; container startup (~5-10 s) slows the feedback loop.
+@SpringBootTest
+@Testcontainers
+class OrderRepositoryIntegrationTest {   // ← wrong suffix
+
+    @Container
+    @ServiceConnection
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
+
+    @Test
+    void shouldSaveOrder() { ... }
+}
+
+// Bad: class name ends in "Test" but uses @SpringBootTest with a real container —
+// Surefire will execute it in the wrong phase; Failsafe's "verify" safety net is bypassed,
+// so a container failure won't fail the build at the right gate.
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Testcontainers
+class OrderApiTest {   // ← should be OrderApiIT
+
+    @Container
+    @ServiceConnection
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
+
+    @Test
+    void shouldCreateOrder() { ... }
+}
+```
+
+### Example 10: Maven Surefire / Failsafe split for *Test, *IT, *AT
+
+Title: Route unit tests to Surefire and integration/acceptance tests to Failsafe in pom.xml
+Description: Configure `maven-surefire-plugin` to include only `*Test` / `*Tests` classes and `maven-failsafe-plugin` to include `*IT` and `*AT` classes. This separates fast unit tests (no Docker, no Spring context) from slower integration and acceptance tests so that: - `mvn test` runs only unit tests — instant local feedback. - `mvn verify` also runs integration and acceptance tests via Failsafe — full safety net on CI. - Failsafe's `verify` goal fails the build when `*IT` / `*AT` tests fail, even if Failsafe itself reported them as failures in `integration-test` phase. The explicit `<excludes>` in Surefire prevent accidental double-execution if a class matches multiple patterns.
+
+**Good example:**
+
+```xml
+<build>
+    <plugins>
+
+        <!-- Surefire: fast unit tests only (*Test, *Tests) — "test" phase -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.5.5</version>
+            <configuration>
+                <includes>
+                    <include>**/*Test.java</include>
+                    <include>**/*Tests.java</include>
+                </includes>
+                <excludes>
+                    <!-- Prevent Surefire from picking up IT/AT classes -->
+                    <exclude>**/*IT.java</exclude>
+                    <exclude>**/*AT.java</exclude>
+                </excludes>
+            </configuration>
+        </plugin>
+
+        <!-- Failsafe: integration (*IT) and acceptance (*AT) tests — "integration-test" / "verify" phases -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <version>3.5.5</version>
+            <configuration>
+                <includes>
+                    <include>**/*IT.java</include>
+                    <include>**/*AT.java</include>
+                </includes>
+            </configuration>
+            <executions>
+                <execution>
+                    <goals>
+                        <!-- Runs IT/AT tests in "integration-test" phase -->
+                        <goal>integration-test</goal>
+                        <!-- Fails the build in "verify" phase if any IT/AT test failed -->
+                        <goal>verify</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+
+    </plugins>
+</build>
+
+<!--
+    Resulting lifecycle:
+      mvn test          → Surefire: *Test, *Tests only (fast)
+      mvn verify        → Surefire: *Test, *Tests  +  Failsafe: *IT, *AT (full safety net)
+      mvn test -DskipITs → skip Failsafe without skipping Surefire
+-->
+```
+
+**Bad example:**
+
+```xml
+<build>
+    <plugins>
+
+        <!-- Bad: Surefire only — default includes pick up *IT classes too.
+             *IT tests run in the "test" phase (wrong phase, wrong speed budget).
+             No Failsafe means no "verify" gate: if an IT fails, mvn verify may still
+             report BUILD SUCCESS because Surefire doesn't use the Failsafe safety net. -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.5.5</version>
+            <!-- No <includes> / <excludes>: default pattern matches
+                 *Test, *Tests, *TestCase, Test*, AND *IT — mixes phases -->
+        </plugin>
+
+        <!-- Missing: maven-failsafe-plugin with integration-test + verify goals -->
+
+    </plugins>
+</build>
 ```
 
 ## Output Format
 
 - **ANALYZE** integration tests: scope (IT vs unit overlap), Testcontainers usage, HTTP assertion quality, data isolation, naming, and container lifecycle
 - **CATEGORIZE** by impact (FLAKINESS, SPEED, CLARITY) and by concern (infra, HTTP, persistence)
-- **APPLY** fixes: introduce or pin containers, add `@DynamicPropertySource`, improve TestRestTemplate assertions, add `@Transactional` or cleanup, rename/split vague tests, use static `@Container`
+- **APPLY** fixes: replace `@DynamicPropertySource` with `@ServiceConnection` for supported containers, pin Docker image tags, use `MockMvcTester` + `@MockitoBean` (Spring Boot 4.0.x standard), add `@DataJdbcTest`/`@DataJpaTest` for persistence slices, improve `TestRestTemplate` assertions with records and AssertJ, add `@Transactional` or cleanup, rename/split vague tests, use static `@Container`
 - **IMPLEMENT** incrementally; keep `mvn verify` green; align Surefire/Failsafe conventions for `*IT` if the project uses them
 - **EXPLAIN** when to use `@321-frameworks-spring-boot-testing-unit-tests` vs full-stack integration
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
