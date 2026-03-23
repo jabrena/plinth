@@ -1,6 +1,6 @@
 ---
 name: 321-frameworks-spring-boot-testing-unit-tests
-description: Use when you need to write unit tests for Spring Boot applications — including pure unit tests with @ExtendWith(MockitoExtension.class) for @Service/@Component, slice tests with @WebMvcTest and @MockBean for controllers, @JsonTest for JSON serialization, test profiles, and @TestConfiguration. For framework-agnostic Java use @131-java-testing-unit-testing. For integration tests use @322-frameworks-spring-boot-testing-integration-tests.
+description: Use when you need to write unit tests for Spring Boot applications — including pure unit tests with @ExtendWith(MockitoExtension.class) for @Service/@Component, slice tests with @WebMvcTest and @MockBean/@MockitoBean for controllers, @JsonTest for JSON serialization, parameterized tests with @CsvSource/@MethodSource, test profiles, and @TestConfiguration. For framework-agnostic Java use @131-java-testing-unit-testing. For integration tests use @322-frameworks-spring-boot-testing-integration-tests.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -14,33 +14,50 @@ You are a Senior software engineer with extensive experience in Spring Boot test
 
 ## Goal
 
-Apply the following Spring Boot unit testing guidelines when writing tests. Use pure Mockito unit tests for @Service and @Component classes, and slice tests for controllers and JSON. Follow the rules, good/bad examples, and best practices described below.
+Spring Boot unit tests mix fast, context-free tests for domain and application services with narrow slice tests for web and JSON. Use Mockito (`@ExtendWith(MockitoExtension.class)`, `@Mock`, `@InjectMocks`) for beans that do not need Spring, and MVC/JSON slices (`@WebMvcTest`, `@JsonTest`) with `@MockitoBean` when you need MockMvc or JacksonTester. Prefer constructor-injected beans and Java records so tests stay simple and readable.
 
-# Spring Boot Unit Testing with Mockito
-
-Spring Boot unit testing combines two complementary approaches: **pure unit tests** (no Spring context) for `@Service` and `@Component` classes, and **slice tests** (lightweight Spring context) for controllers and JSON serialization. Use Mockito for mocking dependencies in both styles. This hybrid approach maximizes speed, isolation, and maintainability.
-
-## Implementing These Principles
+### Implementing These Principles
 
 These guidelines are built upon the following core principles:
 
-- **Pure Unit Tests First**: Test `@Service` and `@Component` classes with `@ExtendWith(MockitoExtension.class)` — no Spring context, maximum speed
-- **Slice Tests for Controllers**: Use `@WebMvcTest` and `@MockBean` when testing controllers with MockMvc
-- **Constructor Injection**: Design Spring beans for testability; constructor injection works seamlessly with `@InjectMocks`
-- **Layer Isolation**: Mock dependencies to focus tests on the unit under test
+1. **Pure unit tests first**: Exercise `@Service` and `@Component` types with Mockito only—no `ApplicationContext`—for speed and isolation.
+2. **Slices over full boot**: Use `@WebMvcTest` for controllers and `@JsonTest` for Jackson mapping; avoid `@SpringBootTest` when a slice suffices.
+3. **Mock boundaries**: Replace collaborators with `@Mock` or `@MockitoBean` so each test targets one unit or layer.
+4. **Deterministic test config**: Use `@ActiveProfiles("test")`, `@TestConfiguration`, and `@Primary` beans (e.g., fixed `Clock`) instead of flaky time or environment coupling.
+5. **Parameterized tests**: Prefer `@ParameterizedTest` with `@CsvSource` or `@MethodSource` over copy-pasted test methods covering the same logic with different inputs.
+6. **Modern mocking API**: Use `@MockitoBean` / `@MockitoSpyBean` in Spring Boot 4.0.x; `@MockBean` / `@SpyBean` are deprecated and removed.
+7. **Records and correct JSON assertions**: Use Java records for domain objects and `extractingJsonPathNumberValue`/`extractingJsonPathStringValue` to assert actual JSON values (not just existence).
 
-## Table of contents
+**Cross-references**: Framework-agnostic unit testing — `@131-java-testing-unit-testing`. Integration tests and Testcontainers — `@322-frameworks-spring-boot-testing-integration-tests`. Acceptance tests from Gherkin — `@323-frameworks-spring-boot-testing-acceptance-tests`. Related slices: `@WebFluxTest` (WebFlux), `@RestClientTest` (REST clients), `@TestPropertySource` (property overrides).
 
-- Rule 1: Pure Unit Tests for @Service/@Component with Mockito
-- Rule 2: Use @WebMvcTest for Controller Testing
-- Rule 3: Use @JsonTest for JSON Serialization Testing
-- Rule 4: Use @MockBean When Testing with Spring Context
-- Rule 5: Configure Test Profiles and @TestConfiguration
+## Constraints
 
-## Rule 1: Pure Unit Tests for @Service/@Component with Mockito
+Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
 
-Title: Test Service and Component Classes Without Spring Context
-Description: Use `@ExtendWith(MockitoExtension.class)` with `@Mock` and `@InjectMocks` to test `@Service` and `@Component` classes in isolation. No Spring context is loaded — tests are fast and fully isolated. Spring Boot's constructor injection makes this pattern natural.
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **PREREQUISITE**: Project must compile successfully and pass basic validation checks before any test refactoring
+- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with test improvements
+- **NO EXCEPTIONS**: Under no circumstances should testing recommendations be applied to a project that fails to compile
+- **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
+
+## Examples
+
+### Table of contents
+
+- Example 1: Pure unit tests with MockitoExtension
+- Example 2: @WebMvcTest for controllers
+- Example 3: @JsonTest for JSON mapping
+- Example 4: @MockBean in slice tests
+- Example 5: Parameterized unit tests
+- Example 6: Test profiles and @TestConfiguration
+- Example 7: @MockitoBean in Spring Boot 4.0.x
+- Example 8: Unit test class naming convention
+
+### Example 1: Pure unit tests with MockitoExtension
+
+Title: No Spring context for @Service and @Component
+Description: Annotate tests with `@ExtendWith(MockitoExtension.class)`, declare collaborators with `@Mock`, and the unit under test with `@InjectMocks`. Stub behavior with `when` and verify interactions with `verify`. Omit `times(1)` — it is Mockito's default and adds noise. Use Java records for domain objects and structure tests with Given-When-Then. Do not use `@SpringBootTest` for simple service logic.
 
 **Good example:**
 
@@ -50,318 +67,659 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 import java.util.Optional;
-
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.*;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
+
+// Domain records
+record CreateOrderRequest(String productName, int quantity) {}
+record Order(Long id, String productName, int quantity) {}
 
 @ExtendWith(MockitoExtension.class)
 class OrderServiceTest {
 
-@Mock
-private OrderRepository orderRepository;
+    @Mock
+    private OrderRepository orderRepository;
 
-@InjectMocks
-private OrderService orderService;
+    @InjectMocks
+    private OrderService orderService;
 
-@Test
-void shouldCreateOrder() {
-// Given
-CreateOrderRequest request = new CreateOrderRequest("Product A", 2);
-Order order = new Order(1L, "Product A", 2);
-when(orderRepository.save(any(Order.class))).thenReturn(order);
+    @Test
+    void shouldCreateOrder() {
+        // Given
+        var request = new CreateOrderRequest("Product A", 2);
+        var order = new Order(1L, "Product A", 2);
+        when(orderRepository.save(any(Order.class))).thenReturn(order);
 
-// When
-Order result = orderService.createOrder(request);
+        // When
+        Order result = orderService.createOrder(request);
 
-// Then
-assertThat(result.getProductName()).isEqualTo("Product A");
-verify(orderRepository, times(1)).save(any(Order.class));
-}
+        // Then
+        assertThat(result.productName()).isEqualTo("Product A");
+        verify(orderRepository).save(any(Order.class));  // times(1) is the default — omit it
+    }
 
-@Test
-void shouldThrowWhenProductNotFound() {
-// Given
-when(orderRepository.findById(999L)).thenReturn(Optional.empty());
+    @Test
+    void shouldThrowWhenOrderNotFound() {
+        // Given
+        when(orderRepository.findById(999L)).thenReturn(Optional.empty());
 
-// When & Then
-assertThatThrownBy(() -> orderService.getOrder(999L))
-.isInstanceOf(OrderNotFoundException.class);
-}
+        // When / Then
+        assertThatThrownBy(() -> orderService.getOrder(999L))
+            .isInstanceOf(OrderNotFoundException.class);
+    }
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
-@SpringBootTest
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+
+@SpringBootTest  // loads full ApplicationContext — very slow for a plain service test
 class OrderServiceTest {
 
-@Autowired
-private OrderService orderService;
+    @Autowired
+    private OrderService orderService;
 
-@Autowired
-private OrderRepository orderRepository;
+    @Autowired
+    private OrderRepository orderRepository;
 
-@Test
-void shouldCreateOrder() {
-// Loads full Spring context and real database — slow, brittle
-// Use pure unit test with mocks instead
-Order result = orderService.createOrder(new CreateOrderRequest("Product A", 2));
-assertThat(result).isNotNull();
-}
+    @Test
+    void shouldCreateOrder() {
+        Order result = orderService.createOrder(new CreateOrderRequest("Product A", 2));
+        assertThat(result).isNotNull();
+        verify(orderRepository, times(1)).save(result);  // times(1) is redundant noise
+    }
 }
 ```
 
-## Rule 2: Use @WebMvcTest for Controller Testing
+### Example 2: @WebMvcTest for controllers
 
-Title: Test Controllers in Isolation with @WebMvcTest
-Description: Use `@WebMvcTest` to test only the web layer (controllers) without loading the full application context. This annotation configures Spring MVC and MockMvc. Use `@MockBean` to mock service dependencies — MockBean integrates Mockito with the slice context.
+Title: MockMvc slice with @MockBean for services
+Description: Use `@WebMvcTest(YourController.class)` to load only MVC infrastructure. Inject `MockMvc`, mock dependencies with `@MockBean`, and assert status and JSON with `MockMvc` matchers. Avoid `TestRestTemplate` with full context for unit-style controller tests.
 
 **Good example:**
 
 ```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 @WebMvcTest(UserController.class)
 class UserControllerTest {
 
-@Autowired
-private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-@MockBean
-private UserService userService;
+    @MockBean
+    private UserService userService;
 
-@Test
-void shouldReturnUserWhenValidId() throws Exception {
-// Given
-User user = new User(1L, "John Doe", "john@example.com");
-when(userService.findById(1L)).thenReturn(user);
+    @Test
+    void shouldReturnUserWhenValidId() throws Exception {
+        User user = new User(1L, "John Doe", "john@example.com");
+        when(userService.findById(1L)).thenReturn(user);
 
-// When & Then
-mockMvc.perform(get("/api/users/1"))
-.andExpect(status().isOk())
-.andExpect(jsonPath("$.name").value("John Doe"))
-.andExpect(jsonPath("$.email").value("john@example.com"));
-}
+        mockMvc.perform(get("/api/users/1"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").value("John Doe"))
+            .andExpect(jsonPath("$.email").value("john@example.com"));
+    }
 
-@Test
-void shouldReturn404WhenUserNotFound() throws Exception {
-when(userService.findById(999L)).thenThrow(new UserNotFoundException(999L));
+    @Test
+    void shouldReturn404WhenUserNotFound() throws Exception {
+        when(userService.findById(999L)).thenThrow(new UserNotFoundException(999L));
 
-mockMvc.perform(get("/api/users/999"))
-.andExpect(status().isNotFound());
-}
+        mockMvc.perform(get("/api/users/999"))
+            .andExpect(status().isNotFound());
+    }
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
-@SpringBootTest
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class UserControllerTest {
 
-@Autowired
-private TestRestTemplate restTemplate;
+    @Autowired
+    private TestRestTemplate restTemplate;
 
-@Test
-void shouldReturnUser() {
-// Loads entire application context unnecessarily
-ResponseEntity<User> response = restTemplate.getForEntity("/api/users/1", User.class);
-assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
-}
+    @Test
+    void shouldReturnUser() {
+        ResponseEntity<User> response = restTemplate.getForEntity("/api/users/1", User.class);
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+    }
 }
 ```
 
-## Rule 3: Use @JsonTest for JSON Serialization Testing
+### Example 3: @JsonTest for JSON mapping
 
-Title: Test JSON Serialization/Deserialization with @JsonTest
-Description: Use `@JsonTest` to test JSON serialization and deserialization in isolation. Auto-configures Jackson and JacksonTester — no full context, fast execution.
+Title: JacksonTester without full Spring Boot
+Description: Use `@JsonTest` to auto-configure Jackson and inject `JacksonTester<T>` for round-trip serialization and JSON assertions. Prefer this over `ObjectMapper` under `@SpringBootTest` for DTO mapping tests. **Important API distinction**: `hasJsonPathNumberValue("$.id")` only verifies that a numeric value *exists* at the path — it does NOT compare the value. To assert the actual value, use `extractingJsonPathNumberValue("$.id").isEqualTo(1)` (number) or `extractingJsonPathStringValue("$.name").isEqualTo("John Doe")` (string). Passing a second argument to `hasJsonPath*Value(expression, args...)` is a printf-style format argument for the expression string, not a value comparison.
 
 **Good example:**
 
 ```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.json.JsonTest;
+import org.springframework.boot.test.json.JacksonTester;
+import static org.assertj.core.api.Assertions.assertThat;
+
+record User(Long id, String name, String email) {}
+
 @JsonTest
 class UserJsonTest {
 
-@Autowired
-private JacksonTester<User> json;
+    @Autowired
+    private JacksonTester<User> json;
 
-@Test
-void shouldSerializeUser() throws Exception {
-User user = new User(1L, "John Doe", "john@example.com");
+    @Test
+    void shouldSerializeUser() throws Exception {
+        var user = new User(1L, "John Doe", "john@example.com");
+        var written = json.write(user);
 
-assertThat(json.write(user))
-.hasJsonPathNumberValue("$.id", 1)
-.hasJsonPathStringValue("$.name", "John Doe")
-.hasJsonPathStringValue("$.email", "john@example.com");
-}
+        // extractingJsonPath* compares the actual value — hasJsonPath*Value only checks existence
+        assertThat(written).extractingJsonPathNumberValue("$.id").isEqualTo(1);
+        assertThat(written).extractingJsonPathStringValue("$.name").isEqualTo("John Doe");
+        assertThat(written).extractingJsonPathStringValue("$.email").isEqualTo("john@example.com");
+    }
 
-@Test
-void shouldDeserializeUser() throws Exception {
-String content = """
-{"id": 1, "name": "John Doe", "email": "john@example.com"}
-""";
+    @Test
+    void shouldDeserializeUser() throws Exception {
+        String content = """
+            {"id": 1, "name": "John Doe", "email": "john@example.com"}
+            """;
 
-assertThat(json.parse(content))
-.usingRecursiveComparison()
-.isEqualTo(new User(1L, "John Doe", "john@example.com"));
-}
+        assertThat(json.parse(content))
+            .usingRecursiveComparison()
+            .isEqualTo(new User(1L, "John Doe", "john@example.com"));
+    }
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
-@SpringBootTest
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import static org.assertj.core.api.Assertions.assertThat;
+
+@SpringBootTest  // loads full context just to get an ObjectMapper
 class UserJsonTest {
 
-@Autowired
-private ObjectMapper objectMapper;
+    @Autowired
+    private ObjectMapper objectMapper;
 
-@Test
-void shouldSerializeUser() throws Exception {
-// Full context for JSON testing is overkill
-User user = new User(1L, "John Doe", "john@example.com");
-String json = objectMapper.writeValueAsString(user);
-assertThat(json).contains("John Doe");
-}
+    @Test
+    void shouldSerializeUser() throws Exception {
+        User user = new User(1L, "John Doe", "john@example.com");
+        String json = objectMapper.writeValueAsString(user);
+        assertThat(json).contains("John Doe");  // substring match — fragile and incomplete
+
+        // Also wrong: hasJsonPathNumberValue("$.id", 1) does NOT compare values;
+        // the second arg is a printf format arg for the expression, not a value matcher
+    }
 }
 ```
 
-## Rule 4: Use @MockBean When Testing with Spring Context
+### Example 4: @MockBean in slice tests
 
-Title: Mock Spring Bean Dependencies in Slice Tests
-Description: Use `@MockBean` to replace Spring beans with Mockito mocks in slice tests. Required for controller dependencies not auto-configured by the slice. Use standard Mockito `when()`, `verify()`, and `ArgumentCaptor`.
+Title: Register Mockito mocks in the Spring test context
+Description: In `@WebMvcTest` (and similar slices), declare each dependency the controller needs as `@MockBean` so Spring can inject mocks. Use `when`/`verify` as usual. If a bean is missing, the context fails to start. Use record accessors (`order.productName()`) rather than JavaBean getters when domain types are records.
 
 **Good example:**
 
 ```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+// Domain records
+record CreateOrderRequest(String productName, int quantity) {}
+record Order(Long id, String productName, int quantity) {}
+
 @WebMvcTest(OrderController.class)
 class OrderControllerTest {
 
-@Autowired
-private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-@MockBean
-private OrderService orderService;
+    @MockBean
+    private OrderService orderService;
 
-@MockBean
-private PaymentService paymentService;
+    @MockBean
+    private PaymentService paymentService;
 
-@Test
-void shouldCreateOrder() throws Exception {
-CreateOrderRequest request = new CreateOrderRequest("Product A", 2);
-Order order = new Order(1L, "Product A", 2);
-when(orderService.createOrder(any(CreateOrderRequest.class))).thenReturn(order);
+    @Test
+    void shouldCreateOrder() throws Exception {
+        // Given
+        var order = new Order(1L, "Product A", 2);
+        when(orderService.createOrder(any(CreateOrderRequest.class))).thenReturn(order);
 
-mockMvc.perform(post("/api/orders")
-.contentType(MediaType.APPLICATION_JSON)
-.content("""
-{"productName": "Product A", "quantity": 2}
-"""))
-.andExpect(status().isCreated())
-.andExpect(jsonPath("$.id").value(1))
-.andExpect(jsonPath("$.productName").value("Product A"));
-}
+        // When / Then
+        mockMvc.perform(post("/api/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("""
+                    {"productName": "Product A", "quantity": 2}
+                    """))
+            .andExpect(status().isCreated())
+            .andExpect(jsonPath("$.id").value(1))
+            .andExpect(jsonPath("$.productName").value(order.productName()));  // record accessor
+    }
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @WebMvcTest(OrderController.class)
 class OrderControllerTest {
 
-@Autowired
-private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-// Missing @MockBean — test fails: OrderService not in context
-
-@Test
-void shouldCreateOrder() throws Exception {
-mockMvc.perform(post("/api/orders")
-.contentType(MediaType.APPLICATION_JSON)
-.content("{}"))
-.andExpect(status().isCreated());
-}
+    @Test
+    void shouldCreateOrder() throws Exception {
+        mockMvc.perform(post("/api/orders")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content("{}"))
+            .andExpect(status().isCreated());
+    }
 }
 ```
 
-## Rule 5: Configure Test Profiles and @TestConfiguration
+### Example 5: Parameterized unit tests
 
-Title: Use Test Profiles and Custom Test Configuration
-Description: Use `@ActiveProfiles("test")` to load test-specific configuration. Use `@TestConfiguration` to define beans (e.g., fixed `Clock`) that apply only in tests.
+Title: @CsvSource and @MethodSource with MockitoExtension
+Description: Use `@ParameterizedTest` with `@CsvSource` for inline tabular data or `@MethodSource` for complex objects. Combine with `@ExtendWith(MockitoExtension.class)` to cover multiple input scenarios without duplicating test code. Each row acts as an independent Given-When-Then scenario.
 
 **Good example:**
 
 ```java
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.junit.jupiter.params.provider.MethodSource;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.Optional;
+import java.util.stream.Stream;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.Mockito.when;
+
+record Product(Long id, String category, double price) {}
+
+@ExtendWith(MockitoExtension.class)
+class DiscountServiceTest {
+
+    @Mock
+    private ProductRepository productRepository;
+
+    @InjectMocks
+    private DiscountService discountService;
+
+    @ParameterizedTest
+    @CsvSource({
+        "ELECTRONICS, 100.0, 10.0",
+        "CLOTHING,    200.0, 40.0",
+        "FOOD,         50.0,  2.5"
+    })
+    void shouldApplyCorrectDiscount(String category, double price, double expectedDiscount) {
+        // Given
+        var product = new Product(1L, category, price);
+        when(productRepository.findById(1L)).thenReturn(Optional.of(product));
+
+        // When
+        double discount = discountService.calculate(1L);
+
+        // Then
+        assertThat(discount).isEqualTo(expectedDiscount);
+    }
+
+    static Stream<String> invalidCategories() {
+        return Stream.of("", "  ", "UNKNOWN");
+    }
+
+    @ParameterizedTest
+    @MethodSource("invalidCategories")
+    void shouldRejectInvalidCategory(String category) {
+        // Given
+        var product = new Product(2L, category, 100.0);
+        when(productRepository.findById(2L)).thenReturn(Optional.of(product));
+
+        // When / Then
+        assertThatThrownBy(() -> discountService.calculate(2L))
+            .isInstanceOf(IllegalArgumentException.class);
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.Optional;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class DiscountServiceTest {
+
+    @Mock ProductRepository productRepository;
+    @InjectMocks DiscountService discountService;
+
+    // Copy-pasted tests — identical structure repeated for each input variant
+    @Test void shouldApplyElectronicsDiscount() {
+        when(productRepository.findById(1L))
+            .thenReturn(Optional.of(new Product(1L, "ELECTRONICS", 100.0)));
+        assertThat(discountService.calculate(1L)).isEqualTo(10.0);
+    }
+
+    @Test void shouldApplyClothingDiscount() {
+        when(productRepository.findById(1L))
+            .thenReturn(Optional.of(new Product(1L, "CLOTHING", 200.0)));
+        assertThat(discountService.calculate(1L)).isEqualTo(40.0);
+    }
+
+    @Test void shouldApplyFoodDiscount() {
+        when(productRepository.findById(1L))
+            .thenReturn(Optional.of(new Product(1L, "FOOD", 50.0)));
+        assertThat(discountService.calculate(1L)).isEqualTo(2.5);
+    }
+}
+```
+
+### Example 6: Test profiles and @TestConfiguration
+
+Title: Stable time, beans, and test-only wiring
+Description: Use `@ActiveProfiles("test")` to isolate configuration. Use `@TestConfiguration` inner classes or static nested config to define beans such as a fixed `Clock` with `@Primary` for deterministic assertions. Avoid asserting on “now” without controlling time.
+
+**Good example:**
+
+```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.web.servlet.MockMvc;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 @WebMvcTest(UserController.class)
 @ActiveProfiles("test")
 class UserControllerTest {
 
-@TestConfiguration
-static class TestConfig {
+    @TestConfiguration
+    static class TestConfig {
 
-@Bean
-@Primary
-Clock testClock() {
-return Clock.fixed(Instant.parse("2023-12-01T10:00:00Z"), ZoneOffset.UTC);
-}
-}
+        @Bean
+        @Primary
+        Clock testClock() {
+            return Clock.fixed(Instant.parse("2023-12-01T10:00:00Z"), ZoneOffset.UTC);
+        }
+    }
 
-@Autowired
-private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-@MockBean
-private UserService userService;
+    @MockBean
+    private UserService userService;
 
-@Test
-void shouldUseFixedTimeForTesting() throws Exception {
-mockMvc.perform(get("/api/users/current-time"))
-.andExpect(status().isOk())
-.andExpect(content().string("2023-12-01T10:00:00Z"));
-}
+    @Test
+    void shouldUseFixedTimeForTesting() throws Exception {
+        mockMvc.perform(get("/api/users/current-time"))
+            .andExpect(status().isOk())
+            .andExpect(content().string("2023-12-01T10:00:00Z"));
+    }
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 @WebMvcTest(UserController.class)
 class UserControllerTest {
 
-@Autowired
-private MockMvc mockMvc;
+    @Autowired
+    private MockMvc mockMvc;
 
-@Test
-void shouldReturnCurrentTime() throws Exception {
-mockMvc.perform(get("/api/users/current-time"))
-.andExpect(status().isOk());
-// Cannot assert exact time — unreliable
-}
+    @MockBean
+    private UserService userService;
+
+    @Test
+    void shouldReturnCurrentTime() throws Exception {
+        mockMvc.perform(get("/api/users/current-time"))
+            .andExpect(status().isOk());  // no Clock control — assertion on "now" is flaky
+    }
 }
 ```
 
-## Cross-References
+### Example 7: @MockitoBean in Spring Boot 4.0.x
 
-| Scenario | Use Rule |
-|----------|----------|
-| Framework-agnostic Java (no Spring Boot) | @131-java-testing-unit-testing |
-| Integration tests, Testcontainers, repositories | @322-frameworks-spring-boot-testing-integration-tests |
-| Acceptance tests from Gherkin | @323-frameworks-spring-boot-testing-acceptance-tests |
+Title: Standard replacement for the removed @MockBean
+Description: Spring Boot 4.0.x uses `@MockitoBean` and `@MockitoSpyBean` from the `org.springframework.test.context.bean.override.mockito` package as the standard mock registration API. `@MockBean` and `@SpyBean` (from `org.springframework.boot.test.mock.mockito`) were deprecated in Spring Boot 3.4 and are no longer available in 4.x — replace all usages with `@MockitoBean` / `@MockitoSpyBean`.
 
-### Additional Annotations
+**Good example:**
 
-- **@WebFluxTest**: For Spring WebFlux reactive controllers
-- **@RestClientTest**: For REST clients and @RestTemplate
-- **@TestPropertySource**: Override properties in tests
+```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;  // Spring Boot 4.0.x
+import org.springframework.test.web.servlet.MockMvc;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+@WebMvcTest(UserController.class)
+class UserControllerTest {
 
-## Constraints
+    @Autowired
+    private MockMvc mockMvc;
 
-Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
+    @MockitoBean  // Spring Boot 4.0.x standard — replaces removed @MockBean
+    private UserService userService;
 
-- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
-- **PREREQUISITE**: Project must compile successfully before any test refactoring
-- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
-- **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
+    @Test
+    void shouldReturnUser() throws Exception {
+        // Given
+        var user = new User(1L, "Alice", "alice@example.com");
+        when(userService.findById(1L)).thenReturn(user);
+
+        // When / Then
+        mockMvc.perform(get("/api/users/1"))
+            .andExpect(status().isOk())
+            .andExpect(jsonPath("$.name").value("Alice"));
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;  // removed in Spring Boot 4 — use @MockitoBean
+import org.springframework.test.web.servlet.MockMvc;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@WebMvcTest(UserController.class)
+class UserControllerTest {
+
+    @Autowired
+    private MockMvc mockMvc;
+
+    @MockBean  // removed in Spring Boot 4 — use @MockitoBean instead
+    private UserService userService;
+
+    @Test
+    void shouldReturnUser() throws Exception {
+        when(userService.findById(1L)).thenReturn(new User(1L, "Alice", "alice@example.com"));
+
+        mockMvc.perform(get("/api/users/1"))
+            .andExpect(status().isOk());
+    }
+}
+```
+
+### Example 8: Unit test class naming convention
+
+Title: Always suffix unit test classes with "Test"
+Description: Unit test class names must end with the suffix `Test` (e.g., `OrderServiceTest`, `UserControllerTest`). Maven Surefire picks up classes matching `**/*Test.java`, `**/Test*.java`, `**/*Tests.java`, and `**/*TestCase.java` by default. Using a different suffix (or none) silently excludes tests from the build. Reserve the `IT` suffix for integration tests executed by Maven Failsafe (`**/*IT.java`). Consistency also makes it trivial to navigate from a production class (`OrderService`) to its test (`OrderServiceTest`).
+
+**Good example:**
+
+```java
+// File: src/test/java/com/example/OrderServiceTest.java
+// Surefire picks this up by default because the name ends with "Test"
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.Optional;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class OrderServiceTest {          // ✔ "Test" suffix — Surefire runs this class
+
+    @Mock
+    private OrderRepository orderRepository;
+
+    @InjectMocks
+    private OrderService orderService;
+
+    @Test
+    void shouldReturnOrderWhenFound() {
+        // Given
+        var order = new Order(1L, "Product A", 2);
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
+
+        // When
+        Order result = orderService.getOrder(1L);
+
+        // Then
+        assertThat(result.productName()).isEqualTo("Product A");
+    }
+}
+```
+
+**Bad example:**
+
+```java
+// File: src/test/java/com/example/OrderServiceSpec.java
+// Surefire does NOT pick this up — tests are silently skipped during "mvn test"
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.Optional;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class OrderServiceSpec {          // ✘ "Spec" suffix — Surefire skips this class silently
+
+    @Mock
+    private OrderRepository orderRepository;
+
+    @InjectMocks
+    private OrderService orderService;
+
+    @Test
+    void shouldReturnOrderWhenFound() {
+        var order = new Order(1L, "Product A", 2);
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(order));
+
+        Order result = orderService.getOrder(1L);
+        assertThat(result.productName()).isEqualTo("Product A");
+        // This test never runs — the class name doesn't match Surefire's default pattern
+    }
+}
+```
+
+## Output Format
+
+- **ANALYZE** the test suite: pure Mockito vs slice tests, unnecessary `@SpringBootTest`, missing `@MockitoBean`/`@MockBean`, JSON coverage, and flaky time or environment
+- **CATEGORIZE** findings by impact (SPEED, FLAKINESS, CLARITY) and by layer (service, web, JSON, config)
+- **APPLY** improvements: convert heavy tests to `@ExtendWith(MockitoExtension.class)`, narrow `@WebMvcTest`/`@JsonTest`, add `@MockitoBean` where the slice needs mocks, introduce `@ActiveProfiles` and `@TestConfiguration` for determinism, replace copy-pasted tests with `@ParameterizedTest`, replace any remaining `@MockBean` with `@MockitoBean` (removed in Spring Boot 4), fix `hasJsonPath*Value` to `extractingJsonPath*Value` for value assertions
+- **IMPLEMENT** changes incrementally; keep tests green after each step
+- **EXPLAIN** when to use `@131-java-testing-unit-testing` vs `@322-frameworks-spring-boot-testing-integration-tests` if the user is mixing concerns
+- **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive test refactors
+
+## Safeguards
+
+- **BLOCKING SAFETY CHECK**: Run `./mvnw compile` or `mvn compile` before ANY test refactoring
+- **CRITICAL VALIDATION**: Run `./mvnw clean verify` after changes; ensure test suite passes
+- **CONTEXT SCOPE**: Do not add `@SpringBootTest` only to “make it work” — fix missing slices and mocks first
+- **MOCK ACCURACY**: Over-mocking or missing `verify` can hide integration issues — pair unit tests with integration tests where appropriate
+- **INCREMENTAL SAFETY**: Refactor one test class or package at a time when converting to slices
+- **SAFETY PROTOCOL**: Stop if tests fail after edits until the failure is understood

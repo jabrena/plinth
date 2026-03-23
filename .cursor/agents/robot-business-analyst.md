@@ -1,7 +1,7 @@
 ---
-name: business-analyst
-description: Business analyst. Use when reviewing user stories, implementation plans, and ADRs for gaps, contradictions, and traceability issues. Use proactively before sign-off or when requirements feel misaligned.
+name: robot-business-analyst
 model: inherit
+description: Business analyst. Use when reviewing user stories, implementation plans, and ADRs for gaps, contradictions, and traceability issues. Use proactively before sign-off or when requirements feel misaligned.
 readonly: true
 ---
 
