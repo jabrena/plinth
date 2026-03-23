@@ -1,6 +1,6 @@
 ---
 name: 311-frameworks-spring-jdbc
-description: Use when you need to write or review programmatic JDBC with Spring — including JdbcTemplate, NamedParameterJdbcTemplate, JdbcClient, parameterized SQL, RowMapper mapping to records, batch operations, transactions, DataAccessException handling, read-only transactions, streaming large result sets, and @JdbcTest slice testing. Part of the skills-for-java project
+description: Use when you need to write or review programmatic JDBC with Spring — including JdbcTemplate, NamedParameterJdbcTemplate, JdbcClient (Spring Framework 6.1+), parameterized SQL, RowMapper mapping to records, batch operations, transactions, safe handling of generated keys, DataAccessException handling, read-only transactions, streaming large result sets, and @JdbcTest slice testing. Part of the skills-for-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -13,10 +13,11 @@ Apply Spring JDBC guidelines using JdbcTemplate, NamedParameterJdbcTemplate, and
 **What is covered in this Skill?**
 
 - Parameterized SQL (never concatenate user input)
-- JdbcClient fluent API for new code
+- JdbcClient fluent API for new code (Spring Framework 6.1+)
 - NamedParameterJdbcTemplate for named placeholders
 - RowMapper and DataClassRowMapper (records)
 - Batch operations
+- Safe handling of generated keys (KeyHolder / JdbcClient returning keys)
 - Service-layer @Transactional boundaries
 - Read-only transactions (@Transactional(readOnly = true))
 - Safe single-row access (optional() / findFirst() vs queryForObject)
