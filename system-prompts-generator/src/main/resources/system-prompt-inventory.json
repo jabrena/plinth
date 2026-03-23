@@ -34,11 +34,11 @@
   {"name": "200-agents-md"},
   {"name": "301-frameworks-spring-boot-core"},
   {"name": "302-frameworks-spring-boot-rest"},
+  {"name": "311-frameworks-spring-jdbc"},
   {"name": "312-frameworks-spring-data-jdbc"},
   {"name": "321-frameworks-spring-boot-testing-unit-tests"},
   {"name": "322-frameworks-spring-boot-testing-integration-tests"},
   {"name": "323-frameworks-spring-boot-testing-acceptance-tests"},
-  {"name": "324-frameworks-spring-boot-testing-e2e-local-tests"},
   {"name": "behaviour-consultative-interaction"},
   {"name": "behaviour-progressive-learning"},
   {"name": "behaviour-article-writer"}

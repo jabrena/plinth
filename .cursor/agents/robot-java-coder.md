@@ -1,5 +1,5 @@
 ---
-name: java-developer
+name: robot-java-coder
 model: inherit
 description: Implementation specialist for Java projects. Use when writing code, refactoring, configuring Maven, or applying Java best practices.
 ---
