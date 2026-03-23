@@ -14,411 +14,444 @@ You are a Senior software engineer with extensive experience in REST API design 
 
 ## Goal
 
-Apply the following Java REST API design principles when building or refactoring Spring Boot REST APIs. Follow the rules, good/bad examples, and best practices described below.
+Well-designed REST APIs use HTTP semantics predictably: resources as nouns, methods for actions, status codes for outcomes, and stable contracts via DTOs and versioning. Production APIs centralize errors (structured JSON or RFC 7807 Problem Details), document behavior for consumers, and apply authentication, authorization, and input validation by default.
 
-# Java REST API Design Principles
-
-This comprehensive guide provides essential principles for designing robust, maintainable, and secure REST APIs using Spring Boot. These rules ensure your APIs follow industry best practices, maintain consistency, and provide excellent developer experience for API consumers.
-
-## Implementing These Principles
+### Implementing These Principles
 
 These guidelines are built upon the following core principles:
 
-- **Semantic Consistency**: Use HTTP methods, status codes, and URI patterns according to their intended semantics
-- **Clear Communication**: Provide unambiguous API contracts through proper DTOs, error handling, and documentation
-- **Security by Design**: Implement authentication, authorization, and input validation from the start
-- **Evolutionary Design**: Version APIs and structure them to support future changes without breaking existing clients
+1. **Semantic consistency**: Align `GET`/`POST`/`PUT`/`PATCH`/`DELETE` with safe vs unsafe operations and return status codes that match the real outcome.
+2. **Clear contracts**: Expose lean request/response DTOs, version APIs explicitly, and avoid leaking domain entities or stack traces to clients.
+3. **Security by design**: Terminate TLS appropriately, authenticate and authorize requests, validate input, and avoid embedding secrets or raw SQL in controllers.
+4. **Operational clarity**: Use `@ControllerAdvice` for consistent errors, Problem Details where appropriate, and OpenAPI (or equivalent) so clients do not rely on reading source code.
+5. **Evolution without surprise**: Choose a versioning strategy (URI, header, or media type) and apply it consistently so breaking changes remain manageable.
 
-## Table of contents
+## Constraints
 
-- Rule 1: Use HTTP Methods Correctly
-- Rule 2: Design Clear and Consistent Resource URIs
-- Rule 3: Use HTTP Status Codes Appropriately
-- Rule 4: Implement Effective Request and Response Payloads (DTOs)
-- Rule 5: Version Your APIs
-- Rule 6: Handle Errors Gracefully
-- Rule 7: Secure Your APIs
-- Rule 8: Document Your APIs
-- Rule 9: Use Controller Advice for Global Exception Handling
-- Rule 10: Implement Problem Details for Error Responses
+Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
 
-## Rule 1: Use HTTP Methods Correctly
+- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **PREREQUISITE**: Project must compile successfully and pass basic validation checks before any REST API refactoring
+- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with REST API improvements
+- **NO EXCEPTIONS**: Under no circumstances should REST API recommendations be applied to a project that fails to compile
+- **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 
-Title: Employ HTTP Methods Semantically
-Description: Use HTTP methods according to their defined semantics to ensure predictability and compliance with web standards. `GET` for retrieval, `POST` for creation, `PUT` for update/replace, `PATCH` for partial update, and `DELETE` for removal.
+## Examples
+
+### Table of contents
+
+- Example 1: Use HTTP methods semantically
+- Example 2: Resource URIs and naming
+- Example 3: HTTP status codes
+- Example 4: DTOs for requests and responses
+- Example 5: API versioning
+- Example 6: Graceful, structured error responses
+- Example 7: Secure APIs
+- Example 8: API documentation
+- Example 9: Controller advice and ProblemDetail
+- Example 10: RFC 7807 Problem Details quality
+
+### Example 1: Use HTTP methods semantically
+
+Title: GET for reads, POST for creates, PUT/PATCH for updates, DELETE for removal
+Description: Map operations to the correct verb: `GET` must not change server state; `POST` typically creates subordinate resources; `PUT` replaces; `PATCH` partially updates; `DELETE` removes. Avoid RPC-style GET/POST misuse.
 
 **Good example:**
 
 ```java
-// Using Spring MVC annotations for illustration
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.net.URI;
+import java.util.Map;
+
 @RestController
 @RequestMapping("/users")
-public class UserController {
+class UserController {
 
-@GetMapping("/{id}") // GET for retrieving a user
-public ResponseEntity<UserDTO> getUser(@PathVariable String id) {
-// ... logic to fetch user ...
-return ResponseEntity.ok(new UserDTO());
+    @GetMapping("/{id}")
+    ResponseEntity<UserDTO> getUser(@PathVariable String id) {
+        return ResponseEntity.ok(new UserDTO());
+    }
+
+    @PostMapping
+    ResponseEntity<UserDTO> createUser(@RequestBody UserCreateDTO body) {
+        UserDTO created = new UserDTO();
+        return ResponseEntity.created(URI.create("/users/" + created.getId())).body(created);
+    }
+
+    @PutMapping("/{id}")
+    ResponseEntity<UserDTO> updateUser(@PathVariable String id, @RequestBody UserUpdateDTO body) {
+        return ResponseEntity.ok(new UserDTO());
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<Void> deleteUser(@PathVariable String id) {
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/{id}")
+    ResponseEntity<UserDTO> patchUser(@PathVariable String id, @RequestBody Map<String, Object> updates) {
+        return ResponseEntity.ok(new UserDTO());
+    }
 }
 
-@PostMapping // POST for creating a new user
-public ResponseEntity<UserDTO> createUser(@RequestBody UserCreateDTO userCreateDTO) {
-// ... logic to create user ...
-UserDTO newUser = new UserDTO(); // Assume it gets an ID after creation
-return ResponseEntity.created(URI.create("/users/" + newUser.getId())).body(newUser);
+class UserDTO {
+    private String id;
+    public String getId() { return id; }
 }
-
-@PutMapping("/{id}") // PUT for replacing/updating a user
-public ResponseEntity<UserDTO> updateUser(@PathVariable String id, @RequestBody UserUpdateDTO userUpdateDTO) {
-// ... logic to update user ...
-return ResponseEntity.ok(new UserDTO());
-}
-
-@DeleteMapping("/{id}") // DELETE for removing a user
-public ResponseEntity<Void> deleteUser(@PathVariable String id) {
-// ... logic to delete user ...
-return ResponseEntity.noContent().build();
-}
-
-@PatchMapping("/{id}") // PATCH for partial updates
-public ResponseEntity<UserDTO> partiallyUpdateUser(@PathVariable String id, @RequestBody Map<String, Object> updates) {
-// ... logic to partially update user ...
-return ResponseEntity.ok(new UserDTO());
-}
-}
-// Dummy DTO classes
-class UserDTO { private String id; public String getId() { return id; } /* ... other fields, getters, setters ... */ }
-class UserCreateDTO { /* ... fields ... */ }
-class UserUpdateDTO { /* ... fields ... */ }
+class UserCreateDTO { }
+class UserUpdateDTO { }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequestMapping("/api")
-public class BadUserController {
+class BadUserController {
 
-// Bad: Using GET to perform a state change (e.g., delete)
-@GetMapping("/deleteUser")
-public ResponseEntity<String> deleteUserViaGet(@RequestParam String id) {
-System.out.println("Deleting user: " + id + " (Bad: GET used for delete)");
-// ... delete logic ...
-return ResponseEntity.ok("User deleted (but GET was used!)");
-}
+    @GetMapping("/deleteUser")
+    ResponseEntity<String> deleteUserViaGet(@RequestParam String id) {
+        return ResponseEntity.ok("User deleted via GET");
+    }
 
-// Bad: Using POST for all operations, including retrieval
-@PostMapping("/getUser")
-public ResponseEntity<UserDTO> getUserViaPost(@RequestBody String idPayload) {
-System.out.println("Fetching user: " + idPayload + " (Bad: POST used for GET)");
-// ... fetch logic ...
-return ResponseEntity.ok(new UserDTO());
+    @PostMapping("/getUser")
+    ResponseEntity<UserDTO> getUserViaPost(@RequestBody String idPayload) {
+        return ResponseEntity.ok(new UserDTO());
+    }
 }
-}
+class UserDTO { }
 ```
 
-## Rule 2: Design Clear and Consistent Resource URIs
+### Example 2: Resource URIs and naming
 
-Title: Use Nouns for Resources and Maintain URI Consistency
-Description: Design URIs that are intuitive and clearly represent resources. Use nouns (e.g., `/users`, `/orders`) instead of verbs. Keep URIs consistent in style (e.g., lowercase, hyphenated or camelCase for path segments).
+Title: Prefer noun-based paths and hierarchical resources
+Description: Model resources as nouns with stable paths (`/users`, `/users/{id}/orders`). Avoid verbs in paths (`/getAllUsers`) and inconsistent mixing of query-only versus path-based identification without reason.
 
 **Good example:**
 
-```
-GET /users                           // Get all users
-GET /users/{userId}                  // Get a specific user
-GET /users/{userId}/orders           // Get all orders for a specific user
-GET /users/{userId}/orders/{orderId} // Get a specific order for a user
-POST /users                          // Create a new user
+```text
+GET    /users
+GET    /users/{userId}
+GET    /users/{userId}/orders
+GET    /users/{userId}/orders/{orderId}
+POST   /users
 ```
 
-**Bad Example:**
+**Bad example:**
 
-```
-GET /getAllUsers
-GET /fetchUserById?id={userId}
+```text
+GET  /getAllUsers
+GET  /fetchUserById?id={userId}
 POST /createNewUser
-GET /userOrders?userId={userId}  // Mixing query params and path styles inconsistently
-POST /processUserOrderCreation   // URI contains verbs and is overly complex
+GET  /userOrders?userId={userId}
+POST /processUserOrderCreation
 ```
 
-## Rule 3: Use HTTP Status Codes Appropriately
+### Example 3: HTTP status codes
 
-Title: Return Meaningful HTTP Status Codes
-Description: Utilize standard HTTP status codes to accurately reflect the outcome of API requests. This helps clients understand the result without needing to parse the response body for basic success/failure information.
-- `200 OK`: General success.
-- `201 Created`: Resource successfully created (often with a `Location` header pointing to the new resource).
-- `204 No Content`: Success, but no content to return (e.g., after a successful `DELETE`).
-- `400 Bad Request`: Client error (e.g., invalid syntax, missing parameters).
-- `401 Unauthorized`: Authentication is required and has failed or has not yet been provided.
-- `403 Forbidden`: Authenticated client does not have permission to access the resource.
-- `404 Not Found`: Resource not found.
-- `500 Internal Server Error`: A generic error message for unexpected server-side errors.
+Title: Reflect outcomes with standard codes, not 200 for every case
+Description: Use `200` for successful bodies, `201` + `Location` for creation, `204` for success with no body, `400` for validation/syntax, `401`/`403` for authz failures, `404` for missing resources, and `500` only for unexpected server faults—without stuffing errors into a 200 OK body.
 
 **Good example:**
 
 ```java
-// (Inside a Spring @RestController method)
-if (resourceNotFound) {
-return ResponseEntity.notFound().build(); // 404
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+
+class StatusExamples {
+
+    ResponseEntity<String> handle(boolean resourceNotFound, boolean forbidden, boolean validationFailed) {
+        if (resourceNotFound) {
+            return ResponseEntity.notFound().build();
+        }
+        if (forbidden) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
+        if (validationFailed) {
+            return ResponseEntity.badRequest().body("Invalid input");
+        }
+        return ResponseEntity.ok("ok");
+    }
 }
-if (!userHasPermission) {
-return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied"); // 403
-}
-if (validationFailed) {
-return ResponseEntity.badRequest().body("Invalid input data"); // 400
-}
-// For creation:
-// return ResponseEntity.created(newResourceUri).body(newResource); // 201
-// For successful deletion:
-// return ResponseEntity.noContent().build(); // 204
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
+import org.springframework.http.ResponseEntity;
 import java.util.Objects;
 
-public ResponseEntity<String> processSomething(String input) {
-try {
-if (Objects.isNull(input)) {
-// Client should receive a 400 Bad Request, not 200 with an error message in body.
-return ResponseEntity.ok("{\"error\":\"Input cannot be null\"}"); 
-}
-// ... process ...
-return ResponseEntity.ok("{\"data\":\"Success!\"}");
-} catch (Exception e) {
-// Client should receive a 500 Internal Server Error, not 200.
-return ResponseEntity.ok("{\"error\":\"Something went wrong on the server\"}");
-}
+class BadStatusExamples {
+
+    ResponseEntity<String> process(String input) {
+        try {
+            if (Objects.isNull(input)) {
+                return ResponseEntity.ok("{\"error\":\"Input cannot be null\"}");
+            }
+            return ResponseEntity.ok("{\"data\":\"Success!\"}");
+        } catch (Exception e) {
+            return ResponseEntity.ok("{\"error\":\"Something went wrong on the server\"}");
+        }
+    }
 }
 ```
 
-## Rule 4: Implement Effective Request and Response Payloads (DTOs)
+### Example 4: DTOs for requests and responses
 
-Title: Use Data Transfer Objects (DTOs) for Payloads and Keep Them Lean
-Description: Use dedicated DTO classes for request and response bodies instead of exposing internal domain/entity objects directly. This decouples your API contract from your internal data model. Keep DTOs focused on the data needed for the specific API operation. Use consistent naming conventions (e.g., JSON with camelCase keys).
+Title: Decouple API contracts from persistence entities
+Description: Use dedicated request/response types so serialization matches what clients should see. Do not return JPA entities with internal fields (password hashes, audit columns) directly from controllers.
 
 **Good example:**
 
 ```java
-// Domain Entity (internal)
 class User {
-private Long id;
-private String username;
-private String passwordHash; // Internal field, should not be in API responses
-private String email;
-private java.time.LocalDateTime createdAt;
-// getters, setters
+    private Long id;
+    private String username;
+    private String passwordHash;
+    private String email;
 }
 
-// DTO for API responses (exposes only necessary fields)
 class UserResponseDTO {
-private Long id;
-private String username;
-private String email;
-// getters, setters
+    private Long id;
+    private String username;
+    private String email;
 }
 
-// DTO for creating a user
 class UserCreateRequestDTO {
-private String username;
-private String password; // Received in request, then hashed internally
-private String email;
-// getters, setters
+    private String username;
+    private String password;
+    private String email;
 }
 
-// In controller:
-// public ResponseEntity<UserResponseDTO> getUser(@PathVariable Long id) { ... }
-// public ResponseEntity<UserResponseDTO> createUser(@RequestBody UserCreateRequestDTO createDto) { ... }
+// Controller returns UserResponseDTO / accepts UserCreateRequestDTO — not User entity
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
-// Bad: Exposing internal User entity directly in API, including sensitive fields like passwordHash.
-@RestController
-public class AnotherUserController {
-@GetMapping("/rawusers/{id}")
-public ResponseEntity<User> getRawUser(@PathVariable String id) {
-// Assume User class has passwordHash and other internal fields
-User internalUser = findUserById(id); // Method that returns the internal User entity
-return ResponseEntity.ok(internalUser); // Exposes passwordHash, createdAt, etc.
-}
-private User findUserById(String id) { return new User(); /* ... */}
-}
-```
-
-## Rule 5: Version Your APIs
-
-Title: Implement a Clear API Versioning Strategy
-Description: Introduce API versioning from the beginning to manage changes and evolution without breaking existing clients. Common strategies include URI versioning (e.g., `/v1/users`), custom request header versioning (e.g., `X-API-Version: 1`), or media type versioning (e.g., `Accept: application/vnd.example.v1+json`). Choose a strategy and apply it consistently.
-
-**Good example (URI Versioning):**
-
-```java
-@RestController
-@RequestMapping("/api/v1/products") // Version in URI
-public class ProductControllerV1 {
-// ... v1 endpoints ...
-}
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v2/products") // New version in URI
-public class ProductControllerV2 {
-// ... v2 endpoints with potential breaking changes or new features ...
+class AnotherUserController {
+
+    @GetMapping("/rawusers/{id}")
+    ResponseEntity<User> getRawUser(@PathVariable String id) {
+        return ResponseEntity.ok(findUserById(id));
+    }
+
+    private User findUserById(String id) {
+        return new User();
+    }
+}
+
+class User {
+    private String passwordHash;
 }
 ```
 
-**Bad Example (No Versioning):**
+### Example 5: API versioning
+
+Title: Version explicitly and consistently (URI, header, or media type)
+Description: Introduce versioning early so breaking changes do not silently break all clients. URI versioning (e.g. `/api/v1/...`) is common; whatever strategy you pick, use it uniformly across controllers.
+
+**Good example:**
 
 ```java
+import org.springframework.web.bind.annotation.*;
+
 @RestController
-@RequestMapping("/products") // No version information
-public class UnversionedProductController {
-// If a breaking change is made here (e.g., field removed from response),
-// all existing clients might break.
-@GetMapping("/{id}")
-public ProductDTO getProduct(@PathVariable String id) {
-// ... logic ...
-return new ProductDTO();
+@RequestMapping("/api/v1/products")
+class ProductControllerV1 {
+    @GetMapping("/{id}")
+    ProductDTO get(@PathVariable String id) {
+        return new ProductDTO();
+    }
 }
+
+@RestController
+@RequestMapping("/api/v2/products")
+class ProductControllerV2 {
+    @GetMapping("/{id}")
+    ProductDTOv2 get(@PathVariable String id) {
+        return new ProductDTOv2();
+    }
 }
-class ProductDTO {}
+class ProductDTO { }
+class ProductDTOv2 { }
 ```
 
-## Rule 6: Handle Errors Gracefully
-
-Title: Provide Clear and Consistent Error Responses
-Description: When an error occurs, return a standardized, machine-readable error response format (e.g., JSON). Include a unique error code or type, a human-readable message, and optionally, details about specific fields that caused validation errors. Do not expose sensitive internal details like stack traces in production error responses.
-
-**Good example (Error DTO and @ControllerAdvice for Spring):**
+**Bad example:**
 
 ```java
-// Error Response DTO
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/products")
+class UnversionedProductController {
+
+    @GetMapping("/{id}")
+    ProductDTO getProduct(@PathVariable String id) {
+        return new ProductDTO();
+    }
+}
+class ProductDTO { }
+```
+
+### Example 6: Graceful, structured error responses
+
+Title: Machine-readable errors; no stack traces in production
+Description: Return JSON (or Problem Details) with stable fields: code/type, message, and optional field-level details for validation. Log full exceptions server-side; do not return stack traces to API clients in production.
+
+**Good example:**
+
+```java
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.stream.Collectors;
+
 class ErrorResponse {
-private String errorCode;
-private String message;
-private List<String> details; // Optional: for field-specific validation errors
-// Constructor, getters
-public ErrorResponse(String errorCode, String message) { this.errorCode = errorCode; this.message = message; }
-public ErrorResponse(String errorCode, String message, List<String> details) { /* ... */ }
+    private final String errorCode;
+    private final String message;
+    private final List<String> details;
+
+    ErrorResponse(String errorCode, String message) {
+        this.errorCode = errorCode;
+        this.message = message;
+        this.details = List.of();
+    }
+
+    ErrorResponse(String errorCode, String message, List<String> details) {
+        this.errorCode = errorCode;
+        this.message = message;
+        this.details = details;
+    }
 }
 
 @ControllerAdvice
 class GlobalExceptionHandler {
-@ExceptionHandler(ResourceNotFoundException.class)
-@ResponseStatus(HttpStatus.NOT_FOUND)
-public ErrorResponse handleResourceNotFound(ResourceNotFoundException ex) {
-return new ErrorResponse("RESOURCE_NOT_FOUND", ex.getMessage());
+
+    @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    ErrorResponse handleNotFound(ResourceNotFoundException ex) {
+        return new ErrorResponse("RESOURCE_NOT_FOUND", ex.getMessage());
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    ErrorResponse handleValidation(MethodArgumentNotValidException ex) {
+        List<String> errors = ex.getBindingResult().getFieldErrors().stream()
+            .map(fe -> fe.getField() + ": " + fe.getDefaultMessage())
+            .collect(Collectors.toList());
+        return new ErrorResponse("VALIDATION_ERROR", "Input validation failed", errors);
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    ErrorResponse handleGeneric(Exception ex) {
+        return new ErrorResponse("INTERNAL_ERROR", "An unexpected error occurred.");
+    }
 }
 
-@ExceptionHandler(MethodArgumentNotValidException.class) // Example for bean validation errors
-@ResponseStatus(HttpStatus.BAD_REQUEST)
-public ErrorResponse handleValidationErrors(MethodArgumentNotValidException ex) {
-List<String> errors = ex.getBindingResult().getFieldErrors().stream()
-.map(fieldError -> fieldError.getField() + ": " + fieldError.getDefaultMessage())
-.collect(Collectors.toList());
-return new ErrorResponse("VALIDATION_ERROR", "Input validation failed", errors);
+class ResourceNotFoundException extends RuntimeException {
+    ResourceNotFoundException(String m) { super(m); }
 }
-
-@ExceptionHandler(Exception.class)
-@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-public ErrorResponse handleGenericError(Exception ex) {
-// Log the full exception internally
-// logger.error("Unhandled exception:", ex);
-return new ErrorResponse("INTERNAL_ERROR", "An unexpected error occurred.");
-}
-}
-// Custom exception
-class ResourceNotFoundException extends RuntimeException { public ResourceNotFoundException(String msg){ super(msg);}}
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
 @RestController
-public class BadErrorHandlingController {
-@GetMapping("/items/{id}")
-public ResponseEntity<String> getItem(@PathVariable String id) {
-if (id.equals("unknown")) {
-// Bad: Returning plain text error, or HTML, or inconsistent format.
-return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found!"); 
-}
-try {
-// ... some logic that might throw an exception ...
-if(id.equals("fail")) throw new NullPointerException("Simulated internal error");
-return ResponseEntity.ok("Item data");
-} catch (Exception e) {
-// Bad: Exposing stack trace to the client in production.
-return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
-}
-}
+class BadErrorHandlingController {
+
+    @GetMapping("/items/{id}")
+    ResponseEntity<String> getItem(@PathVariable String id) {
+        if ("unknown".equals(id)) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Item not found!");
+        }
+        try {
+            if ("fail".equals(id)) {
+                throw new NullPointerException("Simulated internal error");
+            }
+            return ResponseEntity.ok("Item data");
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.toString());
+        }
+    }
 }
 ```
 
-## Rule 7: Secure Your APIs
+### Example 7: Secure APIs
 
-Title: Implement Robust Security Measures
-Description: Protect your APIs from common threats. Use HTTPS for all communication. Implement proper authentication (e.g., OAuth 2.0, JWT) and authorization (e.g., role-based access control). Validate all input data to prevent injection attacks (SQLi, XSS). Apply rate limiting and throttling to prevent abuse.
+Title: Authenticate, authorize, validate input, and avoid injection
+Description: Terminate TLS for external traffic, use Spring Security (or equivalent) for authentication/authorization, validate and sanitize inputs, and use parameterized queries or repositories—never concatenate untrusted input into SQL.
 
-**Good example (Conceptual - actual implementation involves security frameworks like Spring Security):**
+**Good example:**
 
 ```java
-// In a Spring Security configuration:
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+
 @Configuration
-@EnableWebSecurity
-public class SecurityConfig extends WebSecurityConfigurerAdapter {
-@Override
-protected void configure(HttpSecurity http) throws Exception {
-http
-.csrf().disable() // Consider CSRF protection needs
-.authorizeRequests()
-.antMatchers("/public/**").permitAll()
-.antMatchers("/admin/**").hasRole("ADMIN") // Role-based authorization
-.anyRequest().authenticated()       // All other requests need authentication
-.and()
-.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt); // Example: JWT authentication
-// .httpBasic(); // Or basic auth for simplicity in some cases
-}
-// ... user details service, password encoder, etc. ...
+class SecurityConfig {
+
+    @Bean
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http
+            .csrf(csrf -> csrf.disable())
+            .authorizeHttpRequests(auth -> auth
+                .requestMatchers("/public/**").permitAll()
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated());
+        http.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> { }));
+        return http.build();
+    }
 }
 
-// In a controller method:
-// @PreAuthorize("hasAuthority('SCOPE_read:users')") // Example: OAuth2 scope-based authorization
-// @GetMapping("/users/{id}")
-// public UserDTO getUser(@PathVariable String id) { ... }
+// @PreAuthorize("hasAuthority('SCOPE_read:users')") on sensitive controller methods
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
-@RestController
-public class InsecureController {
-// Bad: No authentication or authorization for sensitive operations.
-@PostMapping("/admin/deleteAllData")
-public String deleteAllData() {
-System.out.println("All data deleted! (INSECURE - NO AUTH)");
-return "All data wiped.";
-}
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
-// Bad: Trusting user input directly in a query (conceptual SQLi vulnerability).
-@GetMapping("/products")
-public List<ProductDTO> searchProducts(@RequestParam String category) {
-// String query = "SELECT * FROM products WHERE category = '" + category + "'"; // SQL Injection risk!
-// Use PreparedStatement or an ORM to prevent SQLi.
-System.out.println("Searching for category (raw input): " + category);
-return List.of();
+@RestController
+class InsecureController {
+
+    @PostMapping("/admin/deleteAllData")
+    String deleteAllData() {
+        return "All data wiped.";
+    }
+
+    @GetMapping("/products")
+    List<ProductDTO> searchProducts(@RequestParam String category) {
+        return List.of();
+    }
 }
-}
+class ProductDTO { }
 ```
 
-## Rule 8: Document Your APIs
+### Example 8: API documentation
 
-Title: Provide Clear and Comprehensive API Documentation
-Description: Maintain up-to-date documentation for your API. Tools like Swagger/OpenAPI can be used to generate interactive documentation from code annotations. Documentation should cover resource URIs, HTTP methods, request/response formats (including DTO schemas), expected status codes, authentication methods, and error responses.
+Title: Use OpenAPI annotations for operations, parameters, and responses
+Description: Document resources, methods, schemas, status codes, and auth requirements using springdoc OpenAPI or Spring REST Docs so consumers integrate without reverse-engineering controllers.
 
-**Good example (Using Springdoc OpenAPI / Swagger annotations):**
+**Good example:**
 
 ```java
 import io.swagger.v3.oas.annotations.Operation;
@@ -427,362 +460,268 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-// Assume other necessary imports like Spring MVC, DTOs etc.
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/widgets")
-@Tag(name = "Widget API", description = "APIs for managing widgets")
-public class WidgetController {
+@Tag(name = "Widget API", description = "Manage widgets")
+class WidgetController {
 
-@Operation(summary = "Get a widget by its ID",
-description = "Returns a single widget based on the provided ID.",
-responses = {
-@ApiResponse(responseCode = "200", description = "Successfully retrieved widget",
-content = @Content(mediaType = "application/json", schema = @Schema(implementation = WidgetDTO.class))),
-@ApiResponse(responseCode = "404", description = "Widget not found",
-content = @Content(mediaType = "application/json", schema = @Schema(implementation = ErrorResponse.class)))
-})
-@GetMapping("/{widgetId}")
-public ResponseEntity<WidgetDTO> getWidgetById(
-@Parameter(description = "ID of the widget to retrieve", required = true) 
-@PathVariable String widgetId) {
-// ... logic ...
-// return ResponseEntity.ok(new WidgetDTO(widgetId, "Sample Widget"));
-// For example, if not found:
-if ("unknown".equals(widgetId)) { 
-throw new ResourceNotFoundException("Widget with ID " + widgetId + " not found.");
+    @Operation(
+        summary = "Get widget by ID",
+        responses = {
+            @ApiResponse(responseCode = "200", content = @Content(schema = @Schema(implementation = WidgetDTO.class))),
+            @ApiResponse(responseCode = "404", description = "Not found")
+        })
+    @GetMapping("/{widgetId}")
+    ResponseEntity<WidgetDTO> getWidget(
+            @Parameter(description = "Widget id", required = true) @PathVariable String widgetId) {
+        if ("unknown".equals(widgetId)) {
+            throw new ResourceNotFoundException("not found");
+        }
+        return ResponseEntity.ok(new WidgetDTO());
+    }
 }
-return ResponseEntity.ok(new WidgetDTO()); // Placeholder
+class WidgetDTO { }
+class ResourceNotFoundException extends RuntimeException {
+    ResourceNotFoundException(String m) { super(m); }
 }
-}
-class WidgetDTO { /* fields, getters, setters */ }
-// ErrorResponse and ResourceNotFoundException as defined in Rule 6
 ```
 
-**Bad Example (No Documentation or Incomplete):**
+**Bad example:**
 
 ```java
-// No API documentation tool usage, comments are sparse or missing.
+import org.springframework.web.bind.annotation.*;
+
 @RestController
 @RequestMapping("/legacy/things")
-public class LegacyThingController {
-// What does this do? What are parameters? What are responses?
-@GetMapping("/{id}")
-public Object getAThing(@PathVariable String id, @RequestParam(required = false) String type) {
-// ... complex logic ...
-return new Object(); // Unclear what this object structure is.
+class LegacyThingController {
+
+    @GetMapping("/{id}")
+    Object getAThing(@PathVariable String id, @RequestParam(required = false) String type) {
+        return new Object();
+    }
 }
-}
-// Clients have to guess or read source code to understand how to use the API.
 ```
 
-## Rule 9: Use Controller Advice for Global Exception Handling
+### Example 9: Controller advice and ProblemDetail
 
-Title: Implement Centralized Exception Handling with @ControllerAdvice
-Description: Use `@ControllerAdvice` to create a centralized exception handling mechanism that can catch and handle both checked `Exception` and unchecked `RuntimeException` across all controllers. Use Spring Boot's built-in `ProblemDetail` class for consistent, standardized error responses that follow RFC 7807. This approach promotes DRY principles, ensures consistent error responses, and separates error handling logic from business logic.
+Title: Centralize exception mapping; keep controllers thin
+Description: Use `@ControllerAdvice` to map exceptions to HTTP responses once. Prefer Spring’s `ProblemDetail` (RFC 7807) for a consistent shape: type, title, status, detail, instance, and optional extension properties like `errorId` for correlation.
 
 **Good example:**
 
 ```java
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.net.URI;
+import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
 @ControllerAdvice
-public class GlobalExceptionHandler {
+class GlobalExceptionHandler {
 
-private static final Logger logger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
-@ExceptionHandler(IllegalArgumentException.class)
-public ResponseEntity<ProblemDetail> handleIllegalArgument(
-IllegalArgumentException ex, HttpServletRequest request) {
-logger.warn("Invalid argument: {}", ex.getMessage());
+    @ExceptionHandler(IllegalArgumentException.class)
+    ResponseEntity<ProblemDetail> handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+        pd.setType(URI.create("https://example.com/problems/invalid-argument"));
+        pd.setTitle("Invalid Argument");
+        pd.setInstance(URI.create(request.getRequestURI()));
+        pd.setProperty("timestamp", Instant.now());
+        return ResponseEntity.badRequest().body(pd);
+    }
 
-ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
-HttpStatus.BAD_REQUEST, ex.getMessage()
-);
-problemDetail.setType(URI.create("https://example.com/problems/invalid-argument"));
-problemDetail.setTitle("Invalid Argument");
-problemDetail.setInstance(URI.create(request.getRequestURI()));
-problemDetail.setProperty("timestamp", Instant.now());
+    @ExceptionHandler(EntityNotFoundException.class)
+    ResponseEntity<ProblemDetail> handleNotFound(EntityNotFoundException ex, HttpServletRequest request) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        pd.setType(URI.create("https://example.com/problems/entity-not-found"));
+        pd.setTitle("Entity Not Found");
+        pd.setInstance(URI.create(request.getRequestURI()));
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(pd);
+    }
 
-return ResponseEntity.badRequest().body(problemDetail);
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    ResponseEntity<ProblemDetail> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest request) {
+        List<String> errors = ex.getBindingResult().getFieldErrors().stream()
+            .map(e -> e.getField() + ": " + e.getDefaultMessage())
+            .collect(Collectors.toList());
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Validation failed");
+        pd.setType(URI.create("https://example.com/problems/validation-error"));
+        pd.setProperty("violations", errors);
+        pd.setInstance(URI.create(request.getRequestURI()));
+        return ResponseEntity.badRequest().body(pd);
+    }
+
+    @ExceptionHandler(Exception.class)
+    ResponseEntity<ProblemDetail> handleGeneric(Exception ex, HttpServletRequest request) {
+        String errorId = UUID.randomUUID().toString();
+        log.error("Unhandled error {}", errorId, ex);
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(
+            HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred");
+        pd.setType(URI.create("https://example.com/problems/internal-error"));
+        pd.setProperty("errorId", errorId);
+        pd.setInstance(URI.create(request.getRequestURI()));
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(pd);
+    }
 }
 
-@ExceptionHandler(EntityNotFoundException.class)
-public ResponseEntity<ProblemDetail> handleEntityNotFound(
-EntityNotFoundException ex, HttpServletRequest request) {
-logger.warn("Entity not found: {}", ex.getMessage());
-
-ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
-HttpStatus.NOT_FOUND, ex.getMessage()
-);
-problemDetail.setType(URI.create("https://example.com/problems/entity-not-found"));
-problemDetail.setTitle("Entity Not Found");
-problemDetail.setInstance(URI.create(request.getRequestURI()));
-problemDetail.setProperty("timestamp", Instant.now());
-
-return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail);
-}
-
-@ExceptionHandler(RuntimeException.class)
-public ResponseEntity<ProblemDetail> handleRuntimeException(
-RuntimeException ex, HttpServletRequest request) {
-String errorId = UUID.randomUUID().toString();
-logger.error("Unexpected runtime exception with ID: {}", errorId, ex);
-
-ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
-HttpStatus.INTERNAL_SERVER_ERROR, 
-"An unexpected error occurred while processing the request"
-);
-problemDetail.setType(URI.create("https://example.com/problems/internal-error"));
-problemDetail.setTitle("Internal Server Error");
-problemDetail.setInstance(URI.create(request.getRequestURI()));
-problemDetail.setProperty("timestamp", Instant.now());
-problemDetail.setProperty("errorId", errorId);
-
-return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(problemDetail);
-}
-
-@ExceptionHandler(Exception.class)
-public ResponseEntity<ProblemDetail> handleGenericException(
-Exception ex, HttpServletRequest request) {
-String errorId = UUID.randomUUID().toString();
-logger.error("Unexpected exception with ID: {}", errorId, ex);
-
-ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
-HttpStatus.INTERNAL_SERVER_ERROR, 
-"An unexpected error occurred while processing the request"
-);
-problemDetail.setType(URI.create("https://example.com/problems/internal-error"));
-problemDetail.setTitle("Internal Server Error");
-problemDetail.setInstance(URI.create(request.getRequestURI()));
-problemDetail.setProperty("timestamp", Instant.now());
-problemDetail.setProperty("errorId", errorId);
-
-return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(problemDetail);
-}
-
-@ExceptionHandler(MethodArgumentNotValidException.class)
-public ResponseEntity<ProblemDetail> handleValidationException(
-MethodArgumentNotValidException ex, HttpServletRequest request) {
-List<String> errors = ex.getBindingResult().getFieldErrors().stream()
-.map(error -> error.getField() + ": " + error.getDefaultMessage())
-.collect(Collectors.toList());
-
-ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
-HttpStatus.BAD_REQUEST, "Validation failed for the provided input"
-);
-problemDetail.setType(URI.create("https://example.com/problems/validation-error"));
-problemDetail.setTitle("Validation Error");
-problemDetail.setInstance(URI.create(request.getRequestURI()));
-problemDetail.setProperty("timestamp", Instant.now());
-problemDetail.setProperty("violations", errors);
-
-return ResponseEntity.badRequest().body(problemDetail);
-}
-}
-
-// Custom exceptions
 class EntityNotFoundException extends RuntimeException {
-public EntityNotFoundException(String message) { super(message); }
+    EntityNotFoundException(String m) { super(m); }
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.Map;
+
 @RestController
-public class BadUserController {
+class BadUserController {
 
-// Bad: Exception handling scattered across multiple controllers
-@GetMapping("/users/{id}")
-public ResponseEntity<?> getUser(@PathVariable String id) {
-try {
-if (id.equals("invalid")) {
-throw new IllegalArgumentException("Invalid user ID");
+    @GetMapping("/users/{id}")
+    ResponseEntity<?> getUser(@PathVariable String id) {
+        try {
+            if ("invalid".equals(id)) {
+                throw new IllegalArgumentException("Invalid user ID");
+            }
+            if ("notfound".equals(id)) {
+                throw new EntityNotFoundException("User not found");
+            }
+            return ResponseEntity.ok(new UserDTO());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
+        } catch (EntityNotFoundException e) {
+            return ResponseEntity.notFound().build();
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Server error: " + e);
+        }
+    }
 }
-if (id.equals("notfound")) {
-throw new EntityNotFoundException("User not found");
-}
-// ... business logic ...
-return ResponseEntity.ok(new UserDTO());
-} catch (IllegalArgumentException e) {
-// Bad: Inconsistent error format, not using ProblemDetail
-return ResponseEntity.badRequest().body("Error: " + e.getMessage());
-} catch (EntityNotFoundException e) {
-// Bad: Different error format, no error details
-return ResponseEntity.notFound().build();
-} catch (Exception e) {
-// Bad: Exposing stack trace and inconsistent format
-return ResponseEntity.status(500).body("Server error: " + e.toString());
-}
-}
-
-// Bad: Different controller with different exception handling approach
-@PostMapping("/users")
-public ResponseEntity<?> createUser(@RequestBody UserCreateDTO user) {
-try {
-// ... business logic ...
-return ResponseEntity.ok().build();
-} catch (RuntimeException e) {
-// Bad: Yet another inconsistent error format, not using ProblemDetail
-Map<String, String> error = Map.of("error", e.getMessage());
-return ResponseEntity.status(500).body(error);
-}
-}
-
-// Bad: Using custom error response instead of standard ProblemDetail
-@DeleteMapping("/users/{id}")
-public ResponseEntity<?> deleteUser(@PathVariable String id) {
-try {
-// ... business logic ...
-return ResponseEntity.noContent().build();
-} catch (Exception e) {
-// Bad: Custom error format instead of ProblemDetail
-CustomErrorResponse error = new CustomErrorResponse(
-"DELETE_ERROR", e.getMessage(), new Date()
-);
-return ResponseEntity.status(500).body(error);
-}
-}
-}
-
-// Bad: Custom error response class instead of using ProblemDetail
-class CustomErrorResponse {
-private String code;
-private String message;
-private Date timestamp;
-// constructors, getters, setters...
+class UserDTO { }
+class EntityNotFoundException extends RuntimeException {
+    EntityNotFoundException(String m) { super(m); }
 }
 ```
 
-## Rule 10: Implement Problem Details for Error Responses
+### Example 10: RFC 7807 Problem Details quality
 
-Title: Use RFC 7807 Problem Details for HTTP APIs
-Description: Implement standardized error responses using RFC 7807 Problem Details format for HTTP 500 (Internal Server Error) and other error responses. This provides machine-readable error information that includes a type, title, status, detail, and instance to help clients understand and handle errors consistently.
+Title: Consistent problem bodies; never leak stack traces to clients
+Description: When using Problem Details, populate `type`, `title`, `status`, `detail`, and `instance` predictably. Log exceptions with correlation IDs server-side; do not attach stack traces or arbitrary `Map` shapes that change per endpoint.
 
 **Good example:**
 
 ```java
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.net.URI;
+import java.time.Instant;
+import java.util.List;
+import java.util.UUID;
+
 @ControllerAdvice
-public class ProblemDetailsExceptionHandler {
+class ProblemDetailsExceptionHandler {
 
-private static final Logger logger = LoggerFactory.getLogger(ProblemDetailsExceptionHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(ProblemDetailsExceptionHandler.class);
 
-@ExceptionHandler(RuntimeException.class)
-public ResponseEntity<ProblemDetail> handleRuntimeException(
-RuntimeException ex, HttpServletRequest request) {
+    @ExceptionHandler(RuntimeException.class)
+    ResponseEntity<ProblemDetail> handleRuntime(RuntimeException ex, HttpServletRequest request) {
+        String errorId = UUID.randomUUID().toString();
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(
+            HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred while processing the request");
+        pd.setType(URI.create("https://example.com/problems/internal-error"));
+        pd.setTitle("Internal Server Error");
+        pd.setInstance(URI.create(request.getRequestURI()));
+        pd.setProperty("timestamp", Instant.now());
+        pd.setProperty("errorId", errorId);
+        log.error("Internal error {}", errorId, ex);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(pd);
+    }
 
-ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
-HttpStatus.INTERNAL_SERVER_ERROR, 
-"An unexpected error occurred while processing the request"
-);
-
-problemDetail.setType(URI.create("https://example.com/problems/internal-error"));
-problemDetail.setTitle("Internal Server Error");
-problemDetail.setInstance(URI.create(request.getRequestURI()));
-problemDetail.setProperty("timestamp", Instant.now());
-problemDetail.setProperty("errorId", UUID.randomUUID().toString());
-
-// Log the actual exception for debugging (don't expose to client)
-logger.error("Internal server error with ID: {}", 
-problemDetail.getProperties().get("errorId"), ex);
-
-return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(problemDetail);
+    @ExceptionHandler(ValidationException.class)
+    ResponseEntity<ProblemDetail> handleValidation(ValidationException ex, HttpServletRequest request) {
+        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
+        pd.setType(URI.create("https://example.com/problems/validation-error"));
+        pd.setTitle("Validation Error");
+        pd.setInstance(URI.create(request.getRequestURI()));
+        pd.setProperty("violations", ex.getViolations());
+        return ResponseEntity.badRequest().body(pd);
+    }
 }
 
-@ExceptionHandler(EntityNotFoundException.class)
-public ResponseEntity<ProblemDetail> handleEntityNotFound(
-EntityNotFoundException ex, HttpServletRequest request) {
-
-ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
-HttpStatus.NOT_FOUND, ex.getMessage()
-);
-
-problemDetail.setType(URI.create("https://example.com/problems/entity-not-found"));
-problemDetail.setTitle("Entity Not Found");
-problemDetail.setInstance(URI.create(request.getRequestURI()));
-problemDetail.setProperty("timestamp", Instant.now());
-
-return ResponseEntity.status(HttpStatus.NOT_FOUND).body(problemDetail);
-}
-
-@ExceptionHandler(ValidationException.class)
-public ResponseEntity<ProblemDetail> handleValidation(
-ValidationException ex, HttpServletRequest request) {
-
-ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(
-HttpStatus.BAD_REQUEST, "Validation failed for the provided input"
-);
-
-problemDetail.setType(URI.create("https://example.com/problems/validation-error"));
-problemDetail.setTitle("Validation Error");
-problemDetail.setInstance(URI.create(request.getRequestURI()));
-problemDetail.setProperty("timestamp", Instant.now());
-problemDetail.setProperty("violations", ex.getViolations());
-
-return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(problemDetail);
-}
-}
-
-// Custom validation exception
 class ValidationException extends RuntimeException {
-private final List<String> violations;
-
-public ValidationException(String message, List<String> violations) {
-super(message);
-this.violations = violations;
-}
-
-public List<String> getViolations() { return violations; }
+    private final List<String> violations;
+    ValidationException(String message, List<String> violations) {
+        super(message);
+        this.violations = violations;
+    }
+    List<String> getViolations() { return violations; }
 }
 ```
 
-**Bad Example:**
+**Bad example:**
 
 ```java
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import java.util.*;
+
 @ControllerAdvice
-public class BadExceptionHandler {
+class BadExceptionHandler {
 
-@ExceptionHandler(RuntimeException.class)
-@ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-public Map<String, Object> handleRuntimeException(RuntimeException ex) {
-// Bad: Non-standard error format, inconsistent fields
-Map<String, Object> error = new HashMap<>();
-error.put("error", true);
-error.put("msg", "Something went wrong");
-error.put("exception_type", ex.getClass().getSimpleName());
-error.put("time", new Date());
+    @ExceptionHandler(RuntimeException.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    Map<String, Object> handleRuntime(RuntimeException ex) {
+        Map<String, Object> error = new HashMap<>();
+        error.put("error", true);
+        error.put("msg", "Something went wrong");
+        error.put("exception_type", ex.getClass().getSimpleName());
+        error.put("stack_trace", Arrays.toString(ex.getStackTrace()));
+        return error;
+    }
 
-// Bad: Exposing sensitive stack trace information
-error.put("stack_trace", Arrays.toString(ex.getStackTrace()));
-
-return error;
+    @ExceptionHandler(EntityNotFoundException.class)
+    ResponseEntity<String> handleNotFound(EntityNotFoundException ex) {
+        return ResponseEntity.status(404).body("Not found: " + ex.getMessage());
+    }
 }
-
-@ExceptionHandler(EntityNotFoundException.class)
-public ResponseEntity<String> handleNotFound(EntityNotFoundException ex) {
-// Bad: Inconsistent response format (string vs JSON vs problem details)
-return ResponseEntity.status(404).body("Not found: " + ex.getMessage());
-}
-
-@ExceptionHandler(ValidationException.class)
-public ResponseEntity<Object> handleValidation(ValidationException ex) {
-// Bad: Yet another inconsistent format
-return ResponseEntity.badRequest().body(
-Map.of("validationErrors", ex.getViolations())
-);
-}
-
-// Bad: Missing proper error ID, timestamps, and structured format
-// Bad: No type URIs or standard problem details structure
-// Bad: Inconsistent error formats across different exception types
+class EntityNotFoundException extends RuntimeException {
+    EntityNotFoundException(String m) { super(m); }
 }
 ```
 
+## Output Format
 
-## Constraints
+- **ANALYZE** controllers and supporting types for REST semantics: HTTP verbs, URI shape, status codes, DTO boundaries, versioning, error handling, security annotations/config, and documentation coverage
+- **CATEGORIZE** findings by impact (CRITICAL for security/semantic violations, MAINTAINABILITY for DTO/versioning/docs, CONSISTENCY for errors) and by area (routing, responses, errors, security, docs)
+- **APPLY** changes that align with these principles: fix unsafe GETs, normalize paths, return appropriate status codes, introduce or narrow DTOs, add versioning, centralize exception handling with Problem Details where suitable, tighten security configuration, and enrich OpenAPI metadata
+- **IMPLEMENT** incrementally: preserve public API contracts when possible; use deprecation and versioning for breaking changes; keep error shapes backward compatible unless versioning allows a break
+- **EXPLAIN** trade-offs (e.g., URI vs header versioning, custom ErrorResponse vs ProblemDetail) when multiple valid options exist
+- **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits; exercise critical endpoints in integration tests where available
 
-Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
+## Safeguards
 
-- **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
-- **PREREQUISITE**: Project must compile successfully before any REST API refactoring
-- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
-- **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
+- **BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` or `mvn compile` before ANY REST API refactoring — compilation failure is a HARD STOP
+- **CRITICAL VALIDATION**: Run `./mvnw clean verify` after changes that touch controllers, security, or DTOs
+- **SECURITY**: Never log or return secrets, tokens, or passwords in API responses; validate that error payloads do not include stack traces in production
+- **COMPATIBILITY**: Changing status codes, DTO field names, or error JSON shapes can break clients — coordinate versioning or deprecation
+- **SAFETY PROTOCOL**: Stop and involve the user if compilation or tests fail after edits
+- **INCREMENTAL SAFETY**: Prefer small, reviewable controller and advice changes over large sweeping rewrites

@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
-
+<prompt>
     <metadata>
         <author>Juan Antonio Breña Moral</author>
         <version>0.13.0-SNAPSHOT</version>
@@ -12,9 +11,17 @@
     <role>You are a Senior software engineer with extensive experience in Spring Data and Java persistence</role>
 
     <goal>
-        Apply the following Spring Data JDBC guidelines when building or refactoring data access with Spring Data JDBC and records. Follow the rules, good/bad examples, and best practices described below.
+        Spring Data JDBC maps rows to domain types with minimal magic: one repository call typically loads a whole aggregate in predictable SQL. Java records fit this model because they are immutable, constructor-friendly, and explicit. Success means correct `@Column`/`@Id` mapping, repositories that express intent through naming or `@Query`, small aggregates with `Set` children or foreign keys—not JPA-style graphs—and transactions declared at the service layer.
 
-        <xi:include href="assets/frameworks/312-frameworks-spring-data-jdbc-guidelines.md" parse="text"/>
+        ### Implementing These Principles
+
+        These guidelines are built upon the following core principles:
+
+        1. **Immutability**: Model rows as records (or immutable types); use `with*` methods or new instances for updates instead of mutable entities.
+        2. **Simplicity**: Prefer Spring Data JDBC’s direct SQL and aggregate loading over rich ORM relationship graphs and lazy loading.
+        3. **Aggregate boundaries**: Treat one aggregate root per repository; use foreign keys between aggregates, `Set` for one-to-many inside the root, and junction/explicit entities for many-to-many—not bidirectional linked collections on both Student and Course (JPA-style).
+        4. **SQL and safety**: Use `@Query` with named parameters for non-trivial SQL; avoid concatenating user input into query strings.
+        5. **Transactions and performance**: Put `@Transactional` on services (`readOnly` where appropriate); rely on single-query aggregate loading instead of JPA-style N+1 patterns or manual fan-out queries across child repositories.
     </goal>
 
     <constraints>
@@ -24,10 +31,559 @@
         </constraints-description>
         <constraint-list>
             <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
-            <constraint>**PREREQUISITE**: Project must compile successfully before any Spring Data JDBC refactoring</constraint>
+            <constraint>**PREREQUISITE**: Project must compile successfully and pass basic validation checks before any Spring Data JDBC refactoring</constraint>
             <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations</constraint>
+            <constraint>**BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with persistence changes</constraint>
+            <constraint>**NO EXCEPTIONS**: Under no circumstances should data-access recommendations be applied to a project that fails to compile</constraint>
             <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
         </constraint-list>
     </constraints>
 
+    <examples>
+        <toc auto-generate="true" />
+
+        <example number="1" id="records-as-entities">
+            <example-header>
+                <example-title>Records as JDBC entities</example-title>
+                <example-subtitle>Map columns explicitly; use @PersistenceCreator when multiple constructors exist</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Prefer records for thread-safe, concise persistence types. Use `@Column` when names differ from properties. If you add extra constructors, mark the persistence-facing one with `@PersistenceCreator`. Use factories like `of(...)` for new rows before insert.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.PersistenceCreator;
+import org.springframework.data.relational.core.mapping.Column;
+import java.time.LocalDateTime;
+
+public record Customer(
+    @Id
+    @Column("customer_id")
+    Long id,
+    @Column("first_name")
+    String firstName,
+    @Column("last_name")
+    String lastName,
+    @Column("email_address")
+    String email,
+    @Column("created_at")
+    LocalDateTime createdAt
+) {
+    @PersistenceCreator
+    public Customer(Long id, String firstName, String lastName, String email, LocalDateTime createdAt) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.email = email;
+        this.createdAt = createdAt;
+    }
+
+    public static Customer of(String firstName, String lastName, String email) {
+        return new Customer(null, firstName, lastName, email, LocalDateTime.now());
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import org.springframework.data.annotation.Id;
+import java.time.LocalDateTime;
+
+// Multiple constructors without @PersistenceCreator — mapping is ambiguous
+public record Customer(
+    @Id Long id,
+    String firstName,
+    String lastName,
+    String email,
+    LocalDateTime createdAt
+) {
+    public Customer(Long id, String firstName, String lastName, String email, LocalDateTime createdAt) {
+        this(id, firstName, lastName, email, createdAt);
+    }
+
+    public Customer(String firstName, String lastName, String email) {
+        this(null, firstName, lastName, email, LocalDateTime.now());
+    }
+}
+
+// Mutable entity: boilerplate and accidental mutation
+public class CustomerEntity {
+    @Id
+    private Long id;
+    private String email;
+    // getters/setters — easy to leave entity in inconsistent state
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="2" id="repository-pattern">
+            <example-header>
+                <example-title>Repository interfaces</example-title>
+                <example-subtitle>Extend CrudRepository; derive methods or use @Query with parameters</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Annotate interfaces with `@Repository`, extend `CrudRepository` or `PagingAndSortingRepository`, use query derivation names that match property paths, and bind `@Query` parameters with `@Param`—never hardcode volatile literals for user data.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.springframework.data.jdbc.repository.query.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import java.util.List;
+import java.util.Optional;
+
+@Repository
+public interface CustomerRepository extends CrudRepository<Customer, Long> {
+
+    List<Customer> findByLastName(String lastName);
+
+    Optional<Customer> findByEmail(String email);
+
+    @Query("SELECT * FROM customer WHERE email LIKE :pattern")
+    List<Customer> findByEmailPattern(@Param("pattern") String pattern);
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import org.springframework.data.jdbc.repository.query.Query;
+import org.springframework.data.repository.CrudRepository;
+import java.util.List;
+
+// Missing @Repository; non-idiomatic names; unsafe literal in SQL
+public interface CustomerRepository extends CrudRepository<Customer, Long> {
+
+    List<Customer> getCustomersWithLastName(String lastName);
+
+    @Query("SELECT * FROM customer WHERE email LIKE '%@gmail.com%'")
+    List<Customer> findGmailUsers();
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="immutable-updates">
+            <example-header>
+                <example-title>Updates with immutable records</example-title>
+                <example-subtitle>Return new instances via with* methods; save in a transaction</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Records cannot be mutated in place. Expose `withEmail`, `withName`, or similar methods that copy fields and replace what changed, then `save` the new instance inside a transactional service.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.time.LocalDateTime;
+
+public record Customer(
+    @Id @Column("customer_id") Long id,
+    @Column("first_name") String firstName,
+    @Column("last_name") String lastName,
+    @Column("email_address") String email,
+    @Column("created_at") LocalDateTime createdAt
+) {
+    public Customer withEmail(String newEmail) {
+        return new Customer(id, firstName, lastName, newEmail, createdAt);
+    }
+}
+
+@Service
+class CustomerService {
+
+    private final CustomerRepository customerRepository;
+
+    CustomerService(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
+
+    @Transactional
+    Customer updateCustomerEmail(Long customerId, String newEmail) {
+        return customerRepository.findById(customerId)
+            .map(c -> c.withEmail(newEmail))
+            .map(customerRepository::save)
+            .orElseThrow(() -> new IllegalArgumentException("customer: " + customerId));
+    }
+}
+
+interface CustomerRepository extends org.springframework.data.repository.CrudRepository<Customer, Long> {
+    java.util.Optional<Customer> findById(Long id);
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import org.springframework.transaction.annotation.Transactional;
+
+// Attempting to "mutate" a record is invalid — no setters on components
+// Anti-pattern: partial re-construction that drops fields or bypasses with* helpers
+@Transactional
+class CustomerService {
+
+    Customer updateEmail(Long id, String email, CustomerRepository repo) {
+        Customer c = repo.findById(id).orElseThrow();
+        return repo.save(new Customer(c.id(), email)); // wrong arity / lost fields if record has more components
+    }
+}
+
+record Customer(Long id, String firstName, String lastName, String email, java.time.LocalDateTime createdAt) {
+    Customer(Long id, String email) {
+        this(id, null, null, email, null);
+    }
+}
+interface CustomerRepository extends org.springframework.data.repository.CrudRepository<Customer, Long> {
+    java.util.Optional<Customer> findById(Long id);
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="aggregate-relationships">
+            <example-header>
+                <example-title>Aggregate relationships</example-title>
+                <example-subtitle>Sets inside the root; FK ids across aggregates; avoid bidirectional graphs</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Model one-to-many as `Set<Child>` on the aggregate root loaded with the root. Use scalar foreign keys (`Long customerId`) for references to other aggregates. Many-to-many: junction entity or denormalization—not `Set<Course>` on `Student` and `Set<Student>` on `Course`. Do not expose separate repositories for every line item if the line is part of the order aggregate.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.data.relational.core.mapping.Embedded;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.Set;
+
+public record Order(
+    @Id @Column("order_id") Long id,
+    @Column("customer_id") Long customerId,
+    @Column("order_date") LocalDateTime orderDate,
+    Set<OrderItem> items
+) {}
+
+public record OrderItem(
+    @Id @Column("item_id") Long id,
+    @Column("product_name") String productName,
+    @Column("price") BigDecimal price,
+    @Column("quantity") int quantity
+) {}
+
+// Junction-style link entity for many-to-many style data
+public record Enrollment(
+    @Id @Column("enrollment_id") Long id,
+    @Column("student_id") Long studentId,
+    @Column("course_id") Long courseId,
+    @Column("enrolled_at") LocalDateTime enrolledAt
+) {}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import java.util.Set;
+
+// Full object graph / bidirectional — breaks aggregate boundaries for JDBC
+public record Order(
+    @Id @Column("order_id") Long id,
+    Customer customer,
+    Set<OrderItem> items
+) {}
+
+public record OrderItem(
+    @Id @Column("item_id") Long id,
+    String productName,
+    Order order
+) {}
+
+// Direct many-to-many sets — not supported like JPA
+public record Student(@Id Long id, String name, Set<Course> courses) {}
+public record Course(@Id Long id, String title, Set<Student> students) {}
+
+// Child repository for entities that belong to Order aggregate
+interface OrderItemRepository extends org.springframework.data.repository.CrudRepository<OrderItem, Long> {
+    java.util.List<OrderItem> findByOrderId(Long orderId);
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="5" id="custom-queries">
+            <example-header>
+                <example-title>Custom @Query usage</example-title>
+                <example-subtitle>Parameterized SQL; @Modifying for updates</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use text-block or string SQL with `@Param` bindings. For updates/deletes, add `@Modifying` where required. Split oversized multi-join reports into views, separate reads, or bounded DTO queries instead of `List<Object[]>`.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.springframework.data.jdbc.repository.query.Modifying;
+import org.springframework.data.jdbc.repository.query.Query;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Repository
+public interface CustomerRepository extends CrudRepository<Customer, Long> {
+
+    @Query("""
+        SELECT c.* FROM customer c
+        JOIN orders o ON c.id = o.customer_id
+        WHERE o.order_date BETWEEN :startDate AND :endDate
+        GROUP BY c.id
+        HAVING COUNT(o.id) >= :minOrders
+        """)
+    List<Customer> findActiveCustomers(
+        @Param("startDate") LocalDateTime startDate,
+        @Param("endDate") LocalDateTime endDate,
+        @Param("minOrders") int minOrders
+    );
+
+    @Modifying
+    @Query("UPDATE customer SET email = :email WHERE id = :id")
+    void updateCustomerEmail(@Param("id") Long id, @Param("email") String email);
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import org.springframework.data.jdbc.repository.query.Query;
+import org.springframework.data.repository.CrudRepository;
+import java.time.LocalDateTime;
+import java.util.List;
+
+@Repository
+public interface CustomerRepository extends CrudRepository<Customer, Long> {
+
+    // Never build SQL by concatenating untrusted input
+    @Query("SELECT * FROM customer WHERE email = :email")
+    Customer findByEmailUnsafe(@org.springframework.data.repository.query.Param("email") String email);
+
+    // Over-wide join returning Object[] — hard to maintain
+    @Query("""
+        SELECT c.*, o.*, oi.* FROM customer c
+        LEFT JOIN orders o ON c.id = o.customer_id
+        LEFT JOIN order_item oi ON o.id = oi.order_id
+        WHERE c.created_at > :d
+        """)
+    List<Object[]> findEverything(@org.springframework.data.repository.query.Param("d") LocalDateTime date);
+}]]></code-block>
+                </bad-example>
+                </code-examples>
+        </example>
+
+        <example number="6" id="transaction-management">
+            <example-header>
+                <example-title>Transaction boundaries</example-title>
+                <example-subtitle>@Transactional on services; readOnly for queries</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Declare transactions at the service layer. Use `readOnly = true` on classes or methods that only read. Avoid relying on implicit per-call auto-commit for multi-step writes.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.Optional;
+
+@Service
+@Transactional(readOnly = true)
+class CustomerService {
+
+    private final CustomerRepository customerRepository;
+
+    CustomerService(CustomerRepository customerRepository) {
+        this.customerRepository = customerRepository;
+    }
+
+    Optional<Customer> findByEmail(String email) {
+        return customerRepository.findByEmail(email);
+    }
+
+    @Transactional
+    Customer createCustomer(String firstName, String lastName, String email) {
+        return customerRepository.save(Customer.of(firstName, lastName, email));
+    }
+
+    @Transactional
+    Customer updateCustomerEmail(Long customerId, String newEmail) {
+        return customerRepository.findById(customerId)
+            .map(c -> c.withEmail(newEmail))
+            .map(customerRepository::save)
+            .orElseThrow();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import org.springframework.transaction.annotation.Transactional;
+import java.util.Optional;
+
+// No class-level transaction; each repository call may commit independently
+class CustomerService {
+
+    private final CustomerRepository customerRepository;
+
+    Customer createCustomer(String firstName, String lastName, String email) {
+        return customerRepository.save(Customer.of(firstName, lastName, email));
+    }
+
+    // Read path marked @Transactional without readOnly — misses optimization hint
+    @Transactional
+    Optional<Customer> findByEmail(String email) {
+        return customerRepository.findByEmail(email);
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="7" id="aggregate-loading-n-plus-one">
+            <example-header>
+                <example-title>Single-query aggregate loading</example-title>
+                <example-subtitle>Prefer Spring Data JDBC aggregate load over JPA lazy N+1 or manual fan-out</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Loading an aggregate root typically runs one SQL statement with joins for its collection. Iterate `order.items()` without expecting extra lazy queries (unlike JPA `LAZY`). Design aggregates so that payload size stays acceptable; avoid pulling huge graphs in one root.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.springframework.data.annotation.Id;
+import org.springframework.data.relational.core.mapping.Column;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
+
+public record Order(
+    @Id @Column("order_id") Long id,
+    @Column("customer_id") Long customerId,
+    @Column("order_date") LocalDateTime orderDate,
+    @Column("total_amount") BigDecimal totalAmount,
+    Set<OrderItem> items
+) {}
+
+public record OrderItem(
+    @Id @Column("item_id") Long id,
+    @Column("unit_price") BigDecimal unitPrice,
+    @Column("quantity") int quantity
+) {}
+
+@Service
+@Transactional(readOnly = true)
+class OrderService {
+
+    private final OrderRepository orderRepository;
+
+    OrderService(OrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
+
+    List<OrderSummary> getCustomerOrderSummaries(Long customerId) {
+        return orderRepository.findByCustomerId(customerId).stream()
+            .map(order -> new OrderSummary(
+                order.id(),
+                order.orderDate(),
+                order.totalAmount(),
+                order.items().size(),
+                order.items().stream()
+                    .mapToDouble(i -> i.unitPrice().doubleValue() * i.quantity())
+                    .sum()
+            ))
+            .toList();
+    }
+}
+
+record OrderSummary(Long orderId, LocalDateTime orderDate, BigDecimal totalAmount, int itemCount, double lineTotal) {}
+
+interface OrderRepository extends org.springframework.data.repository.CrudRepository<Order, Long> {
+    List<Order> findByCustomerId(Long customerId);
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[import org.springframework.stereotype.Service;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+// Manual two-step load and map — error-prone when JDBC already loads the aggregate
+@Service
+class OrderService {
+
+    private final OrderRepository orderRepository;
+    private final OrderItemRepository orderItemRepository;
+
+    OrderService(OrderRepository orderRepository, OrderItemRepository orderItemRepository) {
+        this.orderRepository = orderRepository;
+        this.orderItemRepository = orderItemRepository;
+    }
+
+    List<OrderSummary> getCustomerOrderSummaries(Long customerId) {
+        List<Order> orders = orderRepository.findByCustomerId(customerId);
+        List<Long> ids = orders.stream().map(Order::id).toList();
+        List<OrderItem> allItems = orderItemRepository.findByOrderIdIn(ids);
+        Map<Long, List<OrderItem>> byOrder = allItems.stream()
+            .collect(Collectors.groupingBy(OrderItem::orderId));
+        return orders.stream()
+            .map(o -> new OrderSummary(o.id(), o.orderDate(), o.totalAmount(), byOrder.getOrDefault(o.id(), List.of()).size(), 0))
+            .toList();
+    }
+}
+
+record Order(Long id, java.time.LocalDateTime orderDate, java.math.BigDecimal totalAmount) {}
+
+record OrderItem(Long id, Long orderId, java.math.BigDecimal unitPrice, int quantity) {}
+
+interface OrderRepository extends org.springframework.data.repository.CrudRepository<Order, Long> {
+    List<Order> findByCustomerId(Long customerId);
+}
+
+interface OrderItemRepository {
+    List<OrderItem> findByOrderIdIn(List<Long> orderIds);
+}
+
+record OrderSummary(Long orderId, java.time.LocalDateTime orderDate, java.math.BigDecimal totalAmount, int itemCount, double lineTotal) {}
+
+// JPA-style mental model: lazy collections causing N+1 if misapplied
+// @Entity class Order { @jakarta.persistence.OneToMany(fetch = jakarta.persistence.FetchType.LAZY) Set<OrderItem> items; }]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>**ANALYZE** persistence code: record/entity mapping, repository APIs, aggregate shape, `@Query` safety, transaction placement, and load patterns (single query vs extra round-trips)</output-format-item>
+            <output-format-item>**CATEGORIZE** issues by impact (CORRECTNESS, PERFORMANCE, MAINTAINABILITY) and by layer (entity mapping, repository, service/transaction, aggregate design)</output-format-item>
+            <output-format-item>**APPLY** Spring Data JDBC–aligned fixes: add `@Column`/`@Id`, narrow repositories, introduce `with*` updates, reshape aggregates and FKs, parameterize SQL, move `@Transactional` to services with `readOnly` where fit</output-format-item>
+            <output-format-item>**IMPLEMENT** changes so schema, aggregates, and tests stay consistent; prefer migrations and integration tests for repository behavior</output-format-item>
+            <output-format-item>**EXPLAIN** trade-offs (aggregate size vs query size, explicit SQL vs derived queries)</output-format-item>
+            <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` or `mvn compile` before ANY persistence refactoring</safeguards-item>
+            <safeguards-item>**CRITICAL VALIDATION**: Run `./mvnw clean verify` after changes; exercise repository integration tests</safeguards-item>
+            <safeguards-item>**DATA SAFETY**: Review DDL and migration impact before changing aggregate boundaries or `@Query` updates</safeguards-item>
+            <safeguards-item>**SQL INJECTION**: Never concatenate user input into `@Query` strings; use parameters</safeguards-item>
+            <safeguards-item>**INCREMENTAL SAFETY**: Change one aggregate or repository surface at a time when possible</safeguards-item>
+            <safeguards-item>**SAFETY PROTOCOL**: Stop if compilation or data tests fail after edits</safeguards-item>
+        </safeguards-list>
+    </safeguards>
 </prompt>

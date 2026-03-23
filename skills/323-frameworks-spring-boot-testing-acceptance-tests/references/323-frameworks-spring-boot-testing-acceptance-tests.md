@@ -18,23 +18,24 @@ Treats the user as a knowledgeable partner. Parses the Gherkin file systematical
 
 ## Goal
 
-Help developers implement acceptance tests from Gherkin feature files in Spring Boot projects. Given a `.feature` file, this rule:
+Help developers implement acceptance tests from Gherkin feature files in Spring Boot projects. Given a `.feature` file, this rule identifies scenarios tagged `@acceptance` (or `@acceptance-tests`), implements happy-path tests that boot the real application with real HTTP, and wires infrastructure through Testcontainers and WireMock—not mocks of internal beans.
 
-1. **Identifies** scenarios tagged with `@acceptance` (or equivalent: `@acceptance-tests`)
-2. **Implements** happy-path acceptance tests that exercise the full Spring Boot application with simulated dependencies
-3. **Uses RestAssured** for testing REST endpoints
-4. **Uses Spring Boot test infrastructure**: `@SpringBootTest(webEnvironment = RANDOM_PORT)`, `@LocalServerPort`, `@DynamicPropertySource` for Testcontainers and WireMock
+1. **Identifies** scenarios tagged with `@acceptance` (or equivalent: `@acceptance-tests`, `@AcceptanceTest`)
+2. **Implements** happy-path acceptance tests that exercise the full Spring Boot application with simulated *external* dependencies (DB, Kafka, outbound HTTP)
+3. **Uses RestAssured** against `RANDOM_PORT` for REST assertions over the full servlet/filter stack
+4. **Uses Spring Boot test infrastructure**: `@SpringBootTest(webEnvironment = RANDOM_PORT)`, `@LocalServerPort`, `@DynamicPropertySource` for Testcontainers and WireMock URLs
 
-### Guiding principles
+### Implementing These Principles
 
-- Start the full Spring Boot application with all dependencies simulated — no mocks of internal services
-- Use `@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)` to boot the full context
-- Use `@DynamicPropertySource` to inject Testcontainers and WireMock coordinates (spring.datasource.*, spring.kafka.*, custom properties for external services)
-- Use Testcontainers for databases (PostgreSQL, MySQL, etc.) and Kafka when the service depends on them
-- Use WireMock to stub external REST APIs the service calls
-- RestAssured is the preferred library for REST API assertion — fluent DSL, JSON path assertions, status codes
-- Implement only the happy path for each scenario — one test method per scenario, Given-When-Then structure
-- Follow the Gherkin steps literally — each step maps to setup (Given), action (When), or assertion (Then)
+These guidelines are built upon the following core principles:
+
+1. **End-to-end HTTP**: Prefer RestAssured to MockMvc for acceptance tests so serialization, security filters, and real HTTP are exercised.
+2. **Real adjacent infrastructure**: Use Testcontainers for databases and Kafka the app actually uses; stub only *external* systems with WireMock.
+3. **No internal mocks**: Do not replace your own `@Service` beans with mocks—validate real wiring; isolate only third-party HTTP and containerized infra.
+4. **Dynamic wiring**: Register JDBC URLs, Kafka bootstrap servers, and external base URLs via `@DynamicPropertySource`—never hardcode ephemeral ports.
+5. **BDD fidelity**: One test method per tagged scenario; map Given/When/Then to setup, HTTP call, and assertions; implement happy path unless the user asks for negative cases.
+
+**Cross-references**: Framework-agnostic acceptance from Gherkin — `@133-java-testing-acceptance-tests`. Unit and slice tests — `@321-frameworks-spring-boot-testing-unit-tests`. Broader Spring integration tests — `@322-frameworks-spring-boot-testing-integration-tests`.
 
 ## Constraints
 
@@ -43,9 +44,12 @@ Before generating any code, ensure the project is in a valid state and the Gherk
 - **PRECONDITION**: The Gherkin `.feature` file MUST be in context — stop and ask if not provided
 - **PRECONDITION**: The project MUST use Spring Boot — stop and direct the user to `@133-java-testing-acceptance-tests` if they use framework-agnostic Java
 - **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
-- **PREREQUISITE**: Project must compile successfully before generating acceptance test scaffolding
-- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE
-- **SCOPE**: Implement only scenarios tagged with `@acceptance` or `@acceptance-tests`
+- **PREREQUISITE**: Project must compile successfully and pass basic validation checks before generating acceptance test scaffolding
+- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding
+- **NO EXCEPTIONS**: Under no circumstances should acceptance test generation continue if the project fails to compile or the feature file is missing
+- **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
+- **SCOPE**: Implement only scenarios tagged with `@acceptance` or `@acceptance-tests` (or equivalent)
 - **SCOPE**: Implement only the happy path — skip negative or error-path scenarios unless explicitly requested
 
 ## Steps
@@ -226,7 +230,6 @@ Description: Uses @SpringBootTest(RANDOM_PORT), @DynamicPropertySource for Testc
 package com.example.myapp;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.server.LocalServerPort;
@@ -338,3 +341,22 @@ void scenario_registration() {
 }
 // Acceptance tests must exercise serialization, filters, full HTTP stack
 ```
+
+## Output Format
+
+- **ANALYZE** the provided `.feature` file: feature name, scenarios, tags, and steps; confirm Spring Boot and acceptance tags
+- **SUMMARIZE** selected scenarios and proposed Java test class names before coding
+- **IMPLEMENT** `BaseAcceptanceTest` (or equivalent) with `RANDOM_PORT`, Testcontainers, WireMock, and `@DynamicPropertySource` as required by the app
+- **IMPLEMENT** one RestAssured test per acceptance scenario, mapping Given/When/Then
+- **DOCUMENT** Maven test dependencies and WireMock file layout; mention Failsafe patterns for `*AcceptanceTest` / `*IT`
+- **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
+## Safeguards
+
+- **BLOCKING**: Do not generate tests without a `.feature` file in context or without Spring Boot
+- **BLOCKING SAFETY CHECK**: Run `./mvnw compile` or `mvn compile` before generating or refactoring acceptance tests
+- **CRITICAL VALIDATION**: Run `./mvnw clean verify` after changes; acceptance tests need Docker for Testcontainers where used
+- **SCOPE**: Default to happy path only unless the user explicitly asks for negative scenarios
+- **HTTP STACK**: Do not substitute MockMvc for RestAssured when the goal is true acceptance over HTTP
+- **SECRETS**: Do not embed real API keys or production URLs in tests—use WireMock and test properties
+- **INCREMENTAL SAFETY**: Keep generated tests compiling after each scenario if adding many
