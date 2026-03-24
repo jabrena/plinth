@@ -56,6 +56,7 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 8: MockMvcTester for HTTP slice tests
 - Example 9: Test naming conventions: *Test, *IT, *AT
 - Example 10: Maven Surefire / Failsafe split for *Test, *IT, *AT
+- Example 11: Test-specific beans and configuration
 
 ### Example 1: Scope and purpose of integration tests
 
@@ -795,6 +796,70 @@ Description: Configure `maven-surefire-plugin` to include only `*Test` / `*Tests
 
     </plugins>
 </build>
+```
+
+### Example 11: Test-specific beans and configuration
+
+Title: Use @TestConfiguration to isolate test doubles and avoid polluting the production context
+Description: When defining beans exclusively for testing (like stubs, fakes, or custom test setup), place them in `src/test/java` and annotate the class with `@TestConfiguration`. Unlike standard `@Configuration`, `@TestConfiguration` is intentionally excluded from component scanning, ensuring it only applies when explicitly imported via `@Import` or nested inside a test class. Avoid putting test beans in `src/main/java` behind `@Profile("test")`.
+
+**Good example:**
+
+```java
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+
+@TestConfiguration
+class ExternalServiceTestConfig {
+
+    @Bean
+    @Primary
+    ExternalServiceClient fakeExternalServiceClient() {
+        return new FakeExternalServiceClient();
+    }
+}
+
+// Usage in test:
+// @org.springframework.boot.test.context.SpringBootTest
+// @org.springframework.context.annotation.Import(ExternalServiceTestConfig.class)
+// class MyIntegrationTest { ... }
+
+interface ExternalServiceClient { }
+class FakeExternalServiceClient implements ExternalServiceClient { }
+```
+
+**Bad example:**
+
+```java
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
+// Anti-pattern 1: Standard @Configuration in src/test/java
+// If component scanning accidentally reaches this package, it might override production beans
+@Configuration
+class BadTestConfig {
+    @Bean
+    ExternalServiceClient mockClient() {
+        return new MockExternalServiceClient();
+    }
+}
+
+// Anti-pattern 2: Test beans in src/main/java hidden behind a profile
+// Pollutes production classpath with test dependencies and logic
+@Configuration
+@Profile("test")
+class ProductionPollutingTestConfig {
+    @Bean
+    ExternalServiceClient testClient() {
+        return new FakeExternalServiceClient();
+    }
+}
+
+interface ExternalServiceClient { }
+class MockExternalServiceClient implements ExternalServiceClient { }
+class FakeExternalServiceClient implements ExternalServiceClient { }
 ```
 
 ## Output Format

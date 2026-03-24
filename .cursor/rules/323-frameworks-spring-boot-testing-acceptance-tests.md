@@ -239,6 +239,7 @@ Present a summary to the user:
 - Example 3: Acceptance test with TestRestTemplate
 - Example 4: WireMock stub setup for external REST dependencies
 - Example 5: Acceptance test naming convention (*AT) and Maven Surefire/Failsafe configuration
+- Example 6: Test-specific beans and configuration
 
 ### Example 1: Gherkin feature with @acceptance scenarios
 
@@ -581,6 +582,70 @@ class UserRegistrationAcceptanceTest extends BaseAcceptanceTest {
 class UserRegistrationTest extends BaseAcceptanceTest {
     // ...
 }
+```
+
+### Example 6: Test-specific beans and configuration
+
+Title: Use @TestConfiguration to isolate test doubles and avoid polluting the production context
+Description: When defining beans exclusively for testing (like stubs, fakes, or custom test setup), place them in `src/test/java` and annotate the class with `@TestConfiguration`. Unlike standard `@Configuration`, `@TestConfiguration` is intentionally excluded from component scanning, ensuring it only applies when explicitly imported via `@Import` or nested inside a test class. Avoid putting test beans in `src/main/java` behind `@Profile("test")`.
+
+**Good example:**
+
+```java
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+
+@TestConfiguration
+class ExternalServiceTestConfig {
+
+    @Bean
+    @Primary
+    ExternalServiceClient fakeExternalServiceClient() {
+        return new FakeExternalServiceClient();
+    }
+}
+
+// Usage in test:
+// @org.springframework.boot.test.context.SpringBootTest
+// @org.springframework.context.annotation.Import(ExternalServiceTestConfig.class)
+// class MyIntegrationTest { ... }
+
+interface ExternalServiceClient { }
+class FakeExternalServiceClient implements ExternalServiceClient { }
+```
+
+**Bad example:**
+
+```java
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
+// Anti-pattern 1: Standard @Configuration in src/test/java
+// If component scanning accidentally reaches this package, it might override production beans
+@Configuration
+class BadTestConfig {
+    @Bean
+    ExternalServiceClient mockClient() {
+        return new MockExternalServiceClient();
+    }
+}
+
+// Anti-pattern 2: Test beans in src/main/java hidden behind a profile
+// Pollutes production classpath with test dependencies and logic
+@Configuration
+@Profile("test")
+class ProductionPollutingTestConfig {
+    @Bean
+    ExternalServiceClient testClient() {
+        return new FakeExternalServiceClient();
+    }
+}
+
+interface ExternalServiceClient { }
+class MockExternalServiceClient implements ExternalServiceClient { }
+class FakeExternalServiceClient implements ExternalServiceClient { }
 ```
 
 ## Output Format

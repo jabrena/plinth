@@ -57,20 +57,18 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 12: Graceful shutdown
 - Example 13: Virtual threads (Spring Boot 4.0.x)
 - Example 14: javax vs jakarta consistency (Spring Boot 4.0.x)
-- Example 15: Test-specific beans and configuration
 
 ### Example 1: Spring Boot main application class
 
-Title: Use @SpringBootApplication as the entry point and composition root
-Description: Every Spring Boot application should have a main class annotated with `@SpringBootApplication`, combining `@Configuration`, `@EnableAutoConfiguration`, and `@ComponentScan`. Use `SpringApplication.run`, optional `scanBasePackages` / `exclude` for advanced setups, and keep business logic out of the main class.
+Title: Use @SpringBootApplication as the sole annotation on the entry-point class
+Description: Every Spring Boot application must have a main class annotated **only** with `@SpringBootApplication`. This single annotation already composes `@Configuration`, `@EnableAutoConfiguration`, and `@ComponentScan`. No additional annotations — such as `@EnableScheduling`, `@EnableKafka`, `@EnableAsync`, or any other `@Enable*` — should ever appear on the main class. **Rule:** The main class is the composition root, not a feature-configuration class. Keep it minimal and stable. **Advanced setups:** `scanBasePackages` and `exclude` are the only permitted attributes. They are only justified when the default package scan is insufficient or when a specific auto-configuration must be excluded. **Feature enablement:** Any annotation that activates a Spring feature (scheduling, Kafka, async, caching, …) must live in a dedicated `@Configuration` class inside the `config` package. This keeps the main class unchanged as the application grows.
 
 **Good example:**
 
 ```java
+// Minimal main class — the only correct form for the vast majority of applications
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
 
 @SpringBootApplication
 public class MainApplication {
@@ -80,7 +78,10 @@ public class MainApplication {
     }
 }
 
-// Custom scanning and excluding auto-configurations when needed
+// Advanced setup: custom scan + auto-configuration exclusion (only when strictly needed)
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
+import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
+
 @SpringBootApplication(
     scanBasePackages = {
         "com.company.app.controller",
@@ -93,31 +94,60 @@ public class MainApplication {
         SecurityAutoConfiguration.class
     }
 )
-class CustomizedMainApplication {
+public class CustomizedMainApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(CustomizedMainApplication.class, args);
     }
+}
+
+// Feature annotations belong in dedicated @Configuration classes inside config package
+// config/SchedulingConfig.java
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
+@Configuration
+@EnableScheduling
+public class SchedulingConfig {
+}
+
+// config/KafkaConfig.java
+import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.annotation.EnableKafka;
+
+@Configuration
+@EnableKafka
+public class KafkaConfig {
+}
+
+// config/AsyncConfig.java
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.annotation.EnableAsync;
+
+@Configuration
+@EnableAsync
+public class AsyncConfig {
 }
 ```
 
 **Bad example:**
 
 ```java
+// Missing @SpringBootApplication; manual context loses Boot conveniences
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 
-// Missing @SpringBootApplication; manual context loses Boot conveniences
 public class MainApplication {
     public static void main(String[] args) {
         ApplicationContext context = new AnnotationConfigApplicationContext();
     }
 }
 
-// Verbose and error-prone compared to @SpringBootApplication
+// Verbose and error-prone: manually combining what @SpringBootApplication already provides
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+
 @Configuration
 @EnableAutoConfiguration
 @ComponentScan
@@ -127,15 +157,32 @@ class VerboseMainApplication {
     }
 }
 
-// Poor structure: vague name and business logic in main class
+// Bad: @Enable* feature annotations must NOT appear on the main class
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.kafka.annotation.EnableKafka;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.EnableAsync;
+
 @SpringBootApplication
+@EnableScheduling
+@EnableKafka
+@EnableAsync
 class App {
+
+    public static void main(String[] args) {
+        org.springframework.boot.SpringApplication.run(App.class, args);
+    }
+}
+
+// Bad: business logic and auto-wired beans in the main class
+@SpringBootApplication
+class AppWithLogic {
 
     @org.springframework.beans.factory.annotation.Autowired
     private com.company.app.UserService userService;
 
     public static void main(String[] args) {
-        org.springframework.boot.SpringApplication.run(App.class, args);
+        org.springframework.boot.SpringApplication.run(AppWithLogic.class, args);
         System.out.println("Processing users...");
     }
 }
@@ -1301,70 +1348,6 @@ class BrokenBean {
     @PostConstruct
     void init() { }
 }
-```
-
-### Example 15: Test-specific beans and configuration
-
-Title: Use @TestConfiguration to isolate test doubles and avoid polluting the production context
-Description: When defining beans exclusively for testing (like stubs, fakes, or custom test setup), place them in `src/test/java` and annotate the class with `@TestConfiguration`. Unlike standard `@Configuration`, `@TestConfiguration` is intentionally excluded from component scanning, ensuring it only applies when explicitly imported via `@Import` or nested inside a test class. Avoid putting test beans in `src/main/java` behind `@Profile("test")`.
-
-**Good example:**
-
-```java
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Primary;
-
-@TestConfiguration
-class ExternalServiceTestConfig {
-
-    @Bean
-    @Primary
-    ExternalServiceClient fakeExternalServiceClient() {
-        return new FakeExternalServiceClient();
-    }
-}
-
-// Usage in test:
-// @org.springframework.boot.test.context.SpringBootTest
-// @org.springframework.context.annotation.Import(ExternalServiceTestConfig.class)
-// class MyIntegrationTest { ... }
-
-interface ExternalServiceClient { }
-class FakeExternalServiceClient implements ExternalServiceClient { }
-```
-
-**Bad example:**
-
-```java
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-
-// Anti-pattern 1: Standard @Configuration in src/test/java
-// If component scanning accidentally reaches this package, it might override production beans
-@Configuration
-class BadTestConfig {
-    @Bean
-    ExternalServiceClient mockClient() {
-        return new MockExternalServiceClient();
-    }
-}
-
-// Anti-pattern 2: Test beans in src/main/java hidden behind a profile
-// Pollutes production classpath with test dependencies and logic
-@Configuration
-@Profile("test")
-class ProductionPollutingTestConfig {
-    @Bean
-    ExternalServiceClient testClient() {
-        return new FakeExternalServiceClient();
-    }
-}
-
-interface ExternalServiceClient { }
-class MockExternalServiceClient implements ExternalServiceClient { }
-class FakeExternalServiceClient implements ExternalServiceClient { }
 ```
 
 ## Output Format
