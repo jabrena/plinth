@@ -31,7 +31,7 @@ Apply guidance from these Skills when relevant:
 - `@301-frameworks-spring-boot-core`: Spring Boot Core
 - `@302-frameworks-spring-boot-rest`: Spring Boot REST
 - `@311-frameworks-spring-jdbc`: Spring Boot JDBC
-- `312-frameworks-spring-data-jdbc`; Spring Boot Data JDBC
+- `@312-frameworks-spring-data-jdbc`; Spring Boot Data JDBC
 - `@321-frameworks-spring-boot-testing-unit-tests`: Spring Boot unit testing
 - `@322-frameworks-spring-boot-testing-integration-tests`: Spring Boot integration testing
 - `@323-frameworks-spring-boot-testing-acceptance-tests`: Spring Boot acceptance testing

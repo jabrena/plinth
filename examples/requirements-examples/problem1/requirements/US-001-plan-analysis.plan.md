@@ -1,6 +1,6 @@
 ---
 name: God Analysis API Implementation
-overview: "Spring Boot REST API with parallel HTTP fetches: implement 5s timeouts and partial results first, then add linear retries via Resilience4j Retry (ADR-002 + ADR-003); no circuit breaker in v1; Unicode aggregation via London Style TDD."
+overview: "Spring Boot REST API with parallel HTTP fetches: RestClient connect/read timeouts (defaults in application.yml), partial results when a source times out—no outbound retries; Unicode aggregation via London Style TDD."
 todos: []
 isProject: false
 ---
@@ -14,7 +14,7 @@ isProject: false
 **Key Business Rules:**
 - **Unicode Aggregation:** Convert each character to Unicode code point decimal, concatenate per name, sum as BigInteger
 - **Case-Sensitive Filtering:** Filter names by first Unicode code point matching the filter parameter
-- **Resilient HTTP (sequenced):** (1) **Timeout first:** 5-second timeout per source, single attempt per call, partial results when a source times out or errors. (2) **Retries second:** up to **3** additional linear attempts per source (ADR-002), still isolated per source; only after timeout behavior is stable.
+- **Resilient HTTP:** **RestClient** connect/read timeouts (defaults in `application.yml`, overridable via environment variables). **Single attempt per source** per request; partial results when a source times out or errors. **No** automatic retries (aligned with ADR-002 / ADR-003 scope reduction).
 - **Parallel Processing:** Fetch from multiple sources concurrently (Greek, Roman, Nordic)
 - **Expected Result:** JSON response `{"sum": "<decimal-string>"}` for successful aggregation
 
@@ -33,7 +33,7 @@ flowchart LR
   subgraph Application [God Analysis API]
     Controller[REST Controller<br/>GET /api/v1/gods/stats/sum]
     Service[God Analysis Service<br/>Orchestration & Aggregation]
-    Client[HTTP Client<br/>Timeout then Retries]
+    Client[HTTP Client<br/>RestClient timeouts]
     Algorithm[Unicode Algorithm<br/>Filter & Sum]
   end
 
@@ -63,18 +63,13 @@ flowchart LR
 | 12 | Implement filter logic validation | GREEN | Impl | | A2 | ✔ |
 | 13 | Verify service unit tests pass | Verify | | milestone | A2 | ✔ |
 | 14 | Write HTTP client tests for timeout-bound fetching (single attempt per source) | RED | Test | | A3 | ✔ |
-| 15 | Implement HTTP client with 5s timeout only (no retries yet) | GREEN | Impl | | A3 | ✔ |
+| 15 | Implement HTTP client with configured RestClient timeouts (no retries) | GREEN | Impl | | A3 | ✔ |
 | 16 | Add client-level logging for HTTP outcomes | Refactor | | | A3 | ✔ |
 | 17 | Optimize client configuration (timeouts, per-source isolation) | Refactor | | | A3 | ✔ |
 | 18 | Write integration test for Nordic timeout scenario | RED | Test | | A3 | ✔ |
 | 19 | Implement partial result handling in service | GREEN | Impl | | A3 | ✔ |
 | 20 | Verify HTTP client tests pass (timeout phase) | Verify | | milestone | A3 | ✔ |
-| 21 | Write HTTP client tests for linear retry policy (1 + 3 attempts per ADR-002) | RED | Test | | A4 | ✔ |
-| 22 | Add per-source **Resilience4j Retry** around HTTP client calls | GREEN | Impl | | A4 | ✔ |
-| 23 | Extend client logging for retry attempts and final outcomes | Refactor | | | A4 | ✔ |
-| 24 | Optimize retry configuration (linear delays, caps) | Refactor | | | A4 | ✔ |
-| 25 | Verify HTTP client tests pass (with retries) | Verify | | milestone | A4 | ✔ |
-| 26 | Verify all integration tests pass | Verify | ✔ | milestone | A5 | |
+| 21 | Verify all integration tests pass | Verify | | milestone | A4 | ✔ |
 
 ## Execution Instructions
 
@@ -93,7 +88,7 @@ When executing this plan:
 - If any test fails during verification, fix the issue before advancing
 - Never skip verification steps - they ensure software stability
 
-**Parallel column:** Use grouping identifiers (A1, A2, A3, A4, A5, etc.) to group tasks into the same delivery slice. **A3 must complete (including its Verify) before starting A4.** Use when assigning agents or branches to a milestone scope.
+**Parallel column:** Use grouping identifiers (A1, A2, A3, A4, etc.) to group tasks into the same delivery slice. Use when assigning agents or branches to a milestone scope.
 
 ## File Checklist
 
@@ -114,7 +109,7 @@ When executing this plan:
 | 13 | `god-analysis-api/src/test/resources/wiremock/greek-gods.json` |
 | 14 | `god-analysis-api/src/test/resources/wiremock/roman-gods.json` |
 | 15 | `god-analysis-api/src/test/resources/wiremock/nordic-gods.json` |
-| 16 | `god-analysis-api/src/test/java/info/jab/ms/support/WireMockToxiproxyExtension.java` (or equivalent) — Testcontainers lifecycle, proxy URLs, **clear toxics between tests** |
+| 16 | `god-analysis-api/src/test/java/info/jab/ms/support/WireMockExtension.java` (or equivalent) — WireMock lifecycle, base URLs, **reset stubs between tests** |
 | 17 | `god-analysis-api/README.md` |
 
 ## Authoritative Sources
@@ -123,15 +118,15 @@ When executing this plan:
 - [US-001_god_analysis_api.feature](US-001_god_analysis_api.feature) — Three test scenarios defining exact behavior
 - [US-001-god-analysis-api.openapi.yaml](US-001-god-analysis-api.openapi.yaml) — API contract with response schema and parameters
 - [ADR-001-God-Analysis-API-Functional-Requirements.md](ADR-001-God-Analysis-API-Functional-Requirements.md) — Architecture decisions (monolith, no auth, direct HTTP)
-- [ADR-002-God-Analysis-API-Non-Functional-Requirements.md](ADR-002-God-Analysis-API-Non-Functional-Requirements.md) — Performance and resilience requirements (5s timeout, 3 retries, parallel calls; **circuit breaker explicitly out of scope** for initial implementation)
-- [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md) — Runtime stack, `RestClient` (outbound **and** HTTP acceptance tests), **Resilience4j Retry** (retry module only), and **Testcontainers + WireMock + Toxiproxy** for isolated timeout/retry tests
+- [ADR-002-God-Analysis-API-Non-Functional-Requirements.md](ADR-002-God-Analysis-API-Non-Functional-Requirements.md) — Timeouts via `RestClient`, parallel calls, partial results; **no automatic retries**; **circuit breaker explicitly out of scope** for initial implementation
+- [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md) — Runtime stack, `RestClient` (outbound **and** HTTP acceptance tests), **WireMock** (in-process or Testcontainers) for isolated **timeout** tests
 
 **Test Scenarios:**
 1. **Happy Path:** All sources respond → exact sum calculation
 2. **Partial Failure:** Nordic times out → sum from Greek + Roman only
 3. **Filter Edge Case:** `filter=N` → sum equals `"0"`
 
-**ADR-002 vs API contract:** ADR-002 asks for “clear indication of which sources contributed.” The OpenAPI and Gherkin only require `sum`. **Approach:** satisfy the public contract first; meet the ADR via **structured logging**  listing successful vs failed/timed-out sources per request. If product later wants this in JSON, extend OpenAPI in a follow-up.
+**ADR-002 vs API contract:** Earlier drafts mentioned logging which sources contributed; the OpenAPI and Gherkin only require `sum`. **Approach:** satisfy the public contract first; optional **structured logging** for successful vs failed/timed-out sources per request. If product later wants this in JSON, extend OpenAPI in a follow-up.
 
 ## Runtime stack (reconcile ADR-003 with repo)
 
@@ -168,25 +163,23 @@ flowchart LR
 
 ## Configuration
 
-- **Single Configuration:** All settings in `application.yml` with production-ready defaults (5s timeout, 4 max attempts, 1s retry delay)
+- **Single Configuration:** All settings in `application.yml` with production-ready defaults (e.g. 5s connect and read timeouts for outbound `RestClient`)
 - **Base URLs** for `greek`, `roman`, `nordic` with defaults matching ADR-001 URLs
 - **Environment Variables:** Runtime customization without profile complexity
-- **Phase 1 — Timeout only:** 5 seconds per HTTP **attempt** (connect + read as appropriate). `max-attempts` / retry settings disabled or set to **1** until the retry phase lands.
-- **Phase 2 — Retries:** After timeout-only client is verified, enable up to **3** additional attempts per source after failure/timeout (**linear** spacing per ADR-002; no exponential backoff). Prefer separate config keys (e.g. `retry.max-attempts`, `retry.delay`) so Phase 1 stays simple.
-- **Parallelism:** fetch selected sources concurrently. During Phase 1, **wait** until each source returns or times out (single attempt). After Phase 2, **wait** until each source returns data or **exhausts retries** (ADR-002 “completeness priority” before declaring partial aggregate).
+- **Outbound HTTP:** One GET per selected source with configured timeouts; no retry properties—keep configuration minimal.
+- **Parallelism:** Fetch selected sources concurrently; **wait** until each source returns or times out (single attempt), then merge and aggregate.
 
 Wire Spring configuration via `@ConfigurationProperties` for testability.
 
 ## HTTP client and resilience
 
-- **Implementation order:** (1) **Timeouts + partial results** with **one attempt** per source. (2) **Then** add **retries** without changing timeout semantics per attempt. Keeps failing tests readable and matches ADR-001 (timeouts/degradation) before ADR-002 retry policy.
-- **Circuit breaker:** Not required for v1 (ADR-002 considered and rejected it until persistent failure patterns justify it). Do not add Resilience4j circuit breaker or equivalent unless requirements change.
-- Prefer **RestClient** or **WebClient** (Spring 6 / Boot 4 style) with a **shared** builder factory applying timeouts.
+- **Implementation:** **Timeouts + partial results** with **one attempt** per source per request. Matches ADR-001/ADR-002 without a retry phase.
+- **Circuit breaker:** Not required for v1 (ADR-002 considered and rejected it until persistent failure patterns justify it).
+- Use **RestClient** (Spring 6 / Boot 4 style) with a **shared** builder or factory applying **connect/read** timeouts from `application.yml`.
 - Implement a small **GodListClient** (or per-source callable) that:
-  - **Phase 1:** Single GET per source with 5s timeout; on timeout or error, treat that source as empty for aggregation (partial result path).
-  - **Phase 2:** Wrap the same per-source call with **Resilience4j Retry** (see [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md)): **4** total attempts (1 + 3), **fixed** wait between attempts, **one retry configuration per pantheon**—**no** CircuitBreaker in v1.
-  - On **final** failure for a source (after Phase 2), return **empty list** (or sentinel) so aggregation still returns **HTTP 200** with partial logical result, per feature and OpenAPI.
-- **Do not** fail the whole request if one source fails after retries.
+  - Performs a **single** GET per source within the configured timeouts; on timeout or error, treat that source as empty for aggregation (partial result path).
+  - Does **not** wrap calls in Resilience4j Retry or Spring Retry for US-001.
+- **Do not** fail the whole request if one source fails or times out.
 
 ## REST layer
 
@@ -198,14 +191,14 @@ Wire Spring configuration via `@ConfigurationProperties` for testability.
 
 ## Testing strategy
 
-**Stack (see [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md)):** **Testcontainers** runs **WireMock** (stub bodies) and **Toxiproxy** (latency / timeout simulation). The app’s configured base URLs target **Toxiproxy listeners**, not WireMock directly. **Reset or remove all toxics** in `@BeforeEach` / `@AfterEach` (or equivalent) so **every** timeout/retry test starts **isolated**—no cross-test leakage when the suite runs in arbitrary order or in parallel (if parallel, prefer per-class containers or documented synchronization).
+**Stack (see [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md)):** Use **WireMock** (in-process or **Testcontainers**-hosted) with **fixed delays** on stubbed upstream routes so the SUT’s **RestClient** hits configured read timeouts deterministically. Point the app at WireMock URLs in tests. **Reset stubs** in `@BeforeEach` / `@AfterEach` (or equivalent) so **every** timeout test starts **isolated**.
 
 | Goal | Approach |
 |------|----------|
-| Happy path / exact `sum` | `@SpringBootTest` + **Spring `RestClient`** against **RANDOM_PORT**; upstreams via Toxiproxy → WireMock with **JSON fixture files** so `sum` equals **`78179288397447443426`**. No live network in CI. |
-| Nordic timeout / partial sum | Apply **Toxiproxy latency (or timeout) toxic** on the **Nordic proxy only** so the client hits **5s per-attempt** timeout while Greek/Roman stay fast; assert partial `sum` from Greek + Roman. With retries enabled, tune toxics so only Nordic exhausts attempts within the test. |
-| `filter=N` → `"0"` | Same container stack; no Nordic toxic required; assert `sum` is `"0"`. |
-| Unit tests | Pure tests for conversion + filter + aggregation with small strings (**no** Docker). |
+| Happy path / exact `sum` | `@SpringBootTest` + **Spring `RestClient`** against **RANDOM_PORT**; upstream **WireMock** JSON fixtures so `sum` equals **`78179288397447443426`**. No live network in CI. |
+| Nordic (or Roman) timeout / partial sum | Stub one or more pantheon routes with **delay greater than read timeout**; assert partial `sum` matches the feature file expectation for Greek + Roman only. |
+| `filter=N` → `"0"` | Same stack; assert `sum` is `"0"`. |
+| Unit tests | Pure tests for conversion + filter + aggregation with small strings (**no** WireMock). |
 
 Tag tests to mirror Gherkin: e.g. JUnit `@Tag("acceptance-test")` and `@Tag("integration-test")` for Maven `groups`/Surefire filters if desired.
 
@@ -213,13 +206,13 @@ Tag tests to mirror Gherkin: e.g. JUnit `@Tag("acceptance-test")` and `@Tag("int
 
 ## Deliverables checklist
 
-- New Maven project with `spring-boot-starter-web`, `spring-boot-starter-actuator` (ADR-003), **`resilience4j-retry`** plus **Resilience4j Spring Boot integration** (Retry only), `spring-boot-starter-test` (includes AssertJ; use **`RestClient`** from `spring-web` for acceptance tests—**no** Rest Assured per ADR-003), **Testcontainers** (`testcontainers`, `junit-jupiter`, **`toxiproxy`**), and **WireMock on Testcontainers** (or equivalent) per ADR-003.
-- **Single configuration file** `application.yml` with production-ready settings and environment variable support
-- `README` or `DEVELOPER.md` in the new module: how to run, **Docker requirement**, configure URLs/timeouts via environment variables, run tests.
+- New Maven project with `spring-boot-starter-web`, `spring-boot-starter-actuator` (ADR-003), `spring-boot-starter-test` (includes AssertJ; use **`RestClient`** from `spring-web` for acceptance tests—**no** Rest Assured per ADR-003), optional **Testcontainers** + **`org.wiremock:wiremock`** if you run WireMock via containers; in-process WireMock needs no Docker.
+- **Single configuration file** `application.yml` with production-ready **RestClient** timeout settings and environment variable support
+- `README` or `DEVELOPER.md` in the new module: how to run, Docker only if Testcontainers is used, configure URLs/timeouts via environment variables, run tests.
 - `./mvnw clean verify` from the new module passes.
 
 ## Notes
 
 - **Exact happy-path sum:** Depends on **current** Typicode data; **pin** test data in WireMock JSON so builds are deterministic.
-- **Retry + timeout interaction:** After the retry phase, worst-case latency per source follows ADR-002 (~4 attempts × timeout + linear delays); document this for operators. During **timeout-only** phase, worst case is roughly one timeout per slow source (plus parallel peer waits).
+- **Timeout bounds:** Worst-case latency is roughly bounded by the configured **read timeout** per slow source (parallel fetches), with **no** retry multiplier.
 - **Java version:** Pick **25 vs 26** explicitly for this example module’s `pom.xml` `java.version`.

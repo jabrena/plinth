@@ -2,20 +2,22 @@
 
 **Status:** Proposed
 **Date:** Sat Mar 21 09:39:29 CET 2026
-**ISO 25010:2023 Focus:** Reliability (Fault Tolerance, Availability, Recoverability)
+**ISO 25010:2023 Focus:** Reliability (Fault Tolerance, Availability)
 
 ## Context
 
-The God Analysis API is an internal service that aggregates mythology data from three external APIs (Greek, Roman, and Nordic sources) to provide cross-pantheon analysis capabilities. The service performs complex data transformation (Unicode character conversion and filtering) and serves other internal services within our system architecture.
+The God Analysis API is an internal service that aggregates mythology data from three external APIs (Greek, Roman, and Nordic sources) to provide cross-pantheon analysis capabilities. The service performs data transformation (Unicode character conversion and filtering) and serves other internal services within our system architecture.
 
 The primary quality challenge is ensuring reliable service delivery despite the inherent unreliability of external API dependencies. The external mythology APIs (hosted on my-json-server.typicode.com) exhibit variable response times and occasional failures that could impact the availability and reliability of our internal service.
+
+**Scope alignment:** This ADR intentionally does **not** require automatic HTTP retries. Outbound calls use Spring `RestClient` with configured connect/read timeouts (see [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md)). That keeps implementation and operations simpler than introducing a retry library and backoff policy.
 
 ## Non-Functional Requirements
 
 ### Primary Quality Characteristic: Reliability
 
 **Fault Tolerance:**
-- The API must continue operating and return meaningful results even when one or more external data sources fail or timeout
+- The API must continue operating and return meaningful results when one or more external data sources fail or time out on the **single** outbound attempt per source
 - Partial results are acceptable and valuable to consuming services when complete data is unavailable
 - System must gracefully handle individual source failures without cascading to total service failure
 
@@ -24,63 +26,50 @@ The primary quality challenge is ensuring reliable service delivery despite the 
 - No single point of failure from external API dependencies
 - Predictable behavior for internal service consumers
 
-**Recoverability:**
-- Automatic retry mechanisms for transient failures
-- Individual source failure isolation - one failing source should not impact retrieval from other sources
-- Consistent response format regardless of partial or complete data availability
+**Recoverability (without retries):**
+- Isolation per source: one slow or failing source must not block successful retrieval from others beyond bounded waits (timeouts)
+- Consistent response format regardless of partial or complete data availability (same JSON shape; completeness may be inferred from logs if needed)
 
 ### Secondary Quality Characteristics
 
 **Performance Efficiency:**
 - Parallel execution to minimize overall response time
-- Timeout controls to prevent indefinite blocking
-- Resource-efficient retry strategies
+- Timeout controls on `RestClient` (connect + read) to prevent indefinite blocking
+- No retry loops—worst-case latency is bounded by parallel timeouts, not multiplied by retry counts
 
 **Functional Suitability:**
-- Completeness priority - wait for all sources to either succeed or exhaust retries
-- Correctness of partial results when some sources fail
-- Appropriate response indicating data completeness status
+- Correctness of partial results when some sources fail or time out
+- Appropriate handling when all selected sources fail (still a coherent API outcome as defined in the feature file)
 
 ## Technical Decisions
 
 **Timeout Strategy:**
-- 5-second timeout per individual API call to external sources
-- Prevents indefinite blocking while allowing reasonable response time for external services
-
-**Retry Policy:**
-- Up to 3 additional retry attempts per external source (4 total attempts: 1 initial + 3 retries)
-- Linear retry approach without exponential backoff (keeping implementation simple)
-- Individual retry logic per source - failures are isolated
+- Configure `RestClient` (via `ClientHttpRequestFactory` or Spring Boot–supported properties) with explicit **connect** and **read** timeouts; document defaults in `application.yml` (for example 5000 ms each unless overridden)
+- One HTTP attempt per source; on timeout or transport error, treat that source as absent for aggregation and continue with others
 
 **Configuration Management:**
 - Single default configuration provides production-ready settings
-- Environment variables allow runtime customization without profile complexity
-- Default timeout: 5000ms, retry attempts: 4, retry delay: 1000ms
+- Environment variables allow runtime customization of URLs and timeout values without profile complexity
 
 **Execution Model:**
-- Parallel calls to all three external APIs (Greek, Roman, Nordic)
-- Completeness-prioritized approach: wait for all sources to either succeed or exhaust their retry attempts
-- Individual timeout and retry handling per source
+- Parallel calls to all three external APIs when selected (Greek, Roman, Nordic)
+- Wait until each parallel call completes successfully or times out; then merge lists and compute the aggregate
 
 **Error Handling:**
-- Graceful degradation with partial results when some sources fail after all retries
-- Consistent JSON response format regardless of data completeness
-- Clear indication of which sources contributed to the final result (via application logging using log.info)
+- Graceful degradation with partial results when some sources fail or time out
+- Consistent JSON response format regardless of data completeness (public contract: `sum` field; optional structured logging for diagnostics)
 
 ## Alternatives Considered
 
 **Sequential API Calls:**
-- Rejected due to poor performance characteristics (potential 60+ second response times with retries)
-- Would create cascading delays when early sources fail
+- Rejected due to poor performance characteristics (additive latency across sources)
 
-**Immediate Response on First Success:**
-- Rejected in favor of completeness priority
-- Would provide inconsistent data quality to consuming services
+**Automatic Retries (e.g. Resilience4j, Spring Retry):**
+- **Deferred / out of scope for this user story.** Adds dependency surface, configuration, and test complexity beyond the original problem statement. Bounded `RestClient` timeouts plus partial aggregation are sufficient for v1.
 
 **Circuit Breaker Pattern:**
 - Not implemented in v1 because external APIs are not under our control and temporary failures are expected behavior
-- Circuit breakers are designed for protecting downstream services from cascading failures, but our use case expects and handles individual source failures gracefully
-- Will be reconsidered if monitoring reveals persistent failure patterns indicating systematic issues rather than transient network problems
+- Will be reconsidered if monitoring reveals persistent failure patterns indicating systematic issues
 
 **Caching Strategy:**
 - Considered but rejected for initial implementation
@@ -95,13 +84,12 @@ The primary quality challenge is ensuring reliable service delivery despite the 
 - External source success rate: Monitor individual source reliability patterns
 
 **Performance Metrics:**
-- Response time distribution: Track P50, P95, P99 response times including retry scenarios
-- Timeout occurrence rate: Monitor frequency of 5-second timeouts per source
-- Retry effectiveness: Track success rate of retry attempts
+- Response time distribution: Track P50, P95, P99 response times (bounded by configured timeouts under parallel fetch)
+- Timeout occurrence rate: Monitor frequency of per-source timeouts
 
 **Monitoring Approach:**
-- Log all external API call outcomes (success, timeout, failure) with structured logging
-- Track response completeness (full vs. partial results) via application logs
+- Log external API call outcomes (success, timeout, failure) with structured logging
+- Track response completeness (full vs. partial results) via application logs where useful
 - Basic health checks via Spring Boot Actuator endpoints
 - Logging-based monitoring is sufficient for this User Story scope (educational/research API)
 - Advanced observability stacks (Prometheus, Grafana, ELK) are not required for initial implementation
@@ -113,21 +101,21 @@ The primary quality challenge is ensuring reliable service delivery despite the 
 - Predictable behavior for internal service consumers
 - Isolated failure handling prevents cascading issues
 - Parallel execution minimizes response time impact
+- Simpler implementation and tests than retry + backoff policies
 
 **Trade-offs:**
-- Increased complexity in error handling and retry logic
-- Potential for longer response times in worst-case scenarios (up to ~20 seconds with full retry cycles)
-- Resource utilization for parallel calls and retry attempts
-- Partial results require consuming services to handle variable data completeness
+- Transient network blips are not automatically retried—may increase partial-result rate compared to a retry-enabled design
+- Partial results require consuming services to tolerate variable logical completeness (still one consistent JSON contract)
 
 **Follow-up Work:**
 - Evaluate caching strategies based on usage patterns and performance requirements
 - Establish SLA agreements with external API providers if possible
-- Advanced monitoring and alerting infrastructure may be added in future iterations based on operational requirements
+- Revisit automatic retries only if product scope explicitly requires them
 
 ## References
 
 - [ADR-001: God Analysis API Functional Requirements](ADR-001-God-Analysis-API-Functional-Requirements.md)
-- [ADR-003: God Analysis API — Technology Stack](ADR-003-God-Analysis-API-Technology-Stack.md) — **Resilience4j Retry** implements this ADR’s retry policy - [US-001: God Analysis API User Story](US-001_God_Analysis_API.md)
+- [ADR-003: God Analysis API — Technology Stack](ADR-003-God-Analysis-API-Technology-Stack.md) — `RestClient` timeouts and testing
+- [US-001: God Analysis API User Story](US-001_God_Analysis_API.md)
 - [Feature Specification](US-001_god_analysis_api.feature)
 - ISO/IEC 25010:2023 Systems and software engineering — Systems and software Quality Requirements and Evaluation (SQuaRE)

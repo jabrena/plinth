@@ -1,0 +1,20 @@
+@startuml c4-level1-context
+!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+
+title System Context Diagram - God Analysis API (Level 1)
+
+Person(apiClient, "API Client", "Developer or application consumer calling the God Analysis REST API to retrieve statistics about god names")
+
+System(godAnalysisApi, "God Analysis API", "Spring Boot microservice that fetches god names from external mythology data sources, filters them by a Unicode character, and computes the sum of Unicode code points")
+
+System_Ext(greekGodsApi, "Greek Gods API", "External JSON REST API providing a list of Greek god names\nhttps://my-json-server.typicode.com/.../greek")
+System_Ext(romanGodsApi, "Roman Gods API", "External JSON REST API providing a list of Roman god names\nhttps://my-json-server.typicode.com/.../roman")
+System_Ext(nordicGodsApi, "Nordic Gods API", "External JSON REST API providing a list of Nordic god names\nhttps://my-json-server.typicode.com/.../nordic")
+
+Rel(apiClient, godAnalysisApi, "Calls GET /api/v1/gods/stats/sum", "HTTPS/JSON")
+Rel(godAnalysisApi, greekGodsApi, "Fetches Greek god names", "HTTPS/JSON")
+Rel(godAnalysisApi, romanGodsApi, "Fetches Roman god names", "HTTPS/JSON")
+Rel(godAnalysisApi, nordicGodsApi, "Fetches Nordic god names", "HTTPS/JSON")
+
+SHOW_LEGEND()
+@enduml

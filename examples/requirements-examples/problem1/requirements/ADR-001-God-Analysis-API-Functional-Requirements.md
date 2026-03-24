@@ -34,10 +34,10 @@ The primary consumers are educational and research platforms with moderately tec
    - Sum all converted name values to produce final result
 
 ### Error Handling and Resilience
-- **Timeout Management:** 5-second timeout threshold for external API calls
-- **Graceful Degradation:** Continue processing with partial results when individual sources timeout
+- **Timeout Management:** Outbound HTTP uses Spring `RestClient` with connect/read timeouts defined in `application.yml` (e.g. 5 seconds per call unless overridden by environment variables). This is **client configuration only**—no separate retry library or retry policy is required for this user story.
+- **Graceful Degradation:** Continue processing with partial results when individual sources timeout or fail on the single attempt
 - **Invalid Parameters:** Return HTTP 400 with error messages for malformed requests (missing parameters, invalid filter length, invalid source names)
-- **Source Unavailability:** Process available sources when others are unreachable
+- **Source Unavailability:** Process available sources when others are unreachable or time out
 
 ## Technical Decisions
 
@@ -56,18 +56,18 @@ The primary consumers are educational and research platforms with moderately tec
 **Rationale:** Educational and research use case benefits from open access. No sensitive data handling or commercial concerns requiring access controls.
 
 #### Data & Persistence
-**Decision:** No caching, direct calls to external APIs with timeout handling
-**Rationale:** Simplifies architecture and ensures real-time data access. Timeout handling provides necessary resilience without caching complexity.
+**Decision:** No caching, direct calls to external APIs with `RestClient` timeouts configured once in application configuration
+**Rationale:** Simplifies architecture and ensures real-time data access. Bounded waits and partial aggregation provide enough resilience for this scope without caching or outbound retries.
 
 #### Integration & Infrastructure
 **Decision:** Direct HTTP client integration with external god APIs, no specific deployment requirements
 **Rationale:** Straightforward integration pattern sufficient for three well-defined external endpoints. Deployment flexibility maintained for various environments.
 
-**Implementation note:** Retry and HTTP client libraries are specified in [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md) (**Resilience4j Retry** for outbound retries, **RestClient** for HTTP); retry **policy** (counts, timeouts, linear spacing) remains in [ADR-002-God-Analysis-API-Non-Functional-Requirements.md](ADR-002-God-Analysis-API-Non-Functional-Requirements.md).
+**Implementation note:** Outbound HTTP and test clients are specified in [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md) (**RestClient** only). Non-functional expectations for timeouts and partial results are summarized in [ADR-002-God-Analysis-API-Non-Functional-Requirements.md](ADR-002-God-Analysis-API-Non-Functional-Requirements.md); there is **no** separate retry policy.
 
 #### Testing & Monitoring
 **Decision:** Acceptance and integration testing as defined in feature file with fast execution requirements, basic monitoring approach
-**Rationale:** Test scenarios already specified cover critical paths including timeout and filtering behavior. Tests must run fast to support rapid development cycles - timeout and retry scenarios require deterministic simulation rather than real delays. Basic observability sufficient for educational use case.
+**Rationale:** Test scenarios cover critical paths including timeout and filtering behavior. Tests must run fast to support rapid development cycles—timeout scenarios use deterministic stub delays (for example WireMock) rather than real network waits. Basic observability sufficient for educational use case.
 
 **HTTP-level acceptance tests:** Use **Spring Framework `RestClient`** against the application bound to a random port (`@SpringBootTest(webEnvironment = RANDOM_PORT)`), as decided in [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md) (supersedes Rest Assured for this module to avoid Groovy/JVM compatibility issues on Java 21+).
 
@@ -90,10 +90,10 @@ The primary consumers are educational and research platforms with moderately tec
 **Single Default Profile Approach:**
 - All configuration in `application.yml` with production-ready defaults
 - External API URLs configurable via environment variables with sensible defaults
-- Timeout and retry settings externalized for operational flexibility
+- `RestClient` connect/read timeouts externalized (defaults sufficient for local and CI; overrides via environment variables when needed)
 - No profile-specific configuration files - single source of truth
 
-**Rationale:** Simplified configuration management with single default profile reduces complexity while maintaining operational flexibility through environment variables.
+**Rationale:** Simplified configuration management with single default profile reduces complexity while maintaining operational flexibility through environment variables. Outbound retries are intentionally out of scope to avoid extra libraries and policy tuning.
 
 ## Consequences
 

@@ -1,87 +1,46 @@
 package info.jab.ms.service;
 
+import info.jab.ms.algorithm.UnicodeAggregator;
+import info.jab.ms.client.GodDataClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
-/**
- * Service for analyzing god names and calculating Unicode-based statistics.
- * Implements the Unicode aggregation algorithm as specified in the requirements.
- */
 @Service
 public class GodAnalysisService {
 
-    private static final Logger logger = LoggerFactory.getLogger(GodAnalysisService.class);
+    private static final Logger log = LoggerFactory.getLogger(GodAnalysisService.class);
 
-    /**
-     * Calculate the sum of Unicode values for god names with optional filtering.
-     *
-     * Algorithm:
-     * 1. Filter names by first Unicode code point (filter is normalized to uppercase before comparison)
-     * 2. For each name, convert each character to its Unicode integer value
-     * 3. Concatenate those integers as strings per name
-     * 4. Sum all the concatenated values as BigInteger
-     * 5. Return the sum as a string
-     *
-     * @param names  List of god names to process
-     * @param filter Filter for first character, normalized to uppercase before comparison (empty string or null means no filter)
-     * @return Sum of Unicode values as a string
-     */
-    public String calculateSum(List<String> names, String filter) {
-        logger.debug("calculateSum called with {} names, filter: '{}'", names == null ? 0 : names.size(), filter);
+    private final GodDataClient godDataClient;
+    private final UnicodeAggregator unicodeAggregator;
 
-        if (names == null || names.isEmpty()) {
-            return "0";
-        }
-
-        var totalSum = names.stream()
-                .filter(Objects::nonNull)
-                .filter(name -> !name.isEmpty())
-                .filter(name -> !shouldFilterName(name, filter))
-                .map(this::convertNameToUnicodeDecimalString)
-                .filter(s -> !s.isEmpty())
-                .map(BigInteger::new)
-                .reduce(BigInteger.ZERO, BigInteger::add);
-
-        logger.debug("calculateSum result: '{}' for filter: '{}'", totalSum, filter);
-        return totalSum.toString();
+    public GodAnalysisService(GodDataClient godDataClient) {
+        this.godDataClient = godDataClient;
+        this.unicodeAggregator = new UnicodeAggregator();
     }
 
-    /**
-     * Check if a name should be filtered out based on the filter criteria.
-     * The filter's first code point is normalized to uppercase before comparing against
-     * the name's first code point, so that a lowercase filter matches capitalized god names.
-     *
-     * @param name   The name to check
-     * @param filter The filter string (empty/null means no filtering)
-     * @return true if the name should be filtered out, false if it should be included
-     */
-    private boolean shouldFilterName(String name, String filter) {
-        if (filter == null || filter.isEmpty()) {
-            return false;
+    public BigInteger computeSum(String filter, List<String> sources) {
+        log.debug("Computing sum for filter='{}', sources={}", filter, sources);
+        List<String> allNames = new ArrayList<>();
+        for (String source : sources) {
+            List<String> names = switch (source.toLowerCase()) {
+                case "greek" -> godDataClient.fetchGreekGods();
+                case "roman" -> godDataClient.fetchRomanGods();
+                case "nordic" -> godDataClient.fetchNordicGods();
+                default -> {
+                    log.warn("Unknown source: {}", source);
+                    yield List.of();
+                }
+            };
+            log.debug("Source '{}' returned {} names", source, names.size());
+            allNames.addAll(names);
         }
-
-        int firstCodePoint = name.codePointAt(0);
-        int filterCodePoint = filter.codePointAt(0);
-
-        // Normalize filter to uppercase so that e.g. filter='n' matches names starting with 'N'
-        return firstCodePoint != Character.toUpperCase(filterCodePoint);
-    }
-
-    /**
-     * Convert a name to its Unicode decimal string representation.
-     * Each character is converted to its Unicode integer value and concatenated as strings.
-     *
-     * @param name The name to convert
-     * @return The concatenated Unicode decimal string
-     */
-    private String convertNameToUnicodeDecimalString(String name) {
-        StringBuilder unicodeBuilder = new StringBuilder();
-        name.codePoints().forEach(unicodeBuilder::append);
-        return unicodeBuilder.toString();
+        BigInteger sum = unicodeAggregator.aggregate(allNames, filter);
+        log.info("Computed sum for filter='{}': {}", filter, sum);
+        return sum;
     }
 }
