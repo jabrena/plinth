@@ -100,6 +100,7 @@ Present a summary to the user:
 - Use `WireMockExtension` with `@RegisterExtension` for external REST stubs
 - Use `@DynamicPropertySource` **only** for WireMock base URLs and any other infrastructure that does not have a built-in `@ServiceConnection` support
 - WireMock base URL is available after the extension is initialized — pass it into `DynamicPropertyRegistry.add()`
+- **Test isolation**: Default to a shared Spring context and call `wireMock.resetAll()` in `@BeforeEach` so stubs do not leak. Add `@DirtiesContext(classMode = AFTER_EACH_TEST_METHOD)` (or `AFTER_CLASS`) on the base or on specific test classes only when tests mutate shared application state and need a fresh context
 
 ### File placement
 
@@ -166,8 +167,8 @@ Present a summary to the user:
                 ### WireMock mappings
 
                 When the service calls external REST APIs, create WireMock mapping files under:
-                `src/test/resources/wiremock/mappings/{service-name}/`
-                Use `bodyFileName` for large responses; store bodies in `wiremock/files/`.
+                `src/test/resources/wiremock/mappings/` (optionally subfolders per service).
+                Use `bodyFileName` in a mapping JSON for large or reusable response bodies; store those files under `src/test/resources/wiremock/__files/` — WireMock resolves `bodyFileName` relative to the `__files` root when using `usingFilesUnderClasspath("wiremock")`.
 
                 ### Maven Surefire / Failsafe split
 
@@ -276,8 +277,8 @@ Feature: User registration API
 
 ### Example 2: BaseAcceptanceTest with @SpringBootTest, TestRestTemplate, Testcontainers and WireMock
 
-Title: @ServiceConnection for DB/Kafka; @DynamicPropertySource only for WireMock; TestRestTemplate auto-configured
-Description: Uses `@SpringBootTest(RANDOM_PORT)`. Spring Boot auto-configures `TestRestTemplate` at `http://localhost:{randomPort}` — inject it with `@Autowired` and no port wiring is needed. Annotate each Testcontainers database or Kafka container with `@ServiceConnection` (Spring Boot 4.0.x) — this replaces the entire `@DynamicPropertySource` block for those containers. `@DynamicPropertySource` is still required for WireMock because it has no built-in service connection support.
+Title: Shared context vs. Spring context isolation; WireMock reset between tests
+Description: Uses `@SpringBootTest(RANDOM_PORT)`. Spring Boot auto-configures `TestRestTemplate` at `http://localhost:{randomPort}` — inject it with `@Autowired` and no port wiring is needed. Annotate each Testcontainers database or Kafka container with `@ServiceConnection` (Spring Boot 4.0.x) — this replaces the entire `@DynamicPropertySource` block for those containers. `@DynamicPropertySource` is still required for WireMock because it has no built-in service connection support. **Without Spring context isolation (default, faster)**: Reuse one application context for the whole suite. Testcontainers and WireMock extension stay up; clear only WireMock stub state between methods with `wireMock.resetAll()` in `@BeforeEach` so one test’s stubs do not leak into the next. Choose this when tests do not mutate singleton beans, caches, or other shared application state. **With Spring context isolation**: Add `@DirtiesContext` (for example `classMode = AFTER_EACH_TEST_METHOD` or `AFTER_CLASS`) when a test leaves the Spring context in a state that would break siblings — e.g. replacing beans, mutating `@Configuration` state, or integration flows that register one-off components. This reloads the context (slower) but guarantees a clean application between tests. Some scenarios need the non-isolated base for speed; others need `@DirtiesContext` for correctness — pick per feature or split into a dedicated base class for “dirty” tests.
 
 **Good example:**
 
@@ -285,6 +286,7 @@ Description: Uses `@SpringBootTest(RANDOM_PORT)`. Spring Boot auto-configures `T
 package com.example.myapp;
 
 import com.github.tomakehurst.wiremock.junit5.WireMockExtension;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -300,6 +302,7 @@ import org.testcontainers.utility.DockerImageName;
 
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.wireMockConfig;
 
+// Without Spring context isolation: one shared context + containers; reset WireMock between methods
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @Testcontainers
 abstract class BaseAcceptanceTest {
@@ -323,6 +326,11 @@ abstract class BaseAcceptanceTest {
     @DynamicPropertySource  // WireMock has no @ServiceConnection — manual registration still needed
     static void configureWireMockProperties(DynamicPropertyRegistry registry) {
         registry.add("external.service.base-url", wireMock::baseUrl);
+    }
+
+    @BeforeEach
+    void resetWireMockBetweenTests() {
+        wireMock.resetAll();  // isolate stub state; Spring context stays warm
     }
 }
 ```
@@ -436,8 +444,8 @@ void testRegistration() {
 
 ### Example 4: WireMock stub setup for external REST dependencies
 
-Title: Programmatic stubs per test and JSON mapping files for reuse
-Description: When the application calls an external REST service, configure WireMock stubs **before** the HTTP request in the test body (Given phase). Prefer programmatic stubs for scenario-specific responses. Use JSON mapping files under `src/test/resources/wiremock/mappings/` for responses that are shared across many tests. Always inject the WireMock base URL into Spring via `@DynamicPropertySource` in `BaseAcceptanceTest` so the application's `RestClient`/`WebClient` calls hit the stub server. Use `TestRestTemplate` for the outbound call from the test to the application under test.
+Title: Programmatic stubs, JSON mappings, and `__files` bodies via `bodyFileName`
+Description: When the application calls an external REST service, configure WireMock stubs **before** the HTTP request in the test body (Given phase). Prefer programmatic stubs for scenario-specific responses. Use JSON mapping files under `src/test/resources/wiremock/mappings/` for responses that are shared across many tests. For large payloads or fixtures you reuse, put response bodies under `src/test/resources/wiremock/__files/` and reference them from a mapping with `bodyFileName` (path is relative to the `__files` directory). With `WireMockExtension` configured using `usingFilesUnderClasspath("wiremock")`, WireMock loads mappings from `classpath:wiremock/mappings/` and file bodies from `classpath:wiremock/__files/`. The JSON examples below correspond to `src/test/resources/wiremock/mappings/payment-authorise-success.json` (mapping with `bodyFileName`) and `src/test/resources/wiremock/__files/payment-authorise-success.json` (response body). Always inject the WireMock base URL into Spring via `@DynamicPropertySource` in `BaseAcceptanceTest` so the application's `RestClient`/`WebClient` calls hit the stub server. Use `TestRestTemplate` for the outbound call from the test to the application under test.
 
 **Good example:**
 
