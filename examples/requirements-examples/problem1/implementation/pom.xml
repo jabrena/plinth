@@ -15,8 +15,7 @@
 	<description>Spring Boot REST API for cross-pantheon mythology data analysis</description>
 
 	<properties>
-		<java.version>26</java.version>
-		<resilience4j.version>2.4.0</resilience4j.version>
+		<java.version>25</java.version>
 		<wiremock.version>3.5.4</wiremock.version>
 		<jetty.version>12.1.7</jetty.version>
 	</properties>
@@ -55,20 +54,6 @@
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
 
-		<!-- Resilience4j Retry for ADR-002 retry policy -->
-		<dependency>
-			<groupId>io.github.resilience4j</groupId>
-			<artifactId>resilience4j-retry</artifactId>
-			<version>${resilience4j.version}</version>
-		</dependency>
-
-		<!-- Resilience4j Spring Boot integration (Spring Boot 4 module) -->
-		<dependency>
-			<groupId>io.github.resilience4j</groupId>
-			<artifactId>resilience4j-spring-boot4</artifactId>
-			<version>${resilience4j.version}</version>
-		</dependency>
-
 		<!-- Development tools -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -104,6 +89,18 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<configuration>
+				<includes>
+					<include>**/*Tests.java</include>
+					<include>**/*Test.java</include>
+					<include>**/*AT.java</include>
+					<include>**/*IT.java</include>
+				</includes>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

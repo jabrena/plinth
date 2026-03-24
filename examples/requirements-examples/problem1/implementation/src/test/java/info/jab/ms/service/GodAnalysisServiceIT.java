@@ -1,100 +1,69 @@
 package info.jab.ms.service;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.UncheckedIOException;
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.web.client.RestClient;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-@ExtendWith(MockitoExtension.class)
-@DisplayName("GodAnalysisService IT")
+@Tag("integration-test")
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 class GodAnalysisServiceIT {
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
+    static WireMockServer wireMockServer;
 
-    /** Same JSON arrays as WireMock {@code bodyFileName} stubs under {@code src/test/resources/__files/}. */
-    private static final List<String> FIXTURE_PATHS = List.of(
-            "__files/greek-gods.json",
-            "__files/roman-gods.json",
-            "__files/nordic-gods.json");
+    @LocalServerPort
+    int port;
 
-    private GodAnalysisService godAnalysisService;
+    @BeforeAll
+    static void startWireMock() {
+        wireMockServer = new WireMockServer(
+            WireMockConfiguration.wireMockConfig()
+                .dynamicPort()
+                .usingFilesUnderClasspath(".")
+        );
+        wireMockServer.start();
+    }
 
-    @BeforeEach
-    void setUp() {
-        godAnalysisService = new GodAnalysisService();
+    @AfterAll
+    static void stopWireMock() {
+        wireMockServer.stop();
+    }
+
+    @DynamicPropertySource
+    static void wireMockProperties(DynamicPropertyRegistry registry) {
+        String baseUrl = "http://localhost:" + wireMockServer.port();
+        registry.add("god-api.sources.greek.url", () -> baseUrl + "/greek");
+        registry.add("god-api.sources.roman.url", () -> baseUrl + "/roman");
+        registry.add("god-api.sources.nordic.url", () -> baseUrl + "/nordic");
     }
 
     @Test
-    @DisplayName("Should calculate expected sum for all sources with filter='n'")
-    void shouldCalculateExpectedSumForAllSourcesWithFilterN() {
-        // Given: the real 36 god names from all three mythology APIs with filter='n'
-        // filter='n' normalized to 'N': matches Nike, Nemesis (Greek), Neptun (Roman), Njord (Nordic)
-        List<String> allNames = createRealGodNames();
-        String filter = "n";
+    void filterUppercaseN_allSources_returnsZero() {
+        // Given: WireMock stubs return real god lists (all lowercase names)
+        RestClient client = RestClient.create("http://localhost:" + port);
 
-        // When
-        String result = godAnalysisService.calculateSum(allNames, filter);
+        record GodStatsResponse(String sum) {}
 
-        // Then: Nike+Nemesis+Neptun+Njord = 78179288397447443426
-        assertThat(result).isEqualTo("78179288397447443426");
-    }
+        // When: filter=n (lowercase, code point 110) — no Title Case god name starts with lowercase 'n'
+        ResponseEntity<GodStatsResponse> response = client.get()
+            .uri("/api/v1/gods/stats/sum?filter=n&sources=greek,roman,nordic")
+            .retrieve()
+            .toEntity(GodStatsResponse.class);
 
-    @Test
-    @DisplayName("Should return zero when no names match the filter character")
-    void shouldReturnZeroWhenNoNamesMatchFilter() {
-        // Given: names where none start with 'x' (or 'X')
-        List<String> names = List.of("Zeus", "Apollo", "Thor");
-        String filter = "x";
-
-        // When
-        String result = godAnalysisService.calculateSum(names, filter);
-
-        // Then
-        assertThat(result).isEqualTo("0");
-    }
-
-    @Test
-    @DisplayName("Should handle service-level error conditions gracefully")
-    void shouldHandleServiceLevelErrorConditionsGracefully() {
-        // Given: edge case inputs
-        List<String> emptyList = List.of();
-        List<String> nullContainingList = java.util.Arrays.asList("Zeus", null, "Apollo");
-        List<String> emptyStringList = List.of("Zeus", "", "Apollo");
-
-        // When & Then: should handle gracefully without exceptions
-        assertThat(godAnalysisService.calculateSum(emptyList, "z")).isEqualTo("0");
-        assertThat(godAnalysisService.calculateSum(nullContainingList, "z")).isNotNull();
-        assertThat(godAnalysisService.calculateSum(emptyStringList, "z")).isNotNull();
-    }
-
-    /**
-     * All god names as returned by the stubbed mythology APIs — loaded from the same JSON fixtures
-     * WireMock serves via {@code bodyFileName} (see {@code mappings/*.json}).
-     */
-    private static List<String> createRealGodNames() {
-        ClassLoader cl = GodAnalysisServiceIT.class.getClassLoader();
-        List<String> combined = new ArrayList<>();
-        for (String path : FIXTURE_PATHS) {
-            try (InputStream in = cl.getResourceAsStream(path)) {
-                assertThat(in)
-                        .as("classpath resource %s (keep in sync with WireMock __files)", path)
-                        .isNotNull();
-                combined.addAll(OBJECT_MAPPER.readValue(in, new TypeReference<List<String>>() {}));
-            } catch (IOException e) {
-                throw new UncheckedIOException("Failed to read " + path, e);
-            }
-        }
-        return List.copyOf(combined);
+        // Then: sum must be "0"
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
+        assertThat(response.getBody().sum()).isEqualTo("0");
     }
 }

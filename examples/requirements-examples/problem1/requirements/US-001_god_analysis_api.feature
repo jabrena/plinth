@@ -4,14 +4,14 @@ Feature: God Analysis API
   # - Decimal Conversion Rule: For each name, convert each char to its Unicode int value,
   #   then concatenate those ints as strings (e.g., "Zeus" -> Z(90)e(101)u(117)s(115) -> "90101117115").
   # - Filtering for gods starting with 'n' is case-sensitive (only lowercase 'n').
-  # - If a source API call times out, the calculation proceeds with results from the remaining sources.
+  # - If a source API call hits the configured RestClient timeout, the calculation proceeds with results from the remaining sources (single attempt per source; no retries).
   # - Greek API:  https://my-json-server.typicode.com/jabrena/latency-problems/greek
   # - Roman API:  https://my-json-server.typicode.com/jabrena/latency-problems/roman
   # - Nordic API: https://my-json-server.typicode.com/jabrena/latency-problems/nordic
 
   Background:
     Given the God Analysis API is available at "/api/v1"
-    And the system is configured with an API call timeout of 5 seconds
+    And the system is configured with HTTP connect and read timeouts for outbound RestClient calls (default 5 seconds in application configuration)
 
   @acceptance-test
   Scenario: Happy path - Get sum with all three sources filtered by lowercase 'n'

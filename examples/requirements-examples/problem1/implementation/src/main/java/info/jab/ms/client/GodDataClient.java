@@ -1,70 +1,51 @@
 package info.jab.ms.client;
 
 import info.jab.ms.config.GodApiProperties;
-import io.github.resilience4j.retry.Retry;
-import io.github.resilience4j.retry.RetryRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
 
-import java.time.Duration;
-import java.util.Arrays;
 import java.util.List;
 
 @Component
 public class GodDataClient {
 
-    private static final Logger logger = LoggerFactory.getLogger(GodDataClient.class);
+    private static final Logger log = LoggerFactory.getLogger(GodDataClient.class);
 
     private final RestClient restClient;
-    private final RetryRegistry retryRegistry;
+    private final GodApiProperties properties;
 
-    public GodDataClient(GodApiProperties properties, RetryRegistry retryRegistry) {
-        this.retryRegistry = retryRegistry;
-        var factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(Duration.ofMillis(properties.getTimeout().getConnect()));
-        factory.setReadTimeout(Duration.ofMillis(properties.getTimeout().getRead()));
-        this.restClient = RestClient.builder()
-                .requestFactory(factory)
-                .build();
+    public GodDataClient(RestClient restClient, GodApiProperties properties) {
+        this.restClient = restClient;
+        this.properties = properties;
     }
 
-    /**
-     * Fetch god names from the given URL, applying per-source retry policy.
-     * Returns empty list if all retry attempts are exhausted (partial result behavior).
-     */
-    public List<String> fetchGodNames(String url, String sourceName) {
-        var retry = retryRegistry.retry(sourceName);
-        retry.getEventPublisher()
-                .onRetry(e -> logger.warn("Retry attempt #{} for source '{}': {}",
-                        e.getNumberOfRetryAttempts(), sourceName, e.getLastThrowable().getMessage()))
-                .onSuccess(e -> {
-                    if (e.getNumberOfRetryAttempts() > 0) {
-                        logger.info("Source '{}' succeeded after {} retry attempts", sourceName, e.getNumberOfRetryAttempts());
-                    }
-                })
-                .onError(e -> logger.error("Source '{}' failed after all {} attempts",
-                        sourceName, e.getNumberOfRetryAttempts()));
+    public List<String> fetchGreekGods() {
+        return fetch(properties.sources().greek().url(), "greek");
+    }
+
+    public List<String> fetchRomanGods() {
+        return fetch(properties.sources().roman().url(), "roman");
+    }
+
+    public List<String> fetchNordicGods() {
+        return fetch(properties.sources().nordic().url(), "nordic");
+    }
+
+    private List<String> fetch(String url, String source) {
         try {
-            return Retry.decorateCallable(retry, () -> doHttpFetch(url)).call();
-        } catch (Exception finalException) {
-            logger.warn("All {} retry attempts exhausted for source '{}' at {}: {}",
-                    retry.getRetryConfig().getMaxAttempts(), sourceName, url, finalException.getMessage());
-            return List.of();
-        }
-    }
-
-    /**
-     * Performs the actual HTTP call. Throws on any error so Resilience4j Retry can intercept.
-     */
-    private List<String> doHttpFetch(String url) {
-        logger.info("Fetching god names from: {}", url);
-        var names = restClient.get()
+            List<String> result = restClient.get()
                 .uri(url)
                 .retrieve()
-                .body(String[].class);
-        return (names != null) ? Arrays.stream(names).toList() : List.of();
+                .body(new ParameterizedTypeReference<List<String>>() {});
+            log.debug("Fetched {} gods from {}: {} names", source, url, result != null ? result.size() : 0);
+            return result != null ? result : List.of();
+        } catch (RestClientException e) {
+            log.warn("Failed to fetch gods from source {}: {}", source, e.getMessage());
+            return List.of();
+        }
     }
 }
