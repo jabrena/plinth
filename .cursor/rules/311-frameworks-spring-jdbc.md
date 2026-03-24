@@ -310,8 +310,8 @@ class CustomerQuery {
 
 ### Example 5: Transactions and JDBC
 
-Title: Declare boundaries on services
-Description: Wrap multi-statement workflows in `@Transactional` on the service. `JdbcTemplate` participates in the current Spring transaction when one exists.
+Title: Declare boundaries on services — JdbcTemplate and JdbcClient
+Description: Wrap multi-statement workflows in `@Transactional` on the service. Both `JdbcTemplate` and `JdbcClient` participate in the current Spring transaction when one exists. `JdbcClient` (Spring Framework 6.1+) offers the same transactional semantics with a fluent, chainable API.
 
 **Good example:**
 

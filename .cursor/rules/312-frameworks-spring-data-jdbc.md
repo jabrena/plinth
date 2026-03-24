@@ -21,7 +21,7 @@ Spring Data JDBC maps rows to domain types with minimal magic: one repository ca
 These guidelines are built upon the following core principles:
 
 1. **Immutability**: Model rows as records (or immutable types); use `with*` methods or new instances for updates instead of mutable entities.
-2. **Simplicity**: Prefer Spring Data JDBC’s direct SQL and aggregate loading over rich ORM relationship graphs and lazy loading.
+2. **Simplicity**: Prefer Spring Data JDBC’s direct SQL and aggregate loading over rich ORM relationship graphs and lazy loading. Prefer `ListCrudRepository` over `CrudRepository` so that `findAll()`, `findAllById()`, and `saveAll()` return `List<T>` directly instead of `Iterable<T>`.
 3. **Aggregate boundaries**: Treat one aggregate root per repository; use foreign keys between aggregates, `Set` for one-to-many inside the root, and junction/explicit entities for many-to-many—not bidirectional linked collections on both Student and Course (JPA-style).
 4. **SQL and safety**: Use `@Query` with named parameters for non-trivial SQL; avoid concatenating user input into query strings.
 5. **Transactions and performance**: Put `@Transactional` on services (`readOnly` where appropriate); rely on single-query aggregate loading instead of JPA-style N+1 patterns or manual fan-out queries across child repositories.
@@ -132,21 +132,21 @@ public class CustomerEntity {
 
 ### Example 2: Repository interfaces
 
-Title: Extend CrudRepository; derive methods or use @Query with parameters
-Description: Annotate interfaces with `@Repository`, extend `CrudRepository` or `PagingAndSortingRepository`, use query derivation names that match property paths, and bind `@Query` parameters with `@Param`—never hardcode volatile literals for user data.
+Title: Extend ListCrudRepository (preferred over CrudRepository); derive methods or use @Query with parameters
+Description: Annotate interfaces with `@Repository`, extend `ListCrudRepository` (preferred—returns `List<T>` instead of `Iterable<T>`) or `PagingAndSortingRepository`, use query derivation names that match property paths, and bind `@Query` parameters with `@Param`—never hardcode volatile literals for user data.
 
 **Good example:**
 
 ```java
 import org.springframework.data.jdbc.repository.query.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface CustomerRepository extends CrudRepository<Customer, Long> {
+public interface CustomerRepository extends ListCrudRepository<Customer, Long> {
 
     List<Customer> findByLastName(String lastName);
 
@@ -164,7 +164,8 @@ import org.springframework.data.jdbc.repository.query.Query;
 import org.springframework.data.repository.CrudRepository;
 import java.util.List;
 
-// Missing @Repository; non-idiomatic names; unsafe literal in SQL
+// Missing @Repository; non-idiomatic names; unsafe literal in SQL;
+// CrudRepository returns Iterable<T> — prefer ListCrudRepository for List<T>
 public interface CustomerRepository extends CrudRepository<Customer, Long> {
 
     List<Customer> getCustomersWithLastName(String lastName);
@@ -218,7 +219,7 @@ class CustomerService {
     }
 }
 
-interface CustomerRepository extends org.springframework.data.repository.CrudRepository<Customer, Long> {
+interface CustomerRepository extends org.springframework.data.repository.ListCrudRepository<Customer, Long> {
     java.util.Optional<Customer> findById(Long id);
 }
 ```
@@ -327,14 +328,14 @@ Description: Use text-block or string SQL with `@Param` bindings. For updates/de
 ```java
 import org.springframework.data.jdbc.repository.query.Modifying;
 import org.springframework.data.jdbc.repository.query.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
-public interface CustomerRepository extends CrudRepository<Customer, Long> {
+public interface CustomerRepository extends ListCrudRepository<Customer, Long> {
 
     @Query("""
         SELECT c.* FROM customer c
@@ -503,7 +504,7 @@ class OrderService {
 
 record OrderSummary(Long orderId, LocalDateTime orderDate, BigDecimal totalAmount, int itemCount, double lineTotal) {}
 
-interface OrderRepository extends org.springframework.data.repository.CrudRepository<Order, Long> {
+interface OrderRepository extends org.springframework.data.repository.ListCrudRepository<Order, Long> {
     List<Order> findByCustomerId(Long customerId);
 }
 ```
@@ -665,7 +666,7 @@ class ProductService {
     }
 }
 
-interface ProductRepository extends org.springframework.data.repository.CrudRepository<Product, Long> {}
+interface ProductRepository extends org.springframework.data.repository.ListCrudRepository<Product, Long> {}
 ```
 
 **Bad example:**
@@ -749,7 +750,7 @@ class InventoryService {
     }
 }
 
-interface InventoryItemRepository extends org.springframework.data.repository.CrudRepository<InventoryItem, Long> {}
+interface InventoryItemRepository extends org.springframework.data.repository.ListCrudRepository<InventoryItem, Long> {}
 ```
 
 **Bad example:**
@@ -790,7 +791,7 @@ Description: When a query joins multiple tables or aggregates computed columns, 
 
 ```java
 import org.springframework.data.jdbc.repository.query.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
@@ -809,7 +810,7 @@ public record CustomerOrderSummary(
 ) {}
 
 @Repository
-public interface CustomerRepository extends CrudRepository<Customer, Long> {
+public interface CustomerRepository extends ListCrudRepository<Customer, Long> {
 
     @Query(value = """
         SELECT c.customer_id,
@@ -958,7 +959,7 @@ public record AuditLog(@org.springframework.data.annotation.Id Long id, String a
     static AuditLog of(String action, long entityId) { return new AuditLog(null, action, entityId); }
 }
 
-interface AuditLogRepository extends org.springframework.data.repository.CrudRepository<AuditLog, Long> {}
+interface AuditLogRepository extends org.springframework.data.repository.ListCrudRepository<AuditLog, Long> {}
 
 @Service
 class AuditService {
