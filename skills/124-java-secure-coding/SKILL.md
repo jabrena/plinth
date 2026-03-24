@@ -23,6 +23,32 @@ Identify and apply Java secure coding practices to reduce vulnerabilities, prote
 
 **Scope:** The reference is organized by examples (good/bad code patterns) for each core area. Apply recommendations based on applicable examples.
 
+## Workflow
+
+1. **Compile first** — Run `./mvnw compile` or `mvn compile`. If compilation fails, stop immediately.
+2. **Read the reference** — Review the detailed good/bad examples for each secure coding area before making changes.
+3. **Identify vulnerabilities** — Analyze Java code for security issues: injection risks, weak cryptography, hardcoded secrets, unsafe deserialization, missing input validation, and information leakage.
+4. **Apply fixes incrementally** — Implement secure coding improvements one area at a time, validating after each change.
+5. **Verify** — Run `./mvnw clean verify` to confirm all tests pass and no regressions were introduced.
+
+## Quick Reference
+
+SQL injection prevention — use `PreparedStatement` instead of string concatenation:
+
+```java
+// GOOD: Parameterized query prevents SQL injection
+String query = "SELECT * FROM orders WHERE customer_id = ?";
+try (PreparedStatement pstmt = connection.prepareStatement(query)) {
+    pstmt.setString(1, customerId);  // safely bound
+    ResultSet rs = pstmt.executeQuery();
+}
+
+// BAD: String concatenation allows SQL injection
+String query = "SELECT * FROM orders WHERE customer_id = '" + customerId + "'";
+Statement stmt = connection.createStatement();
+stmt.executeQuery(query);  // attacker can inject: '; DROP TABLE orders; --
+```
+
 ## Constraints
 
 Before applying any secure coding changes, ensure the project compiles. If compilation fails, stop immediately — do not proceed until resolved. After applying improvements, run full verification.

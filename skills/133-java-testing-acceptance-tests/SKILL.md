@@ -25,6 +25,35 @@ Implement acceptance tests from Gherkin feature files. Given a .feature file in 
 
 **Scope:** Implements only happy-path scenarios. Use the reference for detailed examples and constraints.
 
+## Workflow
+
+1. **Parse the .feature file** — Locate the Gherkin feature file in context and extract scenarios tagged `@acceptance` or `@acceptance-tests`
+2. **Generate BaseAcceptanceTest** — Create an abstract base class with `@Testcontainers`, `WireMockExtension`, and `@BeforeAll` + `System.setProperty()` for coordinate propagation; start the app programmatically
+3. **Implement with RestAssured** — Create one `@Test` method per scenario using RestAssured's `given()/when()/then()` DSL, mapping Gherkin steps to setup, HTTP request, and assertions
+4. **Add Maven dependencies** — Ensure `rest-assured`, `testcontainers`, and `wiremock-standalone` are declared in test scope in `pom.xml`
+5. **Verify** — Run `./mvnw clean verify` to confirm all acceptance tests pass
+
+## Quick Reference
+
+RestAssured acceptance test pattern:
+
+```java
+class UserRegistrationAcceptanceTest extends BaseAcceptanceTest {
+
+    @Test
+    void scenario_successful_user_registration() {
+        RestAssured.given()
+            .contentType(ContentType.JSON)
+            .body("{\"email\": \"user@example.com\"}")
+        .when()
+            .post("/api/users")
+        .then()
+            .statusCode(201)
+            .body("email", equalTo("user@example.com"));
+    }
+}
+```
+
 ## Constraints
 
 Before applying any acceptance test changes, ensure the Gherkin .feature file is in context and the project compiles. If compilation fails or the feature file is missing, stop immediately.

@@ -27,6 +27,37 @@ Review and improve Java code using comprehensive type design principles that app
 
 **Scope:** The reference is organized by examples (good/bad code patterns) for each core area. Apply recommendations based on applicable examples.
 
+## Workflow
+
+1. **Compile first**: Run `./mvnw compile` or `mvn compile` to ensure the project is in a valid state before making any changes
+2. **Read the reference**: Review [references/122-java-type-design.md](references/122-java-type-design.md) for detailed good/bad patterns across all 12 type design areas
+3. **Identify type design issues**: Analyze the target code for primitive obsession, inconsistent naming, missing abstractions, unsafe casts, and precision problems
+4. **Apply improvements incrementally**: Refactor one type design area at a time — create value objects, introduce generics, align method signatures, etc.
+5. **Verify**: Run `./mvnw clean verify` or `mvn clean verify` to confirm all tests pass after each change
+
+## Quick Reference
+
+**Type-safe wrapper (value object) replacing primitive obsession:**
+
+```java
+// GOOD: Domain type with built-in validation
+public class EmailAddress {
+    private final String value;
+
+    public EmailAddress(String email) {
+        if (!email.matches("^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$")) {
+            throw new IllegalArgumentException("Invalid email: " + email);
+        }
+        this.value = email;
+    }
+
+    public String getValue() { return value; }
+}
+
+// BAD: Primitive obsession — no validation, easy to mix up parameters
+void processPayment(String email, double amount, String currency) { }
+```
+
 ## Constraints
 
 Before applying any type design changes, ensure the project compiles. If compilation fails, stop immediately — do not proceed until resolved. After applying improvements, run full verification.

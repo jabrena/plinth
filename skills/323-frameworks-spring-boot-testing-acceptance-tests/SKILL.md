@@ -27,6 +27,38 @@ Implement acceptance tests from Gherkin feature files in Spring Boot projects. G
 
 **Scope:** Implements only happy-path scenarios. Use the reference for detailed examples and constraints.
 
+## Workflow
+
+1. **Parse the .feature file** — Locate the Gherkin feature file in context and extract scenarios tagged `@acceptance` or `@acceptance-tests`
+2. **Generate BaseAcceptanceTest** — Create an abstract base class with `@SpringBootTest(webEnvironment = RANDOM_PORT)`, `@Autowired TestRestTemplate`, `@ServiceConnection` for Testcontainers, and `WireMockExtension` for external REST stubs
+3. **Implement the test class** — Create one `@Test` method per scenario using `TestRestTemplate`, mapping Given/When/Then steps to setup, HTTP call, and AssertJ assertions; name the class with `AT` suffix
+4. **Add Maven dependencies** — Ensure `testcontainers`, `wiremock-standalone`, and Failsafe plugin configuration are present in `pom.xml`
+5. **Verify** — Run `./mvnw clean verify` to confirm all acceptance tests pass
+
+## Quick Reference
+
+Base class pattern with `@SpringBootTest` and `TestRestTemplate`:
+
+```java
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@Testcontainers
+abstract class BaseAcceptanceTest {
+
+    @Autowired
+    protected TestRestTemplate restTemplate;
+
+    @Container
+    @ServiceConnection
+    static PostgreSQLContainer<?> postgres =
+        new PostgreSQLContainer<>("postgres:16-alpine");
+
+    @RegisterExtension
+    static WireMockExtension wireMock = WireMockExtension.newInstance()
+        .options(wireMockConfig().dynamicPort())
+        .build();
+}
+```
+
 ## Constraints
 
 Before applying any acceptance test changes, ensure the Gherkin .feature file is in context and the project compiles. If compilation fails or the feature file is missing, stop immediately.

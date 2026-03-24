@@ -30,6 +30,36 @@ Identify and apply robust Java exception handling practices to improve error cla
 
 **Scope:** The reference is organized by examples (good/bad code patterns) for each core area. Apply recommendations based on applicable examples.
 
+## Workflow
+
+1. **Compile first** — Run `./mvnw compile` or `mvn compile`. If compilation fails, stop immediately.
+2. **Read the reference** — Review the detailed good/bad examples for each exception handling pattern before making changes.
+3. **Identify issues** — Analyze Java code for exception handling anti-patterns: generic catches, missing resource cleanup, information leakage, swallowed exceptions, missing exception chaining, and log-and-throw duplication.
+4. **Apply improvements incrementally** — Implement exception handling best practices one pattern at a time, validating after each change.
+5. **Verify** — Run `./mvnw clean verify` to confirm all tests pass and no regressions were introduced.
+
+## Quick Reference
+
+Try-with-resources for automatic resource cleanup:
+
+```java
+// GOOD: Resources are automatically closed, even on exception
+public String readFile(Path filePath) throws FileProcessingException {
+    try (BufferedReader reader = Files.newBufferedReader(filePath, StandardCharsets.UTF_8)) {
+        return reader.lines().collect(Collectors.joining(System.lineSeparator()));
+    } catch (NoSuchFileException e) {
+        throw new FileProcessingException("File not found: " + filePath.getFileName(), e);
+    } catch (IOException e) {
+        throw new FileProcessingException("Failed to read file", e);
+    }
+}
+
+// BAD: Manual resource management risks leaks on exception
+BufferedReader reader = Files.newBufferedReader(filePath);
+String content = reader.lines().collect(Collectors.joining("\n"));
+reader.close();  // never reached if lines() throws
+```
+
 ## Constraints
 
 Before applying any exception handling changes, ensure the project compiles. If compilation fails, stop immediately — do not proceed until resolved. After applying improvements, run full verification.

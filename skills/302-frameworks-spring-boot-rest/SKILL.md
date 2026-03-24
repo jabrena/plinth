@@ -32,6 +32,42 @@ Apply REST API design principles for Spring Boot applications.
 
 **Scope:** Apply recommendations based on the reference rules and good/bad code examples.
 
+## Workflow
+
+1. **Compile** — run `./mvnw compile` and confirm the project builds before any changes
+2. **Read reference** — review the reference file for detailed REST API rules and good/bad patterns
+3. **Identify patterns** — scan controllers for HTTP method misuse, missing DTOs, incorrect status codes, or missing validation
+4. **Apply improvements** — refactor using proper verbs, `ResponseEntity`, `@Valid`, and lean DTOs
+5. **Verify** — run `./mvnw clean verify` to confirm all changes pass compilation and tests
+
+## Quick Reference
+
+**Proper REST controller with DTOs and status codes:**
+
+```java
+@RestController
+@RequestMapping("/users")
+class UserController {
+
+    @GetMapping("/{id}")
+    ResponseEntity<UserDTO> getUser(@PathVariable String id) {
+        return ResponseEntity.ok(new UserDTO("user-1"));
+    }
+
+    @PostMapping
+    ResponseEntity<UserDTO> createUser(@Valid @RequestBody UserCreateDTO body) {
+        UserDTO created = new UserDTO("user-2");
+        return ResponseEntity.created(URI.create("/users/" + created.id()))
+            .body(created);
+    }
+
+    @DeleteMapping("/{id}")
+    ResponseEntity<Void> deleteUser(@PathVariable String id) {
+        return ResponseEntity.noContent().build();
+    }
+}
+```
+
 ## Constraints
 
 Before applying any REST API changes, ensure the project compiles. If compilation fails, stop immediately. After applying improvements, run full verification.

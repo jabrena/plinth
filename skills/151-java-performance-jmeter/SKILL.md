@@ -20,6 +20,40 @@ Provide a complete JMeter performance testing solution by creating the run-jmete
 
 **Scope:** Copy the script template verbatim. Do not modify, interpret, or enhance the template content.
 
+## Workflow
+
+1. **Verify JMeter installed** — run `jmeter --version` to confirm JMeter is available in PATH
+2. **Create run-jmeter.sh** — copy the exact template from the reference into the project root
+3. **Set permissions** — run `chmod +x run-jmeter.sh` and verify with `ls -la run-jmeter.sh`
+4. **Configure test plan** — ensure `src/test/resources/jmeter/load-test.jmx` exists for the script to reference
+5. **Run and review** — execute `./run-jmeter.sh -h` to verify, then run tests and check `target/jmeter-report/index.html`
+
+## Quick Reference
+
+**Basic script usage:**
+
+```bash
+# Run with defaults (1000 loops, 1 thread, 1s ramp-up)
+./run-jmeter.sh
+
+# Custom load: 500 loops, 10 threads, 30s ramp-up
+./run-jmeter.sh -l 500 -t 10 -r 30
+
+# Override via environment variables
+JMETER_LOOPS=500 JMETER_THREADS=5 ./run-jmeter.sh
+```
+
+**Expected project structure:**
+
+```
+project-root/
+├── run-jmeter.sh
+├── src/test/resources/jmeter/load-test.jmx
+└── target/
+    ├── jmeter-results.jtl
+    └── jmeter-report/index.html
+```
+
 ## Constraints
 
 JMeter must be installed and available in PATH. If not available, show a message and exit. Use only the exact template for the run-jmeter.sh script.

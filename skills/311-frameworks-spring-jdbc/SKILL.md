@@ -27,6 +27,45 @@ Apply Spring JDBC guidelines using JdbcTemplate, NamedParameterJdbcTemplate, and
 
 **Scope:** Apply recommendations based on the reference rules and good/bad code examples.
 
+## Workflow
+
+1. **Compile** — run `./mvnw compile` and confirm the project builds before any changes
+2. **Read reference** — review the reference file for JDBC rules, good/bad patterns, and JdbcClient examples
+3. **Identify patterns** — scan for string-concatenated SQL, raw `queryForObject` without null handling, missing `@Transactional`
+4. **Apply improvements** — refactor to use `JdbcClient` fluent API (Spring 6.1+), bind parameters, record mapping, and service-layer transactions
+5. **Verify** — run `./mvnw clean verify` to confirm all changes pass compilation and tests
+
+## Quick Reference
+
+**JdbcClient fluent API (Spring Framework 6.1+ — preferred for new code):**
+
+```java
+import org.springframework.jdbc.core.simple.JdbcClient;
+
+class ProductRepository {
+
+    private final JdbcClient jdbcClient;
+
+    Optional<String> findNameById(long id) {
+        return jdbcClient.sql("SELECT name FROM products WHERE id = ?")
+            .param(id)
+            .query(String.class)
+            .optional();   // safe — no exception on zero rows
+    }
+
+    List<ProductRow> findByCategoryAndMinPrice(String category, BigDecimal minPrice) {
+        return jdbcClient.sql("""
+                SELECT id, name FROM products
+                WHERE category = :category AND price >= :minPrice
+                """)
+            .param("category", category)
+            .param("minPrice", minPrice)
+            .query(ProductRow.class)
+            .list();
+    }
+}
+```
+
 ## Constraints
 
 Before applying any Spring JDBC changes, ensure the project compiles. If compilation fails, stop immediately. After applying improvements, run full verification.

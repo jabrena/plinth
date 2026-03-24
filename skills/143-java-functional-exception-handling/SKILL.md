@@ -24,6 +24,47 @@ Identify and apply functional exception handling best practices in Java to impro
 
 **Scope:** The reference is organized by examples (good/bad code patterns) for each core area. Apply recommendations based on applicable examples.
 
+## Workflow
+
+1. **Validate** — run `./mvnw validate` and confirm the project is in a valid state
+2. **Read reference** — review the reference for good/bad patterns across all seven example areas
+3. **Identify exception patterns** — scan for exception-based control flow, null returns, and missing error context
+4. **Apply functional approach** — replace with `Optional<T>` for nullable values, `Either<L,R>` for business failures, and monadic composition (`flatMap`/`map`)
+5. **Verify** — run `./mvnw clean verify` to confirm all changes pass and VAVR dependency is present
+
+## Quick Reference
+
+**Either for business-logic failures (preferred over exceptions):**
+
+```java
+import io.vavr.control.Either;
+
+public Either<TransferError, TransferSuccess> transferMoney(
+        Account from, Account to, BigDecimal amount) {
+
+    if (amount.compareTo(BigDecimal.ZERO) <= 0) {
+        return Either.left(new TransferError("INVALID_AMOUNT",
+            "Transfer amount must be positive"));
+    }
+    if (from.getBalance().compareTo(amount) < 0) {
+        return Either.left(new TransferError("INSUFFICIENT_FUNDS",
+            String.format("Required %s, available %s", amount, from.getBalance())));
+    }
+    return Either.right(performTransfer(from, to, amount));
+}
+```
+
+**Optional for nullable values (preferred over NullPointerException):**
+
+```java
+public Optional<User> findUserById(Long id) {
+    if (Objects.isNull(id) || id <= 0) {
+        return Optional.empty();
+    }
+    return userRepository.findById(id);
+}
+```
+
 ## Constraints
 
 Before applying any functional exception handling changes, ensure the project validates. When introducing Either types, confirm the VAVR dependency (io.vavr:vavr) and SLF4J are present.

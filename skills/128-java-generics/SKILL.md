@@ -27,6 +27,32 @@ Review and improve Java code using comprehensive generics best practices that en
 
 **Scope:** The reference is organized by examples (good/bad code patterns) for each core area. Apply recommendations based on applicable examples.
 
+## Workflow
+
+1. **Compile** — Run `./mvnw compile` to ensure the project builds before making changes
+2. **Read the reference** — Review the good/bad examples in the reference file for the relevant generics patterns
+3. **Identify patterns** — Scan the codebase for raw types, missing wildcards, unsafe casts, and PECS violations
+4. **Apply improvements** — Replace raw types with parameterized types, apply `? extends` / `? super` wildcards following PECS, add `@SafeVarargs` where needed, and use diamond operator
+5. **Verify** — Run `./mvnw clean verify` to confirm all changes compile and tests pass
+
+## Quick Reference
+
+PECS (Producer Extends, Consumer Super) pattern:
+
+```java
+// Producer: use 'extends' — we read from source
+public static double sum(List<? extends Number> numbers) {
+    return numbers.stream()
+        .mapToDouble(Number::doubleValue).sum();
+}
+
+// Consumer: use 'super' — we write to dest
+public static <T> void copy(
+        List<? super T> dest, List<? extends T> src) {
+    for (T item : src) { dest.add(item); }
+}
+```
+
 ## Constraints
 
 Before applying any generics changes, ensure the project compiles. If compilation fails, stop immediately — do not proceed until resolved. After applying improvements, run full verification.

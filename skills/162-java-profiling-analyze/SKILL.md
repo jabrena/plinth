@@ -20,6 +20,28 @@ Analyze profiling results systematically: inventory results (flamegraphs, JFR, G
 
 **Scope:** Validate profiling results represent realistic load scenarios. Cross-reference multiple files. Include quantitative metrics.
 
+## Workflow
+
+1. **Inventory results** — scan `profiler/results/` for flamegraphs (`.html`), JFR files (`.jfr`), GC logs (`.log`), and thread dumps (`.txt`)
+2. **Identify problems** — categorize findings as memory (leaks, GC pressure), performance (CPU hotspots, blocking), or threading (deadlocks, contention)
+3. **Analyze patterns** — cross-reference multiple profiling files to validate findings and correlate with application logs
+4. **Document findings** — create `docs/profiling-problem-analysis-YYYYMMDD.md` and `docs/profiling-solutions-YYYYMMDD.md`
+5. **Prioritize solutions** — score each issue using Impact/Effort and focus on high-priority items first
+
+## Quick Reference
+
+**Impact/Effort scoring framework:**
+
+| Score | Impact | Effort |
+|-------|--------|--------|
+| 5 | Critical performance degradation | Architecture change |
+| 4 | Significant resource waste | Module restructuring |
+| 3 | Moderate performance impact | Class-level refactoring |
+| 2 | Minor inefficiency | Single method optimization |
+| 1 | Cosmetic optimization | Configuration change |
+
+**Priority = Impact / Effort** — focus on high-priority (high impact, low effort) items first.
+
 ## Constraints
 
 Validate profiling results represent realistic load before analysis. Document assumptions and limitations. Cross-reference multiple files.

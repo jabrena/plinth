@@ -26,6 +26,37 @@ Set up robust integration-test infrastructure for Java services using WireMock t
 
 **Scope:** The reference is organized by examples (good/bad code patterns) for each core area. Apply recommendations based on applicable examples.
 
+## Workflow
+
+1. **Compile** — Run `./mvnw compile` to ensure the project builds before making changes
+2. **Detect infrastructure** — Scan imports for HTTP client signals (`HttpClient`, `feign.*`, `retrofit2.*`, `RestTemplate`) to determine WireMock requirements
+3. **Generate BaseIntegrationTest** — Create an abstract base class with `WireMockExtension`, `@RegisterExtension`, dynamic port, and `@BeforeAll` + `System.setProperty()` for coordinate propagation
+4. **Implement test classes** — Write concrete `*IT` test classes extending the base, registering WireMock stubs per test method using Given-When-Then structure
+5. **Verify** — Run `./mvnw clean verify` to confirm all integration tests pass
+
+## Quick Reference
+
+WireMock-based `BaseIntegrationTest` pattern:
+
+```java
+abstract class BaseIntegrationTest {
+
+    @RegisterExtension
+    protected static final WireMockExtension WIREMOCK =
+        WireMockExtension.newInstance()
+            .options(wireMockConfig()
+                .dynamicPort()
+                .usingFilesUnderClasspath("wiremock"))
+            .build();
+
+    @BeforeAll
+    static void propagateCoordinates() {
+        System.setProperty("external.service.base-url",
+            WIREMOCK.baseUrl());
+    }
+}
+```
+
 ## Constraints
 
 Before applying any integration test changes, ensure the project compiles. If compilation fails, stop immediately — do not proceed until resolved. After applying improvements, run full verification.

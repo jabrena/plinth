@@ -19,6 +19,33 @@ Implement refactoring based on profiling analysis: review profiling-problem-anal
 
 **Scope:** Changes must pass all tests. Apply fixes incrementally and verify after each significant change.
 
+## Workflow
+
+1. **Review analysis docs**: Read `docs/profiling-problem-analysis-YYYYMMDD.md` and `docs/profiling-solutions-YYYYMMDD.md` to understand documented findings
+2. **Identify bottlenecks**: Categorize issues by type — CPU hotspots, memory leaks, threading problems, or I/O contention
+3. **Apply incremental fixes**: Refactor one bottleneck at a time, starting with the highest-impact issue
+4. **Run tests**: Execute `./mvnw clean verify` or `mvn clean verify` after each fix to ensure no regressions
+5. **Verify performance**: Confirm the refactoring addresses the profiled issue; re-profile if necessary
+
+## Quick Reference
+
+**Common refactoring pattern — replacing inefficient string concatenation in a hot path:**
+
+```java
+// BAD: String concatenation in a loop (creates many intermediate objects)
+String result = "";
+for (String item : items) {
+    result += item + ", ";
+}
+
+// GOOD: StringBuilder for hot-path string assembly
+StringBuilder sb = new StringBuilder();
+for (String item : items) {
+    sb.append(item).append(", ");
+}
+String result = sb.toString();
+```
+
 ## Constraints
 
 Verify that changes pass all tests before considering the refactoring complete.

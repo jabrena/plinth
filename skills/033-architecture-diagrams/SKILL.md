@@ -21,6 +21,34 @@ Generate comprehensive Java project diagrams through a modular, step-based inter
 - File organization strategies: single-file, separate-files, or integrated with existing documentation
 - Final diagram validation with PlantUML syntax checking
 
+## Workflow
+
+1. **Validate project**: Run `./mvnw validate` or `mvn validate` to ensure the project is in a valid state
+2. **Ask about diagram type**: Present the user with diagram options (sequence, class, C4, state machine, ER) and gather their selection
+3. **Gather context**: Ask follow-up questions about scope, detail level, and file organization preferences
+4. **Generate PlantUML**: Analyze the codebase and produce PlantUML source files based on the user's selections
+5. **Validate syntax**: Review generated `.puml` files for correct PlantUML syntax and offer to render or integrate with documentation
+
+## Quick Reference
+
+**PlantUML sequence diagram for a typical API flow:**
+
+```plantuml
+@startuml
+actor Actor
+participant Controller
+participant Service
+participant Repository
+
+Actor -> Controller: HTTP Request
+Controller -> Service: Business Logic Call
+Service -> Repository: Data Access
+Repository --> Service: Data Response
+Service --> Controller: Business Result
+Controller --> Actor: HTTP Response
+@enduml
+```
+
 ## Constraints
 
 Before applying any diagram generation, ensure the project validates. If validation fails, stop immediately — do not proceed until all validation errors are resolved.

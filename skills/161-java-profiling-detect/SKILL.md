@@ -21,6 +21,39 @@ Set up the Java profiling detection phase: automated environment setup with asyn
 
 **Scope:** Use the exact bash script templates without modification or interpretation.
 
+## Workflow
+
+1. **Set up directory structure** — Create `profiler/scripts/`, `profiler/results/`, and `profiler/current/` directories in the project root
+2. **Create the application runner script** — Copy `run-java-process-for-profiling.sh` exactly from the reference template to launch the Java process with profiling-compatible JVM flags
+3. **Create the interactive profiling script** — Copy `profiler/scripts/profile-java-process.sh` from the reference to enable problem-driven profiling (CPU, memory, lock, GC, I/O)
+4. **Run the application with profiling flags** — Execute `./run-java-process-for-profiling.sh` to start the Java process with async-profiler-compatible JVM options
+5. **Attach the profiler** — Run `./profiler/scripts/profile-java-process.sh` to interactively select a profiling mode and collect flamegraphs or JFR recordings
+
+## Quick Reference
+
+Key JVM flags required for async-profiler compatibility:
+
+```bash
+JVM_FLAGS=(
+    "-Xms512m"
+    "-Xmx512m"
+    "-XX:+UnlockDiagnosticVMOptions"
+    "-XX:+DebugNonSafepoints"
+    "-XX:+PreserveFramePointer"
+)
+```
+
+Project directory layout:
+
+```text
+your-project/
+├── run-java-process-for-profiling.sh
+└── profiler/
+    ├── scripts/profile-java-process.sh
+    ├── results/          # flamegraphs (.html) and JFR (.jfr)
+    └── current/          # symlink to active profiler version
+```
+
 ## Constraints
 
 Copy bash scripts exactly from templates. Ensure JVM flags are applied for profiling compatibility. Verify Java processes are running before attaching profiler.

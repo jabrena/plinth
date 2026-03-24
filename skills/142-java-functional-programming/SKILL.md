@@ -28,6 +28,35 @@ Identify and apply functional programming principles in Java to improve immutabi
 
 **Scope:** The reference is organized by examples (good/bad code patterns) for each core area. Apply recommendations based on applicable examples.
 
+## Workflow
+
+1. **Compile** — Run `./mvnw compile` to ensure the project builds before making changes
+2. **Read the reference** — Review the good/bad examples in the reference file for functional programming patterns relevant to the code
+3. **Identify opportunities** — Scan for mutable state, imperative loops replaceable with streams, raw null checks replaceable with `Optional`, and classes convertible to Records
+4. **Apply improvements** — Replace mutable classes with Records, convert imperative loops to Stream pipelines, use `Optional` idiomatically with `map`/`flatMap`/`orElse`, and apply pattern matching where applicable
+5. **Verify** — Run `./mvnw clean verify` to confirm all changes compile and tests pass
+
+## Quick Reference
+
+Stream API pipeline pattern:
+
+```java
+List<Integer> evenSquares = numbers.stream()
+    .filter(n -> n % 2 == 0)
+    .map(n -> n * n)
+    .collect(Collectors.toUnmodifiableList());
+```
+
+Records for immutable data transfer:
+
+```java
+public record Person(String name, int age) {
+    public Person {
+        if (age < 0) throw new IllegalArgumentException();
+    }
+}
+```
+
 ## Constraints
 
 Before applying any functional programming changes, ensure the project compiles. If compilation fails, stop immediately — do not proceed until the project compiles successfully. Verify that maven-compiler-plugin source/target supports the Java features being used.

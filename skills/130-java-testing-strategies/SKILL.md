@@ -16,6 +16,51 @@ Apply proven testing strategies (RIGHT-BICEP, A-TRIP, CORRECT) to design and ver
 - **A-TRIP**: Characteristics of good tests — Automatic, Thorough, Repeatable, Independent, Professional
 - **CORRECT**: Boundary condition verification — Conformance, Ordering, Range, Reference, Existence, Cardinality, Time
 
+## Workflow
+
+1. **Compile** — run `./mvnw compile` and confirm the project builds before any changes
+2. **Read reference** — review the reference for RIGHT-BICEP, A-TRIP, and CORRECT examples
+3. **Identify applicable strategy** — determine which framework applies: RIGHT-BICEP for test coverage gaps, A-TRIP for test quality, CORRECT for boundary conditions
+4. **Apply tests** — write or refactor tests following the chosen strategy with clear naming (`method_scenario_expectedBehavior`)
+5. **Verify** — run `./mvnw clean verify` to confirm all tests pass
+
+## Quick Reference
+
+**RIGHT-BICEP example (comprehensive test coverage):**
+
+```java
+public class CalculatorTest {
+
+    private final Calculator calculator = new Calculator();
+
+    // R - Right results
+    @Test
+    void add_simplePositiveNumbers_returnsCorrectSum() {
+        assertThat(calculator.add(2, 3)).isEqualTo(5);
+    }
+
+    // B - Boundary conditions
+    @Test
+    void add_nearMaxInteger_returnsCorrectSum() {
+        assertThat(calculator.add(Integer.MAX_VALUE - 1, 1))
+            .isEqualTo(Integer.MAX_VALUE);
+    }
+
+    // C - Cross-check (commutative property)
+    @Test
+    void add_commutativeProperty_holdsTrue() {
+        assertThat(calculator.add(2, 3))
+            .isEqualTo(calculator.add(3, 2));
+    }
+
+    // E - Error conditions
+    @Test
+    void add_integerOverflow_throwsArithmeticException() {
+        assertThatThrownBy(() -> calculator.add(Integer.MAX_VALUE, 1))
+            .isInstanceOf(ArithmeticException.class);
+    }
+}
+```
 
 ## Constraints
 
