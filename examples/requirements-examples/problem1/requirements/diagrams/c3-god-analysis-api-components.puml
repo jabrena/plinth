@@ -10,7 +10,7 @@ Person(api_consumer, "API Consumer", "Client calling the statistics endpoint")
 Container_Boundary(rest_api, "REST application") {
     Component(god_stats_controller, "God Stats Controller", "Spring @RestController", "Validates filter and sources; fetches names in parallel (virtual threads); invokes Unicode sum calculation")
     Component(god_analysis_service, "God Analysis Service", "Spring @Service", "Filters names by first code point; aggregates Unicode values per requirements; returns sum as string")
-    Component(god_data_client, "God Data Client", "Spring @Component, RestClient, Resilience4j", "HTTP GET per source URL; per-source retry; returns name list or empty on exhaustion")
+    Component(god_data_client, "God Data Client", "Spring @Component, RestClient", "HTTP GET per source URL; connect/read timeouts; single attempt; returns name list or empty on timeout/error")
     Component(god_api_properties, "God API properties", "@ConfigurationProperties", "Per-source URLs and HTTP connect/read timeouts")
     Component(global_exception_handler, "Global exception handler", "@ControllerAdvice", "Maps validation and framework errors to HTTP 400 and consistent JSON error bodies for controllers")
     Component(god_stats_response, "God Stats response", "Java record DTO", "Serializes { sum } JSON response body")

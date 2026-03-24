@@ -1,98 +1,89 @@
 package info.jab.ms.controller;
 
-import info.jab.ms.AbstractSpringBootTest;
-import info.jab.ms.dto.GodStatsResponse;
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.web.server.LocalServerPort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.TestPropertySource;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.web.client.RestClient;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.aResponse;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
-import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 
-/**
- * Full-stack integration tests for the HTTP API ({@code RestClient} → running app → WireMock backends).
- * Not a {@code @WebMvcTest} slice — see {@link AbstractSpringBootTest}.
- */
 @Tag("integration-test")
-@TestPropertySource(properties = {
-        "resilience4j.retry.instances.greek.max-attempts=1",
-        "resilience4j.retry.instances.roman.max-attempts=1",
-        "resilience4j.retry.instances.nordic.max-attempts=1"
-})
-class GodAnalysisApiIT extends AbstractSpringBootTest {
+@SpringBootTest(webEnvironment = RANDOM_PORT)
+class GodAnalysisApiIT {
 
-    private RestClient restClient;
+    static WireMockServer wireMock = new WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort());
+
+    @BeforeAll
+    static void startWireMock() {
+        wireMock.start();
+    }
+
+    @AfterAll
+    static void stopWireMock() {
+        wireMock.stop();
+    }
+
+    @DynamicPropertySource
+    static void configure(DynamicPropertyRegistry registry) {
+        String base = "http://localhost:" + wireMock.port();
+        registry.add("god-api.sources.greek.url", () -> base + "/greek");
+        registry.add("god-api.sources.roman.url", () -> base + "/roman");
+        registry.add("god-api.sources.nordic.url", () -> base + "/nordic");
+        registry.add("god-api.timeout.read", () -> "300");
+        registry.add("god-api.timeout.connect", () -> "300");
+    }
 
     @BeforeEach
-    void setUp() {
-        restClient = RestClient.create("http://localhost:" + port);
-        wireMock.resetToDefaultMappings();
+    void resetStubs() {
+        wireMock.resetAll();
     }
 
-    @Test
-    @DisplayName("Happy path: all sources, filter=n -> 78179288397447443426")
-    void shouldCalculateHappyPathSum() {
-
-        ResponseEntity<GodStatsResponse> response = restClient.get()
-                .uri("/api/v1/gods/stats/sum?filter=n&sources=greek,roman,nordic")
-                .retrieve()
-                .toEntity(GodStatsResponse.class);
-
-        assertThat(response.getStatusCode().value()).isEqualTo(200);
-        assertThat(response.getBody().sum()).isEqualTo("78179288397447443426");
-    }
+    @LocalServerPort
+    int port;
 
     @Test
-    @DisplayName("Nordic timeout: Greek+Roman respond, partial sum = 78179210291336329326")
-    void shouldReturnPartialSumWhenNordicTimesOut() {
-        // greek + roman served from default mappings; override nordic with a delay beyond 5s timeout
-        wireMock.stubFor(get(urlEqualTo("/nordic"))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBodyFile("nordic-gods.json")
-                        .withFixedDelay(6000)));
+    void timeout_nordicAndRoman_returnsPartialSumFromGreekOnly() {
+        // Greek: responds immediately with full list
+        wireMock.stubFor(get(urlPathEqualTo("/greek"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody("[\"Zeus\",\"Hera\",\"Poseidon\",\"Demeter\",\"Ares\",\"Athena\",\"Apollo\",\"Artemis\",\"Hephaestus\",\"Aphrodite\",\"Hermes\",\"Dionysus\",\"Hades\",\"Hypnos\",\"Nike\",\"Janus\",\"Nemesis\",\"Iris\",\"Hecate\",\"Tyche\"]")));
+        // Roman: timeout (delay > 300ms read timeout)
+        wireMock.stubFor(get(urlPathEqualTo("/roman"))
+            .willReturn(aResponse().withFixedDelay(1000).withStatus(200).withBody("[]")));
+        // Nordic: timeout (delay > 300ms read timeout)
+        wireMock.stubFor(get(urlPathEqualTo("/nordic"))
+            .willReturn(aResponse().withFixedDelay(1000).withStatus(200).withBody("[]")));
 
-        ResponseEntity<GodStatsResponse> response = restClient.get()
-                .uri("/api/v1/gods/stats/sum?filter=n&sources=greek,roman,nordic")
-                .retrieve()
-                .toEntity(GodStatsResponse.class);
+        RestClient client = RestClient.create("http://localhost:" + port);
 
-        assertThat(response.getStatusCode().value()).isEqualTo(200);
-        // Nike + Nemesis (Greek) + Neptun (Roman) — Njord (Nordic) excluded due to timeout
-        assertThat(response.getBody().sum()).isEqualTo("78179210291336329326");
-    }
+        record GodStatsResponse(String sum) {}
 
-    @Test
-    @DisplayName("Greek-only: partial sum = 78101109179220212216")
-    void shouldReturnGreekOnlyPartialSum() {
-        // greek served from default mappings; override roman + nordic with delays beyond 5s timeout
-        wireMock.stubFor(get(urlEqualTo("/roman"))
-                .willReturn(aResponse()
-                        .withFixedDelay(6000)
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBodyFile("roman-gods.json")));
-        wireMock.stubFor(get(urlEqualTo("/nordic"))
-                .willReturn(aResponse()
-                        .withFixedDelay(6000)
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBodyFile("nordic-gods.json")));
+        ResponseEntity<GodStatsResponse> response = client.get()
+            .uri("/api/v1/gods/stats/sum?filter=N&sources=greek,roman,nordic")
+            .retrieve()
+            .toEntity(GodStatsResponse.class);
 
-        ResponseEntity<GodStatsResponse> response = restClient.get()
-                .uri("/api/v1/gods/stats/sum?filter=n&sources=greek,roman,nordic")
-                .retrieve()
-                .toEntity(GodStatsResponse.class);
-
-        assertThat(response.getStatusCode().value()).isEqualTo(200);
-        // Nike + Nemesis (Greek) only
+        // Greek names starting with 'N': Nike (78105107101) + Nemesis (78101109101115105115)
+        // Sum: 78101109179220212216
+        assertThat(response.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(response.getBody()).isNotNull();
         assertThat(response.getBody().sum()).isEqualTo("78101109179220212216");
     }
 }

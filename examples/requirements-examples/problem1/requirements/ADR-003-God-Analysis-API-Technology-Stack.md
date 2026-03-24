@@ -2,7 +2,7 @@
 
 **Status:** Accepted
 **Date:** Sat Mar 21 10:12:00 CET 2026
-**Decision:** Adopt a **technology stack** for the God Analysis API covering **runtime framework** (Spring Boot), **outbound HTTP** (`RestClient`), **retry policy implementation** (**Resilience4j Retry**), **acceptance-style testing** (**Spring `RestClient`** against `@SpringBootTest(webEnvironment = RANDOM_PORT)`), and **integration testing** with **WireMock in-process** so timeout and retry scenarios run in **isolation** with deterministic delay simulation.
+**Decision:** Adopt a **technology stack** for the God Analysis API covering **runtime framework** (Spring Boot), **outbound HTTP** (`RestClient` with **configured connect/read timeouts** in `application.yml`), **acceptance-style testing** (**Spring `RestClient`** against `@SpringBootTest(webEnvironment = RANDOM_PORT)`), and **integration testing** with **WireMock in-process** (or Testcontainers-hosted WireMock) so **timeout** and partial-result scenarios run in **isolation** with deterministic delay simulation. **Automatic HTTP retries are out of scope** for this user story—no Resilience4j Retry (or equivalent) required.
 
 **Amendment (2026-03-22):** **Rest Assured** was superseded for **HTTP-level acceptance tests** by **Spring Framework `RestClient`**. Rationale: Rest Assured relies on Groovy internals (`RequestSpecificationImpl.applyProxySettings`); on **Java 21+** this path can throw `NullPointerException` (`ConcurrentHashMap` does not permit null keys) during proxy/meta-property handling—making the stack brittle on current LTS/JDK feature releases. **`RestClient`** is already on the classpath (`spring-web`), matches the **same client API** used for outbound calls, and works with **AssertJ** for assertions—no separate acceptance-test HTTP stack required.
 
@@ -10,16 +10,16 @@
 
 The God Analysis API project requires a robust Java framework to implement a REST API that integrates with multiple external mythology data sources, performs complex data transformations, and provides reliable service delivery despite external dependency failures.
 
-Timeout and retry behavior ([ADR-002](ADR-002-God-Analysis-API-Non-Functional-Requirements.md)) is easy to get wrong if tests share static stubs, global delays, or JVM-wide clock tricks. **WireMock in-process** with **scenario-based testing** and **per-test stub reset** keeps each scenario reproducible and **isolated**.
+Timeout behavior ([ADR-002](ADR-002-God-Analysis-API-Non-Functional-Requirements.md)) is easy to get wrong if tests share static stubs, global delays, or JVM-wide clock tricks. **WireMock** with **per-test stub reset** keeps each scenario reproducible and **isolated**.
 
 ### Key Requirements Driving Framework Selection
 
 1. **REST API Development**: Need to expose a single endpoint (`GET /api/v1/gods/stats/sum`) with query parameter handling
-2. **External HTTP Integration**: Must consume three external god APIs with timeout and retry capabilities
+2. **External HTTP Integration**: Must consume three external god APIs with **RestClient** timeouts (no automatic retries)
 3. **Parallel Processing**: Requires concurrent calls to multiple external services for optimal performance
 4. **Error Handling & Resilience**: Graceful degradation with partial results when external sources fail
 5. **JSON Processing**: Handle JSON serialization/deserialization for API responses and external data
-6. **Testing Support**: Comprehensive testing capabilities for acceptance, integration, and unit tests—with **deterministic** timeout/retry coverage using WireMock delay simulation
+6. **Testing Support**: Comprehensive testing capabilities for acceptance, integration, and unit tests—with **deterministic** timeout coverage using WireMock delay simulation
 7. **Development Velocity**: Team expertise and rapid development requirements
 8. **Production Readiness**: Monitoring, health checks, and operational capabilities
 
@@ -38,7 +38,7 @@ Timeout and retry behavior ([ADR-002](ADR-002-God-Analysis-API-Non-Functional-Re
 
 ### Relationship to ADR-002
 
-[ADR-002](ADR-002-God-Analysis-API-Non-Functional-Requirements.md) specifies **per-attempt timeout (5s)**, **up to 3 additional retries per source**, **linear spacing (no exponential backoff)**, and **parallel calls**. **Resilience4j Retry** implements the retry policy with configuration (max attempts, fixed wait) matching ADR-002 **per source**.
+[ADR-002](ADR-002-God-Analysis-API-Non-Functional-Requirements.md) specifies **bounded waits** via **RestClient** connect/read timeouts, **parallel calls**, and **partial results** when a source times out—**without** a separate retry policy. Implementation uses **one attempt per source** per request.
 
 ## Decision Drivers
 
@@ -50,8 +50,8 @@ Timeout and retry behavior ([ADR-002](ADR-002-God-Analysis-API-Non-Functional-Re
 - **Operational Readiness**: Production monitoring and health check capabilities
 - **Community Support**: Active community and extensive documentation
 - **Dependency Management**: Mature ecosystem with curated dependencies
-- **Requirement traceability**: Retry and timeout behavior must remain visible and testable (see implementation plan)
-- **Test isolation**: Timeout/retry tests must not depend on execution order or shared mutable stub state
+- **Requirement traceability**: Timeout and partial-result behavior must remain visible and testable (see implementation plan)
+- **Test isolation**: Timeout tests must not depend on execution order or shared mutable stub state
 
 ## Considered Options (Runtime Platform)
 
@@ -94,19 +94,19 @@ This implementation uses **Spring MVC (traditional servlet-based)** architecture
 **Pros:** Minimal dependencies, full control.
 **Cons:** High boilerplate, weaker out-of-the-box testing and operations story.
 
-## Supplementary decisions: HTTP client, acceptance tests, retries
+## Supplementary decisions: HTTP client and acceptance tests
 
-These decisions apply **within** the chosen Spring Boot stack. They do not change ADR-002’s behavioral contract.
+These decisions apply **within** the chosen Spring Boot stack. They align with ADR-002’s **timeout + partial results** contract (no retries).
 
 ### 1. Outbound HTTP client: `RestClient` (SELECTED)
 
-**Context:** The service performs **blocking** parallel fetches (e.g. `CompletableFuture.supplyAsync` with virtual threads around per-source calls) with **per-attempt timeouts**. This aligns with the **Spring MVC servlet-based architecture** decision. Spring Framework 6.1+ provides **RestClient**, a synchronous API designed as the modern successor to `RestTemplate`.
+**Context:** The service performs **blocking** parallel fetches (e.g. `CompletableFuture.supplyAsync` with virtual threads around per-source calls) with **connect/read timeouts** on each call. This aligns with the **Spring MVC servlet-based architecture** decision. Spring Framework 6.1+ provides **RestClient**, a synchronous API designed as the modern successor to `RestTemplate`.
 
 **Reactive Programming Exclusion:** This implementation explicitly **excludes WebClient and reactive dependencies** to maintain consistency with the Spring MVC servlet-based approach.
 
 | Option | Assessment |
 |--------|------------|
-| **RestClient** | **Selected.** Synchronous API matching servlet stack; fluent API; integrates with `ClientHttpRequestFactory` / `JdkClientHttpRequestFactory` for connect/read timeouts; composes cleanly with **Resilience4j** `Retry` around each per-source call; testable with `MockRestServiceServer` or WireMock-backed URLs. **No reactive dependencies required.** |
+| **RestClient** | **Selected.** Synchronous API matching servlet stack; fluent API; integrates with `ClientHttpRequestFactory` / `JdkClientHttpRequestFactory` for connect/read timeouts; testable with `MockRestServiceServer` or WireMock-backed URLs. **No reactive dependencies required.** |
 | **WebClient** | **Explicitly rejected.** Requires reactive dependencies (spring-webflux, reactor-core) that conflict with our servlet-only architecture decision. |
 | **RestTemplate** | **Not recommended** for new code (maintenance mode). |
 
@@ -167,45 +167,38 @@ These decisions apply **within** the chosen Spring Boot stack. They do not chang
 
 **Decision:** Use **Spring Framework `RestClient`** for **HTTP-level acceptance tests** tagged `@Tag("acceptance-test")`; retain **MockMvc** where slice tests suffice. **Do not** add or rely on **Rest Assured** for this module’s acceptance suite.
 
-### 3. Retries: Resilience4j vs Spring Retry vs manual (SELECTED: Resilience4j Retry for v1)
+### 3. Automatic retries (OUT OF SCOPE for US-001)
 
-**Context:** ADR-002 requires **linear retries**, **per-source isolation**, and **up to 3 retries after the first attempt** (4 total calls per source when retries fire).
+**Decision:** Do **not** add **Resilience4j Retry**, **Spring Retry**, or ad-hoc retry loops for this user story.
 
-| Option | Assessment |
-|--------|------------|
-| **Resilience4j (`resilience4j-retry`)** | **Selected.** Declarative or programmatic **Retry** with fixed-interval waits matches ADR-002 linear policy; **Micrometer** hooks can expose retry counts; **per-source** `Retry` instances (e.g. named `greek`, `roman`, `nordic`) preserve isolation. |
-| **Spring Retry (`@Retryable`)** | Rejected as primary: AOP-based, overlaps conceptually with Resilience4j; team standard is Resilience4j for resilience concerns. |
-| **Manual retry loop** | Rejected as primary: clear but duplicates policy logic and metrics that Resilience4j centralizes; acceptable only in spike code, not as the shipped pattern. |
+**Rationale:** The original problem scope is satisfied by **RestClient** timeouts configured in `application.yml` plus **partial aggregation** when a source times out. Retries would add dependencies, configuration surface, and test scenarios (backoff, attempt counts) beyond what the functional requirements require.
 
-**Decision:** Use **Resilience4j Retry** to implement ADR-002. Configure **max attempts = 4** (1 initial + 3 retries) and **fixed wait** between attempts (no exponential backoff). Apply **one `Retry` configuration per pantheon** so retries on Nordic do not affect Greek/Roman. **Do not** enable Resilience4j **CircuitBreaker** (or other modules) until ADR-002’s “circuit breaker deferred” posture changes.
-
-**Implementation note:** Wrap each per-source `RestClient` call with the appropriate `Retry` (e.g. `Retry.decorateCallable` / registry-backed `Retry.executeCallable`) so **timeouts** still apply **per attempt** inside the retry loop, consistent with ADR-002’s “per-attempt timeout.”
+If product later mandates retries, capture that in a new ADR and only then add a retry library.
 
 ### 4. Integration testing: WireMock (SELECTED)
 
-**Problem:** In-process WireMock with fixed delays can work for simple cases, but **timeout and retry** scenarios need:
+**Problem:** In-process WireMock with fixed delays can work for simple cases, but **timeout** scenarios need:
 
 - **Deterministic delay simulation** to trigger client-side timeouts consistently
 - **Per-scenario control** of latency and failure without cross-test leakage
 - **Isolation** so test A’s “slow Nordic” does not affect test B
 
-**Approach:** Use **WireMock in-process** to serve deterministic JSON for the three god list endpoints. WireMock provides both **response stubs** and **delay/failure simulation** capabilities so each test can:
+**Approach:** Use **WireMock** (in-process or via Testcontainers) to serve deterministic JSON for the three god list endpoints. WireMock provides both **response stubs** and **delay/failure simulation** capabilities so each test can:
 
-1. **Reset** WireMock stubs and scenarios in `@BeforeEach` / `@AfterEach` (or equivalent) for **isolation**
-2. Apply **delay only to the Nordic endpoint** using `fixedDelayMilliseconds` to exercise **5s timeout + partial results**
-3. After retries are implemented, use **WireMock scenarios** to simulate **transient failures** followed by success to force **retry behavior** on one source only
+1. **Reset** WireMock stubs in `@BeforeEach` / `@AfterEach` (or equivalent) for **isolation**
+2. Apply **delay beyond the configured read timeout** on one or more endpoints using `fixedDelayMilliseconds` to exercise **timeout + partial results** (single attempt per source)
 
 **Alternatives considered:**
 
 
 | Approach                                      | Why not primary                                                                                                                                                                         |
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| WireMock in-process | **Selected approach** - Provides **delay simulation** via `fixedDelayMilliseconds`, **scenario-based retry testing**, and **per-test isolation** through stub reset in `@BeforeEach` |
+| WireMock in-process | **Selected approach** - Provides **delay simulation** via `fixedDelayMilliseconds` and **per-test isolation** through stub reset in `@BeforeEach` |
 | WireMock with Testcontainers | Adds Docker dependency and complexity without significant benefit for client timeout testing; in-process delays are sufficient to trigger RestClient timeouts |
 | Live Typicode                                 | Flaky, non-deterministic sums and latency                                                                                                                                               |
 
 
-**Decision:** Use **WireMock in-process** for integration testing. **Every** integration/acceptance test that depends on timeout or retry policy must **start from a clean stub state** (no shared stubs across tests) using `@BeforeEach` lifecycle hooks. Unit tests for pure algorithms remain **without** WireMock.
+**Decision:** Use **WireMock** for integration testing. **Every** integration/acceptance test that depends on timeout behavior must **start from a clean stub state** (no shared stubs across tests) using `@BeforeEach` lifecycle hooks. Unit tests for pure algorithms remain **without** WireMock.
 
 **Implementation notes (non-normative):**
 
@@ -265,8 +258,7 @@ src/test/resources/
 │   ├── greek-gods-success.json
 │   ├── roman-gods-success.json
 │   ├── nordic-gods-success.json
-│   ├── greek-gods-timeout.json      # 6s delay to trigger 5s timeout
-│   └── nordic-gods-retry.json       # Scenario-based for retry testing
+│   └── greek-gods-timeout.json      # delay beyond configured read timeout
 └── __files/
     ├── greek-gods-response.json
     ├── roman-gods-response.json
@@ -280,7 +272,7 @@ src/test/resources/
 - **Reusable responses**: Same JSON file can be used across multiple test scenarios
 - **Version control friendly**: JSON files are easy to review and maintain
 - **Test data management**: Clear organization of test fixtures
-- **Scenario flexibility**: Easy to create variations (success, timeout, retry) using same base data
+- **Scenario flexibility**: Easy to create variations (success, timeout) using same base data
 
 ## Decision Outcome
 
@@ -291,26 +283,26 @@ src/test/resources/
 ### Rationale
 
 1. **Spring MVC** provides mature servlet-based REST API development without reactive complexity
-2. **RestClient** fits synchronous parallel fetches with per-attempt timeouts (no reactive dependencies)
+2. **RestClient** fits synchronous parallel fetches with configured timeouts (no reactive dependencies)
 3. **Spring `RestClient`** gives **black-box** acceptance tests over a real port without a separate Groovy-based HTTP DSL
-4. **WireMock in-process** provides **isolated**, **deterministic** timeout/retry validation aligned with ADR-002
-5. **Resilience4j Retry** implements ADR-002 policy consistently, supports observability, and avoids ad-hoc loops while **other Resilience4j modules stay off** until requirements change
+4. **WireMock** provides **isolated**, **deterministic** timeout validation aligned with ADR-002
+5. **No retry library** keeps the dependency graph and operational knobs smaller than a resilience4j-based design
 6. **Servlet-only architecture** eliminates reactive programming complexity and dependency conflicts
 
 ### Implementation Approach
 
 - **Architecture**: **Spring MVC servlet-based** - traditional thread-per-request model, **no reactive programming**
 - **REST Controller**: `@RestController`, `GET /api/v1/gods/stats/sum`
-- **HTTP Client**: **RestClient** (synchronous) - **5s timeout per attempt** (each attempt inside retry is still bound by this timeout)
-- **Parallelism**: `CompletableFuture` with virtual threads within servlet thread model per source; **retry boundary per source** (separate `Retry` instance or configuration per pantheon)
-- **Retries**: **Resilience4j Retry**—**4 max attempts**, **fixed delay** between attempts
+- **HTTP Client**: **RestClient** (synchronous) with **connect/read timeouts** from configuration (e.g. 5s defaults)
+- **Parallelism**: `CompletableFuture` with virtual threads within servlet thread model per source; **one attempt per source** per request
+- **Retries**: **None** for US-001 (see §3 above)
 - **Configuration**: **Single default configuration** provides production-ready settings with environment variable overrides
 - **Error handling**: `@ControllerAdvice` where needed; partial aggregation per feature
 - **Dependencies**: **No reactive libraries** (spring-webflux, reactor-core, etc.)
 - **Testing**:
   - **Unit tests**: Unicode/filter/sum without containers
   - **Acceptance**: `@SpringBootTest(RANDOM_PORT)` + **Spring `RestClient`** (real HTTP to `localhost:{port}`; AssertJ assertions)
-  - **Integration (timeout/retry/isolation)**: **WireMock in-process**, **reset stubs per test**
+  - **Integration (timeout/isolation)**: **WireMock**, **reset stubs per test**
 
 ### Planned Maven coordinates (design-level)
 
@@ -318,33 +310,28 @@ src/test/resources/
 | ----- | ---------------------- | ---- |
 | main | `spring-boot-starter-web` | **Spring MVC** REST API (servlet-based, **excludes reactive**) |
 | main | `spring-boot-starter-actuator` | Ops |
-| main | `io.github.resilience4j:resilience4j-retry` | ADR-002 retry policy (linear, per source) |
-| main | `io.github.resilience4j:resilience4j-spring-boot3` (or artifact aligned with Spring Boot 4) | Spring configuration for Retry beans and properties |
 | test | `spring-boot-starter-test` | JUnit 5, AssertJ, **MockMvc** (servlet-based testing) |
 | test | *(none extra for AT)* | **Acceptance tests** use **`RestClient`** from **`spring-web`** (already pulled by `spring-boot-starter-web`)—no `rest-assured` dependency |
 | test | `org.wiremock:wiremock` | Deterministic upstream JSON with delay simulation |
 
 **Not used for v1 (by this ADR):** 
-- `spring-retry` (prefer Resilience4j)
-- Broad Resilience4j modules beyond **retry** (unless a future ADR adds them)
+- `resilience4j-retry` / `spring-retry` (retries out of scope for US-001)
 - **Reactive dependencies**: `spring-boot-starter-webflux`, `reactor-core`, `reactor-netty` (conflicts with servlet-only architecture)
 
 ## Consequences
 
 ### Positive
 
-- Timeout/retry behavior validated with **deterministic delay simulation** and **per-test isolation**
-- **WireMock in-process** provides both **response stubs** and **fault simulation** (delays, failures) in one lightweight tool
-- Spring stack + Testcontainers is a well-documented industry pattern
-- **Resilience4j Retry** gives uniform policy, testable configuration, and optional metrics without enabling circuit breaking in v1
+- Timeout behavior validated with **deterministic delay simulation** and **per-test isolation**
+- **WireMock** provides both **response stubs** and **fault simulation** (delays, failures) in one lightweight tool
+- Spring stack + optional Testcontainers is a well-documented industry pattern
 - **Single configuration file** provides consistent baseline with environment variable flexibility
 
 ### Negative
 
-- **Fast test execution** - no Docker overhead, pure JVM testing
-- **Simple setup** - no external dependencies or container lifecycle management
-- Higher memory use on developer laptops when running full integration suite
-- **Resilience4j** adds dependencies and configuration surface; team must **discipline** configuration so only **Retry** is active for this service in v1
+- **Fast test execution** when using in-process WireMock—no Docker overhead
+- Transient upstream failures are **not** retried (by design); operators rely on timeouts and partial results
+- Higher memory use on developer laptops when running full integration suite with containers
 
 ### Neutral
 
@@ -353,14 +340,13 @@ src/test/resources/
 
 ## Follow-up Actions
 
-1. Add Maven dependencies for **Resilience4j Retry** (+ Spring Boot integration) and WireMock (use `org.wiremock:wiremock` - the modern groupId that replaced `com.github.tomakehurst`)
+1. Add Maven dependency for WireMock (use `org.wiremock:wiremock` - the modern groupId that replaced `com.github.tomakehurst`) when using WireMock in tests
 2. Set up **WireMock file structure** with `src/test/resources/mappings/` and `src/test/resources/__files/` directories for organized test data management
 3. Create **JSON response files** in `__files` for each pantheon (greek, roman, nordic) with realistic god data for testing
 4. Implement a **test support** class (or extension) that **starts** WireMock server, **wires** `RestClient` base URLs, and **resets stubs** between tests
-5. Register **RestClient** with production timeouts; define **per-source** `Retry` beans or config; override URLs only in tests
+5. Register **RestClient** with production connect/read timeouts; override URLs only in tests
 6. Keep the **`RestClient`-based** acceptance suite small and Gherkin-aligned; **do not** introduce Rest Assured for this module unless a future ADR revisits the trade-off after Groovy/JVM fixes land upstream
 7. Document WireMock setup, file structure, and stub reset patterns in module README
-8. Verify Resilience4j Retry configuration matches ADR-002 requirements
 
 ## Appendix: Rest Assured — issues observed and why it is discarded (2026-03-22)
 
@@ -419,4 +405,3 @@ If a future Rest Assured + Groovy release **demonstrably** fixes `applyProxySett
 - [Spring Boot 4.0.4 Documentation](https://docs.spring.io/spring-boot/docs/current/reference/htmlsingle/)
 - [Spring Framework — RestClient](https://docs.spring.io/spring-framework/reference/integration/rest-clients.html#rest-restclient) (outbound HTTP and **acceptance tests** in this ADR)
 - [WireMock](https://wiremock.org/) — including Testcontainers integration where applicable
-- [Resilience4j Retry](https://resilience4j.readme.io/docs/retry)

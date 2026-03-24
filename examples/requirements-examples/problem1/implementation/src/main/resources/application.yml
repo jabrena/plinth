@@ -15,35 +15,3 @@ god-api:
     connect: ${GOD_API_CONNECT_TIMEOUT:5000}
     read: ${GOD_API_READ_TIMEOUT:5000}
 
-# Resilience4j Retry Configuration
-resilience4j:
-  retry:
-    instances:
-      greek:
-        max-attempts: ${GOD_API_RETRY_MAX_ATTEMPTS:4}
-        wait-duration: ${GOD_API_RETRY_WAIT_DURATION:1000ms}
-      roman:
-        max-attempts: ${GOD_API_RETRY_MAX_ATTEMPTS:4}
-        wait-duration: ${GOD_API_RETRY_WAIT_DURATION:1000ms}
-      nordic:
-        max-attempts: ${GOD_API_RETRY_MAX_ATTEMPTS:4}
-        wait-duration: ${GOD_API_RETRY_WAIT_DURATION:1000ms}
-
-# Logging Configuration
-logging:
-  level:
-    info.jab.ms: ${LOG_LEVEL:INFO}
-    org.springframework.web: ${LOG_LEVEL_WEB:WARN}
-    org.springframework.web.servlet.DispatcherServlet: ${LOG_LEVEL_REQUEST:INFO}
-  pattern:
-    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
-
-# Actuator Configuration
-management:
-  endpoints:
-    web:
-      exposure:
-        include: health,info,metrics
-  endpoint:
-    health:
-      show-details: always

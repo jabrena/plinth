@@ -8,7 +8,7 @@ title Container Diagram — God Analysis API (C4 Level 2)
 Person(api_consumer, "API Consumer", "Client calling the statistics endpoint")
 
 System_Boundary(god_analysis_boundary, "God Analysis API") {
-    Container(rest_app, "REST application", "Spring Boot 3, Java 21", "Exposes JSON REST API, virtual-thread parallel fetches, Resilience4j retries, Spring Boot Actuator (health, metrics, info)")
+    Container(rest_app, "REST application", "Spring Boot 4, Java 25+", "Exposes JSON REST API, virtual-thread parallel fetches, RestClient timeouts, partial results on source timeout, Spring Boot Actuator (health, metrics, info)")
 }
 
 System_Ext(greek_data, "Greek mythology data API", "REST JSON arrays of god names")

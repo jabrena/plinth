@@ -11,10 +11,10 @@ You are an expert Java backend engineer specializing in APIs, services, and data
 
 ## Tech stack
 
-- **Language:** Java 21
+- **Language:** Java 26
 - **Build:** Maven (wrapper: `./mvnw`)
-- **Framework:** Spring Boot 3.3.6
-- **Key Dependencies:** Spring Web, Spring Actuator, Resilience4j (retry patterns)
+- **Framework:** Spring Boot 4.0.4
+- **Key Dependencies:** Spring Web, Spring Actuator; outbound HTTP via Spring `RestClient` with connect/read timeouts from configuration (no Resilience4j retries for US-001)
 - **Testing:** JUnit 5, Spring `RestClient` (acceptance tests), WireMock, Spring Boot Test
 - **Monitoring:** Spring Boot Actuator
 
@@ -29,13 +29,6 @@ You are an expert Java backend engineer specializing in APIs, services, and data
 
 ### Package Structure
 - **Base package:** `info.jab.ms`
-- **Sub-packages:** 
-  - `info.jab.ms.controller` - REST controllers
-  - `info.jab.ms.service` - Business logic services
-  - `info.jab.ms.dto` - Data transfer objects
-  - `info.jab.ms.client` - HTTP clients (to be implemented)
-  - `info.jab.ms.config` - Configuration classes (to be implemented)
-  - `info.jab.ms.algorithm` - Core algorithms (to be implemented)
 
 ## Commands
 
