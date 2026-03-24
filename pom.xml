@@ -14,6 +14,23 @@
         SDLC that help software engineers and pipelines in their daily work for Java Enterprise
         development.</description>
 
+    <developers>
+        <developer>
+            <id>jabrena</id>
+            <name>Juan Antonio Breña Moral</name>
+            <email>bren@juanantonio.info</email>
+        </developer>
+    </developers>
+    <inceptionYear>2025</inceptionYear>
+    <issueManagement>
+        <url>https://github.com/jabrena/cursor-rules-java/issues</url>
+        <system>GitHub</system>
+    </issueManagement>
+    <ciManagement>
+        <url>https://github.com/jabrena/cursor-rules-java/actions</url>
+        <system>GitHub Actions</system>
+    </ciManagement>
+
     <properties>
         <java.version>25</java.version>
         <maven.version>3.9.10</maven.version>

@@ -309,11 +309,11 @@ class CustomerQuery {
         <example number="5" id="transactions-and-jdbc">
             <example-header>
                 <example-title>Transactions and JDBC</example-title>
-                <example-subtitle>Declare boundaries on services</example-subtitle>
+                <example-subtitle>Declare boundaries on services — JdbcTemplate and JdbcClient</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                Wrap multi-statement workflows in `@Transactional` on the service. `JdbcTemplate` participates in the current Spring transaction when one exists.
+                Wrap multi-statement workflows in `@Transactional` on the service. Both `JdbcTemplate` and `JdbcClient` participate in the current Spring transaction when one exists. `JdbcClient` (Spring Framework 6.1+) offers the same transactional semantics with a fluent, chainable API.
                 ]]>
             </example-description>
             <code-examples>
@@ -335,6 +335,32 @@ class TransferService {
     void transfer(long fromId, long toId, long amount) {
         jdbcTemplate.update("UPDATE accounts SET balance = balance - ? WHERE id = ?", amount, fromId);
         jdbcTemplate.update("UPDATE accounts SET balance = balance + ? WHERE id = ?", amount, toId);
+    }
+}]]></code-block>
+                </good-example>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.springframework.jdbc.core.simple.JdbcClient;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+// JdbcClient (Spring Framework 6.1+) — same transactional semantics, fluent API
+@Service
+class TransferService {
+
+    private final JdbcClient jdbcClient;
+
+    TransferService(JdbcClient jdbcClient) {
+        this.jdbcClient = jdbcClient;
+    }
+
+    @Transactional
+    void transfer(long fromId, long toId, long amount) {
+        jdbcClient.sql("UPDATE accounts SET balance = balance - ? WHERE id = ?")
+            .params(amount, fromId)
+            .update();
+        jdbcClient.sql("UPDATE accounts SET balance = balance + ? WHERE id = ?")
+            .params(amount, toId)
+            .update();
     }
 }]]></code-block>
                 </good-example>

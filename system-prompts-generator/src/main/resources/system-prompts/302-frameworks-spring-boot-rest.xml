@@ -20,16 +20,15 @@
         1. **Semantic consistency**: Align `GET`/`POST`/`PUT`/`PATCH`/`DELETE` with safe vs unsafe operations and return status codes that match the real outcome.
         2. **Clear contracts**: Expose lean request/response DTOs, version APIs explicitly, and avoid leaking domain entities or stack traces to clients.
         3. **Security by design**: Terminate TLS appropriately, authenticate and authorize requests, validate input, and avoid embedding secrets or raw SQL in controllers.
-        4. **Operational clarity**: Use `@ControllerAdvice` for consistent errors, Problem Details where appropriate, and OpenAPI (or equivalent) so clients do not rely on reading source code.
-        5. **Evolution without surprise**: Choose a versioning strategy (URI, header, or media type) and apply it consistently so breaking changes remain manageable.
-        6. **Bounded collections**: Prefer `Page`/`Pageable` (or explicit cursor/limit with caps) for list endpoints; use stable, documented sort keys; avoid unbounded JSON arrays as the default contract.
-        7. **Validation at the boundary**: Apply Bean Validation to request DTOs and `@Valid`/`@Validated` on controller inputs so malformed payloads fail fast with **400** and field-level errors.
-        8. **Safe retries for writes**: Support `Idempotency-Key` (or domain-level deduplication) for `POST` creates; use **409 Conflict** when a request collides with existing state; document idempotent vs non-idempotent operations in OpenAPI.
-        9. **Optimistic concurrency**: Use `ETag` with `If-Match`/`If-None-Match` (or version fields) for updates; return **412 Precondition Failed** or **304 Not Modified** appropriately; consider `ShallowEtagHeaderFilter` or explicit ETags for cacheable reads.
-        10. **Caching discipline**: Set `Cache-Control`/`ETag`/`Last-Modified` deliberately; do not mark personalized or authenticated responses as publicly cacheable by mistake.
-        11. **Deprecation signals**: Communicate API sunset with standard headers (`Deprecation`, `Sunset`) and `Link` (`rel="successor-version"`) so clients can migrate before hard removal—aligned with explicit versioning.
-        12. **Content negotiation**: Default to JSON with explicit `produces`/`consumes`; add vendor media types only when they carry real meaning (often alongside version) and keep them consistent across the surface area.
-        13. **Time and locale in contracts**: Prefer ISO-8601 instants with offset (`OffsetDateTime`, `Instant`) in JSON; use `Accept-Language` for localized problem details only with stable machine codes and consistent semantics across locales.
+        4. **Evolution without surprise**: Choose a versioning strategy (URI, header, or media type) and apply it consistently so breaking changes remain manageable.
+        5. **Bounded collections**: Prefer `Page`/`Pageable` (or explicit cursor/limit with caps) for list endpoints; use stable, documented sort keys; avoid unbounded JSON arrays as the default contract.
+        6. **Validation at the boundary**: Apply Bean Validation to request DTOs and `@Valid`/`@Validated` on controller inputs so malformed payloads fail fast with **400** and field-level errors.
+        7. **Safe retries for writes**: Support `Idempotency-Key` (or domain-level deduplication) for `POST` creates; use **409 Conflict** when a request collides with existing state; document idempotent vs non-idempotent operations in OpenAPI.
+        8. **Optimistic concurrency**: Use `ETag` with `If-Match`/`If-None-Match` (or version fields) for updates; return **412 Precondition Failed** or **304 Not Modified** appropriately; consider `ShallowEtagHeaderFilter` or explicit ETags for cacheable reads.
+        9. **Caching discipline**: Set `Cache-Control`/`ETag`/`Last-Modified` deliberately; do not mark personalized or authenticated responses as publicly cacheable by mistake.
+        10. **Deprecation signals**: Communicate API sunset with standard headers (`Deprecation`, `Sunset`) and `Link` (`rel="successor-version"`) so clients can migrate before hard removal—aligned with explicit versioning.
+        11. **Content negotiation**: Default to JSON with explicit `produces`/`consumes`; add vendor media types only when they carry real meaning (often alongside version) and keep them consistent across the surface area.
+        12. **Time and locale in contracts**: Prefer ISO-8601 instants with offset (`OffsetDateTime`, `Instant`) in JSON; use `Accept-Language` for localized problem details only with stable machine codes and consistent semantics across locales.
     </goal>
 
     <constraints>
@@ -277,33 +276,99 @@ class User {
         <example number="5" id="api-versioning">
             <example-header>
                 <example-title>API versioning</example-title>
-                <example-subtitle>Version explicitly and consistently (URI, header, or media type)</example-subtitle>
+                <example-subtitle>Version explicitly and consistently — URI path, custom request header, or vendor media type</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                Introduce versioning early so breaking changes do not silently break all clients. URI versioning (e.g. `/api/v1/...`) is common; whatever strategy you pick, use it uniformly across controllers.
+                Introduce versioning early so breaking changes do not silently break existing clients. Three common strategies are shown below. Pick one and apply it **uniformly** across every controller in the API surface; mixing strategies creates confusion and unpredictable routing.
+
+                | Strategy | Mechanism | Trade-offs |
+                |---|---|---|
+                | **URI path** | `/api/v1/…` | Easiest to browse, cache, and test; version visible in logs and firewalls |
+                | **Custom header** | `X-API-Version: 2` | Clean URIs; version invisible in browser address bar and CDN cache keys |
+                | **Vendor media type** | `Accept: application/vnd.example.product+json;version=2` | Fully REST-compliant; higher client complexity |
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[import org.springframework.web.bind.annotation.*;
+                    <code-block language="java"><![CDATA[// ── Strategy 1: URI path versioning ──────────────────────────────────────────
+import org.springframework.web.bind.annotation.*;
 
+// V1 route: /api/v1/products/{id}
 @RestController
 @RequestMapping("/api/v1/products")
 class ProductControllerV1 {
+
     @GetMapping("/{id}")
     ProductDTOv1 get(@PathVariable String id) {
         return new ProductDTOv1("widget", 9.99);
     }
 }
 
+// V2 route: /api/v2/products/{id} — breaking shape change isolated behind the new path
 @RestController
 @RequestMapping("/api/v2/products")
 class ProductControllerV2 {
+
     @GetMapping("/{id}")
     ProductDTOv2 get(@PathVariable String id) {
-        // V2: price moved to a nested Money type — breaking change isolated behind a new version
         return new ProductDTOv2("widget", new Money(999, "USD"));
+    }
+}
+
+record ProductDTOv1(String name, double price) { }
+record ProductDTOv2(String name, Money price) { }
+record Money(int amountCents, String currency) { }]]></code-block>
+                </good-example>
+                <good-example>
+                    <code-block language="java"><![CDATA[// ── Strategy 2: Custom request header versioning ─────────────────────────────
+import org.springframework.web.bind.annotation.*;
+
+// Clients send:  GET /api/products/{id}  X-API-Version: 1
+@RestController
+@RequestMapping("/api/products")
+class ProductControllerHeaderV1 {
+
+    @GetMapping(value = "/{id}", headers = "X-API-Version=1")
+    ProductDTOv1 getV1(@PathVariable String id) {
+        return new ProductDTOv1("widget", 9.99);
+    }
+}
+
+// Clients send:  GET /api/products/{id}  X-API-Version: 2
+@RestController
+@RequestMapping("/api/products")
+class ProductControllerHeaderV2 {
+
+    @GetMapping(value = "/{id}", headers = "X-API-Version=2")
+    ProductDTOv2 getV2(@PathVariable String id) {
+        return new ProductDTOv2("widget", new Money(999, "USD"));
+    }
+}
+
+record ProductDTOv1(String name, double price) { }
+record ProductDTOv2(String name, Money price) { }
+record Money(int amountCents, String currency) { }]]></code-block>
+                </good-example>
+                <good-example>
+                    <code-block language="java"><![CDATA[// ── Strategy 3: Vendor media type versioning ─────────────────────────────────
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/api/products")
+class ProductControllerMediaType {
+
+    // Clients send:  Accept: application/vnd.example.product+json;version=1
+    @GetMapping(value = "/{id}", produces = "application/vnd.example.product+json;version=1")
+    ResponseEntity<ProductDTOv1> getV1(@PathVariable String id) {
+        return ResponseEntity.ok(new ProductDTOv1("widget", 9.99));
+    }
+
+    // Clients send:  Accept: application/vnd.example.product+json;version=2
+    @GetMapping(value = "/{id}", produces = "application/vnd.example.product+json;version=2")
+    ResponseEntity<ProductDTOv2> getV2(@PathVariable String id) {
+        return ResponseEntity.ok(new ProductDTOv2("widget", new Money(999, "USD")));
     }
 }
 
@@ -314,6 +379,7 @@ record Money(int amountCents, String currency) { }]]></code-block>
                 <bad-example>
                     <code-block language="java"><![CDATA[import org.springframework.web.bind.annotation.*;
 
+// No versioning at all — any breaking change silently breaks every client
 @RestController
 @RequestMapping("/products")
 class UnversionedProductController {
@@ -412,71 +478,7 @@ class BadErrorHandlingController {
             </code-examples>
         </example>
 
-        <example number="7" id="secure-apis">
-            <example-header>
-                <example-title>Secure APIs</example-title>
-                <example-subtitle>Authenticate, authorize, validate input, and avoid injection</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[
-                Terminate TLS for external traffic, use Spring Security (or equivalent) for authentication/authorization, validate and sanitize inputs, and use parameterized queries or repositories—never concatenate untrusted input into SQL.
-                ]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.SecurityFilterChain;
-
-@Configuration
-class SecurityConfig {
-
-    @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/public/**").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated());
-        http.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> { }));
-        return http.build();
-    }
-}
-
-// @PreAuthorize("hasAuthority('SCOPE_read:users')") on sensitive controller methods]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="java"><![CDATA[import org.springframework.web.bind.annotation.*;
-
-@RestController
-class InsecureController {
-
-    // No authentication or authorization — any caller can wipe all data
-    @PostMapping("/admin/deleteAllData")
-    String deleteAllData() {
-        return "All data wiped.";
-    }
-
-    // Trusts a user-controlled header for identity — trivially spoofable
-    @GetMapping("/account")
-    String account(@RequestHeader("X-User-Id") String userId) {
-        return "Account data for: " + userId;
-    }
-
-    // Concatenates untrusted input into SQL — SQL injection risk
-    @GetMapping("/search")
-    String search(@RequestParam String term) {
-        String sql = "SELECT * FROM products WHERE name = '" + term + "'";
-        return sql;
-    }
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="8" id="api-documentation-openapi">
+        <example number="7" id="api-documentation-openapi">
             <example-header>
                 <example-title>API documentation</example-title>
                 <example-subtitle>Use OpenAPI annotations for operations, parameters, and responses</example-subtitle>
@@ -538,7 +540,7 @@ class LegacyThingController {
             </code-examples>
         </example>
 
-        <example number="9" id="controller-advice-problem-detail">
+        <example number="8" id="controller-advice-problem-detail">
             <example-header>
                 <example-title>Controller advice and ProblemDetail</example-title>
                 <example-subtitle>Centralize exception mapping; keep controllers thin</example-subtitle>
@@ -651,7 +653,7 @@ class EntityNotFoundException extends RuntimeException {
             </code-examples>
         </example>
 
-        <example number="10" id="rfc-7807-problem-details-quality">
+        <example number="9" id="rfc-7807-problem-details-quality">
             <example-header>
                 <example-title>RFC 7807 Problem Details quality</example-title>
                 <example-subtitle>Consistent problem bodies; never leak stack traces to clients</example-subtitle>
@@ -754,7 +756,7 @@ class EntityNotFoundException extends RuntimeException {
             </code-examples>
         </example>
 
-        <example number="11" id="pagination-sorting-filtering">
+        <example number="10" id="pagination-sorting-filtering">
             <example-header>
                 <example-title>Pagination, sorting, and filtering</example-title>
                 <example-subtitle>Bounded pages, stable sorts, optional Link headers (RFC 8288)</example-subtitle>
@@ -821,7 +823,7 @@ class ProductDTO { }]]></code-block>
             </code-examples>
         </example>
 
-        <example number="12" id="validation-at-the-boundary">
+        <example number="11" id="validation-at-the-boundary">
             <example-header>
                 <example-title>Validation at the boundary</example-title>
                 <example-subtitle>`@Valid` / `@Validated` on inputs; Bean Validation on DTOs</example-subtitle>
@@ -882,7 +884,7 @@ class UserDTO { }]]></code-block>
             </code-examples>
         </example>
 
-        <example number="13" id="idempotency-safe-retries">
+        <example number="12" id="idempotency-safe-retries">
             <example-header>
                 <example-title>Idempotency and safe retries</example-title>
                 <example-subtitle>`Idempotency-Key`, duplicate detection, **409 Conflict**, OpenAPI clarity</example-subtitle>
@@ -950,7 +952,7 @@ class PaymentDTO { }]]></code-block>
             </code-examples>
         </example>
 
-        <example number="14" id="concurrency-etag-preconditions">
+        <example number="13" id="concurrency-etag-preconditions">
             <example-header>
                 <example-title>Concurrency control</example-title>
                 <example-subtitle>ETag, If-Match / If-None-Match, **412** / **304**</example-subtitle>
@@ -1013,7 +1015,7 @@ class ItemDTO { }]]></code-block>
             </code-examples>
         </example>
 
-        <example number="15" id="caching-semantics">
+        <example number="14" id="caching-semantics">
             <example-header>
                 <example-title>Caching semantics</example-title>
                 <example-subtitle>`Cache-Control`, ETag/Last-Modified, private vs public data</example-subtitle>
@@ -1072,7 +1074,7 @@ class UserDTO { }]]></code-block>
             </code-examples>
         </example>
 
-        <example number="16" id="deprecation-and-sunset">
+        <example number="15" id="deprecation-and-sunset">
             <example-header>
                 <example-title>Deprecation and sunset</example-title>
                 <example-subtitle>`Deprecation`, `Sunset`, `Link` (`rel="successor-version"`)</example-subtitle>
@@ -1123,7 +1125,7 @@ class ProductDTO { }]]></code-block>
             </code-examples>
         </example>
 
-        <example number="17" id="content-negotiation">
+        <example number="16" id="content-negotiation">
             <example-header>
                 <example-title>Content negotiation</example-title>
                 <example-subtitle>`produces` / `consumes`, JSON default, vendor media types</example-subtitle>
@@ -1186,7 +1188,7 @@ class LooseContentController {
             </code-examples>
         </example>
 
-        <example number="18" id="time-and-locale-in-contracts">
+        <example number="17" id="time-and-locale-in-contracts">
             <example-header>
                 <example-title>Time and locale in contracts</example-title>
                 <example-subtitle>ISO-8601 with offset; optional `Accept-Language` for errors</example-subtitle>

@@ -23,16 +23,15 @@ These guidelines are built upon the following core principles:
 1. **Semantic consistency**: Align `GET`/`POST`/`PUT`/`PATCH`/`DELETE` with safe vs unsafe operations and return status codes that match the real outcome.
 2. **Clear contracts**: Expose lean request/response DTOs, version APIs explicitly, and avoid leaking domain entities or stack traces to clients.
 3. **Security by design**: Terminate TLS appropriately, authenticate and authorize requests, validate input, and avoid embedding secrets or raw SQL in controllers.
-4. **Operational clarity**: Use `@ControllerAdvice` for consistent errors, Problem Details where appropriate, and OpenAPI (or equivalent) so clients do not rely on reading source code.
-5. **Evolution without surprise**: Choose a versioning strategy (URI, header, or media type) and apply it consistently so breaking changes remain manageable.
-6. **Bounded collections**: Prefer `Page`/`Pageable` (or explicit cursor/limit with caps) for list endpoints; use stable, documented sort keys; avoid unbounded JSON arrays as the default contract.
-7. **Validation at the boundary**: Apply Bean Validation to request DTOs and `@Valid`/`@Validated` on controller inputs so malformed payloads fail fast with **400** and field-level errors.
-8. **Safe retries for writes**: Support `Idempotency-Key` (or domain-level deduplication) for `POST` creates; use **409 Conflict** when a request collides with existing state; document idempotent vs non-idempotent operations in OpenAPI.
-9. **Optimistic concurrency**: Use `ETag` with `If-Match`/`If-None-Match` (or version fields) for updates; return **412 Precondition Failed** or **304 Not Modified** appropriately; consider `ShallowEtagHeaderFilter` or explicit ETags for cacheable reads.
-10. **Caching discipline**: Set `Cache-Control`/`ETag`/`Last-Modified` deliberately; do not mark personalized or authenticated responses as publicly cacheable by mistake.
-11. **Deprecation signals**: Communicate API sunset with standard headers (`Deprecation`, `Sunset`) and `Link` (`rel="successor-version"`) so clients can migrate before hard removal—aligned with explicit versioning.
-12. **Content negotiation**: Default to JSON with explicit `produces`/`consumes`; add vendor media types only when they carry real meaning (often alongside version) and keep them consistent across the surface area.
-13. **Time and locale in contracts**: Prefer ISO-8601 instants with offset (`OffsetDateTime`, `Instant`) in JSON; use `Accept-Language` for localized problem details only with stable machine codes and consistent semantics across locales.
+4. **Evolution without surprise**: Choose a versioning strategy (URI, header, or media type) and apply it consistently so breaking changes remain manageable.
+5. **Bounded collections**: Prefer `Page`/`Pageable` (or explicit cursor/limit with caps) for list endpoints; use stable, documented sort keys; avoid unbounded JSON arrays as the default contract.
+6. **Validation at the boundary**: Apply Bean Validation to request DTOs and `@Valid`/`@Validated` on controller inputs so malformed payloads fail fast with **400** and field-level errors.
+7. **Safe retries for writes**: Support `Idempotency-Key` (or domain-level deduplication) for `POST` creates; use **409 Conflict** when a request collides with existing state; document idempotent vs non-idempotent operations in OpenAPI.
+8. **Optimistic concurrency**: Use `ETag` with `If-Match`/`If-None-Match` (or version fields) for updates; return **412 Precondition Failed** or **304 Not Modified** appropriately; consider `ShallowEtagHeaderFilter` or explicit ETags for cacheable reads.
+9. **Caching discipline**: Set `Cache-Control`/`ETag`/`Last-Modified` deliberately; do not mark personalized or authenticated responses as publicly cacheable by mistake.
+10. **Deprecation signals**: Communicate API sunset with standard headers (`Deprecation`, `Sunset`) and `Link` (`rel="successor-version"`) so clients can migrate before hard removal—aligned with explicit versioning.
+11. **Content negotiation**: Default to JSON with explicit `produces`/`consumes`; add vendor media types only when they carry real meaning (often alongside version) and keep them consistent across the surface area.
+12. **Time and locale in contracts**: Prefer ISO-8601 instants with offset (`OffsetDateTime`, `Instant`) in JSON; use `Accept-Language` for localized problem details only with stable machine codes and consistent semantics across locales.
 
 ## Constraints
 
@@ -55,18 +54,17 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 4: DTOs for requests and responses
 - Example 5: API versioning
 - Example 6: Graceful, structured error responses
-- Example 7: Secure APIs
-- Example 8: API documentation
-- Example 9: Controller advice and ProblemDetail
-- Example 10: RFC 7807 Problem Details quality
-- Example 11: Pagination, sorting, and filtering
-- Example 12: Validation at the boundary
-- Example 13: Idempotency and safe retries
-- Example 14: Concurrency control
-- Example 15: Caching semantics
-- Example 16: Deprecation and sunset
-- Example 17: Content negotiation
-- Example 18: Time and locale in contracts
+- Example 7: API documentation
+- Example 8: Controller advice and ProblemDetail
+- Example 9: RFC 7807 Problem Details quality
+- Example 10: Pagination, sorting, and filtering
+- Example 11: Validation at the boundary
+- Example 12: Idempotency and safe retries
+- Example 13: Concurrency control
+- Example 14: Caching semantics
+- Example 15: Deprecation and sunset
+- Example 16: Content negotiation
+- Example 17: Time and locale in contracts
 
 ### Example 1: Use HTTP methods semantically
 
@@ -282,29 +280,33 @@ class User {
 
 ### Example 5: API versioning
 
-Title: Version explicitly and consistently (URI, header, or media type)
-Description: Introduce versioning early so breaking changes do not silently break all clients. URI versioning (e.g. `/api/v1/...`) is common; whatever strategy you pick, use it uniformly across controllers.
+Title: Version explicitly and consistently — URI path, custom request header, or vendor media type
+Description: Introduce versioning early so breaking changes do not silently break existing clients. Three common strategies are shown below. Pick one and apply it **uniformly** across every controller in the API surface; mixing strategies creates confusion and unpredictable routing. | Strategy | Mechanism | Trade-offs | |---|---|---| | **URI path** | `/api/v1/…` | Easiest to browse, cache, and test; version visible in logs and firewalls | | **Custom header** | `X-API-Version: 2` | Clean URIs; version invisible in browser address bar and CDN cache keys | | **Vendor media type** | `Accept: application/vnd.example.product+json;version=2` | Fully REST-compliant; higher client complexity |
 
 **Good example:**
 
 ```java
+// ── Strategy 1: URI path versioning ──────────────────────────────────────────
 import org.springframework.web.bind.annotation.*;
 
+// V1 route: /api/v1/products/{id}
 @RestController
 @RequestMapping("/api/v1/products")
 class ProductControllerV1 {
+
     @GetMapping("/{id}")
     ProductDTOv1 get(@PathVariable String id) {
         return new ProductDTOv1("widget", 9.99);
     }
 }
 
+// V2 route: /api/v2/products/{id} — breaking shape change isolated behind the new path
 @RestController
 @RequestMapping("/api/v2/products")
 class ProductControllerV2 {
+
     @GetMapping("/{id}")
     ProductDTOv2 get(@PathVariable String id) {
-        // V2: price moved to a nested Money type — breaking change isolated behind a new version
         return new ProductDTOv2("widget", new Money(999, "USD"));
     }
 }
@@ -319,6 +321,7 @@ record Money(int amountCents, String currency) { }
 ```java
 import org.springframework.web.bind.annotation.*;
 
+// No versioning at all — any breaking change silently breaks every client
 @RestController
 @RequestMapping("/products")
 class UnversionedProductController {
@@ -412,68 +415,7 @@ class BadErrorHandlingController {
 }
 ```
 
-### Example 7: Secure APIs
-
-Title: Authenticate, authorize, validate input, and avoid injection
-Description: Terminate TLS for external traffic, use Spring Security (or equivalent) for authentication/authorization, validate and sanitize inputs, and use parameterized queries or repositories—never concatenate untrusted input into SQL.
-
-**Good example:**
-
-```java
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.web.SecurityFilterChain;
-
-@Configuration
-class SecurityConfig {
-
-    @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        http
-            .csrf(csrf -> csrf.disable())
-            .authorizeHttpRequests(auth -> auth
-                .requestMatchers("/public/**").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
-                .anyRequest().authenticated());
-        http.oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> { }));
-        return http.build();
-    }
-}
-
-// @PreAuthorize("hasAuthority('SCOPE_read:users')") on sensitive controller methods
-```
-
-**Bad example:**
-
-```java
-import org.springframework.web.bind.annotation.*;
-
-@RestController
-class InsecureController {
-
-    // No authentication or authorization — any caller can wipe all data
-    @PostMapping("/admin/deleteAllData")
-    String deleteAllData() {
-        return "All data wiped.";
-    }
-
-    // Trusts a user-controlled header for identity — trivially spoofable
-    @GetMapping("/account")
-    String account(@RequestHeader("X-User-Id") String userId) {
-        return "Account data for: " + userId;
-    }
-
-    // Concatenates untrusted input into SQL — SQL injection risk
-    @GetMapping("/search")
-    String search(@RequestParam String term) {
-        String sql = "SELECT * FROM products WHERE name = '" + term + "'";
-        return sql;
-    }
-}
-```
-
-### Example 8: API documentation
+### Example 7: API documentation
 
 Title: Use OpenAPI annotations for operations, parameters, and responses
 Description: Document resources, methods, schemas, status codes, and auth requirements using springdoc OpenAPI or Spring REST Docs so consumers integrate without reverse-engineering controllers.
@@ -532,7 +474,7 @@ class LegacyThingController {
 }
 ```
 
-### Example 9: Controller advice and ProblemDetail
+### Example 8: Controller advice and ProblemDetail
 
 Title: Centralize exception mapping; keep controllers thin
 Description: Use `@ControllerAdvice` to map exceptions to HTTP responses once. Prefer Spring’s `ProblemDetail` (RFC 7807) for a consistent shape: type, title, status, detail, instance, and optional extension properties like `errorId` for correlation.
@@ -642,7 +584,7 @@ class EntityNotFoundException extends RuntimeException {
 }
 ```
 
-### Example 10: RFC 7807 Problem Details quality
+### Example 9: RFC 7807 Problem Details quality
 
 Title: Consistent problem bodies; never leak stack traces to clients
 Description: When using Problem Details, populate `type`, `title`, `status`, `detail`, and `instance` predictably. Log exceptions with correlation IDs server-side; do not attach stack traces or arbitrary `Map` shapes that change per endpoint.
@@ -742,7 +684,7 @@ class EntityNotFoundException extends RuntimeException {
 }
 ```
 
-### Example 11: Pagination, sorting, and filtering
+### Example 10: Pagination, sorting, and filtering
 
 Title: Bounded pages, stable sorts, optional Link headers (RFC 8288)
 Description: Exposing “all rows” as a single JSON array does not scale and becomes a brittle contract. Prefer Spring Data’s `Page`/`Pageable` (with `spring-data-commons` / `PageableHandlerMethodArgumentResolver`) or explicit `limit`/`cursor` parameters with **server-enforced maximums**. Whitelist sort properties to avoid sort-by-arbitrary-field injection. Optionally emit `Link` headers (`rel="next"` / `rel="prev"`) for discoverable navigation (RFC 8288).
@@ -806,7 +748,7 @@ class UnboundedProductController {
 class ProductDTO { }
 ```
 
-### Example 12: Validation at the boundary
+### Example 11: Validation at the boundary
 
 Title: `@Valid` / `@Validated` on inputs; Bean Validation on DTOs
 Description: Validate request bodies at the controller boundary with Jakarta Bean Validation annotations on DTOs and `@Valid` (or `@Validated` with groups) on parameters. Pair this with a `@ControllerAdvice` handler for `MethodArgumentNotValidException` so clients receive **400** with field-level violations instead of inconsistent ad hoc strings.
@@ -864,7 +806,7 @@ class UserCreateRequest {
 class UserDTO { }
 ```
 
-### Example 13: Idempotency and safe retries
+### Example 12: Idempotency and safe retries
 
 Title: `Idempotency-Key`, duplicate detection, **409 Conflict**, OpenAPI clarity
 Description: Network clients retry `POST`; without idempotency keys or server-side deduplication, creates can duplicate. Accept an `Idempotency-Key` header (or equivalent) and return the same response when the key replays a completed operation. Use **409 Conflict** when the request conflicts with current resource state (e.g., duplicate business key). Document which operations are idempotent and how retries behave in OpenAPI descriptions and parameters.
@@ -929,7 +871,7 @@ class PaymentCreateRequest { }
 class PaymentDTO { }
 ```
 
-### Example 14: Concurrency control
+### Example 13: Concurrency control
 
 Title: ETag, If-Match / If-None-Match, **412** / **304**
 Description: Prevent lost updates with optimistic concurrency: expose a strong or weak `ETag` (or version) on reads; require `If-Match` on mutating writes and return **412 Precondition Failed** when the version does not match. For reads, `If-None-Match` can yield **304 Not Modified**. Spring can add shallow ETags for some responses via `ShallowEtagHeaderFilter`, or you can set `eTag(...)` explicitly on `ResponseEntity`.
@@ -989,7 +931,7 @@ class BlindOverwriteController {
 class ItemDTO { }
 ```
 
-### Example 15: Caching semantics
+### Example 14: Caching semantics
 
 Title: `Cache-Control`, ETag/Last-Modified, private vs public data
 Description: Use `CacheControl` (or raw `Cache-Control` values) so intermediaries and browsers behave predictably: public, max-age for anonymous catalog data; `no-store` / `private` for tokens, sessions, or personalized “/me” payloads. Pair with `ETag`/`Last-Modified` for conditional GETs where caching helps. Mis-caching authenticated responses can leak data across users.
@@ -1045,7 +987,7 @@ class RiskyCachingController {
 class UserDTO { }
 ```
 
-### Example 16: Deprecation and sunset
+### Example 15: Deprecation and sunset
 
 Title: `Deprecation`, `Sunset`, `Link` (`rel="successor-version"`)
 Description: When an endpoint or version is headed for removal, advertise it with RFC-style headers so automation and humans can plan: `Deprecation` (`true` for simplicity, or a timestamp in the form `@1735689599`), `Sunset` with an HTTP-date for expected shutdown, and `Link` to the replacement (`rel="successor-version"`). Pair this with your URI or media-type versioning strategy; document the timeline in OpenAPI as well. In production, prefer emitting these headers uniformly from a `HandlerInterceptor` or `Filter` rather than repeating them on every controller method.
@@ -1093,7 +1035,7 @@ class SilentBreakController {
 class ProductDTO { }
 ```
 
-### Example 17: Content negotiation
+### Example 16: Content negotiation
 
 Title: `produces` / `consumes`, JSON default, vendor media types
 Description: Declare what controllers emit and accept: default to `application/json` unless you truly need more. Vendor media types (e.g. `application/vnd.example.v1+json`) can align with versioning—then require matching `Accept`/`Content-Type` and keep the same convention everywhere. Avoid ambiguous `*/*` handlers unless you intentionally support multiple representations with clear rules.
@@ -1152,7 +1094,7 @@ class LooseContentController {
 }
 ```
 
-### Example 18: Time and locale in contracts
+### Example 17: Time and locale in contracts
 
 Title: ISO-8601 with offset; optional `Accept-Language` for errors
 Description: Model timestamps as `Instant` or `OffsetDateTime` (ISO-8601 with offset) so clients interpret wall-clock unambiguously—avoid legacy `Date` and ambiguous zone-less `LocalDateTime` in public JSON unless the domain is strictly calendar-local. For localized `ProblemDetail` text, honor `Accept-Language` only if you keep stable problem `type` URIs/codes identical across locales and avoid leaking sensitive details through translated messages.
