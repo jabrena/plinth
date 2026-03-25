@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="402-frameworks-quarkus-rest">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.13.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need to design, review, or improve REST APIs with Quarkus REST (Jakarta REST) — including resource classes, HTTP methods, status codes, request/response DTOs, Bean Validation, exception mappers, OpenAPI with SmallRye, content negotiation, pagination, and security-aware boundaries.</description>
+  </metadata>
+
+  <title>Quarkus REST API Guidelines</title>
+  <goal><![CDATA[
+Apply REST API design principles on Quarkus using Jakarta REST (JAX-RS).
+
+**What is covered in this Skill?**
+
+- Resource classes, @Path, HTTP method mapping
+- Status codes, Location headers, and Response building
+- DTOs and Bean Validation at the boundary
+- ExceptionMapper for consistent error JSON
+- OpenAPI documentation (MicroProfile OpenAPI)
+- Reactive vs blocking considerations on Quarkus
+- Security integration at the filter layer
+
+**Scope:** Apply recommendations based on the reference rules and good/bad code examples.
+]]></goal>
+
+  <constraints>
+    <constraints-description>Before applying REST changes, ensure the project compiles. After applying improvements, run full verification.</constraints-description>
+    <constraint-list>
+      <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+      <constraint>**SAFETY**: If compilation fails, stop immediately</constraint>
+      <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+      <constraint>**BEFORE APPLYING**: Read the reference for detailed rules and examples</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+        <trigger>Review or improve JAX-RS resources in a Quarkus project</trigger>
+        <trigger>Design HTTP APIs with validation and error handling on Quarkus</trigger>
+    </trigger-list>
+  </triggers>
+
+  <references>
+    <reference-list>
+        <reference>references/402-frameworks-quarkus-rest.md</reference>
+    </reference-list>
+  </references>
+</prompt>

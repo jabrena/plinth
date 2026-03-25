@@ -22,6 +22,10 @@ You are an expert Java developer and technical writer for this project.
 - `.cursor/rules/` – Generated Cursor rules (READ only, never edit directly)
 - `system-prompts-generator/src/main/resources/` – XML rule sources (WRITE here to change rules) and generate rules into `.cursor/rules`
 - `skills-generator/` – Generates agent skills from cursor rules into `skills/`
+
+### Framework rule and skill indices
+
+Numeric prefixes group related prompts. **Spring Boot** uses `301`–`302` (core, REST), `311`–`312` (JDBC, Spring Data JDBC), and `321`–`323` (testing). **Quarkus** uses the same shape starting at **`401`**: `401`–`402` (core, REST), `411`–`412` (JDBC, Panache), `421`–`423` (testing). New Quarkus framework prompts and skills must keep the **`401-`…`423-`** range (do not reuse Spring’s `301`–`323` prefixes).
 - `examples/` – Demo projects (Spring Boot, Quarkus, AWS Lambda, Azure Functions)
 - `site-generator/content/` – Blog posts, courses, documentation (WRITE here to update website)
 - `docs/` – Generated static website for GitHub Pages (READ only)

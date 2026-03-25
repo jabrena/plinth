@@ -39,7 +39,7 @@ Help developers implement acceptance tests from Gherkin feature files. Given a `
 Before generating any code, ensure the project is in a valid state and the Gherkin feature file is in context. Compilation failure is a BLOCKING condition. A missing `.feature` file is a BLOCKING condition.
 
 - **PRECONDITION**: The Gherkin `.feature` file MUST be in context — stop and ask if not provided
-- **PRECONDITION**: The project MUST NOT use Spring Boot, Quarkus, or Micronaut — stop and direct the user to `@323-frameworks-spring-boot-testing-acceptance-tests` for Spring Boot Gherkin-based acceptance tests
+- **PRECONDITION**: The project MUST NOT use Spring Boot, Quarkus, or Micronaut — stop and direct the user to `@323-frameworks-spring-boot-testing-acceptance-tests` (Spring Boot) or `@423-frameworks-quarkus-testing-acceptance-tests` (Quarkus) for Gherkin-based acceptance tests
 - **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
 - **PREREQUISITE**: Project must compile successfully before generating acceptance test scaffolding
 - **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE
@@ -54,7 +54,7 @@ Before generating any code, ensure the project is in a valid state and the Gherk
 
 ### Actions
 
-1. **Verify preconditions**: (a) Check that a file with extension `.feature` is present in the context. If not, stop and respond: "The Gherkin feature file (.feature) is required. Please add the feature file to the context." (b) Confirm the project does not use Spring Boot, Quarkus, or Micronaut. If it does, stop and direct the user to `@323-frameworks-spring-boot-testing-acceptance-tests` for Spring Boot acceptance tests.
+1. **Verify preconditions**: (a) Check that a file with extension `.feature` is present in the context. If not, stop and respond: "The Gherkin feature file (.feature) is required. Please add the feature file to the context." (b) Confirm the project does not use Spring Boot, Quarkus, or Micronaut. If it does, stop and direct the user to `@323-frameworks-spring-boot-testing-acceptance-tests` (Spring Boot) or `@423-frameworks-quarkus-testing-acceptance-tests` (Quarkus) for acceptance tests.
 2. **Parse the feature file**: Read the `Feature` block and all `Scenario` blocks.
 3. **Filter scenarios**: Select only scenarios that have one of these tags: `@acceptance`, `@acceptance-tests`, or equivalent (e.g. `@AcceptanceTest`).
 4. **List the happy path**: For each selected scenario, identify the Given / When / Then steps. Focus on the main success path — ignore `Scenario Outline` for now unless the user explicitly requests it, or handle one example row per scenario.
@@ -278,7 +278,7 @@ abstract class BaseAcceptanceTest {
 **Bad example:**
 
 ```java
-// Bad: Using Spring Boot — use @323-frameworks-spring-boot-testing-acceptance-tests instead
+// Bad: Using Spring Boot — use @323-frameworks-spring-boot-testing-acceptance-tests; Quarkus — @423-frameworks-quarkus-testing-acceptance-tests instead
 @SpringBootTest(webEnvironment = RANDOM_PORT)
 abstract class BaseAcceptanceTest {
     @LocalServerPort

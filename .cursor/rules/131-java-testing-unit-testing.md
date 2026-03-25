@@ -1,6 +1,6 @@
 ---
 name: 131-java-testing-unit-testing
-description: Use when you need to review, improve, or write Java unit tests for framework-agnostic applications (no Spring Boot, Quarkus, Micronaut) — including migrating from JUnit 4 to JUnit 5, adopting AssertJ for fluent assertions, structuring tests with Given-When-Then, ensuring test independence, applying parameterized tests, mocking dependencies with Mockito, verifying boundary conditions (RIGHT-BICEP, CORRECT, A-TRIP), leveraging JSpecify null-safety annotations, or eliminating testing anti-patterns such as reflection-based tests or shared mutable state. For Spring Boot use @321-frameworks-spring-boot-testing-unit-tests.
+description: Use when you need to review, improve, or write Java unit tests for framework-agnostic applications (no Spring Boot, Quarkus, Micronaut) — including migrating from JUnit 4 to JUnit 5, adopting AssertJ for fluent assertions, structuring tests with Given-When-Then, ensuring test independence, applying parameterized tests, mocking dependencies with Mockito, verifying boundary conditions (RIGHT-BICEP, CORRECT, A-TRIP), leveraging JSpecify null-safety annotations, or eliminating testing anti-patterns such as reflection-based tests or shared mutable state. For Spring Boot use @321-frameworks-spring-boot-testing-unit-tests. For Quarkus use @421-frameworks-quarkus-testing-unit-tests.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -30,7 +30,7 @@ These guidelines are built upon the following core principles:
 
 Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
 
-- **PRECONDITION**: The project MUST NOT use Spring Boot, Quarkus, or Micronaut — stop and direct the user to `@321-frameworks-spring-boot-testing-unit-tests` for Spring Boot unit testing
+- **PRECONDITION**: The project MUST NOT use Spring Boot, Quarkus, or Micronaut — stop and direct the user to `@321-frameworks-spring-boot-testing-unit-tests` for Spring Boot or `@421-frameworks-quarkus-testing-unit-tests` for Quarkus unit testing
 - **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
 - **PREREQUISITE**: Project must compile successfully and pass basic validation checks before any optimization
 - **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations

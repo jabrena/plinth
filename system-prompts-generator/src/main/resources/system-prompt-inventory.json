@@ -39,6 +39,13 @@
   {"name": "321-frameworks-spring-boot-testing-unit-tests"},
   {"name": "322-frameworks-spring-boot-testing-integration-tests"},
   {"name": "323-frameworks-spring-boot-testing-acceptance-tests"},
+  {"name": "401-frameworks-quarkus-core"},
+  {"name": "402-frameworks-quarkus-rest"},
+  {"name": "411-frameworks-quarkus-jdbc"},
+  {"name": "412-frameworks-quarkus-panache"},
+  {"name": "421-frameworks-quarkus-testing-unit-tests"},
+  {"name": "422-frameworks-quarkus-testing-integration-tests"},
+  {"name": "423-frameworks-quarkus-testing-acceptance-tests"},
   {"name": "behaviour-consultative-interaction"},
   {"name": "behaviour-progressive-learning"},
   {"name": "behaviour-article-writer"}
