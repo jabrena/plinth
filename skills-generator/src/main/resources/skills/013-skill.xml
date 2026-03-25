@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="013-agile-feature"
+      interactive="true">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.13.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Guides the creation of detailed agile feature documentation from an existing epic. Use when the user wants to split an epic into feature files, derive features with scope and acceptance criteria, or plan feature documentation for stakeholders or engineering.</description>
+  </metadata>
+
+  <title>Create Agile Features from an Epic</title>
+
+  <goal><![CDATA[
+Guide the agent to analyze an epic (from file path or pasted content), hold a structured conversation, and generate one Markdown feature document per agreed feature. **This is an interactive SKILL**.
+
+**What is covered in this Skill?**
+
+- Epic intake: path or pasted content, confirmation of epic summary
+- Feature scope: which features to document, technical vs high-level depth
+- Audience and content mix: stakeholders vs engineering, functional vs technical emphasis
+- File organization: naming convention and output location
+- Per-feature refinement: user story links or suggestions, dependencies, success metrics
+- Optional timeline, release constraints, risks, and technical challenges
+- Date handling via `date` for Created/Last Updated fields
+]]></goal>
+
+  <constraints>
+    <constraints-description>Read the epic before summarizing. Ask questions in order; repeat questions 9–11 for each identified feature. Use the feature template and user-provided naming and paths.</constraints-description>
+    <constraint-list>
+      <constraint>**MANDATORY**: Get current date using terminal command before generating feature files</constraint>
+      <constraint>**MUST**: Read epic content from path or use pasted content—do not invent epic details</constraint>
+      <constraint>**MUST**: Use exact wording from the questions template for numbered questions</constraint>
+      <constraint>**MUST**: Repeat per-feature questions (9–11) for every feature in scope</constraint>
+      <constraint>**MUST**: Wait for user responses before proceeding through the flow</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+        <trigger>Create features from an epic</trigger>
+        <trigger>Split epic into features</trigger>
+        <trigger>Feature files from epic</trigger>
+        <trigger>Derive features from epic</trigger>
+    </trigger-list>
+  </triggers>
+
+  <references>
+    <reference-list>
+        <reference>references/013-agile-feature.md</reference>
+    </reference-list>
+  </references>
+</prompt>
