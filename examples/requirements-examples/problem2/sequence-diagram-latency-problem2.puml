@@ -1,0 +1,18 @@
+@startuml
+actor Consumer
+participant Greek
+participant Wikipedia
+
+Consumer -> Greek: GET /greek
+Greek --> Consumer: List of gods
+
+loop for each god
+    Consumer -> Wikipedia: GET /wiki/{greekGod}
+    Wikipedia --> Consumer: God info
+end
+
+loop Stream
+    Consumer -> Consumer: count
+    Consumer -> Consumer: max
+end
+@enduml
