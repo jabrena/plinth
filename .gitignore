@@ -7,3 +7,4 @@ target/
 .agents
 dependency-reduced-pom.xml
 docs-local/
+.quarkus/
