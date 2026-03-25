@@ -88,12 +88,12 @@ flowchart LR
 | 15 | Refactor: service logging and clear boundaries (Greek failure vs Wikipedia) | Refactor | | | A2 | Done |
 | 16 | Refactor: resource maps Greek failure → `Response.status(503).build()` empty body; no Problem Details on this path | Refactor | | | A2 | Done |
 | 17 | Verify milestone | Verify | | milestone | A2 | Done |
-| 18 | RED: `@Tag("acceptance-test")` scenarios from feature — Zeus wins; Zeus down → Ares; three-way tie; Greek API down → **503** empty body (`body(emptyString())` or equivalent); optional Wikipedia delay > read timeout | RED | Test | | A3 | |
-| 19 | GREEN: complete behaviors + `@Tag("integration-test")` slice if split | GREEN | Impl | | A3 | |
-| 20 | Refactor: log levels / noise reduction for tests | Refactor | | | A3 | |
-| 21 | Refactor: README, health smoke doc (`/q/health`) | Refactor | | | A3 | |
-| 22 | Verify milestone: full `./mvnw clean verify` in `implementation/` | Verify | | milestone | A3 | |
-| 23 | Remove `GreetingResource`, obsolete `GreetingResourceTest` / `GreetingResourceIT`; final doc touch | Setup | | | A4 | |
+| 18 | RED: `@Tag("acceptance-test")` scenarios from feature — Zeus wins; Zeus down → Ares; three-way tie; Greek API down → **503** empty body (`body(emptyString())` or equivalent); optional Wikipedia delay > read timeout | RED | Test | | A3 | Done |
+| 19 | GREEN: complete behaviors + `@Tag("integration-test")` slice if split | GREEN | Impl | | A3 | Done |
+| 20 | Refactor: log levels / noise reduction for tests | Refactor | | | A3 | Done |
+| 21 | Refactor: README, health smoke doc (`/q/health`) | Refactor | | | A3 | Done |
+| 22 | Verify milestone: full `./mvnw clean verify` in `implementation/` | Verify | | milestone | A3 | Done |
+| 23 | Remove `GreetingResource`, obsolete `GreetingResourceTest` / `GreetingResourceIT`; final doc touch | Setup | | | A4 | Done |
 
 **Parallel column:** **A1** — test harness + first vertical slice; **A2** — clients + domain service; **A3** — acceptance coverage + hardening; **A4** — cleanup.
 
