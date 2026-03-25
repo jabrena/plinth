@@ -15,7 +15,8 @@ The project add support for:
 - **Agile:** `User Stories` & `Gherkin` 
 - **Architecture:** `ADRs`& `UML/C4/ER Diagrams`
 - **AI Tooling:** `AGENTS.md` & `AI Planning`
-- **Java development:** `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation` & `Spring Boot`
+- **Java development:** `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools` & `Documentation`
+- **Java frameworks:** `Spring Boot` & `Quarkus`
 
 ## Deliverables
 
