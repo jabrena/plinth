@@ -39,7 +39,7 @@ Read the following comprehensive guides to use this project today.
 
 ## How to use them?
 
-The SLDC has evolved with the arrival of this new set of AI tooling, enhancing the Software Engineering process. The project provides `System prompts for Java` & `Skills for Java` to improve the LLM Behaviour when a model tries to complete Java tasks. In the development of this project, it was identified 2 different workflows: `Enginering Java development workflow` & `Pipelines workflow`.
+The SLDC has evolved with the arrival of this new set of AI tooling, enhancing the Software Engineering process. The project provides `System prompts for Java` & `Skills for Java` to improve the LLM Behaviour when a model tries to complete Java tasks. In the development of this project, it was identified 2 different workflows: `Prompting Enginering Workflow`, `Pipelines Workflow` & `Agentic Workflow`.
 
 ### Prompting Enginering Workflow
 
@@ -53,7 +53,7 @@ Adding AI tools to your pipeline can provide new opportunities to deliver more v
 
 ![](./documentation/images/workflow-pipelines.png)
 
-### Agentic Workflow
+### Agentic Workflow
 
 PENDING
 
