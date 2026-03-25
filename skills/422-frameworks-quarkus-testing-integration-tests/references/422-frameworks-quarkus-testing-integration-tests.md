@@ -28,6 +28,8 @@ These guidelines are built upon the following core principles:
 6. **Build**: Name classes `*IT` and run with Failsafe; keep Surefire for fast unit tests.
 7. **Native**: Use `@DisabledOnNativeImage` or separate profiles when behavior differs in native mode.
 
+8. **Test data isolation strategies**: Use `@TestTransaction` for automatic rollback on Panache/Hibernate tests, or explicit `@BeforeEach` cleanup for JDBC repositories — never rely on test execution order or shared mutable state between tests.
+
 **Cross-references**: Unit tests — `@421-frameworks-quarkus-testing-unit-tests`. Framework-agnostic integration — `@132-java-testing-integration-testing`. Acceptance — `@423-frameworks-quarkus-testing-acceptance-tests`.
 
 ## Constraints
@@ -35,7 +37,10 @@ These guidelines are built upon the following core principles:
 Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
 
 - **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
-- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE
+- **PREREQUISITE**: Project must compile successfully and pass basic validation checks before any test refactoring
+- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with integration test changes
+- **NO EXCEPTIONS**: Under no circumstances should testing recommendations be applied to a project that fails to compile
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 
 ## Examples
@@ -44,6 +49,12 @@ Before applying any recommendations, ensure the project is in a valid state by r
 
 - Example 1: HTTP integration
 - Example 2: Persistence test rollback
+- Example 3: Dev Services for automatic test infrastructure
+- Example 4: Testcontainers via QuarkusTestResourceLifecycleManager
+- Example 5: WireMock for external HTTP service stubs
+- Example 6: @QuarkusIntegrationTest for packaged artifact validation
+- Example 7: Data isolation strategies
+- Example 8: Test naming conventions and Maven build split
 
 ### Example 1: HTTP integration
 
@@ -124,12 +135,502 @@ void persists() {
 }
 ```
 
+### Example 3: Dev Services for automatic test infrastructure
+
+Title: Let Quarkus spin up containers automatically — no manual Docker Compose
+Description: Quarkus Dev Services provision real Docker containers (PostgreSQL, Kafka, Redis, and more) automatically when a datasource or extension is configured and no running service is detected. Enable them in `application.properties` with `%test` profile overrides. Prefer Dev Services over manual Testcontainers boilerplate for standard infrastructure. Pin the Docker image tag to keep CI reproducible.
+
+**Good example:**
+
+```properties
+# src/main/resources/application.properties
+
+# Production datasource (points to real DB)
+quarkus.datasource.db-kind=postgresql
+quarkus.datasource.jdbc.url=${DATABASE_URL}
+
+# Test profile: Dev Services provisions a PostgreSQL container automatically
+%test.quarkus.datasource.devservices.enabled=true
+%test.quarkus.datasource.devservices.image-name=postgres:16-alpine
+%test.quarkus.hibernate-orm.database.generation=drop-and-create
+```
+
+**Bad example:**
+
+```java
+import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.Test;
+import static io.restassured.RestAssured.given;
+
+// Bad: no Dev Services config — test relies on a developer's locally running PostgreSQL;
+// breaks on CI and on team members with different local setups
+@QuarkusTest
+class BookRepositoryIT {
+
+    @Test
+    void countBooks() {
+        given()
+            .when().get("/books/count")
+            .then()
+                .statusCode(200); // may fail because no DB is running
+    }
+}
+```
+
+### Example 4: Testcontainers via QuarkusTestResourceLifecycleManager
+
+Title: Pin images, run init scripts, and wire properties when Dev Services do not suffice
+Description: Use `QuarkusTestResourceLifecycleManager` when you need containers with custom initialization scripts, pinned schemas, multi-service topologies, or third-party containers that Dev Services do not support. Implement `start()` to launch the container and return a `Map` of Quarkus property overrides; implement `stop()` to terminate it. Annotate the test class with `@QuarkusTestResource`.
+
+**Good example:**
+
+```java
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
+import org.junit.jupiter.api.Test;
+import org.testcontainers.containers.PostgreSQLContainer;
+import java.util.Map;
+import static org.assertj.core.api.Assertions.assertThat;
+
+// Lifecycle manager: starts the container and returns property overrides
+public class PostgreSQLTestResource implements QuarkusTestResourceLifecycleManager {
+
+    private PostgreSQLContainer<?> postgres;
+
+    @Override
+    public Map<String, String> start() {
+        postgres = new PostgreSQLContainer<>("postgres:16-alpine")
+            .withInitScript("db/init-schema.sql"); // custom init script
+        postgres.start();
+        return Map.of(
+            "quarkus.datasource.jdbc.url",  postgres.getJdbcUrl(),
+            "quarkus.datasource.username",  postgres.getUsername(),
+            "quarkus.datasource.password",  postgres.getPassword()
+        );
+    }
+
+    @Override
+    public void stop() {
+        if (postgres != null) {
+            postgres.stop();
+        }
+    }
+}
+
+@QuarkusTest
+@QuarkusTestResource(PostgreSQLTestResource.class)
+class OrderRepositoryIT {
+
+    @Inject
+    OrderRepository orders;
+
+    @Test
+    void savesAndRetrievesOrder() {
+        var order = new Order(42L, "SKU-A", 2);
+        orders.persist(order);
+
+        assertThat(orders.findByCustomerId(42L)).hasSize(1);
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
+import org.testcontainers.containers.PostgreSQLContainer;
+
+@QuarkusTest
+class OrderRepositoryIT {
+
+    // Bad: static container managed outside Quarkus lifecycle —
+    // Quarkus starts before BeforeAll runs, so the container URL
+    // is not available when Quarkus configures its datasource
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
+
+    @BeforeAll
+    static void startContainer() {
+        postgres.start(); // too late — Quarkus already chose its datasource config
+        System.setProperty("quarkus.datasource.jdbc.url", postgres.getJdbcUrl());
+    }
+
+    @AfterAll
+    static void stopContainer() {
+        postgres.stop();
+    }
+
+    @Test
+    void savesOrder() { }
+}
+```
+
+### Example 5: WireMock for external HTTP service stubs
+
+Title: Stub outbound REST calls with QuarkusTestResourceLifecycleManager
+Description: When the application calls external REST APIs, register a WireMock server as a `QuarkusTestResourceLifecycleManager` to stub those endpoints. Return the WireMock base URL as a property override so the application's REST client points at the stub instead of the real service. Verify call counts and request bodies after the act step to confirm the application's outbound contract.
+
+**Good example:**
+
+```java
+import com.github.tomakehurst.wiremock.WireMockServer;
+import com.github.tomakehurst.wiremock.client.WireMock;
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
+import org.junit.jupiter.api.Test;
+import java.util.Map;
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
+import static org.assertj.core.api.Assertions.assertThat;
+
+public class PaymentWireMockResource implements QuarkusTestResourceLifecycleManager {
+
+    static WireMockServer wireMockServer;
+
+    @Override
+    public Map<String, String> start() {
+        wireMockServer = new WireMockServer(options().dynamicPort());
+        wireMockServer.start();
+        WireMock.configureFor(wireMockServer.port());
+        stubFor(post(urlEqualTo("/api/charge"))
+            .willReturn(aResponse()
+                .withStatus(200)
+                .withHeader("Content-Type", "application/json")
+                .withBody("{\"charged\":true,\"transactionId\":\"txn-123\"}")));
+        return Map.of("payment.api.base-url", wireMockServer.baseUrl());
+    }
+
+    @Override
+    public void stop() {
+        if (wireMockServer != null) {
+            wireMockServer.stop();
+        }
+    }
+}
+
+@QuarkusTest
+@QuarkusTestResource(PaymentWireMockResource.class)
+class PaymentServiceIT {
+
+    @Inject
+    PaymentService paymentService;
+
+    @Test
+    void placeOrder_chargesPaymentGateway() {
+        // When
+        boolean charged = paymentService.charge(1L, 99.0);
+
+        // Then — application charged successfully
+        assertThat(charged).isTrue();
+        // Verify outbound call was made with correct path
+        PaymentWireMockResource.wireMockServer.verify(
+            postRequestedFor(urlEqualTo("/api/charge")));
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.junit.mockito.InjectMock;
+import jakarta.inject.Inject;
+import org.junit.jupiter.api.Test;
+import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThat;
+
+@QuarkusTest
+class PaymentServiceIT {
+
+    // Bad: @InjectMock replaces the REST client with a Mockito mock —
+    // the actual HTTP client configuration, headers, retries, and serialization
+    // are never exercised; this is a unit test, not an integration test
+    @InjectMock
+    PaymentGatewayClient paymentGatewayClient;
+
+    @Inject
+    PaymentService paymentService;
+
+    @Test
+    void placeOrder_chargesPaymentGateway() {
+        when(paymentGatewayClient.charge(1L, 99.0)).thenReturn(true);
+        assertThat(paymentService.charge(1L, 99.0)).isTrue();
+        // HTTP plumbing never tested
+    }
+}
+```
+
+### Example 6: @QuarkusIntegrationTest for packaged artifact validation
+
+Title: Black-box tests run against the built JAR or native binary
+Description: `@QuarkusIntegrationTest` runs test methods against the packaged application (JAR or native binary) started by the Failsafe lifecycle. The test does not have access to CDI beans or internal state — it is purely black-box. Use it to validate that the built artifact starts, responds to health probes, and handles key HTTP flows. Run it after `mvn package` in CI.
+
+**Good example:**
+
+```java
+import io.quarkus.test.junit.QuarkusIntegrationTest;
+import org.junit.jupiter.api.Test;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.Matchers.equalTo;
+
+// Runs against the packaged JAR or native binary — purely black-box HTTP assertions
+@QuarkusIntegrationTest
+class ApplicationHealthIT {
+
+    @Test
+    void healthEndpointReturnsUp() {
+        given()
+            .when().get("/q/health")
+            .then()
+                .statusCode(200)
+                .body("status", equalTo("UP"));
+    }
+
+    @Test
+    void livenessProbeReturnsUp() {
+        given()
+            .when().get("/q/health/live")
+            .then()
+                .statusCode(200)
+                .body("status", equalTo("UP"));
+    }
+
+    @Test
+    void readinessProbeReturnsUp() {
+        given()
+            .when().get("/q/health/ready")
+            .then()
+                .statusCode(200)
+                .body("status", equalTo("UP"));
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import io.quarkus.test.junit.QuarkusIntegrationTest;
+import jakarta.inject.Inject;
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+
+// Bad: @Inject inside @QuarkusIntegrationTest is not supported —
+// CDI beans are not accessible in a black-box test against a packaged artifact;
+// use @QuarkusTest if you need CDI injection
+@QuarkusIntegrationTest
+class BookServiceIT {
+
+    @Inject // ← fails at runtime — CDI context not available
+    BookService bookService;
+
+    @Test
+    void shouldFindBook() {
+        assertThat(bookService.findById(1L)).isNotNull();
+    }
+}
+```
+
+### Example 7: Data isolation strategies
+
+Title: @TestTransaction for automatic rollback; @BeforeEach cleanup for HTTP-driven flows
+Description: Choose the isolation strategy that matches the test scenario. `@TestTransaction` wraps the test in a transaction that rolls back automatically — ideal for Panache repository tests. Explicit `@BeforeEach` cleanup (wrapped in `@Transactional`) is better when the test exercises HTTP endpoints that manage their own transactions internally and therefore cannot be rolled back from the test method.
+
+**Good example:**
+
+```java
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.TestTransaction;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import static io.restassured.RestAssured.given;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.equalTo;
+
+@QuarkusTest
+class BookIT {
+
+    @Inject
+    BookRepository books;
+
+    // Strategy 1: @TestTransaction — rolls back after each test
+    // Use for direct repository tests where no HTTP transaction is involved
+    @Nested
+    class RepositoryTests {
+
+        @Test
+        @TestTransaction
+        void persistsBook() {
+            var book = new Book("Quarkus Guide", "Jane");
+            books.persist(book);
+
+            assertThat(book.id).isNotNull();
+            assertThat(books.count()).isPositive();
+            // rolled back automatically after test
+        }
+    }
+
+    // Strategy 2: Explicit @BeforeEach cleanup
+    // Use when the test exercises HTTP endpoints that commit their own transactions
+    @Nested
+    class HttpTests {
+
+        @BeforeEach
+        @Transactional
+        void cleanDatabase() {
+            books.deleteAll(); // ensure a known empty state before each test
+        }
+
+        @Test
+        void createBook_returns201AndPersists() {
+            given()
+                .contentType("application/json")
+                .body("""{"title":"New Book","author":"Alice"}""")
+                .when().post("/books")
+                .then()
+                    .statusCode(201);
+
+            assertThat(books.count()).isEqualTo(1L);
+        }
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+
+// Bad: no isolation — second test assumes the row created by the first still exists;
+// tests are order-dependent and break when run in parallel
+@QuarkusTest
+class BookIT {
+
+    @Inject
+    BookRepository books;
+
+    private static Long savedId;
+
+    @Test
+    void testA_createBook() {
+        var book = new Book("Quarkus Guide", "Jane");
+        books.persist(book); // committed — stays in DB for all subsequent tests
+        savedId = book.id;
+    }
+
+    @Test
+    void testB_findBook() {
+        // Bad: depends on testA having run first; fails if test order changes
+        assertThat(books.findById(savedId)).isNotNull();
+    }
+}
+```
+
+### Example 8: Test naming conventions and Maven build split
+
+Title: *Test for Surefire, *IT for Failsafe — consistent suffixes enforce build phase separation
+Description: Maven Surefire picks up `*Test.java` classes (fast, no containers) during the `test` phase. Maven Failsafe picks up `*IT.java` classes (container-backed) during the `integration-test` / `verify` phases. Quarkus integration tests annotated with `@QuarkusTest` should be named `*IT` so they are excluded from the fast Surefire pass and run via Failsafe only. Configure both plugins explicitly to prevent accidental overlap.
+
+**Good example:**
+
+```xml
+<build>
+    <plugins>
+
+        <!-- Surefire: fast unit tests (*Test) — "test" phase, no containers -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-surefire-plugin</artifactId>
+            <configuration>
+                <includes>
+                    <include>**/*Test.java</include>
+                </includes>
+                <excludes>
+                    <exclude>**/*IT.java</exclude>
+                </excludes>
+            </configuration>
+        </plugin>
+
+        <!-- Failsafe: integration tests (*IT) — "integration-test" + "verify" phases -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <configuration>
+                <includes>
+                    <include>**/*IT.java</include>
+                </includes>
+            </configuration>
+            <executions>
+                <execution>
+                    <goals>
+                        <goal>integration-test</goal>
+                        <goal>verify</goal>
+                    </goals>
+                </execution>
+            </executions>
+        </plugin>
+
+    </plugins>
+</build>
+<!--
+    mvn test    → Surefire: *Test only (fast, no containers)
+    mvn verify  → Surefire: *Test + Failsafe: *IT (full safety net, with Dev Services)
+-->
+```
+
+**Bad example:**
+
+```java
+// File: src/test/java/com/example/BookRepositoryTest.java
+// Bad: @QuarkusTest with Dev Services named *Test — Surefire runs it during "mvn test",
+// triggering Docker container startup in the fast unit-test phase.
+// Container startup adds 5–10 s to every local compile-test cycle.
+
+import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.TestTransaction;
+import jakarta.inject.Inject;
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+
+@QuarkusTest                      // ← needs Dev Services (Docker) — wrong phase for *Test
+class BookRepositoryTest {        // ← should be BookRepositoryIT
+
+    @Inject BookRepository books;
+
+    @Test
+    @TestTransaction
+    void persistsBook() {
+        books.persist(new Book("Guide", "Jane"));
+        assertThat(books.count()).isPositive();
+    }
+}
+```
+
 ## Output Format
 
-- **ANALYZE** integration coverage vs duplicated unit logic
-- **CONFIGURE** Dev Services, Testcontainers, or test profiles for reproducible environments
-- **VALIDATE** with `./mvnw clean verify`
+- **ANALYZE** integration tests: scope vs unit overlap, Dev Services or Testcontainers configuration, HTTP assertion quality, data isolation strategy, naming conventions, and container lifecycle efficiency
+- **CATEGORIZE** findings by impact (FLAKINESS for shared state or order-dependent tests, SPEED for per-method containers or missing Dev Services, CLARITY for missing assertions or vague test names)
+- **APPLY** improvements: enable Dev Services for standard infrastructure, introduce `QuarkusTestResourceLifecycleManager` for custom containers or WireMock stubs, add `@TestTransaction` or `@BeforeEach` cleanup for data isolation, use REST Assured for HTTP assertions, add `@QuarkusIntegrationTest` for packaged artifact validation
+- **IMPLEMENT** incrementally; keep `mvn verify` green after each step; align test class suffixes (`*Test` for Surefire, `*IT` for Failsafe) and configure both Maven plugins explicitly
+- **EXPLAIN** when to use `@421-frameworks-quarkus-testing-unit-tests` vs `@QuarkusTest` vs `@QuarkusIntegrationTest` if concerns are being mixed
+- **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive test changes
 
 ## Safeguards
 
-- **DOCKER**: Dev Services and Testcontainers require Docker in CI — document the requirement
+- **BLOCKING SAFETY CHECK**: Run `./mvnw compile` or `mvn compile` before ANY integration test refactoring — compilation failure is a HARD STOP
+- **CRITICAL VALIDATION**: Run `./mvnw clean verify` after changes to confirm both Surefire unit tests and Failsafe integration tests pass
+- **DOCKER**: Dev Services and Testcontainers require Docker (or a compatible OCI runtime) in CI — document this prerequisite in the project README and gate CI jobs accordingly
+- **DATA SAFETY**: Never point integration tests at production or shared developer databases; always use isolated Dev Services containers or explicit `QuarkusTestResourceLifecycleManager` containers
+- **TEST PROFILE RESTARTS**: Each distinct `@QuarkusTestProfile` triggers a Quarkus application restart — consolidate config overrides across test classes to minimize restart overhead and total test runtime
+- **INCREMENTAL SAFETY**: Add or refactor one integration test class at a time; verify isolation and naming conventions (`*IT` for Failsafe) before moving to the next change

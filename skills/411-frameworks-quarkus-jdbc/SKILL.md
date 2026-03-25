@@ -1,6 +1,6 @@
 ---
 name: 411-frameworks-quarkus-jdbc
-description: Use when you need to write or review programmatic JDBC in Quarkus — including Agroal-backed DataSource injection, PreparedStatement with bind parameters, mapping rows to Java records, transactions (@Transactional), batch updates, and optional Spring-style JdbcTemplate when the extension is present. Prefer explicit SQL without ORM. Part of the skills-for-java project
+description: Use when you need to write or review programmatic JDBC in Quarkus — including Agroal-backed DataSource injection, PreparedStatement with bind parameters, mapping rows to Java records, safe single-row access with Optional<T>, SQLException translation to domain exceptions, streaming large result sets (setFetchSize), transactions (@Transactional) with propagation types (TxType.REQUIRES_NEW), batch updates, CDI self-invocation avoidance, and Dev Services for test databases. Prefer explicit SQL without ORM. Part of the skills-for-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -12,9 +12,15 @@ Apply programmatic JDBC patterns in Quarkus with safe SQL and clear transactions
 
 **What is covered in this Skill?**
 
-- Injected javax.sql.DataSource and Agroal pooling
-- PreparedStatement, try-with-resources, and record mapping
-- @Transactional service boundaries
+- Injected javax.sql.DataSource (Agroal-backed) and try-with-resources for Connection / PreparedStatement
+- PreparedStatement with bind parameters — never string concatenation
+- Mapping ResultSet rows to Java records (dedicated mapRow method)
+- Safe single-row queries with Optional<T>; never assume rs.next() succeeds
+- SQLException translation to domain exceptions (catch-translate-rethrow)
+- Streaming large result sets with setFetchSize to avoid OOM
+- Batch updates with addBatch / executeBatch for bulk inserts
+- @Transactional service boundaries and propagation types (TxType.REQUIRES_NEW for independent commits)
+- CDI self-invocation pitfall: always call transactional methods through the injected proxy
 - Dev Services for databases in dev/test
 - When to prefer Panache (`@412`) vs raw JDBC
 
@@ -25,7 +31,9 @@ Apply programmatic JDBC patterns in Quarkus with safe SQL and clear transactions
 Compile before JDBC refactors; verify after changes.
 
 - **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **PREREQUISITE**: Project must compile before applying JDBC improvements
 - **SAFETY**: If compilation fails, stop immediately
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 - **BEFORE APPLYING**: Read the reference for detailed rules and examples
 
@@ -33,6 +41,8 @@ Compile before JDBC refactors; verify after changes.
 
 - Review JDBC or SQL data access in a Quarkus project
 - Improve transactions and parameter binding for Quarkus JDBC
+- Translate SQLException to domain exceptions or stream large result sets
+- Fix CDI self-invocation bypassing @Transactional in Quarkus
 
 ## Reference
 

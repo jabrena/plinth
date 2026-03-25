@@ -28,6 +28,9 @@ These guidelines are built upon the following core principles:
 6. **Build-time safety**: Respect build-time configuration (e.g. native image, reflection) — register reflective classes when using libraries that need it; use Quarkus extensions over ad-hoc classpath hacks.
 7. **Lifecycle**: Use `@Startup` for ordered initialization; pair with `@PreDestroy` for cleanup; do not block event observers on long I/O without async patterns.
 8. **Cross-cutting**: Expose health via SmallRye Health and metrics via Micrometer when operations need them; keep business beans free of metrics code where possible (use interceptors or filters).
+9. **CDI interceptors**: Use CDI interceptors (`@InterceptorBinding`, `@Interceptor`, `@Priority`) to attach cross-cutting behavior — logging, auditing, metrics — without polluting domain beans; keep interceptors narrow and composable.
+10. **CDI events**: Prefer `@Observes StartupEvent` / `@Observes ShutdownEvent` for lifecycle hooks over blocking work in `@Startup`; use `@ObservesAsync` for non-blocking notifications; do not perform long I/O synchronously in observers.
+11. **Programmatic injection**: Use `Instance<T>` when you need optional injection, dynamic selection among multiple implementations, or lazy resolution; prefer a custom qualifier or `@Named` to disambiguate when several beans share a type.
 
 **Cross-references**: REST layer — `@402-frameworks-quarkus-rest`. JDBC — `@411-frameworks-quarkus-jdbc`. Panache — `@412-frameworks-quarkus-panache`. Unit tests — `@421-frameworks-quarkus-testing-unit-tests`.
 
@@ -39,6 +42,8 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - **PREREQUISITE**: Project must compile successfully before any Quarkus refactoring
 - **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
+- **JAKARTA NAMESPACE**: Use `jakarta.*` for CDI, validation, and inject APIs; never mix `javax.inject` or `javax.annotation` with their Jakarta equivalents
+- **NATIVE IMAGE SAFETY**: When adding libraries that use reflection, register required classes with `@RegisterForReflection` or a `ReflectionRegistrar` before building native
 
 ## Examples
 
@@ -49,6 +54,13 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 3: Type-safe configuration
 - Example 4: Profiles in configuration
 - Example 5: Startup hooks
+- Example 6: CDI bean disambiguation
+- Example 7: CDI events and lifecycle observers
+- Example 8: Resource cleanup with @PreDestroy
+- Example 9: Configuration validation
+- Example 10: Programmatic injection with Instance<T>
+- Example 11: Health probes with SmallRye Health
+- Example 12: Virtual threads with @RunOnVirtualThread
 
 ### Example 1: Application entry point
 
@@ -243,15 +255,540 @@ void onStart() throws Exception {
 }
 ```
 
+### Example 6: CDI bean disambiguation
+
+Title: @Default, @Alternative + @Priority, and @Named to resolve ambiguous types
+Description: When two or more CDI beans implement the same type, injection points become ambiguous unless you disambiguate. Use `@Default` on the standard implementation, `@Alternative` + `@Priority` to promote an override (e.g. for tests), or a custom qualifier / `@Named` to select by name. `Instance<T>` can also iterate or select programmatically.
+
+**Good example:**
+
+```java
+import jakarta.annotation.Priority;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Alternative;
+import jakarta.enterprise.inject.Default;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
+
+public interface NotificationSender {
+    void send(String message);
+}
+
+@Default
+@ApplicationScoped
+public class EmailNotificationSender implements NotificationSender {
+    @Override
+    public void send(String message) { /* email */ }
+}
+
+@Alternative
+@Priority(100)
+@ApplicationScoped
+public class SmsNotificationSender implements NotificationSender {
+    @Override
+    public void send(String message) { /* sms */ }
+}
+
+@ApplicationScoped
+public class AlertService {
+
+    private final NotificationSender sender; // resolves to @Default or highest-priority @Alternative
+
+    @Inject
+    public AlertService(NotificationSender sender) {
+        this.sender = sender;
+    }
+
+    public void alert(String msg) {
+        sender.send(msg);
+    }
+}
+
+// Programmatic selection via Instance<T>
+@ApplicationScoped
+public class MultiChannelService {
+
+    private final Instance<NotificationSender> senders;
+
+    @Inject
+    public MultiChannelService(Instance<NotificationSender> senders) {
+        this.senders = senders;
+    }
+
+    public void broadcast(String message) {
+        senders.forEach(s -> s.send(message));
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
+public interface NotificationSender {
+    void send(String message);
+}
+
+@ApplicationScoped
+public class EmailNotificationSender implements NotificationSender {
+    @Override
+    public void send(String message) { }
+}
+
+@ApplicationScoped
+public class SmsNotificationSender implements NotificationSender {
+    @Override
+    public void send(String message) { }
+}
+
+@ApplicationScoped
+public class AlertService {
+
+    private final NotificationSender sender;
+
+    @Inject
+    public AlertService(NotificationSender sender) {
+        // Bad: two @ApplicationScoped beans — CDI cannot choose — DeploymentException at startup
+        this.sender = sender;
+    }
+}
+```
+
+### Example 7: CDI events and lifecycle observers
+
+Title: @Observes StartupEvent / ShutdownEvent instead of blocking in @Startup
+Description: Prefer `@Observes StartupEvent` and `@Observes ShutdownEvent` for application lifecycle hooks. These fire after CDI beans are ready (startup) and before the context is torn down (shutdown). Use `@ObservesAsync` for non-blocking event handling. Avoid long blocking I/O in `@Startup` methods when an event observer decouples the concern better.
+
+**Good example:**
+
+```java
+import io.quarkus.runtime.ShutdownEvent;
+import io.quarkus.runtime.StartupEvent;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.event.Observes;
+import jakarta.enterprise.event.ObservesAsync;
+import org.jboss.logging.Logger;
+
+@ApplicationScoped
+public class AppLifecycleBean {
+
+    private static final Logger LOG = Logger.getLogger(AppLifecycleBean.class);
+
+    void onStart(@Observes StartupEvent ev) {
+        LOG.info("Application starting — warming reference data");
+        // load small read-only reference data; keep fast
+    }
+
+    void onStop(@Observes ShutdownEvent ev) {
+        LOG.info("Application stopping — flushing buffers");
+        // release resources, flush async buffers
+    }
+}
+
+@ApplicationScoped
+public class AuditEventHandler {
+
+    void onAuditEvent(@ObservesAsync AuditEvent event) {
+        // non-blocking: runs on a worker thread, does not delay the caller
+        persistAuditRecord(event);
+    }
+
+    private void persistAuditRecord(AuditEvent event) { }
+}
+
+public record AuditEvent(String action, String userId) { }
+```
+
+**Bad example:**
+
+```java
+import io.quarkus.runtime.Startup;
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+public class BadLifecycleBean {
+
+    @Startup
+    void init() {
+        // Bad: blocking remote call during startup — delays readiness probe
+        callRemoteService();
+        // Bad: no shutdown hook — resources are never released
+    }
+
+    private void callRemoteService() {
+        try { Thread.sleep(5_000); } catch (InterruptedException ignored) { }
+    }
+}
+```
+
+### Example 8: Resource cleanup with @PreDestroy
+
+Title: Release executors, connections, and I/O handles on bean destruction
+Description: Annotate a no-arg method with `@PreDestroy` to run cleanup logic when the CDI container destroys the bean. Use it to close external connections, stop background threads, or release file handles. Pair with `@Observes ShutdownEvent` for cleanup that must happen before the CDI context is torn down.
+
+**Good example:**
+
+```java
+import jakarta.annotation.PreDestroy;
+import jakarta.enterprise.context.ApplicationScoped;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
+import org.jboss.logging.Logger;
+
+@ApplicationScoped
+public class BackgroundWorker {
+
+    private static final Logger LOG = Logger.getLogger(BackgroundWorker.class);
+
+    private final ExecutorService executor = Executors.newFixedThreadPool(4);
+
+    public void submit(Runnable task) {
+        executor.submit(task);
+    }
+
+    @PreDestroy
+    void shutdown() {
+        LOG.info("Shutting down background executor");
+        executor.shutdown();
+        try {
+            if (!executor.awaitTermination(10, TimeUnit.SECONDS)) {
+                executor.shutdownNow();
+            }
+        } catch (InterruptedException e) {
+            executor.shutdownNow();
+            Thread.currentThread().interrupt();
+        }
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import jakarta.enterprise.context.ApplicationScoped;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+@ApplicationScoped
+public class LeakyWorker {
+
+    // Bad: executor is never shut down — threads leak on every application restart
+    private final ExecutorService executor = Executors.newFixedThreadPool(4);
+
+    public void submit(Runnable task) {
+        executor.submit(task);
+    }
+}
+```
+
+### Example 9: Configuration validation
+
+Title: Bean Validation constraints on @ConfigMapping fail fast at startup
+Description: Apply Jakarta Bean Validation constraints (`@NotBlank`, `@Min`, `@Max`, `@Pattern`) on `@ConfigMapping` interface methods. Quarkus validates annotated config interfaces at startup; invalid or missing values produce a clear error before any request is served.
+
+**Good example:**
+
+```java
+import io.smallrye.config.ConfigMapping;
+import io.smallrye.config.WithDefault;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+
+@ConfigMapping(prefix = "app.api")
+public interface ApiClientConfig {
+
+    @NotBlank
+    String baseUrl();
+
+    @Min(1) @Max(600)
+    @WithDefault("30")
+    int connectTimeoutSeconds();
+
+    @Positive
+    @WithDefault("3")
+    int maxRetries();
+}
+
+@ApplicationScoped
+public class ApiClient {
+
+    private final ApiClientConfig config;
+
+    @Inject
+    public ApiClient(ApiClientConfig config) {
+        this.config = config;
+    }
+
+    public String baseUrl() {
+        return config.baseUrl(); // guaranteed non-blank at this point
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import io.smallrye.config.ConfigMapping;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
+@ConfigMapping(prefix = "app.api")
+public interface ApiClientConfig {
+    String baseUrl(); // no @NotBlank — empty string is silently accepted
+    int connectTimeoutSeconds(); // no range check — negative timeout is allowed
+}
+
+@ApplicationScoped
+public class ApiClient {
+
+    private final ApiClientConfig config;
+
+    @Inject
+    public ApiClient(ApiClientConfig config) {
+        this.config = config;
+    }
+
+    public void call() {
+        // Bad: discovering misconfiguration only when the HTTP call fails at runtime
+        if (config.baseUrl().isBlank()) {
+            throw new IllegalStateException("baseUrl not configured");
+        }
+    }
+}
+```
+
+### Example 10: Programmatic injection with Instance<T>
+
+Title: Optional, multiple, and dynamically-selected beans via CDI Instance
+Description: `jakarta.enterprise.inject.Instance<T>` gives programmatic access to CDI beans: check presence with `isUnsatisfied()` / `isAmbiguous()`, iterate all matching implementations, or select by qualifier. Use it when a dependency is optional, when you need to enumerate all implementations, or when the choice depends on runtime state.
+
+**Good example:**
+
+```java
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.enterprise.inject.Instance;
+import jakarta.inject.Inject;
+
+public interface MetricsExporter {
+    void export(String metric, double value);
+}
+
+@ApplicationScoped
+public class MetricsService {
+
+    private final Instance<MetricsExporter> exporters;
+
+    @Inject
+    public MetricsService(Instance<MetricsExporter> exporters) {
+        this.exporters = exporters;
+    }
+
+    public void record(String metric, double value) {
+        if (exporters.isUnsatisfied()) {
+            return; // optional dependency — no exporter registered, skip silently
+        }
+        exporters.forEach(e -> e.export(metric, value));
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
+public interface MetricsExporter {
+    void export(String metric, double value);
+}
+
+@ApplicationScoped
+public class MetricsService {
+
+    @Inject
+    MetricsExporter exporter; // Bad: fails with UnsatisfiedResolutionException if no bean is registered;
+                               // field injection cannot express "optional" without Instance<T>
+
+    public void record(String metric, double value) {
+        exporter.export(metric, value);
+    }
+}
+```
+
+### Example 11: Health probes with SmallRye Health
+
+Title: @Liveness and @Readiness checks for operational visibility
+Description: Implement `HealthCheck` and annotate with `@Liveness` (is the process alive?) or `@Readiness` (is it ready to serve traffic?). Keep checks fast and non-destructive. Liveness failures trigger a pod restart; readiness failures remove the pod from the load-balancer. Separate these concerns — do not put connectivity checks inside liveness.
+
+**Good example:**
+
+```java
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import javax.sql.DataSource;
+import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.Liveness;
+import org.eclipse.microprofile.health.Readiness;
+
+@Liveness
+@ApplicationScoped
+public class AppLivenessCheck implements HealthCheck {
+
+    @Override
+    public HealthCheckResponse call() {
+        return HealthCheckResponse.up("application-live");
+    }
+}
+
+@Readiness
+@ApplicationScoped
+public class DatabaseReadinessCheck implements HealthCheck {
+
+    private final DataSource dataSource;
+
+    @Inject
+    public DatabaseReadinessCheck(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    @Override
+    public HealthCheckResponse call() {
+        try (var conn = dataSource.getConnection()) {
+            conn.isValid(1);
+            return HealthCheckResponse.up("database-ready");
+        } catch (Exception e) {
+            return HealthCheckResponse.down("database-ready");
+        }
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import jakarta.enterprise.context.ApplicationScoped;
+import org.eclipse.microprofile.health.HealthCheck;
+import org.eclipse.microprofile.health.HealthCheckResponse;
+import org.eclipse.microprofile.health.Liveness;
+
+@Liveness
+@ApplicationScoped
+public class MixedLivenessCheck implements HealthCheck {
+
+    @Override
+    public HealthCheckResponse call() {
+        // Bad: liveness check performs expensive DB + remote service calls
+        // A DB timeout will unnecessarily kill the pod — separate liveness from readiness
+        boolean dbOk = checkDatabase();
+        boolean remoteOk = callRemoteService();
+        return dbOk && remoteOk
+            ? HealthCheckResponse.up("app")
+            : HealthCheckResponse.down("app");
+    }
+
+    private boolean checkDatabase() { return true; }
+    private boolean callRemoteService() { return true; }
+}
+```
+
+### Example 12: Virtual threads with @RunOnVirtualThread
+
+Title: Offload I/O-bound REST methods to virtual threads on Java 21+
+Description: On **Java 21+**, annotate a REST resource method with `@RunOnVirtualThread` to execute it on a virtual thread instead of a Vert.x worker thread. Ideal for blocking I/O (JDBC, HTTP clients, file I/O) that would otherwise tie up platform threads. Do not use it for CPU-intensive work; profile before enabling broadly.
+
+**Good example:**
+
+```java
+import io.smallrye.common.annotation.RunOnVirtualThread;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+
+@Path("/orders")
+public class OrderResource {
+
+    private final OrderRepository repository;
+
+    @Inject
+    public OrderResource(OrderRepository repository) {
+        this.repository = repository;
+    }
+
+    @GET
+    @Path("/{id}")
+    @RunOnVirtualThread // blocking JDBC call — safe to run on a virtual thread
+    public Order getOrder(@PathParam("id") long id) {
+        return repository.findById(id);
+    }
+}
+
+interface OrderRepository {
+    Order findById(long id);
+}
+
+record Order(long id, String status) { }
+```
+
+**Bad example:**
+
+```java
+import jakarta.inject.Inject;
+import jakarta.ws.rs.GET;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.PathParam;
+
+@Path("/orders")
+public class OrderResource {
+
+    private final OrderRepository repository;
+
+    @Inject
+    public OrderResource(OrderRepository repository) {
+        this.repository = repository;
+    }
+
+    @GET
+    @Path("/{id}")
+    // Bad: blocking JDBC call on the Vert.x event-loop thread — starves
+    // other requests and causes latency spikes under load; add @RunOnVirtualThread
+    public Order getOrder(@PathParam("id") long id) {
+        return repository.findById(id);
+    }
+}
+
+interface OrderRepository {
+    Order findById(long id);
+}
+
+record Order(long id, String status) { }
+```
+
 ## Output Format
 
 - **ANALYZE** the Quarkus project for CDI scope misuse, configuration sprawl, profile handling, lifecycle blocking, and injection style
 - **CATEGORIZE** findings by impact (startup, memory, maintainability) and layer (config, beans, lifecycle)
 - **APPLY** improvements: constructor injection, `@ConfigMapping`, profile-based properties, appropriate scopes, lean startup observers
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits
+- **DETECT** CDI scope ambiguity (multiple unqualified implementations of the same type) and missing bean disambiguation (`@Default`, `@Alternative`, `@Named`)
+- **EXPLAIN** what changed and why: improved startup safety, better testability, narrower scopes, or cleaner cross-cutting separation via interceptors and events
 
 ## Safeguards
 
 - **BLOCKING SAFETY CHECK**: Run `./mvnw compile` before ANY Quarkus refactoring
 - **CRITICAL VALIDATION**: Run `./mvnw clean verify` after changes
 - **NATIVE IMAGE**: Changes that require reflection must be registered for native builds — verify with `quarkus build` when native is in scope
+- **CDI SCOPE CHANGE**: Changing `@ApplicationScoped` to `@Singleton` removes the client proxy — beans injected into narrower scopes may break; verify before refactoring
+- **CONFIG VALIDATION**: Adding Bean Validation to `@ConfigMapping` will fail startup on invalid or missing properties — align `%test` profile values before enabling
+- **DEV SERVICES**: Dev Services only activate in `%dev` and `%test` profiles; never rely on them in `%prod`; ensure production configuration is always explicit
+- **VIRTUAL THREADS**: Requires Java 21+; re-test for thread-pinning and third-party library compatibility after enabling `@RunOnVirtualThread`
+- **JAKARTA NAMESPACE**: Mixing `javax.inject` with `jakarta.inject` on the same classpath causes silent CDI resolution failures — use `jakarta.*` throughout
+- **INCREMENTAL SAFETY**: Apply CDI scope, configuration, and lifecycle changes in small steps with `./mvnw compile` verification between steps
