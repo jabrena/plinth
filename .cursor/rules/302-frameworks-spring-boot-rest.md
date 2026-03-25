@@ -477,7 +477,7 @@ class LegacyThingController {
 ### Example 8: Controller advice and ProblemDetail
 
 Title: Centralize exception mapping; keep controllers thin
-Description: Use `@ControllerAdvice` to map exceptions to HTTP responses once. Prefer Spring’s `ProblemDetail` (RFC 7807) for a consistent shape: type, title, status, detail, instance, and optional extension properties like `errorId` for correlation.
+Description: Use `@ControllerAdvice` to map exceptions to HTTP responses once. Prefer Spring’s `ProblemDetail` (RFC 7807) for a consistent shape: type, title, status, detail, instance, and optional extension properties like `errorId` for correlation. **The `Exception.class` handler is the last frontier**: place it at the end of your `@ControllerAdvice` as a catch-all safety net. Its sole purpose is to ensure that any throwable not matched by a more specific handler still returns an opaque `500 Internal Server Error`—with a correlation `errorId` and a full server-side log—without leaking stack traces or internal details to the caller. **Do not abuse the last frontier by routing domain exceptions through it.** Every named domain exception (`OrderNotFoundException`, `PaymentDeclinedException`, `InsufficientStockException`, …) must have its **own** `@ExceptionHandler` method with the precise HTTP status and `ProblemDetail` type that reflects its meaning. Funneling domain exceptions into the generic `Exception.class` handler causes three problems: - The caller always receives `500` instead of the semantically correct status (`404`, `409`, `422`, …). - The `ProblemDetail` type URI is generic and useless for automated error handling. - The intent of the exception is hidden, making debugging and API contracts harder to reason about.
 
 **Good example:**
 
@@ -500,6 +500,7 @@ class GlobalExceptionHandler {
 
     private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
 
+    // Each domain exception gets its own handler with the correct HTTP status and problem type.
     @ExceptionHandler(IllegalArgumentException.class)
     ResponseEntity<ProblemDetail> handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request) {
         ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
@@ -531,6 +532,9 @@ class GlobalExceptionHandler {
         return ResponseEntity.badRequest().body(pd);
     }
 
+    // Last frontier: catches anything not handled above.
+    // Keep this handler intentionally thin — log with a correlation ID and return an opaque 500.
+    // Never add domain exceptions here; give them their own @ExceptionHandler instead.
     @ExceptionHandler(Exception.class)
     ResponseEntity<ProblemDetail> handleGeneric(Exception ex, HttpServletRequest request) {
         String errorId = UUID.randomUUID().toString();
@@ -552,9 +556,9 @@ class EntityNotFoundException extends RuntimeException {
 **Bad example:**
 
 ```java
+// BAD: per-controller try/catch — exception handling duplicated across every endpoint
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.Map;
 
 @RestController
 class BadUserController {
