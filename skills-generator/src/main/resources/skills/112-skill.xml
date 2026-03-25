@@ -52,9 +52,8 @@ Maven profiles:
 
   <triggers>
     <trigger-list>
-        <trigger>Configure Maven plugins in pom.xml</trigger>
-        <trigger>Add Maven plugins to pom.xml</trigger>
-        <trigger>Improve Maven plugins configuration in pom.xml</trigger>
+        <trigger>Add Maven plugins in pom.xml</trigger>
+        <trigger>Improve Maven plugins in pom.xml</trigger>
     </trigger-list>
   </triggers>
 

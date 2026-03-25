@@ -5,7 +5,7 @@
         <version>0.13.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
         <title>Quarkus Core Guidelines</title>
-        <description>Use when you need to review, improve, or build Quarkus applications — including @QuarkusMain entry points, CDI scopes (@ApplicationScoped, @Singleton, @Dependent), constructor injection, @ConfigMapping and SmallRye Config, profiles (%dev, %test, %prod), build-time vs runtime configuration, lifecycle (@Startup, @PreDestroy), health and metrics hooks, and test-friendly bean design.</description>
+        <description>Use when you need to review, improve, or build Quarkus applications — including mandatory @QuarkusMain entry points with static main methods, CDI scopes (@ApplicationScoped, @Singleton, @Dependent), constructor injection, @ConfigMapping and SmallRye Config, profiles (%dev, %test, %prod), build-time vs runtime configuration, lifecycle (@Startup, @PreDestroy), health and metrics hooks, and test-friendly bean design.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Quarkus, CDI, and Java enterprise development</role>
@@ -17,7 +17,7 @@
 
         These guidelines are built upon the following core principles:
 
-        1. **Composition and entry**: Use `@QuarkusMain` only when you need a custom `main`; otherwise rely on generated launcher. Keep `main` thin — no business logic.
+        1. **Composition and entry**: Always provide a `@QuarkusMain` class with a static `main` method using `Quarkus.run(args)` for simple cases, or implement `QuarkusApplication` for lifecycle control. Keep `main` thin — no business logic.
         2. **CDI scopes**: Default services to `@ApplicationScoped`; use `@Singleton` only when you truly need one instance without client proxies; use `@Dependent` for per-injection lifecycle; avoid `@RequestScoped` on non-HTTP-aware beans unless the extension supports it.
         3. **Injection**: Prefer constructor injection; avoid field injection in domain services; use `@Inject` with final fields via constructor.
         4. **Configuration**: Map `application.properties` with `@ConfigMapping` interfaces or `@ConfigProperty`; validate with Bean Validation on config types where useful; never hardcode secrets — use env vars or Kubernetes secrets mapping.
@@ -50,14 +50,53 @@
     <examples>
         <toc auto-generate="true" />
 
-        <example number="1" id="quarkus-main-minimal">
+        <example number="1" id="quarkus-main-simple">
             <example-header>
-                <example-title>Application entry point</example-title>
-                <example-subtitle>Prefer generated main; custom @QuarkusMain only when needed</example-subtitle>
+                <example-title>Simple application entry point</example-title>
+                <example-subtitle>@QuarkusMain with static main method</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                Most Quarkus apps use the generated `main` from the build. Use `@QuarkusMain` when you must run logic before `Quarkus.run()` or customize args. Never put domain logic in `main`.
+                Every Quarkus application should have a `@QuarkusMain` class with a static `main` method. For simple cases, use `Quarkus.run(args)` directly. Keep `main` thin — no business logic.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.quarkus.runtime.Quarkus;
+import io.quarkus.runtime.annotations.QuarkusMain;
+
+/**
+ * Main application class for the service.
+ */
+@QuarkusMain
+public class MyApplication {
+
+    public static void main(String... args) {
+        Quarkus.run(args);
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[@QuarkusMain
+public class BloatedMain {
+    public static void main(String... args) {
+        // Bad: orchestrating use cases directly in main
+        new OrderService().processBacklog();
+        Quarkus.run(args);
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="2" id="quarkus-application-interface">
+            <example-header>
+                <example-title>Advanced application entry point</example-title>
+                <example-subtitle>QuarkusApplication interface for lifecycle control</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                When you need more control over the application lifecycle or custom shutdown logic, implement `QuarkusApplication`. Still keep business logic out of the main class.
                 ]]>
             </example-description>
             <code-examples>
@@ -91,7 +130,7 @@ public class BloatedMain implements QuarkusApplication {
             </code-examples>
         </example>
 
-        <example number="2" id="cdi-application-scoped-service">
+        <example number="3" id="cdi-application-scoped-service">
             <example-header>
                 <example-title>Service beans</example-title>
                 <example-subtitle>@ApplicationScoped with constructor injection</example-subtitle>
@@ -139,7 +178,7 @@ public class OrderService {
             </code-examples>
         </example>
 
-        <example number="3" id="config-mapping">
+        <example number="4" id="config-mapping">
             <example-header>
                 <example-title>Type-safe configuration</example-title>
                 <example-subtitle>@ConfigMapping for grouped settings</example-subtitle>
@@ -194,7 +233,7 @@ public class BatchOrderProcessor {
             </code-examples>
         </example>
 
-        <example number="4" id="profiles-properties">
+        <example number="5" id="profiles-properties">
             <example-header>
                 <example-title>Profiles in configuration</example-title>
                 <example-subtitle>%dev, %test, %prod property overrides</example-subtitle>
@@ -220,7 +259,7 @@ if (System.getenv("ENV") != null && System.getenv("ENV").equals("dev")) {
             </code-examples>
         </example>
 
-        <example number="5" id="startup-lifecycle">
+        <example number="6" id="startup-lifecycle">
             <example-header>
                 <example-title>Startup hooks</example-title>
                 <example-subtitle>@Startup for eager initialization</example-subtitle>
@@ -258,7 +297,7 @@ void onStart() throws Exception {
             </code-examples>
         </example>
 
-        <example number="6" id="cdi-bean-disambiguation">
+        <example number="7" id="cdi-bean-disambiguation">
             <example-header>
                 <example-title>CDI bean disambiguation</example-title>
                 <example-subtitle>@Default, @Alternative + @Priority, and @Named to resolve ambiguous types</example-subtitle>
@@ -362,7 +401,7 @@ public class AlertService {
             </code-examples>
         </example>
 
-        <example number="7" id="cdi-events-observers">
+        <example number="8" id="cdi-events-observers">
             <example-header>
                 <example-title>CDI events and lifecycle observers</example-title>
                 <example-subtitle>@Observes StartupEvent / ShutdownEvent instead of blocking in @Startup</example-subtitle>
@@ -432,7 +471,7 @@ public class BadLifecycleBean {
             </code-examples>
         </example>
 
-        <example number="8" id="predestroy-cleanup">
+        <example number="9" id="predestroy-cleanup">
             <example-header>
                 <example-title>Resource cleanup with @PreDestroy</example-title>
                 <example-subtitle>Release executors, connections, and I/O handles on bean destruction</example-subtitle>
@@ -496,7 +535,7 @@ public class LeakyWorker {
             </code-examples>
         </example>
 
-        <example number="9" id="config-mapping-validation">
+        <example number="10" id="config-mapping-validation">
             <example-header>
                 <example-title>Configuration validation</example-title>
                 <example-subtitle>Bean Validation constraints on @ConfigMapping fail fast at startup</example-subtitle>
@@ -579,7 +618,7 @@ public class ApiClient {
             </code-examples>
         </example>
 
-        <example number="10" id="instance-programmatic-injection">
+        <example number="11" id="instance-programmatic-injection">
             <example-header>
                 <example-title>Programmatic injection with Instance&lt;T&gt;</example-title>
                 <example-subtitle>Optional, multiple, and dynamically-selected beans via CDI Instance</example-subtitle>
@@ -640,7 +679,7 @@ public class MetricsService {
             </code-examples>
         </example>
 
-        <example number="11" id="smallrye-health-probes">
+        <example number="12" id="smallrye-health-probes">
             <example-header>
                 <example-title>Health probes with SmallRye Health</example-title>
                 <example-subtitle>@Liveness and @Readiness checks for operational visibility</example-subtitle>
@@ -720,7 +759,7 @@ public class MixedLivenessCheck implements HealthCheck {
             </code-examples>
         </example>
 
-        <example number="12" id="virtual-threads-quarkus">
+        <example number="13" id="virtual-threads-quarkus">
             <example-header>
                 <example-title>Virtual threads with @RunOnVirtualThread</example-title>
                 <example-subtitle>Offload I/O-bound REST methods to virtual threads on Java 21+</example-subtitle>
@@ -799,6 +838,7 @@ record Order(long id, String status) { }]]></code-block>
 
     <output-format>
         <output-format-list>
+            <output-format-item>**ENSURE** every Quarkus project has a `@QuarkusMain` class with a static `main` method using `Quarkus.run(args)` — create one if missing</output-format-item>
             <output-format-item>**ANALYZE** the Quarkus project for CDI scope misuse, configuration sprawl, profile handling, lifecycle blocking, and injection style</output-format-item>
             <output-format-item>**CATEGORIZE** findings by impact (startup, memory, maintainability) and layer (config, beans, lifecycle)</output-format-item>
             <output-format-item>**APPLY** improvements: constructor injection, `@ConfigMapping`, profile-based properties, appropriate scopes, lean startup observers</output-format-item>

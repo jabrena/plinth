@@ -45,8 +45,9 @@ Identify and apply functional programming principles in Java to improve immutabi
 
   <triggers>
     <trigger-list>
-        <trigger>Review Java code for functional programming</trigger>
-        <trigger>Apply best practices for functional programming in Java code</trigger>
+        <trigger>Improve the code with Functional Programming</trigger>
+        <trigger>Apply Functional Programming</trigger>
+        <trigger>Refactor the code with Functional Programming</trigger>
     </trigger-list>
   </triggers>
 

@@ -38,8 +38,10 @@ Implement effective Java logging following standardized frameworks, meaningful l
 
   <triggers>
     <trigger-list>
-        <trigger>Review Java code for logging and observability</trigger>
-        <trigger>Apply best practices for logging and observability in Java code</trigger>
+        <trigger>Improve logging</trigger>
+        <trigger>Apply logging</trigger>
+        <trigger>Refactor logging</trigger>
+        <trigger>Add logging support</trigger>
     </trigger-list>
   </triggers>
 
