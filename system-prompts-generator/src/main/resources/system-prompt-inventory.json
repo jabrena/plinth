@@ -1,5 +1,7 @@
 [
   {"name": "000-system-prompt-list"},
+  {"name": "012-agile-epic"},
+  {"name": "013-agile-feature"},
   {"name": "014-agile-user-story"},
   {"name": "030-architecture-adr-general"},
   {"name": "031-architecture-adr-functional-requirements"},
