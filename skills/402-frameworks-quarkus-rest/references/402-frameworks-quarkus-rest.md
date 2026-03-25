@@ -29,6 +29,15 @@ These guidelines are built upon the following core principles:
 7. **Performance**: Prefer reactive types (`Uni`, `Multi`) for non-blocking stacks when extensions support it; do not block event loops on long JDBC without `@Blocking` or worker threads.
 8. **Security**: Integrate Quarkus Security (`quarkus-oidc`, `quarkus-smallrye-jwt`, or basic auth) at the filter level; avoid ad-hoc header parsing in resources.
 
+9. **Versioning**: Choose URI path (`/api/v1/…`), custom header (`X-API-Version`), or vendor media type versioning, and apply it uniformly; breaking changes without versioning silently break all existing clients.
+10. **Pagination and filtering**: Cap list endpoints with explicit `page`/`size` query params and server-enforced maximums; whitelist sort fields to prevent arbitrary-column exposure.
+11. **Idempotency**: Support an `Idempotency-Key` header (or domain-level deduplication) for `POST` creates; return **409 Conflict** when a request collides with existing state.
+12. **Optimistic concurrency**: Use `ETag` with `If-Match` / `If-None-Match` via `jakarta.ws.rs.core.Request.evaluatePreconditions()`; return **412 Precondition Failed** or **304 Not Modified** appropriately.
+13. **Caching discipline**: Set `Cache-Control` deliberately; use `public, max-age=N` for anonymous catalog data and `no-store` for authenticated or personalized responses.
+14. **Deprecation signals**: Communicate API sunset with `Deprecation`, `Sunset`, and `Link` (`rel="successor-version"`) headers so clients can plan migration before removal.
+15. **Content negotiation**: Default to `application/json` with explicit `@Produces` / `@Consumes`; use vendor media types only when they carry real versioning meaning; avoid `*/*` without intent.
+16. **Time in contracts**: Use `Instant` or `OffsetDateTime` (ISO-8601 with offset) in DTOs; avoid legacy `java.util.Date` and ambiguous zone-less `LocalDateTime` in public API contracts.
+
 **Cross-references**: Quarkus core — `@401-frameworks-quarkus-core`. JDBC — `@411-frameworks-quarkus-jdbc`. Panache — `@412-frameworks-quarkus-panache`. Unit tests — `@421-frameworks-quarkus-testing-unit-tests`.
 
 ## Constraints
@@ -39,6 +48,8 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - **PREREQUISITE**: Project must compile successfully before any REST refactoring
 - **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with REST improvements
+- **NO EXCEPTIONS**: Under no circumstances should REST API recommendations be applied to a project that fails to compile
 
 ## Examples
 
@@ -47,6 +58,18 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 1: CRUD resource
 - Example 2: Request validation
 - Example 3: Exception mapping
+- Example 4: Resource URIs and naming
+- Example 5: HTTP status codes
+- Example 6: DTOs for requests and responses
+- Example 7: API versioning
+- Example 8: Structured error responses
+- Example 9: OpenAPI documentation
+- Example 10: Pagination, sorting, and filtering
+- Example 11: Idempotency and safe retries
+- Example 12: Optimistic concurrency with ETag
+- Example 13: Caching semantics
+- Example 14: Deprecation and sunset
+- Example 15: Security annotations
 
 ### Example 1: CRUD resource
 
@@ -200,13 +223,833 @@ public ItemResponse get(@PathParam("id") long id) {
 }
 ```
 
+### Example 4: Resource URIs and naming
+
+Title: Noun-based paths and hierarchy; no verbs in URIs
+Description: Model resources as nouns with stable hierarchical paths. The HTTP method communicates the action; the path names the resource. Avoid RPC-style verbs (`/getAllOrders`, `/createOrder`) that duplicate what the HTTP verb already expresses.
+
+**Good example:**
+
+```text
+GET    /api/v1/orders
+GET    /api/v1/orders/{orderId}
+GET    /api/v1/orders/{orderId}/items
+POST   /api/v1/orders
+PUT    /api/v1/orders/{orderId}
+DELETE /api/v1/orders/{orderId}
+```
+
+**Bad example:**
+
+```text
+GET  /getAllOrders
+GET  /fetchOrderById?id={orderId}
+POST /createNewOrder
+GET  /orderItems?orderId={orderId}
+POST /processOrderCancellation
+```
+
+### Example 5: HTTP status codes
+
+Title: 201 + Location for creates, 204 for deletes, 400/404/409 for errors
+Description: Use status codes that match the real outcome: `201 Created` + `Location` for creates; `204 No Content` for successful deletes; `400` for input errors; `404` for missing resources; `409 Conflict` for state collisions. Never stuff errors into a `200 OK` body.
+
+**Good example:**
+
+```java
+import jakarta.inject.Inject;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import java.net.URI;
+
+@Path("/api/v1/orders")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public class OrderResource {
+
+    private final OrderService service;
+
+    @Inject
+    public OrderResource(OrderService service) {
+        this.service = service;
+    }
+
+    @POST
+    public Response create(@Valid CreateOrderRequest body) {
+        OrderResponse created = service.create(body);
+        return Response.created(URI.create("/api/v1/orders/" + created.id()))
+            .entity(created).build(); // 201 Created + Location
+    }
+
+    @GET
+    @Path("{id}")
+    public OrderResponse get(@PathParam("id") long id) {
+        return service.findById(id); // 200 OK; 404 handled via ExceptionMapper
+    }
+
+    @DELETE
+    @Path("{id}")
+    public Response cancel(@PathParam("id") long id) {
+        service.cancel(id);
+        return Response.noContent().build(); // 204 No Content
+    }
+}
+```
+
+**Bad example:**
+
+```java
+@Path("/orders")
+public class BadOrderResource {
+
+    @POST
+    public String createOrder(CreateOrderRequest body) {
+        return "Order created"; // Bad: 200 instead of 201; no Location header
+    }
+
+    @GET
+    @Path("{id}")
+    public String get(@PathParam("id") long id) {
+        if (id == 0) {
+            return "{\"error\": \"not found\"}"; // Bad: stuffs error into 200 OK body
+        }
+        return "{}";
+    }
+}
+```
+
+### Example 6: DTOs for requests and responses
+
+Title: Decouple API contracts from persistence entities
+Description: Expose records or DTOs from resources — never persistence entities — so serialization matches what clients should see. Returning entities directly leaks internal fields (password hashes, audit columns) and couples the API contract to the database schema.
+
+**Good example:**
+
+```java
+import java.time.Instant;
+
+// Persistence entity — never exposed directly to API consumers
+class UserEntity {
+    long id;
+    String username;
+    String passwordHash; // internal — must never reach the client
+    String email;
+    Instant createdAt;
+}
+
+// Lean response DTO: no password hash, no internal audit fields
+record UserResponse(long id, String username, String email, Instant createdAt) { }
+
+// Inbound DTO: password accepted once, never echoed back
+record CreateUserRequest(
+    @jakarta.validation.constraints.NotBlank String username,
+    @jakarta.validation.constraints.Email String email,
+    @jakarta.validation.constraints.Size(min = 8) String password) { }
+```
+
+**Bad example:**
+
+```java
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+
+@Path("/users")
+@Produces(MediaType.APPLICATION_JSON)
+public class UserResource {
+
+    @GET
+    @Path("{id}")
+    public UserEntity get(@PathParam("id") long id) {
+        return findById(id); // Bad: exposes passwordHash, audit columns, and all internal state
+    }
+
+    private UserEntity findById(long id) { return new UserEntity(); }
+}
+
+class UserEntity {
+    public long id;
+    public String username;
+    public String passwordHash; // leaked to every API consumer
+}
+```
+
+### Example 7: API versioning
+
+Title: URI path, custom header, or vendor media type — pick one and apply uniformly
+Description: Introduce versioning early so breaking changes do not silently affect existing clients. Three common strategies are shown below — pick one and apply it **uniformly** across every resource. | Strategy | Mechanism | Trade-offs | |---|---|---| | **URI path** | `/api/v1/…` | Easiest to browse, cache, and test; visible in logs | | **Custom header** | `X-API-Version: 2` | Clean URIs; version invisible in browser / CDN cache keys | | **Vendor media type** | `Accept: application/vnd.example.order+json;version=2` | Fully REST-compliant; higher client complexity |
+
+**Good example:**
+
+```java
+// ── Strategy 1: URI path versioning ──────────────────────────────────────────
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+
+@Path("/api/v1/orders")
+@Produces(MediaType.APPLICATION_JSON)
+public class OrderResourceV1 {
+
+    @GET
+    @Path("{id}")
+    public OrderDTOv1 get(@PathParam("id") long id) {
+        return new OrderDTOv1(id, "PENDING");
+    }
+}
+
+// V2 route — breaking shape change isolated behind a new path
+@Path("/api/v2/orders")
+@Produces(MediaType.APPLICATION_JSON)
+public class OrderResourceV2 {
+
+    @GET
+    @Path("{id}")
+    public OrderDTOv2 get(@PathParam("id") long id) {
+        return new OrderDTOv2(id, "PENDING", java.time.Instant.now());
+    }
+}
+
+record OrderDTOv1(long id, String status) { }
+record OrderDTOv2(long id, String status, java.time.Instant createdAt) { }
+```
+
+**Bad example:**
+
+```java
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+
+// No versioning — any breaking change silently breaks all clients
+@Path("/orders")
+@Produces(MediaType.APPLICATION_JSON)
+public class UnversionedOrderResource {
+
+    @GET
+    @Path("{id}")
+    public OrderDTO get(@PathParam("id") long id) {
+        return new OrderDTO(id);
+    }
+}
+
+record OrderDTO(long id) { }
+```
+
+### Example 8: Structured error responses
+
+Title: ExceptionMapper with RFC 7807 Problem Detail shape; no stack traces to clients
+Description: Register `ExceptionMapper` beans to centralize error handling. Return a consistent JSON body with stable fields (type, title, status, detail) aligned with RFC 7807 Problem Details. Log full exceptions server-side with a correlation ID; never return stack traces or raw exception messages to API clients in production.
+
+**Good example:**
+
+```java
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.ExceptionMapper;
+import jakarta.ws.rs.ext.Provider;
+import java.util.UUID;
+import org.jboss.logging.Logger;
+
+public record ProblemDetail(String type, String title, int status, String detail, String errorId) { }
+
+// Domain exception hierarchy — one mapper handles the family
+public abstract class DomainException extends RuntimeException {
+    protected DomainException(String message) { super(message); }
+    public abstract int httpStatus();
+    public abstract String typeSlug();
+    public abstract String title();
+}
+
+public class NotFoundException extends DomainException {
+    public NotFoundException(String message) { super(message); }
+    public int httpStatus() { return 404; }
+    public String typeSlug() { return "not-found"; }
+    public String title() { return "Resource Not Found"; }
+}
+
+@Provider
+public class DomainExceptionMapper implements ExceptionMapper<DomainException> {
+
+    @Override
+    public Response toResponse(DomainException ex) {
+        return Response.status(ex.httpStatus())
+            .type(MediaType.APPLICATION_JSON)
+            .entity(new ProblemDetail(
+                "https://example.com/problems/" + ex.typeSlug(),
+                ex.title(),
+                ex.httpStatus(),
+                ex.getMessage(),
+                null))
+            .build();
+    }
+}
+
+@Provider
+public class GlobalExceptionMapper implements ExceptionMapper<Exception> {
+
+    private static final Logger LOG = Logger.getLogger(GlobalExceptionMapper.class);
+
+    @Override
+    public Response toResponse(Exception ex) {
+        String errorId = UUID.randomUUID().toString();
+        LOG.errorf(ex, "Unhandled exception [%s]", errorId);
+        return Response.serverError()
+            .type(MediaType.APPLICATION_JSON)
+            .entity(new ProblemDetail(
+                "https://example.com/problems/internal-error",
+                "Internal Server Error",
+                500,
+                "An unexpected error occurred.",
+                errorId))
+            .build();
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
+@Path("/orders")
+@Produces(MediaType.APPLICATION_JSON)
+public class OrderResource {
+
+    @GET
+    @Path("{id}")
+    public Response get(@PathParam("id") long id) {
+        try {
+            return Response.ok(findOrder(id)).build();
+        } catch (Exception e) {
+            // Bad: leaks stack trace and exception type to clients
+            return Response.serverError()
+                .entity(e.toString()) // internal details exposed
+                .build();
+        }
+    }
+
+    private Object findOrder(long id) { throw new RuntimeException("DB unavailable"); }
+}
+```
+
+### Example 9: OpenAPI documentation
+
+Title: MicroProfile OpenAPI annotations for operations, parameters, and responses
+Description: Document resources with MicroProfile OpenAPI annotations (`@Tag`, `@Operation`, `@APIResponse`, `@Parameter`, `@Schema`) so consumers can integrate without reverse-engineering the code. At minimum document status codes, required parameters, and error shapes.
+
+**Good example:**
+
+```java
+import jakarta.inject.Inject;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import java.net.URI;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.media.Content;
+import org.eclipse.microprofile.openapi.annotations.media.Schema;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
+import org.eclipse.microprofile.openapi.annotations.tags.Tag;
+
+@Tag(name = "Orders", description = "Order management operations")
+@Path("/api/v1/orders")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public class OrderResource {
+
+    @Operation(summary = "Get order by ID")
+    @APIResponses({
+        @APIResponse(responseCode = "200",
+            content = @Content(schema = @Schema(implementation = OrderResponse.class))),
+        @APIResponse(responseCode = "404", description = "Order not found")
+    })
+    @GET
+    @Path("{id}")
+    public OrderResponse get(
+            @Parameter(description = "Order ID", required = true)
+            @PathParam("id") long id) {
+        return new OrderResponse(id, "PENDING");
+    }
+
+    @Operation(summary = "Create a new order")
+    @APIResponse(responseCode = "201", description = "Order created successfully")
+    @APIResponse(responseCode = "400", description = "Invalid request body")
+    @POST
+    public Response create(@Valid CreateOrderRequest body) {
+        OrderResponse created = new OrderResponse(1L, "PENDING");
+        return Response.created(URI.create("/api/v1/orders/" + created.id())).entity(created).build();
+    }
+}
+
+record OrderResponse(long id, String status) { }
+record CreateOrderRequest(
+    @jakarta.validation.constraints.NotBlank String productId,
+    @jakarta.validation.constraints.Positive int quantity) { }
+```
+
+**Bad example:**
+
+```java
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+
+@Path("/orders")
+@Produces(MediaType.APPLICATION_JSON)
+public class UndocumentedOrderResource {
+
+    // No @Operation, @APIResponse, @Parameter — consumers have no contract to integrate against
+    @GET
+    @Path("{id}")
+    public Object get(@PathParam("id") String id, @QueryParam("type") String type) {
+        return new Object();
+    }
+}
+```
+
+### Example 10: Pagination, sorting, and filtering
+
+Title: Bounded pages, sort whitelist, optional Link headers (RFC 8288)
+Description: Returning unbounded lists does not scale. Use explicit `page`/`size` query params with server-enforced maximums, whitelist sortable field names, and optionally emit `Link` headers (`rel="next"` / `rel="prev"`) for discoverable navigation (RFC 8288).
+
+**Good example:**
+
+```java
+import jakarta.inject.Inject;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import java.util.List;
+import java.util.Set;
+
+@Path("/api/v1/orders")
+@Produces(MediaType.APPLICATION_JSON)
+public class OrderListResource {
+
+    private static final int MAX_PAGE_SIZE = 100;
+    private static final Set<String> ALLOWED_SORT = Set.of("createdAt", "status", "total");
+
+    private final OrderService service;
+
+    @Inject
+    public OrderListResource(OrderService service) {
+        this.service = service;
+    }
+
+    @GET
+    public Response list(
+            @QueryParam("page") @DefaultValue("0") int page,
+            @QueryParam("size") @DefaultValue("20") int size,
+            @QueryParam("sort") @DefaultValue("createdAt") String sort) {
+        if (size > MAX_PAGE_SIZE) {
+            throw new BadRequestException("size exceeds maximum of " + MAX_PAGE_SIZE);
+        }
+        if (!ALLOWED_SORT.contains(sort)) {
+            throw new BadRequestException("sort by '" + sort + "' is not allowed");
+        }
+        List<OrderResponse> orders = service.findPage(page, size, sort);
+        String nextLink = "</api/v1/orders?page=" + (page + 1) + "&size=" + size + ">; rel=\"next\"";
+        return Response.ok(orders).header("Link", nextLink).build();
+    }
+}
+
+record OrderResponse(long id, String status) { }
+interface OrderService { List<OrderResponse> findPage(int page, int size, String sort); }
+```
+
+**Bad example:**
+
+```java
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import java.util.List;
+
+@Path("/orders")
+@Produces(MediaType.APPLICATION_JSON)
+public class UnboundedOrderResource {
+
+    @GET
+    public List<OrderResponse> listAll(@QueryParam("sort") String sort) {
+        // Bad: no result cap — dumps entire table; sort field not validated
+        return loadAllOrders(sort);
+    }
+
+    private List<OrderResponse> loadAllOrders(String sort) { return List.of(); }
+}
+
+record OrderResponse(long id, String status) { }
+```
+
+### Example 11: Idempotency and safe retries
+
+Title: Idempotency-Key header, deduplication, 409 Conflict
+Description: Network clients retry `POST`; without idempotency, creates can duplicate. Accept an `Idempotency-Key` header and return the same result when the key replays a completed operation. Return **409 Conflict** when a request collides with current resource state (e.g. duplicate business key).
+
+**Good example:**
+
+```java
+import jakarta.inject.Inject;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import java.net.URI;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import org.eclipse.microprofile.openapi.annotations.Operation;
+import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
+
+@Path("/api/v1/payments")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public class PaymentResource {
+
+    private final Map<String, PaymentResponse> completed = new ConcurrentHashMap<>();
+
+    @Operation(summary = "Create payment",
+               description = "Idempotent: repeating the same Idempotency-Key returns the original result without a double charge.")
+    @POST
+    public Response create(
+            @Parameter(description = "Client-generated deduplication key", required = true)
+            @HeaderParam("Idempotency-Key") String idempotencyKey,
+            @Valid CreatePaymentRequest body) {
+        if (idempotencyKey == null || idempotencyKey.isBlank()) {
+            throw new BadRequestException("Idempotency-Key header is required");
+        }
+        PaymentResponse prior = completed.get(idempotencyKey);
+        if (prior != null) {
+            return Response.ok(prior).build(); // replay — no double charge
+        }
+        PaymentResponse created = new PaymentResponse("pay-" + System.currentTimeMillis());
+        completed.put(idempotencyKey, created);
+        return Response.created(URI.create("/api/v1/payments/" + created.id()))
+            .entity(created).build();
+    }
+}
+
+record CreatePaymentRequest(String accountId, int amountCents) { }
+record PaymentResponse(String id) { }
+```
+
+**Bad example:**
+
+```java
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
+@Path("/payments")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public class NonIdempotentPaymentResource {
+
+    @POST
+    public Response charge(CreatePaymentRequest body) {
+        // Bad: no Idempotency-Key — every retry causes a duplicate charge
+        return Response.ok(new PaymentResponse("pay-new")).build();
+    }
+}
+
+record CreatePaymentRequest(String accountId, int amountCents) { }
+record PaymentResponse(String id) { }
+```
+
+### Example 12: Optimistic concurrency with ETag
+
+Title: If-Match / If-None-Match, 412 Precondition Failed, 304 Not Modified
+Description: Prevent lost updates by generating an `ETag` on reads and requiring `If-Match` on writes. Use `jakarta.ws.rs.core.Request.evaluatePreconditions()` to check `If-None-Match` (yields **304**) or `If-Match` (yields **412**) without manual boilerplate.
+
+**Good example:**
+
+```java
+import jakarta.inject.Inject;
+import jakarta.validation.Valid;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.*;
+
+@Path("/api/v1/items")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public class ItemResource {
+
+    private final ItemService service;
+
+    @Inject
+    public ItemResource(ItemService service) {
+        this.service = service;
+    }
+
+    @GET
+    @Path("{id}")
+    public Response get(@PathParam("id") long id, @Context Request request) {
+        ItemResponse item = service.findById(id);
+        EntityTag etag = new EntityTag(Integer.toHexString(item.version()));
+        Response.ResponseBuilder notModified = request.evaluatePreconditions(etag);
+        if (notModified != null) {
+            return notModified.build(); // 304 Not Modified
+        }
+        return Response.ok(item).tag(etag).build();
+    }
+
+    @PUT
+    @Path("{id}")
+    public Response update(@PathParam("id") long id,
+                           @HeaderParam("If-Match") String ifMatch,
+                           @Valid UpdateItemRequest body) {
+        ItemResponse current = service.findById(id);
+        EntityTag etag = new EntityTag(Integer.toHexString(current.version()));
+        if (!etag.toString().equals(ifMatch)) {
+            return Response.status(Response.Status.PRECONDITION_FAILED).build(); // 412
+        }
+        ItemResponse updated = service.update(id, body);
+        return Response.ok(updated)
+            .tag(new EntityTag(Integer.toHexString(updated.version()))).build();
+    }
+}
+
+record ItemResponse(long id, String name, int version) { }
+record UpdateItemRequest(String name) { }
+interface ItemService {
+    ItemResponse findById(long id);
+    ItemResponse update(long id, UpdateItemRequest req);
+}
+```
+
+**Bad example:**
+
+```java
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
+@Path("/items")
+@Produces(MediaType.APPLICATION_JSON)
+@Consumes(MediaType.APPLICATION_JSON)
+public class BlindOverwriteResource {
+
+    @PUT
+    @Path("{id}")
+    public Response update(@PathParam("id") long id, UpdateItemRequest body) {
+        // Bad: no ETag / version check — concurrent updates silently overwrite each other
+        return Response.ok(new ItemResponse(id, body.name(), 0)).build();
+    }
+}
+
+record UpdateItemRequest(String name) { }
+record ItemResponse(long id, String name, int version) { }
+```
+
+### Example 13: Caching semantics
+
+Title: Cache-Control: public for catalog data, no-store for authenticated responses
+Description: Set `Cache-Control` deliberately: `public, max-age=N` for anonymous catalog data so CDNs and browsers can cache it; `no-store` for authenticated or personalized payloads to prevent cross-user data leaks via shared caches.
+
+**Good example:**
+
+```java
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.CacheControl;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
+@Path("/api/v1/catalog")
+@Produces(MediaType.APPLICATION_JSON)
+public class CatalogResource {
+
+    @GET
+    @Path("{id}")
+    public Response getPublic(@PathParam("id") long id) {
+        CacheControl cc = new CacheControl();
+        cc.setMaxAge(300);
+        return Response.ok(new ProductResponse(id, "Widget"))
+            .cacheControl(cc)
+            .header("Cache-Control", "public, max-age=300") // mark as publicly cacheable
+            .build();
+    }
+}
+
+@Path("/api/v1/me")
+@Produces(MediaType.APPLICATION_JSON)
+public class ProfileResource {
+
+    @GET
+    public Response getProfile() {
+        CacheControl noStore = new CacheControl();
+        noStore.setNoStore(true);
+        return Response.ok(new UserProfile("alice@example.com"))
+            .cacheControl(noStore)
+            .build(); // no-store: never served from a shared cache
+    }
+}
+
+record ProductResponse(long id, String name) { }
+record UserProfile(String email) { }
+```
+
+**Bad example:**
+
+```java
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
+@Path("/api/me")
+@Produces(MediaType.APPLICATION_JSON)
+public class BadProfileResource {
+
+    @GET
+    public Response getProfile() {
+        // Bad: authenticated user profile marked as publicly cacheable
+        // A CDN will serve user A's data to user B on the next request
+        return Response.ok(new UserProfile("alice@example.com"))
+            .header("Cache-Control", "public, max-age=3600")
+            .build();
+    }
+}
+
+record UserProfile(String email) { }
+```
+
+### Example 14: Deprecation and sunset
+
+Title: Deprecation, Sunset, and Link headers for API lifecycle signalling
+Description: When an endpoint or version is headed for removal, advertise it with RFC-style headers: `Deprecation` (`true` or an HTTP-date timestamp), `Sunset` with the expected removal date, and `Link` (`rel="successor-version"`) pointing to the replacement. Pair with your versioning strategy and document the timeline in OpenAPI.
+
+**Good example:**
+
+```java
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
+@Path("/api/v1/orders")
+@Produces(MediaType.APPLICATION_JSON)
+public class DeprecatedOrderResourceV1 {
+
+    @GET
+    @Path("{id}")
+    public Response get(@PathParam("id") long id) {
+        return Response.ok(new OrderDTOv1(id, "PENDING"))
+            .header("Deprecation", "true")
+            .header("Sunset", "Sat, 31 Dec 2026 23:59:59 GMT")
+            .header("Link", "</api/v2/orders/" + id + ">; rel=\"successor-version\"")
+            .build();
+        // Production tip: emit Deprecation/Sunset from a ContainerResponseFilter
+        // so all deprecated resources are flagged uniformly without per-method repetition.
+    }
+}
+
+record OrderDTOv1(long id, String status) { }
+```
+
+**Bad example:**
+
+```java
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+
+// No Deprecation / Sunset headers — clients have no way to know this endpoint is being removed
+@Path("/api/v1/orders")
+@Produces(MediaType.APPLICATION_JSON)
+public class SilentBreakResource {
+
+    @GET
+    @Path("{id}")
+    public Response get(@PathParam("id") long id) {
+        return Response.ok(new OrderDTOv1(id, "PENDING")).build();
+    }
+}
+
+record OrderDTOv1(long id, String status) { }
+```
+
+### Example 15: Security annotations
+
+Title: @RolesAllowed, @Authenticated, and @PermitAll for declarative access control
+Description: Use Jakarta Security and Quarkus Security annotations to declare access control at the resource or method level. Prefer `@RolesAllowed` for role-based access, `@io.quarkus.security.Authenticated` for any authenticated user, and `@PermitAll` for public endpoints. Avoid ad-hoc security checks inside business logic.
+
+**Good example:**
+
+```java
+import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.PermitAll;
+import jakarta.annotation.security.RolesAllowed;
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import java.util.List;
+
+@Path("/api/v1/orders")
+@Produces(MediaType.APPLICATION_JSON)
+@Authenticated // all methods require authentication unless overridden
+public class SecureOrderResource {
+
+    @GET
+    @PermitAll // public catalog read — no auth required
+    public List<OrderResponse> listPublic() {
+        return List.of();
+    }
+
+    @GET
+    @Path("{id}")
+    // @Authenticated inherited — any authenticated user can read
+    public OrderResponse get(@PathParam("id") long id) {
+        return new OrderResponse(id, "PENDING");
+    }
+
+    @DELETE
+    @Path("{id}")
+    @RolesAllowed("admin") // only users with the admin role can delete
+    public Response delete(@PathParam("id") long id) {
+        return Response.noContent().build();
+    }
+}
+
+record OrderResponse(long id, String status) { }
+```
+
+**Bad example:**
+
+```java
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.*;
+
+@Path("/orders")
+@Produces(MediaType.APPLICATION_JSON)
+public class AdHocSecurityResource {
+
+    @DELETE
+    @Path("{id}")
+    public Response delete(@PathParam("id") long id, @Context HttpHeaders headers) {
+        // Bad: manual token inspection instead of declarative security annotations
+        String token = headers.getHeaderString("X-Admin-Token");
+        if (!"secret".equals(token)) {
+            return Response.status(403).build();
+        }
+        return Response.noContent().build();
+    }
+}
+```
+
 ## Output Format
 
-- **ANALYZE** resources for HTTP misuse, missing validation, leaky entities, inconsistent error responses, and blocking on reactive threads
-- **APPLY** DTO boundaries, exception mappers, OpenAPI annotations, and correct status codes
-- **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+- **ANALYZE** resources for HTTP misuse, URI shape, status codes, DTO boundaries, versioning, deprecation/sunset/Link headers, `@Produces`/`@Consumes` declarations, ISO-8601 time fields, pagination bounds, Bean Validation on request DTOs, idempotency, ETag/concurrency, Cache-Control correctness, ExceptionMapper coverage, security annotations, and MicroProfile OpenAPI documentation
+- **CATEGORIZE** findings by impact (CRITICAL for security/semantic violations, MAINTAINABILITY for DTO/versioning/docs, CONSISTENCY for errors) and by area (routing, responses, errors, security, caching, docs)
+- **APPLY** improvements: fix unsafe GETs, normalize paths, return correct status codes, introduce DTO boundaries, add versioning, emit deprecation/sunset/Link when phasing out endpoints, tighten `@Produces`/`@Consumes`, bound list endpoints with `page`/`size` caps, add `@Valid` on request bodies, add idempotency and 409 Conflict patterns, add ETag/`If-Match` checks for updates, set `Cache-Control`, centralize errors with `ExceptionMapper` and Problem Detail shape, add declarative security annotations, and enrich MicroProfile OpenAPI metadata
+- **IMPLEMENT** incrementally: preserve public API contracts where possible; use deprecation and versioning for breaking changes; keep error shapes backward compatible unless versioning allows a break
+- **EXPLAIN** trade-offs (e.g., URI vs header versioning, blocking vs reactive patterns, `@Blocking` vs `@RunOnVirtualThread`) when multiple valid options exist
+- **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits; exercise critical endpoints in integration tests where available
 
 ## Safeguards
 
-- **BLOCKING SAFETY CHECK**: Compile before refactoring REST code
-- **REACTIVE THREADS**: Long blocking JDBC or HTTP client calls may need `@Blocking` or execution on worker pool — verify under load
+- **BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` or `mvn compile` before ANY REST refactoring — compilation failure is a HARD STOP
+- **CRITICAL VALIDATION**: Run `./mvnw clean verify` after changes that touch resources, exception mappers, security, or DTOs
+- **SECURITY**: Never log or return secrets, tokens, or passwords in API responses; verify that error payloads do not include stack traces in production
+- **COMPATIBILITY**: Changing status codes, DTO field names, or error JSON shapes can break clients — coordinate versioning or deprecation before making breaking changes
+- **REACTIVE THREADS**: Long blocking JDBC or HTTP client calls on the Vert.x event loop will stall other requests — annotate with `@Blocking` or use `@RunOnVirtualThread`
+- **INCREMENTAL SAFETY**: Prefer small, reviewable resource and mapper changes over large sweeping rewrites; verify compile and tests between steps

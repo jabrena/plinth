@@ -25,6 +25,12 @@
         6. **Optional Spring JDBC**: If the project already uses `quarkus-spring-jdbc`, `NamedParameterJdbcTemplate` is acceptable — same binding rules apply.
         7. **Dev experience**: Use Dev Services for databases in dev/test when practical (`quarkus.datasource.devservices.enabled`).
 
+        8. **Safe single-row access**: Wrap single-row queries in `Optional`; always call `ResultSet.next()` and check its return value before reading columns — never assume a row exists.
+        9. **Exception handling**: Translate `SQLIntegrityConstraintViolationException` and other `SQLException` subtypes to meaningful domain exceptions at service boundaries; never let raw `SQLException` propagate to callers.
+        10. **Streaming large results**: Set `setFetchSize()` on `PreparedStatement` and process `ResultSet` rows incrementally; never load multi-million-row result sets into a `List` first.
+        11. **Batch operations**: Use `PreparedStatement.addBatch()` / `executeBatch()` for bulk inserts and updates to reduce round-trips and improve throughput.
+        12. **Transaction propagation**: Know the JTA propagation types (`REQUIRED` default, `REQUIRES_NEW` for independent commit, `MANDATORY` to enforce an existing transaction, `NEVER` to forbid one); prefer `REQUIRES_NEW` when a nested operation must commit or roll back independently of the caller.
+
         **Cross-references**: Panache (ORM-style) — `@412-frameworks-quarkus-panache`. Quarkus core — `@401-frameworks-quarkus-core`. Secure SQL — `@124-java-secure-coding`.
     </goal>
 
@@ -38,6 +44,8 @@
             <constraint>**PREREQUISITE**: Project must compile successfully before JDBC changes</constraint>
             <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE</constraint>
             <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+            <constraint>**BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with data-access changes</constraint>
+            <constraint>**NO EXCEPTIONS**: Under no circumstances should JDBC recommendations be applied to a project that fails to compile</constraint>
         </constraint-list>
     </constraints>
 
@@ -172,9 +180,625 @@ long insert(Connection c, String email) throws Exception {
     }
 }]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
+                <bad-example>
                     <code-block language="java"><![CDATA[// Bad: assuming last inserted id from another connection or session
 long id = selectMaxIdPlusOne();]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="row-mapping-records">
+            <example-header>
+                <example-title>Row mapping to records</example-title>
+                <example-subtitle>Extract a private mapRow method for reuse, clarity, and null safety</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Extract `ResultSet`-to-record conversion into a private `mapRow(ResultSet)` method. This keeps query methods readable, centralizes null-handling and type conversion, and makes the mapping easy to test and reuse across multiple queries.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import javax.sql.DataSource;
+import java.sql.*;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+
+record OrderRow(long id, long customerId, String status, Instant createdAt) { }
+
+@ApplicationScoped
+public class OrderJdbcRepository {
+
+    private final DataSource dataSource;
+
+    @Inject
+    public OrderJdbcRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public List<OrderRow> findByCustomer(long customerId) throws SQLException {
+        String sql = "SELECT id, customer_id, status, created_at FROM orders WHERE customer_id = ?";
+        try (Connection c = dataSource.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setLong(1, customerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                List<OrderRow> rows = new ArrayList<>();
+                while (rs.next()) {
+                    rows.add(mapRow(rs)); // centralised, reusable
+                }
+                return rows;
+            }
+        }
+    }
+
+    private OrderRow mapRow(ResultSet rs) throws SQLException {
+        return new OrderRow(
+            rs.getLong("id"),
+            rs.getLong("customer_id"),
+            rs.getString("status"),
+            rs.getTimestamp("created_at").toInstant()
+        );
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+import javax.sql.DataSource;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+@ApplicationScoped
+public class OrderJdbcRepository {
+
+    private final DataSource dataSource;
+
+    public OrderJdbcRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public List<Object[]> findByCustomer(long customerId) throws SQLException {
+        // Bad: Object[] loses type safety; inline mapping duplicated at every call site
+        String sql = "SELECT id, customer_id, status, created_at FROM orders WHERE customer_id = ?";
+        try (Connection c = dataSource.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setLong(1, customerId);
+            try (ResultSet rs = ps.executeQuery()) {
+                List<Object[]> rows = new ArrayList<>();
+                while (rs.next()) {
+                    rows.add(new Object[]{ rs.getLong("id"), rs.getString("status") });
+                }
+                return rows;
+            }
+        }
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="5" id="safe-single-row-queries">
+            <example-header>
+                <example-title>Safe single-row queries</example-title>
+                <example-subtitle>Wrap in Optional — always check ResultSet.next() before reading columns</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                A query that may return zero rows must check `ResultSet.next()` and return `Optional.empty()` when absent. Calling `rs.next()` without checking the return value, or reading columns before the cursor is on a row, results in `NullPointerException` or incorrect data.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import javax.sql.DataSource;
+import java.sql.*;
+import java.util.Optional;
+
+record CustomerRow(long id, String email, String status) { }
+
+@ApplicationScoped
+public class CustomerJdbcRepository {
+
+    private final DataSource dataSource;
+
+    @Inject
+    public CustomerJdbcRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public Optional<CustomerRow> findById(long id) throws SQLException {
+        String sql = "SELECT id, email, status FROM customer WHERE id = ?";
+        try (Connection c = dataSource.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setLong(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    return Optional.of(new CustomerRow(
+                        rs.getLong("id"),
+                        rs.getString("email"),
+                        rs.getString("status")
+                    ));
+                }
+                return Optional.empty();
+            }
+        }
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import javax.sql.DataSource;
+import java.sql.*;
+
+public class CustomerJdbcRepository {
+
+    private final DataSource dataSource;
+
+    public CustomerJdbcRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public CustomerRow findById(long id) throws SQLException {
+        String sql = "SELECT id, email, status FROM customer WHERE id = ?";
+        try (Connection c = dataSource.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setLong(1, id);
+            try (ResultSet rs = ps.executeQuery()) {
+                rs.next(); // Bad: unchecked — throws or returns wrong data when no row exists
+                return new CustomerRow(rs.getLong("id"), rs.getString("email"), rs.getString("status"));
+            }
+        }
+    }
+}
+
+record CustomerRow(long id, String email, String status) { }]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="6" id="sql-exception-translation">
+            <example-header>
+                <example-title>SQL exception translation</example-title>
+                <example-subtitle>Translate SQLException subtypes to domain exceptions at service boundaries</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Catch `SQLIntegrityConstraintViolationException` (unique constraints, FK violations) and other `SQLException` subtypes at the service layer and re-throw as domain-meaningful exceptions. Never let raw `SQLException` propagate to REST resources or callers that should not know about the database schema.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import javax.sql.DataSource;
+import java.sql.*;
+
+@ApplicationScoped
+public class AccountService {
+
+    private final DataSource dataSource;
+
+    @Inject
+    public AccountService(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    @Transactional
+    public void register(String email) {
+        String sql = "INSERT INTO accounts (email) VALUES (?)";
+        try (Connection c = dataSource.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ps.executeUpdate();
+        } catch (SQLIntegrityConstraintViolationException ex) {
+            throw new EmailAlreadyRegisteredException(email, ex);
+        } catch (SQLException ex) {
+            throw new AccountPersistenceException("Failed to register: " + email, ex);
+        }
+    }
+}
+
+public class EmailAlreadyRegisteredException extends RuntimeException {
+    public EmailAlreadyRegisteredException(String email, Throwable cause) {
+        super("Email already registered: " + email, cause);
+    }
+}
+
+public class AccountPersistenceException extends RuntimeException {
+    public AccountPersistenceException(String message, Throwable cause) {
+        super(message, cause);
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import javax.sql.DataSource;
+import java.sql.*;
+
+@ApplicationScoped
+public class AccountService {
+
+    private final DataSource dataSource;
+
+    public AccountService(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    // Bad: propagates raw SQLException — callers must catch java.sql.* and
+    // lose all domain context; unique constraint violation looks the same as a timeout
+    @Transactional
+    public void register(String email) throws SQLException {
+        String sql = "INSERT INTO accounts (email) VALUES (?)";
+        try (Connection c = dataSource.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setString(1, email);
+            ps.executeUpdate();
+        }
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="7" id="batch-updates">
+            <example-header>
+                <example-title>Batch updates</example-title>
+                <example-subtitle>addBatch / executeBatch for bulk inserts and updates</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                For inserting or updating many rows, use `PreparedStatement.addBatch()` to stage statements and `executeBatch()` to send them in a single round-trip. Executing one statement per loop iteration multiplies latency and overwhelms the connection pool.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import javax.sql.DataSource;
+import java.sql.*;
+import java.util.List;
+
+@ApplicationScoped
+public class ItemBatchRepository {
+
+    private final DataSource dataSource;
+
+    @Inject
+    public ItemBatchRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    @Transactional
+    public void insertItems(List<String> names) throws SQLException {
+        String sql = "INSERT INTO items (name) VALUES (?)";
+        try (Connection c = dataSource.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            for (String name : names) {
+                ps.setString(1, name);
+                ps.addBatch();
+            }
+            ps.executeBatch(); // single round-trip for all rows
+        }
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import javax.sql.DataSource;
+import java.sql.*;
+import java.util.List;
+
+@ApplicationScoped
+public class ItemBatchRepository {
+
+    private final DataSource dataSource;
+
+    public ItemBatchRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    // Bad: N separate round-trips — catastrophic for large lists
+    @Transactional
+    public void insertItems(List<String> names) throws SQLException {
+        for (String name : names) {
+            String sql = "INSERT INTO items (name) VALUES (?)";
+            try (Connection c = dataSource.getConnection();
+                 PreparedStatement ps = c.prepareStatement(sql)) {
+                ps.setString(1, name);
+                ps.executeUpdate();
+            }
+        }
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="8" id="streaming-large-result-sets">
+            <example-header>
+                <example-title>Streaming large result sets</example-title>
+                <example-subtitle>setFetchSize for server-side cursor; process rows one at a time</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                For large exports or aggregations, set `setFetchSize()` on the `PreparedStatement` to enable a server-side cursor that streams rows in pages. Combined with `ResultSet.TYPE_FORWARD_ONLY` and `CONCUR_READ_ONLY`, this prevents loading the entire result set into heap memory before processing begins.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import javax.sql.DataSource;
+import java.io.PrintWriter;
+import java.sql.*;
+
+@ApplicationScoped
+public class AuditExportRepository {
+
+    private final DataSource dataSource;
+
+    @Inject
+    public AuditExportRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    @Transactional
+    public void exportAuditLog(PrintWriter writer) throws SQLException {
+        String sql = "SELECT id, action, created_at FROM audit_log ORDER BY created_at";
+        try (Connection c = dataSource.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql,
+                 ResultSet.TYPE_FORWARD_ONLY, ResultSet.CONCUR_READ_ONLY)) {
+            ps.setFetchSize(500); // stream rows 500 at a time — no full load into heap
+            try (ResultSet rs = ps.executeQuery()) {
+                while (rs.next()) {
+                    writer.printf("%d,%s,%s%n",
+                        rs.getLong("id"),
+                        rs.getString("action"),
+                        rs.getTimestamp("created_at"));
+                }
+            }
+        }
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import javax.sql.DataSource;
+import java.io.PrintWriter;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+
+record AuditRow(long id, String action, java.sql.Timestamp createdAt) { }
+
+@ApplicationScoped
+public class AuditExportRepository {
+
+    private final DataSource dataSource;
+
+    public AuditExportRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    // Bad: loads all rows into a List before writing — OOM risk on large tables
+    @Transactional
+    public void exportAuditLog(PrintWriter writer) throws SQLException {
+        List<AuditRow> rows = new ArrayList<>();
+        try (Connection c = dataSource.getConnection();
+             PreparedStatement ps = c.prepareStatement(
+                 "SELECT id, action, created_at FROM audit_log ORDER BY created_at");
+             ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                rows.add(new AuditRow(rs.getLong("id"), rs.getString("action"), rs.getTimestamp("created_at")));
+            }
+        }
+        for (AuditRow r : rows) {
+            writer.printf("%d,%s,%s%n", r.id(), r.action(), r.createdAt());
+        }
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="9" id="transaction-propagation">
+            <example-header>
+                <example-title>Transaction propagation types</example-title>
+                <example-subtitle>REQUIRED for coordinated work, REQUIRES_NEW for independent commits</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                The default `REQUIRED` propagation joins an existing transaction or starts a new one — correct for most service calls. Use `REQUIRES_NEW` when an operation (e.g. audit logging, metrics recording) must commit independently even if the caller's transaction later rolls back. `MANDATORY` enforces that an outer transaction already exists.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import javax.sql.DataSource;
+import java.sql.*;
+
+@ApplicationScoped
+public class AuditRepository {
+
+    private final DataSource dataSource;
+
+    @Inject
+    public AuditRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    // REQUIRES_NEW: always commits independently — audit entry survives even if
+    // the caller's transaction rolls back
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    public void logEvent(String event, long entityId) throws SQLException {
+        String sql = "INSERT INTO audit_log (event, entity_id, occurred_at) VALUES (?, ?, NOW())";
+        try (Connection c = dataSource.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setString(1, event);
+            ps.setLong(2, entityId);
+            ps.executeUpdate();
+        }
+    }
+}
+
+@ApplicationScoped
+public class OrderService {
+
+    private final DataSource dataSource;
+    private final AuditRepository auditRepository;
+
+    @Inject
+    public OrderService(DataSource dataSource, AuditRepository auditRepository) {
+        this.dataSource = dataSource;
+        this.auditRepository = auditRepository;
+    }
+
+    // REQUIRED: joins existing transaction or starts one
+    @Transactional
+    public void placeOrder(long customerId, String sku) throws SQLException {
+        String sql = "INSERT INTO orders (customer_id, sku) VALUES (?, ?)";
+        try (Connection c = dataSource.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setLong(1, customerId);
+            ps.setString(2, sku);
+            ps.executeUpdate();
+        }
+        auditRepository.logEvent("order-placed", customerId); // commits in its own transaction
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import javax.sql.DataSource;
+import java.sql.*;
+
+@ApplicationScoped
+public class OrderService {
+
+    private final DataSource dataSource;
+
+    public OrderService(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    // Bad: no @Transactional — each repository call runs in its own auto-commit connection;
+    // if the inventory update fails, the order insert is already committed and cannot be rolled back
+    public void placeOrder(long customerId, String sku) throws SQLException {
+        insertOrder(customerId, sku);
+        insertInventoryMovement(sku, -1); // failure here cannot undo insertOrder
+    }
+
+    private void insertOrder(long customerId, String sku) throws SQLException { }
+    private void insertInventoryMovement(String sku, int delta) throws SQLException { }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="10" id="cdi-self-invocation-pitfall">
+            <example-header>
+                <example-title>CDI self-invocation pitfall</example-title>
+                <example-subtitle>Calling @Transactional via this.method() bypasses the CDI interceptor</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                CDI applies `@Transactional` through an interceptor that wraps the CDI client proxy. When a method inside a bean calls another method on the same instance via `this.method()`, it bypasses the proxy entirely and the `@Transactional` annotation on the inner method has no effect. Extract the inner method to a separate CDI-managed bean to ensure proxy interception.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.transaction.Transactional;
+import javax.sql.DataSource;
+import java.sql.*;
+
+// Separate bean — CDI proxy is intercepted correctly for every cross-bean call
+@ApplicationScoped
+public class AuditRepository {
+
+    private final DataSource dataSource;
+
+    @Inject
+    public AuditRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    @Transactional
+    public void logEvent(String event, long entityId) throws SQLException {
+        String sql = "INSERT INTO audit_log (event, entity_id) VALUES (?, ?)";
+        try (Connection c = dataSource.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setString(1, event);
+            ps.setLong(2, entityId);
+            ps.executeUpdate();
+        }
+    }
+}
+
+@ApplicationScoped
+public class OrderService {
+
+    private final DataSource dataSource;
+    private final AuditRepository auditRepository; // injected — calls go through CDI proxy
+
+    @Inject
+    public OrderService(DataSource dataSource, AuditRepository auditRepository) {
+        this.dataSource = dataSource;
+        this.auditRepository = auditRepository;
+    }
+
+    @Transactional
+    public void placeOrder(long customerId, String sku) throws SQLException {
+        // ... insert order ...
+        auditRepository.logEvent("order-placed", customerId); // proxy intercepted — @Transactional honoured
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
+import javax.sql.DataSource;
+import java.sql.*;
+
+@ApplicationScoped
+public class OrderService {
+
+    private final DataSource dataSource;
+
+    public OrderService(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public void placeOrder(long customerId, String sku) throws SQLException {
+        // ... insert order ...
+        this.logAudit("order-placed", customerId); // Bad: self-invocation bypasses CDI proxy
+                                                   // @Transactional on logAudit is silently ignored
+    }
+
+    @Transactional
+    public void logAudit(String event, long entityId) throws SQLException {
+        String sql = "INSERT INTO audit_log (event, entity_id) VALUES (?, ?)";
+        try (Connection c = dataSource.getConnection();
+             PreparedStatement ps = c.prepareStatement(sql)) {
+            ps.setString(1, event);
+            ps.setLong(2, entityId);
+            ps.executeUpdate();
+        }
+    }
+}]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
@@ -182,16 +806,28 @@ long id = selectMaxIdPlusOne();]]></code-block>
 
     <output-format>
         <output-format-list>
-            <output-format-item>**ANALYZE** JDBC code for injection risk, missing transactions, connection leaks, and N+1 patterns</output-format-item>
-            <output-format-item>**RECOMMEND** Panache (`@412`) when CRUD and entity state dominate; keep JDBC for ad-hoc SQL</output-format-item>
-            <output-format-item>**VALIDATE** with `./mvnw clean verify` after changes</output-format-item>
+            <output-format-item>**ANALYZE** JDBC code for SQL injection risk, parameter binding style, try-with-resources coverage, transaction boundaries, missing `Optional` on single-row queries, exception translation, batch opportunities, and streaming gaps for large result sets</output-format-item>
+            <output-format-item>**CATEGORIZE** findings by impact (SECURITY for injection risk, CORRECTNESS for missing transactions or unsafe single-row access, PERFORMANCE for N+1 / missing batch / missing fetch-size streaming, MAINTAINABILITY for inline mapping)</output-format-item>
+            <output-format-item>**APPLY** improvements: introduce parameter binding, extract `mapRow` methods, wrap single-row queries in `Optional`, add `@Transactional` at service boundaries, add batch operations, set `setFetchSize` for large exports, translate `SQLException` subtypes to domain exceptions</output-format-item>
+            <output-format-item>**HANDLE** exceptions: translate `SQLIntegrityConstraintViolationException` and other `SQLException` subtypes at the service layer; wrap in meaningful domain exceptions preserving the cause</output-format-item>
+            <output-format-item>**TEST** with `@QuarkusTest` and Dev Services for realistic database coverage; avoid mocking `DataSource` or `Connection` — use real schema with test profiles</output-format-item>
+            <output-format-item>**RECOMMEND** Panache (`@412-frameworks-quarkus-panache`) when CRUD and entity-state management dominate; keep raw JDBC for ad-hoc SQL, reporting, and bulk ETL</output-format-item>
+            <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits</output-format-item>
         </output-format-list>
     </output-format>
 
     <safeguards>
         <safeguards-list>
-            <safeguards-item>**SQL INJECTION**: String-built SQL from user input is a hard reject — use bind parameters</safeguards-item>
-            <safeguards-item>**CONNECTION LEAKS**: Every `Connection` must be closed — prefer try-with-resources</safeguards-item>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` or `mvn compile` before ANY JDBC refactoring — compilation failure is a HARD STOP</safeguards-item>
+            <safeguards-item>**SQL INJECTION**: Never build SQL by concatenating untrusted input — use `PreparedStatement` bind parameters exclusively</safeguards-item>
+            <safeguards-item>**CONNECTION LEAKS**: Every `Connection`, `PreparedStatement`, and `ResultSet` must be closed — always use try-with-resources</safeguards-item>
+            <safeguards-item>**TRANSACTION BOUNDARIES**: Multi-step writes must share a `@Transactional` boundary at the service layer; never rely on auto-commit for coordinated operations</safeguards-item>
+            <safeguards-item>**SINGLE-ROW SAFETY**: Always check `ResultSet.next()` before reading columns; return `Optional.empty()` when no row is found rather than `null` or throwing</safeguards-item>
+            <safeguards-item>**EXCEPTION TRANSLATION**: Translate `SQLIntegrityConstraintViolationException` and other `SQLException` subtypes to domain exceptions at service boundaries; preserve the original cause for diagnostics</safeguards-item>
+            <safeguards-item>**BATCH SAFETY**: Wrap batch inserts/updates in `@Transactional`; call `executeBatch()` inside the same try-with-resources block as `prepareStatement()`</safeguards-item>
+            <safeguards-item>**STREAMING**: A server-side cursor via `setFetchSize()` requires the `ResultSet` to remain open while rows are processed — do not close the connection until streaming is complete</safeguards-item>
+            <safeguards-item>**SELF-INVOCATION**: Never call a `@Transactional` method via `this.method()` within the same bean — the CDI interceptor is bypassed; extract to a separate CDI-managed bean</safeguards-item>
+            <safeguards-item>**INCREMENTAL SAFETY**: Change data-access code in small steps, covered by `@QuarkusTest` integration tests using Dev Services; do not rely on `./mvnw compile` alone to verify correctness</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>

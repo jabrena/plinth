@@ -1,6 +1,6 @@
 ---
 name: 401-frameworks-quarkus-core
-description: Use when you need to review, improve, or build Quarkus applications — including @QuarkusMain entry points, CDI scopes (@ApplicationScoped, @Singleton, @Dependent), constructor injection, @ConfigMapping and SmallRye Config, profiles (%dev, %test, %prod), build-time vs runtime configuration, lifecycle (@Startup, @PreDestroy), health and metrics hooks, and test-friendly bean design. Part of the skills-for-java project
+description: Use when you need to review, improve, or build Quarkus applications — including @QuarkusMain entry points, CDI scopes (@ApplicationScoped, @Singleton, @Dependent), constructor injection, @ConfigMapping and SmallRye Config, profiles (%dev, %test, %prod), build-time vs runtime configuration, lifecycle (@Startup, @PreDestroy), CDI interceptors, CDI events (@Observes, @ObservesAsync), programmatic injection (Instance<T>), configuration validation with Bean Validation, SmallRye Health probes, virtual threads (@RunOnVirtualThread), and test-friendly bean design. Part of the skills-for-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -13,13 +13,17 @@ Apply Quarkus core guidelines for CDI beans, configuration, profiles, and lifecy
 **What is covered in this Skill?**
 
 - @QuarkusMain and application entry (when custom main is needed)
-- CDI scopes: @ApplicationScoped, @Singleton, @Dependent
+- CDI scopes: @ApplicationScoped, @Singleton, @Dependent; bean disambiguation (@Default, @Alternative, @Named)
 - Constructor injection with @Inject
-- @ConfigMapping and structured configuration
+- CDI interceptors (@Interceptor, @InterceptorBinding) for cross-cutting concerns
+- CDI events: @Observes StartupEvent / ShutdownEvent, @ObservesAsync for async dispatch
+- Programmatic injection with Instance<T> for dynamic bean selection
+- @ConfigMapping and structured configuration with Bean Validation (@Valid)
 - Profile-specific properties (%dev, %test, %prod) and @IfBuildProfile
 - Startup and shutdown observers (@Startup, @PreDestroy)
-- Operational hooks: health, metrics (when extensions are present)
-- Alignment with fast startup and native-image constraints
+- SmallRye Health probes (@Liveness, @Readiness)
+- Virtual threads with @RunOnVirtualThread (Java 21+)
+- Native-image safety: @RegisterForReflection, @DisabledOnNativeImage
 
 **Scope:** Apply recommendations based on the reference rules and good/bad code examples.
 
@@ -28,7 +32,9 @@ Apply Quarkus core guidelines for CDI beans, configuration, profiles, and lifecy
 Before applying any Quarkus changes, ensure the project compiles. If compilation fails, stop immediately. After applying improvements, run full verification.
 
 - **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
+- **PREREQUISITE**: Project must compile successfully before applying Quarkus core improvements
 - **SAFETY**: If compilation fails, stop immediately — compilation failure is a blocking condition
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 - **BEFORE APPLYING**: Read the reference for detailed rules, good/bad patterns, and constraints
 
@@ -36,6 +42,8 @@ Before applying any Quarkus changes, ensure the project compiles. If compilation
 
 - Review Java code for Quarkus application structure and CDI
 - Apply best practices for Quarkus configuration and beans
+- Improve CDI interceptors, events, or programmatic injection in Quarkus
+- Add SmallRye Health probes or virtual-thread configuration
 
 ## Reference
 
