@@ -34,8 +34,9 @@ Generate comprehensive Java project documentation through a modular, step-based 
 
   <triggers>
     <trigger-list>
-        <trigger>Review Java code for documentation</trigger>
-        <trigger>Apply best practices for documentation in Java code</trigger>
+        <trigger>Improve the code with documentation</trigger>
+        <trigger>Apply documentation</trigger>
+        <trigger>Refactor the code with documentation</trigger>
     </trigger-list>
   </triggers>
 

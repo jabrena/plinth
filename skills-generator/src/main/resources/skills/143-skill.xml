@@ -41,8 +41,9 @@ Identify and apply functional exception handling best practices in Java to impro
 
   <triggers>
     <trigger-list>
-        <trigger>Review Java code for functional exception handling</trigger>
-        <trigger>Apply best practices for functional exception handling in Java code</trigger>
+        <trigger>Improve the code with Functional Exception Handling</trigger>
+        <trigger>Apply Functional Exception Handling</trigger>
+        <trigger>Refactor the code with Functional Exception Handling</trigger>
     </trigger-list>
   </triggers>
 

@@ -43,8 +43,9 @@ Review and improve Java code using comprehensive generics best practices that en
 
   <triggers>
     <trigger-list>
-        <trigger>Review Java code for generics</trigger>
-        <trigger>Apply best practices for generics in Java code</trigger>
+        <trigger>Improve the code with Generics</trigger>
+        <trigger>Apply Generics</trigger>
+        <trigger>Refactor the code with Generics</trigger>
     </trigger-list>
   </triggers>
 

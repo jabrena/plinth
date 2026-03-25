@@ -79,15 +79,15 @@ flowchart LR
 | 6 | Refactor: structured logging (categories under `info.jab.ms`, ADR-002) | Refactor | | | A1 | Done |
 | 7 | Refactor: tighten timeouts / test profile wiring for WireMock | Refactor | | | A1 | Done |
 | 8 | Verify milestone: `./mvnw clean verify` (or scoped module tests) | Verify | | milestone | A1 | Done |
-| 9 | RED: tests for Greek REST client (`@Path` `/jabrena/latency-problems/greek` + base URL) | RED | Test | | A2 | |
-| 10 | GREEN: `@RegisterRestClient` Greek client → `List<String>` / array type per contract | GREEN | Impl | | A2 | |
-| 11 | RED: tests for Wikipedia client (`@PathParam` god, encoding) | RED | Test | | A2 | |
-| 12 | GREEN: Wikipedia client returning `String` (HTML body) | GREEN | Impl | | A2 | |
-| 13 | RED: service tests — fan-out, tie sort order, Wikipedia failure → 0, timeout/delay → 0 | RED | Test | | A2 | |
-| 14 | GREEN: service — `CompletableFuture` + `Executors.newVirtualThreadPerTaskExecutor()`, map failures to 0, compute max + all ties | GREEN | Impl | | A2 | |
-| 15 | Refactor: service logging and clear boundaries (Greek failure vs Wikipedia) | Refactor | | | A2 | |
-| 16 | Refactor: resource maps Greek failure → `Response.status(503).build()` empty body; no Problem Details on this path | Refactor | | | A2 | |
-| 17 | Verify milestone | Verify | | milestone | A2 | |
+| 9 | RED: tests for Greek REST client (`@Path` `/jabrena/latency-problems/greek` + base URL) | RED | Test | | A2 | Done |
+| 10 | GREEN: `@RegisterRestClient` Greek client → `List<String>` / array type per contract | GREEN | Impl | | A2 | Done |
+| 11 | RED: tests for Wikipedia client (`@PathParam` god, encoding) | RED | Test | | A2 | Done |
+| 12 | GREEN: Wikipedia client returning `String` (HTML body) | GREEN | Impl | | A2 | Done |
+| 13 | RED: service tests — fan-out, tie sort order, Wikipedia failure → 0, timeout/delay → 0 | RED | Test | | A2 | Done |
+| 14 | GREEN: service — `CompletableFuture` + `Executors.newVirtualThreadPerTaskExecutor()`, map failures to 0, compute max + all ties | GREEN | Impl | | A2 | Done |
+| 15 | Refactor: service logging and clear boundaries (Greek failure vs Wikipedia) | Refactor | | | A2 | Done |
+| 16 | Refactor: resource maps Greek failure → `Response.status(503).build()` empty body; no Problem Details on this path | Refactor | | | A2 | Done |
+| 17 | Verify milestone | Verify | | milestone | A2 | Done |
 | 18 | RED: `@Tag("acceptance-test")` scenarios from feature — Zeus wins; Zeus down → Ares; three-way tie; Greek API down → **503** empty body (`body(emptyString())` or equivalent); optional Wikipedia delay > read timeout | RED | Test | | A3 | |
 | 19 | GREEN: complete behaviors + `@Tag("integration-test")` slice if split | GREEN | Impl | | A3 | |
 | 20 | Refactor: log levels / noise reduction for tests | Refactor | | | A3 | |

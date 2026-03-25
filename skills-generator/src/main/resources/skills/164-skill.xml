@@ -38,6 +38,12 @@ Verify performance optimizations through rigorous before/after comparison: ensur
   <triggers>
     <trigger-list>
         <trigger>Verify performance fix</trigger>
+        <trigger>Verify the performance</trigger>
+        <trigger>Verify the memory</trigger>
+        <trigger>Verify the threading</trigger>
+        <trigger>Verify the GC</trigger>
+        <trigger>Verify the profiling</trigger>
+        <trigger>Verify the profiling</trigger>
         <trigger>Performance benchmark</trigger>
     </trigger-list>
   </triggers>

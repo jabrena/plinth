@@ -37,7 +37,9 @@ Set up the Java profiling detection phase: automated environment setup with asyn
 
   <triggers>
     <trigger-list>
-        <trigger>Review Java code for profiling</trigger>
+        <trigger>Improve the code with profiling</trigger>
+        <trigger>Apply Profiling</trigger>
+        <trigger>Refactor the code with profiling</trigger>
         <trigger>Add profiling support</trigger>
     </trigger-list>
   </triggers>

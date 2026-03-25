@@ -1,6 +1,6 @@
 ---
 name: 401-frameworks-quarkus-core
-description: Use when you need to review, improve, or build Quarkus applications — including @QuarkusMain entry points, CDI scopes (@ApplicationScoped, @Singleton, @Dependent), constructor injection, @ConfigMapping and SmallRye Config, profiles (%dev, %test, %prod), build-time vs runtime configuration, lifecycle (@Startup, @PreDestroy), health and metrics hooks, and test-friendly bean design.
+description: Use when you need to review, improve, or build Quarkus applications — including mandatory @QuarkusMain entry points with static main methods, CDI scopes (@ApplicationScoped, @Singleton, @Dependent), constructor injection, @ConfigMapping and SmallRye Config, profiles (%dev, %test, %prod), build-time vs runtime configuration, lifecycle (@Startup, @PreDestroy), health and metrics hooks, and test-friendly bean design.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -20,7 +20,7 @@ Quarkus core development favors explicit CDI beans, narrow scopes, type-safe con
 
 These guidelines are built upon the following core principles:
 
-1. **Composition and entry**: Use `@QuarkusMain` only when you need a custom `main`; otherwise rely on generated launcher. Keep `main` thin — no business logic.
+1. **Composition and entry**: Always provide a `@QuarkusMain` class with a static `main` method using `Quarkus.run(args)` for simple cases, or implement `QuarkusApplication` for lifecycle control. Keep `main` thin — no business logic.
 2. **CDI scopes**: Default services to `@ApplicationScoped`; use `@Singleton` only when you truly need one instance without client proxies; use `@Dependent` for per-injection lifecycle; avoid `@RequestScoped` on non-HTTP-aware beans unless the extension supports it.
 3. **Injection**: Prefer constructor injection; avoid field injection in domain services; use `@Inject` with final fields via constructor.
 4. **Configuration**: Map `application.properties` with `@ConfigMapping` interfaces or `@ConfigProperty`; validate with Bean Validation on config types where useful; never hardcode secrets — use env vars or Kubernetes secrets mapping.
@@ -49,23 +49,60 @@ Before applying any recommendations, ensure the project is in a valid state by r
 
 ### Table of contents
 
-- Example 1: Application entry point
-- Example 2: Service beans
-- Example 3: Type-safe configuration
-- Example 4: Profiles in configuration
-- Example 5: Startup hooks
-- Example 6: CDI bean disambiguation
-- Example 7: CDI events and lifecycle observers
-- Example 8: Resource cleanup with @PreDestroy
-- Example 9: Configuration validation
-- Example 10: Programmatic injection with Instance<T>
-- Example 11: Health probes with SmallRye Health
-- Example 12: Virtual threads with @RunOnVirtualThread
+- Example 1: Simple application entry point
+- Example 2: Advanced application entry point
+- Example 3: Service beans
+- Example 4: Type-safe configuration
+- Example 5: Profiles in configuration
+- Example 6: Startup hooks
+- Example 7: CDI bean disambiguation
+- Example 8: CDI events and lifecycle observers
+- Example 9: Resource cleanup with @PreDestroy
+- Example 10: Configuration validation
+- Example 11: Programmatic injection with Instance<T>
+- Example 12: Health probes with SmallRye Health
+- Example 13: Virtual threads with @RunOnVirtualThread
 
-### Example 1: Application entry point
+### Example 1: Simple application entry point
 
-Title: Prefer generated main; custom @QuarkusMain only when needed
-Description: Most Quarkus apps use the generated `main` from the build. Use `@QuarkusMain` when you must run logic before `Quarkus.run()` or customize args. Never put domain logic in `main`.
+Title: @QuarkusMain with static main method
+Description: Every Quarkus application should have a `@QuarkusMain` class with a static `main` method. For simple cases, use `Quarkus.run(args)` directly. Keep `main` thin — no business logic.
+
+**Good example:**
+
+```java
+import io.quarkus.runtime.Quarkus;
+import io.quarkus.runtime.annotations.QuarkusMain;
+
+/**
+ * Main application class for the service.
+ */
+@QuarkusMain
+public class MyApplication {
+
+    public static void main(String... args) {
+        Quarkus.run(args);
+    }
+}
+```
+
+**Bad example:**
+
+```java
+@QuarkusMain
+public class BloatedMain {
+    public static void main(String... args) {
+        // Bad: orchestrating use cases directly in main
+        new OrderService().processBacklog();
+        Quarkus.run(args);
+    }
+}
+```
+
+### Example 2: Advanced application entry point
+
+Title: QuarkusApplication interface for lifecycle control
+Description: When you need more control over the application lifecycle or custom shutdown logic, implement `QuarkusApplication`. Still keep business logic out of the main class.
 
 **Good example:**
 
@@ -100,7 +137,7 @@ public class BloatedMain implements QuarkusApplication {
 }
 ```
 
-### Example 2: Service beans
+### Example 3: Service beans
 
 Title: @ApplicationScoped with constructor injection
 Description: Application services should be `@ApplicationScoped`, immutable-friendly, and receive collaborators via constructor. Avoid static holders and service locators.
@@ -145,7 +182,7 @@ public class OrderService {
 }
 ```
 
-### Example 3: Type-safe configuration
+### Example 4: Type-safe configuration
 
 Title: @ConfigMapping for grouped settings
 Description: Use `@ConfigMapping` interfaces to bind prefixes in `application.properties`. Keeps magic strings out of business code and documents required keys.
@@ -197,7 +234,7 @@ public class BatchOrderProcessor {
 }
 ```
 
-### Example 4: Profiles in configuration
+### Example 5: Profiles in configuration
 
 Title: %dev, %test, %prod property overrides
 Description: Use Quarkus profile prefixes in `application.properties` instead of branching in Java for environment differences.
@@ -220,7 +257,7 @@ if (System.getenv("ENV") != null && System.getenv("ENV").equals("dev")) {
 }
 ```
 
-### Example 5: Startup hooks
+### Example 6: Startup hooks
 
 Title: @Startup for eager initialization
 Description: Use `@Startup` on a bean method to run work after the Quarkus application is ready. Keep work short or offload to async executors.
@@ -255,7 +292,7 @@ void onStart() throws Exception {
 }
 ```
 
-### Example 6: CDI bean disambiguation
+### Example 7: CDI bean disambiguation
 
 Title: @Default, @Alternative + @Priority, and @Named to resolve ambiguous types
 Description: When two or more CDI beans implement the same type, injection points become ambiguous unless you disambiguate. Use `@Default` on the standard implementation, `@Alternative` + `@Priority` to promote an override (e.g. for tests), or a custom qualifier / `@Named` to select by name. `Instance<T>` can also iterate or select programmatically.
@@ -356,7 +393,7 @@ public class AlertService {
 }
 ```
 
-### Example 7: CDI events and lifecycle observers
+### Example 8: CDI events and lifecycle observers
 
 Title: @Observes StartupEvent / ShutdownEvent instead of blocking in @Startup
 Description: Prefer `@Observes StartupEvent` and `@Observes ShutdownEvent` for application lifecycle hooks. These fire after CDI beans are ready (startup) and before the context is torn down (shutdown). Use `@ObservesAsync` for non-blocking event handling. Avoid long blocking I/O in `@Startup` methods when an event observer decouples the concern better.
@@ -423,7 +460,7 @@ public class BadLifecycleBean {
 }
 ```
 
-### Example 8: Resource cleanup with @PreDestroy
+### Example 9: Resource cleanup with @PreDestroy
 
 Title: Release executors, connections, and I/O handles on bean destruction
 Description: Annotate a no-arg method with `@PreDestroy` to run cleanup logic when the CDI container destroys the bean. Use it to close external connections, stop background threads, or release file handles. Pair with `@Observes ShutdownEvent` for cleanup that must happen before the CDI context is torn down.
@@ -484,7 +521,7 @@ public class LeakyWorker {
 }
 ```
 
-### Example 9: Configuration validation
+### Example 10: Configuration validation
 
 Title: Bean Validation constraints on @ConfigMapping fail fast at startup
 Description: Apply Jakarta Bean Validation constraints (`@NotBlank`, `@Min`, `@Max`, `@Pattern`) on `@ConfigMapping` interface methods. Quarkus validates annotated config interfaces at startup; invalid or missing values produce a clear error before any request is served.
@@ -564,7 +601,7 @@ public class ApiClient {
 }
 ```
 
-### Example 10: Programmatic injection with Instance<T>
+### Example 11: Programmatic injection with Instance<T>
 
 Title: Optional, multiple, and dynamically-selected beans via CDI Instance
 Description: `jakarta.enterprise.inject.Instance<T>` gives programmatic access to CDI beans: check presence with `isUnsatisfied()` / `isAmbiguous()`, iterate all matching implementations, or select by qualifier. Use it when a dependency is optional, when you need to enumerate all implementations, or when the choice depends on runtime state.
@@ -622,7 +659,7 @@ public class MetricsService {
 }
 ```
 
-### Example 11: Health probes with SmallRye Health
+### Example 12: Health probes with SmallRye Health
 
 Title: @Liveness and @Readiness checks for operational visibility
 Description: Implement `HealthCheck` and annotate with `@Liveness` (is the process alive?) or `@Readiness` (is it ready to serve traffic?). Keep checks fast and non-destructive. Liveness failures trigger a pod restart; readiness failures remove the pod from the load-balancer. Separate these concerns — do not put connectivity checks inside liveness.
@@ -699,7 +736,7 @@ public class MixedLivenessCheck implements HealthCheck {
 }
 ```
 
-### Example 12: Virtual threads with @RunOnVirtualThread
+### Example 13: Virtual threads with @RunOnVirtualThread
 
 Title: Offload I/O-bound REST methods to virtual threads on Java 21+
 Description: On **Java 21+**, annotate a REST resource method with `@RunOnVirtualThread` to execute it on a virtual thread instead of a Vert.x worker thread. Ideal for blocking I/O (JDBC, HTTP clients, file I/O) that would otherwise tie up platform threads. Do not use it for CPU-intensive work; profile before enabling broadly.
@@ -774,6 +811,7 @@ record Order(long id, String status) { }
 
 ## Output Format
 
+- **ENSURE** every Quarkus project has a `@QuarkusMain` class with a static `main` method using `Quarkus.run(args)` — create one if missing
 - **ANALYZE** the Quarkus project for CDI scope misuse, configuration sprawl, profile handling, lifecycle blocking, and injection style
 - **CATEGORIZE** findings by impact (startup, memory, maintainability) and layer (config, beans, lifecycle)
 - **APPLY** improvements: constructor injection, `@ConfigMapping`, profile-based properties, appropriate scopes, lean startup observers
