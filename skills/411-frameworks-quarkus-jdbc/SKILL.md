@@ -1,6 +1,6 @@
 ---
 name: 411-frameworks-quarkus-jdbc
-description: Use when you need to write or review programmatic JDBC in Quarkus: injected DataSource (Agroal), parameterized PreparedStatement, row mapping to records, single-row queries with Optional, translating SQLException to domain errors, setFetchSize for large reads, transactional boundaries and REQUIRES_NEW when needed, batch updates, avoiding CDI self-invocation on transactional methods, and Dev Services for databases. Prefer raw SQL over ORM. Part of the skills-for-java project
+description: Programmatic JDBC in Quarkus with Agroal DataSource, parameterized SQL, transactions, batching, and Dev Services. Part of the skills-for-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral

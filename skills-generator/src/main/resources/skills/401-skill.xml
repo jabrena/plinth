@@ -7,7 +7,7 @@
     <version>0.13.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
     <description><![CDATA[
-        Use when you need to review, improve, or build Quarkus applications: QuarkusMain entry, CDI scopes (application, singleton, dependent), constructor injection, ConfigMapping and SmallRye Config, profile-specific properties (dev, test, prod), build-time versus runtime configuration, startup and shutdown lifecycle, CDI interceptors, CDI events (sync and async observes), programmatic injection with Instance, Bean Validation on configuration, SmallRye Health probes, virtual threads via RunOnVirtualThread, and test-friendly bean design.
+        Use when building or reviewing core Quarkus applications with CDI beans and scopes, SmallRye Config and profiles, lifecycle, interceptors and events, health probes, virtual threads, and test-friendly design.
         ]]>
     </description>
   </metadata>

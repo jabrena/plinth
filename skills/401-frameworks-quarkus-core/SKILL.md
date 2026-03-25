@@ -1,6 +1,6 @@
 ---
 name: 401-frameworks-quarkus-core
-description: Use when you need to review, improve, or build Quarkus applications: QuarkusMain entry, CDI scopes (application, singleton, dependent), constructor injection, ConfigMapping and SmallRye Config, profile-specific properties (dev, test, prod), build-time versus runtime configuration, startup and shutdown lifecycle, CDI interceptors, CDI events (sync and async observes), programmatic injection with Instance, Bean Validation on configuration, SmallRye Health probes, virtual threads via RunOnVirtualThread, and test-friendly bean design. Part of the skills-for-java project
+description: Use when building or reviewing core Quarkus applications with CDI beans and scopes, SmallRye Config and profiles, lifecycle, interceptors and events, health probes, virtual threads, and test-friendly design. Part of the skills-for-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
