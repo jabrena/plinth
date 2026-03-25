@@ -25,6 +25,12 @@
         6. **Testing**: Use `@Transactional` rollback in tests or Quarkus test resources — see `@422-frameworks-quarkus-testing-integration-tests`.
         7. **Performance**: Use pagination (`page`) for lists; avoid loading large collections by default.
 
+        8. **Parameterized queries**: Prefer named parameters (`?1`, `:name`, `Parameters.with(...)`) in HQL/PanacheQL for complex conditions; use `@NamedQuery` for frequently executed, stable queries; never concatenate user input into query strings.
+        9. **DTO projections**: For read-heavy endpoints, use `project(Class)` or manual stream mapping to records so that only needed columns are fetched and managed entities are not exposed from REST resources.
+        10. **Pagination**: Always paginate list queries using `.page(Page.of(index, size))`; never call `listAll()` on unbounded tables; expose page count and total count to callers.
+        11. **N+1 avoidance**: Use HQL `JOIN FETCH` for associations needed in the same request; do not rely on lazy collection access outside of a transaction — it triggers implicit extra queries or `LazyInitializationException`.
+        12. **Optimistic locking**: Add `@Version` to aggregate roots that are written concurrently; catch `OptimisticLockException` at the service layer and translate to a meaningful domain response.
+
         **Cross-references**: Raw JDBC — `@411-frameworks-quarkus-jdbc`. REST boundaries — `@402-frameworks-quarkus-rest`. Quarkus core — `@401-frameworks-quarkus-core`.
     </goal>
 
@@ -38,6 +44,8 @@
             <constraint>**PREREQUISITE**: Project must compile successfully before persistence changes</constraint>
             <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE</constraint>
             <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+            <constraint>**BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with persistence changes</constraint>
+            <constraint>**NO EXCEPTIONS**: Under no circumstances should Panache recommendations be applied to a project that fails to compile</constraint>
         </constraint-list>
     </constraints>
 
@@ -158,7 +166,7 @@ public class CatalogService {
     }
 }]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
+                <bad-example>
                     <code-block language="java"><![CDATA[// Bad: REST resource opens transaction per call without cohesive service
 @PUT
 public void publish(@PathParam("id") long id) {
@@ -169,20 +177,505 @@ public void publish(@PathParam("id") long id) {
                 </bad-example>
             </code-examples>
         </example>
+
+        <example number="4" id="parameterized-hql-queries">
+            <example-header>
+                <example-title>Parameterized HQL queries</example-title>
+                <example-subtitle>Positional and named parameters; firstResultOptional for single rows</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Panache offers three levels of query syntax: field shorthand for simple equality, positional `?1` parameters, and full HQL with `Parameters.with(...)` for named bindings. Use `firstResultOptional()` for single-row lookups rather than `findById` when querying by non-PK columns. Never concatenate user input into query strings.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import io.quarkus.panache.common.Parameters;
+import jakarta.enterprise.context.ApplicationScoped;
+import java.util.List;
+import java.util.Optional;
+
+@ApplicationScoped
+public class BookRepository implements PanacheRepository<Book> {
+
+    // Shorthand: single field equality
+    public List<Book> findPublished() {
+        return find("published", true).list();
+    }
+
+    // Positional parameters: readable for 2–3 bindings
+    public List<Book> findByAuthorAndGenre(String author, String genre) {
+        return find("author = ?1 AND genre = ?2 ORDER BY title", author, genre).list();
+    }
+
+    // Named parameters: preferred for long or reused queries
+    public Optional<Book> findMostRecentByAuthor(String author) {
+        return find("author = :author ORDER BY publishedAt DESC",
+                Parameters.with("author", author))
+            .firstResultOptional();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import java.util.List;
+
+@ApplicationScoped
+public class BookRepository implements PanacheRepository<Book> {
+
+    public List<Book> searchByAuthor(String fragment) {
+        // Bad: HQL injection risk — never build query strings from user input
+        return find("FROM Book WHERE author LIKE '%" + fragment + "%'").list();
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="5" id="dto-projections">
+            <example-header>
+                <example-title>DTO projections</example-title>
+                <example-subtitle>project(Class) for column-selective reads; manual mapping for computed fields</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use `project(Class)` to fetch only the columns a DTO interface or record needs, reducing data transfer and avoiding accidental exposure of internal entity fields in API responses. When computed columns or joins are required, use manual stream mapping to a record DTO instead.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import io.quarkus.panache.common.Parameters;
+import jakarta.enterprise.context.ApplicationScoped;
+import java.util.List;
+
+// Lightweight DTO — only the fields the API caller needs
+public interface BookSummary {
+    String getTitle();
+    String getAuthor();
+}
+
+// Record DTO for computed or manually mapped projections
+record BookCard(String title, String author, boolean published) {}
+
+@ApplicationScoped
+public class BookRepository implements PanacheRepository<Book> {
+
+    // project(Class): Panache selects only projected columns
+    public List<BookSummary> listSummaries() {
+        return find("published = true ORDER BY title")
+            .project(BookSummary.class)
+            .list();
+    }
+
+    // Manual mapping when the DTO has computed fields or custom logic
+    public List<BookCard> listCards(String author) {
+        return find("author = :author ORDER BY title",
+                Parameters.with("author", author))
+            .stream()
+            .map(b -> new BookCard(b.title, b.author, b.published))
+            .toList();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Column;
+import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import java.util.List;
+
+@Entity
+public class Book extends PanacheEntity {
+    public String title;
+    public String author;
+    public boolean published;
+    @Column(name = "internal_cost")
+    public java.math.BigDecimal internalCost; // sensitive — should never reach the API
+}
+
+@ApplicationScoped
+public class BookRepository implements PanacheRepository<Book> {
+
+    // Bad: returning managed entities leaks internal fields (internalCost) to callers
+    public List<Book> listPublished() {
+        return find("published", true).list();
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="6" id="pagination">
+            <example-header>
+                <example-title>Pagination</example-title>
+                <example-subtitle>page(Page.of(index, size)) for bounded lists; expose count and page count to callers</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Unbounded `listAll()` or `list(query)` calls will load the entire table into memory. Use `page(Page.of(pageIndex, pageSize))` to fetch one page at a time. Expose `query.count()` and `query.pageCount()` so callers can build navigation controls.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.quarkus.hibernate.orm.panache.PanacheQuery;
+import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import io.quarkus.panache.common.Page;
+import jakarta.enterprise.context.ApplicationScoped;
+import java.util.List;
+
+record PagedResult<T>(List<T> items, long totalCount, int pageCount) {}
+
+@ApplicationScoped
+public class BookRepository implements PanacheRepository<Book> {
+
+    public PagedResult<Book> listPublished(int pageIndex, int pageSize) {
+        PanacheQuery<Book> query = find("published = true ORDER BY title");
+        query.page(Page.of(pageIndex, pageSize));
+        return new PagedResult<>(
+            query.list(),
+            query.count(),
+            query.pageCount()
+        );
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import java.util.List;
+
+@ApplicationScoped
+public class BookRepository implements PanacheRepository<Book> {
+
+    // Bad: listAll() loads the entire books table — OOM risk on large datasets
+    public List<Book> listPublished() {
+        return listAll();
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="7" id="named-queries">
+            <example-header>
+                <example-title>@NamedQuery for stable, reused queries</example-title>
+                <example-subtitle>Declare on the entity; invoke with # prefix; validated at startup</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                `@NamedQuery` declarations are parsed and validated by Hibernate at application startup, catching HQL errors early. Use them for frequently executed, stable queries to enable Hibernate's query plan caching and to centralise SQL intent near the entity it queries.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import io.quarkus.panache.common.Parameters;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.Entity;
+import jakarta.persistence.NamedQuery;
+import java.util.List;
+
+@Entity
+@NamedQuery(
+    name = "Book.findPublishedByGenre",
+    query = "FROM Book WHERE genre = :genre AND published = true ORDER BY title"
+)
+public class Book extends PanacheEntity {
+    public String title;
+    public String author;
+    public String genre;
+    public boolean published;
+}
+
+@ApplicationScoped
+public class BookRepository implements PanacheRepository<Book> {
+
+    public List<Book> findPublishedByGenre(String genre) {
+        // # prefix invokes the named query — validated at startup
+        return find("#Book.findPublishedByGenre",
+                Parameters.with("genre", genre))
+            .list();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import java.util.List;
+
+@ApplicationScoped
+public class BookRepository implements PanacheRepository<Book> {
+
+    // Bad: inline HQL string is validated at runtime only —
+    // a typo in "plblished" is not caught until the query is first executed
+    public List<Book> findPublishedByGenre(String genre) {
+        return find("FROM Book WHERE genre = ?1 AND plblished = true ORDER BY title", genre).list();
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="8" id="join-fetch-n-plus-one">
+            <example-header>
+                <example-title>JOIN FETCH to avoid N+1 queries</example-title>
+                <example-subtitle>Eagerly load associations in one HQL query instead of triggering lazy loads per entity</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                When a use case iterates a collection association on every returned entity, issuing N individual `SELECT` statements. Use `JOIN FETCH` in HQL to load the association in the same query. Outside of an open Hibernate session (e.g. serializing to JSON), lazy access throws `LazyInitializationException`.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
+import java.util.List;
+
+@Entity
+public class Order extends PanacheEntity {
+    public long customerId;
+    @OneToMany(mappedBy = "order", fetch = FetchType.LAZY)
+    public List<OrderItem> items;
+}
+
+@Entity
+public class OrderItem extends PanacheEntity {
+    public String sku;
+    public int quantity;
+    @jakarta.persistence.ManyToOne
+    public Order order;
+}
+
+@ApplicationScoped
+public class OrderRepository implements PanacheRepository<Order> {
+
+    // JOIN FETCH loads items in the same SELECT — no extra queries per order
+    public List<Order> findByCustomerWithItems(long customerId) {
+        return find("FROM Order o LEFT JOIN FETCH o.items WHERE o.customerId = ?1", customerId)
+            .list();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import io.quarkus.hibernate.orm.panache.PanacheRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import java.util.List;
+
+@ApplicationScoped
+public class OrderRepository implements PanacheRepository<Order> {
+
+    public List<Order> findByCustomer(long customerId) {
+        return find("customerId", customerId).list();
+    }
+}
+
+// Bad: calling order.items for each order fires one SELECT per order
+// 100 orders = 101 queries (N+1)
+// Outside a session: LazyInitializationException
+class OrderService {
+    void printSummaries(List<Order> orders) {
+        for (Order o : orders) {
+            System.out.println(o.items.size()); // each access triggers a lazy SELECT
+        }
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="9" id="version-optimistic-locking">
+            <example-header>
+                <example-title>@Version for optimistic locking</example-title>
+                <example-subtitle>Prevent silent lost updates under concurrency; handle OptimisticLockException at the service layer</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Adding `@Version` to an entity field causes Hibernate to append `AND version = ?` to every UPDATE and to increment the field on success. If a concurrent update has already changed the row, Hibernate throws `OptimisticLockException`. Catch it at the service layer and translate it to a meaningful domain response (e.g. HTTP 409 Conflict).
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.persistence.Entity;
+import jakarta.persistence.OptimisticLockException;
+import jakarta.persistence.Version;
+import jakarta.transaction.Transactional;
+import java.math.BigDecimal;
+
+@Entity
+public class Product extends PanacheEntity {
+    public String name;
+    public BigDecimal price;
+    @Version
+    public long version; // Hibernate appends AND version=? to every UPDATE
+}
+
+@ApplicationScoped
+public class ProductService {
+
+    @Transactional
+    public Product updatePrice(long productId, BigDecimal newPrice) {
+        Product p = Product.findById(productId);
+        if (p == null) {
+            throw new IllegalArgumentException("Product not found: " + productId);
+        }
+        p.price = newPrice;
+        // Hibernate flushes on transaction commit with WHERE id=? AND version=?
+        // OptimisticLockException thrown if a concurrent update won the race
+        return p;
+    }
+}
+
+// In REST resource — translate OptimisticLockException to HTTP 409
+// @Provider public class OptimisticLockExceptionMapper implements ExceptionMapper<OptimisticLockException> { ... }]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import io.quarkus.hibernate.orm.panache.PanacheEntity;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.persistence.Entity;
+import jakarta.transaction.Transactional;
+import java.math.BigDecimal;
+
+// No @Version — two concurrent requests both read price=10.00, both update to different values,
+// the last writer silently wins; neither request knows the other existed
+@Entity
+public class Product extends PanacheEntity {
+    public String name;
+    public BigDecimal price;
+}
+
+@ApplicationScoped
+public class ProductService {
+
+    @Transactional
+    public void updatePrice(long productId, BigDecimal newPrice) {
+        Product p = Product.findById(productId);
+        if (p != null) {
+            p.price = newPrice; // silent lost update under concurrency
+        }
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="10" id="testing-with-quarkus-test-transaction">
+            <example-header>
+                <example-title>Testing with @QuarkusTest and @TestTransaction</example-title>
+                <example-subtitle>@TestTransaction rolls back after each test — no leftover data between tests</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Annotate each repository or service test with `@TestTransaction` so Quarkus wraps the test method in a transaction and rolls it back on completion. This keeps tests isolated without manual cleanup scripts. Use Dev Services (automatic container start) so tests run against a real database dialect.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.quarkus.test.junit.QuarkusTest;
+import io.quarkus.test.TestTransaction;
+import jakarta.inject.Inject;
+import org.junit.jupiter.api.Test;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@QuarkusTest
+class BookRepositoryTest {
+
+    @Inject
+    BookRepository bookRepository;
+
+    @Test
+    @TestTransaction // wraps test in a transaction; rolled back on completion
+    void persist_and_findById_returnsBook() {
+        Book b = new Book();
+        b.title = "Quarkus Guide";
+        b.author = "Jane";
+        b.published = true;
+        bookRepository.persist(b);
+
+        Optional<Book> found = bookRepository.findByIdOptional(b.id);
+        assertThat(found).isPresent();
+        assertThat(found.get().title).isEqualTo("Quarkus Guide");
+    }
+
+    @Test
+    @TestTransaction
+    void findPublished_returnsOnlyPublishedBooks() {
+        Book draft = new Book();
+        draft.title = "Draft";
+        draft.author = "Bob";
+        draft.published = false;
+        bookRepository.persist(draft);
+
+        assertThat(bookRepository.findPublished()).noneMatch(bk -> bk.id.equals(draft.id));
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@QuarkusTest
+class BookRepositoryTest {
+
+    @Inject
+    BookRepository bookRepository;
+
+    // Bad: no @TestTransaction — data written by this test persists in the database
+    // and can pollute subsequent tests; test execution order becomes load-bearing
+    @Test
+    void persist_and_find() {
+        Book b = new Book();
+        b.title = "Leaking Book";
+        b.author = "Alice";
+        bookRepository.persist(b); // never cleaned up
+        assertThat(bookRepository.count()).isGreaterThan(0);
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
     </examples>
 
     <output-format>
         <output-format-list>
-            <output-format-item>**ANALYZE** entities and repositories for leaky abstractions, unsafe query construction, missing transactions, and unbounded list queries</output-format-item>
-            <output-format-item>**APPLY** repository pattern, parameterized queries, service-level `@Transactional`, and pagination</output-format-item>
-            <output-format-item>**VALIDATE** with `./mvnw clean verify` after changes</output-format-item>
+            <output-format-item>**ANALYZE** entities, repositories, and services for HQL injection risk, leaky entity boundaries, missing `@Transactional`, unbounded list queries, lazy N+1 patterns, missing `@Version`, and absence of test isolation</output-format-item>
+            <output-format-item>**CATEGORIZE** findings by impact (SECURITY for query injection, CORRECTNESS for missing transactions or N+1, PERFORMANCE for unbounded queries or missing pagination, MAINTAINABILITY for entity exposure at API boundaries)</output-format-item>
+            <output-format-item>**APPLY** improvements: introduce parameterized queries, `project(Class)` DTO projections, `page(Page.of(...))` pagination, `@NamedQuery` for stable queries, `JOIN FETCH` for needed associations, `@Version` for concurrency control</output-format-item>
+            <output-format-item>**IMPLEMENT** changes consistently: keep entity, service, and REST resource layers coherent; update test fixtures when entity shape changes</output-format-item>
+            <output-format-item>**EXPLAIN** trade-offs (active record vs repository, eager JOIN FETCH vs lazy, `project()` vs manual mapping, `@Version` vs DB-level locking)</output-format-item>
+            <output-format-item>**TEST** persistence behaviour with `@QuarkusTest` + `@TestTransaction` using Dev Services for a realistic database dialect; never mock the repository inside persistence tests</output-format-item>
+            <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
         </output-format-list>
     </output-format>
 
     <safeguards>
         <safeguards-list>
-            <safeguards-item>**QUERY SAFETY**: Reject string concatenation for HQL or native SQL with user input</safeguards-item>
-            <safeguards-item>**BOUNDARIES**: Do not return managed entities directly from REST when DTOs clarify API contracts</safeguards-item>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` before ANY Panache refactoring — compilation failure is a HARD STOP</safeguards-item>
+            <safeguards-item>**CRITICAL VALIDATION**: Run `./mvnw clean verify` after changes; confirm persistence tests pass with Dev Services before promoting</safeguards-item>
+            <safeguards-item>**QUERY SAFETY**: Never concatenate user input into HQL, PanacheQL, or native SQL — use `?1`, `:name`, or `Parameters.with(...)` exclusively</safeguards-item>
+            <safeguards-item>**ENTITY BOUNDARIES**: Do not return managed entities directly from REST resources — map to DTOs or use `project(Class)` to keep API contracts stable and prevent accidental field exposure</safeguards-item>
+            <safeguards-item>**PAGINATION**: Never call `listAll()` or an unbound `list(query)` on production tables — always apply `.page(Page.of(index, size))` or a LIMIT clause</safeguards-item>
+            <safeguards-item>**N+1 PREVENTION**: When a use case accesses collection associations on every returned entity, add `JOIN FETCH` to the HQL query; lazy access outside a Hibernate session throws `LazyInitializationException`</safeguards-item>
+            <safeguards-item>**OPTIMISTIC LOCKING**: Adding `@Version` to an existing entity requires a `version` column in the schema — apply via a migration (Flyway/Liquibase) before deploying; mismatched schema causes startup failure</safeguards-item>
+            <safeguards-item>**CDI SELF-INVOCATION**: Never call a `@Transactional` method via `this.method()` within the same CDI bean — the interceptor is bypassed; extract to a separate injected bean</safeguards-item>
+            <safeguards-item>**INCREMENTAL SAFETY**: Change one entity, repository, or service at a time; verify with `@QuarkusTest` + `@TestTransaction` between steps; do not combine aggregate boundary changes with query refactoring in one commit</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>
