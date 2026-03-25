@@ -34,7 +34,9 @@ Implement refactoring based on profiling analysis: review profiling-problem-anal
 
   <triggers>
     <trigger-list>
-        <trigger>Refactor performance</trigger>
+        <trigger>Refactor the code with profiling</trigger>
+        <trigger>Apply profiling</trigger>
+        <trigger>Refactor the code with profiling</trigger>
         <trigger>Optimize hot path</trigger>
         <trigger>Performance refactoring</trigger>
     </trigger-list>

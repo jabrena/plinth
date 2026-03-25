@@ -37,7 +37,13 @@ Analyze profiling results systematically: inventory results (flamegraphs, JFR, G
   <triggers>
     <trigger-list>
         <trigger>Analyze JFR profile</trigger>
-        <trigger>Profile analysis</trigger>
+        <trigger>Analyze the profile</trigger>
+        <trigger>Analyze the performance</trigger>
+        <trigger>Analyze the memory</trigger>
+        <trigger>Analyze the threading</trigger>
+        <trigger>Analyze the GC</trigger>
+        <trigger>Analyze the profiling</trigger>
+        <trigger>Analyze the profiling</trigger>
         <trigger>Performance analysis</trigger>
     </trigger-list>
   </triggers>

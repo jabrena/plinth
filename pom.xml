@@ -14,6 +14,23 @@
         SDLC that help software engineers and pipelines in their daily work for Java Enterprise
         development.</description>
 
+    <url>https://github.com/jabrena/cursor-rules-java</url>
+
+    <licenses>
+        <license>
+            <name>Apache License, Version 2.0</name>
+            <url>https://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <connection>scm:git:https://github.com/jabrena/cursor-rules-java.git</connection>
+        <developerConnection>scm:git:git@github.com:jabrena/cursor-rules-java.git</developerConnection>
+        <url>https://github.com/jabrena/cursor-rules-java</url>
+        <tag>HEAD</tag>
+    </scm>
+
     <developers>
         <developer>
             <id>jabrena</id>
@@ -98,9 +115,11 @@
                 <version>${project.version}</version>
             </dependency>
             <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
+                <groupId>com.fasterxml.jackson</groupId>
+                <artifactId>jackson-bom</artifactId>
                 <version>${jackson.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>
@@ -113,6 +132,9 @@
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${maven-plugin-compiler.version}</version>
+                    <configuration>
+                        <release>${java.version}</release>
+                    </configuration>
                 </plugin>
 
                 <!-- Maven Surefire Plugin -->

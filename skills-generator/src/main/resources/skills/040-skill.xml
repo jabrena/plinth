@@ -43,8 +43,9 @@ Guide the process of creating a structured plan using Cursor Plan mode. **This i
         <trigger>Design an implementation plan</trigger>
         <trigger>Structure a development plan</trigger>
         <trigger>Create a structured design plan</trigger>
-        <trigger>Plan before implementing a Java feature</trigger>
-        <trigger>Refactoring plan</trigger>
+        <trigger>Refactor the plan</trigger>
+        <trigger>Improve the plan</trigger>
+        <trigger>Update the plan</trigger>
     </trigger-list>
   </triggers>
 
