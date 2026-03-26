@@ -48,6 +48,12 @@
   {"name": "421-frameworks-quarkus-testing-unit-tests"},
   {"name": "422-frameworks-quarkus-testing-integration-tests"},
   {"name": "423-frameworks-quarkus-testing-acceptance-tests"},
+  {"name": "501-frameworks-micronaut-core"},
+  {"name": "502-frameworks-micronaut-rest"},
+  {"name": "512-frameworks-micronaut-data"},
+  {"name": "521-frameworks-micronaut-testing-unit-tests"},
+  {"name": "522-frameworks-micronaut-testing-integration-tests"},
+  {"name": "523-frameworks-micronaut-testing-acceptance-tests"},
   {"name": "behaviour-consultative-interaction"},
   {"name": "behaviour-progressive-learning"},
   {"name": "behaviour-article-writer"}

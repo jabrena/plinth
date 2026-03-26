@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt>
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.13.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Micronaut Integration Testing</title>
+        <description>Use when you need to write or improve integration tests for Micronaut — including @MicronautTest with full or partial context, HttpClient against EmbeddedServer, Testcontainers with TestPropertyProvider for JDBC and brokers, data isolation, @Transactional rollback patterns where appropriate, and separating *IT tests with Failsafe.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in integration testing and Micronaut</role>
+
+    <goal>
+        Integration tests prove real wiring: HTTP, repositories, messaging, and external clients. Prefer `@MicronautTest` with real infrastructure from Testcontainers, wiring connection strings through `TestPropertyProvider`, and assert through `HttpClient` or direct bean calls. Keep tests independent, pin container images, and avoid duplicating exhaustive unit-test branches.
+
+        ### Implementing These Principles
+
+        These guidelines are built upon the following core principles:
+
+        1. **Isolation**: Each test owns its data; clean tables or use transactions when your stack supports rollback in tests.
+        2. **Reproducibility**: Use Testcontainers instead of shared developer databases; expose URLs and credentials via `TestPropertyProvider`.
+        3. **Boundaries**: Assert HTTP status and persistence side effects — not every internal branch covered elsewhere.
+        4. **Performance**: Share static `@Container` instances across methods in a class; avoid redundant container starts.
+        5. **Client assertions**: Use `HttpClient` with typed bodies or AssertJ on JSON strings mindfully — prefer typed DTOs when stable.
+
+        **Cross-references**: Unit tests — `@521-frameworks-micronaut-testing-unit-tests`. Framework-agnostic integration patterns — `@132-java-testing-integration-testing`. Acceptance from Gherkin — `@523-frameworks-micronaut-testing-acceptance-tests`.
+
+    </goal>
+
+    <constraints>
+        <constraints-description>
+            Before applying any recommendations, ensure the project is in a valid state by running Maven compilation.
+            Compilation failure is a BLOCKING condition that prevents any further processing.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+        </constraint-list>
+    </constraints>
+
+    <examples>
+        <toc auto-generate="true" />
+
+        <example number="1" id="integration-scope-micronaut">
+            <example-header>
+                <example-title>Scope of integration tests</example-title>
+                <example-subtitle>Wiring and contracts</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Focus on paths that need Micronaut wiring, SQL, or HTTP. Keep pure calculation tests in Mockito-only classes.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import org.junit.jupiter.api.Test;
+
+@MicronautTest
+class CheckoutFlowIT {
+
+    @Test
+    void persistsOrderAndPublishesEvent() {
+        // Given: repository + messaging beans
+        // When: checkoutService.checkout(...)
+        // Then: row exists; message recorded — boundary assertions
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[@MicronautTest
+class CheckoutFlowIT {
+    @Test
+    void recomputesTaxBrackets() {
+        // Bad: duplicates unit-test math; IT should assume tax helper is correct
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="2" id="testcontainers-test-property-provider">
+            <example-header>
+                <example-title>Testcontainers + TestPropertyProvider</example-title>
+                <example-subtitle>Dynamic datasource properties</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Implement `TestPropertyProvider` on the test class to start containers lazily and inject JDBC/Kafka properties before context startup.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import io.micronaut.test.support.TestPropertyProvider;
+import org.junit.jupiter.api.Test;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import java.util.Map;
+
+@MicronautTest
+@Testcontainers
+class OrderRepositoryIT implements TestPropertyProvider {
+
+    @Container
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
+
+    @Override
+    public Map<String, String> getProperties() {
+        if (!postgres.isRunning()) {
+            postgres.start();
+        }
+        return Map.of(
+            "datasources.default.url", postgres.getJdbcUrl(),
+            "datasources.default.username", postgres.getUsername(),
+            "datasources.default.password", postgres.getPassword(),
+            "datasources.default.driver-class-name", "org.postgresql.Driver"
+        );
+    }
+
+    @Test
+    void roundTrip() {
+        // use injected repository
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Bad: hard-coded jdbc:postgresql://localhost:5432/mydb — fails on CI without local Postgres]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="http-client-integration">
+            <example-header>
+                <example-title>Full HTTP stack</example-title>
+                <example-subtitle>HttpClient against embedded server</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use `@MicronautTest` with `@Inject @Client("/") HttpClient` to exercise filters, serialization, and routing together.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.client.HttpClient;
+import io.micronaut.http.client.annotation.Client;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+
+@MicronautTest
+class UserApiIT {
+
+    @Inject
+    @Client("/")
+    HttpClient client;
+
+    @Test
+    void createUser() {
+        HttpResponse<String> res = client.toBlocking().exchange(
+            HttpRequest.POST("/api/users", "{\"name\":\"Ada\"}")
+                .header("Content-Type", "application/json"),
+            String.class);
+        assertThat(res.getStatus().getCode()).isEqualTo(201);
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Bad: calling controller methods directly — skips HTTP validation and filters]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="transactional-rollback-test">
+            <example-header>
+                <example-title>Data isolation</example-title>
+                <example-subtitle>@MicronautTest(transactional = true)</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Enable transactional tests when your datasource participates in Micronaut transaction management and you want automatic rollback per test.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import org.junit.jupiter.api.Test;
+
+@MicronautTest(transactional = true)
+class WritableFlowIT {
+
+    @Test
+    void insertsRow() {
+        // rolled back after test when transactional test mode is active
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Bad: tests share mutable global IDs without cleanup — order-dependent failures]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="5" id="failsafe-it-suffix">
+            <example-header>
+                <example-title>Maven Failsafe</example-title>
+                <example-subtitle>*IT naming</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Name integration classes with `IT` suffix and configure `maven-failsafe-plugin` so `./mvnw verify` runs them after unit tests.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="text"><![CDATA[src/test/java/.../OrderServiceTest.java   → Surefire
+src/test/java/.../OrderApiIT.java        → Failsafe]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="text"><![CDATA[Heavy @MicronautTest classes named *Test.java → slow Surefire phase; harder CI tuning]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>**ANALYZE** integration coverage: missing containers, hard-coded hosts, overlapping unit-test logic, flaky ordering</output-format-item>
+            <output-format-item>**APPLY** TestPropertyProvider wiring, shared static containers, HttpClient assertions, transactional rollback where supported, *IT naming with Failsafe</output-format-item>
+            <output-format-item>**VALIDATE** with `./mvnw clean verify` including integration-test phase</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>**DOCKER**: Testcontainers requires Docker; use `@Testcontainers(disabledWithoutDocker = true)` when optional locally</safeguards-item>
+            <safeguards-item>**FLAKINESS**: Reset WireMock and clear data between tests when sharing a Spring-style context — Micronaut tests should likewise avoid leaked state</safeguards-item>
+            <safeguards-item>**SECRETS**: Do not commit real database passwords — only container defaults in tests</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>
