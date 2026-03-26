@@ -27,7 +27,7 @@ The project generates a set of deliverables at the end of any iteration.
 | ----------------------- | ------------------------------------------------------------ |
 | System prompts for Java | [Catalog](./SYSTEM-PROMPTS-JAVA.md) (`.cursor/rules`)        |
 | Skills for Java         | [https://skills.sh/jabrena/cursor-rules-java](https://skills.sh/jabrena/cursor-rules-java) |
-
+| Agents for Java         | [Catalog](.cursor/agents) (`.cursor/agents`) |
 
 ## Getting started
 
@@ -39,7 +39,7 @@ Read the following comprehensive guides to use this project today.
 
 ## How to use them?
 
-The SLDC has evolved with the arrival of this new set of AI tooling, enhancing the Software Engineering process. The project provides `System prompts for Java` & `Skills for Java` to improve the LLM Behaviour when a model tries to complete Java tasks. In the development of this project, it was identified 2 different workflows: `Prompting Enginering Workflow`, `Pipelines Workflow` & `Agentic Workflow`.
+The SLDC has evolved with the arrival of this new set of AI tooling, enhancing the Software Engineering process. In the development of this project, it was identified 3 different workflows: `Prompting Enginering Workflow`, `Pipelines Workflow` & `Agentic Workflow`.
 
 ### Prompting Enginering Workflow
 
@@ -55,7 +55,7 @@ Adding AI tools to your pipeline can provide new opportunities to deliver more v
 
 ### Agentic Workflow
 
-PENDING
+`Agents are Java Enterprise development` were designed to cover the whole SLDC starting from the requirements and the architectural process. Once you have the foundations well designed. it is possible to execute Plans, iterate and discuss it and when the plans associated to User Stories has the right size & complexity, it is easy to pass to the models to be implemented with security in other case, you will have the classical issues with implementations without control.
 
 ## Limitations
 
