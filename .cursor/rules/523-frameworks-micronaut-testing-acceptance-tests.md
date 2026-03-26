@@ -233,6 +233,13 @@ public abstract class BaseAcceptanceTest implements TestPropertyProvider {
     }
 }
 ```
+
+**Bad example:**
+
+```java
+// Bad: hard-coded jdbc:postgresql://localhost:5432/mydb — breaks CI without a local server
+```
+
 ## Output Format
 
 - **SUMMARIZE** parsed acceptance scenarios before coding

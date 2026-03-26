@@ -61,7 +61,7 @@ Before applying any recommendations, ensure the project is in a valid state by r
 ### Example 1: Spring Boot main application class
 
 Title: Use @SpringBootApplication as the sole annotation on the entry-point class
-Description: Every Spring Boot application must have a main class annotated **only** with `@SpringBootApplication`. This single annotation already composes `@Configuration`, `@EnableAutoConfiguration`, and `@ComponentScan`. No additional annotations — such as `@EnableScheduling`, `@EnableKafka`, `@EnableAsync`, or any other `@Enable*` — should ever appear on the main class. **Rule:** The main class is the composition root, not a feature-configuration class. Keep it minimal and stable. **Advanced setups:** `scanBasePackages` and `exclude` are the only permitted attributes. They are only justified when the default package scan is insufficient or when a specific auto-configuration must be excluded. **Feature enablement:** Any annotation that activates a Spring feature (scheduling, Kafka, async, caching, …) must live in a dedicated `@Configuration` class inside the `config` package. This keeps the main class unchanged as the application grows.
+Description: Every Spring Boot application must have a main class annotated **only** with `@SpringBootApplication`. This single annotation already composes `@Configuration`, `@EnableAutoConfiguration`, and `@ComponentScan`. No additional annotations — such as `@EnableScheduling`, `@EnableKafka`, `@EnableAsync`, `@EnableConfigurationProperties`, `@ConfigurationPropertiesScan`, or any other `@Enable*` — should ever appear on the main class. **Rule:** The main class is the composition root, not a feature-configuration class. Keep it minimal and stable. **Advanced setups:** `scanBasePackages` and `exclude` are the only permitted attributes. They are only justified when the default package scan is insufficient or when a specific auto-configuration must be excluded. **Feature enablement:** Any annotation that activates a Spring feature (scheduling, Kafka, async, caching, type-safe configuration registration, …) must live in a dedicated `@Configuration` class inside the `config` package. Register `@ConfigurationProperties` types with `@EnableConfigurationProperties(YourProperties.class)` or `@ConfigurationPropertiesScan` on that configuration class — never on the main class. This keeps the main class unchanged as the application grows.
 
 **Good example:**
 
@@ -128,6 +128,20 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 public class AsyncConfig {
 }
+
+// config/AppPropertiesConfig.java — @EnableConfigurationProperties belongs here, not on the main class
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+@EnableConfigurationProperties(ApplicationProperties.class)
+public class AppPropertiesConfig {
+}
+
+@ConfigurationProperties(prefix = "app")
+class ApplicationProperties {
+}
 ```
 
 **Bad example:**
@@ -159,6 +173,7 @@ class VerboseMainApplication {
 
 // Bad: @Enable* feature annotations must NOT appear on the main class
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.kafka.annotation.EnableKafka;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.EnableAsync;
@@ -167,11 +182,16 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableScheduling
 @EnableKafka
 @EnableAsync
+@EnableConfigurationProperties(ApplicationProperties.class)
 class App {
 
     public static void main(String[] args) {
         org.springframework.boot.SpringApplication.run(App.class, args);
     }
+}
+
+@org.springframework.boot.context.properties.ConfigurationProperties(prefix = "app")
+class ApplicationProperties {
 }
 
 // Bad: business logic and auto-wired beans in the main class
@@ -417,7 +437,7 @@ interface UserRepository { }
 ### Example 4: Configuration classes and @ConfigurationProperties
 
 Title: Group settings with immutable property beans and @ConditionalOnProperty
-Description: Organize beans in `@Configuration` classes, bind structured configuration with `@ConfigurationProperties` (constructor binding where appropriate), and avoid scattering many `@Value` fields and hardcoded secrets across the codebase.
+Description: Organize beans in `@Configuration` classes, bind structured configuration with `@ConfigurationProperties` (constructor binding where appropriate), and avoid scattering many `@Value` fields and hardcoded secrets across the codebase. Register properties with `@EnableConfigurationProperties` or `@ConfigurationPropertiesScan` on those configuration classes — not on the `@SpringBootApplication` main class.
 
 **Good example:**
 
@@ -1158,7 +1178,7 @@ class SmsNotificationSender implements NotificationSender { public void send(Str
 ### Example 11: Validating configuration — @Validated on @ConfigurationProperties
 
 Title: Fail fast at startup when required properties are missing or invalid
-Description: Annotate `@ConfigurationProperties` types with `@Validated` and use Jakarta Bean Validation constraints (`@NotBlank`, `@Min`, `@NotNull`, etc.) on fields or record components. Register the properties type with `@EnableConfigurationProperties` or `@ConfigurationPropertiesScan`. This surfaces binding errors during context startup instead of after the app is running.
+Description: Annotate `@ConfigurationProperties` types with `@Validated` and use Jakarta Bean Validation constraints (`@NotBlank`, `@Min`, `@NotNull`, etc.) on fields or record components. Register the properties type with `@EnableConfigurationProperties` or `@ConfigurationPropertiesScan` on a dedicated `@Configuration` class (not on the main application class). This surfaces binding errors during context startup instead of after the app is running.
 
 **Good example:**
 

@@ -1,0 +1,89 @@
+openapi: 3.0.3
+info:
+  title: Greek Gods REST API
+  description: API for retrieving information about Greek gods
+  version: 1.0.0
+  contact:
+    name: Juan Antonio Breña Moral
+    email: my@email.com
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+  - url: http://localhost:8080
+    description: Local development server
+paths:
+  /api/v1/gods/greek:
+    get:
+      tags:
+        - Greek Gods
+      summary: Get all Greek gods
+      description: Returns a list of Greek god names
+      operationId: getGreekGods
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+                example:
+                    - "Zeus"
+                    - "Hera"
+                    - "Poseidon"
+                    - "Demeter"
+                    - "Ares"
+                    - "Athena"
+                    - "Apollo"
+                    - "Artemis"
+                    - "Hephaestus"
+                    - "Aphrodite"
+                    - "Hermes"
+                    - "Dionysus"
+                    - "Hades"
+                    - "Hypnos"
+                    - "Nike"
+                    - "Janus"
+                    - "Nemesis"
+                    - "Iris"
+                    - "Hecate"
+                    - "Tyche"
+        '500':
+          description: Internal server error (RFC 7807 Problem Details)
+          content:
+            application/problem+json:
+              schema:
+                $ref: '#/components/schemas/ProblemDetail'
+              example:
+                type: "about:blank"
+                title: Internal Server Error
+                status: 500
+                detail: Internal server error
+                instance: /api/v1/gods/greek
+components:
+  schemas:
+    ProblemDetail:
+      type: object
+      description: RFC 7807 Problem Details for HTTP APIs
+      required:
+        - type
+        - title
+        - status
+      properties:
+        type:
+          type: string
+          description: A URI reference identifying the problem type
+        title:
+          type: string
+          description: Short, human-readable summary of the problem type
+        status:
+          type: integer
+          description: HTTP status code for this occurrence
+        detail:
+          type: string
+          description: Human-readable explanation specific to this occurrence
+        instance:
+          type: string
+          description: URI reference identifying the specific occurrence

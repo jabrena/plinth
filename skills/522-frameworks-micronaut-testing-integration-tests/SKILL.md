@@ -6,7 +6,7 @@ metadata:
   author: Juan Antonio Breña Moral
   version: 0.13.0-SNAPSHOT
 ---
-# Micronaut integration testing
+# Micronaut Integration Testing
 
 Prove real wiring in Micronaut with containers and HTTP.
 

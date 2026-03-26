@@ -110,6 +110,10 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 
 - [https://m.devoxx.com/events/dvbe25/talks/4715/the-power-of-cursor-rules-in-java-enterprise-development](https://m.devoxx.com/events/dvbe25/talks/4715/the-power-of-cursor-rules-in-java-enterprise-development)
 
+### Madrid Jug / Madrid (2025/05/06 - 19:00)
+
+- https://www.meetup.com/es-ES/madridjug/events/307458529/
+
 ### Blogs
 
 - [Delegating Java tasks to Supervised AI Dev Pipelines](https://www.javaadvent.com/2025/12/delegating-java-tasks-to-supervised-ai-dev-pipelines.html)
