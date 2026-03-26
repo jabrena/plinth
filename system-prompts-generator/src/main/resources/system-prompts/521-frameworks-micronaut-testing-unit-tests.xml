@@ -1,0 +1,293 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt>
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.13.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Micronaut Unit Testing</title>
+        <description>Use when you need to write unit tests for Micronaut applications — including pure JUnit 5 + Mockito with @ExtendWith(MockitoExtension.class) for @Singleton services, @MicronautTest with @MockBean for HTTP/controller slices, @Client HttpClient against EmbeddedServer, JSON assertions with AssertJ, @ParameterizedTest with @CsvSource/@MethodSource, property overrides with @Property, and naming conventions (*Test → Surefire, *IT → Failsafe). For framework-agnostic Java use @131-java-testing-unit-testing. For integration tests use @522-frameworks-micronaut-testing-integration-tests.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Micronaut testing and JUnit 5</role>
+
+    <goal>
+        Micronaut tests should be fast by default: exercise plain services with Mockito and no container, and reserve `@MicronautTest` for cases that need HTTP routing, bean replacement, or Micronaut-specific adapters. Use `@MockBean` factory methods to substitute collaborators, inject `HttpClient` with `@Client("/")` for controller tests, and keep deterministic configuration via `@Property` on test classes or methods.
+
+        ### Implementing These Principles
+
+        These guidelines are built upon the following core principles:
+
+        1. **Pure unit tests first**: Test `@Singleton` domain and application services with Mockito only — no `ApplicationContext`.
+        2. **Slim MicronautTest**: Use `@MicronautTest` for controller/client tests; avoid booting the full application when a focused test doubles collaborators.
+        3. **Mock boundaries**: Replace ports with `@MockBean` or Mockito mocks so each test targets one layer.
+        4. **HTTP assertions**: Use `HttpClient` blocking exchange with AssertJ on status and body for Micronaut HTTP tests.
+        5. **Parameterized tests**: Prefer `@ParameterizedTest` with `@CsvSource` / `@MethodSource` over duplicated methods.
+        6. **Naming**: Use `*Test` for Surefire; reserve `*IT` for heavier integration tests in Failsafe.
+
+        **Cross-references**: Framework-agnostic unit testing — `@131-java-testing-unit-testing`. Integration tests — `@522-frameworks-micronaut-testing-integration-tests`. Acceptance from Gherkin — `@523-frameworks-micronaut-testing-acceptance-tests`.
+
+    </goal>
+
+    <constraints>
+        <constraints-description>
+            Before applying any recommendations, ensure the project is in a valid state by running Maven compilation.
+            Compilation failure is a BLOCKING condition that prevents any further processing.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**PREREQUISITE**: Project must compile successfully before any test refactoring</constraint>
+            <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+        </constraint-list>
+    </constraints>
+
+    <examples>
+        <toc auto-generate="true" />
+
+        <example number="1" id="mockito-pure-service">
+            <example-header>
+                <example-title>Pure Mockito for services</example-title>
+                <example-subtitle>No Micronaut context</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use `MockitoExtension`, `@Mock`, and `@InjectMocks` for services that only depend on interfaces.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class PricingServiceTest {
+
+    @Mock
+    DiscountPolicy discounts;
+
+    @InjectMocks
+    PricingService pricingService;
+
+    @Test
+    void appliesDiscount() {
+        when(discounts.rate()).thenReturn(0.1);
+        assertThat(pricingService.price(100)).isEqualTo(90);
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
+import org.junit.jupiter.api.Test;
+
+@MicronautTest // Bad: full context for trivial arithmetic service
+class PricingServiceTest {
+
+    @Inject
+    PricingService pricingService;
+
+    @Test
+    void appliesDiscount() {
+        // slow startup for logic that needs no container
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="2" id="micronaut-test-mock-bean">
+            <example-header>
+                <example-title>@MicronautTest with @MockBean</example-title>
+                <example-subtitle>Replace collaborators in the test scope</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Declare `@MockBean` factory methods on the test class (or a companion) to supply Mockito doubles registered in the Micronaut context.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.test.annotation.MockBean;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
+import static org.mockito.Mockito.when;
+
+@MicronautTest
+class OrderControllerTest {
+
+    @jakarta.inject.Inject
+    OrderService orderService;
+
+    @MockBean(OrderService.class)
+    OrderService mockOrderService() {
+        return Mockito.mock(OrderService.class);
+    }
+
+    @Test
+    void delegatesToService() {
+        when(orderService.find(1L)).thenReturn(new OrderDto(1L, "A"));
+        // inject @Client("/") HttpClient and call GET /orders/1 — assert 200 + body
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+
+@MicronautTest
+class OrderControllerTest {
+    // Bad: hits real OrderService + DB — not a unit test
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="http-client-controller-test">
+            <example-header>
+                <example-title>HttpClient against embedded server</example-title>
+                <example-subtitle>@Inject @Client("/") HttpClient</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Inject a blocking or reactive `HttpClient` bound to the test server to assert status codes and payloads on real routing.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.client.HttpClient;
+import io.micronaut.http.client.annotation.Client;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import jakarta.inject.Inject;
+import org.junit.jupiter.api.Test;
+import static org.assertj.core.api.Assertions.assertThat;
+
+@MicronautTest
+class HelloControllerTest {
+
+    @Inject
+    @Client("/")
+    HttpClient client;
+
+    @Test
+    void ok() {
+        HttpResponse<String> response = client.toBlocking().exchange(
+            HttpRequest.GET("/hello"), String.class);
+        assertThat(response.getStatus().getCode()).isEqualTo(200);
+        assertThat(response.body()).contains("Hello");
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Bad: manually starting Netty in test — MicronautTest already provides EmbeddedServer + client wiring]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="property-override-test">
+            <example-header>
+                <example-title>Test-specific configuration</example-title>
+                <example-subtitle>@Property on the test class</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Override configuration keys for deterministic tests (feature flags, URLs of stub servers).
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.context.annotation.Property;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import org.junit.jupiter.api.Test;
+
+@MicronautTest
+@Property(name = "app.feature.x", value = "false")
+class FeatureOffTest {
+
+    @Test
+    void behavesWhenDisabled() {
+        // ...
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Bad: tests depend on developer application.yml on disk — flaky in CI]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="5" id="parameterized-micronaut">
+            <example-header>
+                <example-title>Parameterized tests</example-title>
+                <example-subtitle>@CsvSource for table-driven cases</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Collapse equivalent scenarios into one parameterized test for readability.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
+import static org.assertj.core.api.Assertions.assertThat;
+
+class ValidatorTest {
+
+    @ParameterizedTest
+    @CsvSource({"0,false", "5,true", "120,false"})
+    void range(int value, boolean ok) {
+        assertThat(Validator.inRange(value)).isEqualTo(ok);
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Bad: three nearly identical @Test methods differing only by input literals]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="6" id="surefire-naming-micronaut">
+            <example-header>
+                <example-title>Test naming and Maven phases</example-title>
+                <example-subtitle>*Test vs *IT</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Keep fast unit tests in classes ending with `Test` for Surefire; use `IT` suffix for integration tests picked up by Failsafe when configured.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="text"><![CDATA[src/test/java/.../OrderServiceTest.java     → Surefire (unit)
+src/test/java/.../OrderRepositoryIT.java    → Failsafe (integration)]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="text"><![CDATA[src/test/java/.../EverythingInOneHugeTest.java → mixes slow and fast tests; hard to run subsets]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>**ANALYZE** tests for unnecessary `@MicronautTest`, missing mocks, non-deterministic config, and duplicated scenarios</output-format-item>
+            <output-format-item>**APPLY** Mockito-first patterns, `@MockBean`/`@Replaces` for collaborators, `HttpClient` assertions, `@Property` overrides, parameterized tests</output-format-item>
+            <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive test refactors</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>**SPEED**: Do not use `@MicronautTest` for pure domain logic — it slows the suite without benefit</safeguards-item>
+            <safeguards-item>**MOCK DRIFT**: Mocks that do not match real contracts hide integration bugs — pair with `@522` tests for wiring</safeguards-item>
+            <safeguards-item>**INCREMENTAL SAFETY**: Refactor one test class at a time; keep the suite green</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="512-frameworks-micronaut-data">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.13.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need data access with Micronaut Data — @MappedEntity, CrudRepository/PageableRepository, @Query with parameters, @Transactional services, projections, @Version, and @MicronautTest with TestPropertyProvider and Testcontainers. Covers JDBC/JPA-style Micronaut Data in one prompt (no separate 511 JDBC rule).</description>
+  </metadata>
+
+  <title>Micronaut Data Guidelines</title>
+  <goal><![CDATA[
+Apply Micronaut Data patterns for relational repositories and safe SQL.
+
+**What is covered in this Skill?**
+
+- @MappedEntity, @Id, @GeneratedValue, @MappedProperty for column mapping
+- @Repository interfaces extending CrudRepository / PageableRepository
+- Derived finder methods and @Query with named parameters
+- @Transactional on @Singleton services (readOnly where appropriate)
+- Page and Pageable for list endpoints
+- DTO/interface projections for read-heavy queries
+- @Version for optimistic locking
+- Integration tests: @MicronautTest + TestPropertyProvider + Testcontainers
+
+**Scope:** Apply recommendations based on the reference rules and good/bad code examples.
+]]></goal>
+
+  <constraints>
+    <constraints-description>Compile before persistence changes; verify the full build after.</constraints-description>
+    <constraint-list>
+      <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+      <constraint>**SAFETY**: If compilation fails, stop immediately</constraint>
+      <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+      <constraint>**BEFORE APPLYING**: Read the reference for detailed rules and examples</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+        <trigger>Review or implement Micronaut Data repositories and entities</trigger>
+        <trigger>Add transactions, pagination, or projections in Micronaut persistence layer</trigger>
+    </trigger-list>
+  </triggers>
+
+  <references>
+    <reference-list>
+        <reference>references/512-frameworks-micronaut-data.md</reference>
+    </reference-list>
+  </references>
+</prompt>
