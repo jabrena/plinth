@@ -55,7 +55,7 @@ Adding AI tools to your pipeline can provide new opportunities to deliver more v
 
 ### Agentic Workflow
 
-`Agents are Java Enterprise development` were designed to cover the whole SLDC starting from the requirements and the architectural process. Once you have the foundations well designed. it is possible to execute Plans, iterate and discuss it and when the plans associated to User Stories has the right size & complexity, it is easy to pass to the models to be implemented with security in other case, you will have the classical issues with implementations without control.
+`Agents for Java Enterprise development` were designed to cover the whole SLDC starting from the requirements and the architectural process. Once you have the foundations well designed. it is possible to execute Plans, iterate and discuss it and when the plans associated to User Stories has the right size & complexity, it is easy to pass to the models to be implemented with security in other case, you will have the classical issues with implementations without control.
 
 ## Limitations
 
