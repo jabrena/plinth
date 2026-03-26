@@ -1,0 +1,22 @@
+INSERT INTO greek_god (name) VALUES
+    ('Zeus'),
+    ('Hera'),
+    ('Poseidon'),
+    ('Demeter'),
+    ('Ares'),
+    ('Athena'),
+    ('Apollo'),
+    ('Artemis'),
+    ('Hephaestus'),
+    ('Aphrodite'),
+    ('Hermes'),
+    ('Dionysus'),
+    ('Hades'),
+    ('Hypnos'),
+    ('Nike'),
+    ('Janus'),
+    ('Nemesis'),
+    ('Iris'),
+    ('Hecate'),
+    ('Tyche')
+ON CONFLICT (name) DO NOTHING;

@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: demo
+  mvc:
+    problemdetails:
+      enabled: true
+  datasource:
+    url: ${SPRING_DATASOURCE_URL:jdbc:postgresql://localhost:5432/greek_gods}
+    username: ${SPRING_DATASOURCE_USERNAME:greek}
+    password: ${SPRING_DATASOURCE_PASSWORD:greek}
+
+greek-gods:
+  sync:
+    base-url: https://my-json-server.typicode.com/jabrena/latency-problems
+    enabled: true
+    fixed-delay-ms: 3600000
+    initial-delay-ms: 60000
+  rest-client:
+    connect-timeout: 5s
+    read-timeout: 30s
+
+springdoc:
+  api-docs:
+    path: /api-docs

@@ -6,7 +6,7 @@ metadata:
   author: Juan Antonio Breña Moral
   version: 0.13.0-SNAPSHOT
 ---
-# Micronaut unit testing
+# Micronaut Unit Testing
 
 Apply fast testing strategies for Micronaut: Mockito-first, narrow @MicronautTest when HTTP or DI replacement is required.
 
