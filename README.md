@@ -127,7 +127,8 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 - [https://agentskills.io/home](https://agentskills.io/home)
 - [https://github.com/anthropics/skills](https://github.com/anthropics/skills)
 - [https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf](https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf)
-- [https://skills.sh/](https://skills.sh/)
+- https://skills.sh/jabrena/cursor-rules-java
+- https://tessl.io/registry/skills/github/jabrena/cursor-rules-java
 - [https://github.com/vercel-labs/skills/issues](https://github.com/vercel-labs/skills/issues)
 - [https://skillsmp.com/](https://skillsmp.com/)
 - [https://cursor.com/docs/cli/github-actions](https://cursor.com/docs/cli/github-actions)
