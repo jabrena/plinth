@@ -5,6 +5,41 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.13.0] 2026-03-30
+
+### Added
+
+- **Skills**:
+  - ER diagram support in architecture diagrams guidance (#511)
+  - Plan mode skill enhancements (`@040-planning-plan-mode`) (#488)
+  - JIB coverage and improved skill summaries in Maven-related skills (#522)
+  - Skill for Java testing strategies (`@130-java-testing-strategies`) (#523)
+  - Spring Boot Updated (#502)
+  - Quarkus support (#560)
+  - Micronaut support (#573, #584)
+
+- **Agents**:
+  - Business Analyst
+  - Coordinator agent
+  - Spring Boot agent
+  - Quarkus agent (#563, #564)
+  - Micronaut agent
+
+### Changed
+
+- **PML & generators**:
+  - Migrated XML rule sources to **PML Schema 0.7.0**; generator validates against https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd (#525).
+
+- **Skills**:
+  - Reduced complexity for ADR discovery on functional requirements (`@031-architecture-adr-functional-requirements`) (#532).
+  - C4 model guidance limited to levels 1–3 (#504).
+  - Improved `@113-java-maven-documentation` (#529).
+  - Spring Boot rules and skills refined (#547).
+
+### Removed
+
+- Structural Concurrency guidance removed while the feature remains in preview (#530).
+
 ## [0.12.0] 2026-03-08
 
 ### Added
@@ -290,6 +325,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added initial cursor rules (Java, Effective Java, Concurrency, Functional programming, Data-Oriented programming & Spring Boot)
 
+[0.13.0]: https://github.com/jabrena/cursor-rules-java/compare/0.12.0...0.13.0
 [0.12.0]: https://github.com/jabrena/cursor-rules-java/compare/0.11.0...0.12.0
 [0.11.0]: https://github.com/jabrena/cursor-rules-java/compare/0.10.0...0.11.0
 [0.10.0]: https://github.com/jabrena/cursor-rules-java/compare/0.9.0...0.10.0
