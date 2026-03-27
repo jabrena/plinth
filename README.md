@@ -131,13 +131,13 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 - [https://cursor.com/cli](https://cursor.com/cli)
 - [https://www.anthropic.com/claude-code](https://www.anthropic.com/claude-code)
 - [https://github.com/features/copilot](https://github.com/features/copilot)
+- [https://cursor.com/docs/cli/github-actions](https://cursor.com/docs/cli/github-actions)
+- [https://code.claude.com/docs/en/github-actions](https://code.claude.com/docs/en/github-actions)
 - [https://agents.md/](https://agents.md/)
 - [https://agentskills.io/home](https://agentskills.io/home)
 - https://skills.sh/jabrena/cursor-rules-java
 - https://tessl.io/registry/skills/github/jabrena/cursor-rules-java
 - [https://github.com/vercel-labs/skills/issues](https://github.com/vercel-labs/skills/issues)
-- [https://cursor.com/docs/cli/github-actions](https://cursor.com/docs/cli/github-actions)
-- [https://code.claude.com/docs/en/github-actions](https://code.claude.com/docs/en/github-actions)
 - [https://openjdk.org/jeps/0](https://openjdk.org/jeps/0)
 - [https://jbake.org/docs/latest/](https://jbake.org/docs/latest/)
 
