@@ -36,6 +36,7 @@ Read the following comprehensive guides to use this project today.
 - [Getting started with `System prompts for Java`](./documentation/GETTING-STARTED-SYSTEM-PROMPTS.md)
 - [Getting started with `Skills for Java`](./documentation/GETTING-STARTED-SKILLS.md)
 - [Getting started with `Pipelines and AI`](./documentation/GETTING-STARTED-PIPELINES.md)
+- [Getting started with `Agents`](./documentation/GETTING-STARTED-AGENTS.md)
 
 ## How to use them?
 
