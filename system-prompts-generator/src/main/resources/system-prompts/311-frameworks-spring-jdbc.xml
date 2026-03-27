@@ -2,7 +2,7 @@
 <prompt>
     <metadata>
         <author>Juan Antonio Breña Moral</author>
-        <version>0.13.0-SNAPSHOT</version>
+        <version>0.13.0</version>
         <license>Apache-2.0</license>
         <title>Spring JDBC — JdbcTemplate and JdbcClient</title>
         <description>Use when you need to write or review programmatic JDBC with Spring — including JdbcTemplate, NamedParameterJdbcTemplate, JdbcClient (Spring Framework 6.1+), parameterized SQL, RowMapper mapping to records, batch operations, transactions, safe handling of generated keys, DataAccessException handling, read-only transactions, streaming large result sets, and @JdbcTest slice testing.</description>

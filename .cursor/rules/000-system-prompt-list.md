@@ -2,7 +2,7 @@
 name: 000-system-prompt-list
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.13.0-SNAPSHOT
+  version: 0.13.0
 ---
 # Create a Checklist with all Java steps to use with system prompts for Java
 

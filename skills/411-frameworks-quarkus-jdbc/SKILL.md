@@ -4,7 +4,7 @@ description: Programmatic JDBC in Quarkus with Agroal DataSource, parameterized 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.13.0-SNAPSHOT
+  version: 0.13.0
 ---
 # Quarkus JDBC — programmatic SQL
 

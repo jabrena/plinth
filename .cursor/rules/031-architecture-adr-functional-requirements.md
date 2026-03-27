@@ -4,7 +4,7 @@ description: Use when the user wants to document CLI and/or REST API architectur
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.13.0-SNAPSHOT
+  version: 0.13.0
 ---
 # Create ADRs for Functional Requirements (CLI and/or REST API)
 

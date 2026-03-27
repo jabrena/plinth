@@ -4,7 +4,7 @@
       id="512-frameworks-micronaut-data">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
-    <version>0.13.0-SNAPSHOT</version>
+    <version>0.13.0</version>
     <license>Apache-2.0</license>
     <description>Use when you need data access with Micronaut Data — @MappedEntity, CrudRepository/PageableRepository, @Query with parameters, @Transactional services, projections, @Version, and @MicronautTest with TestPropertyProvider and Testcontainers. Covers JDBC/JPA-style Micronaut Data in one prompt (no separate 511 JDBC rule).</description>
   </metadata>

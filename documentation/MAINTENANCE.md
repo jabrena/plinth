@@ -16,7 +16,7 @@ Review that the list doesn´t any broken link to @/.cursor with .md files
 Can you update the current changelog for 0.13.0 comparing git commits in relation to 0.12.0 tag. Use  @https://keepachangelog.com/en/1.1.0/  rules
 
 #Bump to a new snapshot
-@resources/ update version to 0.12.0-SNAPSHOT and pom.xml and maven modules
+@resources/ update version to 0.13.0 and pom.xml and maven modules
 ```
 
 ## Release process
@@ -37,13 +37,13 @@ Can you update the current changelog for 0.13.0 comparing git commits in relatio
 Can you update the current changelog for 0.13.0 comparing git commits in relation to 0.12.0 tag. Use  @https://keepachangelog.com/en/1.1.0/  rules
 
 # Maven command to update the maven version to next minor version
-./mvnw versions:set -DnewVersion=0.13.0-SNAPSHOT
+./mvnw versions:set -DnewVersion=0.13.0
 ./mvnw versions:commit
 
 # Prompt to update the project to a new version
 Update xml files from @resources/ and update the version to 0.13.0 removing Snapshot. Update @pom.xml with the new version 0.13.0 Generate system prompts again with ./mvnw clean install -pl system-prompts-generator
 
-Update md files from @resources/ and update the version to 0.13.0 removing Snapshot. Update @pom.xml with the new version 0.13.0 Generate system prompts again with ./mvnw clean install -pl skils-generator
+Update md files from @resources/ and update the version to 0.13.0 removing Snapshot. Update @pom.xml with the new version 0.13.0 Generate system prompts again with ./mvnw clean install -pl skils-generator -am
 
 ## Note: Refactor a bit more to include all pom.xml
 

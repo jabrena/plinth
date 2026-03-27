@@ -2,7 +2,7 @@
 <prompt>
     <metadata>
         <author>Juan Antonio Breña Moral</author>
-        <version>0.13.0-SNAPSHOT</version>
+        <version>0.13.0</version>
         <license>Apache-2.0</license>
         <title>Quarkus REST API Guidelines</title>
         <description>Use when you need to design, review, or improve REST APIs with Quarkus REST (Jakarta REST) — including resource classes, HTTP methods, status codes, request/response DTOs, Bean Validation, exception mappers, OpenAPI with SmallRye, content negotiation, pagination, and security-aware boundaries.</description>
