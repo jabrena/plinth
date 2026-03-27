@@ -1,0 +1,77 @@
+@startuml Greek Gods API - Direct Database Flow
+!theme plain
+title Greek Gods API - Simplified Direct Database Access
+
+' Main Participants
+participant "Developer" as Dev #LightBlue
+participant "API Service" as API #LightGreen
+participant "Database" as DB #LightYellow
+participant "External API" as ExtAPI #LightGray
+
+== Background Data Sync ==
+
+ExtAPI -> DB : Periodic sync\n(Greek gods data)
+activate DB
+DB --> ExtAPI : Data updated
+deactivate DB
+note right of DB : Database contains\n20 Greek god names
+
+== API Request Flow ==
+
+Dev -> API : GET /api/v1/gods/greek
+activate API
+
+API -> DB : SELECT name\nFROM greek_god
+activate DB
+DB --> API : Result set\n(Greek god names)
+deactivate DB
+
+API --> Dev : 200 OK\n["Zeus", "Hera", "Poseidon", "Demeter",\n"Ares", "Athena", "Apollo", ...]
+
+deactivate API
+
+== Error Handling ==
+
+alt Database Connection Error
+    Dev -> API : GET /api/v1/gods/greek
+    activate API
+    API -> DB : Query attempt
+    DB --> API : Connection Error
+    API --> Dev : 500 Internal Server Error\nContent-Type: application/problem+json\nRFC 7807 body: type, title, status=500\n(detail/instance may vary; see ADR-001)
+    deactivate API
+    
+else External API Sync Failure
+    note over ExtAPI : External API down\nfor periodic sync
+    ExtAPI -> DB : Sync attempt
+    DB --> ExtAPI : Timeout/Error
+    note right of DB : API continues serving\nwith existing data
+    
+    Dev -> API : GET /api/v1/gods/greek
+    activate API
+    API -> DB : Query existing data
+    activate DB
+    DB --> API : Cached god names
+    deactivate DB
+    API --> Dev : 200 OK\n(from existing data)
+    deactivate API
+    
+else Empty Database
+    Dev -> API : GET /api/v1/gods/greek
+    activate API
+    API -> DB : Query for data
+    activate DB
+    DB --> API : Empty result
+    deactivate DB
+    API --> Dev : 200 OK\n[] (empty array)
+    deactivate API
+end
+
+note over Dev, ExtAPI
+    **System Benefits:**
+    • Simple architecture
+    • Direct database access
+    • Reliable data persistence
+    • Real-time data queries
+end note
+
+@enduml 
