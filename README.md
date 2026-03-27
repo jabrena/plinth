@@ -141,7 +141,7 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 - [https://openjdk.org/jeps/0](https://openjdk.org/jeps/0)
 - [https://jbake.org/docs/latest/](https://jbake.org/docs/latest/)
 
-## Cursor rules ecosystem
+## Other developments
 
 - [https://github.com/jabrena/pml](https://github.com/jabrena/pml)
 - [https://github.com/jabrena/cursor-rules-java](https://github.com/jabrena/cursor-rules-java)
