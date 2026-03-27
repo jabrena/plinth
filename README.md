@@ -29,6 +29,10 @@ The project generates a set of deliverables at the end of any iteration.
 | Skills for Java         | [https://skills.sh/jabrena/cursor-rules-java](https://skills.sh/jabrena/cursor-rules-java) |
 | Agents for Java         | [Catalog](.cursor/agents) (`.cursor/agents`) |
 
+### Compatibility
+
+This project is compatible with `Cursor AI`, `Claude Code` & `Github Copilot`.
+
 ## Getting started
 
 Read the following comprehensive guides to use this project today.
@@ -86,7 +90,6 @@ The repository includes [a collection of examples](./examples/) where you can ex
 | 2025-07-10 | ADR-002 | [Cursor Rules scope configuration](./documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md)        |
 | 2025-07-08 | ADR-001 | [Cursor Rules generation from XML Files](./documentation/adr/ADR-001-generate-cursor-rules-from-xml-files.md) |
 
-
 ## Changelog
 
 - Review the [CHANGELOG](./CHANGELOG.md) for further details
@@ -124,20 +127,17 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 
 ## References
 
-- [https://agents.md/](https://agents.md/)
 - [https://www.cursor.com/](https://www.cursor.com/)
 - [https://cursor.com/cli](https://cursor.com/cli)
-- [https://docs.cursor.com/context/rules](https://docs.cursor.com/context/rules)
-- [https://docs.cursor.com/context/@-symbols/@-cursor-rules](https://docs.cursor.com/context/@-symbols/@-cursor-rules)
+- [https://www.anthropic.com/claude-code](https://www.anthropic.com/claude-code)
+- [https://github.com/features/copilot](https://github.com/features/copilot)
+- [https://agents.md/](https://agents.md/)
 - [https://agentskills.io/home](https://agentskills.io/home)
-- [https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf](https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf)
 - https://skills.sh/jabrena/cursor-rules-java
 - https://tessl.io/registry/skills/github/jabrena/cursor-rules-java
 - [https://github.com/vercel-labs/skills/issues](https://github.com/vercel-labs/skills/issues)
 - [https://cursor.com/docs/cli/github-actions](https://cursor.com/docs/cli/github-actions)
 - [https://code.claude.com/docs/en/github-actions](https://code.claude.com/docs/en/github-actions)
-- [https://www.anthropic.com/claude-code](https://www.anthropic.com/claude-code)
-- [https://github.com/features/copilot](https://github.com/features/copilot)
 - [https://openjdk.org/jeps/0](https://openjdk.org/jeps/0)
 - [https://jbake.org/docs/latest/](https://jbake.org/docs/latest/)
 
