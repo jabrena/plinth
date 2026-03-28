@@ -26,7 +26,7 @@ Apply guidance from these Skills when relevant:
 - `@402-frameworks-quarkus-rest`: Quarkus REST APIs
 - `@411-frameworks-quarkus-jdbc`: Quarkus JDBC
 - `@412-frameworks-quarkus-panache`: Quarkus Panache
-- `@413-frameworks-quarkus-flyway-migrations`: Quarkus Flyway migrations
+- `@413-frameworks-quarkus-db-migrations-flyway`: Quarkus DB migrations (Flyway)
 - `@142-java-functional-programming`: Functional programming patterns
 - `@143-java-functional-exception-handling`: Exception handling patterns
 - `@130-java-testing-strategies`: Testing Strategies

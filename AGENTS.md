@@ -25,7 +25,7 @@ You are an expert Java developer and technical writer for this project.
 
 ### Framework rule and skill indices
 
-Numeric prefixes group related prompts. **Spring Boot** uses `301`–`302` (core, REST), `311`–`313` (JDBC, Spring Data JDBC, Flyway migrations), and `321`–`323` (testing). **Quarkus** uses the same shape starting at **`401`**: `401`–`402` (core, REST), `411`–`413` (JDBC, Panache, Flyway migrations), `421`–`423` (testing). **Micronaut** uses **`501`**: `501`–`502` (core, REST), `511`–`513` (JDBC, Micronaut Data, Flyway migrations), and `521`–`523` (testing). New Quarkus framework prompts and skills must keep the **`401-`…`423-`** range; new Micronaut prompts must keep **`501-`…`502-`**, **`511-`…`513-`**, and **`521-`…`523-`** (do not reuse Spring or Quarkus prefixes).
+Numeric prefixes group related prompts. **Spring Boot** uses `301`–`302` (core, REST), `311`–`313` (JDBC, Spring Data JDBC, DB migrations — Flyway), and `321`–`323` (testing). **Quarkus** uses the same shape starting at **`401`**: `401`–`402` (core, REST), `411`–`413` (JDBC, Panache, DB migrations — Flyway), `421`–`423` (testing). **Micronaut** uses **`501`**: `501`–`502` (core, REST), `511`–`513` (JDBC, Micronaut Data, DB migrations — Flyway), and `521`–`523` (testing). New Quarkus framework prompts and skills must keep the **`401-`…`423-`** range; new Micronaut prompts must keep **`501-`…`502-`**, **`511-`…`513-`**, and **`521-`…`523-`** (do not reuse Spring or Quarkus prefixes).
 - `examples/` – Demo projects (Spring Boot, Quarkus, Micronaut, AWS Lambda, Azure Functions)
 - `site-generator/content/` – Blog posts, courses, documentation (WRITE here to update website)
 - `docs/` – Generated static website for GitHub Pages (READ only)

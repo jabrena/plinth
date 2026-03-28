@@ -1,12 +1,12 @@
 ---
-name: 413-frameworks-quarkus-flyway-migrations
+name: 413-frameworks-quarkus-db-migrations-flyway
 description: Use when you need to add or review Flyway database migrations in a Quarkus application — quarkus-flyway extension, db/migration scripts, quarkus.flyway.* configuration, migrate-at-start, and alignment with JDBC or Panache. Part of the skills-for-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
   version: 0.13.0
 ---
-# Quarkus — Flyway database migrations
+# Quarkus — Database migrations (Flyway)
 
 Apply Flyway migration guidelines for Quarkus.
 
@@ -36,4 +36,4 @@ Before applying Flyway or SQL changes, ensure the project compiles. After improv
 
 ## Reference
 
-For detailed guidance, examples, and constraints, see [references/413-frameworks-quarkus-flyway-migrations.md](references/413-frameworks-quarkus-flyway-migrations.md).
+For detailed guidance, examples, and constraints, see [references/413-frameworks-quarkus-db-migrations-flyway.md](references/413-frameworks-quarkus-db-migrations-flyway.md).

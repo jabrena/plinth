@@ -27,7 +27,7 @@ Apply guidance from these Skills when relevant:
 - `@502-frameworks-micronaut-rest`: Micronaut REST APIs
 - `@511-frameworks-micronaut-jdbc`: programmatic JDBC (DataSource, SQL, transactions)
 - `@512-frameworks-micronaut-data`: Micronaut Data (repositories, entities, generated SQL)
-- `@513-frameworks-micronaut-flyway-migrations`: Micronaut Flyway migrations
+- `@513-frameworks-micronaut-db-migrations-flyway`: Micronaut DB migrations (Flyway)
 - `@142-java-functional-programming`: Functional programming patterns
 - `@143-java-functional-exception-handling`: Exception handling patterns
 - `@130-java-testing-strategies`: Testing strategies

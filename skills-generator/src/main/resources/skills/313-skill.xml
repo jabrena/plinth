@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
-      id="313-frameworks-spring-flyway-migrations">
+      id="313-frameworks-spring-db-migrations-flyway">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0</version>
@@ -9,7 +9,7 @@
     <description>Use when you need to add or review Flyway database migrations in a Spring Boot application — Maven dependencies, db/migration scripts, spring.flyway.* configuration, baseline and validation, and alignment with JDBC or Spring Data JDBC.</description>
   </metadata>
 
-  <title>Spring Boot — Flyway database migrations</title>
+  <title>Spring — Database migrations (Flyway)</title>
   <goal><![CDATA[
 Apply Flyway migration guidelines for Spring Boot.
 
@@ -44,7 +44,7 @@ Apply Flyway migration guidelines for Spring Boot.
 
   <references>
     <reference-list>
-        <reference>references/313-frameworks-spring-flyway-migrations.md</reference>
+        <reference>references/313-frameworks-spring-db-migrations-flyway.md</reference>
     </reference-list>
   </references>
 </prompt>

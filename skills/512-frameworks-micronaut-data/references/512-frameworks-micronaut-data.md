@@ -1,6 +1,6 @@
 ---
 name: 512-frameworks-micronaut-data
-description: Use when you need data access with Micronaut Data — including JDBC (and JPA where applicable) repositories, @MappedEntity design, CrudRepository and custom @Query methods, pagination with Pageable, transactions with @Transactional, immutable-friendly entities and DTO projections, optimistic locking, compile-time query validation, and test setup with @MicronautTest and TestPropertyProvider. For hand-written java.sql repositories and maximum SQL control, use `@511-frameworks-micronaut-jdbc`. For Flyway-backed DDL and versioned schema changes, use `@513-frameworks-micronaut-flyway-migrations`.
+description: Use when you need data access with Micronaut Data — including JDBC (and JPA where applicable) repositories, @MappedEntity design, CrudRepository and custom @Query methods, pagination with Pageable, transactions with @Transactional, immutable-friendly entities and DTO projections, optimistic locking, compile-time query validation, and test setup with @MicronautTest and TestPropertyProvider. For hand-written java.sql repositories and maximum SQL control, use `@511-frameworks-micronaut-jdbc`. For Flyway-backed DDL and versioned schema changes, use `@513-frameworks-micronaut-db-migrations-flyway`.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -14,7 +14,7 @@ You are a Senior software engineer with extensive experience in Micronaut Data, 
 
 ## Goal
 
-Micronaut Data generates repository implementations at compile time: prefer explicit `@MappedEntity` models, `CrudRepository` / `PageableRepository` interfaces, and parameterized `@Query` for non-derivable SQL. Keep aggregates bounded, declare transactions at the service layer with `io.micronaut.transaction.annotation.Transactional`, and avoid N+1 retrieval patterns by using fetch joins or tailored queries. This prompt covers Micronaut Data for relational access (JDBC or JPA backends depending on project dependencies); use parameterized queries only — never concatenate untrusted input into SQL. For raw `DataSource` / `PreparedStatement` code without generated repositories, apply `@511-frameworks-micronaut-jdbc`. For schema evolution with Flyway, use `@513-frameworks-micronaut-flyway-migrations`.
+Micronaut Data generates repository implementations at compile time: prefer explicit `@MappedEntity` models, `CrudRepository` / `PageableRepository` interfaces, and parameterized `@Query` for non-derivable SQL. Keep aggregates bounded, declare transactions at the service layer with `io.micronaut.transaction.annotation.Transactional`, and avoid N+1 retrieval patterns by using fetch joins or tailored queries. This prompt covers Micronaut Data for relational access (JDBC or JPA backends depending on project dependencies); use parameterized queries only — never concatenate untrusted input into SQL. For raw `DataSource` / `PreparedStatement` code without generated repositories, apply `@511-frameworks-micronaut-jdbc`. For schema evolution with Flyway, use `@513-frameworks-micronaut-db-migrations-flyway`.
 
 ## Constraints
 
@@ -359,7 +359,7 @@ class CustomerRepositoryIT {
 - **ANALYZE** persistence code: `@MappedEntity` mapping, generated repository interfaces, `@Query` safety and compile-time validation, `Pageable`/`Page` usage, `io.micronaut.transaction.annotation.Transactional` placement, projection interfaces, `@Version` usage, and load patterns (single query vs N+1)
 - **CATEGORIZE** issues by impact (CORRECTNESS, PERFORMANCE, MAINTAINABILITY, SECURITY for injection risk) and by layer (entity, repository, service/transaction, test wiring)
 - **APPLY** Micronaut Data–aligned fixes: correct `@Repository` and `@MappedEntity`, parameterized native or JPQL `@Query` as appropriate to the runtime, transactional services, bounded lists, DTO projections for hot reads, `@Version` where concurrent updates matter
-- **IMPLEMENT** changes so schema, migrations, aggregates, and tests stay consistent; prefer Flyway via `@513-frameworks-micronaut-flyway-migrations` when altering tables; exercise repositories with `@MicronautTest` against a real dialect
+- **IMPLEMENT** changes so schema, migrations, aggregates, and tests stay consistent; prefer Flyway via `@513-frameworks-micronaut-db-migrations-flyway` when altering tables; exercise repositories with `@MicronautTest` against a real dialect
 - **EXPLAIN** trade-offs (JDBC vs JPA Micronaut Data runtime, native SQL vs JPQL, `Page` vs full lists, projection interfaces vs full entities, fetch joins vs extra queries)
 - **TEST** repository behaviour with `@MicronautTest` and `TestPropertyProvider` (e.g. Testcontainers Postgres); never mock repositories inside persistence tests meant to verify SQL
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
@@ -372,6 +372,6 @@ class CustomerRepositoryIT {
 - **API BOUNDARIES**: Avoid returning persistence-heavy entities directly from HTTP controllers when a projection or DTO matches the contract — keeps APIs stable and reduces accidental field exposure
 - **PAGINATION**: Do not expose unbounded `findAll()` or full-table lists on large production entities — use `PageableRepository`/`Page` or explicit `LIMIT` in `@Query`
 - **N+1 PREVENTION**: When list use cases touch associations for every row, prefer fetch joins, batch fetching, or tailored `@Query` reads over repeated lazy loads
-- **OPTIMISTIC LOCKING**: Adding `@Version` requires a matching `version` column — ship a migration (`@513-frameworks-micronaut-flyway-migrations`) before deploy; schema drift breaks startup or updates
+- **OPTIMISTIC LOCKING**: Adding `@Version` requires a matching `version` column — ship a migration (`@513-frameworks-micronaut-db-migrations-flyway`) before deploy; schema drift breaks startup or updates
 - **AOP SELF-INVOCATION**: Never call a `@Transactional` method via `this.method()` inside the same Micronaut bean — the interceptor is bypassed; extract to another injected bean
 - **INCREMENTAL SAFETY**: Change one repository surface or aggregate at a time; verify with integration tests between steps; avoid mixing schema changes with broad query refactors in a single commit

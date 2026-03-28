@@ -1,6 +1,6 @@
 ---
 name: 412-frameworks-quarkus-panache
-description: Use when you need data access with Quarkus Hibernate ORM Panache — including PanacheEntity / PanacheEntityBase, PanacheRepository, named and HQL queries, transactions, pagination, and immutable-friendly patterns. This is the Quarkus analogue to Spring Data for relational persistence; prefer Panache APIs over verbose persistence boilerplate. For Flyway-backed DDL and versioned schema changes, use `@413-frameworks-quarkus-flyway-migrations`.
+description: Use when you need data access with Quarkus Hibernate ORM Panache — including PanacheEntity / PanacheEntityBase, PanacheRepository, named and HQL queries, transactions, pagination, and immutable-friendly patterns. This is the Quarkus analogue to Spring Data for relational persistence; prefer Panache APIs over verbose persistence boilerplate. For Flyway-backed DDL and versioned schema changes, use `@413-frameworks-quarkus-db-migrations-flyway`.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -14,7 +14,7 @@ You are a Senior software engineer with extensive experience in Quarkus, Hiberna
 
 ## Goal
 
-Panache simplifies Hibernate ORM in Quarkus: **active record** (`PanacheEntity`) for small entities or **repository** (`PanacheRepository`) for a cleaner separation. Prefer explicit queries (`find`, `list`, `HQL`) over magic lazy graphs; keep aggregates focused; use `@Transactional` on services. For hand-written SQL and reporting, use `@411-frameworks-quarkus-jdbc` instead of forcing everything through Panache. For schema evolution with Flyway, use `@413-frameworks-quarkus-flyway-migrations`.
+Panache simplifies Hibernate ORM in Quarkus: **active record** (`PanacheEntity`) for small entities or **repository** (`PanacheRepository`) for a cleaner separation. Prefer explicit queries (`find`, `list`, `HQL`) over magic lazy graphs; keep aggregates focused; use `@Transactional` on services. For hand-written SQL and reporting, use `@411-frameworks-quarkus-jdbc` instead of forcing everything through Panache. For schema evolution with Flyway, use `@413-frameworks-quarkus-db-migrations-flyway`.
 
 ## Constraints
 
@@ -630,6 +630,6 @@ class BookRepositoryTest {
 - **ENTITY BOUNDARIES**: Do not return managed entities directly from REST resources — map to DTOs or use `project(Class)` to keep API contracts stable and prevent accidental field exposure
 - **PAGINATION**: Never call `listAll()` or an unbound `list(query)` on production tables — always apply `.page(Page.of(index, size))` or a LIMIT clause
 - **N+1 PREVENTION**: When a use case accesses collection associations on every returned entity, add `JOIN FETCH` to the HQL query; lazy access outside a Hibernate session throws `LazyInitializationException`
-- **OPTIMISTIC LOCKING**: Adding `@Version` to an existing entity requires a `version` column in the schema — apply via a migration (`@413-frameworks-quarkus-flyway-migrations`) before deploying; mismatched schema causes startup failure
+- **OPTIMISTIC LOCKING**: Adding `@Version` to an existing entity requires a `version` column in the schema — apply via a migration (`@413-frameworks-quarkus-db-migrations-flyway`) before deploying; mismatched schema causes startup failure
 - **CDI SELF-INVOCATION**: Never call a `@Transactional` method via `this.method()` within the same CDI bean — the interceptor is bypassed; extract to a separate injected bean
 - **INCREMENTAL SAFETY**: Change one entity, repository, or service at a time; verify with `@QuarkusTest` + `@TestTransaction` between steps; do not combine aggregate boundary changes with query refactoring in one commit

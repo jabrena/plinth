@@ -11,7 +11,7 @@
     <role>You are a Senior software engineer with extensive experience in Quarkus and JDBC data access</role>
 
     <goal>
-        Quarkus pairs JDBC drivers (`quarkus-jdbc-*`) with Agroal connection pooling. Application code should use injected `javax.sql.DataSource`, always bind parameters, map rows to immutable records or small DTOs, and declare transactions at the service boundary with `jakarta.transaction.Transactional`. Use Panache (`@412-frameworks-quarkus-panache`) when you want repository-style Hibernate access; use raw JDBC for reporting, bulk ETL, or maximum SQL control. For Flyway migrations with Quarkus, use `@413-frameworks-quarkus-flyway-migrations`.
+        Quarkus pairs JDBC drivers (`quarkus-jdbc-*`) with Agroal connection pooling. Application code should use injected `javax.sql.DataSource`, always bind parameters, map rows to immutable records or small DTOs, and declare transactions at the service boundary with `jakarta.transaction.Transactional`. Use Panache (`@412-frameworks-quarkus-panache`) when you want repository-style Hibernate access; use raw JDBC for reporting, bulk ETL, or maximum SQL control. For Flyway migrations with Quarkus, use `@413-frameworks-quarkus-db-migrations-flyway`.
     </goal>
 
     <constraints>

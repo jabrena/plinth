@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
-      id="513-frameworks-micronaut-flyway-migrations">
+      id="513-frameworks-micronaut-db-migrations-flyway">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0</version>
@@ -9,7 +9,7 @@
     <description>Use when you need to add or review Flyway database migrations in a Micronaut application — micronaut-flyway, db/migration scripts, flyway.datasources.* configuration, and alignment with JDBC or Micronaut Data.</description>
   </metadata>
 
-  <title>Micronaut — Flyway database migrations</title>
+  <title>Micronaut — Database migrations (Flyway)</title>
   <goal><![CDATA[
 Apply Flyway migration guidelines for Micronaut.
 
@@ -43,7 +43,7 @@ Apply Flyway migration guidelines for Micronaut.
 
   <references>
     <reference-list>
-        <reference>references/513-frameworks-micronaut-flyway-migrations.md</reference>
+        <reference>references/513-frameworks-micronaut-db-migrations-flyway.md</reference>
     </reference-list>
   </references>
 </prompt>

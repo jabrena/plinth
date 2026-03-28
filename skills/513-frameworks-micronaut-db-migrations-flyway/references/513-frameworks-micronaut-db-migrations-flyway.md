@@ -1,12 +1,12 @@
 ---
-name: 513-frameworks-micronaut-flyway-migrations
+name: 513-frameworks-micronaut-db-migrations-flyway
 description: Use when you need to add or review Flyway database migrations in a Micronaut application — including `micronaut-flyway` (or Flyway integration aligned with your Micronaut BOM), `classpath:db/migration` scripts, `V{version}__{description}.sql` naming, per-datasource Flyway configuration, and coordination with JDBC (`@511-frameworks-micronaut-jdbc`) or Micronaut Data (`@512-frameworks-micronaut-data`). Focus on repeatable, versioned schema evolution.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
   version: 0.13.0
 ---
-# Micronaut — Flyway database migrations
+# Micronaut — Database migrations (Flyway)
 
 ## Role
 

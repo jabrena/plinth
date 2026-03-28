@@ -1,12 +1,12 @@
 ---
-name: 513-frameworks-micronaut-flyway-migrations
+name: 513-frameworks-micronaut-db-migrations-flyway
 description: Use when you need to add or review Flyway database migrations in a Micronaut application — micronaut-flyway, db/migration scripts, flyway.datasources.* configuration, and alignment with JDBC or Micronaut Data. Part of the skills-for-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
   version: 0.13.0
 ---
-# Micronaut — Flyway database migrations
+# Micronaut — Database migrations (Flyway)
 
 Apply Flyway migration guidelines for Micronaut.
 
@@ -36,4 +36,4 @@ Before applying Flyway or SQL changes, ensure the project compiles. After improv
 
 ## Reference
 
-For detailed guidance, examples, and constraints, see [references/513-frameworks-micronaut-flyway-migrations.md](references/513-frameworks-micronaut-flyway-migrations.md).
+For detailed guidance, examples, and constraints, see [references/513-frameworks-micronaut-db-migrations-flyway.md](references/513-frameworks-micronaut-db-migrations-flyway.md).

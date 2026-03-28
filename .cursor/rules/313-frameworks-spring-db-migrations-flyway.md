@@ -1,12 +1,12 @@
 ---
-name: 313-frameworks-spring-flyway-migrations
+name: 313-frameworks-spring-db-migrations-flyway
 description: Use when you need to add or review Flyway database migrations in a Spring Boot application — including Maven dependencies, `classpath:db/migration` scripts, versioning (`V{version}__{description}.sql`), configuration via `spring.flyway.*`, baseline and repair for existing databases, validation in CI, and coordination with JDBC (`@311-frameworks-spring-jdbc`) or Spring Data JDBC (`@312-frameworks-spring-data-jdbc`). Focus on Flyway; for ORM schema generation use the stack’s Hibernate integration instead of mixing approaches blindly.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
   version: 0.13.0
 ---
-# Spring Boot — Flyway database migrations
+# Spring — Database migrations (Flyway)
 
 ## Role
 

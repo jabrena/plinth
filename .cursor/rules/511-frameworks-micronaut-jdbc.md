@@ -14,7 +14,7 @@ You are a Senior software engineer with extensive experience in Micronaut and JD
 
 ## Goal
 
-Micronaut pairs JDBC drivers (`micronaut-jdbc-hikari` plus `micronaut-sql-jdbc` or a driver BOM) with a pooled `javax.sql.DataSource` from configuration. Application code should inject `DataSource`, always bind parameters, map rows to immutable records or small DTOs, and declare transactions at the service boundary with `io.micronaut.transaction.annotation.Transactional`. Use Micronaut Data (`@512-frameworks-micronaut-data`) when repository-style generated access fits; use raw JDBC for reporting, bulk ETL, upserts, or maximum SQL control (as in hand-written repositories that open `Connection`/`PreparedStatement` directly). For Flyway migrations with Micronaut, use `@513-frameworks-micronaut-flyway-migrations`.
+Micronaut pairs JDBC drivers (`micronaut-jdbc-hikari` plus `micronaut-sql-jdbc` or a driver BOM) with a pooled `javax.sql.DataSource` from configuration. Application code should inject `DataSource`, always bind parameters, map rows to immutable records or small DTOs, and declare transactions at the service boundary with `io.micronaut.transaction.annotation.Transactional`. Use Micronaut Data (`@512-frameworks-micronaut-data`) when repository-style generated access fits; use raw JDBC for reporting, bulk ETL, upserts, or maximum SQL control (as in hand-written repositories that open `Connection`/`PreparedStatement` directly). For Flyway migrations with Micronaut, use `@513-frameworks-micronaut-db-migrations-flyway`.
 
 ## Constraints
 

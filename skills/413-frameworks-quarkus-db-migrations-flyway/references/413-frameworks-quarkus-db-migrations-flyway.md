@@ -1,12 +1,12 @@
 ---
-name: 413-frameworks-quarkus-flyway-migrations
+name: 413-frameworks-quarkus-db-migrations-flyway
 description: Use when you need to add or review Flyway database migrations in a Quarkus application — including the `quarkus-flyway` extension, `classpath:db/migration` scripts, `V{version}__{description}.sql` naming, `quarkus.flyway.*` configuration, migrate-at-start behavior, and coordination with JDBC (`@411-frameworks-quarkus-jdbc`) or Hibernate ORM with Panache (`@412-frameworks-quarkus-panache`). Focus on Flyway-driven schema evolution, not hand-applied DDL in production.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
   version: 0.13.0
 ---
-# Quarkus — Flyway database migrations
+# Quarkus — Database migrations (Flyway)
 
 ## Role
 
