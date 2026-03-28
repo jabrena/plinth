@@ -2,7 +2,7 @@
 <prompt>
     <metadata>
         <author>Juan Antonio Breña Moral</author>
-        <version>0.13.0-SNAPSHOT</version>
+        <version>0.13.0</version>
         <license>Apache-2.0</license>
         <title>Spring Boot Core Guidelines</title>
         <description>Use when you need to review, improve, or build Spring Boot 4.0.x applications — including proper usage of @SpringBootApplication, component annotations (@Controller, @Service, @Repository), bean definition and scoping, configuration classes and @ConfigurationProperties (with @Validated), component scanning, conditional configuration and profiles, constructor injection, @Primary and @Qualifier for multiple beans of the same type, bean minimization, graceful shutdown, virtual threads, Jakarta EE namespace consistency, scheduled tasks, and @TestConfiguration.</description>
@@ -12,18 +12,6 @@
 
     <goal>
         Spring Boot Core centers on the application entry point, stereotype annotations, the IoC container, type-safe configuration, environment-specific behavior, and operational concerns such as scheduling. Effective applications use `@SpringBootApplication` as the composition root, layer-appropriate stereotypes, explicit bean contracts (scope and lifecycle), `@ConfigurationProperties` instead of scattered `@Value`, narrow component scanning, `@Profile` and conditional beans for environment logic, constructor injection, cohesive services over bean sprawl, and configured schedulers with error handling.
-
-        ### Implementing These Principles
-
-        These guidelines are built upon the following core principles:
-
-        1. **Stereotypes and structure**: Use `@SpringBootApplication`, `@RestController`, `@Service`, `@Repository`, and related annotations so each type’s role is obvious and packages reflect layers or features.
-        2. **IoC and testability**: Prefer constructor injection, immutable dependencies where possible, and explicit bean definitions (`@Bean`, scope, lifecycle) over field injection and implicit wiring.
-        3. **Configuration**: Externalize settings with `@ConfigurationProperties`, validate and bind structured properties, and keep secrets and environment-specific code out of business services.
-        4. **Environment awareness**: Model differences with `@Profile`, `@ConditionalOn*`, and feature flags instead of `if (env)` scattered across domain code.
-        5. **Operational quality**: Right-size the bean graph (composition over micro-beans), configure `TaskScheduler` / async execution for scheduled work, observe failures without breaking the scheduler, enable graceful shutdown so in-flight work can finish, and use virtual threads on supported stacks when concurrency-bound.
-        6. **Disambiguation and validation**: Use `@Primary` and `@Qualifier` when several beans share a type; put `@Validated` on `@ConfigurationProperties` types so invalid config fails fast at startup.
-        7. **Namespace consistency (Boot 4)**: Prefer `jakarta.*` for Jakarta EE APIs (validation, persistence, servlet, annotation, inject); keep JDK types such as `javax.sql.DataSource` as-is; avoid mixing legacy `javax.annotation` / `javax.validation` imports with Spring Boot 4.
     </goal>
 
     <constraints>
@@ -1264,15 +1252,16 @@ public record ApiClientProperties(
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="text"><![CDATA[# application.yml (Spring Boot 4.0.x)
+                    <code-block language="yaml"><![CDATA[# application.yml (Spring Boot 4.0.x)
 server:
   shutdown: graceful
 
 spring:
   lifecycle:
-    timeout-per-shutdown-phase: 30s
-
-# Align schedulers with graceful shutdown (Java)
+    timeout-per-shutdown-phase: 30s]]></code-block>
+                </good-example>
+                <good-example>
+                    <code-block language="java"><![CDATA[// Align schedulers with graceful shutdown (pool waits for tasks before exit)
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.TaskScheduler;
@@ -1383,7 +1372,7 @@ class ExampleBean {
 
 record ValidatedInput(@NotBlank String value) { }]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
+                <bad-example>
                     <code-block language="java"><![CDATA[// Mixing legacy javax.* EE imports with Spring Boot 4 — wrong API on the classpath
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotBlank;
@@ -1399,6 +1388,57 @@ class BrokenBean {
 
     @PostConstruct
     void init() { }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="15" id="test-configuration-isolation">
+            <example-header>
+                <example-title>Test-only beans — `@TestConfiguration`</example-title>
+                <example-subtitle>Override beans in tests without polluting the main application context</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use `@TestConfiguration` on `@Configuration` classes that are **only** imported from tests (e.g. `@Import`, `@SpringBootTest` classes). Prefer `@MockBean` / `@MockitoBean` for simple mocks, but use `@TestConfiguration` when you need a small, explicit graph of test doubles. Do not place `@TestConfiguration` on the main application class or under default component scanning — it is intended for test slices.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+
+@TestConfiguration
+public class PaymentTestConfig {
+
+    @Bean
+    @Primary
+    PaymentClient stubPaymentClient() {
+        return amount -> true; // deterministic in tests
+    }
+}
+
+// In a test class:
+// @SpringBootTest
+// @Import(PaymentTestConfig.class)
+// class OrderServiceIT { ... }]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
+// Bad: production @Configuration tagged only with @Profile("test") — easy to
+// leak test doubles into non-test contexts if profiles drift
+@Configuration
+@Profile("test")
+public class ProductionConfigWithTestBeans {
+
+    @Bean
+    PaymentClient fakePayments() {
+        return amount -> true;
+    }
 }]]></code-block>
                 </bad-example>
             </code-examples>

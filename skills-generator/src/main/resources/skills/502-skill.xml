@@ -4,9 +4,9 @@
       id="502-frameworks-micronaut-rest">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
-    <version>0.13.0-SNAPSHOT</version>
+    <version>0.13.0</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to design, review, or improve REST APIs with Micronaut — including @Controller routes, HTTP status codes, DTOs, Bean Validation, exception handlers, pagination, idempotency, ETag/If-Match, caching headers, versioning, OpenAPI, and security annotations.</description>
+    <description>Use when you need to design, review, or improve REST APIs with Micronaut — including @Controller routes, HTTP status codes, DTOs, Bean Validation, exception handlers, pagination, idempotency, ETag/If-Match, caching headers, versioning, contract-first OpenAPI (OpenAPI Generator), optional runtime OpenAPI via micronaut-openapi, and security annotations.</description>
   </metadata>
 
   <title>Micronaut REST API Guidelines</title>
@@ -20,7 +20,7 @@ Apply REST design principles for Micronaut HTTP applications.
 - @Valid on request bodies with Bean Validation
 - Centralized error mapping (ExceptionHandler / problem JSON when applicable)
 - Pagination with Pageable and bounded sizes
-- OpenAPI annotations (@Operation, @Tag)
+- OpenAPI contract file (API-first) and OpenAPI Generator for server stubs
 - Security annotations (@Secured) on sensitive routes
 - Idempotency-Key for retried writes
 - ETag / If-Match for optimistic concurrency
@@ -44,7 +44,7 @@ Apply REST design principles for Micronaut HTTP applications.
   <triggers>
     <trigger-list>
         <trigger>Review or improve Micronaut @Controller REST APIs</trigger>
-        <trigger>Add validation, error handling, or OpenAPI documentation to Micronaut HTTP layer</trigger>
+        <trigger>Add validation, error handling, or align controllers with the OpenAPI contract on Micronaut HTTP layer</trigger>
     </trigger-list>
   </triggers>
 

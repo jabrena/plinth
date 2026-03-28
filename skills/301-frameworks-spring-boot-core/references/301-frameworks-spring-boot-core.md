@@ -4,7 +4,7 @@ description: Use when you need to review, improve, or build Spring Boot 4.0.x ap
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.13.0-SNAPSHOT
+  version: 0.13.0
 ---
 # Spring Boot Core Guidelines
 
@@ -15,18 +15,6 @@ You are a Senior software engineer with extensive experience in Spring Boot and 
 ## Goal
 
 Spring Boot Core centers on the application entry point, stereotype annotations, the IoC container, type-safe configuration, environment-specific behavior, and operational concerns such as scheduling. Effective applications use `@SpringBootApplication` as the composition root, layer-appropriate stereotypes, explicit bean contracts (scope and lifecycle), `@ConfigurationProperties` instead of scattered `@Value`, narrow component scanning, `@Profile` and conditional beans for environment logic, constructor injection, cohesive services over bean sprawl, and configured schedulers with error handling.
-
-### Implementing These Principles
-
-These guidelines are built upon the following core principles:
-
-1. **Stereotypes and structure**: Use `@SpringBootApplication`, `@RestController`, `@Service`, `@Repository`, and related annotations so each type’s role is obvious and packages reflect layers or features.
-2. **IoC and testability**: Prefer constructor injection, immutable dependencies where possible, and explicit bean definitions (`@Bean`, scope, lifecycle) over field injection and implicit wiring.
-3. **Configuration**: Externalize settings with `@ConfigurationProperties`, validate and bind structured properties, and keep secrets and environment-specific code out of business services.
-4. **Environment awareness**: Model differences with `@Profile`, `@ConditionalOn*`, and feature flags instead of `if (env)` scattered across domain code.
-5. **Operational quality**: Right-size the bean graph (composition over micro-beans), configure `TaskScheduler` / async execution for scheduled work, observe failures without breaking the scheduler, enable graceful shutdown so in-flight work can finish, and use virtual threads on supported stacks when concurrency-bound.
-6. **Disambiguation and validation**: Use `@Primary` and `@Qualifier` when several beans share a type; put `@Validated` on `@ConfigurationProperties` types so invalid config fails fast at startup.
-7. **Namespace consistency (Boot 4)**: Prefer `jakarta.*` for Jakarta EE APIs (validation, persistence, servlet, annotation, inject); keep JDK types such as `javax.sql.DataSource` as-is; avoid mixing legacy `javax.annotation` / `javax.validation` imports with Spring Boot 4.
 
 ## Constraints
 
@@ -57,6 +45,7 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 12: Graceful shutdown
 - Example 13: Virtual threads (Spring Boot 4.0.x)
 - Example 14: javax vs jakarta consistency (Spring Boot 4.0.x)
+- Example 15: Test-only beans — `@TestConfiguration`
 
 ### Example 1: Spring Boot main application class
 
@@ -1234,7 +1223,7 @@ Description: Enable graceful shutdown so the embedded server stops accepting new
 
 **Good example:**
 
-```text
+```yaml
 # application.yml (Spring Boot 4.0.x)
 server:
   shutdown: graceful
@@ -1242,26 +1231,6 @@ server:
 spring:
   lifecycle:
     timeout-per-shutdown-phase: 30s
-
-# Align schedulers with graceful shutdown (Java)
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.TaskScheduler;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-
-@Configuration
-class GracefulSchedulingConfig {
-
-    @Bean
-    TaskScheduler taskScheduler() {
-        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-        scheduler.setPoolSize(4);
-        scheduler.setWaitForTasksToCompleteOnShutdown(true);
-        scheduler.setAwaitTerminationSeconds(20);
-        scheduler.initialize();
-        return scheduler;
-    }
-}
 ```
 
 **Bad example:**
@@ -1367,6 +1336,54 @@ class BrokenBean {
 
     @PostConstruct
     void init() { }
+}
+```
+
+### Example 15: Test-only beans — `@TestConfiguration`
+
+Title: Override beans in tests without polluting the main application context
+Description: Use `@TestConfiguration` on `@Configuration` classes that are **only** imported from tests (e.g. `@Import`, `@SpringBootTest` classes). Prefer `@MockBean` / `@MockitoBean` for simple mocks, but use `@TestConfiguration` when you need a small, explicit graph of test doubles. Do not place `@TestConfiguration` on the main application class or under default component scanning — it is intended for test slices.
+
+**Good example:**
+
+```java
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+
+@TestConfiguration
+public class PaymentTestConfig {
+
+    @Bean
+    @Primary
+    PaymentClient stubPaymentClient() {
+        return amount -> true; // deterministic in tests
+    }
+}
+
+// In a test class:
+// @SpringBootTest
+// @Import(PaymentTestConfig.class)
+// class OrderServiceIT { ... }
+```
+
+**Bad example:**
+
+```java
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
+// Bad: production @Configuration tagged only with @Profile("test") — easy to
+// leak test doubles into non-test contexts if profiles drift
+@Configuration
+@Profile("test")
+public class ProductionConfigWithTestBeans {
+
+    @Bean
+    PaymentClient fakePayments() {
+        return amount -> true;
+    }
 }
 ```
 

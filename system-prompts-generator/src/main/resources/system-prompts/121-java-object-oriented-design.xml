@@ -3,7 +3,7 @@
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
-        <version>0.13.0-SNAPSHOT</version>
+        <version>0.13.0</version>
         <license>Apache-2.0</license>
         <title>Java Object-Oriented Design Guidelines</title>
         <description>Use when you need to review, improve, or refactor Java code for object-oriented design quality — applying SOLID, DRY, and YAGNI principles, improving class and interface design, fixing OOP misuse, and resolving common code smells such as God Class, Feature Envy, and Data Clumps.</description>

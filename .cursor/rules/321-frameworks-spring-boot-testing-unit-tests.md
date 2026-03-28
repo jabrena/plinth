@@ -4,7 +4,7 @@ description: Use when you need to write unit tests for Spring Boot applications 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.13.0-SNAPSHOT
+  version: 0.13.0
 ---
 # Spring Boot Unit Testing with Mockito
 
@@ -14,21 +14,7 @@ You are a Senior software engineer with extensive experience in Spring Boot test
 
 ## Goal
 
-Spring Boot unit tests mix fast, context-free tests for domain and application services with narrow slice tests for web and JSON. Use Mockito (`@ExtendWith(MockitoExtension.class)`, `@Mock`, `@InjectMocks`) for beans that do not need Spring, and MVC/JSON slices (`@WebMvcTest`, `@JsonTest`) with `@MockitoBean` when you need MockMvc or JacksonTester. Prefer constructor-injected beans and Java records so tests stay simple and readable.
-
-### Implementing These Principles
-
-These guidelines are built upon the following core principles:
-
-1. **Pure unit tests first**: Exercise `@Service` and `@Component` types with Mockito only—no `ApplicationContext`—for speed and isolation.
-2. **Slices over full boot**: Use `@WebMvcTest` for controllers and `@JsonTest` for Jackson mapping; avoid `@SpringBootTest` when a slice suffices.
-3. **Mock boundaries**: Replace collaborators with `@Mock` or `@MockitoBean` so each test targets one unit or layer.
-4. **Deterministic test config**: Use `@ActiveProfiles("test")`, `@TestConfiguration`, and `@Primary` beans (e.g., fixed `Clock`) instead of flaky time or environment coupling.
-5. **Parameterized tests**: Prefer `@ParameterizedTest` with `@CsvSource` or `@MethodSource` over copy-pasted test methods covering the same logic with different inputs.
-6. **Modern mocking API**: Use `@MockitoBean` / `@MockitoSpyBean` in Spring Boot 4.0.x; `@MockBean` / `@SpyBean` are deprecated and removed.
-7. **Records and correct JSON assertions**: Use Java records for domain objects and `extractingJsonPathNumberValue`/`extractingJsonPathStringValue` to assert actual JSON values (not just existence).
-
-**Cross-references**: Framework-agnostic unit testing — `@131-java-testing-unit-testing`. Integration tests and Testcontainers — `@322-frameworks-spring-boot-testing-integration-tests`. Acceptance tests from Gherkin — `@323-frameworks-spring-boot-testing-acceptance-tests`. Related slices: `@WebFluxTest` (WebFlux), `@RestClientTest` (REST clients), `@TestPropertySource` (property overrides).
+Spring Boot unit tests mix fast, context-free tests for domain and application services with narrow slice tests for web and JSON. Use Mockito (`@ExtendWith(MockitoExtension.class)`, `@Mock`, `@InjectMocks`) for beans that do not need Spring, and MVC/JSON slices (`@WebMvcTest`, `@JsonTest`) with `@MockitoBean` when you need MockMvc or JacksonTester. Prefer constructor-injected beans and Java records so tests stay simple and readable. For time-sensitive logic, inject `java.time.Clock` (or a small `Supplier` of `Instant` / `TimeProvider` abstraction) instead of calling `Instant.now()` or `LocalDate.now()` directly — Mockito cannot mock static factories, and `Instant` / `LocalDateTime` are final value types; a fixed `Clock` or a mocked `Clock` gives deterministic tests.
 
 ## Constraints
 
@@ -46,14 +32,15 @@ Before applying any recommendations, ensure the project is in a valid state by r
 ### Table of contents
 
 - Example 1: Pure unit tests with MockitoExtension
-- Example 2: @WebMvcTest for controllers
-- Example 3: @JsonTest for JSON mapping
-- Example 4: @MockBean in slice tests
-- Example 5: Parameterized unit tests
-- Example 6: Test profiles and @TestConfiguration
-- Example 7: @MockitoBean in Spring Boot 4.0.x
-- Example 8: Unit test class naming convention
-- Example 9: Test-specific beans and configuration
+- Example 2: Injectable `Clock` and time that resists mocking
+- Example 3: @WebMvcTest for controllers
+- Example 4: @JsonTest for JSON mapping
+- Example 5: @MockBean in slice tests
+- Example 6: Parameterized unit tests
+- Example 7: Test profiles and @TestConfiguration
+- Example 8: @MockitoBean in Spring Boot 4.0.x
+- Example 9: Unit test class naming convention
+- Example 10: Test-specific beans and configuration
 
 ### Example 1: Pure unit tests with MockitoExtension
 
@@ -143,10 +130,95 @@ class OrderServiceTest {
 }
 ```
 
-### Example 2: @WebMvcTest for controllers
+### Example 2: Injectable `Clock` and time that resists mocking
+
+Title: Prefer `Clock.fixed` or a mocked `Clock` over `Instant.now()` in production code
+Description: **Why Mockito struggles:** `Instant.now()`, `LocalDate.now()`, and `ZonedDateTime.now()` are static calls on **final** value types — you cannot Mockito-spy them, and you should not mock `Instant` itself. **Inject `java.time.Clock`** (constructor injection on `@Service` / `@Component`) and use `Instant.now(clock)` / `LocalDate.now(clock)` so tests pass a **`Clock.fixed(…, zone)`** for determinism, or `@Mock Clock` with `when(clock.instant()).thenReturn(…)` when you need multiple instants in one test. **Same idea elsewhere:** `UUID.randomUUID()`, `ThreadLocalRandom`, `System.nanoTime()` — inject `Supplier<UUID>`, `Random` (seeded in tests), or a tiny abstraction instead of static calls you cannot stub cleanly. Register a default `Clock` bean in `@Configuration` (`@Bean Clock clock() { return Clock.systemUTC(); }`) if the framework should supply it; in tests, override with `@TestConfiguration` + `@Primary` or pass `Clock.fixed` directly in pure Mockito tests.
+
+**Good example:**
+
+```java
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
+// Production: clock injected — no static Instant.now()
+class PromotionService {
+    private final Clock clock;
+    PromotionService(Clock clock) { this.clock = clock; }
+
+    boolean isActive(Instant validFrom, Instant validTo) {
+        Instant now = clock.instant();
+        return !now.isBefore(validFrom) && now.isBefore(validTo);
+    }
+}
+
+@ExtendWith(MockitoExtension.class)
+class PromotionServiceTest {
+
+    @Mock
+    Clock clock;
+
+    @Test
+    void isActive_whenNowInsideWindow_returnsTrue() {
+        when(clock.instant()).thenReturn(Instant.parse("2024-07-01T12:00:00Z"));
+        var svc = new PromotionService(clock);
+        var from = Instant.parse("2024-07-01T00:00:00Z");
+        var to = Instant.parse("2024-07-02T00:00:00Z");
+        assertThat(svc.isActive(from, to)).isTrue();
+    }
+
+    @Test
+    void isActive_usesFixedClock_withoutMockito() {
+        Clock fixed = Clock.fixed(
+            Instant.parse("2024-07-01T12:00:00Z"), ZoneOffset.UTC);
+        var svc = new PromotionService(fixed);
+        var from = Instant.parse("2024-07-01T00:00:00Z");
+        var to = Instant.parse("2024-07-02T00:00:00Z");
+        assertThat(svc.isActive(from, to)).isTrue();
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import org.junit.jupiter.api.Test;
+import java.time.Instant;
+import static org.assertj.core.api.Assertions.assertThat;
+
+// Bad: static time — unit test depends on wall clock or needs brittle "approximate now" assertions
+class PromotionService {
+
+    boolean isActive(Instant validFrom, Instant validTo) {
+        Instant now = Instant.now(); // cannot stub; flaky / non-deterministic tests
+        return !now.isBefore(validFrom) && now.isBefore(validTo);
+    }
+}
+
+class PromotionServiceTest {
+
+    @Test
+    void isActive_flaky() {
+        var svc = new PromotionService();
+        // Either passes only in a narrow real-time window, or uses loose tolerances
+        assertThat(svc.isActive(
+            Instant.parse("2000-01-01T00:00:00Z"),
+            Instant.parse("3000-01-01T00:00:00Z"))).isTrue();
+    }
+}
+```
+
+### Example 3: @WebMvcTest for controllers
 
 Title: MockMvc slice with @MockBean for services
-Description: Use `@WebMvcTest(YourController.class)` to load only MVC infrastructure. Inject `MockMvc`, mock dependencies with `@MockBean`, and assert status and JSON with `MockMvc` matchers. Avoid `TestRestTemplate` with full context for unit-style controller tests.
+Description: Use `@WebMvcTest(YourController.class)` to load only MVC infrastructure. Inject `MockMvc`, mock dependencies with `@MockBean`, and assert status and JSON with `MockMvc` matchers. **Spring Boot 4.0.x:** use `@MockitoBean` in place of `@MockBean` for those dependencies (see the dedicated example below). Avoid `TestRestTemplate` with full context for unit-style controller tests.
 
 **Good example:**
 
@@ -215,7 +287,7 @@ class UserControllerTest {
 }
 ```
 
-### Example 3: @JsonTest for JSON mapping
+### Example 4: @JsonTest for JSON mapping
 
 Title: JacksonTester without full Spring Boot
 Description: Use `@JsonTest` to auto-configure Jackson and inject `JacksonTester<T>` for round-trip serialization and JSON assertions. Prefer this over `ObjectMapper` under `@SpringBootTest` for DTO mapping tests. **Important API distinction**: `hasJsonPathNumberValue("$.id")` only verifies that a numeric value *exists* at the path — it does NOT compare the value. To assert the actual value, use `extractingJsonPathNumberValue("$.id").isEqualTo(1)` (number) or `extractingJsonPathStringValue("$.name").isEqualTo("John Doe")` (string). Passing a second argument to `hasJsonPath*Value(expression, args...)` is a printf-style format argument for the expression string, not a value comparison.
@@ -288,7 +360,7 @@ class UserJsonTest {
 }
 ```
 
-### Example 4: @MockBean in slice tests
+### Example 5: @MockBean in slice tests
 
 Title: Register Mockito mocks in the Spring test context
 Description: In `@WebMvcTest` (and similar slices), declare each dependency the controller needs as `@MockBean` so Spring can inject mocks. Use `when`/`verify` as usual. If a bean is missing, the context fails to start. Use record accessors (`order.productName()`) rather than JavaBean getters when domain types are records.
@@ -369,7 +441,7 @@ class OrderControllerTest {
 }
 ```
 
-### Example 5: Parameterized unit tests
+### Example 6: Parameterized unit tests
 
 Title: @CsvSource and @MethodSource with MockitoExtension
 Description: Use `@ParameterizedTest` with `@CsvSource` for inline tabular data or `@MethodSource` for complex objects. Combine with `@ExtendWith(MockitoExtension.class)` to cover multiple input scenarios without duplicating test code. Each row acts as an independent Given-When-Then scenario.
@@ -476,7 +548,7 @@ class DiscountServiceTest {
 }
 ```
 
-### Example 6: Test profiles and @TestConfiguration
+### Example 7: Test profiles and @TestConfiguration
 
 Title: Stable time, beans, and test-only wiring
 Description: Use `@ActiveProfiles("test")` to isolate configuration. Use `@TestConfiguration` inner classes or static nested config to define beans such as a fixed `Clock` with `@Primary` for deterministic assertions. Avoid asserting on “now” without controlling time.
@@ -556,7 +628,7 @@ class UserControllerTest {
 }
 ```
 
-### Example 7: @MockitoBean in Spring Boot 4.0.x
+### Example 8: @MockitoBean in Spring Boot 4.0.x
 
 Title: Standard replacement for the removed @MockBean
 Description: Spring Boot 4.0.x uses `@MockitoBean` and `@MockitoSpyBean` from the `org.springframework.test.context.bean.override.mockito` package as the standard mock registration API. `@MockBean` and `@SpyBean` (from `org.springframework.boot.test.mock.mockito`) were deprecated in Spring Boot 3.4 and are no longer available in 4.x — replace all usages with `@MockitoBean` / `@MockitoSpyBean`.
@@ -627,7 +699,7 @@ class UserControllerTest {
 }
 ```
 
-### Example 8: Unit test class naming convention
+### Example 9: Unit test class naming convention
 
 Title: Always suffix unit test classes with "Test"
 Description: Unit test class names must end with the suffix `Test` (e.g., `OrderServiceTest`, `UserControllerTest`). Maven Surefire picks up classes matching `**/*Test.java`, `**/Test*.java`, `**/*Tests.java`, and `**/*TestCase.java` by default. Using a different suffix (or none) silently excludes tests from the build. Reserve the `IT` suffix for integration tests executed by Maven Failsafe (`**/*IT.java`). Consistency also makes it trivial to navigate from a production class (`OrderService`) to its test (`OrderServiceTest`).
@@ -707,7 +779,7 @@ class OrderServiceSpec {          // ✘ "Spec" suffix — Surefire skips this c
 }
 ```
 
-### Example 9: Test-specific beans and configuration
+### Example 10: Test-specific beans and configuration
 
 Title: Use @TestConfiguration to isolate test doubles and avoid polluting the production context
 Description: When defining beans exclusively for testing (like stubs, fakes, or custom test setup), place them in `src/test/java` and annotate the class with `@TestConfiguration`. Unlike standard `@Configuration`, `@TestConfiguration` is intentionally excluded from component scanning, ensuring it only applies when explicitly imported via `@Import` or nested inside a test class. Avoid putting test beans in `src/main/java` behind `@Profile("test")`.

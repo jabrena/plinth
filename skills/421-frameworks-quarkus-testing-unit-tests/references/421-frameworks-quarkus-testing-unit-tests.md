@@ -4,9 +4,9 @@ description: Use when you need to write fast unit tests for Quarkus applications
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.13.0-SNAPSHOT
+  version: 0.13.0
 ---
-# Quarkus unit testing
+# Quarkus Unit Testing
 
 ## Role
 
@@ -14,23 +14,7 @@ You are a Senior software engineer with extensive experience in Quarkus and JUni
 
 ## Goal
 
-Quarkus tests should be as fast as possible: prefer **plain JUnit 5 + Mockito** for classes that do not need the Quarkus container. When CDI wiring matters but a full integration test is too heavy, use `@QuarkusTest` with `@InjectMock` or `@InjectSpy` to substitute collaborators. Reserve `@QuarkusTest` + REST Assured for resource-focused tests; avoid booting Quarkus for pure domain logic.
-
-### Implementing These Principles
-
-These guidelines are built upon the following core principles:
-
-1. **Pure unit tests first**: Test domain and services with Mockito only — `new MyService(mockDep)` or `@InjectMocks` — no `@QuarkusTest`.
-2. **QuarkusTest with mocks**: Use `@QuarkusTest` + `@InjectMock` when you need CDI injection of the class under test but want fake outbound dependencies.
-3. **REST slices**: For JAX-RS resources, `@QuarkusTest` with REST Assured validates serialization and routing; keep assertions on status and JSON body.
-4. **Config**: Use `%test` profile properties or `@TestProfile` for test-specific configuration instead of mutating global env in `@BeforeEach`.
-5. **Determinism**: Inject fixed `Clock` or stub time-dependent collaborators — do not rely on wall-clock in assertions.
-6. **Assertions**: Prefer AssertJ; for JSON use JsonPath assertions from REST Assured or REST Assured's body matchers.
-
-7. **Parameterized tests**: Replace copy-pasted test methods with `@ParameterizedTest` + `@CsvSource` for inline tabular data or `@MethodSource` for complex objects; one test method covers all variants.
-8. **Test naming**: Always suffix unit test classes with `Test` so Maven Surefire picks them up; reserve the `IT` suffix for Failsafe integration tests (`@QuarkusIntegrationTest`).
-
-**Cross-references**: Framework-agnostic unit testing — `@131-java-testing-unit-testing`. Integration tests — `@422-frameworks-quarkus-testing-integration-tests`. Acceptance from Gherkin — `@423-frameworks-quarkus-testing-acceptance-tests`.
+Quarkus tests should be as fast as possible: prefer **plain JUnit 5 + Mockito** for classes that do not need the Quarkus container. When CDI wiring matters but a full integration test is too heavy, use `@QuarkusTest` with `@InjectMock` or `@InjectSpy` to substitute collaborators. Reserve `@QuarkusTest` + REST Assured for resource-focused tests; avoid booting Quarkus for pure domain logic. For time-dependent behaviour, inject `java.time.Clock` (CDI can supply `Clock.systemUTC()` in prod and `Clock.fixed(...)` or a test double in tests) — do not rely on `Instant.now()` in code you unit-test with Mockito; final time types and static `now()` methods are awkward to fake without an injectable clock or supplier.
 
 ## Constraints
 
@@ -48,12 +32,13 @@ Before applying any recommendations, ensure the project is in a valid state by r
 ### Table of contents
 
 - Example 1: Pure Mockito test
-- Example 2: @QuarkusTest with @InjectMock
-- Example 3: @QuarkusTest REST Assured slice
-- Example 4: @InjectSpy for partial CDI bean mocking
-- Example 5: Parameterized unit tests
-- Example 6: @QuarkusTestProfile for test-specific configuration
-- Example 7: Test class naming convention
+- Example 2: Injectable `Clock` and time APIs Mockito cannot stub
+- Example 3: @QuarkusTest with @InjectMock
+- Example 4: @QuarkusTest REST Assured slice
+- Example 5: @InjectSpy for partial CDI bean mocking
+- Example 6: Parameterized unit tests
+- Example 7: @QuarkusTestProfile for test-specific configuration
+- Example 8: Test class naming convention
 
 ### Example 1: Pure Mockito test
 
@@ -103,7 +88,90 @@ class PricingServiceTest {
 }
 ```
 
-### Example 2: @QuarkusTest with @InjectMock
+### Example 2: Injectable `Clock` and time APIs Mockito cannot stub
+
+Title: Inject `Clock` into `@ApplicationScoped` beans; use `Clock.fixed` or `@Mock Clock` in tests
+Description: **`Instant.now()` and `LocalDate.now()`** are static entry points on **final** types — Mockito does not replace them, and mocking `Instant` is the wrong layer. **Inject `java.time.Clock`** (field or constructor on CDI beans) and use `clock.instant()` / `LocalDate.now(clock)`. In unit tests, either construct the bean with **`Clock.fixed(instant, zoneId)`** or use **`@Mock Clock`** with `when(clock.instant()).thenReturn(…)`. For **`@QuarkusTest`**, register a test `Clock` via `QuarkusTestProfile` config, a test-only CDI producer, or keep business logic in a plain class tested with **`@ExtendWith(MockitoExtension.class)`** and a fixed clock (fastest). **Likewise:** `UUID.randomUUID()`, `System.nanoTime()`, unseeded `Random` — inject `Supplier<UUID>`, `LongSupplier`, or `Random` so tests control outputs without bytecode manipulation.
+
+**Good example:**
+
+```java
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
+// @ApplicationScoped bean: @Inject Clock clock — constructor shown for tests
+class PromotionService {
+    private final Clock clock;
+    PromotionService(Clock clock) { this.clock = clock; }
+
+    boolean isActive(Instant validFrom, Instant validTo) {
+        Instant now = clock.instant();
+        return !now.isBefore(validFrom) && now.isBefore(validTo);
+    }
+}
+
+@ExtendWith(MockitoExtension.class)
+class PromotionServiceTest {
+
+    @Mock
+    Clock clock;
+
+    @Test
+    void isActive_whenNowInsideWindow_returnsTrue() {
+        when(clock.instant()).thenReturn(Instant.parse("2024-07-01T12:00:00Z"));
+        var svc = new PromotionService(clock);
+        var from = Instant.parse("2024-07-01T00:00:00Z");
+        var to = Instant.parse("2024-07-02T00:00:00Z");
+        assertThat(svc.isActive(from, to)).isTrue();
+    }
+
+    @Test
+    void isActive_usesFixedClock_withoutMockito() {
+        Clock fixed = Clock.fixed(
+            Instant.parse("2024-07-01T12:00:00Z"), ZoneOffset.UTC);
+        var svc = new PromotionService(fixed);
+        var from = Instant.parse("2024-07-01T00:00:00Z");
+        var to = Instant.parse("2024-07-02T00:00:00Z");
+        assertThat(svc.isActive(from, to)).isTrue();
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import org.junit.jupiter.api.Test;
+import java.time.Instant;
+import static org.assertj.core.api.Assertions.assertThat;
+
+class PromotionService {
+
+    boolean isActive(Instant validFrom, Instant validTo) {
+        Instant now = Instant.now(); // Bad: static — Mockito cannot stub; flaky tests
+        return !now.isBefore(validFrom) && now.isBefore(validTo);
+    }
+}
+
+class PromotionServiceTest {
+
+    @Test
+    void isActive_flaky() {
+        var svc = new PromotionService();
+        assertThat(svc.isActive(
+            Instant.parse("2000-01-01T00:00:00Z"),
+            Instant.parse("3000-01-01T00:00:00Z"))).isTrue();
+    }
+}
+```
+
+### Example 3: @QuarkusTest with @InjectMock
 
 Title: Replace a CDI collaborator
 Description: When the class under test is produced by CDI and you need to isolate external systems, `@InjectMock` replaces the bean in the test archive.
@@ -144,7 +212,7 @@ class OrderAppServiceTest {
 }
 ```
 
-### Example 3: @QuarkusTest REST Assured slice
+### Example 4: @QuarkusTest REST Assured slice
 
 Title: Test JAX-RS resources for routing, serialization, and status codes
 Description: Use `@QuarkusTest` with REST Assured for JAX-RS resource tests. Replace service dependencies with `@InjectMock` to keep the test focused on HTTP routing, JSON serialization, and status codes. Assert the response body with JsonPath matchers rather than deserializing a full DTO.
@@ -239,7 +307,7 @@ class BookResourceTest {
 }
 ```
 
-### Example 4: @InjectSpy for partial CDI bean mocking
+### Example 5: @InjectSpy for partial CDI bean mocking
 
 Title: Wrap a real CDI bean as a Mockito spy to verify calls without replacing behaviour
 Description: `@InjectSpy` wraps the real CDI bean in a Mockito spy. The real implementation runs unless you explicitly stub a method. Use it when you want to verify that a side-effect method (e.g. audit logging, event publishing) was called, while still executing the production code path. Prefer `@InjectMock` when you want complete isolation from the real implementation.
@@ -312,7 +380,7 @@ class OrderServiceTest {
 }
 ```
 
-### Example 5: Parameterized unit tests
+### Example 6: Parameterized unit tests
 
 Title: @CsvSource for inline tabular data; @MethodSource for complex objects
 Description: Replace copy-pasted test methods that differ only in input values with `@ParameterizedTest`. Use `@CsvSource` for simple inline rows and `@MethodSource` for complex domain objects. Combine with `@ExtendWith(MockitoExtension.class)` — no `@QuarkusTest` needed for pure service logic.
@@ -411,7 +479,7 @@ class PricingServiceTest {
 }
 ```
 
-### Example 6: @QuarkusTestProfile for test-specific configuration
+### Example 7: @QuarkusTestProfile for test-specific configuration
 
 Title: Override properties and supply test-only beans without mutating global config
 Description: Implement `QuarkusTestProfile` to supply config overrides and test-only CDI beans for a specific test class. Annotate the test class with `@TestProfile`. This is the Quarkus equivalent of Spring Boot's `@TestConfiguration` + `@ActiveProfiles` combination. Use `%test` properties in `application.properties` for global test defaults; use `QuarkusTestProfile` when individual test classes need different values.
@@ -493,7 +561,7 @@ class FeatureServiceTest {
 }
 ```
 
-### Example 7: Test class naming convention
+### Example 8: Test class naming convention
 
 Title: Test suffix for Surefire; IT suffix for Failsafe / @QuarkusIntegrationTest
 Description: Maven Surefire picks up `**/*Test.java` by default; Maven Failsafe picks up `**/*IT.java`. Use the `Test` suffix for fast unit and `@QuarkusTest` focused tests, and the `IT` suffix for `@QuarkusIntegrationTest` tests that run against a packaged artifact. Misnamed classes are silently skipped, giving a false green build.

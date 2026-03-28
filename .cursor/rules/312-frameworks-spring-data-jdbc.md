@@ -1,10 +1,10 @@
 ---
 name: 312-frameworks-spring-data-jdbc
-description: Use when you need to use Spring Data JDBC with Java records — including entity design with records, repository pattern, immutable updates, aggregate relationships, custom queries, transaction management, and avoiding N+1 problems.
+description: Use when you need to use Spring Data JDBC with Java records — including entity design with records, repository pattern, immutable updates, aggregate relationships, custom queries, transaction management, and avoiding N+1 problems. For programmatic JDBC (`JdbcTemplate`, `NamedParameterJdbcTemplate`), hand-written SQL, and maximum control without repository abstraction, use `@311-frameworks-spring-jdbc`. For Flyway-backed DDL and versioned schema changes, use `@313-frameworks-spring-db-migrations-flyway`.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.13.0-SNAPSHOT
+  version: 0.13.0
 ---
 # Spring Data JDBC with Records
 
@@ -14,18 +14,7 @@ You are a Senior software engineer with extensive experience in Spring Data and 
 
 ## Goal
 
-Spring Data JDBC maps rows to domain types with minimal magic: one repository call typically loads a whole aggregate in predictable SQL. Java records fit this model because they are immutable, constructor-friendly, and explicit. Success means correct `@Column`/`@Id` mapping, repositories that express intent through naming or `@Query`, small aggregates with `Set` children or foreign keys—not JPA-style graphs—and transactions declared at the service layer.
-
-### Implementing These Principles
-
-These guidelines are built upon the following core principles:
-
-1. **Immutability**: Model rows as records (or immutable types); use `with*` methods or new instances for updates instead of mutable entities.
-2. **Simplicity**: Prefer Spring Data JDBC’s direct SQL and aggregate loading over rich ORM relationship graphs and lazy loading. Prefer `ListCrudRepository` over `CrudRepository` so that `findAll()`, `findAllById()`, and `saveAll()` return `List<T>` directly instead of `Iterable<T>`.
-3. **Aggregate boundaries**: Treat one aggregate root per repository; use foreign keys between aggregates, `Set` for one-to-many inside the root, and junction/explicit entities for many-to-many—not bidirectional linked collections on both Student and Course (JPA-style).
-4. **SQL and safety**: Use `@Query` with named parameters for non-trivial SQL; avoid concatenating user input into query strings.
-5. **Transactions and performance**: Put `@Transactional` on services (`readOnly` where appropriate); rely on single-query aggregate loading instead of JPA-style N+1 patterns or manual fan-out queries across child repositories.
-6. **Explicit mapping**: Use `@Table` to name the database table when the record name differs from the table name; use `@Embedded` to inline value-object columns into the parent row without a separate table. Understand how `save()` uses `@Id` nullability to choose INSERT vs UPDATE—always use static factories for new rows and `with*` helpers for updates.
+Spring Data JDBC maps rows to domain types with minimal magic: one repository call typically loads a whole aggregate in predictable SQL. Java records fit this model because they are immutable, constructor-friendly, and explicit. Success means correct `@Column`/`@Id` mapping, repositories that express intent through naming or `@Query`, small aggregates with `Set` children or foreign keys—not JPA-style graphs—and transactions declared at the service layer. For programmatic JDBC, reporting, or batch SQL without Spring Data repositories, use `@311-frameworks-spring-jdbc` instead of forcing everything through repositories.
 
 ## Constraints
 
@@ -1113,7 +1102,7 @@ class CustomerService {
 - **ANALYZE** persistence code: record/entity mapping, repository APIs, aggregate shape, `@Query` safety, transaction placement, and load patterns (single query vs extra round-trips)
 - **CATEGORIZE** issues by impact (CORRECTNESS, PERFORMANCE, MAINTAINABILITY) and by layer (entity mapping, repository, service/transaction, aggregate design)
 - **APPLY** Spring Data JDBC–aligned fixes: add `@Column`/`@Id`, narrow repositories, introduce `with*` updates, reshape aggregates and FKs, parameterize SQL, move `@Transactional` to services with `readOnly` where fit
-- **IMPLEMENT** changes so schema, aggregates, and tests stay consistent; prefer migrations and integration tests for repository behavior
+- **IMPLEMENT** changes so schema, aggregates, and tests stay consistent; prefer Flyway migrations (`@313-frameworks-spring-db-migrations-flyway`) and integration tests for repository behavior
 - **EXPLAIN** trade-offs (aggregate size vs query size, explicit SQL vs derived queries, `@Embedded` vs FK reference)
 - **TEST** repository behavior with `@DataJdbcTest` slices seeded via `@Sql`; never mock repositories inside persistence tests
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
