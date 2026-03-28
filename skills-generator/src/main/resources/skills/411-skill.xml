@@ -4,12 +4,9 @@
       id="411-frameworks-quarkus-jdbc">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
-    <version>0.13.0-SNAPSHOT</version>
+    <version>0.13.0</version>
     <license>Apache-2.0</license>
-    <description><![CDATA[
-        Programmatic JDBC in Quarkus with Agroal DataSource, parameterized SQL, transactions, batching, and Dev Services.
-        ]]>
-    </description>
+    <description>Use when you need programmatic JDBC in Quarkus — Agroal DataSource, parameterized SQL, transactions, batching, and Dev Services.</description>
   </metadata>
 
   <title>Quarkus JDBC — programmatic SQL</title>

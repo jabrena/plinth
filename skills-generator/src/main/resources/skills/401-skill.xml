@@ -4,10 +4,10 @@
       id="401-frameworks-quarkus-core">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
-    <version>0.13.0-SNAPSHOT</version>
+    <version>0.13.0</version>
     <license>Apache-2.0</license>
     <description><![CDATA[
-        Use when building or reviewing core Quarkus applications with CDI beans and scopes, SmallRye Config and profiles, lifecycle, interceptors and events, health probes, virtual threads, and test-friendly design.
+        Use when building or reviewing core Quarkus applications with CDI beans and scopes, SmallRye Config and profiles, lifecycle, interceptors and events, virtual threads, and test-friendly design.
         ]]>
     </description>
   </metadata>
@@ -27,7 +27,6 @@ Apply Quarkus core guidelines for CDI beans, configuration, profiles, and lifecy
 - @ConfigMapping and structured configuration with Bean Validation (@Valid)
 - Profile-specific properties (%dev, %test, %prod) and @IfBuildProfile
 - Startup and shutdown observers (@Startup, @PreDestroy)
-- SmallRye Health probes (@Liveness, @Readiness)
 - Virtual threads with @RunOnVirtualThread (Java 21+)
 - Native-image safety: @RegisterForReflection, @DisabledOnNativeImage
 
@@ -51,7 +50,7 @@ Apply Quarkus core guidelines for CDI beans, configuration, profiles, and lifecy
         <trigger>Review Java code for Quarkus application structure and CDI</trigger>
         <trigger>Apply best practices for Quarkus configuration and beans</trigger>
         <trigger>Improve CDI interceptors, events, or programmatic injection in Quarkus</trigger>
-        <trigger>Add SmallRye Health probes or virtual-thread configuration</trigger>
+        <trigger>Add virtual-thread configuration or tune CDI lifecycle</trigger>
     </trigger-list>
   </triggers>
 

@@ -4,9 +4,9 @@ description: Use when you need to write or improve integration tests for Quarkus
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.13.0-SNAPSHOT
+  version: 0.13.0
 ---
-# Quarkus integration testing
+# Quarkus Integration Testing
 
 ## Role
 
@@ -16,21 +16,12 @@ You are a Senior software engineer with extensive experience in Quarkus integrat
 
 Integration tests in Quarkus validate real wiring: CDI, persistence, HTTP stack, and extensions. Use `@QuarkusTest` for in-JVM integration (default continuous testing friendly). Prefer **Dev Services** to provision databases, Kafka, and similar locally and in CI without manual Docker compose. When you need explicit containers, use Testcontainers with Quarkus configuration (`%test.quarkus.datasource.*` or `QuarkusTestResource`). Black-box tests against a running app use `@QuarkusIntegrationTest`. Keep tests independent and use `@Transactional` rollback on persistence tests when appropriate.
 
-### Implementing These Principles
+**Choosing test infrastructure (Quarkus — not Spring Boot)**:
+- **Dev Services** — Default for PostgreSQL, Kafka, Redis, and other stacks where the Quarkus extension can auto-provision containers via `%test`. Minimal code; pin Docker image tags in `%test` configuration for reproducible CI.
+- **`QuarkusTestResourceLifecycleManager`** — Use when Dev Services cannot model the scenario: custom init scripts, multi-container topologies, third-party images without Dev Services support, **WireMock**, or any case where you must return property overrides from `start()` before the application boots. Do not use `System.setProperty` in `@BeforeEach` for datasource or broker URLs.
+- **Do not apply Spring Boot Testcontainers wiring here** — `@ServiceConnection`, `@DynamicPropertySource`, and `@ImportTestcontainers` belong to `@322-frameworks-spring-boot-testing-integration-tests`. Quarkus uses Dev Services, `%test` properties, and `@QuarkusTestResource` / `QuarkusTestResourceLifecycleManager` instead.
 
-These guidelines are built upon the following core principles:
-
-1. **Scope**: Assert boundaries — HTTP status, repository round-trips, serialization — not every branch already covered by unit tests (`@421-frameworks-quarkus-testing-unit-tests`).
-2. **Dev Services**: Enable Dev Services for PostgreSQL, Kafka, etc., before adding bespoke container code.
-3. **Testcontainers**: Use `@QuarkusTestResource(LifecycleManager.class)` or `QuarkusTestProfile` when you need pinned images or multi-container topologies.
-4. **HTTP**: Use REST Assured with `@TestHTTPResource` URLs or injected `URL` for the Quarkus test endpoint.
-5. **Persistence**: Use `@Transactional` on test methods with rollback OR clean fixtures explicitly — avoid order-dependent tests.
-6. **Build**: Name classes `*IT` and run with Failsafe; keep Surefire for fast unit tests.
-7. **Native**: Use `@DisabledOnNativeImage` or separate profiles when behavior differs in native mode.
-
-8. **Test data isolation strategies**: Use `@TestTransaction` for automatic rollback on Panache/Hibernate tests, or explicit `@BeforeEach` cleanup for JDBC repositories — never rely on test execution order or shared mutable state between tests.
-
-**Cross-references**: Unit tests — `@421-frameworks-quarkus-testing-unit-tests`. Framework-agnostic integration — `@132-java-testing-integration-testing`. Acceptance — `@423-frameworks-quarkus-testing-acceptance-tests`.
+**Shared integration infrastructure**: When multiple `*IT` classes share the same `@QuarkusTest` profile, Dev Services or `@QuarkusTestResource` registrations, and REST Assured defaults, implement an **abstract** `BaseIntegrationTest` first under `src/test/java/{root-package}/`, then concrete `*IT` classes that extend it. This mirrors `BaseAcceptanceTest` in `@423-frameworks-quarkus-testing-acceptance-tests`. One-off tests can remain standalone; add a base when setup would be duplicated across several classes.
 
 ## Constraints
 
@@ -55,6 +46,7 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 6: @QuarkusIntegrationTest for packaged artifact validation
 - Example 7: Data isolation strategies
 - Example 8: Test naming conventions and Maven build split
+- Example 9: Abstract BaseIntegrationTest, then concrete *IT classes
 
 ### Example 1: HTTP integration
 
@@ -539,8 +531,8 @@ class BookIT {
 
 ### Example 8: Test naming conventions and Maven build split
 
-Title: *Test for Surefire, *IT for Failsafe — consistent suffixes enforce build phase separation
-Description: Maven Surefire picks up `*Test.java` classes (fast, no containers) during the `test` phase. Maven Failsafe picks up `*IT.java` classes (container-backed) during the `integration-test` / `verify` phases. Quarkus integration tests annotated with `@QuarkusTest` should be named `*IT` so they are excluded from the fast Surefire pass and run via Failsafe only. Configure both plugins explicitly to prevent accidental overlap.
+Title: *Test / *Tests for Surefire; *IT and *AT for Failsafe — same pattern as other Java Enterprise prompts
+Description: Use suffix conventions that Maven Surefire and Failsafe recognise out of the box: `*Test` / `*Tests` for fast unit tests (Surefire, `test` phase); `*IT` for integration tests with `@QuarkusTest`, Dev Services, or Testcontainers (Failsafe, `integration-test` / `verify`); `*AT` for acceptance / Gherkin-driven full-stack tests (also Failsafe). Quarkus classes that start Docker via Dev Services or `@QuarkusTestResource` should not use the `*Test` suffix — name them `*IT` or `*AT` so they are excluded from the fast Surefire pass. Configure both plugins with explicit `<includes>` and Surefire `<excludes>` for `*IT` and `*AT` to prevent double execution.
 
 **Good example:**
 
@@ -548,27 +540,32 @@ Description: Maven Surefire picks up `*Test.java` classes (fast, no containers) 
 <build>
     <plugins>
 
-        <!-- Surefire: fast unit tests (*Test) — "test" phase, no containers -->
+        <!-- Surefire: fast unit tests (*Test, *Tests) — "test" phase -->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.5.5</version>
             <configuration>
                 <includes>
                     <include>**/*Test.java</include>
+                    <include>**/*Tests.java</include>
                 </includes>
                 <excludes>
                     <exclude>**/*IT.java</exclude>
+                    <exclude>**/*AT.java</exclude>
                 </excludes>
             </configuration>
         </plugin>
 
-        <!-- Failsafe: integration tests (*IT) — "integration-test" + "verify" phases -->
+        <!-- Failsafe: integration (*IT) and acceptance (*AT) — "integration-test" + "verify" phases -->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>
+            <version>3.5.5</version>
             <configuration>
                 <includes>
                     <include>**/*IT.java</include>
+                    <include>**/*AT.java</include>
                 </includes>
             </configuration>
             <executions>
@@ -584,8 +581,8 @@ Description: Maven Surefire picks up `*Test.java` classes (fast, no containers) 
     </plugins>
 </build>
 <!--
-    mvn test    → Surefire: *Test only (fast, no containers)
-    mvn verify  → Surefire: *Test + Failsafe: *IT (full safety net, with Dev Services)
+    mvn test    → Surefire: *Test, *Tests only (fast)
+    mvn verify  → Surefire: *Test, *Tests  +  Failsafe: *IT, *AT (full safety net, Dev Services / Testcontainers)
 -->
 ```
 
@@ -617,12 +614,47 @@ class BookRepositoryTest {        // ← should be BookRepositoryIT
 }
 ```
 
+
+### Example 9: Abstract BaseIntegrationTest, then concrete *IT classes
+
+Title: Share @QuarkusTest, test resources, and REST Assured base URI
+Description: **Workflow**: (1) Define `abstract class BaseIntegrationTest` with `@QuarkusTest`, shared `@QuarkusTestResource` annotations (Testcontainers, WireMock lifecycle managers), `%test` configuration patterns, and any `@BeforeEach` reset (for example `wireMockServer.resetAll()`). (2) Add concrete `*IT` classes extending the base with feature-specific `@Test` methods. Prefer a base when several integration tests repeat the same Quarkus test bootstrap; keep slice-style or radically different profiles as separate hierarchies or standalone classes.
+
+**Good example:**
+
+```java
+import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.Test;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.is;
+
+@QuarkusTest
+public abstract class BaseIntegrationTest {
+    // Shared @QuarkusTestResource, @TestHTTPManager, or helpers used by all ITs in this suite
+}
+
+class HelloResourceIT extends BaseIntegrationTest {
+
+    @Test
+    void hello() {
+        given().when().get("/hello").then().statusCode(200).body(is("hello"));
+    }
+}
+```
+
+**Bad example:**
+
+```java
+// Bad: every *IT repeats the same @QuarkusTest + identical @QuarkusTestResource
+// list — extract BaseIntegrationTest and extend it.
+```
+
 ## Output Format
 
-- **ANALYZE** integration tests: scope vs unit overlap, Dev Services or Testcontainers configuration, HTTP assertion quality, data isolation strategy, naming conventions, and container lifecycle efficiency
+- **ANALYZE** integration tests: scope vs unit overlap, whether Dev Services suffices or `QuarkusTestResourceLifecycleManager` is required (and that Spring Boot `@ServiceConnection` does not apply), HTTP assertion quality, data isolation strategy, naming conventions, container lifecycle efficiency, and whether duplicated Quarkus test setup should become an abstract `BaseIntegrationTest`
 - **CATEGORIZE** findings by impact (FLAKINESS for shared state or order-dependent tests, SPEED for per-method containers or missing Dev Services, CLARITY for missing assertions or vague test names)
 - **APPLY** improvements: enable Dev Services for standard infrastructure, introduce `QuarkusTestResourceLifecycleManager` for custom containers or WireMock stubs, add `@TestTransaction` or `@BeforeEach` cleanup for data isolation, use REST Assured for HTTP assertions, add `@QuarkusIntegrationTest` for packaged artifact validation
-- **IMPLEMENT** incrementally; keep `mvn verify` green after each step; align test class suffixes (`*Test` for Surefire, `*IT` for Failsafe) and configure both Maven plugins explicitly
+- **IMPLEMENT** incrementally; keep `mvn verify` green after each step; align test class suffixes (`*Test` / `*Tests` for Surefire, `*IT` / `*AT` for Failsafe) and configure both Maven plugins explicitly; when several `*IT` classes share bootstrap, **define an abstract `BaseIntegrationTest` first**, then concrete subclasses (same layering as `BaseAcceptanceTest` in `@423-frameworks-quarkus-testing-acceptance-tests`)
 - **EXPLAIN** when to use `@421-frameworks-quarkus-testing-unit-tests` vs `@QuarkusTest` vs `@QuarkusIntegrationTest` if concerns are being mixed
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive test changes
 
@@ -633,4 +665,4 @@ class BookRepositoryTest {        // ← should be BookRepositoryIT
 - **DOCKER**: Dev Services and Testcontainers require Docker (or a compatible OCI runtime) in CI — document this prerequisite in the project README and gate CI jobs accordingly
 - **DATA SAFETY**: Never point integration tests at production or shared developer databases; always use isolated Dev Services containers or explicit `QuarkusTestResourceLifecycleManager` containers
 - **TEST PROFILE RESTARTS**: Each distinct `@QuarkusTestProfile` triggers a Quarkus application restart — consolidate config overrides across test classes to minimize restart overhead and total test runtime
-- **INCREMENTAL SAFETY**: Add or refactor one integration test class at a time; verify isolation and naming conventions (`*IT` for Failsafe) before moving to the next change
+- **INCREMENTAL SAFETY**: Add or refactor one integration test class at a time; verify isolation and naming conventions (`*IT` / `*AT` for Failsafe) before moving to the next change

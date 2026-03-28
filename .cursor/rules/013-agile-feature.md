@@ -4,7 +4,7 @@ description: Use when the user wants to derive detailed feature documentation fr
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.13.0-SNAPSHOT
+  version: 0.13.0
 ---
 # Create Agile Features from an Epic
 

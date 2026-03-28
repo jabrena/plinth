@@ -5,6 +5,42 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.13.0] 2026-03-30
+
+### Added
+
+- **Skills**:
+  - ER diagram support in architecture diagrams guidance (`@033-architecture-diagrams`) (#511)
+  - Plan mode skill enhancements (`@040-planning-plan-mode`) (#488)
+  - JIB coverage and improved skill summaries (`@112-java-maven-plugins`) (#522)
+  - Skill for Java testing strategies (`@130-java-testing-strategies`) (#523)
+  - Spring Boot support (`@301-frameworks-spring-boot-core`, `@302-frameworks-spring-boot-rest`, `@311-frameworks-spring-jdbc`, `@312-frameworks-spring-data-jdbc`, `@313-frameworks-spring-db-migrations-flyway`, `@321-frameworks-spring-boot-testing-unit-tests`, `@322-frameworks-spring-boot-testing-integration-tests`, `@323-frameworks-spring-boot-testing-acceptance-tests`) (#502)
+  - Quarkus support (`@401-frameworks-quarkus-core`, `@402-frameworks-quarkus-rest`, `@411-frameworks-quarkus-jdbc`, `@412-frameworks-quarkus-panache`, `@413-frameworks-quarkus-db-migrations-flyway`, `@421-frameworks-quarkus-testing-unit-tests`, `@422-frameworks-quarkus-testing-integration-tests`, `@423-frameworks-quarkus-testing-acceptance-tests`) (#560)
+  - Micronaut support (`@501-frameworks-micronaut-core`, `@502-frameworks-micronaut-rest`, `@511-frameworks-micronaut-jdbc`, `@512-frameworks-micronaut-data`, `@513-frameworks-micronaut-db-migrations-flyway`, `@521-frameworks-micronaut-testing-unit-tests`, `@522-frameworks-micronaut-testing-integration-tests`, `@523-frameworks-micronaut-testing-acceptance-tests`) (#573, #584)
+
+- **Agents**:
+  - Business Analyst (#547)
+  - Coordinator agent (#547)
+  - Java agent (#547)
+  - Spring Boot agent (#502)
+  - Quarkus agent (#560)
+  - Micronaut agent (#573, #584)
+
+### Changed
+
+- **PML & generators**:
+  - Migrated XML rule sources to **PML Schema 0.7.0**; generator validates against https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd (#525).
+
+- **Skills**:
+  - Improved the way to activate Skills (#574).
+  - Reduced complexity for ADR discovery on functional requirements (`@031-architecture-adr-functional-requirements`) (#532).
+  - C4 model guidance limited to levels 1–3 (`@033-architecture-diagrams`) (#504).
+  - Improved `@113-java-maven-documentation` (#529).
+
+### Removed
+
+- Structural Concurrency guidance removed from `@125-java-concurrency` while the feature remains in preview (#530).
+
 ## [0.12.0] 2026-03-08
 
 ### Added
@@ -290,6 +326,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added initial cursor rules (Java, Effective Java, Concurrency, Functional programming, Data-Oriented programming & Spring Boot)
 
+[0.13.0]: https://github.com/jabrena/cursor-rules-java/compare/0.12.0...0.13.0
 [0.12.0]: https://github.com/jabrena/cursor-rules-java/compare/0.11.0...0.12.0
 [0.11.0]: https://github.com/jabrena/cursor-rules-java/compare/0.10.0...0.11.0
 [0.10.0]: https://github.com/jabrena/cursor-rules-java/compare/0.9.0...0.10.0

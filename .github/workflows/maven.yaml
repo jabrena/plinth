@@ -72,6 +72,7 @@ jobs:
           - { name: "Spring Boot", path: "examples/spring-boot-demo/implementation", goal: "verify -Pjacoco" }
           - { name: "Quarkus", path: "examples/quarkus-demo", goal: "package" }
           - { name: "Skillsjars", path: "examples/skillsjars-demo", goal: "verify" }
+          - { name: "Micronaut", path: "examples/micronaut-demo", goal: "verify" }
     steps:
       - uses: actions/checkout@v6
         with:

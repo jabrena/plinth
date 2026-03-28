@@ -8,12 +8,12 @@
 
 ## Goal
 
-The project provides a curated collection of `System prompts`, `Skills` & `Agents` for modern `SDLC` that help software engineers and pipelines in their daily work for Java Enterprise development.
+A curated collection of `System prompts`, `Skills`, and `Agents` for Java Enterprise development, designed to streamline modern `SDLC` workflows.
 
 The project add support for:
 
 - **Agile:** `User Stories` & `Gherkin`
-- **Architecture:** `ADRs`& `UML/C4/ER Diagrams`
+- **Architecture:** `ADRs`& `UML` / `C4` / `ER` Diagrams`
 - **AI Tooling:** `AGENTS.md` & `AI Planning`
 - **Java development:** `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools` & `Documentation`
 - **Java frameworks:** `Spring Boot`, `Quarkus` & `Micronaut`
@@ -29,6 +29,10 @@ The project generates a set of deliverables at the end of any iteration.
 | Skills for Java         | [https://skills.sh/jabrena/cursor-rules-java](https://skills.sh/jabrena/cursor-rules-java) |
 | Agents for Java         | [Catalog](.cursor/agents) (`.cursor/agents`) |
 
+### Compatibility
+
+This project is compatible with any problem compatible with `Skills`, `Agents` or `AGENTS.md` like `Cursor AI`, `Claude Code` & `Github Copilot`.
+
 ## Getting started
 
 Read the following comprehensive guides to use this project today.
@@ -36,10 +40,11 @@ Read the following comprehensive guides to use this project today.
 - [Getting started with `System prompts for Java`](./documentation/GETTING-STARTED-SYSTEM-PROMPTS.md)
 - [Getting started with `Skills for Java`](./documentation/GETTING-STARTED-SKILLS.md)
 - [Getting started with `Pipelines and AI`](./documentation/GETTING-STARTED-PIPELINES.md)
+- [Getting started with `Agents`](./documentation/GETTING-STARTED-AGENTS.md)
 
 ## How to use them?
 
-The SLDC has evolved with the arrival of this new set of AI tooling, enhancing the Software Engineering process. In the development of this project, it was identified 3 different workflows: `Prompting Enginering Workflow`, `Pipelines Workflow` & `Agentic Workflow`.
+The SDLC has evolved with the arrival of this new set of AI tooling, enhancing the Software Engineering process. In the development of this project, it was identified 3 different workflows: `Prompting Enginering Workflow`, `Pipelines Workflow` & `Agentic Workflow`.
 
 ### Prompting Enginering Workflow
 
@@ -55,7 +60,7 @@ Adding AI tools to your pipeline can provide new opportunities to deliver more v
 
 ### Agentic Workflow
 
-`Agents for Java Enterprise development` were designed to cover the whole SLDC starting from the requirements and the architectural process. Once you have the foundations well designed. it is possible to execute Plans, iterate and discuss it and when the plans associated to User Stories has the right size & complexity, it is easy to pass to the models to be implemented with security in other case, you will have the classical issues with implementations without control.
+`Agents for Java Enterprise development` were designed to cover the whole SDLC starting from the requirements and the architectural process. Once you have the foundations well designed. it is possible to execute Plans, iterate and discuss it and when the plans associated to User Stories has the right size & complexity, it is easy to pass to the models to be implemented with security in other case, you will have the classical issues with implementations without control.
 
 ## Limitations
 
@@ -84,7 +89,6 @@ The repository includes [a collection of examples](./examples/) where you can ex
 | 2025-09-16 | ADR-003 | [Website Generation](./documentation/adr/ADR-003-website-generation.md)                                       |
 | 2025-07-10 | ADR-002 | [Cursor Rules scope configuration](./documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md)        |
 | 2025-07-08 | ADR-001 | [Cursor Rules generation from XML Files](./documentation/adr/ADR-001-generate-cursor-rules-from-xml-files.md) |
-
 
 ## Changelog
 
@@ -123,33 +127,24 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 
 ## References
 
-- [https://agents.md/](https://agents.md/)
 - [https://www.cursor.com/](https://www.cursor.com/)
 - [https://cursor.com/cli](https://cursor.com/cli)
-- [https://docs.cursor.com/context/rules](https://docs.cursor.com/context/rules)
-- [https://docs.cursor.com/context/@-symbols/@-cursor-rules](https://docs.cursor.com/context/@-symbols/@-cursor-rules)
+- [https://www.anthropic.com/claude-code](https://www.anthropic.com/claude-code)
+- [https://github.com/features/copilot](https://github.com/features/copilot)
+- [https://cursor.com/docs/cli/github-actions](https://cursor.com/docs/cli/github-actions)
+- [https://code.claude.com/docs/en/github-actions](https://code.claude.com/docs/en/github-actions)
+- [https://agents.md/](https://agents.md/)
 - [https://agentskills.io/home](https://agentskills.io/home)
-- [https://github.com/anthropics/skills](https://github.com/anthropics/skills)
-- [https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf](https://resources.anthropic.com/hubfs/The-Complete-Guide-to-Building-Skill-for-Claude.pdf)
 - https://skills.sh/jabrena/cursor-rules-java
 - https://tessl.io/registry/skills/github/jabrena/cursor-rules-java
 - [https://github.com/vercel-labs/skills/issues](https://github.com/vercel-labs/skills/issues)
-- [https://skillsmp.com/](https://skillsmp.com/)
-- [https://cursor.com/docs/cli/github-actions](https://cursor.com/docs/cli/github-actions)
-- [https://code.claude.com/docs/en/github-actions](https://code.claude.com/docs/en/github-actions)
-- [https://www.anthropic.com/claude-code](https://www.anthropic.com/claude-code)
-- [https://github.com/features/copilot](https://github.com/features/copilot)
-- [https://www.jetbrains.com/junie/](https://www.jetbrains.com/junie/)
 - [https://openjdk.org/jeps/0](https://openjdk.org/jeps/0)
 - [https://jbake.org/docs/latest/](https://jbake.org/docs/latest/)
 
-## Cursor rules ecosystem
+## Other developments
 
-- [https://github.com/jabrena/101-cursor](https://github.com/jabrena/101-cursor)
 - [https://github.com/jabrena/pml](https://github.com/jabrena/pml)
 - [https://github.com/jabrena/cursor-rules-java](https://github.com/jabrena/cursor-rules-java)
-- [https://github.com/jabrena/cursor-rules-examples](https://github.com/jabrena/cursor-rules-examples)
-- [https://github.com/jabrena/plantuml-to-png-cli](https://github.com/jabrena/plantuml-to-png-cli)
 - [https://github.com/jabrena/setup-cli](https://github.com/jabrena/setup-cli)
 
 Powered by [Cursor](https://www.cursor.com/) with ❤️ from [Madrid](https://www.google.com/maps/place/Community+of+Madrid,+Madrid/@40.4983324,-6.3162283,8z/data=!3m1!4b1!4m6!3m5!1s0xd41817a40e033b9:0x10340f3be4bc880!8m2!3d40.4167088!4d-3.5812692!16zL20vMGo0eGc?entry=ttu&g_ep=EgoyMDI1MDgxOC4wIKXMDSoASAFQAw%3D%3D)

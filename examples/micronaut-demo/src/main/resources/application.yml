@@ -1,0 +1,33 @@
+micronaut:
+  application:
+    name: greek-gods-api
+  http:
+    client:
+      connect-timeout: ${greek-gods.upstream.connect-timeout}
+      read-timeout: ${greek-gods.upstream.read-timeout}
+
+# Declarative client from my-json-server-oas.yaml (java-micronaut-client) uses this base URL.
+openapi-micronaut-client-base-path: ${greek-gods.upstream.base-url}
+
+datasources:
+  default:
+    url: jdbc:postgresql://localhost:5432/greek_gods
+    username: postgres
+    password: postgres
+    driver-class-name: org.postgresql.Driver
+    dialect: POSTGRES
+
+flyway:
+  datasources:
+    default:
+      enabled: true
+
+greek-gods:
+  upstream:
+    base-url: https://my-json-server.typicode.com/jabrena/latency-problems
+    connect-timeout: 5s
+    read-timeout: 10s
+  sync:
+    scheduler-enabled: true
+    fixed-delay: 5m
+    initial-delay: 30s

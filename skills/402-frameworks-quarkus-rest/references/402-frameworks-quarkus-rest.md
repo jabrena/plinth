@@ -1,10 +1,10 @@
 ---
 name: 402-frameworks-quarkus-rest
-description: Use when you need to design, review, or improve REST APIs with Quarkus REST (Jakarta REST) — including resource classes, HTTP methods, status codes, request/response DTOs, Bean Validation, exception mappers, OpenAPI with SmallRye, content negotiation, pagination, and security-aware boundaries.
+description: Use when you need to design, review, or improve REST APIs with Quarkus REST (Jakarta REST) — including resource classes, HTTP methods, status codes, request/response DTOs, ISO-8601 instants in DTOs, Bean Validation, exception mappers, optional runtime OpenAPI exposure (SmallRye), contract-first generation from OpenAPI (Quarkus OpenAPI Generator or OpenAPI Generator `jaxrs-spec`), content negotiation, pagination, and security-aware boundaries.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.13.0-SNAPSHOT
+  version: 0.13.0
 ---
 # Quarkus REST API Guidelines
 
@@ -14,31 +14,7 @@ You are a Senior software engineer with extensive experience in REST API design 
 
 ## Goal
 
-Quarkus REST builds on Jakarta REST (`jakarta.ws.rs`). Resources should express clear HTTP semantics, validate input at the boundary, return appropriate status codes, and map failures to stable JSON (or Problem Details) without leaking stack traces. Use CDI-scoped resource classes (`@Path` + `@ApplicationScoped` or `@RequestScoped` as appropriate), inject services, and document the API with SmallRye OpenAPI. Align with the same REST design principles as Spring (`@302-frameworks-spring-boot-rest`) while using JAX-RS annotations and Quarkus extensions.
-
-### Implementing These Principles
-
-These guidelines are built upon the following core principles:
-
-1. **HTTP semantics**: Use `GET`/`POST`/`PUT`/`PATCH`/`DELETE` correctly; `GET` must be safe; return **201** with `Location` for creates; **204** for successful deletes without body.
-2. **Resource modeling**: Nouns in paths (`/orders/{id}`); avoid RPC-style verbs in URLs unless documenting a deliberate exception.
-3. **DTOs at the edge**: Expose records or DTOs from resources — not persistence entities — unless you intentionally accept tight coupling (discouraged).
-4. **Validation**: Annotate request bodies and parameters with Bean Validation; use `@Valid` on method parameters so malformed input yields **400** with constraint violations.
-5. **Errors**: Implement `jakarta.ws.rs.ext.ExceptionMapper` for domain and infrastructure exceptions; return consistent JSON bodies and correct status codes (**404**, **409**, **422** as appropriate).
-6. **OpenAPI**: Annotate with MicroProfile OpenAPI (`@Operation`, `@APIResponse`) or rely on sensible defaults; keep schemas aligned with DTOs.
-7. **Performance**: Prefer reactive types (`Uni`, `Multi`) for non-blocking stacks when extensions support it; do not block event loops on long JDBC without `@Blocking` or worker threads.
-8. **Security**: Integrate Quarkus Security (`quarkus-oidc`, `quarkus-smallrye-jwt`, or basic auth) at the filter level; avoid ad-hoc header parsing in resources.
-
-9. **Versioning**: Choose URI path (`/api/v1/…`), custom header (`X-API-Version`), or vendor media type versioning, and apply it uniformly; breaking changes without versioning silently break all existing clients.
-10. **Pagination and filtering**: Cap list endpoints with explicit `page`/`size` query params and server-enforced maximums; whitelist sort fields to prevent arbitrary-column exposure.
-11. **Idempotency**: Support an `Idempotency-Key` header (or domain-level deduplication) for `POST` creates; return **409 Conflict** when a request collides with existing state.
-12. **Optimistic concurrency**: Use `ETag` with `If-Match` / `If-None-Match` via `jakarta.ws.rs.core.Request.evaluatePreconditions()`; return **412 Precondition Failed** or **304 Not Modified** appropriately.
-13. **Caching discipline**: Set `Cache-Control` deliberately; use `public, max-age=N` for anonymous catalog data and `no-store` for authenticated or personalized responses.
-14. **Deprecation signals**: Communicate API sunset with `Deprecation`, `Sunset`, and `Link` (`rel="successor-version"`) headers so clients can plan migration before removal.
-15. **Content negotiation**: Default to `application/json` with explicit `@Produces` / `@Consumes`; use vendor media types only when they carry real versioning meaning; avoid `*/*` without intent.
-16. **Time in contracts**: Use `Instant` or `OffsetDateTime` (ISO-8601 with offset) in DTOs; avoid legacy `java.util.Date` and ambiguous zone-less `LocalDateTime` in public API contracts.
-
-**Cross-references**: Quarkus core — `@401-frameworks-quarkus-core`. JDBC — `@411-frameworks-quarkus-jdbc`. Panache — `@412-frameworks-quarkus-panache`. Unit tests — `@421-frameworks-quarkus-testing-unit-tests`.
+Quarkus REST builds on Jakarta REST (`jakarta.ws.rs`). Resources should express clear HTTP semantics, validate input at the boundary, return appropriate status codes, and map failures to stable JSON (or Problem Details) without leaking stack traces. Use CDI-scoped resource classes (`@Path` + `@ApplicationScoped` or `@RequestScoped` as appropriate), inject services, and (if you need a live `/openapi` endpoint) expose SmallRye OpenAPI — for **API-first** work, the checked-in OpenAPI file is the contract, not annotation-heavy descriptions in code. Generate Jakarta REST API interfaces and models from the OpenAPI document using **Quarkus OpenAPI Generator** (`io.quarkiverse.openapi.generator:quarkus-openapi-generator`) or the **OpenAPI Generator** `jaxrs-spec` target with `interfaceOnly`, then implement those interfaces in CDI resource classes. Align with the same REST design principles as Spring (`@302-frameworks-spring-boot-rest`) while using JAX-RS annotations and Quarkus extensions.
 
 ## Constraints
 
@@ -61,15 +37,16 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 4: Resource URIs and naming
 - Example 5: HTTP status codes
 - Example 6: DTOs for requests and responses
-- Example 7: API versioning
-- Example 8: Structured error responses
-- Example 9: OpenAPI documentation
+- Example 7: Time and locale in contracts
+- Example 8: API versioning
+- Example 9: Structured error responses
 - Example 10: Pagination, sorting, and filtering
 - Example 11: Idempotency and safe retries
 - Example 12: Optimistic concurrency with ETag
 - Example 13: Caching semantics
 - Example 14: Deprecation and sunset
 - Example 15: Security annotations
+- Example 16: API-first with OpenAPI Generator (Quarkus / Jakarta REST)
 
 ### Example 1: CRUD resource
 
@@ -375,10 +352,102 @@ class UserEntity {
 }
 ```
 
-### Example 7: API versioning
+### Example 7: Time and locale in contracts
+
+Title: ISO-8601 with offset; optional `Accept-Language` for errors
+Description: Model timestamps as `Instant` or `OffsetDateTime` (ISO-8601 with offset) so clients interpret wall-clock unambiguously—avoid legacy `Date` and ambiguous zone-less `LocalDateTime` in public JSON unless the domain is strictly calendar-local. For localized problem/error text (RFC 7807-style bodies), honor `Accept-Language` only if you keep stable problem `type` URIs/codes identical across locales and avoid leaking sensitive details through translated messages.
+
+**Good example:**
+
+```java
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.ExceptionMapper;
+import jakarta.ws.rs.ext.Provider;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+@Path("/api/v1/events")
+@Produces(MediaType.APPLICATION_JSON)
+public class EventResource {
+
+    @GET
+    @Path("{id}")
+    public Response get(@PathParam("id") String id) {
+        return Response.ok(new EventDTO(
+            Instant.parse("2026-03-23T12:00:00Z"),
+            OffsetDateTime.of(2026, 3, 23, 13, 0, 0, 0, ZoneOffset.ofHours(1)))).build();
+    }
+}
+
+record EventDTO(Instant occurredAt, OffsetDateTime windowStart) { }
+
+// Same Problem Detail field shape as in structured error examples — title/detail from bundles, never raw ex.getMessage()
+record ProblemDetail(String type, String title, int status, String detail, String errorId) { }
+
+@Provider
+public class IllegalArgumentExceptionMapper implements ExceptionMapper<IllegalArgumentException> {
+
+    @Context
+    HttpHeaders headers;
+
+    @Override
+    public Response toResponse(IllegalArgumentException ex) {
+        Locale locale = headers.getAcceptableLanguages().isEmpty()
+            ? Locale.ENGLISH
+            : headers.getAcceptableLanguages().getFirst();
+        ResourceBundle bundle = ResourceBundle.getBundle("ProblemMessages", locale);
+        String detail = bundle.getString("problem.invalid_argument.detail");
+        String title = bundle.getString("problem.invalid_argument.title");
+        return Response.status(400)
+            .type(MediaType.APPLICATION_JSON)
+            .entity(new ProblemDetail(
+                "https://example.com/problems/invalid-argument",
+                title,
+                400,
+                detail,
+                null))
+            .build();
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import java.util.Date;
+
+@Path("/events")
+@Produces(MediaType.APPLICATION_JSON)
+public class AmbiguousTimeResource {
+
+    @GET
+    @Path("{id}")
+    public Response get(@PathParam("id") String id) {
+        return Response.ok(new EventDTO(new Date())).build();
+    }
+}
+
+class EventDTO {
+    private Date createdAt;
+    EventDTO(Date createdAt) { this.createdAt = createdAt; }
+}
+```
+
+
+### Example 8: API versioning
 
 Title: URI path, custom header, or vendor media type — pick one and apply uniformly
-Description: Introduce versioning early so breaking changes do not silently affect existing clients. Three common strategies are shown below — pick one and apply it **uniformly** across every resource. | Strategy | Mechanism | Trade-offs | |---|---|---| | **URI path** | `/api/v1/…` | Easiest to browse, cache, and test; visible in logs | | **Custom header** | `X-API-Version: 2` | Clean URIs; version invisible in browser / CDN cache keys | | **Vendor media type** | `Accept: application/vnd.example.order+json;version=2` | Fully REST-compliant; higher client complexity |
+Description: Introduce versioning early so breaking changes do not silently affect existing clients. Pick one strategy and apply it **uniformly** across every resource. Common options: **URI path** (`/api/v1/…`) — easiest to browse, cache, and test; visible in logs. **Custom header** (`X-API-Version: 2`) — clean URIs; version not in browser or CDN cache keys. **Vendor media type** (`Accept: application/vnd.example.order+json;version=2`) — RESTful negotiation; higher client complexity.
 
 **Good example:**
 
@@ -435,7 +504,7 @@ public class UnversionedOrderResource {
 record OrderDTO(long id) { }
 ```
 
-### Example 8: Structured error responses
+### Example 9: Structured error responses
 
 Title: ExceptionMapper with RFC 7807 Problem Detail shape; no stack traces to clients
 Description: Register `ExceptionMapper` beans to centralize error handling. Return a consistent JSON body with stable fields (type, title, status, detail) aligned with RFC 7807 Problem Details. Log full exceptions server-side with a correlation ID; never return stack traces or raw exception messages to API clients in production.
@@ -531,83 +600,6 @@ public class OrderResource {
     }
 
     private Object findOrder(long id) { throw new RuntimeException("DB unavailable"); }
-}
-```
-
-### Example 9: OpenAPI documentation
-
-Title: MicroProfile OpenAPI annotations for operations, parameters, and responses
-Description: Document resources with MicroProfile OpenAPI annotations (`@Tag`, `@Operation`, `@APIResponse`, `@Parameter`, `@Schema`) so consumers can integrate without reverse-engineering the code. At minimum document status codes, required parameters, and error shapes.
-
-**Good example:**
-
-```java
-import jakarta.inject.Inject;
-import jakarta.validation.Valid;
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import java.net.URI;
-import org.eclipse.microprofile.openapi.annotations.Operation;
-import org.eclipse.microprofile.openapi.annotations.media.Content;
-import org.eclipse.microprofile.openapi.annotations.media.Schema;
-import org.eclipse.microprofile.openapi.annotations.parameters.Parameter;
-import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
-import org.eclipse.microprofile.openapi.annotations.responses.APIResponses;
-import org.eclipse.microprofile.openapi.annotations.tags.Tag;
-
-@Tag(name = "Orders", description = "Order management operations")
-@Path("/api/v1/orders")
-@Produces(MediaType.APPLICATION_JSON)
-@Consumes(MediaType.APPLICATION_JSON)
-public class OrderResource {
-
-    @Operation(summary = "Get order by ID")
-    @APIResponses({
-        @APIResponse(responseCode = "200",
-            content = @Content(schema = @Schema(implementation = OrderResponse.class))),
-        @APIResponse(responseCode = "404", description = "Order not found")
-    })
-    @GET
-    @Path("{id}")
-    public OrderResponse get(
-            @Parameter(description = "Order ID", required = true)
-            @PathParam("id") long id) {
-        return new OrderResponse(id, "PENDING");
-    }
-
-    @Operation(summary = "Create a new order")
-    @APIResponse(responseCode = "201", description = "Order created successfully")
-    @APIResponse(responseCode = "400", description = "Invalid request body")
-    @POST
-    public Response create(@Valid CreateOrderRequest body) {
-        OrderResponse created = new OrderResponse(1L, "PENDING");
-        return Response.created(URI.create("/api/v1/orders/" + created.id())).entity(created).build();
-    }
-}
-
-record OrderResponse(long id, String status) { }
-record CreateOrderRequest(
-    @jakarta.validation.constraints.NotBlank String productId,
-    @jakarta.validation.constraints.Positive int quantity) { }
-```
-
-**Bad example:**
-
-```java
-import jakarta.ws.rs.*;
-import jakarta.ws.rs.core.MediaType;
-
-@Path("/orders")
-@Produces(MediaType.APPLICATION_JSON)
-public class UndocumentedOrderResource {
-
-    // No @Operation, @APIResponse, @Parameter — consumers have no contract to integrate against
-    @GET
-    @Path("{id}")
-    public Object get(@PathParam("id") String id, @QueryParam("type") String type) {
-        return new Object();
-    }
 }
 ```
 
@@ -1036,11 +1028,94 @@ public class AdHocSecurityResource {
 }
 ```
 
+### Example 16: API-first with OpenAPI Generator (Quarkus / Jakarta REST)
+
+Title: Generate JAX-RS API interfaces from `openapi.yaml`; implement as `@Path` resources
+Description: Store the contract under `src/main/resources/openapi` (or similar) and generate **Jakarta REST** API interfaces plus models in the build. Prefer **Quarkus OpenAPI Generator** (`quarkus-openapi-generator`) for Quarkus-native integration, or **`openapi-generator-maven-plugin`** with `generatorName` `jaxrs-spec`, `interfaceOnly=true`, and `useJakartaEe=true`. The generated `*Api` types declare `@Path`, `@GET`/`@POST`, `@Consumes`/`@Produces`; your CDI resource class **implements** the interface and delegates to application services. Register `ExceptionMapper` as needed. Keep the OpenAPI spec authoritative in CI (lint before merge); generated interfaces carry the contract — avoid duplicating it with inline MicroProfile OpenAPI annotations unless you intentionally maintain runtime OpenAPI exposure separately.
+
+**Good example:**
+
+```text
+<!-- Option A: Quarkus extension — see Quarkus OpenAPI Generator guide for full config -->
+<!--
+<dependency>
+    <groupId>io.quarkiverse.openapi.generator</groupId>
+    <artifactId>quarkus-openapi-generator-server</artifactId>
+</dependency>
+-->
+<!-- Option B: openapi-generator-maven-plugin (jaxrs-spec) -->
+<plugin>
+    <groupId>org.openapitools</groupId>
+    <artifactId>openapi-generator-maven-plugin</artifactId>
+    <version>${openapi-generator.version}</version>
+    <executions>
+        <execution>
+            <goals><goal>generate</goal></goals>
+            <configuration>
+                <inputSpec>${project.basedir}/src/main/resources/openapi/api.yaml</inputSpec>
+                <generatorName>jaxrs-spec</generatorName>
+                <apiPackage>com.example.generated.api</apiPackage>
+                <modelPackage>com.example.generated.model</modelPackage>
+                <configOptions>
+                    <interfaceOnly>true</interfaceOnly>
+                    <useJakartaEe>true</useJakartaEe>
+                    <supportAsync>true</supportAsync>
+                </configOptions>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+
+// --- Implement generated UsersApi as a CDI resource ---
+
+import com.example.generated.api.UsersApi;
+import com.example.generated.model.UserDto;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.Path;
+
+@ApplicationScoped
+@Path("/api/v1")
+public class UserResource implements UsersApi {
+
+    private final UserService users;
+
+    @Inject
+    public UserResource(UserService users) {
+        this.users = users;
+    }
+
+    @Override
+    public UserDto getUserById(String userId) {
+        return users.require(userId);
+    }
+}
+
+interface UserService {
+    UserDto require(String id);
+}
+```
+
+**Bad example:**
+
+```java
+// Anti-pattern: resource paths and payloads edited only in Java while openapi.yaml
+// is stale — contract tests and client SDKs disagree with runtime behavior.
+@jakarta.ws.rs.Path("/api/v1")
+public class DriftResource {
+    @jakarta.ws.rs.GET
+    @jakarta.ws.rs.Path("users/{id}")
+    public Object get(String id) {
+        return id;
+    }
+}
+```
+
 ## Output Format
 
-- **ANALYZE** resources for HTTP misuse, URI shape, status codes, DTO boundaries, versioning, deprecation/sunset/Link headers, `@Produces`/`@Consumes` declarations, ISO-8601 time fields, pagination bounds, Bean Validation on request DTOs, idempotency, ETag/concurrency, Cache-Control correctness, ExceptionMapper coverage, security annotations, and MicroProfile OpenAPI documentation
+- **ANALYZE** resources for HTTP misuse, URI shape, status codes, DTO boundaries, versioning, deprecation/sunset/Link headers, `@Produces`/`@Consumes` declarations, ISO-8601 time fields, pagination bounds, Bean Validation on request DTOs, idempotency, ETag/concurrency, Cache-Control correctness, ExceptionMapper coverage, security annotations, and (when API-first) consistency between `openapi.yaml` and generated Jakarta REST API interfaces vs resource implementations
 - **CATEGORIZE** findings by impact (CRITICAL for security/semantic violations, MAINTAINABILITY for DTO/versioning/docs, CONSISTENCY for errors) and by area (routing, responses, errors, security, caching, docs)
-- **APPLY** improvements: fix unsafe GETs, normalize paths, return correct status codes, introduce DTO boundaries, add versioning, emit deprecation/sunset/Link when phasing out endpoints, tighten `@Produces`/`@Consumes`, bound list endpoints with `page`/`size` caps, add `@Valid` on request bodies, add idempotency and 409 Conflict patterns, add ETag/`If-Match` checks for updates, set `Cache-Control`, centralize errors with `ExceptionMapper` and Problem Detail shape, add declarative security annotations, and enrich MicroProfile OpenAPI metadata
+- **APPLY** improvements: fix unsafe GETs, normalize paths, return correct status codes, introduce DTO boundaries, use `OffsetDateTime`/`Instant` in API DTOs for ISO-8601 time fields, add versioning, emit deprecation/sunset/Link when phasing out endpoints, tighten `@Produces`/`@Consumes`, bound list endpoints with `page`/`size` caps, add `@Valid` on request bodies, add idempotency and 409 Conflict patterns, add ETag/`If-Match` checks for updates, set `Cache-Control`, centralize errors with `ExceptionMapper` and Problem Detail shape, add declarative security annotations, and (API-first) align CDI resources with generated `*Api` interfaces from the checked-in `openapi.yaml`
 - **IMPLEMENT** incrementally: preserve public API contracts where possible; use deprecation and versioning for breaking changes; keep error shapes backward compatible unless versioning allows a break
 - **EXPLAIN** trade-offs (e.g., URI vs header versioning, blocking vs reactive patterns, `@Blocking` vs `@RunOnVirtualThread`) when multiple valid options exist
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits; exercise critical endpoints in integration tests where available
