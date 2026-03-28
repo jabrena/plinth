@@ -264,7 +264,7 @@ class User {
 ### Example 5: API versioning
 
 Title: Version explicitly and consistently — URI path, custom request header, or vendor media type
-Description: Introduce versioning early so breaking changes do not silently break existing clients. Three common strategies are shown below. Pick one and apply it **uniformly** across every controller in the API surface; mixing strategies creates confusion and unpredictable routing. | Strategy | Mechanism | Trade-offs | |---|---|---| | **URI path** | `/api/v1/…` | Easiest to browse, cache, and test; version visible in logs and firewalls | | **Custom header** | `X-API-Version: 2` | Clean URIs; version invisible in browser address bar and CDN cache keys | | **Vendor media type** | `Accept: application/vnd.example.product+json;version=2` | Fully REST-compliant; higher client complexity |
+Description: Introduce versioning early so breaking changes do not silently break existing clients. Pick one strategy and apply it **uniformly** across every controller in the API surface; mixing strategies creates confusion and unpredictable routing. Common options: **URI path** (`/api/v1/…`) — easiest to browse, cache, and test; version visible in logs and firewalls. **Custom header** (`X-API-Version: 2`) — clean URIs; version not in the browser address bar or simple CDN cache keys. **Vendor media type** (`Accept: application/vnd.example.product+json;version=2`) — RESTful negotiation; higher client complexity.
 
 **Good example:**
 

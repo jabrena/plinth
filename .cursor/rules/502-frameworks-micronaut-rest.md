@@ -260,7 +260,7 @@ class User {
 ### Example 5: API versioning
 
 Title: Version explicitly — URI path, custom request header, or vendor media type
-Description: Introduce versioning early so breaking changes do not silently break existing clients. Three common strategies are shown below. Pick one and apply it **uniformly** across controllers; mixing strategies creates confusion. Micronaut matches routes by path, optional headers, and `produces`/`consumes` for media-type versioning. | Strategy | Mechanism | Trade-offs | |---|---|---| | **URI path** | `/api/v1/…` | Easiest to browse, cache, and test | | **Custom header** | `X-API-Version: 2` | Clean URIs; weaker CDN cache keys unless Vary is set | | **Vendor media type** | `Accept: application/vnd.example.product+json;version=2` | REST-aligned; higher client complexity |
+Description: Introduce versioning early so breaking changes do not silently break existing clients. Pick one strategy and apply it **uniformly** across controllers; mixing strategies creates confusion. Micronaut matches routes by path, optional headers, and `produces`/`consumes` for media-type versioning. Common options: **URI path** (`/api/v1/…`) — easiest to browse, cache, and test. **Custom header** (`X-API-Version: 2`) — clean URIs; weaker CDN cache keys unless `Vary` is set. **Vendor media type** (`Accept: application/vnd.example.product+json;version=2`) — REST-aligned; higher client complexity.
 
 **Good example:**
 

@@ -448,7 +448,7 @@ class EventDTO {
 ### Example 8: API versioning
 
 Title: URI path, custom header, or vendor media type — pick one and apply uniformly
-Description: Introduce versioning early so breaking changes do not silently affect existing clients. Three common strategies are shown below — pick one and apply it **uniformly** across every resource. | Strategy | Mechanism | Trade-offs | |---|---|---| | **URI path** | `/api/v1/…` | Easiest to browse, cache, and test; visible in logs | | **Custom header** | `X-API-Version: 2` | Clean URIs; version invisible in browser / CDN cache keys | | **Vendor media type** | `Accept: application/vnd.example.order+json;version=2` | Fully REST-compliant; higher client complexity |
+Description: Introduce versioning early so breaking changes do not silently affect existing clients. Pick one strategy and apply it **uniformly** across every resource. Common options: **URI path** (`/api/v1/…`) — easiest to browse, cache, and test; visible in logs. **Custom header** (`X-API-Version: 2`) — clean URIs; version not in browser or CDN cache keys. **Vendor media type** (`Accept: application/vnd.example.order+json;version=2`) — RESTful negotiation; higher client complexity.
 
 **Good example:**
 
