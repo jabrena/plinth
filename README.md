@@ -44,7 +44,7 @@ Read the following comprehensive guides to use this project today.
 
 ## How to use them?
 
-The SLDC has evolved with the arrival of this new set of AI tooling, enhancing the Software Engineering process. In the development of this project, it was identified 3 different workflows: `Prompting Enginering Workflow`, `Pipelines Workflow` & `Agentic Workflow`.
+The SDLC has evolved with the arrival of this new set of AI tooling, enhancing the Software Engineering process. In the development of this project, it was identified 3 different workflows: `Prompting Enginering Workflow`, `Pipelines Workflow` & `Agentic Workflow`.
 
 ### Prompting Enginering Workflow
 
