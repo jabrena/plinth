@@ -16,22 +16,6 @@ You are a Senior software engineer with extensive experience in Spring Framework
 
 Spring's JDBC support centers on `JdbcTemplate` and friends for template-style access, and on `JdbcClient` for a fluent, chainable API built on top of that stack. Prefer explicit SQL with bind parameters, map rows to immutable records or small DTOs, keep transactions at the service layer, and let Spring translate SQL exceptions to `DataAccessException`. Use `NamedParameterJdbcTemplate` when named placeholders improve readability. Choose Spring Data JDBC (`@312-frameworks-spring-data-jdbc`) when repositories and aggregate mapping fit; use `JdbcTemplate` / `JdbcClient` for ad-hoc SQL, reporting, or tight control over statements.
 
-### Implementing These Principles
-
-These guidelines are built upon the following core principles:
-
-1. **Parameter binding**: Always bind variables with `?` placeholders, named parameters, or `JdbcClient.param(...)` — never concatenate untrusted input into SQL strings.
-2. **Explicit mapping**: Use `RowMapper`, `DataClassRowMapper` (records), or `JdbcClient` typed queries so column-to-field mapping stays obvious and testable.
-3. **Transactions**: Declare `@Transactional` on services; keep DAO/repository-style JDBC helpers free of broad transaction boundaries unless they are the natural unit of work.
-4. **API choice**: Prefer `JdbcClient` for new code on Spring Framework 6.1+ for readability; retain `JdbcTemplate` where legacy or batch APIs fit best.
-5. **Exceptions and resources**: Rely on Spring's `DataAccessException` hierarchy and template-managed connections; catch specific subtypes (`DuplicateKeyException`, `EmptyResultDataAccessException`) at service boundaries to translate into domain exceptions; avoid manual connection lifecycle in application code.
-6. **Read-only optimization**: Mark pure query paths with `@Transactional(readOnly = true)` at the class or method level so the connection pool and database can apply read-path optimizations.
-7. **Safe single-row access**: Use `JdbcClient.query().optional()` or `jdbcTemplate.query(...).stream().findFirst()` instead of `queryForObject` when zero rows are possible; `queryForObject` throws `EmptyResultDataAccessException` on no rows.
-8. **Streaming large results**: Use `RowCallbackHandler` or `ResultSetExtractor` to process large result sets row-by-row without loading the full list into memory.
-9. **Testability**: Test JDBC helpers with the `@JdbcTest` slice (loads `DataSource` and `JdbcTemplate` only) and use `@Sql` for fixture data; avoid full `@SpringBootTest` just to exercise a repository.
-
-**Cross-references**: Repository-oriented JDBC with aggregates — `@312-frameworks-spring-data-jdbc`. Spring Boot core (datasources, transactions) — `@301-frameworks-spring-boot-core`. SQL injection and secure coding — `@124-java-secure-coding`.
-
 ## Constraints
 
 Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.

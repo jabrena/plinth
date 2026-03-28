@@ -4,14 +4,14 @@
         <author>Juan Antonio Breña Moral</author>
         <version>0.13.0</version>
         <license>Apache-2.0</license>
-        <title>Quarkus JDBC — programmatic SQL</title>
-        <description>Use when you need to write or review programmatic JDBC in Quarkus — including Agroal-backed DataSource injection, PreparedStatement with bind parameters, mapping rows to Java records, transactions (@Transactional), batch updates, and optional NamedParameterJdbcTemplate when spring-jdbc is on the classpath. Prefer explicit SQL without ORM.</description>
+        <title>Micronaut JDBC — programmatic SQL</title>
+        <description>Use when you need to write or review programmatic JDBC in Micronaut — including Hikari-backed DataSource injection, PreparedStatement with bind parameters, mapping rows to Java records, transactions (io.micronaut.transaction.annotation.Transactional), batch updates, SQL text blocks, and domain-specific exception translation. Prefer explicit SQL without Micronaut Data when you need full control.</description>
     </metadata>
 
-    <role>You are a Senior software engineer with extensive experience in Quarkus and JDBC data access</role>
+    <role>You are a Senior software engineer with extensive experience in Micronaut and JDBC data access</role>
 
     <goal>
-        Quarkus pairs JDBC drivers (`quarkus-jdbc-*`) with Agroal connection pooling. Application code should use injected `javax.sql.DataSource`, always bind parameters, map rows to immutable records or small DTOs, and declare transactions at the service boundary with `jakarta.transaction.Transactional`. Use Panache (`@412-frameworks-quarkus-panache`) when you want repository-style Hibernate access; use raw JDBC for reporting, bulk ETL, or maximum SQL control.
+        Micronaut pairs JDBC drivers (`micronaut-jdbc-hikari` plus `micronaut-sql-jdbc` or a driver BOM) with a pooled `javax.sql.DataSource` from configuration. Application code should inject `DataSource`, always bind parameters, map rows to immutable records or small DTOs, and declare transactions at the service boundary with `io.micronaut.transaction.annotation.Transactional`. Use Micronaut Data (`@512-frameworks-micronaut-data`) when repository-style generated access fits; use raw JDBC for reporting, bulk ETL, upserts, or maximum SQL control (as in hand-written repositories that open `Connection`/`PreparedStatement` directly).
     </goal>
 
     <constraints>
@@ -39,12 +39,12 @@
             </example-header>
             <example-description>
                 <![CDATA[
-                Inject `DataSource`, open a connection per operation (or let transaction demarcation scope it), and map `ResultSet` rows to records.
+                Inject `DataSource`, open a connection per operation (or let transaction demarcation scope it), and map `ResultSet` rows to records. Model repositories as `@Singleton` with constructor injection.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+                    <code-block language="java"><![CDATA[import io.micronaut.context.annotation.Singleton;
 import jakarta.inject.Inject;
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -53,7 +53,7 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 
-@ApplicationScoped
+@Singleton
 public class CustomerJdbcRepository {
 
     private final DataSource dataSource;
@@ -97,19 +97,21 @@ record CustomerRow(long id, String email) { }]]></code-block>
             </example-header>
             <example-description>
                 <![CDATA[
-                Place `@Transactional` on the service layer so multiple JDBC operations commit or roll back together.
+                Place `@Transactional` from `io.micronaut.transaction.annotation` on the service layer so multiple JDBC operations commit or roll back together.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.transaction.Transactional;
+                    <code-block language="java"><![CDATA[import io.micronaut.context.annotation.Singleton;
+import io.micronaut.transaction.annotation.Transactional;
+import jakarta.inject.Inject;
 
-@ApplicationScoped
+@Singleton
 public class OrderService {
 
     private final OrderJdbcRepository orders;
 
+    @Inject
     public OrderService(OrderJdbcRepository orders) {
         this.orders = orders;
     }
@@ -179,7 +181,7 @@ long id = selectMaxIdPlusOne();]]></code-block>
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+                    <code-block language="java"><![CDATA[import io.micronaut.context.annotation.Singleton;
 import jakarta.inject.Inject;
 import javax.sql.DataSource;
 import java.sql.*;
@@ -189,7 +191,7 @@ import java.util.List;
 
 record OrderRow(long id, long customerId, String status, Instant createdAt) { }
 
-@ApplicationScoped
+@Singleton
 public class OrderJdbcRepository {
 
     private final DataSource dataSource;
@@ -225,13 +227,13 @@ public class OrderJdbcRepository {
 }]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+                    <code-block language="java"><![CDATA[import io.micronaut.context.annotation.Singleton;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@ApplicationScoped
+@Singleton
 public class OrderJdbcRepository {
 
     private final DataSource dataSource;
@@ -272,7 +274,7 @@ public class OrderJdbcRepository {
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+                    <code-block language="java"><![CDATA[import io.micronaut.context.annotation.Singleton;
 import jakarta.inject.Inject;
 import javax.sql.DataSource;
 import java.sql.*;
@@ -280,7 +282,7 @@ import java.util.Optional;
 
 record CustomerRow(long id, String email, String status) { }
 
-@ApplicationScoped
+@Singleton
 public class CustomerJdbcRepository {
 
     private final DataSource dataSource;
@@ -346,18 +348,18 @@ record CustomerRow(long id, String email, String status) { }]]></code-block>
             </example-header>
             <example-description>
                 <![CDATA[
-                Catch `SQLIntegrityConstraintViolationException` (unique constraints, FK violations) and other `SQLException` subtypes at the service layer and re-throw as domain-meaningful exceptions. Never let raw `SQLException` propagate to REST resources or callers that should not know about the database schema.
+                Catch `SQLIntegrityConstraintViolationException` (unique constraints, FK violations) and other `SQLException` subtypes at the service layer and re-throw as domain-meaningful exceptions. Never let raw `SQLException` propagate to `@Controller` methods or callers that should not know about the database schema.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+                    <code-block language="java"><![CDATA[import io.micronaut.context.annotation.Singleton;
+import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import javax.sql.DataSource;
 import java.sql.*;
 
-@ApplicationScoped
+@Singleton
 public class AccountService {
 
     private final DataSource dataSource;
@@ -395,12 +397,12 @@ public class AccountPersistenceException extends RuntimeException {
 }]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.transaction.Transactional;
+                    <code-block language="java"><![CDATA[import io.micronaut.context.annotation.Singleton;
+import io.micronaut.transaction.annotation.Transactional;
 import javax.sql.DataSource;
 import java.sql.*;
 
-@ApplicationScoped
+@Singleton
 public class AccountService {
 
     private final DataSource dataSource;
@@ -437,14 +439,14 @@ public class AccountService {
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+                    <code-block language="java"><![CDATA[import io.micronaut.context.annotation.Singleton;
+import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.List;
 
-@ApplicationScoped
+@Singleton
 public class ItemBatchRepository {
 
     private final DataSource dataSource;
@@ -469,13 +471,13 @@ public class ItemBatchRepository {
 }]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.transaction.Transactional;
+                    <code-block language="java"><![CDATA[import io.micronaut.context.annotation.Singleton;
+import io.micronaut.transaction.annotation.Transactional;
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.List;
 
-@ApplicationScoped
+@Singleton
 public class ItemBatchRepository {
 
     private final DataSource dataSource;
@@ -513,14 +515,14 @@ public class ItemBatchRepository {
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+                    <code-block language="java"><![CDATA[import io.micronaut.context.annotation.Singleton;
+import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.*;
 
-@ApplicationScoped
+@Singleton
 public class AuditExportRepository {
 
     private final DataSource dataSource;
@@ -550,8 +552,8 @@ public class AuditExportRepository {
 }]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.transaction.Transactional;
+                    <code-block language="java"><![CDATA[import io.micronaut.context.annotation.Singleton;
+import io.micronaut.transaction.annotation.Transactional;
 import javax.sql.DataSource;
 import java.io.PrintWriter;
 import java.sql.*;
@@ -560,7 +562,7 @@ import java.util.List;
 
 record AuditRow(long id, String action, java.sql.Timestamp createdAt) { }
 
-@ApplicationScoped
+@Singleton
 public class AuditExportRepository {
 
     private final DataSource dataSource;
@@ -597,18 +599,19 @@ public class AuditExportRepository {
             </example-header>
             <example-description>
                 <![CDATA[
-                The default `REQUIRED` propagation joins an existing transaction or starts a new one — correct for most service calls. Use `REQUIRES_NEW` when an operation (e.g. audit logging, metrics recording) must commit independently even if the caller's transaction later rolls back. `MANDATORY` enforces that an outer transaction already exists.
+                The default `REQUIRED` propagation joins an existing transaction or starts a new one — correct for most service calls. Use `REQUIRES_NEW` when an operation (e.g. audit logging, metrics recording) must commit independently even if the caller's transaction later rolls back. Micronaut maps these semantics via `io.micronaut.transaction.TransactionDefinition.Propagation`.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+                    <code-block language="java"><![CDATA[import io.micronaut.context.annotation.Singleton;
+import io.micronaut.transaction.TransactionDefinition.Propagation;
+import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import javax.sql.DataSource;
 import java.sql.*;
 
-@ApplicationScoped
+@Singleton
 public class AuditRepository {
 
     private final DataSource dataSource;
@@ -620,7 +623,7 @@ public class AuditRepository {
 
     // REQUIRES_NEW: always commits independently — audit entry survives even if
     // the caller's transaction rolls back
-    @Transactional(Transactional.TxType.REQUIRES_NEW)
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void logEvent(String event, long entityId) throws SQLException {
         String sql = "INSERT INTO audit_log (event, entity_id, occurred_at) VALUES (?, ?, NOW())";
         try (Connection c = dataSource.getConnection();
@@ -632,7 +635,7 @@ public class AuditRepository {
     }
 }
 
-@ApplicationScoped
+@Singleton
 public class OrderService {
 
     private final DataSource dataSource;
@@ -659,12 +662,11 @@ public class OrderService {
 }]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.transaction.Transactional;
+                    <code-block language="java"><![CDATA[import io.micronaut.context.annotation.Singleton;
 import javax.sql.DataSource;
 import java.sql.*;
 
-@ApplicationScoped
+@Singleton
 public class OrderService {
 
     private final DataSource dataSource;
@@ -687,26 +689,26 @@ public class OrderService {
             </code-examples>
         </example>
 
-        <example number="10" id="cdi-self-invocation-pitfall">
+        <example number="10" id="self-invocation-pitfall">
             <example-header>
-                <example-title>CDI self-invocation pitfall</example-title>
-                <example-subtitle>Calling @Transactional via this.method() bypasses the CDI interceptor</example-subtitle>
+                <example-title>Self-invocation pitfall</example-title>
+                <example-subtitle>Calling @Transactional via this.method() can bypass interception</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                CDI applies `@Transactional` through an interceptor that wraps the CDI client proxy. When a method inside a bean calls another method on the same instance via `this.method()`, it bypasses the proxy entirely and the `@Transactional` annotation on the inner method has no effect. Extract the inner method to a separate CDI-managed bean to ensure proxy interception.
+                Micronaut applies `@Transactional` through AOP. When a method calls another method on the same bean instance via `this.method()`, the call may not pass through the transactional interceptor, so nested transactional behaviour is not applied. Extract the inner concern to a separate `@Singleton` bean and inject it so calls go through the managed proxy.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+                    <code-block language="java"><![CDATA[import io.micronaut.context.annotation.Singleton;
+import io.micronaut.transaction.annotation.Transactional;
 import jakarta.inject.Inject;
-import jakarta.transaction.Transactional;
 import javax.sql.DataSource;
 import java.sql.*;
 
-// Separate bean — CDI proxy is intercepted correctly for every cross-bean call
-@ApplicationScoped
+// Separate bean — interception applies for every cross-bean call
+@Singleton
 public class AuditRepository {
 
     private final DataSource dataSource;
@@ -728,11 +730,11 @@ public class AuditRepository {
     }
 }
 
-@ApplicationScoped
+@Singleton
 public class OrderService {
 
     private final DataSource dataSource;
-    private final AuditRepository auditRepository; // injected — calls go through CDI proxy
+    private final AuditRepository auditRepository; // injected — calls go through bean proxy
 
     @Inject
     public OrderService(DataSource dataSource, AuditRepository auditRepository) {
@@ -743,17 +745,17 @@ public class OrderService {
     @Transactional
     public void placeOrder(long customerId, String sku) throws SQLException {
         // ... insert order ...
-        auditRepository.logEvent("order-placed", customerId); // proxy intercepted — @Transactional honoured
+        auditRepository.logEvent("order-placed", customerId); // intercepted — @Transactional honoured
     }
 }]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.transaction.Transactional;
+                <bad-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.context.annotation.Singleton;
+import io.micronaut.transaction.annotation.Transactional;
 import javax.sql.DataSource;
 import java.sql.*;
 
-@ApplicationScoped
+@Singleton
 public class OrderService {
 
     private final DataSource dataSource;
@@ -764,8 +766,7 @@ public class OrderService {
 
     public void placeOrder(long customerId, String sku) throws SQLException {
         // ... insert order ...
-        this.logAudit("order-placed", customerId); // Bad: self-invocation bypasses CDI proxy
-                                                   // @Transactional on logAudit is silently ignored
+        this.logAudit("order-placed", customerId); // Bad: self-invocation — @Transactional on logAudit may not apply
     }
 
     @Transactional
@@ -782,6 +783,87 @@ public class OrderService {
                 </bad-example>
             </code-examples>
         </example>
+
+        <example number="11" id="text-block-sql-domain-exception">
+            <example-header>
+                <example-title>Text blocks, upserts, and domain exceptions</example-title>
+                <example-subtitle>Readable multi-line SQL and fail-fast translation</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use Java text blocks for multi-line SQL (PostgreSQL `ON CONFLICT`, etc.). Keep `PreparedStatement` parameters bound; translate `SQLException` to a single domain runtime type so controllers stay persistence-agnostic. Structured debug logging belongs at appropriate levels — avoid logging secrets or full row payloads at INFO.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.context.annotation.Singleton;
+import jakarta.inject.Inject;
+import javax.sql.DataSource;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@Singleton
+public class GreekGodRepository {
+
+    private static final Logger LOG = LoggerFactory.getLogger(GreekGodRepository.class);
+
+    private static final String SELECT_ORDERED = "SELECT name FROM greek_god ORDER BY name";
+    private static final String UPSERT = """
+            INSERT INTO greek_god (name) VALUES (?)
+            ON CONFLICT (name) DO NOTHING
+            """;
+
+    private final DataSource dataSource;
+
+    @Inject
+    public GreekGodRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public List<String> findAllNamesOrdered() {
+        try (Connection c = dataSource.getConnection();
+             PreparedStatement ps = c.prepareStatement(SELECT_ORDERED);
+             ResultSet rs = ps.executeQuery()) {
+            List<String> names = new ArrayList<>();
+            while (rs.next()) {
+                names.add(rs.getString(1));
+            }
+            LOG.debug("Loaded {} Greek god names from database", names.size());
+            return names;
+        } catch (SQLException e) {
+            throw new GreekGodsDataAccessException("Failed to load Greek god names", e);
+        }
+    }
+
+    public void upsertByName(String name) {
+        try (Connection c = dataSource.getConnection();
+             PreparedStatement ps = c.prepareStatement(UPSERT)) {
+            ps.setString(1, name);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new GreekGodsDataAccessException("Failed to upsert Greek god: " + name, e);
+        }
+    }
+}
+
+public class GreekGodsDataAccessException extends RuntimeException {
+    public GreekGodsDataAccessException(String message, Throwable cause) {
+        super(message, cause);
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Bad: concatenated multi-line SQL without bind params; swallows or logs-and-ignores SQLException
+public void upsertByName(String name) {
+    String sql = "INSERT INTO greek_god (name) VALUES ('" + name + "') ON CONFLICT (name) DO NOTHING";
+    // ...
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
     </examples>
 
     <output-format>
@@ -790,8 +872,8 @@ public class OrderService {
             <output-format-item>**CATEGORIZE** findings by impact (SECURITY for injection risk, CORRECTNESS for missing transactions or unsafe single-row access, PERFORMANCE for N+1 / missing batch / missing fetch-size streaming, MAINTAINABILITY for inline mapping)</output-format-item>
             <output-format-item>**APPLY** improvements: introduce parameter binding, extract `mapRow` methods, wrap single-row queries in `Optional`, add `@Transactional` at service boundaries, add batch operations, set `setFetchSize` for large exports, translate `SQLException` subtypes to domain exceptions</output-format-item>
             <output-format-item>**HANDLE** exceptions: translate `SQLIntegrityConstraintViolationException` and other `SQLException` subtypes at the service layer; wrap in meaningful domain exceptions preserving the cause</output-format-item>
-            <output-format-item>**TEST** with `@QuarkusTest` and Dev Services for realistic database coverage; avoid mocking `DataSource` or `Connection` — use real schema with test profiles</output-format-item>
-            <output-format-item>**RECOMMEND** Panache (`@412-frameworks-quarkus-panache`) when CRUD and entity-state management dominate; keep raw JDBC for ad-hoc SQL, reporting, and bulk ETL</output-format-item>
+            <output-format-item>**TEST** with `@MicronautTest` and Testcontainers (or a test `DataSource`) for realistic database coverage; avoid mocking `DataSource` or `Connection` for behaviour you care about — use real schema with test configuration</output-format-item>
+            <output-format-item>**RECOMMEND** Micronaut Data (`@512-frameworks-micronaut-data`) when generated repositories and entities fit; keep raw JDBC for ad-hoc SQL, reporting, bulk ETL, and database-specific SQL</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits</output-format-item>
         </output-format-list>
     </output-format>
@@ -806,8 +888,8 @@ public class OrderService {
             <safeguards-item>**EXCEPTION TRANSLATION**: Translate `SQLIntegrityConstraintViolationException` and other `SQLException` subtypes to domain exceptions at service boundaries; preserve the original cause for diagnostics</safeguards-item>
             <safeguards-item>**BATCH SAFETY**: Wrap batch inserts/updates in `@Transactional`; call `executeBatch()` inside the same try-with-resources block as `prepareStatement()`</safeguards-item>
             <safeguards-item>**STREAMING**: A server-side cursor via `setFetchSize()` requires the `ResultSet` to remain open while rows are processed — do not close the connection until streaming is complete</safeguards-item>
-            <safeguards-item>**SELF-INVOCATION**: Never call a `@Transactional` method via `this.method()` within the same bean — the CDI interceptor is bypassed; extract to a separate CDI-managed bean</safeguards-item>
-            <safeguards-item>**INCREMENTAL SAFETY**: Change data-access code in small steps, covered by `@QuarkusTest` integration tests using Dev Services; do not rely on `./mvnw compile` alone to verify correctness</safeguards-item>
+            <safeguards-item>**SELF-INVOCATION**: Avoid calling `@Transactional` methods via `this.method()` within the same bean when you rely on interceptor behaviour — extract to a separate `@Singleton` collaborator</safeguards-item>
+            <safeguards-item>**INCREMENTAL SAFETY**: Change data-access code in small steps, covered by `@MicronautTest` integration tests; do not rely on `./mvnw compile` alone to verify correctness</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>

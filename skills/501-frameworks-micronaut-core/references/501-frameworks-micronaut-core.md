@@ -16,25 +16,6 @@ You are a Senior software engineer with extensive experience in Micronaut, depen
 
 Micronaut favors compile-time dependency injection, fast startup, and explicit configuration. Effective applications keep `main` thin, use `@Singleton` for stateless services, declare beans with `@Factory` when construction is non-trivial, bind settings with `@ConfigurationProperties`, branch environments with Micronaut environments and `@Requires` instead of scattered `if` checks, and use Jakarta APIs consistently. Operational concerns include Netty graceful shutdown, scheduling with bounded error handling, and optional `@ExecuteOn` / virtual threads for blocking work off the event loop.
 
-### Implementing These Principles
-
-These guidelines are built upon the following core principles:
-
-1. **Bootstrap**: Use `Micronaut.run(Application.class, args)` from a dedicated entry class; keep `main` free of business orchestration.
-2. **Scopes**: Default long-lived services to `@Singleton`; use `@Prototype` for per-lookup instances; use request-scoped beans only where the HTTP context exists and the type truly needs it.
-3. **Injection**: Prefer constructor injection with `jakarta.inject.Inject`; avoid field injection in domain services.
-4. **Factories**: Use `@Factory` for beans that need explicit construction, third-party integration, or conditional wiring; keep factory methods small and `@Singleton` unless a narrower scope is required.
-5. **Configuration**: Prefer `@ConfigurationProperties` (records or beans) for grouped settings; use `@Property` only for occasional one-off keys; validate with Bean Validation where appropriate.
-6. **Environments and conditionals**: Use Micronaut environments (`test`, `dev`, `prod`) and `@Requires` (property, class, environment) instead of hard-coded environment checks in business code.
-7. **HTTP vs domain**: Keep `@Controller` types as HTTP adapters; put transactional and domain rules in `@Singleton` application services.
-8. **Cross-cutting**: Use `@Interceptor` / `@InterceptorBinding` for logging, metrics, and security concerns that would otherwise clutter services.
-9. **Scheduling**: Use `@Scheduled` on `@Singleton` beans; handle failures explicitly so one bad run does not stall the scheduler silently.
-10. **Threading**: Avoid blocking I/O on the Netty event loop; offload blocking work with `@ExecuteOn(TaskExecutors.BLOCKING)` or virtual-thread executors where configured.
-11. **Shutdown**: Enable and tune graceful shutdown so in-flight HTTP work can complete within a bounded window.
-12. **Jakarta consistency**: Use `jakarta.*` for inject, validation, annotation, persistence, and servlet APIs as required by your Micronaut version — do not mix `javax.*` equivalents on the same component.
-
-**Cross-references**: REST — `@502-frameworks-micronaut-rest`. Micronaut Data — `@512-frameworks-micronaut-data`. Unit tests — `@521-frameworks-micronaut-testing-unit-tests`.
-
 ## Constraints
 
 Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.

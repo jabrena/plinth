@@ -1,6 +1,6 @@
 ---
 name: 401-frameworks-quarkus-core
-description: Use when you need to review, improve, or build Quarkus applications — including mandatory @QuarkusMain entry points with static main methods, CDI scopes (@ApplicationScoped, @Singleton, @Dependent), constructor injection, @ConfigMapping and SmallRye Config, profiles (%dev, %test, %prod), build-time vs runtime configuration, lifecycle (@Startup, @PreDestroy), health and metrics hooks, and test-friendly bean design.
+description: Use when you need to review, improve, or build Quarkus applications — including mandatory @QuarkusMain entry points with static main methods, CDI scopes (@ApplicationScoped, @Singleton, @Dependent), constructor injection, @ConfigMapping and SmallRye Config, profiles (%dev, %test, %prod), build-time vs runtime configuration, lifecycle (@Startup, @PreDestroy), metrics integration patterns, and test-friendly bean design.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -15,24 +15,6 @@ You are a Senior software engineer with extensive experience in Quarkus, CDI, an
 ## Goal
 
 Quarkus core development favors explicit CDI beans, narrow scopes, type-safe configuration, and profile-aware behavior without a giant Spring-style component graph. The runtime is optimized for fast startup and low memory; align with that by avoiding unnecessary eager singletons, keeping beans `@ApplicationScoped` by default for services, and using `@ConfigMapping` for structured settings. Prefer constructor injection, validate configuration at startup, and separate imperative bootstrap (`@QuarkusMain`) from HTTP or messaging entry points defined by extensions.
-
-### Implementing These Principles
-
-These guidelines are built upon the following core principles:
-
-1. **Composition and entry**: Always provide a `@QuarkusMain` class with a static `main` method using `Quarkus.run(args)` for simple cases, or implement `QuarkusApplication` for lifecycle control. Keep `main` thin — no business logic.
-2. **CDI scopes**: Default services to `@ApplicationScoped`; use `@Singleton` only when you truly need one instance without client proxies; use `@Dependent` for per-injection lifecycle; avoid `@RequestScoped` on non-HTTP-aware beans unless the extension supports it.
-3. **Injection**: Prefer constructor injection; avoid field injection in domain services; use `@Inject` with final fields via constructor.
-4. **Configuration**: Map `application.properties` with `@ConfigMapping` interfaces or `@ConfigProperty`; validate with Bean Validation on config types where useful; never hardcode secrets — use env vars or Kubernetes secrets mapping.
-5. **Profiles**: Encode environment differences with `%prod.*`, `%test.*`, `%dev.*` keys or `@IfBuildProfile`; avoid `if (profile)` scattered in business code.
-6. **Build-time safety**: Respect build-time configuration (e.g. native image, reflection) — register reflective classes when using libraries that need it; use Quarkus extensions over ad-hoc classpath hacks.
-7. **Lifecycle**: Use `@Startup` for ordered initialization; pair with `@PreDestroy` for cleanup; do not block event observers on long I/O without async patterns.
-8. **Cross-cutting**: Expose health via SmallRye Health and metrics via Micrometer when operations need them; keep business beans free of metrics code where possible (use interceptors or filters).
-9. **CDI interceptors**: Use CDI interceptors (`@InterceptorBinding`, `@Interceptor`, `@Priority`) to attach cross-cutting behavior — logging, auditing, metrics — without polluting domain beans; keep interceptors narrow and composable.
-10. **CDI events**: Prefer `@Observes StartupEvent` / `@Observes ShutdownEvent` for lifecycle hooks over blocking work in `@Startup`; use `@ObservesAsync` for non-blocking notifications; do not perform long I/O synchronously in observers.
-11. **Programmatic injection**: Use `Instance<T>` when you need optional injection, dynamic selection among multiple implementations, or lazy resolution; prefer a custom qualifier or `@Named` to disambiguate when several beans share a type.
-
-**Cross-references**: REST layer — `@402-frameworks-quarkus-rest`. JDBC — `@411-frameworks-quarkus-jdbc`. Panache — `@412-frameworks-quarkus-panache`. Unit tests — `@421-frameworks-quarkus-testing-unit-tests`.
 
 ## Constraints
 
@@ -60,8 +42,7 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 9: Resource cleanup with @PreDestroy
 - Example 10: Configuration validation
 - Example 11: Programmatic injection with Instance<T>
-- Example 12: Health probes with SmallRye Health
-- Example 13: Virtual threads with @RunOnVirtualThread
+- Example 12: Virtual threads with @RunOnVirtualThread
 
 ### Example 1: Simple application entry point
 
@@ -659,84 +640,7 @@ public class MetricsService {
 }
 ```
 
-### Example 12: Health probes with SmallRye Health
-
-Title: @Liveness and @Readiness checks for operational visibility
-Description: Implement `HealthCheck` and annotate with `@Liveness` (is the process alive?) or `@Readiness` (is it ready to serve traffic?). Keep checks fast and non-destructive. Liveness failures trigger a pod restart; readiness failures remove the pod from the load-balancer. Separate these concerns — do not put connectivity checks inside liveness.
-
-**Good example:**
-
-```java
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.inject.Inject;
-import javax.sql.DataSource;
-import org.eclipse.microprofile.health.HealthCheck;
-import org.eclipse.microprofile.health.HealthCheckResponse;
-import org.eclipse.microprofile.health.Liveness;
-import org.eclipse.microprofile.health.Readiness;
-
-@Liveness
-@ApplicationScoped
-public class AppLivenessCheck implements HealthCheck {
-
-    @Override
-    public HealthCheckResponse call() {
-        return HealthCheckResponse.up("application-live");
-    }
-}
-
-@Readiness
-@ApplicationScoped
-public class DatabaseReadinessCheck implements HealthCheck {
-
-    private final DataSource dataSource;
-
-    @Inject
-    public DatabaseReadinessCheck(DataSource dataSource) {
-        this.dataSource = dataSource;
-    }
-
-    @Override
-    public HealthCheckResponse call() {
-        try (var conn = dataSource.getConnection()) {
-            conn.isValid(1);
-            return HealthCheckResponse.up("database-ready");
-        } catch (Exception e) {
-            return HealthCheckResponse.down("database-ready");
-        }
-    }
-}
-```
-
-**Bad example:**
-
-```java
-import jakarta.enterprise.context.ApplicationScoped;
-import org.eclipse.microprofile.health.HealthCheck;
-import org.eclipse.microprofile.health.HealthCheckResponse;
-import org.eclipse.microprofile.health.Liveness;
-
-@Liveness
-@ApplicationScoped
-public class MixedLivenessCheck implements HealthCheck {
-
-    @Override
-    public HealthCheckResponse call() {
-        // Bad: liveness check performs expensive DB + remote service calls
-        // A DB timeout will unnecessarily kill the pod — separate liveness from readiness
-        boolean dbOk = checkDatabase();
-        boolean remoteOk = callRemoteService();
-        return dbOk && remoteOk
-            ? HealthCheckResponse.up("app")
-            : HealthCheckResponse.down("app");
-    }
-
-    private boolean checkDatabase() { return true; }
-    private boolean callRemoteService() { return true; }
-}
-```
-
-### Example 13: Virtual threads with @RunOnVirtualThread
+### Example 12: Virtual threads with @RunOnVirtualThread
 
 Title: Offload I/O-bound REST methods to virtual threads on Java 21+
 Description: On **Java 21+**, annotate a REST resource method with `@RunOnVirtualThread` to execute it on a virtual thread instead of a Vert.x worker thread. Ideal for blocking I/O (JDBC, HTTP clients, file I/O) that would otherwise tie up platform threads. Do not use it for CPU-intensive work; profile before enabling broadly.

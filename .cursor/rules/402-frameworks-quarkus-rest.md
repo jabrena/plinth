@@ -16,30 +16,6 @@ You are a Senior software engineer with extensive experience in REST API design 
 
 Quarkus REST builds on Jakarta REST (`jakarta.ws.rs`). Resources should express clear HTTP semantics, validate input at the boundary, return appropriate status codes, and map failures to stable JSON (or Problem Details) without leaking stack traces. Use CDI-scoped resource classes (`@Path` + `@ApplicationScoped` or `@RequestScoped` as appropriate), inject services, and document the API with SmallRye OpenAPI. Align with the same REST design principles as Spring (`@302-frameworks-spring-boot-rest`) while using JAX-RS annotations and Quarkus extensions.
 
-### Implementing These Principles
-
-These guidelines are built upon the following core principles:
-
-1. **HTTP semantics**: Use `GET`/`POST`/`PUT`/`PATCH`/`DELETE` correctly; `GET` must be safe; return **201** with `Location` for creates; **204** for successful deletes without body.
-2. **Resource modeling**: Nouns in paths (`/orders/{id}`); avoid RPC-style verbs in URLs unless documenting a deliberate exception.
-3. **DTOs at the edge**: Expose records or DTOs from resources — not persistence entities — unless you intentionally accept tight coupling (discouraged).
-4. **Validation**: Annotate request bodies and parameters with Bean Validation; use `@Valid` on method parameters so malformed input yields **400** with constraint violations.
-5. **Errors**: Implement `jakarta.ws.rs.ext.ExceptionMapper` for domain and infrastructure exceptions; return consistent JSON bodies and correct status codes (**404**, **409**, **422** as appropriate).
-6. **OpenAPI**: Annotate with MicroProfile OpenAPI (`@Operation`, `@APIResponse`) or rely on sensible defaults; keep schemas aligned with DTOs.
-7. **Performance**: Prefer reactive types (`Uni`, `Multi`) for non-blocking stacks when extensions support it; do not block event loops on long JDBC without `@Blocking` or worker threads.
-8. **Security**: Integrate Quarkus Security (`quarkus-oidc`, `quarkus-smallrye-jwt`, or basic auth) at the filter level; avoid ad-hoc header parsing in resources.
-
-9. **Versioning**: Choose URI path (`/api/v1/…`), custom header (`X-API-Version`), or vendor media type versioning, and apply it uniformly; breaking changes without versioning silently break all existing clients.
-10. **Pagination and filtering**: Cap list endpoints with explicit `page`/`size` query params and server-enforced maximums; whitelist sort fields to prevent arbitrary-column exposure.
-11. **Idempotency**: Support an `Idempotency-Key` header (or domain-level deduplication) for `POST` creates; return **409 Conflict** when a request collides with existing state.
-12. **Optimistic concurrency**: Use `ETag` with `If-Match` / `If-None-Match` via `jakarta.ws.rs.core.Request.evaluatePreconditions()`; return **412 Precondition Failed** or **304 Not Modified** appropriately.
-13. **Caching discipline**: Set `Cache-Control` deliberately; use `public, max-age=N` for anonymous catalog data and `no-store` for authenticated or personalized responses.
-14. **Deprecation signals**: Communicate API sunset with `Deprecation`, `Sunset`, and `Link` (`rel="successor-version"`) headers so clients can plan migration before removal.
-15. **Content negotiation**: Default to `application/json` with explicit `@Produces` / `@Consumes`; use vendor media types only when they carry real versioning meaning; avoid `*/*` without intent.
-16. **Time in contracts**: Use `Instant` or `OffsetDateTime` (ISO-8601 with offset) in DTOs; avoid legacy `java.util.Date` and ambiguous zone-less `LocalDateTime` in public API contracts.
-
-**Cross-references**: Quarkus core — `@401-frameworks-quarkus-core`. JDBC — `@411-frameworks-quarkus-jdbc`. Panache — `@412-frameworks-quarkus-panache`. Unit tests — `@421-frameworks-quarkus-testing-unit-tests`.
-
 ## Constraints
 
 Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.

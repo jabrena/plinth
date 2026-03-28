@@ -12,20 +12,6 @@
 
     <goal>
         Micronaut tests should be fast by default: exercise plain services with Mockito and no container, and reserve `@MicronautTest` for cases that need HTTP routing, bean replacement, or Micronaut-specific adapters. Use `@MockBean` factory methods to substitute collaborators, inject `HttpClient` with `@Client("/")` for controller tests, and keep deterministic configuration via `@Property` on test classes or methods.
-
-        ### Implementing These Principles
-
-        These guidelines are built upon the following core principles:
-
-        1. **Pure unit tests first**: Test `@Singleton` domain and application services with Mockito only — no `ApplicationContext`.
-        2. **Slim MicronautTest**: Use `@MicronautTest` for controller/client tests; avoid booting the full application when a focused test doubles collaborators.
-        3. **Mock boundaries**: Replace ports with `@MockBean` or Mockito mocks so each test targets one layer.
-        4. **HTTP assertions**: Use `HttpClient` blocking exchange with AssertJ on status and body for Micronaut HTTP tests.
-        5. **Parameterized tests**: Prefer `@ParameterizedTest` with `@CsvSource` / `@MethodSource` over duplicated methods.
-        6. **Naming**: Use `*Test` for Surefire; reserve `*IT` for heavier integration tests in Failsafe.
-
-        **Cross-references**: Framework-agnostic unit testing — `@131-java-testing-unit-testing`. Integration tests — `@522-frameworks-micronaut-testing-integration-tests`. Acceptance from Gherkin — `@523-frameworks-micronaut-testing-acceptance-tests`.
-
     </goal>
 
     <constraints>

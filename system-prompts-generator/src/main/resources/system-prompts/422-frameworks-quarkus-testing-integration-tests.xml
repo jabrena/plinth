@@ -12,22 +12,6 @@
 
     <goal>
         Integration tests in Quarkus validate real wiring: CDI, persistence, HTTP stack, and extensions. Use `@QuarkusTest` for in-JVM integration (default continuous testing friendly). Prefer **Dev Services** to provision databases, Kafka, and similar locally and in CI without manual Docker compose. When you need explicit containers, use Testcontainers with Quarkus configuration (`%test.quarkus.datasource.*` or `QuarkusTestResource`). Black-box tests against a running app use `@QuarkusIntegrationTest`. Keep tests independent and use `@Transactional` rollback on persistence tests when appropriate.
-
-        ### Implementing These Principles
-
-        These guidelines are built upon the following core principles:
-
-        1. **Scope**: Assert boundaries — HTTP status, repository round-trips, serialization — not every branch already covered by unit tests (`@421-frameworks-quarkus-testing-unit-tests`).
-        2. **Dev Services**: Enable Dev Services for PostgreSQL, Kafka, etc., before adding bespoke container code.
-        3. **Testcontainers**: Use `@QuarkusTestResource(LifecycleManager.class)` or `QuarkusTestProfile` when you need pinned images or multi-container topologies.
-        4. **HTTP**: Use REST Assured with `@TestHTTPResource` URLs or injected `URL` for the Quarkus test endpoint.
-        5. **Persistence**: Use `@Transactional` on test methods with rollback OR clean fixtures explicitly — avoid order-dependent tests.
-        6. **Build**: Name classes `*IT` and run with Failsafe; keep Surefire for fast unit tests.
-        7. **Native**: Use `@DisabledOnNativeImage` or separate profiles when behavior differs in native mode.
-
-        8. **Test data isolation strategies**: Use `@TestTransaction` for automatic rollback on Panache/Hibernate tests, or explicit `@BeforeEach` cleanup for JDBC repositories — never rely on test execution order or shared mutable state between tests.
-
-        **Cross-references**: Unit tests — `@421-frameworks-quarkus-testing-unit-tests`. Framework-agnostic integration — `@132-java-testing-integration-testing`. Acceptance — `@423-frameworks-quarkus-testing-acceptance-tests`.
     </goal>
 
     <constraints>

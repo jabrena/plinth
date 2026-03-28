@@ -1,6 +1,6 @@
 ---
 name: 512-frameworks-micronaut-data
-description: Use when you need data access with Micronaut Data — including JDBC (and JPA where applicable) repositories, @MappedEntity design, CrudRepository and custom @Query methods, pagination with Pageable, transactions with @Transactional, immutable-friendly entities and DTO projections, optimistic locking, compile-time query validation, and test setup with @MicronautTest and TestPropertyProvider. Replaces a split JDBC + Spring Data JDBC style with a single Micronaut Data prompt (no separate raw JDBC rule in the 501 index).
+description: Use when you need data access with Micronaut Data — including JDBC (and JPA where applicable) repositories, @MappedEntity design, CrudRepository and custom @Query methods, pagination with Pageable, transactions with @Transactional, immutable-friendly entities and DTO projections, optimistic locking, compile-time query validation, and test setup with @MicronautTest and TestPropertyProvider. For hand-written java.sql repositories and maximum SQL control, use `@511-frameworks-micronaut-jdbc`.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -14,24 +14,7 @@ You are a Senior software engineer with extensive experience in Micronaut Data, 
 
 ## Goal
 
-Micronaut Data generates repository implementations at compile time: prefer explicit `@MappedEntity` models, `CrudRepository` / `PageableRepository` interfaces, and parameterized `@Query` for non-derivable SQL. Keep aggregates bounded, declare transactions at the service layer with `io.micronaut.transaction.annotation.Transactional`, and avoid N+1 retrieval patterns by using fetch joins or tailored queries. This prompt covers Micronaut Data for relational access (JDBC or JPA backends depending on project dependencies); use parameterized queries only — never concatenate untrusted input into SQL.
-
-### Implementing These Principles
-
-These guidelines are built upon the following core principles:
-
-1. **Explicit mapping**: Use `@MappedEntity` with clear table/column naming; use `@Id` and `@GeneratedValue` appropriately for your backend.
-2. **Repository interfaces**: Extend `CrudRepository<E, ID>` or add pagination with `PageableRepository`; add derived query methods or `@Query` with named parameters.
-3. **Transactions**: Place `@Transactional` on `@Singleton` application services; use `readOnly = true` for queries when supported.
-4. **Immutability**: Prefer records or immutable types when your Micronaut Data version and mapping style support them; otherwise keep entities small and side-effect free outside persistence.
-5. **Pagination**: Return `Page<E>` for large tables; cap `Pageable` size at the service or controller boundary.
-6. **Projections**: Use interface or DTO projections for read models instead of over-fetching full entities when lists are hot paths.
-7. **Concurrency**: Use `@Version` for optimistic locking where updates collide.
-8. **Safety**: Always bind parameters in `@Query`; validate dynamic sort keys against an allow-list.
-9. **Testing**: Use `@MicronautTest` with `TestPropertyProvider` and Testcontainers for real database integration tests.
-
-**Cross-references**: Micronaut core — `@501-frameworks-micronaut-core`. REST boundaries — `@502-frameworks-micronaut-rest`. Integration tests — `@522-frameworks-micronaut-testing-integration-tests`. Secure SQL patterns — `@124-java-secure-coding`.
-
+Micronaut Data generates repository implementations at compile time: prefer explicit `@MappedEntity` models, `CrudRepository` / `PageableRepository` interfaces, and parameterized `@Query` for non-derivable SQL. Keep aggregates bounded, declare transactions at the service layer with `io.micronaut.transaction.annotation.Transactional`, and avoid N+1 retrieval patterns by using fetch joins or tailored queries. This prompt covers Micronaut Data for relational access (JDBC or JPA backends depending on project dependencies); use parameterized queries only — never concatenate untrusted input into SQL. For raw `DataSource` / `PreparedStatement` code without generated repositories, apply `@511-frameworks-micronaut-jdbc`.
 
 ## Constraints
 
@@ -131,8 +114,8 @@ public interface CustomerRepository extends CrudRepository<Customer, Long> {
 
 ### Example 3: Custom @Query
 
-Title: Named parameters, no string concatenation
-Description: Use `@Query` for SQL or JPQL (depending on dialect) with `:param` binding.
+Title: Native SQL first; named parameters, no string concatenation
+Description: Write **`@Query` strings as native SQL**: use real table and column names (and dialect SQL the project explicitly supports). Bind values with `:param` — never concatenate untrusted input. **Do not default to JPQL** (Hibernate Query Language / entity-path queries): JPQL belongs only on JPA-backed Micronaut Data when you truly need entity navigation and cannot express the statement in native SQL. For JDBC repositories and for most custom reads, native SQL matches what the database runs, aligns with the schema, and avoids mixing persistence dialects.
 
 **Good example:**
 

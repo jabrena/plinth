@@ -16,23 +16,6 @@ You are a Senior software engineer with extensive experience in REST API design 
 
 Well-designed REST APIs use HTTP semantics predictably: resources as nouns, methods for actions, status codes for outcomes, and stable contracts via DTOs and versioning. Production APIs centralize errors (structured JSON or RFC 7807 Problem Details), document behavior for consumers, and apply authentication, authorization, and input validation by default.
 
-### Implementing These Principles
-
-These guidelines are built upon the following core principles:
-
-1. **Semantic consistency**: Align `GET`/`POST`/`PUT`/`PATCH`/`DELETE` with safe vs unsafe operations and return status codes that match the real outcome.
-2. **Clear contracts**: Expose lean request/response DTOs, version APIs explicitly, and avoid leaking domain entities or stack traces to clients.
-3. **Security by design**: Terminate TLS appropriately, authenticate and authorize requests, validate input, and avoid embedding secrets or raw SQL in controllers.
-4. **Evolution without surprise**: Choose a versioning strategy (URI, header, or media type) and apply it consistently so breaking changes remain manageable.
-5. **Bounded collections**: Prefer `Page`/`Pageable` (or explicit cursor/limit with caps) for list endpoints; use stable, documented sort keys; avoid unbounded JSON arrays as the default contract.
-6. **Validation at the boundary**: Apply Bean Validation to request DTOs and `@Valid`/`@Validated` on controller inputs so malformed payloads fail fast with **400** and field-level errors.
-7. **Safe retries for writes**: Support `Idempotency-Key` (or domain-level deduplication) for `POST` creates; use **409 Conflict** when a request collides with existing state; document idempotent vs non-idempotent operations in OpenAPI.
-8. **Optimistic concurrency**: Use `ETag` with `If-Match`/`If-None-Match` (or version fields) for updates; return **412 Precondition Failed** or **304 Not Modified** appropriately; consider `ShallowEtagHeaderFilter` or explicit ETags for cacheable reads.
-9. **Caching discipline**: Set `Cache-Control`/`ETag`/`Last-Modified` deliberately; do not mark personalized or authenticated responses as publicly cacheable by mistake.
-10. **Deprecation signals**: Communicate API sunset with standard headers (`Deprecation`, `Sunset`) and `Link` (`rel="successor-version"`) so clients can migrate before hard removal—aligned with explicit versioning.
-11. **Content negotiation**: Default to JSON with explicit `produces`/`consumes`; add vendor media types only when they carry real meaning (often alongside version) and keep them consistent across the surface area.
-12. **Time and locale in contracts**: Prefer ISO-8601 instants with offset (`OffsetDateTime`, `Instant`) in JSON; use `Accept-Language` for localized problem details only with stable machine codes and consistent semantics across locales.
-
 ## Constraints
 
 Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
@@ -55,16 +38,15 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 5: API versioning
 - Example 6: Graceful, structured error responses
 - Example 7: API documentation
-- Example 8: Controller advice and ProblemDetail
-- Example 9: RFC 7807 Problem Details quality
-- Example 10: Pagination, sorting, and filtering
-- Example 11: Validation at the boundary
-- Example 12: Idempotency and safe retries
-- Example 13: Concurrency control
-- Example 14: Caching semantics
-- Example 15: Deprecation and sunset
-- Example 16: Content negotiation
-- Example 17: Time and locale in contracts
+- Example 8: RFC 7807 Problem Details quality
+- Example 9: Pagination, sorting, and filtering
+- Example 10: Validation at the boundary
+- Example 11: Idempotency and safe retries
+- Example 12: Concurrency control
+- Example 13: Caching semantics
+- Example 14: Deprecation and sunset
+- Example 15: Content negotiation
+- Example 16: Time and locale in contracts
 
 ### Example 1: Use HTTP methods semantically
 
@@ -474,121 +456,7 @@ class LegacyThingController {
 }
 ```
 
-### Example 8: Controller advice and ProblemDetail
-
-Title: Centralize exception mapping; keep controllers thin
-Description: Use `@ControllerAdvice` to map exceptions to HTTP responses once. Prefer Spring’s `ProblemDetail` (RFC 7807) for a consistent shape: type, title, status, detail, instance, and optional extension properties like `errorId` for correlation. **The `Exception.class` handler is the last frontier**: place it at the end of your `@ControllerAdvice` as a catch-all safety net. Its sole purpose is to ensure that any throwable not matched by a more specific handler still returns an opaque `500 Internal Server Error`—with a correlation `errorId` and a full server-side log—without leaking stack traces or internal details to the caller. **Do not abuse the last frontier by routing domain exceptions through it.** Every named domain exception (`OrderNotFoundException`, `PaymentDeclinedException`, `InsufficientStockException`, …) must have its **own** `@ExceptionHandler` method with the precise HTTP status and `ProblemDetail` type that reflects its meaning. Funneling domain exceptions into the generic `Exception.class` handler causes three problems: - The caller always receives `500` instead of the semantically correct status (`404`, `409`, `422`, …). - The `ProblemDetail` type URI is generic and useless for automated error handling. - The intent of the exception is hidden, making debugging and API contracts harder to reason about.
-
-**Good example:**
-
-```java
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ProblemDetail;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.*;
-import jakarta.servlet.http.HttpServletRequest;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import java.net.URI;
-import java.time.Instant;
-import java.util.List;
-import java.util.UUID;
-
-@ControllerAdvice
-class GlobalExceptionHandler {
-
-    private static final Logger log = LoggerFactory.getLogger(GlobalExceptionHandler.class);
-
-    // Each domain exception gets its own handler with the correct HTTP status and problem type.
-    @ExceptionHandler(IllegalArgumentException.class)
-    ResponseEntity<ProblemDetail> handleIllegalArgument(IllegalArgumentException ex, HttpServletRequest request) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, ex.getMessage());
-        pd.setType(URI.create("https://example.com/problems/invalid-argument"));
-        pd.setTitle("Invalid Argument");
-        pd.setInstance(URI.create(request.getRequestURI()));
-        pd.setProperty("timestamp", Instant.now());
-        return ResponseEntity.badRequest().body(pd);
-    }
-
-    @ExceptionHandler(EntityNotFoundException.class)
-    ResponseEntity<ProblemDetail> handleNotFound(EntityNotFoundException ex, HttpServletRequest request) {
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
-        pd.setType(URI.create("https://example.com/problems/entity-not-found"));
-        pd.setTitle("Entity Not Found");
-        pd.setInstance(URI.create(request.getRequestURI()));
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(pd);
-    }
-
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    ResponseEntity<ProblemDetail> handleValidation(MethodArgumentNotValidException ex, HttpServletRequest request) {
-        List<String> errors = ex.getBindingResult().getFieldErrors().stream()
-            .map(e -> e.getField() + ": " + e.getDefaultMessage())
-            .toList();
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST, "Validation failed");
-        pd.setType(URI.create("https://example.com/problems/validation-error"));
-        pd.setProperty("violations", errors);
-        pd.setInstance(URI.create(request.getRequestURI()));
-        return ResponseEntity.badRequest().body(pd);
-    }
-
-    // Last frontier: catches anything not handled above.
-    // Keep this handler intentionally thin — log with a correlation ID and return an opaque 500.
-    // Never add domain exceptions here; give them their own @ExceptionHandler instead.
-    @ExceptionHandler(Exception.class)
-    ResponseEntity<ProblemDetail> handleGeneric(Exception ex, HttpServletRequest request) {
-        String errorId = UUID.randomUUID().toString();
-        log.error("Unhandled error {}", errorId, ex);
-        ProblemDetail pd = ProblemDetail.forStatusAndDetail(
-            HttpStatus.INTERNAL_SERVER_ERROR, "An unexpected error occurred");
-        pd.setType(URI.create("https://example.com/problems/internal-error"));
-        pd.setProperty("errorId", errorId);
-        pd.setInstance(URI.create(request.getRequestURI()));
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(pd);
-    }
-}
-
-class EntityNotFoundException extends RuntimeException {
-    EntityNotFoundException(String m) { super(m); }
-}
-```
-
-**Bad example:**
-
-```java
-// BAD: per-controller try/catch — exception handling duplicated across every endpoint
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-@RestController
-class BadUserController {
-
-    @GetMapping("/users/{id}")
-    ResponseEntity<?> getUser(@PathVariable String id) {
-        try {
-            if ("invalid".equals(id)) {
-                throw new IllegalArgumentException("Invalid user ID");
-            }
-            if ("notfound".equals(id)) {
-                throw new EntityNotFoundException("User not found");
-            }
-            return ResponseEntity.ok(new UserDTO());
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.badRequest().body("Error: " + e.getMessage());
-        } catch (EntityNotFoundException e) {
-            return ResponseEntity.notFound().build();
-        } catch (Exception e) {
-            return ResponseEntity.status(500).body("Server error: " + e);
-        }
-    }
-}
-class UserDTO { }
-class EntityNotFoundException extends RuntimeException {
-    EntityNotFoundException(String m) { super(m); }
-}
-```
-
-### Example 9: RFC 7807 Problem Details quality
+### Example 8: RFC 7807 Problem Details quality
 
 Title: Consistent problem bodies; never leak stack traces to clients
 Description: When using Problem Details, populate `type`, `title`, `status`, `detail`, and `instance` predictably. Log exceptions with correlation IDs server-side; do not attach stack traces or arbitrary `Map` shapes that change per endpoint.
@@ -688,7 +556,7 @@ class EntityNotFoundException extends RuntimeException {
 }
 ```
 
-### Example 10: Pagination, sorting, and filtering
+### Example 9: Pagination, sorting, and filtering
 
 Title: Bounded pages, stable sorts, optional Link headers (RFC 8288)
 Description: Exposing “all rows” as a single JSON array does not scale and becomes a brittle contract. Prefer Spring Data’s `Page`/`Pageable` (with `spring-data-commons` / `PageableHandlerMethodArgumentResolver`) or explicit `limit`/`cursor` parameters with **server-enforced maximums**. Whitelist sort properties to avoid sort-by-arbitrary-field injection. Optionally emit `Link` headers (`rel="next"` / `rel="prev"`) for discoverable navigation (RFC 8288).
@@ -752,7 +620,7 @@ class UnboundedProductController {
 class ProductDTO { }
 ```
 
-### Example 11: Validation at the boundary
+### Example 10: Validation at the boundary
 
 Title: `@Valid` / `@Validated` on inputs; Bean Validation on DTOs
 Description: Validate request bodies at the controller boundary with Jakarta Bean Validation annotations on DTOs and `@Valid` (or `@Validated` with groups) on parameters. Pair this with a `@ControllerAdvice` handler for `MethodArgumentNotValidException` so clients receive **400** with field-level violations instead of inconsistent ad hoc strings.
@@ -810,7 +678,7 @@ class UserCreateRequest {
 class UserDTO { }
 ```
 
-### Example 12: Idempotency and safe retries
+### Example 11: Idempotency and safe retries
 
 Title: `Idempotency-Key`, duplicate detection, **409 Conflict**, OpenAPI clarity
 Description: Network clients retry `POST`; without idempotency keys or server-side deduplication, creates can duplicate. Accept an `Idempotency-Key` header (or equivalent) and return the same response when the key replays a completed operation. Use **409 Conflict** when the request conflicts with current resource state (e.g., duplicate business key). Document which operations are idempotent and how retries behave in OpenAPI descriptions and parameters.
@@ -875,7 +743,7 @@ class PaymentCreateRequest { }
 class PaymentDTO { }
 ```
 
-### Example 13: Concurrency control
+### Example 12: Concurrency control
 
 Title: ETag, If-Match / If-None-Match, **412** / **304**
 Description: Prevent lost updates with optimistic concurrency: expose a strong or weak `ETag` (or version) on reads; require `If-Match` on mutating writes and return **412 Precondition Failed** when the version does not match. For reads, `If-None-Match` can yield **304 Not Modified**. Spring can add shallow ETags for some responses via `ShallowEtagHeaderFilter`, or you can set `eTag(...)` explicitly on `ResponseEntity`.
@@ -935,7 +803,7 @@ class BlindOverwriteController {
 class ItemDTO { }
 ```
 
-### Example 14: Caching semantics
+### Example 13: Caching semantics
 
 Title: `Cache-Control`, ETag/Last-Modified, private vs public data
 Description: Use `CacheControl` (or raw `Cache-Control` values) so intermediaries and browsers behave predictably: public, max-age for anonymous catalog data; `no-store` / `private` for tokens, sessions, or personalized “/me” payloads. Pair with `ETag`/`Last-Modified` for conditional GETs where caching helps. Mis-caching authenticated responses can leak data across users.
@@ -991,7 +859,7 @@ class RiskyCachingController {
 class UserDTO { }
 ```
 
-### Example 15: Deprecation and sunset
+### Example 14: Deprecation and sunset
 
 Title: `Deprecation`, `Sunset`, `Link` (`rel="successor-version"`)
 Description: When an endpoint or version is headed for removal, advertise it with RFC-style headers so automation and humans can plan: `Deprecation` (`true` for simplicity, or a timestamp in the form `@1735689599`), `Sunset` with an HTTP-date for expected shutdown, and `Link` to the replacement (`rel="successor-version"`). Pair this with your URI or media-type versioning strategy; document the timeline in OpenAPI as well. In production, prefer emitting these headers uniformly from a `HandlerInterceptor` or `Filter` rather than repeating them on every controller method.
@@ -1039,7 +907,7 @@ class SilentBreakController {
 class ProductDTO { }
 ```
 
-### Example 16: Content negotiation
+### Example 15: Content negotiation
 
 Title: `produces` / `consumes`, JSON default, vendor media types
 Description: Declare what controllers emit and accept: default to `application/json` unless you truly need more. Vendor media types (e.g. `application/vnd.example.v1+json`) can align with versioning—then require matching `Accept`/`Content-Type` and keep the same convention everywhere. Avoid ambiguous `*/*` handlers unless you intentionally support multiple representations with clear rules.
@@ -1098,7 +966,7 @@ class LooseContentController {
 }
 ```
 
-### Example 17: Time and locale in contracts
+### Example 16: Time and locale in contracts
 
 Title: ISO-8601 with offset; optional `Accept-Language` for errors
 Description: Model timestamps as `Instant` or `OffsetDateTime` (ISO-8601 with offset) so clients interpret wall-clock unambiguously—avoid legacy `Date` and ambiguous zone-less `LocalDateTime` in public JSON unless the domain is strictly calendar-local. For localized `ProblemDetail` text, honor `Accept-Language` only if you keep stable problem `type` URIs/codes identical across locales and avoid leaking sensitive details through translated messages.

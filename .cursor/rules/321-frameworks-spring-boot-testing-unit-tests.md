@@ -16,20 +16,6 @@ You are a Senior software engineer with extensive experience in Spring Boot test
 
 Spring Boot unit tests mix fast, context-free tests for domain and application services with narrow slice tests for web and JSON. Use Mockito (`@ExtendWith(MockitoExtension.class)`, `@Mock`, `@InjectMocks`) for beans that do not need Spring, and MVC/JSON slices (`@WebMvcTest`, `@JsonTest`) with `@MockitoBean` when you need MockMvc or JacksonTester. Prefer constructor-injected beans and Java records so tests stay simple and readable.
 
-### Implementing These Principles
-
-These guidelines are built upon the following core principles:
-
-1. **Pure unit tests first**: Exercise `@Service` and `@Component` types with Mockito only—no `ApplicationContext`—for speed and isolation.
-2. **Slices over full boot**: Use `@WebMvcTest` for controllers and `@JsonTest` for Jackson mapping; avoid `@SpringBootTest` when a slice suffices.
-3. **Mock boundaries**: Replace collaborators with `@Mock` or `@MockitoBean` so each test targets one unit or layer.
-4. **Deterministic test config**: Use `@ActiveProfiles("test")`, `@TestConfiguration`, and `@Primary` beans (e.g., fixed `Clock`) instead of flaky time or environment coupling.
-5. **Parameterized tests**: Prefer `@ParameterizedTest` with `@CsvSource` or `@MethodSource` over copy-pasted test methods covering the same logic with different inputs.
-6. **Modern mocking API**: Use `@MockitoBean` / `@MockitoSpyBean` in Spring Boot 4.0.x; `@MockBean` / `@SpyBean` are deprecated and removed.
-7. **Records and correct JSON assertions**: Use Java records for domain objects and `extractingJsonPathNumberValue`/`extractingJsonPathStringValue` to assert actual JSON values (not just existence).
-
-**Cross-references**: Framework-agnostic unit testing — `@131-java-testing-unit-testing`. Integration tests and Testcontainers — `@322-frameworks-spring-boot-testing-integration-tests`. Acceptance tests from Gherkin — `@323-frameworks-spring-boot-testing-acceptance-tests`. Related slices: `@WebFluxTest` (WebFlux), `@RestClientTest` (REST clients), `@TestPropertySource` (property overrides).
-
 ## Constraints
 
 Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.

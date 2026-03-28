@@ -50,6 +50,7 @@
   {"name": "423-frameworks-quarkus-testing-acceptance-tests"},
   {"name": "501-frameworks-micronaut-core"},
   {"name": "502-frameworks-micronaut-rest"},
+  {"name": "511-frameworks-micronaut-jdbc"},
   {"name": "512-frameworks-micronaut-data"},
   {"name": "521-frameworks-micronaut-testing-unit-tests"},
   {"name": "522-frameworks-micronaut-testing-integration-tests"},

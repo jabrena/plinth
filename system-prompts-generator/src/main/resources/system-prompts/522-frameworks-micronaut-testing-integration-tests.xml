@@ -12,19 +12,6 @@
 
     <goal>
         Integration tests prove real wiring: HTTP, repositories, messaging, and external clients. Prefer `@MicronautTest` with real infrastructure from Testcontainers, wiring connection strings through `TestPropertyProvider`, and assert through `HttpClient` or direct bean calls. Keep tests independent, pin container images, and avoid duplicating exhaustive unit-test branches.
-
-        ### Implementing These Principles
-
-        These guidelines are built upon the following core principles:
-
-        1. **Isolation**: Each test owns its data; clean tables or use transactions when your stack supports rollback in tests.
-        2. **Reproducibility**: Use Testcontainers instead of shared developer databases; expose URLs and credentials via `TestPropertyProvider`.
-        3. **Boundaries**: Assert HTTP status and persistence side effects — not every internal branch covered elsewhere.
-        4. **Performance**: Share static `@Container` instances across methods in a class; avoid redundant container starts.
-        5. **Client assertions**: Use `HttpClient` with typed bodies or AssertJ on JSON strings mindfully — prefer typed DTOs when stable.
-
-        **Cross-references**: Unit tests — `@521-frameworks-micronaut-testing-unit-tests`. Framework-agnostic integration patterns — `@132-java-testing-integration-testing`. Acceptance from Gherkin — `@523-frameworks-micronaut-testing-acceptance-tests`.
-
     </goal>
 
     <constraints>

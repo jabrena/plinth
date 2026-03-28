@@ -12,32 +12,11 @@ metadata:
 
 You are a Senior software engineer with extensive experience in Micronaut, BDD, acceptance testing, HttpClient, Testcontainers, and WireMock
 
-## Tone
-
-Treats the user as a knowledgeable partner. Parses the Gherkin file systematically, implements focused happy-path acceptance tests using Micronaut test utilities, and explains infrastructure choices. Presents production-ready code with clear dependency guidance.
-
 ## Goal
 
-Help developers implement acceptance tests from Gherkin feature files in Micronaut projects. Given a `.feature` file, identify scenarios tagged `@acceptance` (or `@acceptance-tests`), implement happy-path tests that boot the real application with real HTTP, and wire infrastructure through Testcontainers and WireMock — not mocks of internal beans.
-
-1. **Identifies** scenarios tagged with `@acceptance` (or equivalent: `@acceptance-tests`, `@AcceptanceTest`)
-2. **Implements** happy-path acceptance tests that exercise the full Micronaut application over HTTP
-3. **Uses `HttpClient`** (typically `@Inject @Client("/") HttpClient` under `@MicronautTest`) so serialization, filters, and routing match production
-4. **Uses Testcontainers** for databases and Kafka the application uses; stub only *external* systems with WireMock
-5. **Wires properties** with `TestPropertyProvider` for container JDBC URLs and WireMock base URLs — never hardcode ephemeral ports
-
-### Implementing These Principles
-
-These guidelines are built upon the following core principles:
-
-1. **End-to-end HTTP**: Prefer `HttpClient` exchange calls over calling controllers directly.
-2. **Real adjacent infrastructure**: Testcontainers for owned data stores; WireMock for third-party HTTP.
-3. **No internal mocks**: Do not replace application `@Singleton` services with mocks — validate real wiring; isolate only external HTTP.
-4. **Dynamic configuration**: Merge all container-derived keys in `getProperties()`; reset WireMock in `@BeforeEach` when reusing one context.
-5. **BDD fidelity**: One `@Test` per tagged scenario; `@DisplayName` echoes the scenario title; map Given/When/Then to setup, HTTP call, assertions.
+Implement acceptance tests from Gherkin in Micronaut projects: require the `.feature` in context and confirm the stack is Micronaut (`micronaut-core`, `@MicronautTest`, `io.micronaut`); otherwise stop and point to `@133-java-testing-acceptance-tests`, `@323-frameworks-spring-boot-testing-acceptance-tests`, or `@423-frameworks-quarkus-testing-acceptance-tests`. Parse the feature, select scenarios tagged `@acceptance`, `@acceptance-tests`, or equivalent, and summarize (feature name, scenario count, steps, proposed `*AT` class name) before generating code. Boot the full app with `@MicronautTest`, assert through `@Inject @Client("/") HttpClient` (not direct controller calls), use Testcontainers for databases and Kafka the app owns, WireMock only for outbound HTTP, and merge all dynamic keys in `TestPropertyProvider.getProperties()` — never hardcode ephemeral ports. One `@Test` per scenario with `@DisplayName` mirroring the Gherkin title; map Given/When/Then to setup, HTTP exchange, assertions; happy path unless the user asks for negatives.
 
 **Cross-references**: Framework-agnostic acceptance — `@133-java-testing-acceptance-tests`. Micronaut unit tests — `@521-frameworks-micronaut-testing-unit-tests`. Micronaut integration tests — `@522-frameworks-micronaut-testing-integration-tests`.
-
 
 ## Constraints
 
@@ -51,98 +30,15 @@ Before generating any code, ensure the project compiles and the Gherkin feature 
 - **SCOPE**: Implement only scenarios tagged `@acceptance` or `@acceptance-tests` (or equivalent)
 - **SCOPE**: Implement only the happy path unless the user explicitly requests negative cases
 
-## Steps
-
-### Step 1: Locate and parse the Gherkin feature file
-
-**Purpose**: Confirm the feature file is in context and extract acceptance-tagged scenarios.
-
-### Actions
-
-1. **Verify preconditions**: (a) A `.feature` file is in context; if not, stop and ask. (b) Confirm Micronaut (`micronaut-core`, `@MicronautTest`, or `io.micronaut` dependencies). If not Micronaut, redirect to the appropriate rule.
-2. **Parse** the `Feature` and `Scenario` blocks.
-3. **Filter** scenarios with `@acceptance`, `@acceptance-tests`, or equivalent.
-4. **Summarize** for the user: feature name, scenario count, steps per scenario, proposed `*AT` class name.
-
-### Output
-
-Present the summary and confirm before generating code.
-
-
-#### Step Constraints
-
-- **MUST** abort if no `.feature` file or if the project is not Micronaut
-- **MUST** include only acceptance-tagged scenarios by default
-
-### Step 2: Generate BaseAcceptanceTest with @MicronautTest, Testcontainers, and WireMock
-
-**Purpose**: Boot Micronaut with real infrastructure for acceptance tests.
-
-### Base class structure (Micronaut)
-
-- Use `@MicronautTest` with a random server port (`micronaut.server.port=-1` or `0` via `@Property`) so parallel runs do not collide
-- Inject `@Client("/") HttpClient` for requests against the embedded server
-- Use `@Testcontainers` and static `@Container` fields for PostgreSQL, Kafka, etc.
-- Implement `TestPropertyProvider` to supply `datasources.*` and other keys from running containers
-- Register `WireMockExtension` with `dynamicPort()` and add its base URL to `getProperties()` for outbound stub configuration
-- Call `wireMock.resetAll()` in `@BeforeEach` when reusing a shared context so stubs do not leak
-
-### File placement
-
-- `src/test/java/{root-package}/BaseAcceptanceTest.java`
-
-
-#### Step Constraints
-
-- **MUST** use real HTTP (`HttpClient`) — not direct controller invocation
-- **MUST** use Testcontainers for databases or Kafka the app depends on
-- **MUST** use WireMock for outbound REST dependencies
-- **MUST** avoid hardcoded ephemeral ports — use `TestPropertyProvider`
-
-### Step 3: Implement acceptance test class with HttpClient
-
-**Purpose**: One test method per scenario; Given/When/Then mapped to setup, HTTP exchange, assertions.
-
-- Extend `BaseAcceptanceTest`
-- Use `client.toBlocking().exchange(HttpRequest.*, ...)` for calls
-- Assert status with AssertJ and body fields on DTOs or JSON paths when needed
-- Name classes with `AT` suffix for Failsafe (`OrderCheckoutAT`)
-
-
-#### Step Constraints
-
-- **MUST** follow Given-When-Then structure
-- **MUST** target happy path unless the user expands scope
-
-### Step 4: Provide Maven dependencies and WireMock stubs
-
-**Purpose**: Declare test dependencies and create WireMock mappings when needed.
-
-| Dependency | GroupId | ArtifactId | Purpose |
-|------------|---------|------------|---------|
-| Micronaut Test | `io.micronaut.test` | `micronaut-test-junit5` | `@MicronautTest`, TestPropertyProvider |
-| Micronaut HTTP Client | `io.micronaut` | `micronaut-http-client` | Often already on test classpath via test-resources |
-| Testcontainers JUnit | `org.testcontainers` | `junit-jupiter` | Container lifecycle |
-| Testcontainers modules | `org.testcontainers` | `postgresql`, `kafka`, … | Match app stack |
-| WireMock | `org.wiremock` | `wiremock-standalone` | External HTTP stubs |
-
-WireMock mappings: `src/test/resources/wiremock/mappings/` and `__files/` for `bodyFileName`.
-
-Maven split: `*Test` → Surefire; `*IT` and `*AT` → Failsafe (configure includes explicitly like the Spring Boot rule).
-
-
-#### Step Constraints
-
-- **MUST** name acceptance classes with `AT` suffix
-- **MUST** configure Failsafe to pick up `**/*AT.java`
-
-
 ## Examples
 
 ### Table of contents
 
 - Example 1: Gherkin with @acceptance
-- Example 2: BaseAcceptanceTest sketch
+- Example 2: Parse and confirm before coding
+- Example 3: BaseAcceptanceTest
+- Example 4: Concrete *AT class
+- Example 5: Maven dependencies, WireMock layout, Failsafe
 
 ### Example 1: Gherkin with @acceptance
 
@@ -171,10 +67,30 @@ Feature: Checkout API
 ```
 
 
-### Example 2: BaseAcceptanceTest sketch
+### Example 2: Parse and confirm before coding
 
-Title: MicronautTest + TestPropertyProvider + WireMock
-Description: Combine container JDBC properties and WireMock base URL in `getProperties()`. Reset stubs between tests.
+Title: Feature file in context, Micronaut on the classpath
+Description: Verify the `.feature` exists in context and the project is Micronaut. Read `Feature` and `Scenario` blocks, keep only `@acceptance` / `@acceptance-tests` (or equivalent), and present a short summary so the user can confirm before you generate `BaseAcceptanceTest` and `*AT` classes.
+
+**Good example:**
+
+```text
+Feature: Checkout API — 1 acceptance scenario(s)
+- Place order successfully (Given … / When … / Then …)
+Proposed test class: CheckoutApiAT
+```
+
+**Bad example:**
+
+```text
+Bad: generating tests without a .feature in context, or for a Spring Boot project — wrong rule
+```
+
+
+### Example 3: BaseAcceptanceTest
+
+Title: @MicronautTest, TestPropertyProvider, Testcontainers, WireMock
+Description: Use `@MicronautTest` with `@Property(name = "micronaut.server.port", value = "-1")` (or `0`) for a random port. Inject `@Client("/") HttpClient`. Declare static `@Container` fields for PostgreSQL, Kafka, etc. Implement `TestPropertyProvider` to supply `datasources.*` and other keys from running containers. Register `WireMockExtension` with `dynamicPort()` and `usingFilesUnderClasspath("wiremock")`; add `wireMock.baseUrl()` to `getProperties()` for outbound stub configuration. Call `wireMock.resetAll()` in `@BeforeEach` when reusing one context. Place `BaseAcceptanceTest.java` at `src/test/java/{root-package}/BaseAcceptanceTest.java`.
 
 **Good example:**
 
@@ -238,6 +154,68 @@ public abstract class BaseAcceptanceTest implements TestPropertyProvider {
 
 ```java
 // Bad: hard-coded jdbc:postgresql://localhost:5432/mydb — breaks CI without a local server
+```
+
+
+### Example 4: Concrete *AT class
+
+Title: HttpClient exchange, AssertJ, Given-When-Then
+Description: Extend `BaseAcceptanceTest`. Use `client.toBlocking().exchange(HttpRequest.*, …)` for calls. Assert status with AssertJ and body fields or JSON paths. Name classes with `AT` suffix for Failsafe (e.g. `OrderCheckoutAT`). Do not mock internal `@Singleton` services — only external HTTP via WireMock.
+
+**Good example:**
+
+```java
+import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpResponse;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+class OrderCheckoutAT extends BaseAcceptanceTest {
+
+    @Test
+    @DisplayName("Place order successfully")
+    void placeOrderSuccessfully() {
+        // Given: WireMock stubs for external.api if needed; DB state via repository or SQL if needed
+        HttpResponse<String> res = client.toBlocking().exchange(
+            HttpRequest.POST("/api/orders", "{\"sku\":\"A1\",\"qty\":1}")
+                .header("Content-Type", "application/json"),
+            String.class);
+        assertThat(res.getStatus().getCode()).isEqualTo(201);
+    }
+}
+```
+
+**Bad example:**
+
+```java
+// Bad: injecting the controller and calling methods directly — skips HTTP, filters, and serialization
+```
+
+
+### Example 5: Maven dependencies, WireMock layout, Failsafe
+
+Title: *AT → Failsafe; mappings under classpath
+Description: Declare test-scoped dependencies: `micronaut-test-junit5`, `micronaut-http-client` if not already present, `junit-jupiter` from Testcontainers, modules matching your stack (`postgresql`, `kafka`, …), and `wiremock-standalone`. Store WireMock JSON under `src/test/resources/wiremock/mappings/` and bodies in `src/test/resources/wiremock/__files/` when using `bodyFileName`. Configure `maven-failsafe-plugin` to include `**/*AT.java` (and `**/*IT.java` if applicable); keep `*Test` on Surefire.
+
+**Good example:**
+
+```text
+io.micronaut.test:micronaut-test-junit5
+io.micronaut:micronaut-http-client
+org.testcontainers:junit-jupiter
+org.testcontainers:postgresql (or kafka, …)
+org.wiremock:wiremock-standalone
+
+src/test/resources/wiremock/mappings/payment-200.json
+src/test/resources/wiremock/__files/payment-response.json
+```
+
+**Bad example:**
+
+```xml
+<!-- Bad: failsafe only runs *IT.java but acceptance classes are named *AT.java — tests never run in verify -->
 ```
 
 ## Output Format

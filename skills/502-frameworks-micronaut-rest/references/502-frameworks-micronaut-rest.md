@@ -16,25 +16,6 @@ You are a Senior software engineer with extensive experience in REST API design 
 
 Micronaut REST endpoints should honor HTTP semantics, return accurate status codes, keep controllers thin, and expose stable DTO contracts. Use Bean Validation on incoming DTOs, centralize error mapping (including structured problem JSON when the `micronaut-problem` module is present), document APIs with OpenAPI, and apply pagination, idempotency, and concurrency controls where writes and lists matter.
 
-### Implementing These Principles
-
-These guidelines are built upon the following core principles:
-
-1. **Semantic HTTP**: Map `GET`/`POST`/`PUT`/`PATCH`/`DELETE` to safe vs unsafe operations; never use `GET` for state changes.
-2. **Resource-oriented URLs**: Prefer noun-based paths (`/users`, `/users/{id}`) over RPC-style verb paths.
-3. **Status codes**: Use `200`/`201`/`204`/`400`/`404`/`409`/`412`/`422` deliberately — not `200` for every outcome.
-4. **DTO boundaries**: Do not leak persistence entities or arbitrary maps; version breaking changes explicitly.
-5. **Validation**: Annotate request DTOs with Bean Validation and mark controller parameters with `@Valid` (or equivalent) so bad input becomes **400** with field errors.
-6. **Errors**: Map domain failures to HTTP outcomes via `@Error` handlers or `ExceptionHandler` beans; prefer consistent JSON problem bodies for clients.
-7. **Lists**: Bound page size, document sort keys, and return page metadata instead of unbounded arrays by default.
-8. **Idempotency**: Support `Idempotency-Key` (or domain deduplication) for retried creates where appropriate.
-9. **Concurrency**: Use `ETag` / `If-Match` or version columns for optimistic locking on updates.
-10. **Caching**: Set `Cache-Control` and validators consciously for authenticated vs public resources.
-11. **Versioning**: Choose URI, header, or media-type strategy and apply it consistently; signal deprecation with headers when phasing endpoints out.
-12. **Time in JSON**: Prefer `Instant` or `OffsetDateTime` (ISO-8601) in API DTOs.
-
-**Cross-references**: Micronaut core — `@501-frameworks-micronaut-core`. Micronaut Data — `@512-frameworks-micronaut-data`. Integration tests — `@522-frameworks-micronaut-testing-integration-tests`.
-
 ## Constraints
 
 Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
@@ -50,16 +31,15 @@ Before applying any recommendations, ensure the project is in a valid state by r
 
 - Example 1: HTTP methods
 - Example 2: Validation at the boundary
-- Example 3: Centralized error mapping
-- Example 4: Pagination
-- Example 5: OpenAPI documentation
-- Example 6: Content negotiation
-- Example 7: Security at the boundary
-- Example 8: Idempotent creates
-- Example 9: Optimistic concurrency
-- Example 10: HTTP caching headers
-- Example 11: API versioning
-- Example 12: Time in DTOs
+- Example 3: Pagination
+- Example 4: OpenAPI documentation
+- Example 5: Content negotiation
+- Example 6: Security at the boundary
+- Example 7: Idempotent creates
+- Example 8: Optimistic concurrency
+- Example 9: HTTP caching headers
+- Example 10: API versioning
+- Example 11: Time in DTOs
 
 ### Example 1: HTTP methods
 
@@ -171,52 +151,7 @@ public class UserController {
 record UserCreateDto(String name, String email) {}
 ```
 
-### Example 3: Centralized error mapping
-
-Title: @Error or dedicated exception handlers
-Description: Map domain exceptions to HTTP responses in one place. When using `micronaut-problem`, emit RFC 7807-compatible JSON for machine-readable client handling.
-
-**Good example:**
-
-```java
-import io.micronaut.http.HttpRequest;
-import io.micronaut.http.HttpResponse;
-import io.micronaut.http.server.exceptions.ExceptionHandler;
-import jakarta.inject.Singleton;
-
-@Singleton
-public class NotFoundHandler implements ExceptionHandler<EntityNotFoundException, HttpResponse<?>> {
-
-    @Override
-    public HttpResponse<?> handle(HttpRequest request, EntityNotFoundException exception) {
-        return HttpResponse.notFound();
-    }
-}
-```
-
-**Bad example:**
-
-```java
-import io.micronaut.http.annotation.*;
-
-@Controller("/orders")
-public class OrderController {
-
-    @Get("/{id}")
-    public OrderDto get(String id) {
-        try {
-            return load(id);
-        } catch (EntityNotFoundException ex) {
-            // Bad: returning error payload with 200 OK
-            return new OrderDto("ERROR", null);
-        }
-    }
-
-    OrderDto load(String id) { throw new EntityNotFoundException(); }
-}
-```
-
-### Example 4: Pagination
+### Example 3: Pagination
 
 Title: Pageable request and bounded page size
 Description: Accept `page` and `size` (or cursor) query parameters with upper bounds. Return total or next-cursor metadata instead of dumping entire tables.
@@ -262,7 +197,7 @@ public class UserController {
 }
 ```
 
-### Example 5: OpenAPI documentation
+### Example 4: OpenAPI documentation
 
 Title: @Operation and @Tag on controllers
 Description: Document public endpoints with Swagger annotations so generated OpenAPI stays aligned with behavior.
@@ -302,7 +237,7 @@ public class UndocumentedController {
 }
 ```
 
-### Example 6: Content negotiation
+### Example 5: Content negotiation
 
 Title: Prefer JSON with explicit produces/consumes when needed
 Description: Default JSON is typical; when versioning via media types, keep `produces`/`consumes` consistent across the controller surface.
@@ -341,7 +276,7 @@ public class UserController {
 }
 ```
 
-### Example 7: Security at the boundary
+### Example 6: Security at the boundary
 
 Title: @Secured or security rules on routes
 Description: Declare authentication/authorization on sensitive routes. Do not rely on obscurity or client-side-only checks.
@@ -380,7 +315,7 @@ public class OpenAdminController {
 }
 ```
 
-### Example 8: Idempotent creates
+### Example 7: Idempotent creates
 
 Title: Idempotency-Key header handling
 Description: For POST that must survive retries, accept an idempotency key, persist it with the outcome, and return the same response for duplicates.
@@ -425,7 +360,7 @@ public class PaymentController {
 }
 ```
 
-### Example 9: Optimistic concurrency
+### Example 8: Optimistic concurrency
 
 Title: ETag and If-Match
 Description: Return weak or strong ETags for versioned resources; require `If-Match` on mutating requests when clients must detect stale writes.
@@ -472,7 +407,7 @@ public class ItemController {
 }
 ```
 
-### Example 10: HTTP caching headers
+### Example 9: HTTP caching headers
 
 Title: Cache-Control for public vs private responses
 Description: Set caching headers deliberately. Personalized or authorized responses usually need `private` or `no-store`.
@@ -513,7 +448,7 @@ public class ProfileController {
 }
 ```
 
-### Example 11: API versioning
+### Example 10: API versioning
 
 Title: Stable /v1 prefix
 Description: Place version in the path or negotiate via headers/media types consistently. Avoid silent breaking changes on unversioned URLs used in production.
@@ -532,7 +467,7 @@ GET /users/{id}   (breaking field renames without version)
 GET /getUserV2/{id} (inconsistent versioning style)
 ```
 
-### Example 12: Time in DTOs
+### Example 11: Time in DTOs
 
 Title: Instant or OffsetDateTime in JSON
 Description: Prefer ISO-8601-friendly types in API records; avoid `java.util.Date` in new contracts.

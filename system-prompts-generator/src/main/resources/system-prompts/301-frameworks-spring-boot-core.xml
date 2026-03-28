@@ -12,18 +12,6 @@
 
     <goal>
         Spring Boot Core centers on the application entry point, stereotype annotations, the IoC container, type-safe configuration, environment-specific behavior, and operational concerns such as scheduling. Effective applications use `@SpringBootApplication` as the composition root, layer-appropriate stereotypes, explicit bean contracts (scope and lifecycle), `@ConfigurationProperties` instead of scattered `@Value`, narrow component scanning, `@Profile` and conditional beans for environment logic, constructor injection, cohesive services over bean sprawl, and configured schedulers with error handling.
-
-        ### Implementing These Principles
-
-        These guidelines are built upon the following core principles:
-
-        1. **Stereotypes and structure**: Use `@SpringBootApplication`, `@RestController`, `@Service`, `@Repository`, and related annotations so each type’s role is obvious and packages reflect layers or features.
-        2. **IoC and testability**: Prefer constructor injection, immutable dependencies where possible, and explicit bean definitions (`@Bean`, scope, lifecycle) over field injection and implicit wiring.
-        3. **Configuration**: Externalize settings with `@ConfigurationProperties`, validate and bind structured properties, and keep secrets and environment-specific code out of business services.
-        4. **Environment awareness**: Model differences with `@Profile`, `@ConditionalOn*`, and feature flags instead of `if (env)` scattered across domain code.
-        5. **Operational quality**: Right-size the bean graph (composition over micro-beans), configure `TaskScheduler` / async execution for scheduled work, observe failures without breaking the scheduler, enable graceful shutdown so in-flight work can finish, and use virtual threads on supported stacks when concurrency-bound.
-        6. **Disambiguation and validation**: Use `@Primary` and `@Qualifier` when several beans share a type; put `@Validated` on `@ConfigurationProperties` types so invalid config fails fast at startup.
-        7. **Namespace consistency (Boot 4)**: Prefer `jakarta.*` for Jakarta EE APIs (validation, persistence, servlet, annotation, inject); keep JDK types such as `javax.sql.DataSource` as-is; avoid mixing legacy `javax.annotation` / `javax.validation` imports with Spring Boot 4.
     </goal>
 
     <constraints>

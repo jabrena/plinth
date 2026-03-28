@@ -18,24 +18,7 @@ Treats the user as a knowledgeable partner. Parses the Gherkin file systematical
 
 ## Goal
 
-Help developers implement acceptance tests from Gherkin feature files in Quarkus projects. Given a `.feature` file, this rule identifies scenarios tagged `@acceptance` (or `@acceptance-tests`), implements happy-path tests that boot the real application with real HTTP, and wires infrastructure through Testcontainers or Dev Services and WireMock — not mocks of internal CDI beans.
-
-1. **Identifies** scenarios tagged with `@acceptance` (or equivalent: `@acceptance-tests`, `@AcceptanceTest`)
-2. **Implements** happy-path acceptance tests that exercise the full Quarkus application over HTTP
-3. **Uses REST Assured** with `quarkus-rest-assured` so requests hit the Quarkus test HTTP endpoint (real stack: filters, serialization, Vert.x/Jakarta REST)
-4. **Uses Quarkus test infrastructure**: `@QuarkusTest`, Dev Services where enabled, `@QuarkusTestResource` for Testcontainers lifecycle, and dynamic configuration for WireMock base URLs
-
-### Implementing These Principles
-
-These guidelines are built upon the following core principles:
-
-1. **End-to-end HTTP**: Prefer REST Assured against the Quarkus test server — not direct calls into resource classes — so the HTTP pipeline is exercised.
-2. **Real adjacent infrastructure**: Use Dev Services or Testcontainers for databases and Kafka the app uses; stub only *external* systems with WireMock.
-3. **No internal CDI mocks**: Do not replace application `@ApplicationScoped` services with mocks in acceptance tests — validate real wiring; isolate third-party HTTP and containerized infra only.
-4. **Dynamic wiring**: Map Testcontainers ports and WireMock base URLs into `application.properties` for `%test` via `QuarkusTestResource` lifecycle callbacks — never hardcode ephemeral ports in production config.
-5. **BDD fidelity**: One test method per tagged scenario; use `@DisplayName` to echo the Gherkin scenario title; map Given/When/Then to setup, HTTP call, and assertions; implement happy path unless the user asks for negative cases.
-
-**Cross-references**: Framework-agnostic acceptance from Gherkin — `@133-java-testing-acceptance-tests`. Unit tests — `@421-frameworks-quarkus-testing-unit-tests`. Integration tests — `@422-frameworks-quarkus-testing-integration-tests`.
+Help developers implement acceptance tests from Gherkin feature files in Quarkus projects. With a `.feature` file in context, select scenarios tagged `@acceptance` (or `@acceptance-tests`), implement happy-path tests that boot the full application over HTTP with REST Assured (via `quarkus-rest-assured`), wire databases and Kafka with Dev Services or Testcontainers using `@QuarkusTestResource` / `QuarkusTestResourceLifecycleManager`, and stub outbound calls to third-party HTTP with WireMock and dynamic `%test` configuration—without replacing internal CDI beans with mocks. Follow the same shape as `@421-frameworks-quarkus-testing-unit-tests` and `@422-frameworks-quarkus-testing-integration-tests`: a short goal, constraints, and examples; for framework-agnostic Gherkin use `@133-java-testing-acceptance-tests`; for Spring Boot use `@323-frameworks-spring-boot-testing-acceptance-tests`.
 
 ## Constraints
 
@@ -52,122 +35,6 @@ Before generating any code, ensure the project is in a valid state and the Gherk
 - **SCOPE**: Implement only scenarios tagged with `@acceptance` or `@acceptance-tests` (or equivalent)
 - **SCOPE**: Implement only the happy path — skip negative or error-path scenarios unless explicitly requested
 
-## Steps
-
-### Step 1: Locate and parse the Gherkin feature file
-
-**Purpose**: Confirm the feature file is in context and extract acceptance-tagged scenarios.
-
-### Actions
-
-1. **Verify preconditions**: (a) Check that a file with extension `.feature` is present in the context. If not, stop and respond: "The Gherkin feature file (.feature) is required. Please add the feature file to the context." (b) Confirm the project uses Quarkus (look for `quarkus-core`, `@QuarkusApplication`, or `io.quarkus` dependencies). If it does not, stop and direct the user to `@133-java-testing-acceptance-tests` or `@323-frameworks-spring-boot-testing-acceptance-tests`.
-2. **Parse the feature file**: Read the `Feature` block and all `Scenario` blocks.
-3. **Filter scenarios**: Select only scenarios that have one of these tags: `@acceptance`, `@acceptance-tests`, or equivalent (e.g. `@AcceptanceTest`).
-4. **List the happy path**: For each selected scenario, identify the Given / When / Then steps. Focus on the main success path.
-
-### Output
-
-Present a summary to the user:
-- Feature name and description
-- Count of acceptance-tagged scenarios found
-- For each scenario: title and steps (Given / When / Then)
-- Proposed test class name using the `AT` suffix (e.g. `{FeatureName}AT`) so `maven-failsafe-plugin` picks it up automatically
-
-#### Step Constraints
-
-- **MUST** abort if no `.feature` file is in context or if the project does not use Quarkus
-- **MUST** include only scenarios with `@acceptance` or `@acceptance-tests` (or equivalent) tag
-- **MUST** confirm the list of scenarios with the user before generating code
-
-### Step 2: Generate BaseAcceptanceTest with @QuarkusTest, infrastructure, and WireMock
-
-**Purpose**: Create a base class that boots Quarkus with simulated external dependencies.
-
-### Infrastructure matrix
-
-| Dependency type | Technology | When to use |
-|-----------------|------------|-------------|
-| Database | Dev Services or Testcontainers | Service uses JDBC or Panache |
-| Kafka | Dev Services or Testcontainers | Service publishes or consumes messages |
-| External REST APIs | WireMock | Service calls third-party HTTP |
-
-### Base class structure (Quarkus)
-
-- Use `@QuarkusTest` to start the application in test mode with HTTP enabled (`quarkus.http.test-port` — REST Assured integrates via `quarkus-rest-assured`)
-- Register Testcontainers with `QuarkusTestResource` and map JDBC or Kafka URLs into Quarkus config for `%test`
-- Use `WireMockExtension` with `@RegisterExtension` (or equivalent) for outbound REST stubs; inject the base URL into Quarkus config through a test resource or `@io.quarkus.test.junit.TestProfile` / `Map` of config properties
-- **Test isolation**: Call `wireMock.resetAll()` in `@BeforeEach` when reusing one WireMock instance across tests; use separate `@QuarkusTest` profiles only when tests mutate irreversible global state
-
-### File placement
-
-- Place `BaseAcceptanceTest.java` at `src/test/java/{root-package}/BaseAcceptanceTest.java`
-
-#### Step Constraints
-
-- **MUST** use `@QuarkusTest` so HTTP and CDI match production-like wiring
-- **MUST** use Testcontainers or Dev Services for real databases and Kafka the application uses
-- **MUST** use WireMock for outbound REST dependencies
-- **MUST** avoid hardcoding random ports — configure from container or extension
-
-### Step 3: Implement acceptance test class with REST Assured
-
-**Purpose**: Generate the Java test class that implements each acceptance-tagged scenario.
-
-### REST Assured usage
-
-- Use `given().when().get/post/put/delete(...).then()` against relative paths — Quarkus sets the base URI for tests when `quarkus-rest-assured` is present
-- Assert status with `.statusCode(...)` and body with JSON path or Hamcrest/AssertJ as appropriate
-- Structure: Given → stubs and fixture data; When → HTTP call; Then → assertions
-
-### Test structure
-
-- One `@Test` method per scenario
-- Annotate with `@DisplayName` mirroring the Gherkin scenario title
-- Extend or reuse `BaseAcceptanceTest` for shared setup
-
-### File placement
-
-- Place the test class at `src/test/java/{root-package}/{FeatureName}AT.java` — the `AT` suffix targets Failsafe
-
-#### Step Constraints
-
-- **MUST** use REST Assured (or equivalent full-HTTP client) — not direct Java calls into `@Path` methods for acceptance scope
-- **MUST** follow Given-When-Then structure in each test method
-- **MUST** implement only happy-path scenarios unless requested otherwise
-
-### Step 4: Provide Maven dependencies and WireMock stubs
-
-**Purpose**: Declare test dependencies and optional WireMock mapping files.
-
-### Typical Maven dependencies (test scope)
-
-| Purpose | Coordinates (illustrative) |
-|---------|----------------------------|
-| Quarkus JUnit 5 | `io.quarkus:quarkus-junit5` |
-| REST Assured integration | `io.rest-assured:rest-assured` + Quarkus BOM alignment; often via `quarkus-rest-assured` |
-| Testcontainers | `org.testcontainers:junit-jupiter` and module jars (e.g. `postgresql`, `kafka`) |
-| WireMock | `org.wiremock:wiremock-standalone` (or WireMock 3 JUnit Jupiter module per project choice) |
-
-### WireMock mappings
-
-When the service calls external REST APIs, create mapping files under `src/test/resources/wiremock/mappings/` and response bodies under `src/test/resources/wiremock/__files/` when using file-based stubs.
-
-### Maven Surefire / Failsafe split
-
-Same three-tier convention as Spring: `*Test` → Surefire; `*IT` and `*AT` → Failsafe. Name acceptance classes with the `AT` suffix.
-
-### Output
-
-- List dependency snippets aligned with the project BOM
-- List WireMock files created
-- Remind to run `./mvnw clean verify`
-
-#### Step Constraints
-
-- **MUST** configure Failsafe to include `**/*IT.java` and `**/*AT.java`
-- **MUST** name acceptance test classes with the `AT` suffix
-
-
 ## Examples
 
 ### Table of contents
@@ -182,7 +49,7 @@ Same three-tier convention as Spring: `*Test` → Surefire; `*IT` and `*AT` → 
 ### Example 1: Gherkin feature with @acceptance scenarios
 
 Title: Expected structure
-Description: Scenarios must include `@acceptance` or `@acceptance-tests` to be in scope.
+Description: Without a `.feature` file in context or without Quarkus (`io.quarkus` dependencies), stop and ask the user to add the feature file or use `@133-java-testing-acceptance-tests` / `@323-frameworks-spring-boot-testing-acceptance-tests` for other stacks. Read the `Feature` and each `Scenario`; keep only scenarios tagged `@acceptance`, `@acceptance-tests`, or equivalent. For each, capture Given/When/Then on the main success path. Before writing Java, summarize: feature name and description, how many tagged scenarios you found, each scenario title and steps, and a proposed test class name ending in `AT` (e.g. `{FeatureName}AT`) so Failsafe can pick it up.
 
 **Good example:**
 
@@ -207,7 +74,7 @@ Feature: Order API
 ### Example 2: Acceptance test method sketch
 
 Title: @QuarkusTest + REST Assured
-Description: Illustrative pattern — adjust paths and stubs to the feature file.
+Description: Use `given()` / `when()` / `then()` against relative paths; with `quarkus-rest-assured`, the test base URI matches the Quarkus HTTP test port. One `@Test` per tagged scenario; `@DisplayName` should echo the Gherkin scenario title. Structure each method as Given (stubs or data), When (HTTP), Then (status and body). Extend `BaseAcceptanceTest` when you share `@QuarkusTest` and test resources. Place concrete classes at `src/test/java/{root-package}/{FeatureName}AT.java`. Adjust paths and stubs to the feature file.
 
 **Good example:**
 
@@ -253,7 +120,7 @@ class OrderApiAT {
 ### Example 3: BaseAcceptanceTest with @QuarkusTest, Testcontainers, and WireMock
 
 Title: Shared test base wires real infra via QuarkusTestResourceLifecycleManager; resets WireMock between tests
-Description: Use `@QuarkusTest` to start the full application once for the suite. Register Testcontainers (PostgreSQL, Kafka) and WireMock as `QuarkusTestResourceLifecycleManager` implementations annotated with `@QuarkusTestResource` — this ensures Quarkus receives the dynamic configuration (JDBC URL, WireMock base URL) before it starts rather than after. Call `wireMockServer.resetAll()` in `@BeforeEach` to prevent stubs leaking between tests.
+Description: Match infrastructure to the app: JDBC/Panache → database (prefer **Dev Services** when the extension can provision it, otherwise Testcontainers); messaging → Kafka; outbound REST to other systems → WireMock with its base URL exposed as a `%test` property from a lifecycle manager. Place `BaseAcceptanceTest.java` under `src/test/java/{root-package}/`. Use `@QuarkusTest` to start the full application once for the suite. Register Testcontainers and WireMock as `QuarkusTestResourceLifecycleManager` implementations annotated with `@QuarkusTestResource` so Quarkus receives JDBC URLs and WireMock base URLs **before** startup—never rely on `System.setProperty` in `@BeforeEach` for datasource config. Call `wireMockServer.resetAll()` in `@BeforeEach` to prevent stubs leaking between tests; use `@QuarkusTest` profiles only when tests leave irreversible global state.
 
 **Good example:**
 
@@ -477,7 +344,7 @@ class OrderCreationAT extends BaseAcceptanceTest {
 ### Example 6: Acceptance test naming convention (*AT) and Maven Surefire/Failsafe configuration
 
 Title: Three-tier split: *Test → Surefire, *IT + *AT → Failsafe
-Description: Name acceptance test classes with the `AT` suffix so `maven-failsafe-plugin` picks them up automatically alongside `*IT` integration tests. Configure Surefire to include only `*Test` so the fast unit-test pass has no container overhead. Configure Failsafe to include both `*IT` and `*AT` so the full safety-net runs during `mvn verify`.
+Description: Name acceptance test classes with the `AT` suffix so `maven-failsafe-plugin` picks them up automatically alongside `*IT` integration tests. Configure Surefire to include only `*Test` so the fast unit-test pass has no container overhead. Configure Failsafe to include both `*IT` and `*AT` so the full safety-net runs during `mvn verify`. Typical test dependencies (versions via Quarkus BOM): `io.quarkus:quarkus-junit5`, REST Assured integration (`quarkus-rest-assured` or aligned `rest-assured`), `org.testcontainers:junit-jupiter` plus modules you use (e.g. `postgresql`, `kafka`), and WireMock (e.g. `org.wiremock:wiremock-standalone` or the JUnit 5 module your project standardizes on).
 
 **Good example:**
 

@@ -16,22 +16,6 @@ You are a Senior software engineer with extensive experience in Quarkus and JUni
 
 Quarkus tests should be as fast as possible: prefer **plain JUnit 5 + Mockito** for classes that do not need the Quarkus container. When CDI wiring matters but a full integration test is too heavy, use `@QuarkusTest` with `@InjectMock` or `@InjectSpy` to substitute collaborators. Reserve `@QuarkusTest` + REST Assured for resource-focused tests; avoid booting Quarkus for pure domain logic.
 
-### Implementing These Principles
-
-These guidelines are built upon the following core principles:
-
-1. **Pure unit tests first**: Test domain and services with Mockito only — `new MyService(mockDep)` or `@InjectMocks` — no `@QuarkusTest`.
-2. **QuarkusTest with mocks**: Use `@QuarkusTest` + `@InjectMock` when you need CDI injection of the class under test but want fake outbound dependencies.
-3. **REST slices**: For JAX-RS resources, `@QuarkusTest` with REST Assured validates serialization and routing; keep assertions on status and JSON body.
-4. **Config**: Use `%test` profile properties or `@TestProfile` for test-specific configuration instead of mutating global env in `@BeforeEach`.
-5. **Determinism**: Inject fixed `Clock` or stub time-dependent collaborators — do not rely on wall-clock in assertions.
-6. **Assertions**: Prefer AssertJ; for JSON use JsonPath assertions from REST Assured or REST Assured's body matchers.
-
-7. **Parameterized tests**: Replace copy-pasted test methods with `@ParameterizedTest` + `@CsvSource` for inline tabular data or `@MethodSource` for complex objects; one test method covers all variants.
-8. **Test naming**: Always suffix unit test classes with `Test` so Maven Surefire picks them up; reserve the `IT` suffix for Failsafe integration tests (`@QuarkusIntegrationTest`).
-
-**Cross-references**: Framework-agnostic unit testing — `@131-java-testing-unit-testing`. Integration tests — `@422-frameworks-quarkus-testing-integration-tests`. Acceptance from Gherkin — `@423-frameworks-quarkus-testing-acceptance-tests`.
-
 ## Constraints
 
 Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.

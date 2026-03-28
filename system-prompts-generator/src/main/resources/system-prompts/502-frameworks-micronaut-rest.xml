@@ -12,25 +12,6 @@
 
     <goal>
         Micronaut REST endpoints should honor HTTP semantics, return accurate status codes, keep controllers thin, and expose stable DTO contracts. Use Bean Validation on incoming DTOs, centralize error mapping (including structured problem JSON when the `micronaut-problem` module is present), document APIs with OpenAPI, and apply pagination, idempotency, and concurrency controls where writes and lists matter.
-
-        ### Implementing These Principles
-
-        These guidelines are built upon the following core principles:
-
-        1. **Semantic HTTP**: Map `GET`/`POST`/`PUT`/`PATCH`/`DELETE` to safe vs unsafe operations; never use `GET` for state changes.
-        2. **Resource-oriented URLs**: Prefer noun-based paths (`/users`, `/users/{id}`) over RPC-style verb paths.
-        3. **Status codes**: Use `200`/`201`/`204`/`400`/`404`/`409`/`412`/`422` deliberately — not `200` for every outcome.
-        4. **DTO boundaries**: Do not leak persistence entities or arbitrary maps; version breaking changes explicitly.
-        5. **Validation**: Annotate request DTOs with Bean Validation and mark controller parameters with `@Valid` (or equivalent) so bad input becomes **400** with field errors.
-        6. **Errors**: Map domain failures to HTTP outcomes via `@Error` handlers or `ExceptionHandler` beans; prefer consistent JSON problem bodies for clients.
-        7. **Lists**: Bound page size, document sort keys, and return page metadata instead of unbounded arrays by default.
-        8. **Idempotency**: Support `Idempotency-Key` (or domain deduplication) for retried creates where appropriate.
-        9. **Concurrency**: Use `ETag` / `If-Match` or version columns for optimistic locking on updates.
-        10. **Caching**: Set `Cache-Control` and validators consciously for authenticated vs public resources.
-        11. **Versioning**: Choose URI, header, or media-type strategy and apply it consistently; signal deprecation with headers when phasing endpoints out.
-        12. **Time in JSON**: Prefer `Instant` or `OffsetDateTime` (ISO-8601) in API DTOs.
-
-        **Cross-references**: Micronaut core — `@501-frameworks-micronaut-core`. Micronaut Data — `@512-frameworks-micronaut-data`. Integration tests — `@522-frameworks-micronaut-testing-integration-tests`.
     </goal>
 
     <constraints>
@@ -165,55 +146,7 @@ record UserCreateDto(String name, String email) {}]]></code-block>
             </code-examples>
         </example>
 
-        <example number="3" id="error-handling-micronaut">
-            <example-header>
-                <example-title>Centralized error mapping</example-title>
-                <example-subtitle>@Error or dedicated exception handlers</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[
-                Map domain exceptions to HTTP responses in one place. When using `micronaut-problem`, emit RFC 7807-compatible JSON for machine-readable client handling.
-                ]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[import io.micronaut.http.HttpRequest;
-import io.micronaut.http.HttpResponse;
-import io.micronaut.http.server.exceptions.ExceptionHandler;
-import jakarta.inject.Singleton;
-
-@Singleton
-public class NotFoundHandler implements ExceptionHandler<EntityNotFoundException, HttpResponse<?>> {
-
-    @Override
-    public HttpResponse<?> handle(HttpRequest request, EntityNotFoundException exception) {
-        return HttpResponse.notFound();
-    }
-}]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="java"><![CDATA[import io.micronaut.http.annotation.*;
-
-@Controller("/orders")
-public class OrderController {
-
-    @Get("/{id}")
-    public OrderDto get(String id) {
-        try {
-            return load(id);
-        } catch (EntityNotFoundException ex) {
-            // Bad: returning error payload with 200 OK
-            return new OrderDto("ERROR", null);
-        }
-    }
-
-    OrderDto load(String id) { throw new EntityNotFoundException(); }
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="4" id="pagination-micronaut">
+        <example number="3" id="pagination-micronaut">
             <example-header>
                 <example-title>Pagination</example-title>
                 <example-subtitle>Pageable request and bounded page size</example-subtitle>
@@ -262,7 +195,7 @@ public class UserController {
             </code-examples>
         </example>
 
-        <example number="5" id="openapi-micronaut">
+        <example number="4" id="openapi-micronaut">
             <example-header>
                 <example-title>OpenAPI documentation</example-title>
                 <example-subtitle>@Operation and @Tag on controllers</example-subtitle>
@@ -305,7 +238,7 @@ public class UndocumentedController {
             </code-examples>
         </example>
 
-        <example number="6" id="content-type-json">
+        <example number="5" id="content-type-json">
             <example-header>
                 <example-title>Content negotiation</example-title>
                 <example-subtitle>Prefer JSON with explicit produces/consumes when needed</example-subtitle>
@@ -347,7 +280,7 @@ public class UserController {
             </code-examples>
         </example>
 
-        <example number="7" id="security-boundary">
+        <example number="6" id="security-boundary">
             <example-header>
                 <example-title>Security at the boundary</example-title>
                 <example-subtitle>@Secured or security rules on routes</example-subtitle>
@@ -389,7 +322,7 @@ public class OpenAdminController {
             </code-examples>
         </example>
 
-        <example number="8" id="idempotency-post">
+        <example number="7" id="idempotency-post">
             <example-header>
                 <example-title>Idempotent creates</example-title>
                 <example-subtitle>Idempotency-Key header handling</example-subtitle>
@@ -437,7 +370,7 @@ public class PaymentController {
             </code-examples>
         </example>
 
-        <example number="9" id="etag-if-match">
+        <example number="8" id="etag-if-match">
             <example-header>
                 <example-title>Optimistic concurrency</example-title>
                 <example-subtitle>ETag and If-Match</example-subtitle>
@@ -487,7 +420,7 @@ public class ItemController {
             </code-examples>
         </example>
 
-        <example number="10" id="cache-control-micronaut">
+        <example number="9" id="cache-control-micronaut">
             <example-header>
                 <example-title>HTTP caching headers</example-title>
                 <example-subtitle>Cache-Control for public vs private responses</example-subtitle>
@@ -531,7 +464,7 @@ public class ProfileController {
             </code-examples>
         </example>
 
-        <example number="11" id="api-versioning-uri">
+        <example number="10" id="api-versioning-uri">
             <example-header>
                 <example-title>API versioning</example-title>
                 <example-subtitle>Stable /v1 prefix</example-subtitle>
@@ -553,7 +486,7 @@ GET /getUserV2/{id} (inconsistent versioning style)]]></code-block>
             </code-examples>
         </example>
 
-        <example number="12" id="time-dtos-instant">
+        <example number="11" id="time-dtos-instant">
             <example-header>
                 <example-title>Time in DTOs</example-title>
                 <example-subtitle>Instant or OffsetDateTime in JSON</example-subtitle>

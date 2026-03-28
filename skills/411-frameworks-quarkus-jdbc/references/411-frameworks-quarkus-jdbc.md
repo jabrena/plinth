@@ -16,26 +16,6 @@ You are a Senior software engineer with extensive experience in Quarkus and JDBC
 
 Quarkus pairs JDBC drivers (`quarkus-jdbc-*`) with Agroal connection pooling. Application code should use injected `javax.sql.DataSource`, always bind parameters, map rows to immutable records or small DTOs, and declare transactions at the service boundary with `jakarta.transaction.Transactional`. Use Panache (`@412-frameworks-quarkus-panache`) when you want repository-style Hibernate access; use raw JDBC for reporting, bulk ETL, or maximum SQL control.
 
-### Implementing These Principles
-
-These guidelines are built upon the following core principles:
-
-1. **Parameter binding**: Use `PreparedStatement` placeholders — never concatenate untrusted input into SQL.
-2. **Resource management**: Use try-with-resources for `Connection`, `PreparedStatement`, and `ResultSet`.
-3. **Mapping**: Extract row mapping into private methods or small mapper types; prefer records for read models.
-4. **Transactions**: Annotate service entry points with `@Transactional` and `readOnly = true` for queries where supported.
-5. **Pooling**: Rely on Agroal defaults; tune `quarkus.datasource.*` only with measured need.
-6. **Optional Spring JDBC**: If the project already uses `quarkus-spring-jdbc`, `NamedParameterJdbcTemplate` is acceptable — same binding rules apply.
-7. **Dev experience**: Use Dev Services for databases in dev/test when practical (`quarkus.datasource.devservices.enabled`).
-
-8. **Safe single-row access**: Wrap single-row queries in `Optional`; always call `ResultSet.next()` and check its return value before reading columns — never assume a row exists.
-9. **Exception handling**: Translate `SQLIntegrityConstraintViolationException` and other `SQLException` subtypes to meaningful domain exceptions at service boundaries; never let raw `SQLException` propagate to callers.
-10. **Streaming large results**: Set `setFetchSize()` on `PreparedStatement` and process `ResultSet` rows incrementally; never load multi-million-row result sets into a `List` first.
-11. **Batch operations**: Use `PreparedStatement.addBatch()` / `executeBatch()` for bulk inserts and updates to reduce round-trips and improve throughput.
-12. **Transaction propagation**: Know the JTA propagation types (`REQUIRED` default, `REQUIRES_NEW` for independent commit, `MANDATORY` to enforce an existing transaction, `NEVER` to forbid one); prefer `REQUIRES_NEW` when a nested operation must commit or roll back independently of the caller.
-
-**Cross-references**: Panache (ORM-style) — `@412-frameworks-quarkus-panache`. Quarkus core — `@401-frameworks-quarkus-core`. Secure SQL — `@124-java-secure-coding`.
-
 ## Constraints
 
 Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.

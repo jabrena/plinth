@@ -12,21 +12,6 @@
 
     <goal>
         Integration tests prove real wiring: HTTP boundaries, databases, brokers, and other infrastructure. They should stay independent, reproducible (prefer Testcontainers over shared developer databases), and focused on contracts—not a second copy of exhaustive unit-test logic. Use `@ServiceConnection` (Spring Boot 4.0.x) for zero-config Testcontainers wiring; fall back to `@DynamicPropertySource` only for containers without built-in service connection support. Use `MockMvcTester` (Spring Boot 4.0.x) for fluent AssertJ-based HTTP assertions, and `@DataJdbcTest`/`@DataJpaTest` slices to test persistence in isolation.
-
-        ### Implementing These Principles
-
-        These guidelines are built upon the following core principles:
-
-        1. **Test isolation**: Each test owns its scenario; no ordering assumptions or shared mutable state between tests.
-        2. **Environment reproducibility**: Run dependencies in containers with pinned images; wire Spring properties with `@ServiceConnection` (preferred) or `@DynamicPropertySource` (fallback for unsupported containers).
-        3. **Clear boundaries**: Assert integration points—API status and payloads, repository persistence—not every internal branch already covered by unit tests.
-        4. **Performance awareness**: Share static `@Container` instances across methods in a class; avoid starting a new container per method unless necessary.
-        5. **Maintainable assertions**: Use `MockMvcTester` or `TestRestTemplate` with typed DTOs/records and AssertJ; avoid brittle full-JSON string equality.
-        6. **Resource lifecycle**: Rely on Testcontainers JUnit integration for teardown; separate `*IT` / integration tests from fast unit tests in the build when useful.
-        7. **Slice tests for persistence**: Prefer `@DataJdbcTest` / `@DataJpaTest` over full `@SpringBootTest` when only testing repository/query logic — they load only the persistence layer and start faster.
-        8. **Modern mock registration**: Use `@MockitoBean` (Spring Boot 4.0.x standard); `@MockBean` was removed in Spring Boot 4.
-
-        **Cross-references**: Pure unit and slice tests — `@321-frameworks-spring-boot-testing-unit-tests`. Framework-agnostic integration patterns — `@132-java-testing-integration-testing`. Acceptance tests from Gherkin — `@323-frameworks-spring-boot-testing-acceptance-tests`.
     </goal>
 
     <constraints>

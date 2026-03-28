@@ -12,26 +12,6 @@
 
     <goal>
         Panache simplifies Hibernate ORM in Quarkus: **active record** (`PanacheEntity`) for small entities or **repository** (`PanacheRepository`) for a cleaner separation. Prefer explicit queries (`find`, `list`, `HQL`) over magic lazy graphs; keep aggregates focused; use `@Transactional` on services. For hand-written SQL and reporting, use `@411-frameworks-quarkus-jdbc` instead of forcing everything through Panache.
-
-        ### Implementing These Principles
-
-        These guidelines are built upon the following core principles:
-
-        1. **Repository vs active record**: Use `implements PanacheRepository&lt;Entity&gt;` for services that should not inherit persistence base classes; use `extends PanacheEntity` only when it stays simple.
-        2. **Transactions**: Put `@Transactional` on application services; avoid long transactions spanning remote calls.
-        3. **Queries**: Prefer named parameters in HQL/PanacheQL (`?1` or named); never concatenate user input into query strings.
-        4. **IDs and persistence**: Let Panache `persist()` assign identifiers; use `flush()` only when you need visibility before transaction end.
-        5. **DTO projection**: For read-heavy APIs, consider `project(Class)` or manual mapping to records instead of exposing entities from REST resources (`@402-frameworks-quarkus-rest`).
-        6. **Testing**: Use `@Transactional` rollback in tests or Quarkus test resources — see `@422-frameworks-quarkus-testing-integration-tests`.
-        7. **Performance**: Use pagination (`page`) for lists; avoid loading large collections by default.
-
-        8. **Parameterized queries**: Prefer named parameters (`?1`, `:name`, `Parameters.with(...)`) in HQL/PanacheQL for complex conditions; use `@NamedQuery` for frequently executed, stable queries; never concatenate user input into query strings.
-        9. **DTO projections**: For read-heavy endpoints, use `project(Class)` or manual stream mapping to records so that only needed columns are fetched and managed entities are not exposed from REST resources.
-        10. **Pagination**: Always paginate list queries using `.page(Page.of(index, size))`; never call `listAll()` on unbounded tables; expose page count and total count to callers.
-        11. **N+1 avoidance**: Use HQL `JOIN FETCH` for associations needed in the same request; do not rely on lazy collection access outside of a transaction — it triggers implicit extra queries or `LazyInitializationException`.
-        12. **Optimistic locking**: Add `@Version` to aggregate roots that are written concurrently; catch `OptimisticLockException` at the service layer and translate to a meaningful domain response.
-
-        **Cross-references**: Raw JDBC — `@411-frameworks-quarkus-jdbc`. REST boundaries — `@402-frameworks-quarkus-rest`. Quarkus core — `@401-frameworks-quarkus-core`.
     </goal>
 
     <constraints>
