@@ -1,4 +1,4 @@
-# Cursor AI rules for Java
+# Rules, Skills & Agents for Java
 
 ## Stargazers over time
 
