@@ -8,30 +8,33 @@ status=published
 
 ## What are Cursor rules for Java?
 
-A curated collection of `Rules`, `Skills`, and `Agents` for Java Enterprise development, designed to streamline modern `SDLC` workflows.
+A curated collection of `Rules`, `Skills`, and `Agents` for Java Enterprise development usable across **cross-functional stakeholders** (Product Owners, Business Analysts, Architects, Software Engineers) and **CI/CD pipelines** so each role (and automation) can apply consistent guidance through modern `SDLC` workflows.
 
-In this release, we are happy to add support for the good people from Singapore, Amsterdam, Madrid, Ashburn & Atlanta. 👋👋👋
+Happy that good people from Singapore, Amsterdam, Madrid, Ashburn & Atlanta are using this project. 👋👋👋
 
 ## What's new in this release?
 
-In this release, the project introduces several updates and improvements:
+Little by little the project has increased the project audience not only putting focus on the implementation of features with Java because using AI Tooling, requirements require a good collaboration for other roles like `Product Owners`, `Business Analysts` & `Architects`.
 
-- **Added Skills support:**
-- ER diagram support in `@033-architecture-diagrams`
-- Plan mode enhancements in `@040-planning-plan-mode`
-- Jib coverage and improved skill summaries in `@112-java-maven-plugins`
-- `@130-java-testing-strategies` for testing strategy guidance
-- Spring Boot: `@301-frameworks-spring-boot-core`, `@302-frameworks-spring-boot-rest`, `@311-frameworks-spring-jdbc`, `@312-frameworks-spring-data-jdbc`, `@313-frameworks-spring-db-migrations-flyway`, `@321-frameworks-spring-boot-testing-unit-tests`, `@322-frameworks-spring-boot-testing-integration-tests`, `@323-frameworks-spring-boot-testing-acceptance-tests`
-- Quarkus: `@401-frameworks-quarkus-core`, `@402-frameworks-quarkus-rest`, `@411-frameworks-quarkus-jdbc`, `@412-frameworks-quarkus-panache`, `@413-frameworks-quarkus-db-migrations-flyway`, `@421-frameworks-quarkus-testing-unit-tests`, `@422-frameworks-quarkus-testing-integration-tests`, `@423-frameworks-quarkus-testing-acceptance-tests`
-- Micronaut: `@501-frameworks-micronaut-core`, `@502-frameworks-micronaut-rest`, `@511-frameworks-micronaut-jdbc`, `@512-frameworks-micronaut-data`, `@513-frameworks-micronaut-db-migrations-flyway`, `@521-frameworks-micronaut-testing-unit-tests`, `@522-frameworks-micronaut-testing-integration-tests`, `@523-frameworks-micronaut-testing-acceptance-tests`
-- Reduced complexity for ADR discovery on functional requirements in `@031-architecture-adr-functional-requirements`
-- C4 model guidance in `@033-architecture-diagrams` limited to levels 1–3
-- Improvements to `@113-java-maven-documentation`
-- **Added Agents support:**
-- Business Analyst, Coordinator, and Java, Spring Boot, Quarkus, and Micronaut framework agents
-- **Project improvements:**
-- Added initial support for Agents
-- Migrated XML rule sources to **PML Schema 0.7.0**; the generator validates against the [published schema](https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd)
+[![](/cursor-rules-java/images/2026/3/sdlc.png)](https://en.wikipedia.org/wiki/Systems_development_life_cycle)
+
+
+This release is about **spending less time hunting conventions** and **more time shipping correct Java**: Skills turn the project’s rules into focused, invokable workflows in Cursor, and new Agents give you specialists that already speak your stack.
+
+**Skills — what changes for you**
+
+- **Architecture and planning:** Easier, lighter ADR discovery when you document CLIs or HTTP APIs (`@031-architecture-adr-functional-requirements`); architecture diagrams that stay practical—C4 from context through component plus ER models when you need the data picture (`@033-architecture-diagrams`); Plan mode guidance that fits real design sessions (`@040-planning-plan-mode`).
+- **Build and project docs:** Richer Maven plugin coverage (including container builds with Jib) and clearer “what to run and why” material derived from your build (`@112-java-maven-plugins`, `@113-java-maven-documentation`).
+- **Testing:** Explicit help choosing *what* to test and *how* to think about risk, not only syntax (`@130-java-testing-strategies`).
+- **Spring Boot, Quarkus, and Micronaut:** One coherent story from APIs and configuration through data access, migrations, and tests—so whether you ship on Spring (`@301`–`@323`), Quarkus (`@401`–`@423`), or Micronaut (`@501`–`@523`), the assistant can follow the same boundaries and idioms end to end.
+
+**Agents — what changes for you**
+
+- You can delegate by role: business analysis and coordination on one side, and framework-aware engineering agents for plain Java plus Spring Boot, Quarkus, and Micronaut—so prompts land on a model that already assumes your ecosystem.
+
+**Project quality**
+
+- Rule XML now validates against **PML Schema 0.7.0** using the [published schema](https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd), which keeps generated rules and Skills more predictable as the library grows.
 
 Let's walk through each feature. You can also review the [CHANGELOG.md](https://github.com/jabrena/cursor-rules-java/blob/main/CHANGELOG.md#0130-2026-03-30)
 
