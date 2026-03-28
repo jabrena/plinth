@@ -5,13 +5,13 @@
         <version>0.13.0</version>
         <license>Apache-2.0</license>
         <title>Hibernate ORM with Panache</title>
-        <description>Use when you need data access with Quarkus Hibernate ORM Panache — including PanacheEntity / PanacheEntityBase, PanacheRepository, named and HQL queries, transactions, pagination, and immutable-friendly patterns. This is the Quarkus analogue to Spring Data for relational persistence; prefer Panache APIs over verbose persistence boilerplate. For Flyway-backed DDL and versioned schema changes, use `@413-frameworks-quarkus-db-migrations-flyway`.</description>
+        <description>Use when you need data access with Quarkus Hibernate ORM Panache — including PanacheEntity / PanacheEntityBase, PanacheRepository, named queries, JPQL, native SQL, transactions, pagination, and immutable-friendly patterns. This is the Quarkus analogue to Spring Data for relational persistence; prefer Panache APIs over verbose persistence boilerplate. For Flyway-backed DDL and versioned schema changes, use `@413-frameworks-quarkus-db-migrations-flyway`.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Quarkus, Hibernate ORM, and Panache</role>
 
     <goal>
-        Panache simplifies Hibernate ORM in Quarkus: **active record** (`PanacheEntity`) for small entities or **repository** (`PanacheRepository`) for a cleaner separation. Prefer explicit queries (`find`, `list`, `HQL`) over magic lazy graphs; keep aggregates focused; use `@Transactional` on services. For hand-written SQL and reporting, use `@411-frameworks-quarkus-jdbc` instead of forcing everything through Panache. For schema evolution with Flyway, use `@413-frameworks-quarkus-db-migrations-flyway`.
+        Panache simplifies Hibernate ORM in Quarkus: **active record** (`PanacheEntity`) for small entities or **repository** (`PanacheRepository`) for a cleaner separation. Prefer explicit queries (`find`, `list`, JPQL) over magic lazy graphs; keep aggregates focused; use `@Transactional` on services. Use native queries when you want SQL you control and still stay in Hibernate (transactions, same datasource, optional entity mapping). For hand-written SQL and reporting that should bypass Hibernate at the application boundary, use `@411-frameworks-quarkus-jdbc` instead of forcing everything through Panache. For schema evolution with Flyway, use `@413-frameworks-quarkus-db-migrations-flyway`.
     </goal>
 
     <constraints>
@@ -103,7 +103,7 @@ public class BookRepository implements PanacheRepository<Book> {
 
     public List<Book> search(String userFragment) {
         return list("FROM Book WHERE title LIKE '" + userFragment + "%'");
-        // injection risk — never concatenate user input into HQL
+        // injection risk — never concatenate user input into JPQL
     }
 }]]></code-block>
                 </bad-example>
@@ -158,14 +158,14 @@ public void publish(@PathParam("id") long id) {
             </code-examples>
         </example>
 
-        <example number="4" id="parameterized-hql-queries">
+        <example number="4" id="parameterized-jpql-queries">
             <example-header>
-                <example-title>Parameterized HQL queries</example-title>
+                <example-title>Parameterized JPQL queries</example-title>
                 <example-subtitle>Positional and named parameters; firstResultOptional for single rows</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                Panache offers three levels of query syntax: field shorthand for simple equality, positional `?1` parameters, and full HQL with `Parameters.with(...)` for named bindings. Use `firstResultOptional()` for single-row lookups rather than `findById` when querying by non-PK columns. Never concatenate user input into query strings.
+                Panache offers three levels of query syntax: field shorthand for simple equality, positional `?1` parameters, and full JPQL with `Parameters.with(...)` for named bindings. Use `firstResultOptional()` for single-row lookups rather than `findById` when querying by non-PK columns. Never concatenate user input into query strings.
                 ]]>
             </example-description>
             <code-examples>
@@ -206,7 +206,7 @@ import java.util.List;
 public class BookRepository implements PanacheRepository<Book> {
 
     public List<Book> searchByAuthor(String fragment) {
-        // Bad: HQL injection risk — never build query strings from user input
+        // Bad: query injection risk — never build query strings from user input
         return find("FROM Book WHERE author LIKE '%" + fragment + "%'").list();
     }
 }]]></code-block>
@@ -347,7 +347,7 @@ public class BookRepository implements PanacheRepository<Book> {
             </example-header>
             <example-description>
                 <![CDATA[
-                `@NamedQuery` declarations are parsed and validated by Hibernate at application startup, catching HQL errors early. Use them for frequently executed, stable queries to enable Hibernate's query plan caching and to centralise SQL intent near the entity it queries.
+                `@NamedQuery` declarations are parsed and validated by Hibernate at application startup, catching query parse errors early. Use them for frequently executed, stable queries to enable Hibernate's query plan caching and to centralise SQL intent near the entity it queries.
                 ]]>
             </example-description>
             <code-examples>
@@ -391,7 +391,7 @@ import java.util.List;
 @ApplicationScoped
 public class BookRepository implements PanacheRepository<Book> {
 
-    // Bad: inline HQL string is validated at runtime only —
+    // Bad: inline JPQL string is validated at runtime only —
     // a typo in "plblished" is not caught until the query is first executed
     public List<Book> findPublishedByGenre(String genre) {
         return find("FROM Book WHERE genre = ?1 AND plblished = true ORDER BY title", genre).list();
@@ -404,11 +404,11 @@ public class BookRepository implements PanacheRepository<Book> {
         <example number="8" id="join-fetch-n-plus-one">
             <example-header>
                 <example-title>JOIN FETCH to avoid N+1 queries</example-title>
-                <example-subtitle>Eagerly load associations in one HQL query instead of triggering lazy loads per entity</example-subtitle>
+                <example-subtitle>Eagerly load associations in one JPQL query instead of triggering lazy loads per entity</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                When a use case iterates a collection association on every returned entity, issuing N individual `SELECT` statements. Use `JOIN FETCH` in HQL to load the association in the same query. Outside of an open Hibernate session (e.g. serializing to JSON), lazy access throws `LazyInitializationException`.
+                When a use case iterates a collection association on every returned entity, issuing N individual `SELECT` statements. Use `JOIN FETCH` in JPQL to load the association in the same query. Outside of an open Hibernate session (e.g. serializing to JSON), lazy access throws `LazyInitializationException`.
                 ]]>
             </example-description>
             <code-examples>
@@ -635,7 +635,7 @@ class BookRepositoryTest {
 
     <output-format>
         <output-format-list>
-            <output-format-item>**ANALYZE** entities, repositories, and services for HQL injection risk, leaky entity boundaries, missing `@Transactional`, unbounded list queries, lazy N+1 patterns, missing `@Version`, and absence of test isolation</output-format-item>
+            <output-format-item>**ANALYZE** entities, repositories, and services for query injection risk, leaky entity boundaries, missing `@Transactional`, unbounded list queries, lazy N+1 patterns, missing `@Version`, and absence of test isolation</output-format-item>
             <output-format-item>**CATEGORIZE** findings by impact (SECURITY for query injection, CORRECTNESS for missing transactions or N+1, PERFORMANCE for unbounded queries or missing pagination, MAINTAINABILITY for entity exposure at API boundaries)</output-format-item>
             <output-format-item>**APPLY** improvements: introduce parameterized queries, `project(Class)` DTO projections, `page(Page.of(...))` pagination, `@NamedQuery` for stable queries, `JOIN FETCH` for needed associations, `@Version` for concurrency control</output-format-item>
             <output-format-item>**IMPLEMENT** changes consistently: keep entity, service, and REST resource layers coherent; update test fixtures when entity shape changes</output-format-item>
@@ -649,10 +649,10 @@ class BookRepositoryTest {
         <safeguards-list>
             <safeguards-item>**BLOCKING SAFETY CHECK**: ALWAYS run `./mvnw compile` before ANY Panache refactoring — compilation failure is a HARD STOP</safeguards-item>
             <safeguards-item>**CRITICAL VALIDATION**: Run `./mvnw clean verify` after changes; confirm persistence tests pass with Dev Services before promoting</safeguards-item>
-            <safeguards-item>**QUERY SAFETY**: Never concatenate user input into HQL, PanacheQL, or native SQL — use `?1`, `:name`, or `Parameters.with(...)` exclusively</safeguards-item>
+            <safeguards-item>**QUERY SAFETY**: Never concatenate user input into JPQL, PanacheQL, or native SQL — use `?1`, `:name`, or `Parameters.with(...)` exclusively</safeguards-item>
             <safeguards-item>**ENTITY BOUNDARIES**: Do not return managed entities directly from REST resources — map to DTOs or use `project(Class)` to keep API contracts stable and prevent accidental field exposure</safeguards-item>
             <safeguards-item>**PAGINATION**: Never call `listAll()` or an unbound `list(query)` on production tables — always apply `.page(Page.of(index, size))` or a LIMIT clause</safeguards-item>
-            <safeguards-item>**N+1 PREVENTION**: When a use case accesses collection associations on every returned entity, add `JOIN FETCH` to the HQL query; lazy access outside a Hibernate session throws `LazyInitializationException`</safeguards-item>
+            <safeguards-item>**N+1 PREVENTION**: When a use case accesses collection associations on every returned entity, add `JOIN FETCH` to the JPQL query; lazy access outside a Hibernate session throws `LazyInitializationException`</safeguards-item>
             <safeguards-item>**OPTIMISTIC LOCKING**: Adding `@Version` to an existing entity requires a `version` column in the schema — apply via a migration (`@413-frameworks-quarkus-db-migrations-flyway`) before deploying; mismatched schema causes startup failure</safeguards-item>
             <safeguards-item>**CDI SELF-INVOCATION**: Never call a `@Transactional` method via `this.method()` within the same CDI bean — the interceptor is bypassed; extract to a separate injected bean</safeguards-item>
             <safeguards-item>**INCREMENTAL SAFETY**: Change one entity, repository, or service at a time; verify with `@QuarkusTest` + `@TestTransaction` between steps; do not combine aggregate boundary changes with query refactoring in one commit</safeguards-item>
