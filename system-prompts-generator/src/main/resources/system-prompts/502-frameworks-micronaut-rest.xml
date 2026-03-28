@@ -5,7 +5,7 @@
         <version>0.13.0</version>
         <license>Apache-2.0</license>
         <title>Micronaut REST API Guidelines</title>
-        <description>Use when you need to design, review, or improve REST APIs with Micronaut — including @Controller routes, HTTP methods and status codes, request/response DTOs, Bean Validation at the boundary, exception handlers and RFC 7807-style problem responses, pagination and sorting, idempotency keys, ETag / If-Match, HTTP caching headers, API versioning, OpenAPI with Swagger, content negotiation, and security-aware boundaries.</description>
+        <description>Use when you need to design, review, or improve REST APIs with Micronaut — including @Controller routes, HTTP methods and status codes, request/response DTOs, ISO-8601 instants in DTOs, Bean Validation at the boundary, exception handlers and RFC 7807-style problem responses, pagination and sorting, idempotency keys, ETag / If-Match, HTTP caching headers, API versioning, OpenAPI with Swagger, content negotiation, and security-aware boundaries.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in REST API design and Micronaut</role>
@@ -486,26 +486,82 @@ GET /getUserV2/{id} (inconsistent versioning style)]]></code-block>
             </code-examples>
         </example>
 
-        <example number="11" id="time-dtos-instant">
+        <example number="11" id="time-and-locale-in-contracts">
             <example-header>
-                <example-title>Time in DTOs</example-title>
-                <example-subtitle>Instant or OffsetDateTime in JSON</example-subtitle>
+                <example-title>Time and locale in contracts</example-title>
+                <example-subtitle>ISO-8601 with offset; optional `Accept-Language` for errors</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                Prefer ISO-8601-friendly types in API records; avoid `java.util.Date` in new contracts.
+                Model timestamps as `Instant` or `OffsetDateTime` (ISO-8601 with offset) so clients interpret wall-clock unambiguously—avoid legacy `Date` and ambiguous zone-less `LocalDateTime` in public JSON unless the domain is strictly calendar-local. For localized problem/error text (RFC 7807-style bodies), honor `Accept-Language` only if you keep stable problem `type` URIs/codes identical across locales and avoid leaking sensitive details through translated messages.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[import java.time.Instant;
+                    <code-block language="java"><![CDATA[import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.*;
+import io.micronaut.http.server.exceptions.ExceptionHandler;
+import jakarta.inject.Singleton;
+import java.net.URI;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
-public record EventDto(String id, Instant occurredAt) {}]]></code-block>
+@Controller("/api/v1/events")
+public class EventController {
+
+    @Get("/{id}")
+    public EventDto get(String id) {
+        return new EventDto(
+            Instant.parse("2026-03-23T12:00:00Z"),
+            OffsetDateTime.of(2026, 3, 23, 13, 0, 0, 0, ZoneOffset.ofHours(1)));
+    }
+}
+
+record EventDto(Instant occurredAt, OffsetDateTime windowStart) { }
+
+record ProblemBody(URI type, String title, int status, String detail) { }
+
+@Singleton
+public class IllegalArgumentExceptionHandler implements ExceptionHandler<IllegalArgumentException, HttpResponse<?>> {
+
+    @Override
+    public HttpResponse<?> handle(HttpRequest request, IllegalArgumentException ex) {
+        Locale locale = request.getLocale().orElse(Locale.ENGLISH);
+        ResourceBundle bundle = ResourceBundle.getBundle("ProblemMessages", locale);
+        // Title and detail from bundles — ex.getMessage() is never sent to clients
+        String detail = bundle.getString("problem.invalid_argument.detail");
+        String title = bundle.getString("problem.invalid_argument.title");
+        ProblemBody body = new ProblemBody(
+            URI.create("https://example.com/problems/invalid-argument"),
+            title,
+            400,
+            detail);
+        return HttpResponse.badRequest(body);
+    }
+}]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[import java.util.Date;
+                    <code-block language="java"><![CDATA[import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.*;
+import java.util.Date;
 
-public record EventDto(String id, Date occurredAt) {} // Bad: legacy type, timezone pitfalls]]></code-block>
+@Controller("/events")
+public class AmbiguousTimeController {
+
+    @Get("/{id}")
+    public HttpResponse<EventDto> get(String id) {
+        return HttpResponse.ok(new EventDto(new Date()));
+    }
+}
+
+class EventDto {
+    private Date createdAt;
+    EventDto(Date createdAt) { this.createdAt = createdAt; }
+}]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
@@ -513,9 +569,9 @@ public record EventDto(String id, Date occurredAt) {} // Bad: legacy type, timez
 
     <output-format>
         <output-format-list>
-            <output-format-item>**ANALYZE** controllers for HTTP semantics, validation, error mapping, pagination, security annotations, caching, versioning, and OpenAPI coverage</output-format-item>
+            <output-format-item>**ANALYZE** controllers for HTTP semantics, validation, error mapping, pagination, ISO-8601 time fields in DTOs, security annotations, caching, versioning, and OpenAPI coverage</output-format-item>
             <output-format-item>**CATEGORIZE** findings by client impact (breaking vs safe) and by concern (validation, errors, performance)</output-format-item>
-            <output-format-item>**APPLY** improvements: correct status codes, `@Valid` DTOs, centralized exception handling, bounded list endpoints, idempotency for retried writes, ETag/If-Match where updates collide, explicit security rules, cache headers, documented operations</output-format-item>
+            <output-format-item>**APPLY** improvements: correct status codes, `@Valid` DTOs, use `OffsetDateTime`/`Instant` in API DTOs for wall-clock timestamps, centralized exception handling, bounded list endpoints, idempotency for retried writes, ETag/If-Match where updates collide, explicit security rules, cache headers, documented operations</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits</output-format-item>
         </output-format-list>
     </output-format>

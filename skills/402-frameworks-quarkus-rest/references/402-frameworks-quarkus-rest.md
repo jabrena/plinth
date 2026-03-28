@@ -1,6 +1,6 @@
 ---
 name: 402-frameworks-quarkus-rest
-description: Use when you need to design, review, or improve REST APIs with Quarkus REST (Jakarta REST) — including resource classes, HTTP methods, status codes, request/response DTOs, Bean Validation, exception mappers, OpenAPI with SmallRye, content negotiation, pagination, and security-aware boundaries.
+description: Use when you need to design, review, or improve REST APIs with Quarkus REST (Jakarta REST) — including resource classes, HTTP methods, status codes, request/response DTOs, ISO-8601 instants in DTOs, Bean Validation, exception mappers, OpenAPI with SmallRye, content negotiation, pagination, and security-aware boundaries.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -37,15 +37,16 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 4: Resource URIs and naming
 - Example 5: HTTP status codes
 - Example 6: DTOs for requests and responses
-- Example 7: API versioning
-- Example 8: Structured error responses
-- Example 9: OpenAPI documentation
-- Example 10: Pagination, sorting, and filtering
-- Example 11: Idempotency and safe retries
-- Example 12: Optimistic concurrency with ETag
-- Example 13: Caching semantics
-- Example 14: Deprecation and sunset
-- Example 15: Security annotations
+- Example 7: Time and locale in contracts
+- Example 8: API versioning
+- Example 9: Structured error responses
+- Example 10: OpenAPI documentation
+- Example 11: Pagination, sorting, and filtering
+- Example 12: Idempotency and safe retries
+- Example 13: Optimistic concurrency with ETag
+- Example 14: Caching semantics
+- Example 15: Deprecation and sunset
+- Example 16: Security annotations
 
 ### Example 1: CRUD resource
 
@@ -351,7 +352,99 @@ class UserEntity {
 }
 ```
 
-### Example 7: API versioning
+### Example 7: Time and locale in contracts
+
+Title: ISO-8601 with offset; optional `Accept-Language` for errors
+Description: Model timestamps as `Instant` or `OffsetDateTime` (ISO-8601 with offset) so clients interpret wall-clock unambiguously—avoid legacy `Date` and ambiguous zone-less `LocalDateTime` in public JSON unless the domain is strictly calendar-local. For localized problem/error text (RFC 7807-style bodies), honor `Accept-Language` only if you keep stable problem `type` URIs/codes identical across locales and avoid leaking sensitive details through translated messages.
+
+**Good example:**
+
+```java
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.ExceptionMapper;
+import jakarta.ws.rs.ext.Provider;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+@Path("/api/v1/events")
+@Produces(MediaType.APPLICATION_JSON)
+public class EventResource {
+
+    @GET
+    @Path("{id}")
+    public Response get(@PathParam("id") String id) {
+        return Response.ok(new EventDTO(
+            Instant.parse("2026-03-23T12:00:00Z"),
+            OffsetDateTime.of(2026, 3, 23, 13, 0, 0, 0, ZoneOffset.ofHours(1)))).build();
+    }
+}
+
+record EventDTO(Instant occurredAt, OffsetDateTime windowStart) { }
+
+// Same Problem Detail field shape as in structured error examples — title/detail from bundles, never raw ex.getMessage()
+record ProblemDetail(String type, String title, int status, String detail, String errorId) { }
+
+@Provider
+public class IllegalArgumentExceptionMapper implements ExceptionMapper<IllegalArgumentException> {
+
+    @Context
+    HttpHeaders headers;
+
+    @Override
+    public Response toResponse(IllegalArgumentException ex) {
+        Locale locale = headers.getAcceptableLanguages().isEmpty()
+            ? Locale.ENGLISH
+            : headers.getAcceptableLanguages().getFirst();
+        ResourceBundle bundle = ResourceBundle.getBundle("ProblemMessages", locale);
+        String detail = bundle.getString("problem.invalid_argument.detail");
+        String title = bundle.getString("problem.invalid_argument.title");
+        return Response.status(400)
+            .type(MediaType.APPLICATION_JSON)
+            .entity(new ProblemDetail(
+                "https://example.com/problems/invalid-argument",
+                title,
+                400,
+                detail,
+                null))
+            .build();
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import java.util.Date;
+
+@Path("/events")
+@Produces(MediaType.APPLICATION_JSON)
+public class AmbiguousTimeResource {
+
+    @GET
+    @Path("{id}")
+    public Response get(@PathParam("id") String id) {
+        return Response.ok(new EventDTO(new Date())).build();
+    }
+}
+
+class EventDTO {
+    private Date createdAt;
+    EventDTO(Date createdAt) { this.createdAt = createdAt; }
+}
+```
+
+
+### Example 8: API versioning
 
 Title: URI path, custom header, or vendor media type — pick one and apply uniformly
 Description: Introduce versioning early so breaking changes do not silently affect existing clients. Three common strategies are shown below — pick one and apply it **uniformly** across every resource. | Strategy | Mechanism | Trade-offs | |---|---|---| | **URI path** | `/api/v1/…` | Easiest to browse, cache, and test; visible in logs | | **Custom header** | `X-API-Version: 2` | Clean URIs; version invisible in browser / CDN cache keys | | **Vendor media type** | `Accept: application/vnd.example.order+json;version=2` | Fully REST-compliant; higher client complexity |
@@ -411,7 +504,7 @@ public class UnversionedOrderResource {
 record OrderDTO(long id) { }
 ```
 
-### Example 8: Structured error responses
+### Example 9: Structured error responses
 
 Title: ExceptionMapper with RFC 7807 Problem Detail shape; no stack traces to clients
 Description: Register `ExceptionMapper` beans to centralize error handling. Return a consistent JSON body with stable fields (type, title, status, detail) aligned with RFC 7807 Problem Details. Log full exceptions server-side with a correlation ID; never return stack traces or raw exception messages to API clients in production.
@@ -510,7 +603,7 @@ public class OrderResource {
 }
 ```
 
-### Example 9: OpenAPI documentation
+### Example 10: OpenAPI documentation
 
 Title: MicroProfile OpenAPI annotations for operations, parameters, and responses
 Description: Document resources with MicroProfile OpenAPI annotations (`@Tag`, `@Operation`, `@APIResponse`, `@Parameter`, `@Schema`) so consumers can integrate without reverse-engineering the code. At minimum document status codes, required parameters, and error shapes.
@@ -587,7 +680,7 @@ public class UndocumentedOrderResource {
 }
 ```
 
-### Example 10: Pagination, sorting, and filtering
+### Example 11: Pagination, sorting, and filtering
 
 Title: Bounded pages, sort whitelist, optional Link headers (RFC 8288)
 Description: Returning unbounded lists does not scale. Use explicit `page`/`size` query params with server-enforced maximums, whitelist sortable field names, and optionally emit `Link` headers (`rel="next"` / `rel="prev"`) for discoverable navigation (RFC 8288).
@@ -660,7 +753,7 @@ public class UnboundedOrderResource {
 record OrderResponse(long id, String status) { }
 ```
 
-### Example 11: Idempotency and safe retries
+### Example 12: Idempotency and safe retries
 
 Title: Idempotency-Key header, deduplication, 409 Conflict
 Description: Network clients retry `POST`; without idempotency, creates can duplicate. Accept an `Idempotency-Key` header and return the same result when the key replays a completed operation. Return **409 Conflict** when a request collides with current resource state (e.g. duplicate business key).
@@ -734,7 +827,7 @@ record CreatePaymentRequest(String accountId, int amountCents) { }
 record PaymentResponse(String id) { }
 ```
 
-### Example 12: Optimistic concurrency with ETag
+### Example 13: Optimistic concurrency with ETag
 
 Title: If-Match / If-None-Match, 412 Precondition Failed, 304 Not Modified
 Description: Prevent lost updates by generating an `ETag` on reads and requiring `If-Match` on writes. Use `jakarta.ws.rs.core.Request.evaluatePreconditions()` to check `If-None-Match` (yields **304**) or `If-Match` (yields **412**) without manual boilerplate.
@@ -819,7 +912,7 @@ record UpdateItemRequest(String name) { }
 record ItemResponse(long id, String name, int version) { }
 ```
 
-### Example 13: Caching semantics
+### Example 14: Caching semantics
 
 Title: Cache-Control: public for catalog data, no-store for authenticated responses
 Description: Set `Cache-Control` deliberately: `public, max-age=N` for anonymous catalog data so CDNs and browsers can cache it; `no-store` for authenticated or personalized payloads to prevent cross-user data leaks via shared caches.
@@ -890,7 +983,7 @@ public class BadProfileResource {
 record UserProfile(String email) { }
 ```
 
-### Example 14: Deprecation and sunset
+### Example 15: Deprecation and sunset
 
 Title: Deprecation, Sunset, and Link headers for API lifecycle signalling
 Description: When an endpoint or version is headed for removal, advertise it with RFC-style headers: `Deprecation` (`true` or an HTTP-date timestamp), `Sunset` with the expected removal date, and `Link` (`rel="successor-version"`) pointing to the replacement. Pair with your versioning strategy and document the timeline in OpenAPI.
@@ -944,7 +1037,7 @@ public class SilentBreakResource {
 record OrderDTOv1(long id, String status) { }
 ```
 
-### Example 15: Security annotations
+### Example 16: Security annotations
 
 Title: @RolesAllowed, @Authenticated, and @PermitAll for declarative access control
 Description: Use Jakarta Security and Quarkus Security annotations to declare access control at the resource or method level. Prefer `@RolesAllowed` for role-based access, `@io.quarkus.security.Authenticated` for any authenticated user, and `@PermitAll` for public endpoints. Avoid ad-hoc security checks inside business logic.
@@ -1016,7 +1109,7 @@ public class AdHocSecurityResource {
 
 - **ANALYZE** resources for HTTP misuse, URI shape, status codes, DTO boundaries, versioning, deprecation/sunset/Link headers, `@Produces`/`@Consumes` declarations, ISO-8601 time fields, pagination bounds, Bean Validation on request DTOs, idempotency, ETag/concurrency, Cache-Control correctness, ExceptionMapper coverage, security annotations, and MicroProfile OpenAPI documentation
 - **CATEGORIZE** findings by impact (CRITICAL for security/semantic violations, MAINTAINABILITY for DTO/versioning/docs, CONSISTENCY for errors) and by area (routing, responses, errors, security, caching, docs)
-- **APPLY** improvements: fix unsafe GETs, normalize paths, return correct status codes, introduce DTO boundaries, add versioning, emit deprecation/sunset/Link when phasing out endpoints, tighten `@Produces`/`@Consumes`, bound list endpoints with `page`/`size` caps, add `@Valid` on request bodies, add idempotency and 409 Conflict patterns, add ETag/`If-Match` checks for updates, set `Cache-Control`, centralize errors with `ExceptionMapper` and Problem Detail shape, add declarative security annotations, and enrich MicroProfile OpenAPI metadata
+- **APPLY** improvements: fix unsafe GETs, normalize paths, return correct status codes, introduce DTO boundaries, use `OffsetDateTime`/`Instant` in API DTOs for ISO-8601 time fields, add versioning, emit deprecation/sunset/Link when phasing out endpoints, tighten `@Produces`/`@Consumes`, bound list endpoints with `page`/`size` caps, add `@Valid` on request bodies, add idempotency and 409 Conflict patterns, add ETag/`If-Match` checks for updates, set `Cache-Control`, centralize errors with `ExceptionMapper` and Problem Detail shape, add declarative security annotations, and enrich MicroProfile OpenAPI metadata
 - **IMPLEMENT** incrementally: preserve public API contracts where possible; use deprecation and versioning for breaking changes; keep error shapes backward compatible unless versioning allows a break
 - **EXPLAIN** trade-offs (e.g., URI vs header versioning, blocking vs reactive patterns, `@Blocking` vs `@RunOnVirtualThread`) when multiple valid options exist
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits; exercise critical endpoints in integration tests where available

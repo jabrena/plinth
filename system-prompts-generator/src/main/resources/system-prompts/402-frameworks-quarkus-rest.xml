@@ -5,7 +5,7 @@
         <version>0.13.0</version>
         <license>Apache-2.0</license>
         <title>Quarkus REST API Guidelines</title>
-        <description>Use when you need to design, review, or improve REST APIs with Quarkus REST (Jakarta REST) — including resource classes, HTTP methods, status codes, request/response DTOs, Bean Validation, exception mappers, OpenAPI with SmallRye, content negotiation, pagination, and security-aware boundaries.</description>
+        <description>Use when you need to design, review, or improve REST APIs with Quarkus REST (Jakarta REST) — including resource classes, HTTP methods, status codes, request/response DTOs, ISO-8601 instants in DTOs, Bean Validation, exception mappers, OpenAPI with SmallRye, content negotiation, pagination, and security-aware boundaries.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in REST API design and Quarkus</role>
@@ -354,7 +354,101 @@ class UserEntity {
             </code-examples>
         </example>
 
-        <example number="7" id="api-versioning">
+        <example number="7" id="time-and-locale-in-contracts">
+            <example-header>
+                <example-title>Time and locale in contracts</example-title>
+                <example-subtitle>ISO-8601 with offset; optional `Accept-Language` for errors</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Model timestamps as `Instant` or `OffsetDateTime` (ISO-8601 with offset) so clients interpret wall-clock unambiguously—avoid legacy `Date` and ambiguous zone-less `LocalDateTime` in public JSON unless the domain is strictly calendar-local. For localized problem/error text (RFC 7807-style bodies), honor `Accept-Language` only if you keep stable problem `type` URIs/codes identical across locales and avoid leaking sensitive details through translated messages.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.Context;
+import jakarta.ws.rs.core.HttpHeaders;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.ExceptionMapper;
+import jakarta.ws.rs.ext.Provider;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
+@Path("/api/v1/events")
+@Produces(MediaType.APPLICATION_JSON)
+public class EventResource {
+
+    @GET
+    @Path("{id}")
+    public Response get(@PathParam("id") String id) {
+        return Response.ok(new EventDTO(
+            Instant.parse("2026-03-23T12:00:00Z"),
+            OffsetDateTime.of(2026, 3, 23, 13, 0, 0, 0, ZoneOffset.ofHours(1)))).build();
+    }
+}
+
+record EventDTO(Instant occurredAt, OffsetDateTime windowStart) { }
+
+// Same Problem Detail field shape as in structured error examples — title/detail from bundles, never raw ex.getMessage()
+record ProblemDetail(String type, String title, int status, String detail, String errorId) { }
+
+@Provider
+public class IllegalArgumentExceptionMapper implements ExceptionMapper<IllegalArgumentException> {
+
+    @Context
+    HttpHeaders headers;
+
+    @Override
+    public Response toResponse(IllegalArgumentException ex) {
+        Locale locale = headers.getAcceptableLanguages().isEmpty()
+            ? Locale.ENGLISH
+            : headers.getAcceptableLanguages().getFirst();
+        ResourceBundle bundle = ResourceBundle.getBundle("ProblemMessages", locale);
+        String detail = bundle.getString("problem.invalid_argument.detail");
+        String title = bundle.getString("problem.invalid_argument.title");
+        return Response.status(400)
+            .type(MediaType.APPLICATION_JSON)
+            .entity(new ProblemDetail(
+                "https://example.com/problems/invalid-argument",
+                title,
+                400,
+                detail,
+                null))
+            .build();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[import jakarta.ws.rs.*;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import java.util.Date;
+
+@Path("/events")
+@Produces(MediaType.APPLICATION_JSON)
+public class AmbiguousTimeResource {
+
+    @GET
+    @Path("{id}")
+    public Response get(@PathParam("id") String id) {
+        return Response.ok(new EventDTO(new Date())).build();
+    }
+}
+
+class EventDTO {
+    private Date createdAt;
+    EventDTO(Date createdAt) { this.createdAt = createdAt; }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="8" id="api-versioning">
             <example-header>
                 <example-title>API versioning</example-title>
                 <example-subtitle>URI path, custom header, or vendor media type — pick one and apply uniformly</example-subtitle>
@@ -474,7 +568,7 @@ record OrderDTO(long id) { }]]></code-block>
             </code-examples>
         </example>
 
-        <example number="8" id="structured-error-responses">
+        <example number="9" id="structured-error-responses">
             <example-header>
                 <example-title>Structured error responses</example-title>
                 <example-subtitle>ExceptionMapper with RFC 7807 Problem Detail shape; no stack traces to clients</example-subtitle>
@@ -576,7 +670,7 @@ public class OrderResource {
             </code-examples>
         </example>
 
-        <example number="9" id="openapi-documentation">
+        <example number="10" id="openapi-documentation">
             <example-header>
                 <example-title>OpenAPI documentation</example-title>
                 <example-subtitle>MicroProfile OpenAPI annotations for operations, parameters, and responses</example-subtitle>
@@ -656,7 +750,7 @@ public class UndocumentedOrderResource {
             </code-examples>
         </example>
 
-        <example number="10" id="pagination-sorting-filtering">
+        <example number="11" id="pagination-sorting-filtering">
             <example-header>
                 <example-title>Pagination, sorting, and filtering</example-title>
                 <example-subtitle>Bounded pages, sort whitelist, optional Link headers (RFC 8288)</example-subtitle>
@@ -732,7 +826,7 @@ record OrderResponse(long id, String status) { }]]></code-block>
             </code-examples>
         </example>
 
-        <example number="11" id="idempotency-409-conflict">
+        <example number="12" id="idempotency-409-conflict">
             <example-header>
                 <example-title>Idempotency and safe retries</example-title>
                 <example-subtitle>Idempotency-Key header, deduplication, 409 Conflict</example-subtitle>
@@ -809,7 +903,7 @@ record PaymentResponse(String id) { }]]></code-block>
             </code-examples>
         </example>
 
-        <example number="12" id="etag-concurrency">
+        <example number="13" id="etag-concurrency">
             <example-header>
                 <example-title>Optimistic concurrency with ETag</example-title>
                 <example-subtitle>If-Match / If-None-Match, 412 Precondition Failed, 304 Not Modified</example-subtitle>
@@ -897,7 +991,7 @@ record ItemResponse(long id, String name, int version) { }]]></code-block>
             </code-examples>
         </example>
 
-        <example number="13" id="caching-semantics">
+        <example number="14" id="caching-semantics">
             <example-header>
                 <example-title>Caching semantics</example-title>
                 <example-subtitle>Cache-Control: public for catalog data, no-store for authenticated responses</example-subtitle>
@@ -971,7 +1065,7 @@ record UserProfile(String email) { }]]></code-block>
             </code-examples>
         </example>
 
-        <example number="14" id="deprecation-sunset">
+        <example number="15" id="deprecation-sunset">
             <example-header>
                 <example-title>Deprecation and sunset</example-title>
                 <example-subtitle>Deprecation, Sunset, and Link headers for API lifecycle signalling</example-subtitle>
@@ -1028,7 +1122,7 @@ record OrderDTOv1(long id, String status) { }]]></code-block>
             </code-examples>
         </example>
 
-        <example number="15" id="security-annotations">
+        <example number="16" id="security-annotations">
             <example-header>
                 <example-title>Security annotations</example-title>
                 <example-subtitle>@RolesAllowed, @Authenticated, and @PermitAll for declarative access control</example-subtitle>
@@ -1104,7 +1198,7 @@ public class AdHocSecurityResource {
         <output-format-list>
             <output-format-item>**ANALYZE** resources for HTTP misuse, URI shape, status codes, DTO boundaries, versioning, deprecation/sunset/Link headers, `@Produces`/`@Consumes` declarations, ISO-8601 time fields, pagination bounds, Bean Validation on request DTOs, idempotency, ETag/concurrency, Cache-Control correctness, ExceptionMapper coverage, security annotations, and MicroProfile OpenAPI documentation</output-format-item>
             <output-format-item>**CATEGORIZE** findings by impact (CRITICAL for security/semantic violations, MAINTAINABILITY for DTO/versioning/docs, CONSISTENCY for errors) and by area (routing, responses, errors, security, caching, docs)</output-format-item>
-            <output-format-item>**APPLY** improvements: fix unsafe GETs, normalize paths, return correct status codes, introduce DTO boundaries, add versioning, emit deprecation/sunset/Link when phasing out endpoints, tighten `@Produces`/`@Consumes`, bound list endpoints with `page`/`size` caps, add `@Valid` on request bodies, add idempotency and 409 Conflict patterns, add ETag/`If-Match` checks for updates, set `Cache-Control`, centralize errors with `ExceptionMapper` and Problem Detail shape, add declarative security annotations, and enrich MicroProfile OpenAPI metadata</output-format-item>
+            <output-format-item>**APPLY** improvements: fix unsafe GETs, normalize paths, return correct status codes, introduce DTO boundaries, use `OffsetDateTime`/`Instant` in API DTOs for ISO-8601 time fields, add versioning, emit deprecation/sunset/Link when phasing out endpoints, tighten `@Produces`/`@Consumes`, bound list endpoints with `page`/`size` caps, add `@Valid` on request bodies, add idempotency and 409 Conflict patterns, add ETag/`If-Match` checks for updates, set `Cache-Control`, centralize errors with `ExceptionMapper` and Problem Detail shape, add declarative security annotations, and enrich MicroProfile OpenAPI metadata</output-format-item>
             <output-format-item>**IMPLEMENT** incrementally: preserve public API contracts where possible; use deprecation and versioning for breaking changes; keep error shapes backward compatible unless versioning allows a break</output-format-item>
             <output-format-item>**EXPLAIN** trade-offs (e.g., URI vs header versioning, blocking vs reactive patterns, `@Blocking` vs `@RunOnVirtualThread`) when multiple valid options exist</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits; exercise critical endpoints in integration tests where available</output-format-item>
