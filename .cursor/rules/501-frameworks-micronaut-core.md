@@ -39,8 +39,11 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 6: HTTP controllers
 - Example 7: Scheduled tasks
 - Example 8: Blocking work and the event loop
-- Example 9: Graceful shutdown
-- Example 10: CDI-style interceptors
+- Example 9: Multiple beans of the same type — @Primary and @Named
+- Example 10: Graceful shutdown
+- Example 11: Virtual-thread-friendly executors (Java 21+)
+- Example 12: CDI-style interceptors
+- Example 13: javax vs jakarta consistency
 
 ### Example 1: Application bootstrap
 
@@ -393,7 +396,101 @@ public class BlockingOnEventLoopController {
 }
 ```
 
-### Example 9: Graceful shutdown
+### Example 9: Multiple beans of the same type — @Primary and @Named
+
+Title: Disambiguate implementations when several beans share an injection type
+Description: When you register more than one bean of the same type, mark the default with `@Primary` or inject a specific one with `@Named("qualifier")` (or a custom `@Qualifier`). Prefer constructor parameters with explicit names over field injection. Avoid multiple candidates with no `@Primary` and no qualifier — the context fails to resolve the dependency.
+
+**Good example:**
+
+```java
+import io.micronaut.context.annotation.Bean;
+import io.micronaut.context.annotation.Factory;
+import io.micronaut.context.annotation.Primary;
+import io.micronaut.context.annotation.Singleton;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
+
+public interface NotificationSender {
+    void send(String message);
+}
+
+@Factory
+public class NotificationFactory {
+
+    @Bean
+    @Singleton
+    @Primary
+    NotificationSender loggingSender() {
+        return message -> { /* logging sink */ };
+    }
+
+    @Bean
+    @Singleton
+    @Named("metrics")
+    NotificationSender metricsSender() {
+        return message -> { /* metrics sink */ };
+    }
+}
+
+@Singleton
+public class AlertService {
+
+    private final NotificationSender defaultSender;
+    private final NotificationSender metricsSender;
+
+    @Inject
+    public AlertService(
+            NotificationSender defaultSender,
+            @Named("metrics") NotificationSender metricsSender) {
+        this.defaultSender = defaultSender;
+        this.metricsSender = metricsSender;
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import io.micronaut.context.annotation.Bean;
+import io.micronaut.context.annotation.Factory;
+import io.micronaut.context.annotation.Singleton;
+import jakarta.inject.Inject;
+
+public interface NotificationSender {
+    void send(String message);
+}
+
+@Factory
+public class NotificationFactory {
+
+    @Bean
+    @Singleton
+    NotificationSender emailSender() {
+        return m -> { };
+    }
+
+    @Bean
+    @Singleton
+    NotificationSender smsSender() {
+        return m -> { };
+    }
+}
+
+@Singleton
+public class AlertService {
+
+    private final NotificationSender sender;
+
+    @Inject
+    public AlertService(NotificationSender sender) {
+        // Bad: two NotificationSender beans — ambiguous injection at compile/runtime
+        this.sender = sender;
+    }
+}
+```
+
+### Example 10: Graceful shutdown
 
 Title: Netty server shutdown timeouts
 Description: Configure graceful shutdown so active requests can finish. Tune parent/quiet period properties for your SLA; document values for operators.
@@ -417,7 +514,44 @@ micronaut:
     port: 8080
 ```
 
-### Example 10: CDI-style interceptors
+### Example 11: Virtual-thread-friendly executors (Java 21+)
+
+Title: Prefer virtual-thread or thread-per-task IO executors over extra platform pools
+Description: On **Java 21+**, Micronaut can route work through virtual-thread-friendly executors (see `micronaut.executors` and your Micronaut version docs). Use `@ExecuteOn` for blocking controller methods; avoid stacking a large fixed **platform** thread pool on top when the framework already schedules work on virtual threads — that recreates a pool-within-pool bottleneck.
+
+**Good example:**
+
+```yaml
+# Example: thread-per-task style IO executor (verify keys against your Micronaut version)
+micronaut:
+  executors:
+    io:
+      type: THREAD_PER_TASK
+```
+
+**Bad example:**
+
+```java
+import io.micronaut.context.annotation.Bean;
+import io.micronaut.context.annotation.Factory;
+import io.micronaut.context.annotation.Singleton;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+
+// Bad: extra fixed platform pool on top of virtual-thread-friendly dispatch —
+// work piles up waiting for scarce platform threads
+@Factory
+public class RedundantPoolFactory {
+
+    @Bean
+    @Singleton
+    ExecutorService requestExecutor() {
+        return Executors.newFixedThreadPool(200);
+    }
+}
+```
+
+### Example 12: CDI-style interceptors
 
 Title: @InterceptorBinding for cross-cutting behavior
 Description: Attach logging, auditing, or timing with Micronaut AOP interceptors instead of duplicating boilerplate in every service method.
@@ -471,6 +605,58 @@ public class OrderService {
     }
 
     private Order doPlace(OrderRequest r) { return null; }
+}
+```
+
+### Example 13: javax vs jakarta consistency
+
+Title: Use jakarta.* for CDI, validation, and lifecycle; keep javax.sql for JDBC
+Description: Micronaut 4.x aligns with **Jakarta EE 9+** namespaces. Use `jakarta.inject.Inject`, `jakarta.annotation.PostConstruct` / `PreDestroy`, and `jakarta.validation.constraints.*` as appropriate. **Do not** mix legacy `javax.inject`, `javax.annotation`, or `javax.validation` with Jakarta equivalents on the same classpath. **Exception:** JDK types such as `javax.sql.DataSource` remain under `javax.sql`.
+
+**Good example:**
+
+```java
+import io.micronaut.context.annotation.Singleton;
+import jakarta.annotation.PreDestroy;
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.NotBlank;
+import javax.sql.DataSource;
+
+@Singleton
+public class ExampleBean {
+
+    private final DataSource dataSource;
+
+    @Inject
+    public ExampleBean(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    @PreDestroy
+    void cleanup() {
+        // release resources
+    }
+}
+
+record ValidatedInput(@NotBlank String value) { }
+```
+
+**Bad example:**
+
+```java
+// Mixing legacy javax.* EE imports with Micronaut 4 — wrong API on the classpath
+import javax.inject.Inject;
+import javax.validation.constraints.NotBlank;
+import javax.sql.DataSource;
+
+public class BrokenBean {
+
+    private final DataSource dataSource;
+
+    @Inject
+    public BrokenBean(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
 }
 ```
 

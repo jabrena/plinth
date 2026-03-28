@@ -6,7 +6,7 @@ metadata:
   author: Juan Antonio Breña Moral
   version: 0.13.0
 ---
-# Quarkus unit testing
+# Quarkus Unit Testing
 
 Apply fast testing strategies for Quarkus: Mockito-first, QuarkusTest when CDI wiring matters.
 

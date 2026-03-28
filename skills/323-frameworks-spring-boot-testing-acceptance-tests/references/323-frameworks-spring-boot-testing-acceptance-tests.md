@@ -18,14 +18,14 @@ Treats the user as a knowledgeable partner. Parses the Gherkin file systematical
 
 ## Goal
 
-Help developers implement acceptance tests from Gherkin feature files in Spring Boot projects. With a `.feature` file in context, select scenarios tagged `@acceptance` (or `@acceptance-tests`), implement happy-path tests that boot the full application on `RANDOM_PORT` with real HTTP via `TestRestTemplate` (auto-configured by Spring Boot—no extra REST client dependency), wire databases and Kafka with Testcontainers and `@ServiceConnection` (Spring Boot 4.0.x), and stub outbound calls to third-party HTTP with WireMock and `@DynamicPropertySource` for base URLs—without mocking internal `@Service` beans. Follow the same narrative style as `@321-frameworks-spring-boot-testing-unit-tests` and `@322-frameworks-spring-boot-testing-integration-tests`: a concise goal, constraints, and illustrative examples; for framework-agnostic Gherkin-only patterns see `@133-java-testing-acceptance-tests`.
+Help developers implement acceptance tests from Gherkin feature files in Spring Boot projects. With a `.feature` file in context, select scenarios tagged `@acceptance` (or `@acceptance-tests`), implement happy-path tests that boot the full application on `RANDOM_PORT` with real HTTP via `TestRestTemplate` (auto-configured by Spring Boot—no extra REST client dependency), wire databases and Kafka with Testcontainers and `@ServiceConnection` (Spring Boot 4.0.x), and stub outbound calls to third-party HTTP with WireMock and `@DynamicPropertySource` for base URLs—without mocking internal `@Service` beans. Follow the same narrative style as `@321-frameworks-spring-boot-testing-unit-tests` and `@322-frameworks-spring-boot-testing-integration-tests`: a concise goal, constraints, and illustrative examples; for framework-agnostic Gherkin-only patterns see `@133-java-testing-acceptance-tests`; for Quarkus use `@423-frameworks-quarkus-testing-acceptance-tests`; for Micronaut use `@523-frameworks-micronaut-testing-acceptance-tests`.
 
 ## Constraints
 
 Before generating any code, ensure the project is in a valid state and the Gherkin feature file is in context. Compilation failure is a BLOCKING condition. A missing `.feature` file is a BLOCKING condition.
 
 - **PRECONDITION**: The Gherkin `.feature` file MUST be in context — stop and ask if not provided
-- **PRECONDITION**: The project MUST use Spring Boot — stop and direct the user to `@133-java-testing-acceptance-tests` if they use framework-agnostic Java
+- **PRECONDITION**: The project MUST use Spring Boot — stop and direct the user to `@133-java-testing-acceptance-tests` for framework-agnostic Java, or to `@423-frameworks-quarkus-testing-acceptance-tests` / `@523-frameworks-micronaut-testing-acceptance-tests` if they use another stack
 - **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
 - **PREREQUISITE**: Project must compile successfully and pass basic validation checks before generating acceptance test scaffolding
 - **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
@@ -335,7 +335,7 @@ class OrderCreationAT {
 ### Example 5: Acceptance test naming convention (*AT) and Maven Surefire/Failsafe configuration
 
 Title: Three-tier split: *Test → Surefire, *IT + *AT → Failsafe
-Description: Name acceptance test classes with the `AT` suffix so `maven-failsafe-plugin` picks them up automatically alongside `*IT` integration tests, while `maven-surefire-plugin` runs only fast `*Test` unit tests. This keeps `./mvnw test` fast and `./mvnw verify` the gate for the full build. `TestRestTemplate` needs no extra dependency beyond `spring-boot-starter-test`; add test-scoped `org.testcontainers:junit-jupiter` plus the Testcontainers modules you use (e.g. `postgresql`, `kafka`) and a WireMock JUnit 5 artifact—do not add REST Assured for this rule.
+Description: Name acceptance test classes with the `AT` suffix so `maven-failsafe-plugin` picks them up automatically alongside `*IT` integration tests, while `maven-surefire-plugin` runs only fast `*Test` unit tests. This keeps `./mvnw test` fast and `./mvnw verify` the gate for the full build. In `pom.xml`, Surefire should include only `**/*Test.java` and exclude `**/*IT.java` and `**/*AT.java` so integration and acceptance classes never run in the unit-test phase (same pattern as `@423-frameworks-quarkus-testing-acceptance-tests` and `@523-frameworks-micronaut-testing-acceptance-tests`). `TestRestTemplate` needs no extra dependency beyond `spring-boot-starter-test`; add test-scoped `org.testcontainers:junit-jupiter` plus the Testcontainers modules you use (e.g. `postgresql`, `kafka`) and a WireMock JUnit 5 artifact—do not add REST Assured for this rule.
 
 **Good example:**
 

@@ -9,7 +9,7 @@
     <description>Use when you need to write fast unit tests for Quarkus applications — including pure tests with @ExtendWith(MockitoExtension.class), @QuarkusTest with @InjectMock for full CDI mock replacement, @InjectSpy for partial CDI bean mocking, REST Assured for resource-focused tests, @ParameterizedTest with @CsvSource / @MethodSource, QuarkusTestProfile for test-specific configuration overrides, and naming conventions (*Test → Surefire, *IT → Failsafe). For framework-agnostic Java use @131-java-testing-unit-testing.</description>
   </metadata>
 
-  <title>Quarkus unit testing</title>
+  <title>Quarkus Unit Testing</title>
   <goal><![CDATA[
 Apply fast testing strategies for Quarkus: Mockito-first, QuarkusTest when CDI wiring matters.
 

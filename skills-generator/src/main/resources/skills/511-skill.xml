@@ -6,10 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0</version>
     <license>Apache-2.0</license>
-    <description><![CDATA[
-        Programmatic JDBC in Micronaut with pooled DataSource, parameterized SQL, io.micronaut.transaction.annotation.Transactional, batching, and domain exception translation.
-        ]]>
-    </description>
+    <description>Use when you need programmatic JDBC in Micronaut — pooled DataSource, parameterized SQL, io.micronaut.transaction.annotation.Transactional, batching, and domain exception translation.</description>
   </metadata>
 
   <title>Micronaut JDBC — programmatic SQL</title>

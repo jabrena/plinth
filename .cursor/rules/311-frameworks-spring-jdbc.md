@@ -14,7 +14,7 @@ You are a Senior software engineer with extensive experience in Spring Framework
 
 ## Goal
 
-Spring's JDBC support centers on `JdbcTemplate` and friends for template-style access, and on `JdbcClient` for a fluent, chainable API built on top of that stack. Prefer explicit SQL with bind parameters, map rows to immutable records or small DTOs, keep transactions at the service layer, and let Spring translate SQL exceptions to `DataAccessException`. Use `NamedParameterJdbcTemplate` when named placeholders improve readability. Choose Spring Data JDBC (`@312-frameworks-spring-data-jdbc`) when repositories and aggregate mapping fit; use `JdbcTemplate` / `JdbcClient` for ad-hoc SQL, reporting, or tight control over statements.
+Spring's JDBC support centers on `JdbcTemplate` and friends for template-style access, and on `JdbcClient` for a fluent, chainable API built on top of that stack. Prefer explicit SQL with bind parameters, map rows to immutable records or small DTOs, keep transactions at the service layer, and let Spring translate SQL exceptions to `DataAccessException`. Use `NamedParameterJdbcTemplate` when named placeholders improve readability. Choose Spring Data JDBC (`@312-frameworks-spring-data-jdbc`) when repositories and aggregate mapping fit; use `JdbcTemplate` / `JdbcClient` for ad-hoc SQL, reporting, or tight control over statements. For schema evolution with Flyway, use `@313-frameworks-spring-flyway-migrations`.
 
 ## Constraints
 

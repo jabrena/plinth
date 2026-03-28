@@ -45,6 +45,7 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 12: Graceful shutdown
 - Example 13: Virtual threads (Spring Boot 4.0.x)
 - Example 14: javax vs jakarta consistency (Spring Boot 4.0.x)
+- Example 15: Test-only beans — `@TestConfiguration`
 
 ### Example 1: Spring Boot main application class
 
@@ -1222,7 +1223,7 @@ Description: Enable graceful shutdown so the embedded server stops accepting new
 
 **Good example:**
 
-```text
+```yaml
 # application.yml (Spring Boot 4.0.x)
 server:
   shutdown: graceful
@@ -1230,26 +1231,6 @@ server:
 spring:
   lifecycle:
     timeout-per-shutdown-phase: 30s
-
-# Align schedulers with graceful shutdown (Java)
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.scheduling.TaskScheduler;
-import org.springframework.scheduling.concurrent.ThreadPoolTaskScheduler;
-
-@Configuration
-class GracefulSchedulingConfig {
-
-    @Bean
-    TaskScheduler taskScheduler() {
-        ThreadPoolTaskScheduler scheduler = new ThreadPoolTaskScheduler();
-        scheduler.setPoolSize(4);
-        scheduler.setWaitForTasksToCompleteOnShutdown(true);
-        scheduler.setAwaitTerminationSeconds(20);
-        scheduler.initialize();
-        return scheduler;
-    }
-}
 ```
 
 **Bad example:**
@@ -1355,6 +1336,54 @@ class BrokenBean {
 
     @PostConstruct
     void init() { }
+}
+```
+
+### Example 15: Test-only beans — `@TestConfiguration`
+
+Title: Override beans in tests without polluting the main application context
+Description: Use `@TestConfiguration` on `@Configuration` classes that are **only** imported from tests (e.g. `@Import`, `@SpringBootTest` classes). Prefer `@MockBean` / `@MockitoBean` for simple mocks, but use `@TestConfiguration` when you need a small, explicit graph of test doubles. Do not place `@TestConfiguration` on the main application class or under default component scanning — it is intended for test slices.
+
+**Good example:**
+
+```java
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+
+@TestConfiguration
+public class PaymentTestConfig {
+
+    @Bean
+    @Primary
+    PaymentClient stubPaymentClient() {
+        return amount -> true; // deterministic in tests
+    }
+}
+
+// In a test class:
+// @SpringBootTest
+// @Import(PaymentTestConfig.class)
+// class OrderServiceIT { ... }
+```
+
+**Bad example:**
+
+```java
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
+// Bad: production @Configuration tagged only with @Profile("test") — easy to
+// leak test doubles into non-test contexts if profiles drift
+@Configuration
+@Profile("test")
+public class ProductionConfigWithTestBeans {
+
+    @Bean
+    PaymentClient fakePayments() {
+        return amount -> true;
+    }
 }
 ```
 

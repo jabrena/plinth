@@ -5,13 +5,13 @@
         <version>0.13.0</version>
         <license>Apache-2.0</license>
         <title>Quarkus JDBC — programmatic SQL</title>
-        <description>Use when you need to write or review programmatic JDBC in Quarkus — including Agroal-backed DataSource injection, PreparedStatement with bind parameters, mapping rows to Java records, transactions (@Transactional), batch updates, and optional NamedParameterJdbcTemplate when spring-jdbc is on the classpath. Prefer explicit SQL without ORM.</description>
+        <description>Use when you need to write or review programmatic JDBC in Quarkus — including Agroal-backed DataSource injection, PreparedStatement with bind parameters, mapping rows to Java records, transactions (@Transactional), batch updates, SQL text blocks and upserts with domain exception translation, and optional NamedParameterJdbcTemplate when spring-jdbc is on the classpath. Prefer explicit SQL without ORM.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Quarkus and JDBC data access</role>
 
     <goal>
-        Quarkus pairs JDBC drivers (`quarkus-jdbc-*`) with Agroal connection pooling. Application code should use injected `javax.sql.DataSource`, always bind parameters, map rows to immutable records or small DTOs, and declare transactions at the service boundary with `jakarta.transaction.Transactional`. Use Panache (`@412-frameworks-quarkus-panache`) when you want repository-style Hibernate access; use raw JDBC for reporting, bulk ETL, or maximum SQL control.
+        Quarkus pairs JDBC drivers (`quarkus-jdbc-*`) with Agroal connection pooling. Application code should use injected `javax.sql.DataSource`, always bind parameters, map rows to immutable records or small DTOs, and declare transactions at the service boundary with `jakarta.transaction.Transactional`. Use Panache (`@412-frameworks-quarkus-panache`) when you want repository-style Hibernate access; use raw JDBC for reporting, bulk ETL, or maximum SQL control. For Flyway migrations with Quarkus, use `@413-frameworks-quarkus-flyway-migrations`.
     </goal>
 
     <constraints>
@@ -21,11 +21,11 @@
         </constraints-description>
         <constraint-list>
             <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
-            <constraint>**PREREQUISITE**: Project must compile successfully before JDBC changes</constraint>
-            <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE</constraint>
-            <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+            <constraint>**PREREQUISITE**: Project must compile successfully and pass basic validation checks before any JDBC refactoring</constraint>
+            <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations</constraint>
             <constraint>**BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with data-access changes</constraint>
             <constraint>**NO EXCEPTIONS**: Under no circumstances should JDBC recommendations be applied to a project that fails to compile</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
         </constraint-list>
     </constraints>
 
@@ -687,9 +687,9 @@ public class OrderService {
             </code-examples>
         </example>
 
-        <example number="10" id="cdi-self-invocation-pitfall">
+        <example number="10" id="self-invocation-pitfall">
             <example-header>
-                <example-title>CDI self-invocation pitfall</example-title>
+                <example-title>Self-invocation pitfall</example-title>
                 <example-subtitle>Calling @Transactional via this.method() bypasses the CDI interceptor</example-subtitle>
             </example-header>
             <example-description>
@@ -747,7 +747,7 @@ public class OrderService {
     }
 }]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
+                <bad-example>
                     <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.transaction.Transactional;
 import javax.sql.DataSource;
@@ -778,6 +778,87 @@ public class OrderService {
             ps.executeUpdate();
         }
     }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="11" id="text-block-sql-domain-exception">
+            <example-header>
+                <example-title>Text blocks, upserts, and domain exceptions</example-title>
+                <example-subtitle>Readable multi-line SQL and fail-fast translation</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use Java text blocks for multi-line SQL (PostgreSQL `ON CONFLICT`, etc.). Keep `PreparedStatement` parameters bound; translate `SQLException` to a single domain runtime type so layers above the repository stay persistence-agnostic. Structured debug logging belongs at appropriate levels — avoid logging secrets or full row payloads at INFO.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import javax.sql.DataSource;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+@ApplicationScoped
+public class GreekGodRepository {
+
+    private static final Logger LOG = LoggerFactory.getLogger(GreekGodRepository.class);
+
+    private static final String SELECT_ORDERED = "SELECT name FROM greek_god ORDER BY name";
+    private static final String UPSERT = """
+            INSERT INTO greek_god (name) VALUES (?)
+            ON CONFLICT (name) DO NOTHING
+            """;
+
+    private final DataSource dataSource;
+
+    @Inject
+    public GreekGodRepository(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    public List<String> findAllNamesOrdered() {
+        try (Connection c = dataSource.getConnection();
+             PreparedStatement ps = c.prepareStatement(SELECT_ORDERED);
+             ResultSet rs = ps.executeQuery()) {
+            List<String> names = new ArrayList<>();
+            while (rs.next()) {
+                names.add(rs.getString(1));
+            }
+            LOG.debug("Loaded {} Greek god names from database", names.size());
+            return names;
+        } catch (SQLException e) {
+            throw new GreekGodsDataAccessException("Failed to load Greek god names", e);
+        }
+    }
+
+    public void upsertByName(String name) {
+        try (Connection c = dataSource.getConnection();
+             PreparedStatement ps = c.prepareStatement(UPSERT)) {
+            ps.setString(1, name);
+            ps.executeUpdate();
+        } catch (SQLException e) {
+            throw new GreekGodsDataAccessException("Failed to upsert Greek god: " + name, e);
+        }
+    }
+}
+
+public class GreekGodsDataAccessException extends RuntimeException {
+    public GreekGodsDataAccessException(String message, Throwable cause) {
+        super(message, cause);
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Bad: concatenated multi-line SQL without bind params; swallows or logs-and-ignores SQLException
+public void upsertByName(String name) {
+    String sql = "INSERT INTO greek_god (name) VALUES ('" + name + "') ON CONFLICT (name) DO NOTHING";
+    // ...
 }]]></code-block>
                 </bad-example>
             </code-examples>

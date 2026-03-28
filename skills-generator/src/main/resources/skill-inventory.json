@@ -37,6 +37,7 @@
   {"id": "302", "xml": true},
   {"id": "311", "xml": true},
   {"id": "312", "xml": true},
+  {"id": "313", "xml": true},
   {"id": "321", "xml": true},
   {"id": "322", "xml": true},
   {"id": "323", "xml": true},
@@ -44,6 +45,7 @@
   {"id": "402", "xml": true},
   {"id": "411", "xml": true},
   {"id": "412", "xml": true},
+  {"id": "413", "xml": true},
   {"id": "421", "xml": true},
   {"id": "422", "xml": true},
   {"id": "423", "xml": true},
@@ -51,6 +53,7 @@
   {"id": "502", "xml": true},
   {"id": "511", "xml": true},
   {"id": "512", "xml": true},
+  {"id": "513", "xml": true},
   {"id": "521", "xml": true},
   {"id": "522", "xml": true},
   {"id": "523", "xml": true}

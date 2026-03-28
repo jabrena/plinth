@@ -9,9 +9,9 @@
     <description>Use when you need to write or improve integration tests — including Testcontainers with @ServiceConnection, @DataJdbcTest persistence slices, TestRestTemplate or MockMvcTester for HTTP, data isolation, and container lifecycle management for Spring Boot 4.0.x.</description>
   </metadata>
 
-  <title>Java Integration Testing Guidelines</title>
+  <title>Spring Boot Integration Testing</title>
   <goal><![CDATA[
-Apply Java integration testing guidelines for Spring Boot 4.0.x.
+Apply Spring Boot integration testing guidelines for Spring Boot 4.0.x.
 
 **What is covered in this Skill?**
 

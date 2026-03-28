@@ -6,7 +6,7 @@ metadata:
   author: Juan Antonio Breña Moral
   version: 0.13.0
 ---
-# Quarkus integration testing
+# Quarkus Integration Testing
 
 ## Role
 
@@ -523,8 +523,8 @@ class BookIT {
 
 ### Example 8: Test naming conventions and Maven build split
 
-Title: *Test for Surefire, *IT for Failsafe — consistent suffixes enforce build phase separation
-Description: Maven Surefire picks up `*Test.java` classes (fast, no containers) during the `test` phase. Maven Failsafe picks up `*IT.java` classes (container-backed) during the `integration-test` / `verify` phases. Quarkus integration tests annotated with `@QuarkusTest` should be named `*IT` so they are excluded from the fast Surefire pass and run via Failsafe only. Configure both plugins explicitly to prevent accidental overlap.
+Title: *Test / *Tests for Surefire; *IT and *AT for Failsafe — same pattern as other Java Enterprise prompts
+Description: Use suffix conventions that Maven Surefire and Failsafe recognise out of the box: `*Test` / `*Tests` for fast unit tests (Surefire, `test` phase); `*IT` for integration tests with `@QuarkusTest`, Dev Services, or Testcontainers (Failsafe, `integration-test` / `verify`); `*AT` for acceptance / Gherkin-driven full-stack tests (also Failsafe). Quarkus classes that start Docker via Dev Services or `@QuarkusTestResource` should not use the `*Test` suffix — name them `*IT` or `*AT` so they are excluded from the fast Surefire pass. Configure both plugins with explicit `<includes>` and Surefire `<excludes>` for `*IT` and `*AT` to prevent double execution.
 
 **Good example:**
 
@@ -532,27 +532,32 @@ Description: Maven Surefire picks up `*Test.java` classes (fast, no containers) 
 <build>
     <plugins>
 
-        <!-- Surefire: fast unit tests (*Test) — "test" phase, no containers -->
+        <!-- Surefire: fast unit tests (*Test, *Tests) — "test" phase -->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
+            <version>3.5.5</version>
             <configuration>
                 <includes>
                     <include>**/*Test.java</include>
+                    <include>**/*Tests.java</include>
                 </includes>
                 <excludes>
                     <exclude>**/*IT.java</exclude>
+                    <exclude>**/*AT.java</exclude>
                 </excludes>
             </configuration>
         </plugin>
 
-        <!-- Failsafe: integration tests (*IT) — "integration-test" + "verify" phases -->
+        <!-- Failsafe: integration (*IT) and acceptance (*AT) — "integration-test" + "verify" phases -->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>
+            <version>3.5.5</version>
             <configuration>
                 <includes>
                     <include>**/*IT.java</include>
+                    <include>**/*AT.java</include>
                 </includes>
             </configuration>
             <executions>
@@ -568,8 +573,8 @@ Description: Maven Surefire picks up `*Test.java` classes (fast, no containers) 
     </plugins>
 </build>
 <!--
-    mvn test    → Surefire: *Test only (fast, no containers)
-    mvn verify  → Surefire: *Test + Failsafe: *IT (full safety net, with Dev Services)
+    mvn test    → Surefire: *Test, *Tests only (fast)
+    mvn verify  → Surefire: *Test, *Tests  +  Failsafe: *IT, *AT (full safety net, Dev Services / Testcontainers)
 -->
 ```
 
@@ -606,7 +611,7 @@ class BookRepositoryTest {        // ← should be BookRepositoryIT
 - **ANALYZE** integration tests: scope vs unit overlap, Dev Services or Testcontainers configuration, HTTP assertion quality, data isolation strategy, naming conventions, and container lifecycle efficiency
 - **CATEGORIZE** findings by impact (FLAKINESS for shared state or order-dependent tests, SPEED for per-method containers or missing Dev Services, CLARITY for missing assertions or vague test names)
 - **APPLY** improvements: enable Dev Services for standard infrastructure, introduce `QuarkusTestResourceLifecycleManager` for custom containers or WireMock stubs, add `@TestTransaction` or `@BeforeEach` cleanup for data isolation, use REST Assured for HTTP assertions, add `@QuarkusIntegrationTest` for packaged artifact validation
-- **IMPLEMENT** incrementally; keep `mvn verify` green after each step; align test class suffixes (`*Test` for Surefire, `*IT` for Failsafe) and configure both Maven plugins explicitly
+- **IMPLEMENT** incrementally; keep `mvn verify` green after each step; align test class suffixes (`*Test` / `*Tests` for Surefire, `*IT` / `*AT` for Failsafe) and configure both Maven plugins explicitly
 - **EXPLAIN** when to use `@421-frameworks-quarkus-testing-unit-tests` vs `@QuarkusTest` vs `@QuarkusIntegrationTest` if concerns are being mixed
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive test changes
 
@@ -617,4 +622,4 @@ class BookRepositoryTest {        // ← should be BookRepositoryIT
 - **DOCKER**: Dev Services and Testcontainers require Docker (or a compatible OCI runtime) in CI — document this prerequisite in the project README and gate CI jobs accordingly
 - **DATA SAFETY**: Never point integration tests at production or shared developer databases; always use isolated Dev Services containers or explicit `QuarkusTestResourceLifecycleManager` containers
 - **TEST PROFILE RESTARTS**: Each distinct `@QuarkusTestProfile` triggers a Quarkus application restart — consolidate config overrides across test classes to minimize restart overhead and total test runtime
-- **INCREMENTAL SAFETY**: Add or refactor one integration test class at a time; verify isolation and naming conventions (`*IT` for Failsafe) before moving to the next change
+- **INCREMENTAL SAFETY**: Add or refactor one integration test class at a time; verify isolation and naming conventions (`*IT` / `*AT` for Failsafe) before moving to the next change

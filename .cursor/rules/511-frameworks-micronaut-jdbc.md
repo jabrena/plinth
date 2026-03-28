@@ -14,18 +14,18 @@ You are a Senior software engineer with extensive experience in Micronaut and JD
 
 ## Goal
 
-Micronaut pairs JDBC drivers (`micronaut-jdbc-hikari` plus `micronaut-sql-jdbc` or a driver BOM) with a pooled `javax.sql.DataSource` from configuration. Application code should inject `DataSource`, always bind parameters, map rows to immutable records or small DTOs, and declare transactions at the service boundary with `io.micronaut.transaction.annotation.Transactional`. Use Micronaut Data (`@512-frameworks-micronaut-data`) when repository-style generated access fits; use raw JDBC for reporting, bulk ETL, upserts, or maximum SQL control (as in hand-written repositories that open `Connection`/`PreparedStatement` directly).
+Micronaut pairs JDBC drivers (`micronaut-jdbc-hikari` plus `micronaut-sql-jdbc` or a driver BOM) with a pooled `javax.sql.DataSource` from configuration. Application code should inject `DataSource`, always bind parameters, map rows to immutable records or small DTOs, and declare transactions at the service boundary with `io.micronaut.transaction.annotation.Transactional`. Use Micronaut Data (`@512-frameworks-micronaut-data`) when repository-style generated access fits; use raw JDBC for reporting, bulk ETL, upserts, or maximum SQL control (as in hand-written repositories that open `Connection`/`PreparedStatement` directly). For Flyway migrations with Micronaut, use `@513-frameworks-micronaut-flyway-migrations`.
 
 ## Constraints
 
 Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
 
 - **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
-- **PREREQUISITE**: Project must compile successfully before JDBC changes
-- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE
-- **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
+- **PREREQUISITE**: Project must compile successfully and pass basic validation checks before any JDBC refactoring
+- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
 - **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with data-access changes
 - **NO EXCEPTIONS**: Under no circumstances should JDBC recommendations be applied to a project that fails to compile
+- **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 
 ## Examples
 
@@ -768,7 +768,7 @@ public class OrderService {
 ### Example 11: Text blocks, upserts, and domain exceptions
 
 Title: Readable multi-line SQL and fail-fast translation
-Description: Use Java text blocks for multi-line SQL (PostgreSQL `ON CONFLICT`, etc.). Keep `PreparedStatement` parameters bound; translate `SQLException` to a single domain runtime type so controllers stay persistence-agnostic. Structured debug logging belongs at appropriate levels — avoid logging secrets or full row payloads at INFO.
+Description: Use Java text blocks for multi-line SQL (PostgreSQL `ON CONFLICT`, etc.). Keep `PreparedStatement` parameters bound; translate `SQLException` to a single domain runtime type so layers above the repository stay persistence-agnostic. Structured debug logging belongs at appropriate levels — avoid logging secrets or full row payloads at INFO.
 
 **Good example:**
 

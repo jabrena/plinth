@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="513-frameworks-micronaut-flyway-migrations">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.13.0</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need to add or review Flyway database migrations in a Micronaut application — micronaut-flyway, db/migration scripts, flyway.datasources.* configuration, and alignment with JDBC or Micronaut Data.</description>
+  </metadata>
+
+  <title>Micronaut — Flyway database migrations</title>
+  <goal><![CDATA[
+Apply Flyway migration guidelines for Micronaut.
+
+**What is covered in this Skill?**
+
+- `micronaut-flyway` with JDBC/Hikari and database drivers
+- Versioned SQL under `src/main/resources/db/migration`
+- `flyway.datasources.*` (per-datasource) configuration in YAML/properties
+- Tests with Testcontainers and real migration chains
+- Coordination with `@511-frameworks-micronaut-jdbc` and `@512-frameworks-micronaut-data`
+
+**Scope:** Apply recommendations based on the reference rules and good/bad examples.
+]]></goal>
+
+  <constraints>
+    <constraints-description>Before applying Flyway or SQL changes, ensure the project compiles. After improvements, run full verification.</constraints-description>
+    <constraint-list>
+      <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+      <constraint>**SAFETY**: If compilation fails, stop immediately</constraint>
+      <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+      <constraint>**BEFORE APPLYING**: Read the reference for detailed rules and good/bad patterns</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+        <trigger>Add or review Flyway migrations in a Micronaut project</trigger>
+        <trigger>Configure micronaut-flyway or db/migration layout</trigger>
+    </trigger-list>
+  </triggers>
+
+  <references>
+    <reference-list>
+        <reference>references/513-frameworks-micronaut-flyway-migrations.md</reference>
+    </reference-list>
+  </references>
+</prompt>

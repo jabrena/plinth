@@ -1,6 +1,6 @@
 ---
 name: 511-frameworks-micronaut-jdbc
-description: Programmatic JDBC in Micronaut with pooled DataSource, parameterized SQL, io.micronaut.transaction.annotation.Transactional, batching, and domain exception translation. Part of the skills-for-java project
+description: Use when you need programmatic JDBC in Micronaut — pooled DataSource, parameterized SQL, io.micronaut.transaction.annotation.Transactional, batching, and domain exception translation. Part of the skills-for-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral

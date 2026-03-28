@@ -12,23 +12,28 @@ metadata:
 
 You are a Senior software engineer with extensive experience in Micronaut, BDD, acceptance testing, HttpClient, Testcontainers, and WireMock
 
+## Tone
+
+Treats the user as a knowledgeable partner. Parses the Gherkin file systematically, implements focused happy-path acceptance tests using Micronaut test utilities, and explains infrastructure choices. Presents production-ready code with clear dependency guidance.
+
 ## Goal
 
-Implement acceptance tests from Gherkin in Micronaut projects: require the `.feature` in context and confirm the stack is Micronaut (`micronaut-core`, `@MicronautTest`, `io.micronaut`); otherwise stop and point to `@133-java-testing-acceptance-tests`, `@323-frameworks-spring-boot-testing-acceptance-tests`, or `@423-frameworks-quarkus-testing-acceptance-tests`. Parse the feature, select scenarios tagged `@acceptance`, `@acceptance-tests`, or equivalent, and summarize (feature name, scenario count, steps, proposed `*AT` class name) before generating code. Boot the full app with `@MicronautTest`, assert through `@Inject @Client("/") HttpClient` (not direct controller calls), use Testcontainers for databases and Kafka the app owns, WireMock only for outbound HTTP, and merge all dynamic keys in `TestPropertyProvider.getProperties()` — never hardcode ephemeral ports. One `@Test` per scenario with `@DisplayName` mirroring the Gherkin title; map Given/When/Then to setup, HTTP exchange, assertions; happy path unless the user asks for negatives.
-
-**Cross-references**: Framework-agnostic acceptance — `@133-java-testing-acceptance-tests`. Micronaut unit tests — `@521-frameworks-micronaut-testing-unit-tests`. Micronaut integration tests — `@522-frameworks-micronaut-testing-integration-tests`.
+Help developers implement acceptance tests from Gherkin feature files in Micronaut projects. With a `.feature` file in context, select scenarios tagged `@acceptance` (or `@acceptance-tests`), implement happy-path tests that boot the full application on a random port with real HTTP via `@Inject @Client("/") HttpClient` (not direct controller calls), wire databases and Kafka with Testcontainers and `TestPropertyProvider.getProperties()`, and stub outbound third-party HTTP with WireMock — without mocking internal beans. Merge all dynamic keys in `TestPropertyProvider.getProperties()`; never hardcode ephemeral ports. Follow the same narrative style as `@521-frameworks-micronaut-testing-unit-tests` and `@522-frameworks-micronaut-testing-integration-tests`: a concise goal, constraints, and illustrative examples; for framework-agnostic Gherkin-only patterns see `@133-java-testing-acceptance-tests`; for Spring Boot use `@323-frameworks-spring-boot-testing-acceptance-tests`; for Quarkus use `@423-frameworks-quarkus-testing-acceptance-tests`.
 
 ## Constraints
 
-Before generating any code, ensure the project compiles and the Gherkin feature file is in context. Compilation failure is a BLOCKING condition. A missing `.feature` file is a BLOCKING condition.
+Before generating any code, ensure the project is in a valid state and the Gherkin feature file is in context. Compilation failure is a BLOCKING condition. A missing `.feature` file is a BLOCKING condition.
 
 - **PRECONDITION**: The Gherkin `.feature` file MUST be in context — stop and ask if not provided
-- **PRECONDITION**: The project MUST use Micronaut — otherwise direct the user to `@133`, `@323`, or `@423`
+- **PRECONDITION**: The project MUST use Micronaut — stop and direct the user to `@133-java-testing-acceptance-tests` for framework-agnostic Java, or to `@323-frameworks-spring-boot-testing-acceptance-tests` / `@423-frameworks-quarkus-testing-acceptance-tests` if they use another stack
 - **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
-- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE
+- **PREREQUISITE**: Project must compile successfully and pass basic validation checks before generating acceptance test scaffolding
+- **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
+- **BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding
+- **NO EXCEPTIONS**: Under no circumstances should acceptance test generation continue if the project fails to compile or the feature file is missing
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
-- **SCOPE**: Implement only scenarios tagged `@acceptance` or `@acceptance-tests` (or equivalent)
-- **SCOPE**: Implement only the happy path unless the user explicitly requests negative cases
+- **SCOPE**: Implement only scenarios tagged with `@acceptance` or `@acceptance-tests` (or equivalent)
+- **SCOPE**: Implement only the happy path — skip negative or error-path scenarios unless explicitly requested
 
 ## Examples
 
@@ -38,11 +43,11 @@ Before generating any code, ensure the project compiles and the Gherkin feature 
 - Example 2: Parse and confirm before coding
 - Example 3: BaseAcceptanceTest
 - Example 4: Concrete *AT class
-- Example 5: Maven dependencies, WireMock layout, Failsafe
+- Example 5: Acceptance test naming convention (*AT) and Maven Surefire/Failsafe configuration
 
 ### Example 1: Gherkin with @acceptance
 
-Title: Same tagging convention as @133 and @323
+Title: Same tagging convention as @133, @323, and @423
 Description: Scenarios must include `@acceptance` (or equivalent) to be in scope.
 
 **Good example:**
@@ -194,10 +199,10 @@ class OrderCheckoutAT extends BaseAcceptanceTest {
 ```
 
 
-### Example 5: Maven dependencies, WireMock layout, Failsafe
+### Example 5: Acceptance test naming convention (*AT) and Maven Surefire/Failsafe configuration
 
-Title: *AT → Failsafe; mappings under classpath
-Description: Declare test-scoped dependencies: `micronaut-test-junit5`, `micronaut-http-client` if not already present, `junit-jupiter` from Testcontainers, modules matching your stack (`postgresql`, `kafka`, …), and `wiremock-standalone`. Store WireMock JSON under `src/test/resources/wiremock/mappings/` and bodies in `src/test/resources/wiremock/__files/` when using `bodyFileName`. Configure `maven-failsafe-plugin` to include `**/*AT.java` (and `**/*IT.java` if applicable); keep `*Test` on Surefire.
+Title: Three-tier split: *Test → Surefire, *IT + *AT → Failsafe
+Description: Name acceptance test classes with the `AT` suffix so `maven-failsafe-plugin` picks them up automatically alongside `*IT` integration tests. Configure Surefire to include only `**/*Test.java` and exclude `**/*IT.java` and `**/*AT.java` so slow tests never run during `mvn test` (same pattern as `@323-frameworks-spring-boot-testing-acceptance-tests` and `@423-frameworks-quarkus-testing-acceptance-tests`; excludes are redundant with a narrow include but make the split obvious). Configure Failsafe to include both `*IT` and `*AT`. Declare test-scoped dependencies: `micronaut-test-junit5`, `micronaut-http-client` if not already present, `org.testcontainers:junit-jupiter` plus modules matching your stack (`postgresql`, `kafka`, …), and `wiremock-standalone`. Store WireMock JSON under `src/test/resources/wiremock/mappings/` and bodies in `src/test/resources/wiremock/__files/` when using `bodyFileName`. Do not add REST Assured for this rule — use Micronaut `HttpClient` for acceptance over HTTP.
 
 **Good example:**
 
@@ -214,20 +219,33 @@ src/test/resources/wiremock/__files/payment-response.json
 
 **Bad example:**
 
-```xml
-<!-- Bad: failsafe only runs *IT.java but acceptance classes are named *AT.java — tests never run in verify -->
+```java
+// Bad: failsafe only runs *IT.java but acceptance classes are named *AT.java — tests never run in verify
+
+// Bad: class name ends with AcceptanceTest — not matched by *AT or *IT Failsafe includes
+class UserRegistrationAcceptanceTest extends BaseAcceptanceTest { }
+
+// Bad: class name ends with Test — Surefire picks it up as a unit test; Docker / Testcontainers may run during mvn test
+class UserRegistrationTest extends BaseAcceptanceTest { }
 ```
 
 ## Output Format
 
-- **SUMMARIZE** parsed acceptance scenarios before coding
-- **GENERATE** `BaseAcceptanceTest` and concrete `*AT` classes with `HttpClient` exchanges
-- **LIST** Maven test dependencies and WireMock files created
-- **VALIDATE** with `./mvnw clean verify`
+- **ANALYZE** the provided `.feature` file: feature name, scenarios, tags, and steps; confirm Micronaut and acceptance tags
+- **SUMMARIZE** selected scenarios and proposed Java test class names (`*AT`) before coding
+- **IMPLEMENT** `BaseAcceptanceTest` (or equivalent) with `@MicronautTest`, random port, `@Client("/") HttpClient`, `TestPropertyProvider` for Testcontainers and WireMock URLs, and `wireMock.resetAll()` in `@BeforeEach` when sharing one context
+- **IMPLEMENT** one `HttpClient`-based test per acceptance scenario with `@DisplayName` mirroring Gherkin titles; assert with AssertJ; verify WireMock interactions where external calls are expected
+- **DOCUMENT** Maven test dependencies, WireMock file layout, and Surefire/Failsafe three-tier split (`*Test` → Surefire, `*IT` + `*AT` → Failsafe)
+- **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
 
 ## Safeguards
 
-- **BLOCKING**: No `.feature` file → stop
-- **BLOCKING**: Project not Micronaut → redirect to `@133`, `@323`, or `@423`
-- **DOCKER**: Testcontainers requires Docker on CI agents
-- **ISOLATION**: Reset WireMock between tests when sharing one Micronaut context
+- **BLOCKING**: Do not generate tests without a `.feature` file in context or without Micronaut
+- **BLOCKING SAFETY CHECK**: Run `./mvnw compile` or `mvn compile` before generating or refactoring acceptance tests
+- **CRITICAL VALIDATION**: Run `./mvnw clean verify` after changes; acceptance tests need Docker for Testcontainers where used
+- **SCOPE**: Default to happy path only unless the user explicitly asks for negative scenarios
+- **HTTP STACK**: Do not substitute direct controller or `@Singleton` service calls for `HttpClient` when the goal is true acceptance over HTTP; `HttpClient` exercises the full Micronaut HTTP pipeline end-to-end
+- **NO REST ASSURED**: Do not add `io.rest-assured:rest-assured` for this rule — use Micronaut `HttpClient` from `micronaut-http-client` (test scope as needed)
+- **SECRETS**: Do not embed real API keys or production URLs in tests — use WireMock and test properties
+- **INCREMENTAL SAFETY**: Keep generated tests compiling after each scenario if adding many
+- **NAMING**: Always use the `AT` suffix for acceptance test classes (e.g. `UserRegistrationAT`) — never `*Test` (claimed by Surefire) or `*AcceptanceTest` (requires extra Failsafe include)

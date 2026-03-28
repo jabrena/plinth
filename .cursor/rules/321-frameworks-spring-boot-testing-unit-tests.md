@@ -132,7 +132,7 @@ class OrderServiceTest {
 ### Example 2: @WebMvcTest for controllers
 
 Title: MockMvc slice with @MockBean for services
-Description: Use `@WebMvcTest(YourController.class)` to load only MVC infrastructure. Inject `MockMvc`, mock dependencies with `@MockBean`, and assert status and JSON with `MockMvc` matchers. Avoid `TestRestTemplate` with full context for unit-style controller tests.
+Description: Use `@WebMvcTest(YourController.class)` to load only MVC infrastructure. Inject `MockMvc`, mock dependencies with `@MockBean`, and assert status and JSON with `MockMvc` matchers. **Spring Boot 4.0.x:** use `@MockitoBean` in place of `@MockBean` for those dependencies (see the dedicated example below). Avoid `TestRestTemplate` with full context for unit-style controller tests.
 
 **Good example:**
 

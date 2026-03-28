@@ -6,7 +6,7 @@ metadata:
   author: Juan Antonio Breña Moral
   version: 0.13.0
 ---
-# Java Integration Testing Guidelines
+# Spring Boot Integration Testing
 
 ## Role
 

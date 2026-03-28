@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="313-frameworks-spring-flyway-migrations">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.13.0</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need to add or review Flyway database migrations in a Spring Boot application — Maven dependencies, db/migration scripts, spring.flyway.* configuration, baseline and validation, and alignment with JDBC or Spring Data JDBC.</description>
+  </metadata>
+
+  <title>Spring Boot — Flyway database migrations</title>
+  <goal><![CDATA[
+Apply Flyway migration guidelines for Spring Boot.
+
+**What is covered in this Skill?**
+
+- flyway-core and database-specific Flyway modules (e.g. PostgreSQL) with Spring Boot BOM
+- Versioned SQL under `src/main/resources/db/migration` (`V{version}__{description}.sql`)
+- `spring.flyway.*` properties: locations, baseline-on-migrate, validate-on-migrate
+- Optional Java migrations (`BaseJavaMigration`) for data backfills
+- Forward-only discipline: do not rewrite applied migrations in shared environments
+- Coordination with `@311-frameworks-spring-jdbc` and `@312-frameworks-spring-data-jdbc`
+
+**Scope:** Apply recommendations based on the reference rules and good/bad examples.
+]]></goal>
+
+  <constraints>
+    <constraints-description>Before applying Flyway or SQL changes, ensure the project compiles. After improvements, run full verification.</constraints-description>
+    <constraint-list>
+      <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+      <constraint>**SAFETY**: If compilation fails, stop immediately</constraint>
+      <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+      <constraint>**BEFORE APPLYING**: Read the reference for detailed rules and good/bad patterns</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+        <trigger>Add or review Flyway migrations in a Spring Boot project</trigger>
+        <trigger>Configure spring.flyway or db/migration layout</trigger>
+    </trigger-list>
+  </triggers>
+
+  <references>
+    <reference-list>
+        <reference>references/313-frameworks-spring-flyway-migrations.md</reference>
+    </reference-list>
+  </references>
+</prompt>

@@ -1252,15 +1252,16 @@ public record ApiClientProperties(
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="text"><![CDATA[# application.yml (Spring Boot 4.0.x)
+                    <code-block language="yaml"><![CDATA[# application.yml (Spring Boot 4.0.x)
 server:
   shutdown: graceful
 
 spring:
   lifecycle:
-    timeout-per-shutdown-phase: 30s
-
-# Align schedulers with graceful shutdown (Java)
+    timeout-per-shutdown-phase: 30s]]></code-block>
+                </good-example>
+                <good-example>
+                    <code-block language="java"><![CDATA[// Align schedulers with graceful shutdown (pool waits for tasks before exit)
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.TaskScheduler;
@@ -1371,7 +1372,7 @@ class ExampleBean {
 
 record ValidatedInput(@NotBlank String value) { }]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
+                <bad-example>
                     <code-block language="java"><![CDATA[// Mixing legacy javax.* EE imports with Spring Boot 4 — wrong API on the classpath
 import javax.annotation.PostConstruct;
 import javax.validation.constraints.NotBlank;
@@ -1387,6 +1388,57 @@ class BrokenBean {
 
     @PostConstruct
     void init() { }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="15" id="test-configuration-isolation">
+            <example-header>
+                <example-title>Test-only beans — `@TestConfiguration`</example-title>
+                <example-subtitle>Override beans in tests without polluting the main application context</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use `@TestConfiguration` on `@Configuration` classes that are **only** imported from tests (e.g. `@Import`, `@SpringBootTest` classes). Prefer `@MockBean` / `@MockitoBean` for simple mocks, but use `@TestConfiguration` when you need a small, explicit graph of test doubles. Do not place `@TestConfiguration` on the main application class or under default component scanning — it is intended for test slices.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
+
+@TestConfiguration
+public class PaymentTestConfig {
+
+    @Bean
+    @Primary
+    PaymentClient stubPaymentClient() {
+        return amount -> true; // deterministic in tests
+    }
+}
+
+// In a test class:
+// @SpringBootTest
+// @Import(PaymentTestConfig.class)
+// class OrderServiceIT { ... }]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Profile;
+
+// Bad: production @Configuration tagged only with @Profile("test") — easy to
+// leak test doubles into non-test contexts if profiles drift
+@Configuration
+@Profile("test")
+public class ProductionConfigWithTestBeans {
+
+    @Bean
+    PaymentClient fakePayments() {
+        return amount -> true;
+    }
 }]]></code-block>
                 </bad-example>
             </code-examples>

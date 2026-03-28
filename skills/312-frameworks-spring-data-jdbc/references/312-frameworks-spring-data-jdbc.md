@@ -1,6 +1,6 @@
 ---
 name: 312-frameworks-spring-data-jdbc
-description: Use when you need to use Spring Data JDBC with Java records — including entity design with records, repository pattern, immutable updates, aggregate relationships, custom queries, transaction management, and avoiding N+1 problems.
+description: Use when you need to use Spring Data JDBC with Java records — including entity design with records, repository pattern, immutable updates, aggregate relationships, custom queries, transaction management, and avoiding N+1 problems. For programmatic JDBC (`JdbcTemplate`, `NamedParameterJdbcTemplate`), hand-written SQL, and maximum control without repository abstraction, use `@311-frameworks-spring-jdbc`. For Flyway-backed DDL and versioned schema changes, use `@313-frameworks-spring-flyway-migrations`.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -14,7 +14,7 @@ You are a Senior software engineer with extensive experience in Spring Data and 
 
 ## Goal
 
-Spring Data JDBC maps rows to domain types with minimal magic: one repository call typically loads a whole aggregate in predictable SQL. Java records fit this model because they are immutable, constructor-friendly, and explicit. Success means correct `@Column`/`@Id` mapping, repositories that express intent through naming or `@Query`, small aggregates with `Set` children or foreign keys—not JPA-style graphs—and transactions declared at the service layer.
+Spring Data JDBC maps rows to domain types with minimal magic: one repository call typically loads a whole aggregate in predictable SQL. Java records fit this model because they are immutable, constructor-friendly, and explicit. Success means correct `@Column`/`@Id` mapping, repositories that express intent through naming or `@Query`, small aggregates with `Set` children or foreign keys—not JPA-style graphs—and transactions declared at the service layer. For programmatic JDBC, reporting, or batch SQL without Spring Data repositories, use `@311-frameworks-spring-jdbc` instead of forcing everything through repositories.
 
 ## Constraints
 
@@ -1102,7 +1102,7 @@ class CustomerService {
 - **ANALYZE** persistence code: record/entity mapping, repository APIs, aggregate shape, `@Query` safety, transaction placement, and load patterns (single query vs extra round-trips)
 - **CATEGORIZE** issues by impact (CORRECTNESS, PERFORMANCE, MAINTAINABILITY) and by layer (entity mapping, repository, service/transaction, aggregate design)
 - **APPLY** Spring Data JDBC–aligned fixes: add `@Column`/`@Id`, narrow repositories, introduce `with*` updates, reshape aggregates and FKs, parameterize SQL, move `@Transactional` to services with `readOnly` where fit
-- **IMPLEMENT** changes so schema, aggregates, and tests stay consistent; prefer migrations and integration tests for repository behavior
+- **IMPLEMENT** changes so schema, aggregates, and tests stay consistent; prefer Flyway migrations (`@313-frameworks-spring-flyway-migrations`) and integration tests for repository behavior
 - **EXPLAIN** trade-offs (aggregate size vs query size, explicit SQL vs derived queries, `@Embedded` vs FK reference)
 - **TEST** repository behavior with `@DataJdbcTest` slices seeded via `@Sql`; never mock repositories inside persistence tests
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes

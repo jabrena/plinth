@@ -1,6 +1,6 @@
 ---
 name: 402-frameworks-quarkus-rest
-description: Use when you need to design, review, or improve REST APIs with Quarkus REST (Jakarta REST) — including resource classes, HTTP methods, status codes, request/response DTOs, ISO-8601 instants in DTOs, Bean Validation, exception mappers, OpenAPI with SmallRye, content negotiation, pagination, and security-aware boundaries.
+description: Use when you need to design, review, or improve REST APIs with Quarkus REST (Jakarta REST) — including resource classes, HTTP methods, status codes, request/response DTOs, ISO-8601 instants in DTOs, Bean Validation, exception mappers, OpenAPI with SmallRye, contract-first generation from OpenAPI (Quarkus OpenAPI Generator or OpenAPI Generator `jaxrs-spec`), content negotiation, pagination, and security-aware boundaries.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -14,7 +14,7 @@ You are a Senior software engineer with extensive experience in REST API design 
 
 ## Goal
 
-Quarkus REST builds on Jakarta REST (`jakarta.ws.rs`). Resources should express clear HTTP semantics, validate input at the boundary, return appropriate status codes, and map failures to stable JSON (or Problem Details) without leaking stack traces. Use CDI-scoped resource classes (`@Path` + `@ApplicationScoped` or `@RequestScoped` as appropriate), inject services, and document the API with SmallRye OpenAPI. Align with the same REST design principles as Spring (`@302-frameworks-spring-boot-rest`) while using JAX-RS annotations and Quarkus extensions.
+Quarkus REST builds on Jakarta REST (`jakarta.ws.rs`). Resources should express clear HTTP semantics, validate input at the boundary, return appropriate status codes, and map failures to stable JSON (or Problem Details) without leaking stack traces. Use CDI-scoped resource classes (`@Path` + `@ApplicationScoped` or `@RequestScoped` as appropriate), inject services, and document the API with SmallRye OpenAPI. For **API-first** work, generate Jakarta REST API interfaces and models from the OpenAPI document using **Quarkus OpenAPI Generator** (`io.quarkiverse.openapi.generator:quarkus-openapi-generator`) or the **OpenAPI Generator** `jaxrs-spec` target with `interfaceOnly`, then implement those interfaces in CDI resource classes. Align with the same REST design principles as Spring (`@302-frameworks-spring-boot-rest`) while using JAX-RS annotations and Quarkus extensions.
 
 ## Constraints
 
@@ -47,6 +47,7 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 14: Caching semantics
 - Example 15: Deprecation and sunset
 - Example 16: Security annotations
+- Example 17: API-first with OpenAPI Generator (Quarkus / Jakarta REST)
 
 ### Example 1: CRUD resource
 
@@ -1105,11 +1106,94 @@ public class AdHocSecurityResource {
 }
 ```
 
+### Example 17: API-first with OpenAPI Generator (Quarkus / Jakarta REST)
+
+Title: Generate JAX-RS API interfaces from `openapi.yaml`; implement as `@Path` resources
+Description: Store the contract under `src/main/resources/openapi` (or similar) and generate **Jakarta REST** API interfaces plus models in the build. Prefer **Quarkus OpenAPI Generator** (`quarkus-openapi-generator`) for Quarkus-native integration, or **`openapi-generator-maven-plugin`** with `generatorName` `jaxrs-spec`, `interfaceOnly=true`, and `useJakartaEe=true`. The generated `*Api` types declare `@Path`, `@GET`/`@POST`, `@Consumes`/`@Produces`; your CDI resource class **implements** the interface and delegates to application services. Register `ExceptionMapper` and MicroProfile OpenAPI annotations on the implementation or via filters as needed. Keep the spec authoritative in CI (lint before merge).
+
+**Good example:**
+
+```text
+<!-- Option A: Quarkus extension — see Quarkus OpenAPI Generator guide for full config -->
+<!--
+<dependency>
+    <groupId>io.quarkiverse.openapi.generator</groupId>
+    <artifactId>quarkus-openapi-generator-server</artifactId>
+</dependency>
+-->
+<!-- Option B: openapi-generator-maven-plugin (jaxrs-spec) -->
+<plugin>
+    <groupId>org.openapitools</groupId>
+    <artifactId>openapi-generator-maven-plugin</artifactId>
+    <version>${openapi-generator.version}</version>
+    <executions>
+        <execution>
+            <goals><goal>generate</goal></goals>
+            <configuration>
+                <inputSpec>${project.basedir}/src/main/resources/openapi/api.yaml</inputSpec>
+                <generatorName>jaxrs-spec</generatorName>
+                <apiPackage>com.example.generated.api</apiPackage>
+                <modelPackage>com.example.generated.model</modelPackage>
+                <configOptions>
+                    <interfaceOnly>true</interfaceOnly>
+                    <useJakartaEe>true</useJakartaEe>
+                    <supportAsync>true</supportAsync>
+                </configOptions>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+
+// --- Implement generated UsersApi as a CDI resource ---
+
+import com.example.generated.api.UsersApi;
+import com.example.generated.model.UserDto;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.ws.rs.Path;
+
+@ApplicationScoped
+@Path("/api/v1")
+public class UserResource implements UsersApi {
+
+    private final UserService users;
+
+    @Inject
+    public UserResource(UserService users) {
+        this.users = users;
+    }
+
+    @Override
+    public UserDto getUserById(String userId) {
+        return users.require(userId);
+    }
+}
+
+interface UserService {
+    UserDto require(String id);
+}
+```
+
+**Bad example:**
+
+```java
+// Anti-pattern: resource paths and payloads edited only in Java while openapi.yaml
+// is stale — contract tests and client SDKs disagree with runtime behavior.
+@jakarta.ws.rs.Path("/api/v1")
+public class DriftResource {
+    @jakarta.ws.rs.GET
+    @jakarta.ws.rs.Path("users/{id}")
+    public Object get(String id) {
+        return id;
+    }
+}
+```
+
 ## Output Format
 
-- **ANALYZE** resources for HTTP misuse, URI shape, status codes, DTO boundaries, versioning, deprecation/sunset/Link headers, `@Produces`/`@Consumes` declarations, ISO-8601 time fields, pagination bounds, Bean Validation on request DTOs, idempotency, ETag/concurrency, Cache-Control correctness, ExceptionMapper coverage, security annotations, and MicroProfile OpenAPI documentation
+- **ANALYZE** resources for HTTP misuse, URI shape, status codes, DTO boundaries, versioning, deprecation/sunset/Link headers, `@Produces`/`@Consumes` declarations, ISO-8601 time fields, pagination bounds, Bean Validation on request DTOs, idempotency, ETag/concurrency, Cache-Control correctness, ExceptionMapper coverage, security annotations, MicroProfile OpenAPI documentation, and (when API-first) consistency between `openapi.yaml` and generated Jakarta REST API interfaces vs resource implementations
 - **CATEGORIZE** findings by impact (CRITICAL for security/semantic violations, MAINTAINABILITY for DTO/versioning/docs, CONSISTENCY for errors) and by area (routing, responses, errors, security, caching, docs)
-- **APPLY** improvements: fix unsafe GETs, normalize paths, return correct status codes, introduce DTO boundaries, use `OffsetDateTime`/`Instant` in API DTOs for ISO-8601 time fields, add versioning, emit deprecation/sunset/Link when phasing out endpoints, tighten `@Produces`/`@Consumes`, bound list endpoints with `page`/`size` caps, add `@Valid` on request bodies, add idempotency and 409 Conflict patterns, add ETag/`If-Match` checks for updates, set `Cache-Control`, centralize errors with `ExceptionMapper` and Problem Detail shape, add declarative security annotations, and enrich MicroProfile OpenAPI metadata
+- **APPLY** improvements: fix unsafe GETs, normalize paths, return correct status codes, introduce DTO boundaries, use `OffsetDateTime`/`Instant` in API DTOs for ISO-8601 time fields, add versioning, emit deprecation/sunset/Link when phasing out endpoints, tighten `@Produces`/`@Consumes`, bound list endpoints with `page`/`size` caps, add `@Valid` on request bodies, add idempotency and 409 Conflict patterns, add ETag/`If-Match` checks for updates, set `Cache-Control`, centralize errors with `ExceptionMapper` and Problem Detail shape, add declarative security annotations, enrich MicroProfile OpenAPI metadata, and (API-first) align CDI resources with generated `*Api` interfaces from the spec
 - **IMPLEMENT** incrementally: preserve public API contracts where possible; use deprecation and versioning for breaking changes; keep error shapes backward compatible unless versioning allows a break
 - **EXPLAIN** trade-offs (e.g., URI vs header versioning, blocking vs reactive patterns, `@Blocking` vs `@RunOnVirtualThread`) when multiple valid options exist
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits; exercise critical endpoints in integration tests where available

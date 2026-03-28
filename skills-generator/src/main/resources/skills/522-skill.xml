@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.13.0</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to write or improve integration tests for Micronaut — @MicronautTest, HttpClient, TestPropertyProvider with Testcontainers, transactional test mode where appropriate, and *IT naming with Failsafe.</description>
+    <description>Use when you need to write or improve integration tests for Micronaut — @MicronautTest, HttpClient, TestPropertyProvider with Testcontainers, transactional test mode where appropriate, and Maven Surefire/Failsafe splits for *Test, *Tests, *IT, and *AT.</description>
   </metadata>
 
   <title>Micronaut Integration Testing</title>
@@ -20,15 +20,19 @@ Prove real wiring in Micronaut with containers and HTTP.
 - HttpClient full-stack HTTP assertions
 - @MicronautTest(transactional = true) for rollback where supported
 - Shared containers per class; pinned image tags
-- *IT suffix and maven-failsafe-plugin alignment
+- Maven Surefire/Failsafe: *Test / *Tests vs *IT / *AT; explicit plugin includes and excludes
 
 **Scope:** Apply recommendations based on the reference rules and good/bad code examples.
 ]]></goal>
 
   <constraints>
-    <constraints-description>Compile before changes; run verify including integration phase.</constraints-description>
+    <constraints-description>Before applying any integration test changes, ensure the project compiles. If compilation fails, stop immediately. After applying improvements, run full verification.</constraints-description>
     <constraint-list>
       <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+      <constraint>**PREREQUISITE**: Project must compile successfully and pass basic validation checks before any test refactoring</constraint>
+      <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations</constraint>
+      <constraint>**BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with integration test changes</constraint>
+      <constraint>**NO EXCEPTIONS**: Under no circumstances should testing recommendations be applied to a project that fails to compile</constraint>
       <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
       <constraint>**BEFORE APPLYING**: Read the reference for detailed rules and examples</constraint>
     </constraint-list>

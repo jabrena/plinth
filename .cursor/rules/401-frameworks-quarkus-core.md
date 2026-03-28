@@ -42,7 +42,10 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 9: Resource cleanup with @PreDestroy
 - Example 10: Configuration validation
 - Example 11: Programmatic injection with Instance<T>
-- Example 12: Virtual threads with @RunOnVirtualThread
+- Example 12: Graceful shutdown
+- Example 13: Scheduled tasks
+- Example 14: Virtual threads (Java 21+)
+- Example 15: javax vs jakarta consistency
 
 ### Example 1: Simple application entry point
 
@@ -266,10 +269,17 @@ public class CacheWarmup {
 **Bad example:**
 
 ```java
-@Startup
-void onStart() throws Exception {
-    // Bad: blocking network crawl during startup — delays readiness
-    Thread.sleep(60_000);
+import io.quarkus.runtime.Startup;
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+public class CacheWarmupBad {
+
+    @Startup
+    void onStart() throws Exception {
+        // Bad: blocking work during startup — delays readiness
+        Thread.sleep(60_000);
+    }
 }
 ```
 
@@ -640,43 +650,90 @@ public class MetricsService {
 }
 ```
 
-### Example 12: Virtual threads with @RunOnVirtualThread
+### Example 12: Graceful shutdown
 
-Title: Offload I/O-bound REST methods to virtual threads on Java 21+
-Description: On **Java 21+**, annotate a REST resource method with `@RunOnVirtualThread` to execute it on a virtual thread instead of a Vert.x worker thread. Ideal for blocking I/O (JDBC, HTTP clients, file I/O) that would otherwise tie up platform threads. Do not use it for CPU-intensive work; profile before enabling broadly.
+Title: Wait for in-flight HTTP work with `quarkus.shutdown.timeout`
+Description: Set `quarkus.shutdown.timeout` so Quarkus waits for running HTTP requests to finish (up to that limit) instead of stopping immediately. Optional: enable `quarkus.shutdown.delay-enabled` and `quarkus.shutdown.delay` so readiness fails first while the instance still drains traffic — useful behind Kubernetes. See the lifecycle guide for details.
+
+**Good example:**
+
+```properties
+# application.properties — graceful shutdown for HTTP (requires quarkus-vertx-http or equivalent)
+quarkus.shutdown.timeout=30s
+```
+
+**Bad example:**
+
+```properties
+# Bad: timeout too short for longest in-flight HTTP work — requests may be aborted mid-flight
+quarkus.shutdown.timeout=1s
+```
+
+### Example 13: Scheduled tasks
+
+Title: `io.quarkus.scheduler.Scheduled` with the Quarkus Scheduler extension
+Description: Use the Scheduler extension (`quarkus-scheduler`) for periodic work. Keep tasks short, catch errors, and avoid blocking remote calls without `@RunOnVirtualThread` or worker offload where appropriate.
 
 **Good example:**
 
 ```java
-import io.smallrye.common.annotation.RunOnVirtualThread;
-import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
+import io.quarkus.scheduler.Scheduled;
+import jakarta.enterprise.context.ApplicationScoped;
+import org.jboss.logging.Logger;
 
-@Path("/orders")
-public class OrderResource {
+@ApplicationScoped
+public class OutboxFlushJob {
 
-    private final OrderRepository repository;
+    private static final Logger LOG = Logger.getLogger(OutboxFlushJob.class);
 
-    @Inject
-    public OrderResource(OrderRepository repository) {
-        this.repository = repository;
+    private final OutboxRepository outbox;
+
+    public OutboxFlushJob(OutboxRepository outbox) {
+        this.outbox = outbox;
     }
 
-    @GET
-    @Path("/{id}")
-    @RunOnVirtualThread // blocking JDBC call — safe to run on a virtual thread
-    public Order getOrder(@PathParam("id") long id) {
-        return repository.findById(id);
+    @Scheduled(every = "30s")
+    void flush() {
+        try {
+            outbox.dispatchBatch();
+        } catch (Exception e) {
+            LOG.warn("outbox flush failed", e);
+        }
     }
 }
 
-interface OrderRepository {
-    Order findById(long id);
+interface OutboxRepository {
+    void dispatchBatch();
 }
+```
 
-record Order(long id, String status) { }
+**Bad example:**
+
+```java
+import io.quarkus.scheduler.Scheduled;
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+public class SilentJob {
+
+    @Scheduled(every = "5s")
+    void tick() {
+        throw new IllegalStateException(); // Bad: unhandled — failures should be logged or handled
+    }
+}
+```
+
+### Example 14: Virtual threads (Java 21+)
+
+Title: Enable platform virtual threads, then use `@RunOnVirtualThread` on blocking endpoints
+Description: Add the **`quarkus-virtual-threads`** extension on **Java 21+**. `VirtualThreadsConfig` maps to `quarkus.virtual-threads.*` (e.g. `enabled` defaults to `true`; set `enabled=false` to force `@RunOnVirtualThread` work onto the worker pool when pinning hurts). For blocking JAX-RS methods, annotate with `@RunOnVirtualThread` so execution moves off the Vert.x event loop. Ideal for blocking I/O; avoid for CPU-bound work. Profile before enabling broadly.
+
+**Good example:**
+
+```properties
+# Java 21+; add io.quarkus:quarkus-virtual-threads — tune naming/shutdown if needed
+quarkus.virtual-threads.enabled=true
+quarkus.virtual-threads.name-prefix=orders-vt-
 ```
 
 **Bad example:**
@@ -713,12 +770,64 @@ interface OrderRepository {
 record Order(long id, String status) { }
 ```
 
+### Example 15: javax vs jakarta consistency
+
+Title: Use jakarta.* for CDI, validation, and JAX-RS; keep javax.sql for JDBC
+Description: Quarkus targets **Jakarta EE 9+** namespaces. Use `jakarta.enterprise.context.*`, `jakarta.inject.*`, `jakarta.validation.constraints.*`, `jakarta.ws.rs.*`, and `jakarta.annotation.*` as appropriate. **Do not** mix legacy `javax.inject`, `javax.annotation`, or `javax.validation` with Jakarta equivalents. **Exception:** JDK types such as `javax.sql.DataSource` remain under `javax.sql`.
+
+**Good example:**
+
+```java
+import jakarta.annotation.PreDestroy;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.NotBlank;
+import javax.sql.DataSource;
+
+@ApplicationScoped
+public class ExampleBean {
+
+    private final DataSource dataSource;
+
+    @Inject
+    public ExampleBean(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    @PreDestroy
+    void cleanup() {
+        // release resources
+    }
+}
+
+record ValidatedInput(@NotBlank String value) { }
+```
+
+**Bad example:**
+
+```java
+// Mixing legacy javax.* EE imports with Quarkus — wrong API on the classpath
+import javax.inject.Inject;
+import javax.validation.constraints.NotBlank;
+import javax.sql.DataSource;
+
+public class BrokenBean {
+
+    private final DataSource dataSource;
+
+    @Inject
+    public BrokenBean(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+}
+```
+
 ## Output Format
 
 - **ENSURE** every Quarkus project has a `@QuarkusMain` class with a static `main` method using `Quarkus.run(args)` — create one if missing
-- **ANALYZE** the Quarkus project for CDI scope misuse, configuration sprawl, profile handling, lifecycle blocking, and injection style
+- **ANALYZE** the Quarkus project for CDI scope misuse, configuration sprawl, profile handling, lifecycle blocking, injection style, graceful shutdown settings, scheduler error handling, virtual-thread usage, and jakarta vs legacy javax imports
 - **CATEGORIZE** findings by impact (startup, memory, maintainability) and layer (config, beans, lifecycle)
-- **APPLY** improvements: constructor injection, `@ConfigMapping`, profile-based properties, appropriate scopes, lean startup observers
+- **APPLY** improvements: constructor injection, `@ConfigMapping`, profile-based properties, appropriate scopes, lean startup observers, graceful shutdown timeouts, safe scheduler jobs, and virtual-thread usage aligned with the Virtual Threads extension
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits
 - **DETECT** CDI scope ambiguity (multiple unqualified implementations of the same type) and missing bean disambiguation (`@Default`, `@Alternative`, `@Named`)
 - **EXPLAIN** what changed and why: improved startup safety, better testability, narrower scopes, or cleaner cross-cutting separation via interceptors and events

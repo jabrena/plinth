@@ -1,6 +1,6 @@
 ---
 name: 302-frameworks-spring-boot-rest
-description: Use when you need to design, review, or improve REST APIs with Spring Boot — including HTTP methods, resource URIs, status codes, DTOs, versioning, deprecation and sunset headers, content negotiation (JSON and vendor media types), ISO-8601 instants in DTOs, pagination/sorting/filtering, Bean Validation at the boundary, idempotency, ETag concurrency, HTTP caching, error handling, security, API documentation, controller advice, and problem details for errors.
+description: Use when you need to design, review, or improve REST APIs with Spring Boot — including HTTP methods, resource URIs, status codes, DTOs, versioning, deprecation and sunset headers, content negotiation (JSON and vendor media types), ISO-8601 instants in DTOs, pagination/sorting/filtering, Bean Validation at the boundary, idempotency, ETag concurrency, HTTP caching, error handling, security, API documentation (code-first and contract-first with OpenAPI Generator), controller advice, and problem details for errors.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -14,7 +14,7 @@ You are a Senior software engineer with extensive experience in REST API design 
 
 ## Goal
 
-Well-designed REST APIs use HTTP semantics predictably: resources as nouns, methods for actions, status codes for outcomes, and stable contracts via DTOs and versioning. Production APIs centralize errors (structured JSON or RFC 7807 Problem Details), document behavior for consumers, and apply authentication, authorization, and input validation by default.
+Well-designed REST APIs use HTTP semantics predictably: resources as nouns, methods for actions, status codes for outcomes, and stable contracts via DTOs and versioning. Production APIs centralize errors (structured JSON or RFC 7807 Problem Details), document behavior for consumers, and apply authentication, authorization, and input validation by default. For **API-first** work, treat the OpenAPI document (`openapi.yaml` / YAML) as the source of truth: generate Java API interfaces and model types with **OpenAPI Generator** (`openapi-generator-maven-plugin`, `spring` generator with `interfaceOnly`), then implement those interfaces in `@RestController` classes and delegate to domain services so the running service cannot drift from the published contract.
 
 ## Constraints
 
@@ -47,6 +47,7 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 14: Deprecation and sunset
 - Example 15: Content negotiation
 - Example 16: Time and locale in contracts
+- Example 17: API-first with OpenAPI Generator (Spring)
 
 ### Example 1: Use HTTP methods semantically
 
@@ -1043,11 +1044,90 @@ class EventDTO {
 }
 ```
 
+### Example 17: API-first with OpenAPI Generator (Spring)
+
+Title: Generate API interfaces from `openapi.yaml`; implement in `@RestController`
+Description: Keep the OpenAPI spec in `src/main/resources` (or `src/main/openapi`) and run **OpenAPI Generator** in the Maven build so generated `*Api` interfaces and model records/classes stay in sync with the contract. Use `generatorName` `spring` with `interfaceOnly` (and `useSpringBoot3` / `useJakartaEe` as needed) to emit Spring MVC-style API interfaces; your controllers **implement** those interfaces and forward to services. Commit generated sources only if your team policy requires it; otherwise generate per build into `target/generated-sources`. Validate the spec with CI (lint/spectral) before codegen. Pair with springdoc only if you still want runtime OpenAPI exposure—often the checked-in spec is enough for API-first.
+
+**Good example:**
+
+```text
+<!-- openapi-generator-maven-plugin: bind generate to generate-sources -->
+<plugin>
+    <groupId>org.openapitools</groupId>
+    <artifactId>openapi-generator-maven-plugin</artifactId>
+    <version>${openapi-generator.version}</version>
+    <executions>
+        <execution>
+            <goals><goal>generate</goal></goals>
+            <configuration>
+                <inputSpec>${project.basedir}/src/main/resources/openapi/api.yaml</inputSpec>
+                <generatorName>spring</generatorName>
+                <apiPackage>com.example.generated.api</apiPackage>
+                <modelPackage>com.example.generated.model</modelPackage>
+                <configOptions>
+                    <interfaceOnly>true</interfaceOnly>
+                    <useSpringBoot3>true</useSpringBoot3>
+                    <useJakartaEe>true</useJakartaEe>
+                    <skipDefaultInterface>true</skipDefaultInterface>
+                </configOptions>
+            </configuration>
+        </execution>
+    </executions>
+</plugin>
+
+// --- Implement generated UsersApi in a controller ---
+
+// Generated (illustrative): com.example.generated.api.UsersApi
+// @Validated @RequestMapping("/api/v1") public interface UsersApi {
+//   @GetMapping(value = "/users/{userId}", produces = "application/json")
+//   ResponseEntity<UserDto> getUserById(@PathVariable("userId") String userId);
+// }
+
+import com.example.generated.api.UsersApi;
+import com.example.generated.model.UserDto;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+public class UserController implements UsersApi {
+
+    private final UserService users;
+
+    public UserController(UserService users) {
+        this.users = users;
+    }
+
+    @Override
+    public ResponseEntity<UserDto> getUserById(String userId) {
+        return ResponseEntity.ok(users.require(userId));
+    }
+}
+
+interface UserService {
+    UserDto require(String id);
+}
+```
+
+**Bad example:**
+
+```java
+// API-first anti-pattern: hand-written controller paths and DTOs that never
+// match the published openapi.yaml — clients break while the spec still looks fine.
+@RestController
+class OrphanUserController {
+    @org.springframework.web.bind.annotation.GetMapping("/users/{id}")
+    Object get(String id) {
+        return java.util.Map.of("userId", id);
+    }
+}
+```
+
 ## Output Format
 
-- **ANALYZE** controllers and supporting types for REST semantics: HTTP verbs, URI shape, status codes, DTO boundaries, versioning, deprecation/sunset/`Link` headers, `produces`/`consumes` and vendor media types, ISO-8601 time fields, pagination/sort/filter bounds, Bean Validation on request DTOs, idempotency headers and conflict behavior, ETag/preconditions, cache headers for public vs private data, error handling, security annotations/config, and documentation coverage
+- **ANALYZE** controllers and supporting types for REST semantics: HTTP verbs, URI shape, status codes, DTO boundaries, versioning, deprecation/sunset/`Link` headers, `produces`/`consumes` and vendor media types, ISO-8601 time fields, pagination/sort/filter bounds, Bean Validation on request DTOs, idempotency headers and conflict behavior, ETag/preconditions, cache headers for public vs private data, error handling, security annotations/config, documentation coverage, and (when API-first) alignment between `openapi.yaml` and generated `*Api` interfaces vs controller implementations
 - **CATEGORIZE** findings by impact (CRITICAL for security/semantic violations, MAINTAINABILITY for DTO/versioning/docs, CONSISTENCY for errors) and by area (routing, responses, errors, security, docs)
-- **APPLY** changes that align with these principles: fix unsafe GETs, normalize paths, return appropriate status codes, introduce or narrow DTOs, add versioning, emit deprecation/sunset/`Link` when phasing out endpoints, tighten `produces`/`consumes` (JSON default, vendor types only when versioning warrants it), use `OffsetDateTime`/`Instant` in API DTOs, bound list endpoints (`Page`/`Pageable` or capped cursors), add `@Valid` on request bodies with Bean Validation, add idempotency and conflict (**409**) patterns where writes retry, add ETag/`If-Match` or version checks for updates, set `Cache-Control` appropriately, centralize exception handling with Problem Details where suitable, tighten security configuration, and enrich OpenAPI metadata
+- **APPLY** changes that align with these principles: fix unsafe GETs, normalize paths, return appropriate status codes, introduce or narrow DTOs, add versioning, emit deprecation/sunset/`Link` when phasing out endpoints, tighten `produces`/`consumes` (JSON default, vendor types only when versioning warrants it), use `OffsetDateTime`/`Instant` in API DTOs, bound list endpoints (`Page`/`Pageable` or capped cursors), add `@Valid` on request bodies with Bean Validation, add idempotency and conflict (**409**) patterns where writes retry, add ETag/`If-Match` or version checks for updates, set `Cache-Control` appropriately, centralize exception handling with Problem Details where suitable, tighten security configuration, enrich OpenAPI metadata, and (API-first) wire controllers to OpenAPI Generator output so implementations track the spec
 - **IMPLEMENT** incrementally: preserve public API contracts when possible; use deprecation and versioning for breaking changes; keep error shapes backward compatible unless versioning allows a break
 - **EXPLAIN** trade-offs (e.g., URI vs header versioning, custom ErrorResponse vs ProblemDetail) when multiple valid options exist
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits; exercise critical endpoints in integration tests where available

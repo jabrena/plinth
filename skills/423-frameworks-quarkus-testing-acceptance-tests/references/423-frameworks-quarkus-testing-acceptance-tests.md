@@ -18,14 +18,14 @@ Treats the user as a knowledgeable partner. Parses the Gherkin file systematical
 
 ## Goal
 
-Help developers implement acceptance tests from Gherkin feature files in Quarkus projects. With a `.feature` file in context, select scenarios tagged `@acceptance` (or `@acceptance-tests`), implement happy-path tests that boot the full application over HTTP with REST Assured (via `quarkus-rest-assured`), wire databases and Kafka with Dev Services or Testcontainers using `@QuarkusTestResource` / `QuarkusTestResourceLifecycleManager`, and stub outbound calls to third-party HTTP with WireMock and dynamic `%test` configuration—without replacing internal CDI beans with mocks. Follow the same shape as `@421-frameworks-quarkus-testing-unit-tests` and `@422-frameworks-quarkus-testing-integration-tests`: a short goal, constraints, and examples; for framework-agnostic Gherkin use `@133-java-testing-acceptance-tests`; for Spring Boot use `@323-frameworks-spring-boot-testing-acceptance-tests`.
+Help developers implement acceptance tests from Gherkin feature files in Quarkus projects. With a `.feature` file in context, select scenarios tagged `@acceptance` (or `@acceptance-tests`), implement happy-path tests that boot the full application over HTTP with REST Assured (via `quarkus-rest-assured`), wire databases and Kafka with Dev Services or Testcontainers using `@QuarkusTestResource` / `QuarkusTestResourceLifecycleManager`, and stub outbound calls to third-party HTTP with WireMock and dynamic `%test` configuration—without replacing internal CDI beans with mocks. Follow the same shape as `@421-frameworks-quarkus-testing-unit-tests` and `@422-frameworks-quarkus-testing-integration-tests`: a short goal, constraints, and examples; for framework-agnostic Gherkin use `@133-java-testing-acceptance-tests`; for Spring Boot use `@323-frameworks-spring-boot-testing-acceptance-tests`; for Micronaut use `@523-frameworks-micronaut-testing-acceptance-tests`.
 
 ## Constraints
 
 Before generating any code, ensure the project is in a valid state and the Gherkin feature file is in context. Compilation failure is a BLOCKING condition. A missing `.feature` file is a BLOCKING condition.
 
 - **PRECONDITION**: The Gherkin `.feature` file MUST be in context — stop and ask if not provided
-- **PRECONDITION**: The project MUST use Quarkus — stop and direct the user to `@133-java-testing-acceptance-tests` or `@323-frameworks-spring-boot-testing-acceptance-tests` if they use another stack
+- **PRECONDITION**: The project MUST use Quarkus — stop and direct the user to `@133-java-testing-acceptance-tests`, `@323-frameworks-spring-boot-testing-acceptance-tests`, or `@523-frameworks-micronaut-testing-acceptance-tests` if they use another stack
 - **MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change
 - **PREREQUISITE**: Project must compile successfully and pass basic validation checks before generating acceptance test scaffolding
 - **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations
@@ -344,7 +344,7 @@ class OrderCreationAT extends BaseAcceptanceTest {
 ### Example 6: Acceptance test naming convention (*AT) and Maven Surefire/Failsafe configuration
 
 Title: Three-tier split: *Test → Surefire, *IT + *AT → Failsafe
-Description: Name acceptance test classes with the `AT` suffix so `maven-failsafe-plugin` picks them up automatically alongside `*IT` integration tests. Configure Surefire to include only `*Test` so the fast unit-test pass has no container overhead. Configure Failsafe to include both `*IT` and `*AT` so the full safety-net runs during `mvn verify`. Typical test dependencies (versions via Quarkus BOM): `io.quarkus:quarkus-junit5`, REST Assured integration (`quarkus-rest-assured` or aligned `rest-assured`), `org.testcontainers:junit-jupiter` plus modules you use (e.g. `postgresql`, `kafka`), and WireMock (e.g. `org.wiremock:wiremock-standalone` or the JUnit 5 module your project standardizes on).
+Description: Name acceptance test classes with the `AT` suffix so `maven-failsafe-plugin` picks them up automatically alongside `*IT` integration tests. Configure Surefire to include only `**/*Test.java` and exclude `**/*IT.java` and `**/*AT.java` so slow tests never run during `mvn test` (same pattern as `@323-frameworks-spring-boot-testing-acceptance-tests` and `@523-frameworks-micronaut-testing-acceptance-tests`; excludes are redundant with a narrow include but make the split obvious). Configure Failsafe to include both `*IT` and `*AT` so the full safety-net runs during `mvn verify`. Typical test dependencies (versions via Quarkus BOM): `io.quarkus:quarkus-junit5`, REST Assured integration (`quarkus-rest-assured` or aligned `rest-assured`), `org.testcontainers:junit-jupiter` plus modules you use (e.g. `postgresql`, `kafka`), and WireMock (e.g. `org.wiremock:wiremock-standalone` or the JUnit 5 module your project standardizes on).
 
 **Good example:**
 

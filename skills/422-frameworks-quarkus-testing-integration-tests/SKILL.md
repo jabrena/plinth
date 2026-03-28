@@ -6,7 +6,7 @@ metadata:
   author: Juan Antonio Breña Moral
   version: 0.13.0
 ---
-# Quarkus integration testing
+# Quarkus Integration Testing
 
 Apply integration testing patterns for Quarkus with real wiring and reproducible infrastructure.
 

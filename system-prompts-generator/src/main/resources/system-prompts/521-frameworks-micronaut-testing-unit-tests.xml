@@ -21,8 +21,10 @@
         </constraints-description>
         <constraint-list>
             <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
-            <constraint>**PREREQUISITE**: Project must compile successfully before any test refactoring</constraint>
+            <constraint>**PREREQUISITE**: Project must compile successfully and pass basic validation checks before any test refactoring</constraint>
             <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE with any recommendations</constraint>
+            <constraint>**BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding with test improvements</constraint>
+            <constraint>**NO EXCEPTIONS**: Under no circumstances should testing recommendations be applied to a project that fails to compile</constraint>
             <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
         </constraint-list>
     </constraints>
@@ -241,21 +243,88 @@ class ValidatorTest {
 
         <example number="6" id="surefire-naming-micronaut">
             <example-header>
-                <example-title>Test naming and Maven phases</example-title>
-                <example-subtitle>*Test vs *IT</example-subtitle>
+                <example-title>Unit test class naming convention</example-title>
+                <example-subtitle>`Test` suffix for Surefire; `IT` for Failsafe — avoid `Spec` and other mismatches</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                Keep fast unit tests in classes ending with `Test` for Surefire; use `IT` suffix for integration tests picked up by Failsafe when configured.
+                Unit test class names must end with the suffix `Test` (e.g., `OrderServiceTest`, `HelloControllerTest`). Maven Surefire picks up classes matching `**/*Test.java`, `**/Test*.java`, `**/*Tests.java`, and `**/*TestCase.java` by default. Using a different suffix (or none) silently excludes tests from the build. Reserve the `IT` suffix for integration tests executed by Maven Failsafe (`**/*IT.java`) when configured. Consistency also makes it trivial to navigate from a production class (`OrderService`) to its test (`OrderServiceTest`).
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="text"><![CDATA[src/test/java/.../OrderServiceTest.java     → Surefire (unit)
-src/test/java/.../OrderRepositoryIT.java    → Failsafe (integration)]]></code-block>
+                    <code-block language="java"><![CDATA[// File: src/test/java/com/example/OrderServiceTest.java
+// Surefire picks this up by default because the name ends with "Test"
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.Optional;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class OrderServiceTest {          // ✔ "Test" suffix — Surefire runs this class
+
+    @Mock
+    private OrderRepository orderRepository;
+
+    @InjectMocks
+    private OrderService orderService;
+
+    @Test
+    void returnsOrderWhenFound() {
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(new Order(1L, "SKU-A")));
+        assertThat(orderService.getOrder(1L).sku()).isEqualTo("SKU-A");
+    }
+}
+
+// File: src/test/java/com/example/OrderRepositoryIT.java
+// Maven Failsafe runs this during "mvn verify" when the name ends with "IT"
+
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import org.junit.jupiter.api.Test;
+
+@MicronautTest
+class OrderRepositoryIT {          // ✔ "IT" suffix — Failsafe (integration) when configured
+
+    @Test
+    void loadsFromDatabase() {
+        // ...
+    }
+}]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
-                    <code-block language="text"><![CDATA[src/test/java/.../EverythingInOneHugeTest.java → mixes slow and fast tests; hard to run subsets]]></code-block>
+                    <code-block language="java"><![CDATA[// File: src/test/java/com/example/OrderServiceSpec.java
+// Surefire does NOT pick this up — tests are silently skipped during "mvn test"
+
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.util.Optional;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
+@ExtendWith(MockitoExtension.class)
+class OrderServiceSpec {          // ✘ "Spec" suffix — Surefire skips this class silently
+
+    @Mock
+    private OrderRepository orderRepository;
+
+    @InjectMocks
+    private OrderService orderService;
+
+    @Test
+    void returnsOrderWhenFound() {
+        when(orderRepository.findById(1L)).thenReturn(Optional.of(new Order(1L, "SKU-A")));
+        assertThat(orderService.getOrder(1L).sku()).isEqualTo("SKU-A");
+        // This test never runs — the class name doesn't match Surefire's default pattern
+    }
+}]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
@@ -263,17 +332,25 @@ src/test/java/.../OrderRepositoryIT.java    → Failsafe (integration)]]></code-
 
     <output-format>
         <output-format-list>
-            <output-format-item>**ANALYZE** tests for unnecessary `@MicronautTest`, missing mocks, non-deterministic config, and duplicated scenarios</output-format-item>
-            <output-format-item>**APPLY** Mockito-first patterns, `@MockBean`/`@Replaces` for collaborators, `HttpClient` assertions, `@Property` overrides, parameterized tests</output-format-item>
+            <output-format-item>**ANALYZE** the test suite: which tests need `@MicronautTest` vs plain JUnit + Mockito, unnecessary container bootstrap for pure domain logic, missing `@MockBean`/`@Replaces` for collaborators, weak `HttpClient` assertions, copy-pasted methods suitable for `@ParameterizedTest`, flaky time or environment coupling, and non-deterministic config without `@Property`</output-format-item>
+            <output-format-item>**CATEGORIZE** findings by impact (SPEED, FLAKINESS, CLARITY) and by layer (service, HTTP, JSON, config)</output-format-item>
+            <output-format-item>**APPLY** improvements: Mockito-first for pure services, `@MockBean`/`@Replaces` for collaborators, `HttpClient` assertions, `@Property` overrides, `@ParameterizedTest` for data-driven cases, and correct `*Test` / `*IT` class name suffixes</output-format-item>
+            <output-format-item>**IMPLEMENT** changes incrementally; keep tests green after each step and verify with `./mvnw clean verify`</output-format-item>
+            <output-format-item>**EXPLAIN** when to use `@131-java-testing-unit-testing` vs `@MicronautTest` vs `@522-frameworks-micronaut-testing-integration-tests` if the user is mixing concerns</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive test refactors</output-format-item>
         </output-format-list>
     </output-format>
 
     <safeguards>
         <safeguards-list>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` or `mvn compile` before ANY test refactoring — compilation failure is a HARD STOP</safeguards-item>
+            <safeguards-item>**CRITICAL VALIDATION**: Run `./mvnw clean verify` after changes and confirm the full test suite is green before promoting</safeguards-item>
             <safeguards-item>**SPEED**: Do not use `@MicronautTest` for pure domain logic — it slows the suite without benefit</safeguards-item>
-            <safeguards-item>**MOCK DRIFT**: Mocks that do not match real contracts hide integration bugs — pair with `@522` tests for wiring</safeguards-item>
-            <safeguards-item>**INCREMENTAL SAFETY**: Refactor one test class at a time; keep the suite green</safeguards-item>
+            <safeguards-item>**CONTEXT SCOPE**: Do not add `@MicronautTest` only to “make it work” — fix missing `@MockBean`/`@Replaces` and `@Property` overrides first</safeguards-item>
+            <safeguards-item>**MOCK DRIFT**: Mocks that do not match real contracts hide integration bugs — pair unit tests with `@522-frameworks-micronaut-testing-integration-tests` where the Micronaut wiring must be exercised end-to-end</safeguards-item>
+            <safeguards-item>**TEST PROPERTY ISOLATION**: Prefer `@Property` on test classes over mutating `System` properties in lifecycle hooks — parallel tests and bean initialization order can make the latter flaky</safeguards-item>
+            <safeguards-item>**INCREMENTAL SAFETY**: Refactor one test class at a time when converting heavy `@MicronautTest` classes to Mockito-first; verify with `./mvnw clean verify` between steps</safeguards-item>
+            <safeguards-item>**SAFETY PROTOCOL**: Stop if tests fail after edits until the failure is understood</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>

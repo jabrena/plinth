@@ -270,10 +270,17 @@ public class CacheWarmup {
 }]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block language="java"><![CDATA[@Startup
-void onStart() throws Exception {
-    // Bad: blocking network crawl during startup — delays readiness
-    Thread.sleep(60_000);
+                    <code-block language="java"><![CDATA[import io.quarkus.runtime.Startup;
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+public class CacheWarmupBad {
+
+    @Startup
+    void onStart() throws Exception {
+        // Bad: blocking work during startup — delays readiness
+        Thread.sleep(60_000);
+    }
 }]]></code-block>
                 </bad-example>
             </code-examples>
@@ -661,17 +668,101 @@ public class MetricsService {
             </code-examples>
         </example>
 
-        <example number="12" id="virtual-threads-quarkus">
+        <example number="12" id="graceful-shutdown-quarkus">
             <example-header>
-                <example-title>Virtual threads with @RunOnVirtualThread</example-title>
-                <example-subtitle>Offload I/O-bound REST methods to virtual threads on Java 21+</example-subtitle>
+                <example-title>Graceful shutdown</example-title>
+                <example-subtitle>Wait for in-flight HTTP work with `quarkus.shutdown.timeout`</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                On **Java 21+**, annotate a REST resource method with `@RunOnVirtualThread` to execute it on a virtual thread instead of a Vert.x worker thread. Ideal for blocking I/O (JDBC, HTTP clients, file I/O) that would otherwise tie up platform threads. Do not use it for CPU-intensive work; profile before enabling broadly.
+                Set `quarkus.shutdown.timeout` so Quarkus waits for running HTTP requests to finish (up to that limit) instead of stopping immediately. Optional: enable `quarkus.shutdown.delay-enabled` and `quarkus.shutdown.delay` so readiness fails first while the instance still drains traffic — useful behind Kubernetes. See the lifecycle guide for details.
                 ]]>
             </example-description>
             <code-examples>
+                <good-example>
+                    <code-block language="properties"><![CDATA[# application.properties — graceful shutdown for HTTP (requires quarkus-vertx-http or equivalent)
+quarkus.shutdown.timeout=30s]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="properties"><![CDATA[# Bad: timeout too short for longest in-flight HTTP work — requests may be aborted mid-flight
+quarkus.shutdown.timeout=1s]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="13" id="scheduled-tasks-quarkus">
+            <example-header>
+                <example-title>Scheduled tasks</example-title>
+                <example-subtitle>`io.quarkus.scheduler.Scheduled` with the Quarkus Scheduler extension</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use the Scheduler extension (`quarkus-scheduler`) for periodic work. Keep tasks short, catch errors, and avoid blocking remote calls without `@RunOnVirtualThread` or worker offload where appropriate.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.quarkus.scheduler.Scheduled;
+import jakarta.enterprise.context.ApplicationScoped;
+import org.jboss.logging.Logger;
+
+@ApplicationScoped
+public class OutboxFlushJob {
+
+    private static final Logger LOG = Logger.getLogger(OutboxFlushJob.class);
+
+    private final OutboxRepository outbox;
+
+    public OutboxFlushJob(OutboxRepository outbox) {
+        this.outbox = outbox;
+    }
+
+    @Scheduled(every = "30s")
+    void flush() {
+        try {
+            outbox.dispatchBatch();
+        } catch (Exception e) {
+            LOG.warn("outbox flush failed", e);
+        }
+    }
+}
+
+interface OutboxRepository {
+    void dispatchBatch();
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import io.quarkus.scheduler.Scheduled;
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+public class SilentJob {
+
+    @Scheduled(every = "5s")
+    void tick() {
+        throw new IllegalStateException(); // Bad: unhandled — failures should be logged or handled
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="14" id="virtual-threads-quarkus">
+            <example-header>
+                <example-title>Virtual threads (Java 21+)</example-title>
+                <example-subtitle>Enable platform virtual threads, then use `@RunOnVirtualThread` on blocking endpoints</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Add the **`quarkus-virtual-threads`** extension on **Java 21+**. `VirtualThreadsConfig` maps to `quarkus.virtual-threads.*` (e.g. `enabled` defaults to `true`; set `enabled=false` to force `@RunOnVirtualThread` work onto the worker pool when pinning hurts). For blocking JAX-RS methods, annotate with `@RunOnVirtualThread` so execution moves off the Vert.x event loop. Ideal for blocking I/O; avoid for CPU-bound work. Profile before enabling broadly.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="properties"><![CDATA[# Java 21+; add io.quarkus:quarkus-virtual-threads — tune naming/shutdown if needed
+quarkus.virtual-threads.enabled=true
+quarkus.virtual-threads.name-prefix=orders-vt-]]></code-block>
+                </good-example>
                 <good-example>
                     <code-block language="java"><![CDATA[import io.smallrye.common.annotation.RunOnVirtualThread;
 import jakarta.inject.Inject;
@@ -703,7 +794,7 @@ interface OrderRepository {
 
 record Order(long id, String status) { }]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
+                <bad-example>
                     <code-block language="java"><![CDATA[import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -736,14 +827,69 @@ record Order(long id, String status) { }]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
+
+        <example number="15" id="jakarta-vs-javax-namespace-quarkus">
+            <example-header>
+                <example-title>javax vs jakarta consistency</example-title>
+                <example-subtitle>Use jakarta.* for CDI, validation, and JAX-RS; keep javax.sql for JDBC</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Quarkus targets **Jakarta EE 9+** namespaces. Use `jakarta.enterprise.context.*`, `jakarta.inject.*`, `jakarta.validation.constraints.*`, `jakarta.ws.rs.*`, and `jakarta.annotation.*` as appropriate. **Do not** mix legacy `javax.inject`, `javax.annotation`, or `javax.validation` with Jakarta equivalents. **Exception:** JDK types such as `javax.sql.DataSource` remain under `javax.sql`.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import jakarta.annotation.PreDestroy;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import jakarta.validation.constraints.NotBlank;
+import javax.sql.DataSource;
+
+@ApplicationScoped
+public class ExampleBean {
+
+    private final DataSource dataSource;
+
+    @Inject
+    public ExampleBean(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+
+    @PreDestroy
+    void cleanup() {
+        // release resources
+    }
+}
+
+record ValidatedInput(@NotBlank String value) { }]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Mixing legacy javax.* EE imports with Quarkus — wrong API on the classpath
+import javax.inject.Inject;
+import javax.validation.constraints.NotBlank;
+import javax.sql.DataSource;
+
+public class BrokenBean {
+
+    private final DataSource dataSource;
+
+    @Inject
+    public BrokenBean(DataSource dataSource) {
+        this.dataSource = dataSource;
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
     </examples>
 
     <output-format>
         <output-format-list>
             <output-format-item>**ENSURE** every Quarkus project has a `@QuarkusMain` class with a static `main` method using `Quarkus.run(args)` — create one if missing</output-format-item>
-            <output-format-item>**ANALYZE** the Quarkus project for CDI scope misuse, configuration sprawl, profile handling, lifecycle blocking, and injection style</output-format-item>
+            <output-format-item>**ANALYZE** the Quarkus project for CDI scope misuse, configuration sprawl, profile handling, lifecycle blocking, injection style, graceful shutdown settings, scheduler error handling, virtual-thread usage, and jakarta vs legacy javax imports</output-format-item>
             <output-format-item>**CATEGORIZE** findings by impact (startup, memory, maintainability) and layer (config, beans, lifecycle)</output-format-item>
-            <output-format-item>**APPLY** improvements: constructor injection, `@ConfigMapping`, profile-based properties, appropriate scopes, lean startup observers</output-format-item>
+            <output-format-item>**APPLY** improvements: constructor injection, `@ConfigMapping`, profile-based properties, appropriate scopes, lean startup observers, graceful shutdown timeouts, safe scheduler jobs, and virtual-thread usage aligned with the Virtual Threads extension</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits</output-format-item>
             <output-format-item>**DETECT** CDI scope ambiguity (multiple unqualified implementations of the same type) and missing bean disambiguation (`@Default`, `@Alternative`, `@Named`)</output-format-item>
             <output-format-item>**EXPLAIN** what changed and why: improved startup safety, better testability, narrower scopes, or cleaner cross-cutting separation via interceptors and events</output-format-item>
