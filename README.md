@@ -31,7 +31,7 @@ The project generates a set of deliverables at the end of any iteration.
 
 ### Compatibility
 
-This project is compatible with `Cursor AI`, `Claude Code` & `Github Copilot`.
+This project is compatible with any problem compatible with `Skills`, `Agents` or `AGENTS.md` like `Cursor AI`, `Claude Code` & `Github Copilot`.
 
 ## Getting started
 
