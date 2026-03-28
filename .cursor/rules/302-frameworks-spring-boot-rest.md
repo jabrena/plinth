@@ -14,7 +14,7 @@ You are a Senior software engineer with extensive experience in REST API design 
 
 ## Goal
 
-Well-designed REST APIs use HTTP semantics predictably: resources as nouns, methods for actions, status codes for outcomes, and stable contracts via DTOs and versioning. Production APIs centralize errors (structured JSON or RFC 7807 Problem Details), expose a clear contract for consumers (for API-first, the OpenAPI file is that contract), and apply authentication, authorization, and input validation by default. For **API-first** work, treat the OpenAPI document (`openapi.yaml` / YAML) as the source of truth: generate Java API interfaces and model types with **OpenAPI Generator** (`openapi-generator-maven-plugin`, `spring` generator with `interfaceOnly`), then implement those interfaces in `@RestController` classes and delegate to domain services so the running service cannot drift from the published contract.
+Well-designed REST APIs use HTTP semantics predictably: resources as nouns, methods for actions, status codes for outcomes, and stable contracts via DTOs and versioning. Production APIs centralize errors (structured JSON or RFC 7807 Problem Details), expose a clear contract for consumers (for API-first, the OpenAPI file is that contract), and apply authentication, authorization, and input validation by default. For **API-first** work, treat the OpenAPI document (`openapi.yaml` / YAML) as the source of truth: generate Java API interfaces and model types with **OpenAPI Generator** (`openapi-generator-maven-plugin`, `spring` generator with `interfaceOnly` and **`useSpringBoot4`** for Spring Boot 4.x), then implement those interfaces in `@RestController` classes and delegate to domain services so the running service cannot drift from the published contract.
 
 ## Constraints
 
@@ -433,8 +433,9 @@ class ProblemDetailsExceptionHandler {
         return pd;
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    ResponseEntity<ProblemDetail> handleRuntime(RuntimeException ex, HttpServletRequest request) {
+    // Exception.class: supertype of RuntimeException; also catches checked exceptions that bubble up
+    @ExceptionHandler(Exception.class)
+    ResponseEntity<ProblemDetail> handleException(Exception ex, HttpServletRequest request) {
         String errorId = UUID.randomUUID().toString();
         ProblemDetail pd = build(HttpStatus.INTERNAL_SERVER_ERROR, "internal-error",
             "Internal Server Error", "An unexpected error occurred.", request);
@@ -986,8 +987,8 @@ class EventDTO {
 
 ### Example 16: API-first with OpenAPI Generator (Spring)
 
-Title: Generate API interfaces from `openapi.yaml`; implement in `@RestController`
-Description: Keep the OpenAPI spec in `src/main/resources` (or `src/main/openapi`) and run **OpenAPI Generator** in the Maven build so generated `*Api` interfaces and model records/classes stay in sync with the contract. Use `generatorName` `spring` with `interfaceOnly` (and `useSpringBoot3` / `useJakartaEe` as needed) to emit Spring MVC-style API interfaces; your controllers **implement** those interfaces and forward to services. Commit generated sources only if your team policy requires it; otherwise generate per build into `target/generated-sources`. Validate the spec with CI (lint/spectral) before codegen. Pair with springdoc only if you still want runtime OpenAPI exposure—often the checked-in spec is enough for API-first.
+Title: Spring Boot 4.x: `openapi.yaml` → generated `*Api`; implement in `@RestController`
+Description: Keep the OpenAPI spec in `src/main/resources` (or `src/main/openapi`) and run **OpenAPI Generator** (recent **7.x** plugin recommended) in the Maven build so generated `*Api` interfaces and model records/classes stay in sync with the contract. Use `generatorName` `spring` with `interfaceOnly` and **`useSpringBoot4`** for **Spring Boot 4.0.x** (this enables Jakarta EE imports; it replaces the older `useSpringBoot3` path for new Boot 4 apps). For **Spring Boot 3.x** only, use `useSpringBoot3` instead. Your controllers **implement** the generated interfaces and forward to services. Commit generated sources only if your team policy requires it; otherwise generate per build into `target/generated-sources`. Validate the spec with CI (lint/spectral) before codegen. Optional: **`useJackson3`** targets Jackson 3 with Spring Boot 4, but it is incompatible with **`openApiNullable`**—pick one strategy. Pair with springdoc only if you still want runtime OpenAPI exposure—often the checked-in spec is enough for API-first.
 
 **Good example:**
 
@@ -1007,8 +1008,7 @@ Description: Keep the OpenAPI spec in `src/main/resources` (or `src/main/openapi
                 <modelPackage>com.example.generated.model</modelPackage>
                 <configOptions>
                     <interfaceOnly>true</interfaceOnly>
-                    <useSpringBoot3>true</useSpringBoot3>
-                    <useJakartaEe>true</useJakartaEe>
+                    <useSpringBoot4>true</useSpringBoot4>
                     <skipDefaultInterface>true</skipDefaultInterface>
                 </configOptions>
             </configuration>

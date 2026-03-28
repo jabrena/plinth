@@ -11,7 +11,7 @@
     <role>You are a Senior software engineer with extensive experience in Micronaut testing and JUnit 5</role>
 
     <goal>
-        Micronaut tests should be fast by default: exercise plain services with Mockito and no container, and reserve `@MicronautTest` for cases that need HTTP routing, bean replacement, or Micronaut-specific adapters. Use `@MockBean` factory methods to substitute collaborators, inject `HttpClient` with `@Client("/")` for controller tests, and keep deterministic configuration via `@Property` on test classes or methods.
+        Micronaut tests should be fast by default: exercise plain services with Mockito and no container, and reserve `@MicronautTest` for cases that need HTTP routing, bean replacement, or Micronaut-specific adapters. Use `@MockBean` factory methods to substitute collaborators, inject `HttpClient` with `@Client("/")` for controller tests, and keep deterministic configuration via `@Property` on test classes or methods. Inject `java.time.Clock` (or a narrow time-supplier interface) for anything that would otherwise call `Instant.now()` — Mockito does not mock static time APIs, and `Instant` is final; a fixed `Clock` in tests removes flakiness.
     </goal>
 
     <constraints>
@@ -88,7 +88,89 @@ class PricingServiceTest {
             </code-examples>
         </example>
 
-        <example number="2" id="micronaut-test-mock-bean">
+        <example number="2" id="injectable-clock-time-micronaut">
+            <example-header>
+                <example-title>Injectable `Clock` — avoid static time and final value mocks</example-title>
+                <example-subtitle>`@Singleton` services take `Clock`; tests use `Clock.fixed` or `@Mock Clock`</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                **`Instant.now()` / `LocalDate.now()`** hide behind static methods — Mockito does not intercept them, and **`Instant`** is **final**. **Inject `java.time.Clock`** (constructor injection on `@Singleton` beans; optional `@Factory` + `@Bean` for `Clock.systemUTC()` in Micronaut). Unit tests construct the service with **`Clock.fixed(…, zone)`** or **`@Mock Clock`** and `when(clock.instant()).thenReturn(…)`.
+
+                **Also hard to fake in tests:** `UUID.randomUUID()`, `System.nanoTime()`, unseeded `Random` — inject `Supplier<UUID>`, `LongSupplier`, or a seeded `Random` for deterministic assertions.
+
+                In **`@MicronautTest`**, replace the `Clock` bean with `@MockBean` / `@Replaces` returning a fixed clock when the full graph must run; for pure domain logic, prefer **`@ExtendWith(MockitoExtension.class)`** without the container.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
+// @Singleton class OfferService { private final Clock clock; ... }
+class OfferService {
+    private final Clock clock;
+    OfferService(Clock clock) { this.clock = clock; }
+
+    boolean stillValid(Instant expiresAt) {
+        return clock.instant().isBefore(expiresAt);
+    }
+}
+
+@ExtendWith(MockitoExtension.class)
+class OfferServiceTest {
+
+    @Mock
+    Clock clock;
+
+    @Test
+    void stillValid_beforeExpiry_returnsTrue() {
+        when(clock.instant()).thenReturn(Instant.parse("2024-03-01T10:00:00Z"));
+        var svc = new OfferService(clock);
+        assertThat(svc.stillValid(Instant.parse("2024-03-01T23:59:59Z"))).isTrue();
+    }
+
+    @Test
+    void stillValid_usesFixedClock() {
+        Clock fixed = Clock.fixed(
+            Instant.parse("2024-03-01T10:00:00Z"), ZoneOffset.UTC);
+        var svc = new OfferService(fixed);
+        assertThat(svc.stillValid(Instant.parse("2024-03-01T23:59:59Z"))).isTrue();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import org.junit.jupiter.api.Test;
+import java.time.Instant;
+import static org.assertj.core.api.Assertions.assertThat;
+
+class OfferService {
+
+    boolean stillValid(Instant expiresAt) {
+        return Instant.now().isBefore(expiresAt); // Bad: not injectable; tests tied to real time
+    }
+}
+
+class OfferServiceTest {
+
+    @Test
+    void brittle() {
+        var svc = new OfferService();
+        assertThat(svc.stillValid(Instant.parse("2099-01-01T00:00:00Z"))).isTrue();
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="micronaut-test-mock-bean">
             <example-header>
                 <example-title>@MicronautTest with @MockBean</example-title>
                 <example-subtitle>Replace collaborators in the test scope</example-subtitle>
@@ -135,7 +217,7 @@ class OrderControllerTest {
             </code-examples>
         </example>
 
-        <example number="3" id="http-client-controller-test">
+        <example number="4" id="http-client-controller-test">
             <example-header>
                 <example-title>HttpClient against embedded server</example-title>
                 <example-subtitle>@Inject @Client("/") HttpClient</example-subtitle>
@@ -178,7 +260,7 @@ class HelloControllerTest {
             </code-examples>
         </example>
 
-        <example number="4" id="property-override-test">
+        <example number="5" id="property-override-test">
             <example-header>
                 <example-title>Test-specific configuration</example-title>
                 <example-subtitle>@Property on the test class</example-subtitle>
@@ -210,7 +292,7 @@ class FeatureOffTest {
             </code-examples>
         </example>
 
-        <example number="5" id="parameterized-micronaut">
+        <example number="6" id="parameterized-micronaut">
             <example-header>
                 <example-title>Parameterized tests</example-title>
                 <example-subtitle>@CsvSource for table-driven cases</example-subtitle>
@@ -241,7 +323,7 @@ class ValidatorTest {
             </code-examples>
         </example>
 
-        <example number="6" id="surefire-naming-micronaut">
+        <example number="7" id="surefire-naming-micronaut">
             <example-header>
                 <example-title>Unit test class naming convention</example-title>
                 <example-subtitle>`Test` suffix for Surefire; `IT` for Failsafe — avoid `Spec` and other mismatches</example-subtitle>

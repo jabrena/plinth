@@ -11,7 +11,7 @@
     <role>You are a Senior software engineer with extensive experience in Quarkus and JUnit 5 testing</role>
 
     <goal>
-        Quarkus tests should be as fast as possible: prefer **plain JUnit 5 + Mockito** for classes that do not need the Quarkus container. When CDI wiring matters but a full integration test is too heavy, use `@QuarkusTest` with `@InjectMock` or `@InjectSpy` to substitute collaborators. Reserve `@QuarkusTest` + REST Assured for resource-focused tests; avoid booting Quarkus for pure domain logic.
+        Quarkus tests should be as fast as possible: prefer **plain JUnit 5 + Mockito** for classes that do not need the Quarkus container. When CDI wiring matters but a full integration test is too heavy, use `@QuarkusTest` with `@InjectMock` or `@InjectSpy` to substitute collaborators. Reserve `@QuarkusTest` + REST Assured for resource-focused tests; avoid booting Quarkus for pure domain logic. For time-dependent behaviour, inject `java.time.Clock` (CDI can supply `Clock.systemUTC()` in prod and `Clock.fixed(...)` or a test double in tests) — do not rely on `Instant.now()` in code you unit-test with Mockito; final time types and static `now()` methods are awkward to fake without an injectable clock or supplier.
     </goal>
 
     <constraints>
@@ -83,7 +83,97 @@ class PricingServiceTest {
             </code-examples>
         </example>
 
-        <example number="2" id="quarkus-test-inject-mock">
+        <example number="2" id="injectable-clock-time-quarkus">
+            <example-header>
+                <example-title>Injectable `Clock` and time APIs Mockito cannot stub</example-title>
+                <example-subtitle>Inject `Clock` into `@ApplicationScoped` beans; use `Clock.fixed` or `@Mock Clock` in tests</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                **`Instant.now()` and `LocalDate.now()`** are static entry points on **final** types — Mockito does not replace them, and mocking `Instant` is the wrong layer. **Inject `java.time.Clock`** (field or constructor on CDI beans) and use `clock.instant()` / `LocalDate.now(clock)`. In unit tests, either construct the bean with **`Clock.fixed(instant, zoneId)`** or use **`@Mock Clock`** with `when(clock.instant()).thenReturn(…)`.
+
+                For **`@QuarkusTest`**, register a test `Clock` via `QuarkusTestProfile` config, a test-only CDI producer, or keep business logic in a plain class tested with **`@ExtendWith(MockitoExtension.class)`** and a fixed clock (fastest).
+
+                **Likewise:** `UUID.randomUUID()`, `System.nanoTime()`, unseeded `Random` — inject `Supplier<UUID>`, `LongSupplier`, or `Random` so tests control outputs without bytecode manipulation.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
+// @ApplicationScoped bean: @Inject Clock clock — constructor shown for tests
+class PromotionService {
+    private final Clock clock;
+    PromotionService(Clock clock) { this.clock = clock; }
+
+    boolean isActive(Instant validFrom, Instant validTo) {
+        Instant now = clock.instant();
+        return !now.isBefore(validFrom) && now.isBefore(validTo);
+    }
+}
+
+@ExtendWith(MockitoExtension.class)
+class PromotionServiceTest {
+
+    @Mock
+    Clock clock;
+
+    @Test
+    void isActive_whenNowInsideWindow_returnsTrue() {
+        when(clock.instant()).thenReturn(Instant.parse("2024-07-01T12:00:00Z"));
+        var svc = new PromotionService(clock);
+        var from = Instant.parse("2024-07-01T00:00:00Z");
+        var to = Instant.parse("2024-07-02T00:00:00Z");
+        assertThat(svc.isActive(from, to)).isTrue();
+    }
+
+    @Test
+    void isActive_usesFixedClock_withoutMockito() {
+        Clock fixed = Clock.fixed(
+            Instant.parse("2024-07-01T12:00:00Z"), ZoneOffset.UTC);
+        var svc = new PromotionService(fixed);
+        var from = Instant.parse("2024-07-01T00:00:00Z");
+        var to = Instant.parse("2024-07-02T00:00:00Z");
+        assertThat(svc.isActive(from, to)).isTrue();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import org.junit.jupiter.api.Test;
+import java.time.Instant;
+import static org.assertj.core.api.Assertions.assertThat;
+
+class PromotionService {
+
+    boolean isActive(Instant validFrom, Instant validTo) {
+        Instant now = Instant.now(); // Bad: static — Mockito cannot stub; flaky tests
+        return !now.isBefore(validFrom) && now.isBefore(validTo);
+    }
+}
+
+class PromotionServiceTest {
+
+    @Test
+    void isActive_flaky() {
+        var svc = new PromotionService();
+        assertThat(svc.isActive(
+            Instant.parse("2000-01-01T00:00:00Z"),
+            Instant.parse("3000-01-01T00:00:00Z"))).isTrue();
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="quarkus-test-inject-mock">
             <example-header>
                 <example-title>@QuarkusTest with @InjectMock</example-title>
                 <example-subtitle>Replace a CDI collaborator</example-subtitle>
@@ -127,7 +217,7 @@ class OrderAppServiceTest {
             </code-examples>
         </example>
 
-        <example number="3" id="quarkus-test-rest-assured-slice">
+        <example number="4" id="quarkus-test-rest-assured-slice">
             <example-header>
                 <example-title>@QuarkusTest REST Assured slice</example-title>
                 <example-subtitle>Test JAX-RS resources for routing, serialization, and status codes</example-subtitle>
@@ -225,7 +315,7 @@ class BookResourceTest {
             </code-examples>
         </example>
 
-        <example number="4" id="inject-spy-partial-mock">
+        <example number="5" id="inject-spy-partial-mock">
             <example-header>
                 <example-title>@InjectSpy for partial CDI bean mocking</example-title>
                 <example-subtitle>Wrap a real CDI bean as a Mockito spy to verify calls without replacing behaviour</example-subtitle>
@@ -301,7 +391,7 @@ class OrderServiceTest {
             </code-examples>
         </example>
 
-        <example number="5" id="parameterized-tests">
+        <example number="6" id="parameterized-tests">
             <example-header>
                 <example-title>Parameterized unit tests</example-title>
                 <example-subtitle>@CsvSource for inline tabular data; @MethodSource for complex objects</example-subtitle>
@@ -403,7 +493,7 @@ class PricingServiceTest {
             </code-examples>
         </example>
 
-        <example number="6" id="quarkus-test-profile">
+        <example number="7" id="quarkus-test-profile">
             <example-header>
                 <example-title>@QuarkusTestProfile for test-specific configuration</example-title>
                 <example-subtitle>Override properties and supply test-only beans without mutating global config</example-subtitle>
@@ -488,7 +578,7 @@ class FeatureServiceTest {
             </code-examples>
         </example>
 
-        <example number="7" id="test-naming-convention">
+        <example number="8" id="test-naming-convention">
             <example-header>
                 <example-title>Test class naming convention</example-title>
                 <example-subtitle>Test suffix for Surefire; IT suffix for Failsafe / @QuarkusIntegrationTest</example-subtitle>

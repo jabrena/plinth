@@ -14,7 +14,7 @@ You are a Senior software engineer with extensive experience in Micronaut testin
 
 ## Goal
 
-Micronaut tests should be fast by default: exercise plain services with Mockito and no container, and reserve `@MicronautTest` for cases that need HTTP routing, bean replacement, or Micronaut-specific adapters. Use `@MockBean` factory methods to substitute collaborators, inject `HttpClient` with `@Client("/")` for controller tests, and keep deterministic configuration via `@Property` on test classes or methods.
+Micronaut tests should be fast by default: exercise plain services with Mockito and no container, and reserve `@MicronautTest` for cases that need HTTP routing, bean replacement, or Micronaut-specific adapters. Use `@MockBean` factory methods to substitute collaborators, inject `HttpClient` with `@Client("/")` for controller tests, and keep deterministic configuration via `@Property` on test classes or methods. Inject `java.time.Clock` (or a narrow time-supplier interface) for anything that would otherwise call `Instant.now()` — Mockito does not mock static time APIs, and `Instant` is final; a fixed `Clock` in tests removes flakiness.
 
 ## Constraints
 
@@ -32,11 +32,12 @@ Before applying any recommendations, ensure the project is in a valid state by r
 ### Table of contents
 
 - Example 1: Pure Mockito for services
-- Example 2: @MicronautTest with @MockBean
-- Example 3: HttpClient against embedded server
-- Example 4: Test-specific configuration
-- Example 5: Parameterized tests
-- Example 6: Unit test class naming convention
+- Example 2: Injectable `Clock` — avoid static time and final value mocks
+- Example 3: @MicronautTest with @MockBean
+- Example 4: HttpClient against embedded server
+- Example 5: Test-specific configuration
+- Example 6: Parameterized tests
+- Example 7: Unit test class naming convention
 
 ### Example 1: Pure Mockito for services
 
@@ -91,7 +92,82 @@ class PricingServiceTest {
 }
 ```
 
-### Example 2: @MicronautTest with @MockBean
+### Example 2: Injectable `Clock` — avoid static time and final value mocks
+
+Title: `@Singleton` services take `Clock`; tests use `Clock.fixed` or `@Mock Clock`
+Description: **`Instant.now()` / `LocalDate.now()`** hide behind static methods — Mockito does not intercept them, and **`Instant`** is **final**. **Inject `java.time.Clock`** (constructor injection on `@Singleton` beans; optional `@Factory` + `@Bean` for `Clock.systemUTC()` in Micronaut). Unit tests construct the service with **`Clock.fixed(…, zone)`** or **`@Mock Clock`** and `when(clock.instant()).thenReturn(…)`. **Also hard to fake in tests:** `UUID.randomUUID()`, `System.nanoTime()`, unseeded `Random` — inject `Supplier<UUID>`, `LongSupplier`, or a seeded `Random` for deterministic assertions. In **`@MicronautTest`**, replace the `Clock` bean with `@MockBean` / `@Replaces` returning a fixed clock when the full graph must run; for pure domain logic, prefer **`@ExtendWith(MockitoExtension.class)`** without the container.
+
+**Good example:**
+
+```java
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
+// @Singleton class OfferService { private final Clock clock; ... }
+class OfferService {
+    private final Clock clock;
+    OfferService(Clock clock) { this.clock = clock; }
+
+    boolean stillValid(Instant expiresAt) {
+        return clock.instant().isBefore(expiresAt);
+    }
+}
+
+@ExtendWith(MockitoExtension.class)
+class OfferServiceTest {
+
+    @Mock
+    Clock clock;
+
+    @Test
+    void stillValid_beforeExpiry_returnsTrue() {
+        when(clock.instant()).thenReturn(Instant.parse("2024-03-01T10:00:00Z"));
+        var svc = new OfferService(clock);
+        assertThat(svc.stillValid(Instant.parse("2024-03-01T23:59:59Z"))).isTrue();
+    }
+
+    @Test
+    void stillValid_usesFixedClock() {
+        Clock fixed = Clock.fixed(
+            Instant.parse("2024-03-01T10:00:00Z"), ZoneOffset.UTC);
+        var svc = new OfferService(fixed);
+        assertThat(svc.stillValid(Instant.parse("2024-03-01T23:59:59Z"))).isTrue();
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import org.junit.jupiter.api.Test;
+import java.time.Instant;
+import static org.assertj.core.api.Assertions.assertThat;
+
+class OfferService {
+
+    boolean stillValid(Instant expiresAt) {
+        return Instant.now().isBefore(expiresAt); // Bad: not injectable; tests tied to real time
+    }
+}
+
+class OfferServiceTest {
+
+    @Test
+    void brittle() {
+        var svc = new OfferService();
+        assertThat(svc.stillValid(Instant.parse("2099-01-01T00:00:00Z"))).isTrue();
+    }
+}
+```
+
+### Example 3: @MicronautTest with @MockBean
 
 Title: Replace collaborators in the test scope
 Description: Declare `@MockBean` factory methods on the test class (or a companion) to supply Mockito doubles registered in the Micronaut context.
@@ -135,7 +211,7 @@ class OrderControllerTest {
 }
 ```
 
-### Example 3: HttpClient against embedded server
+### Example 4: HttpClient against embedded server
 
 Title: @Inject @Client("/") HttpClient
 Description: Inject a blocking or reactive `HttpClient` bound to the test server to assert status codes and payloads on real routing.
@@ -175,7 +251,7 @@ class HelloControllerTest {
 // Bad: manually starting Netty in test — MicronautTest already provides EmbeddedServer + client wiring
 ```
 
-### Example 4: Test-specific configuration
+### Example 5: Test-specific configuration
 
 Title: @Property on the test class
 Description: Override configuration keys for deterministic tests (feature flags, URLs of stub servers).
@@ -204,7 +280,7 @@ class FeatureOffTest {
 // Bad: tests depend on developer application.yml on disk — flaky in CI
 ```
 
-### Example 5: Parameterized tests
+### Example 6: Parameterized tests
 
 Title: @CsvSource for table-driven cases
 Description: Collapse equivalent scenarios into one parameterized test for readability.
@@ -232,7 +308,7 @@ class ValidatorTest {
 // Bad: three nearly identical @Test methods differing only by input literals
 ```
 
-### Example 6: Unit test class naming convention
+### Example 7: Unit test class naming convention
 
 Title: `Test` suffix for Surefire; `IT` for Failsafe — avoid `Spec` and other mismatches
 Description: Unit test class names must end with the suffix `Test` (e.g., `OrderServiceTest`, `HelloControllerTest`). Maven Surefire picks up classes matching `**/*Test.java`, `**/Test*.java`, `**/*Tests.java`, and `**/*TestCase.java` by default. Using a different suffix (or none) silently excludes tests from the build. Reserve the `IT` suffix for integration tests executed by Maven Failsafe (`**/*IT.java`) when configured. Consistency also makes it trivial to navigate from a production class (`OrderService`) to its test (`OrderServiceTest`).

@@ -1,12 +1,12 @@
 ---
 name: 311-frameworks-spring-jdbc
-description: Use when you need to write or review programmatic JDBC with Spring — including JdbcTemplate, NamedParameterJdbcTemplate, JdbcClient (Spring Framework 6.1+), parameterized SQL, RowMapper mapping to records, batch operations, transactions, safe handling of generated keys, DataAccessException handling, read-only transactions, streaming large result sets, and @JdbcTest slice testing.
+description: Use when you need to write or review programmatic JDBC with Spring — including JdbcClient (Spring Framework 6.1+) as the default API, JdbcTemplate only where batch/streaming APIs require JdbcOperations, NamedParameterJdbcTemplate for legacy named-param code, parameterized SQL, RowMapper mapping to records, batch operations, transactions, safe handling of generated keys, DataAccessException handling, read-only transactions, streaming large result sets, and @JdbcTest slice testing.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
   version: 0.13.0
 ---
-# Spring JDBC — JdbcTemplate and JdbcClient
+# Spring JDBC — JdbcClient (Spring Framework 6.1+)
 
 ## Role
 
@@ -14,7 +14,7 @@ You are a Senior software engineer with extensive experience in Spring Framework
 
 ## Goal
 
-Spring's JDBC support centers on `JdbcTemplate` and friends for template-style access, and on `JdbcClient` for a fluent, chainable API built on top of that stack. Prefer explicit SQL with bind parameters, map rows to immutable records or small DTOs, keep transactions at the service layer, and let Spring translate SQL exceptions to `DataAccessException`. Use `NamedParameterJdbcTemplate` when named placeholders improve readability. Choose Spring Data JDBC (`@312-frameworks-spring-data-jdbc`) when repositories and aggregate mapping fit; use `JdbcTemplate` / `JdbcClient` for ad-hoc SQL, reporting, or tight control over statements. For schema evolution with Flyway, use `@313-frameworks-spring-flyway-migrations`.
+Prefer `JdbcClient` (Spring Framework 6.1+) for new and refactored code: fluent SQL, indexed or named parameters, typed `query(Class)`, and `optional()` / `single()` for single-row reads. It is built on `JdbcOperations` and participates in Spring transactions like `JdbcTemplate`. Use `JdbcTemplate` (or `NamedParameterJdbcTemplate`) only when you need APIs not covered by `JdbcClient` — notably `batchUpdate`, `KeyHolder` inserts, `RowCallbackHandler` / `ResultSetExtractor` streaming — or when maintaining legacy code. Prefer explicit SQL with bind parameters, map rows to immutable records or small DTOs, keep transactions at the service layer, and let Spring translate SQL exceptions to `DataAccessException`. Choose Spring Data JDBC (`@312-frameworks-spring-data-jdbc`) when repositories and aggregate mapping fit; use `JdbcClient` (or `JdbcTemplate` for batch/streaming) for ad-hoc SQL, reporting, or tight control over statements. For schema evolution with Flyway, use `@313-frameworks-spring-flyway-migrations`.
 
 ## Constraints
 
@@ -31,53 +31,52 @@ Before applying any recommendations, ensure the project is in a valid state by r
 
 ### Table of contents
 
-- Example 1: Parameterized queries with JdbcTemplate
-- Example 2: NamedParameterJdbcTemplate
+- Example 1: Parameterized queries with JdbcClient
+- Example 2: Named parameters with JdbcClient
 - Example 3: JdbcClient fluent API
-- Example 4: Row mapping and records
-- Example 5: Transactions and JDBC
-- Example 6: Batch updates and generated keys
-- Example 7: Safe single-row queries
-- Example 8: DataAccessException hierarchy and handling
-- Example 9: Read-only transactions for query paths
-- Example 10: Streaming large result sets
-- Example 11: Testing with @JdbcTest
-- Example 12: Rollback rules
-- Example 13: Self-invocation pitfall
-- Example 14: Programmatic transactions with TransactionTemplate
+- Example 4: Migrate from JdbcTemplate to JdbcClient
+- Example 5: Row mapping and records
+- Example 6: Transactions and JDBC
+- Example 7: Batch updates and generated keys
+- Example 8: Safe single-row queries
+- Example 9: DataAccessException hierarchy and handling
+- Example 10: Read-only transactions for query paths
+- Example 11: Streaming large result sets
+- Example 12: Testing with @JdbcTest
+- Example 13: Rollback rules
+- Example 14: Self-invocation pitfall
+- Example 15: Programmatic transactions with TransactionTemplate
 
-### Example 1: Parameterized queries with JdbcTemplate
+### Example 1: Parameterized queries with JdbcClient
 
 Title: Bind arguments; never concatenate user input into SQL
-Description: Use `query`, `queryForObject`, or `update` overloads that accept `Object...` args or `PreparedStatementSetter`. This keeps plans cacheable and prevents SQL injection.
+Description: Use `JdbcClient.sql(...).param(...)` for positional `?` placeholders, then `query` with a row mapper or mapped type, or `update` for writes. This keeps plans cacheable and prevents SQL injection. Spring Boot 3.2+ registers a `JdbcClient` bean; otherwise use `JdbcClient.create(dataSource)`.
 
 **Good example:**
 
 ```java
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.JdbcClient;
 import java.util.List;
 
 class UserRepository {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final JdbcClient jdbcClient;
 
-    UserRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    UserRepository(JdbcClient jdbcClient) {
+        this.jdbcClient = jdbcClient;
     }
 
     List<String> findEmailsByStatus(String status) {
-        return jdbcTemplate.query(
-            "SELECT email FROM users WHERE status = ?",
-            (rs, rowNum) -> rs.getString("email"),
-            status
-        );
+        return jdbcClient.sql("SELECT email FROM users WHERE status = ?")
+            .param(status)
+            .query((rs, rowNum) -> rs.getString("email"))
+            .list();
     }
 
     int updateStatus(long userId, String newStatus) {
-        return jdbcTemplate.update(
-            "UPDATE users SET status = ? WHERE id = ?",
-            newStatus, userId
-        );
+        return jdbcClient.sql("UPDATE users SET status = ? WHERE id = ?")
+            .params(newStatus, userId)
+            .update();
     }
 }
 ```
@@ -85,52 +84,52 @@ class UserRepository {
 **Bad example:**
 
 ```java
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.JdbcClient;
+import java.util.List;
 
 class UnsafeUserRepository {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final JdbcClient jdbcClient;
 
-    UnsafeUserRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    UnsafeUserRepository(JdbcClient jdbcClient) {
+        this.jdbcClient = jdbcClient;
     }
 
     List<String> findByStatus(String status) {
-        String sql = "SELECT email FROM users WHERE status = '" + status + "'";
-        return jdbcTemplate.query(sql, (rs, rowNum) -> rs.getString("email"));
+        // Bad: concatenation — SQL injection and no stable execution plan
+        return jdbcClient.sql("SELECT email FROM users WHERE status = '" + status + "'")
+            .query((rs, rowNum) -> rs.getString("email"))
+            .list();
     }
 }
 ```
 
-### Example 2: NamedParameterJdbcTemplate
+### Example 2: Named parameters with JdbcClient
 
-Title: Named placeholders for readable SQL and Map-based params
-Description: Use `:name` placeholders with `MapSqlParameterSource` or maps. Prefer this when the same SQL is reused with different named arguments or when readability beats positional `?` lists.
+Title: `:name` placeholders with `.param(name, value)` — legacy code may use NamedParameterJdbcTemplate
+Description: Use `:name` placeholders in SQL, then chain `.param("name", value)` on `JdbcClient`. Prefer this over long positional `?` lists. Existing code using `NamedParameterJdbcTemplate` + `MapSqlParameterSource` can migrate to the same SQL and bindings on `JdbcClient` (see the migration example).
 
 **Good example:**
 
 ```java
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.core.simple.JdbcClient;
 import java.util.List;
 
 class OrderRepository {
 
-    private final NamedParameterJdbcTemplate named;
+    private final JdbcClient jdbcClient;
 
-    OrderRepository(NamedParameterJdbcTemplate named) {
-        this.named = named;
+    OrderRepository(JdbcClient jdbcClient) {
+        this.jdbcClient = jdbcClient;
     }
 
     List<Long> findIdsByCustomerAndState(long customerId, String state) {
-        var params = new MapSqlParameterSource()
-            .addValue("customerId", customerId)
-            .addValue("state", state);
-        return named.query(
-            "SELECT id FROM orders WHERE customer_id = :customerId AND state = :state",
-            params,
-            (rs, rowNum) -> rs.getLong("id")
-        );
+        return jdbcClient.sql(
+                "SELECT id FROM orders WHERE customer_id = :customerId AND state = :state")
+            .param("customerId", customerId)
+            .param("state", state)
+            .query((rs, rowNum) -> rs.getLong("id"))
+            .list();
     }
 }
 ```
@@ -138,19 +137,20 @@ class OrderRepository {
 **Bad example:**
 
 ```java
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.JdbcClient;
 import java.util.List;
 
 class OrderRepository {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final JdbcClient jdbcClient;
 
     List<Long> findIds(long customerId, String state) {
-        return jdbcTemplate.query(
-            "SELECT id FROM orders WHERE customer_id = " + customerId + " AND state = ?",
-            (rs, rowNum) -> rs.getLong("id"),
-            state
-        );
+        // Bad: untrusted fragments in SQL — use bound parameters only
+        return jdbcClient.sql(
+                "SELECT id FROM orders WHERE customer_id = " + customerId + " AND state = ?")
+            .param(state)
+            .query((rs, rowNum) -> rs.getLong("id"))
+            .list();
     }
 }
 ```
@@ -238,33 +238,106 @@ class ProductRepository {
 }
 ```
 
-### Example 4: Row mapping and records
+### Example 4: Migrate from JdbcTemplate to JdbcClient
 
-Title: DataClassRowMapper or explicit RowMapper
-Description: Map `ResultSet` columns to records or immutable types. Use `DataClassRowMapper` for canonical record constructors, or an explicit `RowMapper` when names or conversions need control.
+Title: Same SQL and parameters; inject `JdbcClient` and use the fluent API
+Description: Replace `JdbcTemplate` / `NamedParameterJdbcTemplate` with `JdbcClient` when on Spring Framework 6.1+ (Spring Boot 3.2+). Inject `JdbcClient` or build it with `JdbcClient.create(jdbcTemplate)` during a gradual migration. Map `query` → `sql(...).param(...).query(...).list()` (or `.query(Class).list()`), `queryForObject` for a single row → `query(...).optional()` or `query(Class).single()`, `update` → `sql(...).param(...).update()`. Keep `JdbcTemplate` only for `batchUpdate`, `KeyHolder` inserts, or `RowCallbackHandler` until you refactor those call sites.
 
 **Good example:**
 
 ```java
-import org.springframework.jdbc.core.DataClassRowMapper;
+// Before: JdbcTemplate
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import java.util.List;
+import java.util.Optional;
+
+class LegacyUserRepository {
+
+    private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate named;
+
+    LegacyUserRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate named) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.named = named;
+    }
+
+    List<String> findEmailsByStatus(String status) {
+        return jdbcTemplate.query(
+            "SELECT email FROM users WHERE status = ?",
+            (rs, rowNum) -> rs.getString("email"),
+            status
+        );
+    }
+
+    Optional<Long> findIdByEmail(String email) {
+        var params = new MapSqlParameterSource("email", email);
+        List<Long> rows = named.query(
+            "SELECT id FROM users WHERE email = :email",
+            params,
+            (rs, rowNum) -> rs.getLong("id")
+        );
+        return rows.isEmpty() ? Optional.empty() : Optional.of(rows.get(0));
+    }
+
+    int updateStatus(long userId, String newStatus) {
+        return jdbcTemplate.update(
+            "UPDATE users SET status = ? WHERE id = ?",
+            newStatus, userId
+        );
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import org.springframework.jdbc.core.simple.JdbcClient;
+
+class UserRepository {
+
+    private final JdbcClient jdbcClient;
+
+    UserRepository(JdbcClient jdbcClient) {
+        this.jdbcClient = jdbcClient;
+    }
+
+    // Bad: mixing JdbcTemplate-style queryForObject mental model — use optional() for 0..1 rows
+    Long findIdByEmail(String email) {
+        return jdbcClient.sql("SELECT id FROM users WHERE email = ?")
+            .param(email)
+            .query(Long.class)
+            .single(); // throws if no row — often wrong for lookups by natural key
+    }
+}
+```
+
+### Example 5: Row mapping and records
+
+Title: `JdbcClient.query(Class)` or `DataClassRowMapper` with explicit `RowMapper`
+Description: Map `ResultSet` columns to records or immutable types. Prefer `jdbcClient.sql(...).query(YourRecord.class).list()` for records whose constructor matches column names (or `@ConstructorProperties`). Use `DataClassRowMapper` with `JdbcTemplate` only if you have not migrated that call site yet; otherwise use `JdbcClient` with an explicit `RowMapper` when names or conversions need control.
+
+**Good example:**
+
+```java
+import org.springframework.jdbc.core.simple.JdbcClient;
 import java.util.List;
 
 record CustomerRow(long id, String email, String status) {}
 
 class CustomerQuery {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final JdbcClient jdbcClient;
 
-    CustomerQuery(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    CustomerQuery(JdbcClient jdbcClient) {
+        this.jdbcClient = jdbcClient;
     }
 
     List<CustomerRow> findAll() {
-        return jdbcTemplate.query(
-            "SELECT id, email, status FROM customers",
-            DataClassRowMapper.newInstance(CustomerRow.class)
-        );
+        return jdbcClient.sql("SELECT id, email, status FROM customers")
+            .query(CustomerRow.class)
+            .list();
     }
 }
 ```
@@ -272,51 +345,55 @@ class CustomerQuery {
 **Bad example:**
 
 ```java
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.JdbcClient;
 import java.util.List;
 
 class CustomerQuery {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final JdbcClient jdbcClient;
 
     List<Object[]> findAllRaw() {
-        return jdbcTemplate.query(
-            "SELECT id, email, status FROM customers",
-            (rs, rowNum) -> new Object[] {
+        return jdbcClient.sql("SELECT id, email, status FROM customers")
+            .query((rs, rowNum) -> new Object[] {
                 rs.getLong("id"),
                 rs.getString("email"),
                 rs.getString("status")
-            }
-        );
+            })
+            .list();
     }
+    // Bad: untyped Object[] — use a record or DTO mapping instead
 }
 ```
 
-### Example 5: Transactions and JDBC
+### Example 6: Transactions and JDBC
 
-Title: Declare boundaries on services — JdbcTemplate and JdbcClient
-Description: Wrap multi-statement workflows in `@Transactional` on the service. Both `JdbcTemplate` and `JdbcClient` participate in the current Spring transaction when one exists. `JdbcClient` (Spring Framework 6.1+) offers the same transactional semantics with a fluent, chainable API.
+Title: Declare boundaries on services — `JdbcClient` joins the current transaction
+Description: Wrap multi-statement workflows in `@Transactional` on the service. `JdbcClient` participates in the current Spring transaction the same way `JdbcTemplate` does (it delegates to `JdbcOperations`).
 
 **Good example:**
 
 ```java
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.JdbcClient;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 @Service
 class TransferService {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final JdbcClient jdbcClient;
 
-    TransferService(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    TransferService(JdbcClient jdbcClient) {
+        this.jdbcClient = jdbcClient;
     }
 
     @Transactional
     void transfer(long fromId, long toId, long amount) {
-        jdbcTemplate.update("UPDATE accounts SET balance = balance - ? WHERE id = ?", amount, fromId);
-        jdbcTemplate.update("UPDATE accounts SET balance = balance + ? WHERE id = ?", amount, toId);
+        jdbcClient.sql("UPDATE accounts SET balance = balance - ? WHERE id = ?")
+            .params(amount, fromId)
+            .update();
+        jdbcClient.sql("UPDATE accounts SET balance = balance + ? WHERE id = ?")
+            .params(amount, toId)
+            .update();
     }
 }
 ```
@@ -324,27 +401,29 @@ class TransferService {
 **Bad example:**
 
 ```java
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.simple.JdbcClient;
 
 class TransferDao {
 
-    private final JdbcTemplate jdbcTemplate;
+    private final JdbcClient jdbcClient;
 
     void debit(long id, long amount) {
-        jdbcTemplate.update("UPDATE accounts SET balance = balance - ? WHERE id = ?", amount, id);
+        jdbcClient.sql("UPDATE accounts SET balance = balance - ? WHERE id = ?")
+            .params(amount, id).update();
     }
 
     void credit(long id, long amount) {
-        jdbcTemplate.update("UPDATE accounts SET balance = balance + ? WHERE id = ?", amount, id);
+        jdbcClient.sql("UPDATE accounts SET balance = balance + ? WHERE id = ?")
+            .params(amount, id).update();
     }
     // Bad: callers can forget to wrap debit+credit in one transaction — boundary belongs on service
 }
 ```
 
-### Example 6: Batch updates and generated keys
+### Example 7: Batch updates and generated keys
 
 Title: batchUpdate for bulk writes; KeyHolder for inserts; List<Object[]> shorthand
-Description: Use `JdbcTemplate.batchUpdate` with `BatchPreparedStatementSetter` or a `List<Object[]>` argument-list shorthand for repeated statements. For inserts that return keys, use `KeyHolder` / `GeneratedKeyHolder` with `PreparedStatement.RETURN_GENERATED_KEYS` or database-specific patterns.
+Description: `JdbcClient` does not replace batch and generated-key APIs yet — use `JdbcTemplate` (or `JdbcOperations`) for `batchUpdate` with `BatchPreparedStatementSetter` or `List<Object[]>` shorthand, and `KeyHolder` / `GeneratedKeyHolder` for inserts that return keys. Inject `JdbcTemplate` alongside `JdbcClient` for those call sites, or obtain operations from the same `DataSource`.
 
 **Good example:**
 
@@ -430,15 +509,14 @@ class ItemWriter {
 }
 ```
 
-### Example 7: Safe single-row queries
+### Example 8: Safe single-row queries
 
-Title: optional() or stream().findFirst() instead of queryForObject when zero rows are possible
-Description: `JdbcTemplate.queryForObject` throws `EmptyResultDataAccessException` when it finds zero rows and `IncorrectResultSizeDataAccessException` when it finds more than one. Use `JdbcClient.query().optional()` (Spring 6.1+) or `jdbcTemplate.query(...).stream().findFirst()` when the result may be absent, to keep callers in control of the empty case.
+Title: Prefer `optional()` — avoid `queryForObject` for entity lookups when zero rows are possible
+Description: Legacy `JdbcTemplate.queryForObject` throws `EmptyResultDataAccessException` when it finds zero rows and `IncorrectResultSizeDataAccessException` when it finds more than one. Prefer `JdbcClient.query(...).optional()` for 0..1 rows. Use `single()` only when exactly one row is guaranteed (or when you want an exception if not). For aggregates that always return one row (e.g. `COUNT(*)`), `queryForObject` on `JdbcTemplate` or a typed `query(...).single()` remains appropriate.
 
 **Good example:**
 
 ```java
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.simple.JdbcClient;
 import java.util.Optional;
 
@@ -446,15 +524,12 @@ record UserRow(long id, String email) {}
 
 class UserRepository {
 
-    private final JdbcTemplate jdbcTemplate;
     private final JdbcClient jdbcClient;
 
-    UserRepository(JdbcTemplate jdbcTemplate, JdbcClient jdbcClient) {
-        this.jdbcTemplate = jdbcTemplate;
+    UserRepository(JdbcClient jdbcClient) {
         this.jdbcClient = jdbcClient;
     }
 
-    // JdbcClient (Spring 6.1+): idiomatic optional()
     Optional<UserRow> findByEmail(String email) {
         return jdbcClient.sql("SELECT id, email FROM users WHERE email = ?")
             .param(email)
@@ -462,13 +537,11 @@ class UserRepository {
             .optional();
     }
 
-    // JdbcTemplate: stream().findFirst() avoids the exception on empty result
     Optional<String> findEmailById(long id) {
-        return jdbcTemplate.query(
-            "SELECT email FROM users WHERE id = ?",
-            (rs, rowNum) -> rs.getString("email"),
-            id
-        ).stream().findFirst();
+        return jdbcClient.sql("SELECT email FROM users WHERE id = ?")
+            .param(id)
+            .query((rs, rowNum) -> rs.getString("email"))
+            .optional();
     }
 }
 ```
@@ -499,12 +572,12 @@ class UserRepository {
             status
         );
         // queryForObject is fine for aggregate functions that always return one row;
-        // but for entity lookups, prefer optional() or stream().findFirst()
+        // but for entity lookups, prefer JdbcClient optional()
     }
 }
 ```
 
-### Example 8: DataAccessException hierarchy and handling
+### Example 9: DataAccessException hierarchy and handling
 
 Title: Catch specific subtypes at service boundaries; translate to domain exceptions
 Description: Spring maps all SQL exceptions to `DataAccessException` subtypes. Catch specific subtypes — `DuplicateKeyException` for unique constraint violations, `DataIntegrityViolationException` for FK or check failures — at the service layer and translate them into meaningful domain exceptions. Never let raw `DataAccessException` propagate to controllers or clients.
@@ -589,7 +662,7 @@ class AccountService {
 }
 ```
 
-### Example 9: Read-only transactions for query paths
+### Example 10: Read-only transactions for query paths
 
 Title: @Transactional(readOnly = true) at class level; override for writes
 Description: Apply `@Transactional(readOnly = true)` as the class-level default for services that are predominantly query-oriented. Override with plain `@Transactional` on individual write methods. This allows the connection pool and underlying driver to skip dirty-tracking and may enable read replicas or optimistic locking shortcuts.
@@ -671,10 +744,10 @@ class ProductService {
 }
 ```
 
-### Example 10: Streaming large result sets
+### Example 11: Streaming large result sets
 
-Title: RowCallbackHandler and ResultSetExtractor for row-by-row processing
-Description: When a query may return thousands or millions of rows, loading them all into a `List` risks heap pressure. Use `RowCallbackHandler` to process each row as it arrives (fire-and-forget, no return), or `ResultSetExtractor` when you need to aggregate into a custom result during iteration.
+Title: `JdbcTemplate` / `JdbcOperations` — RowCallbackHandler and ResultSetExtractor
+Description: Prefer `JdbcClient` for bounded queries that fit in memory. When a query may return very large row counts, loading them all via `JdbcClient.query(...).list()` risks heap pressure — use `JdbcTemplate` with `RowCallbackHandler` to process each row as it arrives, or `ResultSetExtractor` to aggregate during iteration (these APIs live on `JdbcOperations`, not the fluent `JdbcClient` surface).
 
 **Good example:**
 
@@ -755,7 +828,7 @@ class ReportService {
 }
 ```
 
-### Example 11: Testing with @JdbcTest
+### Example 12: Testing with @JdbcTest
 
 Title: Lightweight slice test for JDBC repositories; @Sql for fixtures
 Description: Use `@JdbcTest` to load only `DataSource`, `JdbcTemplate`, `NamedParameterJdbcTemplate`, and `JdbcClient` — no web layer, no full application context. Wire your repository under test with `@Import`. Use `@Sql` to set up and tear down fixture data. Prefer an embedded H2 database or Testcontainers for realistic dialect coverage.
@@ -844,7 +917,7 @@ class ProductRepositoryTest {
 }
 ```
 
-### Example 12: Rollback rules
+### Example 13: Rollback rules
 
 Title: rollbackFor for checked exceptions; noRollbackFor for expected failures
 Description: By default Spring rolls back on unchecked (`RuntimeException`) and `Error` only. Declare `rollbackFor` to include checked exceptions that should abort the transaction. Use `noRollbackFor` when a specific exception is an expected, non-fatal condition that must not roll back an otherwise healthy transaction.
@@ -919,7 +992,7 @@ class OrderService {
 }
 ```
 
-### Example 13: Self-invocation pitfall
+### Example 14: Self-invocation pitfall
 
 Title: Calling @Transactional from within the same bean bypasses the proxy
 Description: Spring applies `@Transactional` through a proxy. When a method calls another `@Transactional` method on the same bean instance via `this.method()`, the proxy is bypassed and no transaction is started or joined. Extract the inner method to a separate Spring-managed bean to ensure proxy interception.
@@ -996,7 +1069,7 @@ class OrderService {
 }
 ```
 
-### Example 14: Programmatic transactions with TransactionTemplate
+### Example 15: Programmatic transactions with TransactionTemplate
 
 Title: Fine-grained control when declarative @Transactional is not applicable
 Description: Use `TransactionTemplate` when transaction boundaries must be determined at runtime — for example, inside lambdas, per-item conditional commit/rollback in a loop, or in contexts where AOP proxy interception is unavailable. `TransactionTemplate` is thread-safe and can be shared across instances.
@@ -1070,7 +1143,7 @@ class BatchImportService {
 
 - **ANALYZE** JDBC usage: SQL safety, parameter style, mapping approach, transaction boundaries, batch opportunities, exception handling, and whether Spring Data JDBC would simplify the case
 - **CATEGORIZE** findings by impact (SECURITY for injection risk, CORRECTNESS for mapping or unsafe single-row access, PERFORMANCE for N+1 / missing readOnly / missing streaming)
-- **APPLY** improvements: introduce parameter binding, NamedParameterJdbcTemplate or JdbcClient named params, RowMapper or record mapping, service-level `@Transactional`, `readOnly = true` on query paths, batch APIs and streaming where appropriate
+- **APPLY** improvements: introduce parameter binding, prefer `JdbcClient` (named or indexed params), RowMapper or record mapping via `query(Class)`, service-level `@Transactional`, `readOnly = true` on query paths; use `JdbcTemplate` only for batch/streaming APIs where `JdbcClient` is insufficient
 - **HANDLE** exceptions: translate `DuplicateKeyException` and `DataIntegrityViolationException` to domain exceptions at the service boundary
 - **TEST** with `@JdbcTest` slice and `@Sql` fixture annotations; verify repository behaviour with integration tests before and after refactoring
 - **EXPLAIN** when to keep programmatic JDBC vs adopt `@312-frameworks-spring-data-jdbc`

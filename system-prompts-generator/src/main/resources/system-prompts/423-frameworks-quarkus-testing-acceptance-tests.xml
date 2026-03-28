@@ -20,6 +20,8 @@
 
     <goal>
         Help developers implement acceptance tests from Gherkin feature files in Quarkus projects. With a `.feature` file in context, select scenarios tagged `@acceptance` (or `@acceptance-tests`), implement happy-path tests that boot the full application over HTTP with REST Assured (via `quarkus-rest-assured`), wire databases and Kafka with Dev Services or Testcontainers using `@QuarkusTestResource` / `QuarkusTestResourceLifecycleManager`, and stub outbound calls to third-party HTTP with WireMock and dynamic `%test` configuration—without replacing internal CDI beans with mocks. Follow the same shape as `@421-frameworks-quarkus-testing-unit-tests` and `@422-frameworks-quarkus-testing-integration-tests`: a short goal, constraints, and examples; for framework-agnostic Gherkin use `@133-java-testing-acceptance-tests`; for Spring Boot use `@323-frameworks-spring-boot-testing-acceptance-tests`; for Micronaut use `@523-frameworks-micronaut-testing-acceptance-tests`.
+
+        **Order of implementation**: Implement an **abstract** `BaseAcceptanceTest` with `@QuarkusTest`, shared test resources, and WireMock lifecycle first; then concrete `*AT` classes that extend it—parallel to abstract `BaseIntegrationTest` plus `*IT` in `@422-frameworks-quarkus-testing-integration-tests`.
     </goal>
 
     <constraints>

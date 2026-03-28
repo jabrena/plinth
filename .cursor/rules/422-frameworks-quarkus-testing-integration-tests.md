@@ -16,6 +16,8 @@ You are a Senior software engineer with extensive experience in Quarkus integrat
 
 Integration tests in Quarkus validate real wiring: CDI, persistence, HTTP stack, and extensions. Use `@QuarkusTest` for in-JVM integration (default continuous testing friendly). Prefer **Dev Services** to provision databases, Kafka, and similar locally and in CI without manual Docker compose. When you need explicit containers, use Testcontainers with Quarkus configuration (`%test.quarkus.datasource.*` or `QuarkusTestResource`). Black-box tests against a running app use `@QuarkusIntegrationTest`. Keep tests independent and use `@Transactional` rollback on persistence tests when appropriate.
 
+**Shared integration infrastructure**: When multiple `*IT` classes share the same `@QuarkusTest` profile, Dev Services or `@QuarkusTestResource` registrations, and REST Assured defaults, implement an **abstract** `BaseIntegrationTest` first under `src/test/java/{root-package}/`, then concrete `*IT` classes that extend it. This mirrors `BaseAcceptanceTest` in `@423-frameworks-quarkus-testing-acceptance-tests`. One-off tests can remain standalone; add a base when setup would be duplicated across several classes.
+
 ## Constraints
 
 Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
@@ -39,6 +41,7 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 6: @QuarkusIntegrationTest for packaged artifact validation
 - Example 7: Data isolation strategies
 - Example 8: Test naming conventions and Maven build split
+- Example 9: Abstract BaseIntegrationTest, then concrete *IT classes
 
 ### Example 1: HTTP integration
 
@@ -606,12 +609,47 @@ class BookRepositoryTest {        // ← should be BookRepositoryIT
 }
 ```
 
+
+### Example 9: Abstract BaseIntegrationTest, then concrete *IT classes
+
+Title: Share @QuarkusTest, test resources, and REST Assured base URI
+Description: **Workflow**: (1) Define `abstract class BaseIntegrationTest` with `@QuarkusTest`, shared `@QuarkusTestResource` annotations (Testcontainers, WireMock lifecycle managers), `%test` configuration patterns, and any `@BeforeEach` reset (for example `wireMockServer.resetAll()`). (2) Add concrete `*IT` classes extending the base with feature-specific `@Test` methods. Prefer a base when several integration tests repeat the same Quarkus test bootstrap; keep slice-style or radically different profiles as separate hierarchies or standalone classes.
+
+**Good example:**
+
+```java
+import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.Test;
+import static io.restassured.RestAssured.given;
+import static org.hamcrest.CoreMatchers.is;
+
+@QuarkusTest
+public abstract class BaseIntegrationTest {
+    // Shared @QuarkusTestResource, @TestHTTPManager, or helpers used by all ITs in this suite
+}
+
+class HelloResourceIT extends BaseIntegrationTest {
+
+    @Test
+    void hello() {
+        given().when().get("/hello").then().statusCode(200).body(is("hello"));
+    }
+}
+```
+
+**Bad example:**
+
+```java
+// Bad: every *IT repeats the same @QuarkusTest + identical @QuarkusTestResource
+// list — extract BaseIntegrationTest and extend it.
+```
+
 ## Output Format
 
-- **ANALYZE** integration tests: scope vs unit overlap, Dev Services or Testcontainers configuration, HTTP assertion quality, data isolation strategy, naming conventions, and container lifecycle efficiency
+- **ANALYZE** integration tests: scope vs unit overlap, Dev Services or Testcontainers configuration, HTTP assertion quality, data isolation strategy, naming conventions, container lifecycle efficiency, and whether duplicated Quarkus test setup should become an abstract `BaseIntegrationTest`
 - **CATEGORIZE** findings by impact (FLAKINESS for shared state or order-dependent tests, SPEED for per-method containers or missing Dev Services, CLARITY for missing assertions or vague test names)
 - **APPLY** improvements: enable Dev Services for standard infrastructure, introduce `QuarkusTestResourceLifecycleManager` for custom containers or WireMock stubs, add `@TestTransaction` or `@BeforeEach` cleanup for data isolation, use REST Assured for HTTP assertions, add `@QuarkusIntegrationTest` for packaged artifact validation
-- **IMPLEMENT** incrementally; keep `mvn verify` green after each step; align test class suffixes (`*Test` / `*Tests` for Surefire, `*IT` / `*AT` for Failsafe) and configure both Maven plugins explicitly
+- **IMPLEMENT** incrementally; keep `mvn verify` green after each step; align test class suffixes (`*Test` / `*Tests` for Surefire, `*IT` / `*AT` for Failsafe) and configure both Maven plugins explicitly; when several `*IT` classes share bootstrap, **define an abstract `BaseIntegrationTest` first**, then concrete subclasses (same layering as `BaseAcceptanceTest` in `@423-frameworks-quarkus-testing-acceptance-tests`)
 - **EXPLAIN** when to use `@421-frameworks-quarkus-testing-unit-tests` vs `@QuarkusTest` vs `@QuarkusIntegrationTest` if concerns are being mixed
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive test changes
 

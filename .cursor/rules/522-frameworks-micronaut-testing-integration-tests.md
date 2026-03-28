@@ -16,6 +16,8 @@ You are a Senior software engineer with extensive experience in integration test
 
 Integration tests prove real wiring: HTTP, repositories, messaging, and external clients. Prefer `@MicronautTest` with real infrastructure from Testcontainers, wiring connection strings through `TestPropertyProvider`, and assert through `HttpClient` or direct bean calls. Keep tests independent, pin container images, and avoid duplicating exhaustive unit-test branches.
 
+**Shared integration infrastructure**: When multiple `*IT` classes need the same `@MicronautTest` configuration, `TestPropertyProvider` maps, static `@Container` fields, and `@Client("/") HttpClient`, implement an **abstract** `BaseIntegrationTest` first (often `public abstract class BaseIntegrationTest implements TestPropertyProvider`), then concrete `*IT` classes that extend it—parallel to `BaseAcceptanceTest` in `@523-frameworks-micronaut-testing-acceptance-tests`. Use a standalone `*IT` only when the stack is unique.
+
 ## Constraints
 
 Before applying any recommendations, ensure the project is in a valid state by running Maven compilation. Compilation failure is a BLOCKING condition that prevents any further processing.
@@ -36,6 +38,7 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 3: Full HTTP stack
 - Example 4: Data isolation
 - Example 5: Test naming and Maven Surefire / Failsafe split
+- Example 6: Abstract BaseIntegrationTest, then concrete *IT classes
 
 ### Example 1: Scope of integration tests
 
@@ -209,12 +212,73 @@ Heavy @MicronautTest + Testcontainers classes named *Test.java → Surefire runs
 the "test" phase; use *IT or *AT and Failsafe instead.
 ```
 
+
+### Example 6: Abstract BaseIntegrationTest, then concrete *IT classes
+
+Title: Centralize TestPropertyProvider, containers, and HttpClient
+Description: **Workflow**: (1) Create `public abstract class BaseIntegrationTest implements TestPropertyProvider` with `@MicronautTest`, `@Testcontainers`, shared static containers, `getProperties()` wiring, `@Inject @Client("/") HttpClient`, and optional `@BeforeEach` cleanup. (2) Implement each flow as a concrete `*IT` extending this base. Avoid duplicating `TestPropertyProvider` and container startup in every `*IT`—inherit instead.
+
+**Good example:**
+
+```java
+import io.micronaut.http.client.HttpClient;
+import io.micronaut.http.client.annotation.Client;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import io.micronaut.test.support.TestPropertyProvider;
+import jakarta.inject.Inject;
+import org.junit.jupiter.api.Test;
+import org.testcontainers.containers.PostgreSQLContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import java.util.Map;
+
+@MicronautTest
+@Testcontainers
+public abstract class BaseIntegrationTest implements TestPropertyProvider {
+
+    @Container
+    static PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>("postgres:16-alpine");
+
+    @Inject
+    @Client("/")
+    protected HttpClient client;
+
+    @Override
+    public Map<String, String> getProperties() {
+        if (!postgres.isRunning()) {
+            postgres.start();
+        }
+        return Map.of(
+            "datasources.default.url", postgres.getJdbcUrl(),
+            "datasources.default.username", postgres.getUsername(),
+            "datasources.default.password", postgres.getPassword(),
+            "datasources.default.driver-class-name", "org.postgresql.Driver"
+        );
+    }
+}
+
+class OrderRepositoryIT extends BaseIntegrationTest {
+
+    @Test
+    void roundTrip() {
+        // Feature-specific assertions; datasource + client inherited
+    }
+}
+```
+
+**Bad example:**
+
+```java
+// Bad: each *IT reimplements TestPropertyProvider + @Container postgres + HttpClient —
+// use one abstract BaseIntegrationTest and extend it.
+```
+
 ## Output Format
 
-- **ANALYZE** integration tests: scope (IT vs unit overlap), Testcontainers and TestPropertyProvider wiring, HttpClient assertion quality, data isolation, naming (`*Test`/`*Tests` vs `*IT`/`*AT`), and container lifecycle
+- **ANALYZE** integration tests: scope (IT vs unit overlap), Testcontainers and TestPropertyProvider wiring, HttpClient assertion quality, data isolation, naming (`*Test`/`*Tests` vs `*IT`/`*AT`), container lifecycle, and whether duplicated Micronaut test setup should become an abstract `BaseIntegrationTest`
 - **CATEGORIZE** by impact (FLAKINESS, SPEED, CLARITY) and by concern (infra, HTTP, persistence)
 - **APPLY** fixes: TestPropertyProvider wiring, shared static `@Container` instances, HttpClient assertions, `@MicronautTest(transactional = true)` where appropriate, Surefire/Failsafe naming for `*IT` and `*AT`
-- **IMPLEMENT** incrementally; keep `mvn verify` green; align Surefire/Failsafe conventions for `*IT` and `*AT` if the project uses them
+- **IMPLEMENT** incrementally; keep `mvn verify` green; align Surefire/Failsafe conventions for `*IT` and `*AT` if the project uses them; when several `*IT` classes share the same stack, **define an abstract `BaseIntegrationTest` first**, then concrete subclasses (same layering as `BaseAcceptanceTest` in `@523-frameworks-micronaut-testing-acceptance-tests`)
 - **EXPLAIN** when to use `@521-frameworks-micronaut-testing-unit-tests` vs full-stack `@MicronautTest` integration
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
 

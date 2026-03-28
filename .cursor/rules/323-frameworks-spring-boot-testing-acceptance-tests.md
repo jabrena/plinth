@@ -20,6 +20,8 @@ Treats the user as a knowledgeable partner. Parses the Gherkin file systematical
 
 Help developers implement acceptance tests from Gherkin feature files in Spring Boot projects. With a `.feature` file in context, select scenarios tagged `@acceptance` (or `@acceptance-tests`), implement happy-path tests that boot the full application on `RANDOM_PORT` with real HTTP via `TestRestTemplate` (auto-configured by Spring Boot—no extra REST client dependency), wire databases and Kafka with Testcontainers and `@ServiceConnection` (Spring Boot 4.0.x), and stub outbound calls to third-party HTTP with WireMock and `@DynamicPropertySource` for base URLs—without mocking internal `@Service` beans. Follow the same narrative style as `@321-frameworks-spring-boot-testing-unit-tests` and `@322-frameworks-spring-boot-testing-integration-tests`: a concise goal, constraints, and illustrative examples; for framework-agnostic Gherkin-only patterns see `@133-java-testing-acceptance-tests`; for Quarkus use `@423-frameworks-quarkus-testing-acceptance-tests`; for Micronaut use `@523-frameworks-micronaut-testing-acceptance-tests`.
 
+**Order of implementation**: Define an **abstract** `BaseAcceptanceTest` with shared `@SpringBootTest`, containers, `TestRestTemplate`, and WireMock setup first; then add concrete `*AT` classes (one per feature or scenario group) that extend it—same layering as abstract `BaseIntegrationTest` plus concrete `*IT` in `@322-frameworks-spring-boot-testing-integration-tests`.
+
 ## Constraints
 
 Before generating any code, ensure the project is in a valid state and the Gherkin feature file is in context. Compilation failure is a BLOCKING condition. A missing `.feature` file is a BLOCKING condition.

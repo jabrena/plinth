@@ -11,7 +11,7 @@
     <role>You are a Senior software engineer with extensive experience in Spring Boot testing</role>
 
     <goal>
-        Spring Boot unit tests mix fast, context-free tests for domain and application services with narrow slice tests for web and JSON. Use Mockito (`@ExtendWith(MockitoExtension.class)`, `@Mock`, `@InjectMocks`) for beans that do not need Spring, and MVC/JSON slices (`@WebMvcTest`, `@JsonTest`) with `@MockitoBean` when you need MockMvc or JacksonTester. Prefer constructor-injected beans and Java records so tests stay simple and readable.
+        Spring Boot unit tests mix fast, context-free tests for domain and application services with narrow slice tests for web and JSON. Use Mockito (`@ExtendWith(MockitoExtension.class)`, `@Mock`, `@InjectMocks`) for beans that do not need Spring, and MVC/JSON slices (`@WebMvcTest`, `@JsonTest`) with `@MockitoBean` when you need MockMvc or JacksonTester. Prefer constructor-injected beans and Java records so tests stay simple and readable. For time-sensitive logic, inject `java.time.Clock` (or a small `Supplier` of `Instant` / `TimeProvider` abstraction) instead of calling `Instant.now()` or `LocalDate.now()` directly — Mockito cannot mock static factories, and `Instant` / `LocalDateTime` are final value types; a fixed `Clock` or a mocked `Clock` gives deterministic tests.
     </goal>
 
     <constraints>
@@ -123,7 +123,99 @@ class OrderServiceTest {
             </code-examples>
         </example>
 
-        <example number="2" id="web-mvc-test-controllers">
+        <example number="2" id="injectable-clock-time">
+            <example-header>
+                <example-title>Injectable `Clock` and time that resists mocking</example-title>
+                <example-subtitle>Prefer `Clock.fixed` or a mocked `Clock` over `Instant.now()` in production code</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                **Why Mockito struggles:** `Instant.now()`, `LocalDate.now()`, and `ZonedDateTime.now()` are static calls on **final** value types — you cannot Mockito-spy them, and you should not mock `Instant` itself. **Inject `java.time.Clock`** (constructor injection on `@Service` / `@Component`) and use `Instant.now(clock)` / `LocalDate.now(clock)` so tests pass a **`Clock.fixed(…, zone)`** for determinism, or `@Mock Clock` with `when(clock.instant()).thenReturn(…)` when you need multiple instants in one test.
+
+                **Same idea elsewhere:** `UUID.randomUUID()`, `ThreadLocalRandom`, `System.nanoTime()` — inject `Supplier<UUID>`, `Random` (seeded in tests), or a tiny abstraction instead of static calls you cannot stub cleanly.
+
+                Register a default `Clock` bean in `@Configuration` (`@Bean Clock clock() { return Clock.systemUTC(); }`) if the framework should supply it; in tests, override with `@TestConfiguration` + `@Primary` or pass `Clock.fixed` directly in pure Mockito tests.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneOffset;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
+
+// Production: clock injected — no static Instant.now()
+class PromotionService {
+    private final Clock clock;
+    PromotionService(Clock clock) { this.clock = clock; }
+
+    boolean isActive(Instant validFrom, Instant validTo) {
+        Instant now = clock.instant();
+        return !now.isBefore(validFrom) && now.isBefore(validTo);
+    }
+}
+
+@ExtendWith(MockitoExtension.class)
+class PromotionServiceTest {
+
+    @Mock
+    Clock clock;
+
+    @Test
+    void isActive_whenNowInsideWindow_returnsTrue() {
+        when(clock.instant()).thenReturn(Instant.parse("2024-07-01T12:00:00Z"));
+        var svc = new PromotionService(clock);
+        var from = Instant.parse("2024-07-01T00:00:00Z");
+        var to = Instant.parse("2024-07-02T00:00:00Z");
+        assertThat(svc.isActive(from, to)).isTrue();
+    }
+
+    @Test
+    void isActive_usesFixedClock_withoutMockito() {
+        Clock fixed = Clock.fixed(
+            Instant.parse("2024-07-01T12:00:00Z"), ZoneOffset.UTC);
+        var svc = new PromotionService(fixed);
+        var from = Instant.parse("2024-07-01T00:00:00Z");
+        var to = Instant.parse("2024-07-02T00:00:00Z");
+        assertThat(svc.isActive(from, to)).isTrue();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[import org.junit.jupiter.api.Test;
+import java.time.Instant;
+import static org.assertj.core.api.Assertions.assertThat;
+
+// Bad: static time — unit test depends on wall clock or needs brittle "approximate now" assertions
+class PromotionService {
+
+    boolean isActive(Instant validFrom, Instant validTo) {
+        Instant now = Instant.now(); // cannot stub; flaky / non-deterministic tests
+        return !now.isBefore(validFrom) && now.isBefore(validTo);
+    }
+}
+
+class PromotionServiceTest {
+
+    @Test
+    void isActive_flaky() {
+        var svc = new PromotionService();
+        // Either passes only in a narrow real-time window, or uses loose tolerances
+        assertThat(svc.isActive(
+            Instant.parse("2000-01-01T00:00:00Z"),
+            Instant.parse("3000-01-01T00:00:00Z"))).isTrue();
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="web-mvc-test-controllers">
             <example-header>
                 <example-title>@WebMvcTest for controllers</example-title>
                 <example-subtitle>MockMvc slice with @MockBean for services</example-subtitle>
@@ -198,7 +290,7 @@ class UserControllerTest {
             </code-examples>
         </example>
 
-        <example number="3" id="json-test-jackson">
+        <example number="4" id="json-test-jackson">
             <example-header>
                 <example-title>@JsonTest for JSON mapping</example-title>
                 <example-subtitle>JacksonTester without full Spring Boot</example-subtitle>
@@ -276,7 +368,7 @@ class UserJsonTest {
             </code-examples>
         </example>
 
-        <example number="4" id="mock-bean-slice-tests">
+        <example number="5" id="mock-bean-slice-tests">
             <example-header>
                 <example-title>@MockBean in slice tests</example-title>
                 <example-subtitle>Register Mockito mocks in the Spring test context</example-subtitle>
@@ -360,7 +452,7 @@ class OrderControllerTest {
             </code-examples>
         </example>
 
-        <example number="5" id="parameterized-tests">
+        <example number="6" id="parameterized-tests">
             <example-header>
                 <example-title>Parameterized unit tests</example-title>
                 <example-subtitle>@CsvSource and @MethodSource with MockitoExtension</example-subtitle>
@@ -470,7 +562,7 @@ class DiscountServiceTest {
             </code-examples>
         </example>
 
-        <example number="6" id="test-profiles-test-configuration">
+        <example number="7" id="test-profiles-test-configuration">
             <example-header>
                 <example-title>Test profiles and @TestConfiguration</example-title>
                 <example-subtitle>Stable time, beans, and test-only wiring</example-subtitle>
@@ -553,7 +645,7 @@ class UserControllerTest {
             </code-examples>
         </example>
 
-        <example number="7" id="mockito-bean-spring-boot-4">
+        <example number="8" id="mockito-bean-spring-boot-4">
             <example-header>
                 <example-title>@MockitoBean in Spring Boot 4.0.x</example-title>
                 <example-subtitle>Standard replacement for the removed @MockBean</example-subtitle>
@@ -627,7 +719,7 @@ class UserControllerTest {
             </code-examples>
         </example>
 
-        <example number="8" id="unit-test-naming-convention">
+        <example number="9" id="unit-test-naming-convention">
             <example-header>
                 <example-title>Unit test class naming convention</example-title>
                 <example-subtitle>Always suffix unit test classes with "Test"</example-subtitle>
@@ -710,7 +802,7 @@ class OrderServiceSpec {          // ✘ "Spec" suffix — Surefire skips this c
             </code-examples>
         </example>
 
-        <example number="9" id="test-specific-beans">
+        <example number="10" id="test-specific-beans">
             <example-header>
                 <example-title>Test-specific beans and configuration</example-title>
                 <example-subtitle>Use @TestConfiguration to isolate test doubles and avoid polluting the production context</example-subtitle>
