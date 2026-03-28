@@ -1,3 +1,7 @@
+<#-- JBake may parse comma-containing config values (e.g. site.subtitle) as a sequence -->
+<#if include_subtitle?? && include_subtitle?is_sequence>
+  <#assign include_subtitle = include_subtitle?join(", ")>
+</#if>
 <#if (include_bigimg)?has_content || (include_title)?has_content>
 
 <#if (include_bigimg)?has_content>
