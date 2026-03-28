@@ -16,6 +16,11 @@ You are a Senior software engineer with extensive experience in Quarkus integrat
 
 Integration tests in Quarkus validate real wiring: CDI, persistence, HTTP stack, and extensions. Use `@QuarkusTest` for in-JVM integration (default continuous testing friendly). Prefer **Dev Services** to provision databases, Kafka, and similar locally and in CI without manual Docker compose. When you need explicit containers, use Testcontainers with Quarkus configuration (`%test.quarkus.datasource.*` or `QuarkusTestResource`). Black-box tests against a running app use `@QuarkusIntegrationTest`. Keep tests independent and use `@Transactional` rollback on persistence tests when appropriate.
 
+**Choosing test infrastructure (Quarkus — not Spring Boot)**:
+- **Dev Services** — Default for PostgreSQL, Kafka, Redis, and other stacks where the Quarkus extension can auto-provision containers via `%test`. Minimal code; pin Docker image tags in `%test` configuration for reproducible CI.
+- **`QuarkusTestResourceLifecycleManager`** — Use when Dev Services cannot model the scenario: custom init scripts, multi-container topologies, third-party images without Dev Services support, **WireMock**, or any case where you must return property overrides from `start()` before the application boots. Do not use `System.setProperty` in `@BeforeEach` for datasource or broker URLs.
+- **Do not apply Spring Boot Testcontainers wiring here** — `@ServiceConnection`, `@DynamicPropertySource`, and `@ImportTestcontainers` belong to `@322-frameworks-spring-boot-testing-integration-tests`. Quarkus uses Dev Services, `%test` properties, and `@QuarkusTestResource` / `QuarkusTestResourceLifecycleManager` instead.
+
 **Shared integration infrastructure**: When multiple `*IT` classes share the same `@QuarkusTest` profile, Dev Services or `@QuarkusTestResource` registrations, and REST Assured defaults, implement an **abstract** `BaseIntegrationTest` first under `src/test/java/{root-package}/`, then concrete `*IT` classes that extend it. This mirrors `BaseAcceptanceTest` in `@423-frameworks-quarkus-testing-acceptance-tests`. One-off tests can remain standalone; add a base when setup would be duplicated across several classes.
 
 ## Constraints
@@ -646,7 +651,7 @@ class HelloResourceIT extends BaseIntegrationTest {
 
 ## Output Format
 
-- **ANALYZE** integration tests: scope vs unit overlap, Dev Services or Testcontainers configuration, HTTP assertion quality, data isolation strategy, naming conventions, container lifecycle efficiency, and whether duplicated Quarkus test setup should become an abstract `BaseIntegrationTest`
+- **ANALYZE** integration tests: scope vs unit overlap, whether Dev Services suffices or `QuarkusTestResourceLifecycleManager` is required (and that Spring Boot `@ServiceConnection` does not apply), HTTP assertion quality, data isolation strategy, naming conventions, container lifecycle efficiency, and whether duplicated Quarkus test setup should become an abstract `BaseIntegrationTest`
 - **CATEGORIZE** findings by impact (FLAKINESS for shared state or order-dependent tests, SPEED for per-method containers or missing Dev Services, CLARITY for missing assertions or vague test names)
 - **APPLY** improvements: enable Dev Services for standard infrastructure, introduce `QuarkusTestResourceLifecycleManager` for custom containers or WireMock stubs, add `@TestTransaction` or `@BeforeEach` cleanup for data isolation, use REST Assured for HTTP assertions, add `@QuarkusIntegrationTest` for packaged artifact validation
 - **IMPLEMENT** incrementally; keep `mvn verify` green after each step; align test class suffixes (`*Test` / `*Tests` for Surefire, `*IT` / `*AT` for Failsafe) and configure both Maven plugins explicitly; when several `*IT` classes share bootstrap, **define an abstract `BaseIntegrationTest` first**, then concrete subclasses (same layering as `BaseAcceptanceTest` in `@423-frameworks-quarkus-testing-acceptance-tests`)

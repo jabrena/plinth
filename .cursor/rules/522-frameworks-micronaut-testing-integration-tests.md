@@ -16,6 +16,10 @@ You are a Senior software engineer with extensive experience in integration test
 
 Integration tests prove real wiring: HTTP, repositories, messaging, and external clients. Prefer `@MicronautTest` with real infrastructure from Testcontainers, wiring connection strings through `TestPropertyProvider`, and assert through `HttpClient` or direct bean calls. Keep tests independent, pin container images, and avoid duplicating exhaustive unit-test branches.
 
+**Choosing test infrastructure (Micronaut — not Spring Boot)**:
+- **Single pattern** — Dynamic test configuration (JDBC URLs, Kafka bootstrap servers, WireMock base URLs, random server port) flows through **`TestPropertyProvider.getProperties()`**, merged from `static @Container` fields and other sources. There is no separate Spring-style split between `@ServiceConnection` and `@DynamicPropertySource` in Micronaut tests.
+- **Do not import Spring Boot Testcontainers annotations** — `@ServiceConnection`, `@DynamicPropertySource`, and `@ImportTestcontainers` belong to `@322-frameworks-spring-boot-testing-integration-tests`. Micronaut uses `TestPropertyProvider` + Testcontainers + `@MicronautTest` as shown in the examples below.
+
 **Shared integration infrastructure**: When multiple `*IT` classes need the same `@MicronautTest` configuration, `TestPropertyProvider` maps, static `@Container` fields, and `@Client("/") HttpClient`, implement an **abstract** `BaseIntegrationTest` first (often `public abstract class BaseIntegrationTest implements TestPropertyProvider`), then concrete `*IT` classes that extend it—parallel to `BaseAcceptanceTest` in `@523-frameworks-micronaut-testing-acceptance-tests`. Use a standalone `*IT` only when the stack is unique.
 
 ## Constraints
@@ -275,7 +279,7 @@ class OrderRepositoryIT extends BaseIntegrationTest {
 
 ## Output Format
 
-- **ANALYZE** integration tests: scope (IT vs unit overlap), Testcontainers and TestPropertyProvider wiring, HttpClient assertion quality, data isolation, naming (`*Test`/`*Tests` vs `*IT`/`*AT`), container lifecycle, and whether duplicated Micronaut test setup should become an abstract `BaseIntegrationTest`
+- **ANALYZE** integration tests: scope (IT vs unit overlap), Testcontainers and TestPropertyProvider wiring (no Spring `@ServiceConnection`), HttpClient assertion quality, data isolation, naming (`*Test`/`*Tests` vs `*IT`/`*AT`), container lifecycle, and whether duplicated Micronaut test setup should become an abstract `BaseIntegrationTest`
 - **CATEGORIZE** by impact (FLAKINESS, SPEED, CLARITY) and by concern (infra, HTTP, persistence)
 - **APPLY** fixes: TestPropertyProvider wiring, shared static `@Container` instances, HttpClient assertions, `@MicronautTest(transactional = true)` where appropriate, Surefire/Failsafe naming for `*IT` and `*AT`
 - **IMPLEMENT** incrementally; keep `mvn verify` green; align Surefire/Failsafe conventions for `*IT` and `*AT` if the project uses them; when several `*IT` classes share the same stack, **define an abstract `BaseIntegrationTest` first**, then concrete subclasses (same layering as `BaseAcceptanceTest` in `@523-frameworks-micronaut-testing-acceptance-tests`)
