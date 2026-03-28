@@ -8,7 +8,7 @@
 
 ## Goal
 
-A curated collection of `System prompts`, `Skills`, and `Agents` for Java Enterprise development, designed to streamline modern `SDLC` workflows.
+A curated collection of `Rules`, `Skills`, and `Agents` for Java Enterprise development, designed to streamline modern `SDLC` workflows.
 
 The project add support for:
 

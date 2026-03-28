@@ -8,7 +8,7 @@ status=published
 
 ## What are Cursor rules for Java?
 
-A curated collection of `System prompts`, `Skills`, and `Agents` for Java Enterprise development, designed to streamline modern `SDLC` workflows.
+A curated collection of `Rules`, `Skills`, and `Agents` for Java Enterprise development, designed to streamline modern `SDLC` workflows.
 
 In this release, we are happy to add support for the good people from Singapore, Amsterdam, Madrid, Ashburn & Atlanta. 👋👋👋
 
