@@ -10,20 +10,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Skills**:
-  - ER diagram support in architecture diagrams guidance (#511)
+  - ER diagram support in architecture diagrams guidance (`@033-architecture-diagrams`) (#511)
   - Plan mode skill enhancements (`@040-planning-plan-mode`) (#488)
-  - JIB coverage and improved skill summaries in Maven-related skills (#522)
+  - JIB coverage and improved skill summaries (`@112-java-maven-plugins`) (#522)
   - Skill for Java testing strategies (`@130-java-testing-strategies`) (#523)
-  - Spring Boot Updated (#502)
-  - Quarkus support (#560)
-  - Micronaut support (#573, #584)
+  - Spring Boot support (`@301-frameworks-spring-boot-core`, `@302-frameworks-spring-boot-rest`, `@311-frameworks-spring-jdbc`, `@312-frameworks-spring-data-jdbc`, `@313-frameworks-spring-db-migrations-flyway`, `@321-frameworks-spring-boot-testing-unit-tests`, `@322-frameworks-spring-boot-testing-integration-tests`, `@323-frameworks-spring-boot-testing-acceptance-tests`) (#502)
+  - Quarkus support (`@401-frameworks-quarkus-core`, `@402-frameworks-quarkus-rest`, `@411-frameworks-quarkus-jdbc`, `@412-frameworks-quarkus-panache`, `@413-frameworks-quarkus-db-migrations-flyway`, `@421-frameworks-quarkus-testing-unit-tests`, `@422-frameworks-quarkus-testing-integration-tests`, `@423-frameworks-quarkus-testing-acceptance-tests`) (#560)
+  - Micronaut support (`@501-frameworks-micronaut-core`, `@502-frameworks-micronaut-rest`, `@511-frameworks-micronaut-jdbc`, `@512-frameworks-micronaut-data`, `@513-frameworks-micronaut-db-migrations-flyway`, `@521-frameworks-micronaut-testing-unit-tests`, `@522-frameworks-micronaut-testing-integration-tests`, `@523-frameworks-micronaut-testing-acceptance-tests`) (#573, #584)
 
 - **Agents**:
-  - Business Analyst
-  - Coordinator agent
-  - Spring Boot agent
-  - Quarkus agent (#563, #564)
-  - Micronaut agent
+  - Business Analyst (#547)
+  - Coordinator agent (#547)
+  - Java agent (#547)
+  - Spring Boot agent (#502)
+  - Quarkus agent (#560)
+  - Micronaut agent (#573, #584)
 
 ### Changed
 
@@ -31,14 +32,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Migrated XML rule sources to **PML Schema 0.7.0**; generator validates against https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd (#525).
 
 - **Skills**:
+  - Improved the way to activate Skills (#574).
   - Reduced complexity for ADR discovery on functional requirements (`@031-architecture-adr-functional-requirements`) (#532).
-  - C4 model guidance limited to levels 1–3 (#504).
+  - C4 model guidance limited to levels 1–3 (`@033-architecture-diagrams`) (#504).
   - Improved `@113-java-maven-documentation` (#529).
-  - Spring Boot rules and skills refined (#547).
 
 ### Removed
 
-- Structural Concurrency guidance removed while the feature remains in preview (#530).
+- Structural Concurrency guidance removed from `@125-java-concurrency` while the feature remains in preview (#530).
 
 ## [0.12.0] 2026-03-08
 
