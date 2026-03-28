@@ -1,6 +1,6 @@
 ---
 name: 502-frameworks-micronaut-rest
-description: Use when you need to design, review, or improve REST APIs with Micronaut — including HTTP methods, resource URIs, status codes, DTOs, versioning, deprecation and sunset headers, content negotiation (JSON and vendor media types), ISO-8601 instants in DTOs, pagination/sorting/filtering, Bean Validation at the boundary, idempotency, ETag concurrency, HTTP caching, error handling with `ExceptionHandler`, security annotations, OpenAPI with Swagger, contract-first generation from OpenAPI (OpenAPI Generator `micronaut` server), and RFC 7807-style problem details for errors.
+description: Use when you need to design, review, or improve REST APIs with Micronaut — including HTTP methods, resource URIs, status codes, DTOs, versioning, deprecation and sunset headers, content negotiation (JSON and vendor media types), ISO-8601 instants in DTOs, pagination/sorting/filtering, Bean Validation at the boundary, idempotency, ETag concurrency, HTTP caching, error handling with `ExceptionHandler`, security annotations, contract-first OpenAPI (OpenAPI Generator `micronaut` server), optional runtime OpenAPI via `micronaut-openapi`, and RFC 7807-style problem details for errors.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -14,7 +14,7 @@ You are a Senior software engineer with extensive experience in REST API design 
 
 ## Goal
 
-Micronaut REST endpoints should honor HTTP semantics predictably: resources as nouns, methods for actions, status codes for outcomes, and stable contracts via DTOs and versioning. Production APIs centralize errors (structured JSON or RFC 7807 Problem Details via `ExceptionHandler` or the `micronaut-problem` module), document behavior with OpenAPI, and apply authentication, authorization, and input validation by default. For **API-first** work, generate Micronaut-compatible API interfaces and DTOs from the OpenAPI document using **OpenAPI Generator** (`openapi-generator-maven-plugin`, `micronaut` generator), then implement the generated controller interface in a `@Controller` bean that delegates to domain services. Align with the same REST design principles as Spring (`@302-frameworks-spring-boot-rest`) while using Micronaut `@Controller` routes, `HttpResponse`, and HTTP server filters where appropriate.
+Micronaut REST endpoints should honor HTTP semantics predictably: resources as nouns, methods for actions, status codes for outcomes, and stable contracts via DTOs and versioning. Production APIs centralize errors (structured JSON or RFC 7807 Problem Details via `ExceptionHandler` or the `micronaut-problem` module), expose a clear contract for consumers (for API-first, the OpenAPI file is that contract), and apply authentication, authorization, and input validation by default. For **API-first** work, generate Micronaut-compatible API interfaces and DTOs from the OpenAPI document using **OpenAPI Generator** (`openapi-generator-maven-plugin`, `micronaut` generator), then implement the generated controller interface in a `@Controller` bean that delegates to domain services. Align with the same REST design principles as Spring (`@302-frameworks-spring-boot-rest`) while using Micronaut `@Controller` routes, `HttpResponse`, and HTTP server filters where appropriate.
 
 ## Constraints
 
@@ -37,17 +37,16 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - Example 4: DTOs for requests and responses
 - Example 5: API versioning
 - Example 6: Graceful, structured error responses
-- Example 7: OpenAPI documentation
-- Example 8: RFC 7807 Problem Details quality
-- Example 9: Pagination, sorting, and filtering
-- Example 10: Validation at the boundary
-- Example 11: Idempotency and safe retries
-- Example 12: Concurrency control
-- Example 13: Caching semantics
-- Example 14: Deprecation and sunset
-- Example 15: Content negotiation
-- Example 16: Time and locale in contracts
-- Example 17: API-first with OpenAPI Generator (Micronaut)
+- Example 7: RFC 7807 Problem Details quality
+- Example 8: Pagination, sorting, and filtering
+- Example 9: Validation at the boundary
+- Example 10: Idempotency and safe retries
+- Example 11: Concurrency control
+- Example 12: Caching semantics
+- Example 13: Deprecation and sunset
+- Example 14: Content negotiation
+- Example 15: Time and locale in contracts
+- Example 16: API-first with OpenAPI Generator (Micronaut)
 
 ### Example 1: Use HTTP methods semantically
 
@@ -375,55 +374,7 @@ public class LeakyErrorController {
 }
 ```
 
-### Example 7: OpenAPI documentation
-
-Title: @Operation, @Tag, and parameter descriptions
-Description: Document public endpoints with Swagger (`io.swagger.v3.oas.annotations`) so generated OpenAPI stays aligned with behavior. Describe idempotency headers and error shapes where they matter.
-
-**Good example:**
-
-```java
-import io.micronaut.http.annotation.*;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
-import io.swagger.v3.oas.annotations.tags.Tag;
-
-@Controller("/users")
-@Tag(name = "users")
-public class UserController {
-
-    private final UserService users;
-
-    public UserController(UserService users) {
-        this.users = users;
-    }
-
-    @Get("/{id}")
-    @Operation(summary = "Get user by id")
-    public UserDto get(
-            @Parameter(description = "Stable user identifier", required = true) String id) {
-        return users.require(id);
-    }
-}
-```
-
-**Bad example:**
-
-```java
-import io.micronaut.http.annotation.*;
-
-@Controller("/users")
-public class UndocumentedController {
-
-    @Get("/{id}")
-    public UserDto get(String id) {
-        return new UserDto(id);
-    }
-}
-record UserDto(String id) {}
-```
-
-### Example 8: RFC 7807 Problem Details quality
+### Example 7: RFC 7807 Problem Details quality
 
 Title: Consistent problem bodies; never leak stack traces to clients
 Description: When returning Problem Details, populate `type`, `title`, `status`, `detail`, and `instance` predictably (use a dedicated record or DTO). Log exceptions with correlation IDs server-side; do not attach stack traces or ad hoc `Map` shapes that change per endpoint. The `micronaut-problem` module can align responses with RFC 7807 when enabled.
@@ -509,7 +460,7 @@ public class BadProblemHandler implements ExceptionHandler<RuntimeException, Htt
 }
 ```
 
-### Example 9: Pagination, sorting, and filtering
+### Example 8: Pagination, sorting, and filtering
 
 Title: Bounded pages, stable sorts, optional Link headers (RFC 8288)
 Description: Exposing all rows as a single JSON array does not scale. Prefer `io.micronaut.data.model.Page` / `Pageable` with **server-enforced maximum** page size, or explicit cursor parameters. Whitelist sort properties to avoid sort-by-arbitrary-field injection. Optionally emit `Link` headers (`rel="next"` / `rel="prev"`) for discoverable navigation.
@@ -578,7 +529,7 @@ public class UnboundedProductController {
 class ProductDto { }
 ```
 
-### Example 10: Validation at the boundary
+### Example 9: Validation at the boundary
 
 Title: `@Valid` on `@Body`; Bean Validation on DTOs
 Description: Validate request bodies at the controller boundary with Jakarta Bean Validation annotations on DTOs and `@Valid` on parameters. Pair with an `ExceptionHandler` for `ConstraintViolationException` (or framework validation wrapper) so clients receive **400** with field-level violations instead of inconsistent ad hoc strings.
@@ -639,7 +590,7 @@ record UserCreateRequest(String email) {
 record UserDto(String id) {}
 ```
 
-### Example 11: Idempotency and safe retries
+### Example 10: Idempotency and safe retries
 
 Title: `Idempotency-Key`, duplicate detection, **409 Conflict**, OpenAPI clarity
 Description: Network clients retry `POST`; without idempotency keys or server-side deduplication, creates can duplicate. Accept an `Idempotency-Key` header and return the same response when the key replays a completed operation. Use **409 Conflict** when the request conflicts with current resource state. Document idempotent behavior in OpenAPI.
@@ -700,7 +651,7 @@ record PaymentCreateRequest() {}
 record PaymentDto(String id) {}
 ```
 
-### Example 12: Concurrency control
+### Example 11: Concurrency control
 
 Title: ETag, If-Match / If-None-Match, **412** / **304**
 Description: Prevent lost updates with optimistic concurrency: expose `ETag` on reads; require `If-Match` on mutating writes and return **412 Precondition Failed** when the version does not match. For reads, `If-None-Match` can yield **304 Not Modified** when you short-circuit in the controller or filter.
@@ -768,7 +719,7 @@ public class BlindOverwriteController {
 class ItemDto {}
 ```
 
-### Example 13: Caching semantics
+### Example 12: Caching semantics
 
 Title: `Cache-Control`, ETag/Last-Modified, private vs public data
 Description: Set `Cache-Control` deliberately: public `max-age` for anonymous catalog data; `no-store` / `private` for tokens, sessions, or personalized `/me` payloads. Mis-caching authenticated responses can leak data across users.
@@ -821,7 +772,7 @@ public class RiskyCachingController {
 class UserDto {}
 ```
 
-### Example 14: Deprecation and sunset
+### Example 13: Deprecation and sunset
 
 Title: `Deprecation`, `Sunset`, `Link` (`rel="successor-version"`)
 Description: When an endpoint or version is headed for removal, advertise it with RFC-style headers: `Deprecation` (`true` or a timestamp), `Sunset` with an HTTP-date for expected shutdown, and `Link` to the replacement (`rel="successor-version"`). Document the timeline in OpenAPI. Prefer emitting these headers from an HTTP server filter or advice so deprecated routes stay consistent without repeating headers on every method.
@@ -865,7 +816,7 @@ public class SilentBreakController {
 class ProductDto {}
 ```
 
-### Example 15: Content negotiation
+### Example 14: Content negotiation
 
 Title: `@Produces` / `@Consumes`, JSON default, vendor media types
 Description: Declare what controllers emit and accept: default to `application/json` unless you truly need more. Vendor media types can align with versioning—keep `produces`/`consumes` consistent. Avoid ambiguous multi-representation routes without tests or a clear client contract.
@@ -921,7 +872,7 @@ public class LooseContentController {
 }
 ```
 
-### Example 16: Time and locale in contracts
+### Example 15: Time and locale in contracts
 
 Title: ISO-8601 with offset; optional `Accept-Language` for errors
 Description: Model timestamps as `Instant` or `OffsetDateTime` (ISO-8601 with offset) so clients interpret wall-clock unambiguously—avoid legacy `Date` and ambiguous zone-less `LocalDateTime` in public JSON unless the domain is strictly calendar-local. For localized problem/error text (RFC 7807-style bodies), honor `Accept-Language` only if you keep stable problem `type` URIs/codes identical across locales and avoid leaking sensitive details through translated messages.
@@ -997,7 +948,7 @@ class EventDto {
 }
 ```
 
-### Example 17: API-first with OpenAPI Generator (Micronaut)
+### Example 16: API-first with OpenAPI Generator (Micronaut)
 
 Title: Generate controller API interfaces from `openapi.yaml`; implement in `@Controller`
 Description: Version the OpenAPI spec in `src/main/resources` and run **OpenAPI Generator** with `generatorName` `micronaut` so generated interfaces and models match the contract. Configure `apiPackage` / `modelPackage`, Micronaut/Jakarta options, and bind the `generate` goal to `generate-sources`. Your `@Controller` class **implements** the generated API interface (often named after tags or resource groups) and returns `HttpResponse` from service calls. Optionally keep runtime OpenAPI via `micronaut-openapi` for discovery, but the checked-in spec remains the source of truth for API-first. Validate the spec in CI before codegen.
@@ -1069,9 +1020,9 @@ public class ManualOnlyController {
 
 ## Output Format
 
-- **ANALYZE** controllers and supporting types for REST semantics: HTTP verbs, URI shape, status codes, DTO boundaries, versioning, deprecation/sunset/`Link` headers, `produces`/`consumes` and vendor media types, ISO-8601 time fields, pagination/sort/filter bounds, Bean Validation on request DTOs, idempotency headers and conflict behavior, ETag/preconditions, cache headers for public vs private data, error handling with `ExceptionHandler`, security annotations/config, OpenAPI documentation coverage, and (when API-first) alignment between `openapi.yaml` and generated Micronaut API interfaces vs controller implementations
+- **ANALYZE** controllers and supporting types for REST semantics: HTTP verbs, URI shape, status codes, DTO boundaries, versioning, deprecation/sunset/`Link` headers, `produces`/`consumes` and vendor media types, ISO-8601 time fields, pagination/sort/filter bounds, Bean Validation on request DTOs, idempotency headers and conflict behavior, ETag/preconditions, cache headers for public vs private data, error handling with `ExceptionHandler`, security annotations/config, and (when API-first) alignment between `openapi.yaml` and generated Micronaut API interfaces vs controller implementations
 - **CATEGORIZE** findings by impact (CRITICAL for security/semantic violations, MAINTAINABILITY for DTO/versioning/docs, CONSISTENCY for errors) and by area (routing, responses, errors, security, docs)
-- **APPLY** changes that align with these principles: fix unsafe GETs, normalize paths, return appropriate status codes, introduce or narrow DTOs, add versioning, emit deprecation/sunset/`Link` when phasing out endpoints, tighten `produces`/`consumes` (JSON default, vendor types only when versioning warrants it), use `OffsetDateTime`/`Instant` in API DTOs, bound list endpoints (`Page`/`Pageable` or capped cursors), add `@Valid` on request bodies with Bean Validation, add idempotency and conflict (**409**) patterns where writes retry, add ETag/`If-Match` or version checks for updates, set `Cache-Control` appropriately, centralize exception handling with Problem Details shape where suitable, tighten Micronaut Security configuration, enrich OpenAPI metadata, and (API-first) implement generated Micronaut API interfaces so controllers follow the spec
+- **APPLY** changes that align with these principles: fix unsafe GETs, normalize paths, return appropriate status codes, introduce or narrow DTOs, add versioning, emit deprecation/sunset/`Link` when phasing out endpoints, tighten `produces`/`consumes` (JSON default, vendor types only when versioning warrants it), use `OffsetDateTime`/`Instant` in API DTOs, bound list endpoints (`Page`/`Pageable` or capped cursors), add `@Valid` on request bodies with Bean Validation, add idempotency and conflict (**409**) patterns where writes retry, add ETag/`If-Match` or version checks for updates, set `Cache-Control` appropriately, centralize exception handling with Problem Details shape where suitable, tighten Micronaut Security configuration, and (API-first) implement generated Micronaut API interfaces so controllers follow the checked-in `openapi.yaml`
 - **IMPLEMENT** incrementally: preserve public API contracts when possible; use deprecation and versioning for breaking changes; keep error shapes backward compatible unless versioning allows a break
 - **EXPLAIN** trade-offs (e.g., URI vs header versioning, custom `ErrorResponse` vs RFC 7807 problem bodies, blocking I/O on the Netty event loop vs `@ExecuteOn`) when multiple valid options exist
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits; exercise critical endpoints in integration tests where available
