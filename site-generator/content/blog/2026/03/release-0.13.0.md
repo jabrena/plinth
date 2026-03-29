@@ -44,87 +44,48 @@ The project required to provide solutions to other roles not necessary related t
 
 Let's walk through each feature. You can also review the [CHANGELOG.md](https://github.com/jabrena/cursor-rules-java/blob/main/CHANGELOG.md#0130-2026-03-30)
 
-## Adding support for Spring Boot, Quarkus & Micronaut over Maven
+## What workflows were updated in this release?
 
-- https://skills.sh/?q=spring-boot
-- https://skills.sh/?q=quarkus
-- https://skills.sh/?q=micronaut
-- https://skills.sh/?q=maven
+### Local workflows
 
-### What Skills were generated in this release?
+Now, `Product Owners` & `Business Analysts` have new tools to enhance these anemic one line User Stories and `Architects` could participate in the development adding `ADRs` in an asynchronous way. With that useful information, it is possible to validate those documents to find inconsistencies with the new Agent. If those documents are consistent, the `Software engineer` could elaborate a plan and be enhanced with the Plan mode skill (`@040-planning-plan-mode`) with the plan reviewed, you can delegate it with the new `Coordinator Agent` which it will be in charge of the whole development.
 
-This release includes 58 Skills:
+Take a look the following [Getting Started](https://github.com/jabrena/cursor-rules-java/blob/main/documentation/GETTING-STARTED-SKILLS.md) for further details.
 
-- `@012-agile-epic`
-- `@013-agile-feature`
-- `@014-agile-user-story`
-- `@030-architecture-adr-general`
-- `@031-architecture-adr-functional-requirements`
-- `@032-architecture-adr-non-functional-requirements`
-- `@033-architecture-diagrams`
-- `@040-planning-plan-mode`
-- `@110-java-maven-best-practices`
-- `@111-java-maven-dependencies`
-- `@112-java-maven-plugins`
-- `@113-java-maven-documentation`
-- `@121-java-object-oriented-design`
-- `@122-java-type-design`
-- `@123-java-exception-handling`
-- `@124-java-secure-coding`
-- `@125-java-concurrency`
-- `@128-java-generics`
-- `@130-java-testing-strategies`
-- `@131-java-testing-unit-testing`
-- `@132-java-testing-integration-testing`
-- `@133-java-testing-acceptance-tests`
-- `@141-java-refactoring-with-modern-features`
-- `@142-java-functional-programming`
-- `@143-java-functional-exception-handling`
-- `@144-java-data-oriented-programming`
-- `@151-java-performance-jmeter`
-- `@161-java-profiling-detect`
-- `@162-java-profiling-analyze`
-- `@163-java-profiling-refactor`
-- `@164-java-profiling-verify`
-- `@170-java-documentation`
-- `@180-java-observability-logging`
-- `@200-agents-md`
-- `@301-frameworks-spring-boot-core`
-- `@302-frameworks-spring-boot-rest`
-- `@311-frameworks-spring-jdbc`
-- `@312-frameworks-spring-data-jdbc`
-- `@313-frameworks-spring-db-migrations-flyway`
-- `@321-frameworks-spring-boot-testing-unit-tests`
-- `@322-frameworks-spring-boot-testing-integration-tests`
-- `@323-frameworks-spring-boot-testing-acceptance-tests`
-- `@401-frameworks-quarkus-core`
-- `@402-frameworks-quarkus-rest`
-- `@411-frameworks-quarkus-jdbc`
-- `@412-frameworks-quarkus-panache`
-- `@413-frameworks-quarkus-db-migrations-flyway`
-- `@421-frameworks-quarkus-testing-unit-tests`
-- `@422-frameworks-quarkus-testing-integration-tests`
-- `@423-frameworks-quarkus-testing-acceptance-tests`
-- `@501-frameworks-micronaut-core`
-- `@502-frameworks-micronaut-rest`
-- `@511-frameworks-micronaut-jdbc`
-- `@512-frameworks-micronaut-data`
-- `@513-frameworks-micronaut-db-migrations-flyway`
-- `@521-frameworks-micronaut-testing-unit-tests`
-- `@522-frameworks-micronaut-testing-integration-tests`
-- `@523-frameworks-micronaut-testing-acceptance-tests`
+### CI/CD Pipeline workflows
+
+With the new improvements for architectural tasks, now it is easier to maintain the diagrams about Architecture with C4 model, Data Mapping, Business Glossary documentation and Database ER Diagrams.
+
+Take a look the following [Getting Started](https://github.com/jabrena/cursor-rules-java/blob/main/documentation/GETTING-STARTED-PIPELINES.md) for further details.
+
+---
+
+Observing ideas from others, It is pretty impressive the new processes that [Juan Macias](https://x.com/juanmacias) is developing:
+
+[![](/cursor-rules-java/images/2026/3/juan-macias.png)](https://x.com/juanmacias/status/2037973784674611648?s=20)
+
+I recommend to read the following book [The broken telephone](https://thebrokentelephone.com/).
+
+## Finally, the frameworks are arrived
+
+In the past, It was added and initial Spring Boot support in another [repository](https://github.com/jabrena/cursor-rules-spring-boot) but in this release, that support was integrated here and evolved. Now, the project has added support for the main Java frameworks: Spring Boot, Quarkus & Micronaut over Maven.
+
+All frameworks has the same Skill support:
+
+- Core
+- REST
+- Jdbc
+- ORM (Data JDBC, Panache, Data)
+- DB Migrations with Flyway
+- Unit Testing
+- Integration Testing
+- Acceptance Testing
+
+Further details:
 
 - https://skills.sh/jabrena/cursor-rules-java
 
-## Why Agents?
-
-PENDING
-
-## How to review a requirement?
-
-PENDING
-
-## How the software engineer can use this project?
+## Why we need Agents?
 
 PENDING
 
