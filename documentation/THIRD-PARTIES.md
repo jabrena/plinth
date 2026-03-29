@@ -16,6 +16,8 @@ This repository develop System Prompts, Skills & Agents but in the ecosystem exi
 - https://skills.sh/giuseppe-trisciuoglio/developer-kit/spring-boot-resilience4j
 - https://skills.sh/wshobson/agents/microservices-patterns
 - https://github.com/sivaprasadreddy/sivalabs-agent-skills/tree/main/skills/spring-boot
+- https://github.com/bsene/skills/tree/main/comments-smells
+- https://github.com/bsene/skills/tree/main/tcrdd
 
 ## MCP Servers
 
