@@ -102,7 +102,7 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 
 ## Meetups, Conferences, Workshops & Articles
 
-### Codemotion / Madrid (2026/04/20)
+### Codemotion / Madrid (2026/04/20 - 11:00 - 12:30)
 
 - [Taller técnico sobre Cursor para el desarrollo con Java](https://conferences.codemotion.com/madrid/speakers/)
 
