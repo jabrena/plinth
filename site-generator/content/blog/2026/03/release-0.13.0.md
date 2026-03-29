@@ -8,33 +8,39 @@ status=published
 
 ## What are Cursor rules for Java?
 
-A curated collection of `Rules`, `Skills`, and `Agents` for Java Enterprise development usable across **cross-functional stakeholders** (Product Owners, Business Analysts, Architects, Software Engineers) and **CI/CD pipelines** so each role (and automation) can apply consistent guidance through modern `SDLC` workflows.
+A curated collection of `Rules`, `Skills`, and `Agents` for Java Enterprise development—**to be used in** modern `SDLC` workflows—spanning **cross-functional stakeholders** (Product Owners, Business Analysts, Architects, Software Engineers) and **CI/CD** pipelines, so each role (and automation) applies consistent guidance.
 
 Happy that good people from Singapore, Amsterdam, Madrid, Ashburn & Atlanta are using this project. 👋👋👋
 
 ## What's new in this release?
 
-Little by little the project has increased the project audience not only putting focus on the implementation of features with Java because using AI Tooling, requirements require a good collaboration for other roles like `Product Owners`, `Business Analysts` & `Architects`.
+### Improvements in Analysis & Design phase:
 
-[![](/cursor-rules-java/images/2026/3/sdlc.png)](https://en.wikipedia.org/wiki/Systems_development_life_cycle)
+The project required to provide solutions to other roles not necessary related to the implementation phase in SDLC because in this kind of projects, Requirements and Architectural documents are essential for good implementation by AI Tooling so in this release, it was added new capabilitites to be used by `Product Owners`, `Business Analysts` & `Architects`. With this idea in mind, in the release it was added new capabilities to elaborate better requirements and to elaborate better architectural documents.
 
+**Skills:**
 
-This release is about **spending less time hunting conventions** and **more time shipping correct Java**: Skills turn the project’s rules into focused, invokable workflows in Cursor, and new Agents give you specialists that already speak your stack.
+- Help to author user stories and acceptance criteria (`@014-agile-user-story`);
+- Add ADR discovery when you document CLIs or HTTP APIs (`@031-architecture-adr-functional-requirements`); and for non-functional requirements and quality attributes (`@032-architecture-adr-non-functional-requirements`);
+- Added capacity to generate ER models when you need the data picture (`@033-architecture-diagrams`);
+- Added Plan mode guidance that fits real design sessions (`@040-planning-plan-mode`).
 
-**Skills — what changes for you**
+**Agent:**
 
-- **Architecture and planning:** Easier, lighter ADR discovery when you document CLIs or HTTP APIs (`@031-architecture-adr-functional-requirements`); architecture diagrams that stay practical—C4 from context through component plus ER models when you need the data picture (`@033-architecture-diagrams`); Plan mode guidance that fits real design sessions (`@040-planning-plan-mode`).
+- A `Business analyst` Agent was added to analyze consistency between requirements and architectural documents.
+
+### Improvements in Implementation phase:
+
+**Skills**
+
 - **Build and project docs:** Richer Maven plugin coverage (including container builds with Jib) and clearer “what to run and why” material derived from your build (`@112-java-maven-plugins`, `@113-java-maven-documentation`).
 - **Testing:** Explicit help choosing *what* to test and *how* to think about risk, not only syntax (`@130-java-testing-strategies`).
-- **Spring Boot, Quarkus, and Micronaut:** One coherent story from APIs and configuration through data access, migrations, and tests—so whether you ship on Spring (`@301`–`@323`), Quarkus (`@401`–`@423`), or Micronaut (`@501`–`@523`), the assistant can follow the same boundaries and idioms end to end.
+- **Frameworks:** Initial support for the main Java frameworks like `Spring Boot`, `Quarkus` & `Micronaut`.
+- **Container images:** Dockerize your application with the **Jib** Maven plugin (build OCI images from your Maven project) (`@112-java-maven-plugins`).
 
-**Agents — what changes for you**
+**Agents**
 
-- You can delegate by role: business analysis and coordination on one side, and framework-aware engineering agents for plain Java plus Spring Boot, Quarkus, and Micronaut—so prompts land on a model that already assumes your ecosystem.
-
-**Project quality**
-
-- Rule XML now validates against **PML Schema 0.7.0** using the [published schema](https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd), which keeps generated rules and Skills more predictable as the library grows.
+- Now you can delegate a development plan to a `Coordinator Agent` which review the requirement and project and depending of the project nature, will delegate to the right Agent to implement the requirements. Currently the coordinator delegate workload to specialized agents for `Pure Java` development or Specialized framework agents for `Spring Boot`, `Quarkus` or `Micronaut`.
 
 Let's walk through each feature. You can also review the [CHANGELOG.md](https://github.com/jabrena/cursor-rules-java/blob/main/CHANGELOG.md#0130-2026-03-30)
 

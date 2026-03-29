@@ -26,9 +26,13 @@ Can you update the current changelog for 0.13.0 comparing git commits in relatio
 - [ ] Last review in docs (Manual)
 - [ ] Review git changes for hidden issues (Manual) https://github.com/jabrena/cursor-rules-java/compare/0.12.0...feature/release-0130
 - [ ] Review Skill validation output
+- [ ] Update Skills Registry
 - [ ] Tag repository
 - [ ] Create article
 - [ ] Communicate in social media
+
+https://tessl.io/registry/skills/submit
+npx skills add jabrena/cursor-rules-java --all --agent cursor
 
 ---
 
