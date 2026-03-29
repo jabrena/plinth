@@ -10,8 +10,6 @@ status=published
 
 A curated collection of `Rules`, `Skills`, and `Agents` for Java Enterprise development—**to be used in** modern `SDLC` workflows—spanning **cross-functional stakeholders** (Product Owners, Business Analysts, Architects, Software Engineers) and **CI/CD** pipelines, so that each role (and automation) applies consistent guidance.
 
-Happy that good people from Singapore, Amsterdam, Madrid, Ashburn & Atlanta are using this project. 👋👋👋
-
 ## What's new in this release?
 
 ### Improvements in the Analysis & Design phase
@@ -41,6 +39,67 @@ The project needed to provide solutions for roles not necessarily tied to the im
 **Agents**
 
 - You can delegate a development plan to a `Coordinator Agent`, which reviews the requirements and project and, depending on the nature of the project, delegates to the right agent to implement them. Currently the coordinator assigns work to specialized agents for `Pure Java` development or to specialized framework agents for `Spring Boot`, `Quarkus`, or `Micronaut`.
+
+In the version `v0.13.0`, the project releases `58 Skills`:
+
+- `@012-agile-epic`
+- `@013-agile-feature`
+- `@014-agile-user-story`
+- `@030-architecture-adr-general`
+- `@031-architecture-adr-functional-requirements`
+- `@032-architecture-adr-non-functional-requirements`
+- `@033-architecture-diagrams`
+- `@040-planning-plan-mode`
+- `@110-java-maven-best-practices`
+- `@111-java-maven-dependencies`
+- `@112-java-maven-plugins`
+- `@113-java-maven-documentation`
+- `@121-java-object-oriented-design`
+- `@122-java-type-design`
+- `@123-java-exception-handling`
+- `@124-java-secure-coding`
+- `@125-java-concurrency`
+- `@128-java-generics`
+- `@130-java-testing-strategies`
+- `@131-java-testing-unit-testing`
+- `@132-java-testing-integration-testing`
+- `@133-java-testing-acceptance-tests`
+- `@141-java-refactoring-with-modern-features`
+- `@142-java-functional-programming`
+- `@143-java-functional-exception-handling`
+- `@144-java-data-oriented-programming`
+- `@151-java-performance-jmeter`
+- `@161-java-profiling-detect`
+- `@162-java-profiling-analyze`
+- `@163-java-profiling-refactor`
+- `@164-java-profiling-verify`
+- `@170-java-documentation`
+- `@180-java-observability-logging`
+- `@200-agents-md`
+- `@301-frameworks-spring-boot-core`
+- `@302-frameworks-spring-boot-rest`
+- `@311-frameworks-spring-jdbc`
+- `@312-frameworks-spring-data-jdbc`
+- `@313-frameworks-spring-db-migrations-flyway`
+- `@321-frameworks-spring-boot-testing-unit-tests`
+- `@322-frameworks-spring-boot-testing-integration-tests`
+- `@323-frameworks-spring-boot-testing-acceptance-tests`
+- `@401-frameworks-quarkus-core`
+- `@402-frameworks-quarkus-rest`
+- `@411-frameworks-quarkus-jdbc`
+- `@412-frameworks-quarkus-panache`
+- `@413-frameworks-quarkus-db-migrations-flyway`
+- `@421-frameworks-quarkus-testing-unit-tests`
+- `@422-frameworks-quarkus-testing-integration-tests`
+- `@423-frameworks-quarkus-testing-acceptance-tests`
+- `@501-frameworks-micronaut-core`
+- `@502-frameworks-micronaut-rest`
+- `@511-frameworks-micronaut-jdbc`
+- `@512-frameworks-micronaut-data`
+- `@513-frameworks-micronaut-db-migrations-flyway`
+- `@521-frameworks-micronaut-testing-unit-tests`
+- `@522-frameworks-micronaut-testing-integration-tests`
+- `@523-frameworks-micronaut-testing-acceptance-tests`
 
 Let's walk through each feature. You can also review the [CHANGELOG](https://github.com/jabrena/cursor-rules-java/blob/main/CHANGELOG.md#0130-2026-03-30).
 
@@ -110,6 +169,13 @@ Jira / GitHub / Azure DevOps / Redmine > Plan Mode > Agent Mode to deliver
                 Agent                                         Agent
 ```
 
+Take a look the following example:
+
+![](/cursor-rules-java/images/2026/3/robot-coordinator-example2.png)
+
+![](/cursor-rules-java/images/2026/3/robot-coordinator-example.jpg)
+
+![](/cursor-rules-java/images/2026/3/robot-quarkus-coder-example.jpg)
 
 ## What is the next step?
 
