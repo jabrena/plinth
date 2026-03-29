@@ -16,7 +16,7 @@ The project add support for:
 - **Architecture:** `ADRs`& `UML` / `C4` / `ER` Diagrams`
 - **AI Tooling:** `AGENTS.md` & `AI Planning`
 - **Java development:** `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools` & `Documentation`
-- **Java frameworks:** `Spring Boot`, `Quarkus` & `Micronaut`
+- **Java frameworks:** `Spring Boot`, `Quarkus` & `Micronaut` with the same support (Core, Rest, Jdbc, ORM, Flyway, Unit Tests, IT & AT).
 
 ## Deliverables
 
