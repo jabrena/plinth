@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: god-analysis-api
+
+# God API Configuration
+god-api:
+  sources:
+    greek:
+      url: ${GOD_API_GREEK_URL:https://my-json-server.typicode.com/jabrena/latency-problems/greek}
+    roman:
+      url: ${GOD_API_ROMAN_URL:https://my-json-server.typicode.com/jabrena/latency-problems/roman}
+    nordic:
+      url: ${GOD_API_NORDIC_URL:https://my-json-server.typicode.com/jabrena/latency-problems/nordic}
+  timeout:
+    connect: ${GOD_API_CONNECT_TIMEOUT:5000}
+    read: ${GOD_API_READ_TIMEOUT:5000}
+
