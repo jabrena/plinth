@@ -8,13 +8,15 @@ status=published
 
 ## What are Cursor rules for Java?
 
-A curated collection of `Rules`, `Skills`, and `Agents` for Java Enterprise development—**to be used in** modern `SDLC` workflows—spanning **cross-functional stakeholders** (Product Owners, Business Analysts, Architects, Software Engineers) and **CI/CD** pipelines, so that each role (and automation) applies consistent guidance.
+A curated collection of `Rules`, `Skills`, and `Agents` for Java Enterprise development—**to be used in** modern `SDLC` workflows.
+
+With appreciation for our community in Singapore, Amsterdam, Madrid, Ashburn, and Atlanta. 👋👋👋
 
 ## What's new in this release?
 
 ### Improvements in the Analysis & Design phase
 
-The project needed to provide solutions for roles not necessarily tied to the implementation phase of the SDLC, because in this kind of project, requirements and architectural documents are essential for solid implementation with AI tooling. In this release, new capabilities were added for `Product Owners`, `Business Analysts`, and `Architects`. With that in mind, this release adds further support to produce stronger requirements and architectural documents.
+The project needed to provide solutions for roles not necessarily tied to the implementation phase of the SDLC, because in this kind of project, requirements and architectural documents are essential for solid implementation with AI tooling. In this release, new capabilities were added for `Product Owners`, `Business Analysts`, and `Architects`. With that in mind, this release adds further support for producing stronger requirements and architectural documents.
 
 **Skills:**
 
@@ -29,18 +31,22 @@ The project needed to provide solutions for roles not necessarily tied to the im
 
 ### Improvements in the Implementation phase
 
+The big feature in this version is new support for the main Java frameworks.
+
 **Skills**
 
-- **Build and project docs:** Richer Maven plugin coverage (including container builds with Jib) and clearer “what to run and why” material derived from your build (`@112-java-maven-plugins`, `@113-java-maven-documentation`).
+- **Build and project docs:** Richer Maven plugin coverage and clearer “what to run and why” material derived from your build (`@112-java-maven-plugins`, `@113-java-maven-documentation`).
 - **Testing:** Explicit help choosing *what* to test and *how* to think about risk, not only syntax (`@130-java-testing-strategies`).
 - **Frameworks:** Initial support for the main Java frameworks like `Spring Boot`, `Quarkus` & `Micronaut`.
 - **Container images:** Dockerize your application with the **Jib** Maven plugin (build OCI images from your Maven project) (`@112-java-maven-plugins`).
 
 **Agents**
 
-- You can delegate a development plan to a `Coordinator Agent`, which reviews the requirements and project and, depending on the nature of the project, delegates to the right agent to implement them. Currently the coordinator assigns work to specialized agents for `Pure Java` development or to specialized framework agents for `Spring Boot`, `Quarkus`, or `Micronaut`.
+- You can delegate a development plan to a `Coordinator Agent`, which reviews the requirements and project and, depending on the nature of the project, delegates to the right agent to implement them. Currently, the coordinator assigns work to specialized agents for `Pure Java` development or to specialized framework agents for `Spring Boot`, `Quarkus`, or `Micronaut`.
 
 In the version `v0.13.0`, the project releases `58 Skills`:
+
+**Analysis & Design:**
 
 - `@012-agile-epic`
 - `@013-agile-feature`
@@ -49,7 +55,13 @@ In the version `v0.13.0`, the project releases `58 Skills`:
 - `@031-architecture-adr-functional-requirements`
 - `@032-architecture-adr-non-functional-requirements`
 - `@033-architecture-diagrams`
+
+**Planning:**
+
 - `@040-planning-plan-mode`
+
+**Implementation:**
+
 - `@110-java-maven-best-practices`
 - `@111-java-maven-dependencies`
 - `@112-java-maven-plugins`
@@ -107,7 +119,7 @@ Let's walk through each feature. You can also review the [CHANGELOG](https://git
 
 ### Local workflows
 
-Now, `Product Owners` and `Business Analysts` have new tools to improve thin, one-line user stories, and `Architects` can take part in development by adding `ADRs` asynchronously. With that context, you can validate those documents for inconsistencies using the new agent. When the documents are aligned, the `Software engineer` can draft a plan and refine it with the Plan mode skill (`@040-planning-plan-mode`). After the plan is reviewed, you can hand it off to the new `Coordinator Agent`, which owns end-to-end development.
+Now, `Product Owners` and `Business Analysts` have new tools to improve thin, one-line user stories, and `Architects` can take part in development by adding `ADRs` asynchronously. With that context, you can validate those documents for inconsistencies using the new agent. When the documents are aligned, the `Software Engineer` can draft a plan and refine it with the Plan mode skill (`@040-planning-plan-mode`). After the plan is reviewed, you can hand it off to the new `Coordinator Agent`, which owns end-to-end development.
 
 Take a look at the following [Getting Started](https://github.com/jabrena/cursor-rules-java/blob/main/documentation/GETTING-STARTED-SKILLS.md) guide for further details.
 
@@ -125,14 +137,14 @@ Drawing on ideas from others, it is impressive to see the new processes that [Ju
 
 I recommend reading [The broken telephone](https://thebrokentelephone.com/) and the associated [GitHub repository](https://github.com/darkspock/thebrokentelephone_sample).
 
-## Finally, the frameworks have arrived
+## Finally, the Java frameworks have arrived!
 
-Initial Spring Boot support was added in another [repository](https://github.com/jabrena/cursor-rules-spring-boot); in this release, that support was merged here and extended. The project now covers the main Java frameworks—Spring Boot, Quarkus, and Micronaut—on Maven.
+Initial Spring Boot support was added in another [repository](https://github.com/jabrena/cursor-rules-spring-boot); but in this release, that support was merged here and extended. The project now covers the main Java frameworks—Spring Boot, Quarkus, and Micronaut—on Maven.
 
 All frameworks have the same skill coverage:
 
 - Core
-- REST
+- REST (API First flavour)
 - JDBC
 - ORM (Data JDBC, Panache, Data)
 - DB Migrations with Flyway
@@ -140,23 +152,26 @@ All frameworks have the same skill coverage:
 - Integration Testing
 - Acceptance Testing
 
+**Note:** In the future, Kafka support and other capabilities will be added.
+
 ### Where can you find the skills?
 
-You can find several registries online for these skills and others. Here are a few:
+Currently, there is lively debate about which online Skill registry is best.
+You can find the Skills from this project on several sites.
 
 - https://skills.sh/jabrena/cursor-rules-java
 - https://tessl.io/registry/skills/github/jabrena/cursor-rules-java
 - https://agent-skills.cc/zh/skills/jabrena-cursor-rules-java
 - https://skillsmp.com/skills/jabrena-cursor-rules-java-skills-014-agile-user-story-skill-md
 
-## Why do we need agents?
+## Why do we need Agents?
 
-If you have followed the evolution of this project, we have moved from `Rules` and `System prompts` to `Skills` that shape model behaviour—but how do you increase execution control? The answer is agents.
+If you have followed the evolution of this project, you know we have moved from `Rules` and `System prompts` to `Skills` that shape model behaviour—but how do you increase execution control? The answer is agents.
 
 In this release, we shipped a few agents for two phases:
 
 - `Analysis & Design phase` -> Business Analyst Agent
-- `Java implementation` -> Coder Coordinator Agent
+- `Java implementation` -> Coder Coordinator Agent & Specialized Coder Agents
 
 ```
 ------------- Design phase ----------- | Planning  | ----- Development -----
@@ -169,26 +184,87 @@ Jira / GitHub / Azure DevOps / Redmine > Plan Mode > Agent Mode to deliver
                 Agent                                         Agent
 ```
 
-Take a look the following example:
+Take a look at the following examples:
 
-![](/cursor-rules-java/images/2026/3/robot-coordinator-example2.png)
+**Example 1:**
+
+You have picked up a user story like this:
+
+```markdown
+## User Story Statement
+
+**As an** API consumer/developer
+**I want to** retrieve a complete list of Greek god names
+through a REST API endpoint
+**So that** I can integrate mythology content into
+my educational application with fast,
+reliable access to curated deity information.
+```
+
+After you review the technical specification and the architectural ADRs for the functional and non-functional requirements, you ask your favorite AI tool to draft a plan.
+
+
+With the plan written to disk as a starting point, you enhance it with `@040-planning-plan-mode` and update it. The new task list generated to achieve the goal defined in the user story adds important information such as:
+
+- TDD phase
+- Milestone
+- Parallel/Group (grouped in the London Outside-In style)
+- Status
+
+
+```markdown
+## Task List
+
+| # | Task | Phase | TDD | Milestone | Parallel | Status |
+|---|------|-------|-----|-----------|----------|--------|
+| 1 | Extend **implementation2** `pom.xml`: `quarkus-rest`, JDBC PostgreSQL, Flyway, scheduler, SmallRye OpenAPI, outbound HTTP client dep (or JDK client only), `rest-assured`, Testcontainers, Failsafe for `*IT`; plan `%test` datasource | Setup | | | A1 | Done |
+| 2 | **RED:** `GreekGodsApiIT` — REST Assured `GET /api/v1/gods/greek` expects **200**, JSON array, 20 canonical names (set equality), no duplicates (fails until slice exists) | RED | Test | | A1 | Done |
+| 3 | **GREEN:** Flyway migration matching [schema.sql](../design/schema.sql); seed 20 names (Flyway test data / IT setup); JDBC repository `findAllNamesOrdered()`; Jakarta REST resource; no external call on read path | GREEN | Impl | | A1 | Done |
+| 4 | **Refactor:** Structured logging (read path): request or repo boundaries per team standard | Refactor | | | A1 | Done |
+| 5 | **Refactor:** `ExceptionMapper` for persistence failures → 500 `application/problem+json`; empty DB IT → 200 `[]`; invalid JDBC / container stop for 500 shape; external base URL property (no hard-coded URL) | Refactor | | | A1 | Done |
+| 6 | **Verify:** `./mvnw clean verify` in **implementation2**; fix failures before M2 | Verify | | milestone | A1 | Done |
+```
+
+When the plan is revised and you agree with it, you can invoke the new Agent: `/robot-coordinator` to implement the full plan or the first milestone.
+
+This agent will review the plan and repository and, depending on the context, it will delegate the coding tasks to a specific agent. Specialized agents are currently available for Pure Java, Spring Boot, Quarkus, and Micronaut.
 
 ![](/cursor-rules-java/images/2026/3/robot-coordinator-example.jpg)
 
+When you achieve the first milestone, you can review whether the implementation matches the coding standards and continue until the end of all tasks in the task list.
+
 ![](/cursor-rules-java/images/2026/3/robot-quarkus-coder-example.jpg)
+
+In the image below, you can see how the Coordinator Agent delegates to the Quarkus coder agent.
+
+![](/cursor-rules-java/images/2026/3/robot-coordinator-example2.png)
+
+Using incremental review, you can minimize potential deviations and commit small parts.
 
 ## What is the next step?
 
-For the next iteration, I believe it is necessary to provide an `Execution Workflow` that covers the whole process from a user story.
+In the next iteration, it is necessary to make some changes in the project.
 
-Some interesting skills to review from [`Eduardo Ferro`](https://www.eferro.net/):
+**Skills:**
+- Deprecate Rules in favor of Skills. Currently, each skill has a 1:1 relationship to a reference file that is a Cursor rule; in the future, a rule could have multiple 1:1 references, so this change will improve the flexibility of the whole solution.
+
+On the other hand, it is possible to improve architectural operations with a new Agent.
+
+**Agents:**
+- Define an Agent dedicated to Architecture
+
+And finally, it is necessary to invest time in a general workflow.
+
+**Workflows:**
+- It is necessary to provide an `Execution Workflow` that covers the whole process from a user story or spec.
+
+## Interesting projects from the ecosystem
+
+Some interesting skills to review:
 
 - https://github.com/eferro/skill-factory/blob/main/output_skills/practices/code-simplifier
 - https://github.com/eferro/skill-factory/blob/main/output_skills/practices/story-splitting
 - https://github.com/eferro/skill-factory/blob/main/output_skills/practices/hamburger-method
-
-And others like:
-
 - https://github.com/Envy-7z/mobile-agent-skillpack/tree/main/skills/thinkies
 - https://skills.sh/bsene/skills/mikado-method
 - https://github.com/bsene/skills/tree/main/tcrdd
