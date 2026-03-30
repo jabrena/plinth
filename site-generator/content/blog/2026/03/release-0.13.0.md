@@ -225,6 +225,8 @@ With the plan written to disk as a starting point, you enhance it with `@040-pla
 | 6 | **Verify:** `./mvnw clean verify` in **implementation2**; fix failures before M2 | Verify | | milestone | A1 | Done |
 ```
 
+**Note:** Remember to have `AGENTS.md`/`CLAUDE.md` in your repository to close the loop to verify your development. If you don´t know how to create that file, you can use `@200-agents-md`.
+
 When the plan is revised and you agree with it, you can invoke the new Agent: `/robot-coordinator` to implement the full plan or the first milestone.
 
 This agent will review the plan and repository and, depending on the context, it will delegate the coding tasks to a specific agent. Specialized agents are currently available for Pure Java, Spring Boot, Quarkus, and Micronaut.
