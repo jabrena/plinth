@@ -16,7 +16,7 @@ With appreciation for our community in Singapore, Amsterdam, Madrid, Ashburn, an
 
 ### Improvements in the Analysis & Design phase
 
-The project needed to provide solutions for roles not necessarily tied to the implementation phase of the SDLC, because in this kind of project, requirements and architectural documents are essential for solid implementation with AI tooling. In this release, new capabilities were added for `Product Owners`, `Business Analysts`, and `Architects`. With that in mind, this release adds further support for producing stronger requirements and architectural documents.
+The project needed to provide solutions for roles not necessarily tied to the implementation phase of the SDLC, because in this kind of project, requirements and architectural documents are essential for solid implementation with AI tooling. In this release, new capabilities were added for `Product Owners`, `Business Analysts`, and `Architects`, extending support for producing stronger requirements and architectural documents.
 
 **Skills:**
 
@@ -27,7 +27,7 @@ The project needed to provide solutions for roles not necessarily tied to the im
 
 **Agent:**
 
-- A **Business Analyst** agent was added to analyze consistency between requirements and architectural documents.
+- A **Business Analyst** agent was added to assess consistency between requirements and architectural documents.
 
 ### Improvements in the Implementation phase
 
@@ -42,7 +42,7 @@ The big feature in this version is new support for the main Java frameworks.
 
 **Agents**
 
-- You can delegate a development plan to a `Coordinator Agent`, which reviews the requirements and project and, depending on the nature of the project, delegates to the right agent to implement them. Currently, the coordinator assigns work to specialized agents for `Pure Java` development or to specialized framework agents for `Spring Boot`, `Quarkus`, or `Micronaut`.
+- You can delegate a development plan to a `Coordinator Agent`, which reviews the requirements and the project and, depending on the nature of the project, delegates to the right agent to implement them. Currently, the coordinator assigns work to specialized agents for `Pure Java` development or to specialized framework agents for `Spring Boot`, `Quarkus`, or `Micronaut`.
 
 In the version `v0.13.0`, the project releases `58 Skills`:
 
@@ -144,7 +144,7 @@ Initial Spring Boot support was added in another [repository](https://github.com
 All frameworks have the same skill coverage:
 
 - Core
-- REST (API First flavour)
+- REST (API-first style)
 - JDBC
 - ORM (Data JDBC, Panache, Data)
 - DB Migrations with Flyway
@@ -166,7 +166,7 @@ You can find the Skills from this project on several sites.
 
 ## Why do we need Agents?
 
-If you have followed the evolution of this project, you know we have moved from `Rules` and `System prompts` to `Skills` that shape model behaviour—but how do you increase execution control? The answer is agents.
+If you have followed the evolution of this project, you know we have moved from `Rules` and `System prompts` to `Skills` that shape the model's behaviour—but how do you increase execution control? The answer is agents.
 
 In this release, we shipped a few agents for two phases:
 
@@ -235,13 +235,15 @@ When you achieve the first milestone, you can review whether the implementation 
 
 ![](/cursor-rules-java/images/2026/3/robot-quarkus-coder-example.jpg)
 
-In the image below, you can see how the Coordinator Agent delegates to the Quarkus coder agent.
+Using incremental review, you can minimize potential deviations and commit small parts.
 
 ![](/cursor-rules-java/images/2026/3/robot-coordinator-example2.png)
 
-Using incremental review, you can minimize potential deviations and commit small parts.
+If you have good ADRs and you invested time in a plan, the time spent on refactorings should be minimized. Indeed, I recommend making small commits per milestone.
 
 ## What is the next step?
+
+### Internal changes in the generators
 
 In the next iteration, it is necessary to make some changes in the project.
 
@@ -250,13 +252,17 @@ In the next iteration, it is necessary to make some changes in the project.
 
 On the other hand, it is possible to improve architectural operations with a new Agent.
 
+### More agents and a new workflow
+
 **Agents:**
 - Define an Agent dedicated to Architecture
 
-And finally, it is necessary to invest time in a general workflow.
-
 **Workflows:**
 - It is necessary to provide an `Execution Workflow` that covers the whole process from a user story or spec.
+
+### How to combine user stories with spec documents?
+
+- The project already covers user stories and ADRs, but how should those combine with spec documents? — [Mica](https://x.com/micael_gallego) raises this question.
 
 ## Interesting projects from the ecosystem
 
@@ -266,8 +272,7 @@ Some interesting skills to review:
 - https://github.com/eferro/skill-factory/blob/main/output_skills/practices/story-splitting
 - https://github.com/eferro/skill-factory/blob/main/output_skills/practices/hamburger-method
 - https://github.com/Envy-7z/mobile-agent-skillpack/tree/main/skills/thinkies
-- https://skills.sh/bsene/skills/mikado-method
-- https://github.com/bsene/skills/tree/main/tcrdd
+- https://github.com/bsene/skills/tree/main/mikado-method
 - https://github.com/bsene/skills/tree/main/cupid-checker
 
 ## Do you still have questions about the project?
