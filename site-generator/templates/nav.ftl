@@ -1,3 +1,4 @@
+<#include "jbake-config-text.ftl">
 <#if (config.author_gtm)?has_content>
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=${config.author_gtm}}"
@@ -14,7 +15,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <span class="icon-bar"></span>
   <span class="icon-bar"></span>
 </button>
-<a class="navbar-brand" href="${content.rootpath!}index.html">${config.site_title}</a>
+<a class="navbar-brand" href="${content.rootpath!}index.html">${site_title_string}</a>
 </div>
 
 <div class="collapse navbar-collapse" id="main-navbar">

@@ -24,6 +24,7 @@ sudo apt install nodejs npm
 npx skills --help
 npx skills add jabrena/cursor-rules-java --list
 npx skills add jabrena/cursor-rules-java --all --agent cursor
+npx skills add jabrena/cursor-rules-java --all --agent claude-code
 ```
 
 ### skillsjars
