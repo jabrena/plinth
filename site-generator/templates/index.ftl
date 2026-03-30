@@ -1,6 +1,7 @@
 <#include "excerpt-function.ftl">
+<#include "jbake-config-text.ftl">
 <#assign include_type = "page">
-<#assign include_title = config.site_title>
+<#assign include_title = site_title_string>
 <#assign include_subtitle = config.site_subtitle!>
 <#assign include_bigimg = config.index_bigimg!>
 <!DOCTYPE html>

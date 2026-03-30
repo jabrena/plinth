@@ -1,4 +1,4 @@
-# Cursor AI rules for Java
+# Rules, Skills & Agents for Java
 
 ## Stargazers over time
 
@@ -8,7 +8,7 @@
 
 ## Goal
 
-A curated collection of `System prompts`, `Skills`, and `Agents` for Java Enterprise development, designed to streamline modern `SDLC` workflows.
+A curated collection of `Rules`, `Skills`, and `Agents` for Java Enterprise development, designed to streamline modern `SDLC` workflows.
 
 The project add support for:
 
@@ -16,7 +16,7 @@ The project add support for:
 - **Architecture:** `ADRs`& `UML` / `C4` / `ER` Diagrams`
 - **AI Tooling:** `AGENTS.md` & `AI Planning`
 - **Java development:** `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools` & `Documentation`
-- **Java frameworks:** `Spring Boot`, `Quarkus` & `Micronaut`
+- **Java frameworks:** `Spring Boot`, `Quarkus` & `Micronaut` with the same support (Core, Rest, Jdbc, ORM, Flyway, Unit Tests, IT & AT).
 
 ## Deliverables
 
@@ -102,7 +102,7 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 
 ## Meetups, Conferences, Workshops & Articles
 
-### Codemotion / Madrid (2026/04/20)
+### Codemotion / Madrid (2026/04/20 - 11:00 - 12:30)
 
 - [Taller técnico sobre Cursor para el desarrollo con Java](https://conferences.codemotion.com/madrid/speakers/)
 

@@ -1,8 +1,9 @@
 <#include "excerpt-function.ftl">
+<#include "jbake-config-text.ftl">
 <?xml version="1.0"?>
 <feed xmlns='http://www.w3.org/2005/Atom' xml:lang='${config.site_lang}'>
   <id>${config.site_host}</id>
-  <title>${config.site_title}</title>
+  <title>${site_title_string}</title>
   <updated>${published_date?string("yyyy-MM-dd")}T${published_date?string("HH:mm:ssZ")}</updated>
   <link rel="alternate" type="text/html" href="${config.site_host}" />
   <link rel='self' type='application/atom+xml' href='${config.site_host}/${config.feed_file}' />

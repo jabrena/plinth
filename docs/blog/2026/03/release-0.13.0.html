@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>What&apos;s new in Cursor rules for Java 0.13.0? - Rules, Skills & Agents for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../../feed.xml" title="Rules, Skills & Agents for Java"/>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../../css/prettify.css">
+  <link rel="shortcut icon" href="../../../favicon.ico">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../../index.html">Rules, Skills & Agents for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li><a href="https://forms.gle/TpNXENjmu45wuXoi6" target="_blank">Share feedback</a></li>
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Conferences</a>
+    <div class="navlinks-children">
+      <a href="https://jabrena.github.io/cursor-rules-java/dvbe25/index.html" target="_blank">Devoxx BE 2025</a>
+      <a href="https://jabrena.github.io/101-cursor/" target="_blank">WJAX-2025</a>
+    </div>
+  </li>
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../../courses/java-generics/index.html">Java Generics</a>
+      <a href="../../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
+    </div>
+  </li>
+  <li><a href="../../../archive.html">Archive</a></li>
+  <li><a href="https://jabrena-github-io.translate.goog/cursor-rules-java/?_x_tr_sl=en&_x_tr_tl=cn&_x_tr_hl=en-US&_x_tr_pto=wapp">Translate</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="post-heading">
+<h1>What's new in Cursor rules for Java 0.13.0?</h1>
+<span class="post-meta">
+  <i class="fa fa-calendar-o"></i>
+  2026-03-30
+    &nbsp;
+    <i class="fa fa-pencil"></i>
+    Juan Antonio Breña Moral
+</span>
+<span class="blog-tags">
+  &nbsp;
+  <i class="fa fa-tags"></i>
+    <a href="../../../tags/blog.html">blog</a>
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="blog-post">
+<h2>What are Cursor rules for Java?</h2>
+<p>A curated collection of <code>Rules</code>, <code>Skills</code>, and <code>Agents</code> for Java Enterprise development—<strong>to be used in</strong> modern <code>SDLC</code> workflows.</p>
+<p>With appreciation for our community in Singapore, Amsterdam, Madrid, Ashburn, and Atlanta. 👋👋👋</p>
+<h2>What's new in this release?</h2>
+<h3>Improvements in the Analysis &amp; Design phase</h3>
+<p>The project needed to provide solutions for roles not necessarily tied to the implementation phase of the SDLC, because in this kind of project, requirements and architectural documents are essential for solid implementation with AI tooling. In this release, new capabilities were added for <code>Product Owners</code>, <code>Business Analysts</code>, and <code>Architects</code>, extending support for producing stronger requirements and architectural documents.</p>
+<p><strong>Skills:</strong></p>
+<ul>
+<li>Help with authoring user stories and acceptance criteria (<code>@014-agile-user-story</code>);</li>
+<li>Discover ADRs when you document CLIs or HTTP APIs (<code>@031-architecture-adr-functional-requirements</code>), and when you capture non-functional requirements and quality attributes (<code>@032-architecture-adr-non-functional-requirements</code>);</li>
+<li>Support for generating ER models when you need the data picture (<code>@033-architecture-diagrams</code>);</li>
+<li>Plan mode guidance suited to real design sessions (<code>@040-planning-plan-mode</code>).</li>
+</ul>
+<p><strong>Agent:</strong></p>
+<ul>
+<li>A <strong>Business Analyst</strong> agent was added to assess consistency between requirements and architectural documents.</li>
+</ul>
+<h3>Improvements in the Implementation phase</h3>
+<p>The big feature in this version is new support for the main Java frameworks.</p>
+<p><strong>Skills</strong></p>
+<ul>
+<li><strong>Build and project docs:</strong> Richer Maven plugin coverage and clearer “what to run and why” material derived from your build (<code>@112-java-maven-plugins</code>, <code>@113-java-maven-documentation</code>).</li>
+<li><strong>Testing:</strong> Explicit help choosing <em>what</em> to test and <em>how</em> to think about risk, not only syntax (<code>@130-java-testing-strategies</code>).</li>
+<li><strong>Frameworks:</strong> Initial support for the main Java frameworks like <code>Spring Boot</code>, <code>Quarkus</code> &amp; <code>Micronaut</code>.</li>
+<li><strong>Container images:</strong> Dockerize your application with the <strong>Jib</strong> Maven plugin (build OCI images from your Maven project) (<code>@112-java-maven-plugins</code>).</li>
+</ul>
+<p><strong>Agents</strong></p>
+<ul>
+<li>You can delegate a development plan to a <code>Coordinator Agent</code>, which reviews the requirements and the project and, depending on the nature of the project, delegates to the right agent to implement them. Currently, the coordinator assigns work to specialized agents for <code>Pure Java</code> development or to specialized framework agents for <code>Spring Boot</code>, <code>Quarkus</code>, or <code>Micronaut</code>.</li>
+</ul>
+<p>In the version <code>v0.13.0</code>, the project releases <code>58 Skills</code>:</p>
+<p><strong>Analysis &amp; Design:</strong></p>
+<ul>
+<li><code>@012-agile-epic</code></li>
+<li><code>@013-agile-feature</code></li>
+<li><code>@014-agile-user-story</code></li>
+<li><code>@030-architecture-adr-general</code></li>
+<li><code>@031-architecture-adr-functional-requirements</code></li>
+<li><code>@032-architecture-adr-non-functional-requirements</code></li>
+<li><code>@033-architecture-diagrams</code></li>
+</ul>
+<p><strong>Planning:</strong></p>
+<ul>
+<li><code>@040-planning-plan-mode</code></li>
+</ul>
+<p><strong>Implementation:</strong></p>
+<ul>
+<li><code>@110-java-maven-best-practices</code></li>
+<li><code>@111-java-maven-dependencies</code></li>
+<li><code>@112-java-maven-plugins</code></li>
+<li><code>@113-java-maven-documentation</code></li>
+<li><code>@121-java-object-oriented-design</code></li>
+<li><code>@122-java-type-design</code></li>
+<li><code>@123-java-exception-handling</code></li>
+<li><code>@124-java-secure-coding</code></li>
+<li><code>@125-java-concurrency</code></li>
+<li><code>@128-java-generics</code></li>
+<li><code>@130-java-testing-strategies</code></li>
+<li><code>@131-java-testing-unit-testing</code></li>
+<li><code>@132-java-testing-integration-testing</code></li>
+<li><code>@133-java-testing-acceptance-tests</code></li>
+<li><code>@141-java-refactoring-with-modern-features</code></li>
+<li><code>@142-java-functional-programming</code></li>
+<li><code>@143-java-functional-exception-handling</code></li>
+<li><code>@144-java-data-oriented-programming</code></li>
+<li><code>@151-java-performance-jmeter</code></li>
+<li><code>@161-java-profiling-detect</code></li>
+<li><code>@162-java-profiling-analyze</code></li>
+<li><code>@163-java-profiling-refactor</code></li>
+<li><code>@164-java-profiling-verify</code></li>
+<li><code>@170-java-documentation</code></li>
+<li><code>@180-java-observability-logging</code></li>
+<li><code>@200-agents-md</code></li>
+<li><code>@301-frameworks-spring-boot-core</code></li>
+<li><code>@302-frameworks-spring-boot-rest</code></li>
+<li><code>@311-frameworks-spring-jdbc</code></li>
+<li><code>@312-frameworks-spring-data-jdbc</code></li>
+<li><code>@313-frameworks-spring-db-migrations-flyway</code></li>
+<li><code>@321-frameworks-spring-boot-testing-unit-tests</code></li>
+<li><code>@322-frameworks-spring-boot-testing-integration-tests</code></li>
+<li><code>@323-frameworks-spring-boot-testing-acceptance-tests</code></li>
+<li><code>@401-frameworks-quarkus-core</code></li>
+<li><code>@402-frameworks-quarkus-rest</code></li>
+<li><code>@411-frameworks-quarkus-jdbc</code></li>
+<li><code>@412-frameworks-quarkus-panache</code></li>
+<li><code>@413-frameworks-quarkus-db-migrations-flyway</code></li>
+<li><code>@421-frameworks-quarkus-testing-unit-tests</code></li>
+<li><code>@422-frameworks-quarkus-testing-integration-tests</code></li>
+<li><code>@423-frameworks-quarkus-testing-acceptance-tests</code></li>
+<li><code>@501-frameworks-micronaut-core</code></li>
+<li><code>@502-frameworks-micronaut-rest</code></li>
+<li><code>@511-frameworks-micronaut-jdbc</code></li>
+<li><code>@512-frameworks-micronaut-data</code></li>
+<li><code>@513-frameworks-micronaut-db-migrations-flyway</code></li>
+<li><code>@521-frameworks-micronaut-testing-unit-tests</code></li>
+<li><code>@522-frameworks-micronaut-testing-integration-tests</code></li>
+<li><code>@523-frameworks-micronaut-testing-acceptance-tests</code></li>
+</ul>
+<p>Let's walk through each feature. You can also review the <a href="https://github.com/jabrena/cursor-rules-java/blob/main/CHANGELOG.md#0130-2026-03-30">CHANGELOG</a>.</p>
+<h2>What workflows were updated in this release?</h2>
+<h3>Local workflows</h3>
+<p>Now, <code>Product Owners</code> and <code>Business Analysts</code> have new tools to improve thin, one-line user stories, and <code>Architects</code> can take part in development by adding <code>ADRs</code> asynchronously. With that context, you can validate those documents for inconsistencies using the new agent. When the documents are aligned, the <code>Software Engineer</code> can draft a plan and refine it with the Plan mode skill (<code>@040-planning-plan-mode</code>). After the plan is reviewed, you can hand it off to the new <code>Coordinator Agent</code>, which owns end-to-end development.</p>
+<p>Take a look at the following <a href="https://github.com/jabrena/cursor-rules-java/blob/main/documentation/GETTING-STARTED-SKILLS.md">Getting Started</a> guide for further details.</p>
+<h3>CI/CD Pipeline workflows</h3>
+<p>With the new improvements for architectural tasks, it is now easier to keep architecture diagrams current—including C4 views, data mapping, business glossary documentation, and database ER diagrams.</p>
+<p>Take a look at the following <a href="https://github.com/jabrena/cursor-rules-java/blob/main/documentation/GETTING-STARTED-PIPELINES.md">Getting Started</a> guide for further details.</p>
+<hr />
+<p>Drawing on ideas from others, it is impressive to see the new processes that <a href="https://x.com/juanmacias">Juan Macias</a> is developing:</p>
+<p><a href="https://x.com/juanmacias/status/2037973784674611648?s=20"><img src="/cursor-rules-java/images/2026/3/juan-macias.png" alt="" /></a></p>
+<p>I recommend reading <a href="https://thebrokentelephone.com/">The broken telephone</a> and the associated <a href="https://github.com/darkspock/thebrokentelephone_sample">GitHub repository</a>.</p>
+<h2>Finally, the Java frameworks have arrived!</h2>
+<p>Initial Spring Boot support was added in another <a href="https://github.com/jabrena/cursor-rules-spring-boot">repository</a>; but in this release, that support was merged here and extended. The project now covers the main Java frameworks—Spring Boot, Quarkus, and Micronaut—on Maven.</p>
+<p>All frameworks have the same skill coverage:</p>
+<ul>
+<li>Core</li>
+<li>REST (API-first style)</li>
+<li>JDBC</li>
+<li>ORM (Data JDBC, Panache, Data)</li>
+<li>DB Migrations with Flyway</li>
+<li>Unit Testing</li>
+<li>Integration Testing</li>
+<li>Acceptance Testing</li>
+</ul>
+<p><strong>Note:</strong> In the future, Kafka support and other capabilities will be added.</p>
+<h3>Where can you find the skills?</h3>
+<p>Currently, there is lively debate about which online Skill registry is best.<br />
+You can find the Skills from this project on several sites.</p>
+<ul>
+<li><a href="https://skills.sh/jabrena/cursor-rules-java">https://skills.sh/jabrena/cursor-rules-java</a></li>
+<li><a href="https://tessl.io/registry/skills/github/jabrena/cursor-rules-java">https://tessl.io/registry/skills/github/jabrena/cursor-rules-java</a></li>
+<li><a href="https://agent-skills.cc/zh/skills/jabrena-cursor-rules-java">https://agent-skills.cc/zh/skills/jabrena-cursor-rules-java</a></li>
+<li><a href="https://skillsmp.com/skills/jabrena-cursor-rules-java-skills-014-agile-user-story-skill-md">https://skillsmp.com/skills/jabrena-cursor-rules-java-skills-014-agile-user-story-skill-md</a></li>
+</ul>
+<h2>Why do we need Agents?</h2>
+<p>If you have followed the evolution of this project, you know we have moved from <code>Rules</code> and <code>System prompts</code> to <code>Skills</code> that shape the model's behaviour—but how do you increase execution control? The answer is agents.</p>
+<p>In this release, we shipped a few agents for two phases:</p>
+<ul>
+<li><code>Analysis &amp; Design phase</code> -&gt; Business Analyst Agent</li>
+<li><code>Java implementation</code> -&gt; Coder Coordinator Agent &amp; Specialized Coder Agents</li>
+</ul>
+<pre><code>------------- Design phase ----------- | Planning  | ----- Development -----
+
+Jira / GitHub / Azure DevOps / Redmine &gt; Plan Mode &gt; Agent Mode to deliver
+
+           EA, PO, BA, SA, TL          |  TL, SWE  |       TL, SWE, SE
+
+----------- Business Analyst --------- | --------  | --- Code Coordinator --
+                Agent                                         Agent
+</code></pre>
+<p>Take a look at the following examples:</p>
+<p><strong>Example 1:</strong></p>
+<p>You have picked up a user story like this:</p>
+<pre><code class="language-markdown">## User Story Statement
+
+**As an** API consumer/developer
+**I want to** retrieve a complete list of Greek god names
+through a REST API endpoint
+**So that** I can integrate mythology content into
+my educational application with fast,
+reliable access to curated deity information.
+</code></pre>
+<p>After you review the technical specification and the architectural ADRs for the functional and non-functional requirements, you ask your favorite AI tool to draft a plan.</p>
+<p>With the plan written to disk as a starting point, you enhance it with <code>@040-planning-plan-mode</code> and update it. The new task list generated to achieve the goal defined in the user story adds important information such as:</p>
+<ul>
+<li>TDD phase</li>
+<li>Milestone</li>
+<li>Parallel/Group (grouped in the London Outside-In style)</li>
+<li>Status</li>
+</ul>
+<pre><code class="language-markdown">## Task List
+
+| # | Task | Phase | TDD | Milestone | Parallel | Status |
+|---|------|-------|-----|-----------|----------|--------|
+| 1 | Extend **implementation2** `pom.xml`: `quarkus-rest`, JDBC PostgreSQL, Flyway, scheduler, SmallRye OpenAPI, outbound HTTP client dep (or JDK client only), `rest-assured`, Testcontainers, Failsafe for `*IT`; plan `%test` datasource | Setup | | | A1 | Done |
+| 2 | **RED:** `GreekGodsApiIT` — REST Assured `GET /api/v1/gods/greek` expects **200**, JSON array, 20 canonical names (set equality), no duplicates (fails until slice exists) | RED | Test | | A1 | Done |
+| 3 | **GREEN:** Flyway migration matching [schema.sql](../design/schema.sql); seed 20 names (Flyway test data / IT setup); JDBC repository `findAllNamesOrdered()`; Jakarta REST resource; no external call on read path | GREEN | Impl | | A1 | Done |
+| 4 | **Refactor:** Structured logging (read path): request or repo boundaries per team standard | Refactor | | | A1 | Done |
+| 5 | **Refactor:** `ExceptionMapper` for persistence failures → 500 `application/problem+json`; empty DB IT → 200 `[]`; invalid JDBC / container stop for 500 shape; external base URL property (no hard-coded URL) | Refactor | | | A1 | Done |
+| 6 | **Verify:** `./mvnw clean verify` in **implementation2**; fix failures before M2 | Verify | | milestone | A1 | Done |
+</code></pre>
+<p>When the plan is revised and you agree with it, you can invoke the new Agent: <code>/robot-coordinator</code> to implement the full plan or the first milestone.</p>
+<p>This agent will review the plan and repository and, depending on the context, it will delegate the coding tasks to a specific agent. Specialized agents are currently available for Pure Java, Spring Boot, Quarkus, and Micronaut.</p>
+<p><img src="/cursor-rules-java/images/2026/3/robot-coordinator-example.jpg" alt="" /></p>
+<p>When you achieve the first milestone, you can review whether the implementation matches the coding standards and continue until the end of all tasks in the task list.</p>
+<p><img src="/cursor-rules-java/images/2026/3/robot-quarkus-coder-example.jpg" alt="" /></p>
+<p>Using incremental review, you can minimize potential deviations and commit small parts.</p>
+<p><img src="/cursor-rules-java/images/2026/3/robot-coordinator-example2.png" alt="" /></p>
+<p>If you have good ADRs and you invested time in a plan, the time spent on refactorings should be minimized. Indeed, I recommend making small commits per milestone.</p>
+<h2>What is the next step?</h2>
+<h3>Internal changes in the generators</h3>
+<p>In the next iteration, it is necessary to make some changes in the project.</p>
+<p><strong>Skills:</strong><br />
+- Deprecate Rules in favor of Skills. Currently, each skill has a 1:1 relationship to a reference file that is a Cursor rule; in the future, a rule could have multiple 1:1 references, so this change will improve the flexibility of the whole solution.</p>
+<p>On the other hand, it is possible to improve architectural operations with a new Agent.</p>
+<h3>More agents and a new workflow</h3>
+<p><strong>Agents:</strong><br />
+- Define an Agent dedicated to Architecture</p>
+<p><strong>Workflows:</strong><br />
+- It is necessary to provide an <code>Execution Workflow</code> that covers the whole process from a user story or spec.</p>
+<h3>How to combine user stories with spec documents?</h3>
+<ul>
+<li>The project already covers user stories and ADRs, but how should those combine with spec documents? — <a href="https://x.com/micael_gallego">Mica</a> raises this question.</li>
+</ul>
+<h2>Interesting projects from the ecosystem</h2>
+<p>Some interesting skills to review:</p>
+<ul>
+<li><a href="https://github.com/eferro/skill-factory/blob/main/output_skills/practices/code-simplifier">https://github.com/eferro/skill-factory/blob/main/output_skills/practices/code-simplifier</a></li>
+<li><a href="https://github.com/eferro/skill-factory/blob/main/output_skills/practices/story-splitting">https://github.com/eferro/skill-factory/blob/main/output_skills/practices/story-splitting</a></li>
+<li><a href="https://github.com/eferro/skill-factory/blob/main/output_skills/practices/hamburger-method">https://github.com/eferro/skill-factory/blob/main/output_skills/practices/hamburger-method</a></li>
+<li><a href="https://github.com/Envy-7z/mobile-agent-skillpack/tree/main/skills/thinkies">https://github.com/Envy-7z/mobile-agent-skillpack/tree/main/skills/thinkies</a></li>
+<li><a href="https://github.com/bsene/skills/tree/main/mikado-method">https://github.com/bsene/skills/tree/main/mikado-method</a></li>
+<li><a href="https://github.com/bsene/skills/tree/main/cupid-checker">https://github.com/bsene/skills/tree/main/cupid-checker</a></li>
+</ul>
+<h2>Do you still have questions about the project?</h2>
+<p>If you feel stuck using this project or have questions, you can attend the following workshop at <code>Codemotion Madrid 2026</code>:</p>
+<p><a href="https://conferences.codemotion.com/madrid/"><img src="/cursor-rules-java/images/2026/3/codemotion-madrid-2026.jpg" alt="" /></a></p>
+<p><a href="https://conferences.codemotion.com/madrid/workshop/">https://conferences.codemotion.com/madrid/workshop/</a></p>
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena/cursor-rules-java" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2026 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../../js/jquery-1.11.2.min.js"></script>
+<script src="../../../js/bootstrap.min.js"></script>
+<script src="../../../js/prettify.js"></script>
+<script src="../../../js/run_prettify.js"></script>
+<script src="../../../js/main.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13CV90H4J4');
+</script>
+
+</body>
+</html>

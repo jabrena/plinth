@@ -1,10 +1,23 @@
 <?xml version="1.0"?>
 <feed xmlns='http://www.w3.org/2005/Atom' xml:lang='en'>
   <id>https://jabrena.github.io/cursor-rules-java/</id>
-  <title>Cursor rules and Skills for Java</title>
-  <updated>2026-03-17T21:07:38+0100</updated>
+  <title>Rules, Skills & Agents for Java</title>
+  <updated>2026-03-30T13:42:39+0200</updated>
   <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java/" />
   <link rel='self' type='application/atom+xml' href='https://jabrena.github.io/cursor-rules-java//feed.xml' />
+  <entry>
+    <id>https://jabrena.github.io/cursor-rules-java//blog/2026/03/release-0.13.0.html</id>
+    <title>What&apos;s new in Cursor rules for Java 0.13.0?</title>
+    <link></link>
+    <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2026/03/release-0.13.0.html" />
+    <updated>2026-03-30T00:00:00+0200</updated>
+    <summary>What are Cursor rules for Java?
+A curated collection of Rules, Skills, and Agents for Java Enterprise development—to be used in modern SDLC workflows.
+With appreciation for our community in Singapore, Amsterdam, Madrid, Ashburn, and Atlanta. 👋👋👋
+What&apos;s new in this release?
+Improvements in the Analysis &amp;amp; Design phase
+The project needed to provide solutions for roles not necessarily tied to th...</summary>
+  </entry>
   <entry>
     <id>https://jabrena.github.io/cursor-rules-java//blog/2026/03/release-0.12.0.html</id>
     <title>What&apos;s new in Cursor rules for Java 0.12.0?</title>
