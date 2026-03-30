@@ -13,9 +13,9 @@ Over this example, add the following user prompt:
 
 > "Review my code for object-oriented design using the cursor rule @121-java-object-oriented-design.md @src/"
 
-![](/cursor-rules-java/images/0.8.0-1.png)
-![](/cursor-rules-java/images/0.8.0-2.png)
-![](/cursor-rules-java/images/0.8.0-3.png)
+![](/cursor-rules-java/images/2025/7/0.8.0-1.png)
+![](/cursor-rules-java/images/2025/7/0.8.0-2.png)
+![](/cursor-rules-java/images/2025/7/0.8.0-3.png)
 
 Now, the software engineer has full control over the suggestion and later refactoring because they are able to interact with the Cursor rule and guide how the solution could be improved. If you like this feature, you can try the following cursor rules included in the release:
 
@@ -80,7 +80,7 @@ Using models & system prompts like this project: https://github.com/jabrena/curs
 
 Join us with more than 600+ users in the last 14 days.
 
-![](/cursor-rules-java/images/0.8.0-4.png)
+![](/cursor-rules-java/images/2025/7/0.8.0-4.png)
 
 Enjoy
 
