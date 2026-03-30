@@ -101,7 +101,7 @@ https://forms.gle/TpNXENjmu45wuXoi6
 
 Recently, this technique was identified in the latest `Thoughtworks Radar #33`: **Curated shared instructions for software teams**
 
-[![](/cursor-rules-java/images/11/thoughtworks-radar-system-prompts.jpg)](https://www.thoughtworks.com/radar/techniques/curated-shared-instructions-for-software-teams)
+[![](/cursor-rules-java/images/2025/11/thoughtworks-radar-system-prompts.jpg)](https://www.thoughtworks.com/radar/techniques/curated-shared-instructions-for-software-teams)
 
 **Problem it tries to solve:** Maintain a specialized collection of system prompts for Software development in Java.
 
@@ -113,7 +113,7 @@ https://github.com/jabrena/cursor-rules-java
 
 Churrera is a CLI tool designed to operate with `Cursor Cloud Agents API` easily. The Cloud Agents API (Beta) allows you to programmatically create and manage AI-powered coding agents that work autonomously on your repositories.
 
-![](/cursor-rules-java/images/11/churrera-2.png)
+![](/cursor-rules-java/images/2025/11/churrera-2.png)
 
 **Problem it tries to solve:** Enhance your pipelines with `AI Glue`.
 
@@ -125,11 +125,11 @@ https://github.com/jabrena/churrera
 
 ## Observations in Devoxx 2025
 
-![](/cursor-rules-java/images/11/devoxx-be-room-4.jpg)
+![](/cursor-rules-java/images/2025/11/devoxx-be-room-4.jpg)
 
 In 2025, the entire JVM industry is moving around AI and if you attended the different sessions in Devoxx, you may feel it. In the conference, I listened to the different proposals from the most used frameworks `Spring` & `Quarkus` in the Java industry and in this year, I observed that there exists a real parity between Spring ecosystem and Quarkus ecosystem in terms of talks. Congratulations to `Mario Fusco`, `Georgios Andrianakis`, `Clement Escoffier`, `Rod Johnson` & `Christian Tzolov` for their hard work. I would not like to forget the nice proposal from `Akka` which shared the new features oriented to `Agents`.
 
-![](/cursor-rules-java/images/11/devoxx-quarkus-agentic-talk.png)
+![](/cursor-rules-java/images/2025/11/devoxx-quarkus-agentic-talk.png)
 
 **Can Spring AI or Langchain4j use PML or Cursor rules for Java?**
 
@@ -161,11 +161,11 @@ Yes, for sure. Happy to talk with `Spring AI` team or `Quarkus` team in the futu
 
 ## Observations in W-JAX-2025
 
-![](/cursor-rules-java/images/11/wjax-atlanta-room.png)
+![](/cursor-rules-java/images/2025/11/wjax-atlanta-room.png)
 
 In this case, I visited the conference for a shorter time so my observations were limited, but in the conference the talks put focus on AI also. In the another hand, I observed less presence of Quarkus talks, in Germain Speakers continue with more experience in Spring. Gathering feedback from my talk, many `Java Software engineers` in Germany are starting to use this kind of modern tools but in general, the usage is not massive.
 
-![](/cursor-rules-java/images/11/crossing-the-chasm.png)
+![](/cursor-rules-java/images/2025/11/crossing-the-chasm.png)
 
 ### What talks I loved in W-JAX 2025?
 
