@@ -1,78 +1,71 @@
 package info.jab.ms.controller;
 
 import info.jab.ms.dto.GodStatsResponse;
+import info.jab.ms.exception.BadRequestException;
 import info.jab.ms.service.GodAnalysisService;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Set;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.math.BigInteger;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
-
 @RestController
 @RequestMapping("/api/v1")
 public class GodStatsController {
 
-    private static final Logger log = LoggerFactory.getLogger(GodStatsController.class);
-    private static final Set<String> VALID_SOURCES = Set.of("greek", "roman", "nordic");
+	private static final Logger log = LoggerFactory.getLogger(GodStatsController.class);
 
-    private final GodAnalysisService godAnalysisService;
+	private static final Set<String> ALLOWED_SOURCES = Set.of("greek", "roman", "nordic");
 
-    public GodStatsController(GodAnalysisService godAnalysisService) {
-        this.godAnalysisService = godAnalysisService;
-    }
+	private final GodAnalysisService godAnalysisService;
 
-    @GetMapping("/gods/stats/sum")
-    public ResponseEntity<GodStatsResponse> getSum(
-            @RequestParam(required = false) String filter,
-            @RequestParam(required = false) String sources) {
+	public GodStatsController(GodAnalysisService godAnalysisService) {
+		this.godAnalysisService = godAnalysisService;
+	}
 
-        long start = System.currentTimeMillis();
-        log.info("Incoming request: GET /api/v1/gods/stats/sum filter='{}' sources='{}'", filter, sources);
+	@GetMapping("/gods/stats/sum")
+	public GodStatsResponse getGodsStatsSum(
+			@RequestParam(required = false) String filter,
+			@RequestParam(required = false) String sources) {
+		List<String> sourceKeys = validateAndParseSources(filter, sources);
+		log.info("gods.stats.sum.request filter={} sources={}", filter, sources);
+		GodStatsResponse response = new GodStatsResponse(godAnalysisService.sumForSources(filter, sourceKeys));
+		log.info("gods.stats.sum.response sum={}", response.sum());
+		return response;
+	}
 
-        validateFilter(filter);
-        List<String> sourceList = validateAndParseSources(sources);
-
-        BigInteger sum = godAnalysisService.computeSum(filter, sourceList);
-        GodStatsResponse response = new GodStatsResponse(sum.toString());
-
-        long duration = System.currentTimeMillis() - start;
-        log.info("Response: sum='{}', duration={}ms", response.sum(), duration);
-
-        return ResponseEntity.ok(response);
-    }
-
-    private void validateFilter(String filter) {
-        if (filter == null || filter.isEmpty()) {
-            throw new IllegalArgumentException("'filter' parameter is required and must be a single character");
-        }
-        if (filter.codePointCount(0, filter.length()) != 1) {
-            throw new IllegalArgumentException("'filter' parameter must be exactly one character");
-        }
-    }
-
-    private List<String> validateAndParseSources(String sources) {
-        if (sources == null || sources.isBlank()) {
-            throw new IllegalArgumentException("'sources' parameter is required");
-        }
-        List<String> sourceList = Arrays.stream(sources.split(","))
-            .map(String::trim)
-            .filter(s -> !s.isEmpty())
-            .toList();
-        if (sourceList.isEmpty()) {
-            throw new IllegalArgumentException("'sources' parameter must contain at least one source");
-        }
-        for (String source : sourceList) {
-            if (!VALID_SOURCES.contains(source.toLowerCase())) {
-                throw new IllegalArgumentException("Invalid source: '" + source + "'. Valid sources are: greek, roman, nordic");
-            }
-        }
-        return sourceList;
-    }
+	private static List<String> validateAndParseSources(String filter, String sources) {
+		if (filter == null) {
+			throw new BadRequestException("Missing required query parameter: filter");
+		}
+		if (sources == null) {
+			throw new BadRequestException("Missing required query parameter: sources");
+		}
+		if (filter.isEmpty()) {
+			throw new BadRequestException("filter must be exactly one Unicode code point");
+		}
+		if (filter.codePointCount(0, filter.length()) != 1) {
+			throw new BadRequestException("filter must be exactly one Unicode code point");
+		}
+		if (sources.isEmpty()) {
+			throw new BadRequestException("sources must not be empty");
+		}
+		List<String> parts = Arrays.stream(sources.split(","))
+				.map(String::trim)
+				.filter(s -> !s.isEmpty())
+				.toList();
+		if (parts.isEmpty()) {
+			throw new BadRequestException("sources must not be empty");
+		}
+		for (String part : parts) {
+			if (!ALLOWED_SOURCES.contains(part)) {
+				throw new BadRequestException("Invalid source name: " + part);
+			}
+		}
+		return parts;
+	}
 }

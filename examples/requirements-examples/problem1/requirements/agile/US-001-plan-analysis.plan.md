@@ -49,12 +49,12 @@ flowchart LR
 
 | # | Task | Phase | TDD | Milestone | Parallel | Status |
 |---|------|-------|-----|-----------|----------|--------|
-| 1 | Create Maven project structure with dependencies | Setup | | | A1 | — |
-| 2 | Write acceptance test for happy path sum calculation | RED | Test | | A1 | — |
-| 3 | Create REST controller stub to pass acceptance test | GREEN | Impl | | A1 | — |
-| 4 | Add structured logging for request/response | Refactor | | | A1 | — |
-| 5 | Optimize controller validation and error handling | Refactor | | | A1 | — |
-| 6 | Verify acceptance test passes with controller | Verify | | milestone | A1 | — |
+| 1 | Create Maven project structure with dependencies | Setup | | | A1 | ✔ |
+| 2 | Write acceptance test for happy path sum calculation | RED | Test | | A1 | ✔ |
+| 3 | Create REST controller stub to pass acceptance test | GREEN | Impl | | A1 | ✔ |
+| 4 | Add structured logging for request/response | Refactor | | | A1 | ✔ |
+| 5 | Optimize controller validation and error handling | Refactor | | | A1 | ✔ |
+| 6 | Verify acceptance test passes with controller | Verify | | milestone | A1 | ✔ |
 | 7 | Write service layer unit test for aggregation logic | RED | Test | | A2 | — |
 | 8 | Implement service with Unicode algorithm | GREEN | Impl | | A2 | — |
 | 9 | Add service-level logging | Refactor | | | A2 | — |

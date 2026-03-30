@@ -5,104 +5,62 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>4.0.4</version>
-		<relativePath/> <!-- lookup parent from repository -->
+		<version>4.0.5</version>
+		<relativePath/>
 	</parent>
-	<groupId>com.example</groupId>
+	<groupId>info.jab.ms</groupId>
 	<artifactId>god-analysis-api</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>God Analysis API</name>
-	<description>Spring Boot REST API for cross-pantheon mythology data analysis</description>
-
+	<name>god-analysis-api</name>
+	<description>US-001 God Analysis API</description>
 	<properties>
 		<java.version>25</java.version>
-		<wiremock.version>3.5.4</wiremock.version>
-		<jetty.version>12.1.7</jetty.version>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
-
-	<dependencyManagement>
-		<dependencies>
-			<!-- Force consistent Jetty 12.1.7 across all modules (wiremock-jetty12 mixes ee10 12.0.8 with core 12.1.7) -->
-			<dependency>
-				<groupId>org.eclipse.jetty.ee10</groupId>
-				<artifactId>jetty-ee10-servlet</artifactId>
-				<version>${jetty.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.jetty.ee10</groupId>
-				<artifactId>jetty-ee10-servlets</artifactId>
-				<version>${jetty.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.eclipse.jetty.ee10</groupId>
-				<artifactId>jetty-ee10-webapp</artifactId>
-				<version>${jetty.version}</version>
-			</dependency>
-		</dependencies>
-	</dependencyManagement>
-
 	<dependencies>
-		<!-- Spring Boot Web (servlet-based, no reactive) -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
-
-		<!-- Spring Boot Actuator for monitoring -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-actuator</artifactId>
 		</dependency>
-
-		<!-- Development tools -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
-			<optional>true</optional>
+			<artifactId>spring-boot-starter-webmvc</artifactId>
 		</dependency>
-
-		<!-- Testing dependencies -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
+			<artifactId>spring-boot-starter-actuator-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<!-- Spring Boot 4: MockMvc test support lives in webmvc-test -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webmvc-test</artifactId>
 			<scope>test</scope>
 		</dependency>
-
-		<!-- WireMock with Jetty 12 HTTP server factory for in-process testing -->
 		<dependency>
 			<groupId>org.wiremock</groupId>
-			<artifactId>wiremock-jetty12</artifactId>
-			<version>${wiremock.version}</version>
+			<artifactId>wiremock-standalone</artifactId>
+			<version>3.9.1</version>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<configuration>
-				<includes>
-					<include>**/*Tests.java</include>
-					<include>**/*Test.java</include>
-					<include>**/*AT.java</include>
-					<include>**/*IT.java</include>
-				</includes>
+					<includes>
+						<include>**/*Test.java</include>
+						<include>**/*IT.java</include>
+						<include>**/*AT.java</include>
+					</includes>
 				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
 		</plugins>
 	</build>
-
 </project>

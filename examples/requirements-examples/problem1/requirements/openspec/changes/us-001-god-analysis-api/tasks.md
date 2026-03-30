@@ -13,27 +13,54 @@ Derived from [US-001-plan-analysis.plan.md](../../../agile/US-001-plan-analysis.
 
 | #   | Task                                                                           | Phase    | TDD  | Milestone | Group | Status |
 | --- | ------------------------------------------------------------------------------ | -------- | ---- | --------- | ----- | ------ |
-| 1   | Create Maven project structure with dependencies                               | Setup    |      |           | A1    | ☐      |
-| 2   | Write acceptance test for happy path sum calculation                           | RED      | Test |           | A1    | ☐      |
-| 3   | Create REST controller stub to pass acceptance test                            | GREEN    | Impl |           | A1    | ☐      |
-| 4   | Add structured logging for request/response                                    | Refactor |      |           | A1    | ☐      |
-| 5   | Optimize controller validation and error handling                              | Refactor |      |           | A1    | ☐      |
-| 6   | Verify acceptance test passes with controller                                  | Verify   |      | milestone | A1    | ☐      |
-| 7   | Write service layer unit test for aggregation logic                            | RED      | Test |           | A2    | ☐      |
-| 8   | Implement service with Unicode algorithm                                       | GREEN    | Impl |           | A2    | ☐      |
-| 9   | Add service-level logging                                                      | Refactor |      |           | A2    | ☐      |
-| 10  | Optimize service configuration and error handling                              | Refactor |      |           | A2    | ☐      |
-| 11  | Write integration test for filter=N zero result                                | RED      | Test |           | A2    | ☐      |
-| 12  | Implement filter logic validation                                              | GREEN    | Impl |           | A2    | ☐      |
-| 13  | Verify service unit tests pass                                                 | Verify   |      | milestone | A2    | ☐      |
-| 14  | Write HTTP client tests for timeout-bound fetching (single attempt per source) | RED      | Test |           | A3    | ☐      |
-| 15  | Implement HTTP client with configured RestClient timeouts (no retries)         | GREEN    | Impl |           | A3    | ☐      |
-| 16  | Add client-level logging for HTTP outcomes                                     | Refactor |      |           | A3    | ☐      |
-| 17  | Optimize client configuration (timeouts, per-source isolation)                 | Refactor |      |           | A3    | ☐      |
-| 18  | Write integration test for Nordic/Roman timeout scenario (per feature file)    | RED      | Test |           | A3    | ☐      |
-| 19  | Implement partial result handling in service                                   | GREEN    | Impl |           | A3    | ☐      |
-| 20  | Verify HTTP client tests pass (timeout phase)                                  | Verify   |      | milestone | A3    | ☐      |
+| 1   | Create Maven project structure with dependencies                               | Setup    |      |           | A1    | ✔      |
+| 2   | Write acceptance test for happy path sum calculation                           | RED      | Test |           | A1    | ✔      |
+| 3   | Create REST controller stub to pass acceptance test                            | GREEN    | Impl |           | A1    | ✔      |
+| 4   | Add structured logging for request/response                                    | Refactor |      |           | A1    | ✔      |
+| 5   | Optimize controller validation and error handling                              | Refactor |      |           | A1    | ✔      |
+| 6   | Verify acceptance test passes with controller                                  | Verify   |      | milestone | A1    | ✔      |
+| 7   | Write service layer unit test for aggregation logic                            | RED      | Test |           | A2    | ✔      |
+| 8   | Implement service with Unicode algorithm                                       | GREEN    | Impl |           | A2    | ✔      |
+| 9   | Add service-level logging                                                      | Refactor |      |           | A2    | ✔      |
+| 10  | Optimize service configuration and error handling                              | Refactor |      |           | A2    | ✔      |
+| 11  | Write integration test for filter=N zero result                                | RED      | Test |           | A2    | ✔      |
+| 12  | Implement filter logic validation                                              | GREEN    | Impl |           | A2    | ✔      |
+| 13  | Verify service unit tests pass                                                 | Verify   |      | milestone | A2    | ✔      |
+| 14  | Write HTTP client tests for timeout-bound fetching (single attempt per source) | RED      | Test |           | A3    | ✔      |
+| 15  | Implement HTTP client with configured RestClient timeouts (no retries)         | GREEN    | Impl |           | A3    | ✔      |
+| 16  | Add client-level logging for HTTP outcomes                                     | Refactor |      |           | A3    | ✔      |
+| 17  | Optimize client configuration (timeouts, per-source isolation)                 | Refactor |      |           | A3    | ✔      |
+| 18  | Write integration test for Nordic/Roman timeout scenario (per feature file)    | RED      | Test |           | A3    | ✔      |
+| 19  | Implement partial result handling in service                                   | GREEN    | Impl |           | A3    | ✔      |
+| 20  | Verify HTTP client tests pass (timeout phase)                                  | Verify   |      | milestone | A3    | ✔      |
 | 21  | Verify all integration tests pass                                              | Verify   |      | milestone | A4    | ☐      |
+
+
+## OpenSpec checklist (CLI progress)
+
+Mirror of the **Task list** table above. [OpenSpec](https://github.com/Fission-AI/OpenSpec) counts only lines like `- [ ]` / `- [x]` for `openspec list` and `openspec view`. Keep this section in sync with the **Status** column.
+
+- [x] Create Maven project structure with dependencies
+- [x] Write acceptance test for happy path sum calculation
+- [x] Create REST controller stub to pass acceptance test
+- [x] Add structured logging for request/response
+- [x] Optimize controller validation and error handling
+- [x] Verify acceptance test passes with controller
+- [x] Write service layer unit test for aggregation logic
+- [x] Implement service with Unicode algorithm
+- [x] Add service-level logging
+- [x] Optimize service configuration and error handling
+- [x] Write integration test for filter=N zero result
+- [x] Implement filter logic validation
+- [x] Verify service unit tests pass
+- [x] Write HTTP client tests for timeout-bound fetching (single attempt per source)
+- [x] Implement HTTP client with configured RestClient timeouts (no retries)
+- [x] Add client-level logging for HTTP outcomes
+- [x] Optimize client configuration (timeouts, per-source isolation)
+- [x] Write integration test for Nordic/Roman timeout scenario (per feature file)
+- [x] Implement partial result handling in service
+- [x] Verify HTTP client tests pass (timeout phase)
+- [ ] Verify all integration tests pass
 
 
 ## File checklist (from plan)
