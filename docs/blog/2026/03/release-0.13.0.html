@@ -280,6 +280,7 @@ reliable access to curated deity information.
 | 5 | **Refactor:** `ExceptionMapper` for persistence failures → 500 `application/problem+json`; empty DB IT → 200 `[]`; invalid JDBC / container stop for 500 shape; external base URL property (no hard-coded URL) | Refactor | | | A1 | Done |
 | 6 | **Verify:** `./mvnw clean verify` in **implementation2**; fix failures before M2 | Verify | | milestone | A1 | Done |
 </code></pre>
+<p><strong>Note:</strong> Remember to have <code>AGENTS.md</code>/<code>CLAUDE.md</code> in your repository to close the loop to verify your development. If you don´t know how to create that file, you can use <code>@200-agents-md</code>.</p>
 <p>When the plan is revised and you agree with it, you can invoke the new Agent: <code>/robot-coordinator</code> to implement the full plan or the first milestone.</p>
 <p>This agent will review the plan and repository and, depending on the context, it will delegate the coding tasks to a specific agent. Specialized agents are currently available for Pure Java, Spring Boot, Quarkus, and Micronaut.</p>
 <p><img src="/cursor-rules-java/images/2026/3/robot-coordinator-example.jpg" alt="" /></p>
