@@ -44,6 +44,8 @@ The big feature in this version is new support for the main Java frameworks.
 
 - You can delegate a development plan to a `Coordinator Agent`, which reviews the requirements and the project and, depending on the nature of the project, delegates to the right agent to implement them. Currently, the coordinator assigns work to specialized agents for `Pure Java` development or to specialized framework agents for `Spring Boot`, `Quarkus`, or `Micronaut`.
 
+### Skill inventory
+
 In the version `v0.13.0`, the project releases `58 Skills`:
 
 **Analysis & Design:**
