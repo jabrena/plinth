@@ -18,5 +18,5 @@
 
   <link rel="stylesheet" href="${content.rootpath!}css/asciidoctor.css">
   <link rel="stylesheet" href="${content.rootpath!}css/prettify.css">
-  <link rel="shortcut icon" href="${content.rootpath!}favicon.ico">
+  <link rel="icon" type="image/png" href="${content.rootpath!}images/java-icon.png">
 </head>
