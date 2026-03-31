@@ -35,7 +35,7 @@
 			</div>
 			<div class="slides">
                 <section>
-					<section data-background-image="./images/jackson-pollock-stenographic-figure.jpg">
+					<section data-background-image="./images/background-waves.webp">
 						<h2>
                             <span style="display: inline-block; color: black;  background: #DFFF6D;">
                                 Taller técnico sobre AI Tooling para el desarrollo con Java
@@ -48,14 +48,6 @@
 						</p>
 						<img src="images/duke.png" width="15%" />
 					</section>
-                    <section>
-                        <img src="./images/jackson-pollock-stenographic-figure.jpg" width="45%" />
-                        <p>
-                            Stenographic Figure, <a href="https://www.jackson-pollock.org/" target="_blank">Jackson Pollock</a> (1943)<br />
-                            <a href="https://www.moma.org/" target="_blank">Museum of Modern Art (MoMA)</a><br />
-                            Abstract expressionism
-                        </p>
-                    </section>
 				</section>
                 <section>
                     <section align="left" data-background="#ffd7b5">
@@ -105,22 +97,22 @@
                         <h2>Agenda (90 min)</h2>
                         <ul>
                             <li>Introducción</li>
-                            <li>Herramientas de AI Tooling</li>
-                            <li>Adaptando el SDLC al mundo de AI Tooling</li>
-                            <li>¿Que es Spec-Driven?</li>
+                            <li>¿Como desarrollas?</li>
                             <li>Conceptos</li>
-                            <li>¿Todos los modelos funcionan igual?</li>
-                            <li>¿Que de formas diferentes se puede usar AI Tooling?</li>
+                            <li>Evolucionando el SDLC</li>
+                            <li>Workflows</li>
+                            <li>Demos</li>
                         </ul>
                     </section>
                     <section>
                         <h2>Agenda (90 min)</h2>
+                        <h3>Demos</h3>
                         <ul>
                             <li>Usando los modos de Agente (Ask, Plan, Agent)</li>
                             <li>Usando Skills</li>
                             <li>Definiendo un buen fichero AGENTS.md</li>
-                            <li>Usando SubAgentes en tu desarrollo</li>
-                            <li>Usando AI Tooling en tus pipelines</li>
+                            <li>Usando Agentes en tu desarrollo</li>
+                            <li>Usando Asistentes AI en tus pipelines</li>
                         </ul>
                     </section>
                     <section>
@@ -135,6 +127,154 @@
                             </code>
                         </pre>
                         <img src="images/qr-code.png" width="40%" />
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>¿Como desarrollas?</h2>
+                        <ul>
+                            <li>Coges una Historia de Usuario en Jira</li>
+                            <ul>
+                                <li>Anemica</li>
+                                <li>Completa</li>
+                            </ul>
+                            <li>Revisas los ADRs de tu area</li>
+                            <ul>
+                                <li>No existen</li>
+                                <li>Estan Obsoletos</li>
+                                <li>Se actualizan periodicamente</li>
+                            </ul>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>¿Como desarrollas?</h2>
+                        <ul>
+                            <li>Revisas la historia de usuario para encontrar el mejor enfoque de implementación</li>
+                            <ul>
+                                <li>Trabajo solo</li>
+                                <li>Comentamos todas las mañanas</li>
+                                <li>Hago Pair programming</li>
+                            </ul>
+                            <li>Desarrollo tests</li>
+                            <ul>
+                                <li>Si nos da tiempo</li>
+                                <li>Es obligatorio</li>
+                            </ul>
+                            ...
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>¿Como desarrollas?</h2>
+                        <p>
+                            En muchas ocasiones sin hacer uso de AI Tooling,
+                            al equipo no le llega toda la informacion necesaria,
+                            dentro del equipo, no hay discusiones sobre alternativas,
+                            en algunos casos, no hay tests o estos son insuficientes.
+                        </p>
+                        <p>
+                            Asi, es complicado adoptar AI Tooling en el dia a dia.
+                        </p>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Conceptos</h2>
+                        <ul>
+                            <li>Asistente AI</li>
+                            <li>ADR</li>
+                            <li>Spec</li>
+                            <li>Plan</li>
+                            <li>Skill</li>
+                            <li>Agent</li>
+                            <li>MCP/CLI tools</li>
+                            <li>Workflow</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Asistentes de AI</h2>
+                        <p>
+                            En el mercado hay muchos asistentes de AI,
+                            como Cursor, Claude Code, GitHub Copilot, entre otros.
+                        </p>
+                    </section>
+                </section>
+
+                <section>
+                    <section>
+                        <h2>Evolucionando el SDLC</h2>
+                        <img src="./images/SDLC.jpg" width="50%" />
+                    </section>
+                    <section>
+                        <h2>Evolucionando el SDLC</h2>
+                        <h3>1. Analisis</h3>
+                        <p>
+                            Ayudando al PO/BU con historias de usuario anemicas o incompletas.
+                        </p>
+                        <p>
+                            US -> @014-agile-user-story -> US + .features (Gherkin)
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Evolucionando el SDLC</h2>
+                        <h3>2. Diseño</h3>
+                        <p>
+                            Definiendo/Documentando decisiones de diseño a traves de ADRs.
+                        </p>
+                        <p>
+                            @030-architecture-adr-general
+                            @031-architecture-adr-functional-requirements
+                            @032-architecture-adr-non-functional-requirements
+                            @033-architecture-diagrams -> ADRs + .md
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Evolucionando el SDLC</h2>
+                        <h3>3. Planificacion de la implementación</h3>
+                        <p>
+                            Planicacion de la implementacion y desarrollo de specificaciones.
+                        </p>
+                        <p>
+                            @040-planning-plan-mode
+                            @050-planning-openspec
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Evolucionando el SDLC</h2>
+                        <h3>4. Implementación y pruebas</h3>
+                        <p>
+                            Implementacion de la historia de usuario.
+                        </p>
+                        <p>
+                            Emplear agente /robot-coordinator para implementar la historia de usuario,
+                            teniendo en cuenta los ADRs y las specificaciones para estos cambios.
+                        </p>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Workflows</h2>
+                        <ul>
+                            <li>Prompting Enginering Workflow</li>
+                            <li>Agent-Driven Engineering Workflow</li>
+                            <li>Pipelines Workflow</li>
+                        </u>
+                    </section>
+                    <section>
+                        <h2>Prompting Enginering Workflow</h2>
+                        <img src="./images/workflow.png" width="100%" />
+                    </section>
+                    <section>
+                        <h2>Agent-Driven Engineering Workflow</h2>
+                        <img src="./images/workflow.png" width="100%" />
+                    </section>
+                    <section>
+                        <h2>Pipelines Workflow</h2>
+                        <img src="./images/workflow-pipelines.png" width="100%" />
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <img src="./images/demo.png" width="100%" />
                     </section>
                 </section>
                 <section>
