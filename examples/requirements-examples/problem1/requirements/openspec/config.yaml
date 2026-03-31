@@ -1,0 +1,5 @@
+# OpenSpec project configuration (example — adjust paths if you run `openspec init` at repo root)
+schemaVersion: 1
+project:
+  name: god-analysis-api-requirements-example
+  description: US-001 God Analysis API — requirements example (nested under examples/)

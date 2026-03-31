@@ -1,0 +1,14 @@
+spring:
+  application:
+    name: god-analysis-api
+
+# Outbound HTTP (RestClient). Env: GOD_OUTBOUND_CONNECT_TIMEOUT, GOD_OUTBOUND_READ_TIMEOUT,
+# GOD_OUTBOUND_URLS_GREEK, GOD_OUTBOUND_URLS_ROMAN, GOD_OUTBOUND_URLS_NORDIC
+god:
+  outbound:
+    connect-timeout: 5s
+    read-timeout: 5s
+    urls:
+      greek: https://my-json-server.typicode.com/jabrena/latency-problems/greek
+      roman: https://my-json-server.typicode.com/jabrena/latency-problems/roman
+      nordic: https://my-json-server.typicode.com/jabrena/latency-problems/nordic
