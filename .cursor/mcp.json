@@ -25,6 +25,21 @@
             "env": {
                 "GITHUB_PERSONAL_ACCESS_TOKEN": "YOUR_TOKEN_HERE"
             }
+        },
+        "serena": {
+            "command": "docker",
+            "args": [
+                "run",
+                "-i",
+                "--rm",
+                "-v",
+                ".:/workspaces/projects/repo",
+                "ghcr.io/oraios/serena:latest",
+                "serena",
+                "start-mcp-server",
+                "--project",
+                "/workspaces/projects/repo"
+            ]
         }
     }
 }
