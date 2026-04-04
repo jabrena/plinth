@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="114-java-maven-search">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.14.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Provides comprehensive guidance for searching and retrieving Maven components from Maven Central (repo1.maven.org): Search API queries, maven-metadata.xml, direct POM/JAR/sources/javadoc URLs, coordinate validation, and dependency insight from POMs. Use when the user needs to find, verify, or retrieve Maven dependencies, check versions, or work with groupId, artifactId, and version.</description>
+  </metadata>
+
+  <title>Maven Central search and coordinates</title>
+  <goal><![CDATA[
+Help users search Maven Central, resolve **groupId:artifactId:version**, read version history, and build correct download URLs. **What is covered:**
+
+- Maven Central Search API (`solrsearch/select`) — text and coordinate queries
+- Direct repository layout and `maven-metadata.xml`
+- POM, JAR, `-sources.jar`, `-javadoc.jar` URL patterns
+- Parsing POMs for direct dependencies; transitive trees via Maven/Gradle on the consumer project
+- Output format: structured coordinates, tables, and verifiable HTTPS links
+]]></goal>
+
+  <constraints>
+    <constraints-description>Verify coordinates against the Search API or repository responses before asserting availability. Prefer release versions unless snapshots are explicitly required.</constraints-description>
+    <constraint-list>
+      <constraint>**VERIFY**: Do not invent GAVs — confirm via Search API or successful GET of metadata/POM</constraint>
+      <constraint>**FORMAT**: Always express full coordinates as `groupId:artifactId:version` when a version is fixed</constraint>
+      <constraint>**BEFORE APPLYING**: Read the reference for step-by-step workflows, query syntax, and URL patterns</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+        <trigger>Search Maven Central</trigger>
+        <trigger>Find Maven dependency</trigger>
+        <trigger>Maven coordinates</trigger>
+        <trigger>groupId artifactId version</trigger>
+        <trigger>Latest version Maven</trigger>
+        <trigger>maven-metadata.xml</trigger>
+        <trigger>Download JAR from Maven Central</trigger>
+        <trigger>Dependency tree transitive</trigger>
+    </trigger-list>
+  </triggers>
+
+  <references>
+    <reference-list>
+        <reference>references/114-java-maven-search.md</reference>
+    </reference-list>
+  </references>
+</prompt>
