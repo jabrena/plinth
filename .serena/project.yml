@@ -1,7 +1,7 @@
 # Serena project config — Java (LSP) for this repo
 # Docs: https://oraios.github.io/serena/
 
-project_name: "codemotion-madrid-2026-demos"
+project_name: "cursor-rules-java"
 
 languages:
   - java
