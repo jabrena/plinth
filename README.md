@@ -135,6 +135,7 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 - [https://code.claude.com/docs/en/github-actions](https://code.claude.com/docs/en/github-actions)
 - [https://agents.md/](https://agents.md/)
 - [https://agentskills.io/home](https://agentskills.io/home)
+- https://microsoft.github.io/language-server-protocol/
 - https://skills.sh/jabrena/cursor-rules-java
 - https://tessl.io/registry/skills/github/jabrena/cursor-rules-java
 - [https://github.com/vercel-labs/skills/issues](https://github.com/vercel-labs/skills/issues)

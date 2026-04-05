@@ -3,6 +3,7 @@
   {"name": "012-agile-epic"},
   {"name": "013-agile-feature"},
   {"name": "014-agile-user-story"},
+  {"name": "021-tooling-github"},
   {"name": "030-architecture-adr-general"},
   {"name": "031-architecture-adr-functional-requirements"},
   {"name": "032-architecture-adr-non-functional-requirements"},

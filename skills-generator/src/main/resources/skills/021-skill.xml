@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="021-tooling-github">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.14.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need the GitHub CLI (`gh`) to verify installation, list issues (all or by milestone) as markdown tables, fetch issue bodies and comments for analysis, or hand off to @014-agile-user-story when creating user stories from GitHub threads. Uses an interactive install gate — if `gh` is missing, ask whether to show installation guidance before any issue commands.</description>
+  </metadata>
+
+  <title>GitHub CLI — issues, milestones, and discussion for analysis</title>
+  <goal><![CDATA[
+Use **`gh`** to work with GitHub issues: **first** run an **interactive** check—if `gh` is not installed, **stop**, ask whether the user wants installation guidance (see the consultative pattern in **`112-java-maven-plugins`**, Maven Wrapper step), **wait** for an answer, then continue. When `gh` is available, confirm auth, list issues with optional milestone filters, render **markdown tables** from `--json` output, load **full issue bodies and comment threads** for analysis, and when the user wants user stories plus Gherkin, **chain to `@014-agile-user-story`** using issue content as source material for the interactive questionnaire.
+
+**What is covered in this Skill?**
+
+- **Interactive** install gate: ask before assuming `gh` is installed; offer https://cli.github.com/ and OS hints when the user agrees
+- Install/auth checks (`gh --version`, `gh auth status`, `gh auth login`)
+- Repository context (`--repo`, inferred from git remote)
+- Issue lists: states, limits, milestone filter, `gh issue list --json` for tabular output
+- Milestone discovery via `gh api` when titles are unknown
+- Deep reads: `gh issue view` with `--json` (body, comments) or `--comments`
+]]></goal>
+
+  <constraints>
+    <constraints-description>Do not fabricate issue data; use only `gh` output (or explicitly agreed public REST API responses). Never print tokens or secrets.</constraints-description>
+    <constraint-list>
+      <constraint>**INTERACTIVE GATE**: If `gh` is missing, **stop**, ask whether the user wants installation guidance, **wait**—do not skip to issue listing</constraint>
+      <constraint>**FIRST** (after gate): Verify `gh` is available before issuing subcommands</constraint>
+      <constraint>**TABLES**: Prefer `--json` + markdown pipe tables for issue list summaries</constraint>
+      <constraint>**THREAD**: For analysis, include body and all comments (or explicitly summarize with omissions noted)</constraint>
+      <constraint>**014**: For user stories from issues, use `@014-agile-user-story` and align answers with GitHub-sourced text</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+        <trigger>gh issue list</trigger>
+        <trigger>List GitHub issues</trigger>
+        <trigger>Issues in milestone</trigger>
+        <trigger>GitHub CLI issues</trigger>
+        <trigger>gh issue view comments</trigger>
+    </trigger-list>
+  </triggers>
+
+  <references>
+    <reference-list>
+        <reference>references/021-tooling-github.md</reference>
+    </reference-list>
+  </references>
+</prompt>
