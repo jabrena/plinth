@@ -5,7 +5,7 @@
       interactive="true">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
-    <version>0.13.0</version>
+    <version>0.14.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
     <description>Facilitates conversational discovery to create Architectural Decision Records (ADRs) for functional requirements covering CLI, REST/HTTP APIs, or both. Use when the user wants to document command-line or HTTP service architecture, capture functional requirements, create ADRs for CLI or API projects, or design interfaces with documented decisions.</description>
   </metadata>
