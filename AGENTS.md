@@ -68,7 +68,7 @@ npx skill-check skills
 
 ### Pre-commit hooks (recommended)
 
-This repository includes [pre-commit](https://pre-commit.com/) configuration at [`.pre-commit-config.yaml`](.pre-commit-config.yaml): YAML checks and a **commit-msg** hook that enforces the Conventional Commit rules above (including a required **scope**).
+This repository includes [pre-commit](https://pre-commit.com/) configuration at [`.pre-commit-config.yaml`](.pre-commit-config.yaml): YAML checks and a **commit-msg** hook that enforces the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) rules above (including a required **scope**).
 
 **Setup (once per clone):**
 
