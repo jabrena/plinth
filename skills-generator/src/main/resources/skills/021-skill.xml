@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.14.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need the GitHub CLI (`gh`) to verify installation, list issues (all or by milestone) as markdown tables, fetch issue bodies and comments for analysis, or hand off to @014-agile-user-story when creating user stories from GitHub threads. Uses an interactive install gate: if `gh` is missing, ask whether to show installation guidance before any issue commands.</description>
+    <description>Use when you need the GitHub CLI (`gh`) to verify installation, list issues (all or by milestone) as markdown tables, fetch issue bodies and comments for analysis, or hand off to @014-agile-user-story when creating user stories from GitHub threads. Uses an interactive install gate — if `gh` is missing, ask whether to show installation guidance before any issue commands.</description>
   </metadata>
 
   <title>GitHub CLI — issues, milestones, and discussion for analysis</title>
