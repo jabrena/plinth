@@ -12,6 +12,7 @@
   {"name": "111-java-maven-dependencies"},
   {"name": "112-java-maven-plugins"},
   {"name": "113-java-maven-documentation"},
+  {"name": "114-java-maven-search"},
   {"name": "121-java-object-oriented-design"},
   {"name": "122-java-type-design"},
   {"name": "123-java-exception-handling"},

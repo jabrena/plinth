@@ -2,7 +2,7 @@
 name: 000-system-prompt-list
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.13.0
+  version: 0.14.0-SNAPSHOT
 ---
 # Create a Checklist with all Java steps to use with system prompts for Java
 
@@ -53,6 +53,7 @@ Use the following collection of System prompts of Java to improve your Java deve
 | [111-java-maven-dependencies](.cursor/rules/111-java-maven-dependencies.md) | Add Maven dependencies for improved code quality | **Interactive User Prompt:** `Add essential Maven dependencies for code quality using @111-java-maven-dependencies` **User Prompt:** `Add VAVR dependency with the help of@111-java-maven-dependencies and not make any question` (Example)**Note:** Add in the context the `pom.xml` which you want to enhance with quality dependencies. | It is possible to apply the System prompt in an interactive and non interactive way. Using the interactive approach, the Software engineer will interact with the cursor rule to selectively add JSpecify, Error Prone, NullAway and VAVR dependencies based on project needs. |
 | [112-java-maven-plugins](.cursor/rules/112-java-maven-plugins.md) | Update your `pom.xml` with Maven Dependencies & Plugins | **Interactive User Prompt:** `Improve the pom.xml using the cursor rule @112-java-maven-plugins` **User Prompt:** `Add Maven Enforcer plugin only from the rule @112-java-maven-plugins without any question` (Example) **Note:** Add in the context the `pom.xml` which you want to generate the documentation. |  It is possible to apply the System prompt in an interactive and non interactive way. Using the interactive approach, the Software engineer will interact with the cursor rule to update the `pom.xml`. |
 | [113-java-maven-documentation](.cursor/rules/113-java-maven-documentation.md) | Create a Maven Documentation with the file `README-DEV.md` | **User Prompt:** `Generate developer documentation with essential Maven commands using @113-java-maven-documentation` **Note:** Add in the context the `pom.xml` which you want to generate the documentation. | This cursor rule is applied automatically without any interaction with the Software engineer. |
+| [114-java-maven-search](.cursor/rules/114-java-maven-search.md) | Search Maven Central, resolve coordinates, version metadata, and direct artifact URLs | **User Prompt:** `Find the latest version of com.google.guava:guava using @114-java-maven-search` **Note:** Use for dependency lookup, POM/JAR URLs, `maven-metadata.xml`, or Search API queries — not for editing `pom.xml` (use `@111` / `@112` for that). | Non-interactive. Use MCP Maven tools when available for live Central queries. |
 
 ## Design rules
 

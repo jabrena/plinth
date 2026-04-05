@@ -4,7 +4,7 @@
       id="163-java-profiling-refactor">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
-    <version>0.13.0</version>
+    <version>0.14.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
     <description>Use when you need to refactor Java code based on profiling analysis findings — including reviewing docs/profiling-problem-analysis and docs/profiling-solutions, identifying specific performance bottlenecks, and implementing targeted code changes to address CPU, memory, or threading issues.</description>
   </metadata>

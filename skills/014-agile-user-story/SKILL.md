@@ -4,7 +4,7 @@ description: Guides the creation of agile user stories and Gherkin feature files
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.13.0
+  version: 0.14.0-SNAPSHOT
 ---
 # Create Agile User Stories and Gherkin Feature Files
 
