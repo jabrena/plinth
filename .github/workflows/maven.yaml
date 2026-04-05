@@ -57,6 +57,25 @@ jobs:
         env:
           SKILL_CHECK_NO_BANNER: 1
 
+  pre-commit:
+    name: Pre-commit
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: true
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.x"
+      - name: Install pre-commit
+        run: pip install pre-commit
+      - name: Run pre-commit (all files)
+        run: pre-commit run --all-files
+      - name: Validate HEAD commit message
+        run: |
+          git log -1 --pretty=%B > /tmp/commit-msg.txt
+          pre-commit run conventional-pre-commit --hook-stage commit-msg --commit-msg-filename /tmp/commit-msg.txt
+
   examples:
     name: Build Examples
     runs-on: ubuntu-latest

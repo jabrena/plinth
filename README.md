@@ -74,7 +74,7 @@ Models are able to generate code, but they cannot run code with your local data.
 
 ## Contribute
 
-If you have great ideas, [read the following document](./CONTRIBUTING.md) to contribute.
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for conventions, generator workflows, tests, and how to open a pull request.
 
 ## Examples
 

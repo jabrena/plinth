@@ -8,3 +8,4 @@ target/
 dependency-reduced-pom.xml
 docs-local/
 .quarkus/
+.venv-precommit/
