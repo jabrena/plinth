@@ -1,6 +1,6 @@
 ---
 name: 114-java-maven-search
-description: Provides comprehensive guidance for searching and retrieving Maven components from Maven Central (repo1.maven.org): Search API queries, maven-metadata.xml, direct POM/JAR/sources/javadoc URLs, coordinate validation, and dependency insight from POMs. Use when the user needs to find, verify, or retrieve Maven dependencies, check versions, or work with groupId, artifactId, and version. Part of the skills-for-java project
+description: Covers Maven Central search (Search API, maven-metadata.xml, artifact URLs) and project-local update reports via versions-maven-plugin (display-property-updates, display-dependency-updates, display-plugin-updates). Use when finding or verifying coordinates, browsing Central, or checking what newer versions apply to the user’s pom.xml. Part of the skills-for-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -8,12 +8,13 @@ metadata:
 ---
 # Maven Central search and coordinates
 
-Help users search Maven Central, resolve **groupId:artifactId:version**, read version history, and build correct download URLs. **What is covered:**
+Help users search Maven Central, resolve **groupId:artifactId:version**, read version history, and build correct download URLs; and when working on **their** project, verify `versions-maven-plugin` and run `versions:display-*` goals for dependency, plugin, and property updates. **What is covered:**
 
-- Maven Central Search API (`solrsearch/select`) — text and coordinate queries
+- Maven Central Search API — e.g. keyword search for Spring Boot starters (`spring-boot-starter`) or coordinate filters (`g:org.springframework.boot AND a:spring-boot-starter-parent`)
 - Direct repository layout and `maven-metadata.xml`
 - POM, JAR, `-sources.jar`, `-javadoc.jar` URL patterns
 - Parsing POMs for direct dependencies; transitive trees via Maven/Gradle on the consumer project
+- Versions Maven Plugin — ensure `org.codehaus.mojo:versions-maven-plugin` is declared, then `./mvnw versions:display-property-updates`, `versions:display-dependency-updates`, `versions:display-plugin-updates`
 - Output format: structured coordinates, tables, and verifiable HTTPS links
 
 ## Constraints
@@ -33,7 +34,11 @@ Verify coordinates against the Search API or repository responses before asserti
 - Latest version Maven
 - maven-metadata.xml
 - Download JAR from Maven Central
+- Download javadocs
 - Dependency tree transitive
+- display-dependency-updates
+- display-plugin-updates
+- Outdated Maven dependencies
 
 ## Reference
 
