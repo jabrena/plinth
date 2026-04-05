@@ -66,6 +66,24 @@ npx skill-check skills
   - `fix(generator): resolve template parsing issue`
   - `docs(readme): update installation instructions`
 
+### Pre-commit hooks (recommended)
+
+This repository includes [pre-commit](https://pre-commit.com/) configuration at [`.pre-commit-config.yaml`](.pre-commit-config.yaml): YAML checks and a **commit-msg** hook that enforces the Conventional Commit rules above (including a required **scope**).
+
+**Setup (once per clone):**
+
+```bash
+pip install pre-commit   # or: brew install pre-commit
+pre-commit install --install-hooks
+```
+
+The install registers both the default `pre-commit` stage and `commit-msg` hooks. To validate the latest commit message manually:
+
+```bash
+git log -1 --pretty=%B > /tmp/msg.txt
+pre-commit run conventional-pre-commit --hook-stage commit-msg --commit-msg-filename /tmp/msg.txt
+```
+
 ## Boundaries
 
 - ✅ **Always do:** Edit XML in `system-prompts-generator/src/main/resources/` to change rules, run `./mvnw clean verify` before promoting changes. When edit XML, follow PML Schema: [https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd](https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd).
