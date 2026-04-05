@@ -32,7 +32,7 @@ Can you update the current changelog for 0.13.0 comparing git commits in relatio
 - [ ] Communicate in social media
 
 https://tessl.io/registry/skills/submit
-npx skills add jabrena/cursor-rules-java --all --agent cursor
+cd target && npx skills add jabrena/cursor-rules-java --all --agent cursor
 
 ---
 
