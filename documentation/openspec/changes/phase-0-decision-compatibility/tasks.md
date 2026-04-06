@@ -1,4 +1,0 @@
-# Tasks: Phase 0 - Decision and Compatibility
-
-## Architecture Decision Record
-- [ ] **Create ADR for rules-to-skills migration** — Use the **`030-architecture-adr-general`** agent skill ([`skills/030-architecture-adr-general/SKILL.md`](../../../../skills/030-architecture-adr-general/SKILL.md)) to drive the interactive ADR workflow (including its prerequisites, e.g. Maven validation). Document the architectural decision to remove `.cursor/rules/` generation in favor of agent skills, including context, decision drivers, considered options, decision outcome, and consequences for consumers and the project structure; save the result as the next sequential ADR under [`documentation/adr/`](../../../adr/).

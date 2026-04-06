@@ -80,11 +80,22 @@ openspec archive <change-name>       # Archive a completed change
 
 - **Conventional Commits**: Use conventional commit format for all commit messages
 - Format: `type(scope): description`
-- Types: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`
-- Examples:
-  - `feat(rules): add new Java testing system prompt`
-  - `fix(generator): resolve template parsing issue`
-  - `docs(readme): update installation instructions`
+
+| Type | Typical use |
+|------|-------------|
+| **feat** | New behavior / user-facing capability |
+| **fix** | Bug fix |
+| **docs** | Documentation only |
+| **style** | Formatting, whitespace, etc. (no logic change) |
+| **refactor** | Internal change, same external behavior |
+| **perf** | Performance improvement |
+| **test** | Tests only |
+| **build** | Build system or dependencies (e.g. Maven, Gradle) |
+| **ci** | CI config (workflows, pipelines) |
+| **chore** | Maintenance, tooling, meta (when nothing else fits) |
+| **revert** | Reverts a previous commit |
+
+The [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) spec allows other types if your team agrees. **This repository’s commit-msg hook** accepts the types in the table above and requires a **scope** (see [`.pre-commit-config.yaml`](.pre-commit-config.yaml)).
 
 ### Pre-commit hooks (recommended)
 
