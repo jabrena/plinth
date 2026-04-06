@@ -35,6 +35,8 @@ Guide the process of turning an implementation plan (`*.plan.md`) into an OpenSp
       <constraint>**MUST**: When creating a new OpenSpec project, run plain `openspec init` only (do not use `--tools ...` options)</constraint>
       <constraint>**MUST**: Use a stable change-id (for example: `add-dark-mode`) for status/show/archive commands</constraint>
       <constraint>**MUST**: Run `openspec validate --all` before archiving</constraint>
+      <constraint>**MUST**: When a feature/change is completed (all checklist tasks done), guide the user to archive it (for example: `openspec archive us-001-god-analysis-api`)</constraint>
+      <constraint>**MUST**: In `tasks.md`, generate a single OpenSpec checklist (`- [ ]` / `- [x]`) only; do not add a second table-based task list</constraint>
       <constraint>**MUST**: Explain whether the workflow creates a new change or updates an existing one</constraint>
     </constraint-list>
   </constraints>

@@ -12,11 +12,11 @@ A curated collection of `Rules`, `Skills`, and `Agents` for Java Enterprise deve
 
 The project add support for:
 
-- **Agile:** `User Stories` & `Gherkin`
+- **Agile:** `User Stories` & `Github Issues` handling
 - **Architecture:** `ADRs`& `UML` / `C4` / `ER` Diagrams`
-- **AI Tooling:** `AGENTS.md` & `AI Planning`
+- **Spec-Driven:** `AGENTS.md`, `AI Plan mode` & `OpenSpec`
 - **Java development:** `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools` & `Documentation`
-- **Java frameworks:** `Spring Boot`, `Quarkus` & `Micronaut` with the same support (Core, Rest, Jdbc, ORM, Flyway, Unit Tests, IT & AT).
+- **Java frameworks:** `Spring Boot`, `Quarkus` & `Micronaut`.
 
 ## Deliverables
 
@@ -50,17 +50,19 @@ The SDLC has evolved with the arrival of this new set of AI tooling, enhancing t
 
 In this workflow, the Software engineer interact with models using `User prompts` and in an incremental way you delegate a delegate completely a task or ask help in certain moments. You could use this project to refactor the code generated or delegate the task and associate a System prompt / Skills to that task.
 
-![](./documentation/images/workflow.png)
+![](./documentation/images/workflow-prompts.png)
+
+### Agent Workflow
+
+`Agents for Java Enterprise development` were designed to help the Software engineer in the implementation phase. The software engineer define good `Specs` and that Specifications are delegated to Agents.
+
+![](./documentation/images/workflow-agents.png)
 
 ### Pipelines Workflow
 
 Adding AI tools to your pipeline can provide new opportunities to deliver more value (examples: automatic coding, code refactoring, continuous profiling, and others).
 
 ![](./documentation/images/workflow-pipelines.png)
-
-### Agentic Workflow
-
-`Agents for Java Enterprise development` were designed to cover the whole SDLC starting from the requirements and the architectural process. Once you have the foundations well designed. it is possible to execute Plans, iterate and discuss it and when the plans associated to User Stories has the right size & complexity, it is easy to pass to the models to be implemented with security in other case, you will have the classical issues with implementations without control.
 
 ## Limitations
 
@@ -136,6 +138,7 @@ Java uses JEPs as the vehicle to describe new features to be added to the langua
 - [https://agents.md/](https://agents.md/)
 - [https://agentskills.io/home](https://agentskills.io/home)
 - https://microsoft.github.io/language-server-protocol/
+- https://openspec.dev/
 - https://skills.sh/jabrena/cursor-rules-java
 - https://tessl.io/registry/skills/github/jabrena/cursor-rules-java
 - [https://github.com/vercel-labs/skills/issues](https://github.com/vercel-labs/skills/issues)

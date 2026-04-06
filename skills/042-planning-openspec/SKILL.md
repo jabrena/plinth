@@ -31,6 +31,8 @@ Always execute OpenSpec commands from the parent directory that contains the `op
 - **MUST**: When creating a new OpenSpec project, run plain `openspec init` only (do not use `--tools ...` options)
 - **MUST**: Use a stable change-id (for example: `add-dark-mode`) for status/show/archive commands
 - **MUST**: Run `openspec validate --all` before archiving
+- **MUST**: When a feature/change is completed (all checklist tasks done), guide the user to archive it (for example: `openspec archive us-001-god-analysis-api`)
+- **MUST**: In `tasks.md`, generate a single OpenSpec checklist (`- [ ]` / `- [x]`) only; do not add a second table-based task list
 - **MUST**: Explain whether the workflow creates a new change or updates an existing one
 
 ## When to use this skill

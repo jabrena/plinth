@@ -101,6 +101,10 @@ openspec show add-dark-mode
 Interpretation:
 - If change does not exist: create the OpenSpec change artifacts from the plan (proposal/design/tasks/spec delta)
 - If change exists: update proposal/design/tasks/spec delta to reflect the latest `*.plan.md`
+
+`tasks.md` format rule:
+- Use only one task list in OpenSpec checkbox style (`- [ ]` / `- [x]`)
+- Do not duplicate tasks in an additional Markdown table
 ### Step 5: Validate and Archive
 
 Before completion:
@@ -115,10 +119,18 @@ When the change is accepted and complete:
 openspec archive add-dark-mode
 ```
 
+If a feature/change is already completed in the workspace (all tasks checked), archive it directly after successful validation, for example:
+
+```bash
+openspec archive us-001-god-analysis-api
+```
+
 #### Step Constraints
 
 - **MUST** run `openspec validate --all` before archive
 - **MUST** report validation failures and proposed fixes
+- **MUST** guide archiving for completed features/changes (all tasks done), for example `openspec archive us-001-god-analysis-api`
+- **MUST** generate a single OpenSpec checklist in `tasks.md` (`- [ ]` / `- [x]`) and avoid a second table-based task list
 - **MUST NOT** archive if validation fails or the user has not approved archiving
 
 

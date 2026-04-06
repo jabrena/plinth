@@ -75,10 +75,31 @@ When the user points you at a `*.plan.md` (under `.cursor/plans/`, `requirements
 - Handoffs must include **group id**, **task ids**, paths, and dependency status (e.g. "Parallel=A1 verified; Parallel=A2 may start").
 - Follow project conventions from AGENTS.md (Maven, Git workflow, boundaries).
 
+### OpenSpec task list updates
+
+When you receive an OpenSpec task list (either from a `*.plan.md` or an OpenSpec folder structure with `changes/*/tasks.md`), you **MUST** update the task status after completion:
+
+1. **Identify OpenSpec tasks:** Look for `tasks.md` files with OpenSpec checkbox format (`- [ ]` / `- [x]`)
+2. **Track completion:** As delegated agents complete work, map their outputs to specific OpenSpec tasks
+3. **Update task status:** Mark completed tasks as done (`- [x]`) in the `tasks.md` file
+4. **Validate completion:** Ensure all task requirements are met before marking as complete
+
+**OpenSpec task update workflow:**
+- **During delegation:** Track which tasks each agent is responsible for
+- **After agent completion:** Review agent outputs against OpenSpec task requirements
+- **Update tasks.md:** Change `- [ ]` to `- [x]` for verified completed tasks
+- **Report status:** Include task completion status in your final summary
+
+**Example OpenSpec task files to update:**
+- `openspec/changes/*/tasks.md` (OpenSpec change artifacts)
+- `requirements/openspec/changes/*/tasks.md` (requirements-driven OpenSpec)
+- Any `tasks.md` following OpenSpec checkbox format referenced in the plan
+
 ### Final output format
 
 When synthesizing, provide:
 
 - **Summary:** What was done across **Parallel** groups (by group id).
 - **Implementation:** Consolidated results **per** delegated implementation agent instance (`robot-java-coder`, `robot-spring-boot-coder`, `robot-quarkus-coder`, or `robot-micronaut-coder`), keyed by **Parallel** group when multiple.
+- **OpenSpec Updates:** Task completion status and any `tasks.md` files updated with `- [x]` markers.
 - **Next Steps:** Blocked groups, open integration, or follow-ups.

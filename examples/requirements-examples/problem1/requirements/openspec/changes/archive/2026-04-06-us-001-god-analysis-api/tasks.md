@@ -33,7 +33,7 @@ Derived from [US-001-plan-analysis.plan.md](../../../agile/US-001-plan-analysis.
 | 18  | Write integration test for Nordic/Roman timeout scenario (per feature file)    | RED      | Test |           | A3    | ✔      |
 | 19  | Implement partial result handling in service                                   | GREEN    | Impl |           | A3    | ✔      |
 | 20  | Verify HTTP client tests pass (timeout phase)                                  | Verify   |      | milestone | A3    | ✔      |
-| 21  | Verify all integration tests pass                                              | Verify   |      | milestone | A4    | ☐      |
+| 21  | Verify all integration tests pass                                              | Verify   |      | milestone | A4    | ✔      |
 
 
 ## OpenSpec checklist (CLI progress)
@@ -60,7 +60,7 @@ Mirror of the **Task list** table above. [OpenSpec](https://github.com/Fission-A
 - [x] Write integration test for Nordic/Roman timeout scenario (per feature file)
 - [x] Implement partial result handling in service
 - [x] Verify HTTP client tests pass (timeout phase)
-- [ ] Verify all integration tests pass
+- [x] Verify all integration tests pass
 
 
 ## File checklist (from plan)
