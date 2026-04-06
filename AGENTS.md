@@ -36,13 +36,9 @@ This project uses **OpenSpec** for structured change management and planning:
 - `skills/` – Generated SKILLS (READ only, never edit directly)
 - `.cursor/rules/` – Generated Cursor rules (READ only, never edit directly)
 - `system-prompts-generator/src/main/resources/` – XML rule sources (WRITE here to change rules) and generate rules into `.cursor/rules`
-- `skills-generator/` – Generates agent skills from cursor rules into `skills/`
-- `documentation/openspec/` – OpenSpec change management (proposals, specs, tasks)
-
-### Framework rule and skill indices
-
-Numeric prefixes group related prompts. **Spring Boot** uses `301`–`302` (core, REST), `311`–`313` (JDBC, Spring Data JDBC, DB migrations — Flyway), and `321`–`323` (testing). **Quarkus** uses the same shape starting at **`401`**: `401`–`402` (core, REST), `411`–`413` (JDBC, Panache, DB migrations — Flyway), `421`–`423` (testing). **Micronaut** uses **`501`**: `501`–`502` (core, REST), `511`–`513` (JDBC, Micronaut Data, DB migrations — Flyway), and `521`–`523` (testing). New Quarkus framework prompts and skills must keep the **`401-`…`423-`** range; new Micronaut prompts must keep **`501-`…`502-`**, **`511-`…`513-`**, and **`521-`…`523-`** (do not reuse Spring or Quarkus prefixes).
-- `examples/` – Demo projects (Spring Boot, Quarkus, Micronaut, AWS Lambda, Azure Functions)
+- `skills-generator/` – Generates agent skills from cursor rules into `skills/` (WRITE)
+- `documentation/openspec/` – OpenSpec change management (proposals, specs, tasks) (WRITE)
+- `documentation/adr/` – Architecture Decision Records (WRITE)
 - `site-generator/content/` – Blog posts, courses, documentation (WRITE here to update website)
 - `docs/` – Generated static website for GitHub Pages (READ only)
 
