@@ -69,7 +69,7 @@ flowchart LR
 | 18 | Write integration test for Nordic timeout scenario | RED | Test | | A3 | — |
 | 19 | Implement partial result handling in service | GREEN | Impl | | A3 | — |
 | 20 | Verify HTTP client tests pass (timeout phase) | Verify | | milestone | A3 | — |
-| 21 | Verify all integration tests pass | Verify | | milestone | A4 | — |
+| 21 | Verify all integration tests pass | Verify | | milestone | A4 | ✔ |
 
 ## Execution Instructions
 
