@@ -8,15 +8,15 @@
 
 ## Goal
 
-A curated collection of `Rules`, `Skills`, and `Agents` for Java Enterprise development, designed to streamline modern `SDLC` workflows.
+A curated collection of `Rules`, `Skills`, and `Agents` for Java Enterprise development, designed to streamline modern `SDLC` workflows. The project add support for:
 
-The project add support for:
-
-- **Agile:** `User Stories` & `Github Issues`
-- **Architecture:** `ADRs`& `UML` / `C4` / `ER` Diagrams
-- **Spec-Driven:** `AGENTS.md`, `AI Plan mode` & `OpenSpec`
-- **Java development:** `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools` & `Documentation`
-- **Java frameworks:** `Spring Boot`, `Quarkus` & `Micronaut`
+| QUESTION | ROLE | AREA | SUPPORT |
+| --- | --- | --- | ------------ |
+| WHAT | PO, BA, EA, SA, TL | Agile | `User Stories` & `Github Issues` |
+| WHY | EA, SL, TL | Architecture | `ADRs` & `UML` / `C4` / `ER` Diagrams |
+| HOW | SA, TL, SWE| Spec-Driven | `AGENTS.md`, `AI Plan mode` & `OpenSpec` |
+| HOW | TL, SWE | Java development | `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools` & `Documentation` |
+| HOW | TL, SWE | Java frameworks | `Spring Boot`, `Quarkus` & `Micronaut` |
 
 ## Deliverables
 
