@@ -10,7 +10,7 @@ informed: Repository contributors and downstream consumers of generated guidance
 
 ## Context and Problem Statement
 
-This repository maintains Java enterprise guidance as **generated artifacts** from XML sources (`system-prompts-generator` → Markdown under `.cursor/rules/`) and, since [ADR-004](./ADR-004-skill-generation.md), **Agent Skills** under `skills/` via `skills-generator`. Major assistants now converge on the [Agent Skills specification](https://agentskills.io/specification), so keeping **two** parallel generated surfaces (Cursor rules markdown and skills) duplicates delivery, documentation, and mental load without adding distinct capabilities for most consumers.
+This repository maintains Java enterprise guidance as **generated artifacts** from XML sources in the unified `skills-generator` module (historically a separate `system-prompts-generator` produced Markdown under `.cursor/rules/`) and, since [ADR-004](./ADR-004-skill-generation.md), **Agent Skills** under `skills/`. Major assistants now converge on the [Agent Skills specification](https://agentskills.io/specification), so keeping **two** parallel generated surfaces (Cursor rules markdown and skills) duplicates delivery, documentation, and mental load without adding distinct capabilities for most consumers.
 
 Before implementing pipeline and layout changes for a **rules-to-skills** migration, we need a single recorded decision that states why generated `.cursor/rules/` are retired, what breaks for dependents, and how the repository’s source-of-truth and outputs are expected to look afterward. That record is the primary deliverable for OpenSpec change **phase-0-decision-compatibility** (`documentation/openspec/changes/phase-0-decision-compatibility/`).
 

@@ -15,12 +15,6 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!-- System prompts generator (cursor rules) -->
-        <dependency>
-            <groupId>info.jab.pml</groupId>
-            <artifactId>cursor-rules-java-generator</artifactId>
-        </dependency>
-
         <!-- JSON parsing for skill-inventory.json -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
@@ -85,6 +79,9 @@
                                     <includes>
                                         <include>skill-inventory.json</include>
                                         <include>skills/**</include>
+                                        <include>system-prompts/**</include>
+                                        <include>system-prompts.xsl</include>
+                                        <include>system-prompt-inventory.json</include>
                                     </includes>
                                 </resource>
                             </resources>

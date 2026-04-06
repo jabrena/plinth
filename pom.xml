@@ -79,7 +79,6 @@
     </properties>
 
     <modules>
-        <module>system-prompts-generator</module>
         <module>skills-generator</module>
         <module>site-generator</module>
     </modules>
@@ -108,11 +107,6 @@
                 <artifactId>assertj-core</artifactId>
                 <version>${assertj.version}</version>
                 <scope>test</scope>
-            </dependency>
-            <dependency>
-                <groupId>info.jab.pml</groupId>
-                <artifactId>cursor-rules-java-generator</artifactId>
-                <version>${project.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson</groupId>
