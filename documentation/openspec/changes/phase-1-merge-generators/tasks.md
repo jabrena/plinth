@@ -14,8 +14,12 @@
 - [ ] **Run** `./mvnw clean verify` (and `-pl` scoped runs while iterating) until green.
 - [ ] Verify no `.cursor/rules` content is generated
 - [ ] Confirm skills generation still works correctly
+- [ ] **Regenerate skills idempotently** — Run `./mvnw clean install -pl skills-generator` so `skills/` is regenerated; then confirm **`git status` is clean** (no diffs under `skills/`). A successful merge produces deterministic output, so a second full generation should not change tracked files.
 
 ## Testing
 - [ ] Ensure all existing tests pass in the merged module
 - [ ] Verify test coverage is maintained
 - [ ] Update any test configurations that assumed separate modules
+
+## Documentation
+- [ ] **Update `AGENTS.md` (Commands)** — Remove the `system-prompts-generator` entries (`./mvnw clean verify -pl system-prompts-generator` and `./mvnw clean install -pl system-prompts-generator` that deploy to `.cursor/rules/`); document only the unified generator workflow (build/test and install to `skills/` via the merged module). Align the **File structure** and **Boundaries** bullets if XML sources or module paths move.
