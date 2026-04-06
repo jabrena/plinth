@@ -168,7 +168,7 @@ public final class SkillsGenerator {
     private String loadSkillSummaryFromXml(String skillId) {
         String numericId = extractNumericId(skillId);
         String xmlResource = "skills/" + numericId + "-skill.xml";
-        String xsltResource = "skill-to-markdown.xslt";
+        String xsltResource = "skill-to-markdown.xsl";
         try (
             InputStream xmlStream = getResource(xmlResource);
             InputStream xsltStream = getResource(xsltResource)
