@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="042-planning-openspec"
+      interactive="true">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.14.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need to take a `*.plan.md` file and turn it into OpenSpec change artifacts by validating OpenSpec installation, initializing or reusing an OpenSpec project, and creating or updating a change proposal/spec/tasks flow. Includes a concrete workflow based on `examples/requirements-examples/problem1/requirements/openspec`.</description>
+  </metadata>
+
+  <title>OpenSpec Change Planning from `*.plan.md`</title>
+  <goal><![CDATA[
+Guide the process of turning an implementation plan (`*.plan.md`) into an OpenSpec change workflow. **This is an interactive SKILL**. It verifies CLI availability, initializes OpenSpec when needed, and then creates or updates a change with proposal, design, tasks, and spec deltas.
+
+**What is covered in this Skill?**
+
+- Input analysis from `*.plan.md` (scope, change-id candidate, affected capabilities)
+- Installation and availability checks for OpenSpec CLI
+- Recommended installation paths on macOS, Linux, and Windows using npm
+- OpenSpec project bootstrapping with `openspec init`
+- Existing-project workflow using `openspec list`, `openspec status`, `openspec show`
+- Validation and completion flow with `openspec validate --all` and `openspec archive`
+- Example-root workflow at `examples/requirements-examples/problem1/requirements/openspec`
+]]></goal>
+
+  <constraints>
+    <constraints-description>Always execute OpenSpec commands from the parent directory that contains the `openspec/` folder. Do not invent requirements not present in the `*.plan.md`; convert plan intent into explicit OpenSpec change artifacts.</constraints-description>
+    <constraint-list>
+      <constraint>**MUST**: Start by reading and summarizing the provided `*.plan.md`</constraint>
+      <constraint>**MUST**: Check CLI availability with `openspec --version` before any OpenSpec operation</constraint>
+      <constraint>**MUST**: If OpenSpec is missing, provide macOS, Linux, and Windows install guidance via npm command</constraint>
+      <constraint>**MUST**: Offer `openspec init` when no OpenSpec project exists</constraint>
+      <constraint>**MUST**: When creating a new OpenSpec project, run plain `openspec init` only (do not use `--tools ...` options)</constraint>
+      <constraint>**MUST**: Use a stable change-id (for example: `add-dark-mode`) for status/show/archive commands</constraint>
+      <constraint>**MUST**: Run `openspec validate --all` before archiving</constraint>
+      <constraint>**MUST**: When a feature/change is completed (all checklist tasks done), guide the user to archive it (for example: `openspec archive us-001-god-analysis-api`)</constraint>
+      <constraint>**MUST**: In `tasks.md`, generate a single OpenSpec checklist (`- [ ]` / `- [x]`) only; do not add a second table-based task list</constraint>
+      <constraint>**MUST**: Explain whether the workflow creates a new change or updates an existing one</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+      <trigger>Convert `*.plan.md` into OpenSpec</trigger>
+      <trigger>Add change proposal from plan</trigger>
+      <trigger>Update existing OpenSpec project</trigger>
+      <trigger>Initialize OpenSpec in requirements folder</trigger>
+      <trigger>Validate and archive OpenSpec change</trigger>
+    </trigger-list>
+  </triggers>
+
+  <references>
+    <reference-list>
+      <reference>references/042-planning-openspec.md</reference>
+    </reference-list>
+  </references>
+</prompt>
