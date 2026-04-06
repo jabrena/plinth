@@ -46,10 +46,10 @@ Can you update the current changelog for 0.13.0 comparing git commits in relatio
 
 # Prompt to update the project to a new version
 Update xml files from @resources/ and update the version to 0.14.0-SNAPSHOT removing Snapshot.
-Update @pom.xml with the new version 0.14.0-SNAPSHOT Generate system prompts again with ./mvnw clean install -pl system-prompts-generator
+Update @pom.xml with the new version 0.14.0-SNAPSHOT Regenerate skills with ./mvnw clean install -pl skills-generator
 
 Update md files from @resources/ and update the version to 0.13.0 removing Snapshot.
-Update @pom.xml with the new version 0.14.0-SNAPSHOT Generate system prompts again with ./mvnw clean install -pl skils-generator -am
+Update @pom.xml with the new version 0.14.0-SNAPSHOT Regenerate skills with ./mvnw clean install -pl skills-generator
 
 ## Note: Refactor a bit more to include all pom.xml
 
@@ -64,5 +64,5 @@ git push --tags
 ## Add a new Skills
 
 ```bash
-review if exist a new id in @skills-generator/src/main/resources/skill-inventory.json to review compare with the content of @skills-generator/src/main/resources/skills and if exist add a new skill summary in @skills-generator/src/main/resources/skills . to elaborate the skill review the content of the id with @system-prompts-generator/src/main/resources/system-prompts when finish, validate generation with @/Users/jabrena/.cursor/projects/Users-jabrena-IdeaProjects-java-cursor-rules/terminals/1.txt:69-70 and validate the skill with npx skill-check skills
+review if exist a new id in @skills-generator/src/main/resources/skill-inventory.json to review compare with the content of @skills-generator/src/main/resources/skills and if exist add a new skill summary in @skills-generator/src/main/resources/skills . to elaborate the skill review the content of the id with @skills-generator/src/main/resources/system-prompts when finish, validate generation with ./mvnw clean install -pl skills-generator and validate the skill with npx skill-check skills
 ```

@@ -94,7 +94,7 @@ public final class SkillsInventory {
 
         if (matches.isEmpty()) {
             throw new RuntimeException("No system-prompt found for id " + numericId
-                + ". Add a system-prompts/" + prefix + "*.xml file in system-prompts-generator.");
+                + ". Add a system-prompts/" + prefix + "*.xml file under skills-generator/src/main/resources/system-prompts.");
         }
         if (matches.size() > 1) {
             throw new RuntimeException("Multiple system-prompts match id " + numericId + ": " + matches);
@@ -104,7 +104,7 @@ public final class SkillsInventory {
 
     private static List<String> listSystemPromptBaseNames() {
         try {
-            // Use a known resource from cursor-rules-java-generator to locate the JAR
+            // Anchor on system-prompts.xsl to locate the JAR or exploded classes directory
             URL anchor = getResourceUrl("system-prompts.xsl");
             if (anchor == null) {
                 throw new RuntimeException("system-prompts.xsl not found on classpath");

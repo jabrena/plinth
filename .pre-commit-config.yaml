@@ -23,5 +23,9 @@ repos:
           - docs
           - style
           - refactor
+          - perf
           - test
+          - build
+          - ci
           - chore
+          - revert
