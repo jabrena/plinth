@@ -12,7 +12,7 @@ A curated collection of `Rules`, `Skills`, and `Agents` for Java Enterprise deve
 
 The project add support for:
 
-- **Agile:** `User Stories` & `Github Issues` handling
+- **Agile:** `User Stories` & `Github Issues`
 - **Architecture:** `ADRs`& `UML` / `C4` / `ER` Diagrams`
 - **Spec-Driven:** `AGENTS.md`, `AI Plan mode` & `OpenSpec`
 - **Java development:** `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools` & `Documentation`
