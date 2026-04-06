@@ -1,0 +1,382 @@
+{
+    "name": "cursor-rules-java",
+    "owner": {
+        "name": "Juan Antonio Breña Moral",
+        "email": "bren@juanantonio.info"
+    },
+    "metadata": {
+        "description": "Curated collection of System prompts & Skills for modern SDLC that help software engineers and pipelines in their daily work for Java Enterprise development.",
+        "homepage": "https://jabrena.github.io/cursor-rules-java/",
+        "repository": "https://github.com/jabrena/cursor-rules-java",
+        "version": "0.14.0-SNAPSHOT",
+        "license": "Apache-2.0"
+    },
+    "plugins": [
+        {
+            "name": "012-agile-epic",
+            "source": "./skills/012-agile-epic",
+            "description": "Guides the creation of agile epics with comprehensive definition including business value, success criteria, and breakdown into user stories. Use when the user wants to create an agile epic, define large bodies of work, break down features into user stories, or document strategic initiatives.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "013-agile-feature",
+            "source": "./skills/013-agile-feature",
+            "description": "Guides the creation of detailed agile feature documentation from an existing epic. Use when the user wants to split an epic into feature files, derive features with scope and acceptance criteria, or plan feature documentation for stakeholders or engineering.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "014-agile-user-story",
+            "source": "./skills/014-agile-user-story",
+            "description": "Guides the creation of agile user stories and Gherkin feature files. Use when the user wants to create a user story, write acceptance criteria, define Gherkin scenarios, or author BDD feature files.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "021-tooling-github",
+            "source": "./skills/021-tooling-github",
+            "description": "Use when you need the GitHub CLI (`gh`) to verify installation, list issues (all or by milestone) as markdown tables, fetch issue bodies and comments for analysis, or hand off to @014-agile-user-story when creating user stories from GitHub threads. Uses an interactive install gate — if `gh` is missing, ask whether to show installation guidance before any issue commands.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "030-architecture-adr-general",
+            "source": "./skills/030-architecture-adr-general",
+            "description": "Use when you need to generate Architecture Decision Records (ADRs) for a Java project through an interactive, conversational process that systematically gathers context, stakeholders, options, and outcomes to produce well-structured ADR documents.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "031-architecture-adr-functional-requirements",
+            "source": "./skills/031-architecture-adr-functional-requirements",
+            "description": "Facilitates conversational discovery to create Architectural Decision Records (ADRs) for functional requirements covering CLI, REST/HTTP APIs, or both. Use when the user wants to document command-line or HTTP service architecture, capture functional requirements, create ADRs for CLI or API projects, or design interfaces with documented decisions.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "032-architecture-adr-non-functional-requirements",
+            "source": "./skills/032-architecture-adr-non-functional-requirements",
+            "description": "Facilitates conversational discovery to create Architectural Decision Records (ADRs) for non-functional requirements using the ISO/IEC 25010:2023 quality model. Use when the user wants to document quality attributes, NFR decisions, security/performance/scalability architecture, or design systems with measurable quality criteria.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "033-architecture-diagrams",
+            "source": "./skills/033-architecture-diagrams",
+            "description": "Use when you need to generate Java project diagrams — including UML sequence diagrams, UML class diagrams, C4 model diagrams, UML state machine diagrams, and ER (Entity Relationship) diagrams — through a modular, step-based interactive process that adapts to your specific visualization needs.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "041-planning-plan-mode",
+            "source": "./skills/041-planning-plan-mode",
+            "description": "Use when creating a plan using Plan model and enhancing structured design plans in Cursor Plan mode for Java implementations. Use when the user wants to create a plan, design an implementation, structure a development plan, or use plan mode for outside-in TDD, feature implementation, or refactoring work.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "042-planning-openspec",
+            "source": "./skills/042-planning-openspec",
+            "description": "Use when you need to take a `*.plan.md` file and turn it into OpenSpec change artifacts by validating OpenSpec installation, initializing or reusing an OpenSpec project, and creating or updating a change proposal/spec/tasks flow. Includes a concrete workflow based on `examples/requirements-examples/problem1/requirements/openspec`.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "110-java-maven-best-practices",
+            "source": "./skills/110-java-maven-best-practices",
+            "description": "Use when you need to review, improve, or troubleshoot a Maven pom.xml file — including dependency management with BOMs, plugin configuration, version centralization, multi-module project structure, build profiles, or any situation where you want to align your Maven setup with industry best practices.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "111-java-maven-dependencies",
+            "source": "./skills/111-java-maven-dependencies",
+            "description": "Use when you need to add or evaluate Maven dependencies that improve code quality — including nullness annotations (JSpecify), static analysis (Error Prone + NullAway), functional programming (VAVR), or architecture testing (ArchUnit) — and want a consultative, question-driven approach that adds only what you actually need.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "112-java-maven-plugins",
+            "source": "./skills/112-java-maven-plugins",
+            "description": "Use when you need to add or configure Maven plugins in your pom.xml — including quality tools (enforcer, surefire, failsafe, jacoco, pitest, spotbugs, pmd), security scanning (OWASP), code formatting (Spotless), version management, container image build (Jib), build information tracking, and benchmarking (JMH) — through a consultative, modular step-by-step approach that only adds what you actually need.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "113-java-maven-documentation",
+            "source": "./skills/113-java-maven-documentation",
+            "description": "Use when you need to create a DEVELOPER.md file for a Maven project — combining a fixed base template with dynamic sections derived from the project pom.xml, including a Plugin Goals Reference, Maven Profiles table, and Submodules table for multi-module projects.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "114-java-maven-search",
+            "source": "./skills/114-java-maven-search",
+            "description": "Covers Maven Central search (Search API, maven-metadata.xml, artifact URLs) and project-local update reports via versions-maven-plugin (display-property-updates, display-dependency-updates, display-plugin-updates). Use when finding or verifying coordinates, browsing Central, or checking what newer versions apply to the user’s pom.xml.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "121-java-object-oriented-design",
+            "source": "./skills/121-java-object-oriented-design",
+            "description": "Use when you need to review, improve, or refactor Java code for object-oriented design quality — including applying SOLID, DRY, and YAGNI principles, improving class and interface design, fixing OOP concept misuse (encapsulation, inheritance, polymorphism), identifying and resolving code smells (God Class, Feature Envy, Data Clumps), or improving object creation patterns, method design, and exception handling.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "122-java-type-design",
+            "source": "./skills/122-java-type-design",
+            "description": "Use when you need to review, improve, or refactor Java code for type design quality — including establishing clear type hierarchies, applying consistent naming conventions, eliminating primitive obsession with domain-specific value objects, leveraging generic type parameters, creating type-safe wrappers, designing fluent interfaces, ensuring precision-appropriate numeric types (BigDecimal for financial calculations), and improving type contrast through interfaces and method signature alignment.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "123-java-exception-handling",
+            "source": "./skills/123-java-exception-handling",
+            "description": "Use when you need to apply Java exception handling best practices — including using specific exception types, managing resources with try-with-resources, securing exception messages, preserving error context via exception chaining, validating inputs early with fail-fast principles, handling thread interruption correctly, documenting exceptions with @throws, enforcing logging policy, translating exceptions at API boundaries, managing retries and idempotency, enforcing timeouts, attaching suppressed exceptions, and propagating failures in async/reactive code.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "124-java-secure-coding",
+            "source": "./skills/124-java-secure-coding",
+            "description": "Use when you need to apply Java secure coding best practices — including validating untrusted inputs, defending against injection attacks with parameterized queries, minimizing attack surface via least privilege, applying strong cryptographic algorithms, handling exceptions securely without exposing sensitive data, managing secrets at runtime, avoiding unsafe deserialization, and encoding output to prevent XSS.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "125-java-concurrency",
+            "source": "./skills/125-java-concurrency",
+            "description": "Use when you need to apply Java concurrency best practices — including thread safety fundamentals, ExecutorService thread pool management, concurrent design patterns like Producer-Consumer, asynchronous programming with CompletableFuture, immutability and safe publication, deadlock avoidance, virtual threads, scoped values, backpressure, cancellation discipline, and observability for concurrent systems.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "180-java-observability-logging",
+            "source": "./skills/180-java-observability-logging",
+            "description": "Use when you need to implement or improve Java logging and observability — including selecting SLF4J with Logback/Log4j2, applying proper log levels (ERROR, WARN, INFO, DEBUG, TRACE), parameterized logging, secure logging without sensitive data exposure, environment-specific configuration, log aggregation and monitoring, or validating logging through tests.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "128-java-generics",
+            "source": "./skills/128-java-generics",
+            "description": "Use when you need to review, improve, or refactor Java code for generics quality — including avoiding raw types, applying the PECS (Producer Extends Consumer Super) principle for wildcards, using bounded type parameters, designing effective generic methods, leveraging the diamond operator, understanding type erasure implications, handling generic inheritance correctly, preventing heap pollution with @SafeVarargs, and integrating generics with modern Java features like Records, sealed types, and pattern matching.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "130-java-testing-strategies",
+            "source": "./skills/130-java-testing-strategies",
+            "description": "Use when you need to apply testing strategies for Java code — RIGHT-BICEP to guide test creation, A-TRIP for test quality characteristics, or CORRECT for verifying boundary conditions.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "131-java-testing-unit-testing",
+            "source": "./skills/131-java-testing-unit-testing",
+            "description": "Use when you need to review, improve, or write Java unit tests — including migrating from JUnit 4 to JUnit 5, adopting AssertJ for fluent assertions, structuring tests with Given-When-Then, ensuring test independence, applying parameterized tests, mocking dependencies with Mockito, verifying boundary conditions (RIGHT-BICEP, CORRECT, A-TRIP), leveraging JSpecify null-safety annotations, or eliminating testing anti-patterns such as reflection-based tests or shared mutable state.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "132-java-testing-integration-testing",
+            "source": "./skills/132-java-testing-integration-testing",
+            "description": "Use when you need to set up, review, or improve Java integration tests — including generating a BaseIntegrationTest.java with WireMock for HTTP stubs, detecting HTTP client infrastructure from import signals, injecting service coordinates dynamically via System.setProperty(), creating WireMock JSON mapping files with bodyFileName, isolating stubs per test method, verifying HTTP interactions, or eliminating anti-patterns such as Mockito-mocked HTTP clients or globally registered WireMock stubs.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "133-java-testing-acceptance-tests",
+            "source": "./skills/133-java-testing-acceptance-tests",
+            "description": "Use when you need to implement acceptance tests from a Gherkin .feature file for framework-agnostic Java (no Spring Boot, Quarkus, Micronaut) — finding @acceptance scenarios, happy path with RestAssured, Testcontainers for DB/Kafka, WireMock for external REST. Requires .feature file in context.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "141-java-refactoring-with-modern-features",
+            "source": "./skills/141-java-refactoring-with-modern-features",
+            "description": "Use when you need to refactor Java code to adopt modern Java features (Java 8+) — including migrating anonymous classes to lambdas, replacing Iterator loops with Stream API, adopting Optional for null safety, switching from legacy Date/Calendar to java.time, using collection factory methods, applying text blocks, var inference, or leveraging Java 25 features like flexible constructor bodies and module import declarations.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "142-java-functional-programming",
+            "source": "./skills/142-java-functional-programming",
+            "description": "Use when you need to apply functional programming principles in Java — including writing immutable objects and Records, pure functions, functional interfaces, lambda expressions, Stream API pipelines, Optional for null safety, function composition, higher-order functions, pattern matching for instanceof and switch, sealed classes/interfaces for controlled hierarchies, Stream Gatherers for custom operations, currying/partial application, effect boundary separation, and concurrent-safe functional patterns.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "143-java-functional-exception-handling",
+            "source": "./skills/143-java-functional-exception-handling",
+            "description": "Use when you need to apply functional exception handling best practices in Java — including replacing exception overuse with Optional and VAVR Either types, designing error type hierarchies using sealed classes and enums, implementing monadic error composition pipelines, establishing functional control flow patterns, and reserving exceptions only for truly exceptional system-level failures.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "144-java-data-oriented-programming",
+            "source": "./skills/144-java-data-oriented-programming",
+            "description": "Use when you need to apply data-oriented programming best practices in Java — including separating code (behavior) from data structures using records, designing immutable data with pure transformation functions, keeping data flat and denormalized with ID-based references, starting with generic data structures converting to specific types when needed, ensuring data integrity through pure validation functions, and creating flexible generic data access layers.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "151-java-performance-jmeter",
+            "source": "./skills/151-java-performance-jmeter",
+            "description": "Use when you need to set up JMeter performance testing for a Java project — including creating the run-jmeter.sh script from the exact template, configuring load tests with loops, threads, and ramp-up, or running performance tests from the project root with custom or default settings.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "161-java-profiling-detect",
+            "source": "./skills/161-java-profiling-detect",
+            "description": "Use when you need to set up Java application profiling to detect and measure performance issues — including automated async-profiler v4.0 setup, problem-driven profiling (CPU, memory, threading, GC, I/O), interactive profiling scripts, JFR integration with Java 25 (JEP 518, JEP 520), or collecting profiling data with flamegraphs and JFR recordings.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "162-java-profiling-analyze",
+            "source": "./skills/162-java-profiling-analyze",
+            "description": "Use when you need to analyze Java profiling data collected during the detection phase — including interpreting flamegraphs, memory allocation patterns, CPU hotspots, threading issues, systematic problem categorization, evidence documentation with profiling-problem-analysis and profiling-solutions markdown files, or prioritizing fixes using Impact/Effort scoring.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "163-java-profiling-refactor",
+            "source": "./skills/163-java-profiling-refactor",
+            "description": "Use when you need to refactor Java code based on profiling analysis findings — including reviewing docs/profiling-problem-analysis and docs/profiling-solutions, identifying specific performance bottlenecks, and implementing targeted code changes to address CPU, memory, or threading issues.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "164-java-profiling-verify",
+            "source": "./skills/164-java-profiling-verify",
+            "description": "Use when you need to verify Java performance optimizations by comparing profiling results before and after refactoring — including baseline validation, post-refactoring report generation, quantitative before/after metrics comparison, side-by-side flamegraph analysis, regression detection, or creating profiling-comparison-analysis and profiling-final-results documentation.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "170-java-documentation",
+            "source": "./skills/170-java-documentation",
+            "description": "Use when you need to generate or improve Java project documentation — including README.md files, package-info.java files, and Javadoc enhancements — through a modular, step-based interactive process that adapts to your specific documentation needs.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "200-agents-md",
+            "source": "./skills/200-agents-md",
+            "description": "Use when you need to generate an AGENTS.md file for a Java repository — covering project conventions, tech stack, file structure, commands, Git workflow, and contributor boundaries — through a modular, step-based interactive process that adapts to your specific project needs.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "301-frameworks-spring-boot-core",
+            "source": "./skills/301-frameworks-spring-boot-core",
+            "description": "Use when you need to review, improve, or build Spring Boot 4.0.x applications — including proper usage of @SpringBootApplication, component annotations (@Controller, @Service, @Repository), bean definition and scoping, configuration classes and @ConfigurationProperties (with @Validated), component scanning, conditional configuration and profiles, constructor injection, @Primary and @Qualifier for multiple beans of the same type, bean minimization, graceful shutdown, virtual threads, Jakarta EE namespace consistency, and scheduled tasks.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "302-frameworks-spring-boot-rest",
+            "source": "./skills/302-frameworks-spring-boot-rest",
+            "description": "Use when you need to design, review, or improve REST APIs with Spring Boot — including HTTP methods, resource URIs, status codes, DTOs, versioning, deprecation and sunset headers, content negotiation (JSON and vendor media types), ISO-8601 instants in DTOs, pagination/sorting/filtering, Bean Validation at the boundary, idempotency, ETag concurrency, HTTP caching, error handling, security, contract-first OpenAPI (OpenAPI Generator), controller advice, and problem details for errors.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "311-frameworks-spring-jdbc",
+            "source": "./skills/311-frameworks-spring-jdbc",
+            "description": "Use when you need to write or review programmatic JDBC with Spring — including JdbcClient (Spring Framework 6.1+) as the default API, JdbcTemplate only where batch/streaming APIs require JdbcOperations, NamedParameterJdbcTemplate for legacy named-param code, parameterized SQL, RowMapper mapping to records, batch operations, transactions, safe handling of generated keys, DataAccessException handling, read-only transactions, streaming large result sets, and @JdbcTest slice testing.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "312-frameworks-spring-data-jdbc",
+            "source": "./skills/312-frameworks-spring-data-jdbc",
+            "description": "Use when you need to use Spring Data JDBC with Java records — including entity design with records, repository pattern, immutable updates, aggregate relationships, custom queries, transaction management, and avoiding N+1 problems.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "313-frameworks-spring-db-migrations-flyway",
+            "source": "./skills/313-frameworks-spring-db-migrations-flyway",
+            "description": "Use when you need to add or review Flyway database migrations in a Spring Boot application — Maven dependencies, db/migration scripts, spring.flyway.* configuration, baseline and validation, and alignment with JDBC or Spring Data JDBC.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "321-frameworks-spring-boot-testing-unit-tests",
+            "source": "./skills/321-frameworks-spring-boot-testing-unit-tests",
+            "description": "Use when you need to write unit tests for Spring Boot applications — including pure unit tests with @ExtendWith(MockitoExtension.class) for @Service/@Component, slice tests with @WebMvcTest and @MockitoBean for controllers, @JsonTest for JSON serialization, parameterized tests with @CsvSource/@MethodSource, test profiles, and @TestConfiguration. For framework-agnostic Java use @131-java-testing-unit-testing. For integration tests use @322-frameworks-spring-boot-testing-integration-tests.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "322-frameworks-spring-boot-testing-integration-tests",
+            "source": "./skills/322-frameworks-spring-boot-testing-integration-tests",
+            "description": "Use when you need to write or improve integration tests — including Testcontainers with @ServiceConnection, @DataJdbcTest persistence slices, TestRestTemplate or MockMvcTester for HTTP, data isolation, and container lifecycle management for Spring Boot 4.0.x.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "323-frameworks-spring-boot-testing-acceptance-tests",
+            "source": "./skills/323-frameworks-spring-boot-testing-acceptance-tests",
+            "description": "Use when you need to implement acceptance tests from a Gherkin .feature file for Spring Boot applications — including finding scenarios tagged @acceptance, implementing happy path tests with TestRestTemplate, @SpringBootTest, Testcontainers with @ServiceConnection for DB/Kafka, and WireMock for external REST stubs. Requires .feature file in context.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "401-frameworks-quarkus-core",
+            "source": "./skills/401-frameworks-quarkus-core",
+            "description": "Use when building or reviewing core Quarkus applications with CDI beans and scopes, SmallRye Config and profiles, lifecycle, interceptors and events, virtual threads, and test-friendly design.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "402-frameworks-quarkus-rest",
+            "source": "./skills/402-frameworks-quarkus-rest",
+            "description": "Use when you need to design, review, or improve REST APIs with Quarkus REST (Jakarta REST) — including resource classes, HTTP methods, status codes, request/response DTOs, Bean Validation, exception mappers, optional runtime OpenAPI exposure (SmallRye), contract-first generation from OpenAPI, content negotiation, pagination, sorting and filtering, API versioning, idempotency (Idempotency-Key), optimistic concurrency (ETag / If-Match), HTTP caching (Cache-Control), API deprecation (Sunset / Deprecation headers), RFC 7807 Problem Details, ISO-8601 for time in contracts, and security-aware boundaries.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "411-frameworks-quarkus-jdbc",
+            "source": "./skills/411-frameworks-quarkus-jdbc",
+            "description": "Use when you need programmatic JDBC in Quarkus — Agroal DataSource, parameterized SQL, transactions, batching, and Dev Services.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "412-frameworks-quarkus-panache",
+            "source": "./skills/412-frameworks-quarkus-panache",
+            "description": "Use when you need data access with Quarkus Hibernate ORM Panache — including PanacheEntity / PanacheEntityBase, PanacheRepository, named queries, JPQL, native SQL, DTO projections (project(Class)), pagination (Page.of()), N+1 avoidance (JOIN FETCH), optimistic locking (@Version / OptimisticLockException), @NamedQuery for validated reusable queries, transactions, @TestTransaction for test isolation, and immutable-friendly patterns. This is the Quarkus analogue to Spring Data for relational persistence.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "413-frameworks-quarkus-db-migrations-flyway",
+            "source": "./skills/413-frameworks-quarkus-db-migrations-flyway",
+            "description": "Use when you need to add or review Flyway database migrations in a Quarkus application — quarkus-flyway extension, db/migration scripts, quarkus.flyway.* configuration, migrate-at-start, and alignment with JDBC or Panache.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "421-frameworks-quarkus-testing-unit-tests",
+            "source": "./skills/421-frameworks-quarkus-testing-unit-tests",
+            "description": "Use when you need to write fast unit tests for Quarkus applications — including pure tests with @ExtendWith(MockitoExtension.class), @QuarkusTest with @InjectMock for full CDI mock replacement, @InjectSpy for partial CDI bean mocking, REST Assured for resource-focused tests, @ParameterizedTest with @CsvSource / @MethodSource, QuarkusTestProfile for test-specific configuration overrides, and naming conventions (*Test → Surefire, *IT → Failsafe). For framework-agnostic Java use @131-java-testing-unit-testing.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "422-frameworks-quarkus-testing-integration-tests",
+            "source": "./skills/422-frameworks-quarkus-testing-integration-tests",
+            "description": "Use when you need to write or improve integration tests for Quarkus — including @QuarkusTest, Dev Services for automatic container provisioning, Testcontainers via QuarkusTestResourceLifecycleManager, WireMock for external HTTP stubs, @QuarkusIntegrationTest for black-box testing against packaged artifacts, REST Assured, data isolation strategies (@TestTransaction vs @BeforeEach cleanup), and Maven Surefire/Failsafe three-tier split (*Test, *IT, *AT).",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "423-frameworks-quarkus-testing-acceptance-tests",
+            "source": "./skills/423-frameworks-quarkus-testing-acceptance-tests",
+            "description": "Use when you need to implement acceptance tests from a Gherkin .feature file for Quarkus applications — including @acceptance scenarios, @QuarkusTest, BaseAcceptanceTest with QuarkusTestResourceLifecycleManager for Testcontainers and WireMock, REST Assured for full HTTP pipeline testing, WireMock JSON mapping files (classpath:wiremock/mappings/), *AT suffix naming, and Maven Surefire/Failsafe three-tier split. Requires the .feature file in context.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "501-frameworks-micronaut-core",
+            "source": "./skills/501-frameworks-micronaut-core",
+            "description": "Use when building or reviewing Micronaut applications — Micronaut.run bootstrap, @Singleton/@Prototype, @Factory beans, @ConfigurationProperties, environments, @Requires, @Controller vs services, @Scheduled, graceful shutdown, @ExecuteOn for blocking work, and Jakarta-consistent APIs.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "502-frameworks-micronaut-rest",
+            "source": "./skills/502-frameworks-micronaut-rest",
+            "description": "Use when you need to design, review, or improve REST APIs with Micronaut — including @Controller routes, HTTP status codes, DTOs, Bean Validation, exception handlers, pagination, idempotency, ETag/If-Match, caching headers, versioning, contract-first OpenAPI (OpenAPI Generator), optional runtime OpenAPI via micronaut-openapi, and security annotations.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "511-frameworks-micronaut-jdbc",
+            "source": "./skills/511-frameworks-micronaut-jdbc",
+            "description": "Use when you need programmatic JDBC in Micronaut — pooled DataSource, parameterized SQL, io.micronaut.transaction.annotation.Transactional, batching, and domain exception translation.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "512-frameworks-micronaut-data",
+            "source": "./skills/512-frameworks-micronaut-data",
+            "description": "Use when you need data access with Micronaut Data — @MappedEntity, CrudRepository/PageableRepository, @Query with parameters, @Transactional services, projections, @Version, and @MicronautTest with TestPropertyProvider and Testcontainers. For raw java.sql access without generated repositories, use @511-frameworks-micronaut-jdbc.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "513-frameworks-micronaut-db-migrations-flyway",
+            "source": "./skills/513-frameworks-micronaut-db-migrations-flyway",
+            "description": "Use when you need to add or review Flyway database migrations in a Micronaut application — micronaut-flyway, db/migration scripts, flyway.datasources.* configuration, and alignment with JDBC or Micronaut Data.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "521-frameworks-micronaut-testing-unit-tests",
+            "source": "./skills/521-frameworks-micronaut-testing-unit-tests",
+            "description": "Use when you need to write unit tests for Micronaut applications — Mockito-first with @ExtendWith(MockitoExtension.class), @MicronautTest with @MockBean, HttpClient @Client(\"/\") assertions, @Property overrides, @ParameterizedTest, and *Test vs *IT naming. For framework-agnostic Java use @131-java-testing-unit-testing.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "522-frameworks-micronaut-testing-integration-tests",
+            "source": "./skills/522-frameworks-micronaut-testing-integration-tests",
+            "description": "Use when you need to write or improve integration tests for Micronaut — @MicronautTest, HttpClient, TestPropertyProvider with Testcontainers, transactional test mode where appropriate, and Maven Surefire/Failsafe splits for *Test, *Tests, *IT, and *AT.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "523-frameworks-micronaut-testing-acceptance-tests",
+            "source": "./skills/523-frameworks-micronaut-testing-acceptance-tests",
+            "description": "Use when you need to implement acceptance tests from a Gherkin .feature file for Micronaut applications — @acceptance scenarios, @MicronautTest, HttpClient, BaseAcceptanceTest with TestPropertyProvider for Testcontainers and WireMock, *AT suffix, Failsafe. Requires the .feature file in context.",
+            "version": "0.14.0-SNAPSHOT"
+        }
+    ]
+}
