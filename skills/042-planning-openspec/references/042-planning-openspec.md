@@ -87,6 +87,7 @@ openspec list
 
 - **MUST** run commands from the project directory context expected by OpenSpec
 - **MUST** distinguish between creating a fresh OpenSpec project vs updating an existing one
+- **MUST** use plain `openspec init` (without any `--tools ...` options) when initializing a new OpenSpec project
 
 ### Step 4: Create or Update a Change
 

@@ -90,6 +90,7 @@ openspec list
                 <step-constraint-list>
                     <step-constraint>**MUST** run commands from the project directory context expected by OpenSpec</step-constraint>
                     <step-constraint>**MUST** distinguish between creating a fresh OpenSpec project vs updating an existing one</step-constraint>
+                    <step-constraint>**MUST** use plain `openspec init` (without any `--tools ...` options) when initializing a new OpenSpec project</step-constraint>
                 </step-constraint-list>
             </step-constraints>
         </step>

@@ -28,6 +28,7 @@ Always execute OpenSpec commands from the parent directory that contains the `op
 - **MUST**: Check CLI availability with `openspec --version` before any OpenSpec operation
 - **MUST**: If OpenSpec is missing, provide macOS, Linux, and Windows install guidance via npm command
 - **MUST**: Offer `openspec init` when no OpenSpec project exists
+- **MUST**: When creating a new OpenSpec project, run plain `openspec init` only (do not use `--tools ...` options)
 - **MUST**: Use a stable change-id (for example: `add-dark-mode`) for status/show/archive commands
 - **MUST**: Run `openspec validate --all` before archiving
 - **MUST**: Explain whether the workflow creates a new change or updates an existing one

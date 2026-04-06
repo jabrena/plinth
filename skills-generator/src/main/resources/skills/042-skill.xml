@@ -32,6 +32,7 @@ Guide the process of turning an implementation plan (`*.plan.md`) into an OpenSp
       <constraint>**MUST**: Check CLI availability with `openspec --version` before any OpenSpec operation</constraint>
       <constraint>**MUST**: If OpenSpec is missing, provide macOS, Linux, and Windows install guidance via npm command</constraint>
       <constraint>**MUST**: Offer `openspec init` when no OpenSpec project exists</constraint>
+      <constraint>**MUST**: When creating a new OpenSpec project, run plain `openspec init` only (do not use `--tools ...` options)</constraint>
       <constraint>**MUST**: Use a stable change-id (for example: `add-dark-mode`) for status/show/archive commands</constraint>
       <constraint>**MUST**: Run `openspec validate --all` before archiving</constraint>
       <constraint>**MUST**: Explain whether the workflow creates a new change or updates an existing one</constraint>
