@@ -1,0 +1,25 @@
+schema: spec-driven
+
+context: |
+  This project maintains skills and agents for Java Enterprise development.
+
+  **Complete project context is documented in AGENTS.md**
+
+rules:
+  proposal:
+    - Include impact assessment for breaking changes
+    - Reference GitHub issues when applicable
+    - Consider cross-tool compatibility implications
+    - Include migration path for existing users
+  specs:
+    - Use Given/When/Then format for scenarios
+    - Include SHALL or MUST in requirement statements
+    - Reference existing Maven modules and build processes
+    - Consider both generator architecture and user experience
+  tasks:
+    - Break down complex Maven operations into discrete steps
+    - Include validation steps after each major change
+    - Reference specific file paths and module names
+    - Consider CI/CD pipeline impacts
+
+specsPath: openspec/specs

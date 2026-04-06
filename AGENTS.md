@@ -16,12 +16,28 @@ You are an expert Java developer and technical writer for this project.
 - **Rule pipeline:** XML → XInclude → XSLT → Markdown cursor rules
 - **Site generator:** JBake 2.7.0 with FreeMarker templates → GitHub Pages
 
+## Change workflow
+
+This project uses **OpenSpec** for structured change management and planning:
+
+**GitHub Issues → OpenSpec → Agents + Skills**
+
+1. **GitHub Issues** - Track problems, features, and architectural decisions
+2. **OpenSpec** (`documentation/openspec/`) - Plan and coordinate implementation through:
+   - **Proposals** - Problem statements and solution approaches
+   - **Specs** - Requirements with Given/When/Then scenarios
+   - **Tasks** - Detailed implementation checklists
+3. **Agents + Skills** - Generate the actual cursor rules and agent skills
+
+**Key principle**: Complex changes (especially architectural ones) should be planned in OpenSpec before implementation to ensure thorough analysis and stakeholder alignment.
+
 ## File structure
 
 - `skills/` – Generated SKILLS (READ only, never edit directly)
 - `.cursor/rules/` – Generated Cursor rules (READ only, never edit directly)
 - `system-prompts-generator/src/main/resources/` – XML rule sources (WRITE here to change rules) and generate rules into `.cursor/rules`
 - `skills-generator/` – Generates agent skills from cursor rules into `skills/`
+- `documentation/openspec/` – OpenSpec change management (proposals, specs, tasks)
 
 ### Framework rule and skill indices
 
@@ -53,6 +69,14 @@ Numeric prefixes group related prompts. **Spring Boot** uses `301`–`302` (core
 
 # Validate agent skills
 npx skill-check skills
+
+# OpenSpec change management (run from documentation/ directory)
+cd documentation/
+openspec list                        # List all changes and their progress
+openspec show <change-name>          # Show details of a specific change
+openspec validate --all              # Validate all changes meet requirements
+openspec new change <change-name>    # Create a new change
+openspec archive <change-name>       # Archive a completed change
 
 ```
 
@@ -86,7 +110,6 @@ pre-commit run conventional-pre-commit --hook-stage commit-msg --commit-msg-file
 
 ## Boundaries
 
-- ✅ **Always do:** Edit XML in `system-prompts-generator/src/main/resources/` to change rules, run `./mvnw clean verify` before promoting changes. When edit XML, follow PML Schema: [https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd](https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd).
-- ⚠️ **Ask first:** Adding new XML rule files, modifying the XSLT stylesheet, changing site templates
-- 🚫 **Never do:** Edit `.cursor/rules/` or `docs/` directly, commit secrets, skip tests before promoting
-
+- ✅ **Always do:** Edit XML in `system-prompts-generator/src/main/resources/` to change rules, run `./mvnw clean verify` before promoting changes. When edit XML, follow PML Schema: [https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd](https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd). For complex changes, create OpenSpec proposals first.
+- ⚠️ **Ask first:** Adding new XML rule files, modifying the XSLT stylesheet, changing site templates, architectural changes (use OpenSpec for planning)
+- 🚫 **Never do:** Edit `.cursor/rules/` or `docs/` directly, commit secrets, skip tests before promoting, bypass OpenSpec for major changes
