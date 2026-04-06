@@ -9,6 +9,7 @@
   {"name": "032-architecture-adr-non-functional-requirements"},
   {"name": "033-architecture-diagrams"},
   {"name": "041-planning-plan-mode"},
+  {"name": "042-planning-openspec"},
   {"name": "110-java-maven-best-practices"},
   {"name": "111-java-maven-dependencies"},
   {"name": "112-java-maven-plugins"},
