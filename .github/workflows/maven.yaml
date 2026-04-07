@@ -3,30 +3,6 @@ name: CI Builds
 on: [push]
 
 jobs:
-  generate-cursor-rules:
-    name: Generate Cursor Rules
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          submodules: true  # Fetches all submodules
-      - uses: actions/setup-java@v5
-        with:
-          distribution: 'graalvm' # See 'Supported distributions' for available options
-          java-version: '25'
-      - name: Generate Cursor Rules
-        run: ./mvnw --batch-mode --no-transfer-progress verify --file pom.xml
-      - name: Archive Cursor Rules
-        run: |
-          zip -r cursor-rules.zip .cursor/
-          echo "Created cursor-rules.zip with $(du -h cursor-rules.zip | cut -f1) size"
-      - name: Upload Cursor Rules Archive
-        uses: actions/upload-artifact@v7
-        with:
-          name: cursor-rules
-          path: cursor-rules.zip
-          retention-days: 90
-
   validate-markdown:
     name: Validate Markdown Files
     runs-on: ubuntu-latest
