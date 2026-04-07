@@ -3,7 +3,6 @@ target/
 .idea/
 .vscode/
 .classpath
-.claude
 .agents
 dependency-reduced-pom.xml
 docs-local/
