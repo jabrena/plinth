@@ -63,6 +63,7 @@
   {"name": "521-frameworks-micronaut-testing-unit-tests"},
   {"name": "522-frameworks-micronaut-testing-integration-tests"},
   {"name": "523-frameworks-micronaut-testing-acceptance-tests"},
+  {"name": "701-technologies-openapi"},
   {"name": "behaviour-consultative-interaction"},
   {"name": "behaviour-progressive-learning"},
   {"name": "behaviour-article-writer"}
