@@ -42,10 +42,6 @@ This project uses **OpenSpec** for structured change management and planning:
 - `site-generator/content/` – Blog posts, courses, documentation (WRITE here to update website)
 - `docs/` – Generated static website for GitHub Pages (READ only)
 
-### Skill and system-prompt numbering
-
-Numeric prefixes group related prompts. **Spring Boot** uses `301`–`302` (core, REST), `311`–`313` (JDBC, Spring Data JDBC, Flyway), and `321`–`323` (testing). **Quarkus** uses the same shape starting at **`401`**. **Micronaut** uses **`501`–`523`** with the same grouping. The **`700`–`799`** range is for **cross-cutting technologies**; **`701`** is **OpenAPI 3.x** contract best practices (`701-technologies-openapi`). Use `302` / `402` / `502` for framework-specific REST work, not `701`.
-
 ## Commands
 
 ```bash
