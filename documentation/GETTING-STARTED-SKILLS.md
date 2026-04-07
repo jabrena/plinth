@@ -12,7 +12,7 @@ At its core, a skill is a folder containing a SKILL.md file. This file includes 
 
 ## How to install the Skills?
 
-### npx skills
+### Using a Registry: npx skills
 
 Use the following commands to list and install the Skills:
 
@@ -27,7 +27,13 @@ npx skills add jabrena/cursor-rules-java --all --agent cursor
 npx skills add jabrena/cursor-rules-java --all --agent claude-code
 ```
 
-### skillsjars
+### Using Claude plugins
+
+```bash
+claude plugin marketplace add https://github.com/jabrena/cursor-rules-java
+```
+
+### Using Skillsjars
 
 https://www.skillsjars.com/
 https://github.com/skillsjars/skillsjars-maven-plugin
