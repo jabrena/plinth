@@ -160,6 +160,15 @@ See: [Relative path to Gherkin file]
 ## Notes
 
 [Additional notes if provided]
+
+## INVEST Validation
+
+- **Independent**: [How this story can be delivered without depending on another unfinished story]
+- **Negotiable**: [What parts can be discussed/refined while preserving intent]
+- **Valuable**: [Clear user/business value delivered by this story]
+- **Estimable**: [Why the team can estimate size/effort with current information]
+- **Small**: [Why this can fit in a single iteration]
+- **Testable**: [How acceptance checks prove completion]
 ```
 
 **Gherkin Feature File**
@@ -201,6 +210,7 @@ For multiple scenarios, add each as a separate Scenario block. Use Scenario Outl
 - **MUST** ensure each scenario has Given, When, Then steps
 - **MUST** use docstrings or Example tables for complex data when user provided examples
 - **MUST** use filenames provided by the user for the generated content
+- **MUST** include an INVEST validation section in the user story output with practical evidence for each criterion
 
 ### Step 3: Output Checklist
 
@@ -212,6 +222,12 @@ Before finalizing, verify:
 - [ ] Exactly one scenario is `@acceptance-test` (happy path); all others are `@integration-test`
 - [ ] Each scenario has Given, When, Then
 - [ ] Complex data uses docstrings or Example tables
+- [ ] Independent: story can be delivered without unresolved dependencies on another unfinished story
+- [ ] Negotiable: scope details can be refined without losing user value
+- [ ] Valuable: user/business value is explicit and concrete
+- [ ] Estimable: acceptance criteria are concrete enough for sizing
+- [ ] Small: scope is feasible for one iteration
+- [ ] Testable: completion can be objectively verified through acceptance criteria
 
 ## Output Format
 
