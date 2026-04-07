@@ -27,6 +27,7 @@
   {"name": "131-java-testing-unit-testing"},
   {"name": "132-java-testing-integration-testing"},
   {"name": "133-java-testing-acceptance-tests"},
+  {"name": "134-java-testing-fuzzing-testing"},
   {"name": "141-java-refactoring-with-modern-features"},
   {"name": "142-java-functional-programming"},
   {"name": "143-java-functional-exception-handling"},
