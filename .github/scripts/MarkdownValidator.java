@@ -17,8 +17,8 @@ import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.stream.Stream;
 
-@Command(name = "markdown-validator", 
-         mixinStandardHelpOptions = true, 
+@Command(name = "markdown-validator",
+         mixinStandardHelpOptions = true,
          version = "1.0",
          description = "Validates markdown files from specified directories")
 public class MarkdownValidator implements Callable<Integer> {
@@ -29,10 +29,10 @@ public class MarkdownValidator implements Callable<Integer> {
     @Option(names = {"-f", "--fail-fast"}, description = "Stop on first validation error")
     boolean failFast;
 
-    @Option(names = {"-d", "--directories"}, 
-            description = "Directories to scan for markdown files (default: .cursor/rules,.cursor/rules/templates)",
+    @Option(names = {"-d", "--directories"},
+            description = "Directories to scan for markdown files (default: .cursor/rules,skills,.cursor/agents)",
             split = ",")
-    List<String> targetDirectories = List.of(".cursor/rules", ".cursor/rules/templates");
+    List<String> targetDirectories = List.of(".cursor/rules", "skills", ".cursor/agents");
 
     @Parameters(description = "Root directory to scan (default: current directory)")
     String rootDir = ".";
@@ -56,7 +56,7 @@ public class MarkdownValidator implements Callable<Integer> {
     @Override
     public Integer call() throws Exception {
         System.out.println("🔍 Starting markdown validation...");
-        
+
         Path root = Paths.get(rootDir);
         if (!Files.exists(root)) {
             System.err.println("❌ Root directory does not exist: " + root);
@@ -84,7 +84,7 @@ public class MarkdownValidator implements Callable<Integer> {
 
     private List<Path> findMarkdownFiles(Path root) throws IOException {
         List<Path> files = new ArrayList<>();
-        
+
         for (String targetDir : targetDirectories) {
             Path dir = root.resolve(targetDir);
             if (Files.exists(dir) && Files.isDirectory(dir)) {
@@ -97,7 +97,7 @@ public class MarkdownValidator implements Callable<Integer> {
                 System.out.printf("⚠️  Directory not found: %s\n", dir);
             }
         }
-        
+
         return files;
     }
 
@@ -121,18 +121,18 @@ public class MarkdownValidator implements Callable<Integer> {
         try {
             // Parse markdown content
             Node document = parser.parse(content);
-            
+
             // Try to render to HTML to validate structure
             String html = renderer.render(document);
-            
+
             // Assert that HTML output is not null
             if (html == null) {
                 addError(file, 0, "HTML rendering produced null output");
                 return;
             }
-            
+
             if (verbose) {
-                System.out.printf("✅ Successfully parsed: %s (%d characters, HTML: %d characters)\n", 
+                System.out.printf("✅ Successfully parsed: %s (%d characters, HTML: %d characters)\n",
                     file.getFileName(), content.length(), html.length());
             }
         } catch (Exception e) {
@@ -149,17 +149,17 @@ public class MarkdownValidator implements Callable<Integer> {
 
     private void printResults() {
         System.out.println("\n" + "=".repeat(60));
-        
+
         if (errors.isEmpty()) {
             System.out.println("✅ All markdown files are valid!");
         } else {
             System.out.printf("❌ Found %d validation errors:\n\n", errors.size());
-            
+
             Map<Path, List<ValidationError>> errorsByFile = new LinkedHashMap<>();
             for (ValidationError error : errors) {
                 errorsByFile.computeIfAbsent(error.file, k -> new ArrayList<>()).add(error);
             }
-            
+
             for (Map.Entry<Path, List<ValidationError>> entry : errorsByFile.entrySet()) {
                 System.out.printf("📄 %s:\n", entry.getKey());
                 for (ValidationError error : entry.getValue()) {
@@ -172,7 +172,7 @@ public class MarkdownValidator implements Callable<Integer> {
                 System.out.println();
             }
         }
-        
+
         System.out.println("=".repeat(60));
     }
 
