@@ -1,4 +1,4 @@
-# Rules, Skills & Agents for Java
+# Skills & Agents for Java
 
 ## Stargazers over time
 
@@ -8,11 +8,11 @@
 
 ## Goal
 
-A curated collection of `Rules`, `Skills`, and `Agents` for Java Enterprise development, designed to streamline modern `SDLC` workflows.
+A curated collection of `Skills`, and `Agents` for Java Enterprise development, designed to streamline modern `SDLC` workflows.
 
 | QUESTION   | ROLE               | AREA             | SUPPORT                                                                                                                                                                                                             |
 | ---------- | ------------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| WHAT       | PO, BA, EA, SA, TL | Agile            | `User Stories` & `Github Issues`                                                                                                                                                                                    |
+| WHAT       | PO, BA, EA, SA, TL | Agile            | `User Stories`, `Github Issues` & `Jira`                                                                                                                                                                                    |
 | WHY        | EA, SL, TL         | Architecture     | `ADRs` & `UML` / `C4` / `ER` Diagrams                                                                                                                                                                               |
 | WHEN / HOW | SA, TL, SWE        | Spec-Driven      | `AGENTS.md`, `AI Plan mode` & `OpenSpec`                                                                                                                                                                            |
 | HOW        | TL, SWE            | Java development | `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools` & `Documentation` |
@@ -26,23 +26,21 @@ The project generates a set of deliverables at the end of any iteration.
 
 | Deliverable             | Location                                                                                   |
 | ----------------------- | ------------------------------------------------------------------------------------------ |
-| System prompts for Java | [Catalog](./SYSTEM-PROMPTS-JAVA.md) (`.cursor/rules`)                                      |
 | Skills for Java         | [https://skills.sh/jabrena/cursor-rules-java](https://skills.sh/jabrena/cursor-rules-java) |
 | Agents for Java         | [Catalog](.cursor/agents) (`.cursor/agents`)                                               |
 
 
 ### Compatibility
 
-This project is compatible with any Tool compatible with `Skills`, `Agents` or `AGENTS.md` like `Cursor AI`, `Claude Code` & `Github Copilot`.
+This project is compatible with any Tool compatible with `Skills`, `Agents` or `AGENTS.md`.
 
 ## Getting started
 
 Read the following comprehensive guides to use this project today.
 
-- [Getting started with `System prompts for Java`](./documentation/GETTING-STARTED-SYSTEM-PROMPTS.md)
 - [Getting started with `Skills for Java`](./documentation/GETTING-STARTED-SKILLS.md)
-- [Getting started with `Pipelines and AI`](./documentation/GETTING-STARTED-PIPELINES.md)
-- [Getting started with `Agents`](./documentation/GETTING-STARTED-AGENTS.md)
+- [Getting started with `Agents for Java`](./documentation/GETTING-STARTED-AGENTS.md)
+- [Getting started with `CI/CD Pipelines and AI Capabilities`](./documentation/GETTING-STARTED-PIPELINES.md)
 
 ## How to use them?
 
