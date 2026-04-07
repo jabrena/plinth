@@ -64,6 +64,7 @@
   {"name": "522-frameworks-micronaut-testing-integration-tests"},
   {"name": "523-frameworks-micronaut-testing-acceptance-tests"},
   {"name": "701-technologies-openapi"},
+  {"name": "702-technologies-wiremock"},
   {"name": "behaviour-consultative-interaction"},
   {"name": "behaviour-progressive-learning"},
   {"name": "behaviour-article-writer"}
