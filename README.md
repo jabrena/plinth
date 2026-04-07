@@ -17,7 +17,7 @@ A curated collection of `Skills`, and `Agents` for Java Enterprise development, 
 | WHEN / HOW | SA, TL, SWE        | Spec-Driven      | `AGENTS.md`, `AI Plan mode` & `OpenSpec`                                                                                                                                                                            |
 | HOW        | TL, SWE            | Java development | `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools` & `Documentation` |
 | HOW        | TL, SWE            | Java frameworks  | `Spring Boot`, `Quarkus` & `Micronaut`                                                                                                                                                                              |
-
+| HOW        | TL, SWE            | Technologies & Libraries  | `OpenAPI`, `Wiremock`                                                                                                                                                                             |
 
 ## Deliverables
 
