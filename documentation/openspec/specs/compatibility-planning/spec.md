@@ -1,36 +1,46 @@
 # compatibility-planning Specification
 
 ## Purpose
-TBD - created by archiving change phase-0-decision-compatibility. Update Purpose after archive.
+Define the ongoing compatibility policy for this project so contributors can evolve Skills, Agents, AGENTS.md guidance, and OpenSpec workflows without creating avoidable downstream breakage. This specification establishes how compatibility targets are identified, how breaking changes are communicated, and which repository artifacts must stay aligned when compatibility-impacting decisions are made.
 ## Requirements
-### Requirement: Breaking Change Policy
-The project SHALL establish a clear breaking change policy for the rules-to-skills migration.
+### Requirement: Compatibility Surface Definition
+The project SHALL maintain a clear, documented compatibility surface aligned with the repository goal and deliverables.
 
-#### Scenario: Version bump planning
-- **Given** the migration removes `.cursor/rules` support
-- **When** planning the release
-- **Then** a major version bump to v0.14.0 is planned
-- **And** breaking change documentation is prepared
-- **And** migration guidance is created for users
+#### Scenario: Compatibility targets are explicit
+- **Given** contributors are planning a change that affects generated guidance or project workflows
+- **When** they evaluate compatibility impact
+- **Then** they identify impacted surfaces across `skills/`, `.cursor/agents`, `AGENTS.md` conventions, and OpenSpec-based planning artifacts
+- **And** they document which user-facing contracts are expected to remain stable
+- **And** they record any intentionally unsupported legacy behavior as out of scope
 
-### Requirement: Dependency Inventory
-The project SHALL maintain a complete inventory of systems dependent on the current architecture.
+### Requirement: Breaking Change Governance
+The project SHALL apply explicit governance for breaking changes that affect supported compatibility surfaces.
 
-#### Scenario: Complete dependency mapping
-- **Given** the migration is being planned
-- **When** conducting the dependency audit
-- **Then** all references to `system-prompts-generator` are identified
-- **And** all references to `.cursor/rules` are catalogued
-- **And** all site templates and CI dependencies are mapped
-- **And** all example projects are inventoried
+#### Scenario: Breaking change is proposed
+- **Given** a proposed change alters expected behavior for supported consumers
+- **When** the change is reviewed
+- **Then** the change is marked as breaking
+- **And** semantic versioning impact is documented before release
+- **And** migration guidance is written for downstream users
+- **And** related ADR and/or OpenSpec change records are linked
 
-### Requirement: Artifact Naming Strategy
-The project SHALL define a clear naming strategy for the merged generator module.
+### Requirement: Ecosystem and Dependency Impact Mapping
+The project SHALL evaluate ecosystem and repository dependencies before compatibility-impacting changes are accepted.
 
-#### Scenario: Naming decisions documented
-- **Given** the generators will be merged
-- **When** making naming decisions
-- **Then** the final artifact name is decided
-- **And** Maven coordinates are confirmed
-- **And** backward compatibility implications are understood
+#### Scenario: Impact assessment is completed
+- **Given** a compatibility-relevant change is in planning
+- **When** maintainers perform impact analysis
+- **Then** they map affected documentation, CI workflows, examples, and generator modules
+- **And** they identify downstream usage assumptions that may fail after the change
+- **And** they capture mitigation actions in tasks or migration notes
+
+### Requirement: Documentation and Delivery Alignment
+The project SHALL keep public documentation and validated delivery outputs aligned with the compatibility policy.
+
+#### Scenario: Release preparation validates compatibility communication
+- **Given** compatibility-impacting work is ready for release
+- **When** release preparation is performed
+- **Then** `README.md` and relevant getting-started/contributor documentation reflect the current supported workflow
+- **And** generated deliverables remain consistent with the documented compatibility surface
+- **And** verification commands used by the project continue to pass for the supported pipeline
 

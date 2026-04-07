@@ -16,6 +16,7 @@ Guide the agent to ask targeted questions to gather details for a user story and
 - Gherkin feature file: Feature name, background steps, scenarios
 - Acceptance criteria: Given / When / Then with data examples
 - File naming and linking between user story and feature file
+- INVEST quality validation before finalization (Independent, Negotiable, Valuable, Estimable, Small, Testable)
 
 ## Constraints
 
@@ -25,6 +26,7 @@ Before generating artifacts, gather all required information through structured 
 - **MUST**: Read the reference template fresh and use exact wording—do not use cached questions
 - **MUST**: Wait for user response after each question or block before proceeding
 - **MUST**: Repeat scenario questions for each additional scenario when user indicates more scenarios
+- **MUST**: Validate the final user story against INVEST and present a pass/fail checkpoint for each criterion before finalizing
 
 ## When to use this skill
 
