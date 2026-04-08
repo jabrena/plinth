@@ -8,7 +8,7 @@
 
 ## Goal
 
-A curated collection of `Skills`, and `Agents` for Java Enterprise development, designed to streamline modern `SDLC` workflows.
+A curated collection of `Skills` and `Agents` for Java Enterprise development, designed to streamline modern `SDLC` workflows.
 
 | QUESTION   | ROLE               | AREA             | SUPPORT                                                                                                                                                                                                             |
 | ---------- | ------------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
