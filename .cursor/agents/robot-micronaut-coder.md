@@ -34,6 +34,7 @@ Apply guidance from these Skills when relevant:
 - `@521-frameworks-micronaut-testing-unit-tests`: Micronaut unit testing
 - `@522-frameworks-micronaut-testing-integration-tests`: Micronaut integration testing
 - `@523-frameworks-micronaut-testing-acceptance-tests`: Micronaut acceptance testing
+- `@702-technologies-wiremock`: Improve tests with Wiremock
 
 ### Workflow
 

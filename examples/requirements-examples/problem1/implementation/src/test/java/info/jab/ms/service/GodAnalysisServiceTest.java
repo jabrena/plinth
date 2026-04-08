@@ -1,49 +1,84 @@
 package info.jab.ms.service;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.mockito.Mockito.when;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-import info.jab.ms.client.GodDataClient;
+import info.jab.ms.api.model.PantheonSource;
+import info.jab.ms.exception.BadRequestException;
+import java.math.BigInteger;
 import java.util.List;
-import java.util.concurrent.Executor;
-import org.junit.jupiter.api.BeforeEach;
+import java.util.Set;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
-import org.mockito.junit.jupiter.MockitoExtension;
 
-@ExtendWith(MockitoExtension.class)
 class GodAnalysisServiceTest {
 
-	private static final Executor SYNC_EXECUTOR = Runnable::run;
+    @Test
+    void shouldParseSourcesAsUniqueSet() {
+        var service = new GodAnalysisService(source -> List.of());
 
-	@Mock
-	private GodDataClient godDataClient;
+        var sources = service.parseSources("greek, roman, greek");
 
-	private GodAnalysisService godAnalysisService;
+        assertThat(sources).containsExactlyInAnyOrder(PantheonSource.GREEK, PantheonSource.ROMAN);
+    }
 
-	@BeforeEach
-	void setUp() {
-		godAnalysisService = new GodAnalysisService(godDataClient, SYNC_EXECUTOR);
-	}
+    @Test
+    void shouldRejectUnsupportedSource() {
+        var service = new GodAnalysisService(source -> List.of());
 
-	@Test
-	void aggregatesAcrossSourcesWithPinnedHappyPathSum() {
-		when(godDataClient.fetchNames("greek")).thenReturn(List.of("Nike", "Nemesis"));
-		when(godDataClient.fetchNames("roman")).thenReturn(List.of("Neptun"));
-		when(godDataClient.fetchNames("nordic")).thenReturn(List.of("Njord"));
+        assertThatThrownBy(() -> service.parseSources("greek,egyptian"))
+            .isInstanceOf(BadRequestException.class)
+            .hasMessageContaining("unsupported value: 'egyptian'");
+    }
 
-		String sum = godAnalysisService.sumForSources("n", List.of("greek", "roman", "nordic"));
+    @Test
+    void shouldApplyCaseSensitiveFirstCharacterFilter() {
+        var service = new GodAnalysisService(source -> List.of(
+            new GodData("nyx", BigInteger.TEN),
+            new GodData("Nyx", BigInteger.ONE)
+        ));
 
-		assertThat(sum).isEqualTo("78179288397447443426");
-	}
+        var lowercase = service.aggregateByFilter("n", "greek");
+        var uppercase = service.aggregateByFilter("N", "greek");
 
-	@Test
-	void returnsZeroWhenNoNamesMatchFilter() {
-		when(godDataClient.fetchNames("greek")).thenReturn(List.of("zeus"));
+        assertThat(lowercase).isEqualTo("10");
+        assertThat(uppercase).isEqualTo("1");
+    }
 
-		String sum = godAnalysisService.sumForSources("N", List.of("greek"));
+    @Test
+    void shouldAggregateWithBigIntegerAndDeterministicMergeAcrossRuns() {
+        var service = new GodAnalysisService(source -> switch (source) {
+            case GREEK -> List.of(new GodData("nyx", new BigInteger("9999999999999999999")));
+            case ROMAN -> List.of(new GodData("neptune", new BigInteger("8888888888888888888")));
+            case NORDIC -> List.of(new GodData("njord", new BigInteger("7777777777777777777")));
+        });
 
-		assertThat(sum).isEqualTo("0");
-	}
+        var first = service.aggregateByFilter("n", "greek,roman,nordic");
+        var second = service.aggregateByFilter("n", "nordic,greek,roman");
+
+        assertThat(first).isEqualTo("26666666666666666664");
+        assertThat(second).isEqualTo(first);
+    }
+
+    @Test
+    void shouldFallbackToEmptySourceContributionWhenSourceFails() {
+        var service = new GodAnalysisService(source -> {
+            if (Set.of(PantheonSource.ROMAN).contains(source)) {
+                throw new IllegalStateException("simulated-upstream-failure");
+            }
+            return List.of(new GodData("nyx", BigInteger.valueOf(5)));
+        });
+
+        var result = service.aggregateByFilter("n", "greek,roman");
+
+        assertThat(result).isEqualTo("5");
+    }
+
+    @Test
+    void shouldKeepA1HappyPathValue() {
+        var service = new GodAnalysisService(new InMemoryPantheonDataSource());
+
+        var result = service.aggregateByFilter("n", "greek,roman,nordic");
+
+        assertThat(result).isEqualTo("78179288397447443426");
+    }
 }

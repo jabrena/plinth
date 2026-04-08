@@ -37,6 +37,7 @@ Apply guidance from these Skills when relevant:
 - `@321-frameworks-spring-boot-testing-unit-tests`: Spring Boot unit testing
 - `@322-frameworks-spring-boot-testing-integration-tests`: Spring Boot integration testing
 - `@323-frameworks-spring-boot-testing-acceptance-tests`: Spring Boot acceptance testing
+- `@702-technologies-wiremock`: Improve tests with Wiremock
 
 ### Workflow
 
