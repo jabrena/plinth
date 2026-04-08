@@ -1,25 +1,33 @@
 package info.jab.ms.algorithm;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import java.math.BigInteger;
 import org.junit.jupiter.api.Test;
 
 class UnicodeAggregatorTest {
 
-	@Test
-	void zeusExampleMatchesPinnedDecimalConcatenation() {
-		assertThat(UnicodeAggregator.nameToBigInteger("Zeus")).isEqualTo(new BigInteger("90101117115"));
-	}
+    private final UnicodeAggregator unicodeAggregator = new UnicodeAggregator();
 
-	@Test
-	void sumFilteredMatchesLowercaseFilterAgainstUppercaseNNames() {
-		var names = java.util.List.of("Nike", "Nemesis", "Neptun", "Njord");
-		assertThat(UnicodeAggregator.sumFiltered("n", names).toString()).isEqualTo("78179288397447443426");
-	}
+    @Test
+    void shouldConvertStringToDeterministicBigIntegerSum() {
+        var result = unicodeAggregator.toBigInteger("nA");
 
-	@Test
-	void sumFilteredReturnsZeroWhenNoNameMatches() {
-		assertThat(UnicodeAggregator.sumFiltered("n", java.util.List.of("zeus", "apollo"))).isEqualTo(BigInteger.ZERO);
-	}
+        assertThat(result).isEqualTo(BigInteger.valueOf('n' + 'A'));
+    }
+
+    @Test
+    void shouldHandleNonAsciiCharacters() {
+        var result = unicodeAggregator.toBigInteger("ñ");
+
+        assertThat(result).isEqualTo(BigInteger.valueOf("ñ".codePointAt(0)));
+    }
+
+    @Test
+    void shouldRejectNullInput() {
+        assertThatThrownBy(() -> unicodeAggregator.toBigInteger(null))
+            .isInstanceOf(NullPointerException.class)
+            .hasMessageContaining("value must not be null");
+    }
 }

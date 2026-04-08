@@ -1,32 +1,27 @@
 package info.jab.ms.config;
 
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
+import java.net.http.HttpClient;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.http.client.JdkClientHttpRequestFactory;
 import org.springframework.web.client.RestClient;
 
 @Configuration
 @EnableConfigurationProperties(GodOutboundProperties.class)
-public class HttpClientConfig {
+class HttpClientConfig {
 
-	@Bean
-	public RestClient.Builder godRestClientBuilder(GodOutboundProperties props) {
-		SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-		factory.setConnectTimeout((int) props.connectTimeout().toMillis());
-		factory.setReadTimeout((int) props.readTimeout().toMillis());
-		return RestClient.builder().requestFactory(factory);
-	}
+    @Bean
+    RestClient godOutboundRestClient(GodOutboundProperties properties) {
+        var httpClient = HttpClient.newBuilder()
+            .connectTimeout(properties.connectTimeout())
+            .build();
 
-	@Bean
-	public RestClient godRestClient(RestClient.Builder godRestClientBuilder) {
-		return godRestClientBuilder.build();
-	}
+        var requestFactory = new JdkClientHttpRequestFactory(httpClient);
+        requestFactory.setReadTimeout(properties.readTimeout());
 
-	@Bean(name = "godAnalysisExecutor")
-	public Executor godAnalysisExecutor() {
-		return Executors.newVirtualThreadPerTaskExecutor();
-	}
+        return RestClient.builder()
+            .requestFactory(requestFactory)
+            .build();
+    }
 }

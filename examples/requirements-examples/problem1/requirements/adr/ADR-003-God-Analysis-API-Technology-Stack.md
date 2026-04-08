@@ -2,7 +2,7 @@
 
 **Status:** Accepted
 **Date:** Sat Mar 21 10:12:00 CET 2026
-**Decision:** Adopt a **technology stack** for the God Analysis API covering **runtime framework** (Spring Boot), **outbound HTTP** (`RestClient` with **configured connect/read timeouts** in `application.yml`), **acceptance-style testing** (**Spring `RestClient`** against `@SpringBootTest(webEnvironment = RANDOM_PORT)`), and **integration testing** with **WireMock in-process** (or Testcontainers-hosted WireMock) so **timeout** and partial-result scenarios run in **isolation** with deterministic delay simulation. **Automatic HTTP retries are out of scope** for this user story—no Resilience4j Retry (or equivalent) required.
+**Decision:** Adopt a **technology stack** for the God Analysis API covering **API-first contract development** (OpenAPI 3.x as source of truth with code generation via `openapi-generator-maven-plugin`), **runtime framework** (Spring Boot), **outbound HTTP** (`RestClient` with **configured connect/read timeouts** in `application.yml`), **acceptance-style testing** (**Spring `RestClient`** against `@SpringBootTest(webEnvironment = RANDOM_PORT)`), and **integration testing** with **WireMock in-process** (or Testcontainers-hosted WireMock) so **timeout** and partial-result scenarios run in **isolation** with deterministic delay simulation. **Automatic HTTP retries are out of scope** for this user story—no Resilience4j Retry (or equivalent) required.
 
 **Amendment (2026-03-22):** **Rest Assured** was superseded for **HTTP-level acceptance tests** by **Spring Framework `RestClient`**. Rationale: Rest Assured relies on Groovy internals (`RequestSpecificationImpl.applyProxySettings`); on **Java 21+** this path can throw `NullPointerException` (`ConcurrentHashMap` does not permit null keys) during proxy/meta-property handling—making the stack brittle on current LTS/JDK feature releases. **`RestClient`** is already on the classpath (`spring-web`), matches the **same client API** used for outbound calls, and works with **AssertJ** for assertions—no separate acceptance-test HTTP stack required.
 
@@ -15,13 +15,14 @@ Timeout behavior ([ADR-002](ADR-002-God-Analysis-API-Non-Functional-Requirements
 ### Key Requirements Driving Framework Selection
 
 1. **REST API Development**: Need to expose a single endpoint (`GET /api/v1/gods/stats/sum`) with query parameter handling
-2. **External HTTP Integration**: Must consume three external god APIs with **RestClient** timeouts (no automatic retries)
-3. **Parallel Processing**: Requires concurrent calls to multiple external services for optimal performance
-4. **Error Handling & Resilience**: Graceful degradation with partial results when external sources fail
-5. **JSON Processing**: Handle JSON serialization/deserialization for API responses and external data
-6. **Testing Support**: Comprehensive testing capabilities for acceptance, integration, and unit tests—with **deterministic** timeout coverage using WireMock delay simulation
-7. **Development Velocity**: Team expertise and rapid development requirements
-8. **Production Readiness**: Monitoring, health checks, and operational capabilities
+2. **API-First Contract Governance**: OpenAPI contract must be authored first and treated as the canonical API specification
+3. **External HTTP Integration**: Must consume three external god APIs with **RestClient** timeouts (no automatic retries)
+4. **Parallel Processing**: Requires concurrent calls to multiple external services for optimal performance
+5. **Error Handling & Resilience**: Graceful degradation with partial results when external sources fail
+6. **JSON Processing**: Handle JSON serialization/deserialization for API responses and external data
+7. **Testing Support**: Comprehensive testing capabilities for acceptance, integration, and unit tests—with **deterministic** timeout coverage using WireMock delay simulation
+8. **Development Velocity**: Team expertise and rapid development requirements
+9. **Production Readiness**: Monitoring, health checks, and operational capabilities
 
 ### Team Context
 
@@ -45,6 +46,7 @@ Timeout behavior ([ADR-002](ADR-002-God-Analysis-API-Non-Functional-Requirements
 - **Development Speed**: Framework must enable rapid API development
 - **Team Expertise**: Leverage existing Spring/Java knowledge
 - **REST API Maturity**: Proven patterns for REST endpoint development
+- **API-First Workflow**: Contract-first design with generated interfaces/models from OpenAPI to prevent implementation/spec drift
 - **HTTP Client Integration**: Built-in or well-integrated HTTP client capabilities
 - **Testing Ecosystem**: Comprehensive testing support including mocking external services **and simulating latency/timeouts with WireMock in-process delays**
 - **Operational Readiness**: Production monitoring and health check capabilities
@@ -282,16 +284,20 @@ src/test/resources/
 
 ### Rationale
 
-1. **Spring MVC** provides mature servlet-based REST API development without reactive complexity
-2. **RestClient** fits synchronous parallel fetches with configured timeouts (no reactive dependencies)
-3. **Spring `RestClient`** gives **black-box** acceptance tests over a real port without a separate Groovy-based HTTP DSL
-4. **WireMock** provides **isolated**, **deterministic** timeout validation aligned with ADR-002
-5. **No retry library** keeps the dependency graph and operational knobs smaller than a resilience4j-based design
-6. **Servlet-only architecture** eliminates reactive programming complexity and dependency conflicts
+1. **OpenAPI-first design** makes the contract explicit before code and reduces consumer/provider misunderstandings
+2. **OpenAPI Generator Maven plugin** automates generation of API interfaces/models and reduces manual boilerplate
+3. **Spring MVC** provides mature servlet-based REST API development without reactive complexity
+4. **RestClient** fits synchronous parallel fetches with configured timeouts (no reactive dependencies)
+5. **Spring `RestClient`** gives **black-box** acceptance tests over a real port without a separate Groovy-based HTTP DSL
+6. **WireMock** provides **isolated**, **deterministic** timeout validation aligned with ADR-002
+7. **No retry library** keeps the dependency graph and operational knobs smaller than a resilience4j-based design
+8. **Servlet-only architecture** eliminates reactive programming complexity and dependency conflicts
 
 ### Implementation Approach
 
 - **Architecture**: **Spring MVC servlet-based** - traditional thread-per-request model, **no reactive programming**
+- **API contract**: Author and version OpenAPI 3.x specification first; treat it as the source of truth for request/response schema and operation signatures
+- **Code generation**: Use `openapi-generator-maven-plugin` during build to generate Spring API interfaces and DTO models consumed by implementation
 - **REST Controller**: `@RestController`, `GET /api/v1/gods/stats/sum`
 - **HTTP Client**: **RestClient** (synchronous) with **connect/read timeouts** from configuration (e.g. 5s defaults)
 - **Parallelism**: `CompletableFuture` with virtual threads within servlet thread model per source; **one attempt per source** per request
@@ -308,6 +314,7 @@ src/test/resources/
 
 | Scope | Artifact / integration | Role |
 | ----- | ---------------------- | ---- |
+| build | `org.openapitools:openapi-generator-maven-plugin` | API-first contract to code generation (Spring interfaces/models) from OpenAPI 3.x |
 | main | `spring-boot-starter-web` | **Spring MVC** REST API (servlet-based, **excludes reactive**) |
 | main | `spring-boot-starter-actuator` | Ops |
 | test | `spring-boot-starter-test` | JUnit 5, AssertJ, **MockMvc** (servlet-based testing) |
@@ -340,13 +347,15 @@ src/test/resources/
 
 ## Follow-up Actions
 
-1. Add Maven dependency for WireMock (use `org.wiremock:wiremock` - the modern groupId that replaced `com.github.tomakehurst`) when using WireMock in tests
-2. Set up **WireMock file structure** with `src/test/resources/mappings/` and `src/test/resources/__files/` directories for organized test data management
-3. Create **JSON response files** in `__files` for each pantheon (greek, roman, nordic) with realistic god data for testing
-4. Implement a **test support** class (or extension) that **starts** WireMock server, **wires** `RestClient` base URLs, and **resets stubs** between tests
-5. Register **RestClient** with production connect/read timeouts; override URLs only in tests
-6. Keep the **`RestClient`-based** acceptance suite small and Gherkin-aligned; **do not** introduce Rest Assured for this module unless a future ADR revisits the trade-off after Groovy/JVM fixes land upstream
-7. Document WireMock setup, file structure, and stub reset patterns in module README
+1. Add `openapi-generator-maven-plugin` to the module build and configure generation targets for Spring interfaces and API DTO models
+2. Define and maintain the OpenAPI 3.x contract as the canonical API artifact before implementation changes
+3. Add Maven dependency for WireMock (use `org.wiremock:wiremock` - the modern groupId that replaced `com.github.tomakehurst`) when using WireMock in tests
+4. Set up **WireMock file structure** with `src/test/resources/mappings/` and `src/test/resources/__files/` directories for organized test data management
+5. Create **JSON response files** in `__files` for each pantheon (greek, roman, nordic) with realistic god data for testing
+6. Implement a **test support** class (or extension) that **starts** WireMock server, **wires** `RestClient` base URLs, and **resets stubs** between tests
+7. Register **RestClient** with production connect/read timeouts; override URLs only in tests
+8. Keep the **`RestClient`-based** acceptance suite small and Gherkin-aligned; **do not** introduce Rest Assured for this module unless a future ADR revisits the trade-off after Groovy/JVM fixes land upstream
+9. Document WireMock setup, file structure, stub reset patterns, and OpenAPI generation workflow in module README
 
 ## Appendix: Rest Assured — issues observed and why it is discarded (2026-03-22)
 

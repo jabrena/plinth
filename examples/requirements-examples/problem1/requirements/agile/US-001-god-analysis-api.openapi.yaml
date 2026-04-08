@@ -29,6 +29,10 @@ servers:
 
 security: []
 
+tags:
+  - name: gods
+    description: Operations for god-name analysis and aggregate statistics.
+
 paths:
   /api/v1/gods/stats/sum:
     get:
@@ -54,11 +58,21 @@ paths:
           in: query
           required: true
           description: |
-            Comma-separated list of pantheon sources to include. Typical values are `greek`, `roman`, and `nordic`.
-            Order may affect implementation; the aggregate is over all gods retrieved from the selected sources after filtering.
+            Comma-separated list of pantheon sources to include.
+            Allowed values: `greek`, `roman`, `nordic`.
+            The aggregate is computed over all gods retrieved from the selected sources after filtering.
+          style: form
+          explode: false
           schema:
-            type: string
-          example: "greek,roman,nordic"
+            type: array
+            minItems: 1
+            uniqueItems: true
+            items:
+              $ref: "#/components/schemas/PantheonSource"
+          example:
+            - greek
+            - roman
+            - nordic
       responses:
         "200":
           description: |
@@ -78,20 +92,46 @@ paths:
                   value:
                     sum: "0"
         "400":
-          description: Malformed request (e.g. missing required query parameters, invalid filter length, invalid source names).
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
+          $ref: "#/components/responses/BadRequestResponse"
         "500":
-          description: Unexpected server failure. Not specified in acceptance tests; clients may treat as retryable.
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/ErrorResponse"
+          $ref: "#/components/responses/InternalServerErrorResponse"
 
 components:
+  responses:
+    BadRequestResponse:
+      description: Malformed request (e.g. missing query parameters, invalid filter length, invalid source value).
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          examples:
+            invalidFilterLength:
+              summary: Filter must be exactly one character
+              value:
+                code: INVALID_FILTER
+                message: "Query parameter 'filter' must contain exactly one character."
+            invalidSource:
+              summary: Unsupported source in sources list
+              value:
+                code: INVALID_SOURCE
+                message: "Query parameter 'sources' contains unsupported value: 'egyptian'."
+    InternalServerErrorResponse:
+      description: Unexpected server failure. Not specified in acceptance tests; clients may treat as retryable.
+      content:
+        application/json:
+          schema:
+            $ref: "#/components/schemas/ErrorResponse"
+          example:
+            code: INTERNAL_ERROR
+            message: "Unexpected error while computing aggregate."
   schemas:
+    PantheonSource:
+      type: string
+      enum:
+        - greek
+        - roman
+        - nordic
+      description: Supported external pantheon source identifier.
     GodStatsSumResponse:
       type: object
       required:
@@ -105,5 +145,20 @@ components:
           example: "78179288397447443426"
     ErrorResponse:
       type: object
-      description: Optional error envelope; shape is not fixed by US-001 — adjust to match implementation.
-      additionalProperties: true
+      description: Error response envelope.
+      required:
+        - code
+        - message
+      properties:
+        code:
+          type: string
+          description: Stable machine-readable error code.
+          example: INVALID_FILTER
+        message:
+          type: string
+          description: Human-readable error detail.
+          example: "Query parameter 'filter' must contain exactly one character."
+        details:
+          type: object
+          description: Optional structured metadata about the validation or runtime error.
+          additionalProperties: true

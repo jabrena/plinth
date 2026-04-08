@@ -38,11 +38,11 @@ Help teams produce maintainable **OpenAPI 3.x** contracts that stay aligned with
 
   <triggers>
     <trigger-list>
-        <trigger>Review or author an OpenAPI 3.x spec (YAML or JSON)</trigger>
-        <trigger>Improve API contract documentation, examples, or reusable components</trigger>
-        <trigger>Define security schemes and global security requirements in OpenAPI</trigger>
-        <trigger>Add spec linting or CI validation (e.g. Spectral) for OpenAPI</trigger>
-        <trigger>Assess breaking vs compatible changes when evolving a published API contract</trigger>
+        <trigger>Review an OpenAPI</trigger>
+        <trigger>Improve an OpenAPI</trigger>
+        <trigger>Improve API contract</trigger>
+        <trigger>Improve API schema design</trigger>
+        <trigger>Validate an OpenAPI spec</trigger>
     </trigger-list>
   </triggers>
 
