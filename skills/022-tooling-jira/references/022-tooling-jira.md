@@ -1,6 +1,6 @@
 ---
 name: 022-tooling-jira
-description: Use when you need to list Jira issues (optionally by JQL), inspect issue descriptions and comments with the Jira CLI (`jira`), present results in a table, or feed issue content into agile user-story work with @014-agile-user-story. Starts with an interactive check for `jira` and offers installation guidance before any issue commands.
+description: Use when you need to list Jira issues (optionally by JQL), inspect issue descriptions and comments with the Jira CLI (`jira`), and present results in a table. Starts with an interactive check for `jira` and offers installation guidance before any issue commands.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -25,7 +25,7 @@ Guide a **Jira CLI-first**, **interactive** workflow:
 3. **List issues** for the current project or explicit JQL query.
 4. **Present list output as a markdown table** (key, summary, status, assignee, updated time, URL when available).
 5. **Retrieve issue description and comments** as readable output so the user (or a follow-up step) can analyze requirements, decisions, and acceptance hints.
-6. **Chain with user stories** - when the user wants formal **user story + Gherkin** artifacts from Jira discussion, direct them to **`@014-agile-user-story`** and use the retrieved issue description and comments as **primary source material** for the interactive questionnaire.
+6. **Support user-story preparation** - when the user wants formal **user story + Gherkin** artifacts from Jira discussion, use the retrieved issue description and comments as **primary source material**.
 
 **Do not** invent issue keys, summaries, or URLs - only report what `jira` returns (or clearly label hypothetical examples in documentation snippets).
 
@@ -37,7 +37,7 @@ Prefer the Jira CLI (`jira`) over scraping the web UI. Never expose API tokens o
 - **CONFIG**: If `jira` is not configured for the target workspace, **stop** and ask the user to run `jira configure`
 - **TABLE OUTPUT**: For issue lists, render a markdown pipe table unless the user asks for raw output only
 - **FULL THREAD**: For analysis, fetch issue description and comments - not only list rows
-- **USER STORIES**: When generating user stories from Jira issues, chain with `@014-agile-user-story` per Step 5 - do not skip that rule's interactive template unless the user explicitly opts out
+- **USER STORIES**: When generating user stories from Jira issues, use issue description and comments as the primary source material
 
 ## Steps
 
@@ -72,6 +72,10 @@ jira version
 
 - Provide concise options from issue #608 notes:
 - **macOS (Homebrew):** `brew install jira-cli`
+- **macOS token storage (recommended):** store the Jira API token in Keychain instead of shell history/files:
+`security add-generic-password -a YOUR-EMAIL -s jira-cli -w "your-new-token"`
+- **macOS token retrieval:** read the stored token when needed:
+`security find-generic-password -a YOUR-EMAIL -s jira-cli -w`
 - **Linux (package manager):** `sudo apt-get install jira-cli`
 - **Linux (binary):** download a release binary, `chmod +x`, and move to `/usr/local/bin/jira`
 - **Windows (Chocolatey):** `choco install jira-cli`
@@ -93,7 +97,7 @@ This typically prompts for:
 
 - Jira URL (for example, `https://your-domain.atlassian.net`)
 - Account email/username
-- API token (created from Atlassian account security settings)
+- API token (generated from Atlassian account security settings: [Atlassian API tokens](https://id.atlassian.com/manage-profile/security/api-tokens))
 
 Optional identity/config sanity check (if available in the installed CLI):
 
@@ -159,14 +163,13 @@ jira issue assign PROJ-123 @user
 jira issue transition PROJ-123
 ```
 
-Before destructive or status-changing actions, confirm target key and intended transition.### Step 5: Chain with `@014-agile-user-story`
+Before destructive or status-changing actions, confirm target key and intended transition.### Step 5: Support user-story preparation from Jira content
 
 When the user wants **Markdown user stories and Gherkin** derived from one or more Jira issues:
 
 1. Use **Steps 1-3** to fetch issue description and comments.
-2. Invoke the workflow from **`@014-agile-user-story`**.
-3. **Map Jira content to the template**: use issue summary/description for title, persona hints, goal, and business value; use comment threads for scenario ideas, constraints, and examples. Still ask the template questions in order and treat Jira text as draft answers the user can confirm or correct.
-4. Link generated user-story artifacts back to Jira issue keys in Notes when helpful.### Step 6: Errors and permissions
+2. **Map Jira content to a user-story template**: use issue summary/description for title, persona hints, goal, and business value; use comment threads for scenario ideas, constraints, and examples.
+3. Link generated user-story artifacts back to Jira issue keys in Notes when helpful.### Step 6: Errors and permissions
 
 - **Authentication/config errors** - re-run `jira configure` and verify workspace URL.
 - **Permission errors** - verify project access, issue-level permissions, and workflow transition permissions.
