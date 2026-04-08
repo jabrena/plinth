@@ -1,5 +1,5 @@
 ---
-name: 021-tooling-github
+name: 043-planning-github-issues
 description: Use when you need the GitHub CLI (`gh`) to verify installation, list issues (all or by milestone) as markdown tables, fetch issue bodies and comments for analysis, or hand off to @014-agile-user-story when creating user stories from GitHub threads. Uses an interactive install gate — if `gh` is missing, ask whether to show installation guidance before any issue commands. Part of the skills-for-java project
 license: Apache-2.0
 metadata:
@@ -39,4 +39,4 @@ Do not fabricate issue data; use only `gh` output (or explicitly agreed public R
 
 ## Reference
 
-For detailed guidance, examples, and constraints, see [references/021-tooling-github.md](references/021-tooling-github.md).
+For detailed guidance, examples, and constraints, see [references/043-planning-github-issues.md](references/043-planning-github-issues.md).
