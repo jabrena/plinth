@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
-      id="043-planning-github">
+      id="043-planning-github-issues">
   <metadata>
     <author>Juan Antonio Bre√±a Moral</author>
     <version>0.14.0-SNAPSHOT</version>
@@ -46,7 +46,7 @@ Use **`gh`** to work with GitHub issues: **first** run an **interactive** check‚
 
   <references>
     <reference-list>
-        <reference>references/043-planning-github.md</reference>
+        <reference>references/043-planning-github-issues.md</reference>
     </reference-list>
   </references>
 </prompt>

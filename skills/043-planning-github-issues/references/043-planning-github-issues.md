@@ -1,5 +1,5 @@
 ---
-name: 043-planning-github
+name: 043-planning-github-issues
 description: Use when you need to list GitHub issues (optionally by milestone), inspect issue bodies and comments with the GitHub CLI (`gh`), present results in a table, or feed issue content into agile user-story work with @014-agile-user-story. Starts with an interactive check for `gh` and offers installation guidance before any issue commands.
 license: Apache-2.0
 metadata:
