@@ -33,6 +33,7 @@ Apply guidance from these Skills when relevant:
 - `@421-frameworks-quarkus-testing-unit-tests`: Quarkus Unit Testing
 - `@422-frameworks-quarkus-testing-integration-tests`: Quarkus integration testing
 - `@423-frameworks-quarkus-testing-acceptance-tests`: Quarkus acceptance testing
+- `@702-technologies-wiremock`: Improve tests with Wiremock
 
 ### Workflow
 
