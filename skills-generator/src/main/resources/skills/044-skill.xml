@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
-      id="022-tooling-jira">
+      id="044-planning-jira">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.14.0-SNAPSHOT</version>
@@ -46,7 +46,7 @@ Use **`jira`** to work with Jira issues: **first** run an **interactive** check 
 
   <references>
     <reference-list>
-      <reference>references/022-tooling-jira.md</reference>
+      <reference>references/044-planning-jira.md</reference>
     </reference-list>
   </references>
 </prompt>

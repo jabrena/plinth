@@ -12,12 +12,10 @@ A curated collection of `Skills`, and `Agents` for Java Enterprise development, 
 
 | QUESTION   | ROLE               | AREA             | SUPPORT                                                                                                                                                                                                             |
 | ---------- | ------------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| WHAT       | PO, BA, EA, SA, TL | Agile            | `User Stories`, `Github Issues` & `Jira`                                                                                                                                                                                    |
+| WHAT       | PO, BA, EA, SA, TL | Agile            | `User Stories`|
 | WHY        | EA, SL, TL         | Architecture     | `ADRs` & `UML` / `C4` / `ER` Diagrams                                                                                                                                                                               |
-| WHEN / HOW | SA, TL, SWE        | Spec-Driven      | `AGENTS.md`, `AI Plan mode` & `OpenSpec`                                                                                                                                                                            |
-| HOW        | TL, SWE            | Java development | `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools` & `Documentation` |
-| HOW        | TL, SWE            | Java frameworks  | `Spring Boot`, `Quarkus` & `Micronaut`                                                                                                                                                                              |
-| HOW        | TL, SWE            | Technologies & Libraries  | `OpenAPI`, `Wiremock`                                                                                                                                                                             |
+| WHEN / HOW | PO, BA, SA, TL, SWE        | Planning & Spec-Driven      | `Github Issues` & `Jira`  `AI Plan mode` & `OpenSpec` |
+| HOW        | TL, SWE            | Java development | `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation`, `Spring Boot`, `Quarkus`, `Micronaut`, `OpenAPI`, `Wiremock` & `AGENTS.md` |
 
 ## Deliverables
 
