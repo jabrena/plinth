@@ -12,9 +12,9 @@ A curated collection of `Skills` and `Agents` for Java Enterprise development, d
 
 | QUESTION   | ROLE               | AREA             | SUPPORT                                                                                                                                                                                                             |
 | ---------- | ------------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| WHAT       | PO, BA, EA, SA, TL | Agile            | `User Stories`|
-| WHY        | EA, SL, TL         | Architecture     | `ADRs` & `UML` / `C4` / `ER` Diagrams                                                                                                                                                                               |
-| WHEN / HOW | PO, BA, SA, TL, SWE        | Planning & Spec-Driven      | `Github Issues` & `Jira`  `AI Plan mode` & `OpenSpec` |
+| WHAT / WHEN | PO, BA, EA, SA, TL | Agile & Planning | `User Stories`, `Github Issues` & `Jira`|
+| WHY        | EA, SL, TL         | Architecture     | `ADRs` & `UML` / `C4` / `ER` Diagrams |
+| HOW | SA, TL, SWE | Spec-Driven      | `AI Plan mode` & `OpenSpec` |
 | HOW        | TL, SWE            | Java development | `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation`, `Spring Boot`, `Quarkus`, `Micronaut`, `OpenAPI`, `Wiremock` & `AGENTS.md` |
 
 ## Deliverables
