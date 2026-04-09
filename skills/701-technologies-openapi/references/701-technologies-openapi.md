@@ -21,7 +21,6 @@ Apply **framework-agnostic** OpenAPI best practices so a published contract is a
 3. **Describe HTTP** faithfully: stable paths, correct verbs, explicit status codes and error bodies, `operationId`, parameters (path, query, header, cookie), and request/response `content` types.
 4. **Security**: declare `securitySchemes` and default/global `security` requirements; avoid silent optional auth where the runtime always enforces it.
 5. **Quality gates**: recommend spec linting (e.g. Spectral rulesets), CI validation before codegen, and changelog discipline for breaking vs additive changes.
-6. **Delegation**: for runtime stack concerns (Spring MVC, Quarkus REST, Micronaut controllers, framework plugins, OpenAPI Generator options), direct users to `@302-frameworks-spring-boot-rest`, `@402-frameworks-quarkus-rest`, or `@502-frameworks-micronaut-rest`. For **CATS fuzz execution**, use `@134-java-testing-fuzzing-testing`.
 
 Do not replace those framework skills; complement them with contract-level guidance only.
 
