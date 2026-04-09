@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
-      id="134-java-testing-fuzzing-testing">
+      id="703-technologies-fuzzing-testing">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.14.0-SNAPSHOT</version>
@@ -47,7 +47,7 @@ Design and implement contract-driven fuzz testing for Java APIs using CATS to un
 
   <references>
     <reference-list>
-        <reference>references/134-java-testing-fuzzing-testing.md</reference>
+        <reference>references/703-technologies-fuzzing-testing.md</reference>
     </reference-list>
   </references>
 </prompt>
