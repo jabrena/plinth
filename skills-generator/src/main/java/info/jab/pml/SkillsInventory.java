@@ -1,13 +1,10 @@
 package info.jab.pml;
 
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.JarURLConnection;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -16,18 +13,22 @@ import java.util.List;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
 import java.util.stream.Stream;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
 
 /**
- * Inventory of skills to generate, loaded from {@code skill-inventory.json}.
+ * Inventory of skills to generate, loaded from {@code skill-inventory.xml}.
  * <p>
  * Each entry has an {@code id} (numeric or string like "010"). When {@code requiresSystemPrompt}
  * is true (default), the skillId is derived by matching system-prompts with prefix {@code {id}-}.
  * When false, the entry must specify {@code skillId} and no system-prompt is required.
- * Each skill must have a summary in {@code skills/{id}-skill.md}.
+ * Each skill must have a summary in {@code skills/{id}-skill.md} or {@code skills/{id}-skill.xml}
+ * when {@code xml="true"} on the entry.
  */
 public final class SkillsInventory {
 
-    private static final String INVENTORY_RESOURCE = "skill-inventory.json";
+    private static final String INVENTORY_RESOURCE = "skill-inventory.xml";
     private static final String SYSTEM_PROMPTS_PREFIX = "system-prompts/";
 
     private SkillsInventory() {}
@@ -150,64 +151,79 @@ public final class SkillsInventory {
     }
 
     /**
-     * Loads and parses skill-inventory.json.
+     * Loads and parses skill-inventory.xml.
      */
     public static List<InventoryEntry> loadInventory() {
         try (InputStream stream = getResource(INVENTORY_RESOURCE)) {
             if (stream == null) {
                 throw new RuntimeException("Skill inventory not found: " + INVENTORY_RESOURCE);
             }
-            String json = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
-            return parseInventory(json);
+            return parseInventory(stream);
         } catch (Exception e) {
             throw new RuntimeException("Failed to load skill inventory", e);
         }
     }
 
-    private static List<InventoryEntry> parseInventory(String json) {
+    private static List<InventoryEntry> parseInventory(InputStream in) {
         try {
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode root = mapper.readTree(json);
-            if (!root.isArray()) {
-                throw new RuntimeException("Skill inventory must be a JSON array");
+            Document doc = InventoryXmlLoader.parse(in);
+            Element root = doc.getDocumentElement();
+            if (!"skill-inventory".equals(root.getNodeName())) {
+                throw new RuntimeException("Skill inventory root must be <skill-inventory>");
             }
-
+            NodeList skillNodes = root.getElementsByTagName("skill");
             List<InventoryEntry> entries = new ArrayList<>();
-            for (JsonNode node : root) {
-                String numericId = node.get("id").isTextual()
-                    ? node.get("id").asText()
-                    : String.valueOf(node.get("id").asInt());
-                boolean requiresSystemPrompt = node.has("requiresSystemPrompt")
-                    ? node.get("requiresSystemPrompt").asBoolean()
-                    : true;
-                String skillId = node.has("skillId") ? node.get("skillId").asText() : null;
+            for (int i = 0; i < skillNodes.getLength(); i++) {
+                if (!(skillNodes.item(i) instanceof Element skillEl)) {
+                    continue;
+                }
+                if (skillEl.getParentNode() != root) {
+                    continue;
+                }
+                String numericId = skillEl.getAttribute("id");
+                if (numericId == null || numericId.isBlank()) {
+                    throw new RuntimeException("skill-inventory entry missing id attribute");
+                }
+                boolean requiresSystemPrompt = parseBooleanAttribute(skillEl, "requiresSystemPrompt", true);
+                String skillId = skillEl.hasAttribute("skillId")
+                    ? skillEl.getAttribute("skillId").trim()
+                    : null;
+                if (skillId != null && skillId.isEmpty()) {
+                    skillId = null;
+                }
 
                 if (!requiresSystemPrompt && (skillId == null || skillId.isBlank())) {
                     throw new RuntimeException("Entry with id " + numericId
                         + " has requiresSystemPrompt=false but no skillId specified.");
                 }
-                boolean useXml = parseXmlFlag(node);
+                boolean useXml = parseXmlAttribute(skillEl);
                 entries.add(new InventoryEntry(numericId, requiresSystemPrompt, skillId, useXml));
             }
+            if (entries.isEmpty()) {
+                throw new RuntimeException("Skill inventory must contain at least one <skill> entry");
+            }
             return entries;
+        } catch (RuntimeException e) {
+            throw e;
         } catch (Exception e) {
             throw new RuntimeException("Failed to parse skill inventory", e);
         }
     }
 
-    private static boolean parseXmlFlag(JsonNode node) {
-        if (!node.has("xml")) {
+    private static boolean parseBooleanAttribute(Element el, String name, boolean defaultValue) {
+        if (!el.hasAttribute(name)) {
+            return defaultValue;
+        }
+        String v = el.getAttribute(name).trim().toLowerCase();
+        return "true".equals(v) || "yes".equals(v) || "1".equals(v);
+    }
+
+    private static boolean parseXmlAttribute(Element skillEl) {
+        if (!skillEl.hasAttribute("xml")) {
             return false;
         }
-        JsonNode xmlNode = node.get("xml");
-        if (xmlNode.isBoolean()) {
-            return xmlNode.asBoolean();
-        }
-        if (xmlNode.isTextual()) {
-            String s = xmlNode.asText().toLowerCase();
-            return "true".equals(s) || "yes".equals(s) || "1".equals(s);
-        }
-        return false;
+        String s = skillEl.getAttribute("xml").trim().toLowerCase();
+        return "true".equals(s) || "yes".equals(s) || "1".equals(s);
     }
 
     private static void validateSkillSummaryExists(String numericId, boolean useXml) {
@@ -241,7 +257,7 @@ public final class SkillsInventory {
     }
 
     /**
-     * Single entry from skill-inventory.json. When requiresSystemPrompt is true,
+     * Single entry from skill-inventory.xml. When requiresSystemPrompt is true,
      * skillId is derived by matching system-prompts with prefix {@code {numericId}-}.
      * When false, skillId must be provided and no system-prompt is required.
      * When useXml is true, skill summary is loaded from skills/{numericId}-skill.xml

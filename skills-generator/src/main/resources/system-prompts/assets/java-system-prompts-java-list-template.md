@@ -6,7 +6,7 @@ Use the following collection of System prompts of Java to improve your Java deve
 
 | Cursor Rule | Description | User Prompt | Notes |
 |----|----|----|----|
-| [001-skills](.cursor/rules/001-skills.md) | Generate list of System Prompts for Java | **User Prompt:** `Create a document with all System prompts for Java using @001-skills` | |
+| [001-skills-inventory](.cursor/rules/001-skills-inventory.md) | Generate list of System Prompts for Java | **User Prompt:** `Create a document with all System prompts for Java using @001-skills-inventory` | |
 
 ## AI-Driven Agile (User Stories, Gherkin & AI Planning)
 

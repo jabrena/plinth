@@ -90,7 +90,7 @@ class SkillsGeneratorTest {
     class SkillInventorySyncTests {
 
         @Test
-        @DisplayName("skill-inventory.json entries must have matching skill summary (and system-prompt when required)")
+        @DisplayName("skill-inventory.xml entries must have matching skill summary (and system-prompt when required)")
         void should_validateInventoryMatchesSkillsAndSystemPrompts() {
             List<SkillsInventory.SkillDescriptor> descriptors = SkillsInventory.skillDescriptors().toList();
             assertThat(descriptors).isNotEmpty();

@@ -7,7 +7,7 @@
     <parent>
         <groupId>info.jab</groupId>
         <artifactId>cursor-rules-java</artifactId>
-        <version>0.14.0-SNAPSHOT</version>
+        <version>0.14.0</version>
     </parent>
 
     <groupId>info.jab.pml</groupId>
@@ -15,12 +15,6 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!-- JSON parsing for skill-inventory.json -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-
         <!-- Logging dependencies -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -77,11 +71,11 @@
                                 <resource>
                                     <directory>${project.basedir}/src/main/resources</directory>
                                     <includes>
-                                        <include>skill-inventory.json</include>
+                                        <include>skill-inventory.xml</include>
                                         <include>skills/**</include>
                                         <include>system-prompts/**</include>
                                         <include>system-prompts.xsl</include>
-                                        <include>system-prompt-inventory.json</include>
+                                        <include>system-prompt-inventory.xml</include>
                                     </includes>
                                 </resource>
                             </resources>

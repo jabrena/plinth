@@ -13,10 +13,10 @@ Can you analyze the last Java version, Java 26 from @All-JEPS.md if exist some J
 Review that the list doesn´t any broken link to @/.cursor with .md files
 
 # Prompt to provide a release changelog
-Can you update the current changelog for 0.13.0 comparing git commits in relation to 0.12.0 tag. Use  @https://keepachangelog.com/en/1.1.0/  rules
+Can you update the current changelog for 0.14.0 comparing git commits in relation to 0.13.0 tag. Use  @https://keepachangelog.com/en/1.1.0/  rules
 
 #Bump to a new snapshot
-@resources/ update version to 0.13.0 and pom.xml and maven modules
+@resources/ update version to 0.14.0 and pom.xml, maven modules and finally regenerate the skills
 ```
 
 ## Release process
@@ -64,5 +64,5 @@ git push --tags
 ## Add a new Skills
 
 ```bash
-review if exist a new id in @skills-generator/src/main/resources/skill-inventory.json to review compare with the content of @skills-generator/src/main/resources/skills and if exist add a new skill summary in @skills-generator/src/main/resources/skills . to elaborate the skill review the content of the id with @skills-generator/src/main/resources/system-prompts when finish, validate generation with ./mvnw clean install -pl skills-generator and validate the skill with npx skill-check skills
+review if exist a new id in @skills-generator/src/main/resources/skill-inventory.xml to review compare with the content of @skills-generator/src/main/resources/skills and if exist add a new skill summary in @skills-generator/src/main/resources/skills . to elaborate the skill review the content of the id with @skills-generator/src/main/resources/system-prompts when finish, validate generation with ./mvnw clean install -pl skills-generator and validate the skill with npx skill-check skills
 ```

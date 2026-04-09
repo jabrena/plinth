@@ -3,7 +3,7 @@
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
-        <version>0.14.0-SNAPSHOT</version>
+        <version>0.14.0</version>
         <license>Apache-2.0</license>
         <title>Quarkus acceptance tests from Gherkin</title>
         <description>Use when you need to implement acceptance tests from a Gherkin .feature file for Quarkus applications — including scenarios tagged @acceptance, @QuarkusTest, REST Assured over the real HTTP port, Testcontainers or Dev Services for databases and Kafka, and WireMock for external REST stubs.</description>
