@@ -144,3 +144,4 @@ Use the following collection of System prompts of Java to improve your Java deve
 ---
 
 **Note:** This guide is self-contained and portable. Copy it into any Java project to get started with Cursor Rules for Java development.
+

@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
-      id="001-skills">
+      id="001-skills-inventory">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.14.0</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to generate a checklist document with Java system prompts, following the embedded template exactly and producing SYSTEM-PROMPTS-JAVA.md in the project root.</description>
+    <description>Use when you need to generate a checklist document with Java system prompts, following the embedded template exactly and producing SKILLS-JAVA.md in the project root.</description>
   </metadata>
 
   <title>Create a Checklist with all Java steps to use with system prompts for Java</title>
@@ -16,7 +16,7 @@ Create a comprehensive step-by-step checklist document for Java system prompts b
 **What is covered in this Skill?**
 
 - Exact-template checklist generation
-- Output file creation as `SYSTEM-PROMPTS-JAVA.md`
+- Output file creation as `SKILLS-JAVA.md`
 - Strict adherence to listed steps and cursor rules
 ]]></goal>
 
@@ -32,14 +32,14 @@ Create a comprehensive step-by-step checklist document for Java system prompts b
   <triggers>
     <trigger-list>
       <trigger>Create Java system prompts checklist</trigger>
-      <trigger>Generate SYSTEM-PROMPTS-JAVA.md</trigger>
-      <trigger>Use @001-skills</trigger>
+      <trigger>Generate SKILLS-JAVA.md</trigger>
+      <trigger>Use @001-skills-inventory</trigger>
     </trigger-list>
   </triggers>
 
   <references>
     <reference-list>
-      <reference>references/001-skills.md</reference>
+      <reference>references/001-skills-inventory.md</reference>
     </reference-list>
   </references>
 </prompt>

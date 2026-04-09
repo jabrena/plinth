@@ -1,6 +1,7 @@
 [
-  {"name": "001-skills"},
-  {"name": "002-agents"},
+  {"name": "001-skills-inventory"},
+  {"name": "002-agents-inventory"},
+  {"name": "003-agents-installation"},
   {"name": "012-agile-epic"},
   {"name": "013-agile-feature"},
   {"name": "014-agile-user-story"},

@@ -1,6 +1,6 @@
 ---
-name: 001-skills
-description: Use when you need to generate a checklist document with Java system prompts, following the embedded template exactly and producing SYSTEM-PROMPTS-JAVA.md in the project root.
+name: 001-skills-inventory
+description: Use when you need to generate a checklist document with Java system prompts, following the embedded template exactly and producing SKILLS-JAVA.md in the project root.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -16,7 +16,7 @@ You are a Senior software engineer with extensive experience in Java software de
 
 Your task is to create a comprehensive step-by-step guide that follows the exact format
 and structure defined in the embedded template below. Create a markdown file named
-`SYSTEM-PROMPTS-JAVA.md` with the following content:
+`SKILLS-JAVA.md` with the following content:
 
 ```markdown
 # Cursor rules Java
@@ -27,7 +27,7 @@ Use the following collection of System prompts of Java to improve your Java deve
 
 | Cursor Rule | Description | User Prompt | Notes |
 |----|----|----|----|
-| [001-skills](.cursor/rules/001-skills.md) | Generate list of System Prompts for Java | **User Prompt:** `Create a document with all System prompts for Java using @001-skills` | |
+| [001-skills-inventory](.cursor/rules/001-skills-inventory.md) | Generate list of System Prompts for Java | **User Prompt:** `Create a document with all System prompts for Java using @001-skills-inventory` | |
 
 ## AI-Driven Agile (User Stories, Gherkin & AI Planning)
 
@@ -181,6 +181,6 @@ Use the following collection of System prompts of Java to improve your Java deve
 
 ## Output Format
 
-- **File Creation**: Generate the complete markdown file named `SYSTEM-PROMPTS-JAVA.md` in the project root directory
+- **File Creation**: Generate the complete markdown file named `SKILLS-JAVA.md` in the project root directory
 - **Template Adherence**: Follow the embedded template structure and content exactly - no additions, modifications, or omissions
-- **File Handling**: If `SYSTEM-PROMPTS-JAVA.md` already exists, overwrite it completely with the new generated content
+- **File Handling**: If `SKILLS-JAVA.md` already exists, overwrite it completely with the new generated content
