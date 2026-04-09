@@ -1,5 +1,5 @@
 ---
-name: 134-java-testing-fuzzing-testing
+name: 703-technologies-fuzzing-testing
 description: Use when you need to add or review fuzz testing for Java APIs with CATS — including contract-driven negative testing, malformed payload validation, boundary input exploration, CI integration, reproducible failures, and local execution guidance. Part of the skills-for-java project
 license: Apache-2.0
 metadata:
@@ -40,4 +40,4 @@ Before applying any fuzz testing changes, ensure the project compiles. If compil
 
 ## Reference
 
-For detailed guidance, examples, and constraints, see [references/134-java-testing-fuzzing-testing.md](references/134-java-testing-fuzzing-testing.md).
+For detailed guidance, examples, and constraints, see [references/703-technologies-fuzzing-testing.md](references/703-technologies-fuzzing-testing.md).

@@ -26,7 +26,6 @@
   {"id": "131", "xml": true},
   {"id": "132", "xml": true},
   {"id": "133", "xml": true},
-  {"id": "134", "xml": true},
   {"id": "141", "xml": true},
   {"id": "142", "xml": true},
   {"id": "143", "xml": true},
@@ -63,5 +62,6 @@
   {"id": "522", "xml": true},
   {"id": "523", "xml": true},
   {"id": "701", "xml": true},
-  {"id": "702", "xml": true}
+  {"id": "702", "xml": true},
+  {"id": "703", "xml": true}
 ]
