@@ -23,6 +23,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Rules:**
   - Created an ADR to drop support for Rules in favor of Skills.
 
+- **Examples:**
+  - Reduce CI Pipeline times, removing non essential examples
+
 ## [0.13.0] 2026-03-30
 
 ### Added

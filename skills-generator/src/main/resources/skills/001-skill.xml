@@ -4,7 +4,7 @@
       id="001-skills">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
-    <version>0.14.0-SNAPSHOT</version>
+    <version>0.14.0</version>
     <license>Apache-2.0</license>
     <description>Use when you need to generate a checklist document with Java system prompts, following the embedded template exactly and producing SYSTEM-PROMPTS-JAVA.md in the project root.</description>
   </metadata>

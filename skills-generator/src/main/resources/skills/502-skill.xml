@@ -4,7 +4,7 @@
       id="502-frameworks-micronaut-rest">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
-    <version>0.14.0-SNAPSHOT</version>
+    <version>0.14.0</version>
     <license>Apache-2.0</license>
     <description>Use when you need to design, review, or improve REST APIs with Micronaut — including @Controller routes, HTTP status codes, DTOs, Bean Validation, exception handlers, pagination, idempotency, ETag/If-Match, caching headers, versioning, contract-first OpenAPI (OpenAPI Generator), optional runtime OpenAPI via micronaut-openapi, and security annotations.</description>
   </metadata>
