@@ -1,10 +1,10 @@
 ---
-name: 002-agents
+name: 003-agents-installation
 description: Use when you need to install the embedded robot agents into either .cursor/agents or .claude/agents, selecting the destination interactively and copying the embedded agent definitions from project assets. Part of the skills-for-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.14.0-SNAPSHOT
+  version: 0.14.0
 ---
 # Embedded agents installer
 
@@ -33,4 +33,4 @@ This skill installs only the embedded robot agents bundle and must ask for desti
 
 ## Reference
 
-For detailed guidance, examples, and constraints, see [references/002-agents.md](references/002-agents.md).
+For detailed guidance, examples, and constraints, see [references/003-agents-installation.md](references/003-agents-installation.md).

@@ -40,7 +40,7 @@ The new skill SHALL complement, not duplicate, framework REST skills: framework 
 
 ### Requirement: Generator Integration
 
-New sources for **701** MUST be registered in both `skill-inventory.json` and `system-prompt-inventory.json`, and the `skills-generator` module MUST build successfully after the change.
+New sources for **701** MUST be registered in both `skill-inventory.xml` and `system-prompt-inventory.xml`, and the `skills-generator` module MUST build successfully after the change.
 
 #### Scenario: Maven verify passes
 

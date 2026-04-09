@@ -3,17 +3,17 @@
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
-        <version>0.14.0-SNAPSHOT</version>
+        <version>0.14.0</version>
         <license>Apache-2.0</license>
         <title>Create a Checklist with all Java steps to use with system prompts for Java</title>
-        <description>Use when you need to generate a checklist document with Java system prompts, following the embedded template exactly and producing SYSTEM-PROMPTS-JAVA.md in the project root.</description>
+        <description>Use when you need to generate a checklist document with Java system prompts, following the embedded template exactly and producing SKILLS-JAVA.md in the project root.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
     <goal> Your task is to create a comprehensive step-by-step guide that follows the exact format
         and structure defined in the embedded template below. Create a markdown file named
-        `SYSTEM-PROMPTS-JAVA.md` with the following content:
+        `SKILLS-JAVA.md` with the following content:
 
         ```markdown
         <xi:include href="assets/java-system-prompts-java-list-template.md" parse="text" />
@@ -39,10 +39,10 @@
     <output-format>
         <output-format-list>
             <output-format-item>**File Creation**: Generate the complete markdown file named
-                `SYSTEM-PROMPTS-JAVA.md` in the project root directory</output-format-item>
+                `SKILLS-JAVA.md` in the project root directory</output-format-item>
             <output-format-item>**Template Adherence**: Follow the embedded template structure and
                 content exactly - no additions, modifications, or omissions</output-format-item>
-            <output-format-item>**File Handling**: If `SYSTEM-PROMPTS-JAVA.md` already exists,
+            <output-format-item>**File Handling**: If `SKILLS-JAVA.md` already exists,
                 overwrite it completely with the new generated content</output-format-item>
         </output-format-list>
     </output-format>
