@@ -19,7 +19,7 @@ import org.w3c.dom.NodeList;
  * <p>
  * Reuses CursorRulesGenerator for full rule content. SKILL.md is sourced from
  * {@code skills/{numericId}-skill.md} (user-editable), where numericId is extracted from skillId (e.g. 110 from 110-java-maven-best-practices).
- * The list of skills to generate is defined in {@code skill-inventory.json}; each must have a
+ * The list of skills to generate is defined in {@code skill-inventory.xml}; each must have a
  * matching skill summary in {@code skills/} and a matching system-prompt in {@code system-prompts/}.
  */
 public final class SkillsGenerator {

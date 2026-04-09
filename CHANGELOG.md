@@ -10,7 +10,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Skills**:
-  - INVEST validation added to agile user-story workflow in `@014-agile-user-story` (#633)
+  - `@001-skills-inventory` checklist skill that emits `SKILLS-JAVA.md` in the project root using the embedded system-prompts template
+  - `@002-agents-inventory` checklist skill that emits `AGENTS-JAVA.md` with the embedded agents table and installation targets
+  - `@003-agents-installation` interactive installer that copies the six embedded robot agents into `.cursor/agents` or `.claude/agents`
+  - Add INVEST validation to agile user-story workflow in `@014-agile-user-story` (#633)
   - Maven Central search guidance skill (`@114-java-maven-search`) (#605)
   - OpenSpec adoption for project change management in `@042-planning-openspec` (#620, #621, #616)
   - GitHub issue management workflow support`@043-planning-github` (#607)

@@ -15,12 +15,6 @@
     <packaging>jar</packaging>
 
     <dependencies>
-        <!-- JSON parsing for skill-inventory.json -->
-        <dependency>
-            <groupId>com.fasterxml.jackson.core</groupId>
-            <artifactId>jackson-databind</artifactId>
-        </dependency>
-
         <!-- Logging dependencies -->
         <dependency>
             <groupId>org.slf4j</groupId>
@@ -77,11 +71,11 @@
                                 <resource>
                                     <directory>${project.basedir}/src/main/resources</directory>
                                     <includes>
-                                        <include>skill-inventory.json</include>
+                                        <include>skill-inventory.xml</include>
                                         <include>skills/**</include>
                                         <include>system-prompts/**</include>
                                         <include>system-prompts.xsl</include>
-                                        <include>system-prompt-inventory.json</include>
+                                        <include>system-prompt-inventory.xml</include>
                                     </includes>
                                 </resource>
                             </resources>
