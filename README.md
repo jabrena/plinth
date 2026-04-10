@@ -8,11 +8,11 @@
 
 ## Goal
 
-A curated collection of `Skills` and `Agents` for Java Enterprise development, designed to streamline modern `SDLC` workflows.
+A curated collection of `Skills` and `Agents` to be used in modern `SDLC` workflows for Java Enterprise development.
 
 | QUESTION   | ROLE               | AREA             | SUPPORT                                                                                                                                                                                                             |
 | ---------- | ------------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| WHAT / WHEN | PO, BA, EA, SA, TL | Agile & Planning | `User Stories`, `Github Issues` & `Jira`|
+| WHAT / WHEN | PO, BA, EA, SA, TL | Agile & Planning | `User Stories`, `GitHub Issues` & `Jira` |
 | WHY        | EA, SL, TL         | Architecture     | `ADRs` & `UML` / `C4` / `ER` Diagrams |
 | HOW | SA, TL, SWE | Spec-Driven      | `AI Plan mode` & `OpenSpec` |
 | HOW        | TL, SWE            | Java development | `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation`, `Spring Boot`, `Quarkus`, `Micronaut`, `OpenAPI`, `Wiremock` & `AGENTS.md` |
@@ -22,30 +22,30 @@ A curated collection of `Skills` and `Agents` for Java Enterprise development, d
 The project generates a set of deliverables at the end of any iteration.
 
 
-| Deliverable     | Instalation                                                                                     | Getting Started                                                                           |
+| Deliverable     | Installation                                                                                    | Getting Started                                                                           |
 | --------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | 1. [Skills for Java](./documentation/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/cursor-rules-java --all --agent cursor` | [`Skills for Java`](./documentation/GETTING-STARTED-SKILLS.md)     |
 | 2. [Agents for Java](./documentation/INVENTORY-AGENTS-JAVA.md) | `@003-agents-installation` Install Agents in Cursor | [`Agents for Java`](./documentation/GETTING-STARTED-AGENTS.md)     |
 
-**Note:** Once you install all skills, you could install the agents easily for Cursor or Claude.
+**Note:** After you install the skills, you can install the agents easily for Cursor or Claude.
 
 ### Compatibility
 
-This project is compatible with any Tool compatible with `Skills`, `Agents`, `AGENTS.md` & `MCP` Servers.
+This project is compatible with any tool that supports `Skills`, `Agents`, `AGENTS.md`, and `MCP` servers.
 
-## How to use them?
+## How to use them
 
-The SDLC has evolved with the arrival of this new set of AI tooling, enhancing the Software Engineering process. In the development of this project, it was identified 3 different workflows: `Prompting Enginering Workflow`, `Pipelines Workflow` & `Agentic Workflow`.
+The SDLC has evolved with this new wave of AI tooling, which enhances the software engineering process. While building this project, we identified three workflows: `Prompting Engineering Workflow`, `Pipelines Workflow`, and `Agentic Workflow`.
 
-### Prompting Enginering Workflow
+### Prompting Engineering Workflow
 
-In this workflow, the Software engineer interact with models using `User prompts` and in an incremental way you delegate a delegate completely a task or ask help in certain moments. You could use this project to refactor the code generated or delegate the task and associate a System prompt / Skills to that task.
+In this workflow, the software engineer interacts with models using `User prompts`. In an incremental way, you delegate a whole task or ask for help at specific points. You can use this project to refactor generated code, or delegate the task and attach a system prompt or Skills to it.
 
 ![](./documentation/images/workflow-prompts.png)
 
-### Agent Workflow
+### Agentic Workflow
 
-`Agents for Java Enterprise development` were designed to help the Software engineer in the implementation phase. The software engineer define good `Specs` and that Specifications are delegated to Agents.
+`Agents for Java Enterprise development` were designed to help the software engineer in the implementation phase. The engineer defines solid `Specs`, and those specifications are delegated to Agents.
 
 ![](./documentation/images/workflow-agents.png)
 
@@ -55,21 +55,21 @@ Adding AI tools to your pipeline can provide new opportunities to deliver more v
 
 ![](./documentation/images/workflow-pipelines.png)
 
-Futher information [here`](./documentation/GETTING-STARTED-PIPELINES.md)
+Further information [here](./documentation/GETTING-STARTED-PIPELINES.md).
 
 ## Limitations
 
 ### Lack of determinism
 
-From the outset, be aware that the results provided by interactions with the different `Cursor rules` are not deterministic due to the nature of the models, but this can be mitigated with clear goals and validation checkpoints.
+From the outset, be aware that results from interactions with these `Skills` and agents are not deterministic because of how the models behave, but you can mitigate that with clear goals and validation checkpoints.
 
 ### Not all models behave in the same way
 
-In the project exist some Interactive skills which require to use `Premium` models to run in an interactive way in other case, they will work like in sequence of steps.
+Some interactive skills require `Premium` models for interactive use; otherwise they follow a fixed sequence of steps.
 
 ### Limits of interactions with models
 
-Models are able to generate code, but they cannot run code with your local data. To address this limitation, some prompts provide scripts to bridge this gap on the model side.
+Models can generate code, but they cannot execute it against your local data. To bridge that gap, some Skills include scripts you run locally.
 
 ## Contribute
 
@@ -77,7 +77,7 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for conventions, generator workflows, t
 
 ## Examples
 
-The repository includes [a collection of examples](./examples/) where you can explore the possibilities of these system prompts designed for Java.
+The repository includes [a collection of examples](./examples/) where you can explore what these Skills and workflows enable for Java.
 
 ## Architectural decision records, ADR
 
@@ -87,11 +87,11 @@ The repository includes [a collection of examples](./examples/) where you can ex
 
 - Review the [CHANGELOG](./CHANGELOG.md) for further details
 
-## Java JEPS from Java 8
+## Java JEPs from Java 8 onward
 
-Java uses JEPs as the vehicle to describe new features to be added to the language. The repository continuously reviews which JEPs could improve any of the cursor rules present in this repository.
+Java uses JEPs (JDK Enhancement Proposals) to describe new language and platform features. This repository tracks which JEPs could improve the Skills and guidance here.
 
-- [JEPS List](./documentation/jeps/All-JEPS.md)
+- [JEPs list](./documentation/jeps/All-JEPS.md)
 
 ## Meetups, Conferences, Workshops & Articles
 

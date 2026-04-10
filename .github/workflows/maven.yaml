@@ -72,3 +72,27 @@ jobs:
           java-version: '25'
       - name: Build ${{ matrix.example.name }}
         run: cd ${{ matrix.example.path }} && ./mvnw --batch-mode --no-transfer-progress ${{ matrix.example.goal }} --file pom.xml
+
+  package-agent-artifacts:
+    name: Package Agents and Skills
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: true
+      - name: Create agents archive
+        run: cd .cursor && zip -r ../agents.zip agents
+      - name: Create skills archive
+        run: zip -r skills.zip skills
+      - name: Upload agents.zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: agents.zip
+          path: agents.zip
+          if-no-files-found: error
+      - name: Upload skills.zip
+        uses: actions/upload-artifact@v4
+        with:
+          name: skills.zip
+          path: skills.zip
+          if-no-files-found: error

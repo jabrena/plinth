@@ -16,7 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Add INVEST validation to agile user-story workflow in `@014-agile-user-story` (#633)
   - Maven Central search guidance skill (`@114-java-maven-search`) (#605)
   - OpenSpec adoption for project change management in `@042-planning-openspec` (#620, #621, #616)
-  - GitHub issue management workflow support`@043-planning-github` (#607)
+  - GitHub issue management workflow support (`@043-planning-github-issues`) (#607)
   - Jira planning support and guidance improvements in `@044-planning-jira` (#631, #641, #642)
   - OpenAPI guidance skill `@701-technologies-openapi` (#635)
   - WireMock guidance skill `@702-technologies-wiremock` (#636)
@@ -24,10 +24,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Cursor and Claude plugin support documentation/workflow (#622)
 
 - **Rules:**
-  - Created an ADR to drop support for Rules in favor of Skills.
+  - Added an ADR documenting the decision to drop Rules in favor of Skills.
 
 - **Examples:**
-  - Reduce CI Pipeline times, removing non essential examples
+  - Reduced CI pipeline duration by removing non-essential examples
 
 ## [0.13.0] 2026-03-30
 
@@ -71,12 +71,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Skills & Agent system**:
   - SKILL generator for Cursor agent skills (#421).
-  - Skills support evolution (v1–v4) with skilljars and validation pipeline (#416, #418, #420, #423, #424).
+  - Skills support evolution (v1–v4) with Skill JARs and a validation pipeline (#416, #418, #420, #423, #424).
   - Improved skill generation and minimum requirements (#417, #427, #451).
 
 - **New Cursor Rules**:
   - `@132-java-testing-integration-testing` with WireMock support (#443).
-  - Arch Unit support in `@111-java-maven-dependencies` (#445).
+  - ArchUnit support in `@111-java-maven-dependencies` (#445).
 
 - **Maven rules & docs**:
   - Centralized version management and best practices for multi-module POM in `@110-java-maven-best-practices` (#441).
@@ -98,11 +98,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Behaviours**:
-  - Added Tone variations to consultative and progressive learning behaviours (#330).
-  - Added Tone to Interactive prompts
+  - Added tone variations to consultative and progressive learning behaviours (#330).
+  - Added tone support for interactive prompts.
 
 - **Website**:
-  - Added Website to communicate about System prompts for Java. https://jabrena.github.io/cursor-rules-java/
+  - Added a website covering system prompts for Java: https://jabrena.github.io/cursor-rules-java/
 
 - **Educational content**:
   - New "System Prompts for Java" course (#335). https://jabrena.github.io/cursor-rules-java/courses/system-prompts-java/index.html
@@ -121,8 +121,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Cursor rules**:
   - Extensive refinements across multiple rules (dependencies, plugins, secure coding, concurrency, exception handling, functional programming, documentation, diagrams) (#309, #341).
   - Decoupled system prompts from behaviours and added learning behaviour; reorganized generator templates and inventory (#309).
-  - All examples use single imports without using wildcard *
-  - Updated profiling Script to add support for Async-profiler 4.1 https://github.com/async-profiler/async-profiler/releases/tag/v4.1
+  - All examples use single-type imports (no wildcard `import ...*`)
+  - Updated profiling script to add support for Async-profiler 4.1: https://github.com/async-profiler/async-profiler/releases/tag/v4.1
   - Improved JFR support
 
 ### Removed
@@ -143,7 +143,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - JMH (Java Microbenchmark Harness) support for Maven projects without modules
   - Enhanced Maven plugins cursor rule with comprehensive JMH integration
 
-- Tested the project for Cursor, Cursor CLI, Claude Code, GitHub Copilot & JetBrains Junie. Further information at https://github.com/jabrena/cursor-rules-java/blob/main/docs/reviews/review-20250829.md
+- Tested the project for Cursor, Cursor CLI, Claude Code, GitHub Copilot, and JetBrains Junie. Further information: https://github.com/jabrena/cursor-rules-java/blob/main/docs/reviews/review-20250829.md
 
 ### Changed
 
@@ -289,7 +289,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
     - `@304-java-rest-api-design` (moved to separate Spring Boot rules project)
     - `@500-sql` (moved to Spring Boot rules)
 
-## [0.6.0] 30/5/2025
+## [0.6.0] 2025-05-30
 
 ### Added
 
@@ -301,7 +301,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Moved the Cursor rule about acceptance criteria as part of the repository about [Agile](https://github.com/jabrena/cursor-rules-agile)
 - Increased consistency in all cursor rules, now all examples use asserts from AssertJ
 
-## [0.5.0] 20/05/2025
+## [0.5.0] 2025-05-20
 
 ### Added
 
@@ -313,7 +313,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated all cursor rules
 
-## [0.4.0] 27/04/2025
+## [0.4.0] 2025-04-27
 
 ### Added
 
@@ -323,7 +323,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated all cursor rules
 
-## [0.3.0] 06/04/2025
+## [0.3.0] 2025-04-06
 
 ### Added
 
@@ -334,7 +334,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated cursor rules (Java, Effective Java, Concurrency, Functional programming, Data-Oriented programming, Pragmatic Unit Testing, Spring Boot & Quarkus)
 
 
-## [0.2.0] 01/03/2025
+## [0.2.0] 2025-03-01
 
 ### Added
 
@@ -344,7 +344,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Updated cursor rules (Java, Effective Java, Concurrency, Functional programming, Data-Oriented programming & Spring Boot)
 
-## [0.1.0] 09/02/2025
+## [0.1.0] 2025-02-09
 
 ### Added
 
