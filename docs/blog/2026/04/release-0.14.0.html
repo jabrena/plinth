@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>What&apos;s new in Cursor rules for Java 0.14.0? - Skills & Agents for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../../feed.xml" title="Skills & Agents for Java"/>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../../css/prettify.css">
+  <link rel="icon" type="image/png" href="../../../images/java-icon.png">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../../index.html">Skills & Agents for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li><a href="https://forms.gle/TpNXENjmu45wuXoi6" target="_blank">Share feedback</a></li>
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Conferences</a>
+    <div class="navlinks-children">
+      <a href="https://jabrena.github.io/cursor-rules-java/codemotion-madrid-2026/index.html" target="_blank">Codemotion Madrid 2026</a>
+      <a href="https://jabrena.github.io/cursor-rules-java/dvbe25/index.html" target="_blank">Devoxx BE 2025</a>
+      <a href="https://jabrena.github.io/101-cursor/" target="_blank">WJAX-2025</a>
+    </div>
+  </li>
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../../courses/java-generics/index.html">Java Generics</a>
+      <a href="../../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
+    </div>
+  </li>
+  <li><a href="../../../archive.html">Archive</a></li>
+  <li><a href="https://jabrena-github-io.translate.goog/cursor-rules-java/?_x_tr_sl=en&_x_tr_tl=cn&_x_tr_hl=en-US&_x_tr_pto=wapp">Translate</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="post-heading">
+<h1>What's new in Cursor rules for Java 0.14.0?</h1>
+<span class="post-meta">
+  <i class="fa fa-calendar-o"></i>
+  2026-04-13
+    &nbsp;
+    <i class="fa fa-pencil"></i>
+    Juan Antonio Breña Moral
+</span>
+<span class="blog-tags">
+  &nbsp;
+  <i class="fa fa-tags"></i>
+    <a href="../../../tags/blog.html">blog</a>
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="blog-post">
+<h2>What are Cursor rules for Java?</h2>
+<p>A curated collection of <code>Skills</code> and <code>Agents</code> to be used in modern <code>SDLC</code> workflows for Java Enterprise development.</p>
+<p>With appreciation for our community located in <code>Singapore</code>, <code>Copenhagen</code>, <code>Quito</code>, <code>Shah Alam</code>, and <code>Amstelveen</code>. 👋👋👋</p>
+<h2>What's new in this release?</h2>
+<h3>Rules support dropped in favor of Skills</h3>
+<p>It is a bit weird to explain that the project is named <code>Cursor rules for Java</code>, but one of the changes in this minor release is to drop support for Rules.</p>
+<p><strong>Why were Cursor rules dropped?</strong></p>
+<p>Until this release, the project maintained 3 very different deliverables:</p>
+<ul>
+<li>Rules</li>
+<li>Skills</li>
+<li>Agents</li>
+</ul>
+<p><code>Rules</code> and <code>Skills</code> both guide model behaviour in broadly similar ways, but Rules were Cursor’s approach while <code>Skills</code> have recently become the standard, so consolidating on a single solution makes more sense. <strong>On the other hand</strong>, maintaining a single generator (<code>skills-generator</code>) made it possible to improve how skills are packaged, which was somewhat constrained when both <code>rules-generator</code> and <code>skills-generator</code> existed.</p>
+<pre><code class="language-bash">skill-name/
+├── SKILL.md          # Required: metadata + instructions
+├── scripts/          # Optional: executable code
+├── references/       # Optional: documentation
+├── assets/           # Optional: templates, resources
+└── ...               # Any additional files or directories
+</code></pre>
+<p><strong>Source:</strong> <a href="https://agentskills.io/specification">https://agentskills.io/specification</a></p>
+<p>The last generated rules are preserved in release 0.13.0: <a href="https://github.com/jabrena/cursor-rules-java/releases/tag/0.13.0">https://github.com/jabrena/cursor-rules-java/releases/tag/0.13.0</a>; you can download them there if needed.</p>
+<h3>Improvements in the Agile process</h3>
+<p>When you create a <code>User Story</code>, the flow not only generates the usual structure plus acceptance criteria in <code>Gherkin</code> format; it also reviews the user story as a whole using <code>INVEST</code>. INVEST is an acronym used in Agile to evaluate the quality of a user story, ensuring it is <code>Independent</code>, <code>Negotiable</code>, <code>Valuable</code>, <code>Estimable</code>, <code>Small</code>, and <code>Testable</code>.</p>
+<p><strong>Skills:</strong></p>
+<ul>
+<li><code>@014-agile-user-story</code></li>
+</ul>
+<h3>Improvements in the planning process</h3>
+<p>It is tedious to copy issue details from your issue tracker into the context of whichever AI tool you use. With that in mind, you can now access assigned issues more easily if you work with <code>GitHub Issues</code> or <code>Jira</code>. Those <code>Skills</code> combine well with <code>@014-agile-user-story</code> to turn the classic <code>Anemic one line User Story</code> into something richer.</p>
+<p>Once the information is <code>ready for development</code>, you can convert it into a <code>Change</code> or <code>Delta</code> using <code>OpenSpec</code>.</p>
+<p><img src="/cursor-rules-java/images/2026/4/issue-to-openspec.png" alt="" /></p>
+<h4>How does OpenSpec work?</h4>
+<p>OpenSpec is a spec-driven change workflow: you capture what you want and how you will verify it before (or alongside) changing code and generators.</p>
+<p>The scaffolding for any project using OpenSpec looks like this:</p>
+<pre><code class="language-bash">openspec/
+ └── changes/
+      └── add-profile-filters/
+           ├── proposal.md
+           ├── tasks.md
+           └── specs/profile/spec.md
+ └── specs/
+config.yaml
+</code></pre>
+<p>Commands you will use often:</p>
+<pre><code class="language-bash">openspec init
+openspec list
+openspec status --change &lt;change-id&gt;
+openspec show &lt;change-name&gt;
+openspec new change &lt;change-name&gt;
+openspec validate --all
+openspec archive &lt;change-name&gt;
+</code></pre>
+<p>Further information about OpenSpec: <a href="https://openspec.dev/">https://openspec.dev/</a></p>
+<h4>When to use OpenSpec in daily work?</h4>
+<p>If you pick up a user story from any issue-tracking tool and it relates to a service you know well, you can use the following workflow directly:</p>
+<pre><code class="language-bash">User story &gt; Create a Change in OpenSpec &gt; Implement with Java Agents
+</code></pre>
+<p><img src="/cursor-rules-java/images/2026/4/implement-openspec-change.png" alt="" /></p>
+<p>But if you are less sure about the assigned user story, invest more time in the analysis phase:</p>
+<pre><code class="language-bash">User story &gt; Create a Plan &gt; Enhance the plan &gt; Convert into multiple Changes in OpenSpec &gt; Implement with Java Agents
+</code></pre>
+<p>Some factors to take into consideration:</p>
+<ul>
+<li>Design incremental Deltas</li>
+<li>Review the tests</li>
+<li>Use TDD. (Consider TCR)</li>
+<li>Do not execute all changes at once. Finish one and review for potential technical debt.</li>
+</ul>
+<p><strong>Skills:</strong></p>
+<ul>
+<li><code>@042-planning-openspec</code></li>
+<li><code>@043-planning-github-issues</code></li>
+<li><code>@044-planning-jira</code></li>
+</ul>
+<h3>Improvements in the Implementation phase</h3>
+<h4>Improvements in Maven</h4>
+<p>Now it is easier to update your <code>pom.xml</code> with <code>@114-java-maven-search</code>. On the other hand, the Maven-related skills are gradually gaining popularity.</p>
+<p><a href="https://skills.sh/?q=maven">https://skills.sh/?q=maven</a></p>
+<p><strong>Skills</strong></p>
+<ul>
+<li><code>@114-java-maven-search</code></li>
+</ul>
+<h3>Reinforced REST API development with new technologies</h3>
+<p>In the previous release, the project added Agents to implement plans. In this release, you can apply changes in a more granular way, or keep using Plans when the change is small. You can review your REST contracts with <code>@701-technologies-openapi</code>, reinforce your integration tests with <code>@702-technologies-wiremock</code>, and—most significantly for testing—use the new black-box testing capabilities with <code>@703-technologies-fuzzing-testing</code> based on <code>CATS</code>.</p>
+<p>You can run black-box testing against your development environment using your <code>OpenAPI</code> specification.</p>
+<p><img src="/cursor-rules-java/images/2026/4/cats.png" alt="" /></p>
+<p>Further information about CATS: <a href="https://github.com/Endava/cats">https://github.com/Endava/cats</a></p>
+<p><strong>Skills</strong></p>
+<ul>
+<li><code>@701-technologies-openapi</code></li>
+<li><code>@702-technologies-wiremock</code></li>
+<li><code>@703-technologies-fuzzing-testing</code></li>
+</ul>
+<h3>Skill inventory</h3>
+<p>In version <code>v0.14.0</code>, the project ships <code>68 Skills</code>.</p>
+<p>You can install the <code>Skills</code> easily with:</p>
+<pre><code class="language-bash">npx skills add jabrena/cursor-rules-java --all --agent cursor
+npx skills add jabrena/cursor-rules-java --all --agent claude-code
+</code></pre>
+<p>Once you have the skills installed, you can install the <code>Agents</code> with:</p>
+<pre><code>@003-agents-installation Install Agents in Cursor
+@003-agents-installation Install Agents in Claude
+</code></pre>
+<h2>What is the next step?</h2>
+<p>Improve some Skills based on notes from <a href="https://tessl.io/registry">Tessl</a>.</p>
+<h2>Do you still have questions about the project?</h2>
+<p>If you feel stuck using this project or have questions, you can attend the following workshop at <code>Codemotion Madrid 2026</code>:</p>
+<p><a href="https://conferences.codemotion.com/madrid/"><img src="/cursor-rules-java/images/2026/3/codemotion-madrid-2026.jpg" alt="" /></a></p>
+<p><a href="https://conferences.codemotion.com/madrid/workshop/">https://conferences.codemotion.com/madrid/workshop/</a></p>
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena/cursor-rules-java" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2026 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../../js/jquery-1.11.2.min.js"></script>
+<script src="../../../js/bootstrap.min.js"></script>
+<script src="../../../js/prettify.js"></script>
+<script src="../../../js/run_prettify.js"></script>
+<script src="../../../js/main.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13CV90H4J4');
+</script>
+
+</body>
+</html>
