@@ -10,8 +10,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Skills**:
-  - `@001-skills-inventory` checklist skill that emits `SKILLS-JAVA.md` in the project root using the embedded system-prompts template
-  - `@002-agents-inventory` checklist skill that emits `AGENTS-JAVA.md` with the embedded agents table and installation targets
+  - `@001-skills-inventory` checklist skill that emits `INVENTORY-SKILLS-JAVA.md` in the project root using the embedded system-prompts template
+  - `@002-agents-inventory` checklist skill that emits `INVENTORY-AGENTS-JAVA.md` with the embedded agents table and installation targets
   - `@003-agents-installation` interactive installer that copies the six embedded robot agents into `.cursor/agents` or `.claude/agents`
   - Add INVEST validation to agile user-story workflow in `@014-agile-user-story` (#633)
   - Maven Central search guidance skill (`@114-java-maven-search`) (#605)
