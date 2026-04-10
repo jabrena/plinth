@@ -6,14 +6,14 @@
         <version>0.14.0</version>
         <license>Apache-2.0</license>
         <title>Create a Checklist with embedded agents inventory for Java</title>
-        <description>Use when you need to generate a checklist document with embedded agents inventory, following the embedded template exactly and producing AGENTS-JAVA.md in the project root.</description>
+        <description>Use when you need to generate a checklist document with embedded agents inventory, following the embedded template exactly and producing INVENTORY-AGENTS-JAVA.md in the project root.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
     <goal> Your task is to create a comprehensive checklist that follows the exact format
         and structure defined in the embedded template below. Create a markdown file named
-        `AGENTS-JAVA.md` with the following content:
+        `INVENTORY-AGENTS-JAVA.md` with the following content:
 
         ```markdown
         <xi:include href="assets/java-agents-inventory-template.md" parse="text" />
@@ -34,10 +34,10 @@
     <output-format>
         <output-format-list>
             <output-format-item>**File Creation**: Generate the complete markdown file named
-                `AGENTS-JAVA.md` in the project root directory</output-format-item>
+                `INVENTORY-AGENTS-JAVA.md` in the project root directory</output-format-item>
             <output-format-item>**Template Adherence**: Follow the embedded template structure and
                 content exactly - no additions, modifications, or omissions</output-format-item>
-            <output-format-item>**File Handling**: If `AGENTS-JAVA.md` already exists,
+            <output-format-item>**File Handling**: If `INVENTORY-AGENTS-JAVA.md` already exists,
                 overwrite it completely with the new generated content</output-format-item>
         </output-format-list>
     </output-format>
