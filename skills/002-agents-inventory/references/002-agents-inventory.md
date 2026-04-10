@@ -1,6 +1,6 @@
 ---
 name: 002-agents-inventory
-description: Use when you need to generate a checklist document with embedded agents inventory, following the embedded template exactly and producing AGENTS-JAVA.md in the project root.
+description: Use when you need to generate a checklist document with embedded agents inventory, following the embedded template exactly and producing INVENTORY-AGENTS-JAVA.md in the project root.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -16,7 +16,7 @@ You are a Senior software engineer with extensive experience in Java software de
 
 Your task is to create a comprehensive checklist that follows the exact format
 and structure defined in the embedded template below. Create a markdown file named
-`AGENTS-JAVA.md` with the following content:
+`INVENTORY-AGENTS-JAVA.md` with the following content:
 
 ```markdown
 # Embedded Agents Inventory
@@ -54,6 +54,6 @@ Provide a quick checklist of the embedded agents available for installation in t
 
 ## Output Format
 
-- **File Creation**: Generate the complete markdown file named `AGENTS-JAVA.md` in the project root directory
+- **File Creation**: Generate the complete markdown file named `INVENTORY-AGENTS-JAVA.md` in the project root directory
 - **Template Adherence**: Follow the embedded template structure and content exactly - no additions, modifications, or omissions
-- **File Handling**: If `AGENTS-JAVA.md` already exists, overwrite it completely with the new generated content
+- **File Handling**: If `INVENTORY-AGENTS-JAVA.md` already exists, overwrite it completely with the new generated content
