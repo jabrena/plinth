@@ -8,7 +8,7 @@ status=published
 
 ## What are Cursor rules for Java?
 
-A curated collection of `Skills` and `Agents` to be used in modern `SDLC` workflows for Java Enterprise development.
+A curated and opinionated collection of `Skills` and `Agents` to be used in modern `SDLC` workflows for Java Enterprise development with your favorite AI Agent harness.
 
 Thanks to our community members in `Singapore`, `Chengdu`, `Hanoi`, `Copenhagen`, and `Quito`. 👋👋👋
 
@@ -16,51 +16,24 @@ Thanks to our community members in `Singapore`, `Chengdu`, `Hanoi`, `Copenhagen`
 
 ### Rules support dropped in favor of Skills
 
-It is a bit weird to explain that the project is named `Cursor rules for Java`, but one of the changes in this minor release is to drop support for Rules.
-
-**Why were Cursor rules dropped?**
-
-Until this release, the project maintained three very different deliverables: Rules, Skills, and Agents. `Rules` and `Skills` both guide model behaviour in broadly similar ways, but Rules were Cursor’s approach while `Skills` have recently become the standard, so consolidating on a single solution makes more sense. **On the other hand**, maintaining a single generator (`skills-generator`) made it possible to improve how skills are packaged, which was somewhat constrained when both `rules-generator` and `skills-generator` existed.
-
-```bash
-skill-name/
-├── SKILL.md          # Required: metadata + instructions
-├── scripts/          # Optional: executable code
-├── references/       # Optional: documentation
-├── assets/           # Optional: templates, resources
-└── ...               # Any additional files or directories
-```
-
-**Source:** https://agentskills.io/specification
-
-If you followed the various ADRs published at https://github.com/jabrena/cursor-rules-java/tree/main/documentation/adr, you may recall that when more than 10 rules were active in memory, Cursor (and similar tools at the time) did not run reliably, and you could hit the following issue:
-
-![](/cursor-rules-java/images/2026/4/your-message-is-too-long.png)
-
-If you are interested in this issue with older models, you can review it here: https://github.com/jabrena/cursor-rules-sandbox/blob/main/docs/message-too-long.md
-
-So we changed the metadata included in the `System prompts/Rules` to address that issue and to use the rules in a manual workflow, as described here: https://github.com/jabrena/cursor-rules-java/blob/main/documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md
-
-Users could still use the `System prompts/Rules` in this way:
+Until this release, the project maintained three very different deliverables: Rules, Skills, and Agents. `Rules` and `Skills` both guide model behavior in broadly similar ways, but Rules were Cursor’s approach while `Skills` have recently become the standard, so consolidating on a single solution makes more sense. **On the other hand**, maintaining a single generator (`skills-generator`) made it possible to improve how skills are packaged, which was somewhat constrained when both `rules-generator` and `skills-generator` existed. If you followed the various [ADRs published](https://github.com/jabrena/cursor-rules-java/tree/main/documentation/adr) in the repository, you could see why the project preserves the same guidance while adopting Skills-based packaging. In previous months, users developed or refactored code using `System prompts/Rules` in this way:
 
 ![](/cursor-rules-java/images/2026/4/manual-trigger.png)
 
-But now you can do the same with Skills. You can add the Skill you want to the context explicitly, or leave it to the AI tool to use or skip depending on the context—so you can achieve the same outcomes with Skills as you could with system prompts in the past.
+But now, you can do the same by adding the Skill to the context of your favorite `AI Agent harness`. You can add the Skill you want to the context explicitly, or leave it to the AI tool to use or skip depending on the context—so you can achieve the same outcomes with Skills as you could with system prompts in the past.
 
-On the main branch, a few resources about `System-prompts/rules` remain:
+On the main branch, a few resources about `System-prompts/rules` remain temporarily; we still see web traffic for them:
 
 - All rules from v0.13.0: https://github.com/jabrena/cursor-rules-java/tree/main/.cursor/rules
 - Getting Started: https://github.com/jabrena/cursor-rules-java/blob/main/documentation/GETTING-STARTED-SYSTEM-PROMPTS.md
 
-That usage is `deprecated` in favor of `Skills` and will be removed in the coming months; the recommendation is to review [the new documentation](https://github.com/jabrena/cursor-rules-java?tab=readme-ov-file#deliverables) and adapt.
+That usage is `deprecated` in favor of `Skills` and will be removed in the coming months; review [the new documentation](https://github.com/jabrena/cursor-rules-java?tab=readme-ov-file#deliverables) and adapt your process or pipelines.
 
-You can still download the last generated rules from release 0.13.0 if needed: https://github.com/jabrena/cursor-rules-java/releases/tag/0.13.0
-
-Now that the serious part is out of the way, let's continue with the article.
+Separately, you can still download the last generated `System prompts/rules` from [release 0.13.0](https://github.com/jabrena/cursor-rules-java/releases/tag/0.13.0) if you need them, but development is frozen in favor of the [Skill Standard](https://agentskills.io/specification).
 
 ### Improvements in the Agile process
 
-When you create a `User Story`, the flow not only generates the usual structure plus acceptance criteria in `Gherkin` format; it also reviews the user story as a whole using `INVEST`. INVEST is an acronym used in Agile to evaluate the quality of a user story, ensuring it is `Independent`, `Negotiable`, `Valuable`, `Estimable`, `Small`, and `Testable`.
+When you create a `User Story`, the flow not only generates the usual structure and acceptance criteria in `Gherkin` format, but it also reviews the user story as a whole using `INVEST`. INVEST is an acronym used in Agile to evaluate the quality of a user story, ensuring it is `Independent`, `Negotiable`, `Valuable`, `Estimable`, `Small`, and `Testable`.
 
 **Skills:**
 
@@ -68,7 +41,7 @@ When you create a `User Story`, the flow not only generates the usual structure 
 
 ### Improvements in the planning process
 
-It is tedious to copy issue details from your issue tracker into the context of whichever AI tool you use. With that in mind, you can now access assigned issues more easily if you work with `GitHub Issues` or `Jira`. Those `Skills` combine well with `@014-agile-user-story` to turn the classic `Anemic one line User Story` into something richer.
+It is tedious to copy issue details from your issue tracker into the context of whichever AI tool you use. With that in mind, you can now access assigned issues more easily if you work with `GitHub Issues` or `Jira`. Those `Skills` combine well with `@014-agile-user-story` to turn the classic `Anemic one-line User Story` into something richer.
 
 Once the information is `ready for development`, you can convert it into a `Change` or `Delta` using `OpenSpec`.
 
@@ -105,7 +78,7 @@ openspec archive <change-name>
 
 Further information about OpenSpec: https://openspec.dev/
 
-#### When to use OpenSpec in daily work?
+#### When to use OpenSpec in daily work
 
 If you pick up a user story from any issue-tracking tool and it relates to a service you know well, you can use the following workflow directly:
 
@@ -121,12 +94,19 @@ But if you are less sure about the assigned user story, invest more time in the 
 User story > Create a Plan > Enhance the plan > Convert into multiple Changes in OpenSpec > Implement with Java Agents
 ```
 
-Some factors to consider:
+#### Why spec-driven development (SDD) matters for senior software engineers
 
-- Design incremental Deltas
-- Review the tests
-- Use TDD. (Consider TCR)
-- Do not execute all changes at once. Finish one and review for potential technical debt.
+Whether you use pair programming or work alone with your AI Agent harness, taking time to structure your thoughts before implementation almost always pays off compared to a `traditional` session that mixes manual coding with user prompts.
+
+When you are modeling the changes or deltas, you could consider:
+
+- Size of the incremental deltas
+- Style of the overall test suite using criteria such as London-style outside-in
+- Room up front to review, change, or enhance the proposed tests
+- Include TDD in the task organization (consider TCR)
+- Do not execute all changes at once: finish one, review for technical debt, then continue
+- Structure your day around a clear agenda
+- Build in quality by design
 
 **Skills:**
 
@@ -138,21 +118,19 @@ Some factors to consider:
 
 #### Improvements in Maven
 
-Now it is easier to update your `pom.xml` with `@114-java-maven-search`. On the other hand, the Maven-related skills are gradually gaining popularity.
-
-https://skills.sh/?q=maven
+Now it is easier to update or search for dependencies in your `pom.xml` with the skill `@114-java-maven-search`. On the other hand, the Maven-related skills are gradually gaining popularity in [Vercel's Skill registry](https://skills.sh/?q=maven).
 
 **Skills**
 
 - `@114-java-maven-search`
 
-### Reinforced REST API development with new technologies
+#### Reinforced REST API development with new technologies
 
 In the previous release, the project added Agents to implement plans. In this release, you can apply changes in a more granular way, or keep using Plans when the change is small. You can review your REST contracts with `@701-technologies-openapi`, reinforce your integration tests with `@702-technologies-wiremock`, and—most significantly for testing—use the new black-box testing capabilities with `@703-technologies-fuzzing-testing` based on `CATS`.
 
 You can run black-box tests against your development environment using your `OpenAPI` specification.
 
-![](/cursor-rules-java/images/2026/4/cats.png)
+[![](/cursor-rules-java/images/2026/4/cats.png)](https://endava.github.io/cats/)
 
 Further information about CATS: https://github.com/Endava/cats
 
@@ -180,9 +158,59 @@ Once you have the skills installed, you can install the `Agents` with:
 @003-agents-installation Install Agents in Claude
 ```
 
+## Evolution of this project in Vercel's Skills registry
+
+The ecosystem is large, so you will need your own criteria beyond whether this project fits your preferences.
+
+This project focuses mainly on the following categories, and that scope continues to evolve:
+
+- Maven, https://skills.sh/?q=maven
+- Architecture ADR, https://skills.sh/?q=architecture+adr
+- Java, https://skills.sh/?q=java
+- Spring Boot, https://skills.sh/?q=spring-boot
+- Quarkus, https://skills.sh/?q=quarkus
+- Micronaut, https://skills.sh/?q=micronaut
+
+In upcoming releases, the project will focus on the `skills-lock.json` file.
+
+## Which third-party MCP servers are we using?
+
+We continue using the MCP from [`James Ward`](https://x.com/JamesWard) to retrieve Javadocs from dependencies. In this release, we also added `Serena`, a powerful MCP toolkit for coding that provides semantic retrieval and editing capabilities.
+
+```json
+{
+    "mcpServers": {
+        "javadocs": {
+            "url": "https://www.javadocs.dev/mcp"
+        },
+        "serena": {
+            "command": "docker",
+            "args": [
+                "run",
+                "-i",
+                "--rm",
+                "-v",
+                ".:/workspaces/projects/repo",
+                "ghcr.io/oraios/serena:latest",
+                "serena",
+                "start-mcp-server",
+                "--project",
+                "/workspaces/projects/repo"
+            ]
+        }
+    }
+}
+```
+
+Further information about Serena: https://oraios.github.io/serena/
+
+Further information about LSP: https://microsoft.github.io/language-server-protocol/
+
 ## What is the next step?
 
-In the next release, the project will be renamed to reflect its evolution, and a few Skills will be refactored using notes from [Tessl](https://tessl.io/registry).
+In the next release, the project will be renamed to reflect its evolution, and the naming process will take time.
+
+Separately, the Skills need a few improvements to increase quality, so we will use notes from [Tessl](https://tessl.io/registry).
 
 ## Do you still have questions about the project?
 

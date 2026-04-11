@@ -102,44 +102,28 @@
 <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
 <article role="main" class="blog-post">
 <h2>What are Cursor rules for Java?</h2>
-<p>A curated collection of <code>Skills</code> and <code>Agents</code> to be used in modern <code>SDLC</code> workflows for Java Enterprise development.</p>
+<p>A curated and opinionated collection of <code>Skills</code> and <code>Agents</code> to be used in modern <code>SDLC</code> workflows for Java Enterprise development with your favorite AI Agent harness.</p>
 <p>Thanks to our community members in <code>Singapore</code>, <code>Chengdu</code>, <code>Hanoi</code>, <code>Copenhagen</code>, and <code>Quito</code>. 👋👋👋</p>
 <h2>What's new in this release?</h2>
 <h3>Rules support dropped in favor of Skills</h3>
-<p>It is a bit weird to explain that the project is named <code>Cursor rules for Java</code>, but one of the changes in this minor release is to drop support for Rules.</p>
-<p><strong>Why were Cursor rules dropped?</strong></p>
-<p>Until this release, the project maintained three very different deliverables: Rules, Skills, and Agents. <code>Rules</code> and <code>Skills</code> both guide model behaviour in broadly similar ways, but Rules were Cursor’s approach while <code>Skills</code> have recently become the standard, so consolidating on a single solution makes more sense. <strong>On the other hand</strong>, maintaining a single generator (<code>skills-generator</code>) made it possible to improve how skills are packaged, which was somewhat constrained when both <code>rules-generator</code> and <code>skills-generator</code> existed.</p>
-<pre><code class="language-bash">skill-name/
-├── SKILL.md          # Required: metadata + instructions
-├── scripts/          # Optional: executable code
-├── references/       # Optional: documentation
-├── assets/           # Optional: templates, resources
-└── ...               # Any additional files or directories
-</code></pre>
-<p><strong>Source:</strong> <a href="https://agentskills.io/specification">https://agentskills.io/specification</a></p>
-<p>If you followed the various ADRs published at <a href="https://github.com/jabrena/cursor-rules-java/tree/main/documentation/adr">https://github.com/jabrena/cursor-rules-java/tree/main/documentation/adr</a>, you may recall that when more than 10 rules were active in memory, Cursor (and similar tools at the time) did not run reliably, and you could hit the following issue:</p>
-<p><img src="/cursor-rules-java/images/2026/4/your-message-is-too-long.png" alt="" /></p>
-<p>If you are interested in this issue with older models, you can review it here: <a href="https://github.com/jabrena/cursor-rules-sandbox/blob/main/docs/message-too-long.md">https://github.com/jabrena/cursor-rules-sandbox/blob/main/docs/message-too-long.md</a></p>
-<p>So we changed the metadata included in the <code>System prompts/Rules</code> to address that issue and to use the rules in a manual workflow, as described here: <a href="https://github.com/jabrena/cursor-rules-java/blob/main/documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md">https://github.com/jabrena/cursor-rules-java/blob/main/documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md</a></p>
-<p>Users could still use the <code>System prompts/Rules</code> in this way:</p>
+<p>Until this release, the project maintained three very different deliverables: Rules, Skills, and Agents. <code>Rules</code> and <code>Skills</code> both guide model behavior in broadly similar ways, but Rules were Cursor’s approach while <code>Skills</code> have recently become the standard, so consolidating on a single solution makes more sense. <strong>On the other hand</strong>, maintaining a single generator (<code>skills-generator</code>) made it possible to improve how skills are packaged, which was somewhat constrained when both <code>rules-generator</code> and <code>skills-generator</code> existed. If you followed the various <a href="https://github.com/jabrena/cursor-rules-java/tree/main/documentation/adr">ADRs published</a> in the repository, you could see why the project preserves the same guidance while adopting Skills-based packaging. In previous months, users developed or refactored code using <code>System prompts/Rules</code> in this way:</p>
 <p><img src="/cursor-rules-java/images/2026/4/manual-trigger.png" alt="" /></p>
-<p>But now you can do the same with Skills. You can add the Skill you want to the context explicitly, or leave it to the AI tool to use or skip depending on the context—so you can achieve the same outcomes with Skills as you could with system prompts in the past.</p>
-<p>On the main branch, a few resources about <code>System-prompts/rules</code> remain:</p>
+<p>But now, you can do the same by adding the Skill to the context of your favorite <code>AI Agent harness</code>. You can add the Skill you want to the context explicitly, or leave it to the AI tool to use or skip depending on the context—so you can achieve the same outcomes with Skills as you could with system prompts in the past.</p>
+<p>On the main branch, a few resources about <code>System-prompts/rules</code> remain temporarily; we still see web traffic for them:</p>
 <ul>
 <li>All rules from v0.13.0: <a href="https://github.com/jabrena/cursor-rules-java/tree/main/.cursor/rules">https://github.com/jabrena/cursor-rules-java/tree/main/.cursor/rules</a></li>
 <li>Getting Started: <a href="https://github.com/jabrena/cursor-rules-java/blob/main/documentation/GETTING-STARTED-SYSTEM-PROMPTS.md">https://github.com/jabrena/cursor-rules-java/blob/main/documentation/GETTING-STARTED-SYSTEM-PROMPTS.md</a></li>
 </ul>
-<p>That usage is <code>deprecated</code> in favor of <code>Skills</code> and will be removed in the coming months; the recommendation is to review <a href="https://github.com/jabrena/cursor-rules-java?tab=readme-ov-file#deliverables">the new documentation</a> and adapt.</p>
-<p>You can still download the last generated rules from release 0.13.0 if needed: <a href="https://github.com/jabrena/cursor-rules-java/releases/tag/0.13.0">https://github.com/jabrena/cursor-rules-java/releases/tag/0.13.0</a></p>
-<p>Now that the serious part is out of the way, let's continue with the article.</p>
+<p>That usage is <code>deprecated</code> in favor of <code>Skills</code> and will be removed in the coming months; review <a href="https://github.com/jabrena/cursor-rules-java?tab=readme-ov-file#deliverables">the new documentation</a> and adapt your process or pipelines.</p>
+<p>Separately, you can still download the last generated <code>System prompts/rules</code> from <a href="https://github.com/jabrena/cursor-rules-java/releases/tag/0.13.0">release 0.13.0</a> if you need them, but development is frozen in favor of the <a href="https://agentskills.io/specification">Skill Standard</a>.</p>
 <h3>Improvements in the Agile process</h3>
-<p>When you create a <code>User Story</code>, the flow not only generates the usual structure plus acceptance criteria in <code>Gherkin</code> format; it also reviews the user story as a whole using <code>INVEST</code>. INVEST is an acronym used in Agile to evaluate the quality of a user story, ensuring it is <code>Independent</code>, <code>Negotiable</code>, <code>Valuable</code>, <code>Estimable</code>, <code>Small</code>, and <code>Testable</code>.</p>
+<p>When you create a <code>User Story</code>, the flow not only generates the usual structure and acceptance criteria in <code>Gherkin</code> format, but it also reviews the user story as a whole using <code>INVEST</code>. INVEST is an acronym used in Agile to evaluate the quality of a user story, ensuring it is <code>Independent</code>, <code>Negotiable</code>, <code>Valuable</code>, <code>Estimable</code>, <code>Small</code>, and <code>Testable</code>.</p>
 <p><strong>Skills:</strong></p>
 <ul>
 <li><code>@014-agile-user-story</code></li>
 </ul>
 <h3>Improvements in the planning process</h3>
-<p>It is tedious to copy issue details from your issue tracker into the context of whichever AI tool you use. With that in mind, you can now access assigned issues more easily if you work with <code>GitHub Issues</code> or <code>Jira</code>. Those <code>Skills</code> combine well with <code>@014-agile-user-story</code> to turn the classic <code>Anemic one line User Story</code> into something richer.</p>
+<p>It is tedious to copy issue details from your issue tracker into the context of whichever AI tool you use. With that in mind, you can now access assigned issues more easily if you work with <code>GitHub Issues</code> or <code>Jira</code>. Those <code>Skills</code> combine well with <code>@014-agile-user-story</code> to turn the classic <code>Anemic one-line User Story</code> into something richer.</p>
 <p>Once the information is <code>ready for development</code>, you can convert it into a <code>Change</code> or <code>Delta</code> using <code>OpenSpec</code>.</p>
 <p><img src="/cursor-rules-java/images/2026/4/issue-to-openspec.png" alt="" /></p>
 <h4>How does OpenSpec work?</h4>
@@ -164,7 +148,7 @@ openspec validate --all
 openspec archive &lt;change-name&gt;
 </code></pre>
 <p>Further information about OpenSpec: <a href="https://openspec.dev/">https://openspec.dev/</a></p>
-<h4>When to use OpenSpec in daily work?</h4>
+<h4>When to use OpenSpec in daily work</h4>
 <p>If you pick up a user story from any issue-tracking tool and it relates to a service you know well, you can use the following workflow directly:</p>
 <pre><code class="language-bash">User story &gt; Create a Change in OpenSpec &gt; Implement with Java Agents
 </code></pre>
@@ -172,12 +156,17 @@ openspec archive &lt;change-name&gt;
 <p>But if you are less sure about the assigned user story, invest more time in the analysis phase:</p>
 <pre><code class="language-bash">User story &gt; Create a Plan &gt; Enhance the plan &gt; Convert into multiple Changes in OpenSpec &gt; Implement with Java Agents
 </code></pre>
-<p>Some factors to consider:</p>
+<h4>Why spec-driven development (SDD) matters for senior software engineers</h4>
+<p>Whether you use pair programming or work alone with your AI Agent harness, taking time to structure your thoughts before implementation almost always pays off compared to a <code>traditional</code> session that mixes manual coding with user prompts.</p>
+<p>When you are modeling the changes or deltas, you could consider:</p>
 <ul>
-<li>Design incremental Deltas</li>
-<li>Review the tests</li>
-<li>Use TDD. (Consider TCR)</li>
-<li>Do not execute all changes at once. Finish one and review for potential technical debt.</li>
+<li>Size of the incremental deltas</li>
+<li>Style of the overall test suite using criteria such as London-style outside-in</li>
+<li>Room up front to review, change, or enhance the proposed tests</li>
+<li>Include TDD in the task organization (consider TCR)</li>
+<li>Do not execute all changes at once: finish one, review for technical debt, then continue</li>
+<li>Structure your day around a clear agenda</li>
+<li>Build in quality by design</li>
 </ul>
 <p><strong>Skills:</strong></p>
 <ul>
@@ -187,16 +176,15 @@ openspec archive &lt;change-name&gt;
 </ul>
 <h3>Improvements in the Implementation phase</h3>
 <h4>Improvements in Maven</h4>
-<p>Now it is easier to update your <code>pom.xml</code> with <code>@114-java-maven-search</code>. On the other hand, the Maven-related skills are gradually gaining popularity.</p>
-<p><a href="https://skills.sh/?q=maven">https://skills.sh/?q=maven</a></p>
+<p>Now it is easier to update or search for dependencies in your <code>pom.xml</code> with the skill <code>@114-java-maven-search</code>. On the other hand, the Maven-related skills are gradually gaining popularity in <a href="https://skills.sh/?q=maven">Vercel's Skill registry</a>.</p>
 <p><strong>Skills</strong></p>
 <ul>
 <li><code>@114-java-maven-search</code></li>
 </ul>
-<h3>Reinforced REST API development with new technologies</h3>
+<h4>Reinforced REST API development with new technologies</h4>
 <p>In the previous release, the project added Agents to implement plans. In this release, you can apply changes in a more granular way, or keep using Plans when the change is small. You can review your REST contracts with <code>@701-technologies-openapi</code>, reinforce your integration tests with <code>@702-technologies-wiremock</code>, and—most significantly for testing—use the new black-box testing capabilities with <code>@703-technologies-fuzzing-testing</code> based on <code>CATS</code>.</p>
 <p>You can run black-box tests against your development environment using your <code>OpenAPI</code> specification.</p>
-<p><img src="/cursor-rules-java/images/2026/4/cats.png" alt="" /></p>
+<p><a href="https://endava.github.io/cats/"><img src="/cursor-rules-java/images/2026/4/cats.png" alt="" /></a></p>
 <p>Further information about CATS: <a href="https://github.com/Endava/cats">https://github.com/Endava/cats</a></p>
 <p><strong>Skills</strong></p>
 <ul>
@@ -214,8 +202,48 @@ npx skills add jabrena/cursor-rules-java --all --agent claude-code
 <pre><code>@003-agents-installation Install Agents in Cursor
 @003-agents-installation Install Agents in Claude
 </code></pre>
+<h2>Evolution of this project in Vercel's Skills registry</h2>
+<p>The ecosystem is large, so you will need your own criteria beyond whether this project fits your preferences.</p>
+<p>This project focuses mainly on the following categories, and that scope continues to evolve:</p>
+<ul>
+<li>Maven, <a href="https://skills.sh/?q=maven">https://skills.sh/?q=maven</a></li>
+<li>Architecture ADR, <a href="https://skills.sh/?q=architecture+adr">https://skills.sh/?q=architecture+adr</a></li>
+<li>Java, <a href="https://skills.sh/?q=java">https://skills.sh/?q=java</a></li>
+<li>Spring Boot, <a href="https://skills.sh/?q=spring-boot">https://skills.sh/?q=spring-boot</a></li>
+<li>Quarkus, <a href="https://skills.sh/?q=quarkus">https://skills.sh/?q=quarkus</a></li>
+<li>Micronaut, <a href="https://skills.sh/?q=micronaut">https://skills.sh/?q=micronaut</a></li>
+</ul>
+<p>In upcoming releases, the project will focus on the <code>skills-lock.json</code> file.</p>
+<h2>Which third-party MCP servers are we using?</h2>
+<p>We continue using the MCP from <a href="https://x.com/JamesWard"><code>James Ward</code></a> to retrieve Javadocs from dependencies. In this release, we also added <code>Serena</code>, a powerful MCP toolkit for coding that provides semantic retrieval and editing capabilities.</p>
+<pre><code class="language-json">{
+    &quot;mcpServers&quot;: {
+        &quot;javadocs&quot;: {
+            &quot;url&quot;: &quot;https://www.javadocs.dev/mcp&quot;
+        },
+        &quot;serena&quot;: {
+            &quot;command&quot;: &quot;docker&quot;,
+            &quot;args&quot;: [
+                &quot;run&quot;,
+                &quot;-i&quot;,
+                &quot;--rm&quot;,
+                &quot;-v&quot;,
+                &quot;.:/workspaces/projects/repo&quot;,
+                &quot;ghcr.io/oraios/serena:latest&quot;,
+                &quot;serena&quot;,
+                &quot;start-mcp-server&quot;,
+                &quot;--project&quot;,
+                &quot;/workspaces/projects/repo&quot;
+            ]
+        }
+    }
+}
+</code></pre>
+<p>Further information about Serena: <a href="https://oraios.github.io/serena/">https://oraios.github.io/serena/</a></p>
+<p>Further information about LSP: <a href="https://microsoft.github.io/language-server-protocol/">https://microsoft.github.io/language-server-protocol/</a></p>
 <h2>What is the next step?</h2>
-<p>In the next release, the project will be renamed to reflect its evolution, and a few Skills will be refactored using notes from <a href="https://tessl.io/registry">Tessl</a>.</p>
+<p>In the next release, the project will be renamed to reflect its evolution, and the naming process will take time.</p>
+<p>Separately, the Skills need a few improvements to increase quality, so we will use notes from <a href="https://tessl.io/registry">Tessl</a>.</p>
 <h2>Do you still have questions about the project?</h2>
 <p>If you feel stuck using this project or have questions, you can attend the following workshop at <code>Codemotion Madrid 2026</code>:</p>
 <p><a href="https://conferences.codemotion.com/madrid/"><img src="/cursor-rules-java/images/2026/3/codemotion-madrid-2026.jpg" alt="" /></a></p>
