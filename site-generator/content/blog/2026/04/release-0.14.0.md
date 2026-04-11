@@ -10,7 +10,7 @@ status=published
 
 A curated collection of `Skills` and `Agents` to be used in modern `SDLC` workflows for Java Enterprise development.
 
-With appreciation for our community located in `Singapore`, `Copenhagen`, `Quito`, `Shah Alam`, and `Amstelveen`. 👋👋👋
+Thanks to our community members in `Singapore`, `Chengdu`, `Hanoi`, `Copenhagen`, and `Quito`. 👋👋👋
 
 ## What's new in this release?
 
@@ -20,13 +20,7 @@ It is a bit weird to explain that the project is named `Cursor rules for Java`, 
 
 **Why were Cursor rules dropped?**
 
-Until this release, the project maintained 3 very different deliverables:
-
-- Rules
-- Skills
-- Agents
-
-`Rules` and `Skills` both guide model behaviour in broadly similar ways, but Rules were Cursor’s approach while `Skills` have recently become the standard, so consolidating on a single solution makes more sense. **On the other hand**, maintaining a single generator (`skills-generator`) made it possible to improve how skills are packaged, which was somewhat constrained when both `rules-generator` and `skills-generator` existed.
+Until this release, the project maintained three very different deliverables: Rules, Skills, and Agents. `Rules` and `Skills` both guide model behaviour in broadly similar ways, but Rules were Cursor’s approach while `Skills` have recently become the standard, so consolidating on a single solution makes more sense. **On the other hand**, maintaining a single generator (`skills-generator`) made it possible to improve how skills are packaged, which was somewhat constrained when both `rules-generator` and `skills-generator` existed.
 
 ```bash
 skill-name/
@@ -39,7 +33,30 @@ skill-name/
 
 **Source:** https://agentskills.io/specification
 
-The last generated rules are preserved in release 0.13.0: https://github.com/jabrena/cursor-rules-java/releases/tag/0.13.0; you can download them there if needed.
+If you followed the various ADRs published at https://github.com/jabrena/cursor-rules-java/tree/main/documentation/adr, you may recall that when more than 10 rules were active in memory, Cursor (and similar tools at the time) did not run reliably, and you could hit the following issue:
+
+![](/cursor-rules-java/images/2026/4/your-message-is-too-long.png)
+
+If you are interested in this issue with older models, you can review it here: https://github.com/jabrena/cursor-rules-sandbox/blob/main/docs/message-too-long.md
+
+So we changed the metadata included in the `System prompts/Rules` to address that issue and to use the rules in a manual workflow, as described here: https://github.com/jabrena/cursor-rules-java/blob/main/documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md
+
+Users could still use the `System prompts/Rules` in this way:
+
+![](/cursor-rules-java/images/2026/4/manual-trigger.png)
+
+But now you can do the same with Skills. You can add the Skill you want to the context explicitly, or leave it to the AI tool to use or skip depending on the context—so you can achieve the same outcomes with Skills as you could with system prompts in the past.
+
+On the main branch, a few resources about `System-prompts/rules` remain:
+
+- All rules from v0.13.0: https://github.com/jabrena/cursor-rules-java/tree/main/.cursor/rules
+- Getting Started: https://github.com/jabrena/cursor-rules-java/blob/main/documentation/GETTING-STARTED-SYSTEM-PROMPTS.md
+
+That usage is `deprecated` in favor of `Skills` and will be removed in the coming months; the recommendation is to review [the new documentation](https://github.com/jabrena/cursor-rules-java?tab=readme-ov-file#deliverables) and adapt.
+
+You can still download the last generated rules from release 0.13.0 if needed: https://github.com/jabrena/cursor-rules-java/releases/tag/0.13.0
+
+Now that the serious part is out of the way, let's continue with the article.
 
 ### Improvements in the Agile process
 
@@ -104,7 +121,7 @@ But if you are less sure about the assigned user story, invest more time in the 
 User story > Create a Plan > Enhance the plan > Convert into multiple Changes in OpenSpec > Implement with Java Agents
 ```
 
-Some factors to take into consideration:
+Some factors to consider:
 
 - Design incremental Deltas
 - Review the tests
@@ -133,7 +150,7 @@ https://skills.sh/?q=maven
 
 In the previous release, the project added Agents to implement plans. In this release, you can apply changes in a more granular way, or keep using Plans when the change is small. You can review your REST contracts with `@701-technologies-openapi`, reinforce your integration tests with `@702-technologies-wiremock`, and—most significantly for testing—use the new black-box testing capabilities with `@703-technologies-fuzzing-testing` based on `CATS`.
 
-You can run black-box testing against your development environment using your `OpenAPI` specification.
+You can run black-box tests against your development environment using your `OpenAPI` specification.
 
 ![](/cursor-rules-java/images/2026/4/cats.png)
 
@@ -165,7 +182,7 @@ Once you have the skills installed, you can install the `Agents` with:
 
 ## What is the next step?
 
-Improve some Skills based on notes from [Tessl](https://tessl.io/registry).
+In the next release, the project will be renamed to reflect its evolution, and a few Skills will be refactored using notes from [Tessl](https://tessl.io/registry).
 
 ## Do you still have questions about the project?
 
