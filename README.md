@@ -25,9 +25,10 @@ The project generates a set of deliverables at the end of any iteration.
 | Deliverable     | Installation                                                                                    | Getting Started                                                                           |
 | --------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | 1. [Skills for Java](./documentation/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/cursor-rules-java --all --agent cursor` | [`Skills for Java`](./documentation/GETTING-STARTED-SKILLS.md)     |
-| 2. [Agents for Java](./documentation/INVENTORY-AGENTS-JAVA.md) | `@003-agents-installation` Install Agents in Cursor | [`Agents for Java`](./documentation/GETTING-STARTED-AGENTS.md)     |
+| 2. [Agents for Java](./documentation/INVENTORY-AGENTS-JAVA.md) | `@003-agents-installation` Install Agents in Cursor/Claude | [`Agents for Java`](./documentation/GETTING-STARTED-AGENTS.md)     |
 
 **Note:** After you install the skills, you can install the agents easily for Cursor or Claude.
+**Note:** If you continue using system prompts/rules, please review the article: https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html
 
 ### Compatibility
 
