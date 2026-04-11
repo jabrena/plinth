@@ -8,14 +8,14 @@
 
 ## Goal
 
-A curated collection of `Skills` and `Agents` to be used in modern `SDLC` workflows for Java Enterprise development.
+A curated and opinionated collection of `Skills` and `Agents` to be used in modern `SDLC` workflows for Java Enterprise development with your favorite AI Agent harness.
 
 | QUESTION   | ROLE               | AREA             | SUPPORT                                                                                                                                                                                                             |
 | ---------- | ------------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | WHAT / WHEN | PO, BA, EA, SA, TL | Agile & Planning | `User Stories`, `GitHub Issues` & `Jira` |
 | WHY        | EA, SL, TL         | Architecture     | `ADRs` & `UML` / `C4` / `ER` Diagrams |
 | HOW | SA, TL, SWE | Spec-Driven      | `AI Plan mode` & `OpenSpec` |
-| HOW        | TL, SWE            | Java development | `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation`, `Spring Boot`, `Quarkus`, `Micronaut`, `OpenAPI`, `Wiremock` & `AGENTS.md` |
+| HOW        | TL, SWE            | Java development | `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation`, `Spring Boot`, `Quarkus`, `Micronaut`, `OpenAPI`, `WireMock` & `AGENTS.md` |
 
 ## Deliverables
 
@@ -27,8 +27,7 @@ The project generates a set of deliverables at the end of any iteration.
 | 1. [Skills for Java](./documentation/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/cursor-rules-java --all --agent cursor` | [`Skills for Java`](./documentation/GETTING-STARTED-SKILLS.md)     |
 | 2. [Agents for Java](./documentation/INVENTORY-AGENTS-JAVA.md) | `@003-agents-installation` Install Agents in Cursor/Claude | [`Agents for Java`](./documentation/GETTING-STARTED-AGENTS.md)     |
 
-- **Note:** After you install the skills, you can install the agents easily for Cursor or Claude.
-- **Note2:** If you continue using the System prompts/rules from this project, please review [the article](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html), current `System prompts/rules` will be removed in next months.
+- **⚠️ Note:** If you continue using the System prompts/rules from this project, please review [the article](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html). Current `System prompts/rules` will be removed in the coming months.
 
 ### Compatibility
 
@@ -36,9 +35,9 @@ This project is compatible with any tool that supports `Skills`, `Agents`, `AGEN
 
 ## How to use them
 
-The SDLC has evolved with this new wave of AI tooling, which enhances the software engineering process. While building this project, we identified three workflows: `Prompting Engineering Workflow`, `Pipelines Workflow`, and `Agentic Workflow`.
+The SDLC has evolved with this new wave of AI tooling, which enhances the software engineering process. While building this project, we identified three workflows: `Prompt Engineering Workflow`, `Pipelines Workflow`, and `Agentic Workflow`.
 
-### Prompting Engineering Workflow
+### Prompt Engineering Workflow
 
 In this workflow, the software engineer interacts with models using `User prompts`. In an incremental way, you delegate a whole task or ask for help at specific points. You can use this project to refactor generated code, or delegate the task and attach a system prompt or Skills to it.
 
@@ -80,13 +79,13 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for conventions, generator workflows, t
 
 The repository includes [a collection of examples](./examples/) where you can explore what these Skills and workflows enable for Java.
 
-## Architectural decision records, ADR
+## Architecture Decision Records (ADR)
 
 - Review the [ADR index](./documentation/adr/README.md) for the complete list.
 
 ## Changelog
 
-- Review the [CHANGELOG](./CHANGELOG.md) for further details
+- Review the [CHANGELOG](./CHANGELOG.md) for further details.
 
 ## Java JEPs from Java 8 onward
 
