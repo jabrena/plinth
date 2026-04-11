@@ -10,6 +10,8 @@ status=published
 
 A curated and opinionated collection of `Skills` and `Agents` to be used in modern `SDLC` workflows for Java Enterprise development with your favorite AI Agent harness.
 
+![](/cursor-rules-java/images/2026/4/scope.png)
+
 Thanks to our community members in `Singapore`, `Chengdu`, `Hanoi`, `Copenhagen`, and `Quito`. 👋👋👋
 
 ## What's new in this release?
