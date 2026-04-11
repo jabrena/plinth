@@ -126,11 +126,9 @@ Now it is easier to update or search for dependencies in your `pom.xml` with the
 
 - `@114-java-maven-search`
 
-#### Reinforced REST API development with new technologies
+#### Reinforced REST API desing and testing
 
-In the previous release, the project added Agents to implement plans. In this release, you can apply changes in a more granular way, or keep using Plans when the change is small. You can review your REST contracts with `@701-technologies-openapi`, reinforce your integration tests with `@702-technologies-wiremock`, and—most significantly for testing—use the new black-box testing capabilities with `@703-technologies-fuzzing-testing` based on `CATS`.
-
-You can run black-box tests against your development environment using your `OpenAPI` specification.
+Now, you can review and harden **OpenAPI 3.x** contracts with `@701-technologies-openapi` when the specification still needs work. As you develop integration tests, you can strengthen them with **HTTP stubs** from **WireMock** using `@702-technologies-wiremock`. Finally, if you want **black-box testing** driven by your OpenAPI specification, `@703-technologies-fuzzing-testing` based on **CATS** can help surface defects through contract-driven negative testing, malformed and boundary inputs, and related edge cases.
 
 [![](/cursor-rules-java/images/2026/4/cats.png)](https://endava.github.io/cats/)
 
