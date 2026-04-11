@@ -103,18 +103,12 @@
 <article role="main" class="blog-post">
 <h2>What are Cursor rules for Java?</h2>
 <p>A curated collection of <code>Skills</code> and <code>Agents</code> to be used in modern <code>SDLC</code> workflows for Java Enterprise development.</p>
-<p>With appreciation for our community located in <code>Singapore</code>, <code>Copenhagen</code>, <code>Quito</code>, <code>Shah Alam</code>, and <code>Amstelveen</code>. 👋👋👋</p>
+<p>Thanks to our community members in <code>Singapore</code>, <code>Chengdu</code>, <code>Hanoi</code>, <code>Copenhagen</code>, and <code>Quito</code>. 👋👋👋</p>
 <h2>What's new in this release?</h2>
 <h3>Rules support dropped in favor of Skills</h3>
 <p>It is a bit weird to explain that the project is named <code>Cursor rules for Java</code>, but one of the changes in this minor release is to drop support for Rules.</p>
 <p><strong>Why were Cursor rules dropped?</strong></p>
-<p>Until this release, the project maintained 3 very different deliverables:</p>
-<ul>
-<li>Rules</li>
-<li>Skills</li>
-<li>Agents</li>
-</ul>
-<p><code>Rules</code> and <code>Skills</code> both guide model behaviour in broadly similar ways, but Rules were Cursor’s approach while <code>Skills</code> have recently become the standard, so consolidating on a single solution makes more sense. <strong>On the other hand</strong>, maintaining a single generator (<code>skills-generator</code>) made it possible to improve how skills are packaged, which was somewhat constrained when both <code>rules-generator</code> and <code>skills-generator</code> existed.</p>
+<p>Until this release, the project maintained three very different deliverables: Rules, Skills, and Agents. <code>Rules</code> and <code>Skills</code> both guide model behaviour in broadly similar ways, but Rules were Cursor’s approach while <code>Skills</code> have recently become the standard, so consolidating on a single solution makes more sense. <strong>On the other hand</strong>, maintaining a single generator (<code>skills-generator</code>) made it possible to improve how skills are packaged, which was somewhat constrained when both <code>rules-generator</code> and <code>skills-generator</code> existed.</p>
 <pre><code class="language-bash">skill-name/
 ├── SKILL.md          # Required: metadata + instructions
 ├── scripts/          # Optional: executable code
@@ -123,7 +117,21 @@
 └── ...               # Any additional files or directories
 </code></pre>
 <p><strong>Source:</strong> <a href="https://agentskills.io/specification">https://agentskills.io/specification</a></p>
-<p>The last generated rules are preserved in release 0.13.0: <a href="https://github.com/jabrena/cursor-rules-java/releases/tag/0.13.0">https://github.com/jabrena/cursor-rules-java/releases/tag/0.13.0</a>; you can download them there if needed.</p>
+<p>If you followed the various ADRs published at <a href="https://github.com/jabrena/cursor-rules-java/tree/main/documentation/adr">https://github.com/jabrena/cursor-rules-java/tree/main/documentation/adr</a>, you may recall that when more than 10 rules were active in memory, Cursor (and similar tools at the time) did not run reliably, and you could hit the following issue:</p>
+<p><img src="/cursor-rules-java/images/2026/4/your-message-is-too-long.png" alt="" /></p>
+<p>If you are interested in this issue with older models, you can review it here: <a href="https://github.com/jabrena/cursor-rules-sandbox/blob/main/docs/message-too-long.md">https://github.com/jabrena/cursor-rules-sandbox/blob/main/docs/message-too-long.md</a></p>
+<p>So we changed the metadata included in the <code>System prompts/Rules</code> to address that issue and to use the rules in a manual workflow, as described here: <a href="https://github.com/jabrena/cursor-rules-java/blob/main/documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md">https://github.com/jabrena/cursor-rules-java/blob/main/documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md</a></p>
+<p>Users could still use the <code>System prompts/Rules</code> in this way:</p>
+<p><img src="/cursor-rules-java/images/2026/4/manual-trigger.png" alt="" /></p>
+<p>But now you can do the same with Skills. You can add the Skill you want to the context explicitly, or leave it to the AI tool to use or skip depending on the context—so you can achieve the same outcomes with Skills as you could with system prompts in the past.</p>
+<p>On the main branch, a few resources about <code>System-prompts/rules</code> remain:</p>
+<ul>
+<li>All rules from v0.13.0: <a href="https://github.com/jabrena/cursor-rules-java/tree/main/.cursor/rules">https://github.com/jabrena/cursor-rules-java/tree/main/.cursor/rules</a></li>
+<li>Getting Started: <a href="https://github.com/jabrena/cursor-rules-java/blob/main/documentation/GETTING-STARTED-SYSTEM-PROMPTS.md">https://github.com/jabrena/cursor-rules-java/blob/main/documentation/GETTING-STARTED-SYSTEM-PROMPTS.md</a></li>
+</ul>
+<p>That usage is <code>deprecated</code> in favor of <code>Skills</code> and will be removed in the coming months; the recommendation is to review <a href="https://github.com/jabrena/cursor-rules-java?tab=readme-ov-file#deliverables">the new documentation</a> and adapt.</p>
+<p>You can still download the last generated rules from release 0.13.0 if needed: <a href="https://github.com/jabrena/cursor-rules-java/releases/tag/0.13.0">https://github.com/jabrena/cursor-rules-java/releases/tag/0.13.0</a></p>
+<p>Now that the serious part is out of the way, let's continue with the article.</p>
 <h3>Improvements in the Agile process</h3>
 <p>When you create a <code>User Story</code>, the flow not only generates the usual structure plus acceptance criteria in <code>Gherkin</code> format; it also reviews the user story as a whole using <code>INVEST</code>. INVEST is an acronym used in Agile to evaluate the quality of a user story, ensuring it is <code>Independent</code>, <code>Negotiable</code>, <code>Valuable</code>, <code>Estimable</code>, <code>Small</code>, and <code>Testable</code>.</p>
 <p><strong>Skills:</strong></p>
@@ -164,7 +172,7 @@ openspec archive &lt;change-name&gt;
 <p>But if you are less sure about the assigned user story, invest more time in the analysis phase:</p>
 <pre><code class="language-bash">User story &gt; Create a Plan &gt; Enhance the plan &gt; Convert into multiple Changes in OpenSpec &gt; Implement with Java Agents
 </code></pre>
-<p>Some factors to take into consideration:</p>
+<p>Some factors to consider:</p>
 <ul>
 <li>Design incremental Deltas</li>
 <li>Review the tests</li>
@@ -187,7 +195,7 @@ openspec archive &lt;change-name&gt;
 </ul>
 <h3>Reinforced REST API development with new technologies</h3>
 <p>In the previous release, the project added Agents to implement plans. In this release, you can apply changes in a more granular way, or keep using Plans when the change is small. You can review your REST contracts with <code>@701-technologies-openapi</code>, reinforce your integration tests with <code>@702-technologies-wiremock</code>, and—most significantly for testing—use the new black-box testing capabilities with <code>@703-technologies-fuzzing-testing</code> based on <code>CATS</code>.</p>
-<p>You can run black-box testing against your development environment using your <code>OpenAPI</code> specification.</p>
+<p>You can run black-box tests against your development environment using your <code>OpenAPI</code> specification.</p>
 <p><img src="/cursor-rules-java/images/2026/4/cats.png" alt="" /></p>
 <p>Further information about CATS: <a href="https://github.com/Endava/cats">https://github.com/Endava/cats</a></p>
 <p><strong>Skills</strong></p>
@@ -207,7 +215,7 @@ npx skills add jabrena/cursor-rules-java --all --agent claude-code
 @003-agents-installation Install Agents in Claude
 </code></pre>
 <h2>What is the next step?</h2>
-<p>Improve some Skills based on notes from <a href="https://tessl.io/registry">Tessl</a>.</p>
+<p>In the next release, the project will be renamed to reflect its evolution, and a few Skills will be refactored using notes from <a href="https://tessl.io/registry">Tessl</a>.</p>
 <h2>Do you still have questions about the project?</h2>
 <p>If you feel stuck using this project or have questions, you can attend the following workshop at <code>Codemotion Madrid 2026</code>:</p>
 <p><a href="https://conferences.codemotion.com/madrid/"><img src="/cursor-rules-java/images/2026/3/codemotion-madrid-2026.jpg" alt="" /></a></p>
