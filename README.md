@@ -35,17 +35,17 @@ This project is compatible with any tool that supports `Skills`, `Agents`, `AGEN
 
 ## How to use them
 
-The SDLC has evolved with this new wave of AI tooling, which enhances the software engineering process. While building this project, we identified three workflows: `Prompt Engineering Workflow`, `Pipelines Workflow`, and `Agentic Workflow`.
+The SDLC has evolved with this new wave of AI tooling, which enhances the software engineering process. While building this project, we identified three workflows: `Prompting Engineering Workflow`, `Agent-driven Engineering Workflow`, `Pipelines Workflow`.
 
-### Prompt Engineering Workflow
+### Prompting Engineering Workflow
 
 In this workflow, the software engineer interacts with models using `User prompts`. In an incremental way, you delegate a whole task or ask for help at specific points. You can use this project to refactor generated code, or delegate the task and attach a system prompt or Skills to it.
 
 ![](./documentation/images/workflow-prompts.png)
 
-### Agentic Workflow
+### Agent-driven Engineering Workflow
 
-`Agents for Java Enterprise development` were designed to help the software engineer in the implementation phase. The engineer defines solid `Specs`, and those specifications are delegated to Agents.
+`Agents for Java Enterprise development` were designed to help the software engineer in the implementation phase. The engineer defines solid `Specs`, and those specifications are delegated to `Agents`.
 
 ![](./documentation/images/workflow-agents.png)
 
