@@ -35,9 +35,9 @@
 			</div>
 			<div class="slides">
                 <section>
-					<section data-background-image="./images/background-waves.webp">
+					<section data-background-image="./images/pillars2.jpg">
 						<h2>
-                            <span style="display: inline-block; color: black;  background: #DFFF6D;">
+                            <span style="display: inline-block; color: black;  background: #ffffff;">
                                 Taller técnico sobre AI Tooling para el desarrollo con Java
                             </span>
                         </h2>
@@ -94,24 +94,36 @@
                 </section>
                 <section>
                     <section>
-                        <h2>Agenda (90 min)</h2>
+                        <h2>Agenda (15 min)</h2>
                         <ul>
-                            <li>Introducción</li>
                             <li>¿Como desarrollas?</li>
                             <li>Conceptos</li>
+                            <!--
                             <li>Evolucionando el SDLC</li>
                             <li>Workflows</li>
-                            <li>Demos</li>
+                            -->
                         </ul>
                     </section>
                     <section>
-                        <h2>Agenda (90 min)</h2>
-                        <h3>Demos</h3>
+                        <h2>Agenda (30 min)</h2>
+                        <h3>Demos I</h3>
                         <ul>
-                            <li>Usando los modos de Agente (Ask, Plan, Agent)</li>
                             <li>Usando Skills</li>
                             <li>Definiendo un buen fichero AGENTS.md</li>
                             <li>Usando Agentes en tu desarrollo</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Agenda (30 min)</h2>
+                        <h3>Demos II</h3>
+                        <ul>
+                            <li>Usando los modos de Agente (Ask, Plan, Agent)</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>Agenda (15 min)</h2>
+                        <h3>Demos III</h3>
+                        <ul>
                             <li>Usando Asistentes AI en tus pipelines</li>
                         </ul>
                     </section>
@@ -132,16 +144,25 @@
                 <section>
                     <section>
                         <h2>¿Como desarrollas?</h2>
+                        <img src="./images/trivia.png" width="20%" />
+                    </section>
+                    <section>
+                        <h2>¿Como desarrollas?</h2>
                         <ul>
-                            <li>Coges una Historia de Usuario en Jira</li>
+                            <li>¿Como son las historias de usuario?</li>
                             <ul>
                                 <li>Anemica</li>
                                 <li>Completa</li>
                             </ul>
-                            <li>Revisas los ADRs de tu area</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>¿Como desarrollas?</h2>
+                        <ul>
+                            <li>¿Como son los ADRs de tu área?</li>
                             <ul>
                                 <li>No existen</li>
-                                <li>Estan Obsoletos</li>
+                                <li>Están Obsoletos</li>
                                 <li>Se actualizan periodicamente</li>
                             </ul>
                         </ul>
@@ -149,18 +170,22 @@
                     <section>
                         <h2>¿Como desarrollas?</h2>
                         <ul>
-                            <li>Revisas la historia de usuario para encontrar el mejor enfoque de implementación</li>
+                            <li>¿Como te organizas para desarrollar las historias de usuario?</li>
                             <ul>
                                 <li>Trabajo solo</li>
                                 <li>Comentamos todas las mañanas</li>
                                 <li>Hago Pair programming</li>
                             </ul>
+                        </ul>
+                    </section>
+                    <section>
+                        <h2>¿Como desarrollas?</h2>
+                        <ul>
                             <li>Desarrollo tests</li>
                             <ul>
                                 <li>Si nos da tiempo</li>
                                 <li>Es obligatorio</li>
                             </ul>
-                            ...
                         </ul>
                     </section>
                     <section>
@@ -180,14 +205,16 @@
                     <section>
                         <h2>Conceptos</h2>
                         <ul>
-                            <li>Asistente AI</li>
-                            <li>ADR</li>
-                            <li>Spec</li>
-                            <li>Plan</li>
-                            <li>Skill</li>
-                            <li>Agent</li>
+                            <li>Asistentes AI</li>
+                            <li>LLMs</li>
+                            <li>AGENTS.md</li>
+                            <li>Skills</li>
+                            <li>Subagents</li>
                             <li>MCP/CLI tools</li>
-                            <li>Workflow</li>
+                            <li>ADRs</li>
+                            <li>Plans</li>
+                            <li>SDD</li>
+                            <li>Workflows</li>
                         </ul>
                     </section>
                     <section>
@@ -197,8 +224,156 @@
                             como Cursor, Claude Code, GitHub Copilot, entre otros.
                         </p>
                     </section>
+                    <section>
+                        <h2>Asistentes de AI</h2>
+                        <table>
+                            <tr>
+                                <td><img src="./images/logos/cursor-logo.avif" width="25%" /><br /><small>Cursor AI</small></td>
+                                <td><img src="./images/logos/cursor-cli-logo.png" width="30%" /><br /><small>Cursor CLI</small></td>
+                                <td><img src="./images/logos/claude-code-logo.png" width=40%" /><br /><small>Claude Code CLI</small></td>
+                            </tr>
+                            <tr>
+                                <td><img src="./images/logos/github-copilot-logo-v2.png" width=45%" /><br /><small>GitHub Copilot</small>
+                                </td>
+                                <td><img src="./images/logos/github-copilot-logo-v3.webp" width=30%" /><br /><small>GitHub Copilot
+                                        CLI</small></td>
+                                <td><img src="./images/logos/jetbrains-junie-logo.png" width="45%" /><br /><small>JetBrains Junie</small>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </table>
+                    </section>
+                    <section>
+                        <h2>LLMs</h2>
+                        <p>
+                            Los LLM (Large Language Models) son sistemas de Inteligencia Artificial entrenados con
+                            volúmenes masivos de texto para comprender, generar y resumir lenguaje humano de forma natural.
+                        </p>
+                    </section>
+                    <section>
+                        <h2>AGENTS.md</h2>
+                        <p>
+                            Un formato abierto y sencillo para guiar a los agentes de programación.
+                            Piensa en AGENTS.md como un README para agentes: un lugar dedicado y predecible donde ofrecer el contexto y las instrucciones para ayudar a los agentes de codificación con IA a trabajar en tu proyecto.
+                        </p>
+                        <a href="https://agents.md/" target="_blank">https://agents.md/</a>
+                    </section>
+                    <section>
+                        <h2>Skill</h2>
+                        <p>
+                            Las Skills son carpetas de instrucciones, scripts y recursos que las herramientas de IA cargan dinámicamente
+                            para mejorar el rendimiento
+                            en tareas especializadas.
+                        </p>
+                    </section>
+                    <section>
+                        <h2>Skill</h2>
+                        <p>
+                            Estructura de una Skill:
+                        </p>
+                        <pre><code class="hljs bash" data-trim data-line-numbers>
+skill-name/
+├── SKILL.md # Required: metadata + instructions
+├── scripts/ # Optional: executable code
+├── references/ # Optional: documentation
+├── assets/ # Optional: templates, resources
+└── ... # Any additional files or directories
+                        </code>
+                        </pre>
+                        <a href="https://agentskills.io/specification" target="_blank">https://agentskills.io/specification</a>
+                    </section>
+                    <section>
+                        <h2>Skill</h2>
+                        <p>
+                            ¿Donde puede encontrar Skills para Java?
+                        </p>
+                        <a href="https://skills.sh/" target="_blank">https://skills.sh/</a>
+                    </section>
+                    <section>
+                        <h2>Subagents</h2>
+                        <p>
+Los Subagents son asistentes de IA especializados que el agente de Cursor puede delegar tareas. Cada subagente opera en su propia
+ventana de contexto, maneja tipos de trabajo específicos y devuelve su resultado al agente principal.
+                        </p>
+                        <a href="https://cursor.com/docs/subagents" target="_blank">https://cursor.com/docs/subagents</a><br />
+                        <a href="https://code.claude.com/docs/en/sub-agents" target="_blank">https://code.claude.com/docs/en/sub-agents</a>
+
+                    </section>
+                    <section>
+                        <h3>MCP Severs</h3>
+                        <img src="images/mcp.png" width="50%" />
+                        <p>
+                            Model Context Protocol (MCP) is an open protocol that standardizes how applications provide context to LLMs.
+                        </p>
+                        <small><strong>Source: </strong><a href="https://modelcontextprotocol.io/introduction"
+                                target="_blank">https://modelcontextprotocol.io/introduction</a></small>
+                    </section>
+                    <section>
+                        <h3>MCP Severs</h3>
+                        <p>
+                            Think of MCP as a plugin system for Cursor:
+                        </p>
+                        <img src="images/mcp-architecture.png" width="50%" />
+                        <small><strong>Source: </strong><a href="https://docs.cursor.com/context/model-context-protocol"
+                                target="_blank">https://docs.cursor.com/context/model-context-protocol</a></small>
+                    </section>
+                    <section>
+                        <h2>ADRs</h2>
+                        <p>
+                            An Architectural Decision (AD) is a justified design choice that addresses
+                            a functional or non-functional requirement
+                            that is architecturally significant.
+                        </p>
+                        <a href="https://adr.github.io/" target="_blank">https://adr.github.io/</a>
+                    </section>
+                    <section>
+                        <h2>Plans</h2>
+                        <p>
+                            Los planes son una forma de guiar al agente para que trabaje en una tarea.
+                        </p>
+                        <a href="https://cursor.com/docs/agent/plan-mode" target="_blank">https://cursor.com/docs/agent/plan-mode</a><br />
+                        <a href="https://code.claude.com/docs/en/common-workflows" target="_blank">https://code.claude.com/docs/en/common-workflows</a>
+                    </section>
+                    <section>
+                        <h2>Plans</h2>
+                        <img src="./images/plan-mode.png" width="60%" />
+                    </section>
+                    <section>
+                        <h2>SDD</h2>
+                        <p>
+                            Spec-driven development (SDD) is a software engineering methodology where a formal, machine-readable specification
+                            serves as the authoritative source of truth and the primary artifact from which implementation, testing, and
+                            documentation are derived.
+                        </p>
+                        <a href="https://openspec.dev/" target="_blank">https://openspec.dev/</a><br />
+                        <a href="https://github.github.com/spec-kit/" target="_blank">https://github.github.com/spec-kit/</a>
+                    </section>
+                    <section>
+                        <h2>Workflows</h2>
+                        <ul>
+                            <li>Prompting Enginering Workflow</li>
+                            <li>Agent-Driven Engineering Workflow</li>
+                            <li>Pipelines Workflow</li>
+                        </u>
+                    </section>
+                    <section>
+                        <h2>Workflows</h2>
+                        <h3>Prompting Enginering Workflow</h3>
+                        <img src="./images/workflow-prompts.png" width="100%" />
+                    </section>
+                    <section>
+                        <h2>Workflows</h2>
+                        <h3>Agent-Driven Engineering Workflow</h3>
+                        <img src="./images/workflow-agents.png" width="100%" />
+                    </section>
+                    <section>
+                        <h2>Workflows</h2>
+                        <h3>Pipelines Workflow</h3>
+                        <img src="./images/workflow-pipelines.png" width="100%" />
+                    </section>
                 </section>
 
+                <!--
                 <section>
                     <section>
                         <h2>Evolucionando el SDLC</h2>
@@ -272,14 +447,54 @@
                         <img src="./images/workflow-pipelines.png" width="100%" />
                     </section>
                 </section>
+                -->
                 <section>
                     <section>
-                        <img src="./images/demo.png" width="100%" />
+                        <h2>Demos I</h2>
+                        <ul>
+                            <li>Usando Skills</li>
+                            <li>Definiendo un buen fichero AGENTS.md</li>
+                            <li>Usando Agentes en tu desarrollo</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <section>
+                            <img src="./images/demo.png" width="100%" />
+                        </section>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Demos II</h2>
+                        <ul>
+                            <li>Usando los modos de Agente (Ask, Plan, Agent)</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <section>
+                            <img src="./images/demo.png" width="100%" />
+                        </section>
+                    </section>
+                </section>
+                <section>
+                    <section>
+                        <h2>Demos III</h2>
+                        <ul>
+                            <li>Usando Asistentes AI en tus pipelines</li>
+                        </ul>
+                    </section>
+                    <section>
+                        <section>
+                            <img src="./images/demo.png" width="100%" />
+                        </section>
                     </section>
                 </section>
                 <section>
                     <h2>References</h2>
                     <ul>
+                        <li>
+                            <a href="https://skills.sh/" target="_blank">https://skills.sh/</a>
+                        </li>
                         <li>
                             <a href="https://github.com/jabrena/cursor-rules-java" target="_blank">
                                 Cursor Rules Java @ jabrena
