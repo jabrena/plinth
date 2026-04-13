@@ -85,13 +85,13 @@ jobs:
       - name: Create skills archive
         run: zip -r skills.zip skills
       - name: Upload agents.zip
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: agents.zip
           path: agents.zip
           if-no-files-found: error
       - name: Upload skills.zip
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: skills.zip
           path: skills.zip
