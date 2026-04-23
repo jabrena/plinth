@@ -46,6 +46,31 @@ Guide the agent to systematically gather information and generate a comprehensiv
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="0">
+      <step-title>Get current date</step-title>
+      <step-content>Run `date` before starting and use it to replace all date placeholders in the generated epic document.</step-content>
+    </step>
+    <step number="1">
+      <step-title>Gather epic information</step-title>
+      <step-content>Ask the template questions in strict order, using exact wording and waiting for user responses before continuing.</step-content>
+      <step-constraints>
+        <step-constraint-list>
+          <step-constraint>Read the question template fresh before asking</step-constraint>
+          <step-constraint>Do not skip or reorder required questions</step-constraint>
+        </step-constraint-list>
+      </step-constraints>
+    </step>
+    <step number="2">
+      <step-title>Generate epic document</step-title>
+      <step-content>Create the epic Markdown with all required sections (scope, value, features, dependencies, risks, and success criteria) and apply the actual current date.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Provide follow-up recommendations</step-title>
+      <step-content>Close with actionable next steps for story breakdown, planning, and epic tracking.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
         <reference>references/012-agile-epic.md</reference>

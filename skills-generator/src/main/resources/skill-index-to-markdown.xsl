@@ -49,7 +49,8 @@ metadata:
     <xsl:apply-templates select="goal"/>
     <xsl:apply-templates select="constraints"/>
     <xsl:apply-templates select="triggers"/>
-    <xsl:call-template name="emit-references">
+    <xsl:apply-templates select="steps"/>
+    <xsl:call-template name="references">
       <xsl:with-param name="reference-paths" select="$reference-paths"/>
     </xsl:call-template>
   </xsl:template>
@@ -60,6 +61,58 @@ metadata:
     <xsl:value-of select="."/>
     <xsl:text>
 </xsl:text>
+  </xsl:template>
+
+  <!-- Workflow: render PML steps as numbered markdown list -->
+  <xsl:template match="steps">
+    <xsl:if test="step">
+      <xsl:text>## Workflow
+
+</xsl:text>
+      <xsl:for-each select="step">
+        <xsl:variable name="step-number">
+          <xsl:choose>
+            <xsl:when test="@number and normalize-space(@number) != ''">
+              <xsl:value-of select="normalize-space(@number)"/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:value-of select="position()"/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:variable>
+
+        <xsl:value-of select="$step-number"/>
+        <xsl:text>. </xsl:text>
+        <xsl:if test="step-title[normalize-space(.) != '']">
+          <xsl:text>**</xsl:text>
+          <xsl:value-of select="normalize-space(step-title)"/>
+          <xsl:text>**</xsl:text>
+        </xsl:if>
+        <xsl:text>
+
+</xsl:text>
+
+        <xsl:if test="step-content">
+          <xsl:value-of select="step-content"/>
+          <xsl:text>
+
+</xsl:text>
+        </xsl:if>
+
+        <xsl:if test="step-constraints/step-constraint-list/step-constraint[normalize-space(.) != '']">
+          <xsl:text>Step constraints:
+</xsl:text>
+          <xsl:for-each select="step-constraints/step-constraint-list/step-constraint[normalize-space(.) != '']">
+            <xsl:text>- </xsl:text>
+            <xsl:value-of select="normalize-space(.)"/>
+            <xsl:text>
+</xsl:text>
+          </xsl:for-each>
+          <xsl:text>
+</xsl:text>
+        </xsl:if>
+      </xsl:for-each>
+    </xsl:if>
   </xsl:template>
 
   <!-- Constraints: matches .cursor/rules rendering (## Constraints, list items with - ) -->
@@ -110,7 +163,7 @@ metadata:
   </xsl:template>
 
   <!-- Emit reference section from path list (PML references/reference-list/reference or legacy reference/@path) -->
-  <xsl:template name="emit-references">
+  <xsl:template name="references">
     <xsl:param name="reference-paths"/>
     <xsl:for-each select="$reference-paths">
       <xsl:variable name="path" select="normalize-space(.)"/>
