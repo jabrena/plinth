@@ -48,6 +48,25 @@ Verify performance optimizations through rigorous before/after comparison: ensur
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="1">
+      <step-title>Read verification reference and confirm baseline data</step-title>
+      <step-content>Read `references/164-java-profiling-verify.md` and verify baseline artifacts exist and are non-empty.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Generate post-refactoring profiling data</step-title>
+      <step-content>Run profiling with identical load/test conditions to produce comparable post-refactoring artifacts.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Compare before/after metrics and visuals</step-title>
+      <step-content>Perform quantitative comparisons for memory/CPU/GC/threading and side-by-side flamegraph analysis.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Document final verification outcome</step-title>
+      <step-content>Create comparison and final results reports with regressions, gains, and reproducible scenario details.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
         <reference>references/164-java-profiling-verify.md</reference>

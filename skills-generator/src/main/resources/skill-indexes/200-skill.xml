@@ -41,6 +41,25 @@ Generate a comprehensive AGENTS.md file for Java repositories through a modular,
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="1">
+      <step-title>Review repository context before drafting</step-title>
+      <step-content>Inspect project structure and existing documentation to prepare accurate responses for the AGENTS.md discovery phase.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Read AGENTS generation reference</step-title>
+      <step-content>Read `references/200-agents-md.md` and follow its generation patterns and safeguards.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Run interactive requirements capture</step-title>
+      <step-content>Gather role, tech stack, commands, workflow, and boundaries in a modular step-based conversation.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Generate AGENTS.md artifact</step-title>
+      <step-content>Create AGENTS.md with ✅ Always do / ⚠️ Ask first / 🚫 Never do boundaries and repository-specific conventions.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
         <reference>references/200-agents-md.md</reference>

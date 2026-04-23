@@ -37,6 +37,24 @@ Copy bash scripts exactly from templates. Ensure JVM flags are applied for profi
 - Refactor the code with profiling
 - Add profiling support
 
+## Workflow
+
+1. **Read profiling setup reference**
+
+Read `references/161-java-profiling-detect.md` and use script templates exactly as provided.
+
+2. **Create profiler workspace and scripts**
+
+Create `profiler/scripts` and `profiler/results`, copy setup/profile scripts verbatim, and make scripts executable.
+
+3. **Run application with profiling compatibility**
+
+Start Java process with required profiling JVM flags and verify target process availability for profiler attachment.
+
+4. **Collect profiling artifacts**
+
+Capture CPU/memory/lock/GC/I/O data and produce timestamped flamegraph and JFR outputs for analysis.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/161-java-profiling-detect.md](references/161-java-profiling-detect.md).

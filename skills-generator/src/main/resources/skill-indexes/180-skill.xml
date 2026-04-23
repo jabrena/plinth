@@ -45,6 +45,25 @@ Implement effective Java logging following standardized frameworks, meaningful l
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="1">
+      <step-title>Compile project before logging changes</step-title>
+      <step-content>Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Read logging reference and assess current observability</step-title>
+      <step-content>Read `references/180-java-observability-logging.md` and evaluate framework usage, log levels, sensitive-data handling, and config gaps.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Apply logging and observability improvements</step-title>
+      <step-content>Implement selected framework/configuration/practice changes, including secure logging and monitoring integration where applicable.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Verify with full build</step-title>
+      <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
         <reference>references/180-java-observability-logging.md</reference>

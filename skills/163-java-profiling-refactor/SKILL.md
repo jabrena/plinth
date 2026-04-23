@@ -35,6 +35,24 @@ Verify that changes pass all tests before considering the refactoring complete.
 - Optimize hot path
 - Performance refactoring
 
+## Workflow
+
+1. **Review profiling analysis artifacts**
+
+Read `docs/profiling-problem-analysis-YYYYMMDD.md` and `docs/profiling-solutions-YYYYMMDD.md` to select target bottlenecks.
+
+2. **Apply targeted performance refactors**
+
+Implement focused code changes for documented CPU, memory, or threading hotspots, incrementally and safely.
+
+3. **Verify behavior and performance build integrity**
+
+Run `./mvnw clean verify` or `mvn clean verify`; if tests fail, fix issues before continuing.
+
+4. **Prepare handoff for verification phase**
+
+Summarize implemented changes and expected metric improvements for Step 4 comparison.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/163-java-profiling-refactor.md](references/163-java-profiling-refactor.md).

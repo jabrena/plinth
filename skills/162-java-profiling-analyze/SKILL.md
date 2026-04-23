@@ -41,6 +41,24 @@ Validate profiling results represent realistic load before analysis. Document as
 - Analyze the profiling
 - Performance analysis
 
+## Workflow
+
+1. **Read analysis reference and inventory inputs**
+
+Read `references/162-java-profiling-analyze.md` and inventory profiling artifacts in `profiler/results/`.
+
+2. **Validate data quality and assumptions**
+
+Confirm datasets represent realistic load conditions and record assumptions/limitations before drawing conclusions.
+
+3. **Identify and prioritize bottlenecks**
+
+Analyze memory/CPU/threading findings, cross-reference multiple files, and prioritize issues by Impact/Effort.
+
+4. **Document findings and solution options**
+
+Create `docs/profiling-problem-analysis-YYYYMMDD.md` and `docs/profiling-solutions-YYYYMMDD.md` with quantitative evidence.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/162-java-profiling-analyze.md](references/162-java-profiling-analyze.md).
