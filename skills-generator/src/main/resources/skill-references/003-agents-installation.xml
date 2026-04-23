@@ -45,12 +45,12 @@
             <step-content>
                 Copy these exact source files from `skills-generator/src/main/resources/skill-references/assets/agents/` into the chosen destination directory:
 
-                - `robot-business-analyst.md`
-                - `robot-coordinator.md`
-                - `robot-java-coder.md`
-                - `robot-micronaut-coder.md`
-                - `robot-quarkus-coder.md`
-                - `robot-spring-boot-coder.md`
+                <xi:include href="assets/agents/robot-business-analyst.md" parse="text"/>
+                <xi:include href="assets/agents/robot-coordinator.md" parse="text"/>
+                <xi:include href="assets/agents/robot-java-coder.md" parse="text"/>
+                <xi:include href="assets/agents/robot-micronaut-coder.md" parse="text"/>
+                <xi:include href="assets/agents/robot-quarkus-coder.md" parse="text"/>
+                <xi:include href="assets/agents/robot-spring-boot-coder.md" parse="text"/>
 
                 Create the destination directory if it does not exist.
 

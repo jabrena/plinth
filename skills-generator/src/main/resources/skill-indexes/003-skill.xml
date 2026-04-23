@@ -17,7 +17,7 @@ Install a predefined set of embedded agent definitions from repository assets in
 **What is covered in this Skill?**
 
 - Interactive target selection (`.cursor/agents` or `.claude/agents`)
-- Deterministic copy of the embedded six-agent bundle
+- Deterministic copy of all embedded agents defined via XInclude from `assets/agents`
 - Idempotent re-installation with clear overwrite reporting
 ]]></goal>
 
@@ -25,7 +25,7 @@ Install a predefined set of embedded agent definitions from repository assets in
     <constraints-description>This skill installs only the embedded robot agents bundle and must ask for destination before writing files.</constraints-description>
     <constraint-list>
       <constraint>**MUST** ask the user to choose `.cursor/agents` or `.claude/agents` before installing</constraint>
-      <constraint>**MUST** copy all embedded files from `skills-generator/src/main/resources/skill-references/assets/agents/`</constraint>
+      <constraint>**MUST** copy all embedded agent files included from `skills-generator/src/main/resources/skill-references/assets/agents/`</constraint>
       <constraint>**MUST** preserve file names and report overwrite actions</constraint>
     </constraint-list>
   </constraints>
