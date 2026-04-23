@@ -49,6 +49,25 @@ Review and improve Java code using comprehensive generics best practices that en
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="1">
+      <step-title>Compile project before generics changes</step-title>
+      <step-content>Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Read generics reference and assess type safety</step-title>
+      <step-content>Read `references/128-java-generics.md` and identify raw types, unsafe casts, wildcard misuse, and API variance opportunities.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Apply generics refactorings</step-title>
+      <step-content>Implement selected generic type and API improvements while preserving behavior.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Verify with full build</step-title>
+      <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
         <reference>references/128-java-generics.md</reference>

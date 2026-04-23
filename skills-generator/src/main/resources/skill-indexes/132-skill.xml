@@ -47,6 +47,25 @@ Set up robust integration-test infrastructure for Java services using WireMock t
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="1">
+      <step-title>Compile project before integration-test changes</step-title>
+      <step-content>Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Read integration-testing reference and detect topology</step-title>
+      <step-content>Read `references/132-java-testing-integration-testing.md` and detect HTTP client and external dependency integration points.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Set up resilient integration-test infrastructure</step-title>
+      <step-content>Implement BaseIntegrationTest, WireMock mappings/stubs, per-test isolation, and verification patterns.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Verify with full build</step-title>
+      <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
         <reference>references/132-java-testing-integration-testing.md</reference>

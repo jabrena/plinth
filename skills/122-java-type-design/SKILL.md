@@ -45,6 +45,24 @@ Before applying any type design changes, ensure the project compiles. If compila
 - Create type hierarchies in Java code
 - Create fluent interfaces in Java code
 
+## Workflow
+
+1. **Compile project before type-design changes**
+
+Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.
+
+2. **Read type-design reference and inspect code**
+
+Read `references/122-java-type-design.md` and identify type hierarchy, naming, and value-object improvements.
+
+3. **Apply type-design refactorings**
+
+Implement selected type-safety and readability improvements based on applicable patterns.
+
+4. **Verify with full build**
+
+Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/122-java-type-design.md](references/122-java-type-design.md).

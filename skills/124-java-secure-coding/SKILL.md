@@ -36,6 +36,24 @@ Before applying any secure coding changes, ensure the project compiles. If compi
 
 - Review Java code for secure coding
 
+## Workflow
+
+1. **Compile project before secure-coding changes**
+
+Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.
+
+2. **Read secure-coding reference and assess risks**
+
+Read `references/124-java-secure-coding.md` and identify applicable vulnerabilities and hardening opportunities.
+
+3. **Apply secure-coding improvements**
+
+Implement selected protections for input validation, crypto, secrets, deserialization, and output encoding.
+
+4. **Verify with full build**
+
+Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/124-java-secure-coding.md](references/124-java-secure-coding.md).

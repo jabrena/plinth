@@ -51,6 +51,29 @@ Identify and apply functional programming principles in Java to improve immutabi
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="1">
+      <step-title>Compile project before functional refactoring</step-title>
+      <step-content>Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Confirm Java feature compatibility</step-title>
+      <step-content>Verify maven-compiler-plugin source/target supports the functional features planned for adoption.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Read functional-programming reference and assess code</step-title>
+      <step-content>Read `references/142-java-functional-programming.md` and identify opportunities for immutability, pure functions, and functional composition.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Apply functional programming improvements</step-title>
+      <step-content>Implement selected functional refactorings while keeping side effects at boundaries.</step-content>
+    </step>
+    <step number="5">
+      <step-title>Verify with full build</step-title>
+      <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
         <reference>references/142-java-functional-programming.md</reference>

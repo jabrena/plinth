@@ -53,6 +53,25 @@ Identify and apply robust Java exception handling practices to improve error cla
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="1">
+      <step-title>Compile project before exception-handling changes</step-title>
+      <step-content>Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Read exception-handling reference</step-title>
+      <step-content>Read `references/123-java-exception-handling.md` and identify applicable failure-handling and observability improvements.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Apply exception-handling improvements</step-title>
+      <step-content>Refactor to specific exceptions, safe resource handling, error translation, and consistent logging patterns.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Verify with full build</step-title>
+      <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
         <reference>references/123-java-exception-handling.md</reference>

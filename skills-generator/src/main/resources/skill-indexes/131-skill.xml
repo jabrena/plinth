@@ -47,6 +47,25 @@ Review and improve Java unit tests using modern JUnit 5, AssertJ, and Mockito be
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="1">
+      <step-title>Compile project before unit-test changes</step-title>
+      <step-content>Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Read unit-testing reference and evaluate coverage</step-title>
+      <step-content>Read `references/131-java-testing-unit-testing.md` and identify modernization and quality gaps in current tests.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Apply unit-testing best practices</step-title>
+      <step-content>Implement or refactor tests using JUnit 5, AssertJ, Mockito, parameterization, and stronger boundary checks.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Verify with full build</step-title>
+      <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
         <reference>references/131-java-testing-unit-testing.md</reference>

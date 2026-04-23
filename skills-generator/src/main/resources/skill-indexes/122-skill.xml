@@ -52,6 +52,25 @@ Review and improve Java code using comprehensive type design principles that app
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="1">
+      <step-title>Compile project before type-design changes</step-title>
+      <step-content>Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Read type-design reference and inspect code</step-title>
+      <step-content>Read `references/122-java-type-design.md` and identify type hierarchy, naming, and value-object improvements.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Apply type-design refactorings</step-title>
+      <step-content>Implement selected type-safety and readability improvements based on applicable patterns.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Verify with full build</step-title>
+      <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
         <reference>references/122-java-type-design.md</reference>

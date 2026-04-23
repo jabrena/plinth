@@ -46,6 +46,24 @@ Before applying any exception handling changes, ensure the project compiles. If 
 - Create exception chaining in Java code
 - Apply fail-fast validation in Java code
 
+## Workflow
+
+1. **Compile project before exception-handling changes**
+
+Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.
+
+2. **Read exception-handling reference**
+
+Read `references/123-java-exception-handling.md` and identify applicable failure-handling and observability improvements.
+
+3. **Apply exception-handling improvements**
+
+Refactor to specific exceptions, safe resource handling, error translation, and consistent logging patterns.
+
+4. **Verify with full build**
+
+Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/123-java-exception-handling.md](references/123-java-exception-handling.md).
