@@ -30,7 +30,6 @@ Use **`gh`** to work with GitHub issues: **first** run an **interactive** checkâ
       <constraint>**FIRST** (after gate): Verify `gh` is available before issuing subcommands</constraint>
       <constraint>**TABLES**: Prefer `--json` + markdown pipe tables for issue list summaries</constraint>
       <constraint>**THREAD**: For analysis, include body and all comments (or explicitly summarize with omissions noted)</constraint>
-      <constraint>**014**: For user stories from issues, use `@014-agile-user-story` and align answers with GitHub-sourced text</constraint>
     </constraint-list>
   </constraints>
 

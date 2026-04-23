@@ -27,7 +27,6 @@ Do not fabricate issue data; use only `gh` output (or explicitly agreed public R
 - **FIRST** (after gate): Verify `gh` is available before issuing subcommands
 - **TABLES**: Prefer `--json` + markdown pipe tables for issue list summaries
 - **THREAD**: For analysis, include body and all comments (or explicitly summarize with omissions noted)
-- **014**: For user stories from issues, use `@014-agile-user-story` and align answers with GitHub-sourced text
 
 ## When to use this skill
 
