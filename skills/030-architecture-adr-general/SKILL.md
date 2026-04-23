@@ -45,6 +45,27 @@ Before applying any ADR generation, ensure the project validates. If validation 
 - Infrastructure choice
 - Vendor selection ADR
 
+## Workflow
+
+1. **Validate project state**
+
+Run `./mvnw validate` or `mvn validate` before starting ADR generation.
+
+Step constraints:
+- If validation fails, stop and ask to resolve errors first
+
+2. **Read ADR reference and gather context**
+
+Read `references/030-architecture-adr-general.md`, then collect context, stakeholders, decision drivers, options, and trade-offs through conversation.
+
+3. **Synthesize and confirm decision**
+
+Summarize recommended option, rationale, and consequences, and confirm alignment with the user before creating the ADR artifact.
+
+4. **Generate ADR output**
+
+Create a MADR-style ADR document with the final decision, alternatives, consequences, and follow-up actions.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/030-architecture-adr-general.md](references/030-architecture-adr-general.md).
