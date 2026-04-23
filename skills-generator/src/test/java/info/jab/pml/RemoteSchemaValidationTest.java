@@ -21,7 +21,7 @@ class RemoteSchemaValidationTest {
     private static final String REMOTE_XSD = "https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd";
 
     private static Stream<String> provideXmlFileNames() {
-        return SystemPromptsInventory.xmlFilenames();
+        return SkillReferences.xmlFilenames();
     }
 
     @ParameterizedTest

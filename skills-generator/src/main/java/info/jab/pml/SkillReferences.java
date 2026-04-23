@@ -14,11 +14,11 @@ import org.w3c.dom.NodeList;
  * Each entry has a {@code name} attribute corresponding to the base name of the XML source file
  * (e.g. {@code 110-java-maven-best-practices} maps to {@code skill-references/110-java-maven-best-practices.xml}).
  */
-public final class SystemPromptsInventory {
+public final class SkillReferences {
 
     private static final String INVENTORY_RESOURCE = "skill-references.xml";
 
-    private SystemPromptsInventory() {
+    private SkillReferences() {
     }
 
     public static Stream<String> baseNames() {
@@ -30,7 +30,7 @@ public final class SystemPromptsInventory {
     }
 
     private static List<String> loadInventory() {
-        ClassLoader cl = SystemPromptsInventory.class.getClassLoader();
+        ClassLoader cl = SkillReferences.class.getClassLoader();
         try (InputStream stream = cl.getResourceAsStream(INVENTORY_RESOURCE)) {
             if (stream == null) {
                 throw new RuntimeException("System prompt inventory not found: " + INVENTORY_RESOURCE);
