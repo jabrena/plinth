@@ -48,6 +48,25 @@ Improve Maven POM configuration using industry-standard best practices.
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="1">
+      <step-title>Validate project before recommendations</step-title>
+      <step-content>Run `./mvnw validate` or `mvn validate` and stop if validation fails.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Read reference and analyze root POM</step-title>
+      <step-content>Read `references/110-java-maven-best-practices.md`, then inspect root `pom.xml` structure, dependency management, plugin management, properties, and profiles.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Expand to full module tree when present</step-title>
+      <step-content>If root has a `&lt;modules&gt;` section, read every child `pom.xml` and evaluate cross-module duplication, centralization opportunities, and version drift.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Provide prioritized best-practice recommendations</step-title>
+      <step-content>Propose concrete, safe improvements aligned with Maven best practices and full-module findings.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
         <reference>references/110-java-maven-best-practices.md</reference>
