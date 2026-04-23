@@ -4,7 +4,7 @@ description: Use when you need to install the embedded robot agents into either 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.14.0
+  version: 0.15.0-SNAPSHOT
 ---
 # Embedded agents installer
 
@@ -43,7 +43,7 @@ Wait for the user answer and do not copy any file before the destination is expl
 
 ### Step 2: Install embedded agents
 
-Copy these exact source files from `skills-generator/src/main/resources/system-prompts/assets/agents/` into the chosen destination directory:
+Copy these exact source files from `skills-generator/src/main/resources/skill-references/assets/agents/` into the chosen destination directory:
 
 - `robot-business-analyst.md`
 - `robot-coordinator.md`

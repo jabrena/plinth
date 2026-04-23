@@ -17,20 +17,20 @@ import org.w3c.dom.NodeList;
 /**
  * Generator for Agent Skills (SKILL.md and references) from XML rule definitions and skill files.
  * <p>
- * Reuses CursorRulesGenerator for full rule content. SKILL.md is sourced from
- * {@code skills/{numericId}-skill.md} (user-editable), where numericId is extracted from skillId (e.g. 110 from 110-java-maven-best-practices).
- * The list of skills to generate is defined in {@code skill-inventory.xml}; each must have a
- * matching skill summary in {@code skills/} and a matching system-prompt in {@code system-prompts/}.
+ * Reuses SkillReferenceGenerator for full rule content. SKILL.md is sourced from
+ * {@code skill-indexes/{numericId}-skill.md} (user-editable), where numericId is extracted from skillId (e.g. 110 from 110-java-maven-best-practices).
+ * The list of skills to generate is defined in {@code skill-indexes.xml}; each must have a
+ * matching skill summary in {@code skill-indexes/} and a matching system-prompt in {@code skill-references/}.
  */
 public final class SkillsGenerator {
 
     private static final String PROJECT_TAG = " Part of the skills-for-java project";
     private static final String LICENSE_FIELD = "license: Apache-2.0";
 
-    private final CursorRulesGenerator cursorRulesGenerator;
+    private final SkillReferenceGenerator cursorRulesGenerator;
 
     public SkillsGenerator() {
-        this.cursorRulesGenerator = new CursorRulesGenerator();
+        this.cursorRulesGenerator = new SkillReferenceGenerator();
     }
 
     /**
@@ -40,7 +40,7 @@ public final class SkillsGenerator {
      * @return stream of generated skill outputs
      */
     public Stream<SkillOutput> generateAllSkills() {
-        return SkillsInventory.skillDescriptors()
+        return SkillIndexes.skillDescriptors()
             .map(d -> generateSkill(d.skillId(), d.requiresSystemPrompt(), d.useXml()));
     }
 
@@ -71,7 +71,7 @@ public final class SkillsGenerator {
      *
      * @param skillId the skill identifier (e.g. 110-java-maven-best-practices)
      * @param requiresSystemPrompt when false, skips system-prompt XML and reference generation
-     * @param useXml when true, loads skill from skills/{numericId}-skill.xml, validates against schema, transforms via XSLT
+     * @param useXml when true, loads skill from skill-indexes/{numericId}-skill.xml, validates against schema, transforms via XSLT
      * @return the generated skill output
      */
     public SkillOutput generateSkill(String skillId, boolean requiresSystemPrompt, boolean useXml) {
@@ -85,7 +85,7 @@ public final class SkillsGenerator {
     }
 
     private SkillMetadata parseMetadata(String skillId) {
-        String xmlFileName = "system-prompts/" + skillId + ".xml";
+        String xmlFileName = "skill-references/" + skillId + ".xml";
         try (InputStream xmlStream = getResource(xmlFileName)) {
             if (xmlStream == null) {
                 throw new RuntimeException("XML resource not found: " + xmlFileName);
@@ -147,16 +147,16 @@ public final class SkillsGenerator {
     }
 
     private String generateReferenceContent(String skillId, SkillMetadata metadata) {
-        return cursorRulesGenerator.generate("system-prompts/" + skillId + ".xml", "system-prompts.xsl");
+        return cursorRulesGenerator.generate("skill-references/" + skillId + ".xml", "skill-reference-to-markdown.xsl");
     }
 
     private String loadSkillSummary(String skillId) {
         String numericId = extractNumericId(skillId);
-        String resourceName = "skills/" + numericId + "-skill.md";
+        String resourceName = "skill-indexes/" + numericId + "-skill.md";
         try (InputStream stream = getResource(resourceName)) {
             if (stream == null) {
                 throw new RuntimeException("Skill resource not found: " + resourceName
-                    + ". Each skill in SkillsInventory must have a matching file in skills/.");
+                    + ". Each skill in SkillIndexes must have a matching file in skill-indexes/.");
             }
             String content = new String(stream.readAllBytes());
             return appendProjectTagToDescription(content);
@@ -167,8 +167,8 @@ public final class SkillsGenerator {
 
     private String loadSkillSummaryFromXml(String skillId) {
         String numericId = extractNumericId(skillId);
-        String xmlResource = "skills/" + numericId + "-skill.xml";
-        String xsltResource = "skill-to-markdown.xsl";
+        String xmlResource = "skill-indexes/" + numericId + "-skill.xml";
+        String xsltResource = "skill-index-to-markdown.xsl";
         try (
             InputStream xmlStream = getResource(xmlResource);
             InputStream xsltStream = getResource(xsltResource)

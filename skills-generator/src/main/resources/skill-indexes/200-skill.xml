@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="200-agents-md"
+      interactive="true">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.15.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need to generate an AGENTS.md file for a Java repository — covering project conventions, tech stack, file structure, commands, Git workflow, and contributor boundaries — through a modular, step-based interactive process that adapts to your specific project needs.</description>
+  </metadata>
+
+  <title>AGENTS.md Generator for Java repositories</title>
+  <goal><![CDATA[
+Generate a comprehensive AGENTS.md file for Java repositories through a modular, step-based interactive process that covers role definition, tech stack, file structure, commands, Git workflow, and contributor boundaries. **This is an interactive SKILL**.
+
+**What is covered in this Skill?**
+
+- AGENTS.md generation for Java repositories of any complexity
+- Role and expertise definition for AI agents and contributors
+- Tech stack documentation: language, build tool, frameworks, pipelines
+- File structure mapping with read/write boundaries
+- Command catalogue for build/test/deploy/run workflows
+- Git workflow conventions: branching strategy, commit message format
+- Contributor boundaries using ✅ Always do / ⚠️ Ask first / 🚫 Never do formatting
+]]></goal>
+
+  <constraints>
+    <constraints-description>No Maven validation is required before generating AGENTS.md. Review the project structure and existing documentation before starting to provide accurate answers during Step 1.</constraints-description>
+    <constraint-list>
+      <constraint>**BEFORE STARTING**: Review the project structure and existing documentation to provide accurate answers during Step 1</constraint>
+      <constraint>**BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each AGENTS.md generation pattern</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+        <trigger>Create AGENTS.md</trigger>
+        <trigger>Update AGENTS.md file</trigger>
+        <trigger>Add agent instructions</trigger>
+    </trigger-list>
+  </triggers>
+
+  <references>
+    <reference-list>
+        <reference>references/200-agents-md.md</reference>
+    </reference-list>
+  </references>
+</prompt>

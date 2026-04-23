@@ -42,19 +42,19 @@ class SkillsGeneratorTest {
     @DisplayName("Parameterized Generate Skill Tests")
     class ParameterizedGenerateSkillTests {
 
-        private static Stream<SkillsInventory.SkillDescriptor> provideSkillDescriptors() {
-            return SkillsInventory.skillDescriptors();
+        private static Stream<SkillIndexes.SkillDescriptor> provideSkillDescriptors() {
+            return SkillIndexes.skillDescriptors();
         }
 
         @ParameterizedTest
         @MethodSource("provideSkillDescriptors")
         @DisplayName("Should generate valid SKILL.md and reference for each skill")
-        void should_generateValidSkill_when_skillIdProvided(SkillsInventory.SkillDescriptor descriptor) throws Exception {
+        void should_generateValidSkill_when_skillIdProvided(SkillIndexes.SkillDescriptor descriptor) throws Exception {
             String skillId = descriptor.skillId();
             boolean requiresSystemPrompt = descriptor.requiresSystemPrompt();
             boolean useXml = descriptor.useXml();
 
-            // Given - skill file in resources/skills/ is the source of truth (.md or .xml when useXml)
+            // Given - skill file in resources/skill-indexes/ is the source of truth (.md or .xml when useXml)
             String expectedSkillMd = useXml ? loadSkillFromXmlResources(skillId) : loadSkillFromResources(skillId);
             SkillsGenerator generator = new SkillsGenerator();
 
@@ -63,7 +63,7 @@ class SkillsGeneratorTest {
 
             // Then - Generated SKILL.md must exactly match the skill source (user-editable)
             assertThat(output.skillMd())
-                .withFailMessage("Generated SKILL.md must match skills/%s-skill.%s. "
+                .withFailMessage("Generated SKILL.md must match skill-indexes/%s-skill.%s. "
                     + "Update the skill file and run the build to promote changes.",
                     numericId(skillId), useXml ? "xml" : "md")
                 .isEqualTo(expectedSkillMd);
@@ -90,9 +90,9 @@ class SkillsGeneratorTest {
     class SkillInventorySyncTests {
 
         @Test
-        @DisplayName("skill-inventory.xml entries must have matching skill summary (and system-prompt when required)")
+        @DisplayName("skill-indexes.xml entries must have matching skill summary (and system-prompt when required)")
         void should_validateInventoryMatchesSkillsAndSystemPrompts() {
-            List<SkillsInventory.SkillDescriptor> descriptors = SkillsInventory.skillDescriptors().toList();
+            List<SkillIndexes.SkillDescriptor> descriptors = SkillIndexes.skillDescriptors().toList();
             assertThat(descriptors).isNotEmpty();
         }
     }
@@ -101,20 +101,20 @@ class SkillsGeneratorTest {
     @DisplayName("Title consistency between skill markdown and system-prompt XML")
     class TitleConsistencyTests {
 
-        private static Stream<SkillsInventory.SkillDescriptor> provideSkillDescriptorsWithSystemPrompt() {
-            return SkillsInventory.skillDescriptors()
-                .filter(SkillsInventory.SkillDescriptor::requiresSystemPrompt);
+        private static Stream<SkillIndexes.SkillDescriptor> provideSkillDescriptorsWithSystemPrompt() {
+            return SkillIndexes.skillDescriptors()
+                .filter(SkillIndexes.SkillDescriptor::requiresSystemPrompt);
         }
 
         @ParameterizedTest
         @MethodSource("provideSkillDescriptorsWithSystemPrompt")
         @DisplayName("Skill markdown H1 title must match system-prompt XML title element")
-        void should_haveMatchingTitle_when_comparingSkillMdAndSystemPromptXml(SkillsInventory.SkillDescriptor descriptor) throws Exception {
+        void should_haveMatchingTitle_when_comparingSkillMdAndSystemPromptXml(SkillIndexes.SkillDescriptor descriptor) throws Exception {
             String skillId = descriptor.skillId();
             String numId = numericId(skillId);
             String markdownTitle = loadSkillTitle(numId);
 
-            String xmlResource = "system-prompts/" + skillId + ".xml";
+            String xmlResource = "skill-references/" + skillId + ".xml";
             String xmlTitle;
             try (InputStream stream = SkillsGeneratorTest.class.getClassLoader().getResourceAsStream(xmlResource)) {
                 assertThat(stream).withFailMessage("System-prompt XML not found: %s", xmlResource).isNotNull();
@@ -138,7 +138,7 @@ class SkillsGeneratorTest {
         }
 
         private String loadSkillTitle(String numId) throws Exception {
-            String mdResource = "skills/" + numId + "-skill.md";
+            String mdResource = "skill-indexes/" + numId + "-skill.md";
             try (InputStream stream = SkillsGeneratorTest.class.getClassLoader().getResourceAsStream(mdResource)) {
                 if (stream != null) {
                     String content = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
@@ -149,7 +149,7 @@ class SkillsGeneratorTest {
                         .orElseThrow(() -> new AssertionError("No H1 heading found in " + mdResource));
                 }
             }
-            String xmlResource = "skills/" + numId + "-skill.xml";
+            String xmlResource = "skill-indexes/" + numId + "-skill.xml";
             try (InputStream stream = SkillsGeneratorTest.class.getClassLoader().getResourceAsStream(xmlResource)) {
                 assertThat(stream).withFailMessage("Skill file not found: %s or %s", mdResource, xmlResource).isNotNull();
                 Document doc = DocumentBuilderFactory.newInstance().newDocumentBuilder().parse(stream);
@@ -168,14 +168,14 @@ class SkillsGeneratorTest {
 
         private static final Pattern VERSION_PATTERN = Pattern.compile("^\\s*version:\\s*(\\S+)\\s*$");
 
-        private static Stream<SkillsInventory.SkillDescriptor> provideSkillDescriptors() {
-            return SkillsInventory.skillDescriptors();
+        private static Stream<SkillIndexes.SkillDescriptor> provideSkillDescriptors() {
+            return SkillIndexes.skillDescriptors();
         }
 
         @ParameterizedTest
         @MethodSource("provideSkillDescriptors")
         @DisplayName("Should have metadata version matching project version from parent pom.xml when version is present")
-        void should_haveMetadataVersionMatchingProjectVersion_when_versionPresent(SkillsInventory.SkillDescriptor descriptor) throws Exception {
+        void should_haveMetadataVersionMatchingProjectVersion_when_versionPresent(SkillIndexes.SkillDescriptor descriptor) throws Exception {
             String numId = numericId(descriptor.skillId());
             Optional<String> skillVersion = loadSkillVersion(numId);
 
@@ -187,20 +187,20 @@ class SkillsGeneratorTest {
             assertThat(skillVersion.get())
                 .withFailMessage(
                     "Skill %s has metadata version '%s' but project version is '%s'. "
-                        + "Update the version in skills/%s-skill.md or skills/%s-skill.xml to match pom.xml.",
+                        + "Update the version in skill-indexes/%s-skill.md or skill-indexes/%s-skill.xml to match pom.xml.",
                     numId, skillVersion.get(), expectedVersion, numId, numId)
                 .isEqualTo(expectedVersion);
         }
 
         private Optional<String> loadSkillVersion(String numId) throws Exception {
-            String mdResource = "skills/" + numId + "-skill.md";
+            String mdResource = "skill-indexes/" + numId + "-skill.md";
             try (InputStream stream = SkillsGeneratorTest.class.getClassLoader().getResourceAsStream(mdResource)) {
                 if (stream != null) {
                     String content = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
                     return extractVersionFromFrontmatter(content);
                 }
             }
-            String xmlResource = "skills/" + numId + "-skill.xml";
+            String xmlResource = "skill-indexes/" + numId + "-skill.xml";
             try (InputStream stream = SkillsGeneratorTest.class.getClassLoader().getResourceAsStream(xmlResource)) {
                 if (stream == null) {
                     throw new AssertionError("Skill file not found: " + mdResource + " or " + xmlResource);
@@ -262,7 +262,7 @@ class SkillsGeneratorTest {
 
     private String loadSkillFromResources(String skillId) throws IOException {
         String numId = numericId(skillId);
-        String resourceName = "skills/" + numId + "-skill.md";
+        String resourceName = "skill-indexes/" + numId + "-skill.md";
         try (InputStream stream = SkillsGeneratorTest.class.getClassLoader().getResourceAsStream(resourceName)) {
             if (stream == null) {
                 throw new IllegalArgumentException("Skill file not found: " + resourceName);
@@ -274,8 +274,8 @@ class SkillsGeneratorTest {
 
     private String loadSkillFromXmlResources(String skillId) throws Exception {
         String numId = numericId(skillId);
-        String xmlResource = "skills/" + numId + "-skill.xml";
-        String xsltResource = "skill-to-markdown.xsl";
+        String xmlResource = "skill-indexes/" + numId + "-skill.xml";
+        String xsltResource = "skill-index-to-markdown.xsl";
         try (
             InputStream xmlStream = getTestResource(xmlResource);
             InputStream xsltStream = getTestResource(xsltResource)

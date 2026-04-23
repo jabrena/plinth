@@ -35,7 +35,7 @@ This project uses **OpenSpec** for structured change management and planning:
 
 - `skills/` – Generated SKILLS (READ only, never edit directly)
 - `.cursor/rules/` – Legacy Cursor rules (READ only; not produced by the default Maven install after generator consolidation)
-- `skills-generator/src/main/resources/` – XML rule sources (`system-prompts/`, `skills/`, XSLT) and skill inventory (WRITE here to change rules and skills)
+- `skills-generator/src/main/resources/` – XML rule sources (`skill-references/`, `skills/`, XSLT) and skill inventory (WRITE here to change rules and skills)
 - `skills-generator/` – Unified generator module: builds agent skills into `skills/` (WRITE)
 - `documentation/openspec/` – OpenSpec change management (proposals, specs, tasks) (WRITE)
 - `documentation/adr/` – Architecture Decision Records (WRITE)
@@ -114,6 +114,6 @@ pre-commit run conventional-pre-commit --hook-stage commit-msg --commit-msg-file
 
 ## Boundaries
 
-- ✅ **Always do:** Edit XML in `skills-generator/src/main/resources/` (`system-prompts/`, `skills/`) to change rules and skills, run `./mvnw clean verify` before promoting changes. When editing XML, follow PML Schema: [https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd](https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd). For complex changes, create OpenSpec proposals first.
+- ✅ **Always do:** Edit XML in `skills-generator/src/main/resources/` (`skill-references/`, `skills/`) to change rules and skills, run `./mvnw clean verify` before promoting changes. When editing XML, follow PML Schema: [https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd](https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd). For complex changes, create OpenSpec proposals first.
 - ⚠️ **Ask first:** Adding new XML rule files, modifying the XSLT stylesheet, changing site templates, architectural changes (use OpenSpec for planning)
 - 🚫 **Never do:** Edit `.cursor/rules/` or `docs/` directly, commit secrets, skip tests before promoting, bypass OpenSpec for major changes

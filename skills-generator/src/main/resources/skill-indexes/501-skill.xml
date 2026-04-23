@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="501-frameworks-micronaut-core">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.15.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description><![CDATA[
+        Use when building or reviewing Micronaut applications — Micronaut.run bootstrap, @Singleton/@Prototype, @Factory beans, @ConfigurationProperties, environments, @Requires, @Controller vs services, @Scheduled, graceful shutdown, @ExecuteOn for blocking work, and Jakarta-consistent APIs.
+        ]]>
+    </description>
+  </metadata>
+
+  <title>Micronaut Core Guidelines</title>
+  <goal><![CDATA[
+Apply Micronaut core guidelines for DI, configuration, HTTP adapters, and operations.
+
+**What is covered in this Skill?**
+
+- Thin `main` with `Micronaut.run(Application.class, args)`
+- Bean scopes: @Singleton, @Prototype; request scope only when justified
+- Constructor injection with `jakarta.inject.Inject`
+- @Factory for third-party or explicit bean construction
+- @ConfigurationProperties (grouped settings) vs scattered @Property
+- @Requires and environments instead of env branching in domain code
+- Thin @Controller types delegating to @Singleton services
+- @Scheduled with explicit failure visibility
+- @ExecuteOn(TaskExecutors.BLOCKING) (or virtual-thread executors) for blocking I/O off the event loop
+- Netty graceful shutdown properties
+- AOP interceptors for cross-cutting concerns
+
+**Scope:** Apply recommendations based on the reference rules and good/bad code examples.
+]]></goal>
+
+  <constraints>
+    <constraints-description>Before applying Micronaut changes, ensure the project compiles. If compilation fails, stop immediately. After applying improvements, run full verification.</constraints-description>
+    <constraint-list>
+      <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+      <constraint>**PREREQUISITE**: Project must compile successfully before applying Micronaut core improvements</constraint>
+      <constraint>**SAFETY**: If compilation fails, stop immediately — compilation failure is a blocking condition</constraint>
+      <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+      <constraint>**BEFORE APPLYING**: Read the reference for detailed rules, good/bad patterns, and constraints</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+        <trigger>Review Java code for Micronaut application structure and beans</trigger>
+        <trigger>Apply best practices for Micronaut configuration, @Requires, and factories</trigger>
+        <trigger>Improve scheduling, shutdown, or threading in Micronaut services</trigger>
+    </trigger-list>
+  </triggers>
+
+  <references>
+    <reference-list>
+        <reference>references/501-frameworks-micronaut-core.md</reference>
+    </reference-list>
+  </references>
+</prompt>

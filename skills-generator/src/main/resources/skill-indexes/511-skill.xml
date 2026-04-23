@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="511-frameworks-micronaut-jdbc">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.15.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need programmatic JDBC in Micronaut — pooled DataSource, parameterized SQL, io.micronaut.transaction.annotation.Transactional, batching, and domain exception translation.</description>
+  </metadata>
+
+  <title>Micronaut JDBC — programmatic SQL</title>
+  <goal><![CDATA[
+Apply programmatic JDBC patterns in Micronaut with safe SQL and clear transactions.
+
+**What is covered in this Skill?**
+
+- Injected javax.sql.DataSource (Hikari-backed with micronaut-jdbc-hikari) and try-with-resources for Connection / PreparedStatement
+- PreparedStatement with bind parameters — never string concatenation
+- Mapping ResultSet rows to Java records (dedicated mapRow method)
+- Safe single-row queries with Optional<T>; never assume rs.next() succeeds
+- SQLException translation to domain exceptions (catch-translate-rethrow)
+- Streaming large result sets with setFetchSize to avoid OOM
+- Batch updates with addBatch / executeBatch for bulk inserts
+- @Transactional service boundaries and TransactionDefinition.Propagation (e.g. REQUIRES_NEW for independent commits)
+- Self-invocation pitfall: call transactional collaborators through injected beans, not this.method()
+- SQL text blocks for multi-line SQL (upserts, dialect-specific clauses)
+- When to prefer Micronaut Data (`@512`) vs raw JDBC
+
+**Scope:** Apply recommendations based on the reference rules and good/bad code examples.
+]]></goal>
+
+  <constraints>
+    <constraints-description>Compile before JDBC refactors; verify after changes.</constraints-description>
+    <constraint-list>
+      <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+      <constraint>**PREREQUISITE**: Project must compile before applying JDBC improvements</constraint>
+      <constraint>**SAFETY**: If compilation fails, stop immediately</constraint>
+      <constraint>**BLOCKING CONDITION**: Compilation errors must be resolved by the user before proceeding</constraint>
+      <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+      <constraint>**BEFORE APPLYING**: Read the reference for detailed rules and examples</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+        <trigger>Review JDBC or SQL data access in a Micronaut project</trigger>
+        <trigger>Improve transactions and parameter binding for Micronaut JDBC</trigger>
+        <trigger>Translate SQLException to domain exceptions or stream large result sets</trigger>
+        <trigger>Fix self-invocation bypassing @Transactional in Micronaut</trigger>
+    </trigger-list>
+  </triggers>
+
+  <references>
+    <reference-list>
+        <reference>references/511-frameworks-micronaut-jdbc.md</reference>
+    </reference-list>
+  </references>
+</prompt>
