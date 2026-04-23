@@ -45,6 +45,12 @@ Help teams use **WireMock** effectively for HTTP dependency stubbing with **stab
         <trigger>Stub external HTTP APIs in tests with stable fixtures and dynamic ports</trigger>
     </trigger-list>
   </triggers>
+  <steps>
+    <step number="1"><step-title>Read reference and assess project context</step-title><step-content>Read `references/702-technologies-wiremock.md` and inspect current API/context artifacts before proposing changes.</step-content></step>
+    <step number="2"><step-title>Gather scope and decide target improvements</step-title><step-content>Identify requested outcomes, constraints, and the minimum safe set of changes to apply.</step-content></step>
+    <step number="3"><step-title>Apply technology-aligned changes</step-title><step-content>Implement or refactor artifacts following the reference patterns and project conventions.</step-content></step>
+    <step number="4"><step-title>Run verification and report results</step-title><step-content>Execute appropriate checks and summarize what changed, what was verified, and any follow-up actions.</step-content></step>
+  </steps>
 
   <references>
     <reference-list>

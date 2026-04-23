@@ -53,6 +53,7 @@ Can you update the current changelog for 0.15.0 comparing git commits in relatio
 # Review Skill registries
 https://github.com/jabrena/cursor-rules-java
 https://tessl.io/registry/skills/submit
+npx tessl skill review ./skills/xxx
 cd target && npx skills add jabrena/cursor-rules-java --all --agent cursor && cd ..
 ```
 

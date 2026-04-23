@@ -47,6 +47,24 @@ Do not generate without a .feature file; compile before and verify after.
 - Create WireMock JSON mapping files for external HTTP stubs in Quarkus acceptance tests
 - Configure Maven *AT naming convention and Failsafe plugin for Quarkus acceptance tests
 
+## Workflow
+
+1. **Read reference and assess project context**
+
+Read `references/423-frameworks-quarkus-testing-acceptance-tests.md` and inspect the current project setup before proposing changes.
+
+2. **Gather scope and decide target improvements**
+
+Identify requested outcomes, constraints, and the minimum safe set of changes to apply.
+
+3. **Apply framework-aligned changes**
+
+Implement or refactor configuration/code following the reference patterns and project conventions.
+
+4. **Run verification and report results**
+
+Execute appropriate build/tests and summarize what changed, what was verified, and any follow-up actions.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/423-frameworks-quarkus-testing-acceptance-tests.md](references/423-frameworks-quarkus-testing-acceptance-tests.md).
