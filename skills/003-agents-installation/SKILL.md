@@ -31,6 +31,24 @@ This skill installs only the embedded robot agents bundle and must ask for desti
 - Bootstrap .claude/agents
 - Copy robot agents
 
+## Workflow
+
+1. **Choose destination**
+
+Ask exactly one question to choose `.cursor/agents` or `.claude/agents` and wait for an explicit answer before copying files.
+
+Step constraints:
+- Do not copy any file until destination is explicitly confirmed
+- If destination is ambiguous, ask a clarification question
+
+2. **Install embedded agents**
+
+Create the destination directory if needed, then copy all embedded agent files defined in the reference content, preserving filenames and warning before overwriting existing files.
+
+3. **Report installation result**
+
+Return a concise checklist with selected destination, created/updated files, overwrite actions, and an optional verification command.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/003-agents-installation.md](references/003-agents-installation.md).

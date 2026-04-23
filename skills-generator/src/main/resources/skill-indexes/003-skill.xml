@@ -39,6 +39,27 @@ Install a predefined set of embedded agent definitions from repository assets in
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="1">
+      <step-title>Choose destination</step-title>
+      <step-content>Ask exactly one question to choose `.cursor/agents` or `.claude/agents` and wait for an explicit answer before copying files.</step-content>
+      <step-constraints>
+        <step-constraint-list>
+          <step-constraint>Do not copy any file until destination is explicitly confirmed</step-constraint>
+          <step-constraint>If destination is ambiguous, ask a clarification question</step-constraint>
+        </step-constraint-list>
+      </step-constraints>
+    </step>
+    <step number="2">
+      <step-title>Install embedded agents</step-title>
+      <step-content>Create the destination directory if needed, then copy all embedded agent files defined in the reference content, preserving filenames and warning before overwriting existing files.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Report installation result</step-title>
+      <step-content>Return a concise checklist with selected destination, created/updated files, overwrite actions, and an optional verification command.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
       <reference>references/003-agents-installation.md</reference>
