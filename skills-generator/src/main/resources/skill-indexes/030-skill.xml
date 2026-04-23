@@ -19,17 +19,7 @@ Generate Architecture Decision Records (ADRs) for Java projects through an inter
 - ADR file storage configuration
 - Conversational information gathering: context, stakeholders, decision drivers, options with pros/cons, outcome, consequences
 - MADR template generation
-- Validation with `./mvnw validate` or `mvn validate` before proceeding
 ]]></goal>
-
-  <constraints>
-    <constraints-description>Before applying any ADR generation, ensure the project validates. If validation fails, stop immediately — do not proceed until all validation errors are resolved.</constraints-description>
-    <constraint-list>
-      <constraint>**MANDATORY**: Run `./mvnw validate` or `mvn validate` before applying any ADR generation</constraint>
-      <constraint>**SAFETY**: If validation fails, stop immediately — do not proceed until all validation errors are resolved</constraint>
-      <constraint>**BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each ADR generation pattern</constraint>
-    </constraint-list>
-  </constraints>
 
   <triggers>
     <trigger-list>
@@ -55,23 +45,14 @@ Generate Architecture Decision Records (ADRs) for Java projects through an inter
 
   <steps>
     <step number="1">
-      <step-title>Validate project state</step-title>
-      <step-content>Run `./mvnw validate` or `mvn validate` before starting ADR generation.</step-content>
-      <step-constraints>
-        <step-constraint-list>
-          <step-constraint>If validation fails, stop and ask to resolve errors first</step-constraint>
-        </step-constraint-list>
-      </step-constraints>
-    </step>
-    <step number="2">
       <step-title>Read ADR reference and gather context</step-title>
       <step-content>Read `references/030-architecture-adr-general.md`, then collect context, stakeholders, decision drivers, options, and trade-offs through conversation.</step-content>
     </step>
-    <step number="3">
+    <step number="2">
       <step-title>Synthesize and confirm decision</step-title>
       <step-content>Summarize recommended option, rationale, and consequences, and confirm alignment with the user before creating the ADR artifact.</step-content>
     </step>
-    <step number="4">
+    <step number="3">
       <step-title>Generate ADR output</step-title>
       <step-content>Create a MADR-style ADR document with the final decision, alternatives, consequences, and follow-up actions.</step-content>
     </step>

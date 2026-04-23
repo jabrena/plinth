@@ -15,15 +15,6 @@ Generate Architecture Decision Records (ADRs) for Java projects through an inter
 - ADR file storage configuration
 - Conversational information gathering: context, stakeholders, decision drivers, options with pros/cons, outcome, consequences
 - MADR template generation
-- Validation with `./mvnw validate` or `mvn validate` before proceeding
-
-## Constraints
-
-Before applying any ADR generation, ensure the project validates. If validation fails, stop immediately — do not proceed until all validation errors are resolved.
-
-- **MANDATORY**: Run `./mvnw validate` or `mvn validate` before applying any ADR generation
-- **SAFETY**: If validation fails, stop immediately — do not proceed until all validation errors are resolved
-- **BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each ADR generation pattern
 
 ## When to use this skill
 
@@ -47,22 +38,15 @@ Before applying any ADR generation, ensure the project validates. If validation 
 
 ## Workflow
 
-1. **Validate project state**
-
-Run `./mvnw validate` or `mvn validate` before starting ADR generation.
-
-Step constraints:
-- If validation fails, stop and ask to resolve errors first
-
-2. **Read ADR reference and gather context**
+1. **Read ADR reference and gather context**
 
 Read `references/030-architecture-adr-general.md`, then collect context, stakeholders, decision drivers, options, and trade-offs through conversation.
 
-3. **Synthesize and confirm decision**
+2. **Synthesize and confirm decision**
 
 Summarize recommended option, rationale, and consequences, and confirm alignment with the user before creating the ADR artifact.
 
-4. **Generate ADR output**
+3. **Generate ADR output**
 
 Create a MADR-style ADR document with the final decision, alternatives, consequences, and follow-up actions.
 
