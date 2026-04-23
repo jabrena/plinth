@@ -47,10 +47,10 @@ Apply fast testing strategies for Quarkus: Mockito-first, QuarkusTest when CDI w
         <trigger>Convert repeated test methods to @ParameterizedTest with @CsvSource or @MethodSource</trigger>
     </trigger-list>
   </triggers>
-
-  <references>
-    <reference-list>
-        <reference>references/421-frameworks-quarkus-testing-unit-tests.md</reference>
-    </reference-list>
-  </references>
+  <steps>
+    <step number="1"><step-title>Read reference and assess project context</step-title><step-content>Read `references/421-frameworks-quarkus-testing-unit-tests.md` and inspect the current project setup before proposing changes.</step-content></step>
+    <step number="2"><step-title>Gather scope and decide target improvements</step-title><step-content>Identify requested outcomes, constraints, and the minimum safe set of changes to apply.</step-content></step>
+    <step number="3"><step-title>Apply framework-aligned changes</step-title><step-content>Implement or refactor configuration/code following the reference patterns and project conventions.</step-content></step>
+    <step number="4"><step-title>Run verification and report results</step-title><step-content>Execute appropriate build/tests and summarize what changed, what was verified, and any follow-up actions.</step-content></step>
+  </steps>
 </prompt>

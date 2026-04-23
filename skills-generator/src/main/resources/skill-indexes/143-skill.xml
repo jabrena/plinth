@@ -47,9 +47,26 @@ Identify and apply functional exception handling best practices in Java to impro
     </trigger-list>
   </triggers>
 
-  <references>
-    <reference-list>
-        <reference>references/143-java-functional-exception-handling.md</reference>
-    </reference-list>
-  </references>
+  <steps>
+    <step number="1">
+      <step-title>Validate project before functional-exception changes</step-title>
+      <step-content>Run `./mvnw validate` or `mvn validate` and stop immediately if validation fails.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Check required dependencies</step-title>
+      <step-content>When introducing `Either`, confirm VAVR (`io.vavr:vavr`) and SLF4J are present before implementation.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Read functional-exception reference and identify targets</step-title>
+      <step-content>Read `references/143-java-functional-exception-handling.md` and identify places to replace exception-heavy control flow with monadic error types.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Apply functional exception-handling refactorings</step-title>
+      <step-content>Implement selected `Optional`/`Either`/async error patterns with structured logging and clear error contracts.</step-content>
+    </step>
+    <step number="5">
+      <step-title>Verify with full build</step-title>
+      <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
+    </step>
+  </steps>
 </prompt>

@@ -73,10 +73,4 @@ Guide the process of turning an implementation plan (`*.plan.md`) into an OpenSp
       <step-content>Run `openspec validate --all`; when checklist tasks are complete, guide the user to archive the change with `openspec archive &lt;change-id&gt;`.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-      <reference>references/042-planning-openspec.md</reference>
-    </reference-list>
-  </references>
 </prompt>

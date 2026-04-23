@@ -43,9 +43,22 @@ Identify and apply Java secure coding practices to reduce vulnerabilities, prote
     </trigger-list>
   </triggers>
 
-  <references>
-    <reference-list>
-        <reference>references/124-java-secure-coding.md</reference>
-    </reference-list>
-  </references>
+  <steps>
+    <step number="1">
+      <step-title>Compile project before secure-coding changes</step-title>
+      <step-content>Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Read secure-coding reference and assess risks</step-title>
+      <step-content>Read `references/124-java-secure-coding.md` and identify applicable vulnerabilities and hardening opportunities.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Apply secure-coding improvements</step-title>
+      <step-content>Implement selected protections for input validation, crypto, secrets, deserialization, and output encoding.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Verify with full build</step-title>
+      <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
+    </step>
+  </steps>
 </prompt>

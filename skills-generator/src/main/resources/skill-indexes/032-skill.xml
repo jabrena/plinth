@@ -69,10 +69,4 @@ Guide stakeholders through a structured conversation to uncover and document arc
       <step-content>Only after user confirms "proceed", create the ADR including measurable Quality Metrics and Success Criteria.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/032-architecture-adr-non-functional-requirements.md</reference>
-    </reference-list>
-  </references>
 </prompt>

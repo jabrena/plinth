@@ -39,6 +39,24 @@ Keep recommendations at the WireMock and HTTP-stub layer unless the user explici
 - Debug flaky tests involving WireMock or unmatched request journals
 - Stub external HTTP APIs in tests with stable fixtures and dynamic ports
 
+## Workflow
+
+1. **Read reference and assess project context**
+
+Read `references/702-technologies-wiremock.md` and inspect current API/context artifacts before proposing changes.
+
+2. **Gather scope and decide target improvements**
+
+Identify requested outcomes, constraints, and the minimum safe set of changes to apply.
+
+3. **Apply technology-aligned changes**
+
+Implement or refactor artifacts following the reference patterns and project conventions.
+
+4. **Run verification and report results**
+
+Execute appropriate checks and summarize what changed, what was verified, and any follow-up actions.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/702-technologies-wiremock.md](references/702-technologies-wiremock.md).

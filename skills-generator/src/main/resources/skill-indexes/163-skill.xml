@@ -42,9 +42,22 @@ Implement refactoring based on profiling analysis: review profiling-problem-anal
     </trigger-list>
   </triggers>
 
-  <references>
-    <reference-list>
-        <reference>references/163-java-profiling-refactor.md</reference>
-    </reference-list>
-  </references>
+  <steps>
+    <step number="1">
+      <step-title>Review profiling analysis artifacts</step-title>
+      <step-content>Read `docs/profiling-problem-analysis-YYYYMMDD.md` and `docs/profiling-solutions-YYYYMMDD.md` to select target bottlenecks.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Apply targeted performance refactors</step-title>
+      <step-content>Implement focused code changes for documented CPU, memory, or threading hotspots, incrementally and safely.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Verify behavior and performance build integrity</step-title>
+      <step-content>Run `./mvnw clean verify` or `mvn clean verify`; if tests fail, fix issues before continuing.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Prepare handoff for verification phase</step-title>
+      <step-content>Summarize implemented changes and expected metric improvements for Step 4 comparison.</step-content>
+    </step>
+  </steps>
 </prompt>

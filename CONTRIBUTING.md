@@ -12,7 +12,7 @@ Read [AGENTS.md](./AGENTS.md) for the full contributor guide (tech stack, bounda
 The unified `skills-generator` module holds all XML sources and Java code used to build **agent skills** under `skills/`.
 
 - [System prompt XML files](./skills-generator/src/main/resources/skill-references/) use the PML Schema ([pml.xsd](https://jabrena.github.io/pml/schemas/0.5.0/pml.xsd)). They are transformed with [SkillReferenceGenerator.java](./skills-generator/src/main/java/info/jab/pml/SkillReferenceGenerator.java) and [skill-reference-to-markdown.xsl](./skills-generator/src/main/resources/skill-reference-to-markdown.xsl) when producing reference content for skills.
-- [Skill summaries and inventory](./skills-generator/src/main/resources/) (`skill-indexes/`, `skill-indexes.xml`) drive `SKILL.md` generation.
+- [Skill summaries and inventory](./skills-generator/src/main/resources/) (`skill-indexes/`, `skills.xml`) drive `SKILL.md` generation.
 
 If you have the idea to contribute, review the whole process in detail:
 
@@ -22,7 +22,7 @@ If you have the idea to contribute, review the whole process in detail:
 npx skill-check skills                     # Validate generated skills
 ```
 
-Keep `skill-indexes.xml` aligned with `skill-indexes/` and `skill-references/` when adding or changing skills.
+Keep `skills.xml` aligned with `skill-indexes/` and `skill-references/` when adding or changing skills.
 
 When you feel confident with the process, fork the repository and try to create new XML documents. Models will help you because an XML file is more rigid than natural language and it has `a common vocabulary` to create prompts.
 

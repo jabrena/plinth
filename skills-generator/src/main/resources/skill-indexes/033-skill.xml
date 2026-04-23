@@ -75,10 +75,4 @@ Generate comprehensive Java project diagrams through a modular, step-based inter
       <step-content>Check generated diagrams for syntax correctness and consistency with selected scope before final delivery.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/033-architecture-diagrams.md</reference>
-    </reference-list>
-  </references>
 </prompt>

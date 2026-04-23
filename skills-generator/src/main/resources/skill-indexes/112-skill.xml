@@ -79,10 +79,4 @@ Maven profiles:
       <step-content>Report added plugins/profiles, rationale, and recommended follow-up commands or checks.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/112-java-maven-plugins.md</reference>
-    </reference-list>
-  </references>
 </prompt>

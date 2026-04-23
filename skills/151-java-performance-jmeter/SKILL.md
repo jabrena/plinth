@@ -36,6 +36,24 @@ JMeter must be installed and available in PATH. If not available, show a message
 - Refactor the code with JMeter performance testing
 - Add JMeter support
 
+## Workflow
+
+1. **Verify JMeter prerequisite**
+
+Check `jmeter --version` and stop with guidance if JMeter is not installed or not available in PATH.
+
+2. **Read JMeter reference template**
+
+Read `references/151-java-performance-jmeter.md` and use the `run-jmeter.sh` template exactly as provided.
+
+3. **Create script and project structure**
+
+Create `run-jmeter.sh` in project root, ensure required JMeter directories/files exist, and apply executable permission with `chmod +x`.
+
+4. **Explain usage and environment overrides**
+
+Document CLI options (`-l`, `-t`, `-r`, `-g`, `-h`) and environment variable overrides (`JMETER_LOOPS`, `JMETER_THREADS`, `JMETER_RAMP_UP`).
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/151-java-performance-jmeter.md](references/151-java-performance-jmeter.md).

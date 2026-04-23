@@ -41,6 +41,24 @@ Use identical test conditions between baseline and post-refactoring. Verify both
 - Verify the profiling
 - Performance benchmark
 
+## Workflow
+
+1. **Read verification reference and confirm baseline data**
+
+Read `references/164-java-profiling-verify.md` and verify baseline artifacts exist and are non-empty.
+
+2. **Generate post-refactoring profiling data**
+
+Run profiling with identical load/test conditions to produce comparable post-refactoring artifacts.
+
+3. **Compare before/after metrics and visuals**
+
+Perform quantitative comparisons for memory/CPU/GC/threading and side-by-side flamegraph analysis.
+
+4. **Document final verification outcome**
+
+Create comparison and final results reports with regressions, gains, and reproducible scenario details.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/164-java-profiling-verify.md](references/164-java-profiling-verify.md).

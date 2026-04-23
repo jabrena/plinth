@@ -49,9 +49,22 @@ Review and improve Java code using comprehensive object-oriented design guidelin
     </trigger-list>
   </triggers>
 
-  <references>
-    <reference-list>
-        <reference>references/121-java-object-oriented-design.md</reference>
-    </reference-list>
-  </references>
+  <steps>
+    <step number="1">
+      <step-title>Compile project before OOD changes</step-title>
+      <step-content>Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Read OOD reference and assess code</step-title>
+      <step-content>Read `references/121-java-object-oriented-design.md` and identify applicable SOLID/OOP/code-smell improvements.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Apply focused refactorings</step-title>
+      <step-content>Implement the selected object-oriented design improvements while preserving behavior.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Verify with full build</step-title>
+      <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
+    </step>
+  </steps>
 </prompt>

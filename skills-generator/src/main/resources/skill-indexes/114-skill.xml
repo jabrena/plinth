@@ -65,10 +65,4 @@ Help users search Maven Central, resolve **groupId:artifactId:version**, read ve
       <step-content>When working on a local project, ensure versions-maven-plugin usage and run `versions:display-*` reports for properties, dependencies, and plugins.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/114-java-maven-search.md</reference>
-    </reference-list>
-  </references>
 </prompt>

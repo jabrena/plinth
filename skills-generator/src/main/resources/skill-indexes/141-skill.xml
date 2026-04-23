@@ -45,9 +45,22 @@ Identify and apply modern Java (Java 8+) refactoring opportunities to improve re
     </trigger-list>
   </triggers>
 
-  <references>
-    <reference-list>
-        <reference>references/141-java-refactoring-with-modern-features.md</reference>
-    </reference-list>
-  </references>
+  <steps>
+    <step number="1">
+      <step-title>Compile project before modernization</step-title>
+      <step-content>Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Read modern-Java reference and identify candidates</step-title>
+      <step-content>Read `references/141-java-refactoring-with-modern-features.md` and identify high-value opportunities to adopt modern Java features.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Apply modern Java refactorings</step-title>
+      <step-content>Refactor incrementally using appropriate language/library features while preserving behavior and readability.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Verify with full build</step-title>
+      <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
+    </step>
+  </steps>
 </prompt>

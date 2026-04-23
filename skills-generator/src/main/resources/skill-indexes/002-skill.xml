@@ -57,10 +57,4 @@ Create a comprehensive checklist document for embedded agents inventory by follo
       <step-content>Confirm no extra agent rows were introduced and all required reference sections are present in the generated file.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-      <reference>references/002-agents-inventory.md</reference>
-    </reference-list>
-  </references>
 </prompt>

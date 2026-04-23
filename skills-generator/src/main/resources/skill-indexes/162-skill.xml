@@ -48,9 +48,22 @@ Analyze profiling results systematically: inventory results (flamegraphs, JFR, G
     </trigger-list>
   </triggers>
 
-  <references>
-    <reference-list>
-        <reference>references/162-java-profiling-analyze.md</reference>
-    </reference-list>
-  </references>
+  <steps>
+    <step number="1">
+      <step-title>Read analysis reference and inventory inputs</step-title>
+      <step-content>Read `references/162-java-profiling-analyze.md` and inventory profiling artifacts in `profiler/results/`.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Validate data quality and assumptions</step-title>
+      <step-content>Confirm datasets represent realistic load conditions and record assumptions/limitations before drawing conclusions.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Identify and prioritize bottlenecks</step-title>
+      <step-content>Analyze memory/CPU/threading findings, cross-reference multiple files, and prioritize issues by Impact/Effort.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Document findings and solution options</step-title>
+      <step-content>Create `docs/profiling-problem-analysis-YYYYMMDD.md` and `docs/profiling-solutions-YYYYMMDD.md` with quantitative evidence.</step-content>
+    </step>
+  </steps>
 </prompt>

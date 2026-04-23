@@ -47,9 +47,22 @@ Implement acceptance tests from Gherkin feature files. Given a .feature file in 
     </trigger-list>
   </triggers>
 
-  <references>
-    <reference-list>
-        <reference>references/133-java-testing-acceptance-tests.md</reference>
-    </reference-list>
-  </references>
+  <steps>
+    <step number="1">
+      <step-title>Validate preconditions and compile project</step-title>
+      <step-content>Confirm `.feature` file is in context and framework scope is valid, then run `./mvnw compile` or `mvn compile`; stop if any precondition fails.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Read acceptance-testing reference and parse scenarios</step-title>
+      <step-content>Read `references/133-java-testing-acceptance-tests.md` and extract `@acceptance` scenarios for happy-path implementation.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Implement acceptance test infrastructure and scenarios</step-title>
+      <step-content>Create or update base test infrastructure (RestAssured, Testcontainers, WireMock) and implement one happy-path test per accepted scenario.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Verify with full build</step-title>
+      <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
+    </step>
+  </steps>
 </prompt>

@@ -41,6 +41,24 @@ Compile before REST refactors; verify after.
 - Review or improve Micronaut @Controller REST APIs
 - Add validation, error handling, or align controllers with the OpenAPI contract on Micronaut HTTP layer
 
+## Workflow
+
+1. **Read reference and assess project context**
+
+Read `references/502-frameworks-micronaut-rest.md` and inspect the current project setup before proposing changes.
+
+2. **Gather scope and decide target improvements**
+
+Identify requested outcomes, constraints, and the minimum safe set of changes to apply.
+
+3. **Apply framework-aligned changes**
+
+Implement or refactor configuration/code following the reference patterns and project conventions.
+
+4. **Run verification and report results**
+
+Execute appropriate build/tests and summarize what changed, what was verified, and any follow-up actions.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/502-frameworks-micronaut-rest.md](references/502-frameworks-micronaut-rest.md).

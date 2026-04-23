@@ -66,10 +66,4 @@ Improve Maven POM configuration using industry-standard best practices.
       <step-content>Propose concrete, safe improvements aligned with Maven best practices and full-module findings.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/110-java-maven-best-practices.md</reference>
-    </reference-list>
-  </references>
 </prompt>
