@@ -41,6 +41,28 @@ Gather context before drafting. Include Execution Instructions in every plan. Ne
 - Improve the plan
 - Update the plan
 
+## Workflow
+
+0. **Get current date**
+
+Run `date` before planning and use it to derive the plan filename prefix `YYYY-MM-DD`.
+
+1. **Read reference and gather context**
+
+Read `references/041-planning-plan-mode.md` and ask one or two questions at a time to clarify requirements, constraints, and target scope.
+
+2. **Validate summary and confirm proceed**
+
+Summarize understanding, ask "Does this capture what you need?", and wait for explicit "proceed" before creating the plan artifact.
+
+3. **Generate structured plan artifact**
+
+Create `.cursor/plans/YYYY-MM-DD_<name>.plan.md` with required sections and YAML frontmatter, including Execution Instructions.
+
+4. **Apply execution discipline**
+
+When executing tasks from the plan, update the Status column after each task before moving to the next one.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/041-planning-plan-mode.md](references/041-planning-plan-mode.md).
