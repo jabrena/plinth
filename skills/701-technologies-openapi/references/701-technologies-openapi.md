@@ -4,7 +4,7 @@ description: Use when you need framework-agnostic OpenAPI 3.x guidance — spec 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.14.0
+  version: 0.15.0-SNAPSHOT
 ---
 # OpenAPI 3.x best practices
 

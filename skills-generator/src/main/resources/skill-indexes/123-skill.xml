@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="123-java-exception-handling">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.15.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need to apply Java exception handling best practices — including using specific exception types, managing resources with try-with-resources, securing exception messages, preserving error context via exception chaining, validating inputs early with fail-fast principles, handling thread interruption correctly, documenting exceptions with @throws, enforcing logging policy, translating exceptions at API boundaries, managing retries and idempotency, enforcing timeouts, attaching suppressed exceptions, and propagating failures in async/reactive code.</description>
+  </metadata>
+
+  <title>Java Exception Handling Guidelines</title>
+  <goal><![CDATA[
+Identify and apply robust Java exception handling practices to improve error clarity, security, debuggability, and system reliability.
+
+**What is covered in this Skill?**
+
+- Specific exception types instead of generic `Exception`/`RuntimeException`
+- try-with-resources for automatic resource cleanup
+- Secure exception messages that avoid information leakage
+- Exception chaining to preserve full error context
+- Early input validation with `IllegalArgumentException`/`NullPointerException`
+- `InterruptedException` handling with interrupted-status restoration
+- `@throws` JavaDoc documentation, fail-fast principle
+- Structured logging with correlation IDs, avoiding log-and-throw duplication
+- API boundary translation via centralized exception mappers
+- Bounded retry with backoff for idempotent operations only
+- Timeout enforcement with deadline propagation
+- `Throwable#addSuppressed` for secondary cleanup failures
+- Never catching `Throwable`/`Error`
+- Observability via error metrics
+- Failure propagation in async `CompletionStage` code
+
+**Scope:** The reference is organized by examples (good/bad code patterns) for each core area. Apply recommendations based on applicable examples.
+]]></goal>
+
+  <constraints>
+    <constraints-description>Before applying any exception handling changes, ensure the project compiles. If compilation fails, stop immediately — do not proceed until resolved. After applying improvements, run full verification.</constraints-description>
+    <constraint-list>
+      <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any changes</constraint>
+      <constraint>**SAFETY**: If compilation fails, stop immediately — do not proceed until the project is in a valid state</constraint>
+      <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+      <constraint>**BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each exception handling pattern</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+        <trigger>Exception handling</trigger>
+        <trigger>Use try-with-resources in Java code</trigger>
+        <trigger>Create exception chaining in Java code</trigger>
+        <trigger>Apply fail-fast validation in Java code</trigger>
+    </trigger-list>
+  </triggers>
+
+  <references>
+    <reference-list>
+        <reference>references/123-java-exception-handling.md</reference>
+    </reference-list>
+  </references>
+</prompt>

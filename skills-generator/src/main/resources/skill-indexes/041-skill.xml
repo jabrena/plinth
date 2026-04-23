@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="041-planning-plan-mode"
+      interactive="true">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.15.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when creating a plan using Plan model and enhancing structured design plans in Cursor Plan mode for Java implementations. Use when the user wants to create a plan, design an implementation, structure a development plan, or use plan mode for outside-in TDD, feature implementation, or refactoring work.</description>
+  </metadata>
+
+  <title>Java Design Plan Creation for Cursor Plan Mode</title>
+  <goal><![CDATA[
+Guide the process of creating a structured plan using Cursor Plan mode. **This is an interactive SKILL**. Plans follow a consistent section structure suitable for Java feature implementation, refactoring, or API design.
+
+**What is covered in this Skill?**
+
+- Plan mode workflow: enter Plan mode, gather context, draft plan, iterate
+- YAML frontmatter: name, overview, todos, isProject
+- Required sections: Requirements Summary, Approach (with Mermaid), Task List, Execution Instructions, File Checklist, Notes
+- London Style (outside-in) TDD pattern
+- Plan execution discipline: update Status after each task before advancing
+- Plan file path: .cursor/plans/YYYY-MM-DD_&lt;name&gt;.plan.md
+]]></goal>
+
+  <constraints>
+    <constraints-description>Gather context before drafting. Include Execution Instructions in every plan. Never advance to next task without updating the plan's Status column.</constraints-description>
+    <constraint-list>
+      <constraint>**MANDATORY**: Run `date` before starting to get date prefix for plan filename</constraint>
+      <constraint>**MUST**: Read the reference template fresh—do not use cached content</constraint>
+      <constraint>**MUST**: Ask one or two questions at a time; never all at once</constraint>
+      <constraint>**MUST**: Validate summary ("Does this capture what you need?") before proposing plan creation</constraint>
+      <constraint>**MUST**: Wait for user to confirm "proceed" before generating the plan</constraint>
+      <constraint>**MUST**: Include Execution Instructions section in every generated plan</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+        <trigger>Create a plan with Cursor Plan mode</trigger>
+        <trigger>Write a plan with Claude Plan mode</trigger>
+        <trigger>Design an implementation plan</trigger>
+        <trigger>Structure a development plan</trigger>
+        <trigger>Create a structured design plan</trigger>
+        <trigger>Refactor the plan</trigger>
+        <trigger>Improve the plan</trigger>
+        <trigger>Update the plan</trigger>
+    </trigger-list>
+  </triggers>
+
+  <references>
+    <reference-list>
+        <reference>references/041-planning-plan-mode.md</reference>
+    </reference-list>
+  </references>
+</prompt>

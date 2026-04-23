@@ -1,27 +1,22 @@
 /**
- * Cursor Rules Generator - XML/XSLT transformation engine for generating Cursor AI rules
+ * Skills Generator package for XML/XSLT-driven skill artifacts.
  *
  * <h2>Purpose</h2>
- * This package provides a comprehensive transformation engine specifically designed to convert
- * structured XML rule definitions into Markdown Cursor (MDC) files for the Cursor AI code editor.
- * The package implements a robust, schema-validated transformation pipeline that ensures consistent
- * and reliable generation of AI coding assistance rules from XML specifications.
+ * This package transforms skill-reference and skill-index XML resources into markdown artifacts
+ * used by the repository skill distribution pipeline. It focuses on predictable classpath-based
+ * processing with XInclude and XSLT transforms.
  *
  * <h2>Main Components</h2>
  * <ul>
- * <li>{@link info.jab.pml.CursorRulesGenerator} - The primary transformation engine that orchestrates
- * the entire rule generation process using functional programming principles and immutable data structures</li>
- * <li>{@link info.jab.pml.CursorRulesGenerator.TransformationSources} - Immutable record encapsulating
- * XML and XSLT input streams for thread-safe resource management throughout the transformation pipeline</li>
- * <li>{@link info.jab.pml.CursorRulesGenerator.ValidationErrorHandler} - Specialized error handler
- * providing comprehensive XSD validation reporting for precise schema violation identification</li>
+ * <li>{@link info.jab.pml.SkillReferenceGenerator} - Transforms skill-reference XML into markdown via XSLT.</li>
+ * <li>{@link info.jab.pml.SkillsGenerator} - Builds skill outputs (SKILL.md and references) from indexes and resources.</li>
+ * <li>{@link info.jab.pml.SkillIndexes} - Loads and validates entries from {@code skill-indexes.xml}.</li>
+ * <li>{@link info.jab.pml.InventoryXmlLoader} - Centralizes safe XML parser configuration for inventory documents.</li>
  * </ul>
  *
- * <h2>Dependencies</h2>
- * The package leverages standard Java XML processing capabilities including DOM and SAX parsers
- * for XInclude processing, javax.xml.transform for XSLT transformations, and comprehensive XSD
- * schema validation. Logging is implemented through SLF4J with Logback for operation tracking
- * and debugging support.
+ * <h2>Notes</h2>
+ * Schema validation is not part of the active transformation path; generation is currently based on
+ * XML resource loading, XInclude resolution, and XSLT execution.
  *
  * @since 0.10.0
  * @author Juan Antonio Breña Moral

@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="132-java-testing-integration-testing">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.15.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need to set up, review, or improve Java integration tests — including generating a BaseIntegrationTest.java with WireMock for HTTP stubs, detecting HTTP client infrastructure from import signals, injecting service coordinates dynamically via System.setProperty(), creating WireMock JSON mapping files with bodyFileName, isolating stubs per test method, verifying HTTP interactions, or eliminating anti-patterns such as Mockito-mocked HTTP clients or globally registered WireMock stubs.</description>
+  </metadata>
+
+  <title>Java Integration testing guidelines</title>
+  <goal><![CDATA[
+Set up robust integration-test infrastructure for Java services using WireMock to stub outbound HTTP dependencies.
+
+**What is covered in this Skill?**
+
+- Infrastructure topology detection: scanning imports for `HttpClient`, `feign.*`, `retrofit2.*`, `RestTemplate`
+- Abstract `BaseIntegrationTest` base class
+- `WireMockExtension` with `@RegisterExtension`, dynamic port allocation (`dynamicPort()`)
+- `usingFilesUnderClasspath("wiremock")`, `@BeforeAll` + `System.setProperty()` for coordinate propagation
+- WireMock JSON mapping files (`bodyFileName` referencing `wiremock/files/`)
+- Programmatic stub registration via WireMock DSL
+- Per-test stub isolation: register stubs inside each test method
+- Fault injection: 503 service unavailable, network latency with `withFixedDelay`
+- Request verification via `WIREMOCK.verify`
+- `wiremock-standalone` Maven dependency (test scope)
+- Anti-patterns: global `@BeforeAll` stubs, Mockito-mocked HTTP clients, hardcoded ports or URLs
+
+**Scope:** The reference is organized by examples (good/bad code patterns) for each core area. Apply recommendations based on applicable examples.
+]]></goal>
+
+  <constraints>
+    <constraints-description>Before applying any integration test changes, ensure the project compiles. If compilation fails, stop immediately — do not proceed until resolved. After applying improvements, run full verification.</constraints-description>
+    <constraint-list>
+      <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+      <constraint>**SAFETY**: If compilation fails, stop immediately and do not proceed — compilation failure is a blocking condition</constraint>
+      <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+      <constraint>**BEFORE APPLYING**: Read the reference for detailed examples, good/bad patterns, and constraints</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+        <trigger>Review Java code for integration tests</trigger>
+        <trigger>Apply best practices for integration tests in Java code</trigger>
+    </trigger-list>
+  </triggers>
+
+  <references>
+    <reference-list>
+        <reference>references/132-java-testing-integration-testing.md</reference>
+    </reference-list>
+  </references>
+</prompt>

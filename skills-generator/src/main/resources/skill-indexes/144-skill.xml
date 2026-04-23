@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="144-java-data-oriented-programming">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.15.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need to apply data-oriented programming best practices in Java — including separating code (behavior) from data structures using records, designing immutable data with pure transformation functions, keeping data flat and denormalized with ID-based references, starting with generic data structures converting to specific types when needed, ensuring data integrity through pure validation functions, and creating flexible generic data access layers.</description>
+  </metadata>
+
+  <title>Java Data-Oriented Programming Best Practices</title>
+  <goal><![CDATA[
+Apply data-oriented programming in Java: separate data from behavior with records, use immutable data structures, pure functions for transformations, flat denormalized structures with ID references, generic-to-specific type conversion when needed, pure validation functions, and flexible generic data access layers. All transformations should be explicit, traceable, and composed of clear pure functional steps.
+
+**What is covered in this Skill?**
+
+- Separation of concerns: data structures (records, POJOs) vs behavior (utility classes, services)
+- Immutability: records, final fields, transformations produce new instances
+- Pure data transformations: functions depending only on inputs, no side effects
+- Flat and denormalized data: ID references instead of deep nesting
+- Generic until specific: Map&lt;String,Object&gt; for dynamic data, convert to records when processing
+- Data integrity: pure validation functions returning validation results
+- Flexible generic data access: generic CRUD interfaces, interchangeable implementations
+
+**Scope:** The reference is organized by examples (good/bad code patterns) for each core area. Apply recommendations based on applicable examples.
+]]></goal>
+
+  <constraints>
+    <constraints-description>Before applying any data-oriented programming recommendations, ensure the project compiles. Compilation failure is a blocking condition. After applying improvements, run full verification.</constraints-description>
+    <constraint-list>
+      <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+      <constraint>**SAFETY**: If compilation fails, stop immediately — do not proceed until resolved</constraint>
+      <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+      <constraint>**BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each data-oriented programming pattern</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+        <trigger>Improve the code with Data-Oriented Programming</trigger>
+        <trigger>Apply Data-Oriented Programming</trigger>
+        <trigger>Refactor the code with Data-Oriented Programming</trigger>
+        <trigger>Apply Data-Oriented Programming</trigger>
+        <trigger>Refactor the code with Data-Oriented Programming</trigger>
+        <trigger>Apply Data-Oriented Programming</trigger>
+    </trigger-list>
+  </triggers>
+
+  <references>
+    <reference-list>
+        <reference>references/144-java-data-oriented-programming.md</reference>
+    </reference-list>
+  </references>
+</prompt>
