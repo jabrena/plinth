@@ -71,11 +71,10 @@
                                 <resource>
                                     <directory>${project.basedir}/src/main/resources</directory>
                                     <includes>
-                                        <include>skill-indexes.xml</include>
+                                        <include>skills.xml</include>
                                         <include>skill-indexes/**</include>
                                         <include>skill-references/**</include>
                                         <include>skill-reference-to-markdown.xsl</include>
-                                        <include>skill-references.xml</include>
                                     </includes>
                                 </resource>
                             </resources>

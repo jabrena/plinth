@@ -76,10 +76,4 @@ Guide the process of creating a structured plan using Cursor Plan mode. **This i
       <step-content>When executing tasks from the plan, update the Status column after each task before moving to the next one.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/041-planning-plan-mode.md</reference>
-    </reference-list>
-  </references>
 </prompt>

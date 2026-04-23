@@ -71,10 +71,4 @@ Identify and apply robust Java exception handling practices to improve error cla
       <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/123-java-exception-handling.md</reference>
-    </reference-list>
-  </references>
 </prompt>

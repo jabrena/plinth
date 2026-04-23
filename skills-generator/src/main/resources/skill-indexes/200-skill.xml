@@ -59,10 +59,4 @@ Generate a comprehensive AGENTS.md file for Java repositories through a modular,
       <step-content>Create AGENTS.md with ✅ Always do / ⚠️ Ask first / 🚫 Never do boundaries and repository-specific conventions.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/200-agents-md.md</reference>
-    </reference-list>
-  </references>
 </prompt>

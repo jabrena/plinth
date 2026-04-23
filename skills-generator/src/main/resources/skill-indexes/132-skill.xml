@@ -65,10 +65,4 @@ Set up robust integration-test infrastructure for Java services using WireMock t
       <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/132-java-testing-integration-testing.md</reference>
-    </reference-list>
-  </references>
 </prompt>

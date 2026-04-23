@@ -87,5 +87,5 @@ git push --tags
 ## Add a new Skills
 
 ```bash
-review if exist a new id in @skills-generator/src/main/resources/skill-indexes.xml to review compare with the content of @skills-generator/src/main/resources/skill-indexes and if exist add a new skill summary in @skills-generator/src/main/resources/skill-indexes . to elaborate the skill review the content of the id with @skills-generator/src/main/resources/skill-references when finish, validate generation with ./mvnw clean install -pl skills-generator and validate the skill with npx skill-check skills
+review if exist a new id in @skills-generator/src/main/resources/skills.xml to review compare with the content of @skills-generator/src/main/resources/skill-indexes and if exist add a new skill summary in @skills-generator/src/main/resources/skill-indexes. to elaborate the skill, review the `reference-list/reference` relation declared for that id in @skills-generator/src/main/resources/skills.xml. when finish, validate generation with ./mvnw clean install -pl skills-generator and validate the skill with npx skill-check skills
 ```

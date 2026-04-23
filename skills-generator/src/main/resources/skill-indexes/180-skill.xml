@@ -63,10 +63,4 @@ Implement effective Java logging following standardized frameworks, meaningful l
       <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/180-java-observability-logging.md</reference>
-    </reference-list>
-  </references>
 </prompt>

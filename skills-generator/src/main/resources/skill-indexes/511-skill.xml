@@ -56,10 +56,4 @@ Apply programmatic JDBC patterns in Micronaut with safe SQL and clear transactio
     <step number="3"><step-title>Apply framework-aligned changes</step-title><step-content>Implement or refactor configuration/code following the reference patterns and project conventions.</step-content></step>
     <step number="4"><step-title>Run verification and report results</step-title><step-content>Execute appropriate build/tests and summarize what changed, what was verified, and any follow-up actions.</step-content></step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/511-frameworks-micronaut-jdbc.md</reference>
-    </reference-list>
-  </references>
 </prompt>

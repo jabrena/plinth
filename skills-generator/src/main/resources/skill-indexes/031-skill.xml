@@ -68,10 +68,4 @@ Guide stakeholders through a structured conversation to uncover and document tec
       <step-content>Only after user confirms "proceed", generate the ADR document and provide concise next steps.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/031-architecture-adr-functional-requirements.md</reference>
-    </reference-list>
-  </references>
 </prompt>

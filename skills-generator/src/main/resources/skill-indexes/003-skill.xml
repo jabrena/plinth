@@ -59,10 +59,4 @@ Install a predefined set of embedded agent definitions from repository assets in
       <step-content>Return a concise checklist with selected destination, created/updated files, overwrite actions, and an optional verification command.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-      <reference>references/003-agents-installation.md</reference>
-    </reference-list>
-  </references>
 </prompt>

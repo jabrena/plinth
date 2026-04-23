@@ -66,10 +66,4 @@ Verify performance optimizations through rigorous before/after comparison: ensur
       <step-content>Create comparison and final results reports with regressions, gains, and reproducible scenario details.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/164-java-profiling-verify.md</reference>
-    </reference-list>
-  </references>
 </prompt>

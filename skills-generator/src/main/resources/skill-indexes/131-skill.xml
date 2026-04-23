@@ -65,10 +65,4 @@ Review and improve Java unit tests using modern JUnit 5, AssertJ, and Mockito be
       <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/131-java-testing-unit-testing.md</reference>
-    </reference-list>
-  </references>
 </prompt>

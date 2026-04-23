@@ -60,10 +60,4 @@ Implement refactoring based on profiling analysis: review profiling-problem-anal
       <step-content>Summarize implemented changes and expected metric improvements for Step 4 comparison.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/163-java-profiling-refactor.md</reference>
-    </reference-list>
-  </references>
 </prompt>

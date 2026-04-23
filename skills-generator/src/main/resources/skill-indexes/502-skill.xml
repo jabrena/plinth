@@ -53,10 +53,4 @@ Apply REST design principles for Micronaut HTTP applications.
     <step number="3"><step-title>Apply framework-aligned changes</step-title><step-content>Implement or refactor configuration/code following the reference patterns and project conventions.</step-content></step>
     <step number="4"><step-title>Run verification and report results</step-title><step-content>Execute appropriate build/tests and summarize what changed, what was verified, and any follow-up actions.</step-content></step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/502-frameworks-micronaut-rest.md</reference>
-    </reference-list>
-  </references>
 </prompt>

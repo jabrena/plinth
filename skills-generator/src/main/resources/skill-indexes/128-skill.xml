@@ -67,10 +67,4 @@ Review and improve Java code using comprehensive generics best practices that en
       <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/128-java-generics.md</reference>
-    </reference-list>
-  </references>
 </prompt>

@@ -65,10 +65,4 @@ Implement acceptance tests from Gherkin feature files. Given a .feature file in 
       <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/133-java-testing-acceptance-tests.md</reference>
-    </reference-list>
-  </references>
 </prompt>

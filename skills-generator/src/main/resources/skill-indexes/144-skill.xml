@@ -65,10 +65,4 @@ Apply data-oriented programming in Java: separate data from behavior with record
       <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/144-java-data-oriented-programming.md</reference>
-    </reference-list>
-  </references>
 </prompt>

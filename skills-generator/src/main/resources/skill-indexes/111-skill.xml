@@ -59,10 +59,4 @@ Add essential Maven dependencies that enhance code quality and safety through a 
       <step-content>Summarize what was added, why, and any recommended follow-up validations or tooling alignment.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/111-java-maven-dependencies.md</reference>
-    </reference-list>
-  </references>
 </prompt>

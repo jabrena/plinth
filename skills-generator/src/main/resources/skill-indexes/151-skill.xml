@@ -61,10 +61,4 @@ Provide a complete JMeter performance testing solution by creating the run-jmete
       <step-content>Document CLI options (`-l`, `-t`, `-r`, `-g`, `-h`) and environment variable overrides (`JMETER_LOOPS`, `JMETER_THREADS`, `JMETER_RAMP_UP`).</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/151-java-performance-jmeter.md</reference>
-    </reference-list>
-  </references>
 </prompt>

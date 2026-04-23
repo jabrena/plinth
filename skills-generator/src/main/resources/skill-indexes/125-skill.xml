@@ -68,10 +68,4 @@ Identify and apply Java concurrency best practices to improve thread safety, sca
       <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/125-java-concurrency.md</reference>
-    </reference-list>
-  </references>
 </prompt>

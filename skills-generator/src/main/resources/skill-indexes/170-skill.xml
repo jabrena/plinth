@@ -58,10 +58,4 @@ Generate comprehensive Java project documentation through a modular, step-based 
       <step-content>Execute `./mvnw clean compile` and `./mvnw javadoc:javadoc` (or equivalent) to validate generated docs.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/170-java-documentation.md</reference>
-    </reference-list>
-  </references>
 </prompt>

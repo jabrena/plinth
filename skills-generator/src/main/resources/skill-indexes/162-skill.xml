@@ -66,10 +66,4 @@ Analyze profiling results systematically: inventory results (flamegraphs, JFR, G
       <step-content>Create `docs/profiling-problem-analysis-YYYYMMDD.md` and `docs/profiling-solutions-YYYYMMDD.md` with quantitative evidence.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/162-java-profiling-analyze.md</reference>
-    </reference-list>
-  </references>
 </prompt>

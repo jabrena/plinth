@@ -63,10 +63,4 @@ Identify and apply modern Java (Java 8+) refactoring opportunities to improve re
       <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/141-java-refactoring-with-modern-features.md</reference>
-    </reference-list>
-  </references>
 </prompt>

@@ -49,10 +49,4 @@ Apply Micronaut Data patterns for relational repositories and safe SQL.
     <step number="3"><step-title>Apply framework-aligned changes</step-title><step-content>Implement or refactor configuration/code following the reference patterns and project conventions.</step-content></step>
     <step number="4"><step-title>Run verification and report results</step-title><step-content>Execute appropriate build/tests and summarize what changed, what was verified, and any follow-up actions.</step-content></step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/512-frameworks-micronaut-data.md</reference>
-    </reference-list>
-  </references>
 </prompt>
