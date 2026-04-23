@@ -37,6 +37,28 @@ Before generating the epic document, gather all required information through str
 - Define an epic
 - Epic definition
 
+## Workflow
+
+0. **Get current date**
+
+Run `date` before starting and use it to replace all date placeholders in the generated epic document.
+
+1. **Gather epic information**
+
+Ask the template questions in strict order, using exact wording and waiting for user responses before continuing.
+
+Step constraints:
+- Read the question template fresh before asking
+- Do not skip or reorder required questions
+
+2. **Generate epic document**
+
+Create the epic Markdown with all required sections (scope, value, features, dependencies, risks, and success criteria) and apply the actual current date.
+
+3. **Provide follow-up recommendations**
+
+Close with actionable next steps for story breakdown, planning, and epic tracking.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/012-agile-epic.md](references/012-agile-epic.md).

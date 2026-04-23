@@ -46,6 +46,31 @@ Guide the agent to analyze an epic (from file path or pasted content), hold a st
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="0">
+      <step-title>Get current date</step-title>
+      <step-content>Run `date` before generation and use that value for all date placeholders in feature documents.</step-content>
+    </step>
+    <step number="1">
+      <step-title>Analyze epic and gather feature details</step-title>
+      <step-content>Read epic content from file path or pasted input, summarize it for confirmation, then ask the template questions in order.</step-content>
+      <step-constraints>
+        <step-constraint-list>
+          <step-constraint>Use exact wording from the numbered template questions</step-constraint>
+          <step-constraint>Repeat per-feature questions (9-11) for every identified feature</step-constraint>
+        </step-constraint-list>
+      </step-constraints>
+    </step>
+    <step number="2">
+      <step-title>Generate one document per feature</step-title>
+      <step-content>Create one Markdown feature file per agreed feature, honoring user-defined naming, output path, audience/depth preferences, and per-feature inputs.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Close with integration guidance</step-title>
+      <step-content>Provide next steps for prioritization, breakdown into user stories, and alignment with epic goals and dependencies.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
         <reference>references/013-agile-feature.md</reference>
