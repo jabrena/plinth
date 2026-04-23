@@ -51,6 +51,29 @@ Guide the process of turning an implementation plan (`*.plan.md`) into an OpenSp
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="1">
+      <step-title>Read and summarize plan input</step-title>
+      <step-content>Read the provided `*.plan.md`, summarize scope, and identify candidate change-id and affected capabilities.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Check OpenSpec CLI and install gate</step-title>
+      <step-content>Run `openspec --version`; if missing, provide npm installation guidance for macOS, Linux, and Windows before proceeding.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Initialize or detect OpenSpec project</step-title>
+      <step-content>From the parent directory containing `openspec/`, run project checks and offer `openspec init` (without `--tools`) when initialization is needed.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Create or update change artifacts</step-title>
+      <step-content>Explain whether this is a new or existing change, then create/update proposal, design, tasks, and spec deltas using a stable change-id.</step-content>
+    </step>
+    <step number="5">
+      <step-title>Validate and close workflow</step-title>
+      <step-content>Run `openspec validate --all`; when checklist tasks are complete, guide the user to archive the change with `openspec archive &lt;change-id&gt;`.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
       <reference>references/042-planning-openspec.md</reference>

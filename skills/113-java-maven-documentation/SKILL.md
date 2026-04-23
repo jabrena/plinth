@@ -36,6 +36,24 @@ Before generating any content, read every pom.xml in the workspace. Only include
 - Maven Profiles table
 - Submodules table
 
+## Workflow
+
+1. **Read all POM files in workspace**
+
+Read root and every submodule `pom.xml` before generating content.
+
+2. **Read documentation reference assets**
+
+Read `references/113-java-maven-documentation.md` to use the base template and plugin catalog constraints exactly.
+
+3. **Assemble DEVELOPER.md base and dynamic sections**
+
+Generate `DEVELOPER.md` with verbatim base template plus dynamic sections: plugin goals, profiles (if any), and submodules (if multi-module).
+
+4. **Enforce plugin scope and section omission rules**
+
+Include only explicitly declared plugins and omit Profiles/Submodules sections when not applicable.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/113-java-maven-documentation.md](references/113-java-maven-documentation.md).

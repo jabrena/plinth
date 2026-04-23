@@ -43,6 +43,28 @@ Always execute OpenSpec commands from the parent directory that contains the `op
 - Initialize OpenSpec in requirements folder
 - Validate and archive OpenSpec change
 
+## Workflow
+
+1. **Read and summarize plan input**
+
+Read the provided `*.plan.md`, summarize scope, and identify candidate change-id and affected capabilities.
+
+2. **Check OpenSpec CLI and install gate**
+
+Run `openspec --version`; if missing, provide npm installation guidance for macOS, Linux, and Windows before proceeding.
+
+3. **Initialize or detect OpenSpec project**
+
+From the parent directory containing `openspec/`, run project checks and offer `openspec init` (without `--tools`) when initialization is needed.
+
+4. **Create or update change artifacts**
+
+Explain whether this is a new or existing change, then create/update proposal, design, tasks, and spec deltas using a stable change-id.
+
+5. **Validate and close workflow**
+
+Run `openspec validate --all`; when checklist tasks are complete, guide the user to archive the change with `openspec archive <change-id>`.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/042-planning-openspec.md](references/042-planning-openspec.md).

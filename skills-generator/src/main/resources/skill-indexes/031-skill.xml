@@ -44,6 +44,31 @@ Guide stakeholders through a structured conversation to uncover and document tec
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="0">
+      <step-title>Get current date</step-title>
+      <step-content>Run `date` before discovery and use it for ADR timestamps.</step-content>
+    </step>
+    <step number="1">
+      <step-title>Read reference and discover surface scope</step-title>
+      <step-content>Read `references/031-architecture-adr-functional-requirements.md`, infer CLI/API scope from project context, and ask a short clarifying question if unclear.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Run conversational discovery</step-title>
+      <step-content>Ask one or two questions at a time to capture context, functional requirements, and technical decisions for CLI, REST API, or both.</step-content>
+      <step-constraints>
+        <step-constraint-list>
+          <step-constraint>Never ask all discovery questions at once</step-constraint>
+          <step-constraint>Validate summary with user before proposing ADR generation</step-constraint>
+        </step-constraint-list>
+      </step-constraints>
+    </step>
+    <step number="3">
+      <step-title>Generate ADR after explicit confirmation</step-title>
+      <step-content>Only after user confirms "proceed", generate the ADR document and provide concise next steps.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
         <reference>references/031-architecture-adr-functional-requirements.md</reference>

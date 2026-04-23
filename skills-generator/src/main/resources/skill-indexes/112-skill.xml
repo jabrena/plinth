@@ -57,6 +57,29 @@ Maven profiles:
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="1">
+      <step-title>Validate project before plugin changes</step-title>
+      <step-content>Run `./mvnw validate` or `mvn validate` and stop if validation fails.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Analyze current plugin and profile configuration</step-title>
+      <step-content>Start with existing configuration analysis to identify what is already declared and avoid conflicts or replacement.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Read plugin reference and collect selections</step-title>
+      <step-content>Read `references/112-java-maven-plugins.md`, then use a question-driven flow to select only needed plugins/profiles.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Add non-conflicting plugin configuration</step-title>
+      <step-content>Add selected plugins and profiles without removing existing ones, preserving project structure and compatibility.</step-content>
+    </step>
+    <step number="5">
+      <step-title>Summarize applied plugin setup</step-title>
+      <step-content>Report added plugins/profiles, rationale, and recommended follow-up commands or checks.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
         <reference>references/112-java-maven-plugins.md</reference>

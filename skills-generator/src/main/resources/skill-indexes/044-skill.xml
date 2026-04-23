@@ -44,6 +44,29 @@ Use **`jira`** to work with Jira issues: **first** run an **interactive** check 
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="1">
+      <step-title>Run interactive install gate</step-title>
+      <step-content>Check `jira version`; if missing, stop and ask whether the user wants installation guidance before any issue operations.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Verify Jira CLI configuration</step-title>
+      <step-content>Ensure Jira CLI is configured (site/account/token flow via CLI prompts) before running private workspace commands.</step-content>
+    </step>
+    <step number="3">
+      <step-title>List issues with optional JQL</step-title>
+      <step-content>Retrieve issues using basic listing or JQL filters and present summaries as markdown pipe tables.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Load issue details and discussion</step-title>
+      <step-content>Read full issue descriptions and all comments for analysis, explicitly noting any omissions when summarizing.</step-content>
+    </step>
+    <step number="5">
+      <step-title>Execute core Jira actions when requested</step-title>
+      <step-content>Support create, assign, transition, and add-comment actions using CLI commands while avoiding secret exposure.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
       <reference>references/044-planning-jira.md</reference>

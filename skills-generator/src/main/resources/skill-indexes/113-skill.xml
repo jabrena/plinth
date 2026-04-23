@@ -43,6 +43,25 @@ Generate a `DEVELOPER.md` file that combines a fixed base template with dynamic 
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="1">
+      <step-title>Read all POM files in workspace</step-title>
+      <step-content>Read root and every submodule `pom.xml` before generating content.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Read documentation reference assets</step-title>
+      <step-content>Read `references/113-java-maven-documentation.md` to use the base template and plugin catalog constraints exactly.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Assemble DEVELOPER.md base and dynamic sections</step-title>
+      <step-content>Generate `DEVELOPER.md` with verbatim base template plus dynamic sections: plugin goals, profiles (if any), and submodules (if multi-module).</step-content>
+    </step>
+    <step number="4">
+      <step-title>Enforce plugin scope and section omission rules</step-title>
+      <step-content>Include only explicitly declared plugins and omit Profiles/Submodules sections when not applicable.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
         <reference>references/113-java-maven-documentation.md</reference>
