@@ -21,8 +21,8 @@ Install a predefined set of embedded agent definitions from repository assets in
 This skill installs only the embedded robot agents bundle and must ask for destination before writing files.
 
 - **MUST** ask the user to choose `.cursor/agents` or `.claude/agents` before installing
-- **MUST** copy all embedded agent files included from `skills-generator/src/main/resources/skill-references/assets/agents/`
-- **MUST** preserve file names and report overwrite actions
+- **MUST** copy all embedded agent files defined in `references/003-agents-installation.md`
+- **MUST** preserve file names from the reference content and report overwrite actions
 
 ## When to use this skill
 

@@ -45,6 +45,7 @@ Wait for the user answer and do not copy any file before the destination is expl
 
 Copy these exact source files from `skills-generator/src/main/resources/skill-references/assets/agents/` into the chosen destination directory:
 
+```markdown
 ---
 name: robot-business-analyst
 model: inherit
@@ -78,6 +79,8 @@ Use clear headings:
 
 Be direct and evidence-based. If two documents conflict, quote or paraphrase the conflicting bits. Do not invent requirements; flag uncertainty instead.
 
+```
+```markdown
 ---
 name: robot-coordinator
 model: inherit
@@ -184,6 +187,8 @@ When synthesizing, provide:
 - **OpenSpec Updates:** Task completion status and any `tasks.md` files updated with `- [x]` markers.
 - **Next Steps:** Blocked groups, open integration, or follow-ups.
 
+```
+```markdown
 ---
 name: robot-java-coder
 model: inherit
@@ -228,6 +233,8 @@ Apply guidance from these Skills when relevant:
 - Follow conventional commits for any Git operations.
 - Do not skip tests; run `./mvnw clean verify` when appropriate.
 
+```
+```markdown
 ---
 name: robot-micronaut-coder
 model: inherit
@@ -279,6 +286,8 @@ Apply guidance from these Skills when relevant:
 - Follow conventional commits for any Git operations.
 - Do not skip tests; run `./mvnw clean verify` when appropriate.
 
+```
+```markdown
 ---
 name: robot-quarkus-coder
 model: inherit
@@ -329,6 +338,8 @@ Apply guidance from these Skills when relevant:
 - Follow conventional commits for any Git operations.
 - Do not skip tests; run `./mvnw clean verify` when appropriate.
 
+```
+```markdown
 ---
 name: robot-spring-boot-coder
 model: inherit
@@ -383,6 +394,7 @@ Apply guidance from these Skills when relevant:
 - Follow conventional commits for any Git operations.
 - Do not skip tests; run `./mvnw clean verify` when appropriate.
 
+```
 
 Create the destination directory if it does not exist.
 
