@@ -37,6 +37,27 @@ Create a comprehensive checklist document for embedded agents inventory by follo
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="1">
+      <step-title>Read the embedded template</step-title>
+      <step-content>Read `references/002-agents-inventory.md` before generating output and use it as the authoritative template.</step-content>
+      <step-constraints>
+        <step-constraint-list>
+          <step-constraint>Do not use cached or partial template content</step-constraint>
+          <step-constraint>Preserve exact table rows, headings, and structure from the reference</step-constraint>
+        </step-constraint-list>
+      </step-constraints>
+    </step>
+    <step number="2">
+      <step-title>Generate inventory document</step-title>
+      <step-content>Create `INVENTORY-AGENTS-JAVA.md` in the project root using the exact wording and ordering from the reference template.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Validate template fidelity</step-title>
+      <step-content>Confirm no extra agent rows were introduced and all required reference sections are present in the generated file.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
       <reference>references/002-agents-inventory.md</reference>
