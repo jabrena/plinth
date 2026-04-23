@@ -10,7 +10,7 @@
  * <ul>
  * <li>{@link info.jab.pml.SkillReferenceGenerator} - Transforms skill-reference XML into markdown via XSLT.</li>
  * <li>{@link info.jab.pml.SkillsGenerator} - Builds skill outputs (SKILL.md and references) from indexes and resources.</li>
- * <li>{@link info.jab.pml.SkillIndexes} - Loads and validates entries from {@code skill-indexes.xml}.</li>
+ * <li>{@link info.jab.pml.SkillIndexes} - Loads and validates entries from {@code skills.xml}.</li>
  * <li>{@link info.jab.pml.InventoryXmlLoader} - Centralizes safe XML parser configuration for inventory documents.</li>
  * </ul>
  *

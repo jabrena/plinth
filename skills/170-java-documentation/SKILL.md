@@ -32,6 +32,24 @@ Before applying any documentation generation, ensure the project validates. If v
 - Apply documentation
 - Refactor the code with documentation
 
+## Workflow
+
+1. **Validate project before documentation changes**
+
+Run `./mvnw validate` or `mvn validate` and stop immediately if validation fails.
+
+2. **Read documentation reference and gather scope**
+
+Read `references/170-java-documentation.md` and identify required outputs (README, package-info, Javadoc enhancements).
+
+3. **Generate selected documentation artifacts**
+
+Create or update documentation using the selected file-handling strategy (overwrite/add/backup/skip).
+
+4. **Run documentation validation checks**
+
+Execute `./mvnw clean compile` and `./mvnw javadoc:javadoc` (or equivalent) to validate generated docs.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/170-java-documentation.md](references/170-java-documentation.md).

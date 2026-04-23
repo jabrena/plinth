@@ -63,10 +63,4 @@ Guide the agent to ask targeted questions to gather details for a user story and
       <step-content>Check output completeness and provide an INVEST pass/fail checkpoint with concrete evidence for each criterion.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/014-agile-user-story.md</reference>
-    </reference-list>
-  </references>
 </prompt>

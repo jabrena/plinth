@@ -42,6 +42,24 @@ Before applying any generics changes, ensure the project compiles. If compilatio
 - Apply Generics
 - Refactor the code with Generics
 
+## Workflow
+
+1. **Compile project before generics changes**
+
+Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.
+
+2. **Read generics reference and assess type safety**
+
+Read `references/128-java-generics.md` and identify raw types, unsafe casts, wildcard misuse, and API variance opportunities.
+
+3. **Apply generics refactorings**
+
+Implement selected generic type and API improvements while preserving behavior.
+
+4. **Verify with full build**
+
+Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/128-java-generics.md](references/128-java-generics.md).

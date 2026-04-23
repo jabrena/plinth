@@ -61,10 +61,4 @@ Generate a `DEVELOPER.md` file that combines a fixed base template with dynamic 
       <step-content>Include only explicitly declared plugins and omit Profiles/Submodules sections when not applicable.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/113-java-maven-documentation.md</reference>
-    </reference-list>
-  </references>
 </prompt>

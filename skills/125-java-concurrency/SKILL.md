@@ -43,6 +43,24 @@ Before applying any concurrency changes, ensure the project compiles. If compila
 
 - Review Java code for concurrency
 
+## Workflow
+
+1. **Compile project before concurrency changes**
+
+Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.
+
+2. **Read concurrency reference and analyze hotspots**
+
+Read `references/125-java-concurrency.md` and identify thread-safety, coordination, and throughput issues to address.
+
+3. **Apply concurrency improvements**
+
+Implement suitable concurrency patterns, cancellation discipline, and fit-for-purpose primitives.
+
+4. **Verify with full build**
+
+Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/125-java-concurrency.md](references/125-java-concurrency.md).

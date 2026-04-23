@@ -33,6 +33,24 @@ Before applying any test strategy changes, ensure the project compiles. If compi
 - Apply A-TRIP testing strategies in Java code
 - Apply CORRECT boundary condition verification in Java code
 
+## Workflow
+
+1. **Compile project before test-strategy changes**
+
+Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.
+
+2. **Read testing-strategies reference**
+
+Read `references/130-java-testing-strategies.md` and map current tests to RIGHT-BICEP, A-TRIP, and CORRECT gaps.
+
+3. **Apply strategy-driven test improvements**
+
+Improve or add tests to cover missing boundaries, quality characteristics, and verification depth.
+
+4. **Verify with full build**
+
+Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/130-java-testing-strategies.md](references/130-java-testing-strategies.md).

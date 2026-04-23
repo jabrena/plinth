@@ -2,6 +2,7 @@ package info.jab.pml;
 
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javax.xml.parsers.DocumentBuilder;
@@ -19,7 +20,7 @@ import org.w3c.dom.NodeList;
  * <p>
  * Reuses SkillReferenceGenerator for full rule content. SKILL.md is sourced from
  * {@code skill-indexes/{numericId}-skill.md} (user-editable), where numericId is extracted from skillId (e.g. 110 from 110-java-maven-best-practices).
- * The list of skills to generate is defined in {@code skill-indexes.xml}; each must have a
+ * The list of skills to generate is defined in {@code skills.xml}; each must have a
  * matching skill summary in {@code skill-indexes/} and a matching system-prompt in {@code skill-references/}.
  */
 public final class SkillsGenerator {
@@ -41,7 +42,7 @@ public final class SkillsGenerator {
      */
     public Stream<SkillOutput> generateAllSkills() {
         return SkillIndexes.skillDescriptors()
-            .map(d -> generateSkill(d.skillId(), d.requiresSystemPrompt(), d.useXml()));
+            .map(d -> generateSkill(d.skillId(), d.requiresSystemPrompt(), d.useXml(), d.references()));
     }
 
     /**
@@ -75,11 +76,20 @@ public final class SkillsGenerator {
      * @return the generated skill output
      */
     public SkillOutput generateSkill(String skillId, boolean requiresSystemPrompt, boolean useXml) {
+        List<String> references = SkillIndexes.skillDescriptors()
+            .filter(d -> d.skillId().equals(skillId))
+            .findFirst()
+            .map(SkillIndexes.SkillDescriptor::references)
+            .orElse(List.of());
+        return generateSkill(skillId, requiresSystemPrompt, useXml, references);
+    }
+
+    public SkillOutput generateSkill(String skillId, boolean requiresSystemPrompt, boolean useXml, java.util.List<String> references) {
         String referenceContent = requiresSystemPrompt
             ? generateReferenceContent(skillId, parseMetadata(skillId))
             : "";
         String skillMdContent = useXml
-            ? loadSkillSummaryFromXml(skillId)
+            ? loadSkillSummaryFromXml(skillId, references)
             : loadSkillSummary(skillId);
         return new SkillOutput(skillId, skillMdContent, referenceContent);
     }
@@ -165,7 +175,7 @@ public final class SkillsGenerator {
         }
     }
 
-    private String loadSkillSummaryFromXml(String skillId) {
+    private String loadSkillSummaryFromXml(String skillId, java.util.List<String> references) {
         String numericId = extractNumericId(skillId);
         String xmlResource = "skill-indexes/" + numericId + "-skill.xml";
         String xsltResource = "skill-index-to-markdown.xsl";
@@ -194,10 +204,33 @@ public final class SkillsGenerator {
                 transformer.transform(new StreamSource(xmlStreamForTransform), new StreamResult(writer));
             }
             String content = writer.toString();
-            return appendProjectTagToDescription(content);
+            String withProjectTag = appendProjectTagToDescription(content);
+            return appendReferencesSection(withProjectTag, references);
         } catch (Exception e) {
             throw new RuntimeException("Failed to load and transform skill XML: " + xmlResource, e);
         }
+    }
+
+    private String appendReferencesSection(String content, java.util.List<String> references) {
+        if (references == null || references.isEmpty() || content.contains("## Reference")) {
+            return content;
+        }
+        StringBuilder builder = new StringBuilder(content.stripTrailing());
+        for (String path : references) {
+            String referencePath = "references/" + path + ".md";
+            builder.append(System.lineSeparator())
+                .append(System.lineSeparator())
+                .append("## Reference")
+                .append(System.lineSeparator())
+                .append(System.lineSeparator())
+                .append("For detailed guidance, examples, and constraints, see [")
+                .append(referencePath)
+                .append("](")
+                .append(referencePath)
+                .append(").")
+                .append(System.lineSeparator());
+        }
+        return builder.toString();
     }
 
     private String appendProjectTagToDescription(String content) {

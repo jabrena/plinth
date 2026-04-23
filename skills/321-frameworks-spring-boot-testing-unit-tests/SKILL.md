@@ -36,6 +36,24 @@ Before applying any test changes, ensure the project compiles. If compilation fa
 - Review Java code for Spring Boot unit tests
 - Apply best practices for Spring Boot unit tests in Java code
 
+## Workflow
+
+1. **Read reference and assess project context**
+
+Read `references/321-frameworks-spring-boot-testing-unit-tests.md` and inspect the current project setup before proposing changes.
+
+2. **Gather scope and decide target improvements**
+
+Identify requested outcomes, constraints, and the minimum safe set of changes to apply.
+
+3. **Apply framework-aligned changes**
+
+Implement or refactor configuration/code following the reference patterns and project conventions.
+
+4. **Run verification and report results**
+
+Execute appropriate build/tests and summarize what changed, what was verified, and any follow-up actions.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/321-frameworks-spring-boot-testing-unit-tests.md](references/321-frameworks-spring-boot-testing-unit-tests.md).

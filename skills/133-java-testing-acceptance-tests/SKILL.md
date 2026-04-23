@@ -40,6 +40,24 @@ Before applying any acceptance test changes, ensure the Gherkin .feature file is
 - Review Java code for acceptance tests
 - Apply best practices for acceptance tests in Java code
 
+## Workflow
+
+1. **Validate preconditions and compile project**
+
+Confirm `.feature` file is in context and framework scope is valid, then run `./mvnw compile` or `mvn compile`; stop if any precondition fails.
+
+2. **Read acceptance-testing reference and parse scenarios**
+
+Read `references/133-java-testing-acceptance-tests.md` and extract `@acceptance` scenarios for happy-path implementation.
+
+3. **Implement acceptance test infrastructure and scenarios**
+
+Create or update base test infrastructure (RestAssured, Testcontainers, WireMock) and implement one happy-path test per accepted scenario.
+
+4. **Verify with full build**
+
+Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/133-java-testing-acceptance-tests.md](references/133-java-testing-acceptance-tests.md).

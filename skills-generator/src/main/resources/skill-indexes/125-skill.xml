@@ -50,9 +50,22 @@ Identify and apply Java concurrency best practices to improve thread safety, sca
     </trigger-list>
   </triggers>
 
-  <references>
-    <reference-list>
-        <reference>references/125-java-concurrency.md</reference>
-    </reference-list>
-  </references>
+  <steps>
+    <step number="1">
+      <step-title>Compile project before concurrency changes</step-title>
+      <step-content>Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Read concurrency reference and analyze hotspots</step-title>
+      <step-content>Read `references/125-java-concurrency.md` and identify thread-safety, coordination, and throughput issues to address.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Apply concurrency improvements</step-title>
+      <step-content>Implement suitable concurrency patterns, cancellation discipline, and fit-for-purpose primitives.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Verify with full build</step-title>
+      <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
+    </step>
+  </steps>
 </prompt>

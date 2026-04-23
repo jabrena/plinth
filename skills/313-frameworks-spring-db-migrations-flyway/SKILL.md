@@ -35,6 +35,24 @@ Before applying Flyway or SQL changes, ensure the project compiles. After improv
 - Add or review Flyway migrations in a Spring Boot project
 - Configure spring.flyway or db/migration layout
 
+## Workflow
+
+1. **Read reference and assess project context**
+
+Read `references/313-frameworks-spring-db-migrations-flyway.md` and inspect the current project setup before proposing changes.
+
+2. **Gather scope and decide target improvements**
+
+Identify requested outcomes, constraints, and the minimum safe set of changes to apply.
+
+3. **Apply framework-aligned changes**
+
+Implement or refactor configuration/code following the reference patterns and project conventions.
+
+4. **Run verification and report results**
+
+Execute appropriate build/tests and summarize what changed, what was verified, and any follow-up actions.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/313-frameworks-spring-db-migrations-flyway.md](references/313-frameworks-spring-db-migrations-flyway.md).

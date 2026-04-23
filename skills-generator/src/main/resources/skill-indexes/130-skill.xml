@@ -40,9 +40,22 @@ Apply proven testing strategies (RIGHT-BICEP, A-TRIP, CORRECT) to design and ver
     </trigger-list>
   </triggers>
 
-  <references>
-    <reference-list>
-        <reference>references/130-java-testing-strategies.md</reference>
-    </reference-list>
-  </references>
+  <steps>
+    <step number="1">
+      <step-title>Compile project before test-strategy changes</step-title>
+      <step-content>Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Read testing-strategies reference</step-title>
+      <step-content>Read `references/130-java-testing-strategies.md` and map current tests to RIGHT-BICEP, A-TRIP, and CORRECT gaps.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Apply strategy-driven test improvements</step-title>
+      <step-content>Improve or add tests to cover missing boundaries, quality characteristics, and verification depth.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Verify with full build</step-title>
+      <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
+    </step>
+  </steps>
 </prompt>

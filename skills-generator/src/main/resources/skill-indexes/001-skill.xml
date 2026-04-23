@@ -57,10 +57,4 @@ Create a comprehensive step-by-step checklist document for Java system prompts b
       <step-content>Verify that no extra steps or rules were added, and that all expected sections from the reference are present in the generated file.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-      <reference>references/001-skills-inventory.md</reference>
-    </reference-list>
-  </references>
 </prompt>

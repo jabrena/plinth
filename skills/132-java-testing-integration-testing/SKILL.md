@@ -40,6 +40,24 @@ Before applying any integration test changes, ensure the project compiles. If co
 - Review Java code for integration tests
 - Apply best practices for integration tests in Java code
 
+## Workflow
+
+1. **Compile project before integration-test changes**
+
+Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.
+
+2. **Read integration-testing reference and detect topology**
+
+Read `references/132-java-testing-integration-testing.md` and detect HTTP client and external dependency integration points.
+
+3. **Set up resilient integration-test infrastructure**
+
+Implement BaseIntegrationTest, WireMock mappings/stubs, per-test isolation, and verification patterns.
+
+4. **Verify with full build**
+
+Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/132-java-testing-integration-testing.md](references/132-java-testing-integration-testing.md).

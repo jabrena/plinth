@@ -70,10 +70,4 @@ Guide the agent to systematically gather information and generate a comprehensiv
       <step-content>Close with actionable next steps for story breakdown, planning, and epic tracking.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/012-agile-epic.md</reference>
-    </reference-list>
-  </references>
 </prompt>

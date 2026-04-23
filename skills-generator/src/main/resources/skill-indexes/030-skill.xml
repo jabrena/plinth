@@ -57,10 +57,4 @@ Generate Architecture Decision Records (ADRs) for Java projects through an inter
       <step-content>Create a MADR-style ADR document with the final decision, alternatives, consequences, and follow-up actions.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/030-architecture-adr-general.md</reference>
-    </reference-list>
-  </references>
 </prompt>

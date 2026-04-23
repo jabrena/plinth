@@ -43,6 +43,24 @@ Compile before changes; verify after; Docker may be required for containers.
 - Set up @QuarkusIntegrationTest for packaged artifact or native binary testing
 - Fix test data isolation or configure Maven Surefire/Failsafe split
 
+## Workflow
+
+1. **Read reference and assess project context**
+
+Read `references/422-frameworks-quarkus-testing-integration-tests.md` and inspect the current project setup before proposing changes.
+
+2. **Gather scope and decide target improvements**
+
+Identify requested outcomes, constraints, and the minimum safe set of changes to apply.
+
+3. **Apply framework-aligned changes**
+
+Implement or refactor configuration/code following the reference patterns and project conventions.
+
+4. **Run verification and report results**
+
+Execute appropriate build/tests and summarize what changed, what was verified, and any follow-up actions.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/422-frameworks-quarkus-testing-integration-tests.md](references/422-frameworks-quarkus-testing-integration-tests.md).

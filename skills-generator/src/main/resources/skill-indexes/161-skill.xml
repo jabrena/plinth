@@ -44,9 +44,22 @@ Set up the Java profiling detection phase: automated environment setup with asyn
     </trigger-list>
   </triggers>
 
-  <references>
-    <reference-list>
-        <reference>references/161-java-profiling-detect.md</reference>
-    </reference-list>
-  </references>
+  <steps>
+    <step number="1">
+      <step-title>Read profiling setup reference</step-title>
+      <step-content>Read `references/161-java-profiling-detect.md` and use script templates exactly as provided.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Create profiler workspace and scripts</step-title>
+      <step-content>Create `profiler/scripts` and `profiler/results`, copy setup/profile scripts verbatim, and make scripts executable.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Run application with profiling compatibility</step-title>
+      <step-content>Start Java process with required profiling JVM flags and verify target process availability for profiler attachment.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Collect profiling artifacts</step-title>
+      <step-content>Capture CPU/memory/lock/GC/I/O data and produce timestamped flamegraph and JFR outputs for analysis.</step-content>
+    </step>
+  </steps>
 </prompt>

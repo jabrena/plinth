@@ -43,9 +43,22 @@ Provide a complete JMeter performance testing solution by creating the run-jmete
     </trigger-list>
   </triggers>
 
-  <references>
-    <reference-list>
-        <reference>references/151-java-performance-jmeter.md</reference>
-    </reference-list>
-  </references>
+  <steps>
+    <step number="1">
+      <step-title>Verify JMeter prerequisite</step-title>
+      <step-content>Check `jmeter --version` and stop with guidance if JMeter is not installed or not available in PATH.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Read JMeter reference template</step-title>
+      <step-content>Read `references/151-java-performance-jmeter.md` and use the `run-jmeter.sh` template exactly as provided.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Create script and project structure</step-title>
+      <step-content>Create `run-jmeter.sh` in project root, ensure required JMeter directories/files exist, and apply executable permission with `chmod +x`.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Explain usage and environment overrides</step-title>
+      <step-content>Document CLI options (`-l`, `-t`, `-r`, `-g`, `-h`) and environment variable overrides (`JMETER_LOOPS`, `JMETER_THREADS`, `JMETER_RAMP_UP`).</step-content>
+    </step>
+  </steps>
 </prompt>

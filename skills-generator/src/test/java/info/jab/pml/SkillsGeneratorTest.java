@@ -55,7 +55,9 @@ class SkillsGeneratorTest {
             boolean useXml = descriptor.useXml();
 
             // Given - skill file in resources/skill-indexes/ is the source of truth (.md or .xml when useXml)
-            String expectedSkillMd = useXml ? loadSkillFromXmlResources(skillId) : loadSkillFromResources(skillId);
+            String expectedSkillMd = useXml
+                ? loadSkillFromXmlResources(skillId, descriptor.references())
+                : loadSkillFromResources(skillId);
             SkillsGenerator generator = new SkillsGenerator();
 
             // When
@@ -90,7 +92,7 @@ class SkillsGeneratorTest {
     class SkillInventorySyncTests {
 
         @Test
-        @DisplayName("skill-indexes.xml entries must have matching skill summary (and system-prompt when required)")
+        @DisplayName("skills.xml entries must have matching skill summary (and system-prompt when required)")
         void should_validateInventoryMatchesSkillsAndSystemPrompts() {
             List<SkillIndexes.SkillDescriptor> descriptors = SkillIndexes.skillDescriptors().toList();
             assertThat(descriptors).isNotEmpty();
@@ -272,7 +274,7 @@ class SkillsGeneratorTest {
         }
     }
 
-    private String loadSkillFromXmlResources(String skillId) throws Exception {
+    private String loadSkillFromXmlResources(String skillId, List<String> references) throws Exception {
         String numId = numericId(skillId);
         String xmlResource = "skill-indexes/" + numId + "-skill.xml";
         String xsltResource = "skill-index-to-markdown.xsl";
@@ -289,8 +291,30 @@ class SkillsGeneratorTest {
             Transformer transformer = TransformerFactory.newInstance().newTransformer(new StreamSource(xsltStream));
             StringWriter writer = new StringWriter();
             transformer.transform(new StreamSource(xmlStream), new StreamResult(writer));
-            return appendProjectTagToDescription(writer.toString());
+            return appendReferencesSection(appendProjectTagToDescription(writer.toString()), references);
         }
+    }
+
+    private String appendReferencesSection(String content, List<String> references) {
+        if (references == null || references.isEmpty() || content.contains("## Reference")) {
+            return content;
+        }
+        StringBuilder builder = new StringBuilder(content.stripTrailing());
+        for (String path : references) {
+            String referencePath = "references/" + path + ".md";
+            builder.append(System.lineSeparator())
+                .append(System.lineSeparator())
+                .append("## Reference")
+                .append(System.lineSeparator())
+                .append(System.lineSeparator())
+                .append("For detailed guidance, examples, and constraints, see [")
+                .append(referencePath)
+                .append("](")
+                .append(referencePath)
+                .append(").")
+                .append(System.lineSeparator());
+        }
+        return builder.toString();
     }
 
     private String appendProjectTagToDescription(String content) {

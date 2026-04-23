@@ -46,6 +46,24 @@ Before applying REST changes, ensure the project compiles. After applying improv
 - Add API versioning, idempotency, ETag concurrency, or deprecation headers
 - Implement pagination, sorting, or RFC 7807 Problem Details error responses
 
+## Workflow
+
+1. **Read reference and assess project context**
+
+Read `references/402-frameworks-quarkus-rest.md` and inspect the current project setup before proposing changes.
+
+2. **Gather scope and decide target improvements**
+
+Identify requested outcomes, constraints, and the minimum safe set of changes to apply.
+
+3. **Apply framework-aligned changes**
+
+Implement or refactor configuration/code following the reference patterns and project conventions.
+
+4. **Run verification and report results**
+
+Execute appropriate build/tests and summarize what changed, what was verified, and any follow-up actions.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/402-frameworks-quarkus-rest.md](references/402-frameworks-quarkus-rest.md).

@@ -70,10 +70,4 @@ Guide the agent to analyze an epic (from file path or pasted content), hold a st
       <step-content>Provide next steps for prioritization, breakdown into user stories, and alignment with epic goals and dependencies.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-        <reference>references/013-agile-feature.md</reference>
-    </reference-list>
-  </references>
 </prompt>

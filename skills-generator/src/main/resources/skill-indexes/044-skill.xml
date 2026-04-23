@@ -66,10 +66,4 @@ Use **`jira`** to work with Jira issues: **first** run an **interactive** check 
       <step-content>Support create, assign, transition, and add-comment actions using CLI commands while avoiding secret exposure.</step-content>
     </step>
   </steps>
-
-  <references>
-    <reference-list>
-      <reference>references/044-planning-jira.md</reference>
-    </reference-list>
-  </references>
 </prompt>

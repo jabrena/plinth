@@ -47,9 +47,22 @@ Apply data-oriented programming in Java: separate data from behavior with record
     </trigger-list>
   </triggers>
 
-  <references>
-    <reference-list>
-        <reference>references/144-java-data-oriented-programming.md</reference>
-    </reference-list>
-  </references>
+  <steps>
+    <step number="1">
+      <step-title>Compile project before data-oriented changes</step-title>
+      <step-content>Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Read data-oriented reference and assess model design</step-title>
+      <step-content>Read `references/144-java-data-oriented-programming.md` and identify candidates for data/behavior separation and immutable transformations.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Apply data-oriented refactorings</step-title>
+      <step-content>Implement selected improvements using records, pure transformation functions, flat structures, and explicit validation.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Verify with full build</step-title>
+      <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
+    </step>
+  </steps>
 </prompt>
