@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="163-java-profiling-refactor">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.15.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need to refactor Java code based on profiling analysis findings — including reviewing docs/profiling-problem-analysis and docs/profiling-solutions, identifying specific performance bottlenecks, and implementing targeted code changes to address CPU, memory, or threading issues.</description>
+  </metadata>
+
+  <title>Java Profiling Workflow / Step 3 / Refactor code to fix issues</title>
+  <goal><![CDATA[
+Implement refactoring based on profiling analysis: review profiling-problem-analysis-YYYYMMDD.md and profiling-solutions-YYYYMMDD.md, identify specific performance bottlenecks, and refactor code to fix them. Ensure all tests pass after changes.
+
+**What is covered in this Skill?**
+
+- Review analysis notes: docs/profiling-problem-analysis-YYYYMMDD.md, docs/profiling-solutions-YYYYMMDD.md
+- Identify specific bottlenecks from the documented findings
+- Refactor code to address CPU hotspots, memory leaks, threading issues, or other performance problems
+- Run verification: ./mvnw clean verify or mvn clean verify
+
+**Scope:** Changes must pass all tests. Apply fixes incrementally and verify after each significant change.
+]]></goal>
+
+  <constraints>
+    <constraints-description>Verify that changes pass all tests before considering the refactoring complete.</constraints-description>
+    <constraint-list>
+      <constraint>**MANDATORY**: Run `./mvnw clean verify` or `mvn clean verify` after applying refactoring</constraint>
+      <constraint>**SAFETY**: If tests fail, fix issues before proceeding</constraint>
+      <constraint>**BEFORE APPLYING**: Read the analysis and solutions documents for specific recommendations</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+        <trigger>Refactor the code with profiling</trigger>
+        <trigger>Apply profiling</trigger>
+        <trigger>Refactor the code with profiling</trigger>
+        <trigger>Optimize hot path</trigger>
+        <trigger>Performance refactoring</trigger>
+    </trigger-list>
+  </triggers>
+
+  <references>
+    <reference-list>
+        <reference>references/163-java-profiling-refactor.md</reference>
+    </reference-list>
+  </references>
+</prompt>

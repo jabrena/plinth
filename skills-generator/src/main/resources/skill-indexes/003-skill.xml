@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="003-agents-installation"
+      interactive="true">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.15.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need to install the embedded robot agents into either .cursor/agents or .claude/agents, selecting the destination interactively and copying the embedded agent definitions from project assets.</description>
+  </metadata>
+
+  <title>Embedded agents installer</title>
+  <goal><![CDATA[
+Install a predefined set of embedded agent definitions from repository assets into a user-selected target directory. This is an interactive skill.
+
+**What is covered in this Skill?**
+
+- Interactive target selection (`.cursor/agents` or `.claude/agents`)
+- Deterministic copy of the embedded six-agent bundle
+- Idempotent re-installation with clear overwrite reporting
+]]></goal>
+
+  <constraints>
+    <constraints-description>This skill installs only the embedded robot agents bundle and must ask for destination before writing files.</constraints-description>
+    <constraint-list>
+      <constraint>**MUST** ask the user to choose `.cursor/agents` or `.claude/agents` before installing</constraint>
+      <constraint>**MUST** copy all embedded files from `skills-generator/src/main/resources/skill-references/assets/agents/`</constraint>
+      <constraint>**MUST** preserve file names and report overwrite actions</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+      <trigger>Install embedded agents</trigger>
+      <trigger>Bootstrap .cursor/agents</trigger>
+      <trigger>Bootstrap .claude/agents</trigger>
+      <trigger>Copy robot agents</trigger>
+    </trigger-list>
+  </triggers>
+
+  <references>
+    <reference-list>
+      <reference>references/003-agents-installation.md</reference>
+    </reference-list>
+  </references>
+</prompt>

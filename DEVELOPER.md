@@ -49,7 +49,7 @@ This is a multi-module project. The following modules are declared in the root `
 
 | Module | Artifact ID | Commands | Description |
 |--------|-------------|----------|-------------|
-| skills-generator | cursor-rules-java-skills-generator | `./mvnw clean verify -pl skills-generator`<br>`./mvnw clean install -pl skills-generator` | Unified XML → skills generator: produces agent skills into `skills/` (includes `CursorRulesGenerator`, system-prompt XML, and skill definitions). |
+| skills-generator | cursor-rules-java-skills-generator | `./mvnw clean verify -pl skills-generator`<br>`./mvnw clean install -pl skills-generator` | Unified XML → skills generator: produces agent skills into `skills/` (includes `SkillReferenceGenerator`, system-prompt XML, and skill definitions). |
 | site-generator | cursor-rules-java-site | `./mvnw clean verify -pl site-generator`<br>`./mvnw clean generate-resources jbake:inline -pl site-generator -P local-preview`<br>`./mvnw clean generate-resources -pl site-generator -P site-update` | JBake-based static site generator for documentation and GitHub Pages. |
 
 ## Maven Profiles

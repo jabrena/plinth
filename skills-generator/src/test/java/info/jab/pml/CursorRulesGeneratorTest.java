@@ -24,7 +24,7 @@ import org.w3c.dom.NodeList;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
-@DisplayName("Cursor Rules Generator Tests")
+@DisplayName("Skill Reference Generator Tests")
 class CursorRulesGeneratorTest {
 
     private static final Logger logger = LoggerFactory.getLogger(CursorRulesGeneratorTest.class);
@@ -37,24 +37,24 @@ class CursorRulesGeneratorTest {
         @DisplayName("Should throw exception when XML file does not exist")
         void should_throwException_when_xmlFileDoesNotExist() {
             // Given
-            CursorRulesGenerator generator = new CursorRulesGenerator();
+            SkillReferenceGenerator generator = new SkillReferenceGenerator();
 
             // When & Then - Updated for functional API exception handling
-            assertThatThrownBy(() -> generator.generate("non-existent.xml", "system-prompts.xsl"))
+            assertThatThrownBy(() -> generator.generate("non-existent.xml", "skill-reference-to-markdown.xsl"))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Failed to generate cursor rules for")
                 .hasMessageContaining("non-existent.xml")
-                .hasMessageContaining("system-prompts.xsl");
+                .hasMessageContaining("skill-reference-to-markdown.xsl");
         }
 
         @Test
         @DisplayName("Should throw exception when XSLT file does not exist")
         void should_throwException_when_xsltFileDoesNotExist() {
             // Given
-            CursorRulesGenerator generator = new CursorRulesGenerator();
+            SkillReferenceGenerator generator = new SkillReferenceGenerator();
 
             // When & Then - Updated for functional API exception handling
-            assertThatThrownBy(() -> generator.generate("system-prompts/112-java-maven-documentation.xml", "non-existent.xsl"))
+            assertThatThrownBy(() -> generator.generate("skill-references/112-java-maven-documentation.xml", "non-existent.xsl"))
                 .isInstanceOf(RuntimeException.class)
                 .hasMessageContaining("Failed to generate cursor rules for")
                 .hasMessageContaining("112-java-maven-documentation.xml")
@@ -79,12 +79,12 @@ class CursorRulesGeneratorTest {
         @DisplayName("Should validate semantic structure of generated MDC files")
         void should_validateSemanticStructure_when_generatingMdcFiles(String baseFileName) throws IOException {
             // Given
-            CursorRulesGenerator generator = new CursorRulesGenerator();
+            SkillReferenceGenerator generator = new SkillReferenceGenerator();
 
             // When - Generate content (no schema validation)
             String generatedContent = generator.generate(
-                "system-prompts/" + baseFileName + ".xml",
-                "system-prompts.xsl"
+                "skill-references/" + baseFileName + ".xml",
+                "skill-reference-to-markdown.xsl"
             );
 
             // Save generated content to target for inspection
@@ -484,7 +484,7 @@ class CursorRulesGeneratorTest {
         @DisplayName("Should have metadata version matching project version from parent pom.xml")
         void should_haveMetadataVersionMatchingProjectVersion(String baseFileName) throws Exception {
             String expectedVersion = readProjectVersionFromParentPom();
-            String xmlVersion = readVersionFromXmlMetadata("system-prompts/" + baseFileName + ".xml");
+            String xmlVersion = readVersionFromXmlMetadata("skill-references/" + baseFileName + ".xml");
 
             assertThat(xmlVersion)
                 .withFailMessage(

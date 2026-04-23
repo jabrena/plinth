@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="002-agents-inventory">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.15.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need to generate a checklist document with embedded agents inventory, following the embedded template exactly and producing INVENTORY-AGENTS-JAVA.md in the project root.</description>
+  </metadata>
+
+  <title>Create a Checklist with embedded agents inventory for Java</title>
+  <goal><![CDATA[
+Create a comprehensive checklist document for embedded agents inventory by following the embedded template exactly.
+
+**What is covered in this Skill?**
+
+- Exact-template checklist generation
+- Output file creation as `INVENTORY-AGENTS-JAVA.md`
+- Strict adherence to listed sections and content
+]]></goal>
+
+  <constraints>
+    <constraints-description>Follow the template exactly without adding or removing sections, rows, or details.</constraints-description>
+    <constraint-list>
+      <constraint>**DO NOT** create additional rows beyond what the template defines</constraint>
+      <constraint>**DO NOT** add agent entries not explicitly listed in the template</constraint>
+      <constraint>**ONLY** use exact wording and structure from the embedded template</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+      <trigger>Create embedded agents inventory checklist</trigger>
+      <trigger>Generate INVENTORY-AGENTS-JAVA.md</trigger>
+      <trigger>Use @002-agents-inventory</trigger>
+    </trigger-list>
+  </triggers>
+
+  <references>
+    <reference-list>
+      <reference>references/002-agents-inventory.md</reference>
+    </reference-list>
+  </references>
+</prompt>

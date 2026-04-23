@@ -2,6 +2,21 @@
 
 Some **User prompts** designed to help in the maintenance of this repository.
 
+## Begin a new release
+
+### Bump a new Snapshot version
+
+```bash
+# Maven command to update the maven version to next minor version
+./mvnw versions:set -DnewVersion=0.15.0-SNAPSHOT
+./mvnw versions:commit
+
+#Bump to a new snapshot
+@resources/ update version to 0.15.0-SNAPSHOT and pom.xml, maven modules and finally regenerate the skills
+```
+
+## Finish a release
+
 ```bash
 # Update @All-JEPS.md
 Update @All-JEPS.md with JEPs about Java 26 from https://openjdk.org/jeps/0
@@ -16,7 +31,7 @@ Review that the list doesn´t any broken link to @/.cursor with .md files
 Can you update the current changelog for 0.15.0 comparing git commits in relation to 0.14.0 tag. Use  @https://keepachangelog.com/en/1.1.0/  rules
 
 #Bump to a new snapshot
-@resources/ update version to 0.15.0 and pom.xml, maven modules and finally regenerate the skills
+@resources/ update version to 0.15.0-SNAPSHOT and pom.xml, maven modules and finally regenerate the skills
 ```
 
 ## Release process
@@ -71,5 +86,5 @@ git push --tags
 ## Add a new Skills
 
 ```bash
-review if exist a new id in @skills-generator/src/main/resources/skill-inventory.xml to review compare with the content of @skills-generator/src/main/resources/skills and if exist add a new skill summary in @skills-generator/src/main/resources/skills . to elaborate the skill review the content of the id with @skills-generator/src/main/resources/system-prompts when finish, validate generation with ./mvnw clean install -pl skills-generator and validate the skill with npx skill-check skills
+review if exist a new id in @skills-generator/src/main/resources/skill-indexes.xml to review compare with the content of @skills-generator/src/main/resources/skill-indexes and if exist add a new skill summary in @skills-generator/src/main/resources/skill-indexes . to elaborate the skill review the content of the id with @skills-generator/src/main/resources/skill-references when finish, validate generation with ./mvnw clean install -pl skills-generator and validate the skill with npx skill-check skills
 ```

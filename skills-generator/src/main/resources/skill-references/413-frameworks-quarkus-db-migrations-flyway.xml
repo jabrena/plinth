@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt>
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.15.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Quarkus — Database migrations (Flyway)</title>
+        <description>Use when you need to add or review Flyway database migrations in a Quarkus application — including the `quarkus-flyway` extension, `classpath:db/migration` scripts, `V{version}__{description}.sql` naming, `quarkus.flyway.*` configuration, migrate-at-start behavior, and coordination with JDBC (`@411-frameworks-quarkus-jdbc`) or Hibernate ORM with Panache (`@412-frameworks-quarkus-panache`). Focus on Flyway-driven schema evolution, not hand-applied DDL in production.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Quarkus, relational databases, and schema evolution with Flyway</role>
+
+    <goal>
+        Use the Quarkus Flyway extension to apply versioned migrations from `src/main/resources/db/migration` on startup (when configured) or from build/test workflows, keeping the database schema in sync with Panache entities or JDBC access layers. Prefer small, forward-only migrations; align DDL with entity mappings and repository queries. For raw JDBC usage see `@411-frameworks-quarkus-jdbc`; for Panache entities and repositories see `@412-frameworks-quarkus-panache`.
+    </goal>
+
+    <constraints>
+        <constraints-description>
+            Before applying any recommendations, ensure the project is in a valid state by running Maven compilation.
+            Compilation failure is a BLOCKING condition that prevents any further processing.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**PREREQUISITE**: Project must compile successfully before Flyway or SQL edits</constraint>
+            <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+        </constraint-list>
+    </constraints>
+
+    <examples>
+        <toc auto-generate="true" />
+
+        <example number="1" id="quarkus-flyway-extension">
+            <example-header>
+                <example-title>Extension and JDBC driver</example-title>
+                <example-subtitle>Add `quarkus-flyway` alongside the JDBC driver extension for your database</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Quarkus Flyway integrates with Agroal datasources. Declare `quarkus-flyway` in addition to `quarkus-jdbc-postgresql` (or another `quarkus-jdbc-*`). Use the Quarkus BOM so versions stay aligned. Dev Services can provision a database in dev/test while migrations still run from the same scripts.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="xml"><![CDATA[<!-- pom.xml fragments -->
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-flyway</artifactId>
+</dependency>
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-jdbc-postgresql</artifactId>
+</dependency>]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="xml"><![CDATA[<!-- Bad: Flyway without a JDBC driver extension — datasource may be incomplete -->
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-flyway</artifactId>
+</dependency>]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="2" id="quarkus-migration-sql">
+            <example-header>
+                <example-title>SQL migrations</example-title>
+                <example-subtitle>Default location `db/migration`; follow Flyway versioned naming</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Store scripts under `src/main/resources/db/migration`. Use consecutive versions; split unrelated changes into separate files. Keep DDL consistent with Panache entity fields (`@Column`, `@Version`) and JDBC row mappers.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="sql"><![CDATA[-- src/main/resources/db/migration/V1__create_orders.sql
+CREATE TABLE orders (
+    id           BIGSERIAL PRIMARY KEY,
+    customer_id  BIGINT NOT NULL,
+    placed_at    TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    version      INT NOT NULL DEFAULT 0
+);]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="sql"><![CDATA[-- Bad: non-versioned file — Flyway will not pick it up from default locations
+-- src/main/resources/db/migration/orders.sql]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="quarkus-flyway-properties">
+            <example-header>
+                <example-title>application.properties</example-title>
+                <example-subtitle>Enable migrate-at-start and tune locations for your module layout</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                `quarkus.flyway.migrate-at-start=true` runs migrations when the application starts — typical for services. For tests, the same scripts apply when using `@QuarkusTest` with a datasource (including Dev Services or Testcontainers). Use baseline settings when attaching to an existing database with objects already present.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="properties"><![CDATA[# application.properties (examples)
+quarkus.flyway.migrate-at-start=true
+quarkus.flyway.locations=classpath:db/migration
+# When introducing Flyway to a DB that already has schema:
+# quarkus.flyway.baseline-on-migrate=true
+# quarkus.flyway.baseline-version=1]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="properties"><![CDATA[# Bad: migrate-at-start=false in production without another controlled migration path
+quarkus.flyway.migrate-at-start=false]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="quarkus-multiple-datasources">
+            <example-header>
+                <example-title>Multiple datasources (optional)</example-title>
+                <example-subtitle>Configure Flyway per named datasource when using more than one</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                When multiple Agroal datasources exist, scope Flyway settings per datasource name (e.g. `%named` config keys in Quarkus). Keep migration directories or table names distinct per datasource to avoid clashes.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="properties"><![CDATA[# Illustrative pattern — exact keys follow Quarkus Flyway extension docs for your version
+# quarkus.flyway.orders.migrate-at-start=true
+# quarkus.flyway.orders.locations=classpath:db/migration/orders]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="properties"><![CDATA[# Bad: two datasources but only one Flyway location — ambiguous or wrong schema gets migrated
+quarkus.datasource.orders.jdbc.url=jdbc:postgresql://localhost/orders
+quarkus.datasource.audit.jdbc.url=jdbc:postgresql://localhost/audit
+quarkus.flyway.locations=classpath:db/migration]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>**ANALYZE** Quarkus Flyway setup: extensions, datasource config, migration locations, migrate-at-start, and test profile behavior</output-format-item>
+            <output-format-item>**CATEGORIZE** issues (EXTENSION, CONFIG, SCRIPT, ENTITY MISMATCH) by impact</output-format-item>
+            <output-format-item>**APPLY** Quarkus-aligned fixes: correct `pom.xml`, `application.properties`, and forward-only SQL</output-format-item>
+            <output-format-item>**ALIGN** with `@412-frameworks-quarkus-panache` entities or `@411-frameworks-quarkus-jdbc` SQL</output-format-item>
+            <output-format-item>**TEST** with `@QuarkusTest` and a real database (Dev Services or Testcontainers) after migration changes</output-format-item>
+            <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>**FORWARD ONLY**: Never rewrite migrations that already applied in shared environments</safeguards-item>
+            <safeguards-item>**PANACHE SYNC**: Adding `@Version` or columns requires matching DDL in Flyway before rollout</safeguards-item>
+            <safeguards-item>**DEV SERVICES**: Dev databases are ephemeral — do not treat them as migration history sources of truth</safeguards-item>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before recommending schema or build changes</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>

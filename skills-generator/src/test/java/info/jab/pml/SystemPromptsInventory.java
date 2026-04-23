@@ -9,14 +9,14 @@ import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
 /**
- * Inventory of system prompts to generate, loaded from {@code system-prompt-inventory.xml}.
+ * Inventory of system prompts to generate, loaded from {@code skill-references.xml}.
  * <p>
  * Each entry has a {@code name} attribute corresponding to the base name of the XML source file
- * (e.g. {@code 110-java-maven-best-practices} maps to {@code system-prompts/110-java-maven-best-practices.xml}).
+ * (e.g. {@code 110-java-maven-best-practices} maps to {@code skill-references/110-java-maven-best-practices.xml}).
  */
 public final class SystemPromptsInventory {
 
-    private static final String INVENTORY_RESOURCE = "system-prompt-inventory.xml";
+    private static final String INVENTORY_RESOURCE = "skill-references.xml";
 
     private SystemPromptsInventory() {
     }
@@ -26,7 +26,7 @@ public final class SystemPromptsInventory {
     }
 
     public static Stream<String> xmlFilenames() {
-        return baseNames().map(name -> "system-prompts/" + name + ".xml");
+        return baseNames().map(name -> "skill-references/" + name + ".xml");
     }
 
     private static List<String> loadInventory() {

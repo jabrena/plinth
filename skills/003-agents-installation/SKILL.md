@@ -4,7 +4,7 @@ description: Use when you need to install the embedded robot agents into either 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.14.0
+  version: 0.15.0-SNAPSHOT
 ---
 # Embedded agents installer
 
@@ -21,7 +21,7 @@ Install a predefined set of embedded agent definitions from repository assets in
 This skill installs only the embedded robot agents bundle and must ask for destination before writing files.
 
 - **MUST** ask the user to choose `.cursor/agents` or `.claude/agents` before installing
-- **MUST** copy all embedded files from `skills-generator/src/main/resources/system-prompts/assets/agents/`
+- **MUST** copy all embedded files from `skills-generator/src/main/resources/skill-references/assets/agents/`
 - **MUST** preserve file names and report overwrite actions
 
 ## When to use this skill

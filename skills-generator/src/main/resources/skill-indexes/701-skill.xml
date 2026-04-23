@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="701-technologies-openapi">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.15.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need framework-agnostic OpenAPI 3.x guidance — spec structure, metadata and versioning, paths and operations, reusable schemas, security schemes, examples, documentation quality, contract validation (e.g. Spectral), breaking-change awareness, and handoffs to codegen — without choosing Spring Boot, Quarkus, or Micronaut.</description>
+  </metadata>
+
+  <title>OpenAPI 3.x best practices</title>
+  <goal><![CDATA[
+Help teams produce maintainable **OpenAPI 3.x** contracts that stay aligned with HTTP semantics and consumer needs.
+
+**What is covered in this Skill?**
+
+- Document structure: `openapi`, `info`, `servers`, `tags`, and consistent resource grouping
+- Path and operation design: parameters, request bodies, response matrices, `operationId`, status codes
+- Reusable `components` (schemas, parameters, responses, security schemes) and examples
+- Validation and CI: spec linting, breaking-change checks, pre-codegen gates
+- Security modeling in the contract (schemes, scopes, global vs operation security)
+- Clear boundaries between contract-first design and runtime implementation concerns
+
+**Scope:** Contract-first quality only. Focus this skill on OpenAPI design, quality, and governance guidance.
+]]></goal>
+
+  <constraints>
+    <constraints-description>Keep recommendations at the OpenAPI layer unless the user explicitly asks for Java framework integration. After editing this repository's XML sources, regenerate skills and verify the build.</constraints-description>
+    <constraint-list>
+      <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before proposing Java or Maven changes in the same change set</constraint>
+      <constraint>**FRAMEWORK**: Keep guidance contract-centric; do not prescribe framework-specific controller wiring or runtime exposure details</constraint>
+      <constraint>**FUZZING**: Keep fuzzing guidance high-level and contract-focused without linking to external skill identifiers</constraint>
+      <constraint>**MANDATORY**: Regenerate skills with `./mvnw clean install -pl skills-generator` after editing skill or system-prompt XML in this repo</constraint>
+      <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` before promoting changes</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+        <trigger>Review an OpenAPI</trigger>
+        <trigger>Improve an OpenAPI</trigger>
+        <trigger>Improve API contract</trigger>
+        <trigger>Improve API schema design</trigger>
+        <trigger>Validate an OpenAPI spec</trigger>
+    </trigger-list>
+  </triggers>
+
+  <references>
+    <reference-list>
+        <reference>references/701-technologies-openapi.md</reference>
+    </reference-list>
+  </references>
+</prompt>
