@@ -47,6 +47,35 @@ Generate comprehensive Java project diagrams through a modular, step-based inter
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="1">
+      <step-title>Validate project state</step-title>
+      <step-content>Run `./mvnw validate` or `mvn validate` before applying any diagram generation.</step-content>
+      <step-constraints>
+        <step-constraint-list>
+          <step-constraint>If validation fails, stop and ask to resolve errors first</step-constraint>
+        </step-constraint-list>
+      </step-constraints>
+    </step>
+    <step number="2">
+      <step-title>Read reference and configure diagram scope</step-title>
+      <step-content>Read `references/033-architecture-diagrams.md`, identify requested diagram types, and confirm output organization strategy (single-file, separate-files, or integrated docs).</step-content>
+    </step>
+    <step number="3">
+      <step-title>Generate PlantUML diagrams</step-title>
+      <step-content>Create requested diagrams in PlantUML syntax (sequence, class, C4 levels 1-3 only, state machine, ER) using project inputs and context.</step-content>
+      <step-constraints>
+        <step-constraint-list>
+          <step-constraint>Never generate C4 Level 4 (Code) diagrams</step-constraint>
+        </step-constraint-list>
+      </step-constraints>
+    </step>
+    <step number="4">
+      <step-title>Validate and finalize outputs</step-title>
+      <step-content>Check generated diagrams for syntax correctness and consistency with selected scope before final delivery.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
         <reference>references/033-architecture-diagrams.md</reference>

@@ -49,6 +49,28 @@ Before applying plugin recommendations, ensure the project is in a valid state. 
 - Add Maven plugins in pom.xml
 - Improve Maven plugins in pom.xml
 
+## Workflow
+
+1. **Validate project before plugin changes**
+
+Run `./mvnw validate` or `mvn validate` and stop if validation fails.
+
+2. **Analyze current plugin and profile configuration**
+
+Start with existing configuration analysis to identify what is already declared and avoid conflicts or replacement.
+
+3. **Read plugin reference and collect selections**
+
+Read `references/112-java-maven-plugins.md`, then use a question-driven flow to select only needed plugins/profiles.
+
+4. **Add non-conflicting plugin configuration**
+
+Add selected plugins and profiles without removing existing ones, preserving project structure and compatibility.
+
+5. **Summarize applied plugin setup**
+
+Report added plugins/profiles, rationale, and recommended follow-up commands or checks.
+
 ## Reference
 
 For detailed guidance, examples, and constraints, see [references/112-java-maven-plugins.md](references/112-java-maven-plugins.md).

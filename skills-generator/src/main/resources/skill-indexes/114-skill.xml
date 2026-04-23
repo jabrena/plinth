@@ -47,6 +47,25 @@ Help users search Maven Central, resolve **groupId:artifactId:version**, read ve
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="1">
+      <step-title>Read Maven search reference workflow</step-title>
+      <step-content>Read `references/114-java-maven-search.md` before forming queries, coordinate checks, or URL outputs.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Perform Maven Central discovery and verification</step-title>
+      <step-content>Use Search API and repository metadata/POM checks to confirm valid coordinates and available versions.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Format results with full coordinates and links</step-title>
+      <step-content>Return `groupId:artifactId:version` outputs, structured tables, and verifiable HTTPS artifact URLs.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Run project-local update checks when applicable</step-title>
+      <step-content>When working on a local project, ensure versions-maven-plugin usage and run `versions:display-*` reports for properties, dependencies, and plugins.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
         <reference>references/114-java-maven-search.md</reference>

@@ -30,7 +30,6 @@ Use **`gh`** to work with GitHub issues: **first** run an **interactive** checkâ
       <constraint>**FIRST** (after gate): Verify `gh` is available before issuing subcommands</constraint>
       <constraint>**TABLES**: Prefer `--json` + markdown pipe tables for issue list summaries</constraint>
       <constraint>**THREAD**: For analysis, include body and all comments (or explicitly summarize with omissions noted)</constraint>
-      <constraint>**014**: For user stories from issues, use `@014-agile-user-story` and align answers with GitHub-sourced text</constraint>
     </constraint-list>
   </constraints>
 
@@ -43,6 +42,29 @@ Use **`gh`** to work with GitHub issues: **first** run an **interactive** checkâ
         <trigger>gh issue view comments</trigger>
     </trigger-list>
   </triggers>
+
+  <steps>
+    <step number="1">
+      <step-title>Run interactive install gate</step-title>
+      <step-content>Check `gh --version`; if missing, stop and ask whether the user wants installation guidance before any issue operations.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Verify authentication and repository context</step-title>
+      <step-content>Confirm `gh auth status`, authenticate if needed, and establish target repository context via `--repo` or git remote.</step-content>
+    </step>
+    <step number="3">
+      <step-title>List issues and milestones</step-title>
+      <step-content>Retrieve issues (optionally by milestone/state) using `gh issue list --json` and present summaries as markdown pipe tables.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Load full thread for analysis</step-title>
+      <step-content>Read issue body and all comments via `gh issue view --json` or `--comments`, then provide evidence-based analysis.</step-content>
+    </step>
+    <step number="5">
+      <step-title>Chain to user story workflow when requested</step-title>
+      <step-content>When user asks for user stories and Gherkin from issues, hand off to `@014-agile-user-story` using GitHub-sourced content.</step-content>
+    </step>
+  </steps>
 
   <references>
     <reference-list>

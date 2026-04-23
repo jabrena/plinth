@@ -41,6 +41,25 @@ Add essential Maven dependencies that enhance code quality and safety through a 
     </trigger-list>
   </triggers>
 
+  <steps>
+    <step number="1">
+      <step-title>Validate project before changes</step-title>
+      <step-content>Run `./mvnw validate` or `mvn validate` and stop if validation fails.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Read dependency reference and ask guided questions</step-title>
+      <step-content>Read `references/111-java-maven-dependencies.md` and ask one-by-one in strict order: JSpecify, conditional Enhanced Compiler Analysis, VAVR, and ArchUnit.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Add only selected dependencies</step-title>
+      <step-content>Implement only the dependencies and scopes chosen by the user, preserving existing pom.xml structure.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Report trade-offs and next checks</step-title>
+      <step-content>Summarize what was added, why, and any recommended follow-up validations or tooling alignment.</step-content>
+    </step>
+  </steps>
+
   <references>
     <reference-list>
         <reference>references/111-java-maven-dependencies.md</reference>
