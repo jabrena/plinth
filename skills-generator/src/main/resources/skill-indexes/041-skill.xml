@@ -21,7 +21,7 @@ Guide the process of creating a structured plan using Cursor Plan mode. **This i
 - Required sections: Requirements Summary, Approach (with Mermaid), Task List, Execution Instructions, File Checklist, Notes
 - London Style (outside-in) TDD pattern
 - Plan execution discipline: update Status after each task before advancing
-- Plan file path: .cursor/plans/YYYY-MM-DD_&lt;name&gt;.plan.md
+- Plan storage: ask user for preferred folder and filename convention before creating artifact
 ]]></goal>
 
   <constraints>
@@ -32,6 +32,7 @@ Guide the process of creating a structured plan using Cursor Plan mode. **This i
       <constraint>**MUST**: Ask one or two questions at a time; never all at once</constraint>
       <constraint>**MUST**: Validate summary ("Does this capture what you need?") before proposing plan creation</constraint>
       <constraint>**MUST**: Wait for user to confirm "proceed" before generating the plan</constraint>
+      <constraint>**MUST**: Ask the user where they want to store the plan before generating the plan artifact</constraint>
       <constraint>**MUST**: Include Execution Instructions section in every generated plan</constraint>
     </constraint-list>
   </constraints>
@@ -63,10 +64,14 @@ Guide the process of creating a structured plan using Cursor Plan mode. **This i
       <step-content>Summarize understanding, ask "Does this capture what you need?", and wait for explicit "proceed" before creating the plan artifact.</step-content>
     </step>
     <step number="3">
-      <step-title>Generate structured plan artifact</step-title>
-      <step-content>Create `.cursor/plans/YYYY-MM-DD_&lt;name&gt;.plan.md` with required sections and YAML frontmatter, including Execution Instructions.</step-content>
+      <step-title>Confirm plan storage location</step-title>
+      <step-content>Ask where the user wants to store the plan (for example, `.cursor/plans/` or another folder) and confirm the target filename pattern before writing.</step-content>
     </step>
     <step number="4">
+      <step-title>Generate structured plan artifact</step-title>
+      <step-content>Create the plan at the confirmed location using required sections and YAML frontmatter, including Execution Instructions.</step-content>
+    </step>
+    <step number="5">
       <step-title>Apply execution discipline</step-title>
       <step-content>When executing tasks from the plan, update the Status column after each task before moving to the next one.</step-content>
     </step>

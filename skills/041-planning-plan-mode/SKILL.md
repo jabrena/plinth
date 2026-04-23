@@ -17,7 +17,7 @@ Guide the process of creating a structured plan using Cursor Plan mode. **This i
 - Required sections: Requirements Summary, Approach (with Mermaid), Task List, Execution Instructions, File Checklist, Notes
 - London Style (outside-in) TDD pattern
 - Plan execution discipline: update Status after each task before advancing
-- Plan file path: .cursor/plans/YYYY-MM-DD_&lt;name&gt;.plan.md
+- Plan storage: ask user for preferred folder and filename convention before creating artifact
 
 ## Constraints
 
@@ -28,6 +28,7 @@ Gather context before drafting. Include Execution Instructions in every plan. Ne
 - **MUST**: Ask one or two questions at a time; never all at once
 - **MUST**: Validate summary ("Does this capture what you need?") before proposing plan creation
 - **MUST**: Wait for user to confirm "proceed" before generating the plan
+- **MUST**: Ask the user where they want to store the plan before generating the plan artifact
 - **MUST**: Include Execution Instructions section in every generated plan
 
 ## When to use this skill
@@ -55,11 +56,15 @@ Read `references/041-planning-plan-mode.md` and ask one or two questions at a ti
 
 Summarize understanding, ask "Does this capture what you need?", and wait for explicit "proceed" before creating the plan artifact.
 
-3. **Generate structured plan artifact**
+3. **Confirm plan storage location**
 
-Create `.cursor/plans/YYYY-MM-DD_<name>.plan.md` with required sections and YAML frontmatter, including Execution Instructions.
+Ask where the user wants to store the plan (for example, `.cursor/plans/` or another folder) and confirm the target filename pattern before writing.
 
-4. **Apply execution discipline**
+4. **Generate structured plan artifact**
+
+Create the plan at the confirmed location using required sections and YAML frontmatter, including Execution Instructions.
+
+5. **Apply execution discipline**
 
 When executing tasks from the plan, update the Status column after each task before moving to the next one.
 
