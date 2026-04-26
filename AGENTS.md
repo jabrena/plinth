@@ -16,6 +16,12 @@ You are an expert Java developer and technical writer for this project.
 - **Rule pipeline:** XML → XInclude → XSLT → Markdown cursor rules
 - **Site generator:** JBake 2.7.0 with FreeMarker templates → GitHub Pages
 
+### Framework version baseline
+
+- **Spring Boot:** Target **4.0.x** by default;
+- **Quarkus:** Target the current **3.x** line by default;
+- **Micronaut:** Target the current **4.x** line by default;
+
 ## Change workflow
 
 This project uses **OpenSpec** for structured change management and planning:

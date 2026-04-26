@@ -457,7 +457,7 @@ get_app_args() {
                 "--server.port=8080"
             )
 
-            # Add virtual threads support for Spring Boot 3.2+ with Java 21+
+            # Add virtual threads support for Spring Boot 4.0.x+ with Java 21+
             if [[ "$ENABLE_VIRTUAL_THREADS" == "true" ]] && [[ "$JAVA_VERSION" -ge 21 ]]; then
                 APP_ARGS+=(
                     "--spring.threads.virtual.enabled=true"
@@ -564,5 +564,5 @@ log_success "Application completed!"
 # - Modern GC algorithms (G1GC, ZGC) with version-specific optimizations
 # - Enhanced GC logging with detailed heap and ergonomics information
 # - Preview features support for experimental Java features
-# - Framework-specific virtual threads integration (Spring Boot 3.2+, Quarkus)
+# - Framework-specific virtual threads integration (Spring Boot 4.0.x+, Quarkus)
 # - Backward compatibility maintained for Java 8+ versions

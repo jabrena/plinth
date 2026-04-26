@@ -1,12 +1,12 @@
 ---
 name: 311-frameworks-spring-jdbc
-description: Use when you need to write or review programmatic JDBC with Spring — including JdbcClient (Spring Framework 6.1+) as the default API, JdbcTemplate only where batch/streaming APIs require JdbcOperations, NamedParameterJdbcTemplate for legacy named-param code, parameterized SQL, RowMapper mapping to records, batch operations, transactions, safe handling of generated keys, DataAccessException handling, read-only transactions, streaming large result sets, and @JdbcTest slice testing.
+description: Use when you need to write or review programmatic JDBC with Spring — including JdbcClient (Spring Framework 7+) as the default API, JdbcTemplate only where batch/streaming APIs require JdbcOperations, NamedParameterJdbcTemplate for legacy named-param code, parameterized SQL, RowMapper mapping to records, batch operations, transactions, safe handling of generated keys, DataAccessException handling, read-only transactions, streaming large result sets, and @JdbcTest slice testing.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
   version: 0.15.0-SNAPSHOT
 ---
-# Spring JDBC — JdbcClient (Spring Framework 6.1+)
+# Spring JDBC — JdbcClient (Spring Framework 7+)
 
 ## Role
 
@@ -14,7 +14,7 @@ You are a Senior software engineer with extensive experience in Spring Framework
 
 ## Goal
 
-Prefer `JdbcClient` (Spring Framework 6.1+) for new and refactored code: fluent SQL, indexed or named parameters, typed `query(Class)`, and `optional()` / `single()` for single-row reads. It is built on `JdbcOperations` and participates in Spring transactions like `JdbcTemplate`. Use `JdbcTemplate` (or `NamedParameterJdbcTemplate`) only when you need APIs not covered by `JdbcClient` — notably `batchUpdate`, `KeyHolder` inserts, `RowCallbackHandler` / `ResultSetExtractor` streaming — or when maintaining legacy code. Prefer explicit SQL with bind parameters, map rows to immutable records or small DTOs, keep transactions at the service layer, and let Spring translate SQL exceptions to `DataAccessException`. Choose Spring Data JDBC (`@312-frameworks-spring-data-jdbc`) when repositories and aggregate mapping fit; use `JdbcClient` (or `JdbcTemplate` for batch/streaming) for ad-hoc SQL, reporting, or tight control over statements. For schema evolution with Flyway, use `@313-frameworks-spring-db-migrations-flyway`.
+Prefer `JdbcClient` (Spring Framework 7+) for new and refactored code: fluent SQL, indexed or named parameters, typed `query(Class)`, and `optional()` / `single()` for single-row reads. It is built on `JdbcOperations` and participates in Spring transactions like `JdbcTemplate`. Use `JdbcTemplate` (or `NamedParameterJdbcTemplate`) only when you need APIs not covered by `JdbcClient` — notably `batchUpdate`, `KeyHolder` inserts, `RowCallbackHandler` / `ResultSetExtractor` streaming — or when maintaining legacy code. Prefer explicit SQL with bind parameters, map rows to immutable records or small DTOs, keep transactions at the service layer, and let Spring translate SQL exceptions to `DataAccessException`. Choose Spring Data JDBC (`@312-frameworks-spring-data-jdbc`) when repositories and aggregate mapping fit; use `JdbcClient` (or `JdbcTemplate` for batch/streaming) for ad-hoc SQL, reporting, or tight control over statements. For schema evolution with Flyway, use `@313-frameworks-spring-db-migrations-flyway`.
 
 ## Constraints
 
@@ -50,7 +50,7 @@ Before applying any recommendations, ensure the project is in a valid state by r
 ### Example 1: Parameterized queries with JdbcClient
 
 Title: Bind arguments; never concatenate user input into SQL
-Description: Use `JdbcClient.sql(...).param(...)` for positional `?` placeholders, then `query` with a row mapper or mapped type, or `update` for writes. This keeps plans cacheable and prevents SQL injection. Spring Boot 3.2+ registers a `JdbcClient` bean; otherwise use `JdbcClient.create(dataSource)`.
+Description: Use `JdbcClient.sql(...).param(...)` for positional `?` placeholders, then `query` with a row mapper or mapped type, or `update` for writes. This keeps plans cacheable and prevents SQL injection. Spring Boot 4+ registers a `JdbcClient` bean; otherwise use `JdbcClient.create(dataSource)`.
 
 **Good example:**
 
@@ -157,7 +157,7 @@ class OrderRepository {
 
 ### Example 3: JdbcClient fluent API
 
-Title: Spring Framework 6.1+ chainable SQL, named or indexed params, and typed results
+Title: Spring Framework 7+ chainable SQL, named or indexed params, and typed results
 Description: Inject `JdbcClient` (typically built from `DataSource` or `JdbcTemplate`). Use `sql(String)`, then `.param(value)` for indexed params or `.param(name, value)` for named placeholders (`:name`), then `query` with a row mapper or mapped type, or `update` for writes. Prefer `single()` / `optional()` when at most one row is expected.
 
 **Good example:**
@@ -241,7 +241,7 @@ class ProductRepository {
 ### Example 4: Migrate from JdbcTemplate to JdbcClient
 
 Title: Same SQL and parameters; inject `JdbcClient` and use the fluent API
-Description: Replace `JdbcTemplate` / `NamedParameterJdbcTemplate` with `JdbcClient` when on Spring Framework 6.1+ (Spring Boot 3.2+). Inject `JdbcClient` or build it with `JdbcClient.create(jdbcTemplate)` during a gradual migration. Map `query` → `sql(...).param(...).query(...).list()` (or `.query(Class).list()`), `queryForObject` for a single row → `query(...).optional()` or `query(Class).single()`, `update` → `sql(...).param(...).update()`. Keep `JdbcTemplate` only for `batchUpdate`, `KeyHolder` inserts, or `RowCallbackHandler` until you refactor those call sites.
+Description: Replace `JdbcTemplate` / `NamedParameterJdbcTemplate` with `JdbcClient` when on Spring Framework 7+ (Spring Boot 4+). Inject `JdbcClient` or build it with `JdbcClient.create(jdbcTemplate)` during a gradual migration. Map `query` → `sql(...).param(...).query(...).list()` (or `.query(Class).list()`), `queryForObject` for a single row → `query(...).optional()` or `query(Class).single()`, `update` → `sql(...).param(...).update()`. Keep `JdbcTemplate` only for `batchUpdate`, `KeyHolder` inserts, or `RowCallbackHandler` until you refactor those call sites.
 
 **Good example:**
 
@@ -1160,6 +1160,6 @@ class BatchImportService {
 - **TRANSACTION-TEMPLATE**: Prefer `TransactionTemplate` over raw `PlatformTransactionManager` for programmatic transactions; always use `executeWithoutResult` or `execute` to avoid manual commit/rollback pairing
 - **SINGLE-ROW SAFETY**: Use `optional()` or `stream().findFirst()` for entity lookups; reserve `queryForObject` for aggregate functions that always return one row
 - **EXCEPTION TRANSLATION**: Catch `DuplicateKeyException` / `DataIntegrityViolationException` at the service layer and wrap in meaningful domain exceptions
-- **COMPATIBILITY**: `JdbcClient` requires Spring Framework 6.1+ — verify dependency versions before recommending migration
+- **COMPATIBILITY**: `JdbcClient` requires Spring Framework 7+ — verify dependency versions before recommending migration
 - **INCREMENTAL SAFETY**: Change data-access code in small steps, covered by `@JdbcTest` slice tests
 - **TESTING**: Exercise refactored JDBC code with `@JdbcTest` integration tests; do not rely on `./mvnw compile` alone to verify correctness

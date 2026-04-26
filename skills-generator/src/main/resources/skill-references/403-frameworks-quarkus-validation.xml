@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt>
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.15.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Quarkus Validation Guidelines</title>
+        <description>Use when you need to design, review, or improve validation in Quarkus applications — including Bean Validation on JAX-RS resources, @Valid on parameters and CDI beans, constraint groups, @ConfigMapping validation, custom constraints, nested DTO validation, and ExceptionMapper-based error mapping.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Quarkus, Jakarta REST, and Bean Validation</role>
+
+    <goal>
+        Ensure Quarkus services validate inputs at boundaries, keep validation rules declarative and testable, and return consistent client-safe validation error responses. Align with `@402-frameworks-quarkus-rest` for HTTP semantics and Problem Details on validation failures.
+    </goal>
+
+    <constraints>
+        <constraints-description>
+            Before applying recommendations, ensure the project compiles.
+            Compilation failure is a blocking condition.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**SAFETY**: If compilation fails, stop immediately</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+        </constraint-list>
+    </constraints>
+
+    <examples>
+        <toc auto-generate="true" />
+
+        <example number="1" id="jaxrs-valid-request-body">
+            <example-header>
+                <example-title>JAX-RS request body with @Valid</example-title>
+                <example-subtitle>Bean Validation on resource method parameters</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Apply `@Valid` to the request body parameter so Hibernate Validator runs constraints before your method executes.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.core.MediaType;
+
+@Path("/users")
+@Consumes(MediaType.APPLICATION_JSON)
+public class UserResource {
+    @POST
+    public void create(@Valid CreateUserRequest request) { }
+}
+
+record CreateUserRequest(
+    @NotBlank String username,
+    @NotBlank @Email String email,
+    @NotBlank @Size(min = 8, max = 128) String password
+) { }]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[@POST
+public void create(CreateUserRequest request) {
+    if (request.email() == null) throw new IllegalArgumentException("bad");
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="2" id="quarkus-path-query-constraints">
+            <example-header>
+                <example-title>Path and query parameter constraints</example-title>
+                <example-subtitle>@PathParam / @QueryParam with @Min, @Pattern</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Validate primitive and String parameters directly on resource methods. Quarkus validates these when the `quarkus-hibernate-validator` extension is present and validation is enabled for the resource.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
+import jakarta.ws.rs.*;
+
+@Path("/items")
+public class ItemResource {
+    @GET
+    @Path("{id}")
+    public String get(@PathParam("id") @Pattern(regexp = "^[a-z0-9-]+$") String id) {
+        return id;
+    }
+
+    @GET
+    public String list(@QueryParam("page") @Min(0) int page,
+                         @QueryParam("size") @Min(1) @Max(100) int size) {
+        return page + ":" + size;
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[@GET
+@Path("{id}")
+public String get(@PathParam("id") String id) {
+    return id;
+}
+// No format or bounds validation]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="quarkus-config-mapping-valid">
+            <example-header>
+                <example-title>@ConfigMapping with validation</example-title>
+                <example-subtitle>Fail-fast configuration with Bean Validation constraints</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use SmallRye Config `@ConfigMapping` with Bean Validation constraints on mapping methods so invalid `application.properties` fails at startup. Pairs with `@401-frameworks-quarkus-core`.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.smallrye.config.ConfigMapping;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+
+@ConfigMapping(prefix = "app.api")
+interface ApiConfig {
+    @NotBlank
+    String baseUrl();
+
+    @Min(1)
+    @Max(600)
+    int timeoutSeconds();
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[@ConfigMapping(prefix = "app.api")
+interface ApiConfig {
+    String baseUrl();
+    int timeoutSeconds();
+}
+// Negative timeout accepted until first HTTP call]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="quarkus-nested-valid">
+            <example-header>
+                <example-title>Nested and list validation</example-title>
+                <example-subtitle>@Valid on nested types and container elements</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Cascade validation to nested records and to each list element using `@Valid` and `List<@NotNull @Valid Item>`.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+import java.util.List;
+
+public record OrderRequest(
+    @NotNull @Valid Address shipping,
+    @NotEmpty List<@NotNull @Valid LineItem> lines
+) { }
+
+record Address(@NotNull @Size(max = 200) String street) { }
+
+record LineItem(
+    @NotNull @Size(min = 1, max = 64) String sku,
+    @Positive int qty
+) { }]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[public record OrderRequest(Address shipping, List<LineItem> lines) { }
+// Missing @Valid: nested constraints ignored]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="5" id="quarkus-validation-exception-mapper">
+            <example-header>
+                <example-title>ExceptionMapper for validation failures</example-title>
+                <example-subtitle>Map ConstraintViolationException to HTTP 400 + stable JSON</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Quarkus with `quarkus-hibernate-validator` automatically returns a JSON body for validation failures on JAX-RS resources. For full control over the error shape (e.g. RFC 7807 Problem Details or project-wide structure), provide a `@Provider` `ExceptionMapper` that overrides the default. Use `.toList()` (Java 16+) instead of `Collectors.toList()`.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import jakarta.validation.ConstraintViolationException;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.ExceptionMapper;
+import jakarta.ws.rs.ext.Provider;
+
+@Provider
+public class ConstraintViolationMapper implements ExceptionMapper<ConstraintViolationException> {
+    @Override
+    public Response toResponse(ConstraintViolationException ex) {
+        var messages = ex.getConstraintViolations().stream()
+            .map(v -> v.getPropertyPath() + ": " + v.getMessage())
+            .toList();
+        return Response.status(400)
+            .type(MediaType.APPLICATION_JSON)
+            .entity(java.util.Map.of("error", "VALIDATION_ERROR", "details", messages))
+            .build();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[return Response.status(400).entity(ex.getMessage()).build();
+// Message shape varies; may expose internal property paths]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="6" id="quarkus-custom-constraint">
+            <example-header>
+                <example-title>Class-level custom constraint</example-title>
+                <example-subtitle>Cross-field rules with @Constraint and ConstraintValidator</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Reuse cross-field rules (date ranges, matching passwords) as a single annotation on a type.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import jakarta.validation.Constraint;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+import jakarta.validation.Payload;
+import java.lang.annotation.*;
+
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = SamePasswords.Validator.class)
+@interface SamePasswords {
+    String message() default "passwords must match";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
+
+    class Validator implements ConstraintValidator<SamePasswords, PasswordForm> {
+        @Override
+        public boolean isValid(PasswordForm v, ConstraintValidatorContext ctx) {
+            if (v == null) return true;
+            return java.util.Objects.equals(v.password(), v.confirmPassword());
+        }
+    }
+}
+
+@SamePasswords
+record PasswordForm(String password, String confirmPassword) { }]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[if (!a.equals(b)) throw new IllegalArgumentException("mismatch");
+// Duplicated across resources]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>**ANALYZE** JAX-RS resources and config mappings for missing `@Valid`, missing cascades, and inconsistent 400 bodies</output-format-item>
+            <output-format-item>**APPLY** Bean Validation at REST boundaries; add `@Provider` mappers for validation exceptions</output-format-item>
+            <output-format-item>**ALIGN** error responses with Problem Details or project-standard JSON from `@402-frameworks-quarkus-rest`</output-format-item>
+            <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>Do not skip `@Valid` on constrained request bodies</safeguards-item>
+            <safeguards-item>Do not return stack traces or raw Hibernate Validator messages that expose internals</safeguards-item>
+            <safeguards-item>Test reactive and classic REST stacks if both exist in the repo</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>
