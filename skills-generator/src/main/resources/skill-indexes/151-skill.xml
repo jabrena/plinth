@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.15.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to set up JMeter performance testing for a Java project — including creating the run-jmeter.sh script from the exact template, configuring load tests with loops, threads, and ramp-up, or running performance tests from the project root with custom or default settings.</description>
+    <description>Use when you need to set up JMeter performance testing for a Java project — including creating the run-jmeter.sh script from the exact template, configuring load tests with loops, threads, and ramp-up, or running performance tests from the project root with custom or default settings. This should trigger for requests such as Improve the code with JMeter performance testing; Apply JMeter performance testing; Refactor the code with JMeter performance testing; Add JMeter support.</description>
   </metadata>
 
   <title>Run performance tests based on JMeter</title>
@@ -31,6 +31,8 @@ Provide a complete JMeter performance testing solution by creating the run-jmete
       <constraint>**CRITICAL**: Copy the run-jmeter.sh template exactly — do not modify, interpret, or enhance</constraint>
       <constraint>**PERMISSION**: Make the script executable with `chmod +x run-jmeter.sh`</constraint>
       <constraint>**BEFORE APPLYING**: Read the reference for the exact script template and usage instructions</constraint>
+      <constraint>**EDGE CASE**: If request scope is ambiguous, stop and ask a clarifying question before applying changes</constraint>
+      <constraint>**EDGE CASE**: If required inputs, files, or tooling are missing, report what is missing and ask whether to proceed with setup guidance</constraint>
     </constraint-list>
   </constraints>
 

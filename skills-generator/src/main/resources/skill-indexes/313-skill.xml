@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.15.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to add or review Flyway database migrations in a Spring Boot application — Maven dependencies, db/migration scripts, spring.flyway.* configuration, baseline and validation, and alignment with JDBC or Spring Data JDBC.</description>
+    <description>Use when you need to add or review Flyway database migrations in a Spring Boot application — Maven dependencies, db/migration scripts, spring.flyway.* configuration, baseline and validation, and alignment with JDBC or Spring Data JDBC. This should trigger for requests such as Add or review Flyway migrations in a Spring Boot project; Configure spring.flyway or db/migration layout.</description>
   </metadata>
 
   <title>Spring — Database migrations (Flyway)</title>
@@ -32,6 +32,9 @@ Apply Flyway migration guidelines for Spring Boot.
       <constraint>**SAFETY**: If compilation fails, stop immediately</constraint>
       <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
       <constraint>**BEFORE APPLYING**: Read the reference for detailed rules and good/bad patterns</constraint>
+      <constraint>**EDGE CASE**: If the user goal is ambiguous, stop and ask a clarifying question before editing files or running project-wide commands</constraint>
+      <constraint>**EDGE CASE**: If required context, files, credentials, or tools are missing, report the blocker explicitly and ask whether to proceed with setup or fallback guidance</constraint>
+      <constraint>**EDGE CASE**: If requested changes conflict with project constraints or safety boundaries, explain the conflict and ask for user confirmation on the preferred trade-off</constraint>
     </constraint-list>
   </constraints>
 

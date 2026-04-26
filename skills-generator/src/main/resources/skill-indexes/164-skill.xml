@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.15.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to verify Java performance optimizations by comparing profiling results before and after refactoring — including baseline validation, post-refactoring report generation, quantitative before/after metrics comparison, side-by-side flamegraph analysis, regression detection, or creating profiling-comparison-analysis and profiling-final-results documentation.</description>
+    <description>Use when you need to verify Java performance optimizations by comparing profiling results before and after refactoring — including baseline validation, post-refactoring report generation, quantitative before/after metrics comparison, side-by-side flamegraph analysis, regression detection, or creating profiling-comparison-analysis and profiling-final-results documentation. This should trigger for requests such as Verify performance fix; Verify the performance; Verify the memory; Verify the threading.</description>
   </metadata>
 
   <title>Java Profiling Workflow / Step 4 / Verify results</title>
@@ -32,6 +32,8 @@ Verify performance optimizations through rigorous before/after comparison: ensur
       <constraint>**VALIDATE**: Ensure both baseline and post-refactoring reports exist and are non-empty before comparison</constraint>
       <constraint>**DOCUMENT**: Record test scenarios and load patterns for reproduction</constraint>
       <constraint>**BEFORE APPLYING**: Read the reference for comparison templates and validation steps</constraint>
+      <constraint>**EDGE CASE**: If request scope is ambiguous, stop and ask a clarifying question before applying changes</constraint>
+      <constraint>**EDGE CASE**: If required inputs, files, or tooling are missing, report what is missing and ask whether to proceed with setup guidance</constraint>
     </constraint-list>
   </constraints>
 

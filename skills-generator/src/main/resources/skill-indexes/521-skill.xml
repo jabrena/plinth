@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.15.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to write unit tests for Micronaut applications — Mockito-first with @ExtendWith(MockitoExtension.class), @MicronautTest with @MockBean, HttpClient @Client("/") assertions, @Property overrides, @ParameterizedTest, and *Test vs *IT naming. For framework-agnostic Java use @131-java-testing-unit-testing.</description>
+    <description>Use when you need to write unit tests for Micronaut applications — Mockito-first with @ExtendWith(MockitoExtension.class), @MicronautTest with @MockBean, HttpClient @Client(/) assertions, @Property overrides, @ParameterizedTest, and *Test vs *IT naming. For framework-agnostic Java use @131-java-testing-unit-testing. This should trigger for requests such as Add or improve unit tests in a Micronaut project; Reduce unnecessary @MicronautTest usage with Mockito-first tests.</description>
   </metadata>
 
   <title>Micronaut Unit Testing</title>
@@ -33,6 +33,8 @@ Apply fast testing strategies for Micronaut: Mockito-first, narrow @MicronautTes
       <constraint>**SAFETY**: If compilation fails, stop immediately</constraint>
       <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
       <constraint>**BEFORE APPLYING**: Read the reference for detailed rules and examples</constraint>
+      <constraint>**EDGE CASE**: If request scope is ambiguous, stop and ask a clarifying question before applying changes</constraint>
+      <constraint>**EDGE CASE**: If required inputs, files, or tooling are missing, report what is missing and ask whether to proceed with setup guidance</constraint>
     </constraint-list>
   </constraints>
 

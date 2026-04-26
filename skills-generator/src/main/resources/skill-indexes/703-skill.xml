@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.15.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to add or review fuzz testing for Java APIs with CATS — including contract-driven negative testing, malformed payload validation, boundary input exploration, CI integration, reproducible failures, and local execution guidance.</description>
+    <description>Use when you need to add or review fuzz testing for Java APIs with CATS — including contract-driven negative testing, malformed payload validation, boundary input exploration, CI integration, reproducible failures, and local execution guidance. This should trigger for requests such as Add fuzz testing to a Java project; Use CATS for API negative testing; Review CI quality gates for API contract robustness; Improve boundary and malformed input test coverage.</description>
   </metadata>
 
   <title>Java fuzz testing with CATS</title>
@@ -33,6 +33,8 @@ Design and implement contract-driven fuzz testing for Java APIs using CATS to un
       <constraint>**MANDATORY**: Regenerate skills with `./mvnw clean install -pl skills-generator` after editing skill XML</constraint>
       <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
       <constraint>**BEFORE APPLYING**: Read the reference for detailed examples, good/bad patterns, and constraints</constraint>
+      <constraint>**EDGE CASE**: If request scope is ambiguous, stop and ask a clarifying question before applying changes</constraint>
+      <constraint>**EDGE CASE**: If required inputs, files, or tooling are missing, report what is missing and ask whether to proceed with setup guidance</constraint>
     </constraint-list>
   </constraints>
 

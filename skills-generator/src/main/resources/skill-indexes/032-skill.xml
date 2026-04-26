@@ -7,7 +7,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.15.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Facilitates conversational discovery to create Architectural Decision Records (ADRs) for non-functional requirements using the ISO/IEC 25010:2023 quality model. Use when the user wants to document quality attributes, NFR decisions, security/performance/scalability architecture, or design systems with measurable quality criteria.</description>
+    <description>Facilitates conversational discovery to create Architectural Decision Records (ADRs) for non-functional requirements using the ISO/IEC 25010:2023 quality model. Use when the user wants to document quality attributes, NFR decisions, security/performance/scalability architecture, or design systems with measurable quality criteria. This should trigger for requests such as Create ADR for Non-functional requirements; Document Non-functional requirements; Capture Non-functional requirements; Generate Non-functional requirements in an ADR.</description>
   </metadata>
 
   <title>Create ADRs for Non-Functional Requirements</title>
@@ -31,8 +31,8 @@ Guide stakeholders through a structured conversation to uncover and document arc
       <constraint>**MUST**: Read the reference template fresh—do not use cached questions</constraint>
       <constraint>**MUST**: Start with challenge-first opening (ISO 25010:2023 quality characteristics)</constraint>
       <constraint>**MUST**: Ask one or two questions at a time; never all at once</constraint>
-      <constraint>**MUST**: Validate summary with user ("Does this accurately capture your quality needs?") before proposing ADR creation</constraint>
-      <constraint>**MUST**: Wait for user to confirm "proceed" before generating the ADR</constraint>
+      <constraint>**MUST**: Validate summary with user (Does this accurately capture your quality needs?) before proposing ADR creation</constraint>
+      <constraint>**MUST**: Wait for user to confirm proceed before generating the ADR</constraint>
     </constraint-list>
   </constraints>
 
@@ -66,7 +66,7 @@ Guide stakeholders through a structured conversation to uncover and document arc
     </step>
     <step number="3">
       <step-title>Generate ADR after explicit confirmation</step-title>
-      <step-content>Only after user confirms "proceed", create the ADR including measurable Quality Metrics and Success Criteria.</step-content>
+      <step-content>Only after user confirms proceed, create the ADR including measurable Quality Metrics and Success Criteria.</step-content>
     </step>
   </steps>
 </prompt>

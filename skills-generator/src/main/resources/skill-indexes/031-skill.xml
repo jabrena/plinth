@@ -7,7 +7,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.15.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Facilitates conversational discovery to create Architectural Decision Records (ADRs) for functional requirements covering CLI, REST/HTTP APIs, or both. Use when the user wants to document command-line or HTTP service architecture, capture functional requirements, create ADRs for CLI or API projects, or design interfaces with documented decisions.</description>
+    <description>Facilitates conversational discovery to create Architectural Decision Records (ADRs) for functional requirements covering CLI, REST/HTTP APIs, or both. Use when the user wants to document command-line or HTTP service architecture, capture functional requirements, create ADRs for CLI or API projects, or design interfaces with documented decisions. This should trigger for requests such as Create ADR for functional requirements; Document functional requirements; Capture functional requirements; Generate functional requirements in an ADR.</description>
   </metadata>
 
   <title>Create ADRs for Functional Requirements (CLI and/or REST API)</title>
@@ -30,8 +30,8 @@ Guide stakeholders through a structured conversation to uncover and document tec
       <constraint>**MANDATORY**: Run `date` before starting to get accurate timestamps for the ADR</constraint>
       <constraint>**MUST**: Read the reference template fresh—do not use cached questions</constraint>
       <constraint>**MUST**: Ask one or two questions at a time; never all at once</constraint>
-      <constraint>**MUST**: Validate summary with user ("Does this accurately capture your requirements?") before proposing ADR creation</constraint>
-      <constraint>**MUST**: Wait for user to confirm "proceed" before generating the ADR</constraint>
+      <constraint>**MUST**: Validate summary with user (Does this accurately capture your requirements?) before proposing ADR creation</constraint>
+      <constraint>**MUST**: Wait for user to confirm proceed before generating the ADR</constraint>
     </constraint-list>
   </constraints>
 
@@ -65,7 +65,7 @@ Guide stakeholders through a structured conversation to uncover and document tec
     </step>
     <step number="3">
       <step-title>Generate ADR after explicit confirmation</step-title>
-      <step-content>Only after user confirms "proceed", generate the ADR document and provide concise next steps.</step-content>
+      <step-content>Only after user confirms proceed, generate the ADR document and provide concise next steps.</step-content>
     </step>
   </steps>
 </prompt>
