@@ -33,6 +33,9 @@ Help teams use **WireMock** effectively for HTTP dependency stubbing with **stab
       <constraint>**CONTRACTS**: Defer OpenAPI document structure and linting to `@701-technologies-openapi`</constraint>
       <constraint>**MANDATORY**: Regenerate skills with `./mvnw clean install -pl skills-generator` after editing skill or system-prompt XML in this repo</constraint>
       <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` before promoting changes</constraint>
+      <constraint>**EDGE CASE**: If the user goal is ambiguous, stop and ask a clarifying question before editing files or running project-wide commands</constraint>
+      <constraint>**EDGE CASE**: If required context, files, credentials, or tools are missing, report the blocker explicitly and ask whether to proceed with setup or fallback guidance</constraint>
+      <constraint>**EDGE CASE**: If requested changes conflict with project constraints or safety boundaries, explain the conflict and ask for user confirmation on the preferred trade-off</constraint>
     </constraint-list>
   </constraints>
 

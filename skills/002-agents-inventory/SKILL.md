@@ -23,6 +23,9 @@ Follow the template exactly without adding or removing sections, rows, or detail
 - **DO NOT** create additional rows beyond what the template defines
 - **DO NOT** add agent entries not explicitly listed in the template
 - **ONLY** use exact wording and structure from the embedded template
+- **EDGE CASE**: If the user goal is ambiguous, stop and ask a clarifying question before editing files or running project-wide commands
+- **EDGE CASE**: If required context, files, credentials, or tools are missing, report the blocker explicitly and ask whether to proceed with setup or fallback guidance
+- **EDGE CASE**: If requested changes conflict with project constraints or safety boundaries, explain the conflict and ask for user confirmation on the preferred trade-off
 
 ## When to use this skill
 

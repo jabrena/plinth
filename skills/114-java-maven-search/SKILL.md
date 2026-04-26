@@ -24,6 +24,9 @@ Verify coordinates against the Search API or repository responses before asserti
 - **VERIFY**: Do not invent GAVs — confirm via Search API or successful GET of metadata/POM
 - **FORMAT**: Always express full coordinates as `groupId:artifactId:version` when a version is fixed
 - **BEFORE APPLYING**: Read the reference for step-by-step workflows, query syntax, and URL patterns
+- **EDGE CASE**: If the user goal is ambiguous, stop and ask a clarifying question before editing files or running project-wide commands
+- **EDGE CASE**: If required context, files, credentials, or tools are missing, report the blocker explicitly and ask whether to proceed with setup or fallback guidance
+- **EDGE CASE**: If requested changes conflict with project constraints or safety boundaries, explain the conflict and ask for user confirmation on the preferred trade-off
 
 ## When to use this skill
 

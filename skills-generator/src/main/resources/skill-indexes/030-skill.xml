@@ -21,6 +21,15 @@ Generate Architecture Decision Records (ADRs) for Java projects through an inter
 - MADR template generation
 ]]></goal>
 
+  <constraints>
+    <constraints-description>Handle ambiguity and blockers explicitly to avoid implicit assumptions.</constraints-description>
+    <constraint-list>
+      <constraint>**EDGE CASE**: If the user goal is ambiguous, stop and ask a clarifying question before editing files or running project-wide commands</constraint>
+      <constraint>**EDGE CASE**: If required context, files, credentials, or tools are missing, report the blocker explicitly and ask whether to proceed with setup or fallback guidance</constraint>
+      <constraint>**EDGE CASE**: If requested changes conflict with project constraints or safety boundaries, explain the conflict and ask for user confirmation on the preferred trade-off</constraint>
+    </constraint-list>
+  </constraints>
+
   <triggers>
     <trigger-list>
         <trigger>Generate ADR</trigger>

@@ -7,7 +7,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.15.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to add or evaluate Maven dependencies that improve code quality — including nullness annotations (JSpecify), static analysis (Error Prone + NullAway), functional programming (VAVR), or architecture testing (ArchUnit) — and want a consultative, question-driven approach that adds only what you actually need.</description>
+    <description>Use when you need to add or evaluate Maven dependencies that improve code quality — including nullness annotations (JSpecify), static analysis (Error Prone + NullAway), functional programming (VAVR), or architecture testing (ArchUnit) — and want a consultative, question-driven approach that adds only what you actually need. This should trigger for requests such as Add Maven dependencies; Add JSpecify nullness dependencies; Add Error Prone NullAway dependencies; Add VAVR functional dependencies; Add ArchUnit architecture testing dependencies.</description>
   </metadata>
 
   <title>Add Maven dependencies for improved code quality</title>

@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.15.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to refactor Java code to adopt modern Java features (Java 8+) — including migrating anonymous classes to lambdas, replacing Iterator loops with Stream API, adopting Optional for null safety, switching from legacy Date/Calendar to java.time, using collection factory methods, applying text blocks, var inference, or leveraging Java 25 features like flexible constructor bodies and module import declarations.</description>
+    <description>Use when you need to refactor Java code to adopt modern Java features (Java 8+) — including migrating anonymous classes to lambdas, replacing Iterator loops with Stream API, adopting Optional for null safety, switching from legacy Date/Calendar to java.time, using collection factory methods, applying text blocks, var inference, or leveraging Java 25 features like flexible constructor bodies and module import declarations. This should trigger for requests such as Review Java code for modern Java development; Apply best practices for modern Java development in Java code.</description>
   </metadata>
 
   <title>Modern Java Development Guidelines (Java 8+)</title>
@@ -35,6 +35,8 @@ Identify and apply modern Java (Java 8+) refactoring opportunities to improve re
       <constraint>**SAFETY**: If compilation fails, stop immediately — do not proceed until the project compiles successfully</constraint>
       <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
       <constraint>**BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each modern Java feature</constraint>
+      <constraint>**EDGE CASE**: If request scope is ambiguous, stop and ask a clarifying question before applying changes</constraint>
+      <constraint>**EDGE CASE**: If required inputs, files, or tooling are missing, report what is missing and ask whether to proceed with setup guidance</constraint>
     </constraint-list>
   </constraints>
 

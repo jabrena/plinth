@@ -1,6 +1,6 @@
 ---
 name: 302-frameworks-spring-boot-rest
-description: Use when you need to design, review, or improve REST APIs with Spring Boot — including HTTP methods, resource URIs, status codes, DTOs, versioning, deprecation and sunset headers, content negotiation (JSON and vendor media types), ISO-8601 instants in DTOs, pagination/sorting/filtering, Bean Validation at the boundary, idempotency, ETag concurrency, HTTP caching, error handling, security, contract-first OpenAPI (OpenAPI Generator), controller advice, and problem details for errors. Part of cursor-rules-java project
+description: Use when you need to design, review, or improve REST APIs with Spring Boot — including HTTP methods, resource URIs, status codes, DTOs, versioning, deprecation and sunset headers, content negotiation (JSON and vendor media types), ISO-8601 instants in DTOs, pagination/sorting/filtering, Bean Validation at the boundary, idempotency, ETag concurrency, HTTP caching, error handling, security, contract-first OpenAPI (OpenAPI Generator), controller advice, and problem details for errors. This should trigger for requests such as Review Java code for Spring Boot REST API; Apply best practices for Spring Boot REST API in Java code. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -40,6 +40,8 @@ Before applying any REST API changes, ensure the project compiles. If compilatio
 - **SAFETY**: If compilation fails, stop immediately
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 - **BEFORE APPLYING**: Read the reference for detailed rules and good/bad patterns
+- **EDGE CASE**: If request scope is ambiguous, stop and ask a clarifying question before applying changes
+- **EDGE CASE**: If required inputs, files, or tooling are missing, report what is missing and ask whether to proceed with setup guidance
 
 ## When to use this skill
 

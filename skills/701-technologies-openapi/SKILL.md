@@ -30,6 +30,9 @@ Keep recommendations at the OpenAPI layer unless the user explicitly asks for Ja
 - **FUZZING**: Keep fuzzing guidance high-level and contract-focused without linking to external skill identifiers
 - **MANDATORY**: Regenerate skills with `./mvnw clean install -pl skills-generator` after editing skill or system-prompt XML in this repo
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` before promoting changes
+- **EDGE CASE**: If the user goal is ambiguous, stop and ask a clarifying question before editing files or running project-wide commands
+- **EDGE CASE**: If required context, files, credentials, or tools are missing, report the blocker explicitly and ask whether to proceed with setup or fallback guidance
+- **EDGE CASE**: If requested changes conflict with project constraints or safety boundaries, explain the conflict and ask for user confirmation on the preferred trade-off
 
 ## When to use this skill
 
