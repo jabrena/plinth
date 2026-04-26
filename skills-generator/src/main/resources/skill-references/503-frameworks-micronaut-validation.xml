@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt>
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.15.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Micronaut Validation Guidelines</title>
+        <description>Use when you need to design, review, or improve validation in Micronaut applications — including Bean Validation annotations, @Valid at controller boundaries, custom constraints, and predictable validation error responses.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Micronaut and Jakarta Bean Validation</role>
+
+    <goal>
+        Ensure Micronaut APIs validate inputs at boundaries, enforce clear constraint rules, and return stable validation error responses without leaking implementation details.
+    </goal>
+
+    <constraints>
+        <constraints-description>
+            Before applying recommendations, ensure the project compiles.
+            Compilation failure is a blocking condition.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**SAFETY**: If compilation fails, stop immediately</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+        </constraint-list>
+    </constraints>
+
+    <examples>
+        <toc auto-generate="true" />
+        <example number="1" id="micronaut-boundary-validation">
+            <example-header>
+                <example-title>Validate input using @Valid and Bean Validation</example-title>
+                <example-subtitle>Keep constraints in DTOs and validate at controller entry points</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use `@Body @Valid` in controller methods and annotate request DTOs with Jakarta constraints. Avoid manual string checks spread across endpoints.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.http.HttpResponse;
+import io.micronaut.http.annotation.Body;
+import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Post;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+
+@Controller("/users")
+class UserController {
+    @Post
+    HttpResponse<String> create(@Body @Valid CreateUserRequest request) {
+        return HttpResponse.ok("created");
+    }
+}
+
+record CreateUserRequest(@NotBlank String username, @Email String email) { }]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[@Controller("/users")
+class BadUserController {
+    @Post
+    String create(@Body CreateUserRequest request) {
+        if (request.email() == null || !request.email().contains("@")) {
+            throw new IllegalArgumentException("invalid email");
+        }
+        return "created";
+    }
+}
+record CreateUserRequest(String username, String email) { }]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>**ANALYZE** missing validation at controller and service boundaries</output-format-item>
+            <output-format-item>**APPLY** Bean Validation rules with `@Valid` / custom constraints where needed</output-format-item>
+            <output-format-item>**STANDARDIZE** validation error response handling</output-format-item>
+            <output-format-item>**VALIDATE** with compile and full verification commands</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>Do not rely on ad-hoc per-endpoint checks as the primary validation strategy</safeguards-item>
+            <safeguards-item>Do not expose internal exception details to API clients</safeguards-item>
+            <safeguards-item>Prefer incremental changes and re-verify frequently</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>

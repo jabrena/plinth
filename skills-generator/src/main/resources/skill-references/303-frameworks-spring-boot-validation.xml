@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt>
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.15.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Spring Boot Validation Guidelines</title>
+        <description>Use when you need to design, review, or improve validation in Spring Boot applications — including Bean Validation on request DTOs, @Valid/@Validated at API boundaries, custom constraints, method validation, and consistent validation error handling.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Spring Boot and Jakarta Bean Validation</role>
+
+    <goal>
+        Enforce validation at the boundaries of Spring Boot applications so invalid input is rejected early, errors are predictable for clients, and domain/service layers receive valid data. Prefer declarative Bean Validation annotations and centralized error handling over ad-hoc if/else checks in controllers.
+    </goal>
+
+    <constraints>
+        <constraints-description>
+            Before applying recommendations, ensure the project compiles.
+            Compilation failure is a blocking condition.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**SAFETY**: If compilation fails, stop immediately</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+        </constraint-list>
+    </constraints>
+
+    <examples>
+        <toc auto-generate="true" />
+        <example number="1" id="boundary-validation-with-valid">
+            <example-header>
+                <example-title>Validate request DTOs at the boundary</example-title>
+                <example-subtitle>Use Bean Validation annotations and `@Valid` in controllers</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Keep validation declarative in DTOs and controller signatures. Return structured 400 responses for violations through centralized exception handling.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/users")
+class UserController {
+    @PostMapping
+    ResponseEntity<String> create(@Valid @RequestBody CreateUserRequest request) {
+        return ResponseEntity.ok("created");
+    }
+}
+
+record CreateUserRequest(
+    @NotBlank String username,
+    @Email String email,
+    @Size(min = 8, max = 128) String password
+) { }]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[@RestController
+class BadUserController {
+    @PostMapping("/users")
+    String create(@RequestBody CreateUserRequest request) {
+        if (request.email() == null || !request.email().contains("@")) {
+            throw new IllegalArgumentException("bad email");
+        }
+        return "created";
+    }
+}
+record CreateUserRequest(String username, String email, String password) { }]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>**ANALYZE** controller and service boundaries for missing or inconsistent validation</output-format-item>
+            <output-format-item>**APPLY** declarative Bean Validation rules with `@Valid` / `@Validated` and custom constraints where needed</output-format-item>
+            <output-format-item>**STANDARDIZE** validation error responses with centralized exception handling</output-format-item>
+            <output-format-item>**VALIDATE** with compile and full verification commands</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>Do not bypass boundary validation in public API endpoints</safeguards-item>
+            <safeguards-item>Do not leak internal exception details in validation responses</safeguards-item>
+            <safeguards-item>Prefer small and incremental validation refactors</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>

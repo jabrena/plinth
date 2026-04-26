@@ -215,6 +215,16 @@
             <reference>302-frameworks-spring-boot-rest</reference>
         </reference-list>
     </skill>
+    <skill id="303" xml="true">
+        <reference-list>
+            <reference>303-frameworks-spring-boot-validation</reference>
+        </reference-list>
+    </skill>
+    <skill id="304" xml="true">
+        <reference-list>
+            <reference>304-frameworks-spring-boot-security</reference>
+        </reference-list>
+    </skill>
     <skill id="311" xml="true">
         <reference-list>
             <reference>311-frameworks-spring-jdbc</reference>
@@ -255,6 +265,16 @@
             <reference>402-frameworks-quarkus-rest</reference>
         </reference-list>
     </skill>
+    <skill id="403" xml="true">
+        <reference-list>
+            <reference>403-frameworks-quarkus-validation</reference>
+        </reference-list>
+    </skill>
+    <skill id="404" xml="true">
+        <reference-list>
+            <reference>404-frameworks-quarkus-security</reference>
+        </reference-list>
+    </skill>
     <skill id="411" xml="true">
         <reference-list>
             <reference>411-frameworks-quarkus-jdbc</reference>
@@ -293,6 +313,16 @@
     <skill id="502" xml="true">
         <reference-list>
             <reference>502-frameworks-micronaut-rest</reference>
+        </reference-list>
+    </skill>
+    <skill id="503" xml="true">
+        <reference-list>
+            <reference>503-frameworks-micronaut-validation</reference>
+        </reference-list>
+    </skill>
+    <skill id="504" xml="true">
+        <reference-list>
+            <reference>504-frameworks-micronaut-security</reference>
         </reference-list>
     </skill>
     <skill id="511" xml="true">
