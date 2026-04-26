@@ -135,6 +135,7 @@ Java uses JEPs (JDK Enhancement Proposals) to describe new language and platform
 - [https://github.com/vercel-labs/skills/issues](https://github.com/vercel-labs/skills/issues)
 - [https://openjdk.org/jeps/0](https://openjdk.org/jeps/0)
 - [https://jbake.org/docs/latest/](https://jbake.org/docs/latest/)
+- https://developers.redhat.com/blog/2016/12/09/spring-cloud-for-microservices-compared-to-kubernetes
 
 ## Other developments
 
