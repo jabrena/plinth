@@ -1,6 +1,6 @@
 ---
 name: 504-frameworks-micronaut-security
-description: Use when you need to design, review, or improve security in Micronaut applications — including authentication, authorization with security annotations, endpoint protection, secure defaults, and sensitive-data-safe logging/error handling. This should trigger for requests such as Add Micronaut security support; Review Micronaut security configuration; Improve API authorization in Micronaut. Part of cursor-rules-java project
+description: Use when you need to design, review, or improve security in Micronaut applications — including micronaut-security authentication, @Secured and intercept-url-map rules, JWT/session strategies, SecurityService checks, CORS, CSRF awareness for browser apps, rejection handlers, and sensitive-data-safe logging. This should trigger for requests such as Add Micronaut security support; Review Micronaut security configuration; Improve API authorization in Micronaut; Add JWT security in Micronaut; Harden Micronaut route authorization rules. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -35,6 +35,9 @@ Before applying security changes, ensure the project compiles. After improvement
 - Add Micronaut security support
 - Review Micronaut security configuration
 - Improve API authorization in Micronaut
+- Add JWT security in Micronaut
+- Harden Micronaut route authorization rules
+- Implement @Secured policies in Micronaut controllers
 
 ## Workflow
 

@@ -1,6 +1,6 @@
 ---
 name: 304-frameworks-spring-boot-security
-description: Use when you need to design, review, or improve security in Spring Boot applications — including Spring Security filter chain, authentication and authorization, endpoint protection, method security, secure defaults, and sensitive-data-safe logging/error handling. This should trigger for requests such as Add Spring Boot security support; Review Spring Boot security configuration; Improve API authorization in Spring Boot. Part of cursor-rules-java project
+description: Use when you need to design, review, or improve security in Spring Boot applications — including SecurityFilterChain, OAuth2/JWT resource server patterns, form login basics, method security (@PreAuthorize), CSRF and CORS for APIs, session fixation, security headers, exception handling, password encoding, and sensitive-data-safe logging. This should trigger for requests such as Add Spring Boot security support; Review Spring Boot security configuration; Improve API authorization in Spring Boot; Add JWT resource server security in Spring Boot; Harden Spring Boot security headers and CSRF settings. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -35,6 +35,9 @@ Before applying security changes, ensure the project compiles. After improvement
 - Add Spring Boot security support
 - Review Spring Boot security configuration
 - Improve API authorization in Spring Boot
+- Add JWT resource server security in Spring Boot
+- Harden Spring Boot security headers and CSRF settings
+- Implement method security with @PreAuthorize in Spring Boot
 
 ## Workflow
 

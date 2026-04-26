@@ -1,6 +1,6 @@
 ---
 name: 404-frameworks-quarkus-security
-description: Use when you need to design, review, or improve security in Quarkus applications — including authentication, authorization annotations, endpoint protection, secure defaults, exception mapping, and sensitive-data-safe logging/error handling. This should trigger for requests such as Add Quarkus security support; Review Quarkus security configuration; Improve API authorization in Quarkus. Part of cursor-rules-java project
+description: Use when you need to design, review, or improve security in Quarkus applications — including Quarkus Security with JWT/OIDC, basic auth, @RolesAllowed / @Authenticated / @PermitAll, SecurityIdentity, permission checks, path-based authorization in configuration, exception mapping for auth failures, and sensitive-data-safe logging. This should trigger for requests such as Add Quarkus security support; Review Quarkus security configuration; Improve API authorization in Quarkus; Add JWT/OIDC security in Quarkus; Harden Quarkus authorization rules. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -35,6 +35,9 @@ Before applying security changes, ensure the project compiles. After improvement
 - Add Quarkus security support
 - Review Quarkus security configuration
 - Improve API authorization in Quarkus
+- Add JWT/OIDC security in Quarkus
+- Harden Quarkus authorization rules
+- Implement SecurityIdentity checks in Quarkus services
 
 ## Workflow
 
