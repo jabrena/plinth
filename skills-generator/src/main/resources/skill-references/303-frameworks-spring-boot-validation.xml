@@ -149,7 +149,7 @@ record ItemRequest(String id, String name) { }]]></code-block>
             </example-header>
             <example-description>
                 <![CDATA[
-                For simple handler parameters on Spring Framework 6.1+, put Jakarta constraints directly on method parameters and let Spring MVC method validation raise `HandlerMethodValidationException`. Avoid class-level `@Validated` on controllers unless you intentionally need the older AOP-based validation path.
+                For simple handler parameters on Spring Boot 4+, put Jakarta constraints directly on method parameters and let Spring MVC method validation raise `HandlerMethodValidationException`. Avoid class-level `@Validated` on controllers unless you intentionally need the older AOP-based validation path.
                 ]]>
             </example-description>
             <code-examples>
@@ -324,7 +324,7 @@ record PasswordForm(
             </example-header>
             <example-description>
                 <![CDATA[
-                Map all validation failure types to HTTP 400 with a stable JSON shape. `MethodArgumentNotValidException` fires for `@Valid @RequestBody`; `HandlerMethodValidationException` (Spring 6.1+) covers MVC handler method-parameter validation; `ConstraintViolationException` still appears in older AOP-based `@Validated` flows and non-MVC validation paths. Never return raw `BindingResult` stack traces or exception messages that leak internals.
+                Map all validation failure types to HTTP 400 with a stable JSON shape. `MethodArgumentNotValidException` fires for `@Valid @RequestBody`; `HandlerMethodValidationException` (Spring Boot 4+) covers MVC handler method-parameter validation; `ConstraintViolationException` still appears in older AOP-based `@Validated` flows and non-MVC validation paths. Never return raw `BindingResult` stack traces or exception messages that leak internals.
                 ]]>
             </example-description>
             <code-examples>
@@ -387,7 +387,7 @@ String bad(MethodArgumentNotValidException ex) {
         <output-format-list>
             <output-format-item>**ANALYZE** controllers and configuration beans for missing `@Valid`, missing `@Validated`, wrong groups, and uncascaded nested DTOs</output-format-item>
             <output-format-item>**CATEGORIZE** findings: boundary (HTTP), configuration startup, custom constraints, error response consistency</output-format-item>
-            <output-format-item>**APPLY** declarative Bean Validation; add `@ControllerAdvice` mapping for `MethodArgumentNotValidException`, `ConstraintViolationException`, and `HandlerMethodValidationException` (Spring 6.1+) as appropriate</output-format-item>
+            <output-format-item>**APPLY** declarative Bean Validation; add `@ControllerAdvice` mapping for `MethodArgumentNotValidException`, `ConstraintViolationException`, and `HandlerMethodValidationException` (Spring Boot 4+) as appropriate</output-format-item>
             <output-format-item>**STANDARDIZE** validation error payloads with RFC 7807 or a stable internal schema aligned with `@302-frameworks-spring-boot-rest`</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
         </output-format-list>

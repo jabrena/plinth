@@ -146,7 +146,7 @@ record ItemRequest(String id, String name) { }
 ### Example 3: Path and query parameter validation
 
 Title: @Min, @Max, @Pattern on @PathVariable and @RequestParam
-Description: For simple handler parameters on Spring Framework 6.1+, put Jakarta constraints directly on method parameters and let Spring MVC method validation raise `HandlerMethodValidationException`. Avoid class-level `@Validated` on controllers unless you intentionally need the older AOP-based validation path.
+Description: For simple handler parameters on Spring Boot 4+, put Jakarta constraints directly on method parameters and let Spring MVC method validation raise `HandlerMethodValidationException`. Avoid class-level `@Validated` on controllers unless you intentionally need the older AOP-based validation path.
 
 **Good example:**
 
@@ -309,7 +309,7 @@ void register(String password, String confirm) {
 ### Example 7: Centralized validation error mapping
 
 Title: @ControllerAdvice for MethodArgumentNotValidException, ConstraintViolationException, and HandlerMethodValidationException
-Description: Map all validation failure types to HTTP 400 with a stable JSON shape. `MethodArgumentNotValidException` fires for `@Valid @RequestBody`; `HandlerMethodValidationException` (Spring 6.1+) covers MVC handler method-parameter validation; `ConstraintViolationException` still appears in older AOP-based `@Validated` flows and non-MVC validation paths. Never return raw `BindingResult` stack traces or exception messages that leak internals.
+Description: Map all validation failure types to HTTP 400 with a stable JSON shape. `MethodArgumentNotValidException` fires for `@Valid @RequestBody`; `HandlerMethodValidationException` (Spring Boot 4+) covers MVC handler method-parameter validation; `ConstraintViolationException` still appears in older AOP-based `@Validated` flows and non-MVC validation paths. Never return raw `BindingResult` stack traces or exception messages that leak internals.
 
 **Good example:**
 
@@ -372,7 +372,7 @@ String bad(MethodArgumentNotValidException ex) {
 
 - **ANALYZE** controllers and configuration beans for missing `@Valid`, missing `@Validated`, wrong groups, and uncascaded nested DTOs
 - **CATEGORIZE** findings: boundary (HTTP), configuration startup, custom constraints, error response consistency
-- **APPLY** declarative Bean Validation; add `@ControllerAdvice` mapping for `MethodArgumentNotValidException`, `ConstraintViolationException`, and `HandlerMethodValidationException` (Spring 6.1+) as appropriate
+- **APPLY** declarative Bean Validation; add `@ControllerAdvice` mapping for `MethodArgumentNotValidException`, `ConstraintViolationException`, and `HandlerMethodValidationException` (Spring Boot 4+) as appropriate
 - **STANDARDIZE** validation error payloads with RFC 7807 or a stable internal schema aligned with `@302-frameworks-spring-boot-rest`
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
 
