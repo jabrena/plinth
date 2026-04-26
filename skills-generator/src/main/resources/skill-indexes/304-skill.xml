@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="304-frameworks-spring-boot-security">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.15.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need to design, review, or improve security in Spring Boot applications — including SecurityFilterChain, OAuth2/JWT resource server patterns, form login basics, method security (@PreAuthorize), CSRF and CORS for APIs, session fixation, security headers, exception handling, password encoding, and sensitive-data-safe logging. This should trigger for requests such as Add Spring Boot security support; Review Spring Boot security configuration; Improve API authorization in Spring Boot; Add JWT resource server security in Spring Boot; Harden Spring Boot security headers and CSRF settings.</description>
+  </metadata>
+
+  <title>Spring Boot Security Guidelines</title>
+  <goal><![CDATA[
+Apply Spring Boot security best practices with secure-by-default API boundaries.
+
+**What is covered in this Skill?**
+
+- Spring Security configuration and SecurityFilterChain setup
+- Authentication and authorization policies for endpoints
+- Method-level security (@PreAuthorize / @Secured)
+- Principle of least privilege for roles and scopes
+- Secure error handling and denial responses
+- Sensitive data handling in logs and responses
+
+**Scope:** Apply recommendations based on the reference rules and good/bad examples.
+]]></goal>
+
+  <constraints>
+    <constraints-description>Before applying security changes, ensure the project compiles. After improvements, run full verification.</constraints-description>
+    <constraint-list>
+      <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+      <constraint>**SAFETY**: If compilation fails, stop immediately</constraint>
+      <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+      <constraint>**BEFORE APPLYING**: Read the reference for detailed rules and examples</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+        <trigger>Add Spring Boot security support</trigger>
+        <trigger>Review Spring Boot security configuration</trigger>
+        <trigger>Improve API authorization in Spring Boot</trigger>
+        <trigger>Add JWT resource server security in Spring Boot</trigger>
+        <trigger>Harden Spring Boot security headers and CSRF settings</trigger>
+        <trigger>Implement method security with @PreAuthorize in Spring Boot</trigger>
+    </trigger-list>
+  </triggers>
+
+  <steps>
+    <step number="1"><step-title>Read reference and assess project context</step-title><step-content>Read `references/304-frameworks-spring-boot-security.md` and inspect the current project setup before proposing changes.</step-content></step>
+    <step number="2"><step-title>Gather scope and decide target improvements</step-title><step-content>Identify requested outcomes, constraints, and the minimum safe set of changes to apply.</step-content></step>
+    <step number="3"><step-title>Apply framework-aligned changes</step-title><step-content>Implement or refactor security-related configuration/code following the reference patterns and project conventions.</step-content></step>
+    <step number="4"><step-title>Run verification and report results</step-title><step-content>Execute appropriate build/tests and summarize what changed, what was verified, and any follow-up actions.</step-content></step>
+  </steps>
+</prompt>

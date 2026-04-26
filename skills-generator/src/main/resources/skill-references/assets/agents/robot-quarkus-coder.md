@@ -24,6 +24,8 @@ Apply guidance from these Skills when relevant:
 
 - `@401-frameworks-quarkus-core`: Quarkus core
 - `@402-frameworks-quarkus-rest`: Quarkus REST APIs
+- `@403-frameworks-quarkus-validation`: Quarkus validation (Bean Validation, custom constraints, error mapping)
+- `@404-frameworks-quarkus-security`: Quarkus security (authn/authz annotations, endpoint protection, secure defaults)
 - `@411-frameworks-quarkus-jdbc`: Quarkus JDBC
 - `@412-frameworks-quarkus-panache`: Quarkus Panache
 - `@413-frameworks-quarkus-db-migrations-flyway`: Quarkus DB migrations (Flyway)

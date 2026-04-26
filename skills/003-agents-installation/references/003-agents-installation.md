@@ -262,6 +262,8 @@ Apply guidance from these Skills when relevant:
 
 - `@501-frameworks-micronaut-core`: Micronaut core (bootstrap, DI, config, scheduling, shutdown)
 - `@502-frameworks-micronaut-rest`: Micronaut REST APIs
+- `@503-frameworks-micronaut-validation`: Micronaut validation (Bean Validation, custom constraints, error payloads)
+- `@504-frameworks-micronaut-security`: Micronaut security (authn/authz, endpoint protection, secure defaults)
 - `@511-frameworks-micronaut-jdbc`: programmatic JDBC (DataSource, SQL, transactions)
 - `@512-frameworks-micronaut-data`: Micronaut Data (repositories, entities, generated SQL)
 - `@513-frameworks-micronaut-db-migrations-flyway`: Micronaut DB migrations (Flyway)
@@ -314,6 +316,8 @@ Apply guidance from these Skills when relevant:
 
 - `@401-frameworks-quarkus-core`: Quarkus core
 - `@402-frameworks-quarkus-rest`: Quarkus REST APIs
+- `@403-frameworks-quarkus-validation`: Quarkus validation (Bean Validation, custom constraints, error mapping)
+- `@404-frameworks-quarkus-security`: Quarkus security (authn/authz annotations, endpoint protection, secure defaults)
 - `@411-frameworks-quarkus-jdbc`: Quarkus JDBC
 - `@412-frameworks-quarkus-panache`: Quarkus Panache
 - `@413-frameworks-quarkus-db-migrations-flyway`: Quarkus DB migrations (Flyway)
@@ -366,16 +370,14 @@ Apply guidance from these Skills when relevant:
 
 - `@301-frameworks-spring-boot-core`: Spring Boot core
 - `@302-frameworks-spring-boot-rest`: Spring Boot REST APIs
+- `@303-frameworks-spring-boot-validation`: Spring Boot validation (Bean Validation, groups, custom validators, error responses)
+- `@304-frameworks-spring-boot-security`: Spring Boot security (SecurityFilterChain, authn/authz, secure defaults)
+- `@311-frameworks-spring-jdbc`: Spring JDBC
 - `@312-frameworks-spring-data-jdbc`: Spring Data JDBC
 - `@313-frameworks-spring-db-migrations-flyway`: Flyway database migrations
 - `@142-java-functional-programming`: Functional programming patterns
 - `@143-java-functional-exception-handling`: Exception handling patterns
-- `@130-java-testing-strategies`: Testing Strategies
-- `@301-frameworks-spring-boot-core`: Spring Boot Core
-- `@302-frameworks-spring-boot-rest`: Spring Boot REST
-- `@311-frameworks-spring-jdbc`: Spring Boot JDBC
-- `@312-frameworks-spring-data-jdbc`; Spring Boot Data JDBC
-- `@313-frameworks-spring-db-migrations-flyway`; Spring Boot DB migrations (Flyway)
+- `@130-java-testing-strategies`: Testing strategies
 - `@321-frameworks-spring-boot-testing-unit-tests`: Spring Boot unit testing
 - `@322-frameworks-spring-boot-testing-integration-tests`: Spring Boot integration testing
 - `@323-frameworks-spring-boot-testing-acceptance-tests`: Spring Boot acceptance testing
