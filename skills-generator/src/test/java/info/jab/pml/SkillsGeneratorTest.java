@@ -319,8 +319,8 @@ class SkillsGeneratorTest {
 
     private String appendProjectTagToDescription(String content) {
         return content.lines()
-            .map(line -> line.startsWith("description:") && !line.endsWith(" Part of the skills-for-java project")
-                ? line + " Part of the skills-for-java project"
+            .map(line -> line.startsWith("description:") && !line.endsWith(" Part of cursor-rules-java project")
+                ? line + " Part of cursor-rules-java project"
                 : line)
             .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
     }

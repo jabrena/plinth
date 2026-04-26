@@ -65,3 +65,8 @@ Extract Skills in a directory compatible with your AI Tool like Cursor, Claude C
 ./mvnw skillsjars:extract -Ddir=.claude/skills
 ./mvnw skillsjars:extract -Ddir=.github/skills
 ```
+
+### Using Skill portals
+
+- https://www.awesomeskills.dev/en/skill/jabrena-cursor-rules-java
+- https://shyft.ai/skills/cursor-rules-java

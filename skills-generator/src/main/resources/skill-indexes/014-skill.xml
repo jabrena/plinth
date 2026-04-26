@@ -7,7 +7,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.15.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Guides the creation of agile user stories and Gherkin feature files. Use when the user wants to create a user story, write acceptance criteria, define Gherkin scenarios, or author BDD feature files.</description>
+    <description>Guides the creation of agile user stories and Gherkin feature files. Use when the user wants to create a user story, write acceptance criteria, define Gherkin scenarios, or author BDD feature files. This should trigger for requests such as Create a user story; Write a user story; I need to write a user story.</description>
   </metadata>
 
   <title>Create Agile User Stories and Gherkin Feature Files</title>
