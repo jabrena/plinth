@@ -1,6 +1,6 @@
 ---
 name: 503-frameworks-micronaut-validation
-description: Use when you need to design, review, or improve validation in Micronaut applications — including Bean Validation on @Controller methods, @Body @Valid, query/path parameter validation, @ConfigurationProperties validation, custom constraints, factory-based method validation, nested DTO validation, and ExceptionHandler mapping for constraint violations.
+description: Use when you need to design, review, or improve validation in Micronaut applications — including Bean Validation on @Controller methods, @Body @Valid, query/path parameter validation, @ConfigurationProperties validation, custom constraints, nested DTO validation, and ExceptionHandler mapping for constraint violations.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -32,9 +32,8 @@ Before applying recommendations, ensure the project compiles. Compilation failur
 - Example 2: Query and path parameters
 - Example 3: @ConfigurationProperties validation
 - Example 4: Nested and collection validation
-- Example 5: Service method validation
-- Example 6: ConstraintViolationException handler
-- Example 7: Class-level custom constraint
+- Example 5: ConstraintViolationException handler
+- Example 6: Class-level custom constraint
 
 ### Example 1: Request body validation
 
@@ -174,52 +173,22 @@ public record LineItem(
 
 ```java
 public record OrderRequest(Address shipping, List<LineItem> lines) { }
+// Missing @Valid: nested Address and LineItem constraints are never evaluated
 ```
 
-### Example 5: Service method validation
-
-Title: @Validated singleton with constrained methods
-Description: Apply `io.micronaut.validation.annotation.Validated` to a bean class so method-parameter constraints are enforced when other beans call through the Micronaut proxy (avoid self-invocation bypassing validation).
-
-**Good example:**
-
-```java
-import io.micronaut.validation.annotation.Validated;
-import jakarta.inject.Singleton;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
-
-@Singleton
-@Validated
-class InventoryService {
-    void reserve(@NotBlank String sku, @Positive int quantity) {
-    }
-}
-```
-
-**Bad example:**
-
-```java
-void reserve(String sku, int qty) {
-    if (qty <= 0) throw new IllegalArgumentException();
-}
-```
-
-### Example 6: ConstraintViolationException handler
+### Example 5: ConstraintViolationException handler
 
 Title: Map validation failures to HTTP 400
-Description: Provide an `ExceptionHandler<ConstraintViolationException>` singleton to return consistent JSON for validation errors across controllers.
+Description: Provide an `ExceptionHandler<ConstraintViolationException>` singleton to return consistent JSON for validation errors across controllers. Use `HttpResponse.badRequest(body)` for concise construction and `.toList()` (Java 16+) instead of `Collectors.toList()`.
 
 **Good example:**
 
 ```java
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
-import io.micronaut.http.HttpStatus;
 import io.micronaut.http.server.exceptions.ExceptionHandler;
 import jakarta.inject.Singleton;
 import jakarta.validation.ConstraintViolationException;
-import java.util.stream.Collectors;
 
 @Singleton
 public class ConstraintViolationHandler
@@ -229,9 +198,8 @@ public class ConstraintViolationHandler
     public HttpResponse<?> handle(HttpRequest request, ConstraintViolationException ex) {
         var details = ex.getConstraintViolations().stream()
             .map(v -> v.getPropertyPath() + ": " + v.getMessage())
-            .collect(Collectors.toList());
-        return HttpResponse.status(HttpStatus.BAD_REQUEST)
-            .body(java.util.Map.of("error", "VALIDATION_ERROR", "details", details));
+            .toList();
+        return HttpResponse.badRequest(java.util.Map.of("error", "VALIDATION_ERROR", "details", details));
     }
 }
 ```
@@ -240,10 +208,10 @@ public class ConstraintViolationHandler
 
 ```java
 return HttpResponse.badRequest(ex.getMessage());
-// Unstable message; may expose internal paths
+// Unstable message; may expose internal property paths
 ```
 
-### Example 7: Class-level custom constraint
+### Example 6: Class-level custom constraint
 
 Title: Reuse cross-field rules
 Description: Implement `@Constraint(validatedBy = ...)` for DTO-level rules shared across endpoints.

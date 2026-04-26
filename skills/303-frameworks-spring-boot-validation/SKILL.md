@@ -1,6 +1,6 @@
 ---
 name: 303-frameworks-spring-boot-validation
-description: Use when you need to design, review, or improve validation in Spring Boot applications — including Bean Validation on request DTOs, @Valid/@Validated at API boundaries, constraint groups, custom validators, method-level validation, and consistent validation error responses. This should trigger for requests such as Add validation support in Spring Boot; Review Spring Boot validation rules; Improve request validation in Spring Boot REST APIs. Part of cursor-rules-java project
+description: Use when you need to design, review, or improve validation in Spring Boot applications — including Bean Validation on request DTOs, @Valid/@Validated at API boundaries, constraint groups, custom validators, and consistent validation error responses. This should trigger for requests such as Add validation support in Spring Boot; Review Spring Boot validation rules; Improve request validation in Spring Boot REST APIs. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -8,7 +8,7 @@ metadata:
 ---
 # Spring Boot Validation Guidelines
 
-Apply Spring Boot validation best practices at API and service boundaries.
+Apply Spring Boot validation best practices at API boundaries.
 
 **What is covered in this Skill?**
 
@@ -16,7 +16,6 @@ Apply Spring Boot validation best practices at API and service boundaries.
 - @Valid / @Validated on controllers and method parameters
 - Validation groups for create/update workflows
 - Custom constraint annotations and validators
-- Method-level validation for service contracts
 - Consistent 400 error responses for validation failures
 
 **Scope:** Apply recommendations based on the reference rules and good/bad examples.

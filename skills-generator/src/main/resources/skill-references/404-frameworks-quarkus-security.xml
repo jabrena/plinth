@@ -169,12 +169,13 @@ quarkus.oidc.client-id=api-backend
             </example-header>
             <example-description>
                 <![CDATA[
-                Map `UnauthorizedException`, `ForbiddenException`, and authentication failures to stable JSON or Problem Details. Log server-side details with correlation IDs only.
+                Map both `NotAuthorizedException` (unauthenticated → 401) and `ForbiddenException` (authenticated but lacking role → 403) to stable JSON or Problem Details. Log server-side details with correlation IDs only.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[import jakarta.ws.rs.NotAuthorizedException;
+                    <code-block language="java"><![CDATA[import jakarta.ws.rs.ForbiddenException;
+import jakarta.ws.rs.NotAuthorizedException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
@@ -189,11 +190,22 @@ public class NotAuthorizedMapper implements ExceptionMapper<NotAuthorizedExcepti
             .entity(java.util.Map.of("error", "UNAUTHORIZED"))
             .build();
     }
+}
+
+@Provider
+public class ForbiddenMapper implements ExceptionMapper<ForbiddenException> {
+    @Override
+    public Response toResponse(ForbiddenException ex) {
+        return Response.status(403)
+            .type(MediaType.APPLICATION_JSON)
+            .entity(java.util.Map.of("error", "FORBIDDEN"))
+            .build();
+    }
 }]]></code-block>
                 </good-example>
                 <bad-example>
                     <code-block language="java"><![CDATA[return Response.status(401).entity(ex.toString()).build();
-// May include exception class names and internal detail]]></code-block>
+// May include exception class names and internal detail; 403 case is unhandled]]></code-block>
                 </bad-example>
             </code-examples>
         </example>

@@ -1,6 +1,6 @@
 ---
 name: 403-frameworks-quarkus-validation
-description: Use when you need to design, review, or improve validation in Quarkus applications — including Bean Validation on request DTOs, @Valid at REST boundaries, custom constraints, method-level validation, and consistent error mapping for validation failures. This should trigger for requests such as Add validation support in Quarkus; Review Quarkus validation rules; Improve request validation in Quarkus REST APIs. Part of cursor-rules-java project
+description: Use when you need to design, review, or improve validation in Quarkus applications — including Bean Validation on request DTOs, @Valid at REST boundaries, custom constraints, and consistent error mapping for validation failures. This should trigger for requests such as Add validation support in Quarkus; Review Quarkus validation rules; Improve request validation in Quarkus REST APIs. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -8,14 +8,13 @@ metadata:
 ---
 # Quarkus Validation Guidelines
 
-Apply Quarkus validation best practices at REST and service boundaries.
+Apply Quarkus validation best practices at REST boundaries.
 
 **What is covered in this Skill?**
 
 - Bean Validation annotations on DTOs and command models
 - @Valid and boundary validation in Jakarta REST resources
 - Validation groups and custom constraints
-- Method-level validation with CDI beans
 - Validation error mapping for client-safe responses
 - Consistent handling of invalid inputs across endpoints
 

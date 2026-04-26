@@ -141,11 +141,11 @@ void clear(@Header("X-Admin-Token") String t) {
         <example number="4" id="micronaut-authentication-provider">
             <example-header>
                 <example-title>Custom authentication provider</example-title>
-                <example-subtitle>Return AuthenticationResponse with roles, not raw passwords</example-subtitle>
+                <example-subtitle>HttpRequestAuthenticationProvider with roles; never log credentials</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                When implementing `HttpRequestAuthenticationProvider`, validate credentials against a secure store and return an `AuthenticationResponse` with principal and roles. Never log passwords or API keys.
+                Implement `HttpRequestAuthenticationProvider<B>` (Micronaut 4+) to validate credentials against a secure store and return an `AuthenticationResponse` with principal and roles. Never log passwords or API keys.
                 ]]>
             </example-description>
             <code-examples>
@@ -154,21 +154,27 @@ void clear(@Header("X-Admin-Token") String t) {
 import io.micronaut.security.authentication.AuthenticationProvider;
 import io.micronaut.security.authentication.AuthenticationRequest;
 import io.micronaut.security.authentication.AuthenticationResponse;
-import org.reactivestreams.Publisher;
-import reactor.core.publisher.Mono;
+import jakarta.inject.Singleton;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.FluxSink;
 
-class DbAuthProvider implements AuthenticationProvider {
+@Singleton
+class DbAuthProvider implements AuthenticationProvider<HttpRequest<?>> {
     @Override
-    public Publisher<AuthenticationResponse> authenticate(
+    public org.reactivestreams.Publisher<AuthenticationResponse> authenticate(
             HttpRequest<?> request,
             AuthenticationRequest<?, ?> authRequest) {
-        return Mono.fromCallable(() ->
-            AuthenticationResponse.success((String) authRequest.getIdentity()));
+        return Flux.create(emitter -> {
+            // validate credentials against DB here — never log password
+            emitter.next(AuthenticationResponse.success((String) authRequest.getIdentity()));
+            emitter.complete();
+        }, FluxSink.OverflowStrategy.ERROR);
     }
 }]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block language="java"><![CDATA[LOG.info("login attempt password={}", password);]]></code-block>
+                    <code-block language="java"><![CDATA[LOG.info("login attempt password={}", password);
+// Credential leakage via logs]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
@@ -214,11 +220,11 @@ allowedCredentials: true
         <example number="6" id="micronaut-rejection-handler">
             <example-header>
                 <example-title>Authorization failure responses</example-title>
-                <example-subtitle>Map AuthorizationException to stable JSON</example-subtitle>
+                <example-subtitle>Distinguish 401 (unauthenticated) from 403 (forbidden) in JSON responses</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                Register an `ExceptionHandler` for `io.micronaut.security.authentication.AuthorizationException` (or your stack’s equivalent) so API clients receive JSON or Problem bodies instead of empty responses or HTML defaults.
+                Register an `ExceptionHandler` for `io.micronaut.security.authentication.AuthorizationException` and inspect `isForbidden()` to return the correct status: 401 for unauthenticated callers and 403 for authenticated callers that lack the required role.
                 ]]>
             </example-description>
             <code-examples>
@@ -234,13 +240,18 @@ import jakarta.inject.Singleton;
 class AuthorizationExceptionMapper implements ExceptionHandler<AuthorizationException, HttpResponse<?>> {
     @Override
     public HttpResponse<?> handle(HttpRequest request, AuthorizationException e) {
-        return HttpResponse.status(HttpStatus.FORBIDDEN)
-            .body(java.util.Map.of("error", "FORBIDDEN"));
+        if (e.isForbidden()) {
+            return HttpResponse.status(HttpStatus.FORBIDDEN)
+                .body(java.util.Map.of("error", "FORBIDDEN"));
+        }
+        return HttpResponse.status(HttpStatus.UNAUTHORIZED)
+            .body(java.util.Map.of("error", "UNAUTHORIZED"));
     }
 }]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block language="java"><![CDATA[return HttpResponse.status(403).body(e.toString());]]></code-block>
+                    <code-block language="java"><![CDATA[return HttpResponse.status(403).body(e.toString());
+// Always 403 regardless of auth state; leaks exception detail]]></code-block>
                 </bad-example>
             </code-examples>
         </example>

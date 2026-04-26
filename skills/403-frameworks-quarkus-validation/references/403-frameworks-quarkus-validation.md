@@ -1,6 +1,6 @@
 ---
 name: 403-frameworks-quarkus-validation
-description: Use when you need to design, review, or improve validation in Quarkus applications — including Bean Validation on JAX-RS resources, @Valid on parameters and CDI beans, constraint groups, @ConfigMapping validation, custom constraints, method validation, nested DTO validation, and ExceptionMapper-based error mapping.
+description: Use when you need to design, review, or improve validation in Quarkus applications — including Bean Validation on JAX-RS resources, @Valid on parameters and CDI beans, constraint groups, @ConfigMapping validation, custom constraints, nested DTO validation, and ExceptionMapper-based error mapping.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -32,9 +32,8 @@ Before applying recommendations, ensure the project compiles. Compilation failur
 - Example 2: Path and query parameter constraints
 - Example 3: @ConfigMapping with validation
 - Example 4: Nested and list validation
-- Example 5: CDI service method validation
-- Example 6: ExceptionMapper for validation failures
-- Example 7: Class-level custom constraint
+- Example 5: ExceptionMapper for validation failures
+- Example 6: Class-level custom constraint
 
 ### Example 1: JAX-RS request body with @Valid
 
@@ -184,37 +183,10 @@ public record OrderRequest(Address shipping, List<LineItem> lines) { }
 // Missing @Valid: nested constraints ignored
 ```
 
-### Example 5: CDI service method validation
-
-Title: @Valid parameters on application services
-Description: Validate service entry points with Bean Validation so domain logic is not littered with guard clauses. Enable method validation for the bean (Quarkus enables Hibernate Validator integration when the extension is on the classpath).
-
-**Good example:**
-
-```java
-import jakarta.enterprise.context.ApplicationScoped;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
-
-@ApplicationScoped
-public class InventoryService {
-    public void reserve(@NotBlank String sku, @Positive int quantity) {
-    }
-}
-```
-
-**Bad example:**
-
-```java
-public void reserve(String sku, int quantity) {
-    if (quantity <= 0) throw new IllegalArgumentException("qty");
-}
-```
-
-### Example 6: ExceptionMapper for validation failures
+### Example 5: ExceptionMapper for validation failures
 
 Title: Map ConstraintViolationException to HTTP 400 + stable JSON
-Description: Provide a `@Provider` `ExceptionMapper` for `ConstraintViolationException` (and optionally `ResteasyReactiveViolationException` in reactive stacks) so clients always receive the same error shape.
+Description: Quarkus with `quarkus-hibernate-validator` automatically returns a JSON body for validation failures on JAX-RS resources. For full control over the error shape (e.g. RFC 7807 Problem Details or project-wide structure), provide a `@Provider` `ExceptionMapper` that overrides the default. Use `.toList()` (Java 16+) instead of `Collectors.toList()`.
 
 **Good example:**
 
@@ -224,7 +196,6 @@ import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
-import java.util.stream.Collectors;
 
 @Provider
 public class ConstraintViolationMapper implements ExceptionMapper<ConstraintViolationException> {
@@ -232,7 +203,7 @@ public class ConstraintViolationMapper implements ExceptionMapper<ConstraintViol
     public Response toResponse(ConstraintViolationException ex) {
         var messages = ex.getConstraintViolations().stream()
             .map(v -> v.getPropertyPath() + ": " + v.getMessage())
-            .collect(Collectors.toList());
+            .toList();
         return Response.status(400)
             .type(MediaType.APPLICATION_JSON)
             .entity(java.util.Map.of("error", "VALIDATION_ERROR", "details", messages))
@@ -245,10 +216,10 @@ public class ConstraintViolationMapper implements ExceptionMapper<ConstraintViol
 
 ```java
 return Response.status(400).entity(ex.getMessage()).build();
-// Message shape varies; may expose internal paths
+// Message shape varies; may expose internal property paths
 ```
 
-### Example 7: Class-level custom constraint
+### Example 6: Class-level custom constraint
 
 Title: Cross-field rules with @Constraint and ConstraintValidator
 Description: Reuse cross-field rules (date ranges, matching passwords) as a single annotation on a type.
@@ -292,8 +263,8 @@ if (!a.equals(b)) throw new IllegalArgumentException("mismatch");
 
 ## Output Format
 
-- **ANALYZE** JAX-RS resources, CDI services, and config mappings for missing `@Valid`, missing cascades, and inconsistent 400 bodies
-- **APPLY** Bean Validation at REST and service boundaries; add `@Provider` mappers for validation exceptions
+- **ANALYZE** JAX-RS resources and config mappings for missing `@Valid`, missing cascades, and inconsistent 400 bodies
+- **APPLY** Bean Validation at REST boundaries; add `@Provider` mappers for validation exceptions
 - **ALIGN** error responses with Problem Details or project-standard JSON from `@402-frameworks-quarkus-rest`
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
 

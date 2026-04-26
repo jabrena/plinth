@@ -165,8 +165,8 @@ cors.setAllowCredentials(true);
 
 ### Example 5: OAuth2 Resource Server (JWT)
 
-Title: Validate bearer tokens with issuer or JWK set URI
-Description: For APIs behind an identity provider, use `spring-security-oauth2-resource-server` with `oauth2ResourceServer().jwt(...)`. Configure issuer URI or JWK set URI in properties; avoid embedding symmetric secrets in code.
+Title: Validate bearer tokens with issuer URI; wire the SecurityFilterChain
+Description: For APIs behind an identity provider, use `spring-security-oauth2-resource-server` with `oauth2ResourceServer().jwt(...)`. Configure issuer URI in properties so Spring Boot auto-fetches the JWK set; wire the security filter chain to use it. Never embed symmetric secrets in source code.
 
 **Good example:**
 
@@ -213,16 +213,19 @@ userRepository.save(user);
 
 ### Example 7: Authentication and access-denied handling
 
-Title: Consistent 401/403 responses without stack traces
-Description: Customize `AuthenticationEntryPoint` and `AccessDeniedHandler` for APIs so clients receive JSON or Problem Details instead of HTML error pages.
+Title: Consistent 401/403 JSON responses without stack traces
+Description: Customize both `AuthenticationEntryPoint` (unauthenticated → 401) and `AccessDeniedHandler` (authenticated but forbidden → 403) for APIs so clients receive JSON or Problem Details instead of HTML error pages.
 
 **Good example:**
 
 ```java
-import org.springframework.http.HttpStatus;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
+
 import java.io.IOException;
 
 class Json401EntryPoint implements AuthenticationEntryPoint {
@@ -234,12 +237,22 @@ class Json401EntryPoint implements AuthenticationEntryPoint {
         res.getWriter().write("{\"error\":\"UNAUTHORIZED\"}");
     }
 }
+
+class Json403Handler implements AccessDeniedHandler {
+    @Override
+    public void handle(HttpServletRequest req, HttpServletResponse res,
+                       AccessDeniedException ex) throws IOException {
+        res.setStatus(HttpStatus.FORBIDDEN.value());
+        res.setContentType("application/json");
+        res.getWriter().write("{\"error\":\"FORBIDDEN\"}");
+    }
+}
 ```
 
 **Bad example:**
 
 ```java
-// Default HTML 401 page returned to API clients expecting JSON
+// Default behaviour: HTML 401/403 pages returned to API clients expecting JSON
 ```
 
 ### Example 8: Security headers

@@ -170,16 +170,38 @@ cors.setAllowCredentials(true);
         <example number="5" id="oauth2-resource-server-jwt">
             <example-header>
                 <example-title>OAuth2 Resource Server (JWT)</example-title>
-                <example-subtitle>Validate bearer tokens with issuer or JWK set URI</example-subtitle>
+                <example-subtitle>Validate bearer tokens with issuer URI; wire the SecurityFilterChain</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                For APIs behind an identity provider, use `spring-security-oauth2-resource-server` with `oauth2ResourceServer().jwt(...)`. Configure issuer URI or JWK set URI in properties; avoid embedding symmetric secrets in code.
+                For APIs behind an identity provider, use `spring-security-oauth2-resource-server` with `oauth2ResourceServer().jwt(...)`. Configure issuer URI in properties so Spring Boot auto-fetches the JWK set; wire the security filter chain to use it. Never embed symmetric secrets in source code.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="properties"><![CDATA[spring.security.oauth2.resourceserver.jwt.issuer-uri=https://idp.example.com/realms/myrealm]]></code-block>
+                </good-example>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+class ResourceServerConfig {
+    @Bean
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        return http
+            .csrf(csrf -> csrf.disable())
+            .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+            .authorizeHttpRequests(r -> r
+                .requestMatchers("/actuator/health").permitAll()
+                .anyRequest().authenticated())
+            .oauth2ResourceServer(oauth2 -> oauth2.jwt(jwt -> {}))
+            .build();
+    }
+}]]></code-block>
                 </good-example>
                 <bad-example>
                     <code-block language="java"><![CDATA[String HARDCODED_HS256_SECRET = "change-me";
@@ -224,19 +246,22 @@ userRepository.save(user);
         <example number="7" id="security-exception-handling">
             <example-header>
                 <example-title>Authentication and access-denied handling</example-title>
-                <example-subtitle>Consistent 401/403 responses without stack traces</example-subtitle>
+                <example-subtitle>Consistent 401/403 JSON responses without stack traces</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                Customize `AuthenticationEntryPoint` and `AccessDeniedHandler` for APIs so clients receive JSON or Problem Details instead of HTML error pages.
+                Customize both `AuthenticationEntryPoint` (unauthenticated → 401) and `AccessDeniedHandler` (authenticated but forbidden → 403) for APIs so clients receive JSON or Problem Details instead of HTML error pages.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[import org.springframework.http.HttpStatus;
-import org.springframework.security.web.AuthenticationEntryPoint;
-import jakarta.servlet.http.HttpServletRequest;
+                    <code-block language="java"><![CDATA[import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.access.AccessDeniedHandler;
+
 import java.io.IOException;
 
 class Json401EntryPoint implements AuthenticationEntryPoint {
@@ -247,10 +272,26 @@ class Json401EntryPoint implements AuthenticationEntryPoint {
         res.setContentType("application/json");
         res.getWriter().write("{\"error\":\"UNAUTHORIZED\"}");
     }
+}
+
+class Json403Handler implements AccessDeniedHandler {
+    @Override
+    public void handle(HttpServletRequest req, HttpServletResponse res,
+                       AccessDeniedException ex) throws IOException {
+        res.setStatus(HttpStatus.FORBIDDEN.value());
+        res.setContentType("application/json");
+        res.getWriter().write("{\"error\":\"FORBIDDEN\"}");
+    }
 }]]></code-block>
                 </good-example>
+                <good-example>
+                    <code-block language="java"><![CDATA[// Wire both handlers inside the SecurityFilterChain
+http.exceptionHandling(ex -> ex
+    .authenticationEntryPoint(new Json401EntryPoint())
+    .accessDeniedHandler(new Json403Handler()));]]></code-block>
+                </good-example>
                 <bad-example>
-                    <code-block language="java"><![CDATA[// Default HTML 401 page returned to API clients expecting JSON]]></code-block>
+                    <code-block language="java"><![CDATA[// Default behaviour: HTML 401/403 pages returned to API clients expecting JSON]]></code-block>
                 </bad-example>
             </code-examples>
         </example>

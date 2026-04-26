@@ -160,11 +160,12 @@ String SHARED_SECRET = "hardcoded";
 ### Example 5: Auth failure exception mapping
 
 Title: Consistent 401/403 JSON without stack traces
-Description: Map `UnauthorizedException`, `ForbiddenException`, and authentication failures to stable JSON or Problem Details. Log server-side details with correlation IDs only.
+Description: Map both `NotAuthorizedException` (unauthenticated → 401) and `ForbiddenException` (authenticated but lacking role → 403) to stable JSON or Problem Details. Log server-side details with correlation IDs only.
 
 **Good example:**
 
 ```java
+import jakarta.ws.rs.ForbiddenException;
 import jakarta.ws.rs.NotAuthorizedException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -181,13 +182,24 @@ public class NotAuthorizedMapper implements ExceptionMapper<NotAuthorizedExcepti
             .build();
     }
 }
+
+@Provider
+public class ForbiddenMapper implements ExceptionMapper<ForbiddenException> {
+    @Override
+    public Response toResponse(ForbiddenException ex) {
+        return Response.status(403)
+            .type(MediaType.APPLICATION_JSON)
+            .entity(java.util.Map.of("error", "FORBIDDEN"))
+            .build();
+    }
+}
 ```
 
 **Bad example:**
 
 ```java
 return Response.status(401).entity(ex.toString()).build();
-// May include exception class names and internal detail
+// May include exception class names and internal detail; 403 case is unhandled
 ```
 
 ### Example 6: CORS for browser clients

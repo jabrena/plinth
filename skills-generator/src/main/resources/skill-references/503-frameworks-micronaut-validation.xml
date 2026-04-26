@@ -5,7 +5,7 @@
         <version>0.15.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
         <title>Micronaut Validation Guidelines</title>
-        <description>Use when you need to design, review, or improve validation in Micronaut applications — including Bean Validation on @Controller methods, @Body @Valid, query/path parameter validation, @ConfigurationProperties validation, custom constraints, factory-based method validation, nested DTO validation, and ExceptionHandler mapping for constraint violations.</description>
+        <description>Use when you need to design, review, or improve validation in Micronaut applications — including Bean Validation on @Controller methods, @Body @Valid, query/path parameter validation, @ConfigurationProperties validation, custom constraints, nested DTO validation, and ExceptionHandler mapping for constraint violations.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Micronaut and Jakarta Bean Validation</role>
@@ -176,62 +176,29 @@ public record LineItem(
 ) { }]]></code-block>
                 </good-example>
                 <bad-example>
-                    <code-block language="java"><![CDATA[public record OrderRequest(Address shipping, List<LineItem> lines) { }]]></code-block>
+                    <code-block language="java"><![CDATA[public record OrderRequest(Address shipping, List<LineItem> lines) { }
+// Missing @Valid: nested Address and LineItem constraints are never evaluated]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
 
-        <example number="5" id="micronaut-service-method-validation">
-            <example-header>
-                <example-title>Service method validation</example-title>
-                <example-subtitle>@Validated singleton with constrained methods</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[
-                Apply `io.micronaut.validation.annotation.Validated` to a bean class so method-parameter constraints are enforced when other beans call through the Micronaut proxy (avoid self-invocation bypassing validation).
-                ]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[import io.micronaut.validation.annotation.Validated;
-import jakarta.inject.Singleton;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Positive;
-
-@Singleton
-@Validated
-class InventoryService {
-    void reserve(@NotBlank String sku, @Positive int quantity) {
-    }
-}]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="java"><![CDATA[void reserve(String sku, int qty) {
-    if (qty <= 0) throw new IllegalArgumentException();
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="6" id="micronaut-constraint-exception-handler">
+        <example number="5" id="micronaut-constraint-exception-handler">
             <example-header>
                 <example-title>ConstraintViolationException handler</example-title>
                 <example-subtitle>Map validation failures to HTTP 400</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                Provide an `ExceptionHandler<ConstraintViolationException>` singleton to return consistent JSON for validation errors across controllers.
+                Provide an `ExceptionHandler<ConstraintViolationException>` singleton to return consistent JSON for validation errors across controllers. Use `HttpResponse.badRequest(body)` for concise construction and `.toList()` (Java 16+) instead of `Collectors.toList()`.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
-import io.micronaut.http.HttpStatus;
 import io.micronaut.http.server.exceptions.ExceptionHandler;
 import jakarta.inject.Singleton;
 import jakarta.validation.ConstraintViolationException;
-import java.util.stream.Collectors;
 
 @Singleton
 public class ConstraintViolationHandler
@@ -241,20 +208,19 @@ public class ConstraintViolationHandler
     public HttpResponse<?> handle(HttpRequest request, ConstraintViolationException ex) {
         var details = ex.getConstraintViolations().stream()
             .map(v -> v.getPropertyPath() + ": " + v.getMessage())
-            .collect(Collectors.toList());
-        return HttpResponse.status(HttpStatus.BAD_REQUEST)
-            .body(java.util.Map.of("error", "VALIDATION_ERROR", "details", details));
+            .toList();
+        return HttpResponse.badRequest(java.util.Map.of("error", "VALIDATION_ERROR", "details", details));
     }
 }]]></code-block>
                 </good-example>
                 <bad-example>
                     <code-block language="java"><![CDATA[return HttpResponse.badRequest(ex.getMessage());
-// Unstable message; may expose internal paths]]></code-block>
+// Unstable message; may expose internal property paths]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
 
-        <example number="7" id="micronaut-custom-constraint">
+        <example number="6" id="micronaut-custom-constraint">
             <example-header>
                 <example-title>Class-level custom constraint</example-title>
                 <example-subtitle>Reuse cross-field rules</example-subtitle>

@@ -1,6 +1,6 @@
 ---
 name: 503-frameworks-micronaut-validation
-description: Use when you need to design, review, or improve validation in Micronaut applications — including Bean Validation on request DTOs, @Valid at controller boundaries, custom constraints, method validation, and consistent validation error responses. This should trigger for requests such as Add validation support in Micronaut; Review Micronaut validation rules; Improve request validation in Micronaut REST APIs. Part of cursor-rules-java project
+description: Use when you need to design, review, or improve validation in Micronaut applications — including Bean Validation on request DTOs, @Valid at controller boundaries, custom constraints, and consistent validation error responses. This should trigger for requests such as Add validation support in Micronaut; Review Micronaut validation rules; Improve request validation in Micronaut REST APIs. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -8,14 +8,13 @@ metadata:
 ---
 # Micronaut Validation Guidelines
 
-Apply Micronaut validation best practices at controller and service boundaries.
+Apply Micronaut validation best practices at HTTP API boundaries.
 
 **What is covered in this Skill?**
 
 - Bean Validation annotations on DTOs and command models
 - @Valid / @Validated usage in Micronaut controllers
 - Validation groups and custom validators
-- Method-level validation for service contracts
 - Consistent mapping of validation failures to 400 responses
 - Safe and predictable validation error payloads
 

@@ -138,8 +138,8 @@ secret: "hardcoded-symmetric-key-in-git"
 
 ### Example 4: Custom authentication provider
 
-Title: Return AuthenticationResponse with roles, not raw passwords
-Description: When implementing `HttpRequestAuthenticationProvider`, validate credentials against a secure store and return an `AuthenticationResponse` with principal and roles. Never log passwords or API keys.
+Title: HttpRequestAuthenticationProvider with roles; never log credentials
+Description: Implement `HttpRequestAuthenticationProvider<B>` (Micronaut 4+) to validate credentials against a secure store and return an `AuthenticationResponse` with principal and roles. Never log passwords or API keys.
 
 **Good example:**
 
@@ -148,16 +148,21 @@ import io.micronaut.http.HttpRequest;
 import io.micronaut.security.authentication.AuthenticationProvider;
 import io.micronaut.security.authentication.AuthenticationRequest;
 import io.micronaut.security.authentication.AuthenticationResponse;
-import org.reactivestreams.Publisher;
-import reactor.core.publisher.Mono;
+import jakarta.inject.Singleton;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.FluxSink;
 
-class DbAuthProvider implements AuthenticationProvider {
+@Singleton
+class DbAuthProvider implements AuthenticationProvider<HttpRequest<?>> {
     @Override
-    public Publisher<AuthenticationResponse> authenticate(
+    public org.reactivestreams.Publisher<AuthenticationResponse> authenticate(
             HttpRequest<?> request,
             AuthenticationRequest<?, ?> authRequest) {
-        return Mono.fromCallable(() ->
-            AuthenticationResponse.success((String) authRequest.getIdentity()));
+        return Flux.create(emitter -> {
+            // validate credentials against DB here — never log password
+            emitter.next(AuthenticationResponse.success((String) authRequest.getIdentity()));
+            emitter.complete();
+        }, FluxSink.OverflowStrategy.ERROR);
     }
 }
 ```
@@ -166,6 +171,7 @@ class DbAuthProvider implements AuthenticationProvider {
 
 ```java
 LOG.info("login attempt password={}", password);
+// Credential leakage via logs
 ```
 
 ### Example 5: Micronaut CORS
@@ -205,8 +211,8 @@ allowedCredentials: true
 
 ### Example 6: Authorization failure responses
 
-Title: Map AuthorizationException to stable JSON
-Description: Register an `ExceptionHandler` for `io.micronaut.security.authentication.AuthorizationException` (or your stack’s equivalent) so API clients receive JSON or Problem bodies instead of empty responses or HTML defaults.
+Title: Distinguish 401 (unauthenticated) from 403 (forbidden) in JSON responses
+Description: Register an `ExceptionHandler` for `io.micronaut.security.authentication.AuthorizationException` and inspect `isForbidden()` to return the correct status: 401 for unauthenticated callers and 403 for authenticated callers that lack the required role.
 
 **Good example:**
 
@@ -222,8 +228,12 @@ import jakarta.inject.Singleton;
 class AuthorizationExceptionMapper implements ExceptionHandler<AuthorizationException, HttpResponse<?>> {
     @Override
     public HttpResponse<?> handle(HttpRequest request, AuthorizationException e) {
-        return HttpResponse.status(HttpStatus.FORBIDDEN)
-            .body(java.util.Map.of("error", "FORBIDDEN"));
+        if (e.isForbidden()) {
+            return HttpResponse.status(HttpStatus.FORBIDDEN)
+                .body(java.util.Map.of("error", "FORBIDDEN"));
+        }
+        return HttpResponse.status(HttpStatus.UNAUTHORIZED)
+            .body(java.util.Map.of("error", "UNAUTHORIZED"));
     }
 }
 ```
@@ -232,6 +242,7 @@ class AuthorizationExceptionMapper implements ExceptionHandler<AuthorizationExce
 
 ```java
 return HttpResponse.status(403).body(e.toString());
+// Always 403 regardless of auth state; leaks exception detail
 ```
 
 ### Example 7: CSRF and session cookies
