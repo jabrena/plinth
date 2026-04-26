@@ -25,6 +25,8 @@ Apply guidance from these Skills when relevant:
 
 - `@501-frameworks-micronaut-core`: Micronaut core (bootstrap, DI, config, scheduling, shutdown)
 - `@502-frameworks-micronaut-rest`: Micronaut REST APIs
+- `@503-frameworks-micronaut-validation`: Micronaut validation (Bean Validation, custom constraints, error payloads)
+- `@504-frameworks-micronaut-security`: Micronaut security (authn/authz, endpoint protection, secure defaults)
 - `@511-frameworks-micronaut-jdbc`: programmatic JDBC (DataSource, SQL, transactions)
 - `@512-frameworks-micronaut-data`: Micronaut Data (repositories, entities, generated SQL)
 - `@513-frameworks-micronaut-db-migrations-flyway`: Micronaut DB migrations (Flyway)
