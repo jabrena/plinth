@@ -1,6 +1,6 @@
 ---
 name: 403-frameworks-quarkus-validation
-description: Use when you need to design, review, or improve validation in Quarkus applications — including Bean Validation, @Valid at Jakarta REST boundaries, custom constraints, and consistent validation error mapping.
+description: Use when you need to design, review, or improve validation in Quarkus applications — including Bean Validation on JAX-RS resources, @Valid on parameters and CDI beans, constraint groups, @ConfigMapping validation, custom constraints, method validation, nested DTO validation, and ExceptionMapper-based error mapping.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -14,7 +14,7 @@ You are a Senior software engineer with extensive experience in Quarkus, Jakarta
 
 ## Goal
 
-Ensure Quarkus services validate inputs at boundaries, keep validation rules declarative and testable, and return consistent client-safe validation error responses.
+Ensure Quarkus services validate inputs at boundaries, keep validation rules declarative and testable, and return consistent client-safe validation error responses. Align with `@402-frameworks-quarkus-rest` for HTTP semantics and Problem Details on validation failures.
 
 ## Constraints
 
@@ -28,12 +28,18 @@ Before applying recommendations, ensure the project compiles. Compilation failur
 
 ### Table of contents
 
-- Example 1: Validate REST input with @Valid
+- Example 1: JAX-RS request body with @Valid
+- Example 2: Path and query parameter constraints
+- Example 3: @ConfigMapping with validation
+- Example 4: Nested and list validation
+- Example 5: CDI service method validation
+- Example 6: ExceptionMapper for validation failures
+- Example 7: Class-level custom constraint
 
-### Example 1: Validate REST input with @Valid
+### Example 1: JAX-RS request body with @Valid
 
-Title: Use Jakarta Bean Validation annotations on request models
-Description: Keep validation at REST boundaries to reject malformed data early and reduce downstream defensive code.
+Title: Bean Validation on resource method parameters
+Description: Apply `@Valid` to the request body parameter so Hibernate Validator runs constraints before your method executes.
 
 **Good example:**
 
@@ -59,27 +65,240 @@ record CreateUserRequest(@NotBlank String username, @Email String email) { }
 **Bad example:**
 
 ```java
-@Path("/users")
-public class BadUserResource {
-    @POST
-    public void create(CreateUserRequest request) {
-        if (request.email() == null || !request.email().contains("@")) {
-            throw new IllegalArgumentException("invalid email");
+@POST
+public void create(CreateUserRequest request) {
+    if (request.email() == null) throw new IllegalArgumentException("bad");
+}
+```
+
+### Example 2: Path and query parameter constraints
+
+Title: @PathParam / @QueryParam with @Min, @Pattern
+Description: Validate primitive and String parameters directly on resource methods. Quarkus validates these when the `quarkus-hibernate-validator` extension is present and validation is enabled for the resource.
+
+**Good example:**
+
+```java
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
+import jakarta.ws.rs.*;
+
+@Path("/items")
+public class ItemResource {
+    @GET
+    @Path("{id}")
+    public String get(@PathParam("id") @Pattern(regexp = "^[a-z0-9-]+$") String id) {
+        return id;
+    }
+
+    @GET
+    public String list(@QueryParam("page") @Min(0) int page,
+                         @QueryParam("size") @Min(1) @Max(100) int size) {
+        return page + ":" + size;
+    }
+}
+```
+
+**Bad example:**
+
+```java
+@GET
+@Path("{id}")
+public String get(@PathParam("id") String id) {
+    return id;
+}
+// No format or bounds validation
+```
+
+### Example 3: @ConfigMapping with validation
+
+Title: Fail-fast configuration with @Valid and constraints
+Description: Use SmallRye Config `@ConfigMapping` with Bean Validation so invalid `application.properties` fails at startup. Pairs with `@401-frameworks-quarkus-core`.
+
+**Good example:**
+
+```java
+import io.smallrye.config.ConfigMapping;
+import io.smallrye.config.WithParentName;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+
+@ConfigMapping(prefix = "app.api")
+@Valid
+interface ApiConfig {
+    @WithParentName
+    @NotBlank
+    String baseUrl();
+
+    @Min(1)
+    @Max(600)
+    int timeoutSeconds();
+}
+```
+
+**Bad example:**
+
+```java
+@ConfigMapping(prefix = "app.api")
+interface ApiConfig {
+    String baseUrl();
+    int timeoutSeconds();
+}
+// Negative timeout accepted until first HTTP call
+```
+
+### Example 4: Nested and list validation
+
+Title: @Valid on nested types and container elements
+Description: Cascade validation to nested records and to each list element using `@Valid` and `List<@NotNull @Valid Item>`.
+
+**Good example:**
+
+```java
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import java.util.List;
+
+public record OrderRequest(
+    @NotNull @Valid Address shipping,
+    @NotEmpty List<@NotNull @Valid LineItem> lines
+) { }
+
+public record Address(@NotNull @Size(max = 200) String street) { }
+
+public record LineItem(
+    @NotNull @Size(min = 1, max = 64) String sku,
+    int qty
+) { }
+```
+
+**Bad example:**
+
+```java
+public record OrderRequest(Address shipping, List<LineItem> lines) { }
+// Missing @Valid: nested constraints ignored
+```
+
+### Example 5: CDI service method validation
+
+Title: @Valid parameters on application services
+Description: Validate service entry points with Bean Validation so domain logic is not littered with guard clauses. Enable method validation for the bean (Quarkus enables Hibernate Validator integration when the extension is on the classpath).
+
+**Good example:**
+
+```java
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+
+@ApplicationScoped
+public class InventoryService {
+    public void reserve(@NotBlank String sku, @Positive int quantity) {
+    }
+}
+```
+
+**Bad example:**
+
+```java
+public void reserve(String sku, int quantity) {
+    if (quantity <= 0) throw new IllegalArgumentException("qty");
+}
+```
+
+### Example 6: ExceptionMapper for validation failures
+
+Title: Map ConstraintViolationException to HTTP 400 + stable JSON
+Description: Provide a `@Provider` `ExceptionMapper` for `ConstraintViolationException` (and optionally `ResteasyReactiveViolationException` in reactive stacks) so clients always receive the same error shape.
+
+**Good example:**
+
+```java
+import jakarta.validation.ConstraintViolationException;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.ExceptionMapper;
+import jakarta.ws.rs.ext.Provider;
+import java.util.stream.Collectors;
+
+@Provider
+public class ConstraintViolationMapper implements ExceptionMapper<ConstraintViolationException> {
+    @Override
+    public Response toResponse(ConstraintViolationException ex) {
+        var messages = ex.getConstraintViolations().stream()
+            .map(v -> v.getPropertyPath() + ": " + v.getMessage())
+            .collect(Collectors.toList());
+        return Response.status(400)
+            .type(MediaType.APPLICATION_JSON)
+            .entity(java.util.Map.of("error", "VALIDATION_ERROR", "details", messages))
+            .build();
+    }
+}
+```
+
+**Bad example:**
+
+```java
+return Response.status(400).entity(ex.getMessage()).build();
+// Message shape varies; may expose internal paths
+```
+
+### Example 7: Class-level custom constraint
+
+Title: Cross-field rules with @Constraint and ConstraintValidator
+Description: Reuse cross-field rules (date ranges, matching passwords) as a single annotation on a type.
+
+**Good example:**
+
+```java
+import jakarta.validation.Constraint;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+import jakarta.validation.Payload;
+import java.lang.annotation.*;
+
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = SamePasswords.Validator.class)
+@interface SamePasswords {
+    String message() default "passwords must match";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
+
+    class Validator implements ConstraintValidator<SamePasswords, PasswordForm> {
+        @Override
+        public boolean isValid(PasswordForm v, ConstraintValidatorContext ctx) {
+            if (v == null) return true;
+            return java.util.Objects.equals(v.password(), v.confirmPassword());
         }
     }
 }
-record CreateUserRequest(String username, String email) { }
+
+@SamePasswords
+public record PasswordForm(String password, String confirmPassword) { }
+```
+
+**Bad example:**
+
+```java
+if (!a.equals(b)) throw new IllegalArgumentException("mismatch");
+// Duplicated across resources
 ```
 
 ## Output Format
 
-- **ANALYZE** REST and service boundaries for missing validation
-- **APPLY** Bean Validation rules and custom constraints where needed
-- **STANDARDIZE** validation failure responses
-- **VALIDATE** with compile and full verification commands
+- **ANALYZE** JAX-RS resources, CDI services, and config mappings for missing `@Valid`, missing cascades, and inconsistent 400 bodies
+- **APPLY** Bean Validation at REST and service boundaries; add `@Provider` mappers for validation exceptions
+- **ALIGN** error responses with Problem Details or project-standard JSON from `@402-frameworks-quarkus-rest`
+- **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
 
 ## Safeguards
 
-- Do not rely on ad-hoc per-endpoint validation logic
-- Do not leak internal exception details in validation responses
-- Prefer small and incremental refactors
+- Do not skip `@Valid` on constrained request bodies
+- Do not return stack traces or raw Hibernate Validator messages that expose internals
+- Test reactive and classic REST stacks if both exist in the repo

@@ -5,13 +5,13 @@
         <version>0.15.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
         <title>Quarkus Security Guidelines</title>
-        <description>Use when you need to design, review, or improve security in Quarkus applications — including authentication, authorization with security annotations, protected routes, secure defaults, and sensitive-data-safe behavior.</description>
+        <description>Use when you need to design, review, or improve security in Quarkus applications — including Quarkus Security with JWT/OIDC, basic auth, @RolesAllowed / @Authenticated / @PermitAll, SecurityIdentity, permission checks, path-based authorization in configuration, exception mapping for auth failures, and sensitive-data-safe logging.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Quarkus Security and secure API design</role>
 
     <goal>
-        Apply secure-by-default Quarkus security practices by enforcing authentication and authorization consistently, using least-privilege access control, and preventing sensitive data exposure in API responses and logs.
+        Apply secure-by-default Quarkus security practices: enforce authentication and authorization consistently at resource and configuration layers, use least-privilege roles, prefer declarative Jakarta Security annotations over ad-hoc header checks, and prevent sensitive data exposure. Align with `@402-frameworks-quarkus-rest` for error responses.
     </goal>
 
     <constraints>
@@ -28,31 +28,36 @@
 
     <examples>
         <toc auto-generate="true" />
-        <example number="1" id="quarkus-role-based-protection">
+
+        <example number="1" id="declarative-jakarta-security">
             <example-header>
-                <example-title>Protect routes with declarative security</example-title>
-                <example-subtitle>Use @Authenticated and @RolesAllowed on Quarkus resources</example-subtitle>
+                <example-title>Declarative security on resources</example-title>
+                <example-subtitle>@Authenticated, @RolesAllowed, @PermitAll</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                Keep authorization declarative and explicit in resource classes. Avoid manual token parsing in business methods.
+                Class-level defaults with method-level overrides: mark the resource authenticated by default, then ` @PermitAll` on specific public methods, and `@RolesAllowed` for admin operations.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.PermitAll;
 import jakarta.annotation.security.RolesAllowed;
-import jakarta.ws.rs.DELETE;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
+import jakarta.ws.rs.*;
 
 @Path("/orders")
 @Authenticated
 public class OrderResource {
+
     @GET
     @Path("{id}")
     public String get(@PathParam("id") String id) { return id; }
+
+    @GET
+    @Path("public/catalog")
+    @PermitAll
+    public String catalog() { return "ok"; }
 
     @DELETE
     @Path("{id}")
@@ -60,17 +65,181 @@ public class OrderResource {
     public void delete(@PathParam("id") String id) { }
 }]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[@Path("/orders")
-public class BadOrderResource {
-    @DELETE
-    @Path("{id}")
-    public void delete(@PathParam("id") String id, @jakarta.ws.rs.HeaderParam("X-Token") String token) {
-        if (!"secret".equals(token)) {
-            throw new RuntimeException("forbidden");
+                <bad-example>
+                    <code-block language="java"><![CDATA[@DELETE
+@Path("{id}")
+public void delete(@PathParam("id") String id, @HeaderParam("X-Token") String t) {
+    if (!"secret".equals(t)) throw new ForbiddenException();
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="2" id="security-identity">
+            <example-header>
+                <example-title>SecurityIdentity in services</example-title>
+                <example-subtitle>Principal name, roles, and attribute checks</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Inject `SecurityIdentity` in CDI beans for ownership checks and audit logging. Avoid trusting client-supplied user IDs without comparing to the authenticated principal.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.quarkus.security.identity.SecurityIdentity;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
+@ApplicationScoped
+public class OrderService {
+
+    @Inject
+    SecurityIdentity identity;
+
+    public void assertOwner(String ownerUserId) {
+        if (!identity.getPrincipal().getName().equals(ownerUserId)) {
+            throw new jakarta.ws.rs.ForbiddenException("not owner");
         }
     }
 }]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[public List<Order> loadForUser(String userIdFromClient) {
+    return repo.findByUser(userIdFromClient);
+}
+// Client can pass any userId unless the resource path or service binds userId to SecurityIdentity]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="quarkus-http-auth-policy">
+            <example-header>
+                <example-title>Path-based authorization in configuration</example-title>
+                <example-subtitle>quarkus.http.auth.permission.* for coarse routes</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use `quarkus.http.auth.permission` policies for static path patterns (e.g. actuator-like endpoints, admin prefixes). Combine with annotation security for fine-grained control.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="properties"><![CDATA[quarkus.http.auth.permission.public.paths=/health,/q/health
+quarkus.http.auth.permission.public.policy=permit
+
+quarkus.http.auth.permission.admin.paths=/api/admin/*
+quarkus.http.auth.permission.admin.policy=role:admin]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="properties"><![CDATA[quarkus.http.auth.permission.all.paths=/*
+quarkus.http.auth.permission.all.policy=permit
+# Entire server anonymous]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="quarkus-oidc-jwt">
+            <example-header>
+                <example-title>OIDC / JWT bearer validation</example-title>
+                <example-subtitle>Configure tenant and issuer; avoid hardcoded secrets</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use `quarkus-oidc` for bearer JWT validation with issuer or JWKS URL from configuration. Map roles from token claims via `quarkus.oidc.roles.role-claim` when needed.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="properties"><![CDATA[quarkus.oidc.auth-server-url=https://idp.example.com/realms/app
+quarkus.oidc.client-id=api-backend
+# Use TLS; store client secrets via env or Kubernetes secrets, not in Git]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[String SHARED_SECRET = "hardcoded";
+// Verifying JWT with a symmetric secret committed in source]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="5" id="quarkus-auth-exception-mapper">
+            <example-header>
+                <example-title>Auth failure exception mapping</example-title>
+                <example-subtitle>Consistent 401/403 JSON without stack traces</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Map `UnauthorizedException`, `ForbiddenException`, and authentication failures to stable JSON or Problem Details. Log server-side details with correlation IDs only.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import jakarta.ws.rs.NotAuthorizedException;
+import jakarta.ws.rs.core.MediaType;
+import jakarta.ws.rs.core.Response;
+import jakarta.ws.rs.ext.ExceptionMapper;
+import jakarta.ws.rs.ext.Provider;
+
+@Provider
+public class NotAuthorizedMapper implements ExceptionMapper<NotAuthorizedException> {
+    @Override
+    public Response toResponse(NotAuthorizedException ex) {
+        return Response.status(401)
+            .type(MediaType.APPLICATION_JSON)
+            .entity(java.util.Map.of("error", "UNAUTHORIZED"))
+            .build();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[return Response.status(401).entity(ex.toString()).build();
+// May include exception class names and internal detail]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="6" id="quarkus-cors">
+            <example-header>
+                <example-title>CORS for browser clients</example-title>
+                <example-subtitle>Restrict origins when credentials are used</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Configure `quarkus.http.cors` with explicit origins. Avoid `*` when `access-control-allow-credentials` is true.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="properties"><![CDATA[quarkus.http.cors=true
+quarkus.http.cors.origins=https://app.example.com
+quarkus.http.cors.methods=GET,POST,PUT,DELETE
+quarkus.http.cors.headers=Authorization,Content-Type]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="properties"><![CDATA[quarkus.http.cors.origins=/.*/
+# Overly permissive for credentialed browser sessions]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="7" id="secure-logging">
+            <example-header>
+                <example-title>Logging without secrets</example-title>
+                <example-subtitle>Never log raw Authorization headers or tokens</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Log authentication failures with parameterized logging and opaque correlation IDs. Do not log JWTs, API keys, or passwords.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[org.jboss.logging.Logger LOG = org.jboss.logging.Logger.getLogger(Auth.class);
+LOG.warnf("Auth failed requestId=%s", requestId);]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[System.out.println("Bearer " + token);
+// Secret exfiltration via logs]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
@@ -78,18 +247,18 @@ public class BadOrderResource {
 
     <output-format>
         <output-format-list>
-            <output-format-item>**ANALYZE** current authentication and authorization boundaries</output-format-item>
-            <output-format-item>**APPLY** route and method protections with least-privilege policy</output-format-item>
-            <output-format-item>**HARDEN** error and logging behavior to avoid sensitive data leakage</output-format-item>
-            <output-format-item>**VALIDATE** with compile and full verification commands</output-format-item>
+            <output-format-item>**ANALYZE** annotations, `application.properties` auth policies, OIDC setup, CORS, and exception mapping for 401/403</output-format-item>
+            <output-format-item>**CATEGORIZE** issues: anonymous-by-default, missing role checks, IDOR via client-supplied identifiers, weak CORS, secret leakage</output-format-item>
+            <output-format-item>**APPLY** least-privilege route and method security, correct OIDC config, and stable auth error bodies</output-format-item>
+            <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
         </output-format-list>
     </output-format>
 
     <safeguards>
         <safeguards-list>
-            <safeguards-item>Do not introduce permissive defaults in protected APIs</safeguards-item>
-            <safeguards-item>Do not expose credentials, tokens, or secrets in logs/responses</safeguards-item>
-            <safeguards-item>Prefer incremental changes with verification between steps</safeguards-item>
+            <safeguards-item>Do not ship permissive `permit` policies covering the whole API surface</safeguards-item>
+            <safeguards-item>Do not trust client-supplied user or tenant IDs without binding to SecurityIdentity</safeguards-item>
+            <safeguards-item>Rotate and externalize OIDC client secrets and signing keys</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>

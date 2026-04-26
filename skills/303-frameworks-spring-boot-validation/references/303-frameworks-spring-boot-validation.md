@@ -1,6 +1,6 @@
 ---
 name: 303-frameworks-spring-boot-validation
-description: Use when you need to design, review, or improve validation in Spring Boot applications — including Bean Validation on request DTOs, @Valid/@Validated at API boundaries, custom constraints, method validation, and consistent validation error handling.
+description: Use when you need to design, review, or improve validation in Spring Boot applications — including Bean Validation on request DTOs, @Valid/@Validated at API boundaries, constraint groups, custom constraints, method-level validation, @ConfigurationProperties validation, nested DTO validation, and consistent validation error handling.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -14,7 +14,7 @@ You are a Senior software engineer with extensive experience in Spring Boot and 
 
 ## Goal
 
-Enforce validation at the boundaries of Spring Boot applications so invalid input is rejected early, errors are predictable for clients, and domain/service layers receive valid data. Prefer declarative Bean Validation annotations and centralized error handling over ad-hoc if/else checks in controllers.
+Enforce validation at the boundaries of Spring Boot applications so invalid input is rejected early, errors are predictable for clients, and domain/service layers receive valid data. Prefer declarative Bean Validation annotations and centralized error handling over ad-hoc if/else checks in controllers. Align with `@302-frameworks-spring-boot-rest` for HTTP status codes and problem bodies on validation failures.
 
 ## Constraints
 
@@ -28,12 +28,19 @@ Before applying recommendations, ensure the project compiles. Compilation failur
 
 ### Table of contents
 
-- Example 1: Validate request DTOs at the boundary
+- Example 1: Request body validation with @Valid
+- Example 2: Constraint groups with @Validated
+- Example 3: Path and query parameter validation
+- Example 4: Nested and collection validation
+- Example 5: @ConfigurationProperties with @Validated
+- Example 6: Method-level validation
+- Example 7: Custom constraint
+- Example 8: Centralized validation error mapping
 
-### Example 1: Validate request DTOs at the boundary
+### Example 1: Request body validation with @Valid
 
-Title: Use Bean Validation annotations and `@Valid` in controllers
-Description: Keep validation declarative in DTOs and controller signatures. Return structured 400 responses for violations through centralized exception handling.
+Title: Bean Validation on DTOs; trigger validation on @RequestBody
+Description: Annotate inbound DTOs with Jakarta constraints and add `@Valid` on the `@RequestBody` parameter. Without `@Valid`, Bean Validation does not run for that parameter.
 
 **Good example:**
 
@@ -49,8 +56,8 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 class UserController {
     @PostMapping
-    ResponseEntity<String> create(@Valid @RequestBody CreateUserRequest request) {
-        return ResponseEntity.ok("created");
+    ResponseEntity<Void> create(@Valid @RequestBody CreateUserRequest request) {
+        return ResponseEntity.noContent().build();
     }
 }
 
@@ -67,25 +74,326 @@ record CreateUserRequest(
 @RestController
 class BadUserController {
     @PostMapping("/users")
-    String create(@RequestBody CreateUserRequest request) {
+    void create(@RequestBody CreateUserRequest request) {
         if (request.email() == null || !request.email().contains("@")) {
             throw new IllegalArgumentException("bad email");
         }
-        return "created";
     }
 }
 record CreateUserRequest(String username, String email, String password) { }
 ```
 
+### Example 2: Constraint groups with @Validated
+
+Title: Separate create vs update validation on the same DTO
+Description: Use `@Validated` on the controller class and pass constraint groups to `@Validated({Group.class})` on methods so POST and PUT can validate different subsets of the same record/class.
+
+**Good example:**
+
+```java
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Null;
+import jakarta.validation.groups.Default;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+interface ValidationGroups {
+    interface OnCreate { }
+    interface OnUpdate { }
+}
+
+@RestController
+@RequestMapping("/items")
+@Validated
+class ItemController {
+
+    @PostMapping
+    ResponseEntity<Void> create(
+            @Validated({ValidationGroups.OnCreate.class, Default.class}) @RequestBody ItemRequest request) {
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    ResponseEntity<Void> update(
+            @Validated({ValidationGroups.OnUpdate.class, Default.class}) @RequestBody ItemRequest request) {
+        return ResponseEntity.noContent().build();
+    }
+}
+
+record ItemRequest(
+    @Null(groups = ValidationGroups.OnCreate.class)
+    @NotBlank(groups = ValidationGroups.OnUpdate.class)
+    String id,
+    @NotBlank String name
+) { }
+```
+
+**Bad example:**
+
+```java
+@RestController
+class BadItemController {
+    @PutMapping("/items/{id}")
+    void update(@PathVariable String id, @RequestBody ItemRequest body) {
+        if (id == null || id.isBlank()) {
+            throw new IllegalArgumentException("id required");
+        }
+    }
+}
+record ItemRequest(String id, String name) { }
+```
+
+### Example 3: Path and query parameter validation
+
+Title: @Min, @Max, @Pattern on @PathVariable and @RequestParam
+Description: For simple types, use `@Validated` on the controller and Jakarta constraints directly on handler parameters. Spring validates them before the method body runs.
+
+**Good example:**
+
+```java
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
+
+@RestController
+@RequestMapping("/products")
+@Validated
+class ProductController {
+
+    @GetMapping("/{id}")
+    String get(@PathVariable @Pattern(regexp = "^[a-z0-9-]+$") String id) {
+        return id;
+    }
+
+    @GetMapping
+    String list(@RequestParam @Min(0) int page, @RequestParam @Min(1) @Max(100) int size) {
+        return page + ":" + size;
+    }
+}
+```
+
+**Bad example:**
+
+```java
+@RestController
+class BadProductController {
+    @GetMapping("/products/{id}")
+    String get(@PathVariable String id) {
+        if (id.contains("..")) {
+            throw new IllegalArgumentException("invalid");
+        }
+        return id;
+    }
+}
+```
+
+### Example 4: Nested and collection validation
+
+Title: @Valid on nested records and list elements
+Description: Cascade validation with `@Valid` on nested objects and on collection-typed fields where each element should be validated.
+
+**Good example:**
+
+```java
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
+@RestController
+class OrderController {
+    @PostMapping("/orders")
+    void create(@Valid @RequestBody OrderRequest request) { }
+}
+
+record OrderRequest(
+    @NotNull @Valid Address shipping,
+    @NotEmpty @Valid List<@NotNull @Valid LineItem> lines
+) { }
+
+record Address(@NotNull @Size(max = 200) String street) { }
+
+record LineItem(@NotNull @Size(min = 1, max = 64) String sku, int qty) { }
+```
+
+**Bad example:**
+
+```java
+record OrderRequest(Address shipping, List<LineItem> lines) { }
+// Missing @Valid: nested Address and LineItem constraints are never evaluated
+```
+
+### Example 5: @ConfigurationProperties with @Validated
+
+Title: Fail-fast binding validation at startup
+Description: Bind external configuration to a type-safe bean and validate it with `@Validated` and Bean Validation annotations so misconfiguration fails application startup instead of failing at runtime in random code paths. Pairs with `@301-frameworks-spring-boot-core`.
+
+**Good example:**
+
+```java
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
+
+@ConfigurationProperties(prefix = "app.api")
+@Validated
+record ApiProperties(
+    @NotBlank String baseUrl,
+    @Min(1) @Max(600) int timeoutSeconds
+) { }
+```
+
+**Bad example:**
+
+```java
+@ConfigurationProperties(prefix = "app.api")
+record ApiProperties(String baseUrl, int timeoutSeconds) { }
+// No validation: negative timeout or blank URL only fails deep in HTTP client code
+```
+
+### Example 6: Method-level validation
+
+Title: @Validated service + constraints on method parameters and return values
+Description: Enable method validation with `@Validated` on a Spring-managed bean and use parameter/return constraints for service-layer contracts. Requires `MethodValidationPostProcessor` (Spring Boot auto-configures when validation is on classpath).
+
+**Good example:**
+
+```java
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+import org.springframework.stereotype.Service;
+import org.springframework.validation.annotation.Validated;
+
+@Service
+@Validated
+class InventoryService {
+    void reserve(@NotBlank String sku, @Positive int quantity) {
+    }
+}
+```
+
+**Bad example:**
+
+```java
+@Service
+class BadInventoryService {
+    void reserve(String sku, int quantity) {
+        if (quantity <= 0) {
+            throw new IllegalArgumentException("bad qty");
+        }
+    }
+}
+```
+
+### Example 7: Custom constraint
+
+Title: @Constraint + ConstraintValidator for cross-field rules
+Description: Encapsulate reusable rules (e.g. password confirmation, date ranges) in a custom annotation and validator class registered for dependency injection when needed.
+
+**Good example:**
+
+```java
+import jakarta.validation.Constraint;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+import jakarta.validation.Payload;
+import java.lang.annotation.*;
+
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = SamePasswords.Validator.class)
+@interface SamePasswords {
+    String message() default "password and confirmation must match";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
+
+    class Validator implements ConstraintValidator<SamePasswords, PasswordForm> {
+        @Override
+        public boolean isValid(PasswordForm form, ConstraintValidatorContext ctx) {
+            if (form == null) return true;
+            return java.util.Objects.equals(form.password(), form.confirmPassword());
+        }
+    }
+}
+
+@SamePasswords
+record PasswordForm(
+    String password,
+    String confirmPassword
+) { }
+```
+
+**Bad example:**
+
+```java
+void register(String password, String confirm) {
+    if (!password.equals(confirm)) {
+        throw new IllegalStateException("mismatch");
+    }
+}
+// Duplicated in every controller instead of a reusable constraint
+```
+
+### Example 8: Centralized validation error mapping
+
+Title: @ControllerAdvice for MethodArgumentNotValidException and ConstraintViolationException
+Description: Map validation failures to HTTP 400 with a stable JSON or Problem Detail shape. Never return raw `BindingResult` stack traces or exception messages that leak internals.
+
+**Good example:**
+
+```java
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
+@ControllerAdvice
+class ValidationExceptionHandler {
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    ResponseEntity<Map<String, Object>> handle(MethodArgumentNotValidException ex) {
+        List<String> errors = ex.getBindingResult().getFieldErrors().stream()
+            .map(fe -> fe.getField() + ": " + fe.getDefaultMessage())
+            .collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+            .body(Map.of("error", "VALIDATION_ERROR", "details", errors));
+    }
+}
+```
+
+**Bad example:**
+
+```java
+@ExceptionHandler(MethodArgumentNotValidException.class)
+String bad(MethodArgumentNotValidException ex) {
+    return ex.getMessage();
+}
+// Leaks framework wording; inconsistent with other endpoints
+```
+
 ## Output Format
 
-- **ANALYZE** controller and service boundaries for missing or inconsistent validation
-- **APPLY** declarative Bean Validation rules with `@Valid` / `@Validated` and custom constraints where needed
-- **STANDARDIZE** validation error responses with centralized exception handling
-- **VALIDATE** with compile and full verification commands
+- **ANALYZE** controllers, services, and configuration beans for missing `@Valid`, missing `@Validated`, wrong groups, and uncascaded nested DTOs
+- **CATEGORIZE** findings: boundary (HTTP), configuration startup, service method contracts, custom constraints, error response consistency
+- **APPLY** declarative Bean Validation; add `@ControllerAdvice` mapping for `MethodArgumentNotValidException`, `ConstraintViolationException`, and `HandlerMethodValidationException` (Spring 6.1+) as appropriate
+- **STANDARDIZE** validation error payloads with RFC 7807 or a stable internal schema aligned with `@302-frameworks-spring-boot-rest`
+- **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
 
 ## Safeguards
 
-- Do not bypass boundary validation in public API endpoints
-- Do not leak internal exception details in validation responses
-- Prefer small and incremental validation refactors
+- Do not omit `@Valid` on request bodies that carry constraints
+- Do not leak stack traces, SQL, or internal field names beyond what the API contract documents
+- Prefer incremental refactors; add tests for representative invalid payloads

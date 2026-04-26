@@ -1,6 +1,6 @@
 ---
 name: 304-frameworks-spring-boot-security
-description: Use when you need to design, review, or improve security in Spring Boot applications — including Spring Security configuration, authentication/authorization, endpoint protection, method security, and secure handling of sensitive data.
+description: Use when you need to design, review, or improve security in Spring Boot applications — including SecurityFilterChain, OAuth2/JWT resource server patterns, form login basics, method security (@PreAuthorize), CSRF and CORS for APIs, session fixation, security headers, exception handling, password encoding, and sensitive-data-safe logging.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -14,7 +14,7 @@ You are a Senior software engineer with extensive experience in Spring Security 
 
 ## Goal
 
-Apply secure-by-default Spring Boot practices: enforce authentication and authorization consistently, define least-privilege access control, and avoid sensitive data exposure in logs and API responses.
+Apply secure-by-default Spring Boot practices: enforce authentication and authorization consistently, define least-privilege access control, use stateless or session-based models deliberately, and avoid sensitive data exposure in logs and API responses. Align with `@302-frameworks-spring-boot-rest` for error bodies on 401/403.
 
 ## Constraints
 
@@ -28,31 +28,37 @@ Before applying recommendations, ensure the project compiles. Compilation failur
 
 ### Table of contents
 
-- Example 1: Secure endpoint and method access
+- Example 1: SecurityFilterChain and request authorization
+- Example 2: Method-level security
+- Example 3: Stateless APIs: CSRF and session
+- Example 4: CORS configuration
+- Example 5: OAuth2 Resource Server (JWT)
+- Example 6: Password encoding and user store
+- Example 7: Authentication and access-denied handling
+- Example 8: Security headers
 
-### Example 1: Secure endpoint and method access
+### Example 1: SecurityFilterChain and request authorization
 
-Title: Use SecurityFilterChain and method-level authorization
-Description: Define explicit security policies for public and protected routes. Use role-based authorization for privileged operations.
+Title: Explicit matchers; default deny for protected APIs
+Description: Order matchers from most specific to general. Use `permitAll` only for health, public docs, and true anonymous endpoints. Prefer `authenticated()` as the default for API surfaces unless the product is intentionally public.
 
 **Good example:**
 
 ```java
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.web.SecurityFilterChain;
 
 @Configuration
-@EnableMethodSecurity
-class SecurityConfig {
+class ApiSecurityConfig {
     @Bean
     SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         return http
             .authorizeHttpRequests(registry -> registry
-                .requestMatchers("/actuator/health").permitAll()
-                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/actuator/health", "/actuator/info").permitAll()
+                .requestMatchers("/api/public/**").permitAll()
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated())
             .build();
     }
@@ -62,26 +68,213 @@ class SecurityConfig {
 **Bad example:**
 
 ```java
+http.authorizeHttpRequests(r -> r.anyRequest().permitAll());
+// Entire API world-readable
+```
+
+### Example 2: Method-level security
+
+Title: @EnableMethodSecurity and @PreAuthorize
+Description: Protect service-layer entry points when URLs alone are insufficient (e.g. multi-tenant resources, ownership checks). Use SpEL expressions that reference method arguments or `@authenticationPrincipal`.
+
+**Good example:**
+
+```java
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
+import org.springframework.stereotype.Service;
+
 @Configuration
-class InsecureConfig {
-    @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        return http
-            .authorizeHttpRequests(registry -> registry.anyRequest().permitAll())
-            .build();
+@EnableMethodSecurity
+class MethodSecurityConfiguration { }
+
+@Service
+class OrderService {
+    @PreAuthorize("hasRole('ADMIN') or @orderAuth.ownsOrder(#orderId, authentication.name)")
+    void cancel(long orderId) { }
+}
+```
+
+**Bad example:**
+
+```java
+@Service
+class BadOrderService {
+    void cancel(long orderId, String callerToken) {
+        if (!"secret".equals(callerToken)) {
+            throw new SecurityException("no");
+        }
     }
 }
 ```
 
+### Example 3: Stateless APIs: CSRF and session
+
+Title: Disable CSRF only when using token-based auth without session cookies
+Description: For pure REST APIs authenticated via `Authorization: Bearer` without browser cookie sessions, CSRF protection on Spring Security’s session model is often disabled **together with** a stateless session policy. If the app uses session cookies for authentication, keep CSRF enabled or use a proper token strategy.
+
+**Good example:**
+
+```java
+import org.springframework.security.config.http.SessionCreationPolicy;
+// Inside SecurityFilterChain configuration for a JWT-only API:
+http
+    .csrf(csrf -> csrf.disable())
+    .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+```
+
+**Bad example:**
+
+```java
+http.csrf(csrf -> csrf.disable());
+// Disabled CSRF while still using session cookie login from a browser — vulnerable to CSRF
+```
+
+### Example 4: CORS configuration
+
+Title: Whitelist origins; avoid * with credentials
+Description: Restrict `allowedOriginPatterns` or `allowedOrigins` to known front-end hosts. Using `*` with `allowCredentials(true)` is invalid in browsers and unsafe if misconfigured.
+
+**Good example:**
+
+```java
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+
+CorsConfigurationSource cors() {
+    CorsConfiguration c = new CorsConfiguration();
+    c.setAllowedOriginPatterns(java.util.List.of("https://app.example.com"));
+    c.setAllowedMethods(java.util.List.of("GET", "POST", "PUT", "DELETE"));
+    c.setAllowedHeaders(java.util.List.of("Authorization", "Content-Type"));
+    c.setAllowCredentials(true);
+    UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    source.registerCorsConfiguration("/api/**", c);
+    return source;
+}
+```
+
+**Bad example:**
+
+```java
+cors.addAllowedOriginPattern("*");
+cors.setAllowCredentials(true);
+// Browser rejection or accidental over-permissive cross-origin access
+```
+
+### Example 5: OAuth2 Resource Server (JWT)
+
+Title: Validate bearer tokens with issuer or JWK set URI
+Description: For APIs behind an identity provider, use `spring-security-oauth2-resource-server` with `oauth2ResourceServer().jwt(...)`. Configure issuer URI or JWK set URI in properties; avoid embedding symmetric secrets in code.
+
+**Good example:**
+
+```properties
+spring.security.oauth2.resourceserver.jwt.issuer-uri=https://idp.example.com/realms/myrealm
+```
+
+**Bad example:**
+
+```java
+String HARDCODED_HS256_SECRET = "change-me";
+// Never ship shared secrets in source for token validation in production
+```
+
+### Example 6: Password encoding and user store
+
+Title: BCryptPasswordEncoder (or stronger) for credentials
+Description: Never store plaintext passwords. Use `PasswordEncoder` beans and encode at registration/password change time.
+
+**Good example:**
+
+```java
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+@Configuration
+class CryptoConfig {
+    @Bean
+    PasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder(12);
+    }
+}
+```
+
+**Bad example:**
+
+```java
+user.setPassword(plainTextPassword);
+userRepository.save(user);
+// Plaintext password persisted
+```
+
+### Example 7: Authentication and access-denied handling
+
+Title: Consistent 401/403 responses without stack traces
+Description: Customize `AuthenticationEntryPoint` and `AccessDeniedHandler` for APIs so clients receive JSON or Problem Details instead of HTML error pages.
+
+**Good example:**
+
+```java
+import org.springframework.http.HttpStatus;
+import org.springframework.security.web.AuthenticationEntryPoint;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+class Json401EntryPoint implements AuthenticationEntryPoint {
+    @Override
+    public void commence(HttpServletRequest req, HttpServletResponse res,
+                         org.springframework.security.core.AuthenticationException ex) throws IOException {
+        res.setStatus(HttpStatus.UNAUTHORIZED.value());
+        res.setContentType("application/json");
+        res.getWriter().write("{\"error\":\"UNAUTHORIZED\"}");
+    }
+}
+```
+
+**Bad example:**
+
+```java
+// Default HTML 401 page returned to API clients expecting JSON
+```
+
+### Example 8: Security headers
+
+Title: Frame options, content type options, HSTS where HTTPS
+Description: Enable Spring Security’s default security headers for browser-facing apps. For pure machine-to-machine JSON APIs, some headers matter less but do not weaken TLS or mixed-content assumptions.
+
+**Good example:**
+
+```java
+import org.springframework.security.config.Customizer;
+
+http.headers(Customizer.withDefaults());
+// Spring Security enables X-Content-Type-Options, cache control for authenticated resources, etc.
+
+http.headers(h -> h.frameOptions(frame -> frame.deny()));
+// Add explicit frame denial when serving browser-facing HTML admin alongside the API
+```
+
+**Bad example:**
+
+```java
+http.headers(h -> h.frameOptions(f -> f.sameOrigin()));
+// Misapplied on an API that should deny framing entirely for admin UIs
+```
+
 ## Output Format
 
-- **ANALYZE** current authentication and authorization boundaries
-- **APPLY** secure defaults, route protection, and least-privilege policies
-- **HARDEN** logging/error behavior to avoid sensitive data leakage
-- **VALIDATE** with compile and full verification commands
+- **ANALYZE** SecurityFilterChain rules, method security, CSRF/session model, CORS, authentication mechanism, and error handling for 401/403
+- **CATEGORIZE** issues: misconfigured `permitAll`, missing authorization on admin routes, unsafe CSRF disable, overly broad CORS, weak password storage, information disclosure in errors
+- **APPLY** least-privilege matchers, correct stateless/session strategy, strong password encoding, and JSON/Problem Details for security failures
+- **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes; add integration tests for forbidden and unauthenticated access
 
 ## Safeguards
 
-- Do not weaken endpoint protection to bypass failing tests
-- Do not expose tokens, secrets, or credentials in logs/responses
-- Prefer incremental security changes with verification between steps
+- Do not weaken endpoint protection to green-light failing tests
+- Do not log tokens, passwords, or full Authorization headers
+- Document threat model when disabling CSRF or using wildcard CORS

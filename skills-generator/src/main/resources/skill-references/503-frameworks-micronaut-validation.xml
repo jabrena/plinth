@@ -5,13 +5,13 @@
         <version>0.15.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
         <title>Micronaut Validation Guidelines</title>
-        <description>Use when you need to design, review, or improve validation in Micronaut applications — including Bean Validation annotations, @Valid at controller boundaries, custom constraints, and predictable validation error responses.</description>
+        <description>Use when you need to design, review, or improve validation in Micronaut applications — including Bean Validation on @Controller methods, @Body @Valid, query/path parameter validation, @ConfigurationProperties validation, custom constraints, factory-based method validation, nested DTO validation, and ExceptionHandler mapping for constraint violations.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Micronaut and Jakarta Bean Validation</role>
 
     <goal>
-        Ensure Micronaut APIs validate inputs at boundaries, enforce clear constraint rules, and return stable validation error responses without leaking implementation details.
+        Ensure Micronaut HTTP APIs validate inputs at boundaries, keep constraint definitions on DTOs and command models, and return stable validation error responses. Align with `@502-frameworks-micronaut-rest` for status codes and error bodies.
     </goal>
 
     <constraints>
@@ -28,14 +28,15 @@
 
     <examples>
         <toc auto-generate="true" />
-        <example number="1" id="micronaut-boundary-validation">
+
+        <example number="1" id="controller-body-valid">
             <example-header>
-                <example-title>Validate input using @Valid and Bean Validation</example-title>
-                <example-subtitle>Keep constraints in DTOs and validate at controller entry points</example-subtitle>
+                <example-title>Request body validation</example-title>
+                <example-subtitle>@Body @Valid with constrained records</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                Use `@Body @Valid` in controller methods and annotate request DTOs with Jakarta constraints. Avoid manual string checks spread across endpoints.
+                Always pair constrained request types with `@Valid` (or `@Validated` for groups) on `@Body` parameters so Micronaut triggers Bean Validation before the controller method runs.
                 ]]>
             </example-description>
             <code-examples>
@@ -51,25 +52,248 @@ import jakarta.validation.constraints.NotBlank;
 @Controller("/users")
 class UserController {
     @Post
-    HttpResponse<String> create(@Body @Valid CreateUserRequest request) {
-        return HttpResponse.ok("created");
+    HttpResponse<Void> create(@Body @Valid CreateUserRequest request) {
+        return HttpResponse.noContent();
     }
 }
 
 record CreateUserRequest(@NotBlank String username, @Email String email) { }]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[@Controller("/users")
-class BadUserController {
-    @Post
-    String create(@Body CreateUserRequest request) {
-        if (request.email() == null || !request.email().contains("@")) {
-            throw new IllegalArgumentException("invalid email");
+                <bad-example>
+                    <code-block language="java"><![CDATA[@Post
+HttpResponse<Void> create(@Body CreateUserRequest request) {
+    return HttpResponse.noContent();
+}
+// Constraints on CreateUserRequest are not enforced without @Valid]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="2" id="micronaut-query-path-validation">
+            <example-header>
+                <example-title>Query and path parameters</example-title>
+                <example-subtitle>@Min, @Max, @Pattern on @QueryValue and URI variables</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Validate simple parameters on the controller method. Prefer typed query values with constraints instead of parsing raw strings manually.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.http.annotation.Controller;
+import io.micronaut.http.annotation.Get;
+import io.micronaut.http.annotation.PathVariable;
+import io.micronaut.http.annotation.QueryValue;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
+
+@Controller("/items")
+class ItemController {
+    @Get("/{id}")
+    String get(@PathVariable @Pattern(regexp = "^[a-z0-9-]+$") String id) {
+        return id;
+    }
+
+    @Get
+    String list(@QueryValue @Min(0) int page, @QueryValue @Min(1) @Max(100) int size) {
+        return page + ":" + size;
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[@Get("/{id}")
+String get(String id) {
+    if (id.contains("..")) throw new IllegalArgumentException();
+    return id;
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="micronaut-configuration-validated">
+            <example-header>
+                <example-title>@ConfigurationProperties validation</example-title>
+                <example-subtitle>Fail-fast binding with @Valid and constraints</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Annotate `@ConfigurationProperties` beans with `@Valid` and Jakarta constraints so invalid `application.yml` fails at startup. Pairs with `@501-frameworks-micronaut-core`.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.context.annotation.ConfigurationProperties;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.Valid;
+
+@ConfigurationProperties("app.api")
+@Valid
+record ApiSettings(
+    @NotBlank String baseUrl,
+    @Min(1) @Max(600) int timeoutSeconds
+) { }]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[@ConfigurationProperties("app.api")
+record ApiSettings(String baseUrl, int timeoutSeconds) { }
+// No startup validation]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="micronaut-nested-valid">
+            <example-header>
+                <example-title>Nested and collection validation</example-title>
+                <example-subtitle>@Valid on nested types and list elements</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Cascade validation with `@Valid` on nested fields and `List<@NotNull @Valid LineItem>` patterns.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import java.util.List;
+
+public record OrderRequest(
+    @NotNull @Valid Address shipping,
+    @NotEmpty List<@NotNull @Valid LineItem> lines
+) { }
+
+public record Address(@NotNull @Size(max = 200) String street) { }
+
+public record LineItem(
+    @NotNull @Size(min = 1, max = 64) String sku,
+    int qty
+) { }]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[public record OrderRequest(Address shipping, List<LineItem> lines) { }]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="5" id="micronaut-service-method-validation">
+            <example-header>
+                <example-title>Service method validation</example-title>
+                <example-subtitle>@Validated singleton with constrained methods</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Apply `io.micronaut.validation.annotation.Validated` to a bean class so method-parameter constraints are enforced when other beans call through the Micronaut proxy (avoid self-invocation bypassing validation).
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.validation.annotation.Validated;
+import jakarta.inject.Singleton;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Positive;
+
+@Singleton
+@Validated
+class InventoryService {
+    void reserve(@NotBlank String sku, @Positive int quantity) {
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[void reserve(String sku, int qty) {
+    if (qty <= 0) throw new IllegalArgumentException();
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="6" id="micronaut-constraint-exception-handler">
+            <example-header>
+                <example-title>ConstraintViolationException handler</example-title>
+                <example-subtitle>Map validation failures to HTTP 400</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Provide an `ExceptionHandler<ConstraintViolationException>` singleton to return consistent JSON for validation errors across controllers.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
+import io.micronaut.http.server.exceptions.ExceptionHandler;
+import jakarta.inject.Singleton;
+import jakarta.validation.ConstraintViolationException;
+import java.util.stream.Collectors;
+
+@Singleton
+public class ConstraintViolationHandler
+        implements ExceptionHandler<ConstraintViolationException, HttpResponse<?>> {
+
+    @Override
+    public HttpResponse<?> handle(HttpRequest request, ConstraintViolationException ex) {
+        var details = ex.getConstraintViolations().stream()
+            .map(v -> v.getPropertyPath() + ": " + v.getMessage())
+            .collect(Collectors.toList());
+        return HttpResponse.status(HttpStatus.BAD_REQUEST)
+            .body(java.util.Map.of("error", "VALIDATION_ERROR", "details", details));
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[return HttpResponse.badRequest(ex.getMessage());
+// Unstable message; may expose internal paths]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="7" id="micronaut-custom-constraint">
+            <example-header>
+                <example-title>Class-level custom constraint</example-title>
+                <example-subtitle>Reuse cross-field rules</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Implement `@Constraint(validatedBy = ...)` for DTO-level rules shared across endpoints.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import jakarta.validation.Constraint;
+import jakarta.validation.ConstraintValidator;
+import jakarta.validation.ConstraintValidatorContext;
+import jakarta.validation.Payload;
+import java.lang.annotation.*;
+
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Constraint(validatedBy = SamePasswords.Validator.class)
+@interface SamePasswords {
+    String message() default "passwords must match";
+    Class<?>[] groups() default {};
+    Class<? extends Payload>[] payload() default {};
+
+    class Validator implements ConstraintValidator<SamePasswords, PasswordForm> {
+        @Override
+        public boolean isValid(PasswordForm v, ConstraintValidatorContext ctx) {
+            if (v == null) return true;
+            return java.util.Objects.equals(v.password(), v.confirmPassword());
         }
-        return "created";
     }
 }
-record CreateUserRequest(String username, String email) { }]]></code-block>
+
+@SamePasswords
+public record PasswordForm(String password, String confirmPassword) { }]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[if (!p1.equals(p2)) throw new IllegalArgumentException("mismatch");]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
@@ -77,18 +301,18 @@ record CreateUserRequest(String username, String email) { }]]></code-block>
 
     <output-format>
         <output-format-list>
-            <output-format-item>**ANALYZE** missing validation at controller and service boundaries</output-format-item>
-            <output-format-item>**APPLY** Bean Validation rules with `@Valid` / custom constraints where needed</output-format-item>
-            <output-format-item>**STANDARDIZE** validation error response handling</output-format-item>
-            <output-format-item>**VALIDATE** with compile and full verification commands</output-format-item>
+            <output-format-item>**ANALYZE** controllers, factories, and configuration beans for missing `@Valid`, missing cascades, and inconsistent 400 bodies</output-format-item>
+            <output-format-item>**APPLY** Bean Validation at HTTP boundaries and on `@ConfigurationProperties`; centralize `ConstraintViolationException` handling</output-format-item>
+            <output-format-item>**ALIGN** error responses with Problem Details or project-standard JSON from `@502-frameworks-micronaut-rest`</output-format-item>
+            <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
         </output-format-list>
     </output-format>
 
     <safeguards>
         <safeguards-list>
-            <safeguards-item>Do not rely on ad-hoc per-endpoint checks as the primary validation strategy</safeguards-item>
-            <safeguards-item>Do not expose internal exception details to API clients</safeguards-item>
-            <safeguards-item>Prefer incremental changes and re-verify frequently</safeguards-item>
+            <safeguards-item>Do not omit `@Valid` on constrained `@Body` parameters</safeguards-item>
+            <safeguards-item>Do not return stack traces or raw validator messages to clients</safeguards-item>
+            <safeguards-item>Verify validation behavior under compile-time HTTP clients and GraalVM native if applicable</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>

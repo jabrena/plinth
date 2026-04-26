@@ -1,6 +1,6 @@
 ---
 name: 504-frameworks-micronaut-security
-description: Use when you need to design, review, or improve security in Micronaut applications — including authentication, authorization with @Secured, route protection, secure defaults, and sensitive-data-safe logging/error handling.
+description: Use when you need to design, review, or improve security in Micronaut applications — including micronaut-security authentication, @Secured and intercept-url-map rules, JWT/session strategies, SecurityService checks, CORS, CSRF awareness for browser apps, rejection handlers, and sensitive-data-safe logging.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -14,7 +14,7 @@ You are a Senior software engineer with extensive experience in Micronaut Securi
 
 ## Goal
 
-Apply secure-by-default Micronaut security practices by enforcing route and method authorization policies consistently, using least-privilege roles, and preventing sensitive data exposure.
+Apply secure-by-default Micronaut security practices: authenticate requests consistently, authorize with explicit role or expression rules, avoid custom header secrets, configure CORS narrowly, and prevent credential and token leakage in logs and responses. Align with `@502-frameworks-micronaut-rest` for HTTP error bodies.
 
 ## Constraints
 
@@ -28,12 +28,18 @@ Before applying recommendations, ensure the project compiles. Compilation failur
 
 ### Table of contents
 
-- Example 1: Protect routes with @Secured
+- Example 1: @Secured on controllers
+- Example 2: Intercept URL map rules
+- Example 3: JWT bearer configuration
+- Example 4: Custom authentication provider
+- Example 5: Micronaut CORS
+- Example 6: Authorization failure responses
+- Example 7: CSRF and session cookies
 
-### Example 1: Protect routes with @Secured
+### Example 1: @Secured on controllers
 
-Title: Keep authorization declarative in controllers
-Description: Use Micronaut Security annotations to enforce access rules and avoid manual security checks in request handlers.
+Title: Anonymous, authenticated, and role-based routes
+Description: Use `SecurityRule.IS_ANONYMOUS`, `IS_AUTHENTICATED`, and role strings (e.g. `ROLE_ADMIN`) on controller classes or methods. Prefer declarative security over manual header checks.
 
 **Good example:**
 
@@ -46,41 +52,214 @@ import io.micronaut.security.annotation.Secured;
 import static io.micronaut.security.rules.SecurityRule.IS_ANONYMOUS;
 import static io.micronaut.security.rules.SecurityRule.IS_AUTHENTICATED;
 
-@Controller("/orders")
-class OrderController {
+@Controller("/api")
+@Secured(IS_AUTHENTICATED)
+class ApiController {
+
     @Secured(IS_ANONYMOUS)
-    @Get("/{id}")
-    String read(@PathVariable String id) { return id; }
+    @Get("/health")
+    String health() { return "ok"; }
+
+    @Get("/profile/{id}")
+    String profile(@PathVariable String id) { return id; }
 
     @Secured("ROLE_ADMIN")
-    @Delete("/{id}")
-    void delete(@PathVariable String id) { }
+    @Delete("/admin/cache")
+    void clearCache() { }
 }
 ```
 
 **Bad example:**
 
 ```java
-@Controller("/orders")
-class BadOrderController {
-    @Delete("/{id}")
-    void delete(@PathVariable String id, @io.micronaut.http.annotation.Header("X-Admin-Token") String token) {
-        if (!"secret".equals(token)) {
-            throw new RuntimeException("forbidden");
-        }
+@Delete("/admin/cache")
+void clear(@Header("X-Admin-Token") String t) {
+    if (!"secret".equals(t)) throw new RuntimeException();
+}
+```
+
+### Example 2: Intercept URL map rules
+
+Title: Pattern-based access in configuration
+Description: Define `micronaut.security.intercept-url-map` entries for static path policies (health, swagger UI, admin prefixes). Order patterns from specific to general where the implementation requires it.
+
+**Good example:**
+
+```yaml
+micronaut:
+  security:
+    intercept-url-map:
+      - pattern: /health
+        httpMethod: GET
+        access:
+          - isAnonymous()
+      - pattern: /api/admin/**
+        access:
+          - ROLE_ADMIN
+      - pattern: /api/**
+        access:
+          - isAuthenticated()
+```
+
+**Bad example:**
+
+```yaml
+pattern: /**
+  access:
+    - isAnonymous()
+# Entire application including mutating APIs is public
+```
+
+### Example 3: JWT bearer configuration
+
+Title: Signatures, issuers, and secrets from environment
+Description: Configure `micronaut.security.token.jwt` with signatures or JWKS. Load secrets via environment variables or Micronaut Kubernetes config — never commit private keys or symmetric secrets.
+
+**Good example:**
+
+```yaml
+micronaut:
+  security:
+    token:
+      jwt:
+        signatures:
+          secret:
+            generator:
+              secret: "${JWT_GENERATOR_SIGNATURE_SECRET:}"
+        claims-validators:
+          issuer: https://idp.example.com/
+```
+
+**Bad example:**
+
+```yaml
+secret: "hardcoded-symmetric-key-in-git"
+```
+
+### Example 4: Custom authentication provider
+
+Title: Return AuthenticationResponse with roles, not raw passwords
+Description: When implementing `HttpRequestAuthenticationProvider`, validate credentials against a secure store and return an `AuthenticationResponse` with principal and roles. Never log passwords or API keys.
+
+**Good example:**
+
+```java
+import io.micronaut.http.HttpRequest;
+import io.micronaut.security.authentication.AuthenticationProvider;
+import io.micronaut.security.authentication.AuthenticationRequest;
+import io.micronaut.security.authentication.AuthenticationResponse;
+import org.reactivestreams.Publisher;
+import reactor.core.publisher.Mono;
+
+class DbAuthProvider implements AuthenticationProvider {
+    @Override
+    public Publisher<AuthenticationResponse> authenticate(
+            HttpRequest<?> request,
+            AuthenticationRequest<?, ?> authRequest) {
+        return Mono.fromCallable(() ->
+            AuthenticationResponse.success((String) authRequest.getIdentity()));
     }
 }
 ```
 
+**Bad example:**
+
+```java
+LOG.info("login attempt password={}", password);
+```
+
+### Example 5: Micronaut CORS
+
+Title: Restrict allowed origins for browser clients
+Description: Enable CORS in `micronaut.server.cors` with explicit origins. Avoid `*` when cookies or credentials are sent.
+
+**Good example:**
+
+```yaml
+micronaut:
+  server:
+    cors:
+      enabled: true
+      configurations:
+        web:
+          allowedOrigins:
+            - https://app.example.com
+          allowedMethods:
+            - GET
+            - POST
+            - PUT
+            - DELETE
+          allowedHeaders:
+            - Authorization
+            - Content-Type
+```
+
+**Bad example:**
+
+```yaml
+allowedOrigins:
+  - "*"
+allowedCredentials: true
+# Invalid or unsafe combination in browsers
+```
+
+### Example 6: Authorization failure responses
+
+Title: Map AuthorizationException to stable JSON
+Description: Register an `ExceptionHandler` for `io.micronaut.security.authentication.AuthorizationException` (or your stack’s equivalent) so API clients receive JSON or Problem bodies instead of empty responses or HTML defaults.
+
+**Good example:**
+
+```java
+import io.micronaut.http.HttpRequest;
+import io.micronaut.http.HttpResponse;
+import io.micronaut.http.HttpStatus;
+import io.micronaut.http.server.exceptions.ExceptionHandler;
+import io.micronaut.security.authentication.AuthorizationException;
+import jakarta.inject.Singleton;
+
+@Singleton
+class AuthorizationExceptionMapper implements ExceptionHandler<AuthorizationException, HttpResponse<?>> {
+    @Override
+    public HttpResponse<?> handle(HttpRequest request, AuthorizationException e) {
+        return HttpResponse.status(HttpStatus.FORBIDDEN)
+            .body(java.util.Map.of("error", "FORBIDDEN"));
+    }
+}
+```
+
+**Bad example:**
+
+```java
+return HttpResponse.status(403).body(e.toString());
+```
+
+### Example 7: CSRF and session cookies
+
+Title: Browser-facing apps need explicit CSRF strategy
+Description: Pure bearer-token APIs are often immune to classic CSRF. If Micronaut serves cookie-based sessions to browsers, enable CSRF protection or use same-site cookies and modern SPA patterns; do not assume `@Secured` alone prevents CSRF.
+
+**Good example:**
+
+```text
+Document: cookie session login uses CSRF tokens or SameSite=strict cookies; APIs use Authorization header only.
+```
+
+**Bad example:**
+
+```text
+Cookie session for SPA + state-changing POST without CSRF defense — vulnerable to cross-site form posts
+```
+
 ## Output Format
 
-- **ANALYZE** current authentication/authorization boundaries and risky defaults
-- **APPLY** explicit route and method protections with least-privilege roles
-- **HARDEN** logs and error responses to avoid leaking sensitive information
-- **VALIDATE** with compile and full verification commands
+- **ANALYZE** `@Secured` coverage, intercept URL maps, JWT config, CORS, and error responses for authz failures
+- **CATEGORIZE** issues: anonymous-by-default, weak JWT secrets, overbroad CORS, missing role checks, information disclosure
+- **APPLY** least-privilege rules, secure token configuration, and JSON/Problem responses for 401/403
+- **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
 
 ## Safeguards
 
-- Do not introduce permissive defaults to pass tests quickly
-- Do not expose tokens, credentials, or secrets in logs/responses
-- Prefer incremental security hardening with frequent verification
+- Do not commit signing secrets or API keys to the repository
+- Do not log Authorization headers or JWTs
+- Re-verify security rules after dependency upgrades to micronaut-security
