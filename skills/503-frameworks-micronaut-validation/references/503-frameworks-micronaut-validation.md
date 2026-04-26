@@ -50,6 +50,7 @@ import io.micronaut.http.annotation.Post;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Controller("/users")
 class UserController {
@@ -59,7 +60,11 @@ class UserController {
     }
 }
 
-record CreateUserRequest(@NotBlank String username, @Email String email) { }
+record CreateUserRequest(
+    @NotBlank String username,
+    @NotBlank @Email String email,
+    @NotBlank @Size(min = 8, max = 128) String password
+) { }
 ```
 
 **Bad example:**
@@ -114,8 +119,8 @@ String get(String id) {
 
 ### Example 3: @ConfigurationProperties validation
 
-Title: Fail-fast binding with @Valid and constraints
-Description: Annotate `@ConfigurationProperties` beans with `@Valid` and Jakarta constraints so invalid `application.yml` fails at startup. Pairs with `@501-frameworks-micronaut-core`.
+Title: Fail-fast binding with Bean Validation constraints
+Description: Put Jakarta constraints directly on `@ConfigurationProperties` values so invalid `application.yml` fails at startup. Pairs with `@501-frameworks-micronaut-core`.
 
 **Good example:**
 
@@ -124,10 +129,8 @@ import io.micronaut.context.annotation.ConfigurationProperties;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.Valid;
 
 @ConfigurationProperties("app.api")
-@Valid
 record ApiSettings(
     @NotBlank String baseUrl,
     @Min(1) @Max(600) int timeoutSeconds
@@ -153,6 +156,7 @@ Description: Cascade validation with `@Valid` on nested fields and `List<@NotNul
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.util.List;
 
@@ -161,11 +165,11 @@ public record OrderRequest(
     @NotEmpty List<@NotNull @Valid LineItem> lines
 ) { }
 
-public record Address(@NotNull @Size(max = 200) String street) { }
+record Address(@NotNull @Size(max = 200) String street) { }
 
-public record LineItem(
+record LineItem(
     @NotNull @Size(min = 1, max = 64) String sku,
-    int qty
+    @Positive int qty
 ) { }
 ```
 
@@ -243,7 +247,7 @@ import java.lang.annotation.*;
 }
 
 @SamePasswords
-public record PasswordForm(String password, String confirmPassword) { }
+record PasswordForm(String password, String confirmPassword) { }
 ```
 
 **Bad example:**

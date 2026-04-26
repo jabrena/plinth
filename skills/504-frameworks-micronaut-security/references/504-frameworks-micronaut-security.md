@@ -125,7 +125,7 @@ micronaut:
         signatures:
           secret:
             generator:
-              secret: "${JWT_GENERATOR_SIGNATURE_SECRET:}"
+              secret: "${JWT_GENERATOR_SIGNATURE_SECRET}"
         claims-validators:
           issuer: https://idp.example.com/
 ```
@@ -145,24 +145,19 @@ Description: Implement `HttpRequestAuthenticationProvider<B>` (Micronaut 4+) to 
 
 ```java
 import io.micronaut.http.HttpRequest;
-import io.micronaut.security.authentication.AuthenticationProvider;
 import io.micronaut.security.authentication.AuthenticationRequest;
 import io.micronaut.security.authentication.AuthenticationResponse;
+import io.micronaut.security.authentication.provider.HttpRequestAuthenticationProvider;
 import jakarta.inject.Singleton;
-import reactor.core.publisher.Flux;
-import reactor.core.publisher.FluxSink;
 
 @Singleton
-class DbAuthProvider implements AuthenticationProvider<HttpRequest<?>> {
+class DbAuthProvider<B> implements HttpRequestAuthenticationProvider<B> {
     @Override
-    public org.reactivestreams.Publisher<AuthenticationResponse> authenticate(
-            HttpRequest<?> request,
-            AuthenticationRequest<?, ?> authRequest) {
-        return Flux.create(emitter -> {
-            // validate credentials against DB here — never log password
-            emitter.next(AuthenticationResponse.success((String) authRequest.getIdentity()));
-            emitter.complete();
-        }, FluxSink.OverflowStrategy.ERROR);
+    public AuthenticationResponse authenticate(
+            HttpRequest<B> request,
+            AuthenticationRequest<String, String> authRequest) {
+        // validate credentials against DB here — never log password
+        return AuthenticationResponse.success(authRequest.getIdentity());
     }
 }
 ```

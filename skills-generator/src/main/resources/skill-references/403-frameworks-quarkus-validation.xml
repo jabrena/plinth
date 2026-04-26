@@ -44,6 +44,7 @@
                     <code-block language="java"><![CDATA[import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -56,7 +57,11 @@ public class UserResource {
     public void create(@Valid CreateUserRequest request) { }
 }
 
-record CreateUserRequest(@NotBlank String username, @Email String email) { }]]></code-block>
+record CreateUserRequest(
+    @NotBlank String username,
+    @NotBlank @Email String email,
+    @NotBlank @Size(min = 8, max = 128) String password
+) { }]]></code-block>
                 </good-example>
                 <bad-example>
                     <code-block language="java"><![CDATA[@POST
@@ -113,26 +118,22 @@ public String get(@PathParam("id") String id) {
         <example number="3" id="quarkus-config-mapping-valid">
             <example-header>
                 <example-title>@ConfigMapping with validation</example-title>
-                <example-subtitle>Fail-fast configuration with @Valid and constraints</example-subtitle>
+                <example-subtitle>Fail-fast configuration with Bean Validation constraints</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                Use SmallRye Config `@ConfigMapping` with Bean Validation so invalid `application.properties` fails at startup. Pairs with `@401-frameworks-quarkus-core`.
+                Use SmallRye Config `@ConfigMapping` with Bean Validation constraints on mapping methods so invalid `application.properties` fails at startup. Pairs with `@401-frameworks-quarkus-core`.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[import io.smallrye.config.ConfigMapping;
-import io.smallrye.config.WithParentName;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
 @ConfigMapping(prefix = "app.api")
-@Valid
 interface ApiConfig {
-    @WithParentName
     @NotBlank
     String baseUrl();
 
@@ -167,6 +168,7 @@ interface ApiConfig {
                     <code-block language="java"><![CDATA[import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.util.List;
 
@@ -175,11 +177,11 @@ public record OrderRequest(
     @NotEmpty List<@NotNull @Valid LineItem> lines
 ) { }
 
-public record Address(@NotNull @Size(max = 200) String street) { }
+record Address(@NotNull @Size(max = 200) String street) { }
 
-public record LineItem(
+record LineItem(
     @NotNull @Size(min = 1, max = 64) String sku,
-    int qty
+    @Positive int qty
 ) { }]]></code-block>
                 </good-example>
                 <bad-example>
@@ -264,7 +266,7 @@ import java.lang.annotation.*;
 }
 
 @SamePasswords
-public record PasswordForm(String password, String confirmPassword) { }]]></code-block>
+record PasswordForm(String password, String confirmPassword) { }]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
                     <code-block language="java"><![CDATA[if (!a.equals(b)) throw new IllegalArgumentException("mismatch");

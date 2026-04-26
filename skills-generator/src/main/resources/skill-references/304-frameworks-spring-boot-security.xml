@@ -213,25 +213,25 @@ class ResourceServerConfig {
         <example number="6" id="password-encoder-user-details">
             <example-header>
                 <example-title>Password encoding and user store</example-title>
-                <example-subtitle>BCryptPasswordEncoder (or stronger) for credentials</example-subtitle>
+                <example-subtitle>DelegatingPasswordEncoder for upgradeable credential hashes</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                Never store plaintext passwords. Use `PasswordEncoder` beans and encode at registration/password change time.
+                Never store plaintext passwords. Prefer `PasswordEncoderFactories.createDelegatingPasswordEncoder()` as the default because it stores `{id}` prefixes (for example `{bcrypt}`) and supports future password-hash upgrades without rewriting all credentials.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 class CryptoConfig {
     @Bean
     PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12);
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }]]></code-block>
                 </good-example>

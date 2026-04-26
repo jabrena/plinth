@@ -183,22 +183,22 @@ String HARDCODED_HS256_SECRET = "change-me";
 
 ### Example 6: Password encoding and user store
 
-Title: BCryptPasswordEncoder (or stronger) for credentials
-Description: Never store plaintext passwords. Use `PasswordEncoder` beans and encode at registration/password change time.
+Title: DelegatingPasswordEncoder for upgradeable credential hashes
+Description: Never store plaintext passwords. Prefer `PasswordEncoderFactories.createDelegatingPasswordEncoder()` as the default because it stores `{id}` prefixes (for example `{bcrypt}`) and supports future password-hash upgrades without rewriting all credentials.
 
 **Good example:**
 
 ```java
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 class CryptoConfig {
     @Bean
     PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(12);
+        return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
 }
 ```

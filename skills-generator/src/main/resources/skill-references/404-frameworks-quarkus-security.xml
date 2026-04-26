@@ -169,22 +169,22 @@ quarkus.oidc.client-id=api-backend
             </example-header>
             <example-description>
                 <![CDATA[
-                Map both `NotAuthorizedException` (unauthenticated → 401) and `ForbiddenException` (authenticated but lacking role → 403) to stable JSON or Problem Details. Log server-side details with correlation IDs only.
+                Map Quarkus Security exceptions `UnauthorizedException` (unauthenticated → 401) and `ForbiddenException` (authenticated but lacking role → 403) to stable JSON or Problem Details. Log server-side details with correlation IDs only.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[import jakarta.ws.rs.ForbiddenException;
-import jakarta.ws.rs.NotAuthorizedException;
+                    <code-block language="java"><![CDATA[import io.quarkus.security.ForbiddenException;
+import io.quarkus.security.UnauthorizedException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 
 @Provider
-public class NotAuthorizedMapper implements ExceptionMapper<NotAuthorizedException> {
+public class UnauthorizedMapper implements ExceptionMapper<UnauthorizedException> {
     @Override
-    public Response toResponse(NotAuthorizedException ex) {
+    public Response toResponse(UnauthorizedException ex) {
         return Response.status(401)
             .type(MediaType.APPLICATION_JSON)
             .entity(java.util.Map.of("error", "UNAUTHORIZED"))
@@ -193,7 +193,7 @@ public class NotAuthorizedMapper implements ExceptionMapper<NotAuthorizedExcepti
 }
 
 @Provider
-public class ForbiddenMapper implements ExceptionMapper<ForbiddenException> {
+class ForbiddenMapper implements ExceptionMapper<ForbiddenException> {
     @Override
     public Response toResponse(ForbiddenException ex) {
         return Response.status(403)

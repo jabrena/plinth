@@ -160,22 +160,22 @@ String SHARED_SECRET = "hardcoded";
 ### Example 5: Auth failure exception mapping
 
 Title: Consistent 401/403 JSON without stack traces
-Description: Map both `NotAuthorizedException` (unauthenticated → 401) and `ForbiddenException` (authenticated but lacking role → 403) to stable JSON or Problem Details. Log server-side details with correlation IDs only.
+Description: Map Quarkus Security exceptions `UnauthorizedException` (unauthenticated → 401) and `ForbiddenException` (authenticated but lacking role → 403) to stable JSON or Problem Details. Log server-side details with correlation IDs only.
 
 **Good example:**
 
 ```java
-import jakarta.ws.rs.ForbiddenException;
-import jakarta.ws.rs.NotAuthorizedException;
+import io.quarkus.security.ForbiddenException;
+import io.quarkus.security.UnauthorizedException;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import jakarta.ws.rs.ext.ExceptionMapper;
 import jakarta.ws.rs.ext.Provider;
 
 @Provider
-public class NotAuthorizedMapper implements ExceptionMapper<NotAuthorizedException> {
+public class UnauthorizedMapper implements ExceptionMapper<UnauthorizedException> {
     @Override
-    public Response toResponse(NotAuthorizedException ex) {
+    public Response toResponse(UnauthorizedException ex) {
         return Response.status(401)
             .type(MediaType.APPLICATION_JSON)
             .entity(java.util.Map.of("error", "UNAUTHORIZED"))
@@ -184,7 +184,7 @@ public class NotAuthorizedMapper implements ExceptionMapper<NotAuthorizedExcepti
 }
 
 @Provider
-public class ForbiddenMapper implements ExceptionMapper<ForbiddenException> {
+class ForbiddenMapper implements ExceptionMapper<ForbiddenException> {
     @Override
     public Response toResponse(ForbiddenException ex) {
         return Response.status(403)

@@ -46,6 +46,7 @@ Description: Apply `@Valid` to the request body parameter so Hibernate Validator
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
@@ -58,7 +59,11 @@ public class UserResource {
     public void create(@Valid CreateUserRequest request) { }
 }
 
-record CreateUserRequest(@NotBlank String username, @Email String email) { }
+record CreateUserRequest(
+    @NotBlank String username,
+    @NotBlank @Email String email,
+    @NotBlank @Size(min = 8, max = 128) String password
+) { }
 ```
 
 **Bad example:**
@@ -112,23 +117,19 @@ public String get(@PathParam("id") String id) {
 
 ### Example 3: @ConfigMapping with validation
 
-Title: Fail-fast configuration with @Valid and constraints
-Description: Use SmallRye Config `@ConfigMapping` with Bean Validation so invalid `application.properties` fails at startup. Pairs with `@401-frameworks-quarkus-core`.
+Title: Fail-fast configuration with Bean Validation constraints
+Description: Use SmallRye Config `@ConfigMapping` with Bean Validation constraints on mapping methods so invalid `application.properties` fails at startup. Pairs with `@401-frameworks-quarkus-core`.
 
 **Good example:**
 
 ```java
 import io.smallrye.config.ConfigMapping;
-import io.smallrye.config.WithParentName;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
 @ConfigMapping(prefix = "app.api")
-@Valid
 interface ApiConfig {
-    @WithParentName
     @NotBlank
     String baseUrl();
 
@@ -160,6 +161,7 @@ Description: Cascade validation to nested records and to each list element using
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import java.util.List;
 
@@ -168,11 +170,11 @@ public record OrderRequest(
     @NotEmpty List<@NotNull @Valid LineItem> lines
 ) { }
 
-public record Address(@NotNull @Size(max = 200) String street) { }
+record Address(@NotNull @Size(max = 200) String street) { }
 
-public record LineItem(
+record LineItem(
     @NotNull @Size(min = 1, max = 64) String sku,
-    int qty
+    @Positive int qty
 ) { }
 ```
 
@@ -251,7 +253,7 @@ import java.lang.annotation.*;
 }
 
 @SamePasswords
-public record PasswordForm(String password, String confirmPassword) { }
+record PasswordForm(String password, String confirmPassword) { }
 ```
 
 **Bad example:**

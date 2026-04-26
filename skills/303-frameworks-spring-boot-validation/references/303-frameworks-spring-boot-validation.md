@@ -62,8 +62,8 @@ class UserController {
 
 record CreateUserRequest(
     @NotBlank String username,
-    @Email String email,
-    @Size(min = 8, max = 128) String password
+    @NotBlank @Email String email,
+    @NotBlank @Size(min = 8, max = 128) String password
 ) { }
 ```
 
@@ -146,7 +146,7 @@ record ItemRequest(String id, String name) { }
 ### Example 3: Path and query parameter validation
 
 Title: @Min, @Max, @Pattern on @PathVariable and @RequestParam
-Description: For simple types, use `@Validated` on the controller and Jakarta constraints directly on handler parameters. Spring validates them before the method body runs.
+Description: For simple handler parameters on Spring Framework 6.1+, put Jakarta constraints directly on method parameters and let Spring MVC method validation raise `HandlerMethodValidationException`. Avoid class-level `@Validated` on controllers unless you intentionally need the older AOP-based validation path.
 
 **Good example:**
 
@@ -154,12 +154,10 @@ Description: For simple types, use `@Validated` on the controller and Jakarta co
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/products")
-@Validated
 class ProductController {
 
     @GetMapping("/{id}")
@@ -200,6 +198,7 @@ Description: Cascade validation with `@Valid` on nested objects and on collectio
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 import org.springframework.web.bind.annotation.*;
 
@@ -218,7 +217,7 @@ record OrderRequest(
 
 record Address(@NotNull @Size(max = 200) String street) { }
 
-record LineItem(@NotNull @Size(min = 1, max = 64) String sku, int qty) { }
+record LineItem(@NotNull @Size(min = 1, max = 64) String sku, @Positive int qty) { }
 ```
 
 **Bad example:**
@@ -310,7 +309,7 @@ void register(String password, String confirm) {
 ### Example 7: Centralized validation error mapping
 
 Title: @ControllerAdvice for MethodArgumentNotValidException, ConstraintViolationException, and HandlerMethodValidationException
-Description: Map all validation failure types to HTTP 400 with a stable JSON shape. `MethodArgumentNotValidException` fires for `@Valid @RequestBody`; `ConstraintViolationException` fires for `@Validated` path/query params; `HandlerMethodValidationException` (Spring 6.1+) covers method-parameter validation on `@Validated` controllers. Never return raw `BindingResult` stack traces or exception messages that leak internals.
+Description: Map all validation failure types to HTTP 400 with a stable JSON shape. `MethodArgumentNotValidException` fires for `@Valid @RequestBody`; `HandlerMethodValidationException` (Spring 6.1+) covers MVC handler method-parameter validation; `ConstraintViolationException` still appears in older AOP-based `@Validated` flows and non-MVC validation paths. Never return raw `BindingResult` stack traces or exception messages that leak internals.
 
 **Good example:**
 
