@@ -1,6 +1,6 @@
 ---
 name: 512-frameworks-micronaut-data
-description: Use when you need data access with Micronaut Data — @MappedEntity, CrudRepository/PageableRepository, @Query with parameters, @Transactional services, projections, @Version, and @MicronautTest with TestPropertyProvider and Testcontainers. For raw java.sql access without generated repositories, use @511-frameworks-micronaut-jdbc. Part of the skills-for-java project
+description: Use when you need data access with Micronaut Data — @MappedEntity, CrudRepository/PageableRepository, @Query with parameters, @Transactional services, projections, @Version, and @MicronautTest with TestPropertyProvider and Testcontainers. For raw java.sql access without generated repositories, use @511-frameworks-micronaut-jdbc. This should trigger for requests such as Review or implement Micronaut Data repositories and entities; Add transactions, pagination, or projections in Micronaut persistence layer. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral

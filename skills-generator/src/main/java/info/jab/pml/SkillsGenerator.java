@@ -25,7 +25,7 @@ import org.w3c.dom.NodeList;
  */
 public final class SkillsGenerator {
 
-    private static final String PROJECT_TAG = " Part of the skills-for-java project";
+    private static final String PROJECT_TAG = " Part of cursor-rules-java project";
     private static final String LICENSE_FIELD = "license: Apache-2.0";
 
     private final SkillReferenceGenerator cursorRulesGenerator;

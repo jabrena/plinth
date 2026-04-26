@@ -18,7 +18,7 @@ Set up robust integration-test infrastructure for Java services using WireMock t
 - Infrastructure topology detection: scanning imports for `HttpClient`, `feign.*`, `retrofit2.*`, `RestTemplate`
 - Abstract `BaseIntegrationTest` base class
 - `WireMockExtension` with `@RegisterExtension`, dynamic port allocation (`dynamicPort()`)
-- `usingFilesUnderClasspath("wiremock")`, `@BeforeAll` + `System.setProperty()` for coordinate propagation
+- `usingFilesUnderClasspath(wiremock)`, `@BeforeAll` + `System.setProperty()` for coordinate propagation
 - WireMock JSON mapping files (`bodyFileName` referencing `wiremock/files/`)
 - Programmatic stub registration via WireMock DSL
 - Per-test stub isolation: register stubs inside each test method

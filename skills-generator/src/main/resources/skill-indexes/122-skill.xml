@@ -21,7 +21,7 @@ Review and improve Java code using comprehensive type design principles that app
 - Type-safe wrappers: value objects replacing primitive obsession (EmailAddress, Money)
 - Generic type parameters: flexible reusable types, bounded parameters
 - Domain-specific fluent interfaces: builder pattern, method chaining
-- Type "weights": conceptual importance — core domain vs supporting vs utility
+- Type weights: conceptual importance — core domain vs supporting vs utility
 - Type contrast through interfaces: contract vs implementation separation
 - Aligned method signatures: consistent parameter and return types across related classes
 - Self-documenting code: clear descriptive names

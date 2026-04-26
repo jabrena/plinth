@@ -1,6 +1,6 @@
 ---
 name: 001-skills-inventory
-description: Use when you need to generate a checklist document with Java system prompts, following the embedded template exactly and producing INVENTORY-SKILLS-JAVA.md in the project root. Part of the skills-for-java project
+description: Use when you need to generate a checklist document with Java system prompts, following the embedded template exactly and producing INVENTORY-SKILLS-JAVA.md in the project root. This should trigger for requests such as Create Java system prompts checklist; Generate INVENTORY-SKILLS-JAVA.md; Use @001-skills-inventory. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral

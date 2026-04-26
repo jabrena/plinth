@@ -1,6 +1,6 @@
 ---
 name: 042-planning-openspec
-description: Use when you need to take a `*.plan.md` file and turn it into OpenSpec change artifacts by validating OpenSpec installation, initializing or reusing an OpenSpec project, and creating or updating a change proposal/spec/tasks flow. Includes a concrete workflow based on `examples/requirements-examples/problem1/requirements/openspec`. Part of the skills-for-java project
+description: Use when you need to take a `*.plan.md` file and turn it into OpenSpec change artifacts by validating OpenSpec installation, initializing or reusing an OpenSpec project, and creating or updating a change proposal/spec/tasks flow. Includes a concrete workflow based on `examples/requirements-examples/problem1/requirements/openspec`. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral

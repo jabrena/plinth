@@ -1,6 +1,6 @@
 ---
 name: 302-frameworks-spring-boot-rest
-description: Use when you need to design, review, or improve REST APIs with Spring Boot — including HTTP methods, resource URIs, status codes, DTOs, versioning, deprecation and sunset headers, content negotiation (JSON and vendor media types), ISO-8601 instants in DTOs, pagination/sorting/filtering, Bean Validation at the boundary, idempotency, ETag concurrency, HTTP caching, error handling, security, contract-first OpenAPI (OpenAPI Generator), controller advice, and problem details for errors. Part of the skills-for-java project
+description: Use when you need to design, review, or improve REST APIs with Spring Boot — including HTTP methods, resource URIs, status codes, DTOs, versioning, deprecation and sunset headers, content negotiation (JSON and vendor media types), ISO-8601 instants in DTOs, pagination/sorting/filtering, Bean Validation at the boundary, idempotency, ETag concurrency, HTTP caching, error handling, security, contract-first OpenAPI (OpenAPI Generator), controller advice, and problem details for errors. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -24,7 +24,7 @@ Apply REST API design principles for Spring Boot applications.
 - Idempotency-Key support for POST creates; 409 Conflict for collisions
 - ETag concurrency with If-Match/If-None-Match; 412 Precondition Failed / 304 Not Modified
 - HTTP caching discipline (Cache-Control, ETag, Last-Modified)
-- Deprecation and sunset headers (Deprecation, Sunset, Link rel="successor-version")
+- Deprecation and sunset headers (Deprecation, Sunset, Link rel="successor-version)"
 - Error handling
 - API security (TLS, authentication, authorization, input validation)
 - API contract: OpenAPI file as source of truth for API-first (OpenAPI Generator)

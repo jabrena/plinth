@@ -1,6 +1,6 @@
 ---
 name: 402-frameworks-quarkus-rest
-description: Use when you need to design, review, or improve REST APIs with Quarkus REST (Jakarta REST) — including resource classes, HTTP methods, status codes, request/response DTOs, Bean Validation, exception mappers, optional runtime OpenAPI exposure (SmallRye), contract-first generation from OpenAPI, content negotiation, pagination, sorting and filtering, API versioning, idempotency (Idempotency-Key), optimistic concurrency (ETag / If-Match), HTTP caching (Cache-Control), API deprecation (Sunset / Deprecation headers), RFC 7807 Problem Details, ISO-8601 for time in contracts, and security-aware boundaries. Part of the skills-for-java project
+description: Use when you need to design, review, or improve REST APIs with Quarkus REST (Jakarta REST) — including resource classes, HTTP methods, status codes, request/response DTOs, Bean Validation, exception mappers, optional runtime OpenAPI exposure (SmallRye), contract-first generation from OpenAPI, content negotiation, pagination, sorting and filtering, API versioning, idempotency (Idempotency-Key), optimistic concurrency (ETag / If-Match), HTTP caching (Cache-Control), API deprecation (Sunset / Deprecation headers), RFC 7807 Problem Details, ISO-8601 for time in contracts, and security-aware boundaries. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral

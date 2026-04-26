@@ -27,7 +27,7 @@ Apply REST API design principles for Spring Boot applications.
 - Idempotency-Key support for POST creates; 409 Conflict for collisions
 - ETag concurrency with If-Match/If-None-Match; 412 Precondition Failed / 304 Not Modified
 - HTTP caching discipline (Cache-Control, ETag, Last-Modified)
-- Deprecation and sunset headers (Deprecation, Sunset, Link rel="successor-version")
+- Deprecation and sunset headers (Deprecation, Sunset, Link rel="successor-version)"
 - Error handling
 - API security (TLS, authentication, authorization, input validation)
 - API contract: OpenAPI file as source of truth for API-first (OpenAPI Generator)

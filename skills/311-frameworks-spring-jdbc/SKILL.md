@@ -1,6 +1,6 @@
 ---
 name: 311-frameworks-spring-jdbc
-description: Use when you need to write or review programmatic JDBC with Spring — including JdbcClient (Spring Framework 6.1+) as the default API, JdbcTemplate only where batch/streaming APIs require JdbcOperations, NamedParameterJdbcTemplate for legacy named-param code, parameterized SQL, RowMapper mapping to records, batch operations, transactions, safe handling of generated keys, DataAccessException handling, read-only transactions, streaming large result sets, and @JdbcTest slice testing. Part of the skills-for-java project
+description: Use when you need to write or review programmatic JDBC with Spring — including JdbcClient (Spring Framework 6.1+) as the default API, JdbcTemplate only where batch/streaming APIs require JdbcOperations, NamedParameterJdbcTemplate for legacy named-param code, parameterized SQL, RowMapper mapping to records, batch operations, transactions, safe handling of generated keys, DataAccessException handling, read-only transactions, streaming large result sets, and @JdbcTest slice testing. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral

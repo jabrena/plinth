@@ -1,6 +1,6 @@
 ---
 name: 002-agents-inventory
-description: Use when you need to generate a checklist document with embedded agents inventory, following the embedded template exactly and producing INVENTORY-AGENTS-JAVA.md in the project root. Part of the skills-for-java project
+description: Use when you need to generate a checklist document with embedded agents inventory, following the embedded template exactly and producing INVENTORY-AGENTS-JAVA.md in the project root. This should trigger for requests such as Create embedded agents inventory checklist; Generate INVENTORY-AGENTS-JAVA.md; Use @002-agents-inventory. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral

@@ -1,6 +1,6 @@
 ---
 name: 421-frameworks-quarkus-testing-unit-tests
-description: Use when you need to write fast unit tests for Quarkus applications — including pure tests with @ExtendWith(MockitoExtension.class), @QuarkusTest with @InjectMock for full CDI mock replacement, @InjectSpy for partial CDI bean mocking, REST Assured for resource-focused tests, @ParameterizedTest with @CsvSource / @MethodSource, QuarkusTestProfile for test-specific configuration overrides, and naming conventions (*Test → Surefire, *IT → Failsafe). For framework-agnostic Java use @131-java-testing-unit-testing. Part of the skills-for-java project
+description: Use when you need to write fast unit tests for Quarkus applications — including pure tests with @ExtendWith(MockitoExtension.class), @QuarkusTest with @InjectMock for full CDI mock replacement, @InjectSpy for partial CDI bean mocking, REST Assured for resource-focused tests, @ParameterizedTest with @CsvSource / @MethodSource, QuarkusTestProfile for test-specific configuration overrides, and naming conventions (*Test → Surefire, *IT → Failsafe). For framework-agnostic Java use @131-java-testing-unit-testing. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral

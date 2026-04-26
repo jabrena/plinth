@@ -1,6 +1,6 @@
 ---
 name: 122-java-type-design
-description: Use when you need to review, improve, or refactor Java code for type design quality — including establishing clear type hierarchies, applying consistent naming conventions, eliminating primitive obsession with domain-specific value objects, leveraging generic type parameters, creating type-safe wrappers, designing fluent interfaces, ensuring precision-appropriate numeric types (BigDecimal for financial calculations), and improving type contrast through interfaces and method signature alignment. Part of the skills-for-java project
+description: Use when you need to review, improve, or refactor Java code for type design quality — including establishing clear type hierarchies, applying consistent naming conventions, eliminating primitive obsession with domain-specific value objects, leveraging generic type parameters, creating type-safe wrappers, designing fluent interfaces, ensuring precision-appropriate numeric types (BigDecimal for financial calculations), and improving type contrast through interfaces and method signature alignment. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -18,7 +18,7 @@ Review and improve Java code using comprehensive type design principles that app
 - Type-safe wrappers: value objects replacing primitive obsession (EmailAddress, Money)
 - Generic type parameters: flexible reusable types, bounded parameters
 - Domain-specific fluent interfaces: builder pattern, method chaining
-- Type "weights": conceptual importance — core domain vs supporting vs utility
+- Type weights: conceptual importance — core domain vs supporting vs utility
 - Type contrast through interfaces: contract vs implementation separation
 - Aligned method signatures: consistent parameter and return types across related classes
 - Self-documenting code: clear descriptive names

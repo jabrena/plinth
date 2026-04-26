@@ -1,6 +1,6 @@
 ---
 name: 114-java-maven-search
-description: Covers Maven Central search (Search API, maven-metadata.xml, artifact URLs) and project-local update reports via versions-maven-plugin (display-property-updates, display-dependency-updates, display-plugin-updates). Use when finding or verifying coordinates, browsing Central, or checking what newer versions apply to the user’s pom.xml. Part of the skills-for-java project
+description: Covers Maven Central search (Search API, maven-metadata.xml, artifact URLs) and project-local update reports via versions-maven-plugin (display-property-updates, display-dependency-updates, display-plugin-updates). Use when finding or verifying coordinates, browsing Central, or checking what newer versions apply to the user’s pom.xml. This should trigger for requests such as Search Maven Central; Find Maven dependency; Maven coordinates; groupId artifactId version. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral

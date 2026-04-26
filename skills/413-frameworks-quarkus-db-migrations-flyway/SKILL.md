@@ -1,6 +1,6 @@
 ---
 name: 413-frameworks-quarkus-db-migrations-flyway
-description: Use when you need to add or review Flyway database migrations in a Quarkus application — quarkus-flyway extension, db/migration scripts, quarkus.flyway.* configuration, migrate-at-start, and alignment with JDBC or Panache. Part of the skills-for-java project
+description: Use when you need to add or review Flyway database migrations in a Quarkus application — quarkus-flyway extension, db/migration scripts, quarkus.flyway.* configuration, migrate-at-start, and alignment with JDBC or Panache. This should trigger for requests such as Add or review Flyway migrations in a Quarkus project; Configure quarkus-flyway or db/migration layout. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral

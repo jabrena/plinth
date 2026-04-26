@@ -1,6 +1,6 @@
 ---
 name: 141-java-refactoring-with-modern-features
-description: Use when you need to refactor Java code to adopt modern Java features (Java 8+) — including migrating anonymous classes to lambdas, replacing Iterator loops with Stream API, adopting Optional for null safety, switching from legacy Date/Calendar to java.time, using collection factory methods, applying text blocks, var inference, or leveraging Java 25 features like flexible constructor bodies and module import declarations. Part of the skills-for-java project
+description: Use when you need to refactor Java code to adopt modern Java features (Java 8+) — including migrating anonymous classes to lambdas, replacing Iterator loops with Stream API, adopting Optional for null safety, switching from legacy Date/Calendar to java.time, using collection factory methods, applying text blocks, var inference, or leveraging Java 25 features like flexible constructor bodies and module import declarations. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral

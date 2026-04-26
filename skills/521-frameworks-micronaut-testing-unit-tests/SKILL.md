@@ -1,6 +1,6 @@
 ---
 name: 521-frameworks-micronaut-testing-unit-tests
-description: Use when you need to write unit tests for Micronaut applications — Mockito-first with @ExtendWith(MockitoExtension.class), @MicronautTest with @MockBean, HttpClient @Client("/") assertions, @Property overrides, @ParameterizedTest, and *Test vs *IT naming. For framework-agnostic Java use @131-java-testing-unit-testing. Part of the skills-for-java project
+description: Use when you need to write unit tests for Micronaut applications — Mockito-first with @ExtendWith(MockitoExtension.class), @MicronautTest with @MockBean, HttpClient @Client(/) assertions, @Property overrides, @ParameterizedTest, and *Test vs *IT naming. For framework-agnostic Java use @131-java-testing-unit-testing. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral

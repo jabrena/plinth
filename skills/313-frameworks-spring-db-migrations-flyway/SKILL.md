@@ -1,6 +1,6 @@
 ---
 name: 313-frameworks-spring-db-migrations-flyway
-description: Use when you need to add or review Flyway database migrations in a Spring Boot application — Maven dependencies, db/migration scripts, spring.flyway.* configuration, baseline and validation, and alignment with JDBC or Spring Data JDBC. Part of the skills-for-java project
+description: Use when you need to add or review Flyway database migrations in a Spring Boot application — Maven dependencies, db/migration scripts, spring.flyway.* configuration, baseline and validation, and alignment with JDBC or Spring Data JDBC. This should trigger for requests such as Add or review Flyway migrations in a Spring Boot project; Configure spring.flyway or db/migration layout. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
