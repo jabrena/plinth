@@ -56,7 +56,7 @@
         <slf4j.version>2.0.17</slf4j.version>
         <logback.version>1.5.18</logback.version>
         <junit.version>5.13.3</junit.version>
-        <assertj.version>3.27.3</assertj.version>
+        <assertj.version>3.27.7</assertj.version>
         <jackson.version>2.18.2</jackson.version>
 
         <!-- Core build plugin versions -->
