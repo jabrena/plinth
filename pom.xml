@@ -72,7 +72,7 @@
         <maven-plugin-dependency-check.version>12.2.2</maven-plugin-dependency-check.version>
         <maven-plugin-spotbugs.version>4.9.6.0</maven-plugin-spotbugs.version>
         <maven-plugin-pmd.version>3.27.0</maven-plugin-pmd.version>
-        <maven-plugin-versions.version>2.19.0</maven-plugin-versions.version>
+        <maven-plugin-versions.version>2.21.0</maven-plugin-versions.version>
         <maven-plugin-jbake.version>2.7.0</maven-plugin-jbake.version>
     </properties>
 
