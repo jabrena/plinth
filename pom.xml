@@ -54,7 +54,7 @@
 
         <!-- Dependency versions -->
         <slf4j.version>2.0.17</slf4j.version>
-        <logback.version>1.5.18</logback.version>
+        <logback.version>1.5.32</logback.version>
         <junit.version>6.0.3</junit.version>
         <assertj.version>3.27.7</assertj.version>
         <jackson.version>2.18.2</jackson.version>
@@ -62,16 +62,16 @@
         <!-- Core build plugin versions -->
         <maven-plugin-compiler.version>3.14.0</maven-plugin-compiler.version>
         <maven-plugin-surefire.version>3.5.5</maven-plugin-surefire.version>
-        <maven-plugin-resources.version>3.3.1</maven-plugin-resources.version>
+        <maven-plugin-resources.version>3.5.0</maven-plugin-resources.version>
         <maven-plugin-clean.version>3.5.0</maven-plugin-clean.version>
 
         <!-- Feature-specific plugin versions -->
-        <maven-plugin-enforcer.version>3.6.1</maven-plugin-enforcer.version>
+        <maven-plugin-enforcer.version>3.6.2</maven-plugin-enforcer.version>
         <extra-enforcer-rules.version>1.10.0</extra-enforcer-rules.version>
         <maven-plugin-spotless.version>2.46.1</maven-plugin-spotless.version>
         <maven-plugin-dependency-check.version>12.2.2</maven-plugin-dependency-check.version>
         <maven-plugin-spotbugs.version>4.9.6.0</maven-plugin-spotbugs.version>
-        <maven-plugin-pmd.version>3.27.0</maven-plugin-pmd.version>
+        <maven-plugin-pmd.version>3.28.0</maven-plugin-pmd.version>
         <maven-plugin-versions.version>2.21.0</maven-plugin-versions.version>
         <maven-plugin-jbake.version>2.7.0</maven-plugin-jbake.version>
     </properties>
