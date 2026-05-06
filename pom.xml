@@ -57,7 +57,7 @@
         <logback.version>1.5.32</logback.version>
         <junit.version>6.0.3</junit.version>
         <assertj.version>3.27.7</assertj.version>
-        <jackson.version>2.18.2</jackson.version>
+        <jackson.version>2.21.3</jackson.version>
 
         <!-- Core build plugin versions -->
         <maven-plugin-compiler.version>3.14.0</maven-plugin-compiler.version>
