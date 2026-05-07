@@ -4,7 +4,7 @@
         <author>Juan Antonio Breña Moral</author>
         <version>0.15.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
-        <title>Spring Boot Kafka Guidelines</title>
+        <title>Spring Boot — Kafka messaging</title>
         <description>Use when you need Kafka with Spring Boot (`spring-kafka`) and want examples for design, implementation, and error handling with retries, dead-letter topics, and idempotent consumers.</description>
     </metadata>
     <role>You are a Senior software engineer with extensive experience in Spring Boot and Apache Kafka</role>
@@ -172,6 +172,53 @@ class BadOrderEventListener {
                 </bad-example>
             </code-examples>
         </example>
+        <example number="4" id="spring-kafka-testing-testcontainers">
+            <example-header>
+                <example-title>Testing</example-title>
+                <example-subtitle>Integration tests with Testcontainers Kafka</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Prefer Testcontainers over embedded brokers for realistic integration tests. Wire broker properties dynamically with `@DynamicPropertySource`.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package com.example.orders.messaging;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
+
+@SpringBootTest
+@Testcontainers
+class OrderKafkaIT {
+
+    @Container
+    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.6.1"));
+
+    @DynamicPropertySource
+    static void kafkaProps(DynamicPropertyRegistry registry) {
+        registry.add("spring.kafka.bootstrap-servers", kafka::getBootstrapServers);
+    }
+
+    @Test
+    void shouldPublishAndConsumeEvent() {
+        // invoke publisher and assert consumer side effects
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Bad: unit test mocks KafkaTemplate and never validates real serialization/offset behavior
+class OrderKafkaUnitTest {}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
     </examples>
     <output-format>
         <output-format-list>
@@ -180,7 +227,7 @@ class BadOrderEventListener {
             <output-format-item>**APPLY** Spring Kafka-aligned fixes: configure proper error handlers, use typed payloads, ensure idempotency</output-format-item>
             <output-format-item>**IMPLEMENT** changes consistently across producer and consumer configurations</output-format-item>
             <output-format-item>**EXPLAIN** trade-offs (e.g., at-least-once vs exactly-once delivery, retry backoff strategies)</output-format-item>
-            <output-format-item>**TEST** messaging behavior with `@EmbeddedKafka` or Testcontainers</output-format-item>
+            <output-format-item>**TEST** messaging behavior with Testcontainers Kafka integration tests (avoid relying only on `@EmbeddedKafka`)</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
         </output-format-list>
     </output-format>

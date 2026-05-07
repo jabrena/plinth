@@ -4,7 +4,7 @@
         <author>Juan Antonio Breña Moral</author>
         <version>0.15.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
-        <title>Micronaut Kafka Guidelines</title>
+        <title>Micronaut — Kafka messaging</title>
         <description>Use when you need Kafka in Micronaut and want examples for design, implementation, and error handling with @KafkaClient and @KafkaListener.</description>
     </metadata>
     <role>You are a Senior software engineer with extensive experience in Micronaut and Kafka</role>
@@ -146,6 +146,53 @@ class BadBillingListener {
         }
     }
 }]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="4" id="micronaut-kafka-testing-testcontainers">
+            <example-header>
+                <example-title>Testing</example-title>
+                <example-subtitle>@MicronautTest with Kafka Testcontainers</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Start Kafka in Testcontainers and inject broker properties through `TestPropertyProvider` for reproducible integration tests.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package com.example.billing.messaging;
+
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import io.micronaut.test.support.TestPropertyProvider;
+import org.junit.jupiter.api.Test;
+import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
+import java.util.Map;
+
+@MicronautTest
+@Testcontainers
+class BillingKafkaIT implements TestPropertyProvider {
+
+    @Container
+    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.6.1"));
+
+    @Override
+    public Map<String, String> getProperties() {
+        return Map.of("kafka.bootstrap.servers", kafka.getBootstrapServers());
+    }
+
+    @Test
+    void shouldConsumeEvent() {
+        // publish and verify processing
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Bad: test uses hardcoded localhost:9092 and is not CI-portable
+class BillingKafkaLocalEnvIT {}]]></code-block>
                 </bad-example>
             </code-examples>
         </example>

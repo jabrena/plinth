@@ -4,7 +4,7 @@
         <author>Juan Antonio Breña Moral</author>
         <version>0.15.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
-        <title>Micronaut MongoDB Guidelines</title>
+        <title>Micronaut — MongoDB</title>
         <description>Use when you need MongoDB in Micronaut Data and want examples for design, implementation, and error handling.</description>
     </metadata>
     <role>You are a Senior software engineer with extensive experience in Micronaut and MongoDB</role>
@@ -172,6 +172,53 @@ class BadOrderService {
         }
     }
 }]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="4" id="micronaut-mongo-testing-testcontainers">
+            <example-header>
+                <example-title>Testing</example-title>
+                <example-subtitle>@MicronautTest with MongoDB Testcontainers</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use MongoDB Testcontainers with `TestPropertyProvider` to make repository tests deterministic and CI-friendly.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package com.example.orders.service;
+
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import io.micronaut.test.support.TestPropertyProvider;
+import org.junit.jupiter.api.Test;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
+import java.util.Map;
+
+@MicronautTest
+@Testcontainers
+class OrderMongoIT implements TestPropertyProvider {
+
+    @Container
+    static MongoDBContainer mongo = new MongoDBContainer(DockerImageName.parse("mongo:7.0"));
+
+    @Override
+    public Map<String, String> getProperties() {
+        return Map.of("mongodb.uri", mongo.getReplicaSetUrl());
+    }
+
+    @Test
+    void shouldPersistDocument() {
+        // verify repository persistence/query behavior
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Bad: test assumes local Mongo server state and shared data
+class OrderMongoSharedEnvIT {}]]></code-block>
                 </bad-example>
             </code-examples>
         </example>

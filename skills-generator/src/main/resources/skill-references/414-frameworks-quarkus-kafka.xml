@@ -4,7 +4,7 @@
         <author>Juan Antonio Breña Moral</author>
         <version>0.15.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
-        <title>Quarkus Kafka Guidelines</title>
+        <title>Quarkus — Kafka messaging</title>
         <description>Use when you need Kafka in Quarkus with SmallRye Reactive Messaging and want examples for design, implementation, and error handling.</description>
     </metadata>
     <role>You are a Senior software engineer with extensive experience in Quarkus and Kafka</role>
@@ -141,6 +141,57 @@ class BadOrderConsumer {
                 </bad-example>
             </code-examples>
         </example>
+        <example number="4" id="quarkus-kafka-testing-testcontainers">
+            <example-header>
+                <example-title>Testing</example-title>
+                <example-subtitle>@QuarkusTest with Kafka Testcontainers via test resource</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                For deterministic CI tests, use Testcontainers Kafka and feed runtime properties through `QuarkusTestResourceLifecycleManager`.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package org.acme.orders.test;
+
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
+import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.Test;
+import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.utility.DockerImageName;
+import java.util.Map;
+
+class KafkaTestResource implements QuarkusTestResourceLifecycleManager {
+    private KafkaContainer kafka;
+    @Override
+    public Map<String, String> start() {
+        kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.6.1"));
+        kafka.start();
+        return Map.of("kafka.bootstrap.servers", kafka.getBootstrapServers());
+    }
+    @Override
+    public void stop() {
+        if (kafka != null) kafka.stop();
+    }
+}
+
+@QuarkusTest
+@QuarkusTestResource(KafkaTestResource.class)
+class OrderKafkaIT {
+    @Test
+    void shouldProcessIncomingMessage() {
+        // publish event and assert side effects
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Bad: test depends on a manually started shared Kafka broker
+class OrderKafkaManualEnvIT {}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
     </examples>
     <output-format>
         <output-format-list>
@@ -149,7 +200,7 @@ class BadOrderConsumer {
             <output-format-item>**APPLY** Quarkus Kafka-aligned fixes: configure DLQs, use typed payloads, ensure non-blocking processing</output-format-item>
             <output-format-item>**IMPLEMENT** changes consistently across `application.properties` and Java code</output-format-item>
             <output-format-item>**EXPLAIN** trade-offs (e.g., DLQ vs ignore, throttled vs latest commit strategies)</output-format-item>
-            <output-format-item>**TEST** messaging behavior with `@QuarkusTest` and Dev Services for Kafka</output-format-item>
+            <output-format-item>**TEST** messaging behavior with `@QuarkusTest` and Testcontainers Kafka (optionally through Dev Services where appropriate)</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
         </output-format-list>
     </output-format>

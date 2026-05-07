@@ -4,7 +4,7 @@
         <author>Juan Antonio Breña Moral</author>
         <version>0.15.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
-        <title>Quarkus MongoDB Guidelines</title>
+        <title>Quarkus — MongoDB</title>
         <description>Use when you need MongoDB in Quarkus with Mongo Panache and want examples for design, implementation, and error handling.</description>
     </metadata>
     <role>You are a Senior software engineer with extensive experience in Quarkus and MongoDB</role>
@@ -170,6 +170,57 @@ public class BadOrderService {
                 </bad-example>
             </code-examples>
         </example>
+        <example number="4" id="quarkus-mongo-testing-testcontainers">
+            <example-header>
+                <example-title>Testing</example-title>
+                <example-subtitle>@QuarkusTest with MongoDB Testcontainers via test resource</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use MongoDB Testcontainers for persistence integration tests and inject `quarkus.mongodb.connection-string` dynamically.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package org.acme.orders.test;
+
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
+import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.Test;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.utility.DockerImageName;
+import java.util.Map;
+
+class MongoTestResource implements QuarkusTestResourceLifecycleManager {
+    private MongoDBContainer mongo;
+    @Override
+    public Map<String, String> start() {
+        mongo = new MongoDBContainer(DockerImageName.parse("mongo:7.0"));
+        mongo.start();
+        return Map.of("quarkus.mongodb.connection-string", mongo.getReplicaSetUrl());
+    }
+    @Override
+    public void stop() {
+        if (mongo != null) mongo.stop();
+    }
+}
+
+@QuarkusTest
+@QuarkusTestResource(MongoTestResource.class)
+class OrderMongoIT {
+    @Test
+    void shouldPersistAndReadDocument() {
+        // verify repository round trip
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Bad: test points to developer laptop MongoDB instance
+class OrderMongoLocalOnlyIT {}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
     </examples>
     <output-format>
         <output-format-list>
@@ -178,7 +229,7 @@ public class BadOrderService {
             <output-format-item>**APPLY** Quarkus Mongo Panache-aligned fixes: use `@MongoEntity`, `PanacheMongoRepository`, and proper exception handling</output-format-item>
             <output-format-item>**IMPLEMENT** changes so schema and queries stay consistent</output-format-item>
             <output-format-item>**EXPLAIN** trade-offs (e.g., active record vs repository pattern, embedding vs referencing)</output-format-item>
-            <output-format-item>**TEST** repository behavior with `@QuarkusTest` and Dev Services for MongoDB</output-format-item>
+            <output-format-item>**TEST** repository behavior with `@QuarkusTest` and MongoDB Testcontainers (optionally through Dev Services where appropriate)</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
         </output-format-list>
     </output-format>

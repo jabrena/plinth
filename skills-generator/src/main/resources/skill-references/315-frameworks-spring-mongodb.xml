@@ -4,7 +4,7 @@
         <author>Juan Antonio Breña Moral</author>
         <version>0.15.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
-        <title>Spring Boot MongoDB Guidelines</title>
+        <title>Spring Boot — MongoDB</title>
         <description>Use when you need MongoDB with Spring Data MongoDB and want examples for design, implementation, and error handling for robust document persistence.</description>
     </metadata>
     <role>You are a Senior software engineer with extensive experience in Spring Boot and MongoDB</role>
@@ -172,6 +172,53 @@ class BadOrderService {
         }
     }
 }]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="4" id="spring-mongo-testing-testcontainers">
+            <example-header>
+                <example-title>Testing</example-title>
+                <example-subtitle>Repository tests with MongoDB Testcontainers</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use a real MongoDB container for repository/service integration tests and inject connection settings dynamically.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package com.example.orders.service;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
+
+@DataMongoTest
+@Testcontainers
+class OrderRepositoryIT {
+
+    @Container
+    static MongoDBContainer mongo = new MongoDBContainer(DockerImageName.parse("mongo:7.0"));
+
+    @DynamicPropertySource
+    static void mongoProps(DynamicPropertyRegistry registry) {
+        registry.add("spring.data.mongodb.uri", mongo::getReplicaSetUrl);
+    }
+
+    @Test
+    void shouldPersistAndQueryOrder() {
+        // persist document and verify query behavior
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Bad: test assumes local MongoDB on localhost and fails in CI
+class OrderRepositoryLocalOnlyTest {}]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
