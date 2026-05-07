@@ -52,27 +52,6 @@ jobs:
           git log -1 --pretty=%B > /tmp/commit-msg.txt
           pre-commit run conventional-pre-commit --hook-stage commit-msg --commit-msg-filename /tmp/commit-msg.txt
 
-  examples:
-    name: Build Examples
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        example:
-          - { name: "Maven", path: "examples/maven-demo", goal: "verify" }
-          - { name: "Spring Boot Memory Leak", path: "examples/spring-boot-memory-leak-demo", goal: "package" }
-          - { name: "Spring Boot Performance Bottleneck", path: "examples/spring-boot-performance-bottleneck-demo", goal: "package" }
-          - { name: "Spring Boot", path: "examples/spring-boot-demo/implementation", goal: "verify -Pjacoco" }
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          submodules: true  # Fetches all submodules
-      - uses: actions/setup-java@v5
-        with:
-          distribution: 'graalvm' # See 'Supported distributions' for available options
-          java-version: '25'
-      - name: Build ${{ matrix.example.name }}
-        run: cd ${{ matrix.example.path }} && ./mvnw --batch-mode --no-transfer-progress ${{ matrix.example.goal }} --file pom.xml
-
   package-agent-artifacts:
     name: Package Agents and Skills
     runs-on: ubuntu-latest

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="514-frameworks-micronaut-kafka">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.15.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need Kafka messaging in Micronaut — including @KafkaClient and @KafkaListener design, topic/partition strategy, serialization, retries and dead-letter processing, and error handling. This should trigger for requests such as Add Kafka in Micronaut; Review Micronaut Kafka listeners; Improve retry and failure handling for Micronaut Kafka.</description>
+  </metadata>
+
+  <title>Micronaut — Kafka messaging</title>
+  <goal><![CDATA[
+Apply Micronaut Kafka guidance with concrete examples for design, implementation, and error handling.
+]]></goal>
+
+  <constraints>
+    <constraints-description>Compile before messaging refactors; verify after changes.</constraints-description>
+    <constraint-list>
+      <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+      <constraint>**SAFETY**: If compilation fails, stop immediately</constraint>
+      <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+      <constraint>**BEFORE APPLYING**: Read the reference for detailed rules and examples</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+        <trigger>Add Kafka in Micronaut</trigger>
+        <trigger>Review Micronaut Kafka consumers/producers</trigger>
+        <trigger>Improve retries, dead-letter handling, or idempotency in Micronaut Kafka</trigger>
+    </trigger-list>
+  </triggers>
+
+  <steps>
+    <step number="1"><step-title>Read reference and assess project context</step-title><step-content>Read `references/514-frameworks-micronaut-kafka.md` and inspect current messaging setup before proposing changes.</step-content></step>
+    <step number="2"><step-title>Gather scope and decide target improvements</step-title><step-content>Identify delivery guarantees and resilience requirements to define safe improvements.</step-content></step>
+    <step number="3"><step-title>Apply framework-aligned changes</step-title><step-content>Implement/refactor clients, listeners, and failure strategies in Micronaut Kafka.</step-content></step>
+    <step number="4"><step-title>Run verification and report results</step-title><step-content>Execute build/tests and summarize what changed, what was verified, and follow-up actions.</step-content></step>
+  </steps>
+</prompt>
