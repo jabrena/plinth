@@ -37,6 +37,9 @@ Metrics instrumentation must avoid high-cardinality dimensions and dynamic meter
 - Example 1: Select the Right Meter Type
 - Example 2: Use Stable Naming and Low-Cardinality Tags
 - Example 3: Validate Instrumentation with Tests
+- Example 4: Track Long-Running Jobs with LongTaskTimer
+- Example 5: Configure Histograms and Percentiles Selectively
+- Example 6: Expose Metrics via Spring Boot Actuator and Prometheus
 
 ### Example 1: Select the Right Meter Type
 
@@ -52,7 +55,6 @@ import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
 import java.time.Duration;
-import java.util.Objects;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public final class CheckoutMetrics {
@@ -65,33 +67,42 @@ public final class CheckoutMetrics {
 
     public CheckoutMetrics(MeterRegistry registry) {
         this.checkoutSuccess = Counter.builder("checkout.requests")
-                .description("Total successful checkout requests")
+                .description("Total checkout requests")
                 .tag("outcome", "success")
                 .register(registry);
         this.checkoutFailure = Counter.builder("checkout.requests")
-                .description("Total failed checkout requests")
+                .description("Total checkout requests")
                 .tag("outcome", "failure")
                 .register(registry);
-        this.checkoutLatency = Timer.builder("checkout.latency")
-                .description("Checkout latency")
+        this.checkoutLatency = Timer.builder("checkout.request.duration")
+                .description("Checkout request duration")
+                .serviceLevelObjectives(
+                        Duration.ofMillis(100),
+                        Duration.ofMillis(300),
+                        Duration.ofSeconds(1))
                 .publishPercentileHistogram()
+                .minimumExpectedValue(Duration.ofMillis(1))
                 .maximumExpectedValue(Duration.ofSeconds(5))
                 .register(registry);
         this.payloadBytes = DistributionSummary.builder("checkout.payload.bytes")
                 .description("Payload size of checkout requests")
                 .baseUnit("bytes")
                 .register(registry);
-        this.queueDepth = registry.gauge("checkout.queue.depth", new AtomicInteger(0));
+        this.queueDepth = new AtomicInteger(0);
+        Gauge.builder("checkout.queue.depth", queueDepth, AtomicInteger::get)
+                .description("Number of checkout requests waiting in the queue")
+                .register(registry);
     }
 
     public void recordSuccess(long nanos, int bytes) {
         checkoutSuccess.increment();
-        checkoutLatency.record(nanos, java.util.concurrent.TimeUnit.NANOSECONDS);
+        checkoutLatency.record(Duration.ofNanos(nanos));
         payloadBytes.record(bytes);
     }
 
-    public void recordFailure() {
+    public void recordFailure(long nanos) {
         checkoutFailure.increment();
+        checkoutLatency.record(Duration.ofNanos(nanos));
     }
 
     public void setQueueDepth(int depth) {
@@ -108,11 +119,14 @@ import io.micrometer.core.instrument.MeterRegistry;
 public final class BadMetrics {
 
     public void record(MeterRegistry registry, String userId, long latencyMillis) {
-        // BAD: every signal is a gauge/counter without semantics
+        // BAD: every signal is a counter without clear semantics
         registry.counter("checkout.metric", "type", "latency").increment(latencyMillis);
 
         // BAD: high cardinality tag
         registry.counter("checkout.requests", "userId", userId).increment();
+
+        // BAD: dynamic meter names create unbounded meter churn
+        registry.counter("checkout.requests." + userId).increment();
 
         // BAD: timer should be used for latency, not counter with duration values
         registry.counter("checkout.duration.millis").increment(latencyMillis);
@@ -130,6 +144,7 @@ Description:
 ```java
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import java.util.Locale;
 import java.util.Set;
 
 public final class PaymentMetrics {
@@ -153,8 +168,9 @@ public final class PaymentMetrics {
     }
 
     private String normalizeProvider(String provider) {
-        return switch (provider) {
-            case "adyen", "stripe", "paypal" -> provider;
+        String normalized = provider == null ? "" : provider.toLowerCase(Locale.ROOT);
+        return switch (normalized) {
+            case "adyen", "stripe", "paypal" -> normalized;
             default -> "unknown";
         };
     }
@@ -216,6 +232,170 @@ class PaymentMetricsTest {
 class PaymentMetricsTestBad {
     // BAD: no metric assertions; instrumentation can silently break.
 }
+```
+
+### Example 4: Track Long-Running Jobs with LongTaskTimer
+
+Title: Measure Active Task Duration and Concurrency for Batch and Background Work
+Description: 
+
+**Good example:**
+
+```java
+import io.micrometer.core.instrument.LongTaskTimer;
+import io.micrometer.core.instrument.MeterRegistry;
+
+public final class ReportGenerationService {
+
+    private final LongTaskTimer activeReports;
+
+    public ReportGenerationService(MeterRegistry registry) {
+        this.activeReports = LongTaskTimer.builder("report.generation.active")
+                .description("Tracks reports actively being generated")
+                .tag("type", "scheduled")
+                .register(registry);
+    }
+
+    public void generate(String reportId) {
+        LongTaskTimer.Sample sample = activeReports.start();
+        try {
+            // long-running report generation
+            doGenerateReport(reportId);
+        } finally {
+            sample.stop();
+        }
+    }
+
+    private void doGenerateReport(String reportId) {
+        // simulate work
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
+
+public final class ReportGenerationServiceBad {
+
+    private final MeterRegistry registry;
+    private final Timer reportTimer;
+
+    public ReportGenerationServiceBad(MeterRegistry registry) {
+        this.registry = registry;
+        // BAD: Timer measures completed durations; it cannot track how long
+        // currently-running tasks have been active (use LongTaskTimer for that)
+        this.reportTimer = Timer.builder("report.generation.duration").register(registry);
+    }
+
+    public void generate(String reportId) {
+        Timer.Sample sample = Timer.start(registry);
+        try {
+            doGenerateReport(reportId);
+        } finally {
+            // This only records after completion — no visibility into in-flight tasks
+            sample.stop(reportTimer);
+        }
+    }
+
+    private void doGenerateReport(String reportId) { }
+}
+```
+
+### Example 5: Configure Histograms and Percentiles Selectively
+
+Title: Enable SLO-Oriented Buckets and Percentiles Only Where They Add Value
+Description: 
+
+**Good example:**
+
+```java
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
+import java.time.Duration;
+
+public final class ApiLatencyMetrics {
+
+    private final Timer apiLatency;
+
+    public ApiLatencyMetrics(MeterRegistry registry) {
+        this.apiLatency = Timer.builder("api.request.duration")
+                .description("HTTP API request latency")
+                .tag("service", "checkout")
+                // Publish histogram buckets for Prometheus histogram_quantile()
+                .publishPercentileHistogram()
+                // Declare SLO thresholds to generate histogram buckets aligned to SLOs
+                .serviceLevelObjectives(
+                        Duration.ofMillis(100),
+                        Duration.ofMillis(300),
+                        Duration.ofSeconds(1))
+                // Cap the histogram range to avoid very large bucket counts
+                .minimumExpectedValue(Duration.ofMillis(1))
+                .maximumExpectedValue(Duration.ofSeconds(5))
+                .register(registry);
+    }
+
+    public void record(Runnable operation) {
+        apiLatency.record(operation);
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
+
+public final class ApiLatencyMetricsBad {
+
+    public ApiLatencyMetricsBad(MeterRegistry registry) {
+        // BAD: publishPercentiles() computes percentiles in-process (non-aggregatable)
+        // and publishPercentileHistogram() without bounds creates unbounded buckets
+        Timer.builder("api.request.duration")
+                .publishPercentiles(0.5, 0.95, 0.99) // not aggregatable across instances
+                .publishPercentileHistogram()          // no min/max bounds — costly
+                .register(registry);
+    }
+}
+```
+
+### Example 6: Expose Metrics via Spring Boot Actuator and Prometheus
+
+Title: Configure Scrape Endpoint, Common Tags, and Prometheus Naming
+Description: 
+
+**Good example:**
+
+```yaml
+# application.yml
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      environment: ${spring.profiles.active:default}
+    distribution:
+      percentiles-histogram:
+        http.server.requests: true
+      slo:
+        http.server.requests: 100ms,300ms,1s
+```
+
+**Bad example:**
+
+```yaml
+# BAD: exposes all endpoints and no common tags — loses context in multi-instance deployments
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
 ```
 
 ## Output Format

@@ -33,6 +33,9 @@ Tracing data must remain safe and operationally useful. Incorrect propagation or
 
 - Example 1: Create Spans with Clear Boundaries
 - Example 2: Propagate Context and Keep Attributes Safe
+- Example 3: Apply OpenTelemetry Semantic Conventions
+- Example 4: Configure Sampling Strategy per Environment
+- Example 5: Validate Span Correctness with Tests
 
 ### Example 1: Create Spans with Clear Boundaries
 
@@ -42,7 +45,7 @@ Description:
 **Good example:**
 
 ```java
-import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.OpenTelemetry;
 import io.opentelemetry.api.trace.Span;
 import io.opentelemetry.api.trace.SpanKind;
 import io.opentelemetry.api.trace.StatusCode;
@@ -50,10 +53,19 @@ import io.opentelemetry.api.trace.Tracer;
 import io.opentelemetry.context.Scope;
 
 public final class CheckoutTracing {
-    private static final Tracer TRACER = GlobalOpenTelemetry.getTracer("checkout-service");
+
+    private final Tracer tracer;
+
+    public CheckoutTracing(OpenTelemetry openTelemetry) {
+        this(openTelemetry.getTracer("checkout-service"));
+    }
+
+    CheckoutTracing(Tracer tracer) {
+        this.tracer = tracer;
+    }
 
     public void checkout(String orderId) {
-        Span parent = TRACER.spanBuilder("checkout.process")
+        Span parent = tracer.spanBuilder("checkout.process")
                 .setSpanKind(SpanKind.INTERNAL)
                 .startSpan();
         try (Scope ignored = parent.makeCurrent()) {
@@ -73,7 +85,7 @@ public final class CheckoutTracing {
     }
 
     private void callInventory() {
-        Span span = TRACER.spanBuilder("inventory.reserve").setSpanKind(SpanKind.CLIENT).startSpan();
+        Span span = tracer.spanBuilder("inventory.reserve").setSpanKind(SpanKind.CLIENT).startSpan();
         try (Scope ignored = span.makeCurrent()) {
             // HTTP call / client SDK call
             span.setStatus(StatusCode.OK);
@@ -87,9 +99,13 @@ public final class CheckoutTracing {
     }
 
     private void callPayment() {
-        Span span = TRACER.spanBuilder("payment.charge").setSpanKind(SpanKind.CLIENT).startSpan();
+        Span span = tracer.spanBuilder("payment.charge").setSpanKind(SpanKind.CLIENT).startSpan();
         try (Scope ignored = span.makeCurrent()) {
             span.setStatus(StatusCode.OK);
+        } catch (RuntimeException ex) {
+            span.recordException(ex);
+            span.setStatus(StatusCode.ERROR, "Payment charge failed");
+            throw ex;
         } finally {
             span.end();
         }
@@ -130,12 +146,10 @@ public final class AsyncFlow {
 
     public void submitTask() {
         Context captured = Context.current();
-        executor.execute(() -> {
-            try (var ignored = captured.makeCurrent()) {
-                Span.current().addEvent("async.task.started");
-                // do work
-            }
-        });
+        executor.execute(captured.wrap(() -> {
+            Span.current().addEvent("async.task.started");
+            // do work with the captured parent trace context
+        }));
     }
 }
 ```
@@ -152,6 +166,211 @@ public final class AsyncFlowBad {
         Span.current().setAttribute("user.id", userId);
         Span.current().setAttribute("auth.token", jwtToken);
     }
+}
+```
+
+### Example 3: Apply OpenTelemetry Semantic Conventions
+
+Title: Use Standard Attribute Names for HTTP, Database, and Messaging Spans
+Description: 
+
+**Good example:**
+
+```java
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.SpanKind;
+import io.opentelemetry.api.trace.StatusCode;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Scope;
+
+public final class OrderRepository {
+
+    private static final String DB_SYSTEM_NAME = "db.system.name";
+    private static final String DB_NAMESPACE = "db.namespace";
+    private static final String DB_OPERATION_NAME = "db.operation.name";
+    private static final String DB_COLLECTION_NAME = "db.collection.name";
+
+    private final Tracer tracer;
+
+    public OrderRepository(OpenTelemetry openTelemetry) {
+        this.tracer = openTelemetry.getTracer("order-service");
+    }
+
+    public void insertOrder(String orderId, int quantity) {
+        Span span = tracer.spanBuilder("INSERT orders")
+                .setSpanKind(SpanKind.CLIENT)
+                .setAttribute(DB_SYSTEM_NAME, "postgresql")
+                .setAttribute(DB_NAMESPACE, "shop")
+                .setAttribute(DB_OPERATION_NAME, "INSERT")
+                .setAttribute(DB_COLLECTION_NAME, "orders")
+                .startSpan();
+        try (Scope ignored = span.makeCurrent()) {
+            // execute INSERT
+            span.setStatus(StatusCode.OK);
+        } catch (RuntimeException ex) {
+            span.recordException(ex);
+            span.setStatus(StatusCode.ERROR, "DB insert failed");
+            throw ex;
+        } finally {
+            span.end();
+        }
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.trace.Span;
+
+public final class OrderRepositoryBad {
+
+    public void insertOrder(String orderId) {
+        Span span = GlobalOpenTelemetry
+                .getTracer("repo")
+                .spanBuilder("insert")  // BAD: vague name, no kind
+                .startSpan();
+        try {
+            // execute INSERT
+            // BAD: custom attribute names instead of semantic conventions
+            span.setAttribute("db", "postgres");
+            span.setAttribute("query_type", "INSERT");
+            // BAD: high-cardinality business identifiers do not belong in span attributes
+            span.setAttribute("order.id", orderId);
+        } finally {
+            span.end(); // BAD: no status set, exceptions not recorded
+        }
+    }
+}
+```
+
+### Example 4: Configure Sampling Strategy per Environment
+
+Title: Balance Diagnostic Depth Against Cost and Overhead
+Description: 
+
+**Good example:**
+
+```java
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.samplers.Sampler;
+import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
+import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
+
+public final class TracingConfig {
+
+    public static OpenTelemetry buildForEnvironment(String environment) {
+        Sampler sampler = switch (environment) {
+            case "production" -> Sampler.traceIdRatioBased(0.05);  // 5% in prod
+            case "staging"    -> Sampler.traceIdRatioBased(0.50);  // 50% in staging
+            default           -> Sampler.alwaysOn();               // 100% in dev/test
+        };
+
+        SdkTracerProvider tracerProvider = SdkTracerProvider.builder()
+                .setSampler(Sampler.parentBased(sampler))
+                .addSpanProcessor(BatchSpanProcessor.builder(
+                        OtlpGrpcSpanExporter.builder()
+                                .setEndpoint("http://otel-collector:4317")
+                                .build())
+                        .build())
+                .build();
+
+        return OpenTelemetrySdk.builder()
+                .setTracerProvider(tracerProvider)
+                .buildAndRegisterGlobal();
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.samplers.Sampler;
+
+public final class TracingConfigBad {
+
+    public static SdkTracerProvider build() {
+        // BAD: always-on sampling in production causes cost explosion
+        // BAD: no BatchSpanProcessor — synchronous export blocks request threads
+        return SdkTracerProvider.builder()
+                .setSampler(Sampler.alwaysOn())
+                .build();
+    }
+}
+```
+
+### Example 5: Validate Span Correctness with Tests
+
+Title: Assert Span Name, Kind, Status, and Attributes Using the In-Memory Exporter
+Description: 
+
+**Good example:**
+
+```java
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.common.AttributeKey;
+import io.opentelemetry.api.trace.SpanKind;
+import io.opentelemetry.api.trace.StatusCode;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.testing.exporter.InMemorySpanExporter;
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.data.SpanData;
+import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+class CheckoutTracingTest {
+
+    private InMemorySpanExporter exporter;
+    private CheckoutTracing sut;
+
+    @BeforeEach
+    void setUp() {
+        exporter = InMemorySpanExporter.create();
+        SdkTracerProvider provider = SdkTracerProvider.builder()
+                .addSpanProcessor(SimpleSpanProcessor.create(exporter))
+                .build();
+        OpenTelemetry otel = OpenTelemetrySdk.builder()
+                .setTracerProvider(provider)
+                .build();
+        sut = new CheckoutTracing(otel);
+    }
+
+    @Test
+    void shouldRecordCheckoutSpanOnSuccess() {
+        sut.checkout("order-42");
+
+        List<SpanData> spans = exporter.getFinishedSpanItems();
+        assertThat(spans).hasSizeGreaterThanOrEqualTo(1);
+
+        SpanData root = spans.stream()
+                .filter(s -> s.getName().equals("checkout.process"))
+                .findFirst()
+                .orElseThrow();
+
+        assertThat(root.getKind()).isEqualTo(SpanKind.INTERNAL);
+        assertThat(root.getStatus().getStatusCode()).isEqualTo(StatusCode.OK);
+        assertThat(root.getAttributes().get(AttributeKey.booleanKey("order.id.present"))).isTrue();
+        assertThat(root.getAttributes().asMap()).doesNotContainKey(AttributeKey.stringKey("order.id"));
+    }
+}
+```
+
+**Bad example:**
+
+```java
+class CheckoutTracingTestBad {
+    // BAD: no span assertions; tracing can silently break without test coverage.
+    // BAD: using GlobalOpenTelemetry in tests leads to shared state and flaky results.
 }
 ```
 
