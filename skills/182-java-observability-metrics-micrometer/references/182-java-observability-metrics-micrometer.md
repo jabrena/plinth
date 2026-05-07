@@ -40,6 +40,7 @@ Metrics instrumentation must avoid high-cardinality dimensions and dynamic meter
 - Example 4: Track Long-Running Jobs with LongTaskTimer
 - Example 5: Configure Histograms and Percentiles Selectively
 - Example 6: Expose Metrics via Spring Boot Actuator and Prometheus
+- Example 7: Use Annotation-Based Observation for Service Methods
 
 ### Example 1: Select the Right Meter Type
 
@@ -396,6 +397,51 @@ management:
     web:
       exposure:
         include: "*"
+```
+
+
+### Example 7: Use Annotation-Based Observation for Service Methods
+
+Title: Prefer @Observed with low-cardinality key values for concise instrumentation
+Description: 
+
+**Good example:**
+
+```java
+import io.micrometer.observation.annotation.Observed;
+import org.springframework.stereotype.Service;
+
+@Service
+public class InvoiceService {
+
+    @Observed(
+            name = "invoice.generate",
+            contextualName = "invoice-generate",
+            lowCardinalityKeyValues = {"channel", "api", "outcome", "success"})
+    public String generateInvoice(String orderId) {
+        // business logic
+        return "INV-" + orderId;
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import io.micrometer.observation.annotation.Observed;
+import org.springframework.stereotype.Service;
+
+@Service
+public class InvoiceServiceBad {
+
+    @Observed(
+            name = "invoice.generate",
+            // BAD: high-cardinality and sensitive values must not be encoded as metric dimensions
+            lowCardinalityKeyValues = {"user.id", "93f8b9d0-5c4f-4fd4-aeb2-1de0d0b16e8a", "email", "user@example.com"})
+    public String generateInvoice(String orderId) {
+        return "INV-" + orderId;
+    }
+}
 ```
 
 ## Output Format

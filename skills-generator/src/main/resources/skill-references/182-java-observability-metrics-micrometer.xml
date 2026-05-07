@@ -422,6 +422,52 @@ management:
                 </bad-example>
             </code-examples>
         </example>
+
+        <example number="7" id="annotation-based-observation">
+            <example-header>
+                <example-title>Use Annotation-Based Observation for Service Methods</example-title>
+                <example-subtitle>Prefer @Observed with low-cardinality key values for concise instrumentation</example-subtitle>
+            </example-header>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import io.micrometer.observation.annotation.Observed;
+import org.springframework.stereotype.Service;
+
+@Service
+public class InvoiceService {
+
+    @Observed(
+            name = "invoice.generate",
+            contextualName = "invoice-generate",
+            lowCardinalityKeyValues = {"channel", "api", "outcome", "success"})
+    public String generateInvoice(String orderId) {
+        // business logic
+        return "INV-" + orderId;
+    }
+}
+]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[
+import io.micrometer.observation.annotation.Observed;
+import org.springframework.stereotype.Service;
+
+@Service
+public class InvoiceServiceBad {
+
+    @Observed(
+            name = "invoice.generate",
+            // BAD: high-cardinality and sensitive values must not be encoded as metric dimensions
+            lowCardinalityKeyValues = {"user.id", "93f8b9d0-5c4f-4fd4-aeb2-1de0d0b16e8a", "email", "user@example.com"})
+    public String generateInvoice(String orderId) {
+        return "INV-" + orderId;
+    }
+}
+]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
     </examples>
 
     <output-format>

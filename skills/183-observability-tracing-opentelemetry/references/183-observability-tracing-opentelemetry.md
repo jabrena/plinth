@@ -36,6 +36,7 @@ Tracing data must remain safe and operationally useful. Incorrect propagation or
 - Example 3: Apply OpenTelemetry Semantic Conventions
 - Example 4: Configure Sampling Strategy per Environment
 - Example 5: Validate Span Correctness with Tests
+- Example 6: Use Annotation-Based Instrumentation for Service Methods
 
 ### Example 1: Create Spans with Clear Boundaries
 
@@ -371,6 +372,48 @@ class CheckoutTracingTest {
 class CheckoutTracingTestBad {
     // BAD: no span assertions; tracing can silently break without test coverage.
     // BAD: using GlobalOpenTelemetry in tests leads to shared state and flaky results.
+}
+```
+
+
+### Example 6: Use Annotation-Based Instrumentation for Service Methods
+
+Title: Leverage @WithSpan and @SpanAttribute for concise, consistent tracing
+Description: 
+
+**Good example:**
+
+```java
+import io.opentelemetry.instrumentation.annotations.SpanAttribute;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
+
+public final class ShippingService {
+
+    @WithSpan("shipping.create.label")
+    public String createLabel(
+            @SpanAttribute("shipping.provider") String provider,
+            @SpanAttribute("shipping.expedited") boolean expedited) {
+        // business logic
+        return "LBL-123";
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import io.opentelemetry.api.trace.Span;
+
+public final class ShippingServiceBad {
+
+    public String createLabel(String provider, String customerEmail, String requestId) {
+        // BAD: no explicit span boundary for this business operation
+        // BAD: sensitive and high-cardinality attributes
+        Span.current().setAttribute("customer.email", customerEmail);
+        Span.current().setAttribute("request.id", requestId);
+        Span.current().setAttribute("provider", provider);
+        return "LBL-123";
+    }
 }
 ```
 

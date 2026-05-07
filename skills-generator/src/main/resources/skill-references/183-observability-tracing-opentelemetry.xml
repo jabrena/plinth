@@ -377,6 +377,49 @@ class CheckoutTracingTestBad {
                 </bad-example>
             </code-examples>
         </example>
+
+        <example number="6" id="annotation-instrumentation">
+            <example-header>
+                <example-title>Use Annotation-Based Instrumentation for Service Methods</example-title>
+                <example-subtitle>Leverage @WithSpan and @SpanAttribute for concise, consistent tracing</example-subtitle>
+            </example-header>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import io.opentelemetry.instrumentation.annotations.SpanAttribute;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
+
+public final class ShippingService {
+
+    @WithSpan("shipping.create.label")
+    public String createLabel(
+            @SpanAttribute("shipping.provider") String provider,
+            @SpanAttribute("shipping.expedited") boolean expedited) {
+        // business logic
+        return "LBL-123";
+    }
+}
+]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[
+import io.opentelemetry.api.trace.Span;
+
+public final class ShippingServiceBad {
+
+    public String createLabel(String provider, String customerEmail, String requestId) {
+        // BAD: no explicit span boundary for this business operation
+        // BAD: sensitive and high-cardinality attributes
+        Span.current().setAttribute("customer.email", customerEmail);
+        Span.current().setAttribute("request.id", requestId);
+        Span.current().setAttribute("provider", provider);
+        return "LBL-123";
+    }
+}
+]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
     </examples>
 
     <output-format>
