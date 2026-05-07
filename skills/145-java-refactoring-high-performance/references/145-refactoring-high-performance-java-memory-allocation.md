@@ -1,6 +1,6 @@
 ---
-name: 126-java-high-performance
-description: Use when you need to improve Java performance in code — including allocation reduction, CPU hot paths, concurrency and backpressure, efficient parsing/serialization, and data-access patterns, with a measure-first, evidence-based approach.
+name: 145-refactoring-high-performance-java-memory-allocation
+description: Use when you need to improve Java memory behavior in hot paths — including allocation reduction, primitive data choices, escape analysis, collection sizing, data layout, and deduplication patterns.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -42,51 +42,31 @@ Java performance changes must remain correct and testable. Do not apply speculat
 
 - Example 1: Reuse Temporary Objects in Confined Hot Paths
 - Example 2: Prefer Primitives over Wrappers
-- Example 3: Avoid Capturing Lambdas in Hot Loops
-- Example 4: Use Out-Parameter Pattern in Internal Hot APIs
-- Example 5: Write Escape-Analysis-Friendly Code
-- Example 6: Apply the Measurement Loop
-- Example 7: Concurrency with Backpressure
-- Example 8: I/O, Parsing, and Serialization
-- Example 9: Avoid Boxed Streams in Tight Hot Paths
-- Example 10: Pre-Size Collections When Capacity Is Known
-- Example 11: Reuse Expensive Objects with Thread Confinement
-- Example 12: Avoid String Concatenation in Loops
-- Example 13: Use Flyweight Cache for Repeated Immutable Objects
-- Example 14: Use Mutable In-Place Updates When Safe
-- Example 15: Compile Regex Patterns Once
-- Example 16: Return Primitives or Arrays Instead of New Objects
-- Example 17: Pool Expensive Objects Only When Justified
-- Example 18: Pack Multiple Small Values into Primitives
-- Example 19: Use Mutable Builder Reuse in Internal Pipelines
-- Example 20: Prefer Flat Arrays (SoA) over Object Arrays in Batch Workloads
-- Example 21: Use Status Codes Instead of Tiny Result Objects (When Appropriate)
-- Example 22: Use Memory-Mapped Files for Massive Sequential Reads
-- Example 23: Use SWAR-Style Delimiter Search in Byte Parsing
-- Example 24: Use Open Addressing for Specialized Hot-Key Aggregation
-- Example 25: Process Large Files in Parallel Chunks
-- Example 26: Use Branchless Arithmetic in Hot Paths (When Proven)
-- Example 27: Avoid `sun.misc.Unsafe` Unless There Is Hard Evidence
-- Example 28: Use Manual Loop Unrolling Sparingly
-- Example 29: Escape Analysis Deep Dive: Core Escape Conditions
-- Example 30: Field Assignment Escape vs Local Non-Escape
-- Example 31: Method-Call Escape vs Non-Retaining Method Call
-- Example 32: Iterator Anonymous Class Escape
-- Example 33: StringBuilder Escape vs `toString` Non-Escape
-- Example 34: Boxed List Escape vs Primitive Array
-- Example 35: Vector Intermediate Escape Chain vs In-Place Mutation
-- Example 36: Lambda Return/List Capture Deep Dive
-- Example 37: Record-Specific Escape Analysis Discussion
-- Example 38: Exception Object Escape vs Throw Immediately
-- Example 39: Scalar Replacement: TempData Object vs Locals
-- Example 40: JVM Escape Analysis Verification Flags and Demo
-- Example 41: Use Columnar Layouts for Analytical Access Patterns
-- Example 42: Use Zero-Copy and Direct Buffers for Large Transfers
-- Example 43: Use Lock-Free Ring Buffer for High-Rate Pipelines
-- Example 44: Use Panama Vector API for Numeric Kernels
-- Example 45: Use Time-Based Partitioning for Time-Series Workloads
-- Example 46: Use Symbol Interning via IDs
-- Example 47: Use Write-Ahead Log (WAL) with Batched Sync
+- Example 3: Write Escape-Analysis-Friendly Code
+- Example 4: Avoid Boxed Streams in Tight Hot Paths
+- Example 5: Pre-Size Collections When Capacity Is Known
+- Example 6: Reuse Expensive Objects with Thread Confinement
+- Example 7: Use Flyweight Cache for Repeated Immutable Objects
+- Example 8: Use Mutable In-Place Updates When Safe
+- Example 9: Pool Expensive Objects Only When Justified
+- Example 10: Pack Multiple Small Values into Primitives
+- Example 11: Use Mutable Builder Reuse in Internal Pipelines
+- Example 12: Prefer Flat Arrays (SoA) over Object Arrays in Batch Workloads
+- Example 13: Use Open Addressing for Specialized Hot-Key Aggregation
+- Example 14: Escape Analysis Deep Dive: Core Escape Conditions
+- Example 15: Field Assignment Escape vs Local Non-Escape
+- Example 16: Method-Call Escape vs Non-Retaining Method Call
+- Example 17: Iterator Anonymous Class Escape
+- Example 18: StringBuilder Escape vs `toString` Non-Escape
+- Example 19: Boxed List Escape vs Primitive Array
+- Example 20: Vector Intermediate Escape Chain vs In-Place Mutation
+- Example 21: Lambda Return/List Capture Deep Dive
+- Example 22: Record-Specific Escape Analysis Discussion
+- Example 23: Exception Object Escape vs Throw Immediately
+- Example 24: Scalar Replacement: TempData Object vs Locals
+- Example 25: JVM Escape Analysis Verification Flags and Demo
+- Example 26: Use Columnar Layouts for Analytical Access Patterns
+- Example 27: Use Symbol Interning via IDs
 
 ### Example 1: Reuse Temporary Objects in Confined Hot Paths
 
@@ -155,88 +135,7 @@ final class BoxingAccumulator {
 }
 ```
 
-### Example 3: Avoid Capturing Lambdas in Hot Loops
-
-Title: Returning anonymous functions is usually not a speed optimization
-Description: Prefer direct calls in hot loops when a capturing lambda would allocate or hide dispatch overhead.
-
-**Good example:**
-
-```java
-final class DirectCalculator {
-    /** Direct multiplication; no per-iteration object creation. */
-    long weightedSum(int[] numbers, int[] factors) {
-        long total = 0;
-        for (int factor : factors) {
-            for (int n : numbers) {
-                total += (long) n * factor;
-            }
-        }
-        return total;
-    }
-}
-```
-
-**Bad example:**
-
-```java
-import java.util.function.IntUnaryOperator;
-
-final class CapturingLambdaCalculator {
-    /** Captures `factor`, so the lambda cannot be a static singleton. */
-    private IntUnaryOperator multiplier(int factor) {
-        return x -> x * factor;
-    }
-
-    long weightedSum(int[] numbers, int[] factors) {
-        long total = 0;
-        for (int factor : factors) {
-            IntUnaryOperator op = multiplier(factor); // capture allocates per outer step
-            for (int n : numbers) {
-                total += op.applyAsInt(n);
-            }
-        }
-        return total;
-    }
-}
-```
-
-### Example 4: Use Out-Parameter Pattern in Internal Hot APIs
-
-Title: Avoid creating return objects repeatedly
-Description: For *internal* performance-sensitive APIs only, a caller-provided result holder removes the per-call return allocation. Public APIs should keep immutable return types — apply this pattern only when profiling proves return-allocation pressure.
-
-**Good example:**
-
-```java
-/** Internal mutable holder; reused by the caller across calls in a hot loop. */
-final class MutablePoint {
-    int x;
-    int y;
-}
-
-final class Geometry {
-    void midpoint(int ax, int ay, int bx, int by, MutablePoint out) {
-        out.x = (ax + bx) >>> 1;
-        out.y = (ay + by) >>> 1;
-    }
-}
-```
-
-**Bad example:**
-
-```java
-record Point(int x, int y) {}
-
-final class AllocatingGeometry {
-    /** Allocates a Point on every call; fine off the hot path, costly inside it. */
-    Point midpoint(Point a, Point b) {
-        return new Point((a.x() + b.x()) >>> 1, (a.y() + b.y()) >>> 1);
-    }
-}
-```
-
-### Example 5: Write Escape-Analysis-Friendly Code
+### Example 3: Write Escape-Analysis-Friendly Code
 
 Title: Keep temporary objects local and non-escaping
 Description: Helper objects that never leave the method are candidates for scalar replacement (no heap allocation). Returning, storing in a field, or publishing to another thread defeats it.
@@ -278,152 +177,7 @@ final class EscapingComputation {
 }
 ```
 
-### Example 6: Apply the Measurement Loop
-
-Title: Keep only proven optimizations
-Description: Always run baseline vs candidate under identical inputs and JIT warmup. For real comparisons prefer a JMH harness; the sketch below shows the shape. 1) Warm up both variants until steady-state 2) Measure the same workload under the same conditions 3) Compare latency, allocation rate, and throughput 4) Keep the candidate only when the gain exceeds noise; otherwise revert
-
-**Good example:**
-
-```java
-import java.util.function.IntUnaryOperator;
-
-final class PerformanceExperiment {
-    /** Run baseline vs candidate on identical inputs after warmup; only keep proven wins. */
-    Verdict optimize(IntUnaryOperator baseline, IntUnaryOperator candidate, int[] data) {
-        warmup(baseline, data);
-        warmup(candidate, data);
-        long beforeNs = timeRun(baseline, data);
-        long afterNs = timeRun(candidate, data);
-        return new Verdict(beforeNs, afterNs, afterNs < beforeNs);
-    }
-
-    private void warmup(IntUnaryOperator fn, int[] data) {
-        for (int i = 0; i < 10_000; i++) {
-            for (int v : data) {
-                fn.applyAsInt(v); // exercise both branches before timing
-            }
-        }
-    }
-
-    private long timeRun(IntUnaryOperator fn, int[] data) {
-        long start = System.nanoTime();
-        int sink = 0;
-        for (int v : data) {
-            sink ^= fn.applyAsInt(v); // consume result so JIT cannot DCE it
-        }
-        if (sink == Integer.MIN_VALUE) System.out.println(sink);
-        return System.nanoTime() - start;
-    }
-
-    record Verdict(long beforeNs, long afterNs, boolean keep) {}
-}
-```
-
-**Bad example:**
-
-```java
-import java.util.Arrays;
-
-final class PrematureOptimization {
-    /** Algorithm rewritten without any before/after measurement; risk > benefit. */
-    int optimizeWithoutBaseline(int[] values) {
-        return Arrays.stream(values).map(v -> v * v).sum();
-    }
-}
-```
-
-### Example 7: Concurrency with Backpressure
-
-Title: Bound work and prevent overload cascades
-Description: Use bounded queues and rejection policies to express load limits directly in Java concurrency code.
-
-**Good example:**
-
-```java
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-final class BoundedExecutorFactory {
-    /** Bounded queue + CallerRunsPolicy applies natural backpressure to producers. */
-    static ThreadPoolExecutor create() {
-        return new ThreadPoolExecutor(
-                4, 8,
-                60L, TimeUnit.SECONDS,
-                new ArrayBlockingQueue<>(500),
-                new ThreadPoolExecutor.CallerRunsPolicy());
-    }
-}
-```
-
-**Bad example:**
-
-```java
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-final class UnboundedSubmitter {
-    private final ExecutorService executor = Executors.newFixedThreadPool(8); // unbounded queue
-
-    void submitAll() {
-        for (int i = 0; i < 1_000_000; i++) {
-            executor.submit(() -> { }); // no bound, no timeout, no rejection signal
-        }
-    }
-}
-```
-
-### Example 8: I/O, Parsing, and Serialization
-
-Title: Reduce per-record overhead and unnecessary copies
-Description: Prefer explicit parsing logic in hot paths when general-purpose parsing creates avoidable intermediate objects.
-
-**Good example:**
-
-```java
-final class LineParser {
-    /** Index-based parse + integer fixed-point math: no regex, no String[] allocation. */
-    ParsedRow parse(String line) {
-        int sep = line.indexOf(';');
-        String station = line.substring(0, sep);
-        int tempTenths = parseTenths(line, sep + 1, line.length());
-        return new ParsedRow(station, tempTenths);
-    }
-
-    /** Parses a signed decimal like "-12.3" into tenths (-123) without Double allocation. */
-    private static int parseTenths(String s, int from, int to) {
-        int sign = 1;
-        int i = from;
-        if (s.charAt(i) == '-') { sign = -1; i++; }
-        int value = 0;
-        for (; i < to; i++) {
-            char c = s.charAt(i);
-            if (c == '.') continue;
-            value = value * 10 + (c - '0');
-        }
-        return sign * value;
-    }
-
-    record ParsedRow(String station, int tempTenths) {}
-}
-```
-
-**Bad example:**
-
-```java
-final class SplitParser {
-    /** `split(";")` compiles a regex and allocates a String[] per call. */
-    ParsedRow parse(String line) {
-        String[] parts = line.split(";");
-        return new ParsedRow(parts[0], Double.parseDouble(parts[1]));
-    }
-
-    record ParsedRow(String station, double temperature) {}
-}
-```
-
-### Example 9: Avoid Boxed Streams in Tight Hot Paths
+### Example 4: Avoid Boxed Streams in Tight Hot Paths
 
 Title: Prefer primitive loops when profiling shows stream/boxing overhead
 Description: Streams are great for readability off the hot path. In frequently executed numeric code, a primitive `for` loop avoids `Spliterator`/pipeline overhead and any `Integer` boxing introduced by `boxed()` or `Stream<Integer>`.
@@ -460,7 +214,7 @@ final class BoxedStreamSquares {
 }
 ```
 
-### Example 10: Pre-Size Collections When Capacity Is Known
+### Example 5: Pre-Size Collections When Capacity Is Known
 
 Title: Avoid repeated rehash and array-grow churn
 Description: `HashMap` rehashes (and `ArrayList` reallocates) as elements are added past their threshold. When the final size is known or bounded, sizing the collection up front removes those internal allocations.
@@ -518,7 +272,7 @@ final class GrowingCollections {
 }
 ```
 
-### Example 11: Reuse Expensive Objects with Thread Confinement
+### Example 6: Reuse Expensive Objects with Thread Confinement
 
 Title: Avoid creating `MessageDigest` per request
 Description: `MessageDigest.getInstance(...)` is relatively expensive and can become visible under heavy request volume. Reuse a digest instance per thread (`ThreadLocal`) or per worker object and call `reset()` between uses.
@@ -565,51 +319,7 @@ final class AllocatingDigestService {
 }
 ```
 
-### Example 12: Avoid String Concatenation in Loops
-
-Title: Use `StringBuilder` for iterative query/text assembly
-Description: `String` is immutable, so repeated `+=` in loops allocates a new object each iteration. Use a pre-sized `StringBuilder` when building text incrementally.
-
-**Good example:**
-
-```java
-import java.util.List;
-
-final class QueryBuilder {
-    String buildWhereClause(List<String> params) {
-        StringBuilder query = new StringBuilder(64);
-        query.append("SELECT * FROM users WHERE ");
-        for (int i = 0; i < params.size(); i++) {
-            query.append(params.get(i));
-            if (i < params.size() - 1) {
-                query.append(" AND ");
-            }
-        }
-        return query.toString();
-    }
-}
-```
-
-**Bad example:**
-
-```java
-import java.util.List;
-
-final class AllocatingQueryBuilder {
-    String buildWhereClause(List<String> params) {
-        String query = "SELECT * FROM users WHERE ";
-        for (int i = 0; i < params.size(); i++) {
-            query += params.get(i); // allocates a new String each iteration
-            if (i < params.size() - 1) {
-                query += " AND ";
-            }
-        }
-        return query;
-    }
-}
-```
-
-### Example 13: Use Flyweight Cache for Repeated Immutable Objects
+### Example 7: Use Flyweight Cache for Repeated Immutable Objects
 
 Title: Deduplicate objects created from the same key
 Description: If the same immutable object is loaded repeatedly by key (e.g., texture/config/schema), cache it with `computeIfAbsent` to avoid duplicate allocations and repeated initialization work.
@@ -650,7 +360,7 @@ final class TextureLoader {
 }
 ```
 
-### Example 14: Use Mutable In-Place Updates When Safe
+### Example 8: Use Mutable In-Place Updates When Safe
 
 Title: Reuse existing object instances in internal hot loops
 Description: In internal performance-sensitive code paths, mutating a caller-owned mutable object can remove repeated result allocations. Use this only with clear ownership/thread-safety boundaries.
@@ -689,75 +399,7 @@ final class AllocatingDateCalculator {
 }
 ```
 
-### Example 15: Compile Regex Patterns Once
-
-Title: Hoist `Pattern.compile` out of hot calls
-Description: `String.matches`, `String.split`, and inline `Pattern.compile` re-parse the regex on every call. Cache compiled `Pattern` instances in `static final` fields and reuse `Matcher` per call.
-
-**Good example:**
-
-```java
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-final class CachedRegex {
-    private static final Pattern EMAIL =
-            Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
-
-    boolean isEmail(String s) {
-        Matcher m = EMAIL.matcher(s);
-        return m.matches();
-    }
-}
-```
-
-**Bad example:**
-
-```java
-final class RecompiledRegex {
-    /** `String.matches` compiles the Pattern on every invocation. */
-    boolean isEmail(String s) {
-        return s.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
-    }
-}
-```
-
-### Example 16: Return Primitives or Arrays Instead of New Objects
-
-Title: Use primitive carriers for compact multi-value results
-Description: When API boundaries allow it, return primitive arrays or write into caller-provided arrays to reduce object allocation in tight computation loops.
-
-**Good example:**
-
-```java
-final class Physics {
-    void calculateVelocity(double[] p1, double[] p2, double dt, double[] out) {
-        out[0] = (p2[0] - p1[0]) / dt;
-        out[1] = (p2[1] - p1[1]) / dt;
-        out[2] = (p2[2] - p1[2]) / dt;
-    }
-}
-```
-
-**Bad example:**
-
-```java
-final class Vector3 {
-    double x, y, z;
-}
-
-final class PhysicsAllocating {
-    Vector3 calculateVelocity(Vector3 p1, Vector3 p2, double dt) {
-        Vector3 out = new Vector3(); // new object every call
-        out.x = (p2.x - p1.x) / dt;
-        out.y = (p2.y - p1.y) / dt;
-        out.z = (p2.z - p1.z) / dt;
-        return out;
-    }
-}
-```
-
-### Example 17: Pool Expensive Objects Only When Justified
+### Example 9: Pool Expensive Objects Only When Justified
 
 Title: Borrow-return pattern for costly resources
 Description: Object pools add complexity and should be used for expensive-to-create objects with measurable lifecycle overhead.
@@ -806,7 +448,7 @@ final class ConnectionFactory {
 }
 ```
 
-### Example 18: Pack Multiple Small Values into Primitives
+### Example 10: Pack Multiple Small Values into Primitives
 
 Title: Avoid tiny wrapper objects for hot-path data transport
 Description: For compact value sets (e.g., RGB, pair of ints), bit-packing into `int`/`long` can remove allocations and improve memory locality.
@@ -841,7 +483,7 @@ final class ColorFactory {
 }
 ```
 
-### Example 19: Use Mutable Builder Reuse in Internal Pipelines
+### Example 11: Use Mutable Builder Reuse in Internal Pipelines
 
 Title: Accumulate state once, avoid repeated immutable copies
 Description: For internal assembly flows, reusing a mutable builder object avoids repeated deep-copy allocation patterns.
@@ -884,7 +526,7 @@ final class AllocatingQueryChain {
 }
 ```
 
-### Example 20: Prefer Flat Arrays (SoA) over Object Arrays in Batch Workloads
+### Example 12: Prefer Flat Arrays (SoA) over Object Arrays in Batch Workloads
 
 Title: Improve locality and avoid per-element object churn
 Description: Structure-of-Arrays keeps columns contiguous and avoids object header/pointer overhead common in object-per-element layouts.
@@ -933,126 +575,7 @@ final class ParticleSystemAoS {
 }
 ```
 
-### Example 21: Use Status Codes Instead of Tiny Result Objects (When Appropriate)
-
-Title: Return primitive codes in very hot validation paths
-Description: For high-frequency, simple validations, primitive status codes can avoid small object churn. Keep readability and API clarity in mind for non-hot paths.
-
-**Good example:**
-
-```java
-final class Validator {
-    static final int VALID = 0;
-    static final int ERROR_NULL = 1;
-    static final int ERROR_EMPTY = 2;
-
-    int validate(String input) {
-        if (input == null) return ERROR_NULL;
-        if (input.isEmpty()) return ERROR_EMPTY;
-        return VALID;
-    }
-}
-```
-
-**Bad example:**
-
-```java
-final class ValidationResult {
-    final boolean ok;
-    final String message;
-    ValidationResult(boolean ok, String message) { this.ok = ok; this.message = message; }
-}
-
-final class AllocatingValidator {
-    ValidationResult validate(String input) {
-        if (input == null) return new ValidationResult(false, "Input is null");
-        if (input.isEmpty()) return new ValidationResult(false, "Input is empty");
-        return new ValidationResult(true, "OK");
-    }
-}
-```
-
-
-### Example 22: Use Memory-Mapped Files for Massive Sequential Reads
-
-Title: Reduce copy overhead and syscall pressure on large datasets
-Description: For very large file scans, mmap can improve throughput by letting the OS page cache back file access directly. Validate with realistic workloads and memory pressure conditions.
-
-**Good example:**
-
-```java
-import java.io.RandomAccessFile;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-
-final class MemoryMappedRead {
-    long countLines(String file) throws Exception {
-        try (RandomAccessFile raf = new RandomAccessFile(file, "r");
-             FileChannel ch = raf.getChannel()) {
-            MappedByteBuffer buf = ch.map(FileChannel.MapMode.READ_ONLY, 0, ch.size());
-            long lines = 0;
-            while (buf.hasRemaining()) {
-                if (buf.get() == '\n') lines++;
-            }
-            return lines;
-        }
-    }
-}
-```
-
-**Bad example:**
-
-```java
-import java.io.BufferedReader;
-import java.io.FileReader;
-
-final class TraditionalRead {
-    long countLines(String file) throws Exception {
-        long lines = 0;
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            while (br.readLine() != null) lines++;
-        }
-        return lines;
-    }
-}
-```
-
-### Example 23: Use SWAR-Style Delimiter Search in Byte Parsing
-
-Title: Scan multiple bytes per iteration when parsing hot streams
-Description: SWAR (SIMD Within A Register) can speed delimiter detection by evaluating 8 bytes at once. Keep a simpler fallback implementation for maintainability and tests.
-
-**Good example:**
-
-```java
-final class SWARSearch {
-    private static final long SEMI = 0x3B3B3B3B3B3B3B3BL; // ';'
-
-    int findSemicolon(long[] words, int startWord) {
-        for (int i = startWord; i < words.length; i++) {
-            long x = words[i] ^ SEMI;
-            long m = (x - 0x0101010101010101L) & ~x & 0x8080808080808080L;
-            if (m != 0) return i * 8 + (Long.numberOfTrailingZeros(m) >>> 3);
-        }
-        return -1;
-    }
-}
-```
-
-**Bad example:**
-
-```java
-final class ByteByByteSearch {
-    int findSemicolon(byte[] data, int start) {
-        for (int i = start; i < data.length; i++) {
-            if (data[i] == ';') return i;
-        }
-        return -1;
-    }
-}
-```
-
-### Example 24: Use Open Addressing for Specialized Hot-Key Aggregation
+### Example 13: Use Open Addressing for Specialized Hot-Key Aggregation
 
 Title: Avoid boxing and object-heavy maps in extreme hot loops
 Description: For highly specialized workloads (e.g., fixed-shape aggregations), open-addressing tables can outperform generic `HashMap` by reducing allocations and pointer indirection.
@@ -1101,164 +624,7 @@ final class StandardStats {
 }
 ```
 
-### Example 25: Process Large Files in Parallel Chunks
-
-Title: Split workload by core count and merge partial aggregates
-Description: For huge immutable inputs, split by file ranges (adjusting to record boundaries), process in parallel, and merge deterministic partial results.
-
-**Good example:**
-
-```java
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.*;
-
-final class ParallelChunks {
-    long process(List<byte[]> chunks) throws Exception {
-        int threads = Runtime.getRuntime().availableProcessors();
-        ExecutorService pool = Executors.newFixedThreadPool(threads);
-        try {
-            List<Future<Long>> futures = new ArrayList<>();
-            for (byte[] chunk : chunks) {
-                futures.add(pool.submit(() -> processChunk(chunk)));
-            }
-            long total = 0;
-            for (Future<Long> f : futures) total += f.get();
-            return total;
-        } finally {
-            pool.shutdown();
-        }
-    }
-
-    private long processChunk(byte[] chunk) { return chunk.length; }
-}
-```
-
-**Bad example:**
-
-```java
-final class SingleThreadedProcess {
-    long process(byte[] all) {
-        long total = 0;
-        for (byte b : all) total += b;
-        return total;
-    }
-}
-```
-
-### Example 26: Use Branchless Arithmetic in Hot Paths (When Proven)
-
-Title: Reduce branch misprediction costs for tiny numeric kernels
-Description: Branchless code can help in highly predictable inner loops, but can hurt readability. Apply only with profiling evidence.
-
-**Good example:**
-
-```java
-final class BranchlessMath {
-    int abs(int x) {
-        int mask = x >> 31;
-        return (x + mask) ^ mask;
-    }
-
-    int max(int a, int b) {
-        int diff = a - b;
-        int sign = diff >> 31;
-        return a - (diff & sign);
-    }
-}
-```
-
-**Bad example:**
-
-```java
-final class BranchyMath {
-    int abs(int x) { return x < 0 ? -x : x; }
-    int max(int a, int b) { return a > b ? a : b; }
-}
-```
-
-### Example 27: Avoid `sun.misc.Unsafe` Unless There Is Hard Evidence
-
-Title: Prefer safe code or supported APIs before unsafe memory access
-Description: `Unsafe` can improve low-level throughput but increases portability and safety risk. Use only for proven bottlenecks and isolate behind well-tested abstractions.
-
-**Good example:**
-
-```java
-final class SafeArraySum {
-    long sum(byte[] data) {
-        long s = 0;
-        for (byte b : data) s += b;
-        return s;
-    }
-}
-```
-
-**Bad example:**
-
-```java
-import sun.misc.Unsafe;
-import java.lang.reflect.Field;
-
-final class UnsafeArraySum {
-    private static final Unsafe U;
-    private static final long BASE;
-    static {
-        try {
-            Field f = Unsafe.class.getDeclaredField("theUnsafe");
-            f.setAccessible(true);
-            U = (Unsafe) f.get(null);
-            BASE = U.arrayBaseOffset(byte[].class);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    long sum(byte[] data) {
-        long s = 0;
-        for (int i = 0; i < data.length; i++) s += U.getByte(data, BASE + i);
-        return s;
-    }
-}
-```
-
-### Example 28: Use Manual Loop Unrolling Sparingly
-
-Title: Trade readability for throughput only in proven kernels
-Description: Manual unrolling can reduce loop overhead and improve ILP on tight arithmetic kernels. Keep it localized and benchmarked.
-
-**Good example:**
-
-```java
-final class UnrolledSum {
-    int sum(int[] a) {
-        int s0 = 0, s1 = 0, s2 = 0, s3 = 0;
-        int i = 0, n = a.length - 3;
-        for (; i < n; i += 4) {
-            s0 += a[i];
-            s1 += a[i + 1];
-            s2 += a[i + 2];
-            s3 += a[i + 3];
-        }
-        for (; i < a.length; i++) s0 += a[i];
-        return s0 + s1 + s2 + s3;
-    }
-}
-```
-
-**Bad example:**
-
-```java
-final class SimpleSum {
-    int sum(int[] a) {
-        int s = 0;
-        for (int i = 0; i < a.length; i++) s += a[i];
-        return s;
-    }
-}
-```
-
-### Example 29: Escape Analysis Deep Dive: Core Escape Conditions
+### Example 14: Escape Analysis Deep Dive: Core Escape Conditions
 
 Title: Group the four conditions that force heap allocation
 Description: An object is considered escaping (and less likely to be scalar-replaced) when: 1) it is returned from the method, 2) it is assigned to a field, 3) it is passed to code that may retain it, 4) it is captured by a lambda/anonymous class that outlives the scope.
@@ -1298,7 +664,7 @@ final class EscapeSummary {
 }
 ```
 
-### Example 30: Field Assignment Escape vs Local Non-Escape
+### Example 15: Field Assignment Escape vs Local Non-Escape
 
 Title: Contrast `EscapeExample` and `NoEscapeExample` style
 Description: 
@@ -1341,7 +707,7 @@ final class EscapeExample {
 }
 ```
 
-### Example 31: Method-Call Escape vs Non-Retaining Method Call
+### Example 16: Method-Call Escape vs Non-Retaining Method Call
 
 Title: Passing local objects is safe only if callees do not retain them
 Description: 
@@ -1387,7 +753,7 @@ final class MethodEscape {
 }
 ```
 
-### Example 32: Iterator Anonymous Class Escape
+### Example 17: Iterator Anonymous Class Escape
 
 Title: Returning iterator objects forces escaping state
 Description: 
@@ -1425,7 +791,7 @@ final class IteratorEscape {
 }
 ```
 
-### Example 33: StringBuilder Escape vs `toString` Non-Escape
+### Example 18: StringBuilder Escape vs `toString` Non-Escape
 
 Title: Return final String, not mutable builder objects
 Description: 
@@ -1454,7 +820,7 @@ final class StringBuilderEscape {
 }
 ```
 
-### Example 34: Boxed List Escape vs Primitive Array
+### Example 19: Boxed List Escape vs Primitive Array
 
 Title: Avoid wrapper-object escape through collections when possible
 Description: 
@@ -1490,7 +856,7 @@ final class BoxingEscape {
 }
 ```
 
-### Example 35: Vector Intermediate Escape Chain vs In-Place Mutation
+### Example 20: Vector Intermediate Escape Chain vs In-Place Mutation
 
 Title: Avoid transient object chains in numeric kernels
 Description: 
@@ -1536,7 +902,7 @@ final class PhysicsEscape {
 }
 ```
 
-### Example 36: Lambda Return/List Capture Deep Dive
+### Example 21: Lambda Return/List Capture Deep Dive
 
 Title: Returning/capturing lambdas creates escaping closures
 Description: 
@@ -1574,7 +940,7 @@ final class LambdaEscape {
 }
 ```
 
-### Example 37: Record-Specific Escape Analysis Discussion
+### Example 22: Record-Specific Escape Analysis Discussion
 
 Title: Records help value semantics but can still escape like classes
 Description: 
@@ -1604,7 +970,7 @@ final class PersonFactory {
 }
 ```
 
-### Example 38: Exception Object Escape vs Throw Immediately
+### Example 23: Exception Object Escape vs Throw Immediately
 
 Title: Do not allocate and return exception objects as data
 Description: 
@@ -1636,7 +1002,7 @@ final class ExceptionEscape {
 }
 ```
 
-### Example 39: Scalar Replacement: TempData Object vs Locals
+### Example 24: Scalar Replacement: TempData Object vs Locals
 
 Title: Prefer primitive locals when helper object adds no semantic value
 Description: 
@@ -1672,7 +1038,7 @@ final class ComplexCalculation {
 }
 ```
 
-### Example 40: JVM Escape Analysis Verification Flags and Demo
+### Example 25: JVM Escape Analysis Verification Flags and Demo
 
 Title: Use diagnostic JVM options and paired methods to compare behavior
 Description: Use JVM diagnostics in controlled environments when investigating EA behavior: -XX:+PrintEscapeAnalysis -XX:+DoEscapeAnalysis (default enabled) -XX:-DoEscapeAnalysis (for comparison only)
@@ -1715,8 +1081,7 @@ final class EscapeBlindChanges {
 }
 ```
 
-
-### Example 41: Use Columnar Layouts for Analytical Access Patterns
+### Example 26: Use Columnar Layouts for Analytical Access Patterns
 
 Title: Read only needed columns; improve cache locality
 Description: Row-oriented object collections are convenient but expensive for scan-heavy analytics. Columnar arrays improve sequential access and reduce object indirection.
@@ -1775,212 +1140,7 @@ final class RowOrientedTrades {
 }
 ```
 
-### Example 42: Use Zero-Copy and Direct Buffers for Large Transfers
-
-Title: Reduce userspace copies with `transferTo` and direct buffers
-Description: For large file/network transfers, `FileChannel.transferTo(...)` and direct buffers can reduce copy overhead and improve throughput.
-
-**Good example:**
-
-```java
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.channels.SocketChannel;
-
-final class ZeroCopyTransfer {
-    private final ByteBuffer direct = ByteBuffer.allocateDirect(8192);
-
-    void send(FileChannel file, SocketChannel socket) throws IOException {
-        long pos = 0;
-        long size = file.size();
-        while (pos < size) {
-            pos += file.transferTo(pos, size - pos, socket);
-        }
-    }
-}
-```
-
-**Bad example:**
-
-```java
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
-import java.nio.charset.StandardCharsets;
-
-final class MultipleCopyTransfer {
-    void send(SocketChannel socket, String payload) throws IOException {
-        byte[] bytes = payload.getBytes(StandardCharsets.UTF_8);
-        ByteBuffer heap = ByteBuffer.allocate(bytes.length);
-        heap.put(bytes);
-        heap.flip();
-        socket.write(heap);
-    }
-}
-```
-
-### Example 43: Use Lock-Free Ring Buffer for High-Rate Pipelines
-
-Title: CAS-based queues avoid lock contention under load
-Description: In high-frequency producer/consumer pipelines, lock-free ring buffers can reduce context switching and lock contention compared to synchronized queues.
-
-**Good example:**
-
-```java
-import java.util.concurrent.atomic.AtomicLong;
-
-final class LockFreeRingBuffer<E> {
-    private final Object[] buffer;
-    private final int mask;
-    private final AtomicLong write = new AtomicLong();
-    private final AtomicLong read = new AtomicLong();
-
-    LockFreeRingBuffer(int capacityPow2) {
-        this.buffer = new Object[capacityPow2];
-        this.mask = capacityPow2 - 1;
-    }
-
-    boolean offer(E e) {
-        long w = write.get();
-        long r = read.get();
-        if (w - r >= buffer.length) return false;
-        if (!write.compareAndSet(w, w + 1)) return false;
-        buffer[(int) (w & mask)] = e;
-        return true;
-    }
-
-    @SuppressWarnings("unchecked")
-    E poll() {
-        long r = read.get();
-        if (r >= write.get()) return null;
-        if (!read.compareAndSet(r, r + 1)) return null;
-        int idx = (int) (r & mask);
-        E e = (E) buffer[idx];
-        buffer[idx] = null;
-        return e;
-    }
-}
-```
-
-**Bad example:**
-
-```java
-import java.util.LinkedList;
-import java.util.Queue;
-
-final class SynchronizedQueue<E> {
-    private final Queue<E> q = new LinkedList<>();
-
-    synchronized void add(E e) {
-        q.add(e);
-        notifyAll();
-    }
-
-    synchronized E poll() throws InterruptedException {
-        while (q.isEmpty()) wait();
-        return q.poll();
-    }
-}
-```
-
-### Example 44: Use Panama Vector API for Numeric Kernels
-
-Title: Vectorize arithmetic-heavy loops when available
-Description: For hot numeric loops, the Vector API can exploit hardware SIMD and reduce per-element instruction overhead. Keep scalar fallback paths.
-
-**Good example:**
-
-```java
-import jdk.incubator.vector.DoubleVector;
-import jdk.incubator.vector.VectorOperators;
-import jdk.incubator.vector.VectorSpecies;
-
-final class VectorizedReturns {
-    private static final VectorSpecies<Double> SPECIES = DoubleVector.SPECIES_PREFERRED;
-
-    void calc(double[] prices, double[] returns) {
-        int i = 1;
-        int limit = SPECIES.loopBound(prices.length - 1);
-        for (; i < limit; i += SPECIES.length()) {
-            DoubleVector p = DoubleVector.fromArray(SPECIES, prices, i);
-            DoubleVector prev = DoubleVector.fromArray(SPECIES, prices, i - 1);
-            p.sub(prev).div(prev).intoArray(returns, i);
-        }
-        for (; i < prices.length; i++) {
-            returns[i] = (prices[i] - prices[i - 1]) / prices[i - 1];
-        }
-    }
-}
-```
-
-**Bad example:**
-
-```java
-final class ScalarReturns {
-    void calc(double[] prices, double[] returns) {
-        for (int i = 1; i < prices.length; i++) {
-            returns[i] = (prices[i] - prices[i - 1]) / prices[i - 1];
-        }
-    }
-}
-```
-
-### Example 45: Use Time-Based Partitioning for Time-Series Workloads
-
-Title: Read only relevant partitions, not full dataset
-Description: Partitioning by date/time narrows query scope and improves maintenance operations (archival/compression/retention).
-
-**Good example:**
-
-```java
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-final class TimePartitionedStorage {
-    private final Map<LocalDate, List<Trade>> partitions = new HashMap<>();
-
-    void add(Trade t) {
-        partitions.computeIfAbsent(t.date, d -> new ArrayList<>()).add(t);
-    }
-
-    List<Trade> getByDate(LocalDate d) {
-        return partitions.getOrDefault(d, List.of());
-    }
-
-    static final class Trade {
-        final LocalDate date; final double price;
-        Trade(LocalDate date, double price) { this.date = date; this.price = price; }
-    }
-}
-```
-
-**Bad example:**
-
-```java
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-final class SingleTableStorage {
-    private final List<Trade> all = new ArrayList<>();
-
-    List<Trade> getByDate(LocalDate d) {
-        return all.stream().filter(t -> t.date.equals(d)).collect(Collectors.toList());
-    }
-
-    static final class Trade {
-        final LocalDate date; final double price;
-        Trade(LocalDate date, double price) { this.date = date; this.price = price; }
-    }
-}
-```
-
-### Example 46: Use Symbol Interning via IDs
+### Example 27: Use Symbol Interning via IDs
 
 Title: Deduplicate repeated strings and compare ints instead
 Description: Replace repeated symbol strings with integer IDs to reduce memory and speed lookups/comparisons in hot paths.
@@ -2024,55 +1184,6 @@ final class DuplicatedStrings {
         t.symbol = symbol; // repeated string references everywhere
         t.price = price;
         trades.add(t);
-    }
-}
-```
-
-### Example 47: Use Write-Ahead Log (WAL) with Batched Sync
-
-Title: Improve durability-performance tradeoff versus per-write fsync
-Description: Append-first WAL with periodic `force(false)` reduces fsync cost and enables recovery by replay.
-
-**Good example:**
-
-```java
-import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
-
-final class WriteAheadLog {
-    private final FileChannel wal;
-    private final ByteBuffer buf = ByteBuffer.allocateDirect(64 * 1024);
-    private int writes;
-
-    WriteAheadLog(Path path) throws IOException {
-        wal = FileChannel.open(path, StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.APPEND);
-    }
-
-    void write(long ts, double price) throws IOException {
-        buf.clear();
-        buf.putLong(ts).putDouble(price).flip();
-        wal.write(buf);
-        if (++writes % 1000 == 0) wal.force(false); // batched sync
-    }
-}
-```
-
-**Bad example:**
-
-```java
-import java.nio.MappedByteBuffer;
-
-final class DirectWrites {
-    private final MappedByteBuffer dataFile;
-    DirectWrites(MappedByteBuffer dataFile) { this.dataFile = dataFile; }
-
-    void write(long ts, double price) {
-        dataFile.putLong(ts);
-        dataFile.putDouble(price);
-        dataFile.force(); // fsync-like cost each write
     }
 }
 ```

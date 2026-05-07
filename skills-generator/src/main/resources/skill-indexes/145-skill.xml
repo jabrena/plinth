@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
-      id="126-java-high-performance">
+      id="145-java-refactoring-high-performance">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.15.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to improve Java performance comprehensively in code — including runtime-aware coding choices, allocation reduction, CPU hot-path optimization, concurrency and backpressure patterns, efficient I/O parsing/serialization logic, and persistence/caching implementation patterns. This should trigger for requests such as Review Java code for high performance; Optimize Java hot path; Reduce Java allocations; Improve Java latency/throughput.</description>
+    <description>Use when you need to refactor Java code for high performance — including memory/allocation reduction, CPU hot-path optimization, and syntax/API/control-flow improvements. This should trigger for requests such as Review Java code for high performance; Optimize Java hot path; Reduce Java allocations; Improve Java latency/throughput.</description>
   </metadata>
 
   <title>Java rules for High Performance</title>
@@ -32,7 +32,7 @@ Identify and apply practical Java high-performance techniques using a measure-fi
     <constraint-list>
       <constraint>**MEASURE-FIRST**: Establish baseline behavior and identify Java code hot paths before optimization</constraint>
       <constraint>**NO PREMATURE OPTIMIZATION**: Only optimize code paths identified by profiling evidence</constraint>
-      <constraint>**BEFORE APPLYING**: Read the reference for bad/good examples and measurement workflow</constraint>
+      <constraint>**BEFORE APPLYING**: Read the relevant reference(s) for bad/good examples and measurement workflow</constraint>
       <constraint>**EDGE CASE**: If hotspot evidence is unclear, ask clarifying questions before changing code</constraint>
     </constraint-list>
   </constraints>
@@ -53,12 +53,12 @@ Identify and apply practical Java high-performance techniques using a measure-fi
       <step-content>Confirm the performance-sensitive Java path and baseline behavior before changing code.</step-content>
     </step>
     <step number="2">
-      <step-title>Read high-performance reference and locate bottlenecks</step-title>
-      <step-content>Read `references/126-java-high-performance.md`, identify hotspots across allocation, CPU, concurrency, I/O, data access, and caching (Java code and API boundaries only).</step-content>
+      <step-title>Select the relevant reference(s) by bottleneck</step-title>
+      <step-content>Pick and read only the reference(s) matching the observed hotspot: `references/145-refactoring-high-performance-java-memory-allocation.md` for allocation pressure, primitives vs. wrappers, escape analysis, collection sizing, data layout, and deduplication; `references/145-refactoring-high-performance-java-cpu.md` for CPU-bound hot paths, bit-level parsing, branchless arithmetic, loop unrolling, Unsafe caution, and SIMD/vectorization; `references/145-refactoring-high-performance-java-code-syntax.md` for code shape, lambdas, API return conventions, parsing syntax, I/O strategy, concurrency, and control-flow improvements.</step-content>
     </step>
     <step number="3">
       <step-title>Apply targeted optimizations</step-title>
-      <step-content>Implement minimal, evidence-backed changes across relevant domains (allocation, CPU, concurrency, I/O, and persistence/caching in Java code).</step-content>
+      <step-content>Implement minimal, evidence-backed changes scoped to the chosen domain(s): memory/allocation, CPU/low-level, or code shape/control flow (and adjacent concurrency, I/O, and persistence/caching in Java code).</step-content>
     </step>
     <step number="4">
       <step-title>Validate and compare code-level outcomes</step-title>

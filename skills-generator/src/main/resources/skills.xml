@@ -120,16 +120,6 @@
             <reference>125-java-concurrency</reference>
         </reference-list>
     </skill>
-    <skill id="126">
-        <reference-list>
-            <reference>126-java-high-performance</reference>
-        </reference-list>
-    </skill>
-    <skill id="180">
-        <reference-list>
-            <reference>180-java-observability-logging</reference>
-        </reference-list>
-    </skill>
     <skill id="128">
         <reference-list>
             <reference>128-java-generics</reference>
@@ -175,6 +165,13 @@
             <reference>144-java-data-oriented-programming</reference>
         </reference-list>
     </skill>
+    <skill id="145" skillId="145-java-refactoring-high-performance">
+        <reference-list>
+            <reference>145-refactoring-high-performance-java-memory-allocation</reference>
+            <reference>145-refactoring-high-performance-java-cpu</reference>
+            <reference>145-refactoring-high-performance-java-code-syntax</reference>
+        </reference-list>
+    </skill>
     <skill id="151">
         <reference-list>
             <reference>151-java-performance-jmeter</reference>
@@ -203,6 +200,11 @@
     <skill id="170">
         <reference-list>
             <reference>170-java-documentation</reference>
+        </reference-list>
+    </skill>
+    <skill id="180">
+        <reference-list>
+            <reference>180-java-observability-logging</reference>
         </reference-list>
     </skill>
     <skill id="200">

@@ -6,7 +6,7 @@
         <version>0.15.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
         <title>Java rules for High Performance</title>
-        <description>Use when you need to improve Java performance in code — including allocation reduction, CPU hot paths, concurrency and backpressure, efficient parsing/serialization, and data-access patterns, with a measure-first, evidence-based approach.</description>
+        <description>Use when you need to improve Java memory behavior in hot paths — including allocation reduction, primitive data choices, escape analysis, collection sizing, data layout, and deduplication patterns.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Java software development and performance engineering</role>
@@ -41,6 +41,8 @@
     <examples>
         <toc auto-generate="true" />
 
+
+
         <example number="1" id="object-reuse-string-builder">
             <example-header>
                 <example-title>Reuse Temporary Objects in Confined Hot Paths</example-title>
@@ -73,6 +75,8 @@ final class CoordinateFormatter {
                 </bad-example>
             </code-examples>
         </example>
+
+
 
         <example number="2" id="primitive-over-boxing">
             <example-header>
@@ -110,90 +114,9 @@ final class BoxingAccumulator {
             </code-examples>
         </example>
 
-        <example number="3" id="avoid-capturing-lambdas-hot-loops">
-            <example-header>
-                <example-title>Avoid Capturing Lambdas in Hot Loops</example-title>
-                <example-subtitle>Returning anonymous functions is usually not a speed optimization</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[Prefer direct calls in hot loops when a capturing lambda would allocate or hide dispatch overhead.]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[final class DirectCalculator {
-    /** Direct multiplication; no per-iteration object creation. */
-    long weightedSum(int[] numbers, int[] factors) {
-        long total = 0;
-        for (int factor : factors) {
-            for (int n : numbers) {
-                total += (long) n * factor;
-            }
-        }
-        return total;
-    }
-}]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="java"><![CDATA[import java.util.function.IntUnaryOperator;
 
-final class CapturingLambdaCalculator {
-    /** Captures `factor`, so the lambda cannot be a static singleton. */
-    private IntUnaryOperator multiplier(int factor) {
-        return x -> x * factor;
-    }
 
-    long weightedSum(int[] numbers, int[] factors) {
-        long total = 0;
-        for (int factor : factors) {
-            IntUnaryOperator op = multiplier(factor); // capture allocates per outer step
-            for (int n : numbers) {
-                total += op.applyAsInt(n);
-            }
-        }
-        return total;
-    }
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="4" id="out-parameter-pattern">
-            <example-header>
-                <example-title>Use Out-Parameter Pattern in Internal Hot APIs</example-title>
-                <example-subtitle>Avoid creating return objects repeatedly</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[For *internal* performance-sensitive APIs only, a caller-provided result holder removes the per-call return allocation. Public APIs should keep immutable return types — apply this pattern only when profiling proves return-allocation pressure.]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[/** Internal mutable holder; reused by the caller across calls in a hot loop. */
-final class MutablePoint {
-    int x;
-    int y;
-}
-
-final class Geometry {
-    void midpoint(int ax, int ay, int bx, int by, MutablePoint out) {
-        out.x = (ax + bx) >>> 1;
-        out.y = (ay + by) >>> 1;
-    }
-}]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="java"><![CDATA[record Point(int x, int y) {}
-
-final class AllocatingGeometry {
-    /** Allocates a Point on every call; fine off the hot path, costly inside it. */
-    Point midpoint(Point a, Point b) {
-        return new Point((a.x() + b.x()) >>> 1, (a.y() + b.y()) >>> 1);
-    }
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="5" id="escape-analysis-friendly-code">
+        <example number="3" id="escape-analysis-friendly-code">
             <example-header>
                 <example-title>Write Escape-Analysis-Friendly Code</example-title>
                 <example-subtitle>Keep temporary objects local and non-escaping</example-subtitle>
@@ -236,161 +159,9 @@ final class EscapingComputation {
             </code-examples>
         </example>
 
-        <example number="6" id="measurement-loop">
-            <example-header>
-                <example-title>Apply the Measurement Loop</example-title>
-                <example-subtitle>Keep only proven optimizations</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[Always run baseline vs candidate under identical inputs and JIT warmup. For real comparisons prefer a JMH harness; the sketch below shows the shape.
 
-                1) Warm up both variants until steady-state
-                2) Measure the same workload under the same conditions
-                3) Compare latency, allocation rate, and throughput
-                4) Keep the candidate only when the gain exceeds noise; otherwise revert
-                ]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[import java.util.function.IntUnaryOperator;
 
-final class PerformanceExperiment {
-    /** Run baseline vs candidate on identical inputs after warmup; only keep proven wins. */
-    Verdict optimize(IntUnaryOperator baseline, IntUnaryOperator candidate, int[] data) {
-        warmup(baseline, data);
-        warmup(candidate, data);
-        long beforeNs = timeRun(baseline, data);
-        long afterNs = timeRun(candidate, data);
-        return new Verdict(beforeNs, afterNs, afterNs < beforeNs);
-    }
-
-    private void warmup(IntUnaryOperator fn, int[] data) {
-        for (int i = 0; i < 10_000; i++) {
-            for (int v : data) {
-                fn.applyAsInt(v); // exercise both branches before timing
-            }
-        }
-    }
-
-    private long timeRun(IntUnaryOperator fn, int[] data) {
-        long start = System.nanoTime();
-        int sink = 0;
-        for (int v : data) {
-            sink ^= fn.applyAsInt(v); // consume result so JIT cannot DCE it
-        }
-        if (sink == Integer.MIN_VALUE) System.out.println(sink);
-        return System.nanoTime() - start;
-    }
-
-    record Verdict(long beforeNs, long afterNs, boolean keep) {}
-}]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="java"><![CDATA[import java.util.Arrays;
-
-final class PrematureOptimization {
-    /** Algorithm rewritten without any before/after measurement; risk > benefit. */
-    int optimizeWithoutBaseline(int[] values) {
-        return Arrays.stream(values).map(v -> v * v).sum();
-    }
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="7" id="concurrency-backpressure">
-            <example-header>
-                <example-title>Concurrency with Backpressure</example-title>
-                <example-subtitle>Bound work and prevent overload cascades</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[Use bounded queues and rejection policies to express load limits directly in Java concurrency code.]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
-
-final class BoundedExecutorFactory {
-    /** Bounded queue + CallerRunsPolicy applies natural backpressure to producers. */
-    static ThreadPoolExecutor create() {
-        return new ThreadPoolExecutor(
-                4, 8,
-                60L, TimeUnit.SECONDS,
-                new ArrayBlockingQueue<>(500),
-                new ThreadPoolExecutor.CallerRunsPolicy());
-    }
-}]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="java"><![CDATA[import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-final class UnboundedSubmitter {
-    private final ExecutorService executor = Executors.newFixedThreadPool(8); // unbounded queue
-
-    void submitAll() {
-        for (int i = 0; i < 1_000_000; i++) {
-            executor.submit(() -> { }); // no bound, no timeout, no rejection signal
-        }
-    }
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="8" id="io-parsing-serialization">
-            <example-header>
-                <example-title>I/O, Parsing, and Serialization</example-title>
-                <example-subtitle>Reduce per-record overhead and unnecessary copies</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[Prefer explicit parsing logic in hot paths when general-purpose parsing creates avoidable intermediate objects.]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[final class LineParser {
-    /** Index-based parse + integer fixed-point math: no regex, no String[] allocation. */
-    ParsedRow parse(String line) {
-        int sep = line.indexOf(';');
-        String station = line.substring(0, sep);
-        int tempTenths = parseTenths(line, sep + 1, line.length());
-        return new ParsedRow(station, tempTenths);
-    }
-
-    /** Parses a signed decimal like "-12.3" into tenths (-123) without Double allocation. */
-    private static int parseTenths(String s, int from, int to) {
-        int sign = 1;
-        int i = from;
-        if (s.charAt(i) == '-') { sign = -1; i++; }
-        int value = 0;
-        for (; i < to; i++) {
-            char c = s.charAt(i);
-            if (c == '.') continue;
-            value = value * 10 + (c - '0');
-        }
-        return sign * value;
-    }
-
-    record ParsedRow(String station, int tempTenths) {}
-}]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="java"><![CDATA[final class SplitParser {
-    /** `split(";")` compiles a regex and allocates a String[] per call. */
-    ParsedRow parse(String line) {
-        String[] parts = line.split(";");
-        return new ParsedRow(parts[0], Double.parseDouble(parts[1]));
-    }
-
-    record ParsedRow(String station, double temperature) {}
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="9" id="java-stream-hotpath-avoidance">
+        <example number="4" id="java-stream-hotpath-avoidance">
             <example-header>
                 <example-title>Avoid Boxed Streams in Tight Hot Paths</example-title>
                 <example-subtitle>Prefer primitive loops when profiling shows stream/boxing overhead</example-subtitle>
@@ -428,7 +199,9 @@ final class BoxedStreamSquares {
             </code-examples>
         </example>
 
-        <example number="10" id="presize-collections">
+
+
+        <example number="5" id="presize-collections">
             <example-header>
                 <example-title>Pre-Size Collections When Capacity Is Known</example-title>
                 <example-subtitle>Avoid repeated rehash and array-grow churn</example-subtitle>
@@ -487,7 +260,9 @@ final class GrowingCollections {
             </code-examples>
         </example>
 
-        <example number="11" id="reuse-expensive-objects">
+
+
+        <example number="6" id="reuse-expensive-objects">
             <example-header>
                 <example-title>Reuse Expensive Objects with Thread Confinement</example-title>
                 <example-subtitle>Avoid creating `MessageDigest` per request</example-subtitle>
@@ -535,52 +310,9 @@ final class AllocatingDigestService {
             </code-examples>
         </example>
 
-        <example number="12" id="avoid-string-concatenation-in-loops">
-            <example-header>
-                <example-title>Avoid String Concatenation in Loops</example-title>
-                <example-subtitle>Use `StringBuilder` for iterative query/text assembly</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[`String` is immutable, so repeated `+=` in loops allocates a new object each iteration. Use a pre-sized `StringBuilder` when building text incrementally.]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[import java.util.List;
 
-final class QueryBuilder {
-    String buildWhereClause(List<String> params) {
-        StringBuilder query = new StringBuilder(64);
-        query.append("SELECT * FROM users WHERE ");
-        for (int i = 0; i < params.size(); i++) {
-            query.append(params.get(i));
-            if (i < params.size() - 1) {
-                query.append(" AND ");
-            }
-        }
-        return query.toString();
-    }
-}]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="java"><![CDATA[import java.util.List;
 
-final class AllocatingQueryBuilder {
-    String buildWhereClause(List<String> params) {
-        String query = "SELECT * FROM users WHERE ";
-        for (int i = 0; i < params.size(); i++) {
-            query += params.get(i); // allocates a new String each iteration
-            if (i < params.size() - 1) {
-                query += " AND ";
-            }
-        }
-        return query;
-    }
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="13" id="flyweight-immutable-cache">
+        <example number="7" id="flyweight-immutable-cache">
             <example-header>
                 <example-title>Use Flyweight Cache for Repeated Immutable Objects</example-title>
                 <example-subtitle>Deduplicate objects created from the same key</example-subtitle>
@@ -622,7 +354,9 @@ final class TextureCache {
             </code-examples>
         </example>
 
-        <example number="14" id="mutable-in-place-when-safe">
+
+
+        <example number="8" id="mutable-in-place-when-safe">
             <example-header>
                 <example-title>Use Mutable In-Place Updates When Safe</example-title>
                 <example-subtitle>Reuse existing object instances in internal hot loops</example-subtitle>
@@ -662,77 +396,9 @@ final class AllocatingDateCalculator {
             </code-examples>
         </example>
 
-        <example number="15" id="compile-pattern-once">
-            <example-header>
-                <example-title>Compile Regex Patterns Once</example-title>
-                <example-subtitle>Hoist `Pattern.compile` out of hot calls</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[`String.matches`, `String.split`, and inline `Pattern.compile` re-parse the regex on every call. Cache compiled `Pattern` instances in `static final` fields and reuse `Matcher` per call.]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
-final class CachedRegex {
-    private static final Pattern EMAIL =
-            Pattern.compile("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
 
-    boolean isEmail(String s) {
-        Matcher m = EMAIL.matcher(s);
-        return m.matches();
-    }
-}]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="java"><![CDATA[final class RecompiledRegex {
-    /** `String.matches` compiles the Pattern on every invocation. */
-    boolean isEmail(String s) {
-        return s.matches("^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$");
-    }
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="16" id="return-primitives-or-arrays">
-            <example-header>
-                <example-title>Return Primitives or Arrays Instead of New Objects</example-title>
-                <example-subtitle>Use primitive carriers for compact multi-value results</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[When API boundaries allow it, return primitive arrays or write into caller-provided arrays to reduce object allocation in tight computation loops.]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[final class Physics {
-    void calculateVelocity(double[] p1, double[] p2, double dt, double[] out) {
-        out[0] = (p2[0] - p1[0]) / dt;
-        out[1] = (p2[1] - p1[1]) / dt;
-        out[2] = (p2[2] - p1[2]) / dt;
-    }
-}]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="java"><![CDATA[final class Vector3 {
-    double x, y, z;
-}
-
-final class PhysicsAllocating {
-    Vector3 calculateVelocity(Vector3 p1, Vector3 p2, double dt) {
-        Vector3 out = new Vector3(); // new object every call
-        out.x = (p2.x - p1.x) / dt;
-        out.y = (p2.y - p1.y) / dt;
-        out.z = (p2.z - p1.z) / dt;
-        return out;
-    }
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="17" id="object-pool-expensive-objects">
+        <example number="9" id="object-pool-expensive-objects">
             <example-header>
                 <example-title>Pool Expensive Objects Only When Justified</example-title>
                 <example-subtitle>Borrow-return pattern for costly resources</example-subtitle>
@@ -782,7 +448,9 @@ final class ConnectionPool {
             </code-examples>
         </example>
 
-        <example number="18" id="pack-values-into-primitives">
+
+
+        <example number="10" id="pack-values-into-primitives">
             <example-header>
                 <example-title>Pack Multiple Small Values into Primitives</example-title>
                 <example-subtitle>Avoid tiny wrapper objects for hot-path data transport</example-subtitle>
@@ -818,7 +486,9 @@ final class ColorFactory {
             </code-examples>
         </example>
 
-        <example number="19" id="mutable-builder-reuse">
+
+
+        <example number="11" id="mutable-builder-reuse">
             <example-header>
                 <example-title>Use Mutable Builder Reuse in Internal Pipelines</example-title>
                 <example-subtitle>Accumulate state once, avoid repeated immutable copies</example-subtitle>
@@ -862,7 +532,9 @@ final class AllocatingQueryChain {
             </code-examples>
         </example>
 
-        <example number="20" id="flat-arrays-over-object-arrays">
+
+
+        <example number="12" id="flat-arrays-over-object-arrays">
             <example-header>
                 <example-title>Prefer Flat Arrays (SoA) over Object Arrays in Batch Workloads</example-title>
                 <example-subtitle>Improve locality and avoid per-element object churn</example-subtitle>
@@ -912,128 +584,9 @@ final class AllocatingQueryChain {
             </code-examples>
         </example>
 
-        <example number="21" id="status-codes-over-result-objects">
-            <example-header>
-                <example-title>Use Status Codes Instead of Tiny Result Objects (When Appropriate)</example-title>
-                <example-subtitle>Return primitive codes in very hot validation paths</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[For high-frequency, simple validations, primitive status codes can avoid small object churn. Keep readability and API clarity in mind for non-hot paths.]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[final class Validator {
-    static final int VALID = 0;
-    static final int ERROR_NULL = 1;
-    static final int ERROR_EMPTY = 2;
 
-    int validate(String input) {
-        if (input == null) return ERROR_NULL;
-        if (input.isEmpty()) return ERROR_EMPTY;
-        return VALID;
-    }
-}]]></code-block>
-                </good-example>
-                <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[final class ValidationResult {
-    final boolean ok;
-    final String message;
-    ValidationResult(boolean ok, String message) { this.ok = ok; this.message = message; }
-}
 
-final class AllocatingValidator {
-    ValidationResult validate(String input) {
-        if (input == null) return new ValidationResult(false, "Input is null");
-        if (input.isEmpty()) return new ValidationResult(false, "Input is empty");
-        return new ValidationResult(true, "OK");
-    }
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="22" id="memory-mapped-files">
-            <example-header>
-                <example-title>Use Memory-Mapped Files for Massive Sequential Reads</example-title>
-                <example-subtitle>Reduce copy overhead and syscall pressure on large datasets</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[For very large file scans, mmap can improve throughput by letting the OS page cache back file access directly. Validate with realistic workloads and memory pressure conditions.]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[import java.io.RandomAccessFile;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-
-final class MemoryMappedRead {
-    long countLines(String file) throws Exception {
-        try (RandomAccessFile raf = new RandomAccessFile(file, "r");
-             FileChannel ch = raf.getChannel()) {
-            MappedByteBuffer buf = ch.map(FileChannel.MapMode.READ_ONLY, 0, ch.size());
-            long lines = 0;
-            while (buf.hasRemaining()) {
-                if (buf.get() == '\n') lines++;
-            }
-            return lines;
-        }
-    }
-}]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="java"><![CDATA[import java.io.BufferedReader;
-import java.io.FileReader;
-
-final class TraditionalRead {
-    long countLines(String file) throws Exception {
-        long lines = 0;
-        try (BufferedReader br = new BufferedReader(new FileReader(file))) {
-            while (br.readLine() != null) lines++;
-        }
-        return lines;
-    }
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="23" id="swar-delimiter-search">
-            <example-header>
-                <example-title>Use SWAR-Style Delimiter Search in Byte Parsing</example-title>
-                <example-subtitle>Scan multiple bytes per iteration when parsing hot streams</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[SWAR (SIMD Within A Register) can speed delimiter detection by evaluating 8 bytes at once. Keep a simpler fallback implementation for maintainability and tests.]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[final class SWARSearch {
-    private static final long SEMI = 0x3B3B3B3B3B3B3B3BL; // ';'
-
-    int findSemicolon(long[] words, int startWord) {
-        for (int i = startWord; i < words.length; i++) {
-            long x = words[i] ^ SEMI;
-            long m = (x - 0x0101010101010101L) & ~x & 0x8080808080808080L;
-            if (m != 0) return i * 8 + (Long.numberOfTrailingZeros(m) >>> 3);
-        }
-        return -1;
-    }
-}]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="java"><![CDATA[final class ByteByByteSearch {
-    int findSemicolon(byte[] data, int start) {
-        for (int i = start; i < data.length; i++) {
-            if (data[i] == ';') return i;
-        }
-        return -1;
-    }
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="24" id="open-addressing-hash">
+        <example number="13" id="open-addressing-hash">
             <example-header>
                 <example-title>Use Open Addressing for Specialized Hot-Key Aggregation</example-title>
                 <example-subtitle>Avoid boxing and object-heavy maps in extreme hot loops</example-subtitle>
@@ -1083,168 +636,9 @@ final class StandardStats {
             </code-examples>
         </example>
 
-        <example number="25" id="parallel-chunk-processing">
-            <example-header>
-                <example-title>Process Large Files in Parallel Chunks</example-title>
-                <example-subtitle>Split workload by core count and merge partial aggregates</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[For huge immutable inputs, split by file ranges (adjusting to record boundaries), process in parallel, and merge deterministic partial results.]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.*;
 
-final class ParallelChunks {
-    long process(List<byte[]> chunks) throws Exception {
-        int threads = Runtime.getRuntime().availableProcessors();
-        ExecutorService pool = Executors.newFixedThreadPool(threads);
-        try {
-            List<Future<Long>> futures = new ArrayList<>();
-            for (byte[] chunk : chunks) {
-                futures.add(pool.submit(() -> processChunk(chunk)));
-            }
-            long total = 0;
-            for (Future<Long> f : futures) total += f.get();
-            return total;
-        } finally {
-            pool.shutdown();
-        }
-    }
 
-    private long processChunk(byte[] chunk) { return chunk.length; }
-}]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="java"><![CDATA[final class SingleThreadedProcess {
-    long process(byte[] all) {
-        long total = 0;
-        for (byte b : all) total += b;
-        return total;
-    }
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="26" id="branchless-hot-math">
-            <example-header>
-                <example-title>Use Branchless Arithmetic in Hot Paths (When Proven)</example-title>
-                <example-subtitle>Reduce branch misprediction costs for tiny numeric kernels</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[Branchless code can help in highly predictable inner loops, but can hurt readability. Apply only with profiling evidence.]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[final class BranchlessMath {
-    int abs(int x) {
-        int mask = x >> 31;
-        return (x + mask) ^ mask;
-    }
-
-    int max(int a, int b) {
-        int diff = a - b;
-        int sign = diff >> 31;
-        return a - (diff & sign);
-    }
-}]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="java"><![CDATA[final class BranchyMath {
-    int abs(int x) { return x < 0 ? -x : x; }
-    int max(int a, int b) { return a > b ? a : b; }
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="27" id="unsafe-direct-memory-caution">
-            <example-header>
-                <example-title>Avoid `sun.misc.Unsafe` Unless There Is Hard Evidence</example-title>
-                <example-subtitle>Prefer safe code or supported APIs before unsafe memory access</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[`Unsafe` can improve low-level throughput but increases portability and safety risk. Use only for proven bottlenecks and isolate behind well-tested abstractions.]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[final class SafeArraySum {
-    long sum(byte[] data) {
-        long s = 0;
-        for (byte b : data) s += b;
-        return s;
-    }
-}]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="java"><![CDATA[import sun.misc.Unsafe;
-import java.lang.reflect.Field;
-
-final class UnsafeArraySum {
-    private static final Unsafe U;
-    private static final long BASE;
-    static {
-        try {
-            Field f = Unsafe.class.getDeclaredField("theUnsafe");
-            f.setAccessible(true);
-            U = (Unsafe) f.get(null);
-            BASE = U.arrayBaseOffset(byte[].class);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
-
-    long sum(byte[] data) {
-        long s = 0;
-        for (int i = 0; i < data.length; i++) s += U.getByte(data, BASE + i);
-        return s;
-    }
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="28" id="manual-loop-unrolling">
-            <example-header>
-                <example-title>Use Manual Loop Unrolling Sparingly</example-title>
-                <example-subtitle>Trade readability for throughput only in proven kernels</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[Manual unrolling can reduce loop overhead and improve ILP on tight arithmetic kernels. Keep it localized and benchmarked.]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[final class UnrolledSum {
-    int sum(int[] a) {
-        int s0 = 0, s1 = 0, s2 = 0, s3 = 0;
-        int i = 0, n = a.length - 3;
-        for (; i < n; i += 4) {
-            s0 += a[i];
-            s1 += a[i + 1];
-            s2 += a[i + 2];
-            s3 += a[i + 3];
-        }
-        for (; i < a.length; i++) s0 += a[i];
-        return s0 + s1 + s2 + s3;
-    }
-}]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="java"><![CDATA[final class SimpleSum {
-    int sum(int[] a) {
-        int s = 0;
-        for (int i = 0; i < a.length; i++) s += a[i];
-        return s;
-    }
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="29" id="escape-analysis-understanding">
+        <example number="14" id="escape-analysis-understanding">
             <example-header>
                 <example-title>Escape Analysis Deep Dive: Core Escape Conditions</example-title>
                 <example-subtitle>Group the four conditions that force heap allocation</example-subtitle>
@@ -1289,7 +683,9 @@ final class UnsafeArraySum {
             </code-examples>
         </example>
 
-        <example number="30" id="field-assignment-vs-local-noescape">
+
+
+        <example number="15" id="field-assignment-vs-local-noescape">
             <example-header>
                 <example-title>Field Assignment Escape vs Local Non-Escape</example-title>
                 <example-subtitle>Contrast `EscapeExample` and `NoEscapeExample` style</example-subtitle>
@@ -1330,7 +726,9 @@ final class UnsafeArraySum {
             </code-examples>
         </example>
 
-        <example number="31" id="method-call-escape-vs-noescape">
+
+
+        <example number="16" id="method-call-escape-vs-noescape">
             <example-header>
                 <example-title>Method-Call Escape vs Non-Retaining Method Call</example-title>
                 <example-subtitle>Passing local objects is safe only if callees do not retain them</example-subtitle>
@@ -1374,7 +772,9 @@ final class MethodEscape {
             </code-examples>
         </example>
 
-        <example number="32" id="iterator-anonymous-escape">
+
+
+        <example number="17" id="iterator-anonymous-escape">
             <example-header>
                 <example-title>Iterator Anonymous Class Escape</example-title>
                 <example-subtitle>Returning iterator objects forces escaping state</example-subtitle>
@@ -1410,7 +810,9 @@ final class IteratorEscape {
             </code-examples>
         </example>
 
-        <example number="33" id="stringbuilder-escape-vs-tostring">
+
+
+        <example number="18" id="stringbuilder-escape-vs-tostring">
             <example-header>
                 <example-title>StringBuilder Escape vs `toString` Non-Escape</example-title>
                 <example-subtitle>Return final String, not mutable builder objects</example-subtitle>
@@ -1437,7 +839,9 @@ final class IteratorEscape {
             </code-examples>
         </example>
 
-        <example number="34" id="boxed-list-vs-primitive-array-escape">
+
+
+        <example number="19" id="boxed-list-vs-primitive-array-escape">
             <example-header>
                 <example-title>Boxed List Escape vs Primitive Array</example-title>
                 <example-subtitle>Avoid wrapper-object escape through collections when possible</example-subtitle>
@@ -1471,7 +875,9 @@ final class BoxingEscape {
             </code-examples>
         </example>
 
-        <example number="35" id="vector-intermediate-escape-chain">
+
+
+        <example number="20" id="vector-intermediate-escape-chain">
             <example-header>
                 <example-title>Vector Intermediate Escape Chain vs In-Place Mutation</example-title>
                 <example-subtitle>Avoid transient object chains in numeric kernels</example-subtitle>
@@ -1515,7 +921,9 @@ final class PhysicsEscape {
             </code-examples>
         </example>
 
-        <example number="36" id="lambda-return-capture-deepdive">
+
+
+        <example number="21" id="lambda-return-capture-deepdive">
             <example-header>
                 <example-title>Lambda Return/List Capture Deep Dive</example-title>
                 <example-subtitle>Returning/capturing lambdas creates escaping closures</example-subtitle>
@@ -1551,7 +959,9 @@ final class LambdaEscape {
             </code-examples>
         </example>
 
-        <example number="37" id="record-escape-analysis">
+
+
+        <example number="22" id="record-escape-analysis">
             <example-header>
                 <example-title>Record-Specific Escape Analysis Discussion</example-title>
                 <example-subtitle>Records help value semantics but can still escape like classes</example-subtitle>
@@ -1579,7 +989,9 @@ final class PersonFactory {
             </code-examples>
         </example>
 
-        <example number="38" id="exception-escape-vs-throw-immediately">
+
+
+        <example number="23" id="exception-escape-vs-throw-immediately">
             <example-header>
                 <example-title>Exception Object Escape vs Throw Immediately</example-title>
                 <example-subtitle>Do not allocate and return exception objects as data</example-subtitle>
@@ -1609,7 +1021,9 @@ final class PersonFactory {
             </code-examples>
         </example>
 
-        <example number="39" id="scalar-replacement-tempdata">
+
+
+        <example number="24" id="scalar-replacement-tempdata">
             <example-header>
                 <example-title>Scalar Replacement: TempData Object vs Locals</example-title>
                 <example-subtitle>Prefer primitive locals when helper object adds no semantic value</example-subtitle>
@@ -1643,7 +1057,9 @@ final class PersonFactory {
             </code-examples>
         </example>
 
-        <example number="40" id="jvm-escape-analysis-flags">
+
+
+        <example number="25" id="jvm-escape-analysis-flags">
             <example-header>
                 <example-title>JVM Escape Analysis Verification Flags and Demo</example-title>
                 <example-subtitle>Use diagnostic JVM options and paired methods to compare behavior</example-subtitle>
@@ -1674,7 +1090,7 @@ final class PersonFactory {
     }
 }]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
+                <bad-example>
                     <code-block language="java"><![CDATA[final class EscapeBlindChanges {
     int compute(int x, int y) {
         // Assumes stack allocation without checking runtime behavior or benchmarks
@@ -1690,7 +1106,9 @@ final class PersonFactory {
             </code-examples>
         </example>
 
-        <example number="41" id="columnar-storage-row-vs-column">
+
+
+        <example number="26" id="columnar-storage-row-vs-column">
             <example-header>
                 <example-title>Use Columnar Layouts for Analytical Access Patterns</example-title>
                 <example-subtitle>Read only needed columns; improve cache locality</example-subtitle>
@@ -1750,216 +1168,9 @@ final class RowOrientedTrades {
             </code-examples>
         </example>
 
-        <example number="42" id="zero-copy-direct-buffer">
-            <example-header>
-                <example-title>Use Zero-Copy and Direct Buffers for Large Transfers</example-title>
-                <example-subtitle>Reduce userspace copies with `transferTo` and direct buffers</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[For large file/network transfers, `FileChannel.transferTo(...)` and direct buffers can reduce copy overhead and improve throughput.]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.channels.SocketChannel;
 
-final class ZeroCopyTransfer {
-    private final ByteBuffer direct = ByteBuffer.allocateDirect(8192);
 
-    void send(FileChannel file, SocketChannel socket) throws IOException {
-        long pos = 0;
-        long size = file.size();
-        while (pos < size) {
-            pos += file.transferTo(pos, size - pos, socket);
-        }
-    }
-}]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="java"><![CDATA[import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.SocketChannel;
-import java.nio.charset.StandardCharsets;
-
-final class MultipleCopyTransfer {
-    void send(SocketChannel socket, String payload) throws IOException {
-        byte[] bytes = payload.getBytes(StandardCharsets.UTF_8);
-        ByteBuffer heap = ByteBuffer.allocate(bytes.length);
-        heap.put(bytes);
-        heap.flip();
-        socket.write(heap);
-    }
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="43" id="lock-free-ring-buffer">
-            <example-header>
-                <example-title>Use Lock-Free Ring Buffer for High-Rate Pipelines</example-title>
-                <example-subtitle>CAS-based queues avoid lock contention under load</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[In high-frequency producer/consumer pipelines, lock-free ring buffers can reduce context switching and lock contention compared to synchronized queues.]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[import java.util.concurrent.atomic.AtomicLong;
-
-final class LockFreeRingBuffer<E> {
-    private final Object[] buffer;
-    private final int mask;
-    private final AtomicLong write = new AtomicLong();
-    private final AtomicLong read = new AtomicLong();
-
-    LockFreeRingBuffer(int capacityPow2) {
-        this.buffer = new Object[capacityPow2];
-        this.mask = capacityPow2 - 1;
-    }
-
-    boolean offer(E e) {
-        long w = write.get();
-        long r = read.get();
-        if (w - r >= buffer.length) return false;
-        if (!write.compareAndSet(w, w + 1)) return false;
-        buffer[(int) (w & mask)] = e;
-        return true;
-    }
-
-    @SuppressWarnings("unchecked")
-    E poll() {
-        long r = read.get();
-        if (r >= write.get()) return null;
-        if (!read.compareAndSet(r, r + 1)) return null;
-        int idx = (int) (r & mask);
-        E e = (E) buffer[idx];
-        buffer[idx] = null;
-        return e;
-    }
-}]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="java"><![CDATA[import java.util.LinkedList;
-import java.util.Queue;
-
-final class SynchronizedQueue<E> {
-    private final Queue<E> q = new LinkedList<>();
-
-    synchronized void add(E e) {
-        q.add(e);
-        notifyAll();
-    }
-
-    synchronized E poll() throws InterruptedException {
-        while (q.isEmpty()) wait();
-        return q.poll();
-    }
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="44" id="simd-vector-api">
-            <example-header>
-                <example-title>Use Panama Vector API for Numeric Kernels</example-title>
-                <example-subtitle>Vectorize arithmetic-heavy loops when available</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[For hot numeric loops, the Vector API can exploit hardware SIMD and reduce per-element instruction overhead. Keep scalar fallback paths.]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[import jdk.incubator.vector.DoubleVector;
-import jdk.incubator.vector.VectorOperators;
-import jdk.incubator.vector.VectorSpecies;
-
-final class VectorizedReturns {
-    private static final VectorSpecies<Double> SPECIES = DoubleVector.SPECIES_PREFERRED;
-
-    void calc(double[] prices, double[] returns) {
-        int i = 1;
-        int limit = SPECIES.loopBound(prices.length - 1);
-        for (; i < limit; i += SPECIES.length()) {
-            DoubleVector p = DoubleVector.fromArray(SPECIES, prices, i);
-            DoubleVector prev = DoubleVector.fromArray(SPECIES, prices, i - 1);
-            p.sub(prev).div(prev).intoArray(returns, i);
-        }
-        for (; i < prices.length; i++) {
-            returns[i] = (prices[i] - prices[i - 1]) / prices[i - 1];
-        }
-    }
-}]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="java"><![CDATA[final class ScalarReturns {
-    void calc(double[] prices, double[] returns) {
-        for (int i = 1; i < prices.length; i++) {
-            returns[i] = (prices[i] - prices[i - 1]) / prices[i - 1];
-        }
-    }
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="45" id="time-based-partitioning">
-            <example-header>
-                <example-title>Use Time-Based Partitioning for Time-Series Workloads</example-title>
-                <example-subtitle>Read only relevant partitions, not full dataset</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[Partitioning by date/time narrows query scope and improves maintenance operations (archival/compression/retention).]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-final class TimePartitionedStorage {
-    private final Map<LocalDate, List<Trade>> partitions = new HashMap<>();
-
-    void add(Trade t) {
-        partitions.computeIfAbsent(t.date, d -> new ArrayList<>()).add(t);
-    }
-
-    List<Trade> getByDate(LocalDate d) {
-        return partitions.getOrDefault(d, List.of());
-    }
-
-    static final class Trade {
-        final LocalDate date; final double price;
-        Trade(LocalDate date, double price) { this.date = date; this.price = price; }
-    }
-}]]></code-block>
-                </good-example>
-                <bad-example>
-                    <code-block language="java"><![CDATA[import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-final class SingleTableStorage {
-    private final List<Trade> all = new ArrayList<>();
-
-    List<Trade> getByDate(LocalDate d) {
-        return all.stream().filter(t -> t.date.equals(d)).collect(Collectors.toList());
-    }
-
-    static final class Trade {
-        final LocalDate date; final double price;
-        Trade(LocalDate date, double price) { this.date = date; this.price = price; }
-    }
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="46" id="symbol-interning-ids">
+        <example number="27" id="symbol-interning-ids">
             <example-header>
                 <example-title>Use Symbol Interning via IDs</example-title>
                 <example-subtitle>Deduplicate repeated strings and compare ints instead</example-subtitle>
@@ -1989,7 +1200,7 @@ final class SymbolInterning {
     }
 }]]></code-block>
                 </good-example>
-                <bad-example>
+                <bad-example last-item="true">
                     <code-block language="java"><![CDATA[import java.util.ArrayList;
 import java.util.List;
 
@@ -2002,56 +1213,6 @@ final class DuplicatedStrings {
         t.symbol = symbol; // repeated string references everywhere
         t.price = price;
         trades.add(t);
-    }
-}]]></code-block>
-                </bad-example>
-            </code-examples>
-        </example>
-
-        <example number="47" id="write-ahead-log-pattern">
-            <example-header>
-                <example-title>Use Write-Ahead Log (WAL) with Batched Sync</example-title>
-                <example-subtitle>Improve durability-performance tradeoff versus per-write fsync</example-subtitle>
-            </example-header>
-            <example-description>
-                <![CDATA[Append-first WAL with periodic `force(false)` reduces fsync cost and enables recovery by replay.]]>
-            </example-description>
-            <code-examples>
-                <good-example>
-                    <code-block language="java"><![CDATA[import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
-
-final class WriteAheadLog {
-    private final FileChannel wal;
-    private final ByteBuffer buf = ByteBuffer.allocateDirect(64 * 1024);
-    private int writes;
-
-    WriteAheadLog(Path path) throws IOException {
-        wal = FileChannel.open(path, StandardOpenOption.CREATE, StandardOpenOption.WRITE, StandardOpenOption.APPEND);
-    }
-
-    void write(long ts, double price) throws IOException {
-        buf.clear();
-        buf.putLong(ts).putDouble(price).flip();
-        wal.write(buf);
-        if (++writes % 1000 == 0) wal.force(false); // batched sync
-    }
-}]]></code-block>
-                </good-example>
-                <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[import java.nio.MappedByteBuffer;
-
-final class DirectWrites {
-    private final MappedByteBuffer dataFile;
-    DirectWrites(MappedByteBuffer dataFile) { this.dataFile = dataFile; }
-
-    void write(long ts, double price) {
-        dataFile.putLong(ts);
-        dataFile.putDouble(price);
-        dataFile.force(); // fsync-like cost each write
     }
 }]]></code-block>
                 </bad-example>

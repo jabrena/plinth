@@ -1,6 +1,6 @@
 ---
-name: 126-java-high-performance
-description: Use when you need to improve Java performance comprehensively in code — including runtime-aware coding choices, allocation reduction, CPU hot-path optimization, concurrency and backpressure patterns, efficient I/O parsing/serialization logic, and persistence/caching implementation patterns. This should trigger for requests such as Review Java code for high performance; Optimize Java hot path; Reduce Java allocations; Improve Java latency/throughput. Part of cursor-rules-java project
+name: 145-java-refactoring-high-performance
+description: Use when you need to refactor Java code for high performance — including memory/allocation reduction, CPU hot-path optimization, and syntax/API/control-flow improvements. This should trigger for requests such as Review Java code for high performance; Optimize Java hot path; Reduce Java allocations; Improve Java latency/throughput. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -29,7 +29,7 @@ Performance optimization must be evidence-driven and safe, focused on Java code 
 
 - **MEASURE-FIRST**: Establish baseline behavior and identify Java code hot paths before optimization
 - **NO PREMATURE OPTIMIZATION**: Only optimize code paths identified by profiling evidence
-- **BEFORE APPLYING**: Read the reference for bad/good examples and measurement workflow
+- **BEFORE APPLYING**: Read the relevant reference(s) for bad/good examples and measurement workflow
 - **EDGE CASE**: If hotspot evidence is unclear, ask clarifying questions before changing code
 
 ## When to use this skill
@@ -46,13 +46,13 @@ Performance optimization must be evidence-driven and safe, focused on Java code 
 
 Confirm the performance-sensitive Java path and baseline behavior before changing code.
 
-2. **Read high-performance reference and locate bottlenecks**
+2. **Select the relevant reference(s) by bottleneck**
 
-Read `references/126-java-high-performance.md`, identify hotspots across allocation, CPU, concurrency, I/O, data access, and caching (Java code and API boundaries only).
+Pick and read only the reference(s) matching the observed hotspot: `references/145-refactoring-high-performance-java-memory-allocation.md` for allocation pressure, primitives vs. wrappers, escape analysis, collection sizing, data layout, and deduplication; `references/145-refactoring-high-performance-java-cpu.md` for CPU-bound hot paths, bit-level parsing, branchless arithmetic, loop unrolling, Unsafe caution, and SIMD/vectorization; `references/145-refactoring-high-performance-java-code-syntax.md` for code shape, lambdas, API return conventions, parsing syntax, I/O strategy, concurrency, and control-flow improvements.
 
 3. **Apply targeted optimizations**
 
-Implement minimal, evidence-backed changes across relevant domains (allocation, CPU, concurrency, I/O, and persistence/caching in Java code).
+Implement minimal, evidence-backed changes scoped to the chosen domain(s): memory/allocation, CPU/low-level, or code shape/control flow (and adjacent concurrency, I/O, and persistence/caching in Java code).
 
 4. **Validate and compare code-level outcomes**
 
@@ -60,4 +60,8 @@ Compare before/after behavior and keep only Java code changes with meaningful, v
 
 ## Reference
 
-For detailed guidance, examples, and constraints, see [references/126-java-high-performance.md](references/126-java-high-performance.md).
+For detailed guidance, examples, and constraints, see:
+
+- [references/145-refactoring-high-performance-java-memory-allocation.md](references/145-refactoring-high-performance-java-memory-allocation.md)
+- [references/145-refactoring-high-performance-java-cpu.md](references/145-refactoring-high-performance-java-cpu.md)
+- [references/145-refactoring-high-performance-java-code-syntax.md](references/145-refactoring-high-performance-java-code-syntax.md)
