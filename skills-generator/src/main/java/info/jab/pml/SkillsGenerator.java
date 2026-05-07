@@ -2,7 +2,9 @@ package info.jab.pml;
 
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 import javax.xml.parsers.DocumentBuilder;
@@ -11,9 +13,6 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.NodeList;
 
 /**
  * Generator for Agent Skills (SKILL.md and references) from XML rule definitions and skill files.
@@ -85,79 +84,24 @@ public final class SkillsGenerator {
     }
 
     public SkillOutput generateSkill(String skillId, boolean requiresSystemPrompt, boolean useXml, java.util.List<String> references) {
-        String referenceContent = requiresSystemPrompt
-            ? generateReferenceContent(skillId, parseMetadata(skillId))
-            : "";
+        Map<String, String> referenceContents = requiresSystemPrompt
+            ? generateReferenceContents(references.isEmpty() ? List.of(skillId) : references)
+            : Map.of();
         String skillMdContent = useXml
             ? loadSkillSummaryFromXml(skillId, references)
             : loadSkillSummary(skillId);
-        return new SkillOutput(skillId, skillMdContent, referenceContent);
+        return new SkillOutput(skillId, skillMdContent, referenceContents);
     }
 
-    private SkillMetadata parseMetadata(String skillId) {
-        String xmlFileName = "skill-references/" + skillId + ".xml";
-        try (InputStream xmlStream = getResource(xmlFileName)) {
-            if (xmlStream == null) {
-                throw new RuntimeException("XML resource not found: " + xmlFileName);
-            }
-            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = factory.newDocumentBuilder();
-            Document doc = builder.parse(xmlStream);
-
-            Element metadata = (Element) doc.getElementsByTagName("metadata").item(0);
-            if (metadata == null) {
-                throw new RuntimeException("metadata element not found in " + xmlFileName);
-            }
-
-            String title = getElementText(metadata, "title");
-            String description = getElementText(metadata, "description");
-            String goalLongDescription = extractGoalFirstParagraph(doc);
-
-            return new SkillMetadata(
-                skillId,
-                description != null ? description.replaceAll("\\.$", "") : "",
-                title != null ? title : skillId,
-                goalLongDescription != null ? goalLongDescription : ""
+    private Map<String, String> generateReferenceContents(List<String> referenceIds) {
+        Map<String, String> contents = new LinkedHashMap<>();
+        for (String referenceId : referenceIds) {
+            contents.put(
+                referenceId,
+                cursorRulesGenerator.generate("skill-references/" + referenceId + ".xml", "skill-reference-to-markdown.xsl")
             );
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to parse metadata from " + xmlFileName, e);
         }
-    }
-
-    private String getElementText(Element parent, String tagName) {
-        NodeList nodes = parent.getElementsByTagName(tagName);
-        if (nodes.getLength() == 0) {
-            return null;
-        }
-        String text = nodes.item(0).getTextContent();
-        return text != null ? text.trim() : null;
-    }
-
-    private String extractGoalFirstParagraph(Document doc) {
-        NodeList goalNodes = doc.getElementsByTagName("goal");
-        if (goalNodes.getLength() == 0) {
-            return null;
-        }
-        String goalText = goalNodes.item(0).getTextContent();
-        if (goalText == null || goalText.isEmpty()) {
-            return null;
-        }
-        goalText = goalText.trim();
-        int doubleNewline = goalText.indexOf("\n\n");
-        int hashSection = goalText.indexOf("\n###");
-        int end = goalText.length();
-        if (doubleNewline > 0 && doubleNewline < end) {
-            end = doubleNewline;
-        }
-        if (hashSection > 0 && hashSection < end) {
-            end = hashSection;
-        }
-        goalText = goalText.substring(0, end).trim().replaceAll("\\s+", " ");
-        return goalText.isEmpty() ? null : goalText;
-    }
-
-    private String generateReferenceContent(String skillId, SkillMetadata metadata) {
-        return cursorRulesGenerator.generate("skill-references/" + skillId + ".xml", "skill-reference-to-markdown.xsl");
+        return contents;
     }
 
     private String loadSkillSummary(String skillId) {
@@ -216,19 +160,32 @@ public final class SkillsGenerator {
             return content;
         }
         StringBuilder builder = new StringBuilder(content.stripTrailing());
-        for (String path : references) {
-            String referencePath = "references/" + path + ".md";
-            builder.append(System.lineSeparator())
-                .append(System.lineSeparator())
-                .append("## Reference")
-                .append(System.lineSeparator())
-                .append(System.lineSeparator())
-                .append("For detailed guidance, examples, and constraints, see [")
+        builder.append(System.lineSeparator())
+            .append(System.lineSeparator())
+            .append("## Reference")
+            .append(System.lineSeparator())
+            .append(System.lineSeparator());
+        if (references.size() == 1) {
+            String referencePath = "references/" + references.get(0) + ".md";
+            builder.append("For detailed guidance, examples, and constraints, see [")
                 .append(referencePath)
                 .append("](")
                 .append(referencePath)
                 .append(").")
                 .append(System.lineSeparator());
+        } else {
+            builder.append("For detailed guidance, examples, and constraints, see:")
+                .append(System.lineSeparator())
+                .append(System.lineSeparator());
+            for (String path : references) {
+                String referencePath = "references/" + path + ".md";
+                builder.append("- [")
+                    .append(referencePath)
+                    .append("](")
+                    .append(referencePath)
+                    .append(")")
+                    .append(System.lineSeparator());
+            }
         }
         return builder.toString();
     }
@@ -262,7 +219,10 @@ public final class SkillsGenerator {
     /**
      * Output of skill generation: SKILL.md content and reference content.
      */
-    public record SkillOutput(String skillId, String skillMd, String referenceMd) {}
+    public record SkillOutput(String skillId, String skillMd, Map<String, String> referenceMds) {
+        public String referenceMd() {
+            return referenceMds.values().stream().findFirst().orElse("");
+        }
+    }
 
-    private record SkillMetadata(String skillId, String description, String displayTitle, String goalLongDescription) {}
 }

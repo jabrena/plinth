@@ -1,371 +1,378 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <skill-inventory>
-    <skill id="001" xml="true">
+    <skill id="001">
         <reference-list>
             <reference>001-skills-inventory</reference>
         </reference-list>
     </skill>
-    <skill id="002" xml="true">
+    <skill id="002">
         <reference-list>
             <reference>002-agents-inventory</reference>
         </reference-list>
     </skill>
-    <skill id="003" xml="true">
+    <skill id="003">
         <reference-list>
             <reference>003-agents-installation</reference>
         </reference-list>
     </skill>
-    <skill id="012" xml="true">
+    <skill id="012">
         <reference-list>
             <reference>012-agile-epic</reference>
         </reference-list>
     </skill>
-    <skill id="013" xml="true">
+    <skill id="013">
         <reference-list>
             <reference>013-agile-feature</reference>
         </reference-list>
     </skill>
-    <skill id="014" xml="true">
+    <skill id="014">
         <reference-list>
             <reference>014-agile-user-story</reference>
         </reference-list>
     </skill>
-    <skill id="030" xml="true">
+    <skill id="030">
         <reference-list>
             <reference>030-architecture-adr-general</reference>
         </reference-list>
     </skill>
-    <skill id="031" xml="true">
+    <skill id="031">
         <reference-list>
             <reference>031-architecture-adr-functional-requirements</reference>
         </reference-list>
     </skill>
-    <skill id="032" xml="true">
+    <skill id="032">
         <reference-list>
             <reference>032-architecture-adr-non-functional-requirements</reference>
         </reference-list>
     </skill>
-    <skill id="033" xml="true">
+    <skill id="033">
         <reference-list>
             <reference>033-architecture-diagrams</reference>
         </reference-list>
     </skill>
-    <skill id="041" xml="true">
+    <skill id="041">
         <reference-list>
             <reference>041-planning-plan-mode</reference>
         </reference-list>
     </skill>
-    <skill id="042" xml="true">
+    <skill id="042">
         <reference-list>
             <reference>042-planning-openspec</reference>
         </reference-list>
     </skill>
-    <skill id="043" xml="true">
+    <skill id="043">
         <reference-list>
             <reference>043-planning-github-issues</reference>
         </reference-list>
     </skill>
-    <skill id="044" xml="true">
+    <skill id="044">
         <reference-list>
             <reference>044-planning-jira</reference>
         </reference-list>
     </skill>
-    <skill id="110" xml="true">
+    <skill id="110">
         <reference-list>
             <reference>110-java-maven-best-practices</reference>
         </reference-list>
     </skill>
-    <skill id="111" xml="true">
+    <skill id="111">
         <reference-list>
             <reference>111-java-maven-dependencies</reference>
         </reference-list>
     </skill>
-    <skill id="112" xml="true">
+    <skill id="112">
         <reference-list>
             <reference>112-java-maven-plugins</reference>
         </reference-list>
     </skill>
-    <skill id="113" xml="true">
+    <skill id="113">
         <reference-list>
             <reference>113-java-maven-documentation</reference>
         </reference-list>
     </skill>
-    <skill id="114" xml="true">
+    <skill id="114">
         <reference-list>
             <reference>114-java-maven-search</reference>
         </reference-list>
     </skill>
-    <skill id="121" xml="true">
+    <skill id="121">
         <reference-list>
             <reference>121-java-object-oriented-design</reference>
         </reference-list>
     </skill>
-    <skill id="122" xml="true">
+    <skill id="122">
         <reference-list>
             <reference>122-java-type-design</reference>
         </reference-list>
     </skill>
-    <skill id="123" xml="true">
+    <skill id="123">
         <reference-list>
             <reference>123-java-exception-handling</reference>
         </reference-list>
     </skill>
-    <skill id="124" xml="true">
+    <skill id="124">
         <reference-list>
             <reference>124-java-secure-coding</reference>
         </reference-list>
     </skill>
-    <skill id="125" xml="true">
+    <skill id="125">
         <reference-list>
             <reference>125-java-concurrency</reference>
         </reference-list>
     </skill>
-    <skill id="180" xml="true">
-        <reference-list>
-            <reference>180-java-observability-logging</reference>
-        </reference-list>
-    </skill>
-    <skill id="128" xml="true">
+    <skill id="128">
         <reference-list>
             <reference>128-java-generics</reference>
         </reference-list>
     </skill>
-    <skill id="130" xml="true">
+    <skill id="130">
         <reference-list>
             <reference>130-java-testing-strategies</reference>
         </reference-list>
     </skill>
-    <skill id="131" xml="true">
+    <skill id="131">
         <reference-list>
             <reference>131-java-testing-unit-testing</reference>
         </reference-list>
     </skill>
-    <skill id="132" xml="true">
+    <skill id="132">
         <reference-list>
             <reference>132-java-testing-integration-testing</reference>
         </reference-list>
     </skill>
-    <skill id="133" xml="true">
+    <skill id="133">
         <reference-list>
             <reference>133-java-testing-acceptance-tests</reference>
         </reference-list>
     </skill>
-    <skill id="141" xml="true">
+    <skill id="141">
         <reference-list>
             <reference>141-java-refactoring-with-modern-features</reference>
         </reference-list>
     </skill>
-    <skill id="142" xml="true">
+    <skill id="142">
         <reference-list>
             <reference>142-java-functional-programming</reference>
         </reference-list>
     </skill>
-    <skill id="143" xml="true">
+    <skill id="143">
         <reference-list>
             <reference>143-java-functional-exception-handling</reference>
         </reference-list>
     </skill>
-    <skill id="144" xml="true">
+    <skill id="144">
         <reference-list>
             <reference>144-java-data-oriented-programming</reference>
         </reference-list>
     </skill>
-    <skill id="151" xml="true">
+    <skill id="145" skillId="145-java-refactoring-high-performance">
+        <reference-list>
+            <reference>145-refactoring-high-performance-java-memory-allocation</reference>
+            <reference>145-refactoring-high-performance-java-cpu</reference>
+            <reference>145-refactoring-high-performance-java-code-syntax</reference>
+        </reference-list>
+    </skill>
+    <skill id="151">
         <reference-list>
             <reference>151-java-performance-jmeter</reference>
         </reference-list>
     </skill>
-    <skill id="161" xml="true">
+    <skill id="161">
         <reference-list>
             <reference>161-java-profiling-detect</reference>
         </reference-list>
     </skill>
-    <skill id="162" xml="true">
+    <skill id="162">
         <reference-list>
             <reference>162-java-profiling-analyze</reference>
         </reference-list>
     </skill>
-    <skill id="163" xml="true">
+    <skill id="163">
         <reference-list>
             <reference>163-java-profiling-refactor</reference>
         </reference-list>
     </skill>
-    <skill id="164" xml="true">
+    <skill id="164">
         <reference-list>
             <reference>164-java-profiling-verify</reference>
         </reference-list>
     </skill>
-    <skill id="170" xml="true">
+    <skill id="170">
         <reference-list>
             <reference>170-java-documentation</reference>
         </reference-list>
     </skill>
-    <skill id="200" xml="true">
+    <skill id="180">
+        <reference-list>
+            <reference>180-java-observability-logging</reference>
+        </reference-list>
+    </skill>
+    <skill id="200">
         <reference-list>
             <reference>200-agents-md</reference>
         </reference-list>
     </skill>
-    <skill id="301" xml="true">
+    <skill id="301">
         <reference-list>
             <reference>301-frameworks-spring-boot-core</reference>
         </reference-list>
     </skill>
-    <skill id="302" xml="true">
+    <skill id="302">
         <reference-list>
             <reference>302-frameworks-spring-boot-rest</reference>
         </reference-list>
     </skill>
-    <skill id="303" xml="true">
+    <skill id="303">
         <reference-list>
             <reference>303-frameworks-spring-boot-validation</reference>
         </reference-list>
     </skill>
-    <skill id="304" xml="true">
+    <skill id="304">
         <reference-list>
             <reference>304-frameworks-spring-boot-security</reference>
         </reference-list>
     </skill>
-    <skill id="311" xml="true">
+    <skill id="311">
         <reference-list>
             <reference>311-frameworks-spring-jdbc</reference>
         </reference-list>
     </skill>
-    <skill id="312" xml="true">
+    <skill id="312">
         <reference-list>
             <reference>312-frameworks-spring-data-jdbc</reference>
         </reference-list>
     </skill>
-    <skill id="313" xml="true">
+    <skill id="313">
         <reference-list>
             <reference>313-frameworks-spring-db-migrations-flyway</reference>
         </reference-list>
     </skill>
-    <skill id="321" xml="true">
+    <skill id="321">
         <reference-list>
             <reference>321-frameworks-spring-boot-testing-unit-tests</reference>
         </reference-list>
     </skill>
-    <skill id="322" xml="true">
+    <skill id="322">
         <reference-list>
             <reference>322-frameworks-spring-boot-testing-integration-tests</reference>
         </reference-list>
     </skill>
-    <skill id="323" xml="true">
+    <skill id="323">
         <reference-list>
             <reference>323-frameworks-spring-boot-testing-acceptance-tests</reference>
         </reference-list>
     </skill>
-    <skill id="401" xml="true">
+    <skill id="401">
         <reference-list>
             <reference>401-frameworks-quarkus-core</reference>
         </reference-list>
     </skill>
-    <skill id="402" xml="true">
+    <skill id="402">
         <reference-list>
             <reference>402-frameworks-quarkus-rest</reference>
         </reference-list>
     </skill>
-    <skill id="403" xml="true">
+    <skill id="403">
         <reference-list>
             <reference>403-frameworks-quarkus-validation</reference>
         </reference-list>
     </skill>
-    <skill id="404" xml="true">
+    <skill id="404">
         <reference-list>
             <reference>404-frameworks-quarkus-security</reference>
         </reference-list>
     </skill>
-    <skill id="411" xml="true">
+    <skill id="411">
         <reference-list>
             <reference>411-frameworks-quarkus-jdbc</reference>
         </reference-list>
     </skill>
-    <skill id="412" xml="true">
+    <skill id="412">
         <reference-list>
             <reference>412-frameworks-quarkus-panache</reference>
         </reference-list>
     </skill>
-    <skill id="413" xml="true">
+    <skill id="413">
         <reference-list>
             <reference>413-frameworks-quarkus-db-migrations-flyway</reference>
         </reference-list>
     </skill>
-    <skill id="421" xml="true">
+    <skill id="421">
         <reference-list>
             <reference>421-frameworks-quarkus-testing-unit-tests</reference>
         </reference-list>
     </skill>
-    <skill id="422" xml="true">
+    <skill id="422">
         <reference-list>
             <reference>422-frameworks-quarkus-testing-integration-tests</reference>
         </reference-list>
     </skill>
-    <skill id="423" xml="true">
+    <skill id="423">
         <reference-list>
             <reference>423-frameworks-quarkus-testing-acceptance-tests</reference>
         </reference-list>
     </skill>
-    <skill id="501" xml="true">
+    <skill id="501">
         <reference-list>
             <reference>501-frameworks-micronaut-core</reference>
         </reference-list>
     </skill>
-    <skill id="502" xml="true">
+    <skill id="502">
         <reference-list>
             <reference>502-frameworks-micronaut-rest</reference>
         </reference-list>
     </skill>
-    <skill id="503" xml="true">
+    <skill id="503">
         <reference-list>
             <reference>503-frameworks-micronaut-validation</reference>
         </reference-list>
     </skill>
-    <skill id="504" xml="true">
+    <skill id="504">
         <reference-list>
             <reference>504-frameworks-micronaut-security</reference>
         </reference-list>
     </skill>
-    <skill id="511" xml="true">
+    <skill id="511">
         <reference-list>
             <reference>511-frameworks-micronaut-jdbc</reference>
         </reference-list>
     </skill>
-    <skill id="512" xml="true">
+    <skill id="512">
         <reference-list>
             <reference>512-frameworks-micronaut-data</reference>
         </reference-list>
     </skill>
-    <skill id="513" xml="true">
+    <skill id="513">
         <reference-list>
             <reference>513-frameworks-micronaut-db-migrations-flyway</reference>
         </reference-list>
     </skill>
-    <skill id="521" xml="true">
+    <skill id="521">
         <reference-list>
             <reference>521-frameworks-micronaut-testing-unit-tests</reference>
         </reference-list>
     </skill>
-    <skill id="522" xml="true">
+    <skill id="522">
         <reference-list>
             <reference>522-frameworks-micronaut-testing-integration-tests</reference>
         </reference-list>
     </skill>
-    <skill id="523" xml="true">
+    <skill id="523">
         <reference-list>
             <reference>523-frameworks-micronaut-testing-acceptance-tests</reference>
         </reference-list>
     </skill>
-    <skill id="701" xml="true">
+    <skill id="701">
         <reference-list>
             <reference>701-technologies-openapi</reference>
         </reference-list>
     </skill>
-    <skill id="702" xml="true">
+    <skill id="702">
         <reference-list>
             <reference>702-technologies-wiremock</reference>
         </reference-list>
     </skill>
-    <skill id="703" xml="true">
+    <skill id="703">
         <reference-list>
             <reference>703-technologies-fuzzing-testing</reference>
         </reference-list>

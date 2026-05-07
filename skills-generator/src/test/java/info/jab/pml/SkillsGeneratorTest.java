@@ -72,14 +72,17 @@ class SkillsGeneratorTest {
 
             // Then - Validate reference content (only for skills with system prompt)
             if (requiresSystemPrompt) {
-                assertThat(output.referenceMd())
-                    .startsWith("---")
-                    .contains("## Role")
-                    .contains("## Goal")
-                    .contains("name:")
-                    .contains("description:");
+                assertThat(output.referenceMds())
+                    .containsOnlyKeys(descriptor.references().toArray(String[]::new));
+                assertThat(output.referenceMds().values())
+                    .allSatisfy(referenceMd -> assertThat(referenceMd)
+                        .startsWith("---")
+                        .contains("## Role")
+                        .contains("## Goal")
+                        .contains("name:")
+                        .contains("description:"));
             } else {
-                assertThat(output.referenceMd()).isEmpty();
+                assertThat(output.referenceMds()).isEmpty();
             }
 
             // Save to target for promotion
@@ -116,27 +119,29 @@ class SkillsGeneratorTest {
             String numId = numericId(skillId);
             String markdownTitle = loadSkillTitle(numId);
 
-            String xmlResource = "skill-references/" + skillId + ".xml";
-            String xmlTitle;
-            try (InputStream stream = SkillsGeneratorTest.class.getClassLoader().getResourceAsStream(xmlResource)) {
-                assertThat(stream).withFailMessage("System-prompt XML not found: %s", xmlResource).isNotNull();
-                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-                DocumentBuilder builder = factory.newDocumentBuilder();
-                Document doc = builder.parse(stream);
-                Element metadata = (Element) doc.getElementsByTagName("metadata").item(0);
-                assertThat(metadata).withFailMessage("No <metadata> element in %s", xmlResource).isNotNull();
-                NodeList titleNodes = metadata.getElementsByTagName("title");
-                assertThat(titleNodes.getLength())
-                    .withFailMessage("No <title> element in <metadata> of %s", xmlResource)
-                    .isGreaterThan(0);
-                xmlTitle = titleNodes.item(0).getTextContent().trim();
-            }
+            for (String reference : descriptor.references()) {
+                String xmlResource = "skill-references/" + reference + ".xml";
+                String xmlTitle;
+                try (InputStream stream = SkillsGeneratorTest.class.getClassLoader().getResourceAsStream(xmlResource)) {
+                    assertThat(stream).withFailMessage("System-prompt XML not found: %s", xmlResource).isNotNull();
+                    DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                    DocumentBuilder builder = factory.newDocumentBuilder();
+                    Document doc = builder.parse(stream);
+                    Element metadata = (Element) doc.getElementsByTagName("metadata").item(0);
+                    assertThat(metadata).withFailMessage("No <metadata> element in %s", xmlResource).isNotNull();
+                    NodeList titleNodes = metadata.getElementsByTagName("title");
+                    assertThat(titleNodes.getLength())
+                        .withFailMessage("No <title> element in <metadata> of %s", xmlResource)
+                        .isGreaterThan(0);
+                    xmlTitle = titleNodes.item(0).getTextContent().trim();
+                }
 
-            assertThat(markdownTitle)
-                .withFailMessage(
-                    "Skill title '%s' does not match system-prompt XML <title> '%s' in %s",
-                    markdownTitle, xmlTitle, xmlResource)
-                .isEqualTo(xmlTitle);
+                assertThat(markdownTitle)
+                    .withFailMessage(
+                        "Skill title '%s' does not match system-prompt XML <title> '%s' in %s",
+                        markdownTitle, xmlTitle, xmlResource)
+                    .isEqualTo(xmlTitle);
+            }
         }
 
         private String loadSkillTitle(String numId) throws Exception {
@@ -300,19 +305,32 @@ class SkillsGeneratorTest {
             return content;
         }
         StringBuilder builder = new StringBuilder(content.stripTrailing());
-        for (String path : references) {
-            String referencePath = "references/" + path + ".md";
-            builder.append(System.lineSeparator())
-                .append(System.lineSeparator())
-                .append("## Reference")
-                .append(System.lineSeparator())
-                .append(System.lineSeparator())
-                .append("For detailed guidance, examples, and constraints, see [")
+        builder.append(System.lineSeparator())
+            .append(System.lineSeparator())
+            .append("## Reference")
+            .append(System.lineSeparator())
+            .append(System.lineSeparator());
+        if (references.size() == 1) {
+            String referencePath = "references/" + references.get(0) + ".md";
+            builder.append("For detailed guidance, examples, and constraints, see [")
                 .append(referencePath)
                 .append("](")
                 .append(referencePath)
                 .append(").")
                 .append(System.lineSeparator());
+        } else {
+            builder.append("For detailed guidance, examples, and constraints, see:")
+                .append(System.lineSeparator())
+                .append(System.lineSeparator());
+            for (String path : references) {
+                String referencePath = "references/" + path + ".md";
+                builder.append("- [")
+                    .append(referencePath)
+                    .append("](")
+                    .append(referencePath)
+                    .append(")")
+                    .append(System.lineSeparator());
+            }
         }
         return builder.toString();
     }
@@ -342,12 +360,14 @@ class SkillsGeneratorTest {
         Files.writeString(skillMdPath, output.skillMd());
         logger.info("Generated SKILL.md saved to: {}", skillMdPath.toAbsolutePath());
 
-        if (!output.referenceMd().isEmpty()) {
+        if (!output.referenceMds().isEmpty()) {
             Path referencesDir = targetDir.resolve("references");
             Files.createDirectories(referencesDir);
-            Path referencePath = referencesDir.resolve(output.skillId() + ".md");
-            Files.writeString(referencePath, output.referenceMd());
-            logger.info("Generated reference saved to: {}", referencePath.toAbsolutePath());
+            for (var entry : output.referenceMds().entrySet()) {
+                Path referencePath = referencesDir.resolve(entry.getKey() + ".md");
+                Files.writeString(referencePath, entry.getValue());
+                logger.info("Generated reference saved to: {}", referencePath.toAbsolutePath());
+            }
         }
     }
 }
