@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
-      id="180-java-observability-logging">
+      id="181-java-observability-logging">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.15.0-SNAPSHOT</version>
@@ -52,7 +52,7 @@ Implement effective Java logging following standardized frameworks, meaningful l
     </step>
     <step number="2">
       <step-title>Read logging reference and assess current observability</step-title>
-      <step-content>Read `references/180-java-observability-logging.md` and evaluate framework usage, log levels, sensitive-data handling, and config gaps.</step-content>
+      <step-content>Read `references/181-java-observability-logging.md` and evaluate framework usage, log levels, sensitive-data handling, and config gaps.</step-content>
     </step>
     <step number="3">
       <step-title>Apply logging and observability improvements</step-title>

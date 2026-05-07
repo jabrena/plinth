@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="183-observability-tracing-opentelemetry">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.15.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need to implement or improve distributed tracing with OpenTelemetry in Java — including trace/span modeling, context propagation, semantic conventions, span attributes/events/status, sampling strategy, baggage usage, privacy safeguards, and backend integration with OTLP collectors. This should trigger for requests such as Improve tracing; Apply OpenTelemetry tracing; Add distributed tracing; Refactor tracing instrumentation.</description>
+  </metadata>
+
+  <title>Java Distributed Tracing with OpenTelemetry</title>
+  <goal><![CDATA[
+Implement robust distributed tracing in Java with OpenTelemetry by modeling meaningful spans, preserving context propagation, and instrumenting critical business and infrastructure paths with low-overhead, privacy-safe telemetry.
+
+**What is covered in this Skill?**
+
+- OpenTelemetry tracing fundamentals for Java services
+- Span design: boundaries, parent/child relationships, and operation naming
+- Context propagation across HTTP, messaging, async tasks, and thread boundaries
+- Semantic conventions and stable attribute naming
+- Error/status/event recording best practices
+- Sampling strategy and performance/cost trade-offs
+- Privacy and security controls for trace attributes
+- Testing and verification of trace propagation and span correctness
+
+**Scope:** Distributed tracing quality in application and integration layers, focused on diagnosability, consistency, and operational safety.
+]]></goal>
+
+  <constraints>
+    <constraints-description>Tracing instrumentation must preserve context correctly and avoid leaking sensitive data. Over-instrumentation and high-cardinality attributes can harm cost and signal quality.</constraints-description>
+    <constraint-list>
+      <constraint>**PROPAGATION FIRST**: Ensure context propagation across all sync/async boundaries before adding extra span detail</constraint>
+      <constraint>**NO SENSITIVE DATA**: Never store secrets, credentials, tokens, raw payloads, or PII in span attributes/events</constraint>
+      <constraint>**LOW CARDINALITY ATTRIBUTES**: Avoid unbounded values in attributes that are used for aggregation/search</constraint>
+      <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying tracing changes</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+        <trigger>Improve tracing</trigger>
+        <trigger>Apply OpenTelemetry tracing</trigger>
+        <trigger>Add distributed tracing</trigger>
+        <trigger>Refactor tracing instrumentation</trigger>
+    </trigger-list>
+  </triggers>
+
+  <steps>
+    <step number="1">
+      <step-title>Define trace model and critical flows</step-title>
+      <step-content>Identify high-value request and async flows, define operation boundaries, and choose span names/attributes aligned with semantic conventions.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Instrument and propagate context</step-title>
+      <step-content>Add OpenTelemetry spans to key boundaries and ensure trace context is propagated across HTTP clients/servers, messaging, and executor-based async work.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Harden span data and sampling</step-title>
+      <step-content>Record status/errors/events consistently, remove sensitive data, control attribute cardinality, and configure sampling/exporters according to environment needs.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Validate traces end-to-end</step-title>
+      <step-content>Verify parent-child relationships, propagation continuity, and backend visibility through tests and runtime checks.</step-content>
+    </step>
+  </steps>
+</prompt>

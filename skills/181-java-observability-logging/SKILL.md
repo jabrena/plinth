@@ -1,5 +1,5 @@
 ---
-name: 180-java-observability-logging
+name: 181-java-observability-logging
 description: Use when you need to implement or improve Java logging and observability — including selecting SLF4J with Logback/Log4j2, applying proper log levels (ERROR, WARN, INFO, DEBUG, TRACE), parameterized logging, secure logging without sensitive data exposure, environment-specific configuration, log aggregation and monitoring, or validating logging through tests. This should trigger for requests such as Improve logging; Apply logging; Refactor logging; Add logging support. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
@@ -46,7 +46,7 @@ Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.
 
 2. **Read logging reference and assess current observability**
 
-Read `references/180-java-observability-logging.md` and evaluate framework usage, log levels, sensitive-data handling, and config gaps.
+Read `references/181-java-observability-logging.md` and evaluate framework usage, log levels, sensitive-data handling, and config gaps.
 
 3. **Apply logging and observability improvements**
 
@@ -58,4 +58,4 @@ Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.
 
 ## Reference
 
-For detailed guidance, examples, and constraints, see [references/180-java-observability-logging.md](references/180-java-observability-logging.md).
+For detailed guidance, examples, and constraints, see [references/181-java-observability-logging.md](references/181-java-observability-logging.md).
