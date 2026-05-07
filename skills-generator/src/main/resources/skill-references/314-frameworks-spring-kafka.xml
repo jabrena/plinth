@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt>
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.15.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Spring Boot Kafka Guidelines</title>
+        <description>Use when you need Kafka with Spring Boot (`spring-kafka`) and want examples for design, implementation, and error handling with retries, dead-letter topics, and idempotent consumers.</description>
+    </metadata>
+    <role>You are a Senior software engineer with extensive experience in Spring Boot and Apache Kafka</role>
+    <goal>
+        Design resilient Kafka-based flows in Spring Boot with clear topic contracts, robust producer/consumer implementations, and predictable failure handling.
+    </goal>
+    <constraints>
+        <constraints-description>Compile first; stop on failure; verify after changes.</constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` before applying changes</constraint>
+            <constraint>**SAFETY**: If compile fails, stop immediately</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` after changes</constraint>
+        </constraint-list>
+    </constraints>
+    <examples>
+        <toc auto-generate="true" />
+        <example number="1" id="spring-kafka-design">
+            <example-header>
+                <example-title>Design</example-title>
+                <example-subtitle>Topic versioning and key strategy</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Define stable event types with explicit schema versions. Use meaningful keys (like aggregate IDs) to ensure ordering within partitions. Avoid generic payloads like `Map<String, Object>`.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package com.example.orders.events;
+
+// Good: stable event type, explicit schema version, keyed by aggregate id
+public record OrderCreatedEvent(
+    String eventId,
+    String schemaVersion,
+    String orderId,
+    String customerId
+) {}
+// topic: orders.events.v1
+// key: orderId (keeps order-specific ordering within a partition)]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[package com.example.orders.events;
+
+import java.util.Map;
+
+// Bad: generic payload without versioning and random key
+public class OrderEventFactory {
+    public Map<String, Object> createEvent() {
+        return Map.of("type", "order", "payload", "...");
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="2" id="spring-kafka-implementation">
+            <example-header>
+                <example-title>Implementation</example-title>
+                <example-subtitle>Producer + listener with manual service boundary</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Keep `@KafkaListener` methods thin. Delegate business logic to application services. Use `KafkaTemplate` for producing messages.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package com.example.orders.messaging;
+
+import com.example.orders.events.OrderCreatedEvent;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
+
+@Service
+class OrderEventPublisher {
+    private final KafkaTemplate<String, OrderCreatedEvent> template;
+
+    OrderEventPublisher(KafkaTemplate<String, OrderCreatedEvent> template) {
+        this.template = template;
+    }
+
+    void publish(OrderCreatedEvent event) {
+        template.send("orders.events.v1", event.orderId(), event);
+    }
+}
+
+@Component
+class OrderEventListener {
+    @KafkaListener(topics = "orders.events.v1", groupId = "billing-service")
+    void onEvent(OrderCreatedEvent event) {
+        // Delegate to application service; keep listener thin
+        // billingService.processOrder(event);
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[package com.example.orders.messaging;
+
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Component;
+
+@Component
+class OrderEventListener {
+    @KafkaListener(topics = "orders.events.v1")
+    void onEvent(String raw) {
+        // Bad: business logic + parsing + external calls all inside listener
+        // System.out.println("Processing " + raw);
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="3" id="spring-kafka-error-handling">
+            <example-header>
+                <example-title>Error handling</example-title>
+                <example-subtitle>Retries + dead-letter topic + idempotency</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Configure a `DefaultErrorHandler` with a `DeadLetterPublishingRecoverer` to handle poison pills. Ensure consumers are idempotent to handle retries and rebalances safely. Never swallow exceptions in the listener.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package com.example.orders.config;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.listener.DeadLetterPublishingRecoverer;
+import org.springframework.kafka.listener.DefaultErrorHandler;
+import org.springframework.util.backoff.FixedBackOff;
+
+@Configuration
+class KafkaErrorConfig {
+
+    @Bean
+    DefaultErrorHandler errorHandler(KafkaTemplate<Object, Object> template) {
+        var recoverer = new DeadLetterPublishingRecoverer(template);
+        // Retry 3 times with 1 second backoff before sending to DLT
+        return new DefaultErrorHandler(recoverer, new FixedBackOff(1000L, 3));
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[package com.example.orders.messaging;
+
+import com.example.orders.events.OrderCreatedEvent;
+import org.springframework.kafka.annotation.KafkaListener;
+import org.springframework.stereotype.Component;
+
+@Component
+class BadOrderEventListener {
+    @KafkaListener(topics = "orders.events.v1")
+    void onEvent(OrderCreatedEvent event) {
+        // Bad: swallow exception and lose observability / delivery guarantees
+        try {
+            // process(event);
+            throw new RuntimeException("Failed");
+        } catch (Exception ignored) {
+        }
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+    <output-format>
+        <output-format-list>
+            <output-format-item>**ANALYZE** messaging code: producer/consumer implementations, topic naming, serialization, and error handling strategies</output-format-item>
+            <output-format-item>**CATEGORIZE** issues by impact (RELIABILITY, MAINTAINABILITY, PERFORMANCE)</output-format-item>
+            <output-format-item>**APPLY** Spring Kafka-aligned fixes: configure proper error handlers, use typed payloads, ensure idempotency</output-format-item>
+            <output-format-item>**IMPLEMENT** changes consistently across producer and consumer configurations</output-format-item>
+            <output-format-item>**EXPLAIN** trade-offs (e.g., at-least-once vs exactly-once delivery, retry backoff strategies)</output-format-item>
+            <output-format-item>**TEST** messaging behavior with `@EmbeddedKafka` or Testcontainers</output-format-item>
+            <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
+        </output-format-list>
+    </output-format>
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before ANY refactoring</safeguards-item>
+            <safeguards-item>**POISON PILLS**: Always configure a Dead Letter Topic (DLT) or explicit error handler to prevent blocking the partition</safeguards-item>
+            <safeguards-item>**IDEMPOTENCY**: Ensure consumer logic is idempotent to handle retries and rebalances safely</safeguards-item>
+            <safeguards-item>**TRANSACTIONS**: If using Kafka transactions, ensure `transactional.id` is configured and align with database transactions if needed</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>

@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt>
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.15.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Quarkus MongoDB Guidelines</title>
+        <description>Use when you need MongoDB in Quarkus with Mongo Panache and want examples for design, implementation, and error handling.</description>
+    </metadata>
+    <role>You are a Senior software engineer with extensive experience in Quarkus and MongoDB</role>
+    <goal>
+        Apply Quarkus MongoDB patterns with clean document modeling, maintainable repositories/services, and robust failure handling using Panache.
+    </goal>
+    <constraints>
+        <constraints-description>Compile first; stop on failure; verify after changes.</constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` before applying changes</constraint>
+            <constraint>**SAFETY**: If compile fails, stop immediately</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` after changes</constraint>
+        </constraint-list>
+    </constraints>
+    <examples>
+        <toc auto-generate="true" />
+        <example number="1" id="quarkus-mongo-design">
+            <example-header>
+                <example-title>Design</example-title>
+                <example-subtitle>Document schema and indexes</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use `@MongoEntity` to define collections. Extend `PanacheMongoEntity` for easy ID management. Use `@BsonProperty` to map Java fields to specific BSON field names.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package org.acme.orders.domain;
+
+import io.quarkus.mongodb.panache.PanacheMongoEntity;
+import io.quarkus.mongodb.panache.common.MongoEntity;
+import org.bson.codecs.pojo.annotations.BsonProperty;
+import java.time.Instant;
+
+@MongoEntity(collection = "orders")
+public class OrderDocument extends PanacheMongoEntity {
+    @BsonProperty("order_number")
+    public String orderNumber;
+    public String customerId;
+    public Instant createdAt;
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[package org.acme.orders.domain;
+
+import io.quarkus.mongodb.panache.PanacheMongoEntity;
+
+// Bad: no explicit collection/schema hints for critical fields
+public class OrderDocument extends PanacheMongoEntity {
+    public Object payload;
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="2" id="quarkus-mongo-implementation">
+            <example-header>
+                <example-title>Implementation</example-title>
+                <example-subtitle>Panache repository with explicit query methods</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Implement `PanacheMongoRepository` to separate data access logic from the entity. Use Panache's fluent query API instead of manual JSON strings.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package org.acme.orders.repository;
+
+import org.acme.orders.domain.OrderDocument;
+import io.quarkus.mongodb.panache.PanacheMongoRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+import java.util.Optional;
+
+@ApplicationScoped
+public class OrderRepository implements PanacheMongoRepository<OrderDocument> {
+    public Optional<OrderDocument> findByOrderNumber(String orderNumber) {
+        return find("orderNumber", orderNumber).firstResultOptional();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[package org.acme.orders.repository;
+
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+public class BadOrderRepository {
+    // Bad: hand-built query strings from user input, prone to injection and syntax errors
+    String query(String input) { 
+        return "{ orderNumber: '" + input + "' }"; 
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="3" id="quarkus-mongo-error-handling">
+            <example-header>
+                <example-title>Error handling</example-title>
+                <example-subtitle>Duplicate keys and transient failures</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Catch `MongoWriteException` to handle specific errors like `DUPLICATE_KEY`. Catch `MongoTimeoutException` to handle transient network issues.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package org.acme.orders.service;
+
+import org.acme.orders.domain.OrderDocument;
+import org.acme.orders.repository.OrderRepository;
+import com.mongodb.MongoWriteException;
+import com.mongodb.MongoTimeoutException;
+import com.mongodb.ErrorCategory;
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+public class OrderService {
+    private final OrderRepository repository;
+
+    public OrderService(OrderRepository repository) {
+        this.repository = repository;
+    }
+
+    public void createOrder(OrderDocument document) {
+        try {
+            repository.persist(document);
+        } catch (MongoWriteException ex) {
+            if (ex.getError().getCategory() == ErrorCategory.DUPLICATE_KEY) {
+                throw new IllegalStateException("Order number already exists", ex);
+            }
+            throw ex;
+        } catch (MongoTimeoutException ex) {
+            throw new IllegalStateException("Transient Mongo timeout, consider retry", ex);
+        }
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[package org.acme.orders.service;
+
+import org.acme.orders.domain.OrderDocument;
+import org.acme.orders.repository.OrderRepository;
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+public class BadOrderService {
+    private final OrderRepository repository;
+
+    public BadOrderService(OrderRepository repository) {
+        this.repository = repository;
+    }
+
+    public void createOrder(OrderDocument document) {
+        try {
+            repository.persist(document);
+        } catch (Exception ex) {
+            // Bad: generic catch + ignore, hiding data loss
+        }
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+    <output-format>
+        <output-format-list>
+            <output-format-item>**ANALYZE** MongoDB code: document design, repository interfaces, indexing strategies, and error handling</output-format-item>
+            <output-format-item>**CATEGORIZE** issues by impact (CORRECTNESS, PERFORMANCE, DATA INTEGRITY)</output-format-item>
+            <output-format-item>**APPLY** Quarkus Mongo Panache-aligned fixes: use `@MongoEntity`, `PanacheMongoRepository`, and proper exception handling</output-format-item>
+            <output-format-item>**IMPLEMENT** changes so schema and queries stay consistent</output-format-item>
+            <output-format-item>**EXPLAIN** trade-offs (e.g., active record vs repository pattern, embedding vs referencing)</output-format-item>
+            <output-format-item>**TEST** repository behavior with `@QuarkusTest` and Dev Services for MongoDB</output-format-item>
+            <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
+        </output-format-list>
+    </output-format>
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before ANY refactoring</safeguards-item>
+            <safeguards-item>**INDEXING**: Ensure indexes are created explicitly, as Quarkus does not auto-create them by default in production</safeguards-item>
+            <safeguards-item>**INJECTION**: Avoid building raw JSON queries using string concatenation; use Panache's parameterized `find()` methods</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>

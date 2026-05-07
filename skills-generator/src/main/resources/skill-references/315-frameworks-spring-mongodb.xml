@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt>
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.15.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Spring Boot MongoDB Guidelines</title>
+        <description>Use when you need MongoDB with Spring Data MongoDB and want examples for design, implementation, and error handling for robust document persistence.</description>
+    </metadata>
+    <role>You are a Senior software engineer with extensive experience in Spring Boot and MongoDB</role>
+    <goal>
+        Design clear document models, implement robust Spring Data Mongo repositories/services, and handle Mongo failures explicitly.
+    </goal>
+    <constraints>
+        <constraints-description>Compile first; stop on failure; verify after changes.</constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` before applying changes</constraint>
+            <constraint>**SAFETY**: If compile fails, stop immediately</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` after changes</constraint>
+        </constraint-list>
+    </constraints>
+    <examples>
+        <toc auto-generate="true" />
+        <example number="1" id="spring-mongo-design">
+            <example-header>
+                <example-title>Design</example-title>
+                <example-subtitle>Document boundaries and indexes</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use `@Document` to define collections. Define explicit indexes (like `@CompoundIndex` or `@Indexed`) to ensure query performance and uniqueness constraints.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package com.example.orders.domain;
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.CompoundIndex;
+import org.springframework.data.mongodb.core.mapping.Document;
+import java.time.Instant;
+
+@Document("orders")
+@CompoundIndex(name = "uk_order_number", def = "{'orderNumber': 1}", unique = true)
+public record OrderDocument(
+    @Id String id,
+    String orderNumber,
+    String customerId,
+    Instant createdAt
+) {}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[package com.example.orders.domain;
+
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document("orders")
+class OrderDocument {
+    // Bad: missing unique/index strategy for lookup fields, missing @Id
+    String orderNumber;
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="2" id="spring-mongo-implementation">
+            <example-header>
+                <example-title>Implementation</example-title>
+                <example-subtitle>Repository + service composition</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use `MongoRepository` for standard CRUD operations. Keep repositories focused on data access and use application services to coordinate business logic.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package com.example.orders.service;
+
+import com.example.orders.domain.OrderDocument;
+import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.stereotype.Service;
+import java.util.Optional;
+
+interface OrderRepository extends MongoRepository<OrderDocument, String> {
+    Optional<OrderDocument> findByOrderNumber(String orderNumber);
+}
+
+@Service
+class OrderService {
+    private final OrderRepository repository;
+
+    OrderService(OrderRepository repository) {
+        this.repository = repository;
+    }
+
+    OrderDocument create(OrderDocument doc) {
+        return repository.save(doc);
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[package com.example.orders.api;
+
+import org.springframework.web.bind.annotation.RestController;
+
+// Bad: mixing controller concerns, persistence, and mapping in one class
+@RestController
+class OrderControllerAndRepositoryAndService {
+    // Direct MongoTemplate usage inside controller without service layer
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="3" id="spring-mongo-error-handling">
+            <example-header>
+                <example-title>Error handling</example-title>
+                <example-subtitle>Duplicate key and optimistic locking</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Handle `DuplicateKeyException` for unique index violations. Use `@Version` for optimistic locking to prevent concurrent updates from overwriting each other, and handle `OptimisticLockingFailureException`.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package com.example.orders.service;
+
+import com.example.orders.domain.OrderDocument;
+import org.springframework.dao.DuplicateKeyException;
+import org.springframework.dao.OptimisticLockingFailureException;
+import org.springframework.stereotype.Service;
+
+@Service
+class OrderService {
+    private final OrderRepository repository;
+
+    OrderService(OrderRepository repository) {
+        this.repository = repository;
+    }
+
+    OrderDocument create(OrderDocument doc) {
+        try {
+            return repository.save(doc);
+        } catch (DuplicateKeyException ex) {
+            throw new IllegalStateException("Order number already exists", ex);
+        } catch (OptimisticLockingFailureException ex) {
+            throw new IllegalStateException("Concurrent update detected", ex);
+        }
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[package com.example.orders.service;
+
+import com.example.orders.domain.OrderDocument;
+import org.springframework.stereotype.Service;
+
+@Service
+class BadOrderService {
+    private final OrderRepository repository;
+
+    BadOrderService(OrderRepository repository) {
+        this.repository = repository;
+    }
+
+    OrderDocument create(OrderDocument doc) {
+        try {
+            return repository.save(doc);
+        } catch (Exception ignored) {
+            // Bad: hiding persistence failures makes debugging impossible
+            return null;
+        }
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+    <output-format>
+        <output-format-list>
+            <output-format-item>**ANALYZE** MongoDB code: document design, repository interfaces, indexing strategies, and error handling</output-format-item>
+            <output-format-item>**CATEGORIZE** issues by impact (CORRECTNESS, PERFORMANCE, DATA INTEGRITY)</output-format-item>
+            <output-format-item>**APPLY** Spring Data MongoDB-aligned fixes: use `@Document`, `@Id`, `@Version`, and proper index annotations</output-format-item>
+            <output-format-item>**IMPLEMENT** changes so schema and queries stay consistent</output-format-item>
+            <output-format-item>**EXPLAIN** trade-offs (e.g., embedding vs referencing documents, index overhead)</output-format-item>
+            <output-format-item>**TEST** repository behavior with `@DataMongoTest` and Testcontainers</output-format-item>
+            <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
+        </output-format-list>
+    </output-format>
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before ANY refactoring</safeguards-item>
+            <safeguards-item>**INDEXING**: Ensure indexes are created (either via Spring Data auto-index creation in dev, or explicitly via scripts in prod)</safeguards-item>
+            <safeguards-item>**CONCURRENCY**: Use `@Version` to prevent lost updates in concurrent environments</safeguards-item>
+            <safeguards-item>**TRANSACTIONS**: MongoDB supports multi-document transactions; ensure replica sets are used if `@Transactional` is applied</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>
