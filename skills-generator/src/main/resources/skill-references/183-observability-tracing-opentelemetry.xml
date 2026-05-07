@@ -1,0 +1,442 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.15.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Java Distributed Tracing with OpenTelemetry</title>
+        <description>Use when you need to implement or improve distributed tracing with OpenTelemetry in Java — including trace/span modeling, context propagation, semantic conventions, span attributes/events/status, sampling strategy, baggage usage, privacy safeguards, and backend integration with OTLP collectors.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
+
+    <goal>
+        Effective distributed tracing with OpenTelemetry in Java requires clear span boundaries, reliable context propagation,
+        semantic consistency, and strict privacy controls.
+        Traces should help diagnose latency, failure causes, and cross-service dependencies without introducing excessive overhead.
+    </goal>
+
+    <constraints>
+        <constraints-description>
+            Tracing data must remain safe and operationally useful. Incorrect propagation or sensitive attributes reduce trust in telemetry.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**CONTEXT CONTINUITY**: Ensure trace context is propagated across HTTP/messaging/async boundaries</constraint>
+            <constraint>**SEMANTIC CONSISTENCY**: Use stable span names and OpenTelemetry semantic conventions where applicable</constraint>
+            <constraint>**DATA MINIMIZATION**: Avoid high-cardinality and sensitive attributes in spans/events</constraint>
+            <constraint>**SAMPLING STRATEGY**: Configure sampling per environment to balance cost and diagnostic depth</constraint>
+        </constraint-list>
+    </constraints>
+
+    <examples>
+        <toc auto-generate="true"/>
+        <example number="1" id="basic-span-modeling">
+            <example-header>
+                <example-title>Create Spans with Clear Boundaries</example-title>
+                <example-subtitle>Model request and dependency calls as parent/child spans</example-subtitle>
+            </example-header>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.SpanKind;
+import io.opentelemetry.api.trace.StatusCode;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Scope;
+
+public final class CheckoutTracing {
+
+    private final Tracer tracer;
+
+    public CheckoutTracing(OpenTelemetry openTelemetry) {
+        this(openTelemetry.getTracer("checkout-service"));
+    }
+
+    CheckoutTracing(Tracer tracer) {
+        this.tracer = tracer;
+    }
+
+    public void checkout(String orderId) {
+        Span parent = tracer.spanBuilder("checkout.process")
+                .setSpanKind(SpanKind.INTERNAL)
+                .startSpan();
+        try (Scope ignored = parent.makeCurrent()) {
+            parent.setAttribute("order.id.present", orderId != null);
+
+            callInventory();
+            callPayment();
+
+            parent.setStatus(StatusCode.OK);
+        } catch (RuntimeException ex) {
+            parent.recordException(ex);
+            parent.setStatus(StatusCode.ERROR, "Checkout failed");
+            throw ex;
+        } finally {
+            parent.end();
+        }
+    }
+
+    private void callInventory() {
+        Span span = tracer.spanBuilder("inventory.reserve").setSpanKind(SpanKind.CLIENT).startSpan();
+        try (Scope ignored = span.makeCurrent()) {
+            // HTTP call / client SDK call
+            span.setStatus(StatusCode.OK);
+        } catch (RuntimeException ex) {
+            span.recordException(ex);
+            span.setStatus(StatusCode.ERROR);
+            throw ex;
+        } finally {
+            span.end();
+        }
+    }
+
+    private void callPayment() {
+        Span span = tracer.spanBuilder("payment.charge").setSpanKind(SpanKind.CLIENT).startSpan();
+        try (Scope ignored = span.makeCurrent()) {
+            span.setStatus(StatusCode.OK);
+        } catch (RuntimeException ex) {
+            span.recordException(ex);
+            span.setStatus(StatusCode.ERROR, "Payment charge failed");
+            throw ex;
+        } finally {
+            span.end();
+        }
+    }
+}
+]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[
+public final class CheckoutTracingBad {
+    public void checkout(String userEmail, String token) {
+        // BAD: no spans/context, impossible to diagnose flow latency
+        // BAD: sensitive values often leak when teams later add naive attributes
+        System.out.println("processing " + userEmail + " with token " + token);
+    }
+}
+]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="2" id="propagation-and-safety">
+            <example-header>
+                <example-title>Propagate Context and Keep Attributes Safe</example-title>
+                <example-subtitle>Ensure continuity and avoid cardinality/privacy problems</example-subtitle>
+            </example-header>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.context.Context;
+import java.util.concurrent.Executor;
+
+public final class AsyncFlow {
+    private final Executor executor;
+
+    public AsyncFlow(Executor executor) {
+        this.executor = executor;
+    }
+
+    public void submitTask() {
+        Context captured = Context.current();
+        executor.execute(captured.wrap(() -> {
+            Span.current().addEvent("async.task.started");
+            // do work with the captured parent trace context
+        }));
+    }
+}
+]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[
+import io.opentelemetry.api.trace.Span;
+
+public final class AsyncFlowBad {
+    public void submitTask(String userId, String jwtToken) {
+        // BAD: no context propagation, detached spans
+        // BAD: high cardinality + sensitive attributes
+        Span.current().setAttribute("user.id", userId);
+        Span.current().setAttribute("auth.token", jwtToken);
+    }
+}
+]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="semantic-conventions">
+            <example-header>
+                <example-title>Apply OpenTelemetry Semantic Conventions</example-title>
+                <example-subtitle>Use Standard Attribute Names for HTTP, Database, and Messaging Spans</example-subtitle>
+            </example-header>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.trace.Span;
+import io.opentelemetry.api.trace.SpanKind;
+import io.opentelemetry.api.trace.StatusCode;
+import io.opentelemetry.api.trace.Tracer;
+import io.opentelemetry.context.Scope;
+
+public final class OrderRepository {
+
+    private static final String DB_SYSTEM_NAME = "db.system.name";
+    private static final String DB_NAMESPACE = "db.namespace";
+    private static final String DB_OPERATION_NAME = "db.operation.name";
+    private static final String DB_COLLECTION_NAME = "db.collection.name";
+
+    private final Tracer tracer;
+
+    public OrderRepository(OpenTelemetry openTelemetry) {
+        this.tracer = openTelemetry.getTracer("order-service");
+    }
+
+    public void insertOrder(String orderId, int quantity) {
+        Span span = tracer.spanBuilder("INSERT orders")
+                .setSpanKind(SpanKind.CLIENT)
+                .setAttribute(DB_SYSTEM_NAME, "postgresql")
+                .setAttribute(DB_NAMESPACE, "shop")
+                .setAttribute(DB_OPERATION_NAME, "INSERT")
+                .setAttribute(DB_COLLECTION_NAME, "orders")
+                .startSpan();
+        try (Scope ignored = span.makeCurrent()) {
+            // execute INSERT
+            span.setStatus(StatusCode.OK);
+        } catch (RuntimeException ex) {
+            span.recordException(ex);
+            span.setStatus(StatusCode.ERROR, "DB insert failed");
+            throw ex;
+        } finally {
+            span.end();
+        }
+    }
+}
+]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[
+import io.opentelemetry.api.GlobalOpenTelemetry;
+import io.opentelemetry.api.trace.Span;
+
+public final class OrderRepositoryBad {
+
+    public void insertOrder(String orderId) {
+        Span span = GlobalOpenTelemetry
+                .getTracer("repo")
+                .spanBuilder("insert")  // BAD: vague name, no kind
+                .startSpan();
+        try {
+            // execute INSERT
+            // BAD: custom attribute names instead of semantic conventions
+            span.setAttribute("db", "postgres");
+            span.setAttribute("query_type", "INSERT");
+            // BAD: high-cardinality business identifiers do not belong in span attributes
+            span.setAttribute("order.id", orderId);
+        } finally {
+            span.end(); // BAD: no status set, exceptions not recorded
+        }
+    }
+}
+]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="sampling-configuration">
+            <example-header>
+                <example-title>Configure Sampling Strategy per Environment</example-title>
+                <example-subtitle>Balance Diagnostic Depth Against Cost and Overhead</example-subtitle>
+            </example-header>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.samplers.Sampler;
+import io.opentelemetry.sdk.trace.export.BatchSpanProcessor;
+import io.opentelemetry.exporter.otlp.trace.OtlpGrpcSpanExporter;
+
+public final class TracingConfig {
+
+    public static OpenTelemetry buildForEnvironment(String environment) {
+        Sampler sampler = switch (environment) {
+            case "production" -> Sampler.traceIdRatioBased(0.05);  // 5% in prod
+            case "staging"    -> Sampler.traceIdRatioBased(0.50);  // 50% in staging
+            default           -> Sampler.alwaysOn();               // 100% in dev/test
+        };
+
+        SdkTracerProvider tracerProvider = SdkTracerProvider.builder()
+                .setSampler(Sampler.parentBased(sampler))
+                .addSpanProcessor(BatchSpanProcessor.builder(
+                        OtlpGrpcSpanExporter.builder()
+                                .setEndpoint("http://otel-collector:4317")
+                                .build())
+                        .build())
+                .build();
+
+        return OpenTelemetrySdk.builder()
+                .setTracerProvider(tracerProvider)
+                .buildAndRegisterGlobal();
+    }
+}
+]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.samplers.Sampler;
+
+public final class TracingConfigBad {
+
+    public static SdkTracerProvider build() {
+        // BAD: always-on sampling in production causes cost explosion
+        // BAD: no BatchSpanProcessor — synchronous export blocks request threads
+        return SdkTracerProvider.builder()
+                .setSampler(Sampler.alwaysOn())
+                .build();
+    }
+}
+]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="5" id="test-tracing">
+            <example-header>
+                <example-title>Validate Span Correctness with Tests</example-title>
+                <example-subtitle>Assert Span Name, Kind, Status, and Attributes Using the In-Memory Exporter</example-subtitle>
+            </example-header>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import io.opentelemetry.api.OpenTelemetry;
+import io.opentelemetry.api.common.AttributeKey;
+import io.opentelemetry.api.trace.SpanKind;
+import io.opentelemetry.api.trace.StatusCode;
+import io.opentelemetry.sdk.OpenTelemetrySdk;
+import io.opentelemetry.sdk.testing.exporter.InMemorySpanExporter;
+import io.opentelemetry.sdk.trace.SdkTracerProvider;
+import io.opentelemetry.sdk.trace.data.SpanData;
+import io.opentelemetry.sdk.trace.export.SimpleSpanProcessor;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+class CheckoutTracingTest {
+
+    private InMemorySpanExporter exporter;
+    private CheckoutTracing sut;
+
+    @BeforeEach
+    void setUp() {
+        exporter = InMemorySpanExporter.create();
+        SdkTracerProvider provider = SdkTracerProvider.builder()
+                .addSpanProcessor(SimpleSpanProcessor.create(exporter))
+                .build();
+        OpenTelemetry otel = OpenTelemetrySdk.builder()
+                .setTracerProvider(provider)
+                .build();
+        sut = new CheckoutTracing(otel);
+    }
+
+    @Test
+    void shouldRecordCheckoutSpanOnSuccess() {
+        sut.checkout("order-42");
+
+        List<SpanData> spans = exporter.getFinishedSpanItems();
+        assertThat(spans).hasSizeGreaterThanOrEqualTo(1);
+
+        SpanData root = spans.stream()
+                .filter(s -> s.getName().equals("checkout.process"))
+                .findFirst()
+                .orElseThrow();
+
+        assertThat(root.getKind()).isEqualTo(SpanKind.INTERNAL);
+        assertThat(root.getStatus().getStatusCode()).isEqualTo(StatusCode.OK);
+        assertThat(root.getAttributes().get(AttributeKey.booleanKey("order.id.present"))).isTrue();
+        assertThat(root.getAttributes().asMap()).doesNotContainKey(AttributeKey.stringKey("order.id"));
+    }
+}
+]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[
+class CheckoutTracingTestBad {
+    // BAD: no span assertions; tracing can silently break without test coverage.
+    // BAD: using GlobalOpenTelemetry in tests leads to shared state and flaky results.
+}
+]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="6" id="annotation-instrumentation">
+            <example-header>
+                <example-title>Use Annotation-Based Instrumentation for Service Methods</example-title>
+                <example-subtitle>Leverage @WithSpan and @SpanAttribute for concise, consistent tracing</example-subtitle>
+            </example-header>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import io.opentelemetry.instrumentation.annotations.SpanAttribute;
+import io.opentelemetry.instrumentation.annotations.WithSpan;
+
+public final class ShippingService {
+
+    @WithSpan("shipping.create.label")
+    public String createLabel(
+            @SpanAttribute("shipping.provider") String provider,
+            @SpanAttribute("shipping.expedited") boolean expedited) {
+        // business logic
+        return "LBL-123";
+    }
+}
+]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[
+import io.opentelemetry.api.trace.Span;
+
+public final class ShippingServiceBad {
+
+    public String createLabel(String provider, String customerEmail, String requestId) {
+        // BAD: no explicit span boundary for this business operation
+        // BAD: sensitive and high-cardinality attributes
+        Span.current().setAttribute("customer.email", customerEmail);
+        Span.current().setAttribute("request.id", requestId);
+        Span.current().setAttribute("provider", provider);
+        return "LBL-123";
+    }
+}
+]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>**ANALYZE** tracing gaps across span modeling, propagation, and semantic consistency</output-format-item>
+            <output-format-item>**APPLY** OpenTelemetry instrumentation with clear parent/child relationships and stable names</output-format-item>
+            <output-format-item>**HARDEN** attributes/events/status and remove sensitive or high-cardinality data</output-format-item>
+            <output-format-item>**VALIDATE** end-to-end trace continuity in tests and runtime backends</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>**PRIVACY FIRST**: Never place secrets or PII in trace payloads</safeguards-item>
+            <safeguards-item>**PROPAGATION CHECK**: Verify traceId/spanId continuity across service boundaries</safeguards-item>
+            <safeguards-item>**CARDINALITY CONTROL**: Keep attribute values bounded and query-friendly</safeguards-item>
+            <safeguards-item>**PERF AWARENESS**: Avoid unnecessary spans in hot loops and configure sampling appropriately</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>
