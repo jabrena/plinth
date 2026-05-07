@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.15.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Java Logging Best Practices</title>
+        <description>Use when you need to implement or improve Java logging and observability — including selecting SLF4J with Logback/Log4j2, applying proper log levels, parameterized logging, secure logging without sensitive data exposure, environment-specific configuration, log aggregation and monitoring, or validating logging through tests.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Java software development</role>
+
+    <goal>
+        Effective Java logging requires a consistent framework (SLF4J facade with Logback/Log4j2),
+        deliberate log level usage (ERROR, WARN, INFO, DEBUG, TRACE), and secure operational practices.
+        Logging must provide useful diagnostics, avoid sensitive data leakage, and stay sustainable in production.
+    </goal>
+
+    <constraints>
+        <constraints-description>
+            Logging improvements must preserve security and operational stability.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**NO SENSITIVE DATA**: Never log passwords, tokens, secrets, or personal data in plain text</constraint>
+            <constraint>**LEVEL DISCIPLINE**: Use consistent levels and avoid noisy INFO/DEBUG misuse in hot paths</constraint>
+            <constraint>**PARAMETERIZED LOGGING**: Prefer placeholders instead of string concatenation</constraint>
+            <constraint>**VALIDATE**: Confirm log behavior through tests and run full verification after changes</constraint>
+        </constraint-list>
+    </constraints>
+
+    <examples>
+        <toc auto-generate="true"/>
+        <example number="1" id="logging-basics">
+            <example-header>
+                <example-title>Use Structured and Parameterized Logging</example-title>
+                <example-subtitle>Prefer stable templates and explicit context</example-subtitle>
+            </example-header>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public final class OrderService {
+    private static final Logger logger = LoggerFactory.getLogger(OrderService.class);
+
+    public void process(String orderId) {
+        logger.info("Processing order {}", orderId);
+        try {
+            // business logic
+            logger.debug("Order {} processed successfully", orderId);
+        } catch (RuntimeException ex) {
+            logger.error("Order {} failed", orderId, ex);
+            throw ex;
+        }
+    }
+}
+]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[
+public final class OrderServiceBad {
+    public void process(String orderId, String token) {
+        // BAD: no framework, no level semantics, leaks sensitive data
+        System.out.println("order=" + orderId + ", token=" + token);
+    }
+}
+]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>**ANALYZE** logging issues by level semantics, framework usage, and security risk</output-format-item>
+            <output-format-item>**APPLY** SLF4J-based structured logging and replace anti-patterns</output-format-item>
+            <output-format-item>**EXPLAIN** operational impact of each logging improvement</output-format-item>
+            <output-format-item>**VALIDATE** compilation/tests and verify no sensitive data is logged</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>**SECURITY CHECK**: redact or remove sensitive fields before logging</safeguards-item>
+            <safeguards-item>**NOISE CONTROL**: avoid excessive logs in loops and performance-critical paths</safeguards-item>
+            <safeguards-item>**CONSISTENCY**: keep logger naming, formats, and level usage uniform</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>

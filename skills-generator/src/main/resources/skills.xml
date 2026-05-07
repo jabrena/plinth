@@ -202,9 +202,19 @@
             <reference>170-java-documentation</reference>
         </reference-list>
     </skill>
-    <skill id="180">
+    <skill id="181">
         <reference-list>
-            <reference>180-java-observability-logging</reference>
+            <reference>181-java-observability-logging</reference>
+        </reference-list>
+    </skill>
+    <skill id="182">
+        <reference-list>
+            <reference>182-java-observability-metrics-micrometer</reference>
+        </reference-list>
+    </skill>
+    <skill id="183">
+        <reference-list>
+            <reference>183-observability-tracing-opentelemetry</reference>
         </reference-list>
     </skill>
     <skill id="200">
