@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="145-java-refactoring-high-performance">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.15.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need to refactor Java code for high performance — including memory/allocation reduction, CPU hot-path optimization, and syntax/API/control-flow improvements. This should trigger for requests such as Review Java code for high performance; Optimize Java hot path; Reduce Java allocations; Improve Java latency/throughput.</description>
+  </metadata>
+
+  <title>Java rules for High Performance</title>
+  <goal><![CDATA[
+Identify and apply practical Java high-performance techniques using a measure-first approach, with emphasis on allocation reduction, data layout, concurrency discipline, and evidence-based validation.
+
+**What is covered in this Skill?**
+
+- Measure-first workflow for Java code optimization
+- JVM/runtime-aware coding guidance
+- Allocation reduction techniques with bad/good patterns
+- CPU hot-path simplification and loop-level efficiency patterns
+- Concurrency/backpressure and timeout/cancellation discipline
+- I/O, parsing, and serialization efficiency patterns
+- Persistence/query and caching strategy guidance
+- Java-centric decision workflow: keep/revert based on measured impact
+
+**Scope:** Practical optimization in application code and APIs. Apply only where profiling indicates real bottlenecks.
+]]></goal>
+
+  <constraints>
+    <constraints-description>Performance optimization must be evidence-driven and safe, focused on Java code changes that preserve correctness and maintainability.</constraints-description>
+    <constraint-list>
+      <constraint>**MEASURE-FIRST**: Establish baseline behavior and identify Java code hot paths before optimization</constraint>
+      <constraint>**NO PREMATURE OPTIMIZATION**: Only optimize code paths identified by profiling evidence</constraint>
+      <constraint>**BEFORE APPLYING**: Read the relevant reference(s) for bad/good examples and measurement workflow</constraint>
+      <constraint>**EDGE CASE**: If hotspot evidence is unclear, ask clarifying questions before changing code</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+        <trigger>Review Java code for high performance</trigger>
+        <trigger>Optimize Java hot path</trigger>
+        <trigger>Reduce Java allocations</trigger>
+        <trigger>Improve Java latency</trigger>
+        <trigger>Improve Java throughput</trigger>
+    </trigger-list>
+  </triggers>
+
+  <steps>
+    <step number="1">
+      <step-title>Identify Java hotspot and baseline behavior</step-title>
+      <step-content>Confirm the performance-sensitive Java path and baseline behavior before changing code.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Select the relevant reference(s) by bottleneck</step-title>
+      <step-content>Pick and read only the reference(s) matching the observed hotspot: `references/145-refactoring-high-performance-java-memory-allocation.md` for allocation pressure, primitives vs. wrappers, escape analysis, collection sizing, data layout, and deduplication; `references/145-refactoring-high-performance-java-cpu.md` for CPU-bound hot paths, bit-level parsing, branchless arithmetic, loop unrolling, Unsafe caution, and SIMD/vectorization; `references/145-refactoring-high-performance-java-code-syntax.md` for code shape, lambdas, API return conventions, parsing syntax, I/O strategy, concurrency, and control-flow improvements.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Apply targeted optimizations</step-title>
+      <step-content>Implement minimal, evidence-backed changes scoped to the chosen domain(s): memory/allocation, CPU/low-level, or code shape/control flow (and adjacent concurrency, I/O, and persistence/caching in Java code).</step-content>
+    </step>
+    <step number="4">
+      <step-title>Validate and compare code-level outcomes</step-title>
+      <step-content>Compare before/after behavior and keep only Java code changes with meaningful, verified gains.</step-content>
+    </step>
+  </steps>
+</prompt>

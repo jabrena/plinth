@@ -15,8 +15,8 @@ import org.w3c.dom.NodeList;
  * is true (default), the skillId is derived from the first item in {@code references/reference-list/reference}
  * unless {@code skillId} is explicitly set. When false, the entry must specify {@code skillId}
  * and no reference is required.
- * Each skill must have a summary in {@code skill-indexes/{id}-skill.md} or {@code skill-indexes/{id}-skill.xml}
- * when {@code xml="true"} on the entry.
+ * Each skill must have a summary in {@code skill-indexes/{id}-skill.md} or
+ * {@code skill-indexes/{id}-skill.xml}. XML summaries are auto-detected when the XML file exists.
  */
 public final class SkillIndexes {
 
@@ -133,7 +133,7 @@ public final class SkillIndexes {
                     throw new RuntimeException("Entry with id " + numericId
                         + " has requiresSystemPrompt=false but no skillId specified.");
                 }
-                boolean useXml = parseXmlAttribute(skillEl);
+                boolean useXml = detectXmlSummary(numericId);
                 List<String> references = parseReferences(skillEl);
                 if (requiresSystemPrompt && references.isEmpty() && (skillId == null || skillId.isBlank())) {
                     throw new RuntimeException("Entry with id " + numericId
@@ -160,12 +160,13 @@ public final class SkillIndexes {
         return "true".equals(v) || "yes".equals(v) || "1".equals(v);
     }
 
-    private static boolean parseXmlAttribute(Element skillEl) {
-        if (!skillEl.hasAttribute("xml")) {
-            return false;
+    private static boolean detectXmlSummary(String numericId) {
+        String xmlResource = "skill-indexes/" + numericId + "-skill.xml";
+        try (InputStream stream = getResource(xmlResource)) {
+            return stream != null;
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to detect XML skill summary: " + xmlResource, e);
         }
-        String s = skillEl.getAttribute("xml").trim().toLowerCase();
-        return "true".equals(s) || "yes".equals(s) || "1".equals(s);
     }
 
     private static List<String> parseReferences(Element skillEl) {
