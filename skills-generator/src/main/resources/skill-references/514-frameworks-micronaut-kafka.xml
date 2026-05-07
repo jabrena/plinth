@@ -1,0 +1,218 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt>
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.15.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Micronaut — Kafka messaging</title>
+        <description>Use when you need Kafka in Micronaut and want examples for design, implementation, and error handling with @KafkaClient and @KafkaListener.</description>
+    </metadata>
+    <role>You are a Senior software engineer with extensive experience in Micronaut and Kafka</role>
+    <goal>
+        Design and implement reliable Micronaut Kafka flows with explicit contracts and resilient consumer error handling.
+    </goal>
+    <constraints>
+        <constraints-description>Compile first; stop on failure; verify after changes.</constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` before applying changes</constraint>
+            <constraint>**SAFETY**: If compile fails, stop immediately</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` after changes</constraint>
+        </constraint-list>
+    </constraints>
+    <examples>
+        <toc auto-generate="true" />
+        <example number="1" id="micronaut-kafka-design">
+            <example-header>
+                <example-title>Design</example-title>
+                <example-subtitle>Topic and consumer-group strategy</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Configure Kafka bootstrap servers and application names properly. Ensure consumer groups are unique per logical application to avoid accidental load balancing across unrelated services.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="yaml"><![CDATA[# Good: explicit bootstrap servers and application name
+kafka:
+  bootstrap:
+    servers: localhost:9092
+micronaut:
+  application:
+    name: billing-service
+# topic: orders.events.v1
+# group: billing-service-v1]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="yaml"><![CDATA[# Bad: same consumer group reused by unrelated services causing accidental load balancing
+app.kafka.group: shared-group]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="2" id="micronaut-kafka-implementation">
+            <example-header>
+                <example-title>Implementation</example-title>
+                <example-subtitle>@KafkaClient and @KafkaListener</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use `@KafkaClient` interfaces to produce messages declaratively. Use `@KafkaListener` to consume messages, specifying the `groupId`. Always use typed payloads.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package com.example.billing.messaging;
+
+import io.micronaut.configuration.kafka.annotation.KafkaClient;
+import io.micronaut.configuration.kafka.annotation.KafkaKey;
+import io.micronaut.configuration.kafka.annotation.KafkaListener;
+import io.micronaut.configuration.kafka.annotation.Topic;
+
+@KafkaClient
+interface OrderEventsClient {
+    @Topic("orders.events.v1")
+    void send(@KafkaKey String orderId, OrderCreatedEvent event);
+}
+
+@KafkaListener(groupId = "billing-service-v1")
+class BillingListener {
+    @Topic("orders.events.v1")
+    void receive(@KafkaKey String orderId, OrderCreatedEvent event) {
+        // delegate to app service
+        // billingService.process(orderId, event);
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[package com.example.billing.messaging;
+
+import io.micronaut.configuration.kafka.annotation.KafkaListener;
+import io.micronaut.configuration.kafka.annotation.Topic;
+
+@KafkaListener
+class RawListener {
+    @Topic("orders.events.v1")
+    void receive(String raw) {
+        // Bad: untyped payload + no schema contract, missing groupId
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="3" id="micronaut-kafka-error-handling">
+            <example-header>
+                <example-title>Error handling</example-title>
+                <example-subtitle>Retry with backoff and dead-letter strategy</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use `errorStrategy = KafkaListenerExceptionHandlerValue.RETRY_ON_ERROR` to automatically retry failed messages. Never swallow exceptions, as it acknowledges poison messages.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package com.example.billing.messaging;
+
+import io.micronaut.configuration.kafka.annotation.KafkaListener;
+import io.micronaut.configuration.kafka.annotation.Topic;
+import io.micronaut.configuration.kafka.exceptions.KafkaListenerExceptionHandlerValue;
+
+@KafkaListener(
+    groupId = "billing-service-v1",
+    errorStrategy = KafkaListenerExceptionHandlerValue.RETRY_ON_ERROR
+)
+class BillingListener {
+    @Topic("orders.events.v1")
+    void receive(OrderCreatedEvent event) {
+        // throw to trigger retry policy; publish unrecoverable messages to DLT
+        // if processing fails, the framework will retry based on configuration
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[package com.example.billing.messaging;
+
+import io.micronaut.configuration.kafka.annotation.KafkaListener;
+import io.micronaut.configuration.kafka.annotation.Topic;
+
+@KafkaListener(groupId = "billing-service-v1")
+class BadBillingListener {
+    @Topic("orders.events.v1")
+    void receive(OrderCreatedEvent event) {
+        try { 
+            // process(event); 
+        } catch (Exception ignored) {
+            // Bad: swallowing exception acknowledges poison messages
+        }
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="4" id="micronaut-kafka-testing-testcontainers">
+            <example-header>
+                <example-title>Testing</example-title>
+                <example-subtitle>@MicronautTest with Kafka Testcontainers</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Start Kafka in Testcontainers and inject broker properties through `TestPropertyProvider` for reproducible integration tests.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package com.example.billing.messaging;
+
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import io.micronaut.test.support.TestPropertyProvider;
+import org.junit.jupiter.api.Test;
+import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.utility.DockerImageName;
+import java.util.Map;
+
+@MicronautTest
+@Testcontainers
+class BillingKafkaIT implements TestPropertyProvider {
+
+    @Container
+    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.6.1"));
+
+    @Override
+    public Map<String, String> getProperties() {
+        return Map.of("kafka.bootstrap.servers", kafka.getBootstrapServers());
+    }
+
+    @Test
+    void shouldConsumeEvent() {
+        // publish and verify processing
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Bad: test uses hardcoded localhost:9092 and is not CI-portable
+class BillingKafkaLocalEnvIT {}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+    <output-format>
+        <output-format-list>
+            <output-format-item>**ANALYZE** messaging code: `@KafkaClient`/`@KafkaListener` usage, topic naming, serialization, and error handling strategies</output-format-item>
+            <output-format-item>**CATEGORIZE** issues by impact (RELIABILITY, MAINTAINABILITY, PERFORMANCE)</output-format-item>
+            <output-format-item>**APPLY** Micronaut Kafka-aligned fixes: configure proper error strategies, use typed payloads, ensure idempotency</output-format-item>
+            <output-format-item>**IMPLEMENT** changes consistently across `application.yml` and Java code</output-format-item>
+            <output-format-item>**EXPLAIN** trade-offs (e.g., retry vs DLQ, consumer group isolation)</output-format-item>
+            <output-format-item>**TEST** messaging behavior with `@MicronautTest` and Testcontainers</output-format-item>
+            <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
+        </output-format-list>
+    </output-format>
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before ANY refactoring</safeguards-item>
+            <safeguards-item>**POISON PILLS**: Use `RETRY_ON_ERROR` or explicit exception handlers to prevent poison pills from silently being acknowledged</safeguards-item>
+            <safeguards-item>**CONSUMER GROUPS**: Always specify a `groupId` in `@KafkaListener` to prevent random group generation and message loss on restart</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>

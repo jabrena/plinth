@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt>
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.15.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Quarkus — Kafka messaging</title>
+        <description>Use when you need Kafka in Quarkus with SmallRye Reactive Messaging and want examples for design, implementation, and error handling.</description>
+    </metadata>
+    <role>You are a Senior software engineer with extensive experience in Quarkus and Kafka</role>
+    <goal>
+        Build resilient Quarkus Kafka messaging with explicit contracts, clear channel wiring, and controlled failure behavior using SmallRye Reactive Messaging.
+    </goal>
+    <constraints>
+        <constraints-description>Compile first; stop on failure; verify after changes.</constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` before applying changes</constraint>
+            <constraint>**SAFETY**: If compile fails, stop immediately</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` after changes</constraint>
+        </constraint-list>
+    </constraints>
+    <examples>
+        <toc auto-generate="true" />
+        <example number="1" id="quarkus-kafka-design">
+            <example-header>
+                <example-title>Design</example-title>
+                <example-subtitle>Channel naming and event contract stability</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Map logical channels to physical Kafka topics in `application.properties`. This decouples the code from the infrastructure.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="properties"><![CDATA[# Good: Map logical channels 'orders-out' and 'orders-in' to physical topic
+mp.messaging.outgoing.orders-out.connector=smallrye-kafka
+mp.messaging.outgoing.orders-out.topic=orders.events.v1
+mp.messaging.incoming.orders-in.connector=smallrye-kafka
+mp.messaging.incoming.orders-in.topic=orders.events.v1]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="properties"><![CDATA[# Bad: same logical event sent to multiple ad-hoc topic names, hardcoded in code
+orders.topic=orders
+orders.topic.backup=order-events-final]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="2" id="quarkus-kafka-implementation">
+            <example-header>
+                <example-title>Implementation</example-title>
+                <example-subtitle>Reactive Messaging producer and consumer</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use `@Channel` with `Emitter` for producing messages. Use `@Incoming` for consuming messages. Return `Uni` or `CompletionStage` for non-blocking processing.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package org.acme.orders.messaging;
+
+import io.smallrye.mutiny.Uni;
+import org.eclipse.microprofile.reactive.messaging.Channel;
+import org.eclipse.microprofile.reactive.messaging.Emitter;
+import org.eclipse.microprofile.reactive.messaging.Incoming;
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+class OrderEmitter {
+    @Channel("orders-out")
+    Emitter<OrderCreatedEvent> emitter;
+
+    void publish(OrderCreatedEvent event) {
+        emitter.send(event);
+    }
+}
+
+@ApplicationScoped
+class OrderConsumer {
+    @Incoming("orders-in")
+    public Uni<Void> onMessage(OrderCreatedEvent event) {
+        // Delegate to app service, returning a Uni for reactive processing
+        return Uni.createFrom().voidItem();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[package org.acme.orders.messaging;
+
+import org.eclipse.microprofile.reactive.messaging.Incoming;
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+class BadOrderConsumer {
+    @Incoming("orders-in")
+    void onMessage(String payload) {
+        // Bad: manual parsing and side effects with no contract typing, blocking the event loop
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="3" id="quarkus-kafka-error-handling">
+            <example-header>
+                <example-title>Error handling</example-title>
+                <example-subtitle>Nack strategy and dead-letter queue</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Configure `failure-strategy=dead-letter-queue` to automatically route failing messages to a DLQ. Never manually `ack()` a message that failed processing, as it loses data.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="properties"><![CDATA[# Good: Configure DLQ and throttled commit strategy
+mp.messaging.incoming.orders-in.failure-strategy=dead-letter-queue
+mp.messaging.incoming.orders-in.dead-letter-queue.topic=orders.events.dlq
+mp.messaging.incoming.orders-in.commit-strategy=throttled]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[package org.acme.orders.messaging;
+
+import org.eclipse.microprofile.reactive.messaging.Incoming;
+import org.eclipse.microprofile.reactive.messaging.Message;
+import java.util.concurrent.CompletionStage;
+import jakarta.enterprise.context.ApplicationScoped;
+
+@ApplicationScoped
+class BadOrderConsumer {
+    @Incoming("orders-in")
+    public CompletionStage<Void> onMessage(Message<OrderCreatedEvent> message) {
+        try {
+            // process(message.getPayload());
+            return message.ack();
+        } catch (Exception e) {
+            return message.ack(); // Bad: acknowledges failed records, losing data
+        }
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="4" id="quarkus-kafka-testing-testcontainers">
+            <example-header>
+                <example-title>Testing</example-title>
+                <example-subtitle>@QuarkusTest with Kafka Testcontainers via test resource</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                For deterministic CI tests, use Testcontainers Kafka and feed runtime properties through `QuarkusTestResourceLifecycleManager`.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package org.acme.orders.test;
+
+import io.quarkus.test.common.QuarkusTestResource;
+import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
+import io.quarkus.test.junit.QuarkusTest;
+import org.junit.jupiter.api.Test;
+import org.testcontainers.containers.KafkaContainer;
+import org.testcontainers.utility.DockerImageName;
+import java.util.Map;
+
+class KafkaTestResource implements QuarkusTestResourceLifecycleManager {
+    private KafkaContainer kafka;
+    @Override
+    public Map<String, String> start() {
+        kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.6.1"));
+        kafka.start();
+        return Map.of("kafka.bootstrap.servers", kafka.getBootstrapServers());
+    }
+    @Override
+    public void stop() {
+        if (kafka != null) kafka.stop();
+    }
+}
+
+@QuarkusTest
+@QuarkusTestResource(KafkaTestResource.class)
+class OrderKafkaIT {
+    @Test
+    void shouldProcessIncomingMessage() {
+        // publish event and assert side effects
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Bad: test depends on a manually started shared Kafka broker
+class OrderKafkaManualEnvIT {}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+    <output-format>
+        <output-format-list>
+            <output-format-item>**ANALYZE** messaging code: `@Incoming`/`@Outgoing` usage, channel configuration, and failure strategies</output-format-item>
+            <output-format-item>**CATEGORIZE** issues by impact (RELIABILITY, MAINTAINABILITY, PERFORMANCE)</output-format-item>
+            <output-format-item>**APPLY** Quarkus Kafka-aligned fixes: configure DLQs, use typed payloads, ensure non-blocking processing</output-format-item>
+            <output-format-item>**IMPLEMENT** changes consistently across `application.properties` and Java code</output-format-item>
+            <output-format-item>**EXPLAIN** trade-offs (e.g., DLQ vs ignore, throttled vs latest commit strategies)</output-format-item>
+            <output-format-item>**TEST** messaging behavior with `@QuarkusTest` and Testcontainers Kafka (optionally through Dev Services where appropriate)</output-format-item>
+            <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
+        </output-format-list>
+    </output-format>
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before ANY refactoring</safeguards-item>
+            <safeguards-item>**POISON PILLS**: Use `failure-strategy=dead-letter-queue` to prevent poison pills from blocking the consumer</safeguards-item>
+            <safeguards-item>**BLOCKING CODE**: Do not block the event loop in `@Incoming` methods; use `@Blocking` if synchronous processing is required</safeguards-item>
+            <safeguards-item>**ACKNOWLEDGEMENT**: Let the framework handle ACKs automatically when returning `Uni`/`CompletionStage`, or handle them explicitly but correctly on failure</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>

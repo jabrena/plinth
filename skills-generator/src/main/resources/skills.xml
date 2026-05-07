@@ -257,6 +257,16 @@
             <reference>313-frameworks-spring-db-migrations-flyway</reference>
         </reference-list>
     </skill>
+    <skill id="314">
+        <reference-list>
+            <reference>314-frameworks-spring-kafka</reference>
+        </reference-list>
+    </skill>
+    <skill id="315">
+        <reference-list>
+            <reference>315-frameworks-spring-mongodb</reference>
+        </reference-list>
+    </skill>
     <skill id="321">
         <reference-list>
             <reference>321-frameworks-spring-boot-testing-unit-tests</reference>
@@ -307,6 +317,16 @@
             <reference>413-frameworks-quarkus-db-migrations-flyway</reference>
         </reference-list>
     </skill>
+    <skill id="414">
+        <reference-list>
+            <reference>414-frameworks-quarkus-kafka</reference>
+        </reference-list>
+    </skill>
+    <skill id="415">
+        <reference-list>
+            <reference>415-frameworks-quarkus-mongodb</reference>
+        </reference-list>
+    </skill>
     <skill id="421">
         <reference-list>
             <reference>421-frameworks-quarkus-testing-unit-tests</reference>
@@ -355,6 +375,16 @@
     <skill id="513">
         <reference-list>
             <reference>513-frameworks-micronaut-db-migrations-flyway</reference>
+        </reference-list>
+    </skill>
+    <skill id="514">
+        <reference-list>
+            <reference>514-frameworks-micronaut-kafka</reference>
+        </reference-list>
+    </skill>
+    <skill id="515">
+        <reference-list>
+            <reference>515-frameworks-micronaut-mongodb</reference>
         </reference-list>
     </skill>
     <skill id="521">
