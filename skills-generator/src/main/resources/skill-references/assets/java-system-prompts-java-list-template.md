@@ -41,7 +41,7 @@ Use the following collection of Skills for Java to improve your Java development
 | [043-planning-github-issues](@043-planning-github-issues.md) | List GitHub issues (all or by milestone), fetch issue bodies and comments with `gh`, present tables; hand off to user stories | **User Prompt:** `List open issues in this repo as a table using @043-planning-github-issues` **User Prompt:** `Get all issues for milestone "Sprint 12" with @043-planning-github-issues` **User Prompt:** `Pull issue #44 description and comments, then draft a user story with @014-agile-user-story` **Note:** Requires GitHub CLI (`gh`) installed and authenticated. | Pairs with `@014-agile-user-story` when turning GitHub threads into user stories and Gherkin. |
 | [044-planning-jira](@044-planning-jira.md) | List Jira issues (all or by JQL), fetch issue descriptions and comments with `jira`, present tables; hand off to user stories | **User Prompt:** `List open Jira issues as a table using @044-planning-jira` **User Prompt:** `Get Jira issues with JQL "project = PROJ AND statusCategory != Done" using @044-planning-jira` **User Prompt:** `Pull issue PROJ-44 description and comments, then draft a user story with @014-agile-user-story` **Note:** Requires Jira CLI (`jira`) installed and configured. | Pairs with `@014-agile-user-story` when turning Jira threads into user stories and Gherkin. |
 
-## Build system rules (Maven)
+## Build system skills (Maven)
 
 | Skill | Description | Prompt | Notes |
 |----|----|----|----|
@@ -51,14 +51,14 @@ Use the following collection of Skills for Java to improve your Java development
 | [113-java-maven-documentation](@113-java-maven-documentation.md) | Create a Maven Documentation with the file `README-DEV.md` | **User Prompt:** `Generate developer documentation with essential Maven commands using @113-java-maven-documentation` **Note:** Add in the context the `pom.xml` which you want to generate the documentation. | This skill is applied automatically without any interaction with the Software engineer. |
 | [114-java-maven-search](@114-java-maven-search.md) | Search Maven Central, resolve coordinates, version metadata, and direct artifact URLs | **User Prompt:** `Find the latest version of com.google.guava:guava using @114-java-maven-search` **Note:** Use for dependency lookup, POM/JAR URLs, `maven-metadata.xml`, or Search API queries — not for editing `pom.xml` (use `@111` / `@112` for that). | Non-interactive. Use MCP Maven tools when available for live Central queries. |
 
-## Design rules
+## Design skills
 
 | Skill | Description | Prompt | Notes |
 |----|----|----|----|
 | [121-java-object-oriented-design](@121-java-object-oriented-design.md) | Take another point of view with an Object Oriented Design of your development | **User prompt:** `Improve the class/classes added in the context applying the system prompt @121-java-object-oriented-design`(Example) **Note:** Add in the context a class/classes to improve the design. **User Prompt with Consultative Interactive Behaviour:** `Improve the class/classes added in the context applying the system prompt @121-java-object-oriented-design with the behaviour @behaviour-consultative-interaction` | You can use the System prompt in a purist way or add the Behaviours to customize the final behaviour. |
 | [122-java-type-design](@122-java-type-design.md) | Review the Type Design in your development | **User prompt:** `Improve the class/classes added in the context applying the system prompt @122-java-type-design` (Example) **Note:** Add in the context a class/classes to improve the design. **User Prompt with Consultative Interactive Behaviour:** `Improve the class/classes added in the context applying the system prompt @122-java-type-design with the behaviour @behaviour-consultative-interaction` | You can use the System prompt in a purist way or add the Behaviours to customize the final behaviour.  |
 
-## Coding rules
+## Coding skills
 
 | Skill | Description | Prompt | Notes |
 |----|----|----|----|
@@ -67,7 +67,7 @@ Use the following collection of Skills for Java to improve your Java development
 | [125-java-concurrency](@125-java-concurrency.md) | Improve your code with Concurrency rules | **User Prompt:** `Improve the class/classes added in the context applying the system prompt @125-java-concurrency` (Example) **Note:** Add in the context a class/classes. **User Prompt with Consultative Interactive Behaviour:** `Improve the class/classes added in the context applying the system prompt @125-java-concurrency with the behaviour @behaviour-consultative-interaction` | You can use the System prompt in a purist way or add the Behaviours to customize the final behaviour. |
 | [128-java-generics](@128-java-generics.md) | Apply generics in a class | **User Prompt:** `Improve the class/classes added in the context applying the system prompt @128-java-generics` (Example) **Note:** Add in the context a class/classes. **User Prompt with Consultative Interactive Behaviour:** `Improve the class/classes added in the context applying the system prompt @128-java-generics with the behaviour @behaviour-consultative-interaction` **User Prompt with Training behaviour:** `Create a course about @128-java-generics.md using the behavior @behaviour-progressive-learning.md and put the course here` **Note:** Add in the context the location to add the course. | You can use the System prompt in a purist way or add the Behaviours to customize the final behaviour. |
 
-## Observability rules
+## Observability skills
 
 | Skill | Description | Prompt | Notes |
 |----|----|----|----|
@@ -75,7 +75,7 @@ Use the following collection of Skills for Java to improve your Java development
 | [182-java-observability-metrics-micrometer](@182-java-observability-metrics-micrometer.md) | Apply Micrometer metrics observability best practices in your development | **User Prompt:** `Improve the class/classes added in the context applying the system prompt @182-java-observability-metrics-micrometer` (Example) **Note:** Add in the context a class/classes where metrics are emitted. **User Prompt with Consultative Interactive Behaviour:** `Improve the class/classes added in the context applying the system prompt @182-java-observability-metrics-micrometer with the behaviour @behaviour-consultative-interaction` | Focused on metrics design, meter semantics, naming/tag conventions, and cardinality-safe instrumentation. |
 | [183-observability-tracing-opentelemetry](@183-observability-tracing-opentelemetry.md) | Apply OpenTelemetry distributed tracing best practices in your development | **User Prompt:** `Improve the class/classes added in the context applying the system prompt @183-observability-tracing-opentelemetry` (Example) **Note:** Add in the context code paths where tracing and propagation are relevant. **User Prompt with Consultative Interactive Behaviour:** `Improve the class/classes added in the context applying the system prompt @183-observability-tracing-opentelemetry with the behaviour @behaviour-consultative-interaction` | Focused on span modeling, context propagation, semantic conventions, and privacy-safe tracing attributes. |
 
-## Testing rules
+## Testing skills
 
 | Skill | Description | Prompt | Notes |
 |----|----|----|----|
@@ -84,7 +84,7 @@ Use the following collection of Skills for Java to improve your Java development
 | [132-java-testing-integration-testing](@132-java-testing-integration-testing.md) | Set up integration test infrastructure with WireMock (REST stubs) and generate a `BaseIntegrationTest.java` for framework-agnostic Java (no Spring Boot, Quarkus, Micronaut) | **Interactive User Prompt:** `Set up integration test infrastructure for my service using @132-java-testing-integration-testing` **Note:** The rule will ask questions about your service's outbound HTTP dependencies before generating `BaseIntegrationTest.java` and starter WireMock mapping files. Project must NOT use Spring Boot, Quarkus, or Micronaut. | Precondition: framework-agnostic Java. For Spring Boot use @322-frameworks-spring-boot-testing-integration-tests; for Quarkus @422-frameworks-quarkus-testing-integration-tests; for Micronaut @522-frameworks-micronaut-testing-integration-tests. Interactive rule — asks questions about REST topology before generating code. |
 | [133-java-testing-acceptance-tests](@133-java-testing-acceptance-tests.md) | Implement acceptance tests from a Gherkin .feature file for framework-agnostic Java (no Spring Boot, Quarkus, Micronaut) — @acceptance scenarios, RestAssured, Testcontainers, WireMock | **Interactive User Prompt:** `Implement acceptance tests from my Gherkin feature file using @133-java-testing-acceptance-tests` **Note:** Add the .feature file to context. Project must NOT use Spring Boot, Quarkus, or Micronaut. | Preconditions: .feature file in context; framework-agnostic Java. For Spring Boot use @323-frameworks-spring-boot-testing-acceptance-tests; for Quarkus @423-frameworks-quarkus-testing-acceptance-tests; for Micronaut @523-frameworks-micronaut-testing-acceptance-tests. |
 
-## Refactoring rules
+## Refactoring skills
 
 | Skill | Description | Prompt | Notes |
 |----|----|----|----|
@@ -94,13 +94,13 @@ Use the following collection of Skills for Java to improve your Java development
 | [144-java-data-oriented-programming](@144-java-data-oriented-programming.md) | Add Data Oriented Programming in your development |  **User Prompt:** `Improve the class/classes added in the context applying the system prompt @144-java-data-oriented-programming` (Example) **Note:** Add in the context a class/classes. **User Prompt with Consultative Interactive Behaviour:** `Improve the class/classes added in the context applying the system prompt @144-java-data-oriented-programming with the behaviour @behaviour-consultative-interaction` | You can use the System prompt in a purist way or add the Behaviours to customize the final behaviour. |
 | [145-java-refactoring-high-performance](@145-java-refactoring-high-performance.md) | Refactor Java code performance in hot paths across memory/allocation, CPU/low-level, and code syntax/control-flow patterns | **User Prompt:** `Improve the class/classes added in the context applying the system prompt @145-java-refactoring-high-performance` (Example) **Note:** Add in the context class/classes on critical paths. **User Prompt with Consultative Interactive Behaviour:** `Improve the class/classes added in the context applying the system prompt @145-java-refactoring-high-performance with the behaviour @behaviour-consultative-interaction` | Uses three references: memory/allocation, CPU/low-level, and code syntax/control-flow. Focused on measured improvements in hot paths. |
 
-## Performance rules
+## Performance skills
 
 | Activity | Description | Prompt | Notes |
 |----|----|----|----|
 | [151-java-performance-jmeter](@151-java-performance-jmeter.md) | Run a performance test with Jmeter | **User Prompt:** `Add JMeter performance testing to this project using @151-java-performance-jmeter` **Note:** You could ask the model to create a JMeter based on a RestController/Resource. Example: `Can you create a Jmeter file based on the restcontroller in the path src/test/resources/jmeter/load-test.jmx?` | This skill is applied automatically without any interaction with the Software engineer. If you create a Jmeter file with the model, review the generation, sometimes it is necessary to hammer a bit. |
 
-## Profiling rules (Async profiler, jps, jstack, jcmd & jstat)
+## Profiling skills (Async profiler, jps, jstack, jcmd & jstat)
 
 | Activity | Description | Prompt | Notes |
 |----|----|----|----|
@@ -110,13 +110,13 @@ Use the following collection of Skills for Java to improve your Java development
 | - | Code Refactoring from suggestions from analysis | `Can you apply the solutions from @profiling-solutions-yyyymmdd.md in @/info to mitigate bottlenecks` | Make a refactoring with the notes from the analysis |
 | [164-java-profiling-verify](@164-java-profiling-verify.md) | Compare results comparing results before and after applying changes in the code | **Prompt:** `Review if the problems was solved with last refactoring using the reports located in @/results with the skill @164-java-profiling-verify` **Note:**  Put in the context the folder with the results | This skill is applied automatically without any interaction with the Software engineer. |
 
-## Documentation rules
+## Documentation skills
 
 | Activity | Description | Prompt | Notes |
 |----|----|----|----|
 | [170-java-documentation](@170-java-documentation.md) | Generate Java project documentation including README.md, package-info.java files, and Javadoc using a modular step-based approach | **Interactive User Prompt:** `Generate technical documentation about the project with the skill @170-java-documentation` **User Prompt:** `Generate README.md with @170-java-documentation without any question` (Example) **Note:** Add in the context the folder to generate the documentation. The rule will analyze existing documentation and ask for user preferences before generating anything. Ensures project validation with Maven before proceeding. | Focused on documentation generation only. For diagrams, use @033-architecture-diagrams |
 
-## Spring Boot rules
+## Spring Boot skills
 
 | Skill | Description | Prompt | Notes |
 |----|----|----|----|
@@ -131,7 +131,7 @@ Use the following collection of Skills for Java to improve your Java development
 | [322-frameworks-spring-boot-testing-integration-tests](@322-frameworks-spring-boot-testing-integration-tests.md) | Write integration tests for Spring Boot — Testcontainers, TestRestTemplate, data management, test structure | **User Prompt:** `Add or improve integration tests in context using @322-frameworks-spring-boot-testing-integration-tests` **Note:** Add in the context the project or test classes. | Integration testing guidelines. |
 | [323-frameworks-spring-boot-testing-acceptance-tests](@323-frameworks-spring-boot-testing-acceptance-tests.md) | Implement acceptance tests from Gherkin .feature file for Spring Boot — @acceptance scenarios, RestAssured, @SpringBootTest, Testcontainers, WireMock | **Interactive User Prompt:** `Implement acceptance tests from my Gherkin feature file using @323-frameworks-spring-boot-testing-acceptance-tests` **Note:** Add the .feature file to context. Project must use Spring Boot. | Preconditions: .feature file in context; Spring Boot. For framework-agnostic Java use @133-java-testing-acceptance-tests. |
 
-## Quarkus rules
+## Quarkus skills
 
 | Skill | Description | Prompt | Notes |
 |----|----|----|----|
@@ -146,7 +146,7 @@ Use the following collection of Skills for Java to improve your Java development
 | [422-frameworks-quarkus-testing-integration-tests](@422-frameworks-quarkus-testing-integration-tests.md) | Write integration tests for Quarkus — @QuarkusTest, Testcontainers, Dev Services, persistence and HTTP | **User Prompt:** `Add or improve integration tests in context using @422-frameworks-quarkus-testing-integration-tests` **Note:** Add in the context the project or test classes. | Integration testing with real infrastructure. |
 | [423-frameworks-quarkus-testing-acceptance-tests](@423-frameworks-quarkus-testing-acceptance-tests.md) | Implement acceptance tests from Gherkin .feature file for Quarkus — @QuarkusTest, REST Assured, Testcontainers, WireMock | **Interactive User Prompt:** `Implement acceptance tests from my Gherkin feature file using @423-frameworks-quarkus-testing-acceptance-tests` **Note:** Add the .feature file to context. Project must use Quarkus. | Preconditions: .feature file in context; Quarkus. For framework-agnostic Java use @133-java-testing-acceptance-tests. |
 
-## Micronaut rules
+## Micronaut skills
 
 | Skill | Description | Prompt | Notes |
 |----|----|----|----|
@@ -161,13 +161,13 @@ Use the following collection of Skills for Java to improve your Java development
 | [522-frameworks-micronaut-testing-integration-tests](@522-frameworks-micronaut-testing-integration-tests.md) | Integration tests for Micronaut — @MicronautTest, TestPropertyProvider, Testcontainers, HttpClient | **User Prompt:** `Add or improve integration tests in context using @522-frameworks-micronaut-testing-integration-tests` **Note:** Add in the context the project or test classes. | Real infrastructure in tests. |
 | [523-frameworks-micronaut-testing-acceptance-tests](@523-frameworks-micronaut-testing-acceptance-tests.md) | Acceptance tests from Gherkin .feature for Micronaut — @acceptance, HttpClient, Testcontainers, WireMock | **Interactive User Prompt:** `Implement acceptance tests from my Gherkin feature file using @523-frameworks-micronaut-testing-acceptance-tests` **Note:** Add the .feature file to context. Project must use Micronaut. | Preconditions: .feature in context; Micronaut. For framework-agnostic Java use @133-java-testing-acceptance-tests. |
 
-## AI Tooling
+## AI Tooling skills
 
 | Skill | Description | Prompt | Notes |
 |----|----|----|----|
 | [200-agents-md](@200-agents-md.md) | Generate AGENTS.md files for Java repositories using a modular step-based approach. AGENTS.md guides AI agents and contributors on project conventions, tech stack, file structure, commands, Git workflow, and boundaries | **Interactive User Prompt:** `Generate AGENTS.md for the project with the skill @200-agents-md` **Note:** Add in the context the project root folder. The rule will ask 6 questions to understand requirements before generating. Handles existing AGENTS.md (overwrite/merge/backup). | Focused on AGENTS.md generation only. Asks role, tech stack, file structure, commands, Git workflow, and boundaries before generating |
 
-## Technologies
+## Technologies skills
 
 | Skill | Description | Prompt | Notes |
 |----|----|----|----|
