@@ -53,7 +53,7 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
         <!-- Dependency versions -->
-        <slf4j.version>2.0.17</slf4j.version>
+        <slf4j.version>2.0.18</slf4j.version>
         <logback.version>1.5.32</logback.version>
         <junit.version>6.0.3</junit.version>
         <assertj.version>3.27.7</assertj.version>
