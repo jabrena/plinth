@@ -20,6 +20,7 @@ Help developers design and implement CATS-based fuzz testing for Java APIs.
 2. Prioritize negative and boundary scenarios (invalid types, missing required fields, malformed formats, and range violations).
 3. Integrate CATS execution into CI and provide reproducible failure evidence.
 4. Document local execution so contributors can run the same baseline checks before creating pull requests.
+5. Provide a containerized local CATS installation option using a `cats/Dockerfile`.
 
 ## Constraints
 
@@ -29,13 +30,45 @@ Before applying recommendations, ensure the project compiles and that the API co
 - **PRECONDITION**: API contract input (OpenAPI or equivalent) must be available before configuring CATS
 - **CRITICAL SAFETY**: If compilation fails, stop immediately and do not proceed
 - **MANDATORY**: Regenerate skills after XML edits using `./mvnw clean install -pl skills-generator`
+- **LOCAL INSTALLATION**: Prefer a `cats/Dockerfile` when contributors need repeatable local CATS execution without installing Java tooling or CATS directly on the host
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after integrating fuzz testing changes
+
+## Examples
+
+### Table of contents
+
+- Example 1: Install CATS locally with Docker
+
+### Example 1: Install CATS locally with Docker
+
+Title: Use a project-local Dockerfile so contributors can run CATS without installing it on the host
+Description: Create `cats/Dockerfile` and build it from the project root with `docker build -t local/cats:13.8.0 cats`. Run it with a mounted workspace, for example: `docker run --rm -v "$PWD:/workspace" --network host local/cats:13.8.0 --contract openapi.yaml --server http://localhost:8080`. If the API runs in another container, replace `--network host` with the project Docker network and use the service name in `--server`.
+
+**Good example:**
+
+```dockerfile
+# CATS OpenAPI fuzzer (https://github.com/Endava/cats) — uberjar on Temurin JRE.
+ARG CATS_VERSION=13.8.0
+FROM eclipse-temurin:25-jre-jammy
+
+ARG CATS_VERSION
+RUN mkdir -p /opt/cats \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends curl ca-certificates \
+  && rm -rf /var/lib/apt/lists/* \
+  && curl -fsSL "https://github.com/Endava/cats/releases/download/cats-${CATS_VERSION}/cats_uberjar_${CATS_VERSION}.tar.gz" \
+  | tar -xz -C /opt/cats
+
+WORKDIR /workspace
+ENTRYPOINT ["java", "-jar", "/opt/cats/cats.jar"]
+```
 
 ## Output Format
 
 - **ANALYZE** current API testing and CI workflow to identify where CATS fuzzing should run and what contract sources should be used
 - **CATEGORIZE** fuzzing scope by scenario type: malformed input, missing fields, boundary limits, and schema constraint violations
 - **IMPLEMENT** CI and local commands so CATS can run consistently with reproducible failure output
+- **DOCUMENT** a Docker-based local installation path using `cats/Dockerfile`, including image build and execution commands
 - **EXPLAIN** what failed, why it failed, and how to reproduce findings locally
 - **VALIDATE** that generated artifacts and build checks remain consistent after integration
 

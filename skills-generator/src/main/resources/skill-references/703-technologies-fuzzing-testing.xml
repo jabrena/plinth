@@ -18,6 +18,7 @@
         2. Prioritize negative and boundary scenarios (invalid types, missing required fields, malformed formats, and range violations).
         3. Integrate CATS execution into CI and provide reproducible failure evidence.
         4. Document local execution so contributors can run the same baseline checks before creating pull requests.
+        5. Provide a containerized local CATS installation option using a `cats/Dockerfile`.
     </goal>
 
     <constraints>
@@ -30,15 +31,57 @@
             <constraint>**PRECONDITION**: API contract input (OpenAPI or equivalent) must be available before configuring CATS</constraint>
             <constraint>**CRITICAL SAFETY**: If compilation fails, stop immediately and do not proceed</constraint>
             <constraint>**MANDATORY**: Regenerate skills after XML edits using `./mvnw clean install -pl skills-generator`</constraint>
+            <constraint>**LOCAL INSTALLATION**: Prefer a `cats/Dockerfile` when contributors need repeatable local CATS execution without installing Java tooling or CATS directly on the host</constraint>
             <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after integrating fuzz testing changes</constraint>
         </constraint-list>
     </constraints>
+
+    <examples>
+        <toc auto-generate="true" />
+
+        <example number="1" id="local-cats-dockerfile">
+            <example-header>
+                <example-title>Install CATS locally with Docker</example-title>
+                <example-subtitle>Use a project-local Dockerfile so contributors can run CATS without installing it on the host</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+Create `cats/Dockerfile` and build it from the project root with `docker build -t local/cats:13.8.0 cats`. Run it with a mounted workspace, for example: `docker run --rm -v "$PWD:/workspace" --network host local/cats:13.8.0 --contract openapi.yaml --server http://localhost:8080`. If the API runs in another container, replace `--network host` with the project Docker network and use the service name in `--server`.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="dockerfile"><![CDATA[# CATS OpenAPI fuzzer (https://github.com/Endava/cats) — uberjar on Temurin JRE.
+ARG CATS_VERSION=13.8.0
+FROM eclipse-temurin:25-jre-jammy
+
+ARG CATS_VERSION
+RUN mkdir -p /opt/cats \
+  && apt-get update \
+  && apt-get install -y --no-install-recommends curl ca-certificates \
+  && rm -rf /var/lib/apt/lists/* \
+  && curl -fsSL "https://github.com/Endava/cats/releases/download/cats-${CATS_VERSION}/cats_uberjar_${CATS_VERSION}.tar.gz" \
+  | tar -xz -C /opt/cats
+
+WORKDIR /workspace
+ENTRYPOINT ["java", "-jar", "/opt/cats/cats.jar"]]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="bash"><![CDATA[# Avoid: manual host install with version drift across contributors
+curl -fsSL https://github.com/Endava/cats/releases/download/cats-13.8.0/cats_uberjar_13.8.0.tar.gz \
+  | tar -xz -C /usr/local/bin
+java -jar /usr/local/bin/cats.jar --contract openapi.yaml --server http://localhost:8080]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
 
     <output-format>
         <output-format-list>
             <output-format-item>**ANALYZE** current API testing and CI workflow to identify where CATS fuzzing should run and what contract sources should be used</output-format-item>
             <output-format-item>**CATEGORIZE** fuzzing scope by scenario type: malformed input, missing fields, boundary limits, and schema constraint violations</output-format-item>
             <output-format-item>**IMPLEMENT** CI and local commands so CATS can run consistently with reproducible failure output</output-format-item>
+            <output-format-item>**DOCUMENT** a Docker-based local installation path using `cats/Dockerfile`, including image build and execution commands</output-format-item>
             <output-format-item>**EXPLAIN** what failed, why it failed, and how to reproduce findings locally</output-format-item>
             <output-format-item>**VALIDATE** that generated artifacts and build checks remain consistent after integration</output-format-item>
         </output-format-list>
