@@ -5,211 +5,291 @@
         <version>0.15.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
         <title>Quarkus — Kafka messaging</title>
-        <description>Use when you need Kafka in Quarkus with SmallRye Reactive Messaging and want examples for design, implementation, and error handling.</description>
+        <description>Use when you need Kafka in Quarkus with SmallRye Reactive Messaging — including Maven extension, channel/topic design, typed @Channel Emitter producers, @Incoming consumers with Uni, failure strategies (dead-letter-queue, retry), idempotency, and Dev Services testing. This should trigger for requests such as Add Kafka in Quarkus; Review Reactive Messaging consumers; Improve failure handling for Quarkus Kafka.</description>
     </metadata>
-    <role>You are a Senior software engineer with extensive experience in Quarkus and Kafka</role>
-    <goal>
-        Build resilient Quarkus Kafka messaging with explicit contracts, clear channel wiring, and controlled failure behavior using SmallRye Reactive Messaging.
-    </goal>
+    <role>You are a Senior software engineer with extensive experience in Quarkus and Apache Kafka</role>
+    <goal><![CDATA[Design and implement reliable Kafka messaging in Quarkus using SmallRye Reactive Messaging. Keep channel names and topic names decoupled via configuration. Use typed event records. Delegate business logic to CDI services from thin `@Incoming` methods. Configure `failure-strategy=dead-letter-queue` so unrecoverable messages are routed rather than silently acknowledged.
+
+**What is covered in this Skill?**
+
+- Maven `quarkus-messaging-kafka` extension dependency
+- Channel and topic naming conventions and configuration
+- Typed event records with `eventId` for de-duplication
+- `@Channel` / `Emitter` typed producer
+- `@Incoming` consumer with `Uni<Void>` return type
+- Manual `Message` acknowledgement for explicit ack/nack control
+- `failure-strategy`: `dead-letter-queue`, `fail`, and `ignore`; retry is configured separately with connector retry properties
+- Idempotent consumer pattern using `eventId`
+- Dev Services for Kafka (zero-config in dev and test)
+- Integration testing with `@QuarkusTest` and `@TestProfile`
+
+**Scope:** Apply recommendations based on the reference rules and good/bad code examples.
+ ]]></goal>
     <constraints>
-        <constraints-description>Compile first; stop on failure; verify after changes.</constraints-description>
+        <constraints-description>Before applying any Kafka changes, ensure the project compiles. Compilation failure is a BLOCKING condition.</constraints-description>
         <constraint-list>
-            <constraint>**MANDATORY**: Run `./mvnw compile` before applying changes</constraint>
-            <constraint>**SAFETY**: If compile fails, stop immediately</constraint>
-            <constraint>**VERIFY**: Run `./mvnw clean verify` after changes</constraint>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**SAFETY**: If compilation fails, stop immediately</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+            <constraint>**INJECTION**: Never construct topic names or header values from untrusted user input</constraint>
+            <constraint>**BEFORE APPLYING**: Read the reference for detailed rules and good/bad patterns</constraint>
+            <constraint>**EDGE CASE**: If the user goal is ambiguous, stop and ask a clarifying question before editing files</constraint>
         </constraint-list>
     </constraints>
     <examples>
         <toc auto-generate="true" />
-        <example number="1" id="quarkus-kafka-design">
+        <example number="1" id="414-frameworks-quarkus-kafka-maven-extension">
             <example-header>
-                <example-title>Design</example-title>
-                <example-subtitle>Channel naming and event contract stability</example-subtitle>
+                <example-title>Maven extension</example-title>
+                <example-subtitle>Add quarkus-messaging-kafka; let Quarkus BOM manage the version</example-subtitle>
             </example-header>
-            <example-description>
-                <![CDATA[
-                Map logical channels to physical Kafka topics in `application.properties`. This decouples the code from the infrastructure.
-                ]]>
-            </example-description>
+            <example-description><![CDATA[Add `quarkus-messaging-kafka` to your `pom.xml`. The Quarkus BOM manages the version — do not pin it. Quarkus Dev Services automatically starts a Kafka broker in dev and test modes when this extension is on the classpath and no `kafka.bootstrap.servers` is configured, so no manual setup is needed for local development.]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="properties"><![CDATA[# Good: Map logical channels 'orders-out' and 'orders-in' to physical topic
-mp.messaging.outgoing.orders-out.connector=smallrye-kafka
-mp.messaging.outgoing.orders-out.topic=orders.events.v1
-mp.messaging.incoming.orders-in.connector=smallrye-kafka
-mp.messaging.incoming.orders-in.topic=orders.events.v1]]></code-block>
+                    <code-block language="xml"><![CDATA[<!-- pom.xml — Quarkus BOM manages the version -->
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-messaging-kafka</artifactId>
+</dependency>]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
-                    <code-block language="properties"><![CDATA[# Bad: same logical event sent to multiple ad-hoc topic names, hardcoded in code
-orders.topic=orders
-orders.topic.backup=order-events-final]]></code-block>
+                <bad-example>
+                    <code-block language="xml"><![CDATA[<!-- Bad: pinned version fights the Quarkus BOM -->
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-messaging-kafka</artifactId>
+    <version>3.8.1</version>
+</dependency>]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
-        <example number="2" id="quarkus-kafka-implementation">
+        <example number="2" id="414-frameworks-quarkus-kafka-event-schema-design">
             <example-header>
-                <example-title>Implementation</example-title>
-                <example-subtitle>Reactive Messaging producer and consumer</example-subtitle>
+                <example-title>Event schema design</example-title>
+                <example-subtitle>Versioned immutable record with eventId and aggregate key</example-subtitle>
             </example-header>
-            <example-description>
-                <![CDATA[
-                Use `@Channel` with `Emitter` for producing messages. Use `@Incoming` for consuming messages. Return `Uni` or `CompletionStage` for non-blocking processing.
-                ]]>
-            </example-description>
+            <example-description><![CDATA[Define each Kafka event as a Java record with a `eventId` (UUID) for de-duplication, a `schemaVersion` for forward compatibility, and the aggregate's natural key (e.g. `orderId`). The aggregate key should be used as the Kafka message key to keep partition ordering for the same aggregate. Topic names follow `domain.entity.operation.v{N}`.]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[package org.acme.orders.messaging;
+                    <code-block language="java"><![CDATA[import java.time.Instant;
 
-import io.smallrye.mutiny.Uni;
+public record OrderCreatedEvent(
+    String eventId,       // UUID; used for consumer-side de-duplication
+    String schemaVersion, // "v1"
+    String orderId,       // aggregate key → used as Kafka message key
+    String customerId,
+    Instant occurredAt
+) {
+    public static OrderCreatedEvent of(String orderId, String customerId) {
+        return new OrderCreatedEvent(
+            java.util.UUID.randomUUID().toString(), "v1",
+            orderId, customerId, Instant.now()
+        );
+    }
+}
+// topic: orders.created.v1   key: orderId]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Bad: untyped map, no schema version, no aggregate key
+Map<String, Object> event = Map.of("type", "order", "data", "...");]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="3" id="414-frameworks-quarkus-kafka-channel-and-topic-configuration">
+            <example-header>
+                <example-title>Channel and topic configuration</example-title>
+                <example-subtitle>Map logical channel names to Kafka topics via application.properties</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[Decouple the channel name used in code from the physical Kafka topic name via configuration. This allows topics to be renamed across environments without code changes. Use stable, versioned topic names (`domain.entity.operation.v{N}`). Configure `value-serializer` / `value-deserializer` explicitly so there are no implicit class-name-based surprises.]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="properties"><![CDATA[# application.properties
+mp.messaging.outgoing.orders-out.connector=smallrye-kafka
+mp.messaging.outgoing.orders-out.topic=orders.created.v1
+mp.messaging.outgoing.orders-out.value.serializer=io.quarkus.kafka.client.serialization.ObjectMapperSerializer
+
+mp.messaging.incoming.orders-in.connector=smallrye-kafka
+mp.messaging.incoming.orders-in.topic=orders.created.v1
+mp.messaging.incoming.orders-in.group.id=billing-service-v1
+mp.messaging.incoming.orders-in.value.deserializer=com.example.kafka.OrderCreatedEventDeserializer]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Bad: hardcoded topic string inside a Java annotation — cannot be overridden per environment
+@Incoming("orders.created.v1")
+void onMessage(OrderCreatedEvent event) { }]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="4" id="414-frameworks-quarkus-kafka-producer-implementation">
+            <example-header>
+                <example-title>Producer implementation</example-title>
+                <example-subtitle>@Channel Emitter with keyed Message for partition ordering</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[Inject `@Channel("orders-out") Emitter&lt;OrderCreatedEvent&gt;` into the CDI bean that needs to publish. Wrap the payload in a `Message` with an `OutgoingKafkaRecordMetadata` to set the partition key so all events for the same aggregate go to the same partition.]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.smallrye.reactive.messaging.kafka.api.OutgoingKafkaRecordMetadata;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 import org.eclipse.microprofile.reactive.messaging.Channel;
 import org.eclipse.microprofile.reactive.messaging.Emitter;
-import org.eclipse.microprofile.reactive.messaging.Incoming;
-import jakarta.enterprise.context.ApplicationScoped;
+import org.eclipse.microprofile.reactive.messaging.Message;
 
 @ApplicationScoped
-class OrderEmitter {
+public class OrderEventPublisher {
+
+    @Inject
     @Channel("orders-out")
     Emitter<OrderCreatedEvent> emitter;
 
-    void publish(OrderCreatedEvent event) {
-        emitter.send(event);
-    }
-}
-
-@ApplicationScoped
-class OrderConsumer {
-    @Incoming("orders-in")
-    public Uni<Void> onMessage(OrderCreatedEvent event) {
-        // Delegate to app service, returning a Uni for reactive processing
-        return Uni.createFrom().voidItem();
+    public void publish(OrderCreatedEvent event) {
+        emitter.send(
+            Message.of(event)
+                .addMetadata(OutgoingKafkaRecordMetadata.<String>builder()
+                    .withKey(event.orderId())
+                    .build())
+        );
     }
 }]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[package org.acme.orders.messaging;
+                <bad-example>
+                    <code-block language="java"><![CDATA[@ApplicationScoped
+class OrderEventPublisher {
+    @Inject @Channel("orders-out")
+    Emitter<String> emitter; // Bad: untyped String emitter; no message key set
 
-import org.eclipse.microprofile.reactive.messaging.Incoming;
-import jakarta.enterprise.context.ApplicationScoped;
-
-@ApplicationScoped
-class BadOrderConsumer {
-    @Incoming("orders-in")
-    void onMessage(String payload) {
-        // Bad: manual parsing and side effects with no contract typing, blocking the event loop
+    void publish(OrderCreatedEvent event) {
+        emitter.send(event.toString()); // loses type safety and partition ordering
     }
 }]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
-        <example number="3" id="quarkus-kafka-error-handling">
+        <example number="5" id="414-frameworks-quarkus-kafka-consumer-implementation">
             <example-header>
-                <example-title>Error handling</example-title>
-                <example-subtitle>Nack strategy and dead-letter queue</example-subtitle>
+                <example-title>Consumer implementation</example-title>
+                <example-subtitle>@Incoming with Uni return and thin handler delegating to a service</example-subtitle>
             </example-header>
-            <example-description>
-                <![CDATA[
-                Configure `failure-strategy=dead-letter-queue` to automatically route failing messages to a DLQ. Never manually `ack()` a message that failed processing, as it loses data.
-                ]]>
-            </example-description>
+            <example-description><![CDATA[The `@Incoming` method should be thin: receive the typed event, delegate immediately to an `@ApplicationScoped` service, and return `Uni&lt;Void&gt;` when the processing path is asynchronous. Synchronous `void` methods can still propagate thrown exceptions, but a `Uni`/`CompletionStage` is the safer contract when the service work completes later.]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="properties"><![CDATA[# Good: Configure DLQ and throttled commit strategy
+                    <code-block language="java"><![CDATA[import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import org.eclipse.microprofile.reactive.messaging.Incoming;
+
+@ApplicationScoped
+public class BillingEventConsumer {
+
+    @Inject
+    BillingService billingService;
+
+    @Incoming("orders-in")
+    public Uni<Void> onOrderCreated(OrderCreatedEvent event) {
+        return billingService.createInvoice(event.orderId(), event.customerId());
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Bad: asynchronous work is hidden behind a void method;
+// business logic inline instead of delegating to a service
+@Incoming("orders-in")
+void onOrderCreated(String rawJson) {
+    // 40 lines of parsing + DB calls + HTTP calls
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="6" id="414-frameworks-quarkus-kafka-error-handling-and-dead-letter-queue">
+            <example-header>
+                <example-title>Error handling and dead-letter queue</example-title>
+                <example-subtitle>failure-strategy=dead-letter-queue with nack for unrecoverable messages</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[Configure `failure-strategy=dead-letter-queue` so failed messages are routed to a dedicated DLQ topic instead of stopping the channel or being silently ignored. For transient failures (network, timeout), enable the connector retry options (`retry=true`, bounded attempts, bounded wait) alongside the failure strategy. For deterministic failures (deserialization errors, schema mismatch), use explicit `message.nack(ex)` to route immediately to the DLQ.]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="properties"><![CDATA[# application.properties
 mp.messaging.incoming.orders-in.failure-strategy=dead-letter-queue
-mp.messaging.incoming.orders-in.dead-letter-queue.topic=orders.events.dlq
+mp.messaging.incoming.orders-in.dead-letter-queue.topic=orders.created.dlq
+mp.messaging.incoming.orders-in.retry=true
+mp.messaging.incoming.orders-in.retry-attempts=3
+mp.messaging.incoming.orders-in.retry-max-wait=10S
 mp.messaging.incoming.orders-in.commit-strategy=throttled]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[package org.acme.orders.messaging;
-
-import org.eclipse.microprofile.reactive.messaging.Incoming;
-import org.eclipse.microprofile.reactive.messaging.Message;
-import java.util.concurrent.CompletionStage;
-import jakarta.enterprise.context.ApplicationScoped;
-
-@ApplicationScoped
-class BadOrderConsumer {
-    @Incoming("orders-in")
-    public CompletionStage<Void> onMessage(Message<OrderCreatedEvent> message) {
-        try {
-            // process(message.getPayload());
-            return message.ack();
-        } catch (Exception e) {
-            return message.ack(); // Bad: acknowledges failed records, losing data
-        }
+                <bad-example>
+                    <code-block language="java"><![CDATA[@Incoming("orders-in")
+public CompletionStage<Void> onOrderCreated(Message<OrderCreatedEvent> message) {
+    try {
+        billingService.createInvoice(message.getPayload().orderId(), message.getPayload().customerId());
+        return message.ack();
+    } catch (Exception e) {
+        return message.ack(); // Bad: ack on failure — record consumed and lost silently
     }
 }]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
-        <example number="4" id="quarkus-kafka-testing-testcontainers">
+        <example number="7" id="414-frameworks-quarkus-kafka-idempotent-consumer">
             <example-header>
-                <example-title>Testing</example-title>
-                <example-subtitle>@QuarkusTest with Kafka Testcontainers via test resource</example-subtitle>
+                <example-title>Idempotent consumer</example-title>
+                <example-subtitle>De-duplicate on eventId to survive at-least-once redelivery</example-subtitle>
             </example-header>
-            <example-description>
-                <![CDATA[
-                For deterministic CI tests, use Testcontainers Kafka and feed runtime properties through `QuarkusTestResourceLifecycleManager`.
-                ]]>
-            </example-description>
+            <example-description><![CDATA[Kafka guarantees at-least-once delivery, so consumers can receive duplicate messages on broker retries, consumer group rebalances, or DLQ re-processing. Guard each consumer method with an `eventId` check against a de-duplication store. In production, back the store with a database or Redis; in tests, an in-memory `ConcurrentHashMap` is sufficient.]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[package org.acme.orders.test;
+                    <code-block language="java"><![CDATA[import io.smallrye.mutiny.Uni;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import org.eclipse.microprofile.reactive.messaging.Incoming;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
-import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.KafkaContainer;
-import org.testcontainers.utility.DockerImageName;
-import java.util.Map;
+@ApplicationScoped
+public class BillingEventConsumer {
 
-class KafkaTestResource implements QuarkusTestResourceLifecycleManager {
-    private KafkaContainer kafka;
-    @Override
-    public Map<String, String> start() {
-        kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.6.1"));
-        kafka.start();
-        return Map.of("kafka.bootstrap.servers", kafka.getBootstrapServers());
-    }
-    @Override
-    public void stop() {
-        if (kafka != null) kafka.stop();
-    }
-}
+    private final Set<String> processedIds = ConcurrentHashMap.newKeySet();
 
-@QuarkusTest
-@QuarkusTestResource(KafkaTestResource.class)
-class OrderKafkaIT {
-    @Test
-    void shouldProcessIncomingMessage() {
-        // publish event and assert side effects
+    @Inject BillingService billingService;
+
+    @Incoming("orders-in")
+    public Uni<Void> onOrderCreated(OrderCreatedEvent event) {
+        if (!processedIds.add(event.eventId())) {
+            return Uni.createFrom().voidItem(); // duplicate — skip
+        }
+        return billingService.createInvoice(event.orderId(), event.customerId());
     }
 }]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[// Bad: test depends on a manually started shared Kafka broker
-class OrderKafkaManualEnvIT {}]]></code-block>
+                    <code-block language="java"><![CDATA[@Incoming("orders-in")
+public Uni<Void> onOrderCreated(OrderCreatedEvent event) {
+    // Bad: no idempotency guard — rebalance or DLQ re-play doubles billing
+    return billingService.createInvoice(event.orderId(), event.customerId());
+}]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
     </examples>
     <output-format>
         <output-format-list>
-            <output-format-item>**ANALYZE** messaging code: `@Incoming`/`@Outgoing` usage, channel configuration, and failure strategies</output-format-item>
-            <output-format-item>**CATEGORIZE** issues by impact (RELIABILITY, MAINTAINABILITY, PERFORMANCE)</output-format-item>
-            <output-format-item>**APPLY** Quarkus Kafka-aligned fixes: configure DLQs, use typed payloads, ensure non-blocking processing</output-format-item>
-            <output-format-item>**IMPLEMENT** changes consistently across `application.properties` and Java code</output-format-item>
-            <output-format-item>**EXPLAIN** trade-offs (e.g., DLQ vs ignore, throttled vs latest commit strategies)</output-format-item>
-            <output-format-item>**TEST** messaging behavior with `@QuarkusTest` and Testcontainers Kafka (optionally through Dev Services where appropriate)</output-format-item>
+            <output-format-item>**ANALYZE** Kafka code: event schema versioning, channel/topic binding, producer key strategy, consumer return type, failure strategy configuration, and idempotency guards</output-format-item>
+            <output-format-item>**CATEGORIZE** issues by impact (RELIABILITY for missing DLQ or failure strategy, CORRECTNESS for missing idempotency, MAINTAINABILITY for untyped emitters or inline business logic, SECURITY for user-controlled topic names)</output-format-item>
+            <output-format-item>**APPLY** SmallRye Reactive Messaging–aligned fixes: type the emitters and channels, key messages on the aggregate id, configure failure-strategy, add eventId de-duplication</output-format-item>
+            <output-format-item>**IMPLEMENT** changes so channel config, serializers, consumer methods, and tests stay consistent</output-format-item>
+            <output-format-item>**EXPLAIN** trade-offs (void vs Uni return, dead-letter-queue vs retry vs ignore, in-process Dev Services vs Testcontainers)</output-format-item>
+            <output-format-item>**TEST** with `@QuarkusTest` and Dev Services; use Testcontainers Kafka for full-stack acceptance tests</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
         </output-format-list>
     </output-format>
     <safeguards>
         <safeguards-list>
-            <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before ANY refactoring</safeguards-item>
-            <safeguards-item>**POISON PILLS**: Use `failure-strategy=dead-letter-queue` to prevent poison pills from blocking the consumer</safeguards-item>
-            <safeguards-item>**BLOCKING CODE**: Do not block the event loop in `@Incoming` methods; use `@Blocking` if synchronous processing is required</safeguards-item>
-            <safeguards-item>**ACKNOWLEDGEMENT**: Let the framework handle ACKs automatically when returning `Uni`/`CompletionStage`, or handle them explicitly but correctly on failure</safeguards-item>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before ANY Kafka refactoring — compilation failure is a HARD STOP</safeguards-item>
+            <safeguards-item>**CRITICAL VALIDATION**: Run `./mvnw clean verify` after changes; exercise consumer integration tests before promoting</safeguards-item>
+            <safeguards-item>**INJECTION SAFETY**: Never build topic names or Kafka header values from untrusted user input</safeguards-item>
+            <safeguards-item>**ERROR HANDLING**: Propagate failures from `@Incoming` methods; use `Uni`/`CompletionStage` for asynchronous processing so failures happen inside the messaging contract</safeguards-item>
+            <safeguards-item>**IDEMPOTENCY**: Always de-duplicate on `eventId` — at-least-once delivery means consumers must tolerate receiving the same message more than once</safeguards-item>
+            <safeguards-item>**DLQ MONITORING**: Set up alerting on the DLQ topic — messages landing there indicate systematic processing failures</safeguards-item>
+            <safeguards-item>**CDI SELF-INVOCATION**: Never call an `@Incoming`-annotated method directly via `this` — always inject through the CDI proxy</safeguards-item>
+            <safeguards-item>**INCREMENTAL SAFETY**: Change one producer or consumer surface at a time; verify with `@QuarkusTest` between steps</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>

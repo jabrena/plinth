@@ -5,241 +5,409 @@
         <version>0.15.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
         <title>Spring Boot — MongoDB</title>
-        <description>Use when you need MongoDB with Spring Data MongoDB and want examples for design, implementation, and error handling for robust document persistence.</description>
+        <description>Use when you need MongoDB with Spring Data MongoDB — including Maven dependencies, document modeling with @Document and @CompoundIndex, MongoRepository, MongoTemplate for complex queries, @Version optimistic locking, and explicit error handling for DuplicateKeyException and OptimisticLockingFailureException. This should trigger for requests such as Add MongoDB in Spring Boot; Review Spring Data Mongo repositories; Improve error handling for Mongo writes.</description>
     </metadata>
     <role>You are a Senior software engineer with extensive experience in Spring Boot and MongoDB</role>
-    <goal>
-        Design clear document models, implement robust Spring Data Mongo repositories/services, and handle Mongo failures explicitly.
-    </goal>
+    <goal><![CDATA[Design clear document models, implement correct Spring Data MongoDB repositories and services, and handle MongoDB failures explicitly. Prefer immutable records for documents, explicit index declarations, and `@Version` for concurrency control. Never expose managed documents at API boundaries — map to DTOs. Guard against injection by using derived finders or `Criteria` — never string-concatenated query strings.
+
+**What is covered in this Skill?**
+
+- Maven `spring-boot-starter-data-mongodb` dependency aligned with the Spring Boot BOM
+- Document design: `@Document`, `@Field`, `@CompoundIndex`, and `@Id` mapping
+- Factory methods for new documents; `@Version` for optimistic locking
+- `MongoRepository` with derived finders and explicit `@Query` methods
+- `MongoTemplate` for complex aggregations and multi-condition queries
+- `@Transactional` on service methods (MongoDB multi-document transactions where supported)
+- Error handling: `DuplicateKeyException`, `OptimisticLockingFailureException`, `DataAccessException`
+- DTO projections: returning view types instead of leaking internal documents
+- Testing with `@DataMongoTest` slice and Testcontainers MongoDB
+
+**Scope:** Apply recommendations based on the reference rules and good/bad code examples.
+ ]]></goal>
     <constraints>
-        <constraints-description>Compile first; stop on failure; verify after changes.</constraints-description>
+        <constraints-description>Before applying any MongoDB changes, ensure the project compiles. Compilation failure is a BLOCKING condition.</constraints-description>
         <constraint-list>
-            <constraint>**MANDATORY**: Run `./mvnw compile` before applying changes</constraint>
-            <constraint>**SAFETY**: If compile fails, stop immediately</constraint>
-            <constraint>**VERIFY**: Run `./mvnw clean verify` after changes</constraint>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**SAFETY**: If compilation fails, stop immediately</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+            <constraint>**INJECTION**: Never build query strings by concatenating user input — always use Criteria API or derived finders</constraint>
+            <constraint>**BEFORE APPLYING**: Read the reference for detailed rules and good/bad patterns</constraint>
+            <constraint>**EDGE CASE**: If the user goal is ambiguous, stop and ask a clarifying question before editing files</constraint>
+            <constraint>**EDGE CASE**: If required context, files, or tools are missing, report the blocker explicitly</constraint>
         </constraint-list>
     </constraints>
     <examples>
         <toc auto-generate="true" />
-        <example number="1" id="spring-mongo-design">
+        <example number="1" id="315-frameworks-spring-mongodb-maven-dependency">
             <example-header>
-                <example-title>Design</example-title>
-                <example-subtitle>Document boundaries and indexes</example-subtitle>
+                <example-title>Maven dependency</example-title>
+                <example-subtitle>Add the Spring Data MongoDB starter; version is managed by the Spring Boot BOM</example-subtitle>
             </example-header>
-            <example-description>
-                <![CDATA[
-                Use `@Document` to define collections. Define explicit indexes (like `@CompoundIndex` or `@Indexed`) to ensure query performance and uniqueness constraints.
-                ]]>
-            </example-description>
+            <example-description><![CDATA[Spring Boot's BOM manages the `spring-boot-starter-data-mongodb` version. Declaring an explicit version risks classpath conflicts with the auto-configured `MongoAutoConfiguration`. Add the embedded Flapdoodle MongoDB only in `test` scope for slice tests when not using Testcontainers.]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[package com.example.orders.domain;
+                    <code-block language="xml"><![CDATA[<!-- pom.xml — Spring Boot BOM manages the version -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-mongodb</artifactId>
+</dependency>
 
-import org.springframework.data.annotation.Id;
+<!-- Optional: embedded MongoDB for @DataMongoTest slices without Testcontainers -->
+<dependency>
+    <groupId>de.flapdoodle.embed</groupId>
+    <artifactId>de.flapdoodle.embed.mongo.spring30x</artifactId>
+    <scope>test</scope>
+</dependency>]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="xml"><![CDATA[<!-- Bad: pinned version fights the BOM -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-data-mongodb</artifactId>
+    <version>3.2.0</version>
+</dependency>]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="2" id="315-frameworks-spring-mongodb-document-design">
+            <example-header>
+                <example-title>Document design</example-title>
+                <example-subtitle>@Document with explicit collection, @Field, @CompoundIndex, and factory method</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[Annotate with `@Document` and name the collection explicitly to avoid case-sensitivity surprises across environments. Map field names with `@Field` when the Java property name differs from the stored field. Declare indexes on the entity with `@CompoundIndex` to keep schema intent alongside the model. Use a static factory method (`of(...)`) that leaves `id` null for new inserts.]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.springframework.data.annotation.Id;
+import org.springframework.data.annotation.Version;
 import org.springframework.data.mongodb.core.index.CompoundIndex;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 import java.time.Instant;
 
-@Document("orders")
-@CompoundIndex(name = "uk_order_number", def = "{'orderNumber': 1}", unique = true)
+@Document(collection = "orders")
+@CompoundIndex(name = "uk_order_number", def = "{'order_number': 1}", unique = true)
 public record OrderDocument(
     @Id String id,
-    String orderNumber,
-    String customerId,
-    Instant createdAt
-) {}]]></code-block>
+    @Field("order_number") String orderNumber,
+    @Field("customer_id") String customerId,
+    @Field("created_at") Instant createdAt,
+    @Version Long version
+) {
+    public static OrderDocument of(String orderNumber, String customerId) {
+        return new OrderDocument(null, orderNumber, customerId, Instant.now(), null);
+    }
+}]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[package com.example.orders.domain;
-
-import org.springframework.data.mongodb.core.mapping.Document;
-
-@Document("orders")
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Bad: implicit collection name derived from class name; no indexes; mutable class
+@Document
 class OrderDocument {
-    // Bad: missing unique/index strategy for lookup fields, missing @Id
-    String orderNumber;
+    @Id String id;
+    String orderNumber;  // no unique index
+    String customerId;
+    // setters allow accidental mutation
+    public void setId(String id) { this.id = id; }
 }]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
-        <example number="2" id="spring-mongo-implementation">
+        <example number="3" id="315-frameworks-spring-mongodb-repository-pattern">
             <example-header>
-                <example-title>Implementation</example-title>
-                <example-subtitle>Repository + service composition</example-subtitle>
+                <example-title>Repository pattern</example-title>
+                <example-subtitle>MongoRepository with derived finders; avoid string-concatenated queries</example-subtitle>
             </example-header>
-            <example-description>
-                <![CDATA[
-                Use `MongoRepository` for standard CRUD operations. Keep repositories focused on data access and use application services to coordinate business logic.
-                ]]>
-            </example-description>
+            <example-description><![CDATA[Extend `MongoRepository` (or `ListCrudRepository` for `List&lt;T&gt;` return types). Use Spring Data's query derivation for simple lookups and `@Query` with named parameters for complex ones. Never build MongoDB JSON query strings from user input — use the Criteria API or `@Query` with `:?0` / `:#{[0]}` placeholders.]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[package com.example.orders.service;
-
-import com.example.orders.domain.OrderDocument;
-import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.stereotype.Service;
+                    <code-block language="java"><![CDATA[import org.springframework.data.mongodb.repository.MongoRepository;
+import org.springframework.data.mongodb.repository.Query;
+import org.springframework.stereotype.Repository;
+import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
-interface OrderRepository extends MongoRepository<OrderDocument, String> {
+@Repository
+public interface OrderRepository extends MongoRepository<OrderDocument, String> {
+
     Optional<OrderDocument> findByOrderNumber(String orderNumber);
-}
+
+    List<OrderDocument> findByCustomerId(String customerId);
+
+    // Named @Query — binds the parameter safely
+    @Query("{ 'created_at': { $gte: ?0 } }")
+    List<OrderDocument> findCreatedAfter(Instant since);
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Bad: raw string concatenation into a Mongo query — NoSQL injection risk
+class OrderRepositoryBad {
+    @Autowired MongoTemplate mongoTemplate;
+
+    List<OrderDocument> findByCustomer(String customerId) {
+        String json = "{ 'customer_id': '" + customerId + "' }"; // injection-prone
+        return mongoTemplate.find(new BasicQuery(json), OrderDocument.class);
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="4" id="315-frameworks-spring-mongodb-service-layer">
+            <example-header>
+                <example-title>Service layer</example-title>
+                <example-subtitle>Constructor injection, @Transactional for multi-document atomicity</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[Keep the repository out of REST controllers — route everything through a service. Declare the class `@Transactional(readOnly = true)` and override write methods with `@Transactional`. MongoDB multi-document transactions require a replica set; Spring Data MongoDB supports them transparently when the driver is connected to one.]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
+import java.util.Optional;
 
 @Service
+@Transactional(readOnly = true)
 class OrderService {
+
     private final OrderRepository repository;
 
     OrderService(OrderRepository repository) {
         this.repository = repository;
     }
 
-    OrderDocument create(OrderDocument doc) {
-        return repository.save(doc);
+    Optional<OrderDocument> findByOrderNumber(String orderNumber) {
+        return repository.findByOrderNumber(orderNumber);
+    }
+
+    List<OrderDocument> findByCustomer(String customerId) {
+        return repository.findByCustomerId(customerId);
+    }
+
+    @Transactional
+    OrderDocument create(String orderNumber, String customerId) {
+        return repository.save(OrderDocument.of(orderNumber, customerId));
+    }
+
+    @Transactional
+    OrderDocument updateCustomer(String orderId, String newCustomerId) {
+        return repository.findById(orderId)
+            .map(o -> new OrderDocument(o.id(), o.orderNumber(), newCustomerId, o.createdAt(), o.version()))
+            .map(repository::save)
+            .orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderId));
     }
 }]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[package com.example.orders.api;
-
-import org.springframework.web.bind.annotation.RestController;
-
-// Bad: mixing controller concerns, persistence, and mapping in one class
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Bad: no transaction boundary; repository directly in REST controller leaks persistence
 @RestController
-class OrderControllerAndRepositoryAndService {
-    // Direct MongoTemplate usage inside controller without service layer
+class OrderController {
+    @Autowired OrderRepository repository;
+
+    @PostMapping("/orders")
+    OrderDocument create(String orderNumber) {
+        return repository.save(new OrderDocument(null, orderNumber, null, null, null));
+    }
 }]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
-        <example number="3" id="spring-mongo-error-handling">
+        <example number="5" id="315-frameworks-spring-mongodb-mongotemplate-for-complex-queries">
+            <example-header>
+                <example-title>MongoTemplate for complex queries</example-title>
+                <example-subtitle>Criteria API — type-safe and injection-free</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[Use `MongoTemplate` with the `Criteria` and `Query` builder API when query derivation is insufficient (e.g. dynamic optional filters, aggregation pipelines). This keeps query logic readable, testable, and free of string concatenation risks.]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.stereotype.Repository;
+import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
+
+@Repository
+class OrderCustomRepository {
+
+    private final MongoTemplate mongoTemplate;
+
+    OrderCustomRepository(MongoTemplate mongoTemplate) {
+        this.mongoTemplate = mongoTemplate;
+    }
+
+    List<OrderDocument> search(String customerId, Instant since) {
+        var criteria = new ArrayList<Criteria>();
+        if (customerId != null) {
+            criteria.add(Criteria.where("customer_id").is(customerId));
+        }
+        if (since != null) {
+            criteria.add(Criteria.where("created_at").gte(since));
+        }
+        var query = criteria.isEmpty()
+            ? new Query()
+            : new Query(new Criteria().andOperator(criteria.toArray(new Criteria[0])));
+        return mongoTemplate.find(query, OrderDocument.class);
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Bad: building the JSON query document from user input
+List<OrderDocument> search(String customerId) {
+    String json = "{ customer_id: '" + customerId + "' }"; // injection risk
+    return mongoTemplate.find(new BasicQuery(json), OrderDocument.class);
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="6" id="315-frameworks-spring-mongodb-error-handling">
             <example-header>
                 <example-title>Error handling</example-title>
-                <example-subtitle>Duplicate key and optimistic locking</example-subtitle>
+                <example-subtitle>DuplicateKeyException, OptimisticLockingFailureException — translate at service boundary</example-subtitle>
             </example-header>
-            <example-description>
-                <![CDATA[
-                Handle `DuplicateKeyException` for unique index violations. Use `@Version` for optimistic locking to prevent concurrent updates from overwriting each other, and handle `OptimisticLockingFailureException`.
-                ]]>
-            </example-description>
+            <example-description><![CDATA[Catch MongoDB-specific Spring Data exceptions (`DuplicateKeyException`, `OptimisticLockingFailureException`) at the service layer and translate them into domain exceptions or meaningful HTTP status codes. Never let raw driver-level exceptions leak to the API. Avoid blanket `catch (Exception e)` which swallows the failure and loses context.]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[package com.example.orders.service;
-
-import com.example.orders.domain.OrderDocument;
-import org.springframework.dao.DuplicateKeyException;
+                    <code-block language="java"><![CDATA[import org.springframework.dao.DuplicateKeyException;
 import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
+@Transactional(readOnly = true)
 class OrderService {
+
     private final OrderRepository repository;
 
     OrderService(OrderRepository repository) {
         this.repository = repository;
     }
 
-    OrderDocument create(OrderDocument doc) {
+    @Transactional
+    OrderDocument create(String orderNumber, String customerId) {
         try {
-            return repository.save(doc);
+            return repository.save(OrderDocument.of(orderNumber, customerId));
         } catch (DuplicateKeyException ex) {
-            throw new IllegalStateException("Order number already exists", ex);
+            throw new IllegalStateException("Order number already exists: " + orderNumber, ex);
+        }
+    }
+
+    @Transactional
+    OrderDocument updateCustomer(String orderId, String newCustomerId) {
+        try {
+            return repository.findById(orderId)
+                .map(o -> new OrderDocument(o.id(), o.orderNumber(), newCustomerId, o.createdAt(), o.version()))
+                .map(repository::save)
+                .orElseThrow(() -> new IllegalArgumentException("Order not found: " + orderId));
         } catch (OptimisticLockingFailureException ex) {
-            throw new IllegalStateException("Concurrent update detected", ex);
+            throw new IllegalStateException("Concurrent update on order: " + orderId, ex);
         }
     }
 }]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[package com.example.orders.service;
-
-import com.example.orders.domain.OrderDocument;
-import org.springframework.stereotype.Service;
-
-@Service
-class BadOrderService {
-    private final OrderRepository repository;
-
-    BadOrderService(OrderRepository repository) {
-        this.repository = repository;
-    }
-
-    OrderDocument create(OrderDocument doc) {
-        try {
-            return repository.save(doc);
-        } catch (Exception ignored) {
-            // Bad: hiding persistence failures makes debugging impossible
-            return null;
-        }
+                    <code-block language="java"><![CDATA[OrderDocument create(String orderNumber, String customerId) {
+    try {
+        return repository.save(OrderDocument.of(orderNumber, customerId));
+    } catch (Exception e) {
+        // Bad: generic catch + silent return null hides duplicate-key and network errors
+        return null;
     }
 }]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
-        <example number="4" id="spring-mongo-testing-testcontainers">
+        <example number="7" id="315-frameworks-spring-mongodb-testing">
             <example-header>
                 <example-title>Testing</example-title>
-                <example-subtitle>Repository tests with MongoDB Testcontainers</example-subtitle>
+                <example-subtitle>@DataMongoTest slice with Testcontainers for repository behaviour</example-subtitle>
             </example-header>
-            <example-description>
-                <![CDATA[
-                Use a real MongoDB container for repository/service integration tests and inject connection settings dynamically.
-                ]]>
-            </example-description>
+            <example-description><![CDATA[Use `@DataMongoTest` to spin up only the MongoDB slice — repositories, `MongoTemplate`, and auto-configurations — without the full web layer. Pair it with a `MongoDBContainer` from Testcontainers to run tests against the real dialect. Never mock the repository inside this test — the entire purpose is exercising real MongoDB behaviour.]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[package com.example.orders.service;
-
+                    <code-block language="java"><![CDATA[import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
 import org.springframework.test.context.DynamicPropertyRegistry;
 import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @DataMongoTest
 @Testcontainers
 class OrderRepositoryIT {
 
     @Container
-    static MongoDBContainer mongo = new MongoDBContainer(DockerImageName.parse("mongo:7.0"));
+    static MongoDBContainer mongo = new MongoDBContainer("mongo:7.0");
 
     @DynamicPropertySource
     static void mongoProps(DynamicPropertyRegistry registry) {
         registry.add("spring.data.mongodb.uri", mongo::getReplicaSetUrl);
     }
 
+    @Autowired
+    OrderRepository repository;
+
+    @AfterEach
+    void cleanup() { repository.deleteAll(); }
+
     @Test
-    void shouldPersistAndQueryOrder() {
-        // persist document and verify query behavior
+    void save_generatesId() {
+        OrderDocument saved = repository.save(OrderDocument.of("ORD-001", "CUST-1"));
+        assertThat(saved.id()).isNotNull();
+    }
+
+    @Test
+    void findByOrderNumber_returnsDocument() {
+        repository.save(OrderDocument.of("ORD-002", "CUST-2"));
+        Optional<OrderDocument> found = repository.findByOrderNumber("ORD-002");
+        assertThat(found).isPresent();
+        assertThat(found.get().customerId()).isEqualTo("CUST-2");
     }
 }]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[// Bad: test assumes local MongoDB on localhost and fails in CI
-class OrderRepositoryLocalOnlyTest {}]]></code-block>
+                    <code-block language="java"><![CDATA[// Bad: @SpringBootTest loads full context; mocking repository adds no value
+@SpringBootTest
+class OrderRepositoryTest {
+    @MockBean OrderRepository repository;
+
+    @Test
+    void findByOrderNumber() {
+        when(repository.findByOrderNumber("ORD-001"))
+            .thenReturn(Optional.of(new OrderDocument("id", "ORD-001", "c", null, null)));
+        // verifies Mockito wiring only — tests nothing about real MongoDB
+    }
+}]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
     </examples>
     <output-format>
         <output-format-list>
-            <output-format-item>**ANALYZE** MongoDB code: document design, repository interfaces, indexing strategies, and error handling</output-format-item>
-            <output-format-item>**CATEGORIZE** issues by impact (CORRECTNESS, PERFORMANCE, DATA INTEGRITY)</output-format-item>
-            <output-format-item>**APPLY** Spring Data MongoDB-aligned fixes: use `@Document`, `@Id`, `@Version`, and proper index annotations</output-format-item>
-            <output-format-item>**IMPLEMENT** changes so schema and queries stay consistent</output-format-item>
-            <output-format-item>**EXPLAIN** trade-offs (e.g., embedding vs referencing documents, index overhead)</output-format-item>
-            <output-format-item>**TEST** repository behavior with `@DataMongoTest` and Testcontainers</output-format-item>
+            <output-format-item>**ANALYZE** MongoDB code: document mapping completeness, index declarations, repository query safety, service transaction placement, error handling specificity, and DTO vs document leakage</output-format-item>
+            <output-format-item>**CATEGORIZE** issues by impact (SECURITY for injection risk, CORRECTNESS for missing @Version or transactions, PERFORMANCE for missing indexes or unbounded queries, MAINTAINABILITY for mutable documents or missing factory methods)</output-format-item>
+            <output-format-item>**APPLY** Spring Data MongoDB–aligned fixes: explicit collection, @Field, @CompoundIndex, @Version, safe Criteria-based queries, service-layer transactions, exception translation</output-format-item>
+            <output-format-item>**IMPLEMENT** changes so document model, indexes, repositories, and tests stay consistent</output-format-item>
+            <output-format-item>**EXPLAIN** trade-offs (MongoRepository derived finders vs MongoTemplate Criteria, embedded Flapdoodle vs Testcontainers, multi-document transactions vs application-level idempotency)</output-format-item>
+            <output-format-item>**TEST** repository behaviour with `@DataMongoTest` + Testcontainers; never mock repositories inside persistence slice tests</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
         </output-format-list>
     </output-format>
     <safeguards>
         <safeguards-list>
-            <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before ANY refactoring</safeguards-item>
-            <safeguards-item>**INDEXING**: Ensure indexes are created (either via Spring Data auto-index creation in dev, or explicitly via scripts in prod)</safeguards-item>
-            <safeguards-item>**CONCURRENCY**: Use `@Version` to prevent lost updates in concurrent environments</safeguards-item>
-            <safeguards-item>**TRANSACTIONS**: MongoDB supports multi-document transactions; ensure replica sets are used if `@Transactional` is applied</safeguards-item>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before ANY MongoDB refactoring — compilation failure is a HARD STOP</safeguards-item>
+            <safeguards-item>**CRITICAL VALIDATION**: Run `./mvnw clean verify` after changes; confirm repository tests pass before promoting</safeguards-item>
+            <safeguards-item>**INJECTION SAFETY**: Never concatenate user input into MongoDB query strings or `BasicQuery` objects — use Criteria API or `@Query` with bound parameters</safeguards-item>
+            <safeguards-item>**ERROR HANDLING**: Catch `DuplicateKeyException` and `OptimisticLockingFailureException` at the service boundary and translate to domain exceptions; never swallow with a generic catch</safeguards-item>
+            <safeguards-item>**OPTIMISTIC LOCKING**: Adding `@Version` to an existing document requires a planned rollout for existing documents; test stale-update behavior before enabling it in production</safeguards-item>
+            <safeguards-item>**INDEXES**: Deploy index changes as coordinated background operations on large collections; avoid blocking foreground index builds in production</safeguards-item>
+            <safeguards-item>**API BOUNDARIES**: Never return managed `@Document` entities directly from REST controllers — map to DTOs to keep API contracts stable and prevent field leakage</safeguards-item>
+            <safeguards-item>**INCREMENTAL SAFETY**: Change one repository surface or document mapping at a time; verify with `@DataMongoTest` between steps</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>
