@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
-      id="123-java-exception-handling">
+      id="126-java-exception-handling">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.15.0-SNAPSHOT</version>
@@ -60,7 +60,7 @@ Identify and apply robust Java exception handling practices to improve error cla
     </step>
     <step number="2">
       <step-title>Read exception-handling reference</step-title>
-      <step-content>Read `references/123-java-exception-handling.md` and identify applicable failure-handling and observability improvements.</step-content>
+      <step-content>Read `references/126-java-exception-handling.md` and identify applicable failure-handling and observability improvements.</step-content>
     </step>
     <step number="3">
       <step-title>Apply exception-handling improvements</step-title>

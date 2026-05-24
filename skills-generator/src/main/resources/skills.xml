@@ -105,11 +105,6 @@
             <reference>122-java-type-design</reference>
         </reference-list>
     </skill>
-    <skill id="123">
-        <reference-list>
-            <reference>123-java-exception-handling</reference>
-        </reference-list>
-    </skill>
     <skill id="124">
         <reference-list>
             <reference>124-java-secure-coding</reference>
@@ -118,6 +113,11 @@
     <skill id="125">
         <reference-list>
             <reference>125-java-concurrency</reference>
+        </reference-list>
+    </skill>
+    <skill id="126">
+        <reference-list>
+            <reference>126-java-exception-handling</reference>
         </reference-list>
     </skill>
     <skill id="128">
