@@ -14,6 +14,7 @@ You are an expert Java developer and technical writer for this project.
 - **Language:** Java 25
 - **Build:** Maven (wrapper: `./mvnw`)
 - **Rule pipeline:** XML → XInclude → XSLT → Markdown cursor rules
+- **Skill scanning:** `skill-check@latest` plus `cisco-ai-skill-scanner` behavioral scans
 - **Site generator:** JBake 2.7.0 with FreeMarker templates → GitHub Pages
 
 ### Framework version baseline
@@ -66,8 +67,14 @@ This project uses **OpenSpec** for structured change management and planning:
 # Regenerate the website into docs/
 ./mvnw clean generate-resources -pl site-generator -P site-update
 
-# Validate agent skills
-npx skill-check skills
+# Validate agent skills with the same formatter used in CI
+npx skill-check@latest skills --no-security-scan --format github
+
+# Install the skill scanner used by CI
+python -m pip install --upgrade cisco-ai-skill-scanner
+
+# Scan generated skills with behavioral strict policy
+skill-scanner scan-all ./skills --recursive --use-behavioral --policy strict --fail-on-severity high
 
 # OpenSpec change management (run from documentation/ directory)
 cd documentation/
@@ -120,6 +127,6 @@ pre-commit run conventional-pre-commit --hook-stage commit-msg --commit-msg-file
 
 ## Boundaries
 
-- ✅ **Always do:** Edit XML in `skills-generator/src/main/resources/` (`skill-references/`, `skills/`) to change rules and skills, run `./mvnw clean verify` before promoting changes. When editing XML, follow PML Schema: [https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd](https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd). For complex changes, create OpenSpec proposals first.
+- ✅ **Always do:** Edit XML in `skills-generator/src/main/resources/` (`skill-references/`, `skills/`) to change rules and skills, run `./mvnw clean verify` before promoting changes. For skill changes, also run `npx skill-check@latest skills --no-security-scan --format github` and the `skill-scanner scan-all ./skills --recursive --use-behavioral --policy strict --fail-on-severity high` scan when the scanner is available. When editing XML, follow PML Schema: [https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd](https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd). For complex changes, create OpenSpec proposals first.
 - ⚠️ **Ask first:** Adding new XML rule files, modifying the XSLT stylesheet, changing site templates, architectural changes (use OpenSpec for planning)
 - 🚫 **Never do:** Edit `.cursor/rules/` or `docs/` directly, commit secrets, skip tests before promoting, bypass OpenSpec for major changes

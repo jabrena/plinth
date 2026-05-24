@@ -1,5 +1,5 @@
 ---
-name: 123-java-exception-handling
+name: 126-java-exception-handling
 description: Use when you need to apply Java exception handling best practices — including using specific exception types, managing resources with try-with-resources, securing exception messages, preserving error context via exception chaining, validating inputs early with fail-fast principles, handling thread interruption correctly, documenting exceptions with @throws, enforcing logging policy, translating exceptions at API boundaries, managing retries and idempotency, enforcing timeouts, attaching suppressed exceptions, and propagating failures in async/reactive code. This should trigger for requests such as Exception handling; Use try-with-resources in Java code; Create exception chaining in Java code; Apply fail-fast validation in Java code. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
@@ -54,7 +54,7 @@ Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.
 
 2. **Read exception-handling reference**
 
-Read `references/123-java-exception-handling.md` and identify applicable failure-handling and observability improvements.
+Read `references/126-java-exception-handling.md` and identify applicable failure-handling and observability improvements.
 
 3. **Apply exception-handling improvements**
 
@@ -66,4 +66,4 @@ Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.
 
 ## Reference
 
-For detailed guidance, examples, and constraints, see [references/123-java-exception-handling.md](references/123-java-exception-handling.md).
+For detailed guidance, examples, and constraints, see [references/126-java-exception-handling.md](references/126-java-exception-handling.md).
