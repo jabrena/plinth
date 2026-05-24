@@ -5,36 +5,83 @@
         <version>0.15.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
         <title>Micronaut — MongoDB</title>
-        <description>Use when you need MongoDB in Micronaut Data and want examples for design, implementation, and error handling.</description>
+        <description>Use when you need MongoDB persistence in Micronaut — including Maven dependency, @MappedEntity document design, @MongoRepository with typed finders and @MongoFindQuery, @Singleton service boundaries, optional @Transactional use where MongoDB transaction support is configured, and explicit error handling for MongoWriteException and DataAccessException. This should trigger for requests such as Add MongoDB in Micronaut; Review Micronaut Data Mongo entities; Improve error handling for Micronaut Mongo operations.</description>
     </metadata>
     <role>You are a Senior software engineer with extensive experience in Micronaut and MongoDB</role>
-    <goal>
-        Apply Micronaut MongoDB best practices with explicit document design, repository implementation, and safe handling of persistence failures.
-    </goal>
+    <goal><![CDATA[Design and implement MongoDB persistence in Micronaut using Micronaut Data MongoDB. Prefer `@MappedEntity` records for immutable, compile-time-verified persistence types. Declare repositories as `@MongoRepository` interfaces so Micronaut generates implementations at compile time. Keep business logic in `@Singleton` services — never in repositories or controllers. Guard all queries with bound parameters — never concatenate user input into filter strings.
+
+**What is covered in this Skill?**
+
+- Maven `micronaut-data-mongodb` and `mongodb-driver-sync` dependencies
+- `@MappedEntity` document design with `@Id`, `@MappedProperty`, and `@GeneratedValue`
+- `@MongoRepository` extending `CrudRepository` with derived finders
+- `@MongoFindQuery` for complex filter expressions with bound parameters
+- `@Singleton` service with `io.micronaut.transaction.annotation.Transactional`
+- Pagination with `Pageable` and `Page<T>`
+- DTO projections with interface projections
+- Error handling: `MongoWriteException` / duplicate-key category checks, `DataAccessException`, exception chaining
+- Testing with `@MicronautTest` + `TestPropertyProvider` + Testcontainers MongoDB
+
+**Scope:** Apply recommendations based on the reference rules and good/bad code examples.
+ ]]></goal>
     <constraints>
-        <constraints-description>Compile first; stop on failure; verify after changes.</constraints-description>
+        <constraints-description>Before applying any MongoDB changes, ensure the project compiles. Compilation failure is a BLOCKING condition.</constraints-description>
         <constraint-list>
-            <constraint>**MANDATORY**: Run `./mvnw compile` before applying changes</constraint>
-            <constraint>**SAFETY**: If compile fails, stop immediately</constraint>
-            <constraint>**VERIFY**: Run `./mvnw clean verify` after changes</constraint>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**SAFETY**: If compilation fails, stop immediately</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+            <constraint>**INJECTION**: Never concatenate user input into MongoDB filter strings or raw JSON queries — always use derived finders or `@MongoFindQuery` with bound parameters</constraint>
+            <constraint>**BEFORE APPLYING**: Read the reference for detailed rules and good/bad patterns</constraint>
+            <constraint>**EDGE CASE**: If the user goal is ambiguous, stop and ask a clarifying question before editing files</constraint>
         </constraint-list>
     </constraints>
     <examples>
         <toc auto-generate="true" />
-        <example number="1" id="micronaut-mongo-design">
+        <example number="1" id="515-frameworks-micronaut-mongodb-maven-dependency">
             <example-header>
-                <example-title>Design</example-title>
-                <example-subtitle>Document shape and unique keys</example-subtitle>
+                <example-title>Maven dependency</example-title>
+                <example-subtitle>Add micronaut-data-mongodb and mongodb-driver-sync; BOM manages versions</example-subtitle>
             </example-header>
-            <example-description>
-                <![CDATA[
-                Use `@MappedEntity` to define collections. Use `@Id` for the primary key. Use `@MappedProperty` to map Java fields to specific BSON field names.
-                ]]>
-            </example-description>
+            <example-description><![CDATA[Add `micronaut-data-mongodb` for the repository abstraction and `mongodb-driver-sync` for the synchronous driver. The Micronaut BOM manages both versions — do not pin them explicitly. Add the Testcontainers MongoDB artifact in `test` scope for real-database integration tests.]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[package com.example.orders.domain;
+                    <code-block language="xml"><![CDATA[<!-- pom.xml — Micronaut BOM manages versions -->
+<dependency>
+    <groupId>io.micronaut.data</groupId>
+    <artifactId>micronaut-data-mongodb</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.mongodb</groupId>
+    <artifactId>mongodb-driver-sync</artifactId>
+    <scope>runtime</scope>
+</dependency>
 
+<!-- Testcontainers MongoDB for integration tests -->
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>mongodb</artifactId>
+    <scope>test</scope>
+</dependency>]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="xml"><![CDATA[<!-- Bad: pinned versions fight the BOM and risk classpath conflicts -->
+<dependency>
+    <groupId>io.micronaut.data</groupId>
+    <artifactId>micronaut-data-mongodb</artifactId>
+    <version>4.7.0</version>
+</dependency>]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="2" id="515-frameworks-micronaut-mongodb-entity-design">
+            <example-header>
+                <example-title>Entity design</example-title>
+                <example-subtitle>@MappedEntity record with @Id, @MappedProperty, and factory method</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[Annotate persistence types with `@MappedEntity("collection-name")` to bind them to an explicit MongoDB collection. Use `@MappedProperty` to map Java record components to MongoDB document field names when they differ (e.g. snake_case storage vs camelCase Java). Leave `@Id` null for new documents — Micronaut Data sets it after insert. Expose a static factory method so callers never construct a raw entity with a non-null `id`.]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.data.annotation.GeneratedValue;
 import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.data.annotation.MappedProperty;
@@ -43,202 +90,297 @@ import java.time.Instant;
 
 @MappedEntity("orders")
 public record OrderDocument(
-    @Id ObjectId id,
+    @Id @GeneratedValue ObjectId id,
     @MappedProperty("order_number") String orderNumber,
-    String customerId,
-    Instant createdAt
-) {}]]></code-block>
+    @MappedProperty("customer_id") String customerId,
+    @MappedProperty("created_at") Instant createdAt
+) {
+    public static OrderDocument of(String orderNumber, String customerId) {
+        return new OrderDocument(null, orderNumber, customerId, Instant.now());
+    }
+}]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[package com.example.orders.domain;
-
-// Bad: no stable identifier strategy for business lookups, missing @MappedEntity
-record OrderDocument(Object payload) {}]]></code-block>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Bad: missing @MappedEntity — Micronaut Data cannot derive collection name reliably;
+// no @MappedProperty — field names stored as Java camelCase, breaking schema conventions;
+// mutable class with setters allows accidental mutation after load
+public class OrderDocument {
+    @Id private ObjectId id;
+    private String orderNumber;
+    public void setId(ObjectId id) { this.id = id; }
+}]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
-        <example number="2" id="micronaut-mongo-implementation">
+        <example number="3" id="515-frameworks-micronaut-mongodb-repository-interface">
             <example-header>
-                <example-title>Implementation</example-title>
-                <example-subtitle>@MongoRepository with typed query methods</example-subtitle>
+                <example-title>Repository interface</example-title>
+                <example-subtitle>@MongoRepository with typed derived finders and @MongoFindQuery</example-subtitle>
             </example-header>
-            <example-description>
-                <![CDATA[
-                Use `@MongoRepository` extending `CrudRepository`. Keep data access logic in the repository and coordinate via `@Singleton` services.
-                ]]>
-            </example-description>
+            <example-description><![CDATA[Extend `CrudRepository` and annotate with `@MongoRepository`. Micronaut Data generates the implementation at compile time, validating method names and query correctness. Use query derivation (`findByOrderNumber`) for simple equality lookups. Use `@MongoFindQuery` with a bound filter document for composite or range queries — never concatenate user input into the filter string.]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[package com.example.orders.service;
-
-import com.example.orders.domain.OrderDocument;
+                    <code-block language="java"><![CDATA[import io.micronaut.data.mongodb.annotation.MongoFindQuery;
 import io.micronaut.data.mongodb.annotation.MongoRepository;
 import io.micronaut.data.repository.CrudRepository;
-import jakarta.inject.Singleton;
 import org.bson.types.ObjectId;
+import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 @MongoRepository
-interface OrderRepository extends CrudRepository<OrderDocument, ObjectId> {
+public interface OrderRepository extends CrudRepository<OrderDocument, ObjectId> {
+
+    // Derived finder — safe, generated at compile time
     Optional<OrderDocument> findByOrderNumber(String orderNumber);
-}
 
-@Singleton
-class OrderService {
-    private final OrderRepository repository;
+    List<OrderDocument> findByCustomerId(String customerId);
 
-    OrderService(OrderRepository repository) {
-        this.repository = repository;
-    }
-
-    OrderDocument create(OrderDocument doc) {
-        return repository.save(doc);
-    }
+    // @MongoFindQuery: bound parameter :createdAt — no string concatenation
+    @MongoFindQuery("{ 'created_at': { $gte: :createdAt } }")
+    List<OrderDocument> findCreatedAfter(Instant createdAt);
 }]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[package com.example.orders.service;
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Bad: missing @MongoRepository — not a Micronaut Data bean
+public interface OrderRepository extends CrudRepository<OrderDocument, ObjectId> {}
 
-import jakarta.inject.Singleton;
-
-@Singleton
-class BadOrderService {
-    // Bad: repository replaced by ad-hoc raw JSON query strings in services
-    void search(String userInput) {
-        String q = "{orderNumber:'" + userInput + "'}";
-        // execute raw query...
+// Bad: raw string concatenation into a Mongo filter — NoSQL injection risk
+class OrderCustomQuery {
+    @Inject MongoClient client;
+    List<OrderDocument> findByCustomer(String customerId) {
+        String filter = "{ customer_id: '" + customerId + "' }"; // injection-prone
+        return ...; // unsafe
     }
 }]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
-        <example number="3" id="micronaut-mongo-error-handling">
+        <example number="4" id="515-frameworks-micronaut-mongodb-service-layer">
+            <example-header>
+                <example-title>Service layer</example-title>
+                <example-subtitle>@Singleton service with @Transactional for multi-step writes</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[Wrap business use cases in `@Singleton` services. Use `io.micronaut.transaction.annotation.Transactional` for methods that coordinate multiple repository writes. MongoDB multi-document transactions require a replica set — verify infrastructure support before enabling. Constructor-inject the repository to maintain testability and keep the API layer out of persistence concerns.]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.context.annotation.Singleton;
+import io.micronaut.transaction.annotation.Transactional;
+import jakarta.inject.Inject;
+import org.bson.types.ObjectId;
+import java.util.Optional;
+
+@Singleton
+public class OrderService {
+
+    private final OrderRepository repository;
+
+    @Inject
+    public OrderService(OrderRepository repository) {
+        this.repository = repository;
+    }
+
+    @Transactional
+    public OrderDocument create(String orderNumber, String customerId) {
+        return repository.save(OrderDocument.of(orderNumber, customerId));
+    }
+
+    public Optional<OrderDocument> findByOrderNumber(String orderNumber) {
+        return repository.findByOrderNumber(orderNumber);
+    }
+
+    @Transactional
+    public void delete(ObjectId id) {
+        repository.deleteById(id);
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Bad: controller calling repository directly — no service layer, untestable
+@Controller("/orders")
+class OrderController {
+    @Inject OrderRepository repository;
+
+    @Post
+    OrderDocument create(String body) {
+        return repository.save(OrderDocument.of(body, "unknown")); // no validation or mapping
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="5" id="515-frameworks-micronaut-mongodb-pagination">
+            <example-header>
+                <example-title>Pagination</example-title>
+                <example-subtitle>Pageable and Page&lt;T&gt; for bounded list queries</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[Never expose unbounded `findAll()` on large collections. Use `PageableRepository` or accept a `Pageable` parameter and return `Page&lt;T&gt;`. This keeps memory consumption bounded and lets callers navigate results page by page.]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.data.model.Page;
+import io.micronaut.data.model.Pageable;
+import io.micronaut.data.mongodb.annotation.MongoRepository;
+import io.micronaut.data.repository.PageableRepository;
+import org.bson.types.ObjectId;
+
+@MongoRepository
+public interface OrderRepository extends PageableRepository<OrderDocument, ObjectId> {
+
+    Page<OrderDocument> findByCustomerId(String customerId, Pageable pageable);
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[@MongoRepository
+interface OrderRepository extends CrudRepository<OrderDocument, ObjectId> {
+
+    // Bad: loads every document in the collection — OOM risk on large datasets
+    List<OrderDocument> findAll();
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="6" id="515-frameworks-micronaut-mongodb-error-handling">
             <example-header>
                 <example-title>Error handling</example-title>
-                <example-subtitle>Duplicate key and transient timeout handling</example-subtitle>
+                <example-subtitle>MongoWriteException and DataAccessException — translate at service boundary</example-subtitle>
             </example-header>
-            <example-description>
-                <![CDATA[
-                Handle `DuplicateKeyException` and `DataAccessException` to provide meaningful domain errors instead of generic stack traces.
-                ]]>
-            </example-description>
+            <example-description><![CDATA[Catch MongoDB driver write failures (for example duplicate-key violations via `MongoWriteException` and `ErrorCategory.DUPLICATE_KEY`) and `DataAccessException` at the service boundary, then translate them into meaningful domain exceptions. Always chain the original exception to preserve the stack trace. Never return `null` from a catch block — it corrupts the caller's control flow.]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[package com.example.orders.service;
-
-import com.example.orders.domain.OrderDocument;
+                    <code-block language="java"><![CDATA[import com.mongodb.ErrorCategory;
+import com.mongodb.MongoWriteException;
+import io.micronaut.context.annotation.Singleton;
 import io.micronaut.data.exceptions.DataAccessException;
-import com.mongodb.DuplicateKeyException;
-import jakarta.inject.Singleton;
+import io.micronaut.transaction.annotation.Transactional;
+import jakarta.inject.Inject;
 
 @Singleton
-class OrderService {
-    private final OrderRepository repository;
+public class OrderService {
 
-    OrderService(OrderRepository repository) {
-        this.repository = repository;
-    }
+    @Inject
+    OrderRepository repository;
 
-    OrderDocument save(OrderDocument doc) {
+    @Transactional
+    public OrderDocument create(String orderNumber, String customerId) {
         try {
-            return repository.save(doc);
-        } catch (DuplicateKeyException ex) {
-            throw new IllegalStateException("Duplicate order number", ex);
+            return repository.save(OrderDocument.of(orderNumber, customerId));
+        } catch (MongoWriteException ex) {
+            if (ex.getError().getCategory() == ErrorCategory.DUPLICATE_KEY) {
+                throw new IllegalStateException("Order number already exists: " + orderNumber, ex);
+            }
+            throw ex;
         } catch (DataAccessException ex) {
-            throw new IllegalStateException("Mongo data access failure", ex);
+            throw new IllegalStateException("MongoDB data access failure saving order: " + orderNumber, ex);
         }
     }
 }]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[package com.example.orders.service;
-
-import com.example.orders.domain.OrderDocument;
-import jakarta.inject.Singleton;
-
-@Singleton
-class BadOrderService {
-    private final OrderRepository repository;
-
-    BadOrderService(OrderRepository repository) {
-        this.repository = repository;
-    }
-
-    OrderDocument save(OrderDocument doc) {
-        try {
-            return repository.save(doc);
-        } catch (Exception e) {
-            return null; // Bad: hides failure and corrupts control flow
-        }
+                    <code-block language="java"><![CDATA[public OrderDocument create(String orderNumber, String customerId) {
+    try {
+        return repository.save(OrderDocument.of(orderNumber, customerId));
+    } catch (Exception e) {
+        // Bad: generic catch + null return hides duplicate-key, network errors, schema drift
+        return null;
     }
 }]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
-        <example number="4" id="micronaut-mongo-testing-testcontainers">
+        <example number="7" id="515-frameworks-micronaut-mongodb-integration-testing">
             <example-header>
-                <example-title>Testing</example-title>
-                <example-subtitle>@MicronautTest with MongoDB Testcontainers</example-subtitle>
+                <example-title>Integration testing</example-title>
+                <example-subtitle>@MicronautTest + TestPropertyProvider + Testcontainers MongoDB</example-subtitle>
             </example-header>
-            <example-description>
-                <![CDATA[
-                Use MongoDB Testcontainers with `TestPropertyProvider` to make repository tests deterministic and CI-friendly.
-                ]]>
-            </example-description>
+            <example-description><![CDATA[Use `@MicronautTest` with `TestPropertyProvider` to supply the real MongoDB connection string from a Testcontainers `MongoDBContainer`. This runs tests against a real MongoDB instance with the actual driver, schema, and index behaviour. Never mock `@MongoRepository` inside a persistence test — the goal is exercising real MongoDB behaviour.]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[package com.example.orders.service;
-
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+                    <code-block language="java"><![CDATA[import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
 import io.micronaut.test.support.TestPropertyProvider;
+import jakarta.inject.Inject;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
 import java.util.Map;
+import java.util.Optional;
 
-@MicronautTest
+import static org.assertj.core.api.Assertions.assertThat;
+
+@MicronautTest(transactional = false)
 @Testcontainers
-class OrderMongoIT implements TestPropertyProvider {
+class OrderRepositoryIT implements TestPropertyProvider {
 
     @Container
-    static MongoDBContainer mongo = new MongoDBContainer(DockerImageName.parse("mongo:7.0"));
+    static MongoDBContainer mongo = new MongoDBContainer("mongo:7.0");
+
+    @Inject
+    OrderRepository repository;
 
     @Override
     public Map<String, String> getProperties() {
+        if (!mongo.isRunning()) mongo.start();
         return Map.of("mongodb.uri", mongo.getReplicaSetUrl());
     }
 
+    @AfterEach
+    void cleanup() { repository.deleteAll(); }
+
     @Test
-    void shouldPersistDocument() {
-        // verify repository persistence/query behavior
+    void save_generatesId() {
+        OrderDocument saved = repository.save(OrderDocument.of("ORD-001", "CUST-1"));
+        assertThat(saved.id()).isNotNull();
+    }
+
+    @Test
+    void findByOrderNumber_returnsDocument() {
+        repository.save(OrderDocument.of("ORD-002", "CUST-2"));
+        Optional<OrderDocument> found = repository.findByOrderNumber("ORD-002");
+        assertThat(found).isPresent();
+        assertThat(found.get().customerId()).isEqualTo("CUST-2");
     }
 }]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[// Bad: test assumes local Mongo server state and shared data
-class OrderMongoSharedEnvIT {}]]></code-block>
+                    <code-block language="java"><![CDATA[// Bad: mocking @MongoRepository proves nothing about real MongoDB behavior
+@MicronautTest
+class OrderRepositoryTest {
+    @MockBean(OrderRepository.class)
+    OrderRepository mockRepository;
+
+    @Test
+    void findByOrderNumber() {
+        when(mockRepository.findByOrderNumber("ORD-001")).thenReturn(Optional.empty());
+        // verifies Mockito wiring only — no actual MongoDB interaction
+    }
+}]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
     </examples>
     <output-format>
         <output-format-list>
-            <output-format-item>**ANALYZE** MongoDB code: document design, repository interfaces, indexing strategies, and error handling</output-format-item>
-            <output-format-item>**CATEGORIZE** issues by impact (CORRECTNESS, PERFORMANCE, DATA INTEGRITY)</output-format-item>
-            <output-format-item>**APPLY** Micronaut Data MongoDB-aligned fixes: use `@MappedEntity`, `@MongoRepository`, and proper exception handling</output-format-item>
-            <output-format-item>**IMPLEMENT** changes so schema and queries stay consistent</output-format-item>
-            <output-format-item>**EXPLAIN** trade-offs (e.g., embedding vs referencing, index overhead)</output-format-item>
-            <output-format-item>**TEST** repository behavior with `@MicronautTest` and Testcontainers</output-format-item>
+            <output-format-item>**ANALYZE** MongoDB code: `@MappedEntity` mapping completeness, `@MongoRepository` query safety, service transaction boundaries, error handling specificity, pagination strategy, and DTO vs entity leakage</output-format-item>
+            <output-format-item>**CATEGORIZE** issues by impact (SECURITY for filter injection, CORRECTNESS for missing transactions or generic exception handling, PERFORMANCE for unbounded queries or missing indexes, MAINTAINABILITY for mutable entities or entity leakage at API boundaries)</output-format-item>
+            <output-format-item>**APPLY** Micronaut Data MongoDB–aligned fixes: explicit `@MappedEntity` collection, `@MappedProperty` field mappings, `@MongoRepository` with bound-parameter queries, service-layer `@Transactional`, and typed exception translation</output-format-item>
+            <output-format-item>**IMPLEMENT** changes so document model, repository interfaces, services, and tests stay consistent</output-format-item>
+            <output-format-item>**EXPLAIN** trade-offs (derived finder vs `@MongoFindQuery`, sync driver vs reactive, multi-document transactions vs application idempotency, `Page` vs full list returns)</output-format-item>
+            <output-format-item>**TEST** repository behaviour with `@MicronautTest` + `TestPropertyProvider` + Testcontainers; never mock repositories inside persistence tests meant to verify MongoDB behaviour</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
         </output-format-list>
     </output-format>
     <safeguards>
         <safeguards-list>
-            <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before ANY refactoring</safeguards-item>
-            <safeguards-item>**INDEXING**: Ensure indexes are created explicitly, as Micronaut Data may not auto-create them in production</safeguards-item>
-            <safeguards-item>**INJECTION**: Avoid building raw JSON queries using string concatenation; use derived queries or parameterized `@Query`</safeguards-item>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before ANY MongoDB refactoring — compilation failure is a HARD STOP</safeguards-item>
+            <safeguards-item>**CRITICAL VALIDATION**: Run `./mvnw clean verify` after changes; confirm repository integration tests pass against a real MongoDB instance before promoting</safeguards-item>
+            <safeguards-item>**INJECTION SAFETY**: Never concatenate user input into `@MongoFindQuery` filter strings or raw MongoDB JSON — use derived finders or bound parameters exclusively</safeguards-item>
+            <safeguards-item>**ERROR HANDLING**: Catch duplicate-key write failures and `DataAccessException` at the service boundary; never use a generic `catch (Exception e)` that swallows failures or returns `null`</safeguards-item>
+            <safeguards-item>**PAGINATION**: Never expose unbounded `findAll()` on large collections — always use `PageableRepository` or `Pageable`-accepting methods with `Page&lt;T&gt;`</safeguards-item>
+            <safeguards-item>**TRANSACTIONS**: Multi-document `@Transactional` requires a MongoDB replica set — verify infrastructure compatibility before relying on it</safeguards-item>
+            <safeguards-item>**AOP SELF-INVOCATION**: Never call a `@Transactional` method via `this.method()` inside the same Micronaut bean — the AOP interceptor is bypassed; extract to a separate injected bean</safeguards-item>
+            <safeguards-item>**API BOUNDARIES**: Avoid returning `@MappedEntity` instances directly from HTTP controllers — map to DTOs to keep API contracts stable and prevent internal field leakage</safeguards-item>
+            <safeguards-item>**INCREMENTAL SAFETY**: Change one entity, repository, or service surface at a time; verify with integration tests between steps</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>
