@@ -38,7 +38,7 @@ jobs:
       - name: Install Skill Scanner
         run: python -m pip install --upgrade cisco-ai-skill-scanner
       - name: Scan generated skills in ./skills with Skill Scanner
-        run: skill-scanner scan-all ./skills --recursive --use-behavioral --policy strict
+        run: skill-scanner scan-all ./skills --recursive --use-behavioral --policy strict --fail-on-severity high
 
   pre-commit:
     name: Pre-commit
