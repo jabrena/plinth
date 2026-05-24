@@ -16,7 +16,7 @@
         `INVENTORY-SKILLS-JAVA.md` with the following content:
 
         ```markdown
-        <xi:include href="assets/java-system-prompts-java-list-template.md" parse="text" />
+        <xi:include href="assets/java-skills-list-template.md" parse="text" />
         ```
     </goal>
 

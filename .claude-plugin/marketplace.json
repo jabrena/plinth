@@ -115,12 +115,6 @@
             "version": "0.14.0-SNAPSHOT"
         },
         {
-            "name": "126-java-exception-handling",
-            "source": "./skills/126-java-exception-handling",
-            "description": "Use when you need to apply Java exception handling best practices — including using specific exception types, managing resources with try-with-resources, securing exception messages, preserving error context via exception chaining, validating inputs early with fail-fast principles, handling thread interruption correctly, documenting exceptions with @throws, enforcing logging policy, translating exceptions at API boundaries, managing retries and idempotency, enforcing timeouts, attaching suppressed exceptions, and propagating failures in async/reactive code.",
-            "version": "0.14.0-SNAPSHOT"
-        },
-        {
             "name": "124-java-secure-coding",
             "source": "./skills/124-java-secure-coding",
             "description": "Use when you need to apply Java secure coding best practices — including validating untrusted inputs, defending against injection attacks with parameterized queries, minimizing attack surface via least privilege, applying strong cryptographic algorithms, handling exceptions securely without exposing sensitive data, managing secrets at runtime, avoiding unsafe deserialization, and encoding output to prevent XSS.",
@@ -130,6 +124,12 @@
             "name": "125-java-concurrency",
             "source": "./skills/125-java-concurrency",
             "description": "Use when you need to apply Java concurrency best practices — including thread safety fundamentals, ExecutorService thread pool management, concurrent design patterns like Producer-Consumer, asynchronous programming with CompletableFuture, immutability and safe publication, deadlock avoidance, virtual threads, scoped values, backpressure, cancellation discipline, and observability for concurrent systems.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "126-java-exception-handling",
+            "source": "./skills/126-java-exception-handling",
+            "description": "Use when you need to apply Java exception handling best practices — including using specific exception types, managing resources with try-with-resources, securing exception messages, preserving error context via exception chaining, validating inputs early with fail-fast principles, handling thread interruption correctly, documenting exceptions with @throws, enforcing logging policy, translating exceptions at API boundaries, managing retries and idempotency, enforcing timeouts, attaching suppressed exceptions, and propagating failures in async/reactive code.",
             "version": "0.14.0-SNAPSHOT"
         },
         {

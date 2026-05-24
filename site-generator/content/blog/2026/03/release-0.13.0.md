@@ -70,9 +70,9 @@ In the version `v0.13.0`, the project releases `58 Skills`:
 - `@113-java-maven-documentation`
 - `@121-java-object-oriented-design`
 - `@122-java-type-design`
-- `@126-java-exception-handling`
 - `@124-java-secure-coding`
 - `@125-java-concurrency`
+- `@126-java-exception-handling`
 - `@128-java-generics`
 - `@130-java-testing-strategies`
 - `@131-java-testing-unit-testing`
