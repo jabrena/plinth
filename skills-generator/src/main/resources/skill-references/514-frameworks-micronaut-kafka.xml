@@ -5,214 +5,332 @@
         <version>0.15.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
         <title>Micronaut — Kafka messaging</title>
-        <description>Use when you need Kafka in Micronaut and want examples for design, implementation, and error handling with @KafkaClient and @KafkaListener.</description>
+        <description>Use when you need Kafka in Micronaut — including Maven dependency, consumer group and topic strategy, @KafkaClient typed producers, @KafkaListener consumers with OffsetStrategy, ErrorStrategyValue for retry behaviour, dead-letter routing, idempotency, and testing with @MicronautTest and Testcontainers. This should trigger for requests such as Add Kafka in Micronaut; Review Micronaut Kafka listeners; Improve retry and failure handling for Micronaut Kafka.</description>
     </metadata>
-    <role>You are a Senior software engineer with extensive experience in Micronaut and Kafka</role>
-    <goal>
-        Design and implement reliable Micronaut Kafka flows with explicit contracts and resilient consumer error handling.
-    </goal>
+    <role>You are a Senior software engineer with extensive experience in Micronaut and Apache Kafka</role>
+    <goal><![CDATA[Design and implement reliable Kafka messaging in Micronaut using the `micronaut-kafka` integration. Declare producers as `@KafkaClient` interfaces and consumers as `@KafkaListener` classes. Keep listener methods thin — delegate to `@Singleton` services. Configure `errorStrategy` so processing failures trigger retries or dead-letter routing instead of being silently consumed.
+
+**What is covered in this Skill?**
+
+- Maven `micronaut-kafka` dependency
+- Consumer group and topic naming conventions (`application.yml`)
+- Typed event records with `eventId` for consumer de-duplication
+- `@KafkaClient` interface-based typed producer with `@KafkaKey`
+- `@KafkaListener` consumer with `@Topic`, `@OffsetStrategy`, and typed payload
+- `errorStrategy` with `ErrorStrategyValue.RETRY_ON_ERROR`, `RETRY_EXPONENTIALLY_ON_ERROR`, and `RESUME_AT_NEXT_RECORD` — trade-offs
+- Dead-letter routing via a producer called from an exception handler
+- Idempotent consumer pattern using `eventId`
+- Testing with `@MicronautTest` and an embedded Kafka via `@EmbeddedServer` or Testcontainers
+
+**Scope:** Apply recommendations based on the reference rules and good/bad code examples.
+ ]]></goal>
     <constraints>
-        <constraints-description>Compile first; stop on failure; verify after changes.</constraints-description>
+        <constraints-description>Before applying any Kafka changes, ensure the project compiles. Compilation failure is a BLOCKING condition.</constraints-description>
         <constraint-list>
-            <constraint>**MANDATORY**: Run `./mvnw compile` before applying changes</constraint>
-            <constraint>**SAFETY**: If compile fails, stop immediately</constraint>
-            <constraint>**VERIFY**: Run `./mvnw clean verify` after changes</constraint>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**SAFETY**: If compilation fails, stop immediately</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+            <constraint>**INJECTION**: Never construct topic names or Kafka header values from untrusted user input</constraint>
+            <constraint>**BEFORE APPLYING**: Read the reference for detailed rules and good/bad patterns</constraint>
+            <constraint>**EDGE CASE**: If the user goal is ambiguous, stop and ask a clarifying question before editing files</constraint>
         </constraint-list>
     </constraints>
     <examples>
         <toc auto-generate="true" />
-        <example number="1" id="micronaut-kafka-design">
+        <example number="1" id="514-frameworks-micronaut-kafka-maven-dependency">
             <example-header>
-                <example-title>Design</example-title>
-                <example-subtitle>Topic and consumer-group strategy</example-subtitle>
+                <example-title>Maven dependency</example-title>
+                <example-subtitle>Add micronaut-kafka; Micronaut BOM manages the version</example-subtitle>
             </example-header>
-            <example-description>
-                <![CDATA[
-                Configure Kafka bootstrap servers and application names properly. Ensure consumer groups are unique per logical application to avoid accidental load balancing across unrelated services.
-                ]]>
-            </example-description>
+            <example-description><![CDATA[Add `micronaut-kafka` to `pom.xml`. The Micronaut BOM manages its version. Avoid pinning the version explicitly — it can create classpath conflicts with the auto-configured Micronaut Kafka factory beans. For test isolation with an embedded broker, add `org.testcontainers:kafka` in `test` scope.]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="yaml"><![CDATA[# Good: explicit bootstrap servers and application name
-kafka:
-  bootstrap:
-    servers: localhost:9092
-micronaut:
-  application:
-    name: billing-service
-# topic: orders.events.v1
-# group: billing-service-v1]]></code-block>
+                    <code-block language="xml"><![CDATA[<!-- pom.xml — Micronaut BOM manages the version -->
+<dependency>
+    <groupId>io.micronaut.kafka</groupId>
+    <artifactId>micronaut-kafka</artifactId>
+</dependency>
+
+<!-- Testcontainers Kafka for integration tests -->
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>kafka</artifactId>
+    <scope>test</scope>
+</dependency>]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
-                    <code-block language="yaml"><![CDATA[# Bad: same consumer group reused by unrelated services causing accidental load balancing
-app.kafka.group: shared-group]]></code-block>
+                <bad-example>
+                    <code-block language="xml"><![CDATA[<!-- Bad: pinned version fights the Micronaut BOM -->
+<dependency>
+    <groupId>io.micronaut.kafka</groupId>
+    <artifactId>micronaut-kafka</artifactId>
+    <version>5.3.0</version>
+</dependency>]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
-        <example number="2" id="micronaut-kafka-implementation">
+        <example number="2" id="514-frameworks-micronaut-kafka-event-schema-design">
             <example-header>
-                <example-title>Implementation</example-title>
-                <example-subtitle>@KafkaClient and @KafkaListener</example-subtitle>
+                <example-title>Event schema design</example-title>
+                <example-subtitle>Versioned record with eventId for de-duplication and aggregate key</example-subtitle>
             </example-header>
-            <example-description>
-                <![CDATA[
-                Use `@KafkaClient` interfaces to produce messages declaratively. Use `@KafkaListener` to consume messages, specifying the `groupId`. Always use typed payloads.
-                ]]>
-            </example-description>
+            <example-description><![CDATA[Define each Kafka event as a Java record with a `eventId` (UUID) for consumer-side de-duplication and an `orderId` (or equivalent aggregate key) that will be set as the Kafka message key. Include a `schemaVersion` string so consumers can handle multiple versions gracefully. Use the topic naming pattern `domain.entity.operation.v{N}`.]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[package com.example.billing.messaging;
+                    <code-block language="java"><![CDATA[import java.time.Instant;
 
-import io.micronaut.configuration.kafka.annotation.KafkaClient;
+public record OrderCreatedEvent(
+    String eventId,       // UUID; used for consumer-side de-duplication
+    String schemaVersion, // "v1"
+    String orderId,       // aggregate key → used as @KafkaKey
+    String customerId,
+    Instant occurredAt
+) {
+    public static OrderCreatedEvent of(String orderId, String customerId) {
+        return new OrderCreatedEvent(
+            java.util.UUID.randomUUID().toString(), "v1",
+            orderId, customerId, Instant.now()
+        );
+    }
+}
+// topic: orders.created.v1   key: orderId]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Bad: untyped string payload, no schema version, no stable message key
+String event = "{ type: orderCreated }";]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="3" id="514-frameworks-micronaut-kafka-kafka-configuration">
+            <example-header>
+                <example-title>Kafka configuration</example-title>
+                <example-subtitle>Bootstrap server, consumer group, and serializer in application.yml</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[Configure the Kafka broker, default serializers, and consumer group in `application.yml`. Use a unique, versioned `group-id` per consumer (e.g. `billing-service-v1`) so different service instances share workload without accidentally consuming events intended for another service.]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="yaml"><![CDATA[kafka:
+  bootstrap:
+    servers: ${KAFKA_BOOTSTRAP_SERVERS:`localhost:9092`}
+  consumers:
+    billing-service-v1:
+      group:
+        id: billing-service-v1
+      key:
+        deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value:
+        deserializer: io.micronaut.kafka.serde.JsonObjectSerde]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="yaml"><![CDATA[# Bad: shared consumer group between unrelated services
+kafka:
+  consumers:
+    default:
+      group:
+        id: shared-group]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="4" id="514-frameworks-micronaut-kafka-producer-implementation">
+            <example-header>
+                <example-title>Producer implementation</example-title>
+                <example-subtitle>@KafkaClient interface with @KafkaKey for partition ordering</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[Declare the producer as a `@KafkaClient` interface — Micronaut generates the implementation at compile time. Annotate the key parameter with `@KafkaKey` so the Kafka record key is set explicitly, ensuring all events for the same aggregate land in the same partition and are consumed in order.]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.configuration.kafka.annotation.KafkaClient;
 import io.micronaut.configuration.kafka.annotation.KafkaKey;
-import io.micronaut.configuration.kafka.annotation.KafkaListener;
 import io.micronaut.configuration.kafka.annotation.Topic;
 
 @KafkaClient
-interface OrderEventsClient {
-    @Topic("orders.events.v1")
-    void send(@KafkaKey String orderId, OrderCreatedEvent event);
-}
+public interface OrderEventsClient {
 
-@KafkaListener(groupId = "billing-service-v1")
-class BillingListener {
-    @Topic("orders.events.v1")
-    void receive(@KafkaKey String orderId, OrderCreatedEvent event) {
-        // delegate to app service
-        // billingService.process(orderId, event);
+    @Topic("orders.created.v1")
+    void send(@KafkaKey String orderId, OrderCreatedEvent event);
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[@KafkaClient
+interface OrderEventsClient {
+    @Topic("orders.created.v1")
+    void send(OrderCreatedEvent event); // Bad: no @KafkaKey → null key → no partition ordering
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="5" id="514-frameworks-micronaut-kafka-consumer-implementation">
+            <example-header>
+                <example-title>Consumer implementation</example-title>
+                <example-subtitle>@KafkaListener with typed payload; thin method delegating to a service</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[Annotate the class with `@KafkaListener` and specify the `groupId`. Accept the typed event record as the parameter. Inject and delegate immediately to an application service — keep the listener method as thin as a dispatcher. Use `@OffsetStrategy(SYNC)` to commit offsets synchronously after successful processing, reducing duplicate delivery on restart.]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.micronaut.configuration.kafka.annotation.KafkaKey;
+import io.micronaut.configuration.kafka.annotation.KafkaListener;
+import io.micronaut.configuration.kafka.annotation.OffsetStrategy;
+import io.micronaut.configuration.kafka.annotation.Topic;
+import jakarta.inject.Inject;
+
+@KafkaListener(groupId = "billing-service-v1", offsetStrategy = OffsetStrategy.SYNC)
+public class BillingEventListener {
+
+    @Inject
+    BillingService billingService;
+
+    @Topic("orders.created.v1")
+    void onOrderCreated(@KafkaKey String orderId, OrderCreatedEvent event) {
+        billingService.createInvoice(event.orderId(), event.customerId());
     }
 }]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[package com.example.billing.messaging;
-
-import io.micronaut.configuration.kafka.annotation.KafkaListener;
-import io.micronaut.configuration.kafka.annotation.Topic;
-
-@KafkaListener
+                <bad-example>
+                    <code-block language="java"><![CDATA[@KafkaListener
 class RawListener {
-    @Topic("orders.events.v1")
-    void receive(String raw) {
-        // Bad: untyped payload + no schema contract, missing groupId
+    @Topic("orders.created.v1")
+    void receive(String rawJson) {
+        // Bad: untyped payload, no groupId (random group on each restart),
+        // full business logic inlined
     }
 }]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
-        <example number="3" id="micronaut-kafka-error-handling">
+        <example number="6" id="514-frameworks-micronaut-kafka-error-handling">
             <example-header>
                 <example-title>Error handling</example-title>
-                <example-subtitle>Retry with backoff and dead-letter strategy</example-subtitle>
+                <example-subtitle>errorStrategy RETRY_ON_ERROR with dead-letter routing for unrecoverable failures</example-subtitle>
             </example-header>
-            <example-description>
-                <![CDATA[
-                Use `errorStrategy = KafkaListenerExceptionHandlerValue.RETRY_ON_ERROR` to automatically retry failed messages. Never swallow exceptions, as it acknowledges poison messages.
-                ]]>
-            </example-description>
+            <example-description><![CDATA[Configure `errorStrategy` with `ErrorStrategyValue` so transient failures (network timeouts, temporary DB unavailability) trigger automatic retries. Prefer a bounded strategy such as `RETRY_EXPONENTIALLY_ON_ERROR` with `retryCount` instead of unbounded retry loops. For unrecoverable failures (deserialization errors, permanent business constraint violations) implement a `KafkaListenerExceptionHandler` that publishes the original record to a dead-letter topic and resumes according to the configured strategy. Never swallow exceptions with an empty `catch` block.]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[package com.example.billing.messaging;
-
+                    <code-block language="java"><![CDATA[import io.micronaut.configuration.kafka.annotation.ErrorStrategy;
+import io.micronaut.configuration.kafka.annotation.ErrorStrategyValue;
+import io.micronaut.configuration.kafka.annotation.KafkaClient;
+import io.micronaut.configuration.kafka.annotation.KafkaKey;
 import io.micronaut.configuration.kafka.annotation.KafkaListener;
+import io.micronaut.configuration.kafka.annotation.OffsetStrategy;
 import io.micronaut.configuration.kafka.annotation.Topic;
-import io.micronaut.configuration.kafka.exceptions.KafkaListenerExceptionHandlerValue;
+import io.micronaut.configuration.kafka.exceptions.KafkaListenerException;
+import io.micronaut.configuration.kafka.exceptions.KafkaListenerExceptionHandler;
+import jakarta.inject.Inject;
 
 @KafkaListener(
     groupId = "billing-service-v1",
-    errorStrategy = KafkaListenerExceptionHandlerValue.RETRY_ON_ERROR
+    offsetStrategy = OffsetStrategy.SYNC,
+    errorStrategy = @ErrorStrategy(
+        value = ErrorStrategyValue.RETRY_EXPONENTIALLY_ON_ERROR,
+        retryCount = 3
+    )
 )
-class BillingListener {
-    @Topic("orders.events.v1")
-    void receive(OrderCreatedEvent event) {
-        // throw to trigger retry policy; publish unrecoverable messages to DLT
-        // if processing fails, the framework will retry based on configuration
+public class BillingEventListener implements KafkaListenerExceptionHandler {
+
+    @Inject BillingService billingService;
+    @Inject OrderEventsDeadLetterClient dlqClient;
+
+    @Topic("orders.created.v1")
+    void onOrderCreated(@KafkaKey String orderId, OrderCreatedEvent event) {
+        billingService.createInvoice(event.orderId(), event.customerId());
     }
+
+    @Override
+    public void handle(KafkaListenerException ex) {
+        // After retries exhausted: route to DLQ and resume
+        ex.getKafkaRecord().ifPresent(record ->
+            dlqClient.sendToDlq(record.key().toString(), (OrderCreatedEvent) record.value()));
+    }
+}
+
+@KafkaClient
+interface OrderEventsDeadLetterClient {
+    @Topic("orders.created.dlq")
+    void sendToDlq(@KafkaKey String key, OrderCreatedEvent event);
 }]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[package com.example.billing.messaging;
-
-import io.micronaut.configuration.kafka.annotation.KafkaListener;
-import io.micronaut.configuration.kafka.annotation.Topic;
-
-@KafkaListener(groupId = "billing-service-v1")
-class BadBillingListener {
-    @Topic("orders.events.v1")
-    void receive(OrderCreatedEvent event) {
-        try { 
-            // process(event); 
-        } catch (Exception ignored) {
-            // Bad: swallowing exception acknowledges poison messages
-        }
+                    <code-block language="java"><![CDATA[@Topic("orders.created.v1")
+void onOrderCreated(OrderCreatedEvent event) {
+    try {
+        billingService.createInvoice(event.orderId(), event.customerId());
+    } catch (Exception ignored) {
+        // Bad: offset committed, message consumed, error never visible
     }
 }]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
-        <example number="4" id="micronaut-kafka-testing-testcontainers">
+        <example number="7" id="514-frameworks-micronaut-kafka-idempotent-consumer">
             <example-header>
-                <example-title>Testing</example-title>
-                <example-subtitle>@MicronautTest with Kafka Testcontainers</example-subtitle>
+                <example-title>Idempotent consumer</example-title>
+                <example-subtitle>De-duplicate on eventId to survive at-least-once redelivery</example-subtitle>
             </example-header>
-            <example-description>
-                <![CDATA[
-                Start Kafka in Testcontainers and inject broker properties through `TestPropertyProvider` for reproducible integration tests.
-                ]]>
-            </example-description>
+            <example-description><![CDATA[Kafka at-least-once delivery means a consumer can receive the same message more than once — on retries, after a group rebalance, or from DLQ re-processing. Guard processing with an `eventId` check before calling business logic. In production, back the de-dup store with a database or Redis. In tests, an in-memory `ConcurrentHashMap` is sufficient.]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[package com.example.billing.messaging;
+                    <code-block language="java"><![CDATA[import io.micronaut.configuration.kafka.annotation.ErrorStrategy;
+import io.micronaut.configuration.kafka.annotation.ErrorStrategyValue;
+import io.micronaut.configuration.kafka.annotation.KafkaKey;
+import io.micronaut.configuration.kafka.annotation.KafkaListener;
+import io.micronaut.configuration.kafka.annotation.OffsetStrategy;
+import io.micronaut.configuration.kafka.annotation.Topic;
+import jakarta.inject.Inject;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
-import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
-import io.micronaut.test.support.TestPropertyProvider;
-import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.KafkaContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
-import org.testcontainers.utility.DockerImageName;
-import java.util.Map;
+@KafkaListener(
+    groupId = "billing-service-v1",
+    offsetStrategy = OffsetStrategy.SYNC,
+    errorStrategy = @ErrorStrategy(
+        value = ErrorStrategyValue.RETRY_EXPONENTIALLY_ON_ERROR,
+        retryCount = 3
+    )
+)
+public class IdempotentBillingListener {
 
-@MicronautTest
-@Testcontainers
-class BillingKafkaIT implements TestPropertyProvider {
+    private final Set<String> processedIds = ConcurrentHashMap.newKeySet();
 
-    @Container
-    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("confluentinc/cp-kafka:7.6.1"));
+    @Inject BillingService billingService;
 
-    @Override
-    public Map<String, String> getProperties() {
-        return Map.of("kafka.bootstrap.servers", kafka.getBootstrapServers());
-    }
-
-    @Test
-    void shouldConsumeEvent() {
-        // publish and verify processing
+    @Topic("orders.created.v1")
+    void onOrderCreated(@KafkaKey String orderId, OrderCreatedEvent event) {
+        if (!processedIds.add(event.eventId())) {
+            return; // duplicate — skip without error
+        }
+        billingService.createInvoice(event.orderId(), event.customerId());
     }
 }]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[// Bad: test uses hardcoded localhost:9092 and is not CI-portable
-class BillingKafkaLocalEnvIT {}]]></code-block>
+                    <code-block language="java"><![CDATA[@Topic("orders.created.v1")
+void onOrderCreated(OrderCreatedEvent event) {
+    // Bad: no de-duplication — rebalance or retry causes double billing
+    billingService.createInvoice(event.orderId(), event.customerId());
+}]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
     </examples>
     <output-format>
         <output-format-list>
-            <output-format-item>**ANALYZE** messaging code: `@KafkaClient`/`@KafkaListener` usage, topic naming, serialization, and error handling strategies</output-format-item>
-            <output-format-item>**CATEGORIZE** issues by impact (RELIABILITY, MAINTAINABILITY, PERFORMANCE)</output-format-item>
-            <output-format-item>**APPLY** Micronaut Kafka-aligned fixes: configure proper error strategies, use typed payloads, ensure idempotency</output-format-item>
-            <output-format-item>**IMPLEMENT** changes consistently across `application.yml` and Java code</output-format-item>
-            <output-format-item>**EXPLAIN** trade-offs (e.g., retry vs DLQ, consumer group isolation)</output-format-item>
-            <output-format-item>**TEST** messaging behavior with `@MicronautTest` and Testcontainers</output-format-item>
+            <output-format-item>**ANALYZE** Kafka code: event schema versioning, consumer group isolation, producer key strategy, listener return type and offset strategy, error handling configuration, and idempotency guards</output-format-item>
+            <output-format-item>**CATEGORIZE** issues by impact (RELIABILITY for missing retries/DLQ, CORRECTNESS for missing idempotency or wrong offset strategy, MAINTAINABILITY for untyped payloads or inline business logic, SECURITY for user-controlled topic names)</output-format-item>
+            <output-format-item>**APPLY** Micronaut Kafka–aligned fixes: typed `@KafkaClient`, `@KafkaKey` producers, versioned `groupId`, `SYNC` offset strategy, bounded `ErrorStrategyValue` retry configuration + DLQ exception handler, eventId de-duplication</output-format-item>
+            <output-format-item>**IMPLEMENT** changes so `application.yml` bindings, producer interfaces, listener classes, and tests stay consistent</output-format-item>
+            <output-format-item>**EXPLAIN** trade-offs (SYNC vs ASYNC offset strategy, retry strategies vs `RESUME_AT_NEXT_RECORD`, in-memory vs persistent de-dup store)</output-format-item>
+            <output-format-item>**TEST** with `@MicronautTest` + Testcontainers Kafka; never mock `@KafkaClient` interfaces inside integration tests meant to verify messaging behaviour</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
         </output-format-list>
     </output-format>
     <safeguards>
         <safeguards-list>
-            <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before ANY refactoring</safeguards-item>
-            <safeguards-item>**POISON PILLS**: Use `RETRY_ON_ERROR` or explicit exception handlers to prevent poison pills from silently being acknowledged</safeguards-item>
-            <safeguards-item>**CONSUMER GROUPS**: Always specify a `groupId` in `@KafkaListener` to prevent random group generation and message loss on restart</safeguards-item>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before ANY Kafka refactoring — compilation failure is a HARD STOP</safeguards-item>
+            <safeguards-item>**CRITICAL VALIDATION**: Run `./mvnw clean verify` after changes; exercise listener integration tests before promoting</safeguards-item>
+            <safeguards-item>**INJECTION SAFETY**: Never construct topic names or Kafka header values from untrusted user input</safeguards-item>
+            <safeguards-item>**ERROR HANDLING**: Never swallow exceptions inside `@KafkaListener` methods — propagate so the configured `errorStrategy` can retry or route to DLQ</safeguards-item>
+            <safeguards-item>**IDEMPOTENCY**: Always de-duplicate on `eventId` — Kafka's at-least-once guarantee means consumers must tolerate receiving the same message more than once</safeguards-item>
+            <safeguards-item>**GROUP ID**: Use a unique, versioned `groupId` per consumer class — a shared `groupId` across unrelated services causes accidental competitive consumption</safeguards-item>
+            <safeguards-item>**DLQ MONITORING**: Set up alerting on the DLQ topic — messages landing there indicate systematic processing failures</safeguards-item>
+            <safeguards-item>**INCREMENTAL SAFETY**: Change one producer or consumer surface at a time; verify with `@MicronautTest` between steps</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>

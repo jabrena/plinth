@@ -5,239 +5,323 @@
         <version>0.15.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
         <title>Quarkus — MongoDB</title>
-        <description>Use when you need MongoDB in Quarkus with Mongo Panache and want examples for design, implementation, and error handling.</description>
+        <description>Use when you need MongoDB in Quarkus with MongoDB Panache — including Maven extension, entity/repository design with @MongoEntity, PanacheMongoEntity active record vs PanacheMongoRepository, parameterized queries, service-layer persistence boundaries, optional transaction support where infrastructure allows it, and explicit error handling for duplicate key and transient failures. This should trigger for requests such as Add MongoDB in Quarkus; Review Quarkus Mongo Panache entities; Improve Mongo error handling in Quarkus services.</description>
     </metadata>
     <role>You are a Senior software engineer with extensive experience in Quarkus and MongoDB</role>
-    <goal>
-        Apply Quarkus MongoDB patterns with clean document modeling, maintainable repositories/services, and robust failure handling using Panache.
-    </goal>
+    <goal><![CDATA[Design and implement MongoDB persistence in Quarkus using MongoDB Panache. Choose the **repository pattern** (`PanacheMongoRepository`) for layered architectures and testability; use the **active record** pattern (`PanacheMongoEntity`) only for small, isolated entities. Keep business logic in `@ApplicationScoped` services, not in entities or REST resources. Prefer single-document atomic updates and explicit idempotency; only rely on multi-document MongoDB transactions when the infrastructure is configured for them. Guard all Panache query parameters — never concatenate user input into query strings.
+
+**What is covered in this Skill?**
+
+- Maven `quarkus-mongodb-panache` extension dependency
+- `@MongoEntity` document design with `@BsonProperty` and index strategy
+- Active record (`PanacheMongoEntity`) for simple CRUD
+- Repository (`PanacheMongoRepository`) for separation of concerns
+- Parameterized `find` using field shorthand, positional parameters, and `Document` filters
+- `@ApplicationScoped` service boundaries with explicit single-document atomicity and optional transaction support where infrastructure allows it
+- Error handling: `MongoWriteException` category checks (`DUPLICATE_KEY`), `MongoTimeoutException`, exception chaining
+- DTO projections — never leak internal entities at API boundaries
+- Dev Services for MongoDB (zero-config in dev/test)
+- Testing with `@QuarkusTest`, Dev Services, and explicit cleanup between tests
+
+**Scope:** Apply recommendations based on the reference rules and good/bad code examples.
+ ]]></goal>
     <constraints>
-        <constraints-description>Compile first; stop on failure; verify after changes.</constraints-description>
+        <constraints-description>Before applying any MongoDB changes, ensure the project compiles. Compilation failure is a BLOCKING condition.</constraints-description>
         <constraint-list>
-            <constraint>**MANDATORY**: Run `./mvnw compile` before applying changes</constraint>
-            <constraint>**SAFETY**: If compile fails, stop immediately</constraint>
-            <constraint>**VERIFY**: Run `./mvnw clean verify` after changes</constraint>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**SAFETY**: If compilation fails, stop immediately</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+            <constraint>**INJECTION**: Never build Mongo query strings by concatenating user input — always use bound parameters or the Document filter API</constraint>
+            <constraint>**BEFORE APPLYING**: Read the reference for detailed rules and good/bad patterns</constraint>
+            <constraint>**EDGE CASE**: If the user goal is ambiguous, stop and ask a clarifying question before editing files</constraint>
         </constraint-list>
     </constraints>
     <examples>
         <toc auto-generate="true" />
-        <example number="1" id="quarkus-mongo-design">
+        <example number="1" id="415-frameworks-quarkus-mongodb-maven-extension">
             <example-header>
-                <example-title>Design</example-title>
-                <example-subtitle>Document schema and indexes</example-subtitle>
+                <example-title>Maven extension</example-title>
+                <example-subtitle>Add quarkus-mongodb-panache; Quarkus BOM manages the version</example-subtitle>
             </example-header>
-            <example-description>
-                <![CDATA[
-                Use `@MongoEntity` to define collections. Extend `PanacheMongoEntity` for easy ID management. Use `@BsonProperty` to map Java fields to specific BSON field names.
-                ]]>
-            </example-description>
+            <example-description><![CDATA[Add `quarkus-mongodb-panache` to your `pom.xml`. The Quarkus BOM manages the version. Quarkus Dev Services automatically starts a MongoDB instance in dev and test modes when no `quarkus.mongodb.connection-string` is configured, so no manual setup is needed for local development.]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[package org.acme.orders.domain;
-
-import io.quarkus.mongodb.panache.PanacheMongoEntity;
-import io.quarkus.mongodb.panache.common.MongoEntity;
+                    <code-block language="xml"><![CDATA[<!-- pom.xml — Quarkus BOM manages the version -->
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-mongodb-panache</artifactId>
+</dependency>]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="xml"><![CDATA[<!-- Bad: pinned version fights the Quarkus BOM -->
+<dependency>
+    <groupId>io.quarkus</groupId>
+    <artifactId>quarkus-mongodb-panache</artifactId>
+    <version>3.8.1</version>
+</dependency>]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="2" id="415-frameworks-quarkus-mongodb-entity-design">
+            <example-header>
+                <example-title>Entity design</example-title>
+                <example-subtitle>@MongoEntity with @BsonProperty for explicit field mapping</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[Annotate the entity class with `@MongoEntity` and specify the collection name explicitly. Use `@BsonProperty` to map Java field names to MongoDB document field names when they differ. Keep domain-significant business identifiers (like `orderNumber`) separate from the MongoDB `id`. Use a `Instant createdAt` timestamp for auditability.]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.quarkus.mongodb.panache.common.MongoEntity;
 import org.bson.codecs.pojo.annotations.BsonProperty;
+import org.bson.types.ObjectId;
 import java.time.Instant;
 
 @MongoEntity(collection = "orders")
-public class OrderDocument extends PanacheMongoEntity {
+public class OrderDocument {
+    public ObjectId id;
+
     @BsonProperty("order_number")
     public String orderNumber;
+
+    @BsonProperty("customer_id")
     public String customerId;
+
+    @BsonProperty("created_at")
     public Instant createdAt;
 }]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[package org.acme.orders.domain;
-
-import io.quarkus.mongodb.panache.PanacheMongoEntity;
-
-// Bad: no explicit collection/schema hints for critical fields
-public class OrderDocument extends PanacheMongoEntity {
-    public Object payload;
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Bad: no @MongoEntity → collection name derived from class name case-sensitively;
+// no @BsonProperty → Java field names stored as-is in Mongo (camelCase vs snake_case mismatch)
+public class OrderDocument extends io.quarkus.mongodb.panache.PanacheMongoEntity {
+    public Object payload; // untyped — no schema
 }]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
-        <example number="2" id="quarkus-mongo-implementation">
+        <example number="3" id="415-frameworks-quarkus-mongodb-repository-pattern">
             <example-header>
-                <example-title>Implementation</example-title>
-                <example-subtitle>Panache repository with explicit query methods</example-subtitle>
+                <example-title>Repository pattern</example-title>
+                <example-subtitle>PanacheMongoRepository with typed, parameterized queries</example-subtitle>
             </example-header>
-            <example-description>
-                <![CDATA[
-                Implement `PanacheMongoRepository` to separate data access logic from the entity. Use Panache's fluent query API instead of manual JSON strings.
-                ]]>
-            </example-description>
+            <example-description><![CDATA[Implement `PanacheMongoRepository&lt;OrderDocument&gt;` in an `@ApplicationScoped` bean. Use Panache's shorthand field equality (`find("field", value)`) for simple lookups or `Document` filter objects for composite criteria. Never concatenate user input into a query string — always pass values as bound parameters.]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[package org.acme.orders.repository;
-
-import org.acme.orders.domain.OrderDocument;
-import io.quarkus.mongodb.panache.PanacheMongoRepository;
+                    <code-block language="java"><![CDATA[import io.quarkus.mongodb.panache.PanacheMongoRepository;
 import jakarta.enterprise.context.ApplicationScoped;
+import org.bson.Document;
+import java.time.Instant;
+import java.util.List;
 import java.util.Optional;
 
 @ApplicationScoped
 public class OrderRepository implements PanacheMongoRepository<OrderDocument> {
+
+    // Safe: field shorthand — Panache builds the filter internally
     public Optional<OrderDocument> findByOrderNumber(String orderNumber) {
         return find("orderNumber", orderNumber).firstResultOptional();
     }
+
+    // Safe: Document filter with bound parameters — no string concatenation
+    public List<OrderDocument> findByCustomerSince(String customerId, Instant since) {
+        return find(new Document("customer_id", customerId)
+            .append("created_at", new Document("$gte", since)))
+            .list();
+    }
 }]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[package org.acme.orders.repository;
-
-import jakarta.enterprise.context.ApplicationScoped;
-
-@ApplicationScoped
-public class BadOrderRepository {
-    // Bad: hand-built query strings from user input, prone to injection and syntax errors
-    String query(String input) { 
-        return "{ orderNumber: '" + input + "' }"; 
+                <bad-example>
+                    <code-block language="java"><![CDATA[@ApplicationScoped
+public class OrderRepository implements PanacheMongoRepository<OrderDocument> {
+    // Bad: concatenating user input into a query string — NoSQL injection risk
+    public List<OrderDocument> findByCustomer(String customerId) {
+        return find("{ customer_id: '" + customerId + "' }").list();
     }
 }]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
-        <example number="3" id="quarkus-mongo-error-handling">
+        <example number="4" id="415-frameworks-quarkus-mongodb-service-layer">
             <example-header>
-                <example-title>Error handling</example-title>
-                <example-subtitle>Duplicate keys and transient failures</example-subtitle>
+                <example-title>Service layer</example-title>
+                <example-subtitle>@ApplicationScoped service with explicit persistence boundaries</example-subtitle>
             </example-header>
-            <example-description>
-                <![CDATA[
-                Catch `MongoWriteException` to handle specific errors like `DUPLICATE_KEY`. Catch `MongoTimeoutException` to handle transient network issues.
-                ]]>
-            </example-description>
+            <example-description><![CDATA[Wrap business use cases in `@ApplicationScoped` services. Keep REST resources or CDI event handlers thin — they delegate to the service, not to the repository directly. Constructor-inject the repository to maintain testability. Use single-document atomic updates by default; if a use case truly needs multi-document atomicity, verify MongoDB transaction support and configure it deliberately.]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[package org.acme.orders.service;
-
-import org.acme.orders.domain.OrderDocument;
-import org.acme.orders.repository.OrderRepository;
-import com.mongodb.MongoWriteException;
-import com.mongodb.MongoTimeoutException;
-import com.mongodb.ErrorCategory;
-import jakarta.enterprise.context.ApplicationScoped;
+                    <code-block language="java"><![CDATA[import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+import java.time.Instant;
+import java.util.Optional;
 
 @ApplicationScoped
 public class OrderService {
+
     private final OrderRepository repository;
 
+    @Inject
     public OrderService(OrderRepository repository) {
         this.repository = repository;
     }
 
-    public void createOrder(OrderDocument document) {
-        try {
-            repository.persist(document);
-        } catch (MongoWriteException ex) {
-            if (ex.getError().getCategory() == ErrorCategory.DUPLICATE_KEY) {
-                throw new IllegalStateException("Order number already exists", ex);
-            }
-            throw ex;
-        } catch (MongoTimeoutException ex) {
-            throw new IllegalStateException("Transient Mongo timeout, consider retry", ex);
-        }
+    public OrderDocument create(String orderNumber, String customerId) {
+        var doc = new OrderDocument();
+        doc.orderNumber = orderNumber;
+        doc.customerId = customerId;
+        doc.createdAt = Instant.now();
+        repository.persist(doc);
+        return doc;
+    }
+
+    public Optional<OrderDocument> findByOrderNumber(String orderNumber) {
+        return repository.findByOrderNumber(orderNumber);
     }
 }]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[package org.acme.orders.service;
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Bad: business logic scattered inside a REST resource; no service layer
+@Path("/orders")
+class OrderResource {
+    @Inject OrderRepository repository;
 
-import org.acme.orders.domain.OrderDocument;
-import org.acme.orders.repository.OrderRepository;
-import jakarta.enterprise.context.ApplicationScoped;
-
-@ApplicationScoped
-public class BadOrderService {
-    private final OrderRepository repository;
-
-    public BadOrderService(OrderRepository repository) {
-        this.repository = repository;
-    }
-
-    public void createOrder(OrderDocument document) {
-        try {
-            repository.persist(document);
-        } catch (Exception ex) {
-            // Bad: generic catch + ignore, hiding data loss
-        }
+    @POST
+    void create(String body) {
+        var doc = new OrderDocument();
+        doc.orderNumber = body; // no validation, no mapping
+        repository.persist(doc);
     }
 }]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
-        <example number="4" id="quarkus-mongo-testing-testcontainers">
+        <example number="5" id="415-frameworks-quarkus-mongodb-error-handling">
             <example-header>
-                <example-title>Testing</example-title>
-                <example-subtitle>@QuarkusTest with MongoDB Testcontainers via test resource</example-subtitle>
+                <example-title>Error handling</example-title>
+                <example-subtitle>MongoWriteException category check; exception chaining; no generic catch</example-subtitle>
             </example-header>
-            <example-description>
-                <![CDATA[
-                Use MongoDB Testcontainers for persistence integration tests and inject `quarkus.mongodb.connection-string` dynamically.
-                ]]>
-            </example-description>
+            <example-description><![CDATA[Catch MongoDB driver-level exceptions by category rather than by message string. `MongoWriteException` carries an `ErrorCategory` — check for `DUPLICATE_KEY` to translate it into a domain constraint violation. Catch `MongoTimeoutException` separately for transient connectivity failures and consider retry logic there. Always chain the original exception to preserve the stack trace. Never swallow with a generic `catch (Exception e)` that returns `null` or logs and continues.]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[package org.acme.orders.test;
+                    <code-block language="java"><![CDATA[import com.mongodb.ErrorCategory;
+import com.mongodb.MongoTimeoutException;
+import com.mongodb.MongoWriteException;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
 
-import io.quarkus.test.common.QuarkusTestResource;
-import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
-import io.quarkus.test.junit.QuarkusTest;
-import org.junit.jupiter.api.Test;
-import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.utility.DockerImageName;
-import java.util.Map;
+@ApplicationScoped
+public class OrderService {
 
-class MongoTestResource implements QuarkusTestResourceLifecycleManager {
-    private MongoDBContainer mongo;
-    @Override
-    public Map<String, String> start() {
-        mongo = new MongoDBContainer(DockerImageName.parse("mongo:7.0"));
-        mongo.start();
-        return Map.of("quarkus.mongodb.connection-string", mongo.getReplicaSetUrl());
-    }
-    @Override
-    public void stop() {
-        if (mongo != null) mongo.stop();
-    }
-}
+    @Inject OrderRepository repository;
 
-@QuarkusTest
-@QuarkusTestResource(MongoTestResource.class)
-class OrderMongoIT {
-    @Test
-    void shouldPersistAndReadDocument() {
-        // verify repository round trip
+    public OrderDocument create(String orderNumber, String customerId) {
+        try {
+            var doc = new OrderDocument();
+            doc.orderNumber = orderNumber;
+            doc.customerId = customerId;
+            doc.createdAt = java.time.Instant.now();
+            repository.persist(doc);
+            return doc;
+        } catch (MongoWriteException ex) {
+            if (ex.getError().getCategory() == ErrorCategory.DUPLICATE_KEY) {
+                throw new IllegalStateException("Order number already exists: " + orderNumber, ex);
+            }
+            throw ex;
+        } catch (MongoTimeoutException ex) {
+            throw new IllegalStateException("Transient MongoDB timeout — consider retry", ex);
+        }
     }
 }]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[// Bad: test points to developer laptop MongoDB instance
-class OrderMongoLocalOnlyIT {}]]></code-block>
+                    <code-block language="java"><![CDATA[public OrderDocument create(String orderNumber, String customerId) {
+    try {
+        repository.persist(doc);
+        return doc;
+    } catch (Exception e) {
+        // Bad: generic catch swallows duplicate-key, timeout, schema errors
+        return null; // corrupts control flow for the caller
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="6" id="415-frameworks-quarkus-mongodb-testing">
+            <example-header>
+                <example-title>Testing</example-title>
+                <example-subtitle>@QuarkusTest + Dev Services for repository integration; clean collections between tests</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[Annotate the test class with `@QuarkusTest`. Quarkus Dev Services starts a MongoDB container automatically. Clean the repository before or after each test to keep test data isolated. Do not use JPA-style rollback assumptions for MongoDB persistence tests. Never mock `PanacheMongoRepository` inside a persistence test — the goal is exercising real MongoDB behaviour.]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.quarkus.test.junit.QuarkusTest;
+import jakarta.inject.Inject;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Test;
+import java.util.Optional;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@QuarkusTest
+class OrderRepositoryTest {
+
+    @Inject
+    OrderRepository repository;
+
+    @AfterEach
+    void cleanup() {
+        repository.deleteAll();
+    }
+
+    @Test
+    void persist_and_findByOrderNumber() {
+        OrderDocument doc = new OrderDocument();
+        doc.orderNumber = "ORD-001";
+        doc.customerId = "CUST-1";
+        doc.createdAt = java.time.Instant.now();
+        repository.persist(doc);
+
+        Optional<OrderDocument> found = repository.findByOrderNumber("ORD-001");
+        assertThat(found).isPresent();
+        assertThat(found.get().customerId).isEqualTo("CUST-1");
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Bad: mocking PanacheMongoRepository proves nothing about real Mongo behavior
+@QuarkusTest
+class OrderRepositoryTest {
+    @InjectMock OrderRepository repository;
+
+    @Test
+    void find() {
+        when(repository.findByOrderNumber("ORD-001")).thenReturn(Optional.empty());
+        assertThat(repository.findByOrderNumber("ORD-001")).isEmpty();
+        // only tests Mockito wiring
+    }
+}]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
     </examples>
     <output-format>
         <output-format-list>
-            <output-format-item>**ANALYZE** MongoDB code: document design, repository interfaces, indexing strategies, and error handling</output-format-item>
-            <output-format-item>**CATEGORIZE** issues by impact (CORRECTNESS, PERFORMANCE, DATA INTEGRITY)</output-format-item>
-            <output-format-item>**APPLY** Quarkus Mongo Panache-aligned fixes: use `@MongoEntity`, `PanacheMongoRepository`, and proper exception handling</output-format-item>
-            <output-format-item>**IMPLEMENT** changes so schema and queries stay consistent</output-format-item>
-            <output-format-item>**EXPLAIN** trade-offs (e.g., active record vs repository pattern, embedding vs referencing)</output-format-item>
-            <output-format-item>**TEST** repository behavior with `@QuarkusTest` and MongoDB Testcontainers (optionally through Dev Services where appropriate)</output-format-item>
+            <output-format-item>**ANALYZE** MongoDB code: entity mapping correctness, query parameter safety, service persistence boundaries, error handling specificity, and DTO vs entity leakage</output-format-item>
+            <output-format-item>**CATEGORIZE** issues by impact (SECURITY for query injection, CORRECTNESS for non-atomic multi-document assumptions or generic exception handling, PERFORMANCE for missing indexes, MAINTAINABILITY for active-record overuse or entity leakage at API boundaries)</output-format-item>
+            <output-format-item>**APPLY** Quarkus MongoDB–aligned fixes: explicit `@MongoEntity` collection, `@BsonProperty` mappings, parameterized `find()` calls, clear service-layer persistence boundaries, and typed exception translation</output-format-item>
+            <output-format-item>**IMPLEMENT** changes so entity design, repositories, services, and tests stay consistent; create index creation scripts when adding `@CompoundIndex`-equivalent needs</output-format-item>
+            <output-format-item>**EXPLAIN** trade-offs (active record vs repository, Dev Services vs Testcontainers, multi-document transactions vs single-document atomicity and application-level idempotency)</output-format-item>
+            <output-format-item>**TEST** persistence behaviour with `@QuarkusTest` using Dev Services and explicit cleanup; never mock repositories inside persistence tests</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
         </output-format-list>
     </output-format>
     <safeguards>
         <safeguards-list>
-            <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before ANY refactoring</safeguards-item>
-            <safeguards-item>**INDEXING**: Ensure indexes are created explicitly, as Quarkus does not auto-create them by default in production</safeguards-item>
-            <safeguards-item>**INJECTION**: Avoid building raw JSON queries using string concatenation; use Panache's parameterized `find()` methods</safeguards-item>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before ANY MongoDB refactoring — compilation failure is a HARD STOP</safeguards-item>
+            <safeguards-item>**CRITICAL VALIDATION**: Run `./mvnw clean verify` after changes; confirm persistence tests pass with Dev Services before promoting</safeguards-item>
+            <safeguards-item>**INJECTION SAFETY**: Never concatenate user input into Panache query strings or MongoDB JSON filters — use bound parameters or the `Document` builder API</safeguards-item>
+            <safeguards-item>**ERROR HANDLING**: Catch `MongoWriteException` by `ErrorCategory`; never use a generic `catch (Exception e)` that swallows failures or returns `null`</safeguards-item>
+            <safeguards-item>**API BOUNDARIES**: Do not return Panache entity instances directly from REST resources — map to DTOs to keep contracts stable and prevent internal field leakage</safeguards-item>
+            <safeguards-item>**TRANSACTIONS**: Multi-document MongoDB transactions require replica set/session support — verify infrastructure compatibility before relying on them; prefer single-document atomic updates when possible</safeguards-item>
+            <safeguards-item>**INCREMENTAL SAFETY**: Change one entity, repository, or service surface at a time; verify with `@QuarkusTest` and isolated test data between steps</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>
