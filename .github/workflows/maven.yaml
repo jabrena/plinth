@@ -28,10 +28,17 @@ jobs:
       - uses: actions/checkout@v6
         with:
           submodules: true
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.x"
       - name: Validate SKILL.md files
         run: npx skill-check@latest skills --no-security-scan --format github
         env:
           SKILL_CHECK_NO_BANNER: 1
+      - name: Install Skill Scanner
+        run: python -m pip install --upgrade cisco-ai-skill-scanner
+      - name: Scan generated skills in ./skills with Skill Scanner
+        run: skill-scanner scan-all ./skills --recursive --use-behavioral --policy strict --fail-on-severity high
 
   pre-commit:
     name: Pre-commit
