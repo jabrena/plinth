@@ -105,9 +105,9 @@
             <reference>122-java-type-design</reference>
         </reference-list>
     </skill>
-    <skill id="123">
+    <skill id="126">
         <reference-list>
-            <reference>123-java-exception-handling</reference>
+            <reference>126-java-exception-handling</reference>
         </reference-list>
     </skill>
     <skill id="124">
