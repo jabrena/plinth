@@ -21,6 +21,16 @@ Use the following commands to list and install the Skills:
 brew install node
 sudo apt install nodejs npm
 
+# Install at User level
+npx skills add jabrena/cursor-rules-java --global --agent cursor --all
+npx skills add jabrena/cursor-rules-java --global --agent claude-code --skill '*' -y
+
+npx skills remove --global --agent cursor -y
+npx skills remove --global --agent claude-code --skill '*' -y
+npx skills remove --global -y \
+  $(jq -r '.skills | to_entries[] | select(.value.source == "jabrena/cursor-rules-java") | .key' ~/.agents/.skill-lock.json)
+
+# Install at project level
 npx skills --help
 npx skills add jabrena/cursor-rules-java --list
 npx skills add jabrena/cursor-rules-java --agent cursor --all
