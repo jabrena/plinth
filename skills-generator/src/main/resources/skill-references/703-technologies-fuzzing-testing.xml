@@ -18,6 +18,8 @@
         2. Prioritize negative and boundary scenarios (invalid types, missing required fields, malformed formats, and range violations).
         3. Integrate CATS execution into CI and provide reproducible failure evidence.
         4. Document local execution so contributors can run the same baseline checks before creating pull requests.
+        5. Provide a containerized local CATS installation option using a `cats/Dockerfile` and a `run-cats-fuzz.sh` runner script.
+        6. Review CATS reports with the user to surface contract violations, validation gaps, and reproducible failure evidence.
     </goal>
 
     <constraints>
@@ -30,15 +32,142 @@
             <constraint>**PRECONDITION**: API contract input (OpenAPI or equivalent) must be available before configuring CATS</constraint>
             <constraint>**CRITICAL SAFETY**: If compilation fails, stop immediately and do not proceed</constraint>
             <constraint>**MANDATORY**: Regenerate skills after XML edits using `./mvnw clean install -pl skills-generator`</constraint>
+            <constraint>**LOCAL INSTALLATION**: Prefer a `cats/Dockerfile` when contributors need repeatable local CATS execution without installing Java tooling or CATS directly on the host</constraint>
             <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after integrating fuzz testing changes</constraint>
         </constraint-list>
     </constraints>
+
+    <steps>
+        <step number="1">
+            <step-title>Create CATS Dockerfile</step-title>
+            <step-content>
+Create `cats/Dockerfile` with the following content:
+
+```dockerfile
+<xi:include href="assets/docker/cats.dockerfile" parse="text"/>
+```
+            </step-content>
+            <step-constraints>
+                <step-constraint-list>
+                    <step-constraint>**MUST** copy the embedded template verbatim into `cats/Dockerfile`</step-constraint>
+                    <step-constraint>**DO NOT** modify the template unless the CATS version or base image must change</step-constraint>
+                </step-constraint-list>
+            </step-constraints>
+        </step>
+        <step number="2">
+            <step-title>Create CATS runner script</step-title>
+            <step-content>
+Create `run-cats-fuzz.sh` in the project root and make it executable (`chmod +x run-cats-fuzz.sh`).
+
+Copy the following script verbatim:
+
+```bash
+<xi:include href="scripts/run-cats-fuzz.sh" parse="text"/>
+```
+            </step-content>
+            <step-constraints>
+                <step-constraint-list>
+                    <step-constraint>**MUST** copy the embedded script verbatim into `run-cats-fuzz.sh`</step-constraint>
+                    <step-constraint>**DO NOT** modify the template logic, structure, or features</step-constraint>
+                    <step-constraint>**ONLY** `--openapi` mode is supported; pass the OpenAPI file as the argument after the flag</step-constraint>
+                </step-constraint-list>
+            </step-constraints>
+        </step>
+        <step number="3">
+            <step-title>Execute CATS fuzzing</step-title>
+            <step-content>
+Ask the user for the OpenAPI contract file path before running CATS.
+
+Use a direct question such as: "What is the path to your OpenAPI specification file (for example `src/main/resources/openapi/openapi.yaml`)?"
+
+**STOP HERE** and wait for the user to provide the contract path. **DO NOT** guess common locations, scan the repository, or run `./run-cats-fuzz.sh` until the user shares the path.
+
+After the user responds:
+
+1. Resolve the path relative to the project root when it is not absolute.
+2. Confirm the file exists; if not, ask again and remain blocked until a valid path is provided.
+3. Confirm the API is reachable (for example `./mvnw spring-boot:run`, `docker compose up`, or an already-running instance).
+4. Run fuzzing with the user-provided contract:
+
+```bash
+./run-cats-fuzz.sh --openapi &lt;user-provided-openapi-path&gt;
+```
+
+5. Capture the command exit code and console output. If the run fails, report the error and stop before reviewing results.
+            </step-content>
+            <step-constraints>
+                <step-constraint-list>
+                    <step-constraint>**MUST** ask the user for the OpenAPI file location before execution</step-constraint>
+                    <step-constraint>**MUST NOT** proceed to Step 4 until the user provides a contract path and CATS completes (success or failure)</step-constraint>
+                    <step-constraint>**MUST NOT** substitute a default OpenAPI path without explicit user confirmation</step-constraint>
+                    <step-constraint>**MUST** verify the contract file exists on disk before running the script</step-constraint>
+                </step-constraint-list>
+            </step-constraints>
+        </step>
+        <step number="4">
+            <step-title>Review CATS results</step-title>
+            <step-content>
+After a successful CATS run, review the generated report to discover API contract and robustness issues.
+
+Default report location: `cats/cats-report/` (override with `REPORT_DIR` when set).
+
+Review workflow:
+
+1. Open `cats/cats-report/index.html` when `CATS_REPORT_FORMAT` is `HTML_JS` (default); otherwise inspect the report artifacts in `cats/cats-report/`.
+2. Scan for failed fuzz cases, unexpected HTTP status codes, response schema mismatches, and missing validation on malformed inputs.
+3. Group findings by category: malformed payload handling, missing required fields, boundary violations, wrong status codes, and response body contract drift.
+4. For each issue, record the fuzzer name, request details, actual vs expected behaviour, and a minimal reproduction command or curl example.
+5. Prioritize fixes: server errors (5xx) and contract violations first, then validation gaps and inconsistent 4xx handling.
+6. Summarize total failures, highest-risk endpoints, and recommended next code or contract changes.
+            </step-content>
+            <step-constraints>
+                <step-constraint-list>
+                    <step-constraint>**MUST** base findings on CATS report output, not assumptions</step-constraint>
+                    <step-constraint>**MUST** include enough detail to reproduce each reported issue locally</step-constraint>
+                    <step-constraint>**MUST NOT** skip review when CATS reported failures or warnings</step-constraint>
+                </step-constraint-list>
+            </step-constraints>
+        </step>
+    </steps>
+
+    <examples>
+        <toc auto-generate="true" />
+
+        <example number="1" id="local-cats-dockerfile">
+            <example-header>
+                <example-title>Install CATS locally with Docker</example-title>
+                <example-subtitle>Use a project-local Dockerfile so contributors can run CATS without installing it on the host</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+Copy the embedded Dockerfile template from Step 1 into `cats/Dockerfile`, add `run-cats-fuzz.sh` from Step 2, ask the user for the OpenAPI path in Step 3, then review findings in Step 4.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="bash"><![CDATA[# Step 3: run only after the user provides the OpenAPI path
+./run-cats-fuzz.sh --openapi src/main/resources/openapi/openapi.yaml
+
+# Step 4: review cats/cats-report/index.html for failures]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="bash"><![CDATA[# Avoid: manual host install with version drift across contributors
+curl -fsSL https://github.com/Endava/cats/releases/download/cats-13.8.0/cats_uberjar_13.8.0.tar.gz \
+  | tar -xz -C /usr/local/bin
+java -jar /usr/local/bin/cats.jar --contract openapi.yaml --server http://localhost:8080]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
 
     <output-format>
         <output-format-list>
             <output-format-item>**ANALYZE** current API testing and CI workflow to identify where CATS fuzzing should run and what contract sources should be used</output-format-item>
             <output-format-item>**CATEGORIZE** fuzzing scope by scenario type: malformed input, missing fields, boundary limits, and schema constraint violations</output-format-item>
             <output-format-item>**IMPLEMENT** CI and local commands so CATS can run consistently with reproducible failure output</output-format-item>
+            <output-format-item>**EXECUTE** `./run-cats-fuzz.sh --openapi` only after the user provides the contract path; wait for their answer before running</output-format-item>
+            <output-format-item>**REVIEW** CATS report output under `cats/cats-report/` and summarize contract violations, validation gaps, and prioritized fixes</output-format-item>
+            <output-format-item>**DOCUMENT** a Docker-based local installation path using `cats/Dockerfile` and `run-cats-fuzz.sh --openapi` with the contract file path, including image build and execution commands</output-format-item>
             <output-format-item>**EXPLAIN** what failed, why it failed, and how to reproduce findings locally</output-format-item>
             <output-format-item>**VALIDATE** that generated artifacts and build checks remain consistent after integration</output-format-item>
         </output-format-list>
