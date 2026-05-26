@@ -49,6 +49,10 @@
             <artifactId>quarkus-hibernate-validator</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.quarkus</groupId>
+            <artifactId>quarkus-smallrye-health</artifactId>
+        </dependency>
+        <dependency>
             <groupId>io.quarkiverse.httpproblem</groupId>
             <artifactId>quarkus-http-problem</artifactId>
             <version>${quarkus-http-problem.version}</version>
