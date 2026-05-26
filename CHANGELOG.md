@@ -28,6 +28,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Standardized generated `SKILL.md` files with a defined workflow section across skills (#682, #683, #684)
   - `@181-java-observability-logging` refocused; metrics and tracing guidance split into dedicated skills (#707)
 
+- **Agents**:
+  - Extended `robot-spring-boot-coder`, `robot-quarkus-coder`, and `robot-micronaut-coder` with validation, security, Kafka messaging, and MongoDB responsibilities and skill references (#688, #710)
+  - Wired specialized coders and `robot-java-coder` to additional 0.15.0 skills: `@126-java-exception-handling`, `@145-java-refactoring-high-performance`, `@182-java-observability-metrics-micrometer`, `@183-observability-tracing-opentelemetry`, and `@703-technologies-fuzzing-testing`
+  - Updated `robot-coordinator` framework identification and delegation briefs to route validation, security, Kafka, and MongoDB work to the framework coders (#688, #710)
+
 - **Documentation:**
   - Improved project usage guidance in `README.md` and skills documentation (#732, #733)
   - Added localized README translations (`README_ES.md`, `README_CN.md`) with a language switcher in `README.md`, refreshed the Goal statement, and documented sync requirements in `AGENTS.md`
