@@ -1,4 +1,4 @@
-# Skills & Agents for Java
+# Skills & Agents para Java
 
 <a href="https://trendshift.io/repositories/15013" target="_blank"><img src="https://trendshift.io/api/badge/repositories/15013" alt="jabrena%2Fcursor-rules-java | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 
@@ -6,106 +6,106 @@
 
 [![CI Builds](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml/badge.svg)](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml)
 
-> **Languages:** [Español](./README_ES.md) · [中文](./README_CN.md)
+> **Idiomas:** [English](./README.md) · [中文](./README_CN.md)
 
-## Goal
+## Objetivo
 
-An opinionated AI-native workflow for evolving modern Java Enterprise `SDLC` practices through reusable `Skills`, `Agents`, and `MCP servers`.
+Un flujo de trabajo nativo de IA, con criterio propio, para evolucionar las prácticas modernas de `SDLC` en Java Enterprise mediante `Skills`, `Agents` y servidores `MCP` reutilizables.
 
-| QUESTION   | ROLE               | AREA             | SUPPORT                                                                                                                                                                                                             |
+| PREGUNTA   | ROL                | ÁREA             | SOPORTE                                                                                                                                                                                                             |
 | ---------- | ------------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| WHAT / WHEN | PO, BA, EA, SA, TL | Agile & Planning | `User Stories`, `GitHub Issues` & `Jira` |
-| WHY        | EA, SL, TL         | Architecture     | `ADRs` & `UML` / `C4` / `ER` Diagrams |
-| HOW | SA, TL, SWE | Spec-Driven      | `AI Plan mode` & `OpenSpec` |
-| HOW        | TL, SWE            | Java development | `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation`, `Spring Boot`, `Quarkus`, `Micronaut`, `OpenAPI`, `WireMock` & `AGENTS.md` |
+| QUÉ / CUÁNDO | PO, BA, EA, SA, TL | Agile & Planning | `User Stories`, `GitHub Issues` y `Jira` |
+| POR QUÉ    | EA, SL, TL         | Architecture     | `ADRs` y diagramas `UML` / `C4` / `ER` |
+| CÓMO | SA, TL, SWE | Spec-Driven      | `AI Plan mode` y `OpenSpec` |
+| CÓMO       | TL, SWE            | Java development | `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation`, `Spring Boot`, `Quarkus`, `Micronaut`, `OpenAPI`, `WireMock` y `AGENTS.md` |
 
-## Deliverables
+## Entregables
 
-The project generates a set of deliverables at the end of any iteration.
+El proyecto genera un conjunto de entregables al final de cualquier iteración.
 
 
-| Inventory     | Installation                                                                                    | Getting Started                                                                           |
+| Inventario     | Instalación                                                                                    | Primeros pasos                                                                           |
 | --------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | 1. [Skills for Java](./documentation/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/cursor-rules-java --all --agent cursor` | [`Skills for Java`](./documentation/GETTING-STARTED-SKILLS.md)     |
-| 2. [Agents for Java](./documentation/INVENTORY-AGENTS-JAVA.md) | `@003-agents-installation` Install Agents in Cursor/Claude | [`Agents for Java`](./documentation/GETTING-STARTED-AGENTS.md)     |
+| 2. [Agents for Java](./documentation/INVENTORY-AGENTS-JAVA.md) | `@003-agents-installation` Instalar Agents en Cursor/Claude | [`Agents for Java`](./documentation/GETTING-STARTED-AGENTS.md)     |
 
-**⚠️ Note:** If you continue using the System prompts/rules from this project, please review [the article](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html). Current `System prompts/rules` will be removed in the coming months.
+**⚠️ Nota:** Si sigues usando los System prompts/rules de este proyecto, revisa [el artículo](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html). Los `System prompts/rules` actuales se eliminarán en los próximos meses.
 
-### Compatibility
+### Compatibilidad
 
-This project is compatible with any tool that supports `Skills`, `Agents`, `AGENTS.md`, and `MCP Servers`.
+Este proyecto es compatible con cualquier herramienta que admita `Skills`, `Agents`, `AGENTS.md` y `MCP Servers`.
 
-## How to use the project?
+## ¿Cómo usar el proyecto?
 
-The SDLC has evolved with this new wave of AI tooling, which enhances the software engineering process.
+El SDLC ha evolucionado con esta nueva ola de herramientas de IA, que mejora el proceso de ingeniería de software.
 
-|               | Analysis / Design | Implementation | Operation |
+|               | Análisis / Diseño | Implementación | Operación |
 | ------------- | ----------------- | -------------- | --------- |
 | [Skills](./documentation/GETTING-STARTED-SKILLS.md)        | [014-agile-user-story](https://www.skills.sh/jabrena/cursor-rules-java/014-agile-user-story) · [030-architecture-adr-general](https://www.skills.sh/jabrena/cursor-rules-java/030-architecture-adr-general) · [031-architecture-adr-functional-requirements](https://www.skills.sh/jabrena/cursor-rules-java/031-architecture-adr-functional-requirements) · [033-architecture-diagrams](https://www.skills.sh/jabrena/cursor-rules-java/033-architecture-diagrams) · [041-planning-plan-mode](https://www.skills.sh/jabrena/cursor-rules-java/041-planning-plan-mode) | [110-java-maven-best-practices](https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices) · [121-java-object-oriented-design](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) · [124-java-secure-coding](https://www.skills.sh/jabrena/cursor-rules-java/124-java-secure-coding) · [111-java-maven-dependencies](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) · [143-java-functional-exception-handling](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) | [151-java-performance-jmeter](https://www.skills.sh/jabrena/cursor-rules-java/151-java-performance-jmeter) · [162-java-profiling-analyze](https://www.skills.sh/jabrena/cursor-rules-java/162-java-profiling-analyze) · [161-java-profiling-detect](https://www.skills.sh/jabrena/cursor-rules-java/161-java-profiling-detect) · [163-java-profiling-refactor](https://www.skills.sh/jabrena/cursor-rules-java/163-java-profiling-refactor) · [164-java-profiling-verify](https://www.skills.sh/jabrena/cursor-rules-java/164-java-profiling-verify) |
 | [Agents](./documentation/GETTING-STARTED-AGENTS.md)        | `@robot-business-analyst` | `@robot-coordinator` · `@robot-java-coder` · `@robot-spring-boot-coder` · `@robot-quarkus-coder` · `@robot-micronaut-coder` |  |
 | [MCP Servers](./documentation/THIRD-PARTIES.md)   | [JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) | [JavaDocs](https://www.javadocs.dev/mcp) · [Serena](https://oraios.github.io/serena/01-about/000_intro.html) | [Graphana](https://grafana.com/docs/grafana/latest/developer-resources/mcp/) |
 
-## Workflows
+## Flujos de trabajo
 
-While building this project, we identified three workflows: `Prompting Engineering Workflow`, `Agent-driven Engineering Workflow`, `Pipelines Workflow`.
+Al construir este proyecto identificamos tres flujos de trabajo: `Prompting Engineering Workflow`, `Agent-driven Engineering Workflow`, `Pipelines Workflow`.
 
 ### Prompting Engineering Workflow
 
-In this workflow, the software engineer interacts with models using `User prompts`. In an incremental way, you delegate a whole task or ask for help at specific points. You can use this project to refactor generated code, or delegate the task and attach a system prompt or Skills to it.
+En este flujo, el ingeniero de software interactúa con los modelos mediante `User prompts`. De forma incremental, delegas una tarea completa o pides ayuda en puntos concretos. Puedes usar este proyecto para refactorizar código generado, o delegar la tarea y adjuntar un system prompt o Skills.
 
 ![](./documentation/images/workflow-prompts.png)
 
 ### Agent-driven Engineering Workflow
 
-`Agents for Java Enterprise development` were designed to help the software engineer in the implementation phase. The engineer defines solid `Specs`, and those specifications are delegated to `Agents`.
+Los `Agents for Java Enterprise development` están pensados para ayudar al ingeniero de software en la fase de implementación. El ingeniero define `Specs` sólidas y esas especificaciones se delegan a los `Agents`.
 
 ![](./documentation/images/workflow-agents.png)
 
 ### Pipelines Workflow
 
-Adding AI tools to your pipeline can provide new opportunities to deliver more value (examples: automatic coding, code refactoring, continuous profiling, and others).
+Añadir herramientas de IA a tu pipeline puede abrir nuevas oportunidades para aportar más valor (por ejemplo: codificación automática, refactorización de código, perfilado continuo y otros).
 
 ![](./documentation/images/workflow-pipelines.png)
 
-Further information [here](./documentation/GETTING-STARTED-PIPELINES.md).
+Más información [aquí](./documentation/GETTING-STARTED-PIPELINES.md).
 
-## Limitations
+## Limitaciones
 
-### Lack of determinism
+### Falta de determinismo
 
-From the outset, be aware that results from interactions with these `Skills` and agents are not deterministic because of how the models behave, but you can mitigate that with clear goals and validation checkpoints.
+Desde el principio, ten presente que los resultados de las interacciones con estos `Skills` y agents no son deterministas por el comportamiento de los modelos, pero puedes mitigarlo con objetivos claros y puntos de validación.
 
-### Not all models behave in the same way
+### No todos los modelos se comportan igual
 
-Some interactive skills require `Premium` models for interactive use; otherwise they follow a fixed sequence of steps.
+Algunos skills interactivos requieren modelos `Premium` para uso interactivo; de lo contrario siguen una secuencia fija de pasos.
 
-### Limits of interactions with models
+### Límites de las interacciones con modelos
 
-Models can generate code, but they cannot execute it against your local data. To bridge that gap, some Skills include scripts you run locally.
+Los modelos pueden generar código, pero no pueden ejecutarlo contra tus datos locales. Para cerrar esa brecha, algunos Skills incluyen scripts que ejecutas localmente.
 
-## Contribute
+## Contribuir
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for conventions, generator workflows, tests, and how to open a pull request.
+Consulta [CONTRIBUTING.md](./CONTRIBUTING.md) para convenciones, flujos del generador, pruebas y cómo abrir un pull request.
 
-## Examples
+## Ejemplos
 
-The repository includes [a collection of examples](./examples/) where you can explore what these Skills and workflows enable for Java.
+El repositorio incluye [una colección de ejemplos](./examples/) donde puedes explorar lo que estos Skills y flujos de trabajo permiten en Java.
 
 ## Architecture Decision Records (ADR)
 
-- Review the [ADR index](./documentation/adr/README.md) for the complete list.
+- Revisa el [índice de ADR](./documentation/adr/README.md) para la lista completa.
 
 ## Changelog
 
-- Review the [CHANGELOG](./CHANGELOG.md) for further details.
+- Revisa el [CHANGELOG](./CHANGELOG.md) para más detalles.
 
-## Java JEPs from Java 8 onward
+## Java JEPs desde Java 8
 
-Java uses JEPs (JDK Enhancement Proposals) to describe new language and platform features. This repository tracks which JEPs could improve the Skills and guidance here.
+Java usa JEPs (JDK Enhancement Proposals) para describir nuevas características del lenguaje y la plataforma. Este repositorio hace seguimiento de qué JEPs podrían mejorar los Skills y la guía aquí incluida.
 
-- [JEPs list](./documentation/jeps/All-JEPS.md)
+- [Lista de JEPs](./documentation/jeps/All-JEPS.md)
 
-## Meetups, Conferences, Workshops & Articles
+## Meetups, conferencias, talleres y artículos
 
 ### Codemotion / Madrid (2026/04/20 - 11:00 - 12:30)
 
@@ -130,7 +130,7 @@ Java uses JEPs (JDK Enhancement Proposals) to describe new language and platform
 - [https://www.linkedin.com/pulse/september-rest-story-jvm-weekly-vol-146-artur-skowro%C5%84ski-82lif/?trackingId=wbWPSL65TpCCbdg5ksAWjw%3D%3D](https://www.linkedin.com/pulse/september-rest-story-jvm-weekly-vol-146-artur-skowro%C5%84ski-82lif/?trackingId=wbWPSL65TpCCbdg5ksAWjw%3D%3D)
 - [https://virtuslab.com/blog/ai/providing-library-documentation/](https://virtuslab.com/blog/ai/providing-library-documentation/)
 
-## References
+## Referencias
 
 - [https://www.cursor.com/](https://www.cursor.com/)
 - [https://cursor.com/cli](https://cursor.com/cli)
@@ -149,7 +149,7 @@ Java uses JEPs (JDK Enhancement Proposals) to describe new language and platform
 - [https://jbake.org/docs/latest/](https://jbake.org/docs/latest/)
 - https://developers.redhat.com/blog/2016/12/09/spring-cloud-for-microservices-compared-to-kubernetes
 
-## Other developments
+## Otros desarrollos
 
 - [https://github.com/jabrena/pml](https://github.com/jabrena/pml)
 - [https://github.com/jabrena/cursor-rules-java](https://github.com/jabrena/cursor-rules-java)

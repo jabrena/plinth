@@ -5,6 +5,56 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.15.0] 2026-06-01
+
+### Added
+
+- **Skills**:
+  - Framework validation skills for Spring Boot, Quarkus, and Micronaut (`@303-frameworks-spring-boot-validation`, `@403-frameworks-quarkus-validation`, `@503-frameworks-micronaut-validation`) (#688)
+  - Framework security skills for Spring Boot, Quarkus, and Micronaut (`@304-frameworks-spring-boot-security`, `@404-frameworks-quarkus-security`, `@504-frameworks-micronaut-security`) (#688)
+  - Kafka messaging skills for Spring Boot, Quarkus, and Micronaut (`@314-frameworks-spring-kafka`, `@414-frameworks-quarkus-kafka`, `@514-frameworks-micronaut-kafka`) (#710)
+  - MongoDB persistence skills for Spring Boot, Quarkus, and Micronaut (`@315-frameworks-spring-mongodb`, `@415-frameworks-quarkus-mongodb`, `@515-frameworks-micronaut-mongodb`) (#710)
+  - High-performance refactoring skill (`@145-java-refactoring-high-performance`) (#689)
+  - Micrometer metrics skill (`@182-java-observability-metrics-micrometer`) and OpenTelemetry tracing skill (`@183-observability-tracing-opentelemetry`) (#707)
+  - Exception-handling skill renumbered to `@126-java-exception-handling` (from `@123`) (#727)
+  - Docker-based CATS fuzz-testing workflow and assets for `@703-technologies-fuzzing-testing` (#728)
+
+- **Rules:**
+  - Restored legacy Cursor rules and getting-started system prompts under `.cursor/rules/` (#654)
+
+- **CI:**
+  - Cisco AI Skill Scanner in the Maven workflow with strict behavioral policy (#726)
+
+### Changed
+
+- **PML & generators**:
+  - Refactored the skills generator: per-skill wrappers moved from `skills/` to `skill-indexes/`, renamed inventory classes (`SkillIndexes`, `SkillReferenceGenerator`), and renamed XSLT (`skill-index-to-markdown.xsl`) (#681)
+  - Standardized generated `SKILL.md` files with a defined workflow section across skills (#682, #683, #684)
+  - `@181-java-observability-logging` refocused; metrics and tracing guidance split into dedicated skills (#707)
+  - Robot agent handoffs updated for validation, security, Kafka, and MongoDB skills (#688, #710)
+
+- **Documentation:**
+  - Improved project usage guidance in `README.md` and skills documentation (#732, #733)
+  - Added localized README translations (`README_ES.md`, `README_CN.md`) with a language switcher in `README.md`, refreshed the Goal statement, and documented sync requirements in `AGENTS.md`
+  - Third-party tools and links documented in `documentation/THIRD-PARTIES.md` (#734)
+  - Maintenance and contributor docs aligned with the refactored generator layout (#681)
+
+- **Build & CI:**
+  - Examples build workflow separated from the main Maven pipeline (#710)
+  - Maven and GitHub Actions dependency updates, including JUnit BOM 6.x (#697, #719, and related Dependabot bumps)
+
+### Removed
+
+- `@123-java-exception-handling` superseded by `@126-java-exception-handling` (#727)
+- `@180-java-observability-logging` superseded by the `@181`/`@182`/`@183` observability skill family (#707)
+
+### Fixed
+
+- Restored Kafka and MongoDB XML skill definitions after a regression (#725)
+- Skill description quality improvements (#687)
+- MCP configuration for Claude (#680)
+- README formatting and `cursor-rules-java` installation command order in docs (#663, #714)
+
 ## [0.14.0] 2026-04-12
 
 ### Added
@@ -350,6 +400,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added initial cursor rules (Java, Effective Java, Concurrency, Functional programming, Data-Oriented programming & Spring Boot)
 
+[0.15.0]: https://github.com/jabrena/cursor-rules-java/compare/0.14.0...0.15.0
 [0.14.0]: https://github.com/jabrena/cursor-rules-java/compare/0.13.0...0.14.0
 [0.13.0]: https://github.com/jabrena/cursor-rules-java/compare/0.12.0...0.13.0
 [0.12.0]: https://github.com/jabrena/cursor-rules-java/compare/0.11.0...0.12.0

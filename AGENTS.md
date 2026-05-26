@@ -48,6 +48,7 @@ This project uses **OpenSpec** for structured change management and planning:
 - `documentation/adr/` – Architecture Decision Records (WRITE)
 - `site-generator/content/` – Blog posts, courses, documentation (WRITE here to update website)
 - `docs/` – Generated static website for GitHub Pages (READ only)
+- `README.md` – Default project README (WRITE); keep `README_ES.md` and `README_CN.md` in sync when it changes
 
 ## Commands
 
@@ -127,6 +128,6 @@ pre-commit run conventional-pre-commit --hook-stage commit-msg --commit-msg-file
 
 ## Boundaries
 
-- ✅ **Always do:** Edit XML in `skills-generator/src/main/resources/` (`skill-references/`, `skills/`) to change rules and skills, run `./mvnw clean verify` before promoting changes. For skill changes, also run `npx skill-check@latest skills --no-security-scan --format github` and the `skill-scanner scan-all ./skills --recursive --use-behavioral --policy strict --fail-on-severity high` scan when the scanner is available. When editing XML, follow PML Schema: [https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd](https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd). For complex changes, create OpenSpec proposals first.
+- ✅ **Always do:** Edit XML in `skills-generator/src/main/resources/` (`skill-references/`, `skills/`) to change rules and skills, run `./mvnw clean verify` before promoting changes. For skill changes, also run `npx skill-check@latest skills --no-security-scan --format github` and the `skill-scanner scan-all ./skills --recursive --use-behavioral --policy strict --fail-on-severity high` scan when the scanner is available. When editing XML, follow PML Schema: [https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd](https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd). For complex changes, create OpenSpec proposals first. When you change `README.md`, update the translated READMEs (`README_ES.md`, `README_CN.md`) in the same change.
 - ⚠️ **Ask first:** Adding new XML rule files, modifying the XSLT stylesheet, changing site templates, architectural changes (use OpenSpec for planning)
 - 🚫 **Never do:** Edit `.cursor/rules/` or `docs/` directly, commit secrets, skip tests before promoting, bypass OpenSpec for major changes

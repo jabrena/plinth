@@ -1,4 +1,4 @@
-# Skills & Agents for Java
+# Java 技能与智能体
 
 <a href="https://trendshift.io/repositories/15013" target="_blank"><img src="https://trendshift.io/api/badge/repositories/15013" alt="jabrena%2Fcursor-rules-java | Trendshift" style="width: 250px; height: 55px;" width="250" height="55"/></a>
 
@@ -6,106 +6,106 @@
 
 [![CI Builds](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml/badge.svg)](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml)
 
-> **Languages:** [Español](./README_ES.md) · [中文](./README_CN.md)
+> **语言：** [English](./README.md) · [Español](./README_ES.md)
 
-## Goal
+## 目标
 
-An opinionated AI-native workflow for evolving modern Java Enterprise `SDLC` practices through reusable `Skills`, `Agents`, and `MCP servers`.
+一套带有明确观点的 AI 原生工作流，通过可复用的 `Skills`、`Agents` 与 `MCP servers`，持续演进现代 Java 企业级 `SDLC` 实践。
 
-| QUESTION   | ROLE               | AREA             | SUPPORT                                                                                                                                                                                                             |
+| 问题       | 角色               | 领域             | 支持内容                                                                                                                                                                                                             |
 | ---------- | ------------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| WHAT / WHEN | PO, BA, EA, SA, TL | Agile & Planning | `User Stories`, `GitHub Issues` & `Jira` |
-| WHY        | EA, SL, TL         | Architecture     | `ADRs` & `UML` / `C4` / `ER` Diagrams |
-| HOW | SA, TL, SWE | Spec-Driven      | `AI Plan mode` & `OpenSpec` |
-| HOW        | TL, SWE            | Java development | `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation`, `Spring Boot`, `Quarkus`, `Micronaut`, `OpenAPI`, `WireMock` & `AGENTS.md` |
+| 什么 / 何时 | PO, BA, EA, SA, TL | Agile & Planning | `User Stories`、`GitHub Issues` 与 `Jira` |
+| 为什么     | EA, SL, TL         | Architecture     | `ADRs` 与 `UML` / `C4` / `ER` 图表 |
+| 如何 | SA, TL, SWE | Spec-Driven      | `AI Plan mode` 与 `OpenSpec` |
+| 如何       | TL, SWE            | Java development | 基于 Maven 的构建系统、`Design`、`Coding`、`Testing`、`Observability`、`Refactoring & JMH Benchmarking`、JMeter 性能测试、Async profiler/OpenJDK 工具性能分析、`Documentation`、`Spring Boot`、`Quarkus`、`Micronaut`、`OpenAPI`、`WireMock` 与 `AGENTS.md` |
 
-## Deliverables
+## 交付物
 
-The project generates a set of deliverables at the end of any iteration.
+项目会在每次迭代结束时生成一组交付物。
 
 
-| Inventory     | Installation                                                                                    | Getting Started                                                                           |
+| 清单     | 安装                                                                                    | 快速入门                                                                           |
 | --------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| 1. [Skills for Java](./documentation/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/cursor-rules-java --all --agent cursor` | [`Skills for Java`](./documentation/GETTING-STARTED-SKILLS.md)     |
-| 2. [Agents for Java](./documentation/INVENTORY-AGENTS-JAVA.md) | `@003-agents-installation` Install Agents in Cursor/Claude | [`Agents for Java`](./documentation/GETTING-STARTED-AGENTS.md)     |
+| 1. [Java 技能清单](./documentation/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/cursor-rules-java --all --agent cursor` | [`Java 技能`](./documentation/GETTING-STARTED-SKILLS.md)     |
+| 2. [Java 智能体清单](./documentation/INVENTORY-AGENTS-JAVA.md) | `@003-agents-installation` 在 Cursor/Claude 中安装 Agents | [`Java 智能体`](./documentation/GETTING-STARTED-AGENTS.md)     |
 
-**⚠️ Note:** If you continue using the System prompts/rules from this project, please review [the article](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html). Current `System prompts/rules` will be removed in the coming months.
+**⚠️ 注意：** 若你仍在使用本项目的 System prompts/rules，请阅读[相关文章](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html)。当前的 `System prompts/rules` 将在未来数月内移除。
 
-### Compatibility
+### 兼容性
 
-This project is compatible with any tool that supports `Skills`, `Agents`, `AGENTS.md`, and `MCP Servers`.
+本项目兼容任何支持 `Skills`、`Agents`、`AGENTS.md` 与 `MCP Servers` 的工具。
 
-## How to use the project?
+## 如何使用本项目？
 
-The SDLC has evolved with this new wave of AI tooling, which enhances the software engineering process.
+随着这波 AI 工具浪潮，SDLC 已发生演进，软件工程流程也因此得到增强。
 
-|               | Analysis / Design | Implementation | Operation |
+|               | 分析 / 设计 | 实现 | 运维 |
 | ------------- | ----------------- | -------------- | --------- |
 | [Skills](./documentation/GETTING-STARTED-SKILLS.md)        | [014-agile-user-story](https://www.skills.sh/jabrena/cursor-rules-java/014-agile-user-story) · [030-architecture-adr-general](https://www.skills.sh/jabrena/cursor-rules-java/030-architecture-adr-general) · [031-architecture-adr-functional-requirements](https://www.skills.sh/jabrena/cursor-rules-java/031-architecture-adr-functional-requirements) · [033-architecture-diagrams](https://www.skills.sh/jabrena/cursor-rules-java/033-architecture-diagrams) · [041-planning-plan-mode](https://www.skills.sh/jabrena/cursor-rules-java/041-planning-plan-mode) | [110-java-maven-best-practices](https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices) · [121-java-object-oriented-design](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) · [124-java-secure-coding](https://www.skills.sh/jabrena/cursor-rules-java/124-java-secure-coding) · [111-java-maven-dependencies](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) · [143-java-functional-exception-handling](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) | [151-java-performance-jmeter](https://www.skills.sh/jabrena/cursor-rules-java/151-java-performance-jmeter) · [162-java-profiling-analyze](https://www.skills.sh/jabrena/cursor-rules-java/162-java-profiling-analyze) · [161-java-profiling-detect](https://www.skills.sh/jabrena/cursor-rules-java/161-java-profiling-detect) · [163-java-profiling-refactor](https://www.skills.sh/jabrena/cursor-rules-java/163-java-profiling-refactor) · [164-java-profiling-verify](https://www.skills.sh/jabrena/cursor-rules-java/164-java-profiling-verify) |
 | [Agents](./documentation/GETTING-STARTED-AGENTS.md)        | `@robot-business-analyst` | `@robot-coordinator` · `@robot-java-coder` · `@robot-spring-boot-coder` · `@robot-quarkus-coder` · `@robot-micronaut-coder` |  |
 | [MCP Servers](./documentation/THIRD-PARTIES.md)   | [JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) | [JavaDocs](https://www.javadocs.dev/mcp) · [Serena](https://oraios.github.io/serena/01-about/000_intro.html) | [Graphana](https://grafana.com/docs/grafana/latest/developer-resources/mcp/) |
 
-## Workflows
+## 工作流
 
-While building this project, we identified three workflows: `Prompting Engineering Workflow`, `Agent-driven Engineering Workflow`, `Pipelines Workflow`.
+在构建本项目的过程中，我们识别出三种工作流：`Prompting Engineering Workflow`（提示工程工作流）、`Agent-driven Engineering Workflow`（智能体驱动工程工作流）、`Pipelines Workflow`（流水线工作流）。
 
 ### Prompting Engineering Workflow
 
-In this workflow, the software engineer interacts with models using `User prompts`. In an incremental way, you delegate a whole task or ask for help at specific points. You can use this project to refactor generated code, or delegate the task and attach a system prompt or Skills to it.
+在此工作流中，软件工程师通过 `User prompts` 与模型交互。你可以逐步委托完整任务，或在特定环节寻求帮助。本项目可用于重构生成的代码，或将任务委托出去并附带 system prompt 或 Skills。
 
 ![](./documentation/images/workflow-prompts.png)
 
 ### Agent-driven Engineering Workflow
 
-`Agents for Java Enterprise development` were designed to help the software engineer in the implementation phase. The engineer defines solid `Specs`, and those specifications are delegated to `Agents`.
+`Agents for Java Enterprise development` 旨在帮助软件工程师完成实现阶段。工程师定义清晰的 `Specs`，再将这些规格委托给 `Agents`。
 
 ![](./documentation/images/workflow-agents.png)
 
 ### Pipelines Workflow
 
-Adding AI tools to your pipeline can provide new opportunities to deliver more value (examples: automatic coding, code refactoring, continuous profiling, and others).
+将 AI 工具加入流水线可带来新的价值交付机会（例如：自动编码、代码重构、持续性能分析等）。
 
 ![](./documentation/images/workflow-pipelines.png)
 
-Further information [here](./documentation/GETTING-STARTED-PIPELINES.md).
+更多信息见[此处](./documentation/GETTING-STARTED-PIPELINES.md)。
 
-## Limitations
+## 局限性
 
-### Lack of determinism
+### 缺乏确定性
 
-From the outset, be aware that results from interactions with these `Skills` and agents are not deterministic because of how the models behave, but you can mitigate that with clear goals and validation checkpoints.
+从一开始就要意识到，由于模型行为的原因，与这些 `Skills` 和 agents 交互的结果并非确定性的；但你可以通过明确目标和验证检查点来降低影响。
 
-### Not all models behave in the same way
+### 并非所有模型表现一致
 
-Some interactive skills require `Premium` models for interactive use; otherwise they follow a fixed sequence of steps.
+部分交互式 skills 需要 `Premium` 模型才能进行交互式使用；否则会按固定步骤顺序执行。
 
-### Limits of interactions with models
+### 与模型交互的限制
 
-Models can generate code, but they cannot execute it against your local data. To bridge that gap, some Skills include scripts you run locally.
+模型可以生成代码，但无法针对你的本地数据执行代码。为弥补这一差距，部分 Skills 包含可在本地运行的脚本。
 
-## Contribute
+## 贡献
 
-See [CONTRIBUTING.md](./CONTRIBUTING.md) for conventions, generator workflows, tests, and how to open a pull request.
+请参阅 [CONTRIBUTING.md](./CONTRIBUTING.md)，了解约定、生成器工作流、测试以及如何提交 pull request。
 
-## Examples
+## 示例
 
-The repository includes [a collection of examples](./examples/) where you can explore what these Skills and workflows enable for Java.
+仓库包含[一组示例](./examples/)，可探索这些 Skills 与工作流在 Java 中的能力。
 
 ## Architecture Decision Records (ADR)
 
-- Review the [ADR index](./documentation/adr/README.md) for the complete list.
+- 查看 [ADR 索引](./documentation/adr/README.md) 获取完整列表。
 
-## Changelog
+## 更新日志
 
-- Review the [CHANGELOG](./CHANGELOG.md) for further details.
+- 查看 [CHANGELOG](./CHANGELOG.md) 了解详情。
 
-## Java JEPs from Java 8 onward
+## 自 Java 8 起的 Java JEP
 
-Java uses JEPs (JDK Enhancement Proposals) to describe new language and platform features. This repository tracks which JEPs could improve the Skills and guidance here.
+Java 使用 JEP（JDK Enhancement Proposals）描述新的语言与平台特性。本仓库跟踪哪些 JEP 可能改进此处的 Skills 与指导内容。
 
-- [JEPs list](./documentation/jeps/All-JEPS.md)
+- [JEP 列表](./documentation/jeps/All-JEPS.md)
 
-## Meetups, Conferences, Workshops & Articles
+## 聚会、会议、工作坊与文章
 
 ### Codemotion / Madrid (2026/04/20 - 11:00 - 12:30)
 
@@ -123,14 +123,14 @@ Java uses JEPs (JDK Enhancement Proposals) to describe new language and platform
 
 - [https://www.meetup.com/es-ES/madridjug/events/307458529/](https://www.meetup.com/es-ES/madridjug/events/307458529/)
 
-### Blogs
+### 博客
 
 - [Delegating Java tasks to Supervised AI Dev Pipelines](https://www.javaadvent.com/2025/12/delegating-java-tasks-to-supervised-ai-dev-pipelines.html)
 - [https://vibekode.it/blog/cursor-ai-developer-cloud-platform/](https://vibekode.it/blog/cursor-ai-developer-cloud-platform/)
 - [https://www.linkedin.com/pulse/september-rest-story-jvm-weekly-vol-146-artur-skowro%C5%84ski-82lif/?trackingId=wbWPSL65TpCCbdg5ksAWjw%3D%3D](https://www.linkedin.com/pulse/september-rest-story-jvm-weekly-vol-146-artur-skowro%C5%84ski-82lif/?trackingId=wbWPSL65TpCCbdg5ksAWjw%3D%3D)
 - [https://virtuslab.com/blog/ai/providing-library-documentation/](https://virtuslab.com/blog/ai/providing-library-documentation/)
 
-## References
+## 参考资料
 
 - [https://www.cursor.com/](https://www.cursor.com/)
 - [https://cursor.com/cli](https://cursor.com/cli)
@@ -149,7 +149,7 @@ Java uses JEPs (JDK Enhancement Proposals) to describe new language and platform
 - [https://jbake.org/docs/latest/](https://jbake.org/docs/latest/)
 - https://developers.redhat.com/blog/2016/12/09/spring-cloud-for-microservices-compared-to-kubernetes
 
-## Other developments
+## 其他项目
 
 - [https://github.com/jabrena/pml](https://github.com/jabrena/pml)
 - [https://github.com/jabrena/cursor-rules-java](https://github.com/jabrena/cursor-rules-java)
