@@ -16,6 +16,9 @@ jobs:
           - { name: "Spring Boot Memory Leak", path: "examples/spring-boot-memory-leak-demo", goal: "package" }
           - { name: "Spring Boot Performance Bottleneck", path: "examples/spring-boot-performance-bottleneck-demo", goal: "package" }
           - { name: "Spring Boot", path: "examples/spring-boot-demo/implementation", goal: "verify -Pjacoco" }
+          - { name: "Frameworks Spring Boot", path: "examples/frameworks/spring-boot", goal: "verify" }
+          - { name: "Frameworks Quarkus", path: "examples/frameworks/quarkus", goal: "verify" }
+          - { name: "Frameworks Micronaut", path: "examples/frameworks/micronaut", goal: "verify" }
     steps:
       - uses: actions/checkout@v6
         with:

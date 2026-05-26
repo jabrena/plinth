@@ -183,7 +183,7 @@ public record OrderRequest(Address shipping, List<LineItem> lines) { }
 ### Example 5: ConstraintViolationException handler
 
 Title: Map validation failures to HTTP 400
-Description: Provide an `ExceptionHandler<ConstraintViolationException>` singleton to return consistent JSON for validation errors across controllers. Use `HttpResponse.badRequest(body)` for concise construction and `.toList()` (Java 16+) instead of `Collectors.toList()`.
+Description: Provide an `ExceptionHandler<ConstraintViolationException>` singleton that returns RFC 7807 Problem Details aligned with `@502-frameworks-micronaut-rest`: stable `type`, `title`, `status`, `detail`, `instance`, plus a `violations` extension for field-level messages. Use `HttpResponse.badRequest(body)` for concise construction and `.toList()` (Java 16+) instead of `Collectors.toList()`.
 
 **Good example:**
 
@@ -194,16 +194,30 @@ import io.micronaut.http.server.exceptions.ExceptionHandler;
 import jakarta.inject.Singleton;
 import jakarta.validation.ConstraintViolationException;
 
+import java.net.URI;
+import java.util.List;
+
+record ValidationProblemBody(URI type, String title, int status, String detail, URI instance, List<String> violations) { }
+
 @Singleton
 public class ConstraintViolationHandler
-        implements ExceptionHandler<ConstraintViolationException, HttpResponse<?>> {
+        implements ExceptionHandler<ConstraintViolationException, HttpResponse<ValidationProblemBody>> {
+
+    private static final URI VALIDATION_TYPE = URI.create("https://example.com/problems/validation-error");
 
     @Override
-    public HttpResponse<?> handle(HttpRequest request, ConstraintViolationException ex) {
-        var details = ex.getConstraintViolations().stream()
+    public HttpResponse<ValidationProblemBody> handle(HttpRequest request, ConstraintViolationException ex) {
+        List<String> violations = ex.getConstraintViolations().stream()
             .map(v -> v.getPropertyPath() + ": " + v.getMessage())
             .toList();
-        return HttpResponse.badRequest(java.util.Map.of("error", "VALIDATION_ERROR", "details", details));
+        ValidationProblemBody body = new ValidationProblemBody(
+            VALIDATION_TYPE,
+            "Validation Error",
+            400,
+            "One or more request fields failed validation.",
+            request.getUri(),
+            violations);
+        return HttpResponse.badRequest(body);
     }
 }
 ```
@@ -211,8 +225,9 @@ public class ConstraintViolationHandler
 **Bad example:**
 
 ```java
-return HttpResponse.badRequest(ex.getMessage());
-// Unstable message; may expose internal property paths
+return HttpResponse.badRequest(
+    java.util.Map.of("error", "VALIDATION_ERROR", "details", List.of(ex.getMessage())));
+// Ad hoc Map shape — not RFC 7807; unstable message; may expose internal property paths
 ```
 
 ### Example 6: Class-level custom constraint
@@ -260,7 +275,7 @@ if (!p1.equals(p2)) throw new IllegalArgumentException("mismatch");
 
 - **ANALYZE** controllers, factories, and configuration beans for missing `@Valid`, missing cascades, and inconsistent 400 bodies
 - **APPLY** Bean Validation at HTTP boundaries and on `@ConfigurationProperties`; centralize `ConstraintViolationException` handling
-- **ALIGN** error responses with Problem Details or project-standard JSON from `@502-frameworks-micronaut-rest`
+- **ALIGN** error responses with RFC 7807 Problem Details (`ValidationProblemBody` record) from `@502-frameworks-micronaut-rest`
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
 
 ## Safeguards
