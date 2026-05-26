@@ -43,7 +43,7 @@ Apply guidance from these Skills when relevant:
 - `@145-java-refactoring-high-performance`: High-performance refactoring
 - `@181-java-observability-logging`: Logging observability
 - `@182-java-observability-metrics-micrometer`: Micrometer metrics
-- `@183-observability-tracing-opentelemetry`: OpenTelemetry tracing
+- `@183-java-observability-tracing-opentelemetry`: OpenTelemetry tracing
 - `@421-frameworks-quarkus-testing-unit-tests`: Quarkus Unit Testing
 - `@422-frameworks-quarkus-testing-integration-tests`: Quarkus integration testing
 - `@423-frameworks-quarkus-testing-acceptance-tests`: Quarkus acceptance testing

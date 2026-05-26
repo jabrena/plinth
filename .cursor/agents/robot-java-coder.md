@@ -33,7 +33,7 @@ Apply guidance from these Skills when relevant:
 - `@145-java-refactoring-high-performance`: High-performance refactoring
 - `@181-java-observability-logging`: Logging observability
 - `@182-java-observability-metrics-micrometer`: Micrometer metrics
-- `@183-observability-tracing-opentelemetry`: OpenTelemetry tracing
+- `@183-java-observability-tracing-opentelemetry`: OpenTelemetry tracing
 - `@703-technologies-fuzzing-testing`: API fuzz testing with CATS
 
 ### Workflow

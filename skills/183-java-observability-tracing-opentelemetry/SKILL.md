@@ -1,5 +1,5 @@
 ---
-name: 183-observability-tracing-opentelemetry
+name: 183-java-observability-tracing-opentelemetry
 description: Use when you need to implement or improve distributed tracing with OpenTelemetry in Java — including trace/span modeling, context propagation, semantic conventions, span attributes/events/status, sampling strategy, baggage usage, privacy safeguards, and backend integration with OTLP collectors. This should trigger for requests such as Improve tracing; Apply OpenTelemetry tracing; Add distributed tracing; Refactor tracing instrumentation. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
@@ -59,4 +59,4 @@ Verify parent-child relationships, propagation continuity, and backend visibilit
 
 ## Reference
 
-For detailed guidance, examples, and constraints, see [references/183-observability-tracing-opentelemetry.md](references/183-observability-tracing-opentelemetry.md).
+For detailed guidance, examples, and constraints, see [references/183-java-observability-tracing-opentelemetry.md](references/183-java-observability-tracing-opentelemetry.md).

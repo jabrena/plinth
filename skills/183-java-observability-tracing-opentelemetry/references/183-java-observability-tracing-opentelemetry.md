@@ -1,5 +1,5 @@
 ---
-name: 183-observability-tracing-opentelemetry
+name: 183-java-observability-tracing-opentelemetry
 description: Use when you need to implement or improve distributed tracing with OpenTelemetry in Java — including trace/span modeling, context propagation, semantic conventions, span attributes/events/status, sampling strategy, baggage usage, privacy safeguards, and backend integration with OTLP collectors.
 license: Apache-2.0
 metadata:

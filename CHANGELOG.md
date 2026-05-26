@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Kafka messaging skills for Spring Boot, Quarkus, and Micronaut (`@314-frameworks-spring-kafka`, `@414-frameworks-quarkus-kafka`, `@514-frameworks-micronaut-kafka`) (#710)
   - MongoDB persistence skills for Spring Boot, Quarkus, and Micronaut (`@315-frameworks-spring-mongodb`, `@415-frameworks-quarkus-mongodb`, `@515-frameworks-micronaut-mongodb`) (#710)
   - High-performance refactoring skill (`@145-java-refactoring-high-performance`) (#689)
-  - Micrometer metrics skill (`@182-java-observability-metrics-micrometer`) and OpenTelemetry tracing skill (`@183-observability-tracing-opentelemetry`) (#707)
+  - Micrometer metrics skill (`@182-java-observability-metrics-micrometer`) and OpenTelemetry tracing skill (`@183-java-observability-tracing-opentelemetry`) (#707)
   - Exception-handling skill renumbered to `@126-java-exception-handling` (from `@123`) (#727)
   - Docker-based CATS fuzz-testing workflow and assets for `@703-technologies-fuzzing-testing` (#728)
 
@@ -27,10 +27,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **PML & generators**:
   - Standardized generated `SKILL.md` files with a defined workflow section across skills (#682, #683, #684)
   - `@181-java-observability-logging` refocused; metrics and tracing guidance split into dedicated skills (#707)
+  - Renamed OpenTelemetry tracing skill from `@183-observability-tracing-opentelemetry` to `@183-java-observability-tracing-opentelemetry` for naming consistency with `@182-java-observability-metrics-micrometer`
 
 - **Agents**:
   - Extended `robot-spring-boot-coder`, `robot-quarkus-coder`, and `robot-micronaut-coder` with validation, security, Kafka messaging, and MongoDB responsibilities and skill references (#688, #710)
-  - Wired specialized coders and `robot-java-coder` to additional 0.15.0 skills: `@126-java-exception-handling`, `@145-java-refactoring-high-performance`, `@182-java-observability-metrics-micrometer`, `@183-observability-tracing-opentelemetry`, and `@703-technologies-fuzzing-testing`
+  - Wired specialized coders and `robot-java-coder` to additional 0.15.0 skills: `@126-java-exception-handling`, `@145-java-refactoring-high-performance`, `@182-java-observability-metrics-micrometer`, `@183-java-observability-tracing-opentelemetry`, and `@703-technologies-fuzzing-testing`
   - Updated `robot-coordinator` framework identification and delegation briefs to route validation, security, Kafka, and MongoDB work to the framework coders (#688, #710)
 
 - **Documentation:**

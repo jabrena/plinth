@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
-      id="183-observability-tracing-opentelemetry">
+      id="183-java-observability-tracing-opentelemetry">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.15.0</version>
