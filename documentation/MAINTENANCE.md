@@ -42,8 +42,10 @@ Can you update the current changelog for 0.15.0 comparing git commits in relatio
 - [ ] Remove SNAPSHOT from .xml, .md & pom.xml
 - [ ] Last review in docs (Manual)
 - [ ] Review git changes for hidden issues (Manual) https://github.com/jabrena/cursor-rules-java/compare/0.12.0...feature/release-0130
+- [ ] Verify if all features were tested propertly
 - [ ] Review if Agents need to add more Skills
 - [ ] Review Skill validation output
+- [ ] Review Skill security validation
 - [ ] Update Skills Registry
 - [ ] Tag repository
 - [ ] Create article
