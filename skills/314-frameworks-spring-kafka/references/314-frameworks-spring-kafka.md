@@ -4,7 +4,7 @@ description: Use when you need Kafka with Spring Boot (`spring-kafka`) — inclu
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0-SNAPSHOT
+  version: 0.15.0
 ---
 # Spring Boot — Kafka messaging
 

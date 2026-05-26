@@ -8,11 +8,11 @@ Some **User prompts** designed to help in the maintenance of this repository.
 
 ```bash
 # Maven command to update the maven version to next minor version
-./mvnw versions:set -DnewVersion=0.15.0-SNAPSHOT
+./mvnw versions:set -DnewVersion=0.15.0
 ./mvnw versions:commit
 
 #Bump to a new snapshot
-@resources/ update version to 0.15.0-SNAPSHOT and pom.xml, maven modules and finally regenerate the skills
+@resources/ update version to 0.15.0 and pom.xml, maven modules and finally regenerate the skills
 ```
 
 ## Finish a release
@@ -40,6 +40,7 @@ Can you update the current changelog for 0.15.0 comparing git commits in relatio
 - [ ] Remove SNAPSHOT from .xml, .md & pom.xml
 - [ ] Last review in docs (Manual)
 - [ ] Review git changes for hidden issues (Manual) https://github.com/jabrena/cursor-rules-java/compare/0.12.0...feature/release-0130
+- [ ] Review if Agents need to add more Skills
 - [ ] Review Skill validation output
 - [ ] Update Skills Registry
 - [ ] Tag repository

@@ -4,7 +4,7 @@ description: Provides guidance for (1) Maven Central search and coordinates via 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0-SNAPSHOT
+  version: 0.15.0
 ---
 # Maven Central search and coordinates
 

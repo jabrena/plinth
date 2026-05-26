@@ -2,7 +2,7 @@
 <prompt>
     <metadata>
         <author>Juan Antonio Breña Moral</author>
-        <version>0.15.0-SNAPSHOT</version>
+        <version>0.15.0</version>
         <license>Apache-2.0</license>
         <title>Quarkus — Kafka messaging</title>
         <description>Use when you need Kafka in Quarkus with SmallRye Reactive Messaging — including Maven extension, channel/topic design, typed @Channel Emitter producers, @Incoming consumers with Uni, failure strategies (dead-letter-queue, retry), idempotency, and Dev Services testing. This should trigger for requests such as Add Kafka in Quarkus; Review Reactive Messaging consumers; Improve failure handling for Quarkus Kafka.</description>
