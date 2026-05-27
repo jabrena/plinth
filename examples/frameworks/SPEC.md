@@ -61,3 +61,31 @@ Expected behavior:
 Keep existing REST and Security scenarios unchanged.
 ```
 
+### Mongo DB
+
+```bash
+Add MongoDB persistence to the existing sum flow.
+
+When POST /api/v1/sum returns successfully, store a SumCalculation document in MongoDB with:
+- id
+- param1
+- param2
+- result
+- createdAt
+
+Add a new endpoint GET /api/v1/sum/history that returns the stored calculations ordered by createdAt descending.
+
+Use framework-native MongoDB support:
+- Spring Boot: Spring Data MongoDB repository
+- Quarkus: MongoDB Panache repository
+- Micronaut: Micronaut Data MongoDB repository
+
+Configure MongoDB with Testcontainers in integration tests:
+- Start a MongoDB container and wire the connection URI into test configuration
+- Add an integration test that POSTs to /api/v1/sum and verifies the calculation was persisted
+- Add an integration test that GET /api/v1/sum/history returns persisted calculations in newest-first order
+
+Expected behavior:
+- POST /api/v1/sum with {"param1": 10, "param2": 32} -> 200 OK and persists a SumCalculation with result 42
+- GET /api/v1/sum/history -> 200 OK and returns the stored calculation history
+```
