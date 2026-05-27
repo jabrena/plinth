@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.15.0</version>
     <license>Apache-2.0</license>
-    <description>Use when you need Kafka messaging in Quarkus with SmallRye Reactive Messaging — including channel/topic design, serialization, ack/failure strategies, retries/DLQ, and error handling. This should trigger for requests such as Add Kafka in Quarkus; Review Reactive Messaging consumers; Improve failure handling for Quarkus Kafka.</description>
+    <description>Use when you need Kafka messaging in Quarkus with SmallRye Reactive Messaging — including channel/topic design, build-time Jackson serialization, typed @Channel/@Incoming, ack/failure strategies, retries/DLQ, idempotency, Dev Services, and Testcontainers integration tests. This should trigger for requests such as Add Kafka in Quarkus; Review Reactive Messaging consumers; Improve failure handling for Quarkus Kafka.</description>
   </metadata>
 
   <title>Quarkus — Kafka messaging</title>

@@ -1,6 +1,6 @@
 ---
 name: 514-frameworks-micronaut-kafka
-description: Use when you need Kafka messaging in Micronaut — including @KafkaClient and @KafkaListener design, topic/partition strategy, serialization, retries and dead-letter processing, and error handling. This should trigger for requests such as Add Kafka in Micronaut; Review Micronaut Kafka listeners; Improve retry and failure handling for Micronaut Kafka. Part of cursor-rules-java project
+description: Use when you need Kafka messaging in Micronaut — including @KafkaClient and @KafkaListener design, @Serdeable serialization, topic/partition strategy, TestPropertyProvider integration tests, retries and dead-letter processing, and error handling. This should trigger for requests such as Add Kafka in Micronaut; Review Micronaut Kafka listeners; Improve retry and failure handling for Micronaut Kafka. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
