@@ -8,7 +8,7 @@ If you are interested in getting the benefits of these `System prompts for Java`
 
 A system prompt is a set of instructions given to an AI model that defines how it should behave, what role it should take on, and what guidelines it should follow when responding to users. Think of it as the "operating manual" that shapes the AI's personality, capabilities, and boundaries.
 
-![](./images/prompts.png)
+![](../images/prompts.png)
 
 ### Types of System prompts
 
@@ -28,7 +28,7 @@ The repository provides System prompts that can behave interactively or non-inte
 
 This view has a big green button with the text: `<> Code`. If you click on it, you will see the tab `Local` and you will see the link for: `Download Zip`.
 
-![](./images/getting-started-github.png)
+![](../images/getting-started-github.png)
 
 Once you have downloaded it, go to the `Downloads` folder in your system and you should see the zip file: `cursor-rules-java-main.zip`. Unzip it and copy the folder `.cursor` into the Java repository where you want to use these Cursor rules.
 
@@ -56,11 +56,11 @@ jbang --fresh setup@jabrena init --cursor https://github.com/jabrena/cursor-rule
 
 | Cursor Rule | Description | Prompt | Notes |
 |-------------|-------------|--------|-------|
-| [000-system-prompt-list](.cursor/rules/000-system-prompt-list.md) | Generate list of System Prompts for Java | `Create a document with all System prompts for Java using @000-system-prompt-list` | This cursor rule is applied automatically without any interaction with the software engineer. |
+| [000-system-prompt-list](../../.cursor/rules/000-system-prompt-list.md) | Generate list of System Prompts for Java | `Create a document with all System prompts for Java using @000-system-prompt-list` | This cursor rule is applied automatically without any interaction with the software engineer. |
 
 Once you have installed the cursor rules in the path `.cursor/rules`, type the following prompt in the cursor chat:
 
-![](./images/getting-started-prompt.png)
+![](../images/getting-started-prompt.png)
 
 ```bash
 Create a document with all System prompts for Java using @000-system-prompt-list

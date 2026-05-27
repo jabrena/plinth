@@ -64,7 +64,7 @@ jobs:
           .github/scripts/create-pr.sh
 ```
 
-**Example:** [cursor-agent-cli-demo](../examples/cursor-agent-cli-demo/README.md)
+**Example:** [cursor-agent-cli-demo](../../examples/cursor-agent-cli-demo/README.md)
 
 ## Claude Code
 
