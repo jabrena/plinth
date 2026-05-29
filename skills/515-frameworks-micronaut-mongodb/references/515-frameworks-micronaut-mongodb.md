@@ -72,14 +72,15 @@ Description: Add `micronaut-data-mongodb` for the repository abstraction and `mo
     <scope>runtime</scope>
 </dependency>
 
-<!-- Testcontainers MongoDB for integration tests -->
+<!-- Testcontainers MongoDB for integration tests.
+     Choose this form when Testcontainers is managed by the parent/BOM. -->
 <dependency>
     <groupId>org.testcontainers</groupId>
     <artifactId>mongodb</artifactId>
     <scope>test</scope>
 </dependency>
 
-<!-- If Testcontainers is not managed by the current parent/BOM, use one property -->
+<!-- Alternative: if Testcontainers is not managed, use one property. -->
 <properties>
     <testcontainers.version>1.21.3</testcontainers.version>
 </properties>

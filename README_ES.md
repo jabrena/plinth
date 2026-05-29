@@ -7,10 +7,13 @@
 [![CI Builds](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml/badge.svg)](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml)
 
 > **Idiomas:** [English](./README.md) · [中文](./README_CN.md)
+> **Apoya el proyecto:** [Sponsor to pay tokens](https://github.com/sponsors/jabrena)
 
 ## Objetivo
 
 Un flujo de trabajo nativo de IA, con criterio propio, para evolucionar las prácticas modernas de `SDLC` en Java Enterprise mediante `Skills`, `Agents` y servidores `MCP` reutilizables.
+
+Con este proyecto aprenderás a resolver los [Five whys](https://en.wikipedia.org/wiki/Five_whys) usando tu harness de AI Agent favorito:
 
 | PREGUNTA   | ROL                | ÁREA             | SOPORTE                                                                                                                                                                                                             |
 | ---------- | ------------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -29,7 +32,7 @@ El proyecto genera un conjunto de entregables al final de cualquier iteración.
 | 1. [Skills for Java](./documentation/guides/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/cursor-rules-java --all --agent cursor` | [`Skills for Java`](./documentation/guides/GETTING-STARTED-SKILLS_ES.md)     |
 | 2. [Agents for Java](./documentation/guides/INVENTORY-AGENTS-JAVA.md) | `@003-agents-installation` Instalar Agents en Cursor/Claude | [`Agents for Java`](./documentation/guides/GETTING-STARTED-AGENTS_ES.md)     |
 
-**⚠️ Nota:** Si sigues usando los System prompts/rules de este proyecto, revisa [el artículo](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html). Los `System prompts/rules` actuales se eliminarán en los próximos meses.
+**⚠️ Nota:** Si sigues usando los System prompts/rules de este proyecto, revisa [el artículo](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html). Los `System prompts/rules` actuales se eliminarán en la próxima versión (v0.16.0).
 
 ### Compatibilidad
 
@@ -37,7 +40,7 @@ Este proyecto es compatible con cualquier herramienta que admita `Skills`, `Agen
 
 ## ¿Cómo usar el proyecto?
 
-El SDLC ha evolucionado con esta nueva ola de herramientas de IA, que mejora el proceso de ingeniería de software.
+El SDLC ha evolucionado con esta nueva ola de herramientas de IA, que mejora el proceso de ingeniería de software. Según la fase en la que te encuentres, puedes usar distintos `Skills`, `Agents` o `MCP Servers`. Consulta la siguiente tabla de ejemplo para entender la idea:
 
 |               | Análisis / Diseño | Implementación | Operación |
 | ------------- | ----------------- | -------------- | --------- |
@@ -144,6 +147,7 @@ Java usa JEPs (JDK Enhancement Proposals) para describir nuevas características
 - [https://openspec.dev/](https://openspec.dev/)
 - [https://skills.sh/jabrena/cursor-rules-java](https://skills.sh/jabrena/cursor-rules-java)
 - [https://tessl.io/registry/skills/github/jabrena/cursor-rules-java](https://tessl.io/registry/skills/github/jabrena/cursor-rules-java)
+- https://agent-skills.cc/zh/skills/jabrena-cursor-rules-java
 - [https://github.com/vercel-labs/skills/issues](https://github.com/vercel-labs/skills/issues)
 - [https://openjdk.org/jeps/0](https://openjdk.org/jeps/0)
 - [https://jbake.org/docs/latest/](https://jbake.org/docs/latest/)
