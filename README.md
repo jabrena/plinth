@@ -158,6 +158,7 @@ Java uses JEPs (JDK Enhancement Proposals) to describe new language and platform
 
 - [https://github.com/jabrena/pml](https://github.com/jabrena/pml)
 - [https://github.com/jabrena/cursor-rules-java](https://github.com/jabrena/cursor-rules-java)
+- https://github.com/jabrena/ai-agent-harness-monitor-cli
 - [https://github.com/jabrena/setup-cli](https://github.com/jabrena/setup-cli)
 
 Powered by [Cursor](https://www.cursor.com/) & [Codex](https://openai.com/codex/) with ❤️ from [Madrid](https://www.google.com/maps/place/Community+of+Madrid,+Madrid/@40.4983324,-6.3162283,8z/data=!3m1!4b1!4m6!3m5!1s0xd41817a40e033b9:0x10340f3be4bc880!8m2!3d40.4167088!4d-3.5812692!16zL20vMGo0eGc?entry=ttu&g_ep=EgoyMDI1MDgxOC4wIKXMDSoASAFQAw%3D%3D)
