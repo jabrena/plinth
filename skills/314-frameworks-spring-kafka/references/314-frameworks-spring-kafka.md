@@ -1,10 +1,10 @@
 ---
 name: 314-frameworks-spring-kafka
-description: Use when you need Kafka with Spring Boot (`spring-kafka`) — including Maven dependencies, topic and event schema design, typed KafkaTemplate producers, @KafkaListener consumers, retries with DefaultErrorHandler, dead-letter topics, idempotent consumers, and integration testing with @EmbeddedKafka. This should trigger for requests such as Add Kafka in Spring Boot; Review Spring Kafka consumers; Improve retries and DLT in Spring Kafka.
+description: Use when you need Kafka with Spring Boot — including Maven dependencies (`spring-boot-starter-kafka`), typed event records, KafkaTemplate producers, @KafkaListener consumers, JSON serialization with Boot auto-configuration, retries and dead-letter topics, idempotent consumers, and integration testing with Testcontainers `@ServiceConnection` or `@EmbeddedKafka`. This should trigger for requests such as Add Kafka in Spring Boot; Review Spring Kafka consumers; Improve retries and DLT in Spring Kafka.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0-SNAPSHOT
+  version: 0.15.0
 ---
 # Spring Boot — Kafka messaging
 
@@ -14,11 +14,12 @@ You are a Senior software engineer with extensive experience in Spring Boot and 
 
 ## Goal
 
-Design and implement reliable Kafka messaging in Spring Boot using `spring-kafka`. Prefer typed event records, keyed producers for ordered processing, and declarative error handling with dead-letter topics over silent exception swallowing. Keep listeners thin — delegate business logic to services. Guard consumers against poison messages and replay with idempotency on the eventId.
+Design and implement reliable Kafka messaging in Spring Boot using `spring-boot-starter-kafka` and Spring Kafka auto-configuration. Prefer typed event records, keyed producers for ordered processing, and declarative error handling with dead-letter topics over silent exception swallowing. Keep listeners thin — delegate business logic to services. Guard consumers against poison messages and replay with idempotency on the eventId.
 
 **What is covered in this Skill?**
 
-- Maven `spring-kafka` dependency aligned with the Spring Boot BOM
+- Maven `spring-boot-starter-kafka` dependency aligned with the Spring Boot BOM (raw `spring-kafka` only for non-Boot library modules)
+- JSON event serialization via `DefaultKafkaProducerFactoryCustomizer` / `DefaultKafkaConsumerFactoryCustomizer` — do not duplicate manual `ProducerFactory` / `ConsumerFactory` beans when using `@ServiceConnection`
 - Versioned event schemas as Java records with explicit `eventId`, `schemaVersion`, and aggregate key
 - Topic naming conventions (`domain.entity.operation.v{N}`)
 - `KafkaTemplate<K, V>` typed producer with explicit key strategy
@@ -27,9 +28,10 @@ Design and implement reliable Kafka messaging in Spring Boot using `spring-kafka
 - `DefaultErrorHandler` with `FixedBackOff` / `ExponentialBackOff` and `DeadLetterPublishingRecoverer`
 - Idempotent consumer pattern using `eventId` de-duplication store
 - Kafka transactions for exactly-once producer semantics
-- Testing with `@EmbeddedKafka` and `EmbeddedKafkaBroker`
+- Integration testing with Testcontainers `@ServiceConnection` (full-stack `*IT`) and `@EmbeddedKafka` (in-process broker tests)
+- `@TestConfiguration` with `NewTopic` beans imported only by integration tests
 
-**Scope:** Apply recommendations based on the reference rules and good/bad code examples.
+**Scope:** Apply recommendations based on the reference rules and good/bad code examples. For HTTP + Testcontainers wiring in `*IT` classes, cross-reference `@322-frameworks-spring-boot-testing-integration-tests`.
 
 ## Constraints
 
@@ -53,27 +55,35 @@ Before applying any Kafka changes, ensure the project compiles. Compilation fail
 - Example 4: Consumer implementation
 - Example 5: Error handling and dead-letter topic
 - Example 6: Idempotent consumer
-- Example 7: Integration testing
+- Example 7: Integration testing with @EmbeddedKafka
+- Example 8: JSON serialization with Boot auto-configuration
+- Example 9: Full-stack integration test with Testcontainers
 
 ### Example 1: Maven dependency
 
-Title: Add spring-kafka via the Spring Boot BOM; never pin the version manually
-Description: Spring Boot manages the `spring-kafka` version via its BOM. Declaring an explicit version pins the library and can cause incompatibility with the auto-configured `KafkaAutoConfiguration`. Use the starter form when using Spring Boot; add the raw `spring-kafka` artifact for library modules that do not depend on Spring Boot auto-configuration.
+Title: Use spring-boot-starter-kafka in Boot apps; raw spring-kafka only in library modules
+Description: Spring Boot manages Kafka versions via its BOM. In Spring Boot applications, prefer `spring-boot-starter-kafka` so `KafkaConnectionDetails`, `@ServiceConnection`, and factory customizers integrate correctly. Declaring an explicit version pins the library and can cause classpath conflicts. Use the raw `spring-kafka` artifact only in library modules that do not depend on Spring Boot auto-configuration.
 
 **Good example:**
 
 ```xml
-<!-- pom.xml — Spring Boot manages the version via its BOM -->
+<!-- pom.xml — Spring Boot application: use the starter -->
 <dependency>
-    <groupId>org.springframework.kafka</groupId>
-    <artifactId>spring-kafka</artifactId>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-kafka</artifactId>
+</dependency>
+<!-- Optional for JSON event records at compile time -->
+<dependency>
+    <groupId>com.fasterxml.jackson.core</groupId>
+    <artifactId>jackson-databind</artifactId>
 </dependency>
 ```
 
 **Bad example:**
 
 ```xml
-<!-- Bad: explicit version fights the BOM and can cause classpath conflicts -->
+<!-- Bad in a Boot app: raw artifact skips Boot Kafka auto-configuration;
+     explicit version fights the BOM -->
 <dependency>
     <groupId>org.springframework.kafka</groupId>
     <artifactId>spring-kafka</artifactId>
@@ -305,10 +315,10 @@ void onOrderCreated(OrderCreatedEvent event) {
 }
 ```
 
-### Example 7: Integration testing
+### Example 7: Integration testing with @EmbeddedKafka
 
-Title: @EmbeddedKafka with KafkaTestUtils for end-to-end listener tests
-Description: Annotate the test class with `@SpringBootTest` and `@EmbeddedKafka` to start an in-process broker. Use `KafkaTestUtils.getRecords` to consume messages programmatically and assert on their values. This verifies the full serialization/deserialization path without a running Kafka cluster.
+Title: In-process broker for producer/consumer serialization tests
+Description: Use `@EmbeddedKafka` when you need an in-process broker to verify serialization and topic routing without Docker. For full-stack integration tests that boot the application with HTTP and real infrastructure, prefer Testcontainers `@ServiceConnection` (see the next example). Do not mock `KafkaTemplate` in tests meant to verify messaging behaviour. In Spring Boot 4.x use `@MockitoBean`, not `@MockBean`.
 
 **Good example:**
 
@@ -360,7 +370,7 @@ class OrderEventPublisherIT {
 @SpringBootTest
 class OrderEventPublisherTest {
 
-    @MockBean
+    @MockitoBean
     KafkaTemplate<String, OrderCreatedEvent> template;
 
     @Autowired
@@ -374,6 +384,126 @@ class OrderEventPublisherTest {
 }
 ```
 
+### Example 8: JSON serialization with Boot auto-configuration
+
+Title: DefaultKafkaProducerFactoryCustomizer / DefaultKafkaConsumerFactoryCustomizer — not manual factories
+Description: When publishing typed Java records, configure JSON serializers on Boot's auto-configured Kafka client factories. Use `DefaultKafkaProducerFactoryCustomizer` and `DefaultKafkaConsumerFactoryCustomizer` with `updateConfigs()` so bootstrap servers from `@ServiceConnection` or `spring.kafka.bootstrap-servers` stay intact. Do **not** declare separate `@Bean ProducerFactory` / `@Bean ConsumerFactory` built from `KafkaProperties.buildProducerProperties()` — those often capture `localhost:9092` while Testcontainers runs on a dynamic port, and `@ServiceConnection` may still default producers to `StringSerializer`, causing `SerializationException` on typed events. In Spring Boot 4.x, `KafkaProperties.buildProducerProperties()` and `buildConsumerProperties()` take no arguments.
+
+**Good example:**
+
+```java
+import java.util.Map;
+import org.apache.kafka.clients.consumer.ConsumerConfig;
+import org.apache.kafka.clients.producer.ProducerConfig;
+import org.apache.kafka.common.serialization.StringDeserializer;
+import org.apache.kafka.common.serialization.StringSerializer;
+import org.springframework.boot.kafka.autoconfigure.DefaultKafkaConsumerFactoryCustomizer;
+import org.springframework.boot.kafka.autoconfigure.DefaultKafkaProducerFactoryCustomizer;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.kafka.support.serializer.JsonDeserializer;
+import org.springframework.kafka.support.serializer.JsonSerializer;
+
+@Configuration
+class KafkaConfig {
+
+    @Bean
+    DefaultKafkaProducerFactoryCustomizer jsonProducerFactoryCustomizer() {
+        return producerFactory -> producerFactory.updateConfigs(Map.of(
+            ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class,
+            ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class));
+    }
+
+    @Bean
+    DefaultKafkaConsumerFactoryCustomizer jsonConsumerFactoryCustomizer() {
+        return consumerFactory -> consumerFactory.updateConfigs(Map.of(
+            ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class,
+            ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class,
+            JsonDeserializer.TRUSTED_PACKAGES, "com.example.events",
+            JsonDeserializer.VALUE_DEFAULT_TYPE, OrderCreatedEvent.class.getName()));
+    }
+}
+```
+
+**Bad example:**
+
+```java
+// Bad: manual factories bypass @ServiceConnection bootstrap wiring and often stick to localhost:9092
+@Configuration
+class KafkaConfig {
+
+    @Bean
+    ProducerFactory<String, OrderCreatedEvent> producerFactory(KafkaProperties props) {
+        Map<String, Object> config = props.buildProducerProperties();
+        config.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+        return new DefaultKafkaProducerFactory<>(config); // wrong broker in *IT tests
+    }
+
+    @Bean
+    KafkaTemplate<String, OrderCreatedEvent> template(ProducerFactory<String, OrderCreatedEvent> pf) {
+        return new KafkaTemplate<>(pf);
+    }
+}
+```
+
+### Example 9: Full-stack integration test with Testcontainers
+
+Title: @ServiceConnection on KafkaContainer; NewTopic in @TestConfiguration
+Description: For `*IT` classes that POST to HTTP and assert a `@KafkaListener` received an event, start a `KafkaContainer` with Testcontainers and wire it via `@ServiceConnection` (Spring Boot 4.x). Do not set `spring.kafka.bootstrap-servers=localhost:9092` in shared `src/test/resources/application.properties` — that overrides the container port. Declare `NewTopic` in a `@TestConfiguration` imported only by the IT class. Enable listeners in the IT (`spring.kafka.listener.auto-startup=true`) while keeping them disabled in unit tests. Use Maven Failsafe for `*IT` classes. Testcontainers 2.x Maven artifacts are `testcontainers-kafka` and `testcontainers-junit-jupiter`. Cross-reference `@322-frameworks-spring-boot-testing-integration-tests` for HTTP client and container lifecycle details.
+
+**Good example:**
+
+```java
+import org.apache.kafka.clients.admin.NewTopic;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.TestConfiguration;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Import;
+import org.springframework.kafka.config.TopicBuilder;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+import org.testcontainers.kafka.KafkaContainer;
+import org.testcontainers.utility.DockerImageName;
+
+@Testcontainers
+@Import(OrderKafkaTestConfiguration.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,
+    properties = "spring.kafka.listener.auto-startup=true")
+class OrderCreatedIT {
+
+    @Container
+    @ServiceConnection
+    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("apache/kafka-native:3.8.0"));
+
+    @Test
+    void createOrder_publishesOrderCreatedEvent() {
+        // POST via TestRestTemplate; await listener-side assertion
+    }
+}
+
+@TestConfiguration
+class OrderKafkaTestConfiguration {
+
+    @Bean
+    NewTopic orderCreatedTopic() {
+        return TopicBuilder.name("orders.created.v1").partitions(1).replicas(1).build();
+    }
+}
+```
+
+**Bad example:**
+
+```java
+# src/test/resources/application.properties — Bad with @ServiceConnection ITs:
+spring.kafka.bootstrap-servers=localhost:9092
+spring.kafka.listener.auto-startup=false
+
+// Forces producer/consumer to localhost:9092 while Testcontainers exposes a random port.
+// Also disables the listener in full-stack IT unless every class overrides properties.
+```
+
 ## Output Format
 
 - **ANALYZE** Kafka code: event schema versioning, producer key strategy, listener group isolation, error handler registration, idempotency guards, and test coverage
@@ -381,7 +511,7 @@ class OrderEventPublisherTest {
 - **APPLY** Spring Kafka–aligned fixes: type the templates, key producers on the aggregate id, register DefaultErrorHandler with backoff and DLT, add eventId de-duplication
 - **IMPLEMENT** changes so topic configs, serializers, and tests stay consistent
 - **EXPLAIN** trade-offs (at-least-once vs exactly-once, fixed vs exponential backoff, in-process vs Testcontainers Kafka)
-- **TEST** with `@EmbeddedKafka` for unit/integration; use Testcontainers for full-stack acceptance tests
+- **TEST** with Testcontainers `@ServiceConnection` for full-stack `*IT` tests; use `@EmbeddedKafka` for in-process serialization tests; `@MockitoBean KafkaTemplate` only for context-load tests without a broker
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
 
 ## Safeguards
@@ -393,4 +523,6 @@ class OrderEventPublisherTest {
 - **IDEMPOTENCY**: Always de-duplicate on `eventId` — Kafka's at-least-once guarantee means consumers must tolerate duplicates
 - **KEY STRATEGY**: Always set the Kafka message key to the aggregate's natural key; null keys disable partition-level ordering
 - **DLT MONITORING**: Set up alerting on the DLT topic — messages landing there indicate systematic processing failures
-- **INCREMENTAL SAFETY**: Change one producer/consumer surface at a time; verify with `@EmbeddedKafka` tests between steps
+- **SERVICE CONNECTION**: Never hand-wire `spring.kafka.bootstrap-servers` when `@ServiceConnection` on `KafkaContainer` already applies; never duplicate manual `ProducerFactory` / `ConsumerFactory` beans unless you also wire `KafkaConnectionDetails`
+- **JSON SERDE**: For typed event records with `@ServiceConnection`, prefer factory customizers with `updateConfigs()` over `application.properties` alone — defaults may still use `StringSerializer`
+- **INCREMENTAL SAFETY**: Change one producer/consumer surface at a time; verify with `@EmbeddedKafka` or Testcontainers `*IT` tests between steps

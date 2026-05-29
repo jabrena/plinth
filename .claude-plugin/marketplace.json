@@ -133,9 +133,21 @@
             "version": "0.14.0-SNAPSHOT"
         },
         {
-            "name": "180-java-observability-logging",
-            "source": "./skills/180-java-observability-logging",
+            "name": "181-java-observability-logging",
+            "source": "./skills/181-java-observability-logging",
             "description": "Use when you need to implement or improve Java logging and observability — including selecting SLF4J with Logback/Log4j2, applying proper log levels (ERROR, WARN, INFO, DEBUG, TRACE), parameterized logging, secure logging without sensitive data exposure, environment-specific configuration, log aggregation and monitoring, or validating logging through tests.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "182-java-observability-metrics-micrometer",
+            "source": "./skills/182-java-observability-metrics-micrometer",
+            "description": "Use when you need to implement or improve Java metrics observability with Micrometer — including meter design, naming/tag conventions, cardinality control, timers/counters/gauges/distribution summaries, percentiles/histograms, Actuator/Prometheus integration, and metrics validation through tests.",
+            "version": "0.14.0-SNAPSHOT"
+        },
+        {
+            "name": "183-java-observability-tracing-opentelemetry",
+            "source": "./skills/183-java-observability-tracing-opentelemetry",
+            "description": "Use when you need to implement or improve distributed tracing with OpenTelemetry in Java — including trace/span modeling, context propagation, semantic conventions, span attributes/events/status, sampling strategy, baggage usage, privacy safeguards, and backend integration with OTLP collectors.",
             "version": "0.14.0-SNAPSHOT"
         },
         {

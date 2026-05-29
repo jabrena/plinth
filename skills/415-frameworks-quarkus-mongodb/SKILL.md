@@ -4,7 +4,7 @@ description: Use when you need MongoDB persistence in Quarkus — including Pana
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0-SNAPSHOT
+  version: 0.15.0
 ---
 # Quarkus — MongoDB
 

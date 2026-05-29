@@ -1,10 +1,10 @@
 ---
 name: 314-frameworks-spring-kafka
-description: Use when you need to design or implement Kafka messaging in Spring Boot — including topic design, producer/consumer implementation with Spring for Apache Kafka, retries and dead-letter topics, idempotency, and error handling. This should trigger for requests such as Add Kafka in Spring Boot; Review Spring Kafka consumers; Improve retries and DLT in Spring Kafka. Part of cursor-rules-java project
+description: Use when you need to design or implement Kafka messaging in Spring Boot — including topic design, producer/consumer implementation, JSON serialization with Boot factory customizers, Testcontainers `@ServiceConnection` integration tests, retries and dead-letter topics, idempotency, and error handling. This should trigger for requests such as Add Kafka in Spring Boot; Review Spring Kafka consumers; Improve retries and DLT in Spring Kafka. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0-SNAPSHOT
+  version: 0.15.0
 ---
 # Spring Boot — Kafka messaging
 

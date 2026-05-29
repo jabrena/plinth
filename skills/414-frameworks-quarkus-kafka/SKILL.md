@@ -1,10 +1,10 @@
 ---
 name: 414-frameworks-quarkus-kafka
-description: Use when you need Kafka messaging in Quarkus with SmallRye Reactive Messaging — including channel/topic design, serialization, ack/failure strategies, retries/DLQ, and error handling. This should trigger for requests such as Add Kafka in Quarkus; Review Reactive Messaging consumers; Improve failure handling for Quarkus Kafka. Part of cursor-rules-java project
+description: Use when you need Kafka messaging in Quarkus with SmallRye Reactive Messaging — including channel/topic design, build-time Jackson serialization, typed @Channel/@Incoming, ack/failure strategies, retries/DLQ, idempotency, Dev Services, and Testcontainers integration tests. This should trigger for requests such as Add Kafka in Quarkus; Review Reactive Messaging consumers; Improve failure handling for Quarkus Kafka. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0-SNAPSHOT
+  version: 0.15.0
 ---
 # Quarkus — Kafka messaging
 

@@ -4,7 +4,7 @@ description: Use when you need MongoDB persistence in Micronaut — including Ma
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0-SNAPSHOT
+  version: 0.15.0
 ---
 # Micronaut — MongoDB
 
@@ -18,15 +18,15 @@ Design and implement MongoDB persistence in Micronaut using Micronaut Data Mongo
 
 **What is covered in this Skill?**
 
-- Maven `micronaut-data-mongodb` and `mongodb-driver-sync` dependencies
-- `@MappedEntity` document design with `@Id`, `@MappedProperty`, and `@GeneratedValue`
+- Maven `micronaut-data-mongodb` and `mongodb-driver-sync` dependencies, plus Testcontainers MongoDB version management when the active BOM does not provide it
+- `@MappedEntity` document design with `@Id`, `@MappedProperty`, and explicit `ObjectId` creation when generated IDs are not reliably populated for record entities
 - `@MongoRepository` extending `CrudRepository` with derived finders
 - `@MongoFindQuery` for complex filter expressions with bound parameters
 - `@Singleton` service with `io.micronaut.transaction.annotation.Transactional`
 - Pagination with `Pageable` and `Page<T>`
 - DTO projections with interface projections
 - Error handling: `MongoWriteException` / duplicate-key category checks, `DataAccessException`, exception chaining
-- Testing with `@MicronautTest` + `TestPropertyProvider` + Testcontainers MongoDB
+- Testing with `@MicronautTest` + `TestPropertyProvider` + Testcontainers MongoDB, including JUnit `PER_CLASS` lifecycle and project-specific test naming conventions
 
 **Scope:** Apply recommendations based on the reference rules and good/bad code examples.
 
@@ -55,8 +55,8 @@ Before applying any MongoDB changes, ensure the project compiles. Compilation fa
 
 ### Example 1: Maven dependency
 
-Title: Add micronaut-data-mongodb and mongodb-driver-sync; BOM manages versions
-Description: Add `micronaut-data-mongodb` for the repository abstraction and `mongodb-driver-sync` for the synchronous driver. The Micronaut BOM manages both versions — do not pin them explicitly. Add the Testcontainers MongoDB artifact in `test` scope for real-database integration tests.
+Title: Add micronaut-data-mongodb and mongodb-driver-sync; verify Testcontainers version management
+Description: Add `micronaut-data-mongodb` for the repository abstraction and `mongodb-driver-sync` for the synchronous driver. The Micronaut BOM manages Micronaut Data and MongoDB driver versions — do not pin those explicitly. Add the Testcontainers MongoDB artifact in `test` scope for real-database integration tests. If Maven reports that `org.testcontainers:mongodb` has no managed version, either import the Testcontainers BOM or define a single project property for the Testcontainers version instead of hard-coding it inline.
 
 **Good example:**
 
@@ -72,10 +72,23 @@ Description: Add `micronaut-data-mongodb` for the repository abstraction and `mo
     <scope>runtime</scope>
 </dependency>
 
-<!-- Testcontainers MongoDB for integration tests -->
+<!-- Testcontainers MongoDB for integration tests.
+     Choose this form when Testcontainers is managed by the parent/BOM. -->
 <dependency>
     <groupId>org.testcontainers</groupId>
     <artifactId>mongodb</artifactId>
+    <scope>test</scope>
+</dependency>
+
+<!-- Alternative: if Testcontainers is not managed, use one property. -->
+<properties>
+    <testcontainers.version>1.21.3</testcontainers.version>
+</properties>
+
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>mongodb</artifactId>
+    <version>${testcontainers.version}</version>
     <scope>test</scope>
 </dependency>
 ```
@@ -89,17 +102,24 @@ Description: Add `micronaut-data-mongodb` for the repository abstraction and `mo
     <artifactId>micronaut-data-mongodb</artifactId>
     <version>4.7.0</version>
 </dependency>
+
+<!-- Bad: inline Testcontainers version duplicated across dependencies -->
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>mongodb</artifactId>
+    <version>1.21.3</version>
+    <scope>test</scope>
+</dependency>
 ```
 
 ### Example 2: Entity design
 
-Title: @MappedEntity record with @Id, @MappedProperty, and factory method
-Description: Annotate persistence types with `@MappedEntity("collection-name")` to bind them to an explicit MongoDB collection. Use `@MappedProperty` to map Java record components to MongoDB document field names when they differ (e.g. snake_case storage vs camelCase Java). Leave `@Id` null for new documents — Micronaut Data sets it after insert. Expose a static factory method so callers never construct a raw entity with a non-null `id`.
+Title: @MappedEntity record with @Id, @MappedProperty, explicit ObjectId, and factory method
+Description: Annotate persistence types with `@MappedEntity("collection-name")` to bind them to an explicit MongoDB collection. Use `@MappedProperty` to map Java record components to MongoDB document field names when they differ (e.g. snake_case storage vs camelCase Java). For immutable records with `ObjectId`, prefer creating the ID explicitly in the factory method unless the project has an integration test proving `@GeneratedValue` is populated correctly in the active Micronaut Data MongoDB version. Expose a static factory method so callers do not construct raw persistence entities by hand.
 
 **Good example:**
 
 ```java
-import io.micronaut.data.annotation.GeneratedValue;
 import io.micronaut.data.annotation.Id;
 import io.micronaut.data.annotation.MappedEntity;
 import io.micronaut.data.annotation.MappedProperty;
@@ -108,13 +128,13 @@ import java.time.Instant;
 
 @MappedEntity("orders")
 public record OrderDocument(
-    @Id @GeneratedValue ObjectId id,
+    @Id ObjectId id,
     @MappedProperty("order_number") String orderNumber,
     @MappedProperty("customer_id") String customerId,
     @MappedProperty("created_at") Instant createdAt
 ) {
     public static OrderDocument of(String orderNumber, String customerId) {
-        return new OrderDocument(null, orderNumber, customerId, Instant.now());
+        return new OrderDocument(new ObjectId(), orderNumber, customerId, Instant.now());
     }
 }
 ```
@@ -124,7 +144,8 @@ public record OrderDocument(
 ```java
 // Bad: missing @MappedEntity — Micronaut Data cannot derive collection name reliably;
 // no @MappedProperty — field names stored as Java camelCase, breaking schema conventions;
-// mutable class with setters allows accidental mutation after load
+// mutable class with setters allows accidental mutation after load;
+// generated id behavior is assumed, but not verified by an integration test
 public class OrderDocument {
     @Id private ObjectId id;
     private String orderNumber;
@@ -319,7 +340,7 @@ public OrderDocument create(String orderNumber, String customerId) {
 ### Example 7: Integration testing
 
 Title: @MicronautTest + TestPropertyProvider + Testcontainers MongoDB
-Description: Use `@MicronautTest` with `TestPropertyProvider` to supply the real MongoDB connection string from a Testcontainers `MongoDBContainer`. This runs tests against a real MongoDB instance with the actual driver, schema, and index behaviour. Never mock `@MongoRepository` inside a persistence test — the goal is exercising real MongoDB behaviour.
+Description: Use `@MicronautTest` with `TestPropertyProvider` to supply the real MongoDB connection string from a Testcontainers `MongoDBContainer`. Classes that implement `TestPropertyProvider` must use `@TestInstance(TestInstance.Lifecycle.PER_CLASS)` with Micronaut Test. This runs tests against a real MongoDB instance with the actual driver, schema, and index behaviour. Never mock `@MongoRepository` inside a persistence test — the goal is exercising real MongoDB behaviour. Before naming a class `*IT`, verify that the project's Failsafe/Surefire configuration actually runs `*IT` during `mvn verify`; otherwise use the project's executed test naming pattern, such as `*Test`.
 
 **Good example:**
 
@@ -329,28 +350,29 @@ import io.micronaut.test.support.TestPropertyProvider;
 import jakarta.inject.Inject;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.testcontainers.containers.MongoDBContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 import java.util.Map;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @MicronautTest(transactional = false)
-@Testcontainers
-class OrderRepositoryIT implements TestPropertyProvider {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class OrderRepositoryPersistenceTest implements TestPropertyProvider {
 
-    @Container
-    static MongoDBContainer mongo = new MongoDBContainer("mongo:7.0");
+    static final MongoDBContainer mongo = new MongoDBContainer("mongo:7.0");
+
+    static {
+        mongo.start();
+    }
 
     @Inject
     OrderRepository repository;
 
     @Override
     public Map<String, String> getProperties() {
-        if (!mongo.isRunning()) mongo.start();
-        return Map.of("mongodb.uri", mongo.getReplicaSetUrl());
+        return Map.of("mongodb.uri", mongo.getReplicaSetUrl("orders"));
     }
 
     @AfterEach
@@ -396,13 +418,16 @@ class OrderRepositoryTest {
 - **APPLY** Micronaut Data MongoDB–aligned fixes: explicit `@MappedEntity` collection, `@MappedProperty` field mappings, `@MongoRepository` with bound-parameter queries, service-layer `@Transactional`, and typed exception translation
 - **IMPLEMENT** changes so document model, repository interfaces, services, and tests stay consistent
 - **EXPLAIN** trade-offs (derived finder vs `@MongoFindQuery`, sync driver vs reactive, multi-document transactions vs application idempotency, `Page` vs full list returns)
-- **TEST** repository behaviour with `@MicronautTest` + `TestPropertyProvider` + Testcontainers; never mock repositories inside persistence tests meant to verify MongoDB behaviour
+- **TEST** repository behaviour with `@MicronautTest` + `TestPropertyProvider` + Testcontainers; use `PER_CLASS` lifecycle, verify the build executes the selected test class naming pattern, and never mock repositories inside persistence tests meant to verify MongoDB behaviour
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
 
 ## Safeguards
 
 - **BLOCKING SAFETY CHECK**: Run `./mvnw compile` before ANY MongoDB refactoring — compilation failure is a HARD STOP
 - **CRITICAL VALIDATION**: Run `./mvnw clean verify` after changes; confirm repository integration tests pass against a real MongoDB instance before promoting
+- **TEST EXECUTION**: Confirm MongoDB persistence tests are actually executed by the project's Surefire/Failsafe naming configuration; do not assume `*IT` runs during `mvn verify` unless the build is configured for it
+- **TEST LIFECYCLE**: Classes implementing Micronaut `TestPropertyProvider` require `@TestInstance(TestInstance.Lifecycle.PER_CLASS)`
+- **ID GENERATION**: Verify `@GeneratedValue` behavior with a real MongoDB integration test before relying on it for immutable record entities; explicitly create `ObjectId` values when generated IDs are not returned or rehydrated as expected
 - **INJECTION SAFETY**: Never concatenate user input into `@MongoFindQuery` filter strings or raw MongoDB JSON — use derived finders or bound parameters exclusively
 - **ERROR HANDLING**: Catch duplicate-key write failures and `DataAccessException` at the service boundary; never use a generic `catch (Exception e)` that swallows failures or returns `null`
 - **PAGINATION**: Never expose unbounded `findAll()` on large collections — always use `PageableRepository` or `Pageable`-accepting methods with `Page<T>`

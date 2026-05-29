@@ -1,10 +1,10 @@
 ---
 name: 403-frameworks-quarkus-validation
-description: Use when you need to design, review, or improve validation in Quarkus applications — including Bean Validation on JAX-RS resources, @Valid on parameters and CDI beans, constraint groups, @ConfigMapping validation, custom constraints, nested DTO validation, and ExceptionMapper-based error mapping.
+description: Use when you need to design, review, or improve validation in Quarkus applications — including Bean Validation on JAX-RS resources, @Valid on parameters and CDI beans, constraint groups, @ConfigMapping validation, custom constraints, nested DTO validation, and RFC 7807 validation errors via quarkus-http-problem.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0-SNAPSHOT
+  version: 0.15.0
 ---
 # Quarkus Validation Guidelines
 
@@ -14,7 +14,7 @@ You are a Senior software engineer with extensive experience in Quarkus, Jakarta
 
 ## Goal
 
-Ensure Quarkus services validate inputs at boundaries, keep validation rules declarative and testable, and return consistent client-safe validation error responses. Align with `@402-frameworks-quarkus-rest` for HTTP semantics and Problem Details on validation failures.
+Ensure Quarkus services validate inputs at boundaries, keep validation rules declarative and testable, and return consistent client-safe validation error responses. Prefer `quarkus-http-problem` (Quarkiverse) for RFC 7807 / RFC 9457 Problem Details on validation failures instead of hand-rolled response records. Align with `@402-frameworks-quarkus-rest` for HTTP semantics.
 
 ## Constraints
 
@@ -32,7 +32,7 @@ Before applying recommendations, ensure the project compiles. Compilation failur
 - Example 2: Path and query parameter constraints
 - Example 3: @ConfigMapping with validation
 - Example 4: Nested and list validation
-- Example 5: ExceptionMapper for validation failures
+- Example 5: RFC 7807 validation errors with quarkus-http-problem
 - Example 6: Class-level custom constraint
 
 ### Example 1: JAX-RS request body with @Valid
@@ -185,40 +185,57 @@ public record OrderRequest(Address shipping, List<LineItem> lines) { }
 // Missing @Valid: nested constraints ignored
 ```
 
-### Example 5: ExceptionMapper for validation failures
+### Example 5: RFC 7807 validation errors with quarkus-http-problem
 
-Title: Map ConstraintViolationException to HTTP 400 + stable JSON
-Description: Quarkus with `quarkus-hibernate-validator` automatically returns a JSON body for validation failures on JAX-RS resources. For full control over the error shape (e.g. RFC 7807 Problem Details or project-wide structure), provide a `@Provider` `ExceptionMapper` that overrides the default. Use `.toList()` (Java 16+) instead of `Collectors.toList()`.
+Title: Built-in ConstraintViolationException mapping to application/problem+json
+Description: Quarkus has no built-in RFC 7807 type like Spring's `ProblemDetail`. Add the Quarkiverse extension `io.quarkiverse.httpproblem:quarkus-http-problem` (successor to legacy `quarkus-resteasy-problem`) so `ConstraintViolationException` from `@Valid` request bodies is mapped automatically to `HttpValidationProblem` with `application/problem+json`. Customize status/title via `quarkus.http-problem.constraint-violation.*` when needed; add a custom `@Provider` `ExceptionMapper` only when the built-in shape is insufficient.
 
 **Good example:**
 
-```java
-import jakarta.validation.ConstraintViolationException;
-import jakarta.ws.rs.core.MediaType;
-import jakarta.ws.rs.core.Response;
-import jakarta.ws.rs.ext.ExceptionMapper;
-import jakarta.ws.rs.ext.Provider;
+```text
+<!-- pom.xml -->
+<dependency>
+    <groupId>io.quarkiverse.httpproblem</groupId>
+    <artifactId>quarkus-http-problem</artifactId>
+    <version>3.33.1</version>
+</dependency>
 
-@Provider
-public class ConstraintViolationMapper implements ExceptionMapper<ConstraintViolationException> {
-    @Override
-    public Response toResponse(ConstraintViolationException ex) {
-        var messages = ex.getConstraintViolations().stream()
-            .map(v -> v.getPropertyPath() + ": " + v.getMessage())
-            .toList();
-        return Response.status(400)
-            .type(MediaType.APPLICATION_JSON)
-            .entity(java.util.Map.of("error", "VALIDATION_ERROR", "details", messages))
-            .build();
+// SumController.java
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
+import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.POST;
+import jakarta.ws.rs.Path;
+import jakarta.ws.rs.core.MediaType;
+
+@Path("/api/v1")
+@Consumes(MediaType.APPLICATION_JSON)
+public class SumController {
+    @POST
+    @Path("/sum")
+    public SumResponse sum(@Valid SumRequest request) {
+        return new SumResponse(request.param1() + request.param2());
     }
 }
+
+record SumRequest(
+    @NotNull(message = "must not be null") Integer param1,
+    @NotNull(message = "must not be null") Integer param2) { }
+
+# application.properties (optional)
+quarkus.http-problem.constraint-violation.status=400
+quarkus.http-problem.constraint-violation.title=Bad Request
 ```
 
 **Bad example:**
 
 ```java
-return Response.status(400).entity(ex.getMessage()).build();
-// Message shape varies; may expose internal property paths
+record ValidationProblemDetail(String type, String title, int status, String detail, List<String> violations) { }
+
+@Provider
+public class ConstraintViolationMapper implements ExceptionMapper<ConstraintViolationException> {
+    // Reimplements what quarkus-http-problem already provides
+}
 ```
 
 ### Example 6: Class-level custom constraint
@@ -266,12 +283,13 @@ if (!a.equals(b)) throw new IllegalArgumentException("mismatch");
 ## Output Format
 
 - **ANALYZE** JAX-RS resources and config mappings for missing `@Valid`, missing cascades, and inconsistent 400 bodies
-- **APPLY** Bean Validation at REST boundaries; add `@Provider` mappers for validation exceptions
-- **ALIGN** error responses with Problem Details or project-standard JSON from `@402-frameworks-quarkus-rest`
+- **APPLY** Bean Validation at REST boundaries; add `quarkus-http-problem` for RFC 7807 validation responses
+- **ALIGN** validation errors with `HttpValidationProblem` / `application/problem+json` from `@402-frameworks-quarkus-rest`
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
 
 ## Safeguards
 
 - Do not skip `@Valid` on constrained request bodies
+- Do not hand-roll RFC 7807 response records when `quarkus-http-problem` is on the classpath
 - Do not return stack traces or raw Hibernate Validator messages that expose internals
 - Test reactive and classic REST stacks if both exist in the repo
