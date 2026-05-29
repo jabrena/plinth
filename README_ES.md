@@ -7,6 +7,7 @@
 [![CI Builds](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml/badge.svg)](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml)
 
 > **Idiomas:** [English](./README.md) · [中文](./README_CN.md)
+>
 > **Apoya el proyecto:** [Sponsor to pay tokens](https://github.com/sponsors/jabrena)
 
 ## Objetivo
