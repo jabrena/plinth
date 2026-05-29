@@ -8,11 +8,11 @@ Some **User prompts** designed to help in the maintenance of this repository.
 
 ```bash
 # Maven command to update the maven version to next minor version
-./mvnw versions:set -DnewVersion=0.15.0-SNAPSHOT
+./mvnw versions:set -DnewVersion=0.15.0
 ./mvnw versions:commit
 
 #Bump to a new snapshot
-@resources/ update version to 0.15.0-SNAPSHOT and pom.xml, maven modules and finally regenerate the skills
+@resources/ update version to 0.15.0 and pom.xml, maven modules and finally regenerate the skills
 ```
 
 ## Finish a release
@@ -32,6 +32,8 @@ Can you update the current changelog for 0.15.0 comparing git commits in relatio
 
 #Bump to a new snapshot
 @resources/ update version to 0.15.0-SNAPSHOT and pom.xml, maven modules and finally regenerate the skills
+
+@skills-generator/src/main/resources/skill-references/assets/agents/robot-java-coder.md @skills-generator/src/main/resources/skill-references/assets/agents/robot-micronaut-coder.md @skills-generator/src/main/resources/skill-references/assets/agents/robot-quarkus-coder.md @skills-generator/src/main/resources/skill-references/assets/agents/robot-spring-boot-coder.md review @CHANGELOG.md if it is possible to add new capabilities added in this release
 ```
 
 ## Release process
@@ -40,7 +42,10 @@ Can you update the current changelog for 0.15.0 comparing git commits in relatio
 - [ ] Remove SNAPSHOT from .xml, .md & pom.xml
 - [ ] Last review in docs (Manual)
 - [ ] Review git changes for hidden issues (Manual) https://github.com/jabrena/cursor-rules-java/compare/0.12.0...feature/release-0130
+- [ ] Verify if all features were tested propertly
+- [ ] Review if Agents need to add more Skills
 - [ ] Review Skill validation output
+- [ ] Review Skill security validation
 - [ ] Update Skills Registry
 - [ ] Tag repository
 - [ ] Create article
@@ -88,4 +93,10 @@ git push --tags
 
 ```bash
 review if exist a new id in @skills-generator/src/main/resources/skills.xml to review compare with the content of @skills-generator/src/main/resources/skill-indexes and if exist add a new skill summary in @skills-generator/src/main/resources/skill-indexes. to elaborate the skill, review the `reference-list/reference` relation declared for that id in @skills-generator/src/main/resources/skills.xml. when finish, validate generation with ./mvnw clean install -pl skills-generator and validate the skill with npx skill-check skills
+```
+
+## Improve skills
+
+```
+solving the problem with the skill, did you learn something that it didn´t work as expected or something to improve in the skill? 
 ```

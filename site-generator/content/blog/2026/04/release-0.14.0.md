@@ -27,7 +27,7 @@ But now, you can do the same by adding the Skill to the context of your favorite
 On the main branch, a few resources about `System-prompts/rules` remain temporarily; we still see web traffic for them:
 
 - All rules from v0.13.0: https://github.com/jabrena/cursor-rules-java/tree/main/.cursor/rules
-- Getting Started: https://github.com/jabrena/cursor-rules-java/blob/main/documentation/GETTING-STARTED-SYSTEM-PROMPTS.md
+- Getting Started: https://github.com/jabrena/cursor-rules-java/blob/main/documentation/guides/GETTING-STARTED-SYSTEM-PROMPTS.md
 
 That usage is `deprecated` in favor of `Skills` and will be removed in the coming months; review [the new documentation](https://github.com/jabrena/cursor-rules-java?tab=readme-ov-file#deliverables) and adapt your process or pipelines.
 

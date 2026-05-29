@@ -1,0 +1,29 @@
+{
+  "resources": {
+    "includes": [
+      {
+        "pattern": ".*\\.properties$"
+      },
+      {
+        "pattern": ".*\\.json$"
+      },
+      {
+        "pattern": ".*\\.xml$"
+      },
+      {
+        "pattern": ".*\\.yml$"
+      },
+      {
+        "pattern": ".*\\.yaml$"
+      },
+      {
+        "pattern": "META-INF/.*"
+      }
+    ]
+  },
+  "bundles": [
+    {
+      "name": "messages"
+    }
+  ]
+} 

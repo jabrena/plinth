@@ -4,7 +4,7 @@ description: Use when you need MongoDB with Spring Data MongoDB — including Ma
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0-SNAPSHOT
+  version: 0.15.0
 ---
 # Spring Boot — MongoDB
 
@@ -23,10 +23,10 @@ Design clear document models, implement correct Spring Data MongoDB repositories
 - Factory methods for new documents; `@Version` for optimistic locking
 - `MongoRepository` with derived finders and explicit `@Query` methods
 - `MongoTemplate` for complex aggregations and multi-condition queries
-- `@Transactional` on service methods (MongoDB multi-document transactions where supported)
+- Service-layer write/read boundaries; use `@Transactional` only when MongoDB multi-document atomicity is required and supported
 - Error handling: `DuplicateKeyException`, `OptimisticLockingFailureException`, `DataAccessException`
 - DTO projections: returning view types instead of leaking internal documents
-- Testing with `@DataMongoTest` slice and Testcontainers MongoDB
+- Testing with `@DataMongoTest`, `@SpringBootTest`, and Testcontainers MongoDB
 
 **Scope:** Apply recommendations based on the reference rules and good/bad code examples.
 
@@ -53,6 +53,7 @@ Before applying any MongoDB changes, ensure the project compiles. Compilation fa
 - Example 5: MongoTemplate for complex queries
 - Example 6: Error handling
 - Example 7: Testing
+- Example 8: Full context tests
 
 ### Example 1: Maven dependency
 
@@ -68,7 +69,24 @@ Description: Spring Boot's BOM manages the `spring-boot-starter-data-mongodb` ve
     <artifactId>spring-boot-starter-data-mongodb</artifactId>
 </dependency>
 
-<!-- Optional: embedded MongoDB for @DataMongoTest slices without Testcontainers -->
+<!-- Spring Boot 4 / Testcontainers 2 artifact names; versions are managed by the Spring Boot BOM -->
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-testcontainers</artifactId>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>testcontainers-mongodb</artifactId>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>testcontainers-junit-jupiter</artifactId>
+    <scope>test</scope>
+</dependency>
+
+<!-- Optional alternative: embedded MongoDB for @DataMongoTest slices without Testcontainers -->
 <dependency>
     <groupId>de.flapdoodle.embed</groupId>
     <artifactId>de.flapdoodle.embed.mongo.spring30x</artifactId>
@@ -84,6 +102,18 @@ Description: Spring Boot's BOM manages the `spring-boot-starter-data-mongodb` ve
     <groupId>org.springframework.boot</groupId>
     <artifactId>spring-boot-starter-data-mongodb</artifactId>
     <version>3.2.0</version>
+</dependency>
+
+<!-- Bad for Spring Boot 4 / Testcontainers 2: old artifact names are not managed here -->
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>mongodb</artifactId>
+    <scope>test</scope>
+</dependency>
+<dependency>
+    <groupId>org.testcontainers</groupId>
+    <artifactId>junit-jupiter</artifactId>
+    <scope>test</scope>
 </dependency>
 ```
 
@@ -175,19 +205,17 @@ class OrderRepositoryBad {
 
 ### Example 4: Service layer
 
-Title: Constructor injection, @Transactional for multi-document atomicity
-Description: Keep the repository out of REST controllers — route everything through a service. Declare the class `@Transactional(readOnly = true)` and override write methods with `@Transactional`. MongoDB multi-document transactions require a replica set; Spring Data MongoDB supports them transparently when the driver is connected to one.
+Title: Constructor injection; transactions only when atomicity requires them
+Description: Keep the repository out of REST controllers — route everything through a service. For simple single-document writes, an explicit repository call with exception translation is usually enough. Add `@Transactional` only when the use case needs multi-document atomicity and the MongoDB deployment supports transactions through a replica set.
 
 **Good example:**
 
 ```java
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@Transactional(readOnly = true)
 class OrderService {
 
     private final OrderRepository repository;
@@ -204,12 +232,10 @@ class OrderService {
         return repository.findByCustomerId(customerId);
     }
 
-    @Transactional
     OrderDocument create(String orderNumber, String customerId) {
         return repository.save(OrderDocument.of(orderNumber, customerId));
     }
 
-    @Transactional
     OrderDocument updateCustomer(String orderId, String newCustomerId) {
         return repository.findById(orderId)
             .map(o -> new OrderDocument(o.id(), o.orderNumber(), newCustomerId, o.createdAt(), o.version()))
@@ -357,8 +383,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.data.mongo.DataMongoTest;
-import org.springframework.test.context.DynamicPropertyRegistry;
-import org.springframework.test.context.DynamicPropertySource;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
 import org.testcontainers.containers.MongoDBContainer;
 import org.testcontainers.junit.jupiter.Container;
 import org.testcontainers.junit.jupiter.Testcontainers;
@@ -371,12 +396,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 class OrderRepositoryIT {
 
     @Container
+    @ServiceConnection
     static MongoDBContainer mongo = new MongoDBContainer("mongo:7.0");
-
-    @DynamicPropertySource
-    static void mongoProps(DynamicPropertyRegistry registry) {
-        registry.add("spring.data.mongodb.uri", mongo::getReplicaSetUrl);
-    }
 
     @Autowired
     OrderRepository repository;
@@ -417,22 +438,74 @@ class OrderRepositoryTest {
 }
 ```
 
+
+### Example 8: Full context tests
+
+Title: Wire MongoDB for @SpringBootTest and ensure tests actually run
+Description: After adding MongoDB auto-configuration, existing `@SpringBootTest` tests may try `localhost:27017` and log connection failures even when no repository operation is executed. Wire those tests to Testcontainers with `@ServiceConnection` or explicitly disable MongoDB for tests that do not need it. Also confirm naming: Maven Surefire runs `*Test` by default, while `*IT` usually requires Failsafe configuration.
+
+**Good example:**
+
+```java
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.testcontainers.service.connection.ServiceConnection;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.junit.jupiter.Container;
+import org.testcontainers.junit.jupiter.Testcontainers;
+
+@SpringBootTest
+@Testcontainers
+class ApplicationTests {
+
+    @Container
+    @ServiceConnection
+    static MongoDBContainer mongo = new MongoDBContainer("mongo:7.0");
+
+    @Test
+    void contextLoads() {
+    }
+}
+
+// If the project has no maven-failsafe-plugin configuration, name Mongo integration tests
+// like SumControllerMongoTest so Surefire executes them during `mvn verify`.
+```
+
+**Bad example:**
+
+```java
+// Bad: passes without exercising MongoDB but logs localhost:27017 connection failures
+@SpringBootTest
+class ApplicationTests {
+
+    @Test
+    void contextLoads() {
+    }
+}
+
+// Bad unless maven-failsafe-plugin is configured: this class may not run in `mvn verify`.
+class OrderRepositoryIT {
+}
+```
+
 ## Output Format
 
 - **ANALYZE** MongoDB code: document mapping completeness, index declarations, repository query safety, service transaction placement, error handling specificity, and DTO vs document leakage
 - **CATEGORIZE** issues by impact (SECURITY for injection risk, CORRECTNESS for missing @Version or transactions, PERFORMANCE for missing indexes or unbounded queries, MAINTAINABILITY for mutable documents or missing factory methods)
-- **APPLY** Spring Data MongoDB–aligned fixes: explicit collection, @Field, @CompoundIndex, @Version, safe Criteria-based queries, service-layer transactions, exception translation
+- **APPLY** Spring Data MongoDB–aligned fixes: explicit collection, @Field, @CompoundIndex, @Version where appropriate, safe Criteria-based queries, service-layer boundaries, exception translation
 - **IMPLEMENT** changes so document model, indexes, repositories, and tests stay consistent
-- **EXPLAIN** trade-offs (MongoRepository derived finders vs MongoTemplate Criteria, embedded Flapdoodle vs Testcontainers, multi-document transactions vs application-level idempotency)
-- **TEST** repository behaviour with `@DataMongoTest` + Testcontainers; never mock repositories inside persistence slice tests
+- **EXPLAIN** trade-offs (MongoRepository derived finders vs MongoTemplate Criteria, embedded Flapdoodle vs Testcontainers, single-document writes vs multi-document transactions)
+- **TEST** repository behaviour with `@DataMongoTest` + Testcontainers and full flows with `@SpringBootTest` when needed; never mock repositories inside persistence slice tests
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
 
 ## Safeguards
 
 - **BLOCKING SAFETY CHECK**: Run `./mvnw compile` before ANY MongoDB refactoring — compilation failure is a HARD STOP
 - **CRITICAL VALIDATION**: Run `./mvnw clean verify` after changes; confirm repository tests pass before promoting
+- **TEST DISCOVERY**: Confirm MongoDB tests are actually executed by the current Maven setup; use `*Test` naming for Surefire-only projects or configure Failsafe for `*IT` classes
 - **INJECTION SAFETY**: Never concatenate user input into MongoDB query strings or `BasicQuery` objects — use Criteria API or `@Query` with bound parameters
 - **ERROR HANDLING**: Catch `DuplicateKeyException` and `OptimisticLockingFailureException` at the service boundary and translate to domain exceptions; never swallow with a generic catch
+- **FULL CONTEXT TESTS**: Existing `@SpringBootTest` tests need a MongoDB test connection or an explicit MongoDB exclusion to avoid accidental localhost:27017 connection attempts
 - **OPTIMISTIC LOCKING**: Adding `@Version` to an existing document requires a planned rollout for existing documents; test stale-update behavior before enabling it in production
 - **INDEXES**: Deploy index changes as coordinated background operations on large collections; avoid blocking foreground index builds in production
 - **API BOUNDARIES**: Never return managed `@Document` entities directly from REST controllers — map to DTOs to keep API contracts stable and prevent field leakage

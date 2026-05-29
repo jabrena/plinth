@@ -4,7 +4,7 @@ description: Use when you need to design, review, or improve validation in Sprin
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0-SNAPSHOT
+  version: 0.15.0
 ---
 # Spring Boot Validation Guidelines
 
@@ -309,51 +309,61 @@ void register(String password, String confirm) {
 ### Example 7: Centralized validation error mapping
 
 Title: @ControllerAdvice for MethodArgumentNotValidException, ConstraintViolationException, and HandlerMethodValidationException
-Description: Map all validation failure types to HTTP 400 with a stable JSON shape. `MethodArgumentNotValidException` fires for `@Valid @RequestBody`; `HandlerMethodValidationException` (Spring Boot 4+) covers MVC handler method-parameter validation; `ConstraintViolationException` still appears in older AOP-based `@Validated` flows and non-MVC validation paths. Never return raw `BindingResult` stack traces or exception messages that leak internals.
+Description: Map all validation failure types to HTTP 400 with RFC 7807 `ProblemDetail` bodies aligned with `@302-frameworks-spring-boot-rest`. `MethodArgumentNotValidException` fires for `@Valid @RequestBody`; `HandlerMethodValidationException` (Spring Boot 4+) covers MVC handler method-parameter validation; `ConstraintViolationException` still appears in older AOP-based `@Validated` flows and non-MVC validation paths. Populate `type`, `title`, `status`, `detail`, and `instance`; attach field-level messages as a `violations` extension property. Never return raw `BindingResult` stack traces, ad hoc `Map` shapes, or exception messages that leak internals.
 
 **Good example:**
 
 ```java
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
+import java.net.URI;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.StreamSupport;
 
 @ControllerAdvice
 class ValidationExceptionHandler {
 
+    private ProblemDetail buildValidationProblem(HttpServletRequest request, List<String> violations) {
+        ProblemDetail problem = ProblemDetail.forStatusAndDetail(
+            HttpStatus.BAD_REQUEST, "One or more request fields failed validation.");
+        problem.setType(URI.create("https://example.com/problems/validation-error"));
+        problem.setTitle("Validation Error");
+        problem.setInstance(URI.create(request.getRequestURI()));
+        problem.setProperty("violations", violations);
+        return problem;
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    ResponseEntity<Map<String, Object>> handleBody(MethodArgumentNotValidException ex) {
-        List<String> errors = ex.getBindingResult().getFieldErrors().stream()
+    ResponseEntity<ProblemDetail> handleBody(MethodArgumentNotValidException ex, HttpServletRequest request) {
+        List<String> violations = ex.getBindingResult().getFieldErrors().stream()
             .map(fe -> fe.getField() + ": " + fe.getDefaultMessage())
             .toList();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(Map.of("error", "VALIDATION_ERROR", "details", errors));
+        return ResponseEntity.badRequest().body(buildValidationProblem(request, violations));
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
-    ResponseEntity<Map<String, Object>> handleConstraints(ConstraintViolationException ex) {
-        List<String> errors = ex.getConstraintViolations().stream()
+    ResponseEntity<ProblemDetail> handleConstraints(ConstraintViolationException ex, HttpServletRequest request) {
+        List<String> violations = ex.getConstraintViolations().stream()
             .map(v -> v.getPropertyPath() + ": " + v.getMessage())
             .toList();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(Map.of("error", "VALIDATION_ERROR", "details", errors));
+        return ResponseEntity.badRequest().body(buildValidationProblem(request, violations));
     }
 
     @ExceptionHandler(HandlerMethodValidationException.class)
-    ResponseEntity<Map<String, Object>> handleMethodValidation(HandlerMethodValidationException ex) {
-        List<String> errors = ex.getAllValidationResults().stream()
-            .flatMap(r -> r.getResolvableErrors().stream()
-                .map(e -> r.getMethodParameter().getParameterName() + ": " + e.getDefaultMessage()))
+    ResponseEntity<ProblemDetail> handleMethodValidation(HandlerMethodValidationException ex, HttpServletRequest request) {
+        List<String> violations = ex.getParameterValidationResults().stream()
+            .flatMap(result -> StreamSupport.stream(result.getResolvableErrors().spliterator(), false)
+                .map(error -> result.getMethodParameter().getParameterName() + ": " + error.getDefaultMessage()))
             .toList();
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-            .body(Map.of("error", "VALIDATION_ERROR", "details", errors));
+        return ResponseEntity.badRequest().body(buildValidationProblem(request, violations));
     }
 }
 ```
@@ -362,10 +372,11 @@ class ValidationExceptionHandler {
 
 ```java
 @ExceptionHandler(MethodArgumentNotValidException.class)
-String bad(MethodArgumentNotValidException ex) {
-    return ex.getMessage();
+ResponseEntity<Map<String, Object>> bad(MethodArgumentNotValidException ex) {
+    return ResponseEntity.badRequest()
+        .body(Map.of("error", "VALIDATION_ERROR", "details", List.of(ex.getMessage())));
 }
-// Leaks framework wording; only covers one of the three validation exception types
+// Ad hoc Map shape — not RFC 7807; leaks framework wording; only covers one exception type
 ```
 
 ## Output Format
@@ -373,7 +384,7 @@ String bad(MethodArgumentNotValidException ex) {
 - **ANALYZE** controllers and configuration beans for missing `@Valid`, missing `@Validated`, wrong groups, and uncascaded nested DTOs
 - **CATEGORIZE** findings: boundary (HTTP), configuration startup, custom constraints, error response consistency
 - **APPLY** declarative Bean Validation; add `@ControllerAdvice` mapping for `MethodArgumentNotValidException`, `ConstraintViolationException`, and `HandlerMethodValidationException` (Spring Boot 4+) as appropriate
-- **STANDARDIZE** validation error payloads with RFC 7807 or a stable internal schema aligned with `@302-frameworks-spring-boot-rest`
+- **STANDARDIZE** validation error payloads as RFC 7807 `ProblemDetail` (Spring Boot) with a `violations` extension property, aligned with `@302-frameworks-spring-boot-rest`
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
 
 ## Safeguards
