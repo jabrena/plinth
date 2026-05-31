@@ -30,7 +30,7 @@ jobs:
           submodules: true
       - uses: actions/setup-python@v6
         with:
-          python-version: "3.x"
+          python-version: "3.12"
       - name: Validate SKILL.md files
         run: npx skill-check@latest skills --no-security-scan --format github
         env:
@@ -39,6 +39,11 @@ jobs:
         run: python -m pip install --upgrade cisco-ai-skill-scanner
       - name: Scan generated skills in ./skills with Skill Scanner
         run: skill-scanner scan-all ./skills --recursive --use-behavioral --policy strict --fail-on-severity high
+      - name: Install SkillSpector
+        run: python -m pip install "git+https://github.com/NVIDIA/SkillSpector.git"
+      - name: Scan generated skills in ./skills with SkillSpector
+        continue-on-error: true
+        run: skillspector scan ./skills --no-llm
 
   pre-commit:
     name: Pre-commit

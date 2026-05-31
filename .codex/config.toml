@@ -1,0 +1,18 @@
+[mcp_servers.javadocs]
+type = "http"
+url = "https://www.javadocs.dev/mcp"
+
+[mcp_servers.serena]
+command = "docker"
+args = [
+  "run",
+  "-i",
+  "--rm",
+  "-v",
+  ".:/workspaces/projects/repo",
+  "ghcr.io/oraios/serena:latest",
+  "serena",
+  "start-mcp-server",
+  "--project",
+  "/workspaces/projects/repo",
+]
