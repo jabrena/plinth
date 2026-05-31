@@ -24,26 +24,38 @@ Thanks to our community members in `Singapore`, `Hanoi`, `Hong Kong`, `Milan`, a
 
 ## What's new in this release?
 
-### Improved security validations in the CI pipeline
+### Improved security validation in the CI pipeline
 
 All skills are validated on every commit using a multi-scanner workflow:
 
-- **[`skill-check@latest`](https://github.com/thedaviddias/skill-check) by David Dias** validates the structure and formatting of every generated `SKILL.md` file. It runs as a required CI gate and fails the workflow when a skill does not follow the expected skill format.
 - **[`Cisco AI Skill Scanner`](https://github.com/cisco-ai-defense/skill-scanner) by Cisco AI Defense** analyzes every generated skill recursively with behavioral scanning enabled. It runs as a required CI gate using the `strict` policy and fails the workflow on `high` severity findings.
 - **[`SkillSpector`](https://github.com/NVIDIA/SkillSpector) by NVIDIA** performs an additional static security review of the generated skills.
 
-Rules derived from all three scanners are pending.
+The main risks that can remain when generated skills are not scanned before publication are:
 
-### Improvements in Java Enterprise Frameworks
+- **Prompt injection:** Hidden instructions can try to override the agent's normal behavior, ignore repository rules, or bypass review steps. Covered by `Cisco AI Skill Scanner` and `SkillSpector`.
+- **Data exfiltration:** A skill can include instructions or code paths that send source code, secrets, environment variables, or local files to an external service. Covered by `Cisco AI Skill Scanner` and `SkillSpector`.
+- **Command injection:** Shell commands can be built from untrusted input, allowing unexpected command execution when the skill runs. Covered by `Cisco AI Skill Scanner` and `SkillSpector`.
+- **Obfuscation and hidden content:** Base64 payloads, invisible Unicode characters, homoglyphs, or concealed scripts can hide malicious behavior from human reviewers. Covered by `Cisco AI Skill Scanner` and `SkillSpector`.
+- **Supply-chain abuse:** A skill can fetch and execute remote code, depend on unsafe packages, or introduce vulnerable dependencies. Covered by `Cisco AI Skill Scanner` and `SkillSpector`.
+- **Excessive permissions or tool misuse:** A skill can request broader file, shell, network, or MCP access than its stated purpose requires. Covered by `SkillSpector` and `Cisco AI Skill Scanner`.
+- **Description-behavior mismatch:** A skill can look harmless in its description while its scripts, references, or triggers perform a different action. Covered by `SkillSpector` and `Cisco AI Skill Scanner`.
+- **Social engineering and trigger abuse:** A skill can use misleading names, vague triggers, or urgent instructions to make agents or users invoke it in the wrong context. Covered by `Cisco AI Skill Scanner` and `SkillSpector`.
 
-In this release, the project continues adding new features to improve support for `Spring Boot`, `Quarkus` & `Micronaut`. The new skills added for all frameworks cover the following aspects:
+The project provides scanners, and when you use `Skills.sh`, a popular skills registry, every entry must pass three validations.
+
+**Example:** https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices
+
+### Improvements in Java Enterprise frameworks
+
+In this release, the project continues to add new features to improve support for `Spring Boot`, `Quarkus` & `Micronaut`. The new skills added for all frameworks cover the following aspects:
 
 - **Data Validation:** [`@303-frameworks-spring-boot-validation`](https://www.skills.sh/jabrena/cursor-rules-java/303-frameworks-spring-boot-validation), [`@403-frameworks-quarkus-validation`](https://www.skills.sh/jabrena/cursor-rules-java/403-frameworks-quarkus-validation) & [`@503-frameworks-micronaut-validation`](https://www.skills.sh/jabrena/cursor-rules-java/503-frameworks-micronaut-validation)
 - **Security:** [`@304-frameworks-spring-boot-security`](https://www.skills.sh/jabrena/cursor-rules-java/304-frameworks-spring-boot-security), [`@404-frameworks-quarkus-security`](https://www.skills.sh/jabrena/cursor-rules-java/404-frameworks-quarkus-security) & [`@504-frameworks-micronaut-security`](https://www.skills.sh/jabrena/cursor-rules-java/504-frameworks-micronaut-security)
 - **Kafka:** [`@314-frameworks-spring-kafka`](https://www.skills.sh/jabrena/cursor-rules-java/314-frameworks-spring-kafka), [`@414-frameworks-quarkus-kafka`](https://www.skills.sh/jabrena/cursor-rules-java/414-frameworks-quarkus-kafka) & [`@514-frameworks-micronaut-kafka`](https://www.skills.sh/jabrena/cursor-rules-java/514-frameworks-micronaut-kafka)
 - **MongoDB:** [`@315-frameworks-spring-mongodb`](https://www.skills.sh/jabrena/cursor-rules-java/315-frameworks-spring-mongodb), [`@415-frameworks-quarkus-mongodb`](https://www.skills.sh/jabrena/cursor-rules-java/415-frameworks-quarkus-mongodb) & [`@515-frameworks-micronaut-mongodb`](https://www.skills.sh/jabrena/cursor-rules-java/515-frameworks-micronaut-mongodb)
 
-### Improvements in Observability
+### Improvements in observability
 
 Observability is an essential aspect of any application:
 
@@ -61,7 +73,7 @@ Now, using any supported framework with OTEL, you can easily send continuous pro
 
 https://grafana.com/oss/pyroscope/
 
-### Improvements in Testing
+### Improvements in testing
 
 In this release, fuzz testing was improved to make it easier to use: `@703-technologies-fuzzing-testing`.
 
@@ -69,13 +81,13 @@ In this release, fuzz testing was improved to make it easier to use: `@703-techn
 
 https://github.com/Endava/cats
 
-### Better documentation 
+### Better documentation
 
 The project now provides documentation in three languages:
 
-- `English`
-- `Chinese`
-- `Spanish`
+- [`English`](https://github.com/jabrena/cursor-rules-java/blob/main/README.md)
+- [`Chinese`](https://github.com/jabrena/cursor-rules-java/blob/main/README_CN.md)
+- [`Spanish`](https://github.com/jabrena/cursor-rules-java/blob/main/README_ES.md)
 
 ## Evolution of this project in Vercel's Skills registry
 
@@ -96,7 +108,7 @@ This project focuses mainly on the following categories, and that scope continue
 
 ![](/cursor-rules-java/images/2026/6/codex.png)
 
-Recently, I tested Codex running on `VSCode`, and the experience was fantastic. Codex understands `AGENTS.md` and skills located in `.agents/skills`.
+Recently, I tested Codex running in `VS Code`, and the experience was fantastic. Codex understands `AGENTS.md` and skills located in `.agents/skills`.
 
 Using Codex, you can run the `Agents` provided by the project without any changes.
 
@@ -112,7 +124,7 @@ https://cursor.com/lp/2026-gartner-mq
 
 ### The experience in Codemotion Madrid 2026
 
-Last month, the project was explained and used at the tech conference `Codemotion Madrid 2026`. The workshop had sold out a few weeks before, and participants scored the session 4.5/5.
+Last month, the project was presented and used at the tech conference `Codemotion Madrid 2026`. The workshop had sold out a few weeks before, and participants rated the session 4.5/5.
 
 [![](/cursor-rules-java/images/2026/6/codemotion-madrid-workshop.jpg)](https://conferences.codemotion.com/madrid/)
 
@@ -120,13 +132,13 @@ Last month, the project was explained and used at the tech conference `Codemotio
 
 ### The experience in JMad 2026
 
-Every year, `MadridJUG` organizes `JMad`, a Java tech event using `OpenSpace`.
+Every year, `MadridJUG` organizes `JMad`, a Java tech event based on `OpenSpace`.
 
 [![](/cursor-rules-java/images/2026/6/IMG_8268.jpg)](https://jmad.madridjug.es/)
 
-`JMad` is a nice opportunity to exchange ideas and have good debates about the topics Java people want to discuss.
+`JMad` is a nice opportunity to exchange ideas and have good debates about the topics Java developers want to discuss.
 
-This year, the agenda was:
+This year's agenda was:
 
 ![](/cursor-rules-java/images/2026/6/IMG_2584.webp)
 
