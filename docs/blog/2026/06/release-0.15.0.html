@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>What&apos;s new in Cursor rules for Java 0.15.0? - Skills & Agents for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../../feed.xml" title="Skills & Agents for Java"/>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../../css/prettify.css">
+  <link rel="icon" type="image/png" href="../../../images/java-icon.png">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../../index.html">Skills & Agents for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li><a href="https://forms.gle/TpNXENjmu45wuXoi6" target="_blank">Share feedback</a></li>
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Conferences</a>
+    <div class="navlinks-children">
+      <a href="https://jabrena.github.io/cursor-rules-java/codemotion-madrid-2026/index.html" target="_blank">Codemotion Madrid 2026</a>
+      <a href="https://jabrena.github.io/cursor-rules-java/dvbe25/index.html" target="_blank">Devoxx BE 2025</a>
+      <a href="https://jabrena.github.io/101-cursor/" target="_blank">WJAX-2025</a>
+    </div>
+  </li>
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../../courses/java-generics/index.html">Java Generics</a>
+      <a href="../../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
+    </div>
+  </li>
+  <li><a href="../../../archive.html">Archive</a></li>
+  <li><a href="https://jabrena-github-io.translate.goog/cursor-rules-java/?_x_tr_sl=en&_x_tr_tl=cn&_x_tr_hl=en-US&_x_tr_pto=wapp">Translate</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="post-heading">
+<h1>What's new in Cursor rules for Java 0.15.0?</h1>
+<span class="post-meta">
+  <i class="fa fa-calendar-o"></i>
+  2026-06-01
+    &nbsp;
+    <i class="fa fa-pencil"></i>
+    Juan Antonio Breña Moral
+</span>
+<span class="blog-tags">
+  &nbsp;
+  <i class="fa fa-tags"></i>
+    <a href="../../../tags/blog.html">blog</a>
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="blog-post">
+<h2>What is the purpose?</h2>
+<p>An opinionated, AI-native workflow for evolving modern Java Enterprise <code>SDLC</code> practices through reusable <code>Skills</code>, <code>Agents</code>, and <code>MCP servers</code>.</p>
+<p>It helps you answer the <code>Five Whys</code> when your team needs to evolve a Java-based product or service:</p>
+<p><img src="/cursor-rules-java/images/2026/6/scope.png" alt="" /></p>
+<p>Once the idea is clear, you can implement it in a structured way:</p>
+<p><img src="/cursor-rules-java/images/2026/6/workflow.png" alt="" /></p>
+<p>Thanks to our community members in <code>Singapore</code>, <code>Hanoi</code>, <code>Hong Kong</code>, <code>Milan</code>, and <code>New York</code>. 👋👋👋</p>
+<p><strong>Note:</strong> <a href="https://github.com/sponsors/jabrena">If you love this project and use it, you can support it to help pay the token bills.</a></p>
+<h2>What's new in this release?</h2>
+<h3>Improved security validation in the CI pipeline</h3>
+<p>All skills are validated on every commit using a multi-scanner workflow:</p>
+<ul>
+<li><strong><a href="https://github.com/cisco-ai-defense/skill-scanner"><code>Cisco AI Skill Scanner</code></a> by Cisco AI Defense</strong> analyzes every generated skill recursively with behavioral scanning enabled. It runs as a required CI gate using the <code>strict</code> policy and fails the workflow on <code>high</code> severity findings.</li>
+<li><strong><a href="https://github.com/NVIDIA/SkillSpector"><code>SkillSpector</code></a> by NVIDIA</strong> performs an additional static security review of the generated skills.</li>
+</ul>
+<p>The main risks that can remain when generated skills are not scanned before publication are:</p>
+<ul>
+<li><strong>Prompt injection:</strong> Hidden instructions can try to override the agent's normal behavior, ignore repository rules, or bypass review steps. Covered by <code>Cisco AI Skill Scanner</code> and <code>SkillSpector</code>.</li>
+<li><strong>Data exfiltration:</strong> A skill can include instructions or code paths that send source code, secrets, environment variables, or local files to an external service. Covered by <code>Cisco AI Skill Scanner</code> and <code>SkillSpector</code>.</li>
+<li><strong>Command injection:</strong> Shell commands can be built from untrusted input, allowing unexpected command execution when the skill runs. Covered by <code>Cisco AI Skill Scanner</code> and <code>SkillSpector</code>.</li>
+<li><strong>Obfuscation and hidden content:</strong> Base64 payloads, invisible Unicode characters, homoglyphs, or concealed scripts can hide malicious behavior from human reviewers. Covered by <code>Cisco AI Skill Scanner</code> and <code>SkillSpector</code>.</li>
+<li><strong>Supply-chain abuse:</strong> A skill can fetch and execute remote code, depend on unsafe packages, or introduce vulnerable dependencies. Covered by <code>Cisco AI Skill Scanner</code> and <code>SkillSpector</code>.</li>
+<li><strong>Excessive permissions or tool misuse:</strong> A skill can request broader file, shell, network, or MCP access than its stated purpose requires. Covered by <code>SkillSpector</code> and <code>Cisco AI Skill Scanner</code>.</li>
+<li><strong>Description-behavior mismatch:</strong> A skill can look harmless in its description while its scripts, references, or triggers perform a different action. Covered by <code>SkillSpector</code> and <code>Cisco AI Skill Scanner</code>.</li>
+<li><strong>Social engineering and trigger abuse:</strong> A skill can use misleading names, vague triggers, or urgent instructions to make agents or users invoke it in the wrong context. Covered by <code>Cisco AI Skill Scanner</code> and <code>SkillSpector</code>.</li>
+</ul>
+<p>The project provides scanners, and when you use <code>Skills.sh</code>, a popular skills registry, every entry must pass three validations.</p>
+<p><strong>Example:</strong> <a href="https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices">https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices</a></p>
+<h3>Improvements in Java Enterprise frameworks</h3>
+<p>In this release, the project continues to add new features to improve support for <code>Spring Boot</code>, <code>Quarkus</code> &amp; <code>Micronaut</code>. The new skills added for all frameworks cover the following aspects:</p>
+<ul>
+<li><strong>Data Validation:</strong> <a href="https://www.skills.sh/jabrena/cursor-rules-java/303-frameworks-spring-boot-validation"><code>@303-frameworks-spring-boot-validation</code></a>, <a href="https://www.skills.sh/jabrena/cursor-rules-java/403-frameworks-quarkus-validation"><code>@403-frameworks-quarkus-validation</code></a> &amp; <a href="https://www.skills.sh/jabrena/cursor-rules-java/503-frameworks-micronaut-validation"><code>@503-frameworks-micronaut-validation</code></a></li>
+<li><strong>Security:</strong> <a href="https://www.skills.sh/jabrena/cursor-rules-java/304-frameworks-spring-boot-security"><code>@304-frameworks-spring-boot-security</code></a>, <a href="https://www.skills.sh/jabrena/cursor-rules-java/404-frameworks-quarkus-security"><code>@404-frameworks-quarkus-security</code></a> &amp; <a href="https://www.skills.sh/jabrena/cursor-rules-java/504-frameworks-micronaut-security"><code>@504-frameworks-micronaut-security</code></a></li>
+<li><strong>Kafka:</strong> <a href="https://www.skills.sh/jabrena/cursor-rules-java/314-frameworks-spring-kafka"><code>@314-frameworks-spring-kafka</code></a>, <a href="https://www.skills.sh/jabrena/cursor-rules-java/414-frameworks-quarkus-kafka"><code>@414-frameworks-quarkus-kafka</code></a> &amp; <a href="https://www.skills.sh/jabrena/cursor-rules-java/514-frameworks-micronaut-kafka"><code>@514-frameworks-micronaut-kafka</code></a></li>
+<li><strong>MongoDB:</strong> <a href="https://www.skills.sh/jabrena/cursor-rules-java/315-frameworks-spring-mongodb"><code>@315-frameworks-spring-mongodb</code></a>, <a href="https://www.skills.sh/jabrena/cursor-rules-java/415-frameworks-quarkus-mongodb"><code>@415-frameworks-quarkus-mongodb</code></a> &amp; <a href="https://www.skills.sh/jabrena/cursor-rules-java/515-frameworks-micronaut-mongodb"><code>@515-frameworks-micronaut-mongodb</code></a></li>
+</ul>
+<h3>Improvements in observability</h3>
+<p>Observability is an essential aspect of any application:</p>
+<p><a href="https://developers.redhat.com/blog/2016/12/09/spring-cloud-for-microservices-compared-to-kubernetes"><img src="/cursor-rules-java/images/2026/6/ms-concerns.webp" alt="" /></a></p>
+<p>In this release, we completed support for the main concepts related to observability: <code>Logging</code>, <code>Metrics</code> &amp; <code>Tracing</code>:</p>
+<ul>
+<li><strong>Logging:</strong> <a href="https://www.skills.sh/jabrena/cursor-rules-java/181-java-observability-logging"><code>@181-java-observability-logging</code></a></li>
+<li><strong>Metrics:</strong> <a href="https://www.skills.sh/jabrena/cursor-rules-java/182-java-observability-metrics-micrometer"><code>@182-java-observability-metrics-micrometer</code></a></li>
+<li><strong>Tracing:</strong> <a href="https://www.skills.sh/jabrena/cursor-rules-java/183-java-observability-tracing-opentelemetry"><code>@183-java-observability-tracing-opentelemetry</code></a></li>
+</ul>
+<p>Now, using any supported framework with OTEL, you can easily send continuous profiling data to Grafana:</p>
+<p><img src="/cursor-rules-java/images/2026/6/piroscope-demo.png" alt="" /></p>
+<p><a href="https://grafana.com/oss/pyroscope/">https://grafana.com/oss/pyroscope/</a></p>
+<h3>Improvements in testing</h3>
+<p>In this release, fuzz testing was improved to make it easier to use: <code>@703-technologies-fuzzing-testing</code>.</p>
+<p><img src="/cursor-rules-java/images/2026/6/cats.png" alt="" /></p>
+<p><a href="https://github.com/Endava/cats">https://github.com/Endava/cats</a></p>
+<h3>Better documentation</h3>
+<p>The project now provides documentation in three languages:</p>
+<ul>
+<li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/README.md"><code>English</code></a></li>
+<li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/README_CN.md"><code>Chinese</code></a></li>
+<li><a href="https://github.com/jabrena/cursor-rules-java/blob/main/README_ES.md"><code>Spanish</code></a></li>
+</ul>
+<h2>Evolution of this project in Vercel's Skills registry</h2>
+<p>The ecosystem is large, so you will need your own criteria beyond whether this project fits your preferences.</p>
+<p>This project focuses mainly on the following categories, and that scope continues to evolve:</p>
+<ul>
+<li>Maven, <a href="https://skills.sh/?q=maven">https://skills.sh/?q=maven</a></li>
+<li>Architecture ADR, <a href="https://skills.sh/?q=architecture+adr">https://skills.sh/?q=architecture+adr</a></li>
+<li>Java, <a href="https://skills.sh/?q=java">https://skills.sh/?q=java</a></li>
+<li>Spring Boot, <a href="https://skills.sh/?q=spring-boot">https://skills.sh/?q=spring-boot</a></li>
+<li>Quarkus, <a href="https://skills.sh/?q=quarkus">https://skills.sh/?q=quarkus</a></li>
+<li>Micronaut, <a href="https://skills.sh/?q=micronaut">https://skills.sh/?q=micronaut</a></li>
+</ul>
+<h2>Using the project in IDEs</h2>
+<h3>Codex</h3>
+<p><img src="/cursor-rules-java/images/2026/6/codex.png" alt="" /></p>
+<p>Recently, I tested Codex running in <code>VS Code</code>, and the experience was fantastic. Codex understands <code>AGENTS.md</code> and skills located in <code>.agents/skills</code>.</p>
+<p>Using Codex, you can run the <code>Agents</code> provided by the project without any changes.</p>
+<h3>Magic Quadrant update</h3>
+<p>Recently, Gartner updated the Magic Quadrant.</p>
+<p><img src="/cursor-rules-java/images/2026/6/magic-cuadrant-agents.jpg" alt="" /></p>
+<p><a href="https://cursor.com/lp/2026-gartner-mq">https://cursor.com/lp/2026-gartner-mq</a></p>
+<h2>The project in events</h2>
+<h3>The experience in Codemotion Madrid 2026</h3>
+<p>Last month, the project was presented and used at the tech conference <code>Codemotion Madrid 2026</code>. The workshop had sold out a few weeks before, and participants rated the session 4.5/5.</p>
+<p><a href="https://conferences.codemotion.com/madrid/"><img src="/cursor-rules-java/images/2026/6/codemotion-madrid-workshop.jpg" alt="" /></a></p>
+<p><strong>Slides:</strong> <a href="https://jabrena.github.io/cursor-rules-java/codemotion-madrid-2026/index.html">https://jabrena.github.io/cursor-rules-java/codemotion-madrid-2026/index.html</a></p>
+<h3>The experience in JMad 2026</h3>
+<p>Every year, <code>MadridJUG</code> organizes <code>JMad</code>, a Java tech event based on <code>OpenSpace</code>.</p>
+<p><a href="https://jmad.madridjug.es/"><img src="/cursor-rules-java/images/2026/6/IMG_8268.jpg" alt="" /></a></p>
+<p><code>JMad</code> is a nice opportunity to exchange ideas and have good debates about the topics Java developers want to discuss.</p>
+<p>This year's agenda was:</p>
+<p><img src="/cursor-rules-java/images/2026/6/IMG_2584.webp" alt="" /></p>
+<p>This year, several AI topics were discussed, including <code>AI Governance</code> and how to manage <code>Skills</code> in your team, unit, or company.</p>
+<p>Further information: <a href="https://jmad.madridjug.es/">https://jmad.madridjug.es/</a></p>
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena/cursor-rules-java" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2026 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../../js/jquery-1.11.2.min.js"></script>
+<script src="../../../js/bootstrap.min.js"></script>
+<script src="../../../js/prettify.js"></script>
+<script src="../../../js/run_prettify.js"></script>
+<script src="../../../js/main.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13CV90H4J4');
+</script>
+
+</body>
+</html>
