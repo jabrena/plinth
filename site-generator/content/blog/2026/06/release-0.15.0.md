@@ -24,13 +24,15 @@ Thanks to our community members in `Singapore`, `Hanoi`, `Hong Kong`, `Milan` an
 
 ## What's new in this release?
 
-### Improved Security
+### Improved Security validations in the CI pipeline
 
-All Skills are validated per commit using 2 specific Scanners:
+All Skills are validated per commit using a multi-scanner workflow:
 
+- **[`skill-check@latest`](https://github.com/thedaviddias/skill-check) by David Dias** validates the structure and formatting of every generated `SKILL.md` file. It runs as a required CI gate and fails the workflow when a skill does not follow the expected skill format.
+- **[`Cisco AI Skill Scanner`](https://github.com/cisco-ai-defense/skill-scanner) by Cisco AI Defense** analyzes every generated skill recursively with behavioral scanning enabled. It runs as a required CI gate using the `strict` policy and fails the workflow on `high` severity findings.
+- **[`SkillSpector`](https://github.com/NVIDIA/SkillSpector) by NVIDIA** performs an additional static security review of the generated skills.
 
-
-- Cisco AI Skill Scanner in the Maven workflow with strict behavioral policy.
+ADD RULES FROM ALL 3 SCANNERS. PENDING
 
 ### Improvements in Java Enterprise Frameworks
 
@@ -43,32 +45,68 @@ In this new release, the project continue adding new features to improve the sup
 
 ### Improvements in Observability
 
+Observability is an essential aspect about any development:
+
+[![](/cursor-rules-java/images/2026/6/ms-concerns.webp)](https://developers.redhat.com/blog/2016/12/09/spring-cloud-for-microservices-compared-to-kubernetes)
+
+In this release, we have completed the support for all main concepts related to observability, `Logging`, `Metrics` & `Tracing`:
+
 - **Logging:** [`@181-java-observability-logging`](https://www.skills.sh/jabrena/cursor-rules-java/181-java-observability-logging)
 - **Metrics:** [`@182-java-observability-metrics-micrometer`](https://www.skills.sh/jabrena/cursor-rules-java/182-java-observability-metrics-micrometer)
 - **Tracing:** [`@183-java-observability-tracing-opentelemetry`](https://www.skills.sh/jabrena/cursor-rules-java/183-java-observability-tracing-opentelemetry)
 
+Now, using any Framework supported + OTEL, you could send Continous Profiling easily to Graphana:
+
+![](/cursor-rules-java/images/2026/6/piroscope-demo.png)
+
+https://grafana.com/oss/pyroscope/
+
 ### Improvements in Testing
 
-- Docker-based CATS fuzz-testing workflow and assets for `@703-technologies-fuzzing-testing`.
+In this release, Fuzzing testing was improved a bit to simplify the usage. `@703-technologies-fuzzing-testing`.
 
-- High-performance refactoring skill (`@145-java-refactoring-high-performance`).
+![](/cursor-rules-java/images/2026/6/cats.png)
 
-https://github.com/cisco-ai-defense/skill-scanner
+https://github.com/Endava/cats
 
-## The experience in Codemotion Madrid 2026
+## Using the project in IDEs
+
+### Codex
+
+![](/cursor-rules-java/images/2026/6/codex.png)
+
+Recently, I was testing Codex running on `VSCode` and the experience was fantastic, Codex understands `AGENTS.md` and Skills located in `.agents/skills`
+
+Using Codex, you can run the `Agents` provided by the project without any change.
+
+### Magic Cuadrant update
+
+Recently, Garnert updated the Magic cuadrant
+
+![](/cursor-rules-java/images/2026/6/magic-cuadrant-agents.jpg)
+
+https://cursor.com/lp/2026-gartner-mq
+
+## The project in events
+
+### The experience in Codemotion Madrid 2026
+
+In last Month, the project was explained and used in the tech conference `Codemotion Madrid 2026`. The workshop had `sold out` few weeks before and the participants scored the session with 4.5/5.
 
 [![](/cursor-rules-java/images/2026/6/codemotion-madrid-workshop.jpg)](https://conferences.codemotion.com/madrid/)
 
-https://conferences.codemotion.com/madrid/workshop/
+**Slides:** https://jabrena.github.io/cursor-rules-java/codemotion-madrid-2026/index.html
 
-## The experience in JMad 2026
+### The experience in JMad 2026
 
-
-[![](/cursor-rules-java/images/2026/6/jmad-logo.png)](https://jmad.madridjug.es/)
+Annualy `MadridJUG` organize `JMad` a Java Tech Event using `OpenSpace`.
 
 [![](/cursor-rules-java/images/2026/6/IMG_8268.jpg)](https://jmad.madridjug.es/)
 
-Agenda:
+`JMad` is a nice opportunity to exchange ideas an run a good debate about topics that Java people want to talk.
+
+This year, the Agenda was:
 
 ![](/cursor-rules-java/images/2026/6/IMG_2584.webp)
 
+In this year, several topics about AI was present and one of the relevant topics was about `the AI Governance` and how to manage `the Skills` in your team/unit/company.
