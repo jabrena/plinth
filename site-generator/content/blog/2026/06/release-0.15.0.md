@@ -69,6 +69,14 @@ In this release, Fuzzing testing was improved a bit to simplify the usage. `@703
 
 https://github.com/Endava/cats
 
+### Better documentation 
+
+Now the project provide support the documentation in 3 languages:
+
+- `English`
+- `Chinese`
+- `Spanish`
+
 ## Using the project in IDEs
 
 ### Codex
@@ -79,9 +87,9 @@ Recently, I was testing Codex running on `VSCode` and the experience was fantast
 
 Using Codex, you can run the `Agents` provided by the project without any change.
 
-### Magic Cuadrant update
+### Magic Quadrant update
 
-Recently, Garnert updated the Magic cuadrant
+Recently, Gartner updated the Magic quadrant
 
 ![](/cursor-rules-java/images/2026/6/magic-cuadrant-agents.jpg)
 
