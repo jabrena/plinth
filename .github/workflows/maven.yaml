@@ -43,13 +43,7 @@ jobs:
         run: python -m pip install "git+https://github.com/NVIDIA/SkillSpector.git"
       - name: Scan generated skills in ./skills with SkillSpector
         continue-on-error: true
-        run: skillspector scan ./skills --no-llm --format sarif --output skillspector.sarif
-      - name: Upload SkillSpector SARIF report
-        if: always()
-        uses: actions/upload-artifact@v7
-        with:
-          name: skillspector.sarif
-          path: skillspector.sarif
+        run: skillspector scan ./skills --no-llm
 
   pre-commit:
     name: Pre-commit
