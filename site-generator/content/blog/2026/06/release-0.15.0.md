@@ -6,7 +6,7 @@ author=Juan Antonio Breña Moral
 status=published
 ~~~~~~
 
-## What are Cursor rules for Java?
+## What is the purpose?
 
 An opinionated AI-native workflow for evolving modern Java Enterprise `SDLC` practices through reusable `Skills`, `Agents`, and `MCP servers`.
 
@@ -23,6 +23,14 @@ Thanks to our community members in `Singapore`, `Hanoi`, `Hong Kong`, `Milan` an
 **Note:** [Remember that if you love this project and you use it, you could support it in order to pay the Token bills.](https://github.com/sponsors/jabrena)
 
 ## What's new in this release?
+
+### Improved Security
+
+All Skills are validated per commit using 2 specific Scanners:
+
+
+
+- Cisco AI Skill Scanner in the Maven workflow with strict behavioral policy.
 
 ### Improvements in Java Enterprise Frameworks
 
@@ -44,10 +52,6 @@ In this new release, the project continue adding new features to improve the sup
 - Docker-based CATS fuzz-testing workflow and assets for `@703-technologies-fuzzing-testing`.
 
 - High-performance refactoring skill (`@145-java-refactoring-high-performance`).
-
-### Improvements in process to generate the Skills
-
-- Cisco AI Skill Scanner in the Maven workflow with strict behavioral policy.
 
 https://github.com/cisco-ai-defense/skill-scanner
 
