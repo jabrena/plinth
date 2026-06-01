@@ -135,6 +135,8 @@ Java usa JEPs (JDK Enhancement Proposals) para describir nuevas características
 - [https://vibekode.it/blog/cursor-ai-developer-cloud-platform/](https://vibekode.it/blog/cursor-ai-developer-cloud-platform/)
 - [https://www.linkedin.com/pulse/september-rest-story-jvm-weekly-vol-146-artur-skowro%C5%84ski-82lif/?trackingId=wbWPSL65TpCCbdg5ksAWjw%3D%3D](https://www.linkedin.com/pulse/september-rest-story-jvm-weekly-vol-146-artur-skowro%C5%84ski-82lif/?trackingId=wbWPSL65TpCCbdg5ksAWjw%3D%3D)
 - [https://virtuslab.com/blog/ai/providing-library-documentation/](https://virtuslab.com/blog/ai/providing-library-documentation/)
+- https://github.com/the911fund/skill-of-skills
+- https://blog.csdn.net/weixin_42526249/article/details/161176209
 
 ## Referencias
 
@@ -151,6 +153,8 @@ Java usa JEPs (JDK Enhancement Proposals) para describir nuevas características
 - [https://skills.sh/jabrena/cursor-rules-java](https://skills.sh/jabrena/cursor-rules-java)
 - [https://tessl.io/registry/skills/github/jabrena/cursor-rules-java](https://tessl.io/registry/skills/github/jabrena/cursor-rules-java)
 - https://agent-skills.cc/zh/skills/jabrena-cursor-rules-java
+- https://shyft.ai/skills/cursor-rules-java
+- https://lobehub.com/skills?q=cursor-rules-java
 - [https://github.com/vercel-labs/skills/issues](https://github.com/vercel-labs/skills/issues)
 - [https://openjdk.org/jeps/0](https://openjdk.org/jeps/0)
 - [https://jbake.org/docs/latest/](https://jbake.org/docs/latest/)
