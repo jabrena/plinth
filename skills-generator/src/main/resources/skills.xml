@@ -177,6 +177,11 @@
             <reference>151-java-performance-jmeter</reference>
         </reference-list>
     </skill>
+    <skill id="152">
+        <reference-list>
+            <reference>152-java-performance-gatling</reference>
+        </reference-list>
+    </skill>
     <skill id="161">
         <reference-list>
             <reference>161-java-profiling-detect</reference>
