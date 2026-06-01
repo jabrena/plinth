@@ -267,6 +267,11 @@
             <reference>315-frameworks-spring-mongodb</reference>
         </reference-list>
     </skill>
+    <skill id="316">
+        <reference-list>
+            <reference>316-frameworks-spring-mongodb-migrations-mongock</reference>
+        </reference-list>
+    </skill>
     <skill id="321">
         <reference-list>
             <reference>321-frameworks-spring-boot-testing-unit-tests</reference>
@@ -327,6 +332,11 @@
             <reference>415-frameworks-quarkus-mongodb</reference>
         </reference-list>
     </skill>
+    <skill id="416">
+        <reference-list>
+            <reference>416-frameworks-quarkus-mongodb-migrations-mongock</reference>
+        </reference-list>
+    </skill>
     <skill id="421">
         <reference-list>
             <reference>421-frameworks-quarkus-testing-unit-tests</reference>
@@ -385,6 +395,11 @@
     <skill id="515">
         <reference-list>
             <reference>515-frameworks-micronaut-mongodb</reference>
+        </reference-list>
+    </skill>
+    <skill id="516">
+        <reference-list>
+            <reference>516-frameworks-micronaut-mongodb-migrations-mongock</reference>
         </reference-list>
     </skill>
     <skill id="521">

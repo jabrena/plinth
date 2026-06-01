@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt>
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.15.0</version>
+        <license>Apache-2.0</license>
+        <title>Micronaut - MongoDB migrations (Mongock)</title>
+        <description>Use when you need to add or review Mongock MongoDB data migrations in a Micronaut application - including Mongock runner/driver selection, Micronaut bean wiring, migration scan packages, `@ChangeUnit` classes, lock and transaction behavior, and Testcontainers validation. For general Micronaut MongoDB persistence use `@515-frameworks-micronaut-mongodb`.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Micronaut, Micronaut Data MongoDB, and code-first MongoDB migrations with Mongock</role>
+
+    <goal><![CDATA[
+        Add or improve Mongock migrations as code-first, versioned data changes in Micronaut applications. Prefer a Micronaut-specific runner only when the selected Mongock version documents one that is compatible with the project. Otherwise, wire the Mongock standalone runner through Micronaut beans or a controlled startup/job path. Keep migrations separate from controllers and repositories, make `@ChangeUnit` operations idempotent, and verify them against a real MongoDB instance. For Micronaut Data Mongo repositories and document modeling, use `@515-frameworks-micronaut-mongodb`.
+    ]]></goal>
+
+    <constraints>
+        <constraints-description>
+            Before applying any recommendations, ensure the project is in a valid state by running Maven compilation.
+            Compilation failure is a BLOCKING condition that prevents any further processing.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**PREREQUISITE**: Project must compile successfully before Mongock, MongoDB, or migration edits</constraint>
+            <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements; include a MongoDB-backed Micronaut test where feasible</constraint>
+            <constraint>**COMPATIBILITY**: Verify whether the selected Mongock version documents a compatible Micronaut runner before recommending Micronaut-specific runner coordinates</constraint>
+        </constraint-list>
+    </constraints>
+
+    <examples>
+        <toc auto-generate="true" />
+
+        <example number="1" id="micronaut-mongock-dependencies">
+            <example-header>
+                <example-title>Maven coordinates</example-title>
+                <example-subtitle>Use the Mongock BOM with the standalone runner and MongoDB sync driver when no compatible Micronaut runner is verified</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                Mongock architecture lets runners and drivers be combined. When a Micronaut-specific runner is unavailable or not verified for the project version, use `mongock-standalone` with `mongodb-sync-v4-driver` and wire execution as a Micronaut bean. Keep Micronaut MongoDB dependencies aligned with the Micronaut BOM.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="xml"><![CDATA[<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>io.mongock</groupId>
+            <artifactId>mongock-bom</artifactId>
+            <version>${mongock.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+
+<dependencies>
+    <dependency>
+        <groupId>io.mongock</groupId>
+        <artifactId>mongock-standalone</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.mongock</groupId>
+        <artifactId>mongodb-sync-v4-driver</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.micronaut.mongodb</groupId>
+        <artifactId>micronaut-mongo-sync</artifactId>
+    </dependency>
+</dependencies>]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="xml"><![CDATA[<!-- Bad: adding guessed Micronaut runner coordinates without verifying they exist and match the project -->
+<dependency>
+    <groupId>io.mongock</groupId>
+    <artifactId>mongock-micronaut</artifactId>
+    <version>5.5.1</version>
+</dependency>]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="2" id="micronaut-mongock-runner-bean">
+            <example-header>
+                <example-title>Runner bean</example-title>
+                <example-subtitle>Wire a controlled Mongock standalone runner through Micronaut</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                Run migrations at a deliberate lifecycle point. For small required migrations, a startup event listener can work. For long-running backfills, prefer a maintenance job or explicit operational command and gate application rollout around it.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import com.mongodb.client.MongoClient;
+import io.micronaut.context.annotation.Value;
+import io.micronaut.runtime.event.annotation.EventListener;
+import io.micronaut.runtime.server.event.ServerStartupEvent;
+import io.mongock.driver.mongodb.sync.v4.driver.MongoSync4Driver;
+import io.mongock.runner.standalone.MongockStandalone;
+import jakarta.inject.Singleton;
+
+@Singleton
+public class MongockMigrationRunner {
+
+    private final MongoClient mongoClient;
+    private final String databaseName;
+
+    public MongockMigrationRunner(
+            MongoClient mongoClient,
+            @Value("${mongodb.database}") String databaseName) {
+        this.mongoClient = mongoClient;
+        this.databaseName = databaseName;
+    }
+
+    @EventListener
+    void migrate(ServerStartupEvent event) {
+        MongockStandalone.builder()
+            .setDriver(MongoSync4Driver.withDefaultLock(mongoClient, databaseName))
+            .addMigrationScanPackage("com.example.migrations.mongo")
+            .buildRunner()
+            .execute();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Bad: running migrations from a controller allows repeated ad hoc execution paths
+@Controller("/admin/migrations")
+class MigrationController {
+    @Post
+    void migrate() {
+        runner.migrate();
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="micronaut-mongock-change-unit">
+            <example-header>
+                <example-title>ChangeUnit design</example-title>
+                <example-subtitle>Use stable MongoDB operations rather than Micronaut Data repositories</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                Keep old migrations compilable when Micronaut Data documents and repositories evolve. Use low-level MongoDB collection operations, explicit field names, and small idempotent updates.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import com.mongodb.client.MongoClient;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import io.mongock.api.annotations.ChangeUnit;
+import io.mongock.api.annotations.Execution;
+import io.mongock.api.annotations.RollbackExecution;
+
+@ChangeUnit(id = "orders-add-status", order = "001", author = "platform")
+public class OrdersAddStatusChange {
+
+    @Execution
+    public void execute(MongoClient mongoClient) {
+        mongoClient.getDatabase("orders")
+            .getCollection("orders")
+            .updateMany(Filters.exists("status", false), Updates.set("status", "PENDING"));
+    }
+
+    @RollbackExecution
+    public void rollback(MongoClient mongoClient) {
+        mongoClient.getDatabase("orders")
+            .getCollection("orders")
+            .updateMany(Filters.eq("status", "PENDING"), Updates.unset("status"));
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Bad: repository methods and document records may change after this migration has run
+@ChangeUnit(id = "orders-add-status", order = "001", author = "platform")
+class OrdersAddStatusChange {
+    @Execution
+    void execute(OrderRepository repository) {
+        repository.findAll().forEach(order -> repository.update(order.withStatus("PENDING")));
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="micronaut-mongock-testing">
+            <example-header>
+                <example-title>Testing migrations</example-title>
+                <example-subtitle>Run Micronaut migration wiring against Testcontainers MongoDB</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                Use `@MicronautTest` with MongoDB Testcontainers or Micronaut Test Resources so the same runner and driver execute against a real MongoDB instance. Verify the migrated collection state rather than only mocking the runner.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[@MicronautTest
+class MongockMigrationTest {
+
+    @Inject MongoClient mongoClient;
+
+    @Test
+    void appliesOrderStatusMigration() {
+        List<Document> orders = mongoClient.getDatabase("orders")
+            .getCollection("orders")
+            .find()
+            .into(new ArrayList<>());
+
+        assertThat(orders).allSatisfy(order -> assertThat(order).containsKey("status"));
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Bad: a pure Mockito test of the runner does not verify lock/history collections or MongoDB updates]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>**ANALYZE** Micronaut MongoDB setup: Micronaut version, MongoDB client type, available Mongock runner, driver, scan package, and startup policy</output-format-item>
+            <output-format-item>**CATEGORIZE** migration risks (RUNNER COMPATIBILITY, LOCKING, IDEMPOTENCY, DOMAIN COUPLING, STARTUP TIME, TEST GAP) by impact</output-format-item>
+            <output-format-item>**APPLY** Micronaut-aligned fixes: compatible Mongock dependencies, explicit runner bean/job, stable `@ChangeUnit` classes, and Testcontainers checks</output-format-item>
+            <output-format-item>**ALIGN** with `@515-frameworks-micronaut-mongodb` for normal document/repository design while keeping migrations independent</output-format-item>
+            <output-format-item>**VALIDATE** with `./mvnw compile` before changes and `./mvnw clean verify` after changes</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>**DO NOT EDIT APPLIED MIGRATIONS**: Once a `@ChangeUnit` has run in a shared environment, add a new ordered change instead of modifying it</safeguards-item>
+            <safeguards-item>**IDEMPOTENCY**: Write migrations so interrupted non-transactional execution can safely continue on the next run</safeguards-item>
+            <safeguards-item>**STARTUP TIME**: Do not run long backfills in a startup listener if probes or rollout windows can interrupt them repeatedly</safeguards-item>
+            <safeguards-item>**RUNNER CLAIMS**: Do not invent Micronaut-specific Mongock coordinates; verify official artifacts or use the standalone runner pattern</safeguards-item>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before recommending dependency or migration changes</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>
