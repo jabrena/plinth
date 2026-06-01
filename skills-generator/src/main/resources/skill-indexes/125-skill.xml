@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.15.0</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to apply Java concurrency best practices — including thread safety fundamentals, ExecutorService thread pool management, concurrent design patterns like Producer-Consumer, asynchronous programming with CompletableFuture, immutability and safe publication, deadlock avoidance, virtual threads, scoped values, backpressure, cancellation discipline, and observability for concurrent systems. This should trigger for requests such as Review Java code for concurrency.</description>
+    <description>Use when you need to apply Java concurrency best practices — including thread safety fundamentals, ExecutorService thread pool management, concurrent design patterns like Producer-Consumer, asynchronous programming with CompletableFuture, immutability and safe publication, deadlock avoidance, virtual threads, structured concurrency, scoped values, backpressure, cancellation discipline, and observability for concurrent systems. This should trigger for requests such as Review Java code for concurrency.</description>
   </metadata>
 
   <title>Java rules for Concurrency objects</title>
@@ -22,6 +22,7 @@ Identify and apply Java concurrency best practices to improve thread safety, sca
 - Immutability and safe publication (`volatile`, static initializers)
 - Lock contention and false-sharing performance optimization
 - Virtual threads (`Executors.newVirtualThreadPerTaskExecutor()`) for I/O-bound scalability
+- Structured Concurrency (`StructuredTaskScope`) for related subtasks in Java 27 preview
 - `ScopedValue` over `ThreadLocal` for immutable cross-task data
 - Cooperative cancellation and `InterruptedException` discipline
 - Backpressure with bounded queues and `CallerRunsPolicy`
@@ -61,7 +62,7 @@ Identify and apply Java concurrency best practices to improve thread safety, sca
     </step>
     <step number="3">
       <step-title>Apply concurrency improvements</step-title>
-      <step-content>Implement suitable concurrency patterns, cancellation discipline, and fit-for-purpose primitives.</step-content>
+    <step-content>Implement suitable concurrency patterns, structured task scopes where they fit related subtasks, cancellation discipline, and fit-for-purpose primitives.</step-content>
     </step>
     <step number="4">
       <step-title>Verify with full build</step-title>
