@@ -1,0 +1,223 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt>
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.15.0</version>
+        <license>Apache-2.0</license>
+        <title>Spring - MongoDB migrations (Mongock)</title>
+        <description>Use when you need to add or review Mongock MongoDB data migrations in a Spring Boot application - including Mongock BOM/dependencies, Spring Data MongoDB driver selection, migration scan packages, `@ChangeUnit` classes, lock and transaction behavior, and Testcontainers validation. For general Spring Data MongoDB persistence use `@315-frameworks-spring-mongodb`.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Spring Boot, Spring Data MongoDB, and code-first MongoDB migrations with Mongock</role>
+
+    <goal><![CDATA[
+        Add or improve Mongock migrations as code-first, versioned data changes that run safely with Spring Boot and Spring Data MongoDB. Keep migrations separate from normal repositories and request handling. Use `@ChangeUnit` classes for forward-only document changes, make operations idempotent, and verify them against a real MongoDB instance. For document modeling, repositories, and service-layer persistence patterns, use `@315-frameworks-spring-mongodb`.
+    ]]></goal>
+
+    <constraints>
+        <constraints-description>
+            Before applying any recommendations, ensure the project is in a valid state by running Maven compilation.
+            Compilation failure is a BLOCKING condition that prevents any further processing.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**PREREQUISITE**: Project must compile successfully before Mongock, MongoDB, or migration edits</constraint>
+            <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements; include a MongoDB-backed migration test where feasible</constraint>
+            <constraint>**COMPATIBILITY**: Verify the Mongock runner and driver generation against the active Spring Boot and Spring Data MongoDB versions before adding dependencies</constraint>
+        </constraint-list>
+    </constraints>
+
+    <examples>
+        <toc auto-generate="true" />
+
+        <example number="1" id="spring-mongock-dependencies">
+            <example-header>
+                <example-title>Maven coordinates</example-title>
+                <example-subtitle>Use the Mongock BOM and select the runner/driver generation that matches Spring Data MongoDB</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                Mongock artifacts are versioned together through `io.mongock:mongock-bom`. For Spring Boot 3.x and Spring Data MongoDB 4.x, the current Mongock v5 artifacts include `mongock-springboot-v3` and `mongodb-springdata-v4-driver`. For Spring Boot 4.x projects, verify Spring Data MongoDB compatibility before assuming the v4 driver is valid; if a compatible Mongock driver is not available, capture that as a blocker instead of forcing mismatched coordinates.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="xml"><![CDATA[<dependencyManagement>
+    <dependencies>
+        <dependency>
+            <groupId>io.mongock</groupId>
+            <artifactId>mongock-bom</artifactId>
+            <version>${mongock.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+    </dependencies>
+</dependencyManagement>
+
+<dependencies>
+    <dependency>
+        <groupId>io.mongock</groupId>
+        <artifactId>mongock-springboot-v3</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.mongock</groupId>
+        <artifactId>mongodb-springdata-v4-driver</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-data-mongodb</artifactId>
+    </dependency>
+</dependencies>]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="xml"><![CDATA[<!-- Bad: mixing old and new generations without checking Spring Data compatibility -->
+<dependency>
+    <groupId>io.mongock</groupId>
+    <artifactId>mongock-springboot</artifactId>
+    <version>5.0.0</version>
+</dependency>
+<dependency>
+    <groupId>io.mongock</groupId>
+    <artifactId>mongodb-springdata-v2-driver</artifactId>
+    <version>5.5.1</version>
+</dependency>]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="2" id="spring-mongock-configuration">
+            <example-header>
+                <example-title>Spring Boot configuration</example-title>
+                <example-subtitle>Declare migration scan packages and make startup behavior explicit</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                Mongock scans packages for `@ChangeUnit` classes. Keep migrations in a stable package such as `com.example.migrations.mongo` and avoid scanning the entire application. Prefer an explicit startup policy: automatic startup is convenient for services, while controlled jobs are safer for long-running backfills.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="yaml"><![CDATA[mongock:
+  enabled: true
+  migration-scan-package:
+    - com.example.migrations.mongo
+  transactional: true
+  throw-exception-if-cannot-obtain-lock: true
+  runner-type: applicationrunner]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="yaml"><![CDATA[# Bad: broad scan, hidden startup behavior, and lock failures ignored
+mongock:
+  migration-scan-package:
+    - com.example
+  throw-exception-if-cannot-obtain-lock: false]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="spring-mongock-change-unit">
+            <example-header>
+                <example-title>ChangeUnit design</example-title>
+                <example-subtitle>Use MongoTemplate or low-level operations instead of repositories tied to changing domain models</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                `@ChangeUnit` is the source of truth for an applied migration. Keep it stable after it has run in shared environments. Prefer `MongoTemplate`, collection names, and raw field names over repositories and domain records that may evolve later and break old migration compilation.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.mongock.api.annotations.ChangeUnit;
+import io.mongock.api.annotations.Execution;
+import io.mongock.api.annotations.RollbackExecution;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
+
+import static org.springframework.data.mongodb.core.query.Criteria.where;
+
+@ChangeUnit(id = "orders-add-status", order = "001", author = "platform")
+public class OrdersAddStatusChange {
+
+    @Execution
+    public void execute(MongoTemplate mongoTemplate) {
+        Query missingStatus = Query.query(where("status").exists(false));
+        Update setPending = new Update().set("status", "PENDING");
+        mongoTemplate.updateMulti(missingStatus, setPending, "orders");
+    }
+
+    @RollbackExecution
+    public void rollback(MongoTemplate mongoTemplate) {
+        Query pendingFromMigration = Query.query(where("status").is("PENDING"));
+        Update removeStatus = new Update().unset("status");
+        mongoTemplate.updateMulti(pendingFromMigration, removeStatus, "orders");
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Bad: repository/domain coupling makes old migrations fragile when OrderDocument changes
+@ChangeUnit(id = "orders-add-status", order = "001", author = "platform")
+class OrdersAddStatusChange {
+    @Execution
+    void execute(OrderRepository repository) {
+        repository.findAll().forEach(order -> repository.save(order.withStatus("PENDING")));
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="spring-mongock-testcontainers">
+            <example-header>
+                <example-title>Testing migrations</example-title>
+                <example-subtitle>Exercise startup migration against real MongoDB with Testcontainers</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                A useful integration test starts MongoDB, boots the Spring context with Mongock enabled, and verifies the post-migration document shape. Keep the test data small and targeted; do not validate business workflows here.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[@SpringBootTest
+@Testcontainers
+class MongockMigrationTest {
+
+    @Container
+    static MongoDBContainer mongo = new MongoDBContainer("mongo:7.0");
+
+    @DynamicPropertySource
+    static void mongoProperties(DynamicPropertyRegistry registry) {
+        registry.add("spring.data.mongodb.uri", mongo::getReplicaSetUrl);
+    }
+
+    @Autowired MongoTemplate mongoTemplate;
+
+    @Test
+    void appliesOrderStatusMigration() {
+        assertThat(mongoTemplate.findAll(Document.class, "orders"))
+            .allSatisfy(order -> assertThat(order).containsKey("status"));
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Bad: asserting only that the context starts while Mongock is disabled
+// mongock.enabled=false]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>**ANALYZE** Spring Boot MongoDB setup: Boot version, Spring Data MongoDB generation, Mongock BOM, runner, driver, scan package, and startup policy</output-format-item>
+            <output-format-item>**CATEGORIZE** migration risks (COMPATIBILITY, LOCKING, IDEMPOTENCY, DOMAIN COUPLING, TEST GAP) by impact</output-format-item>
+            <output-format-item>**APPLY** Spring-aligned fixes: compatible dependencies, focused `mongock.*` properties, stable `@ChangeUnit` classes, and Testcontainers checks</output-format-item>
+            <output-format-item>**ALIGN** with `@315-frameworks-spring-mongodb` for normal document/repository design while keeping migrations independent</output-format-item>
+            <output-format-item>**VALIDATE** with `./mvnw compile` before changes and `./mvnw clean verify` after changes</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>**DO NOT EDIT APPLIED MIGRATIONS**: Once a `@ChangeUnit` has run in a shared environment, add a new ordered change instead of modifying it</safeguards-item>
+            <safeguards-item>**IDEMPOTENCY**: Write migrations so interrupted non-transactional execution can safely continue on the next run</safeguards-item>
+            <safeguards-item>**LOCKING**: Do not hide lock acquisition failures in clustered deployments unless there is a documented external migration coordinator</safeguards-item>
+            <safeguards-item>**DOMAIN MODEL DRIFT**: Avoid repositories and mutable domain models inside old migrations; use stable collection/field operations</safeguards-item>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before recommending dependency or migration changes</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>
