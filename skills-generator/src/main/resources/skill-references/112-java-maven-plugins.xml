@@ -6,7 +6,7 @@
         <version>0.15.0</version>
         <license>Apache-2.0</license>
         <title>Maven Plugins: pom.xml Configuration Best Practices</title>
-        <description>Use when you need to add or configure Maven plugins in your pom.xml using a modular, step-based approach.</description>
+        <description>Use when you need to add or configure Maven plugins in your pom.xml using a modular, step-based approach, including dependency analysis for unused declared dependencies.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Java software development</role>
@@ -15,6 +15,7 @@
 
     <goal>
         This rule provides a modular, step-based approach to updating Maven pom.xml files with plugins and profiles. Each step has a single responsibility and clear dependencies on user answers, making the configuration process more maintainable and user-friendly.
+        It includes dependency analysis with maven-dependency-plugin to detect unused declared dependencies and undeclared used dependencies.
     </goal>
 
     <constraints>
@@ -1965,12 +1966,96 @@ After adding this plugin, verify the configuration:
                 </step-constraint-list>
             </step-constraints>
         </step>
+        <step number="22">
+            <step-title>Maven Dependency Plugin Analysis Configuration</step-title>
+            <step-content><![CDATA[
+**Purpose**: Configure maven-dependency-plugin to detect unused declared dependencies and used undeclared dependencies during the build.
+
+**Dependencies**: Only execute if user selected "Dependency analysis (maven-dependency-plugin)" in Step 3. Requires completion of core plugin steps (3, 4, 5).
+
+**CRITICAL PRESERVATION RULE**: Only ADD this plugin if it doesn't already exist. Never REPLACE or REMOVE existing plugins.
+
+## Pre-Implementation Check
+
+**BEFORE adding maven-dependency-plugin, check if it already exists in the pom.xml:**
+
+If maven-dependency-plugin already exists: Ask user "maven-dependency-plugin already exists. Do you want to enhance the existing configuration? (y/n)"
+
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing configuration elements only.
+
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Dependency analysis (maven-dependency-plugin)" in Step 3.
+
+## Maven Dependency Plugin Configuration
+
+**ADD this plugin to the `<build><plugins>` section ONLY if it doesn't already exist:**
+
+```xml
+<plugin>
+<groupId>org.apache.maven.plugins</groupId>
+<artifactId>maven-dependency-plugin</artifactId>
+<version>${maven-plugin-dependency.version}</version>
+<executions>
+    <execution>
+        <id>analyze-dependencies</id>
+        <phase>verify</phase>
+        <goals>
+            <goal>analyze-only</goal>
+        </goals>
+        <configuration>
+            <failOnWarning>true</failOnWarning>
+            <ignoreNonCompile>true</ignoreNonCompile>
+        </configuration>
+    </execution>
+</executions>
+</plugin>
+```
+
+## Implementation Guidelines
+
+1. **Use `analyze-only` in lifecycle bindings**: The `analyze` goal is useful from the command line, while `analyze-only` participates cleanly in the build lifecycle after classes have been compiled.
+2. **Fail on dependency warnings**: `failOnWarning` should be `true` when the team wants unused declared dependencies or used undeclared dependencies to block `verify`.
+3. **Reduce false positives for non-compile scopes**: `ignoreNonCompile` avoids failing unused dependency analysis on runtime, provided, test, and system scoped dependencies.
+4. **Preserve known exceptions**: If the project intentionally declares dependencies only used reflectively or through generated code, configure the appropriate ignored dependency lists instead of removing the plugin.
+
+## Usage Examples
+
+```bash
+# Run dependency analysis directly
+./mvnw dependency:analyze
+
+# Run the lifecycle-bound dependency analysis
+./mvnw verify
+```
+
+## Validation
+
+After adding this plugin, verify the configuration:
+
+```bash
+# Test Maven Dependency plugin configuration
+./mvnw verify
+```
+                ]]>
+            </step-content>
+            <step-constraints>
+                <step-constraint-list>
+                    <step-constraint>**MUST** only add maven-dependency-plugin if "Dependency analysis (maven-dependency-plugin)" was selected in Step 3</step-constraint>
+                    <step-constraint>**MUST** check if plugin already exists before adding</step-constraint>
+                    <step-constraint>**MUST** ask user permission before modifying existing plugin configuration</step-constraint>
+                    <step-constraint>**MUST** use properties configured in Step 4 for plugin version</step-constraint>
+                    <step-constraint>**MUST** configure `analyze-only` bound to the `verify` phase for lifecycle execution</step-constraint>
+                    <step-constraint>**MUST** enable `failOnWarning` so dependency warnings can fail the build</step-constraint>
+                    <step-constraint>**MUST** skip this step entirely if Dependency analysis was not selected</step-constraint>
+                </step-constraint-list>
+            </step-constraints>
+        </step>
     </steps>
 
     <output-format>
         <output-format-list>
             <output-format-item>Ask questions one by one following the template exactly in Step 3</output-format-item>
-            <output-format-item>Execute steps 4-21 only based on user selections from Step 3</output-format-item>
+            <output-format-item>Execute steps 4-22 only based on user selections from Step 3</output-format-item>
             <output-format-item>Skip entire steps if no relevant features were selected</output-format-item>
             <output-format-item>Implement only requested features based on user selections</output-format-item>
             <output-format-item>Follow template specifications exactly for all configurations</output-format-item>

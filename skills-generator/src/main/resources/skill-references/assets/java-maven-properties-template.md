@@ -103,6 +103,11 @@ Start with essential build properties that every project needs (use the Java ver
 <maven-plugin-versions.version>2.18.0</maven-plugin-versions.version>
 ```
 
+**If Dependency Analysis selected**:
+```xml
+<maven-plugin-dependency.version>3.11.0</maven-plugin-dependency.version>
+```
+
 **If Build Info selected**:
 ```xml
 <maven-plugin-git-commit-id.version>4.9.10</maven-plugin-git-commit-id.version>
@@ -167,6 +172,7 @@ The final `<properties>` section will look like this (example with common select
   <maven-plugin-pitest.version>1.19.4</maven-plugin-pitest.version>
   <maven-plugin-pitest-junit5.version>1.2.3</maven-plugin-pitest-junit5.version>
   <maven-plugin-spotbugs.version>4.9.3.0</maven-plugin-spotbugs.version>
+  <maven-plugin-dependency.version>3.11.0</maven-plugin-dependency.version>
   <maven-plugin-compiler.version>3.13.0</maven-plugin-compiler.version>
   <!-- If Cyclomatic complexity: maven-plugin-pmd.version, maven-plugin-jxr.version -->
   <!-- If Jib selected: maven-plugin-jib.version -->
