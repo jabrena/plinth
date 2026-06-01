@@ -8,7 +8,7 @@ Some **User prompts** designed to help in the maintenance of this repository.
 
 ```bash
 # Maven command to update the maven version to next minor version
-./mvnw versions:set -DnewVersion=0.15.0
+./mvnw versions:set -DnewVersion=0.16.0-SNAPSHOT
 ./mvnw versions:commit
 
 #Bump to a new snapshot
