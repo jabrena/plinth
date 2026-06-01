@@ -6,7 +6,7 @@
         <version>0.15.0</version>
         <license>Apache-2.0</license>
         <title>Java rules for Concurrency objects</title>
-        <description>Use when you need to apply Java concurrency best practices — including thread safety fundamentals, ExecutorService thread pool management, concurrent design patterns like Producer-Consumer, asynchronous programming with CompletableFuture, immutability and safe publication, deadlock avoidance, virtual threads, scoped values, backpressure, cancellation discipline, and observability for concurrent systems.</description>
+        <description>Use when you need to apply Java concurrency best practices — including thread safety fundamentals, ExecutorService thread pool management, concurrent design patterns like Producer-Consumer, asynchronous programming with CompletableFuture, immutability and safe publication, deadlock avoidance, virtual threads, structured concurrency, scoped values, backpressure, cancellation discipline, and observability for concurrent systems.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Java software development</role>
@@ -27,6 +27,7 @@
         7.  **Thorough Testing and Debugging**: Rigorously test concurrent code. This includes unit tests for thread-safe components, integration tests for interactions, and stress tests to reveal race conditions or deadlocks. Utilize thread dump analysis, proper logging, and concurrency testing tools.
         8.  **Adopt Modern Java Concurrency Features for Enhanced Development**:
             *   **Virtual Threads (Project Loom)**: Embrace virtual threads via `Executors.newVirtualThreadPerTaskExecutor()` for I/O-bound tasks to dramatically increase scalability with minimal resource overhead. Avoid pooling virtual threads.
+            *   **Structured Concurrency**: Use `StructuredTaskScope` when a task forks related subtasks that should succeed, fail, cancel, and be observed as one unit. In Java 27, this is the seventh preview API from JEP 533 and requires `--enable-preview`.
             *   **Scoped Values**: Prefer `ScopedValue` over `ThreadLocal` for sharing immutable data robustly and efficiently across tasks within a dynamically bounded scope, especially when working with virtual threads.
         9.  **Cooperative Cancellation and Interruption Discipline**: Design tasks to be cancellable; always respond to interruption promptly. Do not swallow `InterruptedException`; either propagate it or restore the interrupt flag with `Thread.currentThread().interrupt()`. Prefer time-bounded operations (`orTimeout`, `completeOnTimeout`, timeouts on blocking calls), use `Future.cancel(true)`, prefer `Lock.lockInterruptibly()`/`tryLock(timeout, unit)` where applicable, and ensure cleanup on cancellation.
         10. **Backpressure and Overload Protection**: Prevent unbounded work queues and cascading failures by using bounded queues, appropriate rejection policies (e.g., `CallerRunsPolicy` for graceful shedding), semaphores/bulkheads to cap concurrency, request rate limiting, and the `Flow` (Reactive Streams) API when stream backpressure is needed.
@@ -1921,22 +1922,131 @@ class ExchangerExample {
                 </bad-example>
             </code-examples>
         </example>
+
+        <example number="17" id="structured-concurrency">
+            <example-header>
+                <example-title>Structured Concurrency with StructuredTaskScope</example-title>
+                <example-subtitle>Coordinate related subtasks as one unit of work</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use Structured Concurrency when a parent task forks related subtasks that must be joined, cancelled, and observed together. `StructuredTaskScope` is a Java 27 preview API (JEP 533), so compile and run code that uses it with `--enable-preview`.
+
+                Apply this guidance when reviewing Java 27 preview code:
+                - Prefer `StructuredTaskScope` for request-scoped fan-out where sibling subtasks share one lifecycle.
+                - Use try-with-resources so the scope is closed and unfinished subtasks are cancelled.
+                - Call `join()` from the owner thread inside the scope before reading `Subtask` results.
+                - Expect the Java 27 API shape: `StructuredTaskScope<T, R, R_X extends Throwable>` and `Joiner<T, R, R_X>`.
+                - Use `StructuredTaskScope.open()` for the default join policy, or `StructuredTaskScope.open(UnaryOperator)` when configuring the default policy with a name, timeout, or thread factory.
+                - Use `Joiner.allSuccessfulOrThrow()`, `anySuccessfulOrThrow()`, or `awaitAllSuccessfulOrThrow()` when failure should be surfaced by `ExecutionException`; use their overloads to map failures to a custom exception type.
+                - Do not use older preview API shapes: `Joiner.awaitAll()` was removed, and `Joiner.onTimeout()` was replaced by `timeout()`.
+                - Distinguish structured concurrency from general `ExecutorService`: a scope models a bounded parent-child relationship, while an executor is a broader task submission mechanism.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.concurrent.ExecutionException;
+import java.util.concurrent.StructuredTaskScope;
+import java.util.concurrent.StructuredTaskScope.Joiner;
+import java.util.concurrent.StructuredTaskScope.Subtask;
+
+class StructuredConcurrencyExample {
+    Response handle(Request request) throws ExecutionException, InterruptedException {
+        try (var scope = StructuredTaskScope.open()) {
+            Subtask<Customer> customer = scope.fork(() -> findCustomer(request.customerId()));
+            Subtask<OrderHistory> orders = scope.fork(() -> fetchOrderHistory(request.customerId()));
+
+            scope.join(); // joins subtasks and propagates failure as ExecutionException
+
+            return new Response(customer.get(), orders.get());
+        }
+    }
+
+    Quote fastestQuote(Request request) throws ExecutionException, InterruptedException {
+        try (var scope = StructuredTaskScope.open(Joiner.<Quote>anySuccessfulOrThrow())) {
+            scope.fork(() -> quoteFromPrimary(request));
+            scope.fork(() -> quoteFromBackup(request));
+
+            return scope.join(); // returns the first successful quote, or throws ExecutionException
+        }
+    }
+
+    private Customer findCustomer(String customerId) {
+        return new Customer(customerId);
+    }
+
+    private OrderHistory fetchOrderHistory(String customerId) {
+        return new OrderHistory(customerId);
+    }
+
+    private Quote quoteFromPrimary(Request request) {
+        return new Quote("primary");
+    }
+
+    private Quote quoteFromBackup(Request request) {
+        return new Quote("backup");
+    }
+}
+
+record Request(String customerId) {}
+record Customer(String id) {}
+record OrderHistory(String customerId) {}
+record Quote(String provider) {}
+record Response(Customer customer, OrderHistory orders) {}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+
+class UnstructuredFanOutExample {
+    private final ExecutorService executor = Executors.newCachedThreadPool();
+
+    Response handle(Request request) throws Exception {
+        Future<Customer> customer = executor.submit(() -> findCustomer(request.customerId()));
+        Future<OrderHistory> orders = executor.submit(() -> fetchOrderHistory(request.customerId()));
+
+        // BAD: If customer.get() fails or the parent task is interrupted,
+        // the sibling task can continue running without a clear parent scope.
+        return new Response(customer.get(), orders.get());
+    }
+
+    void stalePreviewApiUsage() {
+        // BAD for Java 27 / JEP 533:
+        // - Do not recommend removed Joiner.awaitAll().
+        // - Do not recommend replaced Joiner.onTimeout().
+        // - Do not catch older preview-specific FailedException for the standard
+        //   successful-or-throw joiners; they now surface ExecutionException by default.
+    }
+
+    private Customer findCustomer(String customerId) {
+        return new Customer(customerId);
+    }
+
+    private OrderHistory fetchOrderHistory(String customerId) {
+        return new OrderHistory(customerId);
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
     </examples>
 
     <output-format>
         <output-format-list>
             <output-format-item>**ANALYZE** Java code to identify specific concurrency issues and categorize them by impact (CRITICAL, PERFORMANCE, DEADLOCK_RISK, SCALABILITY, THREAD_SAFETY) and concurrency area (thread safety, synchronization, thread pools, async operations, modern concurrency)</output-format-item>
-            <output-format-item>**CATEGORIZE** concurrency improvements found: Thread Safety Issues (race conditions vs atomic operations, unsafe collections vs concurrent collections, shared mutable state vs immutable objects), Thread Pool Management (improper sizing vs optimal configuration, resource leaks vs proper lifecycle management), Synchronization Problems (deadlock risks vs lock-free algorithms, excessive contention vs efficient synchronization), Performance Issues (blocking operations vs non-blocking alternatives, memory consistency problems vs volatile/final usage), and Modern Concurrency Gaps (platform threads vs virtual threads, callback hell vs CompletableFuture composition, ThreadLocal vs ScopedValue for context propagation)</output-format-item>
-            <output-format-item>**APPLY** concurrency best practices directly by implementing the most appropriate improvements for each identified issue: Replace unsafe collections with concurrent alternatives, implement proper synchronization using atomic classes and concurrent utilities, configure thread pools with appropriate sizing and lifecycle management, refactor blocking operations to non-blocking alternatives using CompletableFuture, eliminate race conditions through immutability and proper synchronization, and adopt modern concurrency features like virtual threads and ScopedValue where beneficial</output-format-item>
-            <output-format-item>**IMPLEMENT** comprehensive concurrency refactoring using proven patterns: Establish thread-safe data structures using concurrent collections and atomic classes, implement efficient synchronization with locks, semaphores, and barriers, configure optimal thread pool management with proper ExecutorService usage, apply asynchronous programming patterns with CompletableFuture composition, integrate modern concurrency features (virtual threads, scoped values), and implement proper error handling and resource management in concurrent contexts</output-format-item>
-            <output-format-item>**REFACTOR** code systematically following the concurrency improvement roadmap: First eliminate critical thread safety issues through atomic operations and concurrent collections, then optimize synchronization mechanisms to reduce contention and deadlock risks, configure proper thread pool management and lifecycle, refactor blocking operations to asynchronous alternatives, integrate modern concurrency features (virtual threads, ScopedValue) for improved scalability, and implement comprehensive testing strategies for concurrent code validation</output-format-item>
-            <output-format-item>**EXPLAIN** the applied concurrency improvements and their benefits: Thread safety enhancements through proper synchronization and atomic operations, performance improvements via optimized thread pool management and non-blocking operations, scalability gains from modern concurrency features like virtual threads, deadlock prevention through lock-free algorithms and proper synchronization patterns, and maintainability improvements from clear async composition and ScopedValue for context propagation</output-format-item>
+            <output-format-item>**CATEGORIZE** concurrency improvements found: Thread Safety Issues (race conditions vs atomic operations, unsafe collections vs concurrent collections, shared mutable state vs immutable objects), Thread Pool Management (improper sizing vs optimal configuration, resource leaks vs proper lifecycle management), Synchronization Problems (deadlock risks vs lock-free algorithms, excessive contention vs efficient synchronization), Performance Issues (blocking operations vs non-blocking alternatives, memory consistency problems vs volatile/final usage), and Modern Concurrency Gaps (platform threads vs virtual threads, unstructured fan-out vs StructuredTaskScope, callback hell vs CompletableFuture composition, ThreadLocal vs ScopedValue for context propagation)</output-format-item>
+            <output-format-item>**APPLY** concurrency best practices directly by implementing the most appropriate improvements for each identified issue: Replace unsafe collections with concurrent alternatives, implement proper synchronization using atomic classes and concurrent utilities, configure thread pools with appropriate sizing and lifecycle management, refactor blocking operations to non-blocking alternatives using CompletableFuture, eliminate race conditions through immutability and proper synchronization, and adopt modern concurrency features like virtual threads, StructuredTaskScope, and ScopedValue where beneficial</output-format-item>
+            <output-format-item>**IMPLEMENT** comprehensive concurrency refactoring using proven patterns: Establish thread-safe data structures using concurrent collections and atomic classes, implement efficient synchronization with locks, semaphores, and barriers, configure optimal thread pool management with proper ExecutorService usage, apply asynchronous programming patterns with CompletableFuture composition, integrate modern concurrency features (virtual threads, structured concurrency, scoped values), and implement proper error handling and resource management in concurrent contexts</output-format-item>
+            <output-format-item>**REFACTOR** code systematically following the concurrency improvement roadmap: First eliminate critical thread safety issues through atomic operations and concurrent collections, then optimize synchronization mechanisms to reduce contention and deadlock risks, configure proper thread pool management and lifecycle, refactor blocking operations to asynchronous alternatives, integrate modern concurrency features (virtual threads, StructuredTaskScope, ScopedValue) for improved scalability, and implement comprehensive testing strategies for concurrent code validation</output-format-item>
+            <output-format-item>**EXPLAIN** the applied concurrency improvements and their benefits: Thread safety enhancements through proper synchronization and atomic operations, performance improvements via optimized thread pool management and non-blocking operations, scalability gains from modern concurrency features like virtual threads and StructuredTaskScope, deadlock prevention through lock-free algorithms and proper synchronization patterns, and maintainability improvements from clear async composition and ScopedValue for context propagation</output-format-item>
             <output-format-item>**VALIDATE** that all applied concurrency refactoring compiles successfully, maintains thread safety guarantees, eliminates race conditions and deadlock risks, preserves or improves performance characteristics, and achieves the intended concurrency improvements through comprehensive testing and verification</output-format-item>
             <output-format-item>**CANCELLATION/INTERRUPTION**: Identify blocking calls and long-running tasks; ensure interruption is propagated/restored, add timeouts (`orTimeout`, `completeOnTimeout`, timed `poll/take/tryLock`), and verify `Future.cancel(true)` paths release resources.</output-format-item>
             <output-format-item>**BACKPRESSURE/OVERLOAD**: Detect unbounded producers and queues; introduce bounded queues, rejection policies, semaphores/bulkheads, and when streaming, prefer `Flow`/Reactive Streams to enforce backpressure.</output-format-item>
             <output-format-item>**FORKJOIN/PARALLEL STREAMS USAGE**: Flag blocking operations in common pool, migrate to dedicated executors or `ManagedBlocker`, verify tasks are CPU-bound and side-effect-free, and gate `parallelStream()` usage behind measurements.</output-format-item>
             <output-format-item>**PINNING WITH VIRTUAL THREADS**: Inspect `synchronized` blocks around blocking I/O; replace with cooperative locks, shrink critical sections, and recommend JFR pinning analysis.</output-format-item>
             <output-format-item>**COORDINATION PRIMITIVES**: Identify opportunities for Phaser (phased tasks), CyclicBarrier (reusable barriers), and Exchanger (pairwise exchange); ensure proper usage with interruption handling and resource cleanup.</output-format-item>
+            <output-format-item>**STRUCTURED CONCURRENCY**: For related subtasks, prefer `StructuredTaskScope` over ad hoc `ExecutorService` fan-out; verify Java 27 preview usage, `--enable-preview`, `ExecutionException` joiner behavior, `R_X` exception typing, `open(UnaryOperator)` configuration, and removal/replacement of stale preview APIs (`awaitAll()`, `onTimeout()`).</output-format-item>
         </output-format-list>
     </output-format>
 
@@ -1957,6 +2067,7 @@ class ExchangerExample {
             <safeguards-item>**OVERLOAD/BACKPRESSURE PROTECTION**: Avoid unbounded queues; enforce bounded capacity, sane rejection policies, and rate/concurrency limits to prevent cascading failures.</safeguards-item>
             <safeguards-item>**TIMEOUTS/RETRIES/IDEMPOTENCY**: Bound external calls with timeouts, use bounded-jittered retries only for idempotent operations, and validate no duplicate side effects occur.</safeguards-item>
             <safeguards-item>**COORDINATION SAFETY**: For Phaser/Barrier/Exchanger, validate party counts, handle interruptions, and prevent hangs from mismatched arrivals.</safeguards-item>
+            <safeguards-item>**STRUCTURED CONCURRENCY PREVIEW SAFETY**: For `StructuredTaskScope`, require Java 27 preview awareness and `--enable-preview`; do not recommend stale preview APIs such as `Joiner.awaitAll()` or `Joiner.onTimeout()`.</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>
