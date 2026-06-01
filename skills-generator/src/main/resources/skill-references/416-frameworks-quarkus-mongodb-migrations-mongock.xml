@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt>
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.15.0</version>
+        <license>Apache-2.0</license>
+        <title>Quarkus - MongoDB migrations (Mongock)</title>
+        <description>Use when you need to add or review Mongock MongoDB data migrations in a Quarkus application - including the Quarkiverse Mongock extension, Quarkus MongoDB client configuration, `quarkus.mongock.*` settings, `@ChangeUnit` classes, lock and transaction behavior, and Quarkus test validation. For general Quarkus MongoDB persistence use `@415-frameworks-quarkus-mongodb`.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Quarkus, Quarkus MongoDB client/Panache Mongo, and code-first MongoDB migrations with Mongock</role>
+
+    <goal><![CDATA[
+        Add or improve Mongock migrations as code-first, versioned data changes that run safely in Quarkus. Use the Quarkiverse Mongock extension when it matches the project version and MongoDB client model. Keep migrations separate from resources and repositories, make `@ChangeUnit` operations idempotent, and verify them against a real MongoDB instance. For Panache Mongo entities, repositories, and service-layer persistence patterns, use `@415-frameworks-quarkus-mongodb`.
+    ]]></goal>
+
+    <constraints>
+        <constraints-description>
+            Before applying any recommendations, ensure the project is in a valid state by running Maven compilation.
+            Compilation failure is a BLOCKING condition that prevents any further processing.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
+            <constraint>**PREREQUISITE**: Project must compile successfully before Mongock, MongoDB, or migration edits</constraint>
+            <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements; include a MongoDB-backed Quarkus test where feasible</constraint>
+            <constraint>**COMPATIBILITY**: Verify the Quarkiverse Mongock extension version against the active Quarkus platform before adding dependencies</constraint>
+            <constraint>**DEFAULT CLIENT LIMIT**: If the application uses multiple MongoDB clients, confirm the extension supports that topology before implementing migrations</constraint>
+        </constraint-list>
+    </constraints>
+
+    <examples>
+        <toc auto-generate="true" />
+
+        <example number="1" id="quarkus-mongock-extension">
+            <example-header>
+                <example-title>Maven extension</example-title>
+                <example-subtitle>Add Quarkiverse Mongock with the Quarkus MongoDB client</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                Quarkiverse Mongock provides Quarkus integration around Mongock and relies on the Quarkus MongoDB client. If the extension is not part of the active Quarkus platform BOM, declare an explicit version through a property and keep it reviewed during Quarkus upgrades.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="xml"><![CDATA[<properties>
+    <quarkus-mongock.version>0.6.0</quarkus-mongock.version>
+</properties>
+
+<dependencies>
+    <dependency>
+        <groupId>io.quarkus</groupId>
+        <artifactId>quarkus-mongodb-client</artifactId>
+    </dependency>
+    <dependency>
+        <groupId>io.quarkiverse.mongock</groupId>
+        <artifactId>quarkus-mongock</artifactId>
+        <version>${quarkus-mongock.version}</version>
+    </dependency>
+</dependencies>]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="xml"><![CDATA[<!-- Bad: extension without Quarkus MongoDB client configuration -->
+<dependency>
+    <groupId>io.quarkiverse.mongock</groupId>
+    <artifactId>quarkus-mongock</artifactId>
+    <version>0.6.0</version>
+</dependency>]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="2" id="quarkus-mongock-configuration">
+            <example-header>
+                <example-title>application.properties</example-title>
+                <example-subtitle>Configure MongoDB and make migrate-at-start intentional</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                The extension can run migrations automatically at startup with `quarkus.mongock.migrate-at-start=true`, or you can inject `MongockFactory` and run a migration explicitly. Automatic startup is simple; a controlled job is safer for long-running backfills.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="properties"><![CDATA[quarkus.mongodb.connection-string=mongodb://localhost:27017
+quarkus.mongodb.database=orders
+
+quarkus.mongock.enabled=true
+quarkus.mongock.migrate-at-start=true
+quarkus.mongock.transaction-enabled=true]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="properties"><![CDATA[# Bad: no controlled migration path; app starts without applying required data changes
+quarkus.mongock.migrate-at-start=false]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="quarkus-mongock-change-unit">
+            <example-header>
+                <example-title>ChangeUnit design</example-title>
+                <example-subtitle>Use stable MongoDB collection operations rather than mutable Panache entity APIs</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                `@ChangeUnit` classes should remain compilable and meaningful after the domain model evolves. Prefer stable collection names and fields. If you use Panache Mongo in application code, keep migrations independent from active record methods and repository abstractions.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import com.mongodb.client.MongoClient;
+import com.mongodb.client.model.Filters;
+import com.mongodb.client.model.Updates;
+import io.mongock.api.annotations.ChangeUnit;
+import io.mongock.api.annotations.Execution;
+import io.mongock.api.annotations.RollbackExecution;
+
+@ChangeUnit(id = "orders-add-status", order = "001", author = "platform")
+public class OrdersAddStatusChange {
+
+    @Execution
+    public void execute(MongoClient mongoClient) {
+        mongoClient.getDatabase("orders")
+            .getCollection("orders")
+            .updateMany(Filters.exists("status", false), Updates.set("status", "PENDING"));
+    }
+
+    @RollbackExecution
+    public void rollback(MongoClient mongoClient) {
+        mongoClient.getDatabase("orders")
+            .getCollection("orders")
+            .updateMany(Filters.eq("status", "PENDING"), Updates.unset("status"));
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Bad: coupling migrations to Panache entity methods that may change later
+@ChangeUnit(id = "orders-add-status", order = "001", author = "platform")
+class OrdersAddStatusChange {
+    @Execution
+    void execute() {
+        OrderEntity.listAll().forEach(order -> {
+            order.status = "PENDING";
+            order.update();
+        });
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="quarkus-mongock-explicit-runner">
+            <example-header>
+                <example-title>Explicit execution</example-title>
+                <example-subtitle>Use MongockFactory when startup execution is not the right operational model</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                For migrations that may exceed startup probes or need a maintenance window, inject `MongockFactory` and execute from a controlled CDI bean, CLI command, or operator-managed path. Ensure the application does not serve traffic that assumes the new data shape before the migration completes.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import io.mongock.runner.core.executor.MongockRunner;
+import io.quarkiverse.mongock.MongockFactory;
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.inject.Inject;
+
+@ApplicationScoped
+public class MigrationService {
+
+    @Inject MongockFactory mongockFactory;
+
+    public void migrate() {
+        MongockRunner runner = mongockFactory.createMongockRunner();
+        runner.execute();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Bad: endpoint-triggered migration can race with normal traffic and repeated requests
+@POST
+@Path("/migrate")
+public void migrateFromHttpRequest() {
+    migrationService.migrate();
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="5" id="quarkus-mongock-testing">
+            <example-header>
+                <example-title>Testing migrations</example-title>
+                <example-subtitle>Run migrations with @QuarkusTest and real MongoDB infrastructure</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                Quarkus Dev Services or Testcontainers should provide a real MongoDB instance for integration tests. Verify that the post-migration document shape exists, and keep the test focused on migration behavior.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[@QuarkusTest
+class MongockMigrationTest {
+
+    @Inject MongoClient mongoClient;
+
+    @Test
+    void appliesOrderStatusMigration() {
+        List<Document> orders = mongoClient.getDatabase("orders")
+            .getCollection("orders")
+            .find()
+            .into(new ArrayList<>());
+
+        assertThat(orders).allSatisfy(order -> assertThat(order).containsKey("status"));
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Bad: only unit-testing the ChangeUnit with mocks; no lock/history/startup behavior is exercised]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>**ANALYZE** Quarkus MongoDB setup: platform version, Quarkiverse Mongock version, default MongoDB client, migration execution mode, and tests</output-format-item>
+            <output-format-item>**CATEGORIZE** migration risks (EXTENSION COMPATIBILITY, DEFAULT CLIENT, LOCKING, IDEMPOTENCY, DOMAIN COUPLING, TEST GAP) by impact</output-format-item>
+            <output-format-item>**APPLY** Quarkus-aligned fixes: extension coordinates, `quarkus.mongock.*` properties, stable `@ChangeUnit` classes, and Quarkus MongoDB tests</output-format-item>
+            <output-format-item>**ALIGN** with `@415-frameworks-quarkus-mongodb` for normal MongoDB/Panache Mongo design while keeping migrations independent</output-format-item>
+            <output-format-item>**VALIDATE** with `./mvnw compile` before changes and `./mvnw clean verify` after changes</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>**DO NOT EDIT APPLIED MIGRATIONS**: Once a `@ChangeUnit` has run in a shared environment, add a new ordered change instead of modifying it</safeguards-item>
+            <safeguards-item>**IDEMPOTENCY**: Write migrations so interrupted non-transactional execution can safely continue on the next run</safeguards-item>
+            <safeguards-item>**LOCKING**: Keep lock acquisition failures visible in clustered deployments unless an external coordinator is documented</safeguards-item>
+            <safeguards-item>**EXTENSION LIMITS**: Re-check Quarkiverse Mongock limitations for multiple clients, native mode, and transaction behavior during upgrades</safeguards-item>
+            <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before recommending dependency or migration changes</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>
