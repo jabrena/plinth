@@ -34,6 +34,7 @@ Options:
 - Security vulnerability scanning (OWASP)
 - Security static code analysis (SpotBugs, PMD)
 - Sonar
+- Dependency analysis (maven-dependency-plugin)
 - Version management
 - Container image build (Jib)
 - JMH (Java Microbenchmark Harness)
