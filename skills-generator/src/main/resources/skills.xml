@@ -451,4 +451,9 @@
             <reference>703-technologies-fuzzing-testing</reference>
         </reference-list>
     </skill>
+    <skill id="704">
+        <reference-list>
+            <reference>704-technologies-sql</reference>
+        </reference-list>
+    </skill>
 </skill-inventory>
