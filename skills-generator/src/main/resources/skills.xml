@@ -105,6 +105,15 @@
             <reference>122-java-type-design</reference>
         </reference-list>
     </skill>
+    <skill id="123" skillId="123-java-design-patterns">
+        <reference-list>
+            <reference>123-java-design-patterns</reference>
+            <reference>123-rest-api-patterns</reference>
+            <reference>123-kafka-event-driven-patterns</reference>
+            <reference>123-database-persistence-patterns</reference>
+            <reference>123-cross-cutting-integration-patterns</reference>
+        </reference-list>
+    </skill>
     <skill id="124">
         <reference-list>
             <reference>124-java-secure-coding</reference>
