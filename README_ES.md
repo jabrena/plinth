@@ -137,6 +137,7 @@ Java usa JEPs (JDK Enhancement Proposals) para describir nuevas características
 - [https://virtuslab.com/blog/ai/providing-library-documentation/](https://virtuslab.com/blog/ai/providing-library-documentation/)
 - https://github.com/the911fund/skill-of-skills
 - https://blog.csdn.net/weixin_42526249/article/details/161176209
+- https://juejin.cn/post/7632095808490340392
 
 ## Referencias
 
@@ -155,6 +156,9 @@ Java usa JEPs (JDK Enhancement Proposals) para describir nuevas características
 - https://agent-skills.cc/zh/skills/jabrena-cursor-rules-java
 - https://shyft.ai/skills/cursor-rules-java
 - https://lobehub.com/skills?q=cursor-rules-java
+- https://www.awesomeskills.dev/es/skill/jabrena-cursor-rules-java
+- https://github.com/laolaoshiren/claude-code-skills-zh
+- https://github.com/LessUp/awesome-cursorrules-zh
 - [https://github.com/vercel-labs/skills/issues](https://github.com/vercel-labs/skills/issues)
 - [https://openjdk.org/jeps/0](https://openjdk.org/jeps/0)
 - [https://jbake.org/docs/latest/](https://jbake.org/docs/latest/)
