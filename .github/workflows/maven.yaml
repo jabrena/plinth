@@ -21,8 +21,20 @@ jobs:
       - name: Validate Markdown Files
         run: jbang .github/scripts/MarkdownValidator.java --verbose .
 
-  validate-skills:
-    name: Validate Agent Skills
+  validate-skill-check:
+    name: Validate Agent Skills with skill-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: true
+      - name: Validate SKILL.md files
+        run: npx skill-check@latest skills --no-security-scan --format github
+        env:
+          SKILL_CHECK_NO_BANNER: 1
+
+  validate-skill-scanner:
+    name: Validate Agent Skills with Skill Scanner
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
@@ -31,14 +43,21 @@ jobs:
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
-      - name: Validate SKILL.md files
-        run: npx skill-check@latest skills --no-security-scan --format github
-        env:
-          SKILL_CHECK_NO_BANNER: 1
       - name: Install Skill Scanner
         run: python -m pip install --upgrade cisco-ai-skill-scanner
       - name: Scan generated skills in ./skills with Skill Scanner
         run: skill-scanner scan-all ./skills --recursive --use-behavioral --policy strict --fail-on-severity high
+
+  validate-skillspector:
+    name: Validate Agent Skills with SkillSpector
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: true
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
       - name: Install SkillSpector
         run: python -m pip install "git+https://github.com/NVIDIA/SkillSpector.git"
       - name: Scan generated skills in ./skills with SkillSpector
