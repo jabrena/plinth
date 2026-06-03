@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.16.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Java Design and Integration Patterns</title>
+        <description>Use when designing or reviewing REST API patterns — resource-oriented endpoints, DTO boundaries, idempotency, pagination, optimistic concurrency, Problem Details, API gateways, and resilient client interaction.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in REST API design, Java web applications, and distributed systems</role>
+
+    <goal>
+        Design REST APIs around stable resource contracts, predictable HTTP semantics, explicit error shapes, and evolvable client/server boundaries.
+
+        ### Pattern selection principles
+
+        1. **Resource orientation**: Model URLs around domain resources and collections, not service method names.
+        2. **Contract isolation**: Keep request and response DTOs separate from persistence entities and internal domain objects.
+        3. **Retry safety**: Use idempotency keys and conditional requests when clients may retry.
+        4. **Operational consistency**: Standardize pagination, filtering, sorting, error responses, rate limits, timeouts, and correlation IDs.
+        5. **Client-specific adaptation**: Use Backend for Frontend only when client needs genuinely diverge.
+    </goal>
+
+    <constraints>
+        <constraints-description>REST patterns must preserve HTTP semantics and make API contracts easier to evolve.</constraints-description>
+        <constraint-list>
+            <constraint>**HTTP SEMANTICS**: Use methods, status codes, headers, and cache/concurrency semantics intentionally</constraint>
+            <constraint>**DTO BOUNDARY**: Do not expose persistence entities directly as public API contracts</constraint>
+            <constraint>**ERROR CONTRACTS**: Prefer RFC 9457-style Problem Details for machine-readable API errors</constraint>
+            <constraint>**IDEMPOTENCY**: For retryable state-changing operations, define idempotency behavior and storage requirements</constraint>
+        </constraint-list>
+    </constraints>
+
+    <examples>
+        <toc auto-generate="true" />
+
+        <example number="1" id="resource-oriented-api">
+            <example-header>
+                <example-title>Use Resource-Oriented Endpoints</example-title>
+                <example-subtitle>Represent business resources instead of internal actions</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[Resource-oriented APIs make contracts predictable and easier to document. Use command-like endpoints only when the action is not naturally represented as a resource transition.]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="text"><![CDATA[GET    /customers/{customerId}/orders
+POST   /customers/{customerId}/orders
+GET    /orders/{orderId}
+PATCH  /orders/{orderId}
+POST   /orders/{orderId}/cancellations]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="text"><![CDATA[POST /createOrder
+POST /updateOrder
+POST /cancelOrder
+GET  /getOrdersForCustomer
+POST /doOrderWorkflowStep]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="2" id="idempotency-key">
+            <example-header>
+                <example-title>Use Idempotency Key for Retryable Commands</example-title>
+                <example-subtitle>Make client retries safe for create operations</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[Use an idempotency key when clients may retry a non-idempotent operation after timeouts or network failures. Store the key with the final response or command result.]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="http"><![CDATA[POST /payments HTTP/1.1
+Idempotency-Key: 8f7f0e50-56a5-4f55-9e6e-0cb94e1f6a3d
+Content-Type: application/json
+
+{
+  "invoiceId": "inv-123",
+  "amount": "49.95",
+  "currency": "EUR"
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="http"><![CDATA[POST /payments HTTP/1.1
+Content-Type: application/json
+
+{
+  "invoiceId": "inv-123",
+  "amount": "49.95",
+  "currency": "EUR"
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="problem-details-error-contract">
+            <example-header>
+                <example-title>Use Problem Details for API Errors</example-title>
+                <example-subtitle>Return stable machine-readable errors</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[Problem Details gives clients a consistent error envelope while allowing service-specific details. Do not leak stack traces, SQL errors, or internal class names.]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="json"><![CDATA[{
+  "type": "https://api.example.com/problems/invalid-order-state",
+  "title": "Invalid order state",
+  "status": 409,
+  "detail": "Only NEW orders can be cancelled.",
+  "instance": "/orders/ord-123/cancellations"
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="json"><![CDATA[{
+  "error": "java.lang.IllegalStateException",
+  "message": "Cannot cancel row 8721 from table orders",
+  "trace": "com.example.OrderService.cancel(OrderService.java:42)"
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>**DESIGN** resource paths, HTTP methods, status codes, request DTOs, response DTOs, and error shapes</output-format-item>
+            <output-format-item>**DEFINE** pagination, filtering, sorting, idempotency, optimistic concurrency, and versioning rules when needed</output-format-item>
+            <output-format-item>**EXPLAIN** trade-offs between generic APIs, BFF endpoints, and domain-specific resources</output-format-item>
+            <output-format-item>**VALIDATE** API contracts with OpenAPI, integration tests, and negative cases for validation and conflict handling</output-format-item>
+        </output-format-list>
+    </output-format>
+</prompt>
