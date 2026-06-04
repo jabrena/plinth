@@ -58,6 +58,27 @@
                 </configuration>
             </plugin>
 
+            <!-- Clean generated skills output before the package-phase copy refreshes it -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>clean-skills-output</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <delete dir="${skills.output.directory}" />
+                                <mkdir dir="${skills.output.directory}" />
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+
             <!-- Include main resources in test classpath and copy generated skills for local use -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -86,7 +107,7 @@
                     </execution>
                     <execution>
                         <id>copy-skills</id>
-                        <phase>install</phase>
+                        <phase>prepare-package</phase>
                         <goals>
                             <goal>copy-resources</goal>
                         </goals>
@@ -128,30 +149,6 @@
             <properties>
                 <skills.output.directory>${project.basedir}/../skills</skills.output.directory>
             </properties>
-            <build>
-                <plugins>
-                    <!-- Clean public skills/ before the install-phase copy refreshes release output -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-antrun-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>clean-skills-release-output</id>
-                                <phase>prepare-package</phase>
-                                <goals>
-                                    <goal>run</goal>
-                                </goals>
-                                <configuration>
-                                    <target>
-                                        <delete dir="${skills.output.directory}" />
-                                        <mkdir dir="${skills.output.directory}" />
-                                    </target>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
         </profile>
     </profiles>
 </project>
