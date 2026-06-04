@@ -236,6 +236,11 @@
             <reference>200-agents-md</reference>
         </reference-list>
     </skill>
+    <skill id="300">
+        <reference-list>
+            <reference>300-frameworks-spring-boot-create-project</reference>
+        </reference-list>
+    </skill>
     <skill id="301">
         <reference-list>
             <reference>301-frameworks-spring-boot-core</reference>
@@ -306,6 +311,11 @@
             <reference>323-frameworks-spring-boot-testing-acceptance-tests</reference>
         </reference-list>
     </skill>
+    <skill id="400">
+        <reference-list>
+            <reference>400-frameworks-quarkus-create-project</reference>
+        </reference-list>
+    </skill>
     <skill id="401">
         <reference-list>
             <reference>401-frameworks-quarkus-core</reference>
@@ -369,6 +379,11 @@
     <skill id="423">
         <reference-list>
             <reference>423-frameworks-quarkus-testing-acceptance-tests</reference>
+        </reference-list>
+    </skill>
+    <skill id="500">
+        <reference-list>
+            <reference>500-frameworks-micronaut-create-project</reference>
         </reference-list>
     </skill>
     <skill id="501">
