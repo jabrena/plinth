@@ -3,7 +3,7 @@
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
-        <version>0.15.0</version>
+        <version>0.16.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
         <title>OpenSpec Change Planning from `*.plan.md`</title>
         <description>Use when you need to take a `*.plan.md` file and turn it into OpenSpec change artifacts by validating OpenSpec installation, initializing or reusing an OpenSpec project, and creating or updating a change proposal/spec/tasks flow. Includes a concrete workflow based on `examples/requirements-examples/problem1/requirements/openspec`.</description>
