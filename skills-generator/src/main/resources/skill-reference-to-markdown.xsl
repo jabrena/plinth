@@ -217,6 +217,7 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
     <!-- Output format section template -->
     <xsl:template match="output-format">
         <xsl:text>
+
 ## Output Format
 
 </xsl:text>
@@ -230,6 +231,7 @@ Description: </xsl:text>        <xsl:value-of select="normalize-space(example-de
     <!-- Safeguards section template -->
     <xsl:template match="safeguards">
         <xsl:text>
+
 ## Safeguards
 
 </xsl:text>

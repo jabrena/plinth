@@ -2,7 +2,7 @@
 <prompt>
     <metadata>
         <author>Juan Antonio Breña Moral</author>
-        <version>0.15.0</version>
+        <version>0.16.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
         <title>Quarkus Core Guidelines</title>
         <description>Use when you need to review, improve, or build Quarkus applications — including mandatory @QuarkusMain entry points with static main methods, CDI scopes (@ApplicationScoped, @Singleton, @Dependent), constructor injection, @ConfigMapping and SmallRye Config, profiles (%dev, %test, %prod), build-time vs runtime configuration, lifecycle (@Startup, @PreDestroy), metrics integration patterns, and test-friendly bean design.</description>
