@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
-      id="705-technologies-non-relational-databases-mongodb">
+      id="705-technologies-nosql-mongodb">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.16.0</version>
@@ -50,7 +50,7 @@ Help teams design maintainable, secure, and performant **MongoDB and non-relatio
     </trigger-list>
   </triggers>
   <steps>
-    <step number="1"><step-title>Read reference and assess data context</step-title><step-content>Read `references/705-technologies-non-relational-databases-mongodb.md` and inspect current collections, schemas, indexes, queries, aggregation pipelines, tests, and database configuration before proposing changes.</step-content></step>
+    <step number="1"><step-title>Read reference and assess data context</step-title><step-content>Read `references/705-technologies-nosql-mongodb.md` and inspect current collections, schemas, indexes, queries, aggregation pipelines, tests, and database configuration before proposing changes.</step-content></step>
     <step number="2"><step-title>Identify workload and operational constraints</step-title><step-content>Confirm query patterns, cardinality, data volume, document growth, consistency requirements, shard topology, and migration constraints that shape the non-relational design.</step-content></step>
     <step number="3"><step-title>Apply database-aligned changes</step-title><step-content>Implement or refactor database artifacts following the reference patterns and project conventions, keeping Java framework integration out of scope unless explicitly requested.</step-content></step>
     <step number="4"><step-title>Run verification and report results</step-title><step-content>Execute appropriate build, schema validation, query-plan, migration, and test checks; summarize what changed, what was verified, and any remaining database risks.</step-content></step>

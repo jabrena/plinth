@@ -458,7 +458,7 @@
     </skill>
     <skill id="705">
         <reference-list>
-            <reference>705-technologies-non-relational-databases-mongodb</reference>
+            <reference>705-technologies-nosql-mongodb</reference>
         </reference-list>
     </skill>
 </skill-inventory>
