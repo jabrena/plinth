@@ -43,28 +43,6 @@ jwebserver -p 8005 -d "$(pwd)/target/site/"
 ./mvnw clean generate-resources -pl site-generator -P site-update
 ```
 
-## Skill generation workflows
-
-The skill XML sources are generated into `skills-generator/target/skills` during the
-`skills-generator` test lifecycle. Maven then exposes two different copy workflows:
-
-```bash
-# Local workflow: generate skills and copy them to .agents/skills
-# This does not update the public skills/ release output.
-./mvnw clean install -pl skills-generator
-
-# Optional direct local copy after target/skills already exists
-./mvnw resources:copy-resources@copy-skills -pl skills-generator
-
-# Release workflow: clean and refresh the public skills/ directory intentionally
-./mvnw clean install -pl skills-generator -P release
-```
-
-Use `.agents/skills` for local agent testing after XML edits. Use
-`-P release` only when the generated skill changes are ready to become
-part of the public release output under `skills/`. The destination directory can
-be overridden for verification with `-Dskills.output.directory=...`.
-
 ## Submodules
 
 This is a multi-module project. The following modules are declared in the root `pom.xml`.
