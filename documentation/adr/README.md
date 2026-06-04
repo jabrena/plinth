@@ -2,6 +2,7 @@
 
 | Date       | ID      | Name                                                                                                                                    |
 | ---------- | ------- | --------------------------------------------------------------------------------------------------------------------------------------- |
+| 2026-06-04 | ADR-006 | [Separate local skill generation from release publishing](./ADR-006-separate-local-skill-generation-from-release-publishing.md) |
 | 2026-04-06 | ADR-005 | [Drop Cursor rules support in favor of Agent Skills](./ADR-005-drop-cursor-rules-support-in-favor-of-agent-skills.md) |
 | 2026-03-01 | ADR-004 | [Skill Generation](./ADR-004-skill-generation.md)                                                                     |
 | 2025-09-16 | ADR-003 | [Website Generation](./ADR-003-website-generation.md)                                                                 |
