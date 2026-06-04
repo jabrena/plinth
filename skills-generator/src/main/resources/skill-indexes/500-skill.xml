@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
-      id="500-frameworks-micronaut-create-maven-project">
+      id="500-frameworks-micronaut-create-project">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.16.0-SNAPSHOT</version>
@@ -45,7 +45,7 @@ Create a new Micronaut Maven project through SDKMAN-managed tooling, aligned wit
   </triggers>
 
   <steps>
-    <step number="1"><step-title>Read reference and gather project inputs</step-title><step-content>Read `references/500-frameworks-micronaut-create-maven-project.md`, then gather project directory, group, artifact, package name, Java version, application type, and desired Micronaut features.</step-content></step>
+    <step number="1"><step-title>Read reference and gather project inputs</step-title><step-content>Read `references/500-frameworks-micronaut-create-project.md`, then gather project directory, group, artifact, package name, Java version, application type, and desired Micronaut features.</step-content></step>
     <step number="2"><step-title>Verify SDKMAN-managed tooling</step-title><step-content>Check SDKMAN, Java, and Micronaut CLI availability. Install or switch candidates only after confirming the intended versions with the user.</step-content></step>
     <step number="3"><step-title>Create the Maven project</step-title><step-content>Use the Micronaut CLI to create a Maven project, keeping features explicit and the Micronaut 4.x baseline as the default.</step-content></step>
     <step number="4"><step-title>Verify and report</step-title><step-content>Run Maven verification in the generated project and summarize commands used, selected options, generated path, and any follow-up setup.</step-content></step>
@@ -53,7 +53,7 @@ Create a new Micronaut Maven project through SDKMAN-managed tooling, aligned wit
 
   <references>
     <reference-list>
-      <reference>references/500-frameworks-micronaut-create-maven-project.md</reference>
+      <reference>references/500-frameworks-micronaut-create-project.md</reference>
     </reference-list>
   </references>
 </prompt>

@@ -238,7 +238,7 @@
     </skill>
     <skill id="300">
         <reference-list>
-            <reference>300-frameworks-spring-boot-create-maven-project</reference>
+            <reference>300-frameworks-spring-boot-create-project</reference>
         </reference-list>
     </skill>
     <skill id="301">
@@ -313,7 +313,7 @@
     </skill>
     <skill id="400">
         <reference-list>
-            <reference>400-frameworks-quarkus-create-maven-project</reference>
+            <reference>400-frameworks-quarkus-create-project</reference>
         </reference-list>
     </skill>
     <skill id="401">
@@ -383,7 +383,7 @@
     </skill>
     <skill id="500">
         <reference-list>
-            <reference>500-frameworks-micronaut-create-maven-project</reference>
+            <reference>500-frameworks-micronaut-create-project</reference>
         </reference-list>
     </skill>
     <skill id="501">
