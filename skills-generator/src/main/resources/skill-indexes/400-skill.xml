@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="400-frameworks-quarkus-create-maven-project">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.16.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need to create a new Maven-based Quarkus 3.x project using SDKMAN-managed Java and Quarkus CLI tooling. This should trigger for requests such as Create a Quarkus Maven project; Bootstrap Quarkus project with SDKMAN; Generate a new Quarkus service.</description>
+  </metadata>
+
+  <title>Create Quarkus Maven Project</title>
+  <goal><![CDATA[
+Create a new Quarkus Maven project through SDKMAN-managed tooling, aligned with Java 25 and the repository's Quarkus 3.x baseline.
+
+**What is covered in this Skill?**
+
+- Verify SDKMAN and Java availability before project creation
+- Install or select the required Java and Quarkus CLI candidates through SDKMAN
+- Gather project coordinates, package name, Java version, extensions, and target directory
+- Create a Maven project with the Quarkus CLI
+- Prefer Maven wrapper commands for validation
+- Verify the generated project with Maven before reporting completion
+]]></goal>
+
+  <constraints>
+    <constraints-description>Project creation must be explicit, reproducible, and Maven-based.</constraints-description>
+    <constraint-list>
+      <constraint>**PREREQUISITE**: Verify SDKMAN is installed with `sdk version`; if missing, stop and provide setup guidance instead of installing it silently</constraint>
+      <constraint>**JAVA BASELINE**: Prefer Java 25 unless the user requests another supported version</constraint>
+      <constraint>**FRAMEWORK BASELINE**: Target the current Quarkus 3.x line by default</constraint>
+      <constraint>**BUILD TOOL**: Generate a Maven project, not Gradle</constraint>
+      <constraint>**SAFETY**: Do not overwrite an existing non-empty target directory without explicit user confirmation</constraint>
+      <constraint>**VERIFY**: Run `./mvnw clean verify` from the generated project when the Maven wrapper exists; otherwise run `mvn clean verify`</constraint>
+      <constraint>**BEFORE APPLYING**: Read the reference for the full SDKMAN and Quarkus CLI workflow</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+      <trigger>Create a Quarkus Maven project</trigger>
+      <trigger>Bootstrap Quarkus project with SDKMAN</trigger>
+      <trigger>Generate a new Quarkus service</trigger>
+    </trigger-list>
+  </triggers>
+
+  <steps>
+    <step number="1"><step-title>Read reference and gather project inputs</step-title><step-content>Read `references/400-frameworks-quarkus-create-maven-project.md`, then gather project directory, group, artifact, package name, Java version, and desired Quarkus extensions.</step-content></step>
+    <step number="2"><step-title>Verify SDKMAN-managed tooling</step-title><step-content>Check SDKMAN, Java, and Quarkus CLI availability. Install or switch candidates only after confirming the intended versions with the user.</step-content></step>
+    <step number="3"><step-title>Create the Maven project</step-title><step-content>Use the Quarkus CLI to create a Maven project, keeping extensions explicit and the Quarkus 3.x baseline as the default.</step-content></step>
+    <step number="4"><step-title>Verify and report</step-title><step-content>Run Maven verification in the generated project and summarize commands used, selected options, generated path, and any follow-up setup.</step-content></step>
+  </steps>
+
+  <references>
+    <reference-list>
+      <reference>references/400-frameworks-quarkus-create-maven-project.md</reference>
+    </reference-list>
+  </references>
+</prompt>

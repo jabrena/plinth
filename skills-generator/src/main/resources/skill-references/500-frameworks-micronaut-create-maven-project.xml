@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt>
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.16.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Create Micronaut Maven Project</title>
+        <description>Use when creating a new Maven-based Micronaut 4.x project with SDKMAN-managed Java and Micronaut CLI tooling.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Micronaut, Maven, SDKMAN, and Java enterprise project bootstrapping</role>
+
+    <goal>
+        Create a new Micronaut Maven project in a predictable way. Use SDKMAN to manage Java and the Micronaut CLI, gather project coordinates before running commands, generate the project with Maven as the build tool, and verify the result with the Maven wrapper when available.
+    </goal>
+
+    <constraints>
+        <constraints-description>New project generation changes the filesystem, so confirm target paths and avoid overwriting user work.</constraints-description>
+        <constraint-list>
+            <constraint>**PREREQUISITE**: Run `sdk version` before using SDKMAN-managed tooling</constraint>
+            <constraint>**MISSING SDKMAN**: If SDKMAN is not installed, stop and provide the official installation prerequisite instead of installing it silently</constraint>
+            <constraint>**JAVA BASELINE**: Prefer Java 25 unless the user requests another supported version</constraint>
+            <constraint>**FRAMEWORK BASELINE**: Use the current Micronaut 4.x line by default</constraint>
+            <constraint>**BUILD TOOL**: Generate Maven projects only; do not generate Gradle projects from this skill</constraint>
+            <constraint>**TARGET DIRECTORY**: Check whether the target directory exists and is empty before project creation</constraint>
+            <constraint>**FEATURES**: Ask for desired Micronaut features when the request does not specify them</constraint>
+            <constraint>**VERIFY**: Run `./mvnw clean verify` in the generated project when `mvnw` exists; otherwise run `mvn clean verify`</constraint>
+        </constraint-list>
+    </constraints>
+
+    <steps>
+        <step number="1">
+            <step-title>Gather project inputs</step-title>
+            <step-content>Collect the target directory, group id, artifact id, package name, Java version, application type, Micronaut version preference, and desired features such as `http-server`, `validation`, `management`, `openapi`, or database support.</step-content>
+        </step>
+        <step number="2">
+            <step-title>Verify SDKMAN and Java</step-title>
+            <step-content>Run `sdk version`, then check Java with `java -version`. If a Java switch is required, use `sdk list java`, `sdk install java &lt;version&gt;`, or `sdk use java &lt;version&gt;` after confirming the selected candidate.</step-content>
+        </step>
+        <step number="3">
+            <step-title>Verify Micronaut CLI</step-title>
+            <step-content>Check `mn --version`. If the Micronaut CLI is missing, use SDKMAN candidate discovery such as `sdk list micronaut`, then install or use the agreed candidate with `sdk install micronaut &lt;version&gt;` or `sdk use micronaut &lt;version&gt;`.</step-content>
+        </step>
+        <step number="4">
+            <step-title>Create the Maven project</step-title>
+            <step-content>Use `mn create-app` with explicit Maven options, for example `mn create-app &lt;package&gt;.&lt;artifact&gt; --build=maven --jdk=25 --features=&lt;features&gt; --lang=java --test=junit --output=&lt;target-directory&gt;`. Keep feature choices explicit and use the Micronaut 4.x CLI defaults unless the user requests a specific compatible version.</step-content>
+        </step>
+        <step number="5">
+            <step-title>Verify the generated project</step-title>
+            <step-content>Change into the generated project directory, inspect the generated `pom.xml`, and run `./mvnw clean verify` when the wrapper exists. Report command output failures with the exact failing goal and the next corrective action.</step-content>
+        </step>
+        <step number="6">
+            <step-title>Report completion</step-title>
+            <step-content>Summarize the generated path, selected Java version, Micronaut version, Maven command used, features, and verification result.</step-content>
+        </step>
+    </steps>
+</prompt>
