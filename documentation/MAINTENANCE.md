@@ -12,7 +12,7 @@ Some **User prompts** designed to help in the maintenance of this repository.
 ./mvnw versions:commit
 
 #Bump to a new snapshot
-@resources/ update version to 0.15.0 and pom.xml, maven modules and finally regenerate the skills
+@resources/ update version to 0.15.0 and pom.xml, maven modules and finally regenerate local skills with ./mvnw clean install -pl skills-generator
 ```
 
 ## Finish a release
@@ -31,7 +31,7 @@ Review that the list doesn´t any broken link to @/.cursor with .md files
 Can you update the current changelog for 0.15.0 comparing git commits in relation to 0.14.0 tag. Use  @https://keepachangelog.com/en/1.1.0/  rules
 
 #Bump to a new snapshot
-@resources/ update version to 0.15.0-SNAPSHOT and pom.xml, maven modules and finally regenerate the skills
+@resources/ update version to 0.15.0-SNAPSHOT and pom.xml, maven modules and finally regenerate local skills with ./mvnw clean install -pl skills-generator
 
 @skills-generator/src/main/resources/skill-references/assets/agents/robot-java-coder.md @skills-generator/src/main/resources/skill-references/assets/agents/robot-micronaut-coder.md @skills-generator/src/main/resources/skill-references/assets/agents/robot-quarkus-coder.md @skills-generator/src/main/resources/skill-references/assets/agents/robot-spring-boot-coder.md review @CHANGELOG.md if it is possible to add new capabilities added in this release
 ```
@@ -46,6 +46,7 @@ Can you update the current changelog for 0.15.0 comparing git commits in relatio
 - [ ] Review if Agents need to add more Skills
 - [ ] Review Skill validation output
 - [ ] Review Skill security validation
+- [ ] Refresh public skills/ release output with `./mvnw clean install -pl skills-generator -P release`
 - [ ] Update Skills Registry
 - [ ] Tag repository
 - [ ] Create article
@@ -74,10 +75,10 @@ Can you update the current changelog for 0.14.0 comparing git commits in relatio
 
 # Prompt to update the project to a new version
 Update xml files from @resources/ and update the version to 0.15.0-SNAPSHOT removing Snapshot.
-Update @pom.xml with the new version 0.15.0-SNAPSHOT Regenerate skills with ./mvnw clean install -pl skills-generator
+Update @pom.xml with the new version 0.15.0-SNAPSHOT Regenerate local skills with ./mvnw clean install -pl skills-generator. If preparing release output, refresh skills/ with ./mvnw clean install -pl skills-generator -P release
 
 Update md files from @resources/ and update the version to 0.15.0 removing Snapshot.
-Update @pom.xml with the new version 0.15.0-SNAPSHOT Regenerate skills with ./mvnw clean install -pl skills-generator
+Update @pom.xml with the new version 0.15.0-SNAPSHOT Regenerate local skills with ./mvnw clean install -pl skills-generator. If preparing release output, refresh skills/ with ./mvnw clean install -pl skills-generator -P release
 
 ## Note: Refactor a bit more to include all pom.xml
 
@@ -92,7 +93,7 @@ git push --tags
 ## Add a new Skills
 
 ```bash
-review if exist a new id in @skills-generator/src/main/resources/skills.xml to review compare with the content of @skills-generator/src/main/resources/skill-indexes and if exist add a new skill summary in @skills-generator/src/main/resources/skill-indexes. to elaborate the skill, review the `reference-list/reference` relation declared for that id in @skills-generator/src/main/resources/skills.xml. when finish, validate generation with ./mvnw clean install -pl skills-generator and validate the skill with npx skill-check skills
+review if exist a new id in @skills-generator/src/main/resources/skills.xml to review compare with the content of @skills-generator/src/main/resources/skill-indexes and if exist add a new skill summary in @skills-generator/src/main/resources/skill-indexes. to elaborate the skill, review the `reference-list/reference` relation declared for that id in @skills-generator/src/main/resources/skills.xml. when finish, validate local generation with ./mvnw clean install -pl skills-generator and validate release skills with npx skill-check skills after running ./mvnw clean install -pl skills-generator -P release
 ```
 
 ## Improve skills

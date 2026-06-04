@@ -93,6 +93,13 @@ Los modelos pueden generar código, pero no pueden ejecutarlo contra tus datos l
 
 Consulta [CONTRIBUTING.md](./CONTRIBUTING.md) para convenciones, flujos del generador, pruebas y cómo abrir un pull request.
 
+Los maintainers que cambien fuentes XML de skills deben regenerar las skills locales con
+`./mvnw clean install -pl skills-generator`, que copia la salida generada a
+`.agents/skills` para pruebas locales con agents. Actualiza `skills/` solo al preparar
+la salida de release, usando `./mvnw clean install -pl skills-generator -P release`.
+Consulta [DEVELOPER.md](./DEVELOPER.md) y [ADR-006](./documentation/adr/ADR-006-separate-local-skill-generation-from-release-publishing.md)
+para ver el flujo completo.
+
 ## Ejemplos
 
 El repositorio incluye [una colección de ejemplos](./examples/) donde puedes explorar lo que estos Skills y flujos de trabajo permiten en Java.
