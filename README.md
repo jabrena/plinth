@@ -93,6 +93,13 @@ Models can generate code, but they cannot execute it against your local data. To
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for conventions, generator workflows, tests, and how to open a pull request.
 
+Maintainers who change skill XML sources should regenerate local skills with
+`./mvnw clean install -pl skills-generator`, which copies generated output to
+`.agents/skills` for local agent testing. Refresh `skills/` only when preparing
+release output, using `./mvnw clean install -pl skills-generator -P release`.
+See [DEVELOPER.md](./DEVELOPER.md) and [ADR-006](./documentation/adr/ADR-006-separate-local-skill-generation-from-release-publishing.md)
+for the full workflow.
+
 ## Examples
 
 The repository includes [a collection of examples](./examples/) where you can explore what these Skills and workflows enable for Java.
