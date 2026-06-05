@@ -34,6 +34,20 @@ The project generates a set of deliverables at the end of any iteration.
 | --------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | 1. [Skills for Java](./documentation/guides/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/cursor-rules-java --all --agent cursor` | [`Skills for Java`](./documentation/guides/GETTING-STARTED-SKILLS.md)     |
 | 2. [Agents for Java](./documentation/guides/INVENTORY-AGENTS-JAVA.md) | `@003-agents-installation` Install Agents in Cursor/Claude | [`Agents for Java`](./documentation/guides/GETTING-STARTED-AGENTS.md)     |
+| 3. [Commands for Java](./documentation/guides/COMMANDS.md) | `@004-commands-installation` Install Commands in project | [`Commands for Java`](./documentation/guides/COMMANDS.md) |
+
+### Available Commands
+
+The project provides a set of workflow commands that streamline the development process:
+
+| Command | Purpose | Usage |
+|---------|---------|-------|
+| `/update-issue-description` | Update GitHub issues with structured content following agile templates | `/update-issue-description <issue-number> [<file-path>]` |
+| `/create-feature-branch` | Create feature branches with proper naming conventions | `/create-feature-branch <feature-name> [<base-branch>]` |
+| `/implement` | Implement features with test-driven development approach | `/implement [<task-specification>]` |
+| `/verify` | Verify implementation meets acceptance criteria and quality standards | `/verify [<specification-path>]` |
+
+Use `@004-commands-installation` skill to install these commands to your preferred directory (`.cursor/command`, `.claude/commands`, `.github/commands`, or `.codex/commands`).
 
 **⚠️ Note:** If you continue using the System prompts/rules from this project, please review [the article](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html). Current `System prompts/rules` will be removed in the next release (v0.16.0).
 
