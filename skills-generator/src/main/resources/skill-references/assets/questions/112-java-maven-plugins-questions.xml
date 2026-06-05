@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<question-flow><![CDATA[
 **Question 1**: What type of Java project is this?
 
 Options:
@@ -110,3 +112,4 @@ Options:
 **If SonarQube Server**: Please provide your SonarQube server URL (e.g., `https://sonar.mycompany.com`)
 
 ---
+]]></question-flow>
