@@ -118,7 +118,7 @@ public class UnsafeInputProcessor {
 
     public String loadFile(String userPath) {
         // VULNERABLE: No validation allows path traversal attacks
-        // User could pass "../../etc/passwd" to access sensitive files
+        // User could pass traversal segments to access sensitive files
         return readFileContent(userPath);
     }
 }]]></code-block>
@@ -225,7 +225,7 @@ public class VulnerableDataAccess {
 
     public void executeCommand(String userCommand) {
         // EXTREMELY DANGEROUS: Command injection vulnerability
-        String command = "ls " + userCommand; // User could inject "; rm -rf /"
+        String command = "ls " + userCommand; // User could inject destructive shell syntax
         try {
             Runtime.getRuntime().exec(command);
         } catch (Exception e) {

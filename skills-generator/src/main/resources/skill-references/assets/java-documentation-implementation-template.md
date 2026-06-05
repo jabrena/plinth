@@ -157,9 +157,9 @@ package [package.name];
 
 ## File Handling Options
 
-### Overwrite
-- Replace existing file content completely
-- Create backup with .backup extension before overwriting
+### Approved Replacement
+- Apply replacement content only after explicit user approval
+- Create backup with .backup extension before applying the replacement
 
 ### Add New Information
 - Parse existing README.md to identify existing sections

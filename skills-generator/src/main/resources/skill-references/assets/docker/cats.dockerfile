@@ -6,9 +6,9 @@ ARG CATS_VERSION
 RUN mkdir -p /opt/cats \
   && apt-get update \
   && apt-get install -y --no-install-recommends curl ca-certificates \
-  && rm -rf /var/lib/apt/lists/* \
-  && curl -fsSL "https://github.com/Endava/cats/releases/download/cats-${CATS_VERSION}/cats_uberjar_${CATS_VERSION}.tar.gz" \
-  | tar -xz -C /opt/cats
+  && apt-get clean \
+  && curl -fsSL -o /tmp/cats.tar.gz "https://github.com/Endava/cats/releases/download/cats-${CATS_VERSION}/cats_uberjar_${CATS_VERSION}.tar.gz" \
+  && tar -xzf /tmp/cats.tar.gz -C /opt/cats
 
 WORKDIR /workspace
 ENTRYPOINT ["java", "-jar", "/opt/cats/cats.jar"]

@@ -73,11 +73,8 @@ jira version
 
 - Provide concise options from issue #608 notes:
   - **macOS (Homebrew):** `brew install jira-cli`
-  - **macOS token storage (recommended):** store the Jira API token in Keychain instead of shell history/files:
-    `security add-generic-password -a YOUR-EMAIL -s jira-cli -w "your-new-token"`
-  - **macOS token retrieval:** read the stored token when needed:
-    `security find-generic-password -a YOUR-EMAIL -s jira-cli -w`
-  - **Linux (package manager):** `sudo apt-get install jira-cli`
+  - **macOS token storage (recommended):** use the Jira CLI's documented OS credential-store flow; do not paste tokens into chat or shell history.
+  - **Linux (package manager):** install with your approved package manager using least privilege.
   - **Linux (binary):** download a release binary, `chmod +x`, and move to `/usr/local/bin/jira`
   - **Windows (Chocolatey):** `choco install jira-cli`
 - Ask the user to run `jira version` after installing and confirm when it works before continuing.

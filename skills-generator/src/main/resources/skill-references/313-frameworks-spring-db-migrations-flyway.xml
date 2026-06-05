@@ -42,8 +42,7 @@
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="xml"><![CDATA[<!-- pom.xml — Flyway + PostgreSQL support (adjust artifact to your DB) -->
-<dependency>
+                    <code-block language="xml"><![CDATA[<dependency>
     <groupId>org.flywaydb</groupId>
     <artifactId>flyway-core</artifactId>
 </dependency>
@@ -53,11 +52,11 @@
 </dependency>]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
-                    <code-block language="xml"><![CDATA[<!-- Bad: relying on an outdated Flyway without the database module Flyway 10+ expects -->
+                    <code-block language="xml"><![CDATA[
 <dependency>
     <groupId>org.flywaydb</groupId>
     <artifactId>flyway-core</artifactId>
-    <version>8.0.0</version> <!-- pinned old version fighting Spring Boot BOM -->
+    <version>8.0.0</version>
 </dependency>]]></code-block>
                 </bad-example>
             </code-examples>

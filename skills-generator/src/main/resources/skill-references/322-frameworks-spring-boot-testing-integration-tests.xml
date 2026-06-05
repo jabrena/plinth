@@ -747,7 +747,6 @@ class OrderApiTest {   // ← should be OrderApiIT
                     <code-block language="xml"><![CDATA[<build>
     <plugins>
 
-        <!-- Surefire: fast unit tests only (*Test, *Tests) — "test" phase -->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
@@ -758,14 +757,12 @@ class OrderApiTest {   // ← should be OrderApiIT
                     <include>**/*Tests.java</include>
                 </includes>
                 <excludes>
-                    <!-- Prevent Surefire from picking up IT/AT classes -->
                     <exclude>**/*IT.java</exclude>
                     <exclude>**/*AT.java</exclude>
                 </excludes>
             </configuration>
         </plugin>
 
-        <!-- Failsafe: integration (*IT) and acceptance (*AT) tests — "integration-test" / "verify" phases -->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>
@@ -779,9 +776,7 @@ class OrderApiTest {   // ← should be OrderApiIT
             <executions>
                 <execution>
                     <goals>
-                        <!-- Runs IT/AT tests in "integration-test" phase -->
                         <goal>integration-test</goal>
-                        <!-- Fails the build in "verify" phase if any IT/AT test failed -->
                         <goal>verify</goal>
                     </goals>
                 </execution>
@@ -791,30 +786,18 @@ class OrderApiTest {   // ← should be OrderApiIT
     </plugins>
 </build>
 
-<!--
-    Resulting lifecycle:
-      mvn test          → Surefire: *Test, *Tests only (fast)
-      mvn verify        → Surefire: *Test, *Tests  +  Failsafe: *IT, *AT (full safety net)
-      mvn test -DskipITs → skip Failsafe without skipping Surefire
--->]]></code-block>
+]]></code-block>
                 </good-example>
                 <bad-example>
                     <code-block language="xml"><![CDATA[<build>
     <plugins>
 
-        <!-- Bad: Surefire only — default includes pick up *IT classes too.
-             *IT tests run in the "test" phase (wrong phase, wrong speed budget).
-             No Failsafe means no "verify" gate: if an IT fails, mvn verify may still
-             report BUILD SUCCESS because Surefire doesn't use the Failsafe safety net. -->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>3.5.5</version>
-            <!-- No <includes> / <excludes>: default pattern matches
-                 *Test, *Tests, *TestCase, Test*, AND *IT — mixes phases -->
         </plugin>
 
-        <!-- Missing: maven-failsafe-plugin with integration-test + verify goals -->
 
     </plugins>
 </build>]]></code-block>
