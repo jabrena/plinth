@@ -154,8 +154,8 @@ npx skills add jabrena/cursor-rules-java --all --agent claude-code
 Once you have the skills installed, you can install the `Agents` with:
 
 ```
-@003-agents-installation Install Agents in Cursor
-@003-agents-installation Install Agents in Claude
+@005-agents-installation Install Agents in Cursor
+@005-agents-installation Install Agents in Claude
 ```
 
 ## Evolution of this project in Vercel's Skills registry

@@ -14,9 +14,9 @@
 
 ## 目标
 
-一套带有明确观点的 AI 原生工作流，通过可复用的 `Skills`、`Agents` 与 `MCP servers`，持续演进现代 Java 企业级 `SDLC` 实践。
+一套带有明确观点的 AI 原生工作流，通过可复用的 `Skills`、`Agents`、`Commands` 与 `MCP servers`，持续演进现代 Java 企业级 `SDLC` 实践。
 
-借助本项目，你将学会使用你喜爱的 AI Agent 工具链，通过 [五个为什么](https://en.wikipedia.org/wiki/Five_whys) 解决所有问题：
+当你的团队需要演进基于 Java 的产品或服务时，本项目可帮助你回答 [五个为什么](https://en.wikipedia.org/wiki/Five_whys)：
 
 | 问题       | 角色               | 领域             | 支持内容                                                                                                                                                                                                             |
 | ---------- | ------------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -25,31 +25,30 @@
 | 如何 | SA, TL, SWE | Spec-Driven      | `AI Plan mode` 与 `OpenSpec` |
 | 如何       | TL, SWE            | Java development | 基于 Maven 的构建系统、`Design`、`Coding`、`Testing`、`Observability`、`Refactoring & JMH Benchmarking`、JMeter 性能测试、Async profiler/OpenJDK 工具性能分析、`Documentation`、`Spring Boot`、`Quarkus`、`Micronaut`、`OpenAPI`、`WireMock` 与 `AGENTS.md` |
 
+想法清晰后，你可以用结构化方式实现它：
+
+|               | 分析 / 设计 | 实现 | 运维 |
+| ------------- | ----------------- | -------------- | --------- |
+| Commands      | [`/update-issue-description`](./.cursor/commands/update-issue-description.md) | [`/create-feature-branch`](./.cursor/commands/create-feature-branch.md) · [`/implement`](./.cursor/commands/implement.md) | [`/verify`](./.cursor/commands/verify.md) · [`/kill-port`](./.cursor/commands/kill-port.md) |
+| [Agents](./documentation/guides/GETTING-STARTED-AGENTS_CN.md)        | `@robot-business-analyst` | `@robot-coordinator` · `@robot-java-coder` · `@robot-spring-boot-coder` · `@robot-quarkus-coder` · `@robot-micronaut-coder` |  |
+| [Skills](./documentation/guides/GETTING-STARTED-SKILLS_CN.md)        | [014-agile-user-story](https://www.skills.sh/jabrena/cursor-rules-java/014-agile-user-story) · [030-architecture-adr-general](https://www.skills.sh/jabrena/cursor-rules-java/030-architecture-adr-general) · [031-architecture-adr-functional-requirements](https://www.skills.sh/jabrena/cursor-rules-java/031-architecture-adr-functional-requirements) · [033-architecture-diagrams](https://www.skills.sh/jabrena/cursor-rules-java/033-architecture-diagrams) · [041-planning-plan-mode](https://www.skills.sh/jabrena/cursor-rules-java/041-planning-plan-mode) | [110-java-maven-best-practices](https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices) · [121-java-object-oriented-design](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) · [124-java-secure-coding](https://www.skills.sh/jabrena/cursor-rules-java/124-java-secure-coding) · [111-java-maven-dependencies](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) · [143-java-functional-exception-handling](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) | [151-java-performance-jmeter](https://www.skills.sh/jabrena/cursor-rules-java/151-java-performance-jmeter) · [162-java-profiling-analyze](https://www.skills.sh/jabrena/cursor-rules-java/162-java-profiling-analyze) · [161-java-profiling-detect](https://www.skills.sh/jabrena/cursor-rules-java/161-java-profiling-detect) · [163-java-profiling-refactor](https://www.skills.sh/jabrena/cursor-rules-java/163-java-profiling-refactor) · [164-java-profiling-verify](https://www.skills.sh/jabrena/cursor-rules-java/164-java-profiling-verify) |
+| [MCP Servers](./documentation/guides/THIRD-PARTIES.md)   | [JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) | [JavaDocs](https://www.javadocs.dev/mcp) · [Serena](https://oraios.github.io/serena/01-about/000_intro.html) | [Graphana](https://grafana.com/docs/grafana/latest/developer-resources/mcp/) |
+
 ## 交付物
 
 项目会在每次迭代结束时生成一组交付物。
 
-
 | 清单     | 安装                                                                                    | 快速入门                                                                           |
 | --------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| 1. [Java 技能清单](./documentation/guides/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/cursor-rules-java --all --agent cursor` | [`Java 技能`](./documentation/guides/GETTING-STARTED-SKILLS_CN.md)     |
-| 2. [Java 智能体清单](./documentation/guides/INVENTORY-AGENTS-JAVA.md) | `@003-agents-installation` 在 Cursor/Claude 中安装 Agents | [`Java 智能体`](./documentation/guides/GETTING-STARTED-AGENTS_CN.md)     |
+| 1. [Commands](./documentation/guides/INVENTORY-COMMANDS-JAVA.md) | `@004-commands-installation` 在项目中安装 Commands | [`Commands`](./documentation/guides/COMMANDS.md) |
+| 2. [Agents](./documentation/guides/INVENTORY-AGENTS-JAVA.md) | `@005-agents-installation` 在 Cursor/Claude 中安装 Agents | [`Agents`](./documentation/guides/GETTING-STARTED-AGENTS_CN.md)     |
+| 3. [Skills](./documentation/guides/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/cursor-rules-java --all --agent cursor` | [`Skills`](./documentation/guides/GETTING-STARTED-SKILLS_CN.md)     |
 
 **⚠️ 注意：** 若你仍在使用本项目的 System prompts/rules，请阅读[相关文章](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html)。当前的 `System prompts/rules` 将在下一版本（v0.16.0）中移除。
 
 ### 兼容性
 
-本项目兼容任何支持 `Skills`、`Agents`、`AGENTS.md` 与 `MCP Servers` 的工具。
-
-## 如何使用本项目？
-
-随着这波 AI 工具浪潮，SDLC 已发生演进，软件工程流程也因此得到增强。根据你当前所处的阶段，可以使用不同的 `Skills`、`Agents` 或 `MCP Servers`。请查看下表示例以理解其背后的思路：
-
-|               | 分析 / 设计 | 实现 | 运维 |
-| ------------- | ----------------- | -------------- | --------- |
-| [Skills](./documentation/guides/GETTING-STARTED-SKILLS_CN.md)        | [014-agile-user-story](https://www.skills.sh/jabrena/cursor-rules-java/014-agile-user-story) · [030-architecture-adr-general](https://www.skills.sh/jabrena/cursor-rules-java/030-architecture-adr-general) · [031-architecture-adr-functional-requirements](https://www.skills.sh/jabrena/cursor-rules-java/031-architecture-adr-functional-requirements) · [033-architecture-diagrams](https://www.skills.sh/jabrena/cursor-rules-java/033-architecture-diagrams) · [041-planning-plan-mode](https://www.skills.sh/jabrena/cursor-rules-java/041-planning-plan-mode) | [110-java-maven-best-practices](https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices) · [121-java-object-oriented-design](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) · [124-java-secure-coding](https://www.skills.sh/jabrena/cursor-rules-java/124-java-secure-coding) · [111-java-maven-dependencies](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) · [143-java-functional-exception-handling](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) | [151-java-performance-jmeter](https://www.skills.sh/jabrena/cursor-rules-java/151-java-performance-jmeter) · [162-java-profiling-analyze](https://www.skills.sh/jabrena/cursor-rules-java/162-java-profiling-analyze) · [161-java-profiling-detect](https://www.skills.sh/jabrena/cursor-rules-java/161-java-profiling-detect) · [163-java-profiling-refactor](https://www.skills.sh/jabrena/cursor-rules-java/163-java-profiling-refactor) · [164-java-profiling-verify](https://www.skills.sh/jabrena/cursor-rules-java/164-java-profiling-verify) |
-| [Agents](./documentation/guides/GETTING-STARTED-AGENTS_CN.md)        | `@robot-business-analyst` | `@robot-coordinator` · `@robot-java-coder` · `@robot-spring-boot-coder` · `@robot-quarkus-coder` · `@robot-micronaut-coder` |  |
-| [MCP Servers](./documentation/guides/THIRD-PARTIES.md)   | [JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) | [JavaDocs](https://www.javadocs.dev/mcp) · [Serena](https://oraios.github.io/serena/01-about/000_intro.html) | [Graphana](https://grafana.com/docs/grafana/latest/developer-resources/mcp/) |
+本项目兼容任何支持 `Commands`、`Agents`、`Skills`、`MCP Servers` 与 `AGENTS.md` 的工具。
 
 ## 工作流
 

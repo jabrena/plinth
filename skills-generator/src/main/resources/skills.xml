@@ -2,7 +2,7 @@
 <skill-inventory>
     <skill id="001">
         <reference-list>
-            <reference>001-skills-inventory</reference>
+            <reference>001-commands-inventory</reference>
         </reference-list>
     </skill>
     <skill id="002">
@@ -12,12 +12,17 @@
     </skill>
     <skill id="003">
         <reference-list>
-            <reference>003-agents-installation</reference>
+            <reference>003-skills-inventory</reference>
         </reference-list>
     </skill>
     <skill id="004">
         <reference-list>
             <reference>004-commands-installation</reference>
+        </reference-list>
+    </skill>
+    <skill id="005">
+        <reference-list>
+            <reference>005-agents-installation</reference>
         </reference-list>
     </skill>
     <skill id="012">
