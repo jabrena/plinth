@@ -82,9 +82,27 @@
             <reference>111-java-maven-dependencies-archunit</reference>
         </reference-list>
     </skill>
-    <skill id="112">
+    <skill id="112" skillId="112-java-maven-plugins">
         <reference-list>
-            <reference>112-java-maven-plugins</reference>
+            <reference>112-java-maven-plugins-maven-compiler-plugin</reference>
+            <reference>112-java-maven-plugins-maven-enforcer-plugin</reference>
+            <reference>112-java-maven-plugins-maven-surefire-plugin</reference>
+            <reference>112-java-maven-plugins-maven-failsafe-plugin</reference>
+            <reference>112-java-maven-plugins-maven-surefire-report-plugin</reference>
+            <reference>112-java-maven-plugins-maven-jxr-plugin</reference>
+            <reference>112-java-maven-plugins-spotless-maven-plugin</reference>
+            <reference>112-java-maven-plugins-flatten-maven-plugin</reference>
+            <reference>112-java-maven-plugins-versions-maven-plugin</reference>
+            <reference>112-java-maven-plugins-git-commit-id-maven-plugin</reference>
+            <reference>112-java-maven-plugins-jib-maven-plugin</reference>
+            <reference>112-java-maven-plugins-maven-dependency-plugin</reference>
+            <reference>112-java-maven-plugins-profile-jacoco</reference>
+            <reference>112-java-maven-plugins-profile-pitest</reference>
+            <reference>112-java-maven-plugins-profile-security</reference>
+            <reference>112-java-maven-plugins-profile-static-analysis</reference>
+            <reference>112-java-maven-plugins-profile-sonar</reference>
+            <reference>112-java-maven-plugins-profile-jmh</reference>
+            <reference>112-java-maven-plugins-profile-cyclomatic-complexity</reference>
         </reference-list>
     </skill>
     <skill id="113">
