@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="004-commands-installation"
+      interactive="true">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.16.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need to install the embedded project commands into command directories (.github/commands, .claude/commands, .cursor/command, .codex/commands), selecting the destination interactively and copying the embedded command definitions from project assets. This should trigger for requests such as Install embedded commands; Bootstrap .cursor/command; Bootstrap .claude/commands; Copy project commands; Install project command suite.</description>
+  </metadata>
+
+  <title>Embedded commands installer</title>
+  <goal><![CDATA[
+Install a predefined set of embedded project commands from repository assets into a user-selected target directory. This is an interactive skill.
+
+**What is covered in this Skill?**
+
+- Interactive target selection (`.github/commands`, `.claude/commands`, `.cursor/command`, or `.codex/commands`)
+- Deterministic copy of all embedded commands defined via XInclude from `assets/commands`
+- Idempotent re-installation with clear overwrite reporting
+- Support for four command framework destinations
+]]></goal>
+
+  <constraints>
+    <constraints-description>This skill installs only the embedded project commands bundle and must ask for destination before writing files.</constraints-description>
+    <constraint-list>
+      <constraint>**MUST** ask the user to choose one of four command destinations before installing</constraint>
+      <constraint>**MUST** copy all embedded command files defined in `references/004-commands-installation.md`</constraint>
+      <constraint>**MUST** preserve file names from the reference content and report overwrite actions</constraint>
+      <constraint>**MUST** create the destination directory if it does not exist</constraint>
+    </constraint-list>
+  </constraints>
+
+</prompt>
