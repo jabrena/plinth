@@ -25,11 +25,11 @@ Guide stakeholders through a structured conversation to uncover and document tec
 ]]></goal>
 
   <constraints>
-    <constraints-description>Use conversational discovery—ask 1-2 questions at a time, build on answers, validate before proceeding. Only create ADR after thorough conversation and user confirmation.</constraints-description>
+    <constraints-description>Use conversational discovery in small batches, build on answers, validate before proceeding. Only create ADR after thorough conversation and user confirmation.</constraints-description>
     <constraint-list>
       <constraint>**MANDATORY**: Use the local shell `date` command before starting to get accurate timestamps for the ADR</constraint>
       <constraint>**MUST**: Load the bundled reference template during the current session; ignore prior-session content unless the user provides it again</constraint>
-      <constraint>**MUST**: Ask one or two questions at a time; never all at once</constraint>
+      <constraint>**MUST**: Pose one or two discovery questions at a time; never all at once</constraint>
       <constraint>**MUST**: Validate summary with user (Does this accurately capture your requirements?) before proposing ADR creation</constraint>
       <constraint>**MUST**: Wait for user to confirm proceed before generating the ADR</constraint>
     </constraint-list>
@@ -55,7 +55,7 @@ Guide stakeholders through a structured conversation to uncover and document tec
     </step>
     <step number="2">
       <step-title>Conduct conversational discovery</step-title>
-      <step-content>Ask one or two questions at a time to capture context, functional requirements, and technical decisions for CLI, REST API, or both.</step-content>
+      <step-content>Guide discovery in small batches to elicit functional requirements and technical decisions for CLI, REST API, or both.</step-content>
       <step-constraints>
         <step-constraint-list>
           <step-constraint>Never ask all discovery questions at once</step-constraint>

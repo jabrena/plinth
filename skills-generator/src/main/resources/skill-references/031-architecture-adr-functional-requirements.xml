@@ -27,7 +27,7 @@
         <step number="2">
             <step-title>Conversational Information Gathering</step-title>
             <step-content>
-                Ask one or two questions at a time. Build on answers from the current session only. Acknowledge and validate responses before moving on. Complete **Surface discovery** (Phase 0 in the template) before Initial Context when the conversation does not already state the interface type.
+                Pose one or two discovery questions at a time. Build on answers from the current session only. Acknowledge and validate responses before moving on. Complete **Surface discovery** (Phase 0 in the template) before Initial Context when the conversation does not already state the interface type.
 
                 ```markdown
                 <xi:include href="assets/questions/adr-functional-requirements-questions-template.md" parse="text"/>
@@ -107,7 +107,7 @@ After generating the ADR, provide:
             <safeguards-item>Do not include secrets, credentials, unrelated file contents, or hidden/private context in the ADR</safeguards-item>
             <safeguards-item>Never proceed to ADR generation without completing conversational discovery and user validation</safeguards-item>
             <safeguards-item>Never assume or invent requirements—use only what the user provided</safeguards-item>
-            <safeguards-item>Create ADR when: clear context, key decisions identified, alternatives explored, understanding validated</safeguards-item>
+            <safeguards-item>Proceed with ADR output only after the user validates the requirements, key decisions, alternatives, and trade-offs</safeguards-item>
             <safeguards-item>Continue conversation when: requirements unclear, decisions arbitrary, alternatives not explored, stakeholders uncertain</safeguards-item>
         </safeguards-list>
     </safeguards>
