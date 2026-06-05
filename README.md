@@ -14,9 +14,9 @@
 
 ## Goal
 
-An opinionated AI-native workflow for evolving modern Java Enterprise `SDLC` practices through reusable `Skills`, `Agents`, and `MCP servers`.
+An opinionated AI-native workflow for evolving modern Java Enterprise `SDLC` practices through reusable `Skills`, `Agents`, `Commands` & `MCP servers`.
 
-With this project you will learn to resolve all [Five whys](https://en.wikipedia.org/wiki/Five_whys) using your favourite AI Agent harness:
+It helps you answer the [Five whys](https://en.wikipedia.org/wiki/Five_whys) when your team needs to evolve a Java-based product or service:
 
 | QUESTION   | ROLE               | AREA             | SUPPORT                                                                                                                                                                                                             |
 | ---------- | ------------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -25,45 +25,30 @@ With this project you will learn to resolve all [Five whys](https://en.wikipedia
 | HOW | SA, TL, SWE | Spec-Driven      | `AI Plan mode` & `OpenSpec` |
 | HOW        | TL, SWE            | Java development | `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Observability`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/OpenJDK tools`, `Documentation`, `Spring Boot`, `Quarkus`, `Micronaut`, `OpenAPI`, `WireMock` & `AGENTS.md` |
 
+Once the idea is clear, you can implement it in a structured way:
+
+|               | Analysis / Design | Implementation | Operation |
+| ------------- | ----------------- | -------------- | --------- |
+| Commands      | [`/update-issue-description`](./.cursor/commands/update-issue-description.md) | [`/create-feature-branch`](./.cursor/commands/create-feature-branch.md) · [`/implement`](./.cursor/commands/implement.md) | [`/verify`](./.cursor/commands/verify.md) · [`/kill-port`](./.cursor/commands/kill-port.md) |
+| [Agents](./documentation/guides/GETTING-STARTED-AGENTS.md)        | `@robot-business-analyst` | `@robot-coordinator` · `@robot-java-coder` · `@robot-spring-boot-coder` · `@robot-quarkus-coder` · `@robot-micronaut-coder` |  |
+| [Skills](./documentation/guides/GETTING-STARTED-SKILLS.md)        | [014-agile-user-story](https://www.skills.sh/jabrena/cursor-rules-java/014-agile-user-story) · [030-architecture-adr-general](https://www.skills.sh/jabrena/cursor-rules-java/030-architecture-adr-general) · [031-architecture-adr-functional-requirements](https://www.skills.sh/jabrena/cursor-rules-java/031-architecture-adr-functional-requirements) · [033-architecture-diagrams](https://www.skills.sh/jabrena/cursor-rules-java/033-architecture-diagrams) · [041-planning-plan-mode](https://www.skills.sh/jabrena/cursor-rules-java/041-planning-plan-mode) ... | [110-java-maven-best-practices](https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices) · [121-java-object-oriented-design](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) · [124-java-secure-coding](https://www.skills.sh/jabrena/cursor-rules-java/124-java-secure-coding) · [111-java-maven-dependencies](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) · [143-java-functional-exception-handling](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) ... | [151-java-performance-jmeter](https://www.skills.sh/jabrena/cursor-rules-java/151-java-performance-jmeter) · [162-java-profiling-analyze](https://www.skills.sh/jabrena/cursor-rules-java/162-java-profiling-analyze) · [161-java-profiling-detect](https://www.skills.sh/jabrena/cursor-rules-java/161-java-profiling-detect) · [163-java-profiling-refactor](https://www.skills.sh/jabrena/cursor-rules-java/163-java-profiling-refactor) · [164-java-profiling-verify](https://www.skills.sh/jabrena/cursor-rules-java/164-java-profiling-verify) ... |
+| [MCP Servers](./documentation/guides/THIRD-PARTIES.md)   | [JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) | [JavaDocs](https://www.javadocs.dev/mcp) · [Serena](https://oraios.github.io/serena/01-about/000_intro.html) | [Graphana](https://grafana.com/docs/grafana/latest/developer-resources/mcp/) |
+
 ## Deliverables
 
 The project generates a set of deliverables at the end of any iteration.
 
-
 | Inventory     | Installation                                                                                    | Getting Started                                                                           |
 | --------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
-| 1. [Skills for Java](./documentation/guides/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/cursor-rules-java --all --agent cursor` | [`Skills for Java`](./documentation/guides/GETTING-STARTED-SKILLS.md)     |
-| 2. [Agents for Java](./documentation/guides/INVENTORY-AGENTS-JAVA.md) | `@003-agents-installation` Install Agents in Cursor/Claude | [`Agents for Java`](./documentation/guides/GETTING-STARTED-AGENTS.md)     |
-| 3. [Commands for Java](./documentation/guides/COMMANDS.md) | `@004-commands-installation` Install Commands in project | [`Commands for Java`](./documentation/guides/COMMANDS.md) |
-
-### Available Commands
-
-The project provides a set of workflow commands that streamline the development process:
-
-| Command | Purpose | Usage |
-|---------|---------|-------|
-| `/update-issue-description` | Update GitHub issues with structured content following agile templates | `/update-issue-description <issue-number> [<file-path>]` |
-| `/create-feature-branch` | Create feature branches with proper naming conventions | `/create-feature-branch <feature-name> [<base-branch>]` |
-| `/implement` | Implement features with test-driven development approach | `/implement [<task-specification>]` |
-| `/verify` | Verify implementation meets acceptance criteria and quality standards | `/verify [<specification-path>]` |
-
-Use `@004-commands-installation` skill to install these commands to your preferred directory (`.cursor/command`, `.claude/commands`, `.github/commands`, or `.codex/commands`).
+| 1. [Commands](./documentation/guides/INVENTORY-COMMANDS-JAVA.md) | `@004-commands-installation` Install Commands in project | [`Commands`](./documentation/guides/COMMANDS.md) |
+| 2. [Agents](./documentation/guides/INVENTORY-AGENTS-JAVA.md) | `@005-agents-installation` Install Agents in Cursor/Claude | [`Agents`](./documentation/guides/GETTING-STARTED-AGENTS.md)     |
+| 3. [Skills](./documentation/guides/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/cursor-rules-java --all --agent cursor` | [`Skills`](./documentation/guides/GETTING-STARTED-SKILLS.md)     |
 
 **⚠️ Note:** If you continue using the System prompts/rules from this project, please review [the article](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html). Current `System prompts/rules` will be removed in the next release (v0.16.0).
 
 ### Compatibility
 
-This project is compatible with any tool that supports `Skills`, `Agents`, `AGENTS.md`, and `MCP Servers`.
-
-## How to use the project?
-
-The SDLC has evolved with this new wave of AI tooling, which enhances the software engineering process. Depending of the phase where you are, you could use different `Skills`, `Agents` or `MCP Servers`. Take a look the following example table to understand the idea behind:
-
-|               | Analysis / Design | Implementation | Operation |
-| ------------- | ----------------- | -------------- | --------- |
-| [Skills](./documentation/guides/GETTING-STARTED-SKILLS.md)        | [014-agile-user-story](https://www.skills.sh/jabrena/cursor-rules-java/014-agile-user-story) · [030-architecture-adr-general](https://www.skills.sh/jabrena/cursor-rules-java/030-architecture-adr-general) · [031-architecture-adr-functional-requirements](https://www.skills.sh/jabrena/cursor-rules-java/031-architecture-adr-functional-requirements) · [033-architecture-diagrams](https://www.skills.sh/jabrena/cursor-rules-java/033-architecture-diagrams) · [041-planning-plan-mode](https://www.skills.sh/jabrena/cursor-rules-java/041-planning-plan-mode) | [110-java-maven-best-practices](https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices) · [121-java-object-oriented-design](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) · [124-java-secure-coding](https://www.skills.sh/jabrena/cursor-rules-java/124-java-secure-coding) · [111-java-maven-dependencies](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) · [143-java-functional-exception-handling](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) | [151-java-performance-jmeter](https://www.skills.sh/jabrena/cursor-rules-java/151-java-performance-jmeter) · [162-java-profiling-analyze](https://www.skills.sh/jabrena/cursor-rules-java/162-java-profiling-analyze) · [161-java-profiling-detect](https://www.skills.sh/jabrena/cursor-rules-java/161-java-profiling-detect) · [163-java-profiling-refactor](https://www.skills.sh/jabrena/cursor-rules-java/163-java-profiling-refactor) · [164-java-profiling-verify](https://www.skills.sh/jabrena/cursor-rules-java/164-java-profiling-verify) |
-| [Agents](./documentation/guides/GETTING-STARTED-AGENTS.md)        | `@robot-business-analyst` | `@robot-coordinator` · `@robot-java-coder` · `@robot-spring-boot-coder` · `@robot-quarkus-coder` · `@robot-micronaut-coder` |  |
-| [MCP Servers](./documentation/guides/THIRD-PARTIES.md)   | [JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) | [JavaDocs](https://www.javadocs.dev/mcp) · [Serena](https://oraios.github.io/serena/01-about/000_intro.html) | [Graphana](https://grafana.com/docs/grafana/latest/developer-resources/mcp/) |
+This project is compatible with any tool that supports `Commands`, `Agents`, `Skills`, `MCP Servers` and `AGENTS.md`.
 
 ## Workflows
 

@@ -6,14 +6,15 @@ Use the following collection of Skills for Java to improve your Java development
 
 | Skill | Description | User Prompt | Notes |
 |----|----|----|----|
-| [001-skills-inventory](@001-skills-inventory.md) | Generate list of System Prompts for Java | **User Prompt:** `Create a document with all System prompts for Java using @001-skills-inventory` | |
+| [001-commands-inventory](@001-commands-inventory.md) | Generate checklist with embedded commands inventory for Java | **User Prompt:** `Create a document with all commands for Java using @001-commands-inventory` | |
 | [002-agents-inventory](@002-agents-inventory.md) | Generate checklist with embedded agents inventory for Java | **User Prompt:** `Create a document with all agents for Java using @002-agents-inventory` | |
+| [003-skills-inventory](@003-skills-inventory.md) | Generate list of System Prompts for Java | **User Prompt:** `Create a document with all System prompts for Java using @003-skills-inventory` | |
 
 ## Installation
 
 | Skill | Description | User Prompt | Notes |
 |----|----|----|----|
-| [003-agents-installation](@003-agents-installation.md) | Install embedded robot agents into `.cursor/agents` or `.claude/agents` | **Interactive User Prompt:** `Install embedded agents using @003-agents-installation` | Asks destination first, then installs the full six-agent bundle from embedded assets. |
+| [005-agents-installation](@005-agents-installation.md) | Install embedded robot agents into `.cursor/agents` or `.claude/agents` | **Interactive User Prompt:** `Install embedded agents using @005-agents-installation` | Asks destination first, then installs the full six-agent bundle from embedded assets. |
 
 ## Agile (User Stories, Gherkin & AI Planning)
 
