@@ -64,7 +64,7 @@
         <maven-plugin-surefire.version>3.5.6</maven-plugin-surefire.version>
         <maven-plugin-resources.version>3.5.0</maven-plugin-resources.version>
         <maven-plugin-clean.version>3.5.0</maven-plugin-clean.version>
-        <maven-plugin-antrun.version>3.1.0</maven-plugin-antrun.version>
+        <maven-plugin-antrun.version>3.2.0</maven-plugin-antrun.version>
 
         <!-- Feature-specific plugin versions -->
         <maven-plugin-enforcer.version>3.6.3</maven-plugin-enforcer.version>
