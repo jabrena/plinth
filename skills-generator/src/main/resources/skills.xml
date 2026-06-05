@@ -75,9 +75,11 @@
             <reference>110-java-maven-best-practices</reference>
         </reference-list>
     </skill>
-    <skill id="111">
+    <skill id="111" skillId="111-java-maven-dependencies">
         <reference-list>
-            <reference>111-java-maven-dependencies</reference>
+            <reference>111-java-maven-dependencies-jspecify</reference>
+            <reference>111-java-maven-dependencies-vavr</reference>
+            <reference>111-java-maven-dependencies-archunit</reference>
         </reference-list>
     </skill>
     <skill id="112">

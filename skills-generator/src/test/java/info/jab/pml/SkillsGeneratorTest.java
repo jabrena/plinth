@@ -3,6 +3,7 @@ package info.jab.pml;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -17,6 +18,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
 import org.junit.jupiter.api.DisplayName;
@@ -29,6 +31,7 @@ import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
+import org.xml.sax.InputSource;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -293,11 +296,37 @@ class SkillsGeneratorTest {
             if (xsltStream == null) {
                 throw new IllegalArgumentException("XSLT not found: " + xsltResource);
             }
+            DOMSource xmlSource = createXIncludeDomSource(xmlStream, xmlResource);
             Transformer transformer = TransformerFactory.newInstance().newTransformer(new StreamSource(xsltStream));
             StringWriter writer = new StringWriter();
-            transformer.transform(new StreamSource(xmlStream), new StreamResult(writer));
+            transformer.transform(xmlSource, new StreamResult(writer));
             return appendReferencesSection(appendProjectTagToDescription(writer.toString()), references);
         }
+    }
+
+    private DOMSource createXIncludeDomSource(InputStream xmlStream, String xmlResource) throws Exception {
+        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+        factory.setNamespaceAware(true);
+        factory.setXIncludeAware(true);
+        DocumentBuilder builder = factory.newDocumentBuilder();
+        InputSource inputSource = new InputSource(xmlStream);
+        inputSource.setSystemId(resolveBaseUri(xmlResource));
+        Document document = builder.parse(inputSource);
+        return new DOMSource(document);
+    }
+
+    private String resolveBaseUri(String xmlResource) {
+        URL xmlUrl = SkillsGeneratorTest.class.getClassLoader().getResource(xmlResource);
+        if (xmlUrl != null) {
+            String url = xmlUrl.toString();
+            int lastSlash = url.lastIndexOf('/');
+            if (lastSlash > 0) {
+                return url.substring(0, lastSlash + 1);
+            }
+        }
+        return Optional.ofNullable(SkillsGeneratorTest.class.getClassLoader().getResource(""))
+            .map(URL::toString)
+            .orElse("");
     }
 
     private String appendReferencesSection(String content, List<String> references) {

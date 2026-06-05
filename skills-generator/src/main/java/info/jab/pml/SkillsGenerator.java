@@ -2,6 +2,7 @@ package info.jab.pml;
 
 import java.io.InputStream;
 import java.io.StringWriter;
+import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,8 +12,11 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import org.w3c.dom.Document;
+import org.xml.sax.InputSource;
 
 /**
  * Generator for Agent Skills (SKILL.md and references) from XML rule definitions and skill files.
@@ -133,26 +137,43 @@ public final class SkillsGenerator {
             if (xsltStream == null) {
                 throw new RuntimeException("XSLT not found: " + xsltResource);
             }
-            // Parse without schema validation: skills use PML schema (prompt root)
-            DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
-            DocumentBuilder builder = docFactory.newDocumentBuilder();
-            builder.parse(xmlStream);
+            DOMSource xmlSource = createXIncludeDomSource(xmlStream, xmlResource);
 
             TransformerFactory tf = TransformerFactory.newInstance();
             Transformer transformer = tf.newTransformer(new StreamSource(xsltStream));
             StringWriter writer = new StringWriter();
-            try (InputStream xmlStreamForTransform = getResource(xmlResource)) {
-                if (xmlStreamForTransform == null) {
-                    throw new RuntimeException("Skill XML not found: " + xmlResource);
-                }
-                transformer.transform(new StreamSource(xmlStreamForTransform), new StreamResult(writer));
-            }
+            transformer.transform(xmlSource, new StreamResult(writer));
             String content = writer.toString();
             String withProjectTag = appendProjectTagToDescription(content);
             return appendReferencesSection(withProjectTag, references);
         } catch (Exception e) {
             throw new RuntimeException("Failed to load and transform skill XML: " + xmlResource, e);
         }
+    }
+
+    private DOMSource createXIncludeDomSource(InputStream xmlStream, String xmlResource) throws Exception {
+        DocumentBuilderFactory docFactory = DocumentBuilderFactory.newInstance();
+        docFactory.setNamespaceAware(true);
+        docFactory.setXIncludeAware(true);
+        DocumentBuilder builder = docFactory.newDocumentBuilder();
+        InputSource inputSource = new InputSource(xmlStream);
+        inputSource.setSystemId(resolveBaseUri(xmlResource));
+        Document document = builder.parse(inputSource);
+        return new DOMSource(document);
+    }
+
+    private String resolveBaseUri(String xmlResource) {
+        URL xmlUrl = getClass().getClassLoader().getResource(xmlResource);
+        if (xmlUrl != null) {
+            String url = xmlUrl.toString();
+            int lastSlash = url.lastIndexOf('/');
+            if (lastSlash > 0) {
+                return url.substring(0, lastSlash + 1);
+            }
+        }
+        return Optional.ofNullable(getClass().getClassLoader().getResource(""))
+            .map(URL::toString)
+            .orElse("");
     }
 
     private String appendReferencesSection(String content, java.util.List<String> references) {

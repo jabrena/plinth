@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.16.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Add Maven dependencies for improved code quality</title>
+        <description>ArchUnit Maven dependency guidance for the interactive Maven dependencies skill.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Java software development.</role>
+
+    <goal><![CDATA[
+Add ArchUnit only when the user selects architecture testing support in the SKILL.md question flow.
+
+]]></goal>
+
+    <constraints>
+        <constraints-description>ArchUnit is a test dependency used to enforce architectural rules in the normal test lifecycle.</constraints-description>
+        <constraint-list>
+            <constraint>Use `test` scope for ArchUnit.</constraint>
+            <constraint>Use `archunit-junit5` when JUnit 5 is the test framework.</constraint>
+            <constraint>Do not add ArchUnit when the user skipped architecture testing support.</constraint>
+        </constraint-list>
+    </constraints>
+
+    <steps>
+        <step number="1">
+            <step-title>Add selected version property</step-title>
+            <step-content><![CDATA[
+```xml
+<archunit.version>1.4.1</archunit.version>
+```
+
+
+]]></step-content>
+        </step>
+        <step number="2">
+            <step-title>Add ArchUnit JUnit 5 dependency</step-title>
+            <step-content><![CDATA[
+```xml
+<dependency>
+    <groupId>com.tngtech.archunit</groupId>
+    <artifactId>archunit-junit5</artifactId>
+    <version>${archunit.version}</version>
+    <scope>test</scope>
+</dependency>
+```
+
+
+]]></step-content>
+        </step>
+        <step number="3">
+            <step-title>Validate architecture tests</step-title>
+            <step-content><![CDATA[
+After adding ArchUnit, recommend running:
+
+```bash
+./mvnw test
+```
+
+If an architecture test is added, a focused check can use:
+
+```bash
+./mvnw test -Dtest="*ArchitectureTest"
+```
+
+
+]]></step-content>
+        </step>
+    </steps>
+</prompt>
