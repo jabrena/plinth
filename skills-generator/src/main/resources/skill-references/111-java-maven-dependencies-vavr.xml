@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.16.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Add Maven dependencies for improved code quality</title>
+        <description>VAVR Maven dependency guidance for the interactive Maven dependencies skill.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Java software development.</role>
+
+    <goal><![CDATA[
+Add VAVR only when the user selects functional programming support in the SKILL.md question flow.
+
+]]></goal>
+
+    <constraints>
+        <constraints-description>VAVR is an application dependency. Add it only when selected and preserve the existing POM structure.</constraints-description>
+        <constraint-list>
+            <constraint>Use default Maven compile scope for VAVR.</constraint>
+            <constraint>Do not add VAVR when the user skipped functional programming support.</constraint>
+        </constraint-list>
+    </constraints>
+
+    <steps>
+        <step number="1">
+            <step-title>Add selected version property</step-title>
+            <step-content><![CDATA[
+```xml
+<vavr.version>0.10.6</vavr.version>
+```
+
+
+]]></step-content>
+        </step>
+        <step number="2">
+            <step-title>Add VAVR dependency</step-title>
+            <step-content><![CDATA[
+```xml
+<dependency>
+    <groupId>io.vavr</groupId>
+    <artifactId>vavr</artifactId>
+    <version>${vavr.version}</version>
+</dependency>
+```
+
+
+]]></step-content>
+        </step>
+        <step number="3">
+            <step-title>Report common usage</step-title>
+            <step-content><![CDATA[
+Mention VAVR is useful for `Try`, `Either`, and immutable collections. Recommend adding examples only if the user asks or if the change introduces VAVR into existing code.
+
+
+]]></step-content>
+        </step>
+    </steps>
+</prompt>

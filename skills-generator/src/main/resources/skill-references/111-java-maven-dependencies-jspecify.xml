@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.16.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Add Maven dependencies for improved code quality</title>
+        <description>JSpecify, Error Prone, and NullAway Maven dependency guidance for the interactive Maven dependencies skill.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Java software development.</role>
+
+    <goal><![CDATA[
+Configure nullness analysis only when selected by the user. This reference owns both the JSpecify dependency and the conditional Error Prone + NullAway compiler analysis path because enhanced NullAway analysis depends on the JSpecify decision in the question flow.
+
+]]></goal>
+
+    <constraints>
+        <constraints-description>Apply only the selected nullness-analysis pieces after the questions embedded in SKILL.md have been answered.</constraints-description>
+        <constraint-list>
+            <constraint>Use `provided` scope for JSpecify.</constraint>
+            <constraint>Add Error Prone + NullAway only when the user selected enhanced compiler analysis after selecting JSpecify.</constraint>
+            <constraint>Ask for and use the real project package name in `NullAway:AnnotatedPackages`.</constraint>
+            <constraint>Create `.mvn/jvm.config` only when enhanced compiler analysis is selected.</constraint>
+        </constraint-list>
+    </constraints>
+
+    <steps>
+        <step number="1">
+            <step-title>Add selected version properties</step-title>
+            <step-content><![CDATA[
+Add only the properties needed by the user's selections:
+
+```xml
+<jspecify.version>1.0.0</jspecify.version>
+<error-prone.version>2.35.1</error-prone.version>
+<nullaway.version>0.12.0</nullaway.version>
+```
+
+
+]]></step-content>
+        </step>
+        <step number="2">
+            <step-title>Add JSpecify dependency when selected</step-title>
+            <step-content><![CDATA[
+```xml
+<dependency>
+    <groupId>org.jspecify</groupId>
+    <artifactId>jspecify</artifactId>
+    <version>${jspecify.version}</version>
+    <scope>provided</scope>
+</dependency>
+```
+
+
+]]></step-content>
+        </step>
+        <step number="3">
+            <step-title>Add enhanced compiler analysis when selected</step-title>
+            <step-content><![CDATA[
+Update or add `maven-compiler-plugin` configuration only when the user selected enhanced analysis. Replace `com.example.myproject` with the package name confirmed by the user.
+
+```xml
+<plugin>
+    <groupId>org.apache.maven.plugins</groupId>
+    <artifactId>maven-compiler-plugin</artifactId>
+    <version>${maven-plugin-compiler.version}</version>
+    <configuration>
+        <release>${java.version}</release>
+        <compilerArgs>
+            <arg>-Xlint:all</arg>
+            <arg>-Werror</arg>
+            <arg>-XDcompilePolicy=simple</arg>
+            <arg>--should-stop=ifError=FLOW</arg>
+            <arg>-Xplugin:ErrorProne
+                -Xep:NullAway:ERROR
+                -XepOpt:NullAway:JSpecifyMode=true
+                -XepOpt:NullAway:TreatGeneratedAsUnannotated=true
+                -XepOpt:NullAway:CheckOptionalEmptiness=true
+                -XepOpt:NullAway:HandleTestAssertionLibraries=true
+                -XepOpt:NullAway:AssertsEnabled=true
+                -XepOpt:NullAway:AnnotatedPackages=com.example.myproject
+            </arg>
+        </compilerArgs>
+        <annotationProcessorPaths>
+            <path>
+                <groupId>com.google.errorprone</groupId>
+                <artifactId>error_prone_core</artifactId>
+                <version>${error-prone.version}</version>
+            </path>
+            <path>
+                <groupId>com.uber.nullaway</groupId>
+                <artifactId>nullaway</artifactId>
+                <version>${nullaway.version}</version>
+            </path>
+        </annotationProcessorPaths>
+    </configuration>
+</plugin>
+```
+
+
+]]></step-content>
+        </step>
+        <step number="4">
+            <step-title>Create JVM configuration for enhanced analysis</step-title>
+            <step-content><![CDATA[
+Create `.mvn/jvm.config` only when enhanced compiler analysis is selected:
+
+```text
+--add-exports=jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED
+--add-exports=jdk.compiler/com.sun.tools.javac.file=ALL-UNNAMED
+--add-exports=jdk.compiler/com.sun.tools.javac.main=ALL-UNNAMED
+--add-exports=jdk.compiler/com.sun.tools.javac.model=ALL-UNNAMED
+--add-exports=jdk.compiler/com.sun.tools.javac.parser=ALL-UNNAMED
+--add-exports=jdk.compiler/com.sun.tools.javac.processing=ALL-UNNAMED
+--add-exports=jdk.compiler/com.sun.tools.javac.tree=ALL-UNNAMED
+--add-exports=jdk.compiler/com.sun.tools.javac.util=ALL-UNNAMED
+--add-opens=jdk.compiler/com.sun.tools.javac.code=ALL-UNNAMED
+--add-opens=jdk.compiler/com.sun.tools.javac.comp=ALL-UNNAMED
+```
+
+
+]]></step-content>
+        </step>
+    </steps>
+</prompt>

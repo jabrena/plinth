@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<question-flow>
+**Question 1**: Do you want to add JSpecify for enhanced nullness annotations?
+
+JSpecify provides modern nullness annotations that help prevent null pointer exceptions at compile time. It's particularly useful for new projects or those looking to improve null safety.
+
+**Options**:
+- **y** - Add JSpecify dependency (recommended for new projects)
+- **n** - Skip JSpecify dependency
+
+**Recommendation**: Choose 'y' for better null safety and modern annotation support.
+
+---
+
+**Note**: This question is asked ONLY if you selected 'y' for JSpecify.
+
+**Question 2**: Do you want to enable enhanced compiler analysis with Error Prone and NullAway?
+
+This adds Error Prone static analysis and NullAway nullness checking to your build process. It will catch more potential issues at compile time but may initially show warnings in existing code.
+
+**Options**:
+- **y** - Enable enhanced analysis with Error Prone and NullAway (recommended)
+- **n** - Just add JSpecify dependency without enhanced analysis
+
+**Recommendation**: Choose 'y' to get the full benefit of nullness checking and additional static analysis.
+
+---
+
+**Note**: This question is asked ONLY if you selected enhanced compiler analysis.
+
+**Question 3**: What is your main project package name?
+
+This is needed to configure NullAway to analyze your code. For example, if your classes are in `com.example.myproject`, enter `com.example.myproject`.
+
+**Format**: Use dot notation (e.g., `com.example.myproject` or `org.mycompany.myapp`)
+
+**Example**: `com.example.myproject`
+
+---
+
+**Question 4**: Do you want to add VAVR for functional programming support?
+
+VAVR is a functional programming library for Java that provides immutable data types, functional control structures (Try and Either), and immutable collections. It helps write more robust and expressive code using functional programming patterns.
+
+**Options**:
+- **y** - Add VAVR dependency for functional programming (recommended for functional style)
+- **n** - Skip VAVR dependency
+
+**Recommendation**: Choose 'y' if you want to use functional programming patterns, immutable data structures, or need better error handling with Try/Either monads.
+
+---
+
+**Question 5**: Do you want to add ArchUnit for architecture testing?
+
+ArchUnit lets you write unit tests that enforce architectural constraints, such as layering rules, naming conventions, dependency directions, and package structure, directly in your test suite. It integrates with JUnit 5 and runs as part of the normal test lifecycle.
+
+**Options**:
+- **y** - Add ArchUnit JUnit 5 dependency (recommended for architecture governance)
+- **n** - Skip ArchUnit dependency
+
+**Recommendation**: Choose 'y' if you want to prevent architecture erosion and enforce design rules automatically on every build.
+</question-flow>
