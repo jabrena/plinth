@@ -15,6 +15,11 @@
             <reference>003-agents-installation</reference>
         </reference-list>
     </skill>
+    <skill id="004">
+        <reference-list>
+            <reference>004-commands-installation</reference>
+        </reference-list>
+    </skill>
     <skill id="012">
         <reference-list>
             <reference>012-agile-epic</reference>
