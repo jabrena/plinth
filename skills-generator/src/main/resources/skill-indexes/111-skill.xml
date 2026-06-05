@@ -28,7 +28,7 @@ Add essential Maven dependencies that enhance code quality and safety through a 
     <constraint-list>
       <constraint>**MANDATORY**: Run `./mvnw validate` or `mvn validate` before any changes</constraint>
       <constraint>**SAFETY**: If validation fails, stop and ask the user to fix issues—do not proceed until resolved</constraint>
-      <constraint><![CDATA[**BEFORE READING DEPENDENCY REFERENCES**: Run the question flow embedded in this SKILL.md first. Ask questions one-by-one in strict order (JSpecify → Enhanced Compiler Analysis (conditional) → Package Name (conditional) → VAVR → ArchUnit), then read only the dependency references selected by the user's answers. Use consultative language, present trade-offs, and wait for user responses before implementing]]></constraint>
+      <constraint><![CDATA[**BEFORE READING DEPENDENCY REFERENCES**: Run the question flow embedded in this SKILL.md first. Ask one consolidated dependency-selection question, then ask only conditional follow-up questions required by the selected options. Read only the dependency references selected by the user's answers. Use consultative language, present trade-offs, and wait for user responses before implementing]]></constraint>
     </constraint-list>
   </constraints>
 
@@ -50,7 +50,7 @@ Add essential Maven dependencies that enhance code quality and safety through a 
     <step number="2">
       <step-title>Ask dependency assessment questions before reading references</step-title>
       <step-content><![CDATA[
-Run this XML-included question flow before reading any dependency implementation reference. Ask one question at a time, wait for the user's answer, and record selected dependency families before continuing.
+Run this XML-included question flow before reading any dependency implementation reference. Ask the consolidated dependency-selection question first, wait for the user's answer, and record selected dependency families before continuing. Ask conditional follow-up questions only when required by the selected dependencies.
 
 ]]><xi:include href="../skill-references/assets/questions/111-java-maven-dependencies-questions.xml"/><![CDATA[
 
