@@ -27,7 +27,7 @@
         <step number="2">
             <step-title>Conversational Information Gathering</step-title>
             <step-content>
-                Ask one or two questions at a time. Build on previous answers. Stay consultative, not interrogative. Skip quality characteristics irrelevant to the use case; dive deeper where there's uncertainty or risk.
+                Ask one or two questions at a time. Build on answers from the current session only. Stay consultative, not interrogative. Skip quality characteristics irrelevant to the use case; dive deeper where there's uncertainty or risk.
 
                 ```markdown
                 <xi:include href="assets/questions/adr-nfr-questions-template.md" parse="text"/>
@@ -35,8 +35,8 @@
             </step-content>
             <step-constraints>
                 <step-constraint-list>
-                    <step-constraint>**MUST** read template files fresh using file_search and read_file tools before asking questions</step-constraint>
-                    <step-constraint>**MUST NOT** use cached or remembered questions from previous interactions</step-constraint>
+                    <step-constraint>**MUST** load bundled template files from the current workspace before asking questions</step-constraint>
+                    <step-constraint>**MUST** ignore prior-session content unless the user provides it again in the current conversation</step-constraint>
                     <step-constraint>**MUST** start with challenge-first opening (ISO 25010:2023 quality characteristics)</step-constraint>
                     <step-constraint>**MUST** ask one or two questions at a time—never all at once</step-constraint>
                     <step-constraint>**MUST** WAIT for user response and acknowledge before proceeding</step-constraint>
@@ -105,7 +105,8 @@ After generating the ADR, provide:
 
     <safeguards>
         <safeguards-list>
-            <safeguards-item>Always read template files fresh using file_search and read_file tools</safeguards-item>
+            <safeguards-item>Always load bundled template files from the current workspace for the active session</safeguards-item>
+            <safeguards-item>Do not include secrets, credentials, unrelated file contents, or hidden/private context in the ADR</safeguards-item>
             <safeguards-item>Never proceed to ADR generation without completing conversational discovery and user validation</safeguards-item>
             <safeguards-item>Never assume or invent NFRs—use only what the user provided</safeguards-item>
             <safeguards-item>Create ADR when: clear context, key quality decisions identified, alternatives explored, understanding validated</safeguards-item>

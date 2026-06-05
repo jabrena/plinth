@@ -12,7 +12,7 @@
 
   <title>Create ADRs for Functional Requirements (CLI and/or REST API)</title>
   <goal><![CDATA[
-Guide stakeholders through a structured conversation to uncover and document technical decisions and functional requirements for command-line tools, REST/HTTP APIs, or combined surfaces. **This is an interactive SKILL**. The ADR is the documentation of that conversation, not the conversation itself. Infer CLI vs API from project context when possible; ask a short clarifying question when unclear.
+Guide stakeholders through a structured conversation to uncover and document technical decisions and functional requirements for command-line tools, REST/HTTP APIs, or combined surfaces. **This is an interactive SKILL**. The ADR is the documentation of that conversation, not the conversation itself. Infer CLI vs API from the current workspace when possible; ask a short clarifying question when unclear. Use only the current conversation and repository files explicitly available in the current session.
 
 **What is covered in this Skill?**
 
@@ -27,8 +27,8 @@ Guide stakeholders through a structured conversation to uncover and document tec
   <constraints>
     <constraints-description>Use conversational discovery—ask 1-2 questions at a time, build on answers, validate before proceeding. Only create ADR after thorough conversation and user confirmation.</constraints-description>
     <constraint-list>
-      <constraint>**MANDATORY**: Run `date` before starting to get accurate timestamps for the ADR</constraint>
-      <constraint>**MUST**: Read the reference template fresh—do not use cached questions</constraint>
+      <constraint>**MANDATORY**: Use the local shell `date` command before starting to get accurate timestamps for the ADR</constraint>
+      <constraint>**MUST**: Load the bundled reference template during the current session; ignore prior-session content unless the user provides it again</constraint>
       <constraint>**MUST**: Ask one or two questions at a time; never all at once</constraint>
       <constraint>**MUST**: Validate summary with user (Does this accurately capture your requirements?) before proposing ADR creation</constraint>
       <constraint>**MUST**: Wait for user to confirm proceed before generating the ADR</constraint>
@@ -47,14 +47,14 @@ Guide stakeholders through a structured conversation to uncover and document tec
   <steps>
     <step number="0">
       <step-title>Get current date</step-title>
-      <step-content>Run `date` before discovery and use it for ADR timestamps.</step-content>
+      <step-content>Use the local shell `date` command before discovery and use it for ADR timestamps.</step-content>
     </step>
     <step number="1">
-      <step-title>Read reference and discover surface scope</step-title>
-      <step-content>Read `references/031-architecture-adr-functional-requirements.md`, infer CLI/API scope from project context, and ask a short clarifying question if unclear.</step-content>
+      <step-title>Load reference and discover surface scope</step-title>
+      <step-content>Load `references/031-architecture-adr-functional-requirements.md` from this skill, infer CLI/API scope from the current workspace, and ask a short clarifying question if unclear.</step-content>
     </step>
     <step number="2">
-      <step-title>Run conversational discovery</step-title>
+      <step-title>Conduct conversational discovery</step-title>
       <step-content>Ask one or two questions at a time to capture context, functional requirements, and technical decisions for CLI, REST API, or both.</step-content>
       <step-constraints>
         <step-constraint-list>
