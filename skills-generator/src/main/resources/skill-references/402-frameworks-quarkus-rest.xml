@@ -210,7 +210,7 @@ GET    /api/v1/orders/{orderId}
 GET    /api/v1/orders/{orderId}/items
 POST   /api/v1/orders
 PUT    /api/v1/orders/{orderId}
-DELETE /api/v1/orders/{orderId}]]></code-block>
+PATCH  /api/v1/orders/{orderId}/status]]></code-block>
                 </good-example>
                 <bad-example>
                     <code-block language="text"><![CDATA[GET  /getAllOrders

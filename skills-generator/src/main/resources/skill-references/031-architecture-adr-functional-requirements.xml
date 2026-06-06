@@ -27,7 +27,7 @@
         <step number="2">
             <step-title>Conversational Information Gathering</step-title>
             <step-content>
-                Ask one or two questions at a time. Build on previous answers. Acknowledge and validate responses before moving on. Complete **Surface discovery** (Phase 0 in the template) before Initial Context when the conversation does not already state the interface type.
+                Pose one or two discovery questions at a time. Build on answers from the current session only. Acknowledge and validate responses before moving on. Complete **Surface discovery** (Phase 0 in the template) before Initial Context when the conversation does not already state the interface type.
 
                 ```markdown
                 <xi:include href="assets/questions/adr-functional-requirements-questions-template.md" parse="text"/>
@@ -35,12 +35,12 @@
             </step-content>
             <step-constraints>
                 <step-constraint-list>
-                    <step-constraint>**MUST** read template files fresh using file_search and read_file tools before asking questions</step-constraint>
-                    <step-constraint>**MUST NOT** use cached or remembered questions from previous interactions</step-constraint>
+                    <step-constraint>**MUST** load bundled template files from the current workspace before asking questions</step-constraint>
+                    <step-constraint>**MUST** ignore prior-session content unless the user provides it again in the current conversation</step-constraint>
                     <step-constraint>**MUST** infer CLI vs REST/HTTP API from the workspace when the user provides project context; **MUST** ask a single clarifying question when inference is unclear or conflicting</step-constraint>
                     <step-constraint>**MUST** ask one or two questions at a time—never all at once</step-constraint>
                     <step-constraint>**MUST** WAIT for user response and acknowledge before proceeding</step-constraint>
-                    <step-constraint>**MUST** build on previous answers and adapt follow-up questions</step-constraint>
+                    <step-constraint>**MUST** build on current-session answers and adapt follow-up questions</step-constraint>
                     <step-constraint>**MUST NOT** assume answers or provide defaults without user input</step-constraint>
                     <step-constraint>**MUST** cover Surface discovery (when needed), Initial Context, Functional Requirements, Technical Decisions, and Decision Synthesis before proposing ADR creation</step-constraint>
                     <step-constraint>**MUST** only propose ADR creation after user validates the summary ("Does this accurately capture your requirements?")</step-constraint>
@@ -103,10 +103,11 @@ After generating the ADR, provide:
 
     <safeguards>
         <safeguards-list>
-            <safeguards-item>Always read template files fresh using file_search and read_file tools</safeguards-item>
+            <safeguards-item>Always load bundled template files from the current workspace for the active session</safeguards-item>
+            <safeguards-item>Do not include secrets, credentials, unrelated file contents, or hidden/private context in the ADR</safeguards-item>
             <safeguards-item>Never proceed to ADR generation without completing conversational discovery and user validation</safeguards-item>
             <safeguards-item>Never assume or invent requirements—use only what the user provided</safeguards-item>
-            <safeguards-item>Create ADR when: clear context, key decisions identified, alternatives explored, understanding validated</safeguards-item>
+            <safeguards-item>Proceed with ADR output only after the user validates the requirements, key decisions, alternatives, and trade-offs</safeguards-item>
             <safeguards-item>Continue conversation when: requirements unclear, decisions arbitrary, alternatives not explored, stakeholders uncertain</safeguards-item>
         </safeguards-list>
     </safeguards>

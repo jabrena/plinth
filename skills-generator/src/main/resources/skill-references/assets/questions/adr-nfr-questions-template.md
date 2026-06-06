@@ -1,6 +1,6 @@
 **Phase 1: Conversational Information Gathering**
 
-Ask one or two questions at a time. Build on previous answers. Stay consultative, not interrogative. Skip quality characteristics irrelevant to the use case; dive deeper where there's uncertainty or risk.
+Pose one or two discovery questions at a time. Build on current-session answers. Stay consultative, not interrogative. Skip quality characteristics irrelevant to the use case; dive deeper where there's uncertainty or risk.
 
 ---
 

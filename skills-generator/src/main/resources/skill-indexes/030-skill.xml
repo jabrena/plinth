@@ -12,7 +12,7 @@
 
   <title>Java ADR Generator with interactive conversational approach</title>
   <goal><![CDATA[
-Generate Architecture Decision Records (ADRs) for Java projects through an interactive, conversational process that systematically gathers all necessary context to produce well-structured ADR documents. **This is an interactive SKILL**.
+Generate Architecture Decision Records (ADRs) for Java projects through an interactive, conversational process that elicits the decision inputs needed for a well-structured ADR. **This is an interactive SKILL**. Use only the current conversation and repository files explicitly available in the current session; do not expose, persist, or reuse unrelated user/project context.
 
 **What is covered in this Skill?**
 
@@ -54,8 +54,8 @@ Generate Architecture Decision Records (ADRs) for Java projects through an inter
 
   <steps>
     <step number="1">
-      <step-title>Read ADR reference and gather context</step-title>
-      <step-content>Read `references/030-architecture-adr-general.md`, then collect context, stakeholders, decision drivers, options, and trade-offs through conversation.</step-content>
+      <step-title>Load ADR reference and elicit decision inputs</step-title>
+      <step-content>Load `references/030-architecture-adr-general.md` from this skill, then elicit stakeholders, decision drivers, options, and trade-offs through the current conversation only.</step-content>
     </step>
     <step number="2">
       <step-title>Synthesize and confirm decision</step-title>

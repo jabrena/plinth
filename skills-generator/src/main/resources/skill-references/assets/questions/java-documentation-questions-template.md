@@ -23,9 +23,9 @@ Options:
 **Question 2**: What is your preferred approach for handling existing documentation files?
 
 Options:
-- Overwrite existing files (replace content completely)
+- Apply an approved replacement to existing files
 - Add new information (merge with existing content intelligently)
-- Create backup before modifying (save original as .backup)
+- Create backup before approved edits (save original as .backup)
 - Skip files that already exist
 
 ---

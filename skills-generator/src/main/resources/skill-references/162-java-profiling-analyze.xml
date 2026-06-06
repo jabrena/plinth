@@ -232,13 +232,15 @@
                 3. Plan validation and monitoring approach
                 4. Schedule follow-up profiling sessions
 
-                **Tools and Techniques:**
+                **Approved Analysis Scope:**
 
-                **Analysis Tools:**
-                - **async-profiler**: Flamegraph generation and CPU/memory profiling
-                - **JFR (Java Flight Recorder)**: Low-overhead continuous profiling
-                - **JProfiler/YourKit**: Commercial profiling tools for deep analysis
-                - **GCViewer**: Garbage collection log analysis
+                Select only the user-approved, already installed analyzer needed for the available evidence:
+                - **async-profiler**: Existing flamegraph or CPU/memory recording analysis
+                - **JFR (Java Flight Recorder)**: Existing JFR recording analysis
+                - **JProfiler/YourKit**: Existing export analysis when the project already uses the selected commercial profiler
+                - **GCViewer**: Existing garbage collection log analysis
+
+                Do not install, launch, or access any profiler outside the selected evidence source.
 
                 **Visualization Techniques:**
                 - **Flamegraphs**: Call stack visualization

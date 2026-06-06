@@ -188,7 +188,7 @@ warn_host_port_conflict() {
 verify_cats_reachability() {
   local probe_url
   probe_url="$(health_url_for_docker)"
-  local -a docker_args=(run --rm --entrypoint sh)
+  local -a docker_args=(run --rm --read-only --cap-drop ALL --security-opt no-new-privileges --entrypoint sh)
   if [[ -n "${CATS_DOCKER_NETWORK}" ]]; then
     docker_args+=(--network "${CATS_DOCKER_NETWORK}")
   else
@@ -234,7 +234,7 @@ ensure_cats_image() {
 }
 
 run_cats_docker() {
-  local -a docker_args=(run --rm -v "${REPO_ROOT}:/workspace" -w /workspace)
+  local -a docker_args=(run --rm --cap-drop ALL --security-opt no-new-privileges --mount "type=bind,source=${REPO_ROOT},target=/workspace" -w /workspace)
   if [[ -n "${CATS_DOCKER_NETWORK}" ]]; then
     docker_args+=(--network "${CATS_DOCKER_NETWORK}")
   else

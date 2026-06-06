@@ -42,8 +42,7 @@
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="xml"><![CDATA[<!-- pom.xml fragments -->
-<dependency>
+                    <code-block language="xml"><![CDATA[<dependency>
     <groupId>io.quarkus</groupId>
     <artifactId>quarkus-flyway</artifactId>
 </dependency>
@@ -53,7 +52,7 @@
 </dependency>]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
-                    <code-block language="xml"><![CDATA[<!-- Bad: Flyway without a JDBC driver extension — datasource may be incomplete -->
+                    <code-block language="xml"><![CDATA[
 <dependency>
     <groupId>io.quarkus</groupId>
     <artifactId>quarkus-flyway</artifactId>
