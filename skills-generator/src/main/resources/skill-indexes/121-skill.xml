@@ -6,12 +6,12 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.16.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to review, improve, or refactor Java code for object-oriented design quality — including applying SOLID, DRY, and YAGNI principles, improving class and interface design, fixing OOP concept misuse (encapsulation, inheritance, polymorphism), identifying and resolving code smells (God Class, Feature Envy, Data Clumps), or improving object creation patterns, method design, and exception handling. This should trigger for requests such as Review Java code for object-oriented design; Refactor Java code for object-oriented design; Improve Java code for object-oriented design; Fix OOP concept misuse in Java code.</description>
+    <description>Use when reviewing, improving, or refactoring Java object-oriented design, including applying SOLID, DRY, or YAGNI; improving classes and interfaces; correcting encapsulation, inheritance, or polymorphism; resolving God Class, Feature Envy, or Data Clumps; and improving object creation, methods, or exception contracts. Triggers include review Java OOD, refactor Java OOD, improve Java OOD, fix OOP misuse, and identify Java code smells.</description>
   </metadata>
 
   <title>Java Object-Oriented Design Guidelines</title>
   <goal><![CDATA[
-Review and improve Java code using comprehensive object-oriented design guidelines and refactoring practices.
+Review and improve Java code using focused object-oriented design references selected after assessing the request and affected code.
 
 **What is covered in this Skill?**
 
@@ -23,7 +23,7 @@ Review and improve Java code using comprehensive object-oriented design guidelin
 - Method design: parameter validation, defensive copies, careful signatures, empty collections over nulls, Optional usage
 - Exception handling: checked vs. runtime exceptions, standard exceptions, failure-capture messages, no silent ignoring
 
-**Scope:** The reference is organized by examples (good/bad code patterns) for each core area. Apply recommendations based on applicable examples.
+**Scope:** Classify the applicable OOD concerns first, then load only the focused references needed for those concerns. Load multiple references when a refactoring crosses concern boundaries.
 ]]></goal>
 
   <constraints>
@@ -32,7 +32,12 @@ Review and improve Java code using comprehensive object-oriented design guidelin
       <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
       <constraint>**SAFETY**: If compilation fails, stop immediately and do not proceed — compilation failure is a blocking condition</constraint>
       <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
-      <constraint>**BEFORE APPLYING**: Read the reference for detailed examples, good/bad patterns, and constraints</constraint>
+      <constraint>**PROGRESSIVE DISCLOSURE**: Classify the applicable OOD concerns before reading references, then read only the references mapped to those concerns</constraint>
+      <constraint>**MULTI-CONCERN CHANGES**: Read multiple focused references only when the request or diagnosed code problems cross concern boundaries</constraint>
+      <constraint>**PRESERVE BEHAVIOR**: Apply focused, incremental refactorings without changing observable business behavior</constraint>
+      <constraint>**INCREMENTAL SAFETY**: Compile after each significant refactoring and keep changes easy to revert if validation reveals a regression</constraint>
+      <constraint>**DEPENDENCY SAFETY**: Confirm refactoring does not break imports, dependencies, class relationships, or established contracts</constraint>
+      <constraint>**ADJACENT SKILLS**: Use skill 122 for dedicated type-design work and skill 126 for dedicated exception-handling work; use the overlapping skill 121 references only when those topics are part of a broader OOD review</constraint>
       <constraint>**EDGE CASE**: If request scope is ambiguous, stop and ask a clarifying question before applying changes</constraint>
       <constraint>**EDGE CASE**: If required inputs, files, or tooling are missing, report what is missing and ask whether to proceed with setup guidance</constraint>
     </constraint-list>
@@ -57,16 +62,61 @@ Review and improve Java code using comprehensive object-oriented design guidelin
       <step-content>Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.</step-content>
     </step>
     <step number="2">
-      <step-title>Read OOD reference and assess code</step-title>
-      <step-content>Read `references/121-java-object-oriented-design.md` and identify applicable SOLID/OOP/code-smell improvements.</step-content>
+      <step-title>Assess code and classify OOD concerns</step-title>
+      <step-content><![CDATA[
+Analyze the request and affected Java code before reading implementation guidance. Classify each relevant problem into one or more concerns:
+
+- Fundamental principles: SOLID, DRY, or YAGNI violations.
+- Core OOP concepts: encapsulation, inheritance, or polymorphism misuse.
+- Code smells: God Class, Feature Envy, Inappropriate Intimacy, Refused Bequest, Shotgun Surgery, or Data Clumps.
+- Object creation: factories, builders, singletons, dependency injection, or unnecessary object creation.
+- Classes and interfaces: accessibility, public fields, mutability, composition, or inheritance design.
+- Enums and annotations: int constants, ordinals, bit fields, ordinal indexing, or missing `@Override`.
+- Methods: parameter validation, defensive copies, signatures, null collections, or `Optional`.
+- Exceptions: exception contracts that are part of the broader OOD review.
+
+If the request is dedicated type-design work, use skill 122. If it is dedicated exception-handling work, use skill 126.
+]]></step-content>
     </step>
     <step number="3">
-      <step-title>Apply focused refactorings</step-title>
-      <step-content>Implement the selected object-oriented design improvements while preserving behavior.</step-content>
+      <step-title>Read only applicable OOD references</step-title>
+      <step-content><![CDATA[
+Map the classified concerns to focused references:
+
+- For SOLID, DRY, or YAGNI, read `references/121-java-object-oriented-design-principles.md`.
+- For encapsulation, inheritance, or polymorphism, read `references/121-java-object-oriented-design-oop-concepts.md`.
+- For object-oriented code smells, read `references/121-java-object-oriented-design-code-smells.md`.
+- For factories, builders, singletons, dependency injection, or unnecessary objects, read `references/121-java-object-oriented-design-object-creation.md`.
+- For class and interface boundaries, accessibility, mutability, composition, or inheritance design, read `references/121-java-object-oriented-design-classes-interfaces.md`.
+- For enums, ordinals, bit fields, enum lookup, or `@Override`, read `references/121-java-object-oriented-design-enums-annotations.md`.
+- For method contracts, validation, defensive copies, signatures, collection returns, or `Optional`, read `references/121-java-object-oriented-design-methods.md`.
+- For exception contracts within a broader OOD review, read `references/121-java-object-oriented-design-exceptions.md`.
+
+Read every reference required by a cross-concern refactoring, but do not read unrelated references.
+]]></step-content>
     </step>
     <step number="4">
+      <step-title>Apply focused refactorings</step-title>
+      <step-content><![CDATA[
+Prioritize findings by impact: CRITICAL, MAINTAINABILITY, FLEXIBILITY, or CODE_QUALITY. Apply the smallest suitable refactoring for each diagnosed concern while preserving observable behavior:
+
+- Extract classes or methods to restore focused responsibilities.
+- Introduce or refine abstractions for extension, interface segregation, and dependency inversion.
+- Correct inheritance hierarchies to preserve substitutability, or replace inheritance with composition.
+- Move behavior to eliminate Feature Envy and improve encapsulation.
+- Introduce cohesive value or parameter objects for Data Clumps.
+- Hide exposed state and reduce unnecessary coupling.
+
+Apply changes incrementally and compile after each significant refactoring.
+]]></step-content>
+    </step>
+    <step number="5">
       <step-title>Verify with full build</step-title>
       <step-content>Run `./mvnw clean verify` or `mvn clean verify` after applying improvements.</step-content>
+    </step>
+    <step number="6">
+      <step-title>Report applied OOD improvements</step-title>
+      <step-content>Report findings by impact and concern, focused references used, refactorings applied, maintainability/flexibility/testability benefits, behavior-preservation evidence, and the final compilation and test result.</step-content>
     </step>
   </steps>
 </prompt>
