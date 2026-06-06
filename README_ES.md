@@ -87,10 +87,6 @@ la salida de release, usando `./mvnw clean install -pl skills-generator -P relea
 Consulta [DEVELOPER.md](./DEVELOPER.md) y [ADR-006](./documentation/adr/ADR-006-separate-local-skill-generation-from-release-publishing.md)
 para ver el flujo completo.
 
-## Ejemplos
-
-El repositorio incluye [una colección de ejemplos](./examples/) donde puedes explorar lo que estos Skills y flujos de trabajo permiten en Java.
-
 ## Architecture Decision Records (ADR)
 
 - Revisa el [índice de ADR](./documentation/adr/README.md) para la lista completa.

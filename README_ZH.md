@@ -87,10 +87,6 @@
 刷新 `skills/`。完整流程请参阅 [DEVELOPER.md](./DEVELOPER.md) 和
 [ADR-006](./documentation/adr/ADR-006-separate-local-skill-generation-from-release-publishing.md)。
 
-## 示例
-
-仓库包含[一组示例](./examples/)，可探索这些 Skills 与工作流在 Java 中的能力。
-
 ## Architecture Decision Records (ADR)
 
 - 查看 [ADR 索引](./documentation/adr/README.md) 获取完整列表。
