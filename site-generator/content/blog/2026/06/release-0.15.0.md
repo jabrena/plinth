@@ -86,7 +86,7 @@ https://github.com/Endava/cats
 The project now provides documentation in three languages:
 
 - [`English`](https://github.com/jabrena/cursor-rules-java/blob/main/README.md)
-- [`Chinese`](https://github.com/jabrena/cursor-rules-java/blob/main/README_CN.md)
+- [`Chinese`](https://github.com/jabrena/cursor-rules-java/blob/main/README_ZH.md)
 - [`Spanish`](https://github.com/jabrena/cursor-rules-java/blob/main/README_ES.md)
 
 ## Evolution of this project in Vercel's Skills registry

@@ -36,7 +36,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Documentation:**
   - Improved project usage guidance in `README.md` and skills documentation (#732, #733)
-  - Added localized README translations (`README_ES.md`, `README_CN.md`) with a language switcher in `README.md`, refreshed the Goal statement, and documented sync requirements in `AGENTS.md`
+  - Added localized README translations (`README_ES.md`, `README_ZH.md`) with a language switcher in `README.md`, refreshed the Goal statement, and documented sync requirements in `AGENTS.md`
   - Third-party tools and links documented in `documentation/THIRD-PARTIES.md` (#734)
 
 ## [0.14.0] 2026-04-12

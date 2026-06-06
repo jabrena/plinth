@@ -6,7 +6,7 @@
 
 [![CI Builds](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml/badge.svg)](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml)
 
-> **Idiomas:** [English](./README.md) · [中文](./README_CN.md)
+> **Idiomas:** [English](./README.md) · [中文](./README_ZH.md)
 >
 > **Website:** https://jabrena.github.io/cursor-rules-java/
 >
@@ -159,6 +159,7 @@ Java usa JEPs (JDK Enhancement Proposals) para describir nuevas características
 - [https://openspec.dev/](https://openspec.dev/)
 - [https://skills.sh/jabrena/cursor-rules-java](https://skills.sh/jabrena/cursor-rules-java)
 - [https://tessl.io/registry/skills/github/jabrena/cursor-rules-java](https://tessl.io/registry/skills/github/jabrena/cursor-rules-java)
+- https://claudskills.com/author/jabrena/
 - https://agent-skills.cc/zh/skills/jabrena-cursor-rules-java
 - https://shyft.ai/skills/cursor-rules-java
 - https://lobehub.com/skills?q=cursor-rules-java
