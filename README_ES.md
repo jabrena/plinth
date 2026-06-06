@@ -80,13 +80,6 @@ Este proyecto está pensado para desarrollos que no dependen de datos en tiempo 
 
 Consulta [CONTRIBUTING.md](./CONTRIBUTING.md) para convenciones, flujos del generador, pruebas y cómo abrir un pull request.
 
-Los maintainers que cambien fuentes XML de skills deben regenerar las skills locales con
-`./mvnw clean install -pl skills-generator`, que copia la salida generada a
-`.agents/skills` para pruebas locales con agents. Actualiza `skills/` solo al preparar
-la salida de release, usando `./mvnw clean install -pl skills-generator -P release`.
-Consulta [DEVELOPER.md](./DEVELOPER.md) y [ADR-006](./documentation/adr/ADR-006-separate-local-skill-generation-from-release-publishing.md)
-para ver el flujo completo.
-
 ## Architecture Decision Records (ADR)
 
 - Revisa el [índice de ADR](./documentation/adr/README.md) para la lista completa.

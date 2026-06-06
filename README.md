@@ -80,13 +80,6 @@ This project is intended for development work that does not depend on real-time 
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for conventions, generator workflows, tests, and how to open a pull request.
 
-Maintainers who change skill XML sources should regenerate local skills with
-`./mvnw clean install -pl skills-generator`, which copies generated output to
-`.agents/skills` for local agent testing. Refresh `skills/` only when preparing
-release output, using `./mvnw clean install -pl skills-generator -P release`.
-See [DEVELOPER.md](./DEVELOPER.md) and [ADR-006](./documentation/adr/ADR-006-separate-local-skill-generation-from-release-publishing.md)
-for the full workflow.
-
 ## Architecture Decision Records (ADR)
 
 - Review the [ADR index](./documentation/adr/README.md) for the complete list.

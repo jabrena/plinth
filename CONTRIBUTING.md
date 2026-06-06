@@ -17,10 +17,25 @@ The unified `skills-generator` module holds all XML sources and Java code used t
 If you have the idea to contribute, review the whole process in detail:
 
 ```bash
-./mvnw clean verify -pl skills-generator   # Pass tests
-./mvnw clean install -pl skills-generator  # Generate skills into skills/
-npx skill-check skills                     # Validate generated skills
+./mvnw clean verify -pl skills-generator   # Build and test the generator
+./mvnw clean install -pl skills-generator  # Generate local skills in .agents/skills/
 ```
+
+Maintainers who change skill XML sources should use the normal install command
+to regenerate `.agents/skills/` for local agent testing. Do not edit or refresh
+the public `skills/` directory during normal development.
+
+When preparing an intentional release, refresh and validate the public output:
+
+```bash
+./mvnw clean install -pl skills-generator -P release
+npx skill-check@latest skills --no-security-scan --format github
+skill-scanner scan-all ./skills --recursive --use-behavioral --policy strict --fail-on-severity high
+```
+
+See [DEVELOPER.md](./DEVELOPER.md) and
+[ADR-006](./documentation/adr/ADR-006-separate-local-skill-generation-from-release-publishing.md)
+for the full local generation and release publishing workflow.
 
 Keep `skills.xml` aligned with `skill-indexes/` and `skill-references/` when adding or changing skills.
 

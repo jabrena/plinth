@@ -80,13 +80,6 @@
 
 请参阅 [CONTRIBUTING.md](./CONTRIBUTING.md)，了解约定、生成器工作流、测试以及如何提交 pull request。
 
-维护者修改 skill XML 源文件后，应使用 `./mvnw clean install -pl skills-generator`
-重新生成本地 skills；该命令会把生成结果复制到 `.agents/skills`，用于本地 agent 测试。
-只有在准备发布输出时，才使用
-`./mvnw clean install -pl skills-generator -P release`
-刷新 `skills/`。完整流程请参阅 [DEVELOPER.md](./DEVELOPER.md) 和
-[ADR-006](./documentation/adr/ADR-006-separate-local-skill-generation-from-release-publishing.md)。
-
 ## Architecture Decision Records (ADR)
 
 - 查看 [ADR 索引](./documentation/adr/README.md) 获取完整列表。
