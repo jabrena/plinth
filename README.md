@@ -72,9 +72,9 @@ Models can generate code, but they cannot execute it against your local data. To
 
 This project supports software engineering work; it does not replace engineering judgment. A software engineer must review, guide, and validate AI-generated decisions, code, and outcomes before they are used.
 
-### No real-time data
+### Access to corporate data
 
-This project is intended for development work that does not depend on real-time data. Do not rely on its guidance when correctness requires live, continuously changing information unless you provide and validate that information through appropriate tools.
+Use caution when a problem involves corporate databases or other sensitive organizational data. Before granting an AI-assisted workflow access, assess authorization, privacy, data leakage, retention, and unintended modification risks. Apply least-privilege access, human review, validation, and monitoring. See [OWASP GenAI Data Security Risks & Mitigations 2026](https://genai.owasp.org/resource/owasp-genai-data-security-risks-mitigations-2026/).
 
 ## Contribute
 

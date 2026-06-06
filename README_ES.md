@@ -72,9 +72,9 @@ Los modelos pueden generar código, pero no pueden ejecutarlo contra tus datos l
 
 Este proyecto apoya el trabajo de ingeniería de software, pero no sustituye el criterio profesional. Un ingeniero de software debe revisar, guiar y validar las decisiones, el código y los resultados generados por IA antes de utilizarlos.
 
-### Sin datos en tiempo real
+### Acceso a datos corporativos
 
-Este proyecto está pensado para desarrollos que no dependen de datos en tiempo real. No confíes en sus recomendaciones cuando la corrección requiera información actualizada continuamente, salvo que proporciones y valides dicha información mediante las herramientas adecuadas.
+Actúa con precaución cuando un problema involucre bases de datos corporativas u otros datos sensibles de la organización. Antes de conceder acceso a un flujo de trabajo asistido por IA, evalúa los riesgos de autorización, privacidad, filtración, retención y modificación accidental de datos. Aplica acceso con privilegios mínimos, revisión humana, validación y monitorización. Consulta [OWASP GenAI Data Security Risks & Mitigations 2026](https://genai.owasp.org/resource/owasp-genai-data-security-risks-mitigations-2026/).
 
 ## Contribuir
 
