@@ -52,27 +52,7 @@ This project is compatible with any tool that supports `Commands`, `Agents`, `Sk
 
 ## Workflows
 
-While building this project, we identified three workflows: `Prompting Engineering Workflow`, `Agent-driven Engineering Workflow`, `Pipelines Workflow`.
-
-### Prompting Engineering Workflow
-
-In this workflow, the software engineer interacts with models using `User prompts`. In an incremental way, you delegate a whole task or ask for help at specific points. You can use this project to refactor generated code, or delegate the task and attach a system prompt or Skills to it.
-
-![](./documentation/images/workflow-prompts.png)
-
-### Agent-driven Engineering Workflow
-
-`Agents for Java Enterprise development` were designed to help the software engineer in the implementation phase. The engineer defines solid `Specs`, and those specifications are delegated to `Agents`.
-
-![](./documentation/images/workflow-agents.png)
-
-### Pipelines Workflow
-
-Adding AI tools to your pipeline can provide new opportunities to deliver more value (examples: automatic coding, code refactoring, continuous profiling, and others).
-
-![](./documentation/images/workflow-pipelines.png)
-
-Further information [here](./documentation/guides/GETTING-STARTED-PIPELINES.md).
+Review the [project workflows guide](./documentation/guides/GETTING-STARTED-WORKFLOWS.md) for prompting, agent-driven engineering, and pipeline workflows.
 
 ## Limitations
 
