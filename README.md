@@ -6,7 +6,7 @@
 
 [![CI Builds](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml/badge.svg)](https://github.com/jabrena/cursor-rules-java/actions/workflows/maven.yaml)
 
-> **Languages:** [Español](./README_ES.md) · [中文](./README_CN.md)
+> **Languages:** [Español](./README_ES.md) · [中文](./README_ZH.md)
 >
 > **Website:** https://jabrena.github.io/cursor-rules-java/
 >

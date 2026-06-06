@@ -18,7 +18,7 @@
 
 ### 对 Skills 和 System prompts 的依赖
 
-这些智能体假设你可以附加 **Skills**（见 [Java Skills 快速入门](GETTING-STARTED-SKILLS_CN.md)）和/或 **Cursor rules**（见 [Getting started for System prompts for Java](GETTING-STARTED-SYSTEM-PROMPTS.md)），这样聊天中的 `@...` 引用才能解析。实现智能体会明确命名具体的 skill 前缀（例如 `@322-frameworks-spring-boot-testing-integration-tests`）。
+这些智能体假设你可以附加 **Skills**（见 [Java Skills 快速入门](GETTING-STARTED-SKILLS_ZH.md)）和/或 **Cursor rules**（见 [Getting started for System prompts for Java](GETTING-STARTED-SYSTEM-PROMPTS.md)），这样聊天中的 `@...` 引用才能解析。实现智能体会明确命名具体的 skill 前缀（例如 `@322-frameworks-spring-boot-testing-integration-tests`）。
 
 ## 如何安装 Agents？
 
