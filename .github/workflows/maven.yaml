@@ -80,14 +80,15 @@ jobs:
         run: python -m pip install "git+https://github.com/NVIDIA/SkillSpector.git"
       - name: Generate SkillSpector Markdown report
         continue-on-error: true
+        run: skillspector scan .agents/skills --no-llm --verbose --format markdown --output skillspector-report.md
+      - name: Display SkillSpector report
+        if: always()
         run: |
-          set +e
-          skillspector scan .agents/skills --no-llm --verbose --format markdown --output skillspector-report.md
-          status=$?
           if [ -f skillspector-report.md ]; then
             cat skillspector-report.md
+          else
+            echo "SkillSpector Markdown report was not generated."
           fi
-          exit "$status"
       - name: Upload SkillSpector reports
         uses: actions/upload-artifact@v7
         with:
