@@ -15,6 +15,8 @@ import org.w3c.dom.NodeList;
  * is true (default), the skillId is derived from the first item in {@code references/reference-list/reference}
  * unless {@code skillId} is explicitly set. When false, the entry must specify {@code skillId}
  * and no reference is required.
+ * Optional {@code resource-list/resource} entries declare classpath sources and
+ * skill-root-relative targets for standalone generated files.
  * Each skill must have a summary in {@code skill-indexes/{id}-skill.md} or
  * {@code skill-indexes/{id}-skill.xml}. XML summaries are auto-detected when the XML file exists.
  */
@@ -59,7 +61,13 @@ public final class SkillIndexes {
             String skillId = entry.requiresSystemPrompt()
                 ? resolveSkillId(entry)
                 : entry.skillId();
-            descriptors.add(new SkillDescriptor(skillId, entry.requiresSystemPrompt(), entry.useXml(), entry.references()));
+            descriptors.add(new SkillDescriptor(
+                skillId,
+                entry.requiresSystemPrompt(),
+                entry.useXml(),
+                entry.references(),
+                entry.resources()
+            ));
         }
         return descriptors.stream();
     }
@@ -67,7 +75,18 @@ public final class SkillIndexes {
     /**
      * Skill ID, whether it requires a system prompt for reference generation, and whether to use XML source.
      */
-    public record SkillDescriptor(String skillId, boolean requiresSystemPrompt, boolean useXml, List<String> references) {}
+    public record SkillDescriptor(
+        String skillId,
+        boolean requiresSystemPrompt,
+        boolean useXml,
+        List<String> references,
+        List<SkillResource> resources
+    ) {}
+
+    /**
+     * Classpath source and skill-root-relative target for a generated skill resource.
+     */
+    public record SkillResource(String sourcePath, String targetPath) {}
 
     /**
      * Resolves skillId from inventory entry.
@@ -135,11 +154,19 @@ public final class SkillIndexes {
                 }
                 boolean useXml = detectXmlSummary(numericId);
                 List<String> references = parseReferences(skillEl);
+                List<SkillResource> resources = parseResources(skillEl, numericId);
                 if (requiresSystemPrompt && references.isEmpty() && (skillId == null || skillId.isBlank())) {
                     throw new RuntimeException("Entry with id " + numericId
                         + " requires a system prompt but has no reference-list/reference and no skillId.");
                 }
-                entries.add(new InventoryEntry(numericId, requiresSystemPrompt, skillId, useXml, references));
+                entries.add(new InventoryEntry(
+                    numericId,
+                    requiresSystemPrompt,
+                    skillId,
+                    useXml,
+                    references,
+                    resources
+                ));
             }
             if (entries.isEmpty()) {
                 throw new RuntimeException("Skill inventory must contain at least one <skill> entry");
@@ -188,6 +215,37 @@ public final class SkillIndexes {
         return values;
     }
 
+    private static List<SkillResource> parseResources(Element skillEl, String numericId) {
+        NodeList resourceLists = skillEl.getElementsByTagName("resource-list");
+        if (resourceLists.getLength() == 0) {
+            return List.of();
+        }
+        NodeList resources = ((Element) resourceLists.item(0)).getElementsByTagName("resource");
+        List<SkillResource> values = new ArrayList<>();
+        for (int i = 0; i < resources.getLength(); i++) {
+            if (!(resources.item(i) instanceof Element resourceEl)) {
+                continue;
+            }
+            String source = resourceEl.getAttribute("source").trim();
+            String target = resourceEl.getAttribute("target").trim();
+            if (source.isEmpty() || target.isEmpty()) {
+                throw new RuntimeException("Resource entry for skill " + numericId
+                    + " must define non-empty source and target attributes.");
+            }
+            if (target.startsWith("/") || target.contains("..")) {
+                throw new RuntimeException("Resource target for skill " + numericId
+                    + " must be relative to the skill root: " + target);
+            }
+            boolean duplicateTarget = values.stream()
+                .anyMatch(resource -> resource.targetPath().equals(target));
+            if (duplicateTarget) {
+                throw new RuntimeException("Duplicate resource target for skill " + numericId + ": " + target);
+            }
+            values.add(new SkillResource(source, target));
+        }
+        return List.copyOf(values);
+    }
+
     private static void validateSkillSummaryExists(String numericId, boolean useXml) {
         String resourceName = useXml
             ? "skill-indexes/" + numericId + "-skill.xml"
@@ -222,6 +280,7 @@ public final class SkillIndexes {
      * Single entry from skills.xml. When requiresSystemPrompt is true,
      * skillId is derived from the first reference entry when not explicitly provided.
      * When false, skillId must be provided and no skill-reference is required.
+     * Resources declare classpath sources and skill-root-relative output targets.
      * When useXml is true, skill summary is loaded from skill-indexes/{numericId}-skill.xml
      * and transformed via schema validation and XSLT; otherwise from skill-indexes/{numericId}-skill.md.
      */
@@ -230,6 +289,7 @@ public final class SkillIndexes {
         boolean requiresSystemPrompt,
         String skillId,
         boolean useXml,
-        List<String> references
+        List<String> references,
+        List<SkillResource> resources
     ) {}
 }

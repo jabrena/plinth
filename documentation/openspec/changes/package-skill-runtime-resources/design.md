@@ -20,9 +20,13 @@
 
 ## Decisions
 
-### Use an explicit per-skill resource map
+### Declare resources in the skill inventory
 
-Extend `SkillOutput` with a map from skill-root-relative output path to UTF-8 resource content. A fixed mapping keeps ownership deterministic and prevents unrelated skills from receiving resources.
+Add a `resource-list` to relevant `skills.xml` entries. Each resource declares its classpath `source` and skill-root-relative `target`. `SkillIndexes` parses and validates this metadata, and `SkillsGenerator` loads the resources supplied by each descriptor.
+
+This keeps skill ownership in the existing inventory instead of hardcoding skill identifiers and paths in Java. It also remains explicit, preventing unrelated XIncludes from becoming packaged resources.
+
+Alternative considered: hardcode an explicit per-skill map in `SkillsGenerator`. This was rejected because it duplicates inventory information in Java and requires generator code changes for every resource assignment.
 
 Alternative considered: scan XInclude declarations automatically. This was rejected because not every include is a runtime resource and automatic scanning would broaden issue #801 beyond its approved scope.
 
@@ -44,13 +48,13 @@ The three XML references will link from generated `references/*.md` files using 
 
 ## Risks / Trade-offs
 
-- [Risk] The explicit mapping requires code changes when another skill gains a runtime resource. -> Keep this issue intentionally scoped and consider a declarative inventory in a future change.
+- [Risk] Invalid inventory paths could write outside a generated skill directory. -> Reject absolute targets, parent traversal, missing attributes, and duplicate targets while parsing `skills.xml`.
 - [Risk] Executable permissions behave differently on non-POSIX filesystems. -> Set the executable bit when supported and test the generated file on the current build platform.
 - [Risk] A resource path can become stale if a source file moves. -> Fail generation when a mapped classpath resource cannot be loaded.
 
 ## Migration Plan
 
-1. Add the explicit resource mapping and output model.
+1. Add resource declarations to `skills.xml` and extend the inventory descriptor.
 2. Update the three XML references to use relative links.
 3. Generate local skills and verify layouts and links.
 4. Roll back by reverting the generator mapping and restoring the XIncludes if validation fails.

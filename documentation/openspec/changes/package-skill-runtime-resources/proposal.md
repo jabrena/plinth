@@ -7,6 +7,7 @@ Issue [#801](https://github.com/jabrena/cursor-rules-java/issues/801) identifies
 - Package the JMeter script for skill `151-java-performance-jmeter` under `scripts/`.
 - Package both profiling scripts for skill `161-java-profiling-detect` under `scripts/`.
 - Package the CATS runner under `scripts/` and its Dockerfile under `assets/` for skill `703-technologies-fuzzing-testing`.
+- Declare source and target resource paths in `skills.xml` so resource ownership remains inventory-driven.
 - Replace embedded resource bodies in the three generated references with valid relative links.
 - Verify exact paths, contents, executable script permissions, and resource isolation in generator tests.
 
@@ -22,7 +23,7 @@ None.
 
 ## Impact
 
-- Affects `skills-generator` Java output modeling, test-driven packaging, and three XML skill references.
+- Affects the `skills.xml` inventory, `skills-generator` Java output modeling, test-driven packaging, and three XML skill references.
 - Adds no external dependencies and does not change public Java APIs outside the generator module.
 - Existing generated references become smaller; consumers migrate from embedded code blocks to the linked files in the same skill package.
 - Local generation continues to target `.agents/skills`; public `skills/` output remains release-profile only.

@@ -4,6 +4,12 @@
 
 The skills generator SHALL package only the five runtime resources assigned to skills `151-java-performance-jmeter`, `161-java-profiling-detect`, and `703-technologies-fuzzing-testing`.
 
+#### Scenario: Read ownership from the skill inventory
+
+- **WHEN** the generator loads a skill descriptor from `skills.xml`
+- **THEN** its resource source and target paths come from that skill's `resource-list`
+- **AND** `SkillsGenerator` contains no skill-specific resource mapping
+
 #### Scenario: Generate skill-owned resources
 
 - **WHEN** the generator builds any of the three scoped skills

@@ -1,8 +1,9 @@
 ## 1. Generator Output
 
-- [x] 1.1 Extend `SkillsGenerator.SkillOutput` with explicit skill-root-relative resource content.
-- [x] 1.2 Map the five issue #801 resources to skills `151`, `161`, and `703`.
-- [x] 1.3 Write mapped resources into generated skill directories and preserve script executability.
+- [x] 1.1 Declare source and target paths for the five resources in `skills.xml`.
+- [x] 1.2 Extend skill inventory descriptors with validated resource metadata.
+- [x] 1.3 Extend `SkillsGenerator.SkillOutput` with inventory-driven skill-root-relative resource content.
+- [x] 1.4 Write mapped resources into generated skill directories and preserve script executability.
 
 ## 2. Reference Sources
 

@@ -89,7 +89,11 @@ class SkillsGeneratorTest {
                 assertThat(output.referenceMds()).isEmpty();
             }
 
-            Map<String, String> expectedResources = expectedResourceSources(skillId);
+            Map<String, String> expectedResources = descriptor.resources().stream()
+                .collect(Collectors.toMap(
+                    SkillIndexes.SkillResource::targetPath,
+                    SkillIndexes.SkillResource::sourcePath
+                ));
             assertThat(output.resourceFiles()).containsOnlyKeys(expectedResources.keySet());
             expectedResources.forEach((outputPath, sourcePath) -> {
                 assertThat(output.resourceFiles().get(outputPath))
@@ -405,28 +409,6 @@ class SkillsGeneratorTest {
         } catch (IOException e) {
             throw new IllegalStateException("Failed to load resource file: " + name, e);
         }
-    }
-
-    private Map<String, String> expectedResourceSources(String skillId) {
-        return switch (skillId) {
-            case "151-java-performance-jmeter" -> Map.of(
-                "scripts/run-jmeter.sh",
-                "skill-references/scripts/run-jmeter.sh"
-            );
-            case "161-java-profiling-detect" -> Map.of(
-                "scripts/run-java-process-for-profiling.sh",
-                "skill-references/scripts/run-java-process-for-profiling.sh",
-                "scripts/profile-java-process.sh",
-                "skill-references/scripts/profile-java-process.sh"
-            );
-            case "703-technologies-fuzzing-testing" -> Map.of(
-                "scripts/run-cats-fuzz.sh",
-                "skill-references/scripts/run-cats-fuzz.sh",
-                "assets/cats.dockerfile",
-                "skill-references/assets/docker/cats.dockerfile"
-            );
-            default -> Map.of();
-        };
     }
 
     private static String numericId(String skillId) {
