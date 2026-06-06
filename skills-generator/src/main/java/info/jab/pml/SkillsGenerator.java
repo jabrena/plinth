@@ -3,6 +3,7 @@ package info.jab.pml;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,6 +31,35 @@ public final class SkillsGenerator {
 
     private static final String PROJECT_TAG = " Part of cursor-rules-java project";
     private static final String LICENSE_FIELD = "license: Apache-2.0";
+    private static final Map<String, List<SkillResource>> SKILL_RESOURCES = Map.of(
+        "151-java-performance-jmeter",
+        List.of(new SkillResource(
+            "skill-references/scripts/run-jmeter.sh",
+            "scripts/run-jmeter.sh"
+        )),
+        "161-java-profiling-detect",
+        List.of(
+            new SkillResource(
+                "skill-references/scripts/run-java-process-for-profiling.sh",
+                "scripts/run-java-process-for-profiling.sh"
+            ),
+            new SkillResource(
+                "skill-references/scripts/profile-java-process.sh",
+                "scripts/profile-java-process.sh"
+            )
+        ),
+        "703-technologies-fuzzing-testing",
+        List.of(
+            new SkillResource(
+                "skill-references/scripts/run-cats-fuzz.sh",
+                "scripts/run-cats-fuzz.sh"
+            ),
+            new SkillResource(
+                "skill-references/assets/docker/cats.dockerfile",
+                "assets/cats.dockerfile"
+            )
+        )
+    );
 
     private final SkillReferenceGenerator cursorRulesGenerator;
 
@@ -94,7 +124,7 @@ public final class SkillsGenerator {
         String skillMdContent = useXml
             ? loadSkillSummaryFromXml(skillId, references)
             : loadSkillSummary(skillId);
-        return new SkillOutput(skillId, skillMdContent, referenceContents);
+        return new SkillOutput(skillId, skillMdContent, referenceContents, generateResourceFiles(skillId));
     }
 
     private Map<String, String> generateReferenceContents(List<String> referenceIds) {
@@ -106,6 +136,25 @@ public final class SkillsGenerator {
             );
         }
         return contents;
+    }
+
+    private Map<String, String> generateResourceFiles(String skillId) {
+        Map<String, String> contents = new LinkedHashMap<>();
+        for (SkillResource resource : SKILL_RESOURCES.getOrDefault(skillId, List.of())) {
+            contents.put(resource.outputPath(), loadResourceContent(resource.sourcePath()));
+        }
+        return contents;
+    }
+
+    private String loadResourceContent(String resourceName) {
+        try (InputStream stream = getResource(resourceName)) {
+            if (stream == null) {
+                throw new RuntimeException("Skill resource file not found: " + resourceName);
+            }
+            return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load skill resource file: " + resourceName, e);
+        }
     }
 
     private String loadSkillSummary(String skillId) {
@@ -238,12 +287,20 @@ public final class SkillsGenerator {
     }
 
     /**
-     * Output of skill generation: SKILL.md content and reference content.
+     * Output of skill generation: SKILL.md, reference content, and standalone resource files.
      */
-    public record SkillOutput(String skillId, String skillMd, Map<String, String> referenceMds) {
+    public record SkillOutput(
+        String skillId,
+        String skillMd,
+        Map<String, String> referenceMds,
+        Map<String, String> resourceFiles
+    ) {
         public String referenceMd() {
             return referenceMds.values().stream().findFirst().orElse("");
         }
+    }
+
+    private record SkillResource(String sourcePath, String outputPath) {
     }
 
 }

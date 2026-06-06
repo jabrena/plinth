@@ -41,15 +41,12 @@
         <step number="1">
             <step-title>Create CATS Dockerfile</step-title>
             <step-content>
-Create `cats/Dockerfile` with the following content:
-
-```dockerfile
-<xi:include href="assets/docker/cats.dockerfile" parse="text"/>
-```
+Create `cats/Dockerfile` by copying the packaged resource:
+[cats.dockerfile](../assets/cats.dockerfile).
             </step-content>
             <step-constraints>
                 <step-constraint-list>
-                    <step-constraint>**MUST** copy the embedded template verbatim into `cats/Dockerfile`</step-constraint>
+                    <step-constraint>**MUST** copy the packaged `assets/cats.dockerfile` resource verbatim into `cats/Dockerfile`</step-constraint>
                     <step-constraint>**DO NOT** modify the template unless the CATS version or base image must change</step-constraint>
                 </step-constraint-list>
             </step-constraints>
@@ -59,11 +56,8 @@ Create `cats/Dockerfile` with the following content:
             <step-content>
 Create `run-cats-fuzz.sh` in the project root and make it executable (`chmod +x run-cats-fuzz.sh`).
 
-Copy the following script verbatim:
-
-```bash
-<xi:include href="scripts/run-cats-fuzz.sh" parse="text"/>
-```
+Copy the packaged script verbatim:
+[run-cats-fuzz.sh](../scripts/run-cats-fuzz.sh).
             </step-content>
             <step-constraints>
                 <step-constraint-list>
@@ -140,7 +134,7 @@ Review workflow:
             </example-header>
             <example-description>
                 <![CDATA[
-Copy the embedded Dockerfile template from Step 1 into `cats/Dockerfile`, add `run-cats-fuzz.sh` from Step 2, ask the user for the OpenAPI path in Step 3, then review findings in Step 4.
+Copy the packaged Dockerfile from Step 1 into `cats/Dockerfile`, add the packaged `run-cats-fuzz.sh` from Step 2, ask the user for the OpenAPI path in Step 3, then review findings in Step 4.
                 ]]>
             </example-description>
             <code-examples>

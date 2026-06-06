@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -88,8 +89,27 @@ class SkillsGeneratorTest {
                 assertThat(output.referenceMds()).isEmpty();
             }
 
+            Map<String, String> expectedResources = expectedResourceSources(skillId);
+            assertThat(output.resourceFiles()).containsOnlyKeys(expectedResources.keySet());
+            expectedResources.forEach((outputPath, sourcePath) -> {
+                assertThat(output.resourceFiles().get(outputPath))
+                    .isEqualTo(loadClasspathResource(sourcePath));
+                assertThat(output.referenceMd())
+                    .contains("](../" + outputPath + ")")
+                    .doesNotContain(output.resourceFiles().get(outputPath));
+            });
+
             // Save to target for promotion
             saveToTarget(output);
+            for (var entry : output.resourceFiles().entrySet()) {
+                Path generatedResource = Paths.get("target", "skills", skillId).resolve(entry.getKey());
+                assertThat(generatedResource)
+                    .exists()
+                    .hasContent(entry.getValue());
+                if (entry.getKey().startsWith("scripts/")) {
+                    assertThat(Files.isExecutable(generatedResource)).isTrue();
+                }
+            }
         }
     }
 
@@ -376,6 +396,39 @@ class SkillsGeneratorTest {
         return SkillsGeneratorTest.class.getClassLoader().getResourceAsStream(name);
     }
 
+    private String loadClasspathResource(String name) {
+        try (InputStream stream = getTestResource(name)) {
+            if (stream == null) {
+                throw new IllegalArgumentException("Resource file not found: " + name);
+            }
+            return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (IOException e) {
+            throw new IllegalStateException("Failed to load resource file: " + name, e);
+        }
+    }
+
+    private Map<String, String> expectedResourceSources(String skillId) {
+        return switch (skillId) {
+            case "151-java-performance-jmeter" -> Map.of(
+                "scripts/run-jmeter.sh",
+                "skill-references/scripts/run-jmeter.sh"
+            );
+            case "161-java-profiling-detect" -> Map.of(
+                "scripts/run-java-process-for-profiling.sh",
+                "skill-references/scripts/run-java-process-for-profiling.sh",
+                "scripts/profile-java-process.sh",
+                "skill-references/scripts/profile-java-process.sh"
+            );
+            case "703-technologies-fuzzing-testing" -> Map.of(
+                "scripts/run-cats-fuzz.sh",
+                "skill-references/scripts/run-cats-fuzz.sh",
+                "assets/cats.dockerfile",
+                "skill-references/assets/docker/cats.dockerfile"
+            );
+            default -> Map.of();
+        };
+    }
+
     private static String numericId(String skillId) {
         int dash = skillId.indexOf('-');
         return dash > 0 ? skillId.substring(0, dash) : skillId;
@@ -397,6 +450,16 @@ class SkillsGeneratorTest {
                 Files.writeString(referencePath, entry.getValue());
                 logger.info("Generated reference saved to: {}", referencePath.toAbsolutePath());
             }
+        }
+
+        for (var entry : output.resourceFiles().entrySet()) {
+            Path resourcePath = targetDir.resolve(entry.getKey());
+            Files.createDirectories(resourcePath.getParent());
+            Files.writeString(resourcePath, entry.getValue(), StandardCharsets.UTF_8);
+            if (entry.getKey().startsWith("scripts/") && !resourcePath.toFile().setExecutable(true, false)) {
+                throw new IOException("Failed to make generated script executable: " + resourcePath);
+            }
+            logger.info("Generated resource saved to: {}", resourcePath.toAbsolutePath());
         }
     }
 }
