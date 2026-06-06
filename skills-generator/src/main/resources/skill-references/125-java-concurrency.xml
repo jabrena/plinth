@@ -964,8 +964,12 @@ public class PoorPerformance {
     }
 
     public void reader() {
-        while (!flag) {
-            // Might loop forever
+        int attempts = 0;
+        while (!flag && attempts++ < 1_000) {
+            Thread.onSpinWait();
+        }
+        if (!flag) {
+            throw new IllegalStateException("Update was not visible before the bounded wait ended");
         }
         // Might see stale data
         System.out.println("Data: " + data);

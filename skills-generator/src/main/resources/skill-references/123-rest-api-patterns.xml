@@ -99,7 +99,7 @@ Content-Type: application/json
             <code-examples>
                 <good-example>
                     <code-block language="json"><![CDATA[{
-  "type": "https://api.example.com/problems/invalid-order-state",
+  "type": "urn:problem:invalid-order-state",
   "title": "Invalid order state",
   "status": 409,
   "detail": "Only NEW orders can be cancelled.",

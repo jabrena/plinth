@@ -459,8 +459,8 @@ class OrderRepositoryIT {
     <output-format>
         <output-format-list>
             <output-format-item>**ANALYZE** MongoDB code: document mapping completeness, index declarations, repository query safety, service transaction placement, error handling specificity, and DTO vs document leakage</output-format-item>
-            <output-format-item>**CATEGORIZE** issues by impact (SECURITY for injection risk, CORRECTNESS for missing @Version or transactions, PERFORMANCE for missing indexes or unbounded queries, MAINTAINABILITY for mutable documents or missing factory methods)</output-format-item>
-            <output-format-item>**APPLY** Spring Data MongoDB–aligned fixes: explicit collection, @Field, @CompoundIndex, @Version where appropriate, safe Criteria-based queries, service-layer boundaries, exception translation</output-format-item>
+            <output-format-item>**CATEGORIZE** issues by impact (SECURITY for injection risk, CORRECTNESS for missing @Version or transactions, PERFORMANCE for missing indexes or queries without explicit pagination and result limits, MAINTAINABILITY for mutable documents or missing factory methods)</output-format-item>
+            <output-format-item>**APPLY** Spring Data MongoDB–aligned fixes: explicit collection, @Field, @CompoundIndex, @Version where appropriate, safe Criteria-based queries, bounded pagination with an explicit maximum page size, service-layer boundaries, exception translation</output-format-item>
             <output-format-item>**IMPLEMENT** changes so document model, indexes, repositories, and tests stay consistent</output-format-item>
             <output-format-item>**EXPLAIN** trade-offs (MongoRepository derived finders vs MongoTemplate Criteria, embedded Flapdoodle vs Testcontainers, single-document writes vs multi-document transactions)</output-format-item>
             <output-format-item>**TEST** repository behaviour with `@DataMongoTest` + Testcontainers and full flows with `@SpringBootTest` when needed; never mock repositories inside persistence slice tests</output-format-item>
