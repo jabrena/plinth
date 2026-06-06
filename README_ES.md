@@ -159,6 +159,7 @@ Java usa JEPs (JDK Enhancement Proposals) para describir nuevas características
 - [https://openspec.dev/](https://openspec.dev/)
 - [https://skills.sh/jabrena/cursor-rules-java](https://skills.sh/jabrena/cursor-rules-java)
 - [https://tessl.io/registry/skills/github/jabrena/cursor-rules-java](https://tessl.io/registry/skills/github/jabrena/cursor-rules-java)
+- https://claudskills.com/author/jabrena/
 - https://agent-skills.cc/zh/skills/jabrena-cursor-rules-java
 - https://shyft.ai/skills/cursor-rules-java
 - https://lobehub.com/skills?q=cursor-rules-java
