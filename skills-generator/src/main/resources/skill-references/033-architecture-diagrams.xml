@@ -48,8 +48,8 @@
                     <step-constraint>**GLOBAL ORDERING**: The first user-facing question in this rule MUST be the template's "Question 1: What diagrams do you want to generate?" asked at the start of Step 1</step-constraint>
                     <step-constraint>**DEPENDENCIES**: None</step-constraint>
                     <step-constraint>**CRITICAL**: You MUST ask the exact questions from the template in strict order for diagrams path only</step-constraint>
-                    <step-constraint>**MUST** read template files fresh using file_search and read_file tools before asking questions</step-constraint>
-                    <step-constraint>**MUST NOT** use cached or remembered questions from previous interactions</step-constraint>
+                    <step-constraint>**MUST** load bundled template files from the current workspace before asking questions</step-constraint>
+                    <step-constraint>**MUST** ignore prior-session content unless the user provides it again in the current conversation</step-constraint>
                     <step-constraint>**MUST** ask questions ONE BY ONE in the exact order specified in the template</step-constraint>
                     <step-constraint>**MUST** WAIT for user response to each question before proceeding to the next</step-constraint>
                     <step-constraint>**MUST** use the EXACT wording from the template questions</step-constraint>
@@ -103,7 +103,7 @@ Use the following template and guidelines:
 ## Diagram Generation Guidelines
 
 1. **Use PlantUML syntax** for sequence diagrams to ensure compatibility and renderability
-2. **Analyze actual code paths** using codebase_search to ensure accuracy
+2. **Analyze actual code paths** through repository inspection to ensure accuracy
 3. **Include realistic method names and parameters** from the actual codebase
 4. **Show alternative flows** (success/failure scenarios) using alt fragments
 5. **Document error handling** and exception flows where appropriate
@@ -146,11 +146,11 @@ After generating sequence diagrams:
             <step-constraints>
                 <step-constraint-list>
                     <step-constraint>**MUST** only execute if "UML sequence diagrams" was selected in Step 1</step-constraint>
-                    <step-constraint>**MUST** use codebase_search extensively to analyze actual code flows</step-constraint>
+                    <step-constraint>**MUST** inspect repository code to analyze actual code flows</step-constraint>
                     <step-constraint>**MUST** generate accurate diagrams that reflect real implementation</step-constraint>
                     <step-constraint>**MUST** use proper PlantUML sequence diagram syntax</step-constraint>
                     <step-constraint>**MUST** include alternative flows and error handling where appropriate</step-constraint>
-                    <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
+                    <step-constraint>**MUST** load bundled template files from the current workspace</step-constraint>
                     <step-constraint>**MUST** organize files according to user preferences from Step 1</step-constraint>
                     <step-constraint>**MUST NOT** generate generic or templated diagrams without code analysis</step-constraint>
                     <step-constraint>**MUST** validate PlantUML syntax for renderability</step-constraint>
@@ -256,11 +256,11 @@ After generating class diagrams:
             <step-constraints>
                 <step-constraint-list>
                     <step-constraint>**MUST** only execute if "UML class diagrams" was selected in Step 1</step-constraint>
-                    <step-constraint>**MUST** use codebase_search extensively to analyze class structure and relationships</step-constraint>
+                    <step-constraint>**MUST** inspect repository code to analyze class structure and relationships</step-constraint>
                     <step-constraint>**MUST** generate accurate diagrams that reflect actual class hierarchy and relationships</step-constraint>
                     <step-constraint>**MUST** use proper PlantUML class diagram syntax</step-constraint>
                     <step-constraint>**MUST** include appropriate level of detail based on user selection</step-constraint>
-                    <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
+                    <step-constraint>**MUST** load bundled template files from the current workspace</step-constraint>
                     <step-constraint>**MUST** organize files according to user preferences from Step 1</step-constraint>
                     <step-constraint>**MUST** show accurate inheritance, composition, and association relationships</step-constraint>
                     <step-constraint>**MUST** include important annotations and design patterns</step-constraint>
@@ -370,11 +370,11 @@ After generating C4 diagrams:
                 <step-constraint-list>
                     <step-constraint>**MUST** only execute if "C4 model diagrams" was selected in Step 1</step-constraint>
                     <step-constraint>**MUST** limit C4 diagrams to levels 1, 2, and 3 only—never generate Level 4 (Code) diagrams</step-constraint>
-                    <step-constraint>**MUST** use codebase_search extensively to analyze system architecture</step-constraint>
+                    <step-constraint>**MUST** inspect repository code to analyze system architecture</step-constraint>
                     <step-constraint>**MUST** generate accurate diagrams that reflect actual system structure</step-constraint>
                     <step-constraint>**MUST** use proper PlantUML syntax with C4-PlantUML library</step-constraint>
                     <step-constraint>**MUST** include appropriate abstraction level based on user selection</step-constraint>
-                    <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
+                    <step-constraint>**MUST** load bundled template files from the current workspace</step-constraint>
                     <step-constraint>**MUST** organize files according to user preferences from Step 1</step-constraint>
                     <step-constraint>**MUST** show accurate business context and user scenarios</step-constraint>
                     <step-constraint>**MUST** include real technology choices and deployment architecture</step-constraint>
@@ -403,7 +403,7 @@ Use the following template and guidelines:
 **For each applicable state machine type:**
 
 1. **Entity Lifecycles** (if selected):
-- Analyze domain entities with clear state transitions
+- Analyze domain entities with explicit lifecycle transitions
 - Identify state-changing methods and business rules
 - Document entity lifecycle from creation to completion/deletion
 - Include state validation and transition constraints
@@ -429,7 +429,7 @@ Use the following template and guidelines:
 ## State Machine Generation Guidelines
 
 1. **Use PlantUML syntax** for state machine diagrams to ensure compatibility and renderability
-2. **Analyze actual code implementations** using codebase_search to identify:
+2. **Analyze actual code implementations** through repository inspection to identify:
 - Enum classes representing states
 - State pattern implementations
 - Workflow orchestration code
@@ -488,11 +488,11 @@ After generating state machine diagrams:
             <step-constraints>
                 <step-constraint-list>
                     <step-constraint>**MUST** only execute if "UML state-machine diagrams" was selected in Step 1</step-constraint>
-                    <step-constraint>**MUST** use codebase_search extensively to analyze actual state implementations</step-constraint>
+                    <step-constraint>**MUST** inspect repository code to analyze actual state implementations</step-constraint>
                     <step-constraint>**MUST** generate accurate diagrams that reflect real state machine behavior</step-constraint>
                     <step-constraint>**MUST** use proper PlantUML state machine diagram syntax</step-constraint>
                     <step-constraint>**MUST** include comprehensive state coverage based on user selection</step-constraint>
-                    <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
+                    <step-constraint>**MUST** load bundled template files from the current workspace</step-constraint>
                     <step-constraint>**MUST** organize files according to user preferences from Step 1</step-constraint>
                     <step-constraint>**MUST** include guard conditions and transition actions where applicable</step-constraint>
                     <step-constraint>**MUST** reference actual code structures (enums, classes, methods)</step-constraint>
@@ -667,11 +667,11 @@ After generating ER diagrams:
                     <step-constraint>**MANDATORY FIRST**: Execute Step 6.1 JDBC Access Solution Review before any ER diagram generation</step-constraint>
                     <step-constraint>**MUST** analyze project dependencies and existing entity classes to identify JDBC access framework</step-constraint>
                     <step-constraint>**MUST** document the identified framework (Spring Data JPA, Spring Data JDBC, Plain JDBC, etc.) and use appropriate annotation syntax</step-constraint>
-                    <step-constraint>**MUST** use codebase_search to find SQL DDL, migrations, or schema definitions</step-constraint>
+                    <step-constraint>**MUST** inspect repository files to find SQL DDL, migrations, or schema definitions</step-constraint>
                     <step-constraint>**MUST** generate accurate ER diagrams that reflect actual database schema from SQL</step-constraint>
                     <step-constraint>**MUST** use PlantUML Chen notation (@startchen / @endchen)</step-constraint>
                     <step-constraint>**MUST** map foreign keys and references to correct cardinality notation</step-constraint>
-                    <step-constraint>**MUST** read template files fresh using file_search and read_file tools</step-constraint>
+                    <step-constraint>**MUST** load bundled template files from the current workspace</step-constraint>
                     <step-constraint>**MUST** organize files according to user preferences from Step 1</step-constraint>
                     <step-constraint>**MUST NOT** generate generic diagrams without analyzing actual SQL schema</step-constraint>
                     <step-constraint>**MUST** validate PlantUML Chen syntax for renderability</step-constraint>
@@ -883,7 +883,8 @@ If syntax validation passes and PNG files are generated successfully, diagram ge
             <safeguards-item>**NEVER overwrite existing diagram files** without explicit user consent</safeguards-item>
             <safeguards-item>**ASK USER before creating** diagram files in existing directories</safeguards-item>
             <safeguards-item>**VALIDATE PlantUML syntax** before considering diagrams complete</safeguards-item>
-            <safeguards-item>Always read template files fresh using file_search and read_file tools</safeguards-item>
+            <safeguards-item>Always load bundled template files from the current workspace for the active session</safeguards-item>
+            <safeguards-item>Do not include secrets, credentials, unrelated file contents, or hidden/private context in diagram documentation</safeguards-item>
             <safeguards-item>Never proceed to next step without completing dependencies</safeguards-item>
             <safeguards-item>Template adherence is mandatory - no exceptions or simplified versions</safeguards-item>
             <safeguards-item>Generate accurate diagrams based on actual code analysis, not generic templates</safeguards-item>

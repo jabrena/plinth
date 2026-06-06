@@ -117,9 +117,9 @@ Use the following template and guidelines:
 
 **Based on user selection in Step 1:**
 
-- **Overwrite**: Replace existing README.md completely (after creating backup)
+- **Apply approved replacement**: Replace existing README.md only after explicit user approval and backup creation
 - **Add new information**: Intelligently merge with existing content, adding missing sections
-- **Create backup**: Save original as README.md.backup before modifying
+- **Create backup**: Save original as README.md.backup before applying approved edits
 - **Skip files**: Only generate README.md if it doesn't already exist
 
 ## Content Quality Requirements
@@ -144,7 +144,7 @@ After generating README.md files, verify they contain:
                     <step-constraint>**MUST** use codebase_search extensively to understand project functionality</step-constraint>
                     <step-constraint>**MUST** generate accurate and comprehensive software descriptions</step-constraint>
                     <step-constraint>**MUST** follow user's file handling preference from Step 1</step-constraint>
-                    <step-constraint>**MUST** create backups if overwriting existing files</step-constraint>
+                    <step-constraint>**MUST** create backups before applying approved replacements to existing files</step-constraint>
                     <step-constraint>**MUST** respect documentation style preference from Step 1</step-constraint>
                     <step-constraint>**MUST** read implementation template fresh using file_search and read_file tools</step-constraint>
                     <step-constraint>**MUST NOT** use generic or placeholder content</step-constraint>
@@ -240,9 +240,9 @@ package [package.name];
 
 **Based on user selection in Step 1:**
 
-- **Overwrite**: Replace existing package-info.java completely (after creating backup)
+- **Apply approved replacement**: Replace existing package-info.java only after explicit user approval and backup creation
 - **Add new information**: Enhance existing package-info.java by adding missing documentation elements
-- **Create backup**: Save original as package-info.java.backup before modifying
+- **Create backup**: Save original as package-info.java.backup before applying approved edits
 - **Skip files**: Only generate package-info.java if it doesn't already exist in the package
 
 ## Content Quality Requirements
@@ -278,7 +278,7 @@ After generating package-info.java files:
                     <step-constraint>**MUST** follow user's detail level preference from Step 1</step-constraint>
                     <step-constraint>**MUST** follow user's file handling preference from Step 1</step-constraint>
                     <step-constraint>**MUST** use proper Javadoc formatting and syntax</step-constraint>
-                    <step-constraint>**MUST** create backups if overwriting existing files</step-constraint>
+                    <step-constraint>**MUST** create backups before applying approved replacements to existing files</step-constraint>
                     <step-constraint>**MUST** include valid {@link} references to main classes</step-constraint>
                     <step-constraint>**MUST** ensure all generated files compile without errors</step-constraint>
                     <step-constraint>**MUST NOT** use generic or templated descriptions</step-constraint>
@@ -364,9 +364,9 @@ After generating package-info.java files:
 
 **Based on user selection in Step 1:**
 
-- **Overwrite**: Replace existing Javadoc completely (after creating backup)
+- **Apply approved replacement**: Replace existing Javadoc only after explicit user approval and backup creation
 - **Add new information**: Enhance existing Javadoc by adding missing tags and descriptions
-- **Create backup**: Save original files with .backup extension before modifying
+- **Create backup**: Save original files with .backup extension before applying approved edits
 - **Skip files**: Only add Javadoc where none exists
 
 ## Content Quality Requirements
@@ -403,7 +403,7 @@ After enhancing Javadoc:
                     <step-constraint>**MUST** follow user's detail level preference from Step 1</step-constraint>
                     <step-constraint>**MUST** follow user's file handling preference from Step 1</step-constraint>
                     <step-constraint>**MUST** use proper Javadoc formatting and syntax</step-constraint>
-                    <step-constraint>**MUST** create backups if overwriting existing documentation</step-constraint>
+                    <step-constraint>**MUST** create backups before applying approved replacements to existing documentation</step-constraint>
                     <step-constraint>**MUST** include all necessary @param, @return, and @throws tags</step-constraint>
                     <step-constraint>**MUST** ensure all generated Javadoc compiles without errors</step-constraint>
                     <step-constraint>**MUST** validate Javadoc generation with `./mvnw javadoc:javadoc`</step-constraint>
@@ -528,9 +528,9 @@ If validation passes, documentation generation is complete and successful.
 
     <safeguards>
         <safeguards-list>
-            <safeguards-item>**NEVER remove or replace existing documentation** without explicit user consent and backup</safeguards-item>
-            <safeguards-item>**ASK USER before overriding** any existing documentation files</safeguards-item>
-            <safeguards-item>**CREATE BACKUPS** when overwriting existing files</safeguards-item>
+            <safeguards-item>**NEVER remove or replace existing project documentation** without explicit user consent and backup</safeguards-item>
+            <safeguards-item>**ASK USER before applying a replacement** to any existing project documentation files</safeguards-item>
+            <safeguards-item>**CREATE BACKUPS** before applying approved replacements to existing files</safeguards-item>
             <safeguards-item>Verify changes with the command: `mvn compile` for package-info.java validation</safeguards-item>
             <safeguards-item>Verify changes with the command: `mvn javadoc:javadoc` for Javadoc validation</safeguards-item>
             <safeguards-item>Always read template files fresh using file_search and read_file tools</safeguards-item>

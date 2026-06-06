@@ -42,8 +42,7 @@
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="xml"><![CDATA[<!-- pom.xml — illustrative; align versions with micronaut-parent / BOM -->
-<dependency>
+                    <code-block language="xml"><![CDATA[<dependency>
     <groupId>io.micronaut.flyway</groupId>
     <artifactId>micronaut-flyway</artifactId>
 </dependency>
@@ -58,7 +57,7 @@
 </dependency>]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
-                    <code-block language="xml"><![CDATA[<!-- Bad: Flyway without a configured DataSource bean / JDBC stack -->
+                    <code-block language="xml"><![CDATA[
 <dependency>
     <groupId>io.micronaut.flyway</groupId>
     <artifactId>micronaut-flyway</artifactId>

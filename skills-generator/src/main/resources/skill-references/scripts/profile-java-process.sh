@@ -207,8 +207,7 @@ download_profiler() {
         mkdir -p "$profiler_dir"
         cd "$profiler_dir"
 
-        # Remove any failed downloads
-        rm -f async-profiler-*.tar.gz async-profiler-*.zip 2>/dev/null
+        # Keep failed downloads for manual inspection instead of deleting wildcard matches.
 
         if command -v curl >/dev/null 2>&1; then
             curl -L -o "$filename" "$url"
@@ -412,9 +411,8 @@ handle_profiling_error() {
             echo "• Use allocation profiling instead of native memory profiling"
         else
             echo "• Check if you have sufficient permissions:"
-            echo "  sudo sysctl kernel.perf_event_paranoid=1"
-            echo "  sudo sysctl kernel.kptr_restrict=0"
-            echo "• Try running with sudo for full system profiling"
+            echo "• Ask an administrator to review perf_event_paranoid and kptr_restrict for this host"
+            echo "• Prefer user-space profiling unless full-system profiling is explicitly approved"
             echo "• Use --all-user flag to profile only user-space code"
         fi
 
@@ -977,8 +975,7 @@ execute_profiling() {
                 echo "  - Insufficient permissions to access GC logs"
                 echo "  - The Java version doesn't support dynamic GC logging"
 
-                # Clean up empty file
-                [ -f "$GC_LOG_FILE" ] && [ ! -s "$GC_LOG_FILE" ] && rm -f "$GC_LOG_FILE"
+                echo "  Empty GC log file retained for inspection: $GC_LOG_FILE"
             fi
             ;;
         20)

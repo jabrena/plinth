@@ -1,6 +1,6 @@
 **Phase 1: Conversational Information Gathering**
 
-Ask one or two questions at a time. Build on previous answers. Acknowledge and validate responses before moving on. Adjust depth to interface complexity (CLI, REST/HTTP API, or both); skip irrelevant areas and dive deeper where needed.
+Pose one or two discovery questions at a time. Build on current-session answers. Acknowledge and validate responses before moving on. Adjust depth to interface complexity (CLI, REST/HTTP API, or both); skip irrelevant areas and dive deeper where needed.
 
 ---
 

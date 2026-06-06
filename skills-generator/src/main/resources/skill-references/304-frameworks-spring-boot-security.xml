@@ -62,7 +62,7 @@ class ApiSecurityConfig {
                 </good-example>
                 <bad-example>
                     <code-block language="java"><![CDATA[http.authorizeHttpRequests(r -> r.anyRequest().permitAll());
-// Entire API world-readable]]></code-block>
+// Every endpoint is public]]></code-block>
                 </bad-example>
             </code-examples>
         </example>

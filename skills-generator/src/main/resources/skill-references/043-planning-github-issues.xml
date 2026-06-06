@@ -79,7 +79,7 @@ gh --version
 
 **If the user answers `n` (declines installation):**
 
-- Explain the **limited fallback**: for **public** repositories only, the GitHub REST API (for example `curl` to `https://api.github.com/repos/OWNER/REPO/issues`) may work without `gh`, subject to rate limits, redirects, and **no** access to private repositories without a token.
+- Explain the **limited fallback**: for **public** repositories only, use GitHub's documented public REST endpoint with an approved HTTP client after validating that the destination host is GitHub-controlled. Apply explicit request timeouts and rate limits, send no credentials, and do not use this fallback for private repositories.
 - **Never** fabricate issue numbers, titles, or URLs—only report API or `gh` output.
 - For **private** repos or reliable authenticated workflows, the user must install `gh` (or use another approved method). **Do not** ask the user to paste tokens into chat.
 
