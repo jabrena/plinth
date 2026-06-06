@@ -68,6 +68,14 @@ Algunos skills interactivos requieren modelos `Premium` para uso interactivo; de
 
 Los modelos pueden generar código, pero no pueden ejecutarlo contra tus datos locales. Para cerrar esa brecha, algunos Skills incluyen scripts que ejecutas localmente.
 
+### Los ingenieros de software deben permanecer en el proceso
+
+Este proyecto apoya el trabajo de ingeniería de software, pero no sustituye el criterio profesional. Un ingeniero de software debe revisar, guiar y validar las decisiones, el código y los resultados generados por IA antes de utilizarlos.
+
+### Sin datos en tiempo real
+
+Este proyecto está pensado para desarrollos que no dependen de datos en tiempo real. No confíes en sus recomendaciones cuando la corrección requiera información actualizada continuamente, salvo que proporciones y valides dicha información mediante las herramientas adecuadas.
+
 ## Contribuir
 
 Consulta [CONTRIBUTING.md](./CONTRIBUTING.md) para convenciones, flujos del generador, pruebas y cómo abrir un pull request.

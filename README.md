@@ -68,6 +68,14 @@ Some interactive skills require `Premium` models for interactive use; otherwise 
 
 Models can generate code, but they cannot execute it against your local data. To bridge that gap, some Skills include scripts you run locally.
 
+### Software engineers must remain in the loop
+
+This project supports software engineering work; it does not replace engineering judgment. A software engineer must review, guide, and validate AI-generated decisions, code, and outcomes before they are used.
+
+### No real-time data
+
+This project is intended for development work that does not depend on real-time data. Do not rely on its guidance when correctness requires live, continuously changing information unless you provide and validate that information through appropriate tools.
+
 ## Contribute
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for conventions, generator workflows, tests, and how to open a pull request.
