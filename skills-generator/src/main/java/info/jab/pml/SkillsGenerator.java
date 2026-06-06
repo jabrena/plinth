@@ -3,6 +3,7 @@ package info.jab.pml;
 import java.io.InputStream;
 import java.io.StringWriter;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +46,13 @@ public final class SkillsGenerator {
      */
     public Stream<SkillOutput> generateAllSkills() {
         return SkillIndexes.skillDescriptors()
-            .map(d -> generateSkill(d.skillId(), d.requiresSystemPrompt(), d.useXml(), d.references()));
+            .map(d -> generateSkill(
+                d.skillId(),
+                d.requiresSystemPrompt(),
+                d.useXml(),
+                d.references(),
+                d.resources()
+            ));
     }
 
     /**
@@ -79,22 +86,41 @@ public final class SkillsGenerator {
      * @return the generated skill output
      */
     public SkillOutput generateSkill(String skillId, boolean requiresSystemPrompt, boolean useXml) {
-        List<String> references = SkillIndexes.skillDescriptors()
+        Optional<SkillIndexes.SkillDescriptor> descriptor = SkillIndexes.skillDescriptors()
             .filter(d -> d.skillId().equals(skillId))
-            .findFirst()
+            .findFirst();
+        List<String> references = descriptor
             .map(SkillIndexes.SkillDescriptor::references)
             .orElse(List.of());
-        return generateSkill(skillId, requiresSystemPrompt, useXml, references);
+        List<SkillIndexes.SkillResource> resources = descriptor
+            .map(SkillIndexes.SkillDescriptor::resources)
+            .orElse(List.of());
+        return generateSkill(skillId, requiresSystemPrompt, useXml, references, resources);
     }
 
     public SkillOutput generateSkill(String skillId, boolean requiresSystemPrompt, boolean useXml, java.util.List<String> references) {
+        List<SkillIndexes.SkillResource> resources = SkillIndexes.skillDescriptors()
+            .filter(d -> d.skillId().equals(skillId))
+            .findFirst()
+            .map(SkillIndexes.SkillDescriptor::resources)
+            .orElse(List.of());
+        return generateSkill(skillId, requiresSystemPrompt, useXml, references, resources);
+    }
+
+    public SkillOutput generateSkill(
+        String skillId,
+        boolean requiresSystemPrompt,
+        boolean useXml,
+        List<String> references,
+        List<SkillIndexes.SkillResource> resources
+    ) {
         Map<String, String> referenceContents = requiresSystemPrompt
             ? generateReferenceContents(references.isEmpty() ? List.of(skillId) : references)
             : Map.of();
         String skillMdContent = useXml
             ? loadSkillSummaryFromXml(skillId, references)
             : loadSkillSummary(skillId);
-        return new SkillOutput(skillId, skillMdContent, referenceContents);
+        return new SkillOutput(skillId, skillMdContent, referenceContents, generateResourceFiles(resources));
     }
 
     private Map<String, String> generateReferenceContents(List<String> referenceIds) {
@@ -106,6 +132,25 @@ public final class SkillsGenerator {
             );
         }
         return contents;
+    }
+
+    private Map<String, String> generateResourceFiles(List<SkillIndexes.SkillResource> resources) {
+        Map<String, String> contents = new LinkedHashMap<>();
+        for (SkillIndexes.SkillResource resource : resources) {
+            contents.put(resource.targetPath(), loadResourceContent(resource.sourcePath()));
+        }
+        return contents;
+    }
+
+    private String loadResourceContent(String resourceName) {
+        try (InputStream stream = getResource(resourceName)) {
+            if (stream == null) {
+                throw new RuntimeException("Skill resource file not found: " + resourceName);
+            }
+            return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load skill resource file: " + resourceName, e);
+        }
     }
 
     private String loadSkillSummary(String skillId) {
@@ -238,9 +283,14 @@ public final class SkillsGenerator {
     }
 
     /**
-     * Output of skill generation: SKILL.md content and reference content.
+     * Output of skill generation: SKILL.md, reference content, and standalone resource files.
      */
-    public record SkillOutput(String skillId, String skillMd, Map<String, String> referenceMds) {
+    public record SkillOutput(
+        String skillId,
+        String skillMd,
+        Map<String, String> referenceMds,
+        Map<String, String> resourceFiles
+    ) {
         public String referenceMd() {
             return referenceMds.values().stream().findFirst().orElse("");
         }

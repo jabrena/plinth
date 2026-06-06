@@ -52,11 +52,8 @@
         <step number="2">
             <step-title>Copy Template Content</step-title>
             <step-content>
-Create the entire script with the following content:
-
-```bash
-<xi:include href="scripts/run-jmeter.sh" parse="text"/>
-```
+Copy the entire script from the packaged resource:
+[run-jmeter.sh](../scripts/run-jmeter.sh).
             </step-content>
             <step-constraints>
                 <step-constraint-list>
@@ -137,7 +134,7 @@ Create the entire script with the following content:
             <safeguards-item>**PERMISSION VALIDATION**: Verify the script is executable with `chmod +x run-jmeter.sh` and confirm permissions with `ls -la run-jmeter.sh`</safeguards-item>
             <safeguards-item>**FUNCTIONALITY TEST**: Verify the script is working correctly with basic usage test: `./run-jmeter.sh -h`</safeguards-item>
             <safeguards-item>**PROJECT STRUCTURE VERIFICATION**: Confirm the expected directory structure exists (`src/test/resources/jmeter/`) or will be created by the script</safeguards-item>
-            <safeguards-item>**TEMPLATE INTEGRITY**: Ensure the copied template content matches exactly what is specified in the fragment file without any alterations</safeguards-item>
+            <safeguards-item>**TEMPLATE INTEGRITY**: Ensure the copied template content matches the packaged `scripts/run-jmeter.sh` resource without any alterations</safeguards-item>
             <safeguards-item>**DEPENDENCY VALIDATION**: Verify that all required directories and paths referenced in the script will be accessible and writable</safeguards-item>
             <safeguards-item>**EXECUTION SAFETY**: Test script execution in a safe environment before providing it to the user for production use</safeguards-item>
         </safeguards-list>
