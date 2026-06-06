@@ -68,20 +68,17 @@
 
 模型可以生成代码，但无法针对你的本地数据执行代码。为弥补这一差距，部分 Skills 包含可在本地运行的脚本。
 
+### 软件工程师必须参与其中
+
+本项目用于支持软件工程工作，但不能替代工程判断。在使用 AI 生成的决策、代码和结果之前，必须由软件工程师进行审查、指导和验证。
+
+### 访问企业数据
+
+当问题涉及企业数据库或其他组织敏感数据时，请谨慎使用。在向 AI 辅助工作流授予访问权限之前，应评估授权、隐私、数据泄露、数据保留和意外修改等风险，并实施最小权限访问、人工审查、验证和监控。请参阅 [OWASP GenAI Data Security Risks & Mitigations 2026](https://genai.owasp.org/resource/owasp-genai-data-security-risks-mitigations-2026/)。
+
 ## 贡献
 
 请参阅 [CONTRIBUTING.md](./CONTRIBUTING.md)，了解约定、生成器工作流、测试以及如何提交 pull request。
-
-维护者修改 skill XML 源文件后，应使用 `./mvnw clean install -pl skills-generator`
-重新生成本地 skills；该命令会把生成结果复制到 `.agents/skills`，用于本地 agent 测试。
-只有在准备发布输出时，才使用
-`./mvnw clean install -pl skills-generator -P release`
-刷新 `skills/`。完整流程请参阅 [DEVELOPER.md](./DEVELOPER.md) 和
-[ADR-006](./documentation/adr/ADR-006-separate-local-skill-generation-from-release-publishing.md)。
-
-## 示例
-
-仓库包含[一组示例](./examples/)，可探索这些 Skills 与工作流在 Java 中的能力。
 
 ## Architecture Decision Records (ADR)
 
