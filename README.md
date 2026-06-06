@@ -68,20 +68,17 @@ Some interactive skills require `Premium` models for interactive use; otherwise 
 
 Models can generate code, but they cannot execute it against your local data. To bridge that gap, some Skills include scripts you run locally.
 
+### Software engineers must remain in the loop
+
+This project supports software engineering work; it does not replace engineering judgment. A software engineer must review, guide, and validate AI-generated decisions, code, and outcomes before they are used.
+
+### Access to corporate data
+
+Use caution when a problem involves corporate databases or other sensitive organizational data. Before granting an AI-assisted workflow access, assess authorization, privacy, data leakage, retention, and unintended modification risks. Apply least-privilege access, human review, validation, and monitoring. See [OWASP GenAI Data Security Risks & Mitigations 2026](https://genai.owasp.org/resource/owasp-genai-data-security-risks-mitigations-2026/).
+
 ## Contribute
 
 See [CONTRIBUTING.md](./CONTRIBUTING.md) for conventions, generator workflows, tests, and how to open a pull request.
-
-Maintainers who change skill XML sources should regenerate local skills with
-`./mvnw clean install -pl skills-generator`, which copies generated output to
-`.agents/skills` for local agent testing. Refresh `skills/` only when preparing
-release output, using `./mvnw clean install -pl skills-generator -P release`.
-See [DEVELOPER.md](./DEVELOPER.md) and [ADR-006](./documentation/adr/ADR-006-separate-local-skill-generation-from-release-publishing.md)
-for the full workflow.
-
-## Examples
-
-The repository includes [a collection of examples](./examples/) where you can explore what these Skills and workflows enable for Java.
 
 ## Architecture Decision Records (ADR)
 

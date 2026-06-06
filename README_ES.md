@@ -68,20 +68,17 @@ Algunos skills interactivos requieren modelos `Premium` para uso interactivo; de
 
 Los modelos pueden generar código, pero no pueden ejecutarlo contra tus datos locales. Para cerrar esa brecha, algunos Skills incluyen scripts que ejecutas localmente.
 
+### Los ingenieros de software deben permanecer en el proceso
+
+Este proyecto apoya el trabajo de ingeniería de software, pero no sustituye el criterio profesional. Un ingeniero de software debe revisar, guiar y validar las decisiones, el código y los resultados generados por IA antes de utilizarlos.
+
+### Acceso a datos corporativos
+
+Actúa con precaución cuando un problema involucre bases de datos corporativas u otros datos sensibles de la organización. Antes de conceder acceso a un flujo de trabajo asistido por IA, evalúa los riesgos de autorización, privacidad, filtración, retención y modificación accidental de datos. Aplica acceso con privilegios mínimos, revisión humana, validación y monitorización. Consulta [OWASP GenAI Data Security Risks & Mitigations 2026](https://genai.owasp.org/resource/owasp-genai-data-security-risks-mitigations-2026/).
+
 ## Contribuir
 
 Consulta [CONTRIBUTING.md](./CONTRIBUTING.md) para convenciones, flujos del generador, pruebas y cómo abrir un pull request.
-
-Los maintainers que cambien fuentes XML de skills deben regenerar las skills locales con
-`./mvnw clean install -pl skills-generator`, que copia la salida generada a
-`.agents/skills` para pruebas locales con agents. Actualiza `skills/` solo al preparar
-la salida de release, usando `./mvnw clean install -pl skills-generator -P release`.
-Consulta [DEVELOPER.md](./DEVELOPER.md) y [ADR-006](./documentation/adr/ADR-006-separate-local-skill-generation-from-release-publishing.md)
-para ver el flujo completo.
-
-## Ejemplos
-
-El repositorio incluye [una colección de ejemplos](./examples/) donde puedes explorar lo que estos Skills y flujos de trabajo permiten en Java.
 
 ## Architecture Decision Records (ADR)
 
