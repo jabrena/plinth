@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.16.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Java Object-Oriented Design Guidelines</title>
+        <description>Object creation guidance covering factories, builders, singletons, dependency injection, and unnecessary objects.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Java software development.</role>
+
+    <goal><![CDATA[
+Improve object creation when the skill orchestration identifies constructor, lifecycle, dependency, or allocation design problems.
+Read this reference only after `121-java-object-oriented-design` has compiled the project and classified this concern as applicable.
+    ]]></goal>
+
+    <constraints>
+        <constraints-description>Apply only guidance relevant to the diagnosed concern and preserve observable behavior.</constraints-description>
+        <constraint-list>
+            <constraint>Read this reference only when the SKILL.md orchestration maps the request or code problem to this concern.</constraint>
+            <constraint>Apply focused, incremental refactorings and preserve existing business behavior.</constraint>
+            <constraint>Do not broaden the change into unrelated object-oriented design concerns.</constraint>
+        </constraint-list>
+    </constraints>
+
+    <examples>
+        <toc auto-generate="true" />
+
+        <example number="1" id="creating-destroying-objects">
+            <example-header>
+                <example-title>Creating and Destroying Objects</example-title>
+                <example-subtitle>Best Practices for Object Creation and Destruction</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Effective object creation and destruction patterns improve code clarity, performance, and maintainability. These practices help avoid common pitfalls and leverage Java's capabilities effectively.
+                ]]>
+            </example-description>
+        </example>
+        <example number="2" id="static-factory-methods">
+            <example-header>
+                <example-title>Consider Static Factory Methods Instead of Constructors</example-title>
+                <example-subtitle>Use static factory methods to provide more flexibility than constructors</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Static factory methods offer advantages like descriptive names, ability to return existing instances, and flexibility in return types.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[public class BigInteger {
+    // Static factory method with descriptive name
+    public static BigInteger valueOf(long val) {
+        if (val == 0) return ZERO;  // Return cached instance
+        if (val > 0 && val <= MAX_CONSTANT) return posConst[(int) val];
+        return new BigInteger(val);
+    }
+
+    // Private constructor
+    private BigInteger(long val) { /* implementation */ }
+
+    private static final BigInteger ZERO = new BigInteger(0);
+    private static final BigInteger[] posConst = new BigInteger[MAX_CONSTANT + 1];
+}
+
+// Usage with clear intent
+BigInteger zero = BigInteger.valueOf(0);  // Clear what we're creating
+BigInteger hundred = BigInteger.valueOf(100);]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[public class BigInteger {
+    // Only constructor available - less flexible
+    public BigInteger(long val) { /* implementation */ }
+
+    // Client code is less clear
+    BigInteger zero = new BigInteger(0);  // Not clear this could be cached
+    BigInteger hundred = new BigInteger(100);  // Creates new instance every time
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="3" id="builder-pattern">
+            <example-header>
+                <example-title>Consider a Builder When Faced with Many Constructor Parameters</example-title>
+                <example-subtitle>Use the Builder pattern for classes with multiple optional parameters</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                The Builder pattern provides a readable alternative to telescoping constructors and is safer than JavaBeans pattern.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[public class NutritionFacts {
+    private final int servingSize;
+    private final int servings;
+    private final int calories;
+    private final int fat;
+    private final int sodium;
+    private final int carbohydrate;
+
+    public static class Builder {
+        // Required parameters
+        private final int servingSize;
+        private final int servings;
+
+        // Optional parameters - initialized to default values
+        private int calories = 0;
+        private int fat = 0;
+        private int sodium = 0;
+        private int carbohydrate = 0;
+
+        public Builder(int servingSize, int servings) {
+            this.servingSize = servingSize;
+            this.servings = servings;
+        }
+
+        public Builder calories(int val) { calories = val; return this; }
+        public Builder fat(int val) { fat = val; return this; }
+        public Builder sodium(int val) { sodium = val; return this; }
+        public Builder carbohydrate(int val) { carbohydrate = val; return this; }
+
+        public NutritionFacts build() {
+            return new NutritionFacts(this);
+        }
+    }
+
+    private NutritionFacts(Builder builder) {
+        servingSize = builder.servingSize;
+        servings = builder.servings;
+        calories = builder.calories;
+        fat = builder.fat;
+        sodium = builder.sodium;
+        carbohydrate = builder.carbohydrate;
+    }
+}
+
+// Usage - readable and flexible
+NutritionFacts cocaCola = new NutritionFacts.Builder(240, 8)
+    .calories(100)
+    .sodium(35)
+    .carbohydrate(27)
+    .build();]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Telescoping constructor pattern - hard to read and error-prone
+public class NutritionFacts {
+    private final int servingSize;
+    private final int servings;
+    private final int calories;
+    private final int fat;
+    private final int sodium;
+    private final int carbohydrate;
+
+    public NutritionFacts(int servingSize, int servings) {
+        this(servingSize, servings, 0);
+    }
+
+    public NutritionFacts(int servingSize, int servings, int calories) {
+        this(servingSize, servings, calories, 0);
+    }
+
+    public NutritionFacts(int servingSize, int servings, int calories, int fat) {
+        this(servingSize, servings, calories, fat, 0);
+    }
+
+    public NutritionFacts(int servingSize, int servings, int calories, int fat, int sodium) {
+        this(servingSize, servings, calories, fat, sodium, 0);
+    }
+
+    public NutritionFacts(int servingSize, int servings, int calories, int fat, int sodium, int carbohydrate) {
+        this.servingSize = servingSize;
+        this.servings = servings;
+        this.calories = calories;
+        this.fat = fat;
+        this.sodium = sodium;
+        this.carbohydrate = carbohydrate;
+    }
+}
+
+// Usage - confusing parameter order, easy to make mistakes
+NutritionFacts cocaCola = new NutritionFacts(240, 8, 100, 0, 35, 27);  // What do these numbers mean?]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="4" id="singleton-pattern">
+            <example-header>
+                <example-title>Enforce the Singleton Property with a Private Constructor or an Enum Type</example-title>
+                <example-subtitle>Use enum or private constructor with static field for singletons</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Enum-based singletons are the best way to implement singletons, providing serialization and reflection safety.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[// Enum singleton - preferred approach
+public enum DatabaseConnection {
+    INSTANCE;
+
+    public void connect() {
+        System.out.println("Connecting to database...");
+    }
+
+    public void executeQuery(String query) {
+        System.out.println("Executing: " + query);
+    }
+}
+
+// Alternative: Static field with private constructor
+public class Logger {
+    private static final Logger INSTANCE = new Logger();
+
+    private Logger() { /* private constructor */ }
+
+    public static Logger getInstance() {
+        return INSTANCE;
+    }
+
+    public void log(String message) {
+        System.out.println("LOG: " + message);
+    }
+}
+
+// Usage
+DatabaseConnection.INSTANCE.connect();
+Logger.getInstance().log("Application started");]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Not thread-safe singleton
+public class BadSingleton {
+    private static BadSingleton instance;
+
+    private BadSingleton() {}
+
+    public static BadSingleton getInstance() {
+        if (instance == null) {  // Race condition possible
+            instance = new BadSingleton();
+        }
+        return instance;
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="5" id="dependency-injection">
+            <example-header>
+                <example-title>Prefer Dependency Injection to Hardwiring Resources</example-title>
+                <example-subtitle>Use dependency injection instead of hardcoded dependencies</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Classes should not create their dependencies directly but receive them from external sources, improving testability and flexibility.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[public class SpellChecker {
+    private final Lexicon dictionary;
+
+    // Dependency injected through constructor
+    public SpellChecker(Lexicon dictionary) {
+        this.dictionary = Objects.requireNonNull(dictionary);
+    }
+
+    public boolean isValid(String word) {
+        return dictionary.contains(word);
+    }
+}
+
+interface Lexicon {
+    boolean contains(String word);
+}
+
+class EnglishLexicon implements Lexicon {
+    public boolean contains(String word) {
+        // English dictionary lookup
+        return true;
+    }
+}
+
+// Usage - flexible and testable
+Lexicon englishDict = new EnglishLexicon();
+SpellChecker checker = new SpellChecker(englishDict);]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Hardwired dependency - inflexible and hard to test
+public class SpellChecker {
+    private static final Lexicon dictionary = new EnglishLexicon();  // Hardcoded
+
+    private SpellChecker() {}  // Noninstantiable
+
+    public static boolean isValid(String word) {
+        return dictionary.contains(word);
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+        <example number="6" id="avoid-unnecessary-objects">
+            <example-header>
+                <example-title>Avoid Creating Unnecessary Objects</example-title>
+                <example-subtitle>Reuse objects when possible to improve performance</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Object creation can be expensive. Reuse immutable objects and avoid creating objects in loops when possible.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[public class DateUtils {
+    // Reuse expensive objects
+    private static final DateTimeFormatter FORMATTER =
+        DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+    public String formatDate(LocalDate date) {
+        return FORMATTER.format(date);  // Reuse formatter
+    }
+
+    // Use primitives when possible
+    public boolean isEven(int number) {
+        return number % 2 == 0;  // No object creation
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[public class DateUtils {
+    public String formatDate(LocalDate date) {
+        // Creates new formatter every time - expensive
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return formatter.format(date);
+    }
+
+    // Unnecessary autoboxing
+    public boolean isEven(Integer number) {
+        return number % 2 == 0;  // Creates Integer objects
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+</prompt>

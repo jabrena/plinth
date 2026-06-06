@@ -125,9 +125,16 @@
             <reference>114-java-maven-search</reference>
         </reference-list>
     </skill>
-    <skill id="121">
+    <skill id="121" skillId="121-java-object-oriented-design">
         <reference-list>
-            <reference>121-java-object-oriented-design</reference>
+            <reference>121-java-object-oriented-design-principles</reference>
+            <reference>121-java-object-oriented-design-oop-concepts</reference>
+            <reference>121-java-object-oriented-design-code-smells</reference>
+            <reference>121-java-object-oriented-design-object-creation</reference>
+            <reference>121-java-object-oriented-design-classes-interfaces</reference>
+            <reference>121-java-object-oriented-design-enums-annotations</reference>
+            <reference>121-java-object-oriented-design-methods</reference>
+            <reference>121-java-object-oriented-design-exceptions</reference>
         </reference-list>
     </skill>
     <skill id="122">
