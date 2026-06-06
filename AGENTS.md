@@ -117,6 +117,16 @@ openspec archive <change-name>       # Archive a completed change
 
 The [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) spec allows other types if your team agrees. **This repository’s commit-msg hook** accepts the types in the table above and requires a **scope** (see [`.pre-commit-config.yaml`](.pre-commit-config.yaml)).
 
+### AI-assisted commits
+
+When Cursor, Claude, Codex, or another AI tool authors or materially contributes to a commit, include a `Co-authored-by` trailer using the tool's documented Git identity:
+
+```text
+Co-authored-by: <tool-name> <tool-email>
+```
+
+Place the trailer after a blank line at the end of the commit message. Do not add an AI co-author when the tool only provided incidental assistance and did not contribute to the committed change.
+
 ### Pre-commit hooks (recommended)
 
 This repository includes [pre-commit](https://pre-commit.com/) configuration at [`.pre-commit-config.yaml`](.pre-commit-config.yaml): YAML checks and a **commit-msg** hook that enforces the [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) rules above (including a required **scope**).
