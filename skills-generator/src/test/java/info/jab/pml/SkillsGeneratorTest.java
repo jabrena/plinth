@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -126,6 +127,198 @@ class SkillsGeneratorTest {
         void should_validateInventoryMatchesSkillsAndSystemPrompts() {
             List<SkillIndexes.SkillDescriptor> descriptors = SkillIndexes.skillDescriptors().toList();
             assertThat(descriptors).isNotEmpty();
+        }
+    }
+
+    @Nested
+    @DisplayName("Embedded command bundle")
+    class EmbeddedCommandBundleTests {
+
+        private static final List<String> EXPECTED_COMMAND_FILES = List.of(
+            "update-issue-description.md",
+            "create-feature-branch.md",
+            "create-issue.md",
+            "create-worktree.md",
+            "explore-design.md",
+            "create-adr.md",
+            "create-diagram.md",
+            "create-plan.md",
+            "create-spec.md",
+            "review-alignment.md",
+            "implement.md",
+            "verify.md",
+            "kill-port.md"
+        );
+
+        @Test
+        @DisplayName("Command assets must include the complete analysis and design bundle")
+        void should_haveCompleteCommandAssets_when_commandBundleIsInstalled() {
+            EXPECTED_COMMAND_FILES.forEach(commandFile -> {
+                String resource = "skill-references/assets/commands/" + commandFile;
+                assertThat(getTestResource(resource))
+                    .withFailMessage("Command asset missing: %s", resource)
+                    .isNotNull();
+            });
+        }
+
+        @Test
+        @DisplayName("Command installer must include the exact command bundle")
+        void should_includeExactCommands_when_commandInstallerUsesXIncludes() throws Exception {
+            List<String> commandIncludes = readCommandIncludes("skill-references/004-commands-installation.xml");
+
+            assertThat(commandIncludes)
+                .containsExactlyElementsOf(EXPECTED_COMMAND_FILES.stream()
+                    .map(commandFile -> "assets/commands/" + commandFile)
+                    .toList());
+        }
+
+        @Test
+        @DisplayName("Command inventory template must list the exact command bundle")
+        void should_listExactCommands_when_inventoryTemplateIsGenerated() {
+            String inventory = loadClasspathResource("skill-references/assets/java-commands-inventory-template.md");
+
+            EXPECTED_COMMAND_FILES.stream()
+                .map(commandFile -> commandFile.substring(0, commandFile.length() - ".md".length()))
+                .map(commandName -> "`/" + commandName + "`")
+                .forEach(command -> assertThat(inventory).contains(command));
+
+            long commandRows = inventory.lines()
+                .filter(line -> line.startsWith("| `/"))
+                .count();
+            assertThat(commandRows).isEqualTo(EXPECTED_COMMAND_FILES.size());
+        }
+
+        @Test
+        @DisplayName("Feature branch command must support analysis and design transition")
+        void should_documentDesignTransition_when_featureBranchCommandIsInstalled() {
+            String command = loadClasspathResource("skill-references/assets/commands/create-feature-branch.md");
+
+            assertThat(command)
+                .contains("issue/change identifier")
+                .contains("safe working tree")
+                .contains("OpenSpec artifacts")
+                .contains("ADRs")
+                .contains("diagrams")
+                .contains("does not create a commit automatically");
+        }
+
+        private List<String> readCommandIncludes(String xmlResource) throws Exception {
+            try (InputStream xmlStream = getTestResource(xmlResource)) {
+                assertThat(xmlStream)
+                    .withFailMessage("XML resource not found on classpath: %s", xmlResource)
+                    .isNotNull();
+
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                factory.setNamespaceAware(true);
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                Document document = builder.parse(xmlStream);
+                NodeList includes = document.getElementsByTagNameNS("http://www.w3.org/2001/XInclude", "include");
+
+                List<String> commandIncludes = new ArrayList<>();
+                for (int i = 0; i < includes.getLength(); i++) {
+                    Element include = (Element) includes.item(i);
+                    String href = include.getAttribute("href");
+                    if (href.startsWith("assets/commands/")) {
+                        commandIncludes.add(href);
+                    }
+                }
+                return commandIncludes;
+            }
+        }
+    }
+
+    @Nested
+    @DisplayName("Embedded agent bundle")
+    class EmbeddedAgentBundleTests {
+
+        private static final List<String> CODER_AGENTS = List.of(
+            "robot-java-coder.md",
+            "robot-spring-boot-coder.md",
+            "robot-quarkus-coder.md",
+            "robot-micronaut-coder.md"
+        );
+
+        @Test
+        @DisplayName("Installer and inventory provide architect and tech lead without coordinator")
+        void should_installRenamedAnalysisDesignAgents_withoutCoordinatorAlias() {
+            String installer = loadClasspathResource("skill-references/005-agents-installation.xml");
+            String inventory = loadClasspathResource(
+                "skill-references/assets/java-agents-inventory-template.md"
+            );
+
+            assertThat(installer)
+                .contains("assets/agents/robot-architect.md")
+                .contains("assets/agents/robot-tech-lead.md")
+                .doesNotContain("assets/agents/robot-coordinator.md");
+            assertThat(inventory)
+                .contains("`robot-architect`")
+                .contains("`robot-tech-lead`")
+                .doesNotContain("`robot-coordinator`");
+            assertThat(getTestResource("skill-references/assets/agents/robot-coordinator.md"))
+                .isNull();
+        }
+
+        @Test
+        @DisplayName("Tech lead preserves all framework coder routes")
+        void should_referenceAllCoderAgents_when_techLeadCoordinatesDelivery() {
+            String installer = loadClasspathResource("skill-references/005-agents-installation.xml");
+            String techLead = loadClasspathResource(
+                "skill-references/assets/agents/robot-tech-lead.md"
+            );
+
+            CODER_AGENTS.forEach(coderAgent -> {
+                assertThat(installer).contains(coderAgent);
+                assertThat(techLead).contains(coderAgent);
+            });
+        }
+    }
+
+    @Nested
+    @DisplayName("Composable planning skill contracts")
+    class ComposablePlanningSkillContractTests {
+
+        @Test
+        @DisplayName("Should register design exploration and independent plan and OpenSpec workflows")
+        void should_registerComposablePlanningSkills_when_loadingInventory() {
+            Map<String, SkillIndexes.SkillDescriptor> descriptors = SkillIndexes.skillDescriptors()
+                .collect(Collectors.toMap(SkillIndexes.SkillDescriptor::skillId, descriptor -> descriptor));
+
+            assertThat(descriptors)
+                .containsKeys(
+                    "034-architecture-design-exploration",
+                    "041-planning-plan-mode",
+                    "042-planning-openspec"
+                );
+            assertThat(descriptors.get("034-architecture-design-exploration").references())
+                .containsExactly("034-architecture-design-exploration");
+        }
+
+        @Test
+        @DisplayName("Should generate planning workflows with source authority and controlled derivation")
+        void should_generateControlledDerivation_when_planningSkillsGenerated() {
+            SkillsGenerator generator = new SkillsGenerator();
+
+            SkillsGenerator.SkillOutput exploration = generator.generateSkill(
+                "034-architecture-design-exploration",
+                true,
+                true
+            );
+            SkillsGenerator.SkillOutput plan = generator.generateSkill("041-planning-plan-mode", true, true);
+            SkillsGenerator.SkillOutput openspec = generator.generateSkill("042-planning-openspec", true, true);
+
+            assertThat(exploration.skillMd())
+                .contains("Compare two or three feasible approaches")
+                .contains("Obtain approval")
+                .contains("ADR candidates");
+            assertThat(plan.skillMd())
+                .contains("OpenSpec is an optional input or downstream artifact")
+                .contains("Record source artifacts and derivation direction")
+                .contains("MUST NOT**: Require creation of OpenSpec artifacts");
+            assertThat(openspec.skillMd())
+                .contains("An implementation plan is optional")
+                .contains("one reviewable change versus multiple independently valuable or deployable changes")
+                .contains("Obtain user approval for a multiple-change map")
+                .contains("MUST NOT**: Perform automatic two-way synchronization");
         }
     }
 

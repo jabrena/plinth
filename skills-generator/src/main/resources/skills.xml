@@ -60,6 +60,11 @@
             <reference>033-architecture-diagrams</reference>
         </reference-list>
     </skill>
+    <skill id="034">
+        <reference-list>
+            <reference>034-architecture-design-exploration</reference>
+        </reference-list>
+    </skill>
     <skill id="041">
         <reference-list>
             <reference>041-planning-plan-mode</reference>

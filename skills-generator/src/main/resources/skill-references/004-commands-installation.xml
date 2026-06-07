@@ -54,6 +54,30 @@
                 <xi:include href="assets/commands/create-feature-branch.md" parse="text"/>
                 ```
                 ```markdown
+                <xi:include href="assets/commands/create-issue.md" parse="text"/>
+                ```
+                ```markdown
+                <xi:include href="assets/commands/create-worktree.md" parse="text"/>
+                ```
+                ```markdown
+                <xi:include href="assets/commands/explore-design.md" parse="text"/>
+                ```
+                ```markdown
+                <xi:include href="assets/commands/create-adr.md" parse="text"/>
+                ```
+                ```markdown
+                <xi:include href="assets/commands/create-diagram.md" parse="text"/>
+                ```
+                ```markdown
+                <xi:include href="assets/commands/create-plan.md" parse="text"/>
+                ```
+                ```markdown
+                <xi:include href="assets/commands/create-spec.md" parse="text"/>
+                ```
+                ```markdown
+                <xi:include href="assets/commands/review-alignment.md" parse="text"/>
+                ```
+                ```markdown
                 <xi:include href="assets/commands/implement.md" parse="text"/>
                 ```
                 ```markdown
@@ -70,7 +94,7 @@
             <step-constraints>
                 <step-constraint-list>
                     <step-constraint>**MUST** copy from embedded assets, not from external URLs</step-constraint>
-                    <step-constraint>**MUST** install all five commands as one set</step-constraint>
+                    <step-constraint>**MUST** install all thirteen commands as one set</step-constraint>
                     <step-constraint>**MUST** preserve original file names</step-constraint>
                 </step-constraint-list>
             </step-constraints>

@@ -5,40 +5,61 @@
         <author>Juan Antonio Breña Moral</author>
         <version>0.16.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
-        <title>OpenSpec Change Planning from `*.plan.md`</title>
-        <description>Use when you need to take a `*.plan.md` file and turn it into OpenSpec change artifacts by validating OpenSpec installation, initializing or reusing an OpenSpec project, and creating or updating a change proposal/spec/tasks flow. Includes a concrete workflow based on `examples/requirements-examples/problem1/requirements/openspec`.</description>
+        <title>Composable OpenSpec Change Planning</title>
+        <description>Use when creating or updating OpenSpec change artifacts from an issue, implementation plan, approved design, ADRs, existing OpenSpec artifacts, or a valid combination.</description>
     </metadata>
 
-    <role>You are a Senior software engineer who transforms implementation plans into OpenSpec-compliant change artifacts.</role>
+    <role>You are a Senior software engineer who creates traceable OpenSpec changes from authoritative project artifacts.</role>
 
-    <tone>Be practical and step-by-step. Verify installation first, then execute the smallest safe set of OpenSpec commands to create or update the target change.</tone>
+    <tone>Be practical, explicit about authority, and conservative about scope. Propose change boundaries before creating files and ask for decisions when sources conflict.</tone>
 
     <goal>
-        Given a `*.plan.md`, produce (or update) an OpenSpec change workflow: proposal, design, tasks, and spec deltas, then validate and optionally archive the change.
+        Create or update OpenSpec proposal, design, specification, and task artifacts from issue, plan, design, ADR, or existing OpenSpec inputs. Assess whether the scope requires one change or multiple changes, record derivation, and prevent silent synchronization.
     </goal>
 
     <steps>
         <step number="1">
-            <step-title>Read and Normalize the Plan</step-title>
+            <step-title>Read Inputs and Establish Authority</step-title>
             <step-content><![CDATA[
-Read the target `*.plan.md` and extract:
-- Change intent (what behavior is added/modified)
-- Candidate change-id (kebab-case, verb-led, e.g. `add-dark-mode`)
-- Affected capability names for OpenSpec specs
-- Key acceptance checkpoints and task phases
+Read all supplied artifacts and classify them:
 
-If unclear, ask one or two clarifying questions and wait for answers.
+- Issue or story: problem, value, scope, acceptance criteria
+- Approved design: selected technical direction
+- ADR: architecture decisions and consequences
+- Implementation plan: technical delivery strategy
+- Existing OpenSpec specification: requirements
+- Existing OpenSpec tasks: execution tracking when selected
+
+Record source paths or identifiers and derivation direction. A plan is optional. Do not invent requirements absent from authoritative sources.
+            ]]></step-content>
+        </step>
+        <step number="2">
+            <step-title>Assess One Change or Multiple Changes</step-title>
+            <step-content><![CDATA[
+Keep an atomic outcome in one OpenSpec change even when it updates several capability specifications.
+
+Propose multiple changes only when outcomes differ materially by:
+
+- Business value
+- Release timing
+- Ownership
+- Dependency order
+- Risk or approval
+- Rollback boundary
+- Deployment boundary
+
+For multiple changes, present a change map with change IDs, scopes, affected capabilities, and dependency order. Wait for user approval before creating artifacts.
             ]]></step-content>
             <step-constraints>
                 <step-constraint-list>
-                    <step-constraint>**MUST** use the `*.plan.md` as source of truth</step-constraint>
-                    <step-constraint>**MUST NOT** invent requirements not present in plan/spec inputs</step-constraint>
-                    <step-constraint>**MUST** propose the normalized change-id before running status/show/archive commands</step-constraint>
+                    <step-constraint>**MUST** avoid one-change-per-layer or one-change-per-file decomposition</step-constraint>
+                    <step-constraint>**MUST** preserve independently reviewable and deployable outcomes</step-constraint>
+                    <step-constraint>**MUST** obtain explicit approval for the change map</step-constraint>
                 </step-constraint-list>
             </step-constraints>
         </step>
-        <step number="2">
-            <step-title>Verify OpenSpec Installation</step-title>
+        <step number="3">
+            <step-title>Verify OpenSpec Installation and Project</step-title>
             <step-content><![CDATA[
 Run:
 
@@ -46,122 +67,77 @@ Run:
 openspec --version
 ```
 
-If the command fails or is unavailable, offer installation guidance.
-
-On macOS, Linux, and Windows, the simplest way is via npm:
-
-```bash
-npm install -g @fission-ai/openspec@latest
-openspec --version
-```
-
-Notes:
-- macOS/Linux: run in Terminal with a Node.js + npm installation
-- Windows: run in PowerShell (or Command Prompt) with Node.js + npm installed
-            ]]></step-content>
-            <step-constraints>
-                <step-constraint-list>
-                    <step-constraint>**MUST** gate all OpenSpec operations behind `openspec --version`</step-constraint>
-                    <step-constraint>**MUST** explicitly ask the user to proceed with installation guidance if OpenSpec is missing</step-constraint>
-                </step-constraint-list>
-            </step-constraints>
-        </step>
-        <step number="3">
-            <step-title>Ensure OpenSpec Project Exists</step-title>
-            <step-content><![CDATA[
-Work from the parent folder containing `openspec/`.
-
-Example location:
-`examples/requirements-examples/problem1/requirements/openspec`
-
-If there is no initialized OpenSpec project for the target workspace, offer:
+If unavailable, provide npm installation guidance. Work from the parent directory containing `openspec/`. When initialization is approved and required, run:
 
 ```bash
 openspec init
 ```
 
-Then inspect project state:
-
-```bash
-openspec list
-```
+Use `openspec list`, `openspec status --change <change-id>`, and `openspec show <change-id>` to distinguish new changes from updates.
             ]]></step-content>
-            <step-constraints>
-                <step-constraint-list>
-                    <step-constraint>**MUST** run commands from the project directory context expected by OpenSpec</step-constraint>
-                    <step-constraint>**MUST** distinguish between creating a fresh OpenSpec project vs updating an existing one</step-constraint>
-                    <step-constraint>**MUST** use plain `openspec init` (without any `--tools ...` options) when initializing a new OpenSpec project</step-constraint>
-                </step-constraint-list>
-            </step-constraints>
         </step>
         <step number="4">
-            <step-title>Create or Update a Change</step-title>
+            <step-title>Create or Update Approved Change Artifacts</step-title>
             <step-content><![CDATA[
-Use the change-id from Step 1 (example: `add-dark-mode`) and review the current state:
+For each approved change:
 
-```bash
-openspec status --change add-dark-mode
-openspec show add-dark-mode
-```
+- Create or update `proposal.md` for why and scope
+- Create or update `design.md` for technical decisions
+- Create or update capability specification deltas for requirements and scenarios
+- Create or update `tasks.md` with one checkbox checklist only
+- Record source artifacts and derivation direction
+- Document dependency order in proposal or design when several changes are related
 
-Interpretation:
-- If change does not exist: create the OpenSpec change artifacts from the plan (proposal/design/tasks/spec delta)
-- If change exists: update proposal/design/tasks/spec delta to reflect the latest `*.plan.md`
-
-`tasks.md` format rule:
-- Use only one task list in OpenSpec checkbox style (`- [ ]` / `- [x]`)
-- Do not duplicate tasks in an additional Markdown table
+Explain whether each change is new or existing.
             ]]></step-content>
         </step>
         <step number="5">
+            <step-title>Handle Conflicts Without Silent Synchronization</step-title>
+            <step-content><![CDATA[
+When a derived OpenSpec artifact conflicts with an issue, ADR, approved design, plan, or existing specification:
+
+1. Report the conflict and affected concern.
+2. Leave source artifacts unchanged.
+3. Request alignment review and an explicit user decision.
+4. Apply only the approved propagation direction.
+
+Never maintain automatic two-way synchronization.
+            ]]></step-content>
+        </step>
+        <step number="6">
             <step-title>Validate and Archive</step-title>
             <step-content><![CDATA[
-Before completion:
+Run:
 
 ```bash
 openspec validate --all
 ```
 
-When the change is accepted and complete:
+Report failures and fix approved issues. Archive a completed change only after successful validation and explicit user approval:
 
 ```bash
-openspec archive add-dark-mode
-```
-
-If a feature/change is already completed in the workspace (all tasks checked), archive it directly after successful validation, for example:
-
-```bash
-openspec archive us-001-god-analysis-api
+openspec archive <change-id>
 ```
             ]]></step-content>
-            <step-constraints>
-                <step-constraint-list>
-                    <step-constraint>**MUST** run `openspec validate --all` before archive</step-constraint>
-                    <step-constraint>**MUST** report validation failures and proposed fixes</step-constraint>
-                    <step-constraint>**MUST** guide archiving for completed features/changes (all tasks done), for example `openspec archive us-001-god-analysis-api`</step-constraint>
-                    <step-constraint>**MUST** generate a single OpenSpec checklist in `tasks.md` (`- [ ]` / `- [x]`) and avoid a second table-based task list</step-constraint>
-                    <step-constraint>**MUST NOT** archive if validation fails or the user has not approved archiving</step-constraint>
-                </step-constraint-list>
-            </step-constraints>
         </step>
     </steps>
 
     <output-format>
         <output-format-list>
-            <output-format-item>Start with a brief plan summary from the `*.plan.md`</output-format-item>
-            <output-format-item>Confirm whether OpenSpec is installed and which version is detected</output-format-item>
-            <output-format-item>State whether you will initialize a project or update an existing one</output-format-item>
-            <output-format-item>Show the exact next command(s)</output-format-item>
-            <output-format-item>Summarize validation status and archive readiness</output-format-item>
+            <output-format-item>Summarize source artifacts, authority, and derivation direction</output-format-item>
+            <output-format-item>State whether the scope is one change or present an approval-ready change map</output-format-item>
+            <output-format-item>Explain whether each OpenSpec change is new or being updated</output-format-item>
+            <output-format-item>Report validation and archive readiness</output-format-item>
         </output-format-list>
     </output-format>
 
     <safeguards>
         <safeguards-list>
-            <safeguards-item>Never skip installation/version verification</safeguards-item>
-            <safeguards-item>Never skip validation before archive</safeguards-item>
-            <safeguards-item>Keep change-id consistent across status/show/archive</safeguards-item>
-            <safeguards-item>Treat `*.plan.md` as the requirement baseline for OpenSpec changes</safeguards-item>
+            <safeguards-item>Never require a plan when an issue, design, ADR, or existing OpenSpec provides sufficient input</safeguards-item>
+            <safeguards-item>Never invent requirements absent from authoritative sources</safeguards-item>
+            <safeguards-item>Never create multiple changes before the user approves the change map</safeguards-item>
+            <safeguards-item>Never silently rewrite source artifacts or synchronize in both directions</safeguards-item>
+            <safeguards-item>Never archive before successful validation and user approval</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>
