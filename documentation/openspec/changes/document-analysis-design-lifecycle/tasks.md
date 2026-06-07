@@ -3,7 +3,7 @@
 - [ ] 1.1 Confirm `add-analysis-design-commands` is integrated and validated.
 - [ ] 1.2 Confirm `add-analysis-design-agents` is integrated and validated.
 - [ ] 1.3 Confirm `add-composable-planning-workflows` is integrated and validated.
-- [ ] 1.4 Resolve whether `robot-coordinator` has a temporary compatibility alias.
+- [x] 1.4 Resolve whether `robot-coordinator` has a temporary compatibility alias.
 
 ## 2. README and Inventories
 

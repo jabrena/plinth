@@ -68,5 +68,9 @@ The parent tracks child status and final issue alignment. It contains no duplica
 
 ## Open Questions
 
-- Resolve the coordinator compatibility-alias decision before the documentation child begins.
 - Confirm XML skill `034` before the planning child creates new XML sources.
+
+## Resolved Questions
+
+- `robot-coordinator` is renamed immediately to `robot-tech-lead`; no compatibility alias is installed.
+- Skill identifier `034-architecture-design-exploration` is approved for the planning child.

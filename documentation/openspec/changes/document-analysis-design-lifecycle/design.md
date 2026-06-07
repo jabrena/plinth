@@ -53,4 +53,4 @@ Prerequisite changes run focused verification. This integration change runs full
 
 ## Open Questions
 
-- Resolve the coordinator compatibility-alias decision before publishing migration instructions.
+None. The migration is an immediate rename from `robot-coordinator` to `robot-tech-lead` without a compatibility alias.
