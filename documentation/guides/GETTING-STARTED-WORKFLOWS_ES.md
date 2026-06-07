@@ -1,23 +1,33 @@
 # Flujos de trabajo del proyecto
 
-Al construir este proyecto identificamos tres flujos de trabajo: `Prompting Engineering Workflow`, `Agent-driven Engineering Workflow` y `Pipelines Workflow`.
+El análisis y el diseño son componibles. Empieza desde los artefactos autoritativos disponibles; no es obligatorio crear un plan antes de OpenSpec ni OpenSpec antes de un plan.
 
-## Prompting Engineering Workflow
+## Opciones del ciclo de vida
 
-En este flujo, el ingeniero de software interactúa con los modelos mediante `User prompts`. De forma incremental, delegas una tarea completa o pides ayuda en puntos concretos. Puedes usar este proyecto para refactorizar código generado, o delegar la tarea y adjuntar un system prompt o Skills.
+1. Ejecuta opcionalmente `/create-feature-branch` antes de versionar artefactos de análisis y diseño.
+2. Usa `/create-worktree` cuando cambios hijos independientes puedan ejecutarse en ramas aisladas.
+3. Ejecuta `/create-issue` para crear o refinar la necesidad registrada en GitHub o Jira.
+4. Ejecuta `/explore-design` cuando existan alternativas técnicas relevantes sin resolver.
+5. Ejecuta `/create-adr` para decisiones duraderas y `/create-diagram` para vistas de arquitectura útiles.
+6. Ejecuta `/create-plan` desde un issue, diseño aprobado, ADRs, OpenSpec o una combinación válida.
+7. Ejecuta `/create-spec` desde un issue, diseño aprobado, ADRs, plan, OpenSpec existente o una combinación válida.
+8. Ejecuta `/review-alignment` antes de la entrega cuando los artefactos puedan discrepar o la preparación sea incierta.
+9. Pide a `@robot-tech-lead` que entregue el plan o `tasks.md` de OpenSpec seleccionado.
 
-![](../images/workflow-prompts.png)
+Las rutas comunes incluyen issue a plan, issue a OpenSpec, plan a OpenSpec y OpenSpec existente a plan. `/create-spec` puede proponer varios cambios OpenSpec cuando los resultados tengan límites independientes de valor, propiedad, entrega, riesgo, rollback o despliegue. El usuario aprueba ese mapa antes de crear los cambios.
 
-## Agent-driven Engineering Workflow
+## Autoridad de los artefactos
 
-Los `Agents for Java Enterprise development` están pensados para ayudar al ingeniero de software en la fase de implementación. El ingeniero define `Specs` sólidas y esas especificaciones se delegan a los `Agents`.
+| Artefacto | Responsabilidad autoritativa |
+| --- | --- |
+| Issue o user story | Problema, valor, alcance y criterios de aceptación |
+| ADR | Decisión de arquitectura y consecuencias |
+| Especificación OpenSpec | Requisitos y escenarios |
+| Plan de implementación | Estrategia técnica, secuencia, dependencias y verificación |
+| OpenSpec `tasks.md` seleccionado | Seguimiento de ejecución cuando se elige ese flujo |
 
-![](../images/workflow-agents.png)
+La derivación es unidireccional y queda registrada. Un artefacto derivado nunca modifica silenciosamente sus fuentes. Si existen conflictos, ejecuta `/review-alignment` en modo solo lectura, decide qué responsabilidad autoritativa debe cambiar, actualízala explícitamente, regenera los derivados afectados y revisa la alineación de nuevo.
 
-## Pipelines Workflow
+## Entrega en paralelo
 
-Añadir herramientas de IA a tu pipeline puede abrir nuevas oportunidades para aportar más valor, como la codificación automática, la refactorización de código y el perfilado continuo.
-
-![](../images/workflow-pipelines.png)
-
-Consulta la [guía de pipelines](./GETTING-STARTED-PIPELINES_ES.md) para obtener más información.
+Usa worktrees separados para cambios independientes de comandos, agentes o planificación. Integra y valida esos cambios fuente antes de actualizar documentación compartida. El tech lead solo puede delegar grupos simultáneamente cuando las dependencias y la propiedad de archivos hagan el trabajo independiente.

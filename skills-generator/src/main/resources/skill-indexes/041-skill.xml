@@ -7,73 +7,74 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.16.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when creating a plan using Plan model and enhancing structured design plans in Cursor Plan mode for Java implementations. Use when the user wants to create a plan, design an implementation, structure a development plan, or use plan mode for outside-in TDD, feature implementation, or refactoring work. This should trigger for requests such as Create a plan with Cursor Plan mode; Write a plan with Claude Plan mode; Design an implementation plan; Structure a development plan.</description>
+    <description>Use when creating or refining a structured Java implementation plan from an issue, approved design, ADRs, OpenSpec change, or a valid combination. The plan records its source artifacts and derivation direction and can remain the execution artifact without requiring OpenSpec. This should trigger for requests such as Create a plan from an issue; Create a plan from OpenSpec; Design an implementation plan; Refine an existing plan.</description>
   </metadata>
 
-  <title>Java Design Plan Creation for Cursor Plan Mode</title>
+  <title>Composable Java Implementation Planning</title>
   <goal><![CDATA[
-Guide the process of creating a structured plan using Cursor Plan mode. **This is an interactive SKILL**. Plans follow a consistent section structure suitable for Java feature implementation, refactoring, or API design.
+Create or refine a structured implementation plan from the authoritative artifacts already available. **This is an interactive SKILL**. OpenSpec is an optional input or downstream artifact, never a prerequisite.
 
 **What is covered in this Skill?**
 
-- Plan mode workflow: enter Plan mode, gather context, draft plan, iterate
-- YAML frontmatter: name, overview, todos, isProject
-- Required sections: Requirements Summary, Approach (with Mermaid), Task List, Execution Instructions, File Checklist, Notes
-- London Style (outside-in) TDD pattern
-- Plan execution discipline: update Status after each task before advancing
-- Plan storage: ask user for preferred folder and filename convention before creating artifact
+- Input from issues, approved designs, ADRs, OpenSpec changes, existing plans, or valid combinations
+- Concern-specific source authority and conflict detection
+- Source-artifact and derivation-direction recording
+- Technical approach, sequence, dependencies, risks, verification, and execution instructions
+- Structured milestones and parallel work
+- Plan-only execution without OpenSpec
+- Controlled updates that never silently rewrite source artifacts
 ]]></goal>
 
   <constraints>
-    <constraints-description>Gather context before drafting. Include Execution Instructions in every plan. Never advance to next task without updating the plan's Status column.</constraints-description>
+    <constraints-description>Gather context before drafting, preserve source authority, and make derivation explicit. A plan may stand alone and MUST NOT require OpenSpec.</constraints-description>
     <constraint-list>
-      <constraint>**MANDATORY**: Run `date` before starting to get date prefix for plan filename</constraint>
-      <constraint>**MUST**: Read the reference template fresh—do not use cached content</constraint>
-      <constraint>**MUST**: Ask one or two questions at a time; never all at once</constraint>
-      <constraint>**MUST**: Validate summary (Does this capture what you need?) before proposing plan creation</constraint>
-      <constraint>**MUST**: Wait for user to confirm proceed before generating the plan</constraint>
-      <constraint>**MUST**: Ask the user where they want to store the plan before generating the plan artifact</constraint>
-      <constraint>**MUST**: Include Execution Instructions section in every generated plan</constraint>
+      <constraint>**MANDATORY**: Run `date` before starting to get the date prefix for the plan filename</constraint>
+      <constraint>**MUST**: Read the reference template fresh</constraint>
+      <constraint>**MUST**: Accept issue, approved design, ADR, OpenSpec, existing plan, or combined inputs</constraint>
+      <constraint>**MUST**: Record source artifacts and derivation direction in the plan</constraint>
+      <constraint>**MUST**: Preserve concern-specific authority and report source conflicts</constraint>
+      <constraint>**MUST**: Wait for explicit user resolution before propagating a conflict</constraint>
+      <constraint>**MUST**: Include Execution Instructions in every generated plan</constraint>
+      <constraint>**MUST NOT**: Require creation of OpenSpec artifacts</constraint>
+      <constraint>**MUST NOT**: Silently rewrite issues, ADRs, designs, or OpenSpec sources</constraint>
     </constraint-list>
   </constraints>
 
   <triggers>
     <trigger-list>
-        <trigger>Create a plan with Cursor Plan mode</trigger>
-        <trigger>Write a plan with Claude Plan mode</trigger>
-        <trigger>Design an implementation plan</trigger>
-        <trigger>Structure a development plan</trigger>
-        <trigger>Create a structured design plan</trigger>
-        <trigger>Refactor the plan</trigger>
-        <trigger>Improve the plan</trigger>
-        <trigger>Update the plan</trigger>
+      <trigger>Create a plan from an issue</trigger>
+      <trigger>Create a plan from an approved design</trigger>
+      <trigger>Create a plan from ADRs</trigger>
+      <trigger>Create a plan from OpenSpec</trigger>
+      <trigger>Design an implementation plan</trigger>
+      <trigger>Refine an existing plan</trigger>
     </trigger-list>
   </triggers>
 
   <steps>
     <step number="0">
       <step-title>Get current date</step-title>
-      <step-content>Run `date` before planning and use it to derive the plan filename prefix `YYYY-MM-DD`.</step-content>
+      <step-content>Run `date` before planning and use it when the selected filename convention requires a date prefix.</step-content>
     </step>
     <step number="1">
-      <step-title>Read reference and gather context</step-title>
-      <step-content>Read `references/041-planning-plan-mode.md` and ask one or two questions at a time to clarify requirements, constraints, and target scope.</step-content>
+      <step-title>Read sources and establish authority</step-title>
+      <step-content>Read `references/041-planning-plan-mode.md` and all supplied artifacts. Classify each source by concern: issue/story for problem and acceptance criteria, ADR for decisions, OpenSpec for requirements, and plan for delivery strategy.</step-content>
     </step>
     <step number="2">
-      <step-title>Validate summary and confirm proceed</step-title>
-      <step-content>Summarize understanding, ask Does this capture what you need?, and wait for explicit proceed before creating the plan artifact.</step-content>
+      <step-title>Resolve ambiguity and conflicts</step-title>
+      <step-content>Summarize scope, constraints, assumptions, and conflicts. Ask one or two focused questions at a time. Do not propagate conflicting changes until the user makes an explicit decision.</step-content>
     </step>
     <step number="3">
-      <step-title>Confirm plan storage location</step-title>
-      <step-content>Ask where the user wants to store the plan (for example, `.cursor/plans/` or another folder) and confirm the target filename pattern before writing.</step-content>
+      <step-title>Confirm plan intent and storage</step-title>
+      <step-content>Confirm whether the plan is new or being refined, its derivation direction, execution role, target folder, and filename. Validate the summary and wait for approval before writing.</step-content>
     </step>
     <step number="4">
-      <step-title>Generate structured plan artifact</step-title>
-      <step-content>Create the plan at the confirmed location using required sections and YAML frontmatter, including Execution Instructions.</step-content>
+      <step-title>Generate the implementation plan</step-title>
+      <step-content>Create the structured plan with source metadata, requirements summary, technical approach, dependencies, risks, tasks, milestones, parallel groups, verification, execution instructions, file checklist, and notes.</step-content>
     </step>
     <step number="5">
-      <step-title>Apply execution discipline</step-title>
-      <step-content>When executing tasks from the plan, update the Status column after each task before moving to the next one.</step-content>
+      <step-title>Use the selected execution authority</step-title>
+      <step-content>If the plan is the selected execution artifact, track work directly in it. If OpenSpec tasks are selected later, record that transition explicitly; do not maintain silent two-way synchronization.</step-content>
     </step>
   </steps>
 </prompt>
