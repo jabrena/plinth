@@ -20,6 +20,6 @@
 
 ## 4. Parent Completion
 
-- [ ] 4.1 Verify all four child changes are complete and ready for archive.
-- [ ] 4.2 Verify issue #806 acceptance criteria are covered by the child specifications.
-- [ ] 4.3 Archive child changes in integration order, then archive this coordination change.
+- [x] 4.1 Verify all four child changes are complete and ready for archive.
+- [x] 4.2 Verify issue #806 acceptance criteria are covered by the child specifications.
+- [x] 4.3 Archive child changes in integration order, then archive this coordination change.
