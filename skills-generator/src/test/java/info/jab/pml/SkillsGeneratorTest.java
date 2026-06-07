@@ -228,6 +228,52 @@ class SkillsGeneratorTest {
     }
 
     @Nested
+    @DisplayName("Embedded agent bundle")
+    class EmbeddedAgentBundleTests {
+
+        private static final List<String> CODER_AGENTS = List.of(
+            "robot-java-coder.md",
+            "robot-spring-boot-coder.md",
+            "robot-quarkus-coder.md",
+            "robot-micronaut-coder.md"
+        );
+
+        @Test
+        @DisplayName("Installer and inventory provide architect and tech lead without coordinator")
+        void should_installRenamedAnalysisDesignAgents_withoutCoordinatorAlias() {
+            String installer = loadClasspathResource("skill-references/005-agents-installation.xml");
+            String inventory = loadClasspathResource(
+                "skill-references/assets/java-agents-inventory-template.md"
+            );
+
+            assertThat(installer)
+                .contains("assets/agents/robot-architect.md")
+                .contains("assets/agents/robot-tech-lead.md")
+                .doesNotContain("assets/agents/robot-coordinator.md");
+            assertThat(inventory)
+                .contains("`robot-architect`")
+                .contains("`robot-tech-lead`")
+                .doesNotContain("`robot-coordinator`");
+            assertThat(getTestResource("skill-references/assets/agents/robot-coordinator.md"))
+                .isNull();
+        }
+
+        @Test
+        @DisplayName("Tech lead preserves all framework coder routes")
+        void should_referenceAllCoderAgents_when_techLeadCoordinatesDelivery() {
+            String installer = loadClasspathResource("skill-references/005-agents-installation.xml");
+            String techLead = loadClasspathResource(
+                "skill-references/assets/agents/robot-tech-lead.md"
+            );
+
+            CODER_AGENTS.forEach(coderAgent -> {
+                assertThat(installer).contains(coderAgent);
+                assertThat(techLead).contains(coderAgent);
+            });
+        }
+    }
+
+    @Nested
     @DisplayName("Title consistency between skill markdown and system-prompt XML")
     class TitleConsistencyTests {
 
