@@ -274,6 +274,55 @@ class SkillsGeneratorTest {
     }
 
     @Nested
+    @DisplayName("Composable planning skill contracts")
+    class ComposablePlanningSkillContractTests {
+
+        @Test
+        @DisplayName("Should register design exploration and independent plan and OpenSpec workflows")
+        void should_registerComposablePlanningSkills_when_loadingInventory() {
+            Map<String, SkillIndexes.SkillDescriptor> descriptors = SkillIndexes.skillDescriptors()
+                .collect(Collectors.toMap(SkillIndexes.SkillDescriptor::skillId, descriptor -> descriptor));
+
+            assertThat(descriptors)
+                .containsKeys(
+                    "034-architecture-design-exploration",
+                    "041-planning-plan-mode",
+                    "042-planning-openspec"
+                );
+            assertThat(descriptors.get("034-architecture-design-exploration").references())
+                .containsExactly("034-architecture-design-exploration");
+        }
+
+        @Test
+        @DisplayName("Should generate planning workflows with source authority and controlled derivation")
+        void should_generateControlledDerivation_when_planningSkillsGenerated() {
+            SkillsGenerator generator = new SkillsGenerator();
+
+            SkillsGenerator.SkillOutput exploration = generator.generateSkill(
+                "034-architecture-design-exploration",
+                true,
+                true
+            );
+            SkillsGenerator.SkillOutput plan = generator.generateSkill("041-planning-plan-mode", true, true);
+            SkillsGenerator.SkillOutput openspec = generator.generateSkill("042-planning-openspec", true, true);
+
+            assertThat(exploration.skillMd())
+                .contains("Compare two or three feasible approaches")
+                .contains("Obtain approval")
+                .contains("ADR candidates");
+            assertThat(plan.skillMd())
+                .contains("OpenSpec is an optional input or downstream artifact")
+                .contains("Record source artifacts and derivation direction")
+                .contains("MUST NOT**: Require creation of OpenSpec artifacts");
+            assertThat(openspec.skillMd())
+                .contains("An implementation plan is optional")
+                .contains("one reviewable change versus multiple independently valuable or deployable changes")
+                .contains("Obtain user approval for a multiple-change map")
+                .contains("MUST NOT**: Perform automatic two-way synchronization");
+        }
+    }
+
+    @Nested
     @DisplayName("Title consistency between skill markdown and system-prompt XML")
     class TitleConsistencyTests {
 

@@ -7,72 +7,76 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.16.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to take a `*.plan.md` file and turn it into OpenSpec change artifacts by validating OpenSpec installation, initializing or reusing an OpenSpec project, and creating or updating a change proposal/spec/tasks flow. Includes a concrete workflow based on `examples/requirements-examples/problem1/requirements/openspec`. This should trigger for requests such as Convert `*.plan.md` into OpenSpec; Add change proposal from plan; Update existing OpenSpec project; Initialize OpenSpec in requirements folder.</description>
+    <description>Use when creating or updating OpenSpec change artifacts from an issue, implementation plan, approved design, ADRs, existing OpenSpec artifacts, or a valid combination. The workflow assesses whether the scope is one change or multiple changes, records sources and derivation direction, and prevents silent synchronization. This should trigger for requests such as Create an OpenSpec change from an issue; Convert a plan into OpenSpec; Update an existing OpenSpec change; Split broad requirements into reviewable OpenSpec changes.</description>
   </metadata>
 
-  <title>OpenSpec Change Planning from `*.plan.md`</title>
+  <title>Composable OpenSpec Change Planning</title>
   <goal><![CDATA[
-Guide the process of turning an implementation plan (`*.plan.md`) into an OpenSpec change workflow. **This is an interactive SKILL**. It verifies CLI availability, initializes OpenSpec when needed, and then creates or updates a change with proposal, design, tasks, and spec deltas.
+Create or update OpenSpec proposal, design, specification, and task artifacts from the authoritative inputs already available. **This is an interactive SKILL**. An implementation plan is optional.
 
 **What is covered in this Skill?**
 
-- Input analysis from `*.plan.md` (scope, change-id candidate, affected capabilities)
-- Installation and availability checks for OpenSpec CLI
-- Recommended installation paths on macOS, Linux, and Windows using npm
-- OpenSpec project bootstrapping with `openspec init`
-- Existing-project workflow using `openspec list`, `openspec status`, `openspec show`
-- Validation and completion flow with `openspec validate --all` and `openspec archive`
-- Example-root workflow at `examples/requirements-examples/problem1/requirements/openspec`
+- Inputs from issues, plans, approved designs, ADRs, existing OpenSpec, or valid combinations
+- OpenSpec installation and project checks
+- Concern-specific artifact authority
+- Source recording and derivation direction
+- One-change versus multiple-change scope assessment
+- User-approved change maps and dependency order
+- Proposal, design, specification, and single-checklist task creation
+- Explicit conflict handling and no silent two-way synchronization
 ]]></goal>
 
   <constraints>
-    <constraints-description>Always execute OpenSpec commands from the parent directory that contains the `openspec/` folder. Do not invent requirements not present in the `*.plan.md`; convert plan intent into explicit OpenSpec change artifacts.</constraints-description>
+    <constraints-description>Create only requirements supported by authoritative inputs, assess change boundaries before writing artifacts, and preserve source authority.</constraints-description>
     <constraint-list>
-      <constraint>**MUST**: Start by reading and summarizing the provided `*.plan.md`</constraint>
-      <constraint>**MUST**: Check CLI availability with `openspec --version` before any OpenSpec operation</constraint>
-      <constraint>**MUST**: If OpenSpec is missing, provide macOS, Linux, and Windows install guidance via npm command</constraint>
-      <constraint>**MUST**: Offer `openspec init` when no OpenSpec project exists</constraint>
-      <constraint>**MUST**: When creating a new OpenSpec project, run plain `openspec init` only (do not use `--tools ...` options)</constraint>
-      <constraint>**MUST**: Use a stable change-id (for example: `add-dark-mode`) for status/show/archive commands</constraint>
-      <constraint>**MUST**: Run `openspec validate --all` before archiving</constraint>
-      <constraint>**MUST**: When a feature/change is completed (all checklist tasks done), guide the user to archive it (for example: `openspec archive us-001-god-analysis-api`)</constraint>
-      <constraint>**MUST**: In `tasks.md`, generate a single OpenSpec checklist (`- [ ]` / `- [x]`) only; do not add a second table-based task list</constraint>
-      <constraint>**MUST**: Explain whether the workflow creates a new change or updates an existing one</constraint>
-      <constraint>**EDGE CASE**: If request scope is ambiguous, stop and ask a clarifying question before applying changes</constraint>
-      <constraint>**EDGE CASE**: If required inputs, files, or tooling are missing, report what is missing and ask whether to proceed with setup guidance</constraint>
+      <constraint>**MUST**: Accept issue, plan, approved design, ADR, existing OpenSpec, or combined inputs</constraint>
+      <constraint>**MUST**: Check CLI availability with `openspec --version` before OpenSpec operations</constraint>
+      <constraint>**MUST**: Assess one reviewable change versus multiple independently valuable or deployable changes</constraint>
+      <constraint>**MUST**: Obtain user approval for a multiple-change map before creating changes</constraint>
+      <constraint>**MUST**: Record source artifacts and derivation direction</constraint>
+      <constraint>**MUST**: Preserve concern-specific authority and require explicit conflict resolution</constraint>
+      <constraint>**MUST**: Use one OpenSpec checklist in each `tasks.md`</constraint>
+      <constraint>**MUST NOT**: Require an implementation plan</constraint>
+      <constraint>**MUST NOT**: Invent absent requirements or silently rewrite source artifacts</constraint>
+      <constraint>**MUST NOT**: Perform automatic two-way synchronization</constraint>
     </constraint-list>
   </constraints>
 
   <triggers>
     <trigger-list>
-      <trigger>Convert `*.plan.md` into OpenSpec</trigger>
-      <trigger>Add change proposal from plan</trigger>
-      <trigger>Update existing OpenSpec project</trigger>
-      <trigger>Initialize OpenSpec in requirements folder</trigger>
-      <trigger>Validate and archive OpenSpec change</trigger>
+      <trigger>Create an OpenSpec change from an issue</trigger>
+      <trigger>Create OpenSpec from an approved design</trigger>
+      <trigger>Convert a plan into OpenSpec</trigger>
+      <trigger>Update an existing OpenSpec change</trigger>
+      <trigger>Split broad requirements into OpenSpec changes</trigger>
+      <trigger>Validate and archive OpenSpec changes</trigger>
     </trigger-list>
   </triggers>
 
   <steps>
     <step number="1">
-      <step-title>Read and summarize plan input</step-title>
-      <step-content>Read `references/042-planning-openspec.md` and the provided `*.plan.md`, then summarize scope and identify candidate change-id and affected capabilities.</step-content>
+      <step-title>Read sources and establish authority</step-title>
+      <step-content>Read `references/042-planning-openspec.md` and all supplied inputs. Record their paths or identifiers, concerns, and intended derivation direction.</step-content>
     </step>
     <step number="2">
-      <step-title>Check OpenSpec CLI and install gate</step-title>
-      <step-content>Run `openspec --version`; if missing, provide npm installation guidance for macOS, Linux, and Windows before proceeding.</step-content>
+      <step-title>Assess change boundaries</step-title>
+      <step-content>Determine whether the input is one atomic, reviewable outcome or multiple changes separated by value, release, ownership, dependency, risk, approval, rollback, or deployment boundaries. Obtain approval for any proposed change map.</step-content>
     </step>
     <step number="3">
-      <step-title>Initialize or detect OpenSpec project</step-title>
-      <step-content>From the parent directory containing `openspec/`, run project checks and offer `openspec init` (without `--tools`) when initialization is needed.</step-content>
+      <step-title>Check OpenSpec tooling and project</step-title>
+      <step-content>Run `openspec --version`, initialize with plain `openspec init` when approved and needed, and inspect existing changes from the parent directory containing `openspec/`.</step-content>
     </step>
     <step number="4">
-      <step-title>Create or update change artifacts</step-title>
-      <step-content>Explain whether this is a new or existing change, then create/update proposal, design, tasks, and spec deltas using a stable change-id.</step-content>
+      <step-title>Create or update approved changes</step-title>
+      <step-content>Create or update proposal, design, specification deltas, and tasks for each approved change. Keep one atomic outcome together even when it updates several capability specifications.</step-content>
     </step>
     <step number="5">
+      <step-title>Validate authority and alignment</step-title>
+      <step-content>Check artifacts against their sources. Leave conflicting sources unchanged and require alignment review plus an explicit user decision before propagation.</step-content>
+    </step>
+    <step number="6">
       <step-title>Validate and close workflow</step-title>
-      <step-content>Run `openspec validate --all`; when checklist tasks are complete, guide the user to archive the change with `openspec archive &lt;change-id&gt;`.</step-content>
+      <step-content>Run `openspec validate --all`. Archive only completed, validated changes with user approval.</step-content>
     </step>
   </steps>
 </prompt>
