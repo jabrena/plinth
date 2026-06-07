@@ -8,6 +8,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -126,6 +127,103 @@ class SkillsGeneratorTest {
         void should_validateInventoryMatchesSkillsAndSystemPrompts() {
             List<SkillIndexes.SkillDescriptor> descriptors = SkillIndexes.skillDescriptors().toList();
             assertThat(descriptors).isNotEmpty();
+        }
+    }
+
+    @Nested
+    @DisplayName("Embedded command bundle")
+    class EmbeddedCommandBundleTests {
+
+        private static final List<String> EXPECTED_COMMAND_FILES = List.of(
+            "update-issue-description.md",
+            "create-feature-branch.md",
+            "create-issue.md",
+            "create-worktree.md",
+            "explore-design.md",
+            "create-adr.md",
+            "create-diagram.md",
+            "create-plan.md",
+            "create-spec.md",
+            "review-alignment.md",
+            "implement.md",
+            "verify.md",
+            "kill-port.md"
+        );
+
+        @Test
+        @DisplayName("Command assets must include the complete analysis and design bundle")
+        void should_haveCompleteCommandAssets_when_commandBundleIsInstalled() {
+            EXPECTED_COMMAND_FILES.forEach(commandFile -> {
+                String resource = "skill-references/assets/commands/" + commandFile;
+                assertThat(getTestResource(resource))
+                    .withFailMessage("Command asset missing: %s", resource)
+                    .isNotNull();
+            });
+        }
+
+        @Test
+        @DisplayName("Command installer must include the exact command bundle")
+        void should_includeExactCommands_when_commandInstallerUsesXIncludes() throws Exception {
+            List<String> commandIncludes = readCommandIncludes("skill-references/004-commands-installation.xml");
+
+            assertThat(commandIncludes)
+                .containsExactlyElementsOf(EXPECTED_COMMAND_FILES.stream()
+                    .map(commandFile -> "assets/commands/" + commandFile)
+                    .toList());
+        }
+
+        @Test
+        @DisplayName("Command inventory template must list the exact command bundle")
+        void should_listExactCommands_when_inventoryTemplateIsGenerated() {
+            String inventory = loadClasspathResource("skill-references/assets/java-commands-inventory-template.md");
+
+            EXPECTED_COMMAND_FILES.stream()
+                .map(commandFile -> commandFile.substring(0, commandFile.length() - ".md".length()))
+                .map(commandName -> "`/" + commandName + "`")
+                .forEach(command -> assertThat(inventory).contains(command));
+
+            long commandRows = inventory.lines()
+                .filter(line -> line.startsWith("| `/"))
+                .count();
+            assertThat(commandRows).isEqualTo(EXPECTED_COMMAND_FILES.size());
+        }
+
+        @Test
+        @DisplayName("Feature branch command must support analysis and design transition")
+        void should_documentDesignTransition_when_featureBranchCommandIsInstalled() {
+            String command = loadClasspathResource("skill-references/assets/commands/create-feature-branch.md");
+
+            assertThat(command)
+                .contains("issue/change identifier")
+                .contains("safe working tree")
+                .contains("OpenSpec artifacts")
+                .contains("ADRs")
+                .contains("diagrams")
+                .contains("does not create a commit automatically");
+        }
+
+        private List<String> readCommandIncludes(String xmlResource) throws Exception {
+            try (InputStream xmlStream = getTestResource(xmlResource)) {
+                assertThat(xmlStream)
+                    .withFailMessage("XML resource not found on classpath: %s", xmlResource)
+                    .isNotNull();
+
+                DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+                factory.setNamespaceAware(true);
+                DocumentBuilder builder = factory.newDocumentBuilder();
+                Document document = builder.parse(xmlStream);
+                NodeList includes = document.getElementsByTagNameNS("http://www.w3.org/2001/XInclude", "include");
+
+                List<String> commandIncludes = new ArrayList<>();
+                for (int i = 0; i < includes.getLength(); i++) {
+                    Element include = (Element) includes.item(i);
+                    String href = include.getAttribute("href");
+                    if (href.startsWith("assets/commands/")) {
+                        commandIncludes.add(href);
+                    }
+                }
+                return commandIncludes;
+            }
         }
     }
 
