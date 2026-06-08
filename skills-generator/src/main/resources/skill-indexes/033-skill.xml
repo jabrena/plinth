@@ -8,12 +8,12 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.16.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to generate Java project diagrams — including UML sequence diagrams, UML class diagrams, C4 model diagrams, UML state machine diagrams, and ER (Entity Relationship) diagrams — through a modular, step-based interactive process that adapts to your specific visualization needs. This should trigger for requests such as Generate UML diagram; Create sequence diagram; Create class diagram; Create state machine diagram; Create C4 diagram.</description>
+    <description>Use when you need to generate Java project diagrams — including UML sequence diagrams, UML class diagrams, C4 model diagrams, UML state machine diagrams, ER (Entity Relationship) diagrams, and bounded-context diagrams — through a modular, step-based interactive process that adapts to your specific visualization needs. This should trigger for requests such as Generate UML diagram; Create sequence diagram; Create class diagram; Create state machine diagram; Create C4 diagram; Create bounded-context diagram; Create context-map diagram.</description>
   </metadata>
 
   <title>Java Diagrams Generator with modular step-based configuration</title>
   <goal><![CDATA[
-Generate comprehensive Java project diagrams through a modular, step-based interactive process that covers UML sequence diagrams, UML class diagrams, C4 model diagrams, UML state machine diagrams, and ER (Entity Relationship) diagrams using PlantUML syntax. **This is an interactive SKILL**.
+Generate comprehensive Java project diagrams through a modular, step-based interactive process that covers UML sequence diagrams, UML class diagrams, C4 model diagrams, UML state machine diagrams, ER (Entity Relationship) diagrams, and bounded-context diagrams using PlantUML syntax. **This is an interactive SKILL**.
 
 **What is covered in this Skill?**
 
@@ -22,6 +22,7 @@ Generate comprehensive Java project diagrams through a modular, step-based inter
 - C4 model diagram generation for Context, Container, and Component diagrams
 - UML state machine diagram generation for entity lifecycles and business workflows
 - ER diagram generation from SQL schema (DDL, migrations) using PlantUML Chen notation
+- Bounded-context diagram generation for DDD context maps across one or more repositories
 - PlantUML syntax for all diagram types
 - File organization strategies: single-file, separate-files, or integrated with existing documentation
 - Final diagram validation with PlantUML syntax checking
@@ -46,6 +47,8 @@ Generate comprehensive Java project diagrams through a modular, step-based inter
         <trigger>Create state machine diagram</trigger>
         <trigger>Create C4 diagram</trigger>
         <trigger>Generate ER diagram</trigger>
+        <trigger>Create bounded-context diagram</trigger>
+        <trigger>Create context-map diagram</trigger>
     </trigger-list>
   </triggers>
 
@@ -62,7 +65,7 @@ Generate comprehensive Java project diagrams through a modular, step-based inter
     <step number="2">
       <step-title>Ask diagram assessment questions before reading references</step-title>
       <step-content><![CDATA[
-Run this XML-included question flow before reading any diagram-family implementation reference. Ask questions one-by-one in strict order, wait for the user's answer to each question, and record selected diagram families, C4 scope, output organization, file format, and documentation preference before continuing.
+Run this XML-included question flow before reading any diagram-family implementation reference. Ask questions one-by-one in strict order, wait for the user's answer to each question, and record selected diagram families, C4 scope, bounded-context repository scope, output organization, file format, and documentation preference before continuing.
 
 ]]><xi:include href="../skill-references/assets/questions/033-architecture-diagrams-questions.xml"/><![CDATA[
 
@@ -73,7 +76,8 @@ After all applicable questions are answered, confirm the selections and map them
 - If C4 model diagrams are selected, read `references/033-architecture-diagrams-c4.md`.
 - If UML state-machine diagrams are selected, read `references/033-architecture-diagrams-state-machine.md`.
 - If ER diagrams are selected, read `references/033-architecture-diagrams-er.md`.
-- If All diagrams is selected, read all five focused diagram-family references.
+- If bounded-context diagrams are selected, read `references/033-architecture-diagrams-bounded-context.md`.
+- If All diagrams is selected, read all six focused diagram-family references.
 - If Skip is selected for a diagram family, do not read that diagram-family reference.
 - Do not read unselected diagram-family references.
 ]]></step-content>

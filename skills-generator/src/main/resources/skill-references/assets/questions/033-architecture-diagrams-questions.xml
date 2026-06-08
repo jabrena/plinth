@@ -19,6 +19,7 @@ Options:
 - UML state-machine diagrams
 - C4 model diagrams (Context, Container, Component)
 - ER diagrams (Entity Relationship)
+- Bounded-context diagrams
 - All diagrams
 - Skip
 
@@ -93,7 +94,21 @@ Options:
 
 ---
 
-**Question 8**: How would you like to organize the generated diagram files?
+**Question 8**: For bounded-context diagrams, which repositories should be represented?
+Ask this question only if you selected "Bounded-context diagrams" or "All diagrams" in Question 1.
+
+Options:
+- Current repository only
+- One or more local repository paths (I'll provide paths)
+- One or more repository URLs (I'll provide URLs)
+- A named repository list (I'll provide names and context)
+- Skip
+
+For each repository in scope, collect what is available: repository name or path, bounded context, domain or subdomain, owning team, application type, owned data store, exposed interfaces, consumed interfaces, and known relationships.
+
+---
+
+**Question 9**: How would you like to organize the generated diagram files?
 
 Options:
 - Single directory (all diagrams in /diagrams folder)
@@ -103,7 +118,7 @@ Options:
 
 ---
 
-**Question 9**: What file format would you prefer for the diagrams?
+**Question 10**: What file format would you prefer for the diagrams?
 
 Options:
 - PlantUML source files (.puml) only
@@ -113,7 +128,7 @@ Options:
 
 ---
 
-**Question 10**: Would you like to include explanatory documentation with the diagrams?
+**Question 11**: Would you like to include explanatory documentation with the diagrams?
 
 Options:
 - Yes, comprehensive explanations for each diagram
