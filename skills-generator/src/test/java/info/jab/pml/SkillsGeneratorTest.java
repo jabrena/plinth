@@ -146,6 +146,8 @@ class SkillsGeneratorTest {
             "create-spec.md",
             "review-alignment.md",
             "implement-issue.md",
+            "profile.md",
+            "benchmark.md",
             "verify.md",
             "kill-port.md"
         );
@@ -224,6 +226,31 @@ class SkillsGeneratorTest {
                 .contains("MUST NOT implement application code directly");
         }
 
+        @Test
+        @DisplayName("Performance commands must route to Java performance agent")
+        void should_routePerformanceWorkflows_when_profileAndBenchmarkCommandsAreInstalled() {
+            String profile = loadClasspathResource("skill-references/assets/commands/profile.md");
+            String benchmark = loadClasspathResource("skill-references/assets/commands/benchmark.md");
+
+            assertThat(profile)
+                .contains("/profile <application-or-module>")
+                .contains("Owner: `@robot-java-performance`")
+                .contains("`@161-java-profiling-detect`")
+                .contains("`@162-java-profiling-analyze`")
+                .contains("`@163-java-profiling-refactor`")
+                .contains("`@164-java-profiling-verify`")
+                .contains("Do not optimize without user approval")
+                .contains("non-equivalent measurements");
+            assertThat(benchmark)
+                .contains("/benchmark <target>")
+                .contains("Owner: `@robot-java-performance`")
+                .contains("`@151-java-performance-jmeter`")
+                .contains("`@152-java-performance-gatling`")
+                .contains("Maven/JMH guidance")
+                .contains("JMeter or Gatling")
+                .contains("JMH");
+        }
+
         private List<String> readCommandIncludes(String xmlResource) throws Exception {
             try (InputStream xmlStream = getTestResource(xmlResource)) {
                 assertThat(xmlStream)
@@ -272,11 +299,13 @@ class SkillsGeneratorTest {
                 .contains("assets/agents/robot-architect.md")
                 .contains("assets/agents/robot-tech-lead.md")
                 .contains("assets/agents/robot-no-java.md")
+                .contains("assets/agents/robot-java-performance.md")
                 .doesNotContain("assets/agents/robot-coordinator.md");
             assertThat(inventory)
                 .contains("`robot-architect`")
                 .contains("`robot-tech-lead`")
                 .contains("`robot-no-java`")
+                .contains("`robot-java-performance`")
                 .doesNotContain("`robot-coordinator`");
             assertThat(getTestResource("skill-references/assets/agents/robot-coordinator.md"))
                 .isNull();
@@ -309,8 +338,8 @@ class SkillsGeneratorTest {
 
             assertThat(installer)
                 .contains("robot-no-java.md")
-                .contains("all eight files")
-                .contains("eight-agent bundle");
+                .contains("all nine files")
+                .contains("nine-agent bundle");
             assertThat(techLead)
                 .contains("no Java, Maven, or JVM implementation scope")
                 .contains("| Plain Java, Maven/JVM work, Java CLI-only work, or Java framework-neutral requirements | [@robot-java-coder](robot-java-coder.md) |")
@@ -320,6 +349,30 @@ class SkillsGeneratorTest {
                 .contains("name: robot-no-java")
                 .contains("does not use Java, Maven, or a JVM-based framework")
                 .contains("If the task is actually plain Java or Maven work");
+        }
+
+        @Test
+        @DisplayName("Java performance agent must coordinate profiling and benchmarks without direct implementation")
+        void should_coordinatePerformanceWorkflows_when_javaPerformanceAgentIsInstalled() {
+            String installer = loadClasspathResource("skill-references/005-agents-installation.xml");
+            String performanceAgent = loadClasspathResource(
+                "skill-references/assets/agents/robot-java-performance.md"
+            );
+
+            assertThat(installer)
+                .contains("robot-java-performance.md")
+                .contains("all nine files")
+                .contains("nine-agent bundle");
+            assertThat(performanceAgent)
+                .contains("name: robot-java-performance")
+                .contains("`@161-java-profiling-detect`")
+                .contains("`@162-java-profiling-analyze`")
+                .contains("`@164-java-profiling-verify`")
+                .contains("`@151-java-performance-jmeter`")
+                .contains("`@152-java-performance-gatling`")
+                .contains("JMH")
+                .contains("You do not directly implement application-code optimizations")
+                .contains("verified, inconclusive, or regressed");
         }
 
         @Test

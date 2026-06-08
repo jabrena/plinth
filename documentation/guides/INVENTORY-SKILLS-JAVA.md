@@ -14,7 +14,7 @@ Use the following collection of Skills for Java to improve your Java development
 
 | Skill | Description | User Prompt | Notes |
 |----|----|----|----|
-| [005-agents-installation](@005-agents-installation.md) | Install embedded robot agents into `.cursor/agents` or `.claude/agents` | **Interactive User Prompt:** `Install embedded agents using @005-agents-installation` | Asks destination first, then installs the full six-agent bundle from embedded assets. |
+| [005-agents-installation](@005-agents-installation.md) | Install embedded robot agents into `.cursor/agents` or `.claude/agents` | **Interactive User Prompt:** `Install embedded agents using @005-agents-installation` | Asks destination first, then installs the full nine-agent bundle from embedded assets. |
 
 ## Agile (User Stories, Gherkin & AI Planning)
 

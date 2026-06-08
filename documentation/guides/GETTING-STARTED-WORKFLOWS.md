@@ -13,6 +13,7 @@ Analysis and design are composable. Start from the authoritative artifacts alrea
 7. Run `/create-spec` from an issue, approved design, ADRs, plan, existing OpenSpec, or a valid combination.
 8. Run `/review-alignment` before delivery when artifacts may disagree or readiness is uncertain.
 9. Ask `@robot-tech-lead` to deliver the selected plan or OpenSpec `tasks.md`.
+10. Use `/profile` or `/benchmark` with `@robot-java-performance` when post-implementation performance evidence is needed.
 
 Common paths include issue to plan, issue to OpenSpec, plan to OpenSpec, and existing OpenSpec to plan. `/create-spec` may propose multiple OpenSpec changes when outcomes have independent value, ownership, release, risk, rollback, or deployment boundaries. The user approves that change map before creation.
 

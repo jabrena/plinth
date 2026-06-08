@@ -13,6 +13,7 @@
 7. 从 issue、已批准设计、ADR、计划、现有 OpenSpec 或有效组合运行 `/create-spec`。
 8. 当工件可能不一致或就绪状态不确定时，在交付前运行 `/review-alignment`。
 9. 让 `@robot-tech-lead` 交付选定的计划或 OpenSpec `tasks.md`。
+10. 当实现后需要性能证据时，使用 `/profile` 或 `/benchmark` 并交给 `@robot-java-performance`。
 
 常见路径包括 issue 到计划、issue 到 OpenSpec、计划到 OpenSpec，以及现有 OpenSpec 到计划。当结果在价值、负责人、发布时间、风险、回滚或部署边界上相互独立时，`/create-spec` 可以提出多个 OpenSpec changes。创建前必须由用户批准该 change map。
 
