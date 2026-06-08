@@ -21,14 +21,14 @@ A bare issue is context, not an execution contract. When repository policy requi
 ## Owner and delegation
 
 - Owner: `@robot-tech-lead`
-- Delegation targets: `@robot-java-coder`, `@robot-spring-boot-coder`, `@robot-quarkus-coder`, or `@robot-micronaut-coder`
+- Delegation targets: `@robot-java-coder`, `@robot-java-spring-boot-coder`, `@robot-java-quarkus-coder`, `@robot-java-micronaut-coder`, or `@robot-no-java`
 - The tech lead coordinates delivery and MUST NOT implement application code directly.
 
 ## Workflow
 
 1. Load the actual selected plan or OpenSpec `tasks.md` and confirm it is current, approved, and internally consistent.
 2. Stop and request `/review-alignment` when the issue, ADRs, specification, plan, or task list conflicts materially.
-3. Identify the framework from authoritative artifacts, build files, and code; select the matching specialized coder.
+3. Identify the framework from authoritative artifacts, build files, and code; select the matching specialized coder or `@robot-no-java` when the execution artifact does not use Java.
 4. Extract task groups, dependencies, milestones, verification gates, and expected file ownership.
 5. Serialize dependent or overlapping groups; run groups concurrently only when dependencies and owned files do not conflict.
 6. Delegate each group with task IDs, owned files, acceptance criteria, blocked-by relationships, and focused validation commands.

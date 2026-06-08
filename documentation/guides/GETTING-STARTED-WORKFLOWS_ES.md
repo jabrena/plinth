@@ -13,6 +13,7 @@ El análisis y el diseño son componibles. Empieza desde los artefactos autorita
 7. Ejecuta `/create-spec` desde un issue, diseño aprobado, ADRs, plan, OpenSpec existente o una combinación válida.
 8. Ejecuta `/review-alignment` antes de la entrega cuando los artefactos puedan discrepar o la preparación sea incierta.
 9. Pide a `@robot-tech-lead` que entregue el plan o `tasks.md` de OpenSpec seleccionado.
+10. Usa `/profile` o `/benchmark` con `@robot-java-performance` cuando necesites evidencia de rendimiento después de la implementación.
 
 Las rutas comunes incluyen issue a plan, issue a OpenSpec, plan a OpenSpec y OpenSpec existente a plan. `/create-spec` puede proponer varios cambios OpenSpec cuando los resultados tengan límites independientes de valor, propiedad, entrega, riesgo, rollback o despliegue. El usuario aprueba ese mapa antes de crear los cambios.
 
