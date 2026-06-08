@@ -9,6 +9,7 @@ Users who want context-map style diagrams currently have to approximate them wit
 - Add bounded-context diagrams as a selectable diagram family in `033-architecture-diagrams`.
 - Update the skill metadata, goal, triggers, question flow, and selected-reference mapping to include bounded-context diagrams.
 - Add focused reference guidance for generating bounded-context diagrams with valid PlantUML syntax.
+- Add a multi-repository intake template so users can provide the repositories, bounded contexts, ownership, interfaces, and relationships that should appear in the diagram.
 - Ensure the "All diagrams" path includes bounded-context diagrams.
 - Preserve the existing PlantUML validation workflow for generated `.puml` files.
 - Keep the scope to PlantUML authoring guidance inside the skill, without adding a Context Mapper CML parser or external generator integration.
@@ -26,13 +27,14 @@ None.
 ## Source and Derivation
 
 - Source artifact: GitHub issue [#817](https://github.com/jabrena/cursor-rules-java/issues/817), milestone `v0.16.0`.
+- Source clarification: bounded-context diagrams may need multiple repositories as input so the generated context map can represent all bounded contexts in scope.
 - External reference: Context Mapper PlantUML generator documentation, https://contextmapper.org/docs/plant-uml/.
 - Related existing capability: `architecture-diagram-skill-references`.
-- Derivation direction: issue #817 -> OpenSpec change artifacts -> implementation tasks. The issue remains the source for problem, scope, acceptance criteria, and implementation constraints.
+- Derivation direction: issue #817 plus user clarification -> OpenSpec change artifacts -> implementation tasks. The issue remains the source for problem, scope, acceptance criteria, and implementation constraints; the clarification narrows the bounded-context intake workflow.
 
 ## Change Boundary Assessment
 
-This is one OpenSpec change because it delivers one atomic outcome: bounded-context PlantUML diagram support in the existing `033-architecture-diagrams` skill. The work touches the skill entry point, question asset, focused reference registration, and a new focused reference file, but those changes share one review boundary, validation path, and user-facing capability.
+This is one OpenSpec change because it delivers one atomic outcome: bounded-context PlantUML diagram support in the existing `033-architecture-diagrams` skill. The multi-repository intake template is part of that same bounded-context diagram capability because it provides the inputs needed to draw a complete context map. The work touches the skill entry point, question asset, focused reference registration, and a new focused reference file, but those changes share one review boundary, validation path, and user-facing capability.
 
 The change does not require splitting by technical layer because the issue does not request a Context Mapper CML parser, a generator integration, website updates, or release-output refresh.
 

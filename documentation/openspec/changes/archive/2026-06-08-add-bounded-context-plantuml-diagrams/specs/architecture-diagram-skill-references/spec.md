@@ -17,6 +17,25 @@ The `033-architecture-diagrams` skill MUST offer bounded-context diagrams as a s
 - **WHEN** the skill maps selected diagram families to focused references
 - **THEN** the bounded-context diagram reference is included with the other selected focused references
 
+### Requirement: Multi-repository bounded-context intake
+
+The `033-architecture-diagrams` skill MUST ask for the repositories in scope before generating bounded-context diagrams.
+
+#### Scenario: Collect repositories for bounded-context diagrams
+
+- **GIVEN** bounded-context diagrams are selected
+- **WHEN** the skill collects bounded-context inputs
+- **THEN** it asks which repositories should be represented in the diagram
+- **AND** it accepts one or more repository names, URLs, or local paths
+- **AND** it collects the bounded context, domain or subdomain, owning team, application type, owned data store, exposed interfaces, consumed interfaces, and known relationships for each repository when available
+
+#### Scenario: Support single-repository and multi-repository context maps
+
+- **GIVEN** bounded-context diagrams are selected
+- **WHEN** the user provides only one repository
+- **THEN** the workflow can still generate a bounded-context diagram for the known context and its external relationships
+- **AND** when the user provides multiple repositories, the workflow represents all provided bounded contexts in the same context map
+
 ### Requirement: Bounded-context focused reference
 
 The architecture diagram skill reference source MUST include focused bounded-context PlantUML guidance that is loaded only when bounded-context diagrams are selected or when all diagrams are selected.
@@ -46,6 +65,15 @@ The bounded-context reference MUST guide agents to generate valid PlantUML that 
 - **AND** relationships between bounded contexts include direction and labels when supported by project context or user input
 - **AND** the guidance includes DDD relationship concepts such as upstream/downstream, shared kernel, partnership, customer/supplier, conformist, open host service, published language, and anticorruption layer where applicable
 - **AND** the output remains valid PlantUML syntax
+
+#### Scenario: Use bounded-context PlantUML template
+
+- **GIVEN** the bounded-context reference is inspected
+- **WHEN** diagram examples or templates are reviewed
+- **THEN** the reference includes a reusable PlantUML template for multi-repository bounded-context maps
+- **AND** the template groups or annotates bounded contexts by repository
+- **AND** the template includes placeholders for repository name, bounded context name, owner, domain or subdomain, data store, interface mechanisms, and relationship labels
+- **AND** the template can be adapted without requiring Context Mapper tooling
 
 #### Scenario: Validate bounded-context diagram output
 

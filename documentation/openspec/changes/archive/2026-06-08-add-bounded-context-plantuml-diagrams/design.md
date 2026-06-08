@@ -9,8 +9,10 @@ Context Mapper's PlantUML documentation describes generated UML component diagra
 **Goals:**
 
 - Add bounded-context diagrams as a first-class selectable diagram family in the skill workflow.
+- Ask for the repositories that should be represented before generating a bounded-context diagram.
 - Guide agents to represent bounded contexts and relationships clearly in PlantUML.
 - Support relationship direction and labels for DDD context-map concepts such as upstream/downstream, shared kernel, partnership, customer/supplier, conformist, open host service, published language, and anticorruption layer where project context supports them.
+- Provide a reusable bounded-context diagram input template for repository inventory and relationship mapping.
 - Keep bounded-context output compatible with the existing PlantUML validation workflow.
 - Keep selected-reference loading rules consistent: read the bounded-context reference only when selected, or when "All diagrams" is selected.
 
@@ -37,6 +39,14 @@ The issue links to Context Mapper PlantUML documentation. The skill should cite 
 
 Bounded contexts can be represented with PlantUML component or package-style notation. The reference should favor readable context-map diagrams where bounded contexts are visually distinct and relationships carry DDD labels. The generated diagrams should be simple to validate with the existing Docker-based PlantUML commands.
 
+### Collect multi-repository context before generation
+
+Bounded-context diagrams often describe a system landscape rather than a single codebase. The workflow should ask which repositories are in scope and collect a concise inventory for each repository before generating the diagram. The intake should capture repository name or path, bounded context name, domain or subdomain, owning team, application type, owned data store, exposed interfaces, consumed interfaces, and known upstream/downstream relationships.
+
+### Include a reusable PlantUML diagram template
+
+The bounded-context reference should include a template that groups bounded contexts by repository and shows owned data stores plus labeled relationships between contexts. The template should use placeholders that agents can replace from the repository inventory, and it should include a legend for DDD relationship labels where helpful.
+
 ### Preserve source and generated-output boundaries
 
 Implementation should edit XML sources under `skills-generator/src/main/resources/`. Local generated skills can be refreshed with `./mvnw clean install -pl skills-generator` for validation. Public `skills/` release output should only be refreshed when release output is intentionally in scope.
@@ -45,6 +55,7 @@ Implementation should edit XML sources under `skills-generator/src/main/resource
 
 - [Risk] Bounded-context guidance overlaps with C4 Context diagrams. -> Keep bounded-context guidance focused on DDD context-map vocabulary and relationship semantics.
 - [Risk] Agents infer unsupported DDD relationships from sparse code. -> Require relationship labels to be based on project context, user input, or documented architecture artifacts.
+- [Risk] Multi-repository intake becomes too heavy for small systems. -> Make repository collection concise and allow a single-repository path when only one bounded context source is in scope.
 - [Risk] PlantUML examples become too Context Mapper-specific. -> Provide plain PlantUML examples that do not require Context Mapper tooling.
 - [Risk] The "All diagrams" path drifts from the reference list. -> Update the question flow, reference mapping, `skills.xml`, and generated local output together.
 
@@ -52,9 +63,11 @@ Implementation should edit XML sources under `skills-generator/src/main/resource
 
 1. Update `033-skill.xml` metadata, goal text, trigger list, and selected-reference mapping.
 2. Update `033-architecture-diagrams-questions.xml` so bounded-context diagrams appear in the diagram selection flow.
-3. Add a focused bounded-context PlantUML reference under `skill-references/`.
-4. Register the new reference for skill `033` in `skills.xml`.
-5. Validate changed XML files with `xmllint --noout`.
-6. Run `./mvnw clean install -pl skills-generator` to regenerate local skills without refreshing public `skills/`.
-7. Inspect generated local `033-architecture-diagrams/SKILL.md` and reference links for bounded-context selection and "All diagrams" coverage.
-8. Run `./mvnw clean verify -pl skills-generator` before promoting the implementation.
+3. Add bounded-context follow-up guidance that asks for repositories in scope before generation.
+4. Add a focused bounded-context PlantUML reference under `skill-references/`.
+5. Include repository inventory and relationship-mapping templates in the bounded-context reference.
+6. Register the new reference for skill `033` in `skills.xml`.
+7. Validate changed XML files with `xmllint --noout`.
+8. Run `./mvnw clean install -pl skills-generator` to regenerate local skills without refreshing public `skills/`.
+9. Inspect generated local `033-architecture-diagrams/SKILL.md` and reference links for bounded-context selection, multi-repository intake, "All diagrams" coverage, and reference links.
+10. Run `./mvnw clean verify -pl skills-generator` before promoting the implementation.
