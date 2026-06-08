@@ -4,12 +4,11 @@ GitHub issue [#808](https://github.com/jabrena/cursor-rules-java/issues/808) ide
 
 ## What Changes
 
-- Add `/profile` as the profiling lifecycle command coordinated by a new `@robot-performance-engineer`.
-- Add `/benchmark` as the performance-test selection command coordinated by `@robot-performance-engineer`.
-- Add `robot-performance-engineer.md` as an operation-focused coordinator that delegates application-code optimizations to existing Java/framework coder agents.
+- Add `/profile` as the profiling lifecycle command coordinated by a new `@robot-java-performance`.
+- Add `/benchmark` as the performance-test selection command coordinated by `@robot-java-performance`.
+- Add `robot-java-performance.md` as an operation-focused coordinator that delegates application-code optimizations to existing Java/framework coder agents.
 - Align skills `151`, `152`, and `161`-`164` only where needed so command and agent assets compose existing behavior instead of duplicating it.
 - Document JMeter, Gatling, and JMH selection boundaries, reproducibility safeguards, baseline authority, and before/after comparison rules.
-- Keep `/deploy` and production access outside this change.
 
 ## Capabilities
 
@@ -29,8 +28,8 @@ None.
 
 ## Change Boundary Assessment
 
-This is one parent OpenSpec change because `/profile`, `/benchmark`, and `@robot-performance-engineer` deliver one user-facing operation workflow outcome. Implementation may later be split into independently reviewable branches for command assets, agent assets, skill alignment, and documentation, but this OpenSpec change owns the shared requirements and completion criteria unless a separate child-change map is explicitly approved.
+This is one parent OpenSpec change because `/profile`, `/benchmark`, and `@robot-java-performance` deliver one user-facing operation workflow outcome. Implementation may later be split into independently reviewable branches for command assets, agent assets, skill alignment, and documentation, but this OpenSpec change owns the shared requirements and completion criteria unless a separate child-change map is explicitly approved.
 
 ## Impact
 
-Canonical command, agent, XML skill source, installer, inventory, focused generator tests, README, localized guides, and OpenSpec documentation may be affected. Generated `skills/`, `.cursor/rules/`, and `docs/` must not be edited directly. No deployment platform, production access workflow, or automatic optimization behavior is introduced.
+Canonical command, agent, XML skill source, installer, inventory, focused generator tests, README, localized guides, and OpenSpec documentation may be affected. Generated `skills/`, `.cursor/rules/`, and `docs/` must not be edited directly. No automatic optimization behavior is introduced.

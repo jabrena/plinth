@@ -9,17 +9,16 @@ The generator SHALL provide embedded command assets for `/profile` and `/benchma
 - **WHEN** a user runs the embedded command installation workflow and selects a supported destination
 - **THEN** the installer copies `/profile` and `/benchmark` together with the existing commands
 - **AND** the command inventory identifies both commands as operation lifecycle commands
-- **AND** no `/deploy` command is added by this change
 
 ### Requirement: Profile lifecycle coordination
 
-`/profile` MUST route profiling work to `@robot-performance-engineer` and use skills `161`-`164` to coordinate baseline detection, evidence collection, analysis, approved optimization delegation, equivalent remeasurement, and result verification.
+`/profile` MUST route profiling work to `@robot-java-performance` and use skills `161`-`164` to coordinate baseline detection, evidence collection, analysis, approved optimization delegation, equivalent remeasurement, and result verification.
 
 #### Scenario: Profile and verify a Java performance improvement
 
 - **GIVEN** a project user has a Java application and a representative workload
 - **WHEN** the user invokes `/profile`
-- **THEN** `@robot-performance-engineer` records the runtime, environment, workload, and baseline
+- **THEN** `@robot-java-performance` records the runtime, environment, workload, and baseline
 - **AND** it uses the `161`-`164` lifecycle to detect, analyze, delegate, and verify
 - **AND** it requires user approval before delegating an optimization
 - **AND** application-code changes are delegated to the appropriate coder agent
@@ -28,13 +27,13 @@ The generator SHALL provide embedded command assets for `/profile` and `/benchma
 
 ### Requirement: Benchmark workflow selection
 
-`/benchmark` MUST route performance-test design to `@robot-performance-engineer` and select JMeter, Gatling, or JMH based on the test boundary, objective, workload model, and reporting needs.
+`/benchmark` MUST route performance-test design to `@robot-java-performance` and select JMeter, Gatling, or JMH based on the test boundary, objective, workload model, and reporting needs.
 
 #### Scenario: Create an appropriate performance test
 
 - **GIVEN** a project user supplies a performance objective and target
 - **WHEN** the user invokes `/benchmark`
-- **THEN** `@robot-performance-engineer` selects JMeter, Gatling, or JMH based on the test boundary
+- **THEN** `@robot-java-performance` selects JMeter, Gatling, or JMH based on the test boundary
 - **AND** it records the selection rationale
 - **AND** the generated workflow defines reproducible workload and environment parameters
 - **AND** results are evaluated against explicit thresholds
@@ -42,12 +41,12 @@ The generator SHALL provide embedded command assets for `/profile` and `/benchma
 
 ### Requirement: Performance engineer delegation boundary
 
-`@robot-performance-engineer` MUST coordinate profiling and performance-testing workflows without directly implementing application-code optimizations.
+`@robot-java-performance` MUST coordinate profiling and performance-testing workflows without directly implementing application-code optimizations.
 
 #### Scenario: Delegate approved optimization work
 
 - **WHEN** profiling evidence identifies an optimization candidate and the user approves the target
-- **THEN** `@robot-performance-engineer` delegates implementation to `@robot-java-coder`, `@robot-spring-boot-coder`, `@robot-quarkus-coder`, or `@robot-micronaut-coder`
+- **THEN** `@robot-java-performance` delegates implementation to `@robot-java-coder`, `@robot-spring-boot-coder`, `@robot-quarkus-coder`, or `@robot-micronaut-coder`
 - **AND** it preserves the profiling evidence, benchmark results, implementation delegation record, and verification result as traceable artifacts
 - **AND** it does not perform the coder agent's implementation work directly
 
@@ -68,6 +67,6 @@ The workflow documentation MUST describe tool selection, reproducibility, baseli
 #### Scenario: Update repository documentation
 
 - **WHEN** the performance operation workflow is integrated
-- **THEN** README and localized guidance describe `/profile`, `/benchmark`, and `@robot-performance-engineer`
+- **THEN** README and localized guidance describe `/profile`, `/benchmark`, and `@robot-java-performance`
 - **AND** generated outputs are refreshed only through the approved generator profiles
 - **AND** generated `skills/`, `.cursor/rules/`, and `docs/` are not edited directly

@@ -1,28 +1,42 @@
 # create-feature-branch
 
 ## Purpose
-Create a feature branch with standardized naming convention.
+Create and switch the current checkout to a conventionally named local branch for analysis, design, or implementation work.
 
 ## Usage
+```text
+/create-feature-branch <issue-or-change|type description> [<base-reference>]
 ```
-/create-feature-branch <type> <description>
-```
 
-## Parameters
-- `<type>`: Branch type - one of: feature, fix, enhancement, chore
-- `<description>`: Short description of the work (kebab-case)
+## Accepted Inputs
+- An issue/change identifier, or an explicit branch type and description
+- Optional base reference
+- Supported branch types: `feat`, `fix`, `docs`, `refactor`, and `chore`
 
-## Branch Naming Convention
-- `feature/description` - New feature work
-- `fix/description` - Bug fixes
-- `enhancement/description` - Improvements to existing features
-- `chore/description` - Maintenance and tooling
+## Owning Agent
+`@robot-tech-lead`
 
-## Frameworks
-- Git
-- GitHub Flow
+## Associated Capabilities
+- Git branch naming and validation
+- Issue and OpenSpec change traceability
+- Analysis/design-to-implementation transition
+
+## Workflow
+1. Resolve the branch type, issue/change identifier, and kebab-case description.
+2. Verify the repository and selected base reference.
+3. Verify a safe working tree before changing the current checkout.
+4. Stop if the proposed branch already exists or is checked out in another worktree.
+5. Create and switch to the conventionally named local branch.
+6. Report the branch name and base reference.
 
 ## Output
 - Created local branch
-- Confirmation message with branch name
-- Ready for feature implementation
+- Confirmation with the exact branch name and base reference
+- A checkout ready for plans, OpenSpec artifacts, ADRs, diagrams, documentation, or application code
+
+## Safeguards
+- Stop when uncommitted work could be displaced or mixed into the new branch.
+- Do not overwrite, delete, or force-update an existing branch.
+- Allow analysis and design artifacts to be committed before application-code implementation.
+- The command does not create a commit automatically.
+- Do not push or open a pull request automatically.

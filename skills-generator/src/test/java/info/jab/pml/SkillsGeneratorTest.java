@@ -216,6 +216,7 @@ class SkillsGeneratorTest {
                 .contains("`@robot-spring-boot-coder`")
                 .contains("`@robot-quarkus-coder`")
                 .contains("`@robot-micronaut-coder`")
+                .contains("`@robot-no-java`")
                 .contains("file ownership")
                 .contains("Mark OpenSpec tasks complete only after")
                 .contains("Use `/verify` separately")
@@ -270,10 +271,12 @@ class SkillsGeneratorTest {
             assertThat(installer)
                 .contains("assets/agents/robot-architect.md")
                 .contains("assets/agents/robot-tech-lead.md")
+                .contains("assets/agents/robot-no-java.md")
                 .doesNotContain("assets/agents/robot-coordinator.md");
             assertThat(inventory)
                 .contains("`robot-architect`")
                 .contains("`robot-tech-lead`")
+                .contains("`robot-no-java`")
                 .doesNotContain("`robot-coordinator`");
             assertThat(getTestResource("skill-references/assets/agents/robot-coordinator.md"))
                 .isNull();
@@ -291,6 +294,32 @@ class SkillsGeneratorTest {
                 assertThat(installer).contains(coderAgent);
                 assertThat(techLead).contains(coderAgent);
             });
+        }
+
+        @Test
+        @DisplayName("Tech lead must route non-Java work to default non-Java agent")
+        void should_routeNonJavaWork_when_executionArtifactIsNotJava() {
+            String installer = loadClasspathResource("skill-references/005-agents-installation.xml");
+            String techLead = loadClasspathResource(
+                "skill-references/assets/agents/robot-tech-lead.md"
+            );
+            String noJavaAgent = loadClasspathResource(
+                "skill-references/assets/agents/robot-no-java.md"
+            );
+
+            assertThat(installer)
+                .contains("robot-no-java.md")
+                .contains("all eight files")
+                .contains("eight-agent bundle");
+            assertThat(techLead)
+                .contains("no Java, Maven, or JVM implementation scope")
+                .contains("| Plain Java, Maven/JVM work, Java CLI-only work, or Java framework-neutral requirements | [@robot-java-coder](robot-java-coder.md) |")
+                .contains("| Explicit non-Java stack, no Java/JVM implementation scope, or no Java evidence in the selected issue/plan/spec | [@robot-no-java](robot-no-java.md) |")
+                .contains("Prefer **robot-no-java** when the selected issue, plan, or OpenSpec tasks do not use Java");
+            assertThat(noJavaAgent)
+                .contains("name: robot-no-java")
+                .contains("does not use Java, Maven, or a JVM-based framework")
+                .contains("If the task is actually plain Java or Maven work");
         }
 
         @Test

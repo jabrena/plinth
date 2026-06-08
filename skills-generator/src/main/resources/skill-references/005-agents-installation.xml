@@ -55,6 +55,9 @@
                 <xi:include href="assets/agents/robot-tech-lead.md" parse="text"/>
                 ```
                 ```markdown
+                <xi:include href="assets/agents/robot-no-java.md" parse="text"/>
+                ```
+                ```markdown
                 <xi:include href="assets/agents/robot-java-coder.md" parse="text"/>
                 ```
                 ```markdown
@@ -74,7 +77,7 @@
             <step-constraints>
                 <step-constraint-list>
                     <step-constraint>**MUST** copy from embedded assets, not from external URLs</step-constraint>
-                    <step-constraint>**MUST** install all seven files as one set</step-constraint>
+                    <step-constraint>**MUST** install all eight files as one set</step-constraint>
                     <step-constraint>**MUST** preserve original file names</step-constraint>
                 </step-constraint-list>
             </step-constraints>
@@ -103,7 +106,7 @@
     <safeguards>
         <safeguards-list>
             <safeguards-item>Never edit generated output locations directly as source of truth; use embedded assets as canonical input</safeguards-item>
-            <safeguards-item>Never skip files from the required seven-agent bundle</safeguards-item>
+            <safeguards-item>Never skip files from the required eight-agent bundle</safeguards-item>
             <safeguards-item>If destination answer is unclear, ask a clarification question before any write</safeguards-item>
         </safeguards-list>
     </safeguards>

@@ -11,6 +11,7 @@ Provide a quick checklist of the embedded agents available for installation in t
 | `robot-business-analyst` | Create GitHub or Jira issues and perform read-only alignment and readiness reviews. |
 | `robot-architect` | Explore designs, record architecture decisions, and create architecture diagrams. |
 | `robot-tech-lead` | Create plans or OpenSpec changes and coordinate delivery through specialized coders. |
+| `robot-no-java` | Implement non-Java changes when issue, plan, or spec work does not use Java. |
 | `robot-java-coder` | Implement framework-agnostic Java changes and refactors. |
 | `robot-micronaut-coder` | Implement Micronaut-specific code and architecture changes. |
 | `robot-quarkus-coder` | Implement Quarkus-specific code and architecture changes. |

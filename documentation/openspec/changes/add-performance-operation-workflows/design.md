@@ -1,13 +1,13 @@
 ## Context
 
-Issue #808 closes an operation lifecycle gap by introducing profiling and performance-testing workflows without expanding into deployment. The project already includes JMeter, Gatling, Maven/JMH guidance, and profiling lifecycle skills. The missing layer is a small command and agent contract that composes those skills, records reproducible evidence, and prevents unsupported performance claims.
+Issue #808 closes an operation lifecycle gap by introducing profiling and performance-testing workflows for post-implementation performance work. The project already includes JMeter, Gatling, Maven/JMH guidance, and profiling lifecycle skills. The missing layer is a small command and agent contract that composes those skills, records reproducible evidence, and prevents unsupported performance claims.
 
 ## Goals / Non-Goals
 
 **Goals:**
 
 - Provide `/profile` and `/benchmark` command contracts with clear inputs, owner, workflow, outputs, and safeguards.
-- Add `@robot-performance-engineer` as a coordinator for profiling and performance-testing workflows.
+- Add `@robot-java-performance` as a coordinator for profiling and performance-testing workflows.
 - Keep `151`, `152`, and `161`-`164` authoritative for substantive behavior.
 - Delegate application-code optimizations to existing Java, Spring Boot, Quarkus, or Micronaut coder agents.
 - Preserve traceability from baseline metadata through evidence, recommendation, delegation, repeated measurement, and final outcome.
@@ -15,17 +15,16 @@ Issue #808 closes an operation lifecycle gap by introducing profiling and perfor
 
 **Non-Goals:**
 
-- Define `/deploy`, `@robot-operator`, production access, or deployment safeguards.
 - Let the performance engineer directly implement application-code optimizations.
 - Claim performance improvement from non-equivalent or non-reproducible runs.
-- Replace the general `/verify` workflow with performance comparison.
+- Replace general implementation verification with performance comparison.
 - Edit generated `skills/`, `.cursor/rules/`, or `docs/` directly.
 
 ## Decisions
 
 ### Use one operation coordinator
 
-`@robot-performance-engineer` owns performance workflow coordination, not application implementation. It establishes the baseline, selects profiling or benchmark skills, ranks findings, asks for user approval before optimization, delegates code work to the appropriate coder agent, and verifies the result with equivalent measurement.
+`@robot-java-performance` owns performance workflow coordination, not application implementation. It establishes the baseline, selects profiling or benchmark skills, ranks findings, asks for user approval before optimization, delegates code work to the appropriate coder agent, and verifies the result with equivalent measurement.
 
 ### Keep command assets concise
 

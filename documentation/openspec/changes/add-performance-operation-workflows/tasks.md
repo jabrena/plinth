@@ -6,7 +6,7 @@
 
 ## 2. Performance Engineer Agent
 
-- [ ] 2.1 Add `robot-performance-engineer.md` under canonical agent sources.
+- [ ] 2.1 Add `robot-java-performance.md` under canonical agent sources.
 - [ ] 2.2 Define profiling baseline, evidence collection, finding prioritization, approval, delegation, verification, and outcome reporting responsibilities.
 - [ ] 2.3 Define benchmark tool-selection, workload, environment, threshold, artifact, and limitation reporting responsibilities.
 - [ ] 2.4 Update agent installer, agent inventory source, and focused agent generator tests.
@@ -32,3 +32,4 @@
 - [ ] 5.4 For release output, run `./mvnw clean install -pl skills-generator -P release`, `npx skill-check@latest skills --no-security-scan --format github`, and behavioral scanner validation when available.
 - [ ] 5.5 Run Markdown validation for documentation changes and inspect changed local links.
 - [ ] 5.6 Run `openspec validate --all`.
+- [ ] 5.7 Archive `add-performance-operation-workflows` after implementation is complete and validation passes.
