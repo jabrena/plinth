@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.16.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Java Diagrams Generator with modular step-based configuration</title>
+        <description>Focused UML class diagram guidance for the interactive architecture diagrams skill.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Java package analysis and UML class modeling.</role>
+
+    <goal><![CDATA[
+Generate UML class diagrams only when selected by the `033-architecture-diagrams` question flow. Use this reference to analyze Java packages, classes, interfaces, records, enums, annotations, and relationships, then produce PlantUML class diagrams at the selected scope and detail level.
+    ]]></goal>
+
+    <constraints>
+        <constraints-description>Apply this reference only after the SKILL.md question flow selected UML class diagrams.</constraints-description>
+        <constraint-list>
+            <constraint>Read this reference only when the user selected UML class diagrams or All diagrams in the centralized question flow.</constraint>
+            <constraint>Inspect repository code before generating diagrams; do not produce generic diagrams without class and package analysis.</constraint>
+            <constraint>Use PlantUML class diagram syntax and validate renderability before final delivery.</constraint>
+            <constraint>Honor the selected scope and detail level; avoid overwhelming diagrams with unnecessary implementation detail.</constraint>
+            <constraint>Organize generated files according to the user's output organization and format selections.</constraint>
+        </constraint-list>
+    </constraints>
+
+    <steps>
+        <step number="1">
+            <step-title>Analyze selected class scope</step-title>
+            <step-content><![CDATA[
+Use the user's class-scope and detail answers:
+
+- All packages: map the complete project structure, then create high-level package or module diagrams plus focused diagrams for important areas.
+- Core business logic packages only: focus on domain models, services, repositories, policies, commands, events, and value objects.
+- Specific packages: ask for package names if not already provided, then analyze those packages and relevant external dependencies.
+
+Identify inheritance, interface implementation, composition, aggregation, association, annotations, visibility, public APIs, and major design patterns from actual Java sources.
+            ]]></step-content>
+        </step>
+        <step number="2">
+            <step-title>Apply class template guidance</step-title>
+            <step-content><![CDATA[
+Use the following template and guidelines:
+
+]]><xi:include href="assets/architecture/java-uml-class-diagram-template.md" parse="text"/><![CDATA[
+
+Class diagrams must reflect actual type names, relationships, package boundaries, and selected detail level. Prefer several focused diagrams over one unreadable diagram when the scope is large.
+            ]]></step-content>
+        </step>
+        <step number="3">
+            <step-title>Organize class outputs</step-title>
+            <step-content><![CDATA[
+Follow the user's organization preference:
+
+- Single directory: place class `.puml` files under the chosen diagrams directory and use consistent names such as `class-domain-model.puml`.
+- Organized by type: place files under a class-specific folder such as `diagrams/class/`.
+- Organized by package/domain: group class diagrams with the package or domain they explain.
+- Integrated documentation: embed or link class diagrams from existing architecture, package, or README documentation only after confirming the target file.
+
+Never overwrite existing diagram or documentation files without explicit user consent.
+            ]]></step-content>
+        </step>
+        <step number="4">
+            <step-title>Validate class diagrams</step-title>
+            <step-content><![CDATA[
+Before final delivery:
+
+1. Verify PlantUML syntax for every generated class diagram.
+2. Re-check classes, interfaces, records, enums, annotations, and relationships against the analyzed Java implementation.
+3. Confirm the selected detail level is respected.
+4. Confirm file names, links, and documentation references match the selected organization.
+5. Summarize generated class diagrams, packages/classes inspected, and any deliberately excluded details.
+            ]]></step-content>
+        </step>
+    </steps>
+</prompt>

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xmlns:xi="http://www.w3.org/2001/XInclude"
       xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
       id="033-architecture-diagrams"
       interactive="true">
@@ -18,7 +19,7 @@ Generate comprehensive Java project diagrams through a modular, step-based inter
 
 - UML sequence diagram generation for application workflows and API interactions
 - UML class diagram generation for package structure and class relationships
-- C4 model diagram generation at Context/Container/Component levels only (levels 1–3; Code/Level 4 not generated)
+- C4 model diagram generation for Context, Container, and Component diagrams
 - UML state machine diagram generation for entity lifecycles and business workflows
 - ER diagram generation from SQL schema (DDL, migrations) using PlantUML Chen notation
 - PlantUML syntax for all diagram types
@@ -31,8 +32,8 @@ Generate comprehensive Java project diagrams through a modular, step-based inter
     <constraint-list>
       <constraint>**MANDATORY**: Run `./mvnw validate` or `mvn validate` before applying any diagram generation</constraint>
       <constraint>**SAFETY**: If validation fails, stop immediately — do not proceed until all validation errors are resolved</constraint>
-      <constraint>**BEFORE APPLYING**: Read the reference for detailed good/bad examples, constraints, and safeguards for each diagram generation pattern</constraint>
-      <constraint>**C4 LIMIT**: C4 diagrams restricted to levels 1, 2, 3 only (Context, Container, Component); never generate Level 4 (Code) diagrams</constraint>
+      <constraint><![CDATA[**BEFORE READING DIAGRAM REFERENCES**: Run the question flow embedded in this SKILL.md first. Ask the diagram preference questions one by one, collect selected diagram families and output preferences, then read only the implementation references selected by the user's answers]]></constraint>
+      <constraint>**C4 SCOPE**: C4 diagrams are restricted to Context, Container, and Component diagrams</constraint>
     </constraint-list>
   </constraints>
 
@@ -58,17 +59,27 @@ Generate comprehensive Java project diagrams through a modular, step-based inter
       </step-constraints>
     </step>
     <step number="2">
-      <step-title>Read reference and configure diagram scope</step-title>
-      <step-content>Read `references/033-architecture-diagrams.md`, identify requested diagram types, and confirm output organization strategy (single-file, separate-files, or integrated docs).</step-content>
+      <step-title>Ask diagram assessment questions before reading references</step-title>
+      <step-content><![CDATA[
+Run this XML-included question flow before reading any diagram-family implementation reference. Ask questions one-by-one in strict order, wait for the user's answer to each question, and record selected diagram families, C4 scope, output organization, file format, and documentation preference before continuing.
+
+]]><xi:include href="../skill-references/assets/questions/033-architecture-diagrams-questions.xml"/><![CDATA[
+
+After all applicable questions are answered, confirm the selections and map them to references:
+
+- If UML sequence diagrams are selected, read `references/033-architecture-diagrams-uml-sequence.md`.
+- If UML class diagrams are selected, read `references/033-architecture-diagrams-uml-class.md`.
+- If C4 model diagrams are selected, read `references/033-architecture-diagrams-c4.md`.
+- If UML state-machine diagrams are selected, read `references/033-architecture-diagrams-state-machine.md`.
+- If ER diagrams are selected, read `references/033-architecture-diagrams-er.md`.
+- If All diagrams is selected, read all five focused diagram-family references.
+- If Skip is selected for a diagram family, do not read that diagram-family reference.
+- Do not read unselected diagram-family references.
+]]></step-content>
     </step>
     <step number="3">
-      <step-title>Generate PlantUML diagrams</step-title>
-      <step-content>Create requested diagrams in PlantUML syntax (sequence, class, C4 levels 1-3 only, state machine, ER) using project inputs and context.</step-content>
-      <step-constraints>
-        <step-constraint-list>
-          <step-constraint>Never generate C4 Level 4 (Code) diagrams</step-constraint>
-        </step-constraint-list>
-      </step-constraints>
+      <step-title>Read selected references and generate PlantUML diagrams</step-title>
+      <step-content>Create requested diagrams in PlantUML syntax using only the selected focused references, project inputs, and repository context.</step-content>
     </step>
     <step number="4">
       <step-title>Validate and finalize outputs</step-title>

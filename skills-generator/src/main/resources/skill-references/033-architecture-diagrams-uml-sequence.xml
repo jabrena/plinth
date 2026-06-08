@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.16.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Java Diagrams Generator with modular step-based configuration</title>
+        <description>Focused UML sequence diagram guidance for the interactive architecture diagrams skill.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Java workflow analysis and sequence diagram generation.</role>
+
+    <goal><![CDATA[
+Generate UML sequence diagrams only when selected by the `033-architecture-diagrams` question flow. Use this reference to analyze real Java workflows, API interactions, and business processes, then produce PlantUML sequence diagrams that match the selected output organization.
+    ]]></goal>
+
+    <constraints>
+        <constraints-description>Apply this reference only after the SKILL.md question flow selected UML sequence diagrams.</constraints-description>
+        <constraint-list>
+            <constraint>Read this reference only when the user selected UML sequence diagrams or All diagrams in the centralized question flow.</constraint>
+            <constraint>Inspect repository code before generating diagrams; do not produce generic diagrams without code analysis.</constraint>
+            <constraint>Use PlantUML sequence diagram syntax and validate renderability before final delivery.</constraint>
+            <constraint>Organize generated files according to the user's output organization and format selections.</constraint>
+        </constraint-list>
+    </constraints>
+
+    <steps>
+        <step number="1">
+            <step-title>Analyze selected sequence scope</step-title>
+            <step-content><![CDATA[
+Use the user's sequence-specific answer to decide which workflows to inspect:
+
+- Main application flows: application entry points, user journeys, authentication, authorization, and core feature usage.
+- API interactions: REST endpoints, request/response patterns, controller-to-service paths, persistence calls, and error handling.
+- Complex business logic flows: orchestration, transaction boundaries, batch jobs, state transitions, and consistency handling.
+
+For every diagram, trace actual classes, methods, messages, and alternative flows from the repository.
+            ]]></step-content>
+        </step>
+        <step number="2">
+            <step-title>Apply sequence template guidance</step-title>
+            <step-content><![CDATA[
+Use the following template and guidelines:
+
+]]><xi:include href="assets/architecture/java-uml-sequence-diagram-template.md" parse="text"/><![CDATA[
+
+Sequence diagrams must include realistic participants, message labels, alternative fragments for success/failure paths where useful, and method names that match the codebase.
+            ]]></step-content>
+        </step>
+        <step number="3">
+            <step-title>Organize sequence outputs</step-title>
+            <step-content><![CDATA[
+Follow the user's organization preference:
+
+- Single directory: place sequence `.puml` files under the chosen diagrams directory and use consistent names such as `sequence-order-flow.puml`.
+- Organized by type: place files under a sequence-specific folder such as `diagrams/sequence/`.
+- Organized by package/domain: group sequence diagrams with the domain or package they explain.
+- Integrated documentation: embed or link sequence diagrams from existing architecture or README documentation only after confirming the target file.
+
+Never overwrite existing diagram or documentation files without explicit user consent.
+            ]]></step-content>
+        </step>
+        <step number="4">
+            <step-title>Validate sequence diagrams</step-title>
+            <step-content><![CDATA[
+Before final delivery:
+
+1. Verify PlantUML syntax for every generated sequence diagram.
+2. Re-check each participant and message against the analyzed Java implementation.
+3. Confirm alternative and error flows are accurate and not speculative.
+4. Confirm file names, links, and documentation references match the selected organization.
+5. Summarize generated sequence diagrams, source packages/classes inspected, and any intentionally omitted flows.
+            ]]></step-content>
+        </step>
+    </steps>
+</prompt>
