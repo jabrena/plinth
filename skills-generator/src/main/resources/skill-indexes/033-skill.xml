@@ -25,6 +25,7 @@ Generate comprehensive Java project diagrams through a modular, step-based inter
 - PlantUML syntax for all diagram types
 - File organization strategies: single-file, separate-files, or integrated with existing documentation
 - Final diagram validation with PlantUML syntax checking
+- Docker-based PlantUML validation and PNG/SVG rendering with the official `plantuml/plantuml` image
 ]]></goal>
 
   <constraints>
@@ -83,7 +84,31 @@ After all applicable questions are answered, confirm the selections and map them
     </step>
     <step number="4">
       <step-title>Validate and finalize outputs</step-title>
-      <step-content>Check generated diagrams for syntax correctness and consistency with selected scope before final delivery.</step-content>
+      <step-content><![CDATA[
+Check generated diagrams for syntax correctness and consistency with selected scope before final delivery.
+
+When Docker is available, use the official `plantuml/plantuml` image to validate and render generated `.puml` files without requiring a local PlantUML, Java, or Graphviz installation.
+
+Validate PlantUML syntax without generating images:
+
+```bash
+docker run --rm -v "$PWD:/data" plantuml/plantuml --check-syntax /data/diagrams
+```
+
+Render PNG images:
+
+```bash
+docker run --rm -v "$PWD:/data" plantuml/plantuml --png /data/diagrams
+```
+
+Render SVG images:
+
+```bash
+docker run --rm -v "$PWD:/data" plantuml/plantuml --svg /data/diagrams
+```
+
+Use the path mounted under `/data` to point at the directory or `.puml` file containing generated diagrams. This workflow uses the CLI-oriented PlantUML image, not the PlantUML server image.
+]]></step-content>
     </step>
   </steps>
 </prompt>
