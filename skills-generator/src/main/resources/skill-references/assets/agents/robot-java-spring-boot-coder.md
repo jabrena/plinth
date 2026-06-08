@@ -1,5 +1,5 @@
 ---
-name: robot-spring-boot-coder
+name: robot-java-spring-boot-coder
 model: inherit
 description: Implementation specialist for Spring Boot projects. Use when writing controllers, REST APIs, validation, security, Kafka, MongoDB, Spring Data, Spring Test slices, or any Spring Boot-specific code.
 ---

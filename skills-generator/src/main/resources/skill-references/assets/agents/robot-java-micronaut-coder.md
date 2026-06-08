@@ -1,5 +1,5 @@
 ---
-name: robot-micronaut-coder
+name: robot-java-micronaut-coder
 model: inherit
 description: Implementation specialist for Micronaut projects. Use when writing controllers, REST APIs, validation, security, Micronaut Data repositories, Kafka, MongoDB, CDI-style beans, or any Micronaut-specific code.
 ---

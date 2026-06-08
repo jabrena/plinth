@@ -1,5 +1,5 @@
 ---
-name: robot-quarkus-coder
+name: robot-java-quarkus-coder
 model: inherit
 description: Implementation specialist for Quarkus projects. Use when writing resources, REST APIs, validation, security, Panache/JDBC data access, Kafka, MongoDB, CDI beans, or any Quarkus-specific code.
 ---

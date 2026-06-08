@@ -146,6 +146,8 @@ class SkillsGeneratorTest {
             "create-spec.md",
             "review-alignment.md",
             "implement-issue.md",
+            "profile.md",
+            "benchmark.md",
             "verify.md",
             "kill-port.md"
         );
@@ -213,14 +215,40 @@ class SkillsGeneratorTest {
                 .contains("validated `tasks.md`")
                 .contains("Owner: `@robot-tech-lead`")
                 .contains("`@robot-java-coder`")
-                .contains("`@robot-spring-boot-coder`")
-                .contains("`@robot-quarkus-coder`")
-                .contains("`@robot-micronaut-coder`")
+                .contains("`@robot-java-spring-boot-coder`")
+                .contains("`@robot-java-quarkus-coder`")
+                .contains("`@robot-java-micronaut-coder`")
+                .contains("`@robot-no-java`")
                 .contains("file ownership")
                 .contains("Mark OpenSpec tasks complete only after")
                 .contains("Use `/verify` separately")
                 .contains("request `/review-alignment`")
                 .contains("MUST NOT implement application code directly");
+        }
+
+        @Test
+        @DisplayName("Performance commands must route to Java performance agent")
+        void should_routePerformanceWorkflows_when_profileAndBenchmarkCommandsAreInstalled() {
+            String profile = loadClasspathResource("skill-references/assets/commands/profile.md");
+            String benchmark = loadClasspathResource("skill-references/assets/commands/benchmark.md");
+
+            assertThat(profile)
+                .contains("/profile <application-or-module>")
+                .contains("Owner: `@robot-java-performance`")
+                .contains("`@161-java-profiling-detect`")
+                .contains("`@162-java-profiling-analyze`")
+                .contains("`@163-java-profiling-refactor`")
+                .contains("`@164-java-profiling-verify`")
+                .contains("Do not optimize without user approval")
+                .contains("non-equivalent measurements");
+            assertThat(benchmark)
+                .contains("/benchmark <target>")
+                .contains("Owner: `@robot-java-performance`")
+                .contains("`@151-java-performance-jmeter`")
+                .contains("`@152-java-performance-gatling`")
+                .contains("Maven/JMH guidance")
+                .contains("JMeter or Gatling")
+                .contains("JMH");
         }
 
         private List<String> readCommandIncludes(String xmlResource) throws Exception {
@@ -254,9 +282,9 @@ class SkillsGeneratorTest {
 
         private static final List<String> CODER_AGENTS = List.of(
             "robot-java-coder.md",
-            "robot-spring-boot-coder.md",
-            "robot-quarkus-coder.md",
-            "robot-micronaut-coder.md"
+            "robot-java-spring-boot-coder.md",
+            "robot-java-quarkus-coder.md",
+            "robot-java-micronaut-coder.md"
         );
 
         @Test
@@ -270,10 +298,14 @@ class SkillsGeneratorTest {
             assertThat(installer)
                 .contains("assets/agents/robot-architect.md")
                 .contains("assets/agents/robot-tech-lead.md")
+                .contains("assets/agents/robot-no-java.md")
+                .contains("assets/agents/robot-java-performance.md")
                 .doesNotContain("assets/agents/robot-coordinator.md");
             assertThat(inventory)
                 .contains("`robot-architect`")
                 .contains("`robot-tech-lead`")
+                .contains("`robot-no-java`")
+                .contains("`robot-java-performance`")
                 .doesNotContain("`robot-coordinator`");
             assertThat(getTestResource("skill-references/assets/agents/robot-coordinator.md"))
                 .isNull();
@@ -291,6 +323,56 @@ class SkillsGeneratorTest {
                 assertThat(installer).contains(coderAgent);
                 assertThat(techLead).contains(coderAgent);
             });
+        }
+
+        @Test
+        @DisplayName("Tech lead must route non-Java work to default non-Java agent")
+        void should_routeNonJavaWork_when_executionArtifactIsNotJava() {
+            String installer = loadClasspathResource("skill-references/005-agents-installation.xml");
+            String techLead = loadClasspathResource(
+                "skill-references/assets/agents/robot-tech-lead.md"
+            );
+            String noJavaAgent = loadClasspathResource(
+                "skill-references/assets/agents/robot-no-java.md"
+            );
+
+            assertThat(installer)
+                .contains("robot-no-java.md")
+                .contains("all nine files")
+                .contains("nine-agent bundle");
+            assertThat(techLead)
+                .contains("no Java, Maven, or JVM implementation scope")
+                .contains("| Plain Java, Maven/JVM work, Java CLI-only work, or Java framework-neutral requirements | [@robot-java-coder](robot-java-coder.md) |")
+                .contains("| Explicit non-Java stack, no Java/JVM implementation scope, or no Java evidence in the selected issue/plan/spec | [@robot-no-java](robot-no-java.md) |")
+                .contains("Prefer **robot-no-java** when the selected issue, plan, or OpenSpec tasks do not use Java");
+            assertThat(noJavaAgent)
+                .contains("name: robot-no-java")
+                .contains("does not use Java, Maven, or a JVM-based framework")
+                .contains("If the task is actually plain Java or Maven work");
+        }
+
+        @Test
+        @DisplayName("Java performance agent must coordinate profiling and benchmarks without direct implementation")
+        void should_coordinatePerformanceWorkflows_when_javaPerformanceAgentIsInstalled() {
+            String installer = loadClasspathResource("skill-references/005-agents-installation.xml");
+            String performanceAgent = loadClasspathResource(
+                "skill-references/assets/agents/robot-java-performance.md"
+            );
+
+            assertThat(installer)
+                .contains("robot-java-performance.md")
+                .contains("all nine files")
+                .contains("nine-agent bundle");
+            assertThat(performanceAgent)
+                .contains("name: robot-java-performance")
+                .contains("`@161-java-profiling-detect`")
+                .contains("`@162-java-profiling-analyze`")
+                .contains("`@164-java-profiling-verify`")
+                .contains("`@151-java-performance-jmeter`")
+                .contains("`@152-java-performance-gatling`")
+                .contains("JMH")
+                .contains("You do not directly implement application-code optimizations")
+                .contains("verified, inconclusive, or regressed");
         }
 
         @Test
@@ -319,17 +401,17 @@ class SkillsGeneratorTest {
         @DisplayName("Framework coders must prefer JDBC for relational persistence")
         void should_preferJdbc_when_frameworkCoderSelectsRelationalPersistence() {
             assertThat(loadClasspathResource(
-                "skill-references/assets/agents/robot-spring-boot-coder.md"
+                "skill-references/assets/agents/robot-java-spring-boot-coder.md"
             ))
                 .contains("Prefer `@311-frameworks-spring-jdbc`")
                 .contains("Use `@312-frameworks-spring-data-jdbc` only");
             assertThat(loadClasspathResource(
-                "skill-references/assets/agents/robot-quarkus-coder.md"
+                "skill-references/assets/agents/robot-java-quarkus-coder.md"
             ))
                 .contains("Prefer `@411-frameworks-quarkus-jdbc`")
                 .contains("Use `@412-frameworks-quarkus-panache` only");
             assertThat(loadClasspathResource(
-                "skill-references/assets/agents/robot-micronaut-coder.md"
+                "skill-references/assets/agents/robot-java-micronaut-coder.md"
             ))
                 .contains("Prefer `@511-frameworks-micronaut-jdbc`")
                 .contains("Use `@512-frameworks-micronaut-data` only");
