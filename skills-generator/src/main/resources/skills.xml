@@ -62,6 +62,7 @@
             <reference>033-architecture-diagrams-c4</reference>
             <reference>033-architecture-diagrams-state-machine</reference>
             <reference>033-architecture-diagrams-er</reference>
+            <reference>033-architecture-diagrams-bounded-context</reference>
         </reference-list>
     </skill>
     <skill id="034">
