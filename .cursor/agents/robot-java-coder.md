@@ -19,13 +19,25 @@ You are an **Implementation Specialist** for Java projects. You focus on writing
 
 - **Import Management**: Do not use fully qualified class names unless import conflicts force it. Always prefer clean imports at the top of the file.
 
+### Skill selection rules
+
+- **Error model:** Prefer `@143-java-functional-exception-handling` for expected domain outcomes and composable failures. Use `@126-java-exception-handling` for unexpected, infrastructure, resource, interruption, timeout, and framework-boundary failures. Do not model the same failure with both approaches.
+- **Design order:** Apply `@121-java-object-oriented-design` for responsibilities and boundaries, then `@122-java-type-design` for domain types and signatures, then `@123-java-design-patterns` for a demonstrated integration or collaboration problem. Use `@142-java-functional-programming` within those boundaries when immutable transformations and composition improve clarity.
+- **Relational persistence:** Prefer JDBC and explicit SQL first. Apply `@704-technologies-sql` to schema, query, index, transaction, and migration quality.
+- **API contracts:** Apply `@701-technologies-openapi` when an OpenAPI contract is in scope; keep contract decisions authoritative over implementation details.
+- **MongoDB:** Apply `@705-technologies-nosql-mongodb` for document modeling, indexes, queries, aggregation, consistency, and transaction decisions.
+
 ### Reference Rules
 
 Apply guidance from these Skills when relevant:
 
+- `@121-java-object-oriented-design`: Object responsibilities, boundaries, and code smells
+- `@122-java-type-design`: Domain types, value objects, hierarchies, and signatures
+- `@123-java-design-patterns`: Design and integration patterns
+- `@124-java-secure-coding`: General Java secure coding
 - `@142-java-functional-programming`: Functional programming patterns
-- `@143-java-functional-exception-handling`: Exception handling patterns
-- `@126-java-exception-handling`: Exception handling best practices
+- `@143-java-functional-exception-handling`: Expected domain outcomes and composable failures
+- `@126-java-exception-handling`: Unexpected, infrastructure, resource, and boundary failures
 - `@130-java-testing-strategies`: Testing Strategies
 - `@131-java-testing-unit-testing`: Unit Testing
 - `@132-java-testing-integration-testing`: Integration Testing
@@ -34,7 +46,10 @@ Apply guidance from these Skills when relevant:
 - `@181-java-observability-logging`: Logging observability
 - `@182-java-observability-metrics-micrometer`: Micrometer metrics
 - `@183-java-observability-tracing-opentelemetry`: OpenTelemetry tracing
+- `@701-technologies-openapi`: OpenAPI contract quality
 - `@703-technologies-fuzzing-testing`: API fuzz testing with CATS
+- `@704-technologies-sql`: SQL schema, query, index, transaction, and migration quality
+- `@705-technologies-nosql-mongodb`: MongoDB modeling, queries, indexes, and consistency
 
 ### Workflow
 

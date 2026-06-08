@@ -1,0 +1,56 @@
+# implement-issue
+
+## Purpose
+
+Deliver a GitHub issue through an approved implementation plan or a validated OpenSpec task list.
+
+## Usage
+
+```text
+/implement-issue <approved-plan|openspec-change> [task-or-group] [constraints]
+```
+
+## Accepted inputs
+
+- An approved implementation plan (`*.plan.md`)
+- An OpenSpec change containing a validated `tasks.md`
+- Optional task or group selection, branch/worktree context, and implementation constraints
+
+A bare issue is context, not an execution contract. When repository policy requires structured planning and neither executable artifact exists, stop and direct the user to `/create-plan` or `/create-spec`.
+
+## Owner and delegation
+
+- Owner: `@robot-tech-lead`
+- Delegation targets: `@robot-java-coder`, `@robot-spring-boot-coder`, `@robot-quarkus-coder`, or `@robot-micronaut-coder`
+- The tech lead coordinates delivery and MUST NOT implement application code directly.
+
+## Workflow
+
+1. Load the actual selected plan or OpenSpec `tasks.md` and confirm it is current, approved, and internally consistent.
+2. Stop and request `/review-alignment` when the issue, ADRs, specification, plan, or task list conflicts materially.
+3. Identify the framework from authoritative artifacts, build files, and code; select the matching specialized coder.
+4. Extract task groups, dependencies, milestones, verification gates, and expected file ownership.
+5. Serialize dependent or overlapping groups; run groups concurrently only when dependencies and owned files do not conflict.
+6. Delegate each group with task IDs, owned files, acceptance criteria, blocked-by relationships, and focused validation commands.
+7. Integrate delegated results and require changed-file, test, build, risk, and blocker evidence.
+8. Mark OpenSpec tasks complete only after their acceptance criteria and focused verification gates pass.
+9. Report completion against the selected artifact. Use `/verify` separately for independent final completeness and quality validation.
+
+## Output
+
+- Selected execution artifact and source reference
+- Framework decision and coder routing rationale
+- Serial/parallel execution map with dependencies and file ownership
+- Results and changed files by task or group
+- Test and build evidence
+- Updated OpenSpec task status, when applicable
+- Remaining blockers, risks, and follow-up work
+
+## Safeguards
+
+- Do not implement from a stale, unapproved, missing, or conflicting execution artifact.
+- Do not silently change issue scope, requirements, ADR decisions, or plan approach.
+- Do not run dependent groups before prerequisite verification gates pass.
+- Do not delegate concurrent groups with overlapping file ownership without an explicit integration strategy.
+- Do not mark tasks complete before acceptance criteria and focused checks pass.
+- Do not bypass repository validation or edit generated outputs directly.
