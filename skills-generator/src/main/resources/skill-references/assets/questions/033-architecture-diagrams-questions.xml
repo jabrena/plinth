@@ -1,3 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<question-flow><![CDATA[
 IMPORTANT: You MUST ask these questions in the exact order and wording shown here. The very first question to the user MUST be "Question 1: What diagrams do you want to generate?". Do not ask any other questions prior to it.
 
 Diagrams Selection
@@ -15,7 +17,7 @@ Options:
 - UML sequence diagrams
 - UML class diagrams
 - UML state-machine diagrams
-- C4 model diagrams (Context, Container & Component diagrams)
+- C4 model diagrams (Context, Container, Component)
 - ER diagrams (Entity Relationship)
 - All diagrams
 - Skip
@@ -59,9 +61,10 @@ Options:
 Ask this question only if you selected "C4 model diagrams" or "All diagrams" in Question 1.
 
 Options:
-- Complete C4 model (Context, Container, Component, and Code levels)
+- Complete C4 model (Context, Container, Component)
 - High-level diagrams only (Context and Container)
-- Detailed diagrams only (Component and Code)
+- Component diagrams only
+- Specific C4 levels (Context, Container, and/or Component)
 - Skip
 
 ---
@@ -119,3 +122,4 @@ Options:
 - Integrate explanations into existing documentation
 
 ---
+]]></question-flow>

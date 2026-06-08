@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.16.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Java Diagrams Generator with modular step-based configuration</title>
+        <description>Focused ER diagram guidance for the interactive architecture diagrams skill.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in SQL schema analysis and ER modeling.</role>
+
+    <goal><![CDATA[
+Generate ER diagrams only when selected by the `033-architecture-diagrams` question flow. Use this reference to analyze SQL DDL, migrations, schema definitions, and persistence metadata, then produce PlantUML Chen notation diagrams that match the selected output organization.
+    ]]></goal>
+
+    <constraints>
+        <constraints-description>Apply this reference only after the SKILL.md question flow selected ER diagrams.</constraints-description>
+        <constraint-list>
+            <constraint>Read this reference only when the user selected ER diagrams or All diagrams in the centralized question flow.</constraint>
+            <constraint>Inspect repository schema sources before generating diagrams; do not produce generic ER diagrams without schema analysis.</constraint>
+            <constraint>Use PlantUML Chen notation with `@startchen` and `@endchen` and validate renderability before final delivery.</constraint>
+            <constraint>Map tables, columns, primary keys, foreign keys, join tables, and cardinality from actual schema evidence.</constraint>
+            <constraint>Organize generated files according to the user's output organization and format selections.</constraint>
+        </constraint-list>
+    </constraints>
+
+    <steps>
+        <step number="1">
+            <step-title>Identify persistence and schema sources</step-title>
+            <step-content><![CDATA[
+Before generating ER diagrams:
+
+1. Inspect Maven or Gradle dependencies to identify the data access approach when relevant.
+2. Locate SQL DDL, Flyway/Liquibase migrations, schema files, test fixtures, or persistence annotations.
+3. Identify whether the project uses Spring Data JPA, Spring Data JDBC, plain JDBC, Hibernate, Micronaut Data, Quarkus Panache, or another persistence approach.
+4. Document which schema sources are authoritative for the ER diagram.
+
+Use framework-specific annotations only when they are present in the repository. Prefer SQL migrations and DDL as the source of truth when available.
+            ]]></step-content>
+        </step>
+        <step number="2">
+            <step-title>Analyze selected ER scope</step-title>
+            <step-content><![CDATA[
+Use the user's ER-specific answer:
+
+- Complete database schema: include all application tables while documenting omitted technical tables, if any.
+- Core domain tables only: focus on business tables and relationships; exclude technical tables such as migration history or sessions unless they are part of the domain.
+- Specific tables: ask for table names if not already provided, then include directly related tables needed for foreign key context.
+
+Extract table names, columns, data types, primary keys, foreign keys, nullable constraints, unique constraints, and relationship cardinality from actual schema evidence.
+            ]]></step-content>
+        </step>
+        <step number="3">
+            <step-title>Apply ER template guidance</step-title>
+            <step-content><![CDATA[
+Use the following template and guidelines:
+
+]]><xi:include href="assets/architecture/java-er-diagram-template.md" parse="text"/><![CDATA[
+
+ER diagrams must reflect actual schema structure. If schema details are split across migrations, compose the final state carefully and call out any uncertainty.
+            ]]></step-content>
+        </step>
+        <step number="4">
+            <step-title>Organize ER outputs</step-title>
+            <step-content><![CDATA[
+Follow the user's organization preference:
+
+- Single directory: place ER `.puml` files under the chosen diagrams directory and use names such as `er-schema.puml`.
+- Organized by type: place files under an ER-specific folder such as `diagrams/er/`.
+- Organized by package/domain: group ER diagrams with the domain or persistence module they explain.
+- Integrated documentation: embed or link ER diagrams from existing architecture, database, or README documentation only after confirming the target file.
+
+Never overwrite existing diagram or documentation files without explicit user consent.
+            ]]></step-content>
+        </step>
+        <step number="5">
+            <step-title>Validate ER diagrams</step-title>
+            <step-content><![CDATA[
+Before final delivery:
+
+1. Verify PlantUML Chen syntax for every generated ER diagram.
+2. Re-check tables, columns, keys, and relationships against schema sources.
+3. Confirm cardinality matches foreign key constraints and join table semantics.
+4. Confirm file names, links, and documentation references match the selected organization.
+5. Summarize generated ER diagrams, schema sources inspected, and any unresolved schema assumptions.
+            ]]></step-content>
+        </step>
+    </steps>
+</prompt>

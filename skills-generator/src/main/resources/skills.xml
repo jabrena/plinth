@@ -55,9 +55,13 @@
             <reference>032-architecture-adr-non-functional-requirements</reference>
         </reference-list>
     </skill>
-    <skill id="033">
+    <skill id="033" skillId="033-architecture-diagrams">
         <reference-list>
-            <reference>033-architecture-diagrams</reference>
+            <reference>033-architecture-diagrams-uml-sequence</reference>
+            <reference>033-architecture-diagrams-uml-class</reference>
+            <reference>033-architecture-diagrams-c4</reference>
+            <reference>033-architecture-diagrams-state-machine</reference>
+            <reference>033-architecture-diagrams-er</reference>
         </reference-list>
     </skill>
     <skill id="034">

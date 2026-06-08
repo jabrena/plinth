@@ -2,16 +2,15 @@
 
 ## Implementation Strategy
 
-Generate C4 model diagrams using PlantUML with C4-PlantUML library to visualize system architecture at different levels of abstraction: Context, Container, Component, and Code.
+Generate C4 model diagrams using PlantUML with C4-PlantUML library to visualize system architecture at the supported levels of abstraction: Context, Container, and Component.
 
 ### C4 Model Overview
 
 The C4 model provides a hierarchical approach to architectural documentation:
 
-1. **Level 1 - System Context**: Shows how your system fits into the overall environment
-2. **Level 2 - Container**: Shows the high-level technology choices and containers
-3. **Level 3 - Component**: Shows how containers are made up of components
-4. **Level 4 - Code**: Shows how components are implemented (classes, interfaces)
+1. **System Context**: Shows how your system fits into the overall environment
+2. **Container**: Shows the high-level technology choices and containers
+3. **Component**: Shows how containers are made up of components
 
 ### Analysis Process
 
@@ -35,15 +34,9 @@ The C4 model provides a hierarchical approach to architectural documentation:
    - Document inter-component communication
    - Map business capabilities to components
 
-4. **Code Analysis**:
-   - Focus on critical or complex components
-   - Show key classes and interfaces
-   - Document important design patterns
-   - Illustrate implementation relationships
-
 ### Diagram Generation Guidelines
 
-#### Level 1 - System Context Diagram
+#### System Context Diagram
 ```plantuml
 @startuml
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
@@ -69,7 +62,7 @@ Rel(ecommerce, inventory, "Checks stock, updates inventory")
 @enduml
 ```
 
-#### Level 2 - Container Diagram
+#### Container Diagram
 ```plantuml
 @startuml
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
@@ -117,7 +110,7 @@ Rel(order_service, email_system, "Sends notifications", "SMTP")
 @enduml
 ```
 
-#### Level 3 - Component Diagram
+#### Component Diagram
 ```plantuml
 @startuml
 !include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
@@ -154,78 +147,6 @@ Rel(order_repository, order_db, "Reads from and writes to", "JDBC")
 Rel(payment_service, payment_gateway, "Processes payments", "HTTPS")
 Rel(notification_service, email_service, "Sends emails", "SMTP")
 Rel(inventory_service, inventory_system, "Updates inventory", "REST API")
-
-@enduml
-```
-
-#### Level 4 - Code Diagram (Class-based)
-```plantuml
-@startuml
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
-
-title Code Diagram for Order Processing Component
-
-Component_Boundary(order_processing, "Order Processing Component") {
-
-    class OrderController {
-        +createOrder(OrderRequest): ResponseEntity<Order>
-        +getOrder(Long): ResponseEntity<Order>
-        +updateOrderStatus(Long, OrderStatus): ResponseEntity<Order>
-    }
-
-    class OrderService {
-        -orderRepository: OrderRepository
-        -paymentService: PaymentService
-        -inventoryService: InventoryService
-        +processOrder(OrderRequest): Order
-        +validateOrder(Order): boolean
-        +calculateTotal(Order): BigDecimal
-    }
-
-    interface OrderRepository {
-        +save(Order): Order
-        +findById(Long): Optional<Order>
-        +findByCustomerId(Long): List<Order>
-    }
-
-    class Order {
-        -id: Long
-        -customerId: Long
-        -items: List<OrderItem>
-        -status: OrderStatus
-        -totalAmount: BigDecimal
-        +addItem(OrderItem): void
-        +calculateTotal(): BigDecimal
-    }
-
-    class OrderItem {
-        -productId: Long
-        -quantity: Integer
-        -unitPrice: BigDecimal
-        +getSubtotal(): BigDecimal
-    }
-
-    enum OrderStatus {
-        PENDING
-        CONFIRMED
-        SHIPPED
-        DELIVERED
-        CANCELLED
-    }
-
-    class PaymentService {
-        +processPayment(PaymentRequest): PaymentResult
-        +validatePayment(PaymentRequest): boolean
-    }
-}
-
-OrderController --> OrderService : uses
-OrderService --> OrderRepository : uses
-OrderService --> PaymentService : uses
-OrderService ..> Order : creates/manages
-Order --> OrderItem : contains
-Order --> OrderStatus : has
-OrderRepository ..> Order : persists
 
 @enduml
 ```
@@ -267,7 +188,6 @@ OrderRepository ..> Order : persists
    - Context: Focus on external interactions and system purpose
    - Container: Show deployable units and technology choices
    - Component: Logical grouping of functionality
-   - Code: Key classes and implementation details
 
 3. **Clear Relationships**:
    - Use appropriate relationship types and labels
@@ -289,12 +209,12 @@ OrderRepository ..> Order : persists
 - Provide business context and system purpose
 
 #### In Architecture Documentation
-- Create dedicated architecture.md files for complete C4 model
+- Create dedicated architecture.md files for the supported C4 model scope
 - Organize diagrams by abstraction level
 - Include detailed explanations for each diagram
 
 #### In Package Documentation
-- Reference relevant Component and Code diagrams
+- Reference relevant Component diagrams
 - Show how packages fit into overall architecture
 - Document cross-package dependencies
 
@@ -347,6 +267,6 @@ After generating C4 diagrams:
 ### Output Locations
 
 - **README.md files**: Context and Container diagrams for overview
-- **Architecture documentation**: Complete C4 model with all levels
-- **Module documentation**: Component and Code diagrams for specific modules
+- **Architecture documentation**: Supported C4 model scope
+- **Module documentation**: Component diagrams for specific modules
 - **Design documents**: Detailed architectural decisions and patterns
