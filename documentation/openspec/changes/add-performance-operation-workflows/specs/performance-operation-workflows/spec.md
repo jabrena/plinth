@@ -46,7 +46,7 @@ The generator SHALL provide embedded command assets for `/profile` and `/benchma
 #### Scenario: Delegate approved optimization work
 
 - **WHEN** profiling evidence identifies an optimization candidate and the user approves the target
-- **THEN** `@robot-java-performance` delegates implementation to `@robot-java-coder`, `@robot-spring-boot-coder`, `@robot-quarkus-coder`, or `@robot-micronaut-coder`
+- **THEN** `@robot-java-performance` delegates implementation to `@robot-java-coder`, `@robot-java-spring-boot-coder`, `@robot-java-quarkus-coder`, or `@robot-java-micronaut-coder`
 - **AND** it preserves the profiling evidence, benchmark results, implementation delegation record, and verification result as traceable artifacts
 - **AND** it does not perform the coder agent's implementation work directly
 

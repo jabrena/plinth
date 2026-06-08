@@ -11,9 +11,9 @@
 | `robot-tech-lead` | 创建实现计划。<br>创建 OpenSpec change。<br>协调交付。<br>选择实现 Agent 并委托工作。<br>跟踪实现与验证。 | 使用 `/create-plan`、`/create-spec`，或提供已批准的计划/OpenSpec 任务列表进行交付。 |
 | `robot-java-performance` | 协调 profiling 和 benchmarking。<br>保留 baseline 与测量证据。<br>将已批准的优化委托给 coder agents。 | 使用 `/profile` 或 `/benchmark`。它不会直接实现应用代码。 |
 | `robot-java-coder` | 实现与框架无关的 Java 和 Maven 工作。 | 由 tech lead 选择的委托目标。 |
-| `robot-spring-boot-coder` | 实现 Spring Boot 工作。 | 由 tech lead 选择的委托目标。 |
-| `robot-quarkus-coder` | 实现 Quarkus 工作。 | 由 tech lead 选择的委托目标。 |
-| `robot-micronaut-coder` | 实现 Micronaut 工作。 | 由 tech lead 选择的委托目标。 |
+| `robot-java-spring-boot-coder` | 实现 Spring Boot 工作。 | 由 tech lead 选择的委托目标。 |
+| `robot-java-quarkus-coder` | 实现 Quarkus 工作。 | 由 tech lead 选择的委托目标。 |
+| `robot-java-micronaut-coder` | 实现 Micronaut 工作。 | 由 tech lead 选择的委托目标。 |
 
 business analyst、architect、tech lead 和 Java performance agent 不替代 coder agents。tech lead 根据仓库证据选择实现 Agent，并且仅在依赖关系和文件所有权允许时并行委托任务组。Java performance agent 会在已有 profiling 或 benchmark 证据后，将已批准的优化委托给合适的 coder。
 

@@ -33,7 +33,7 @@ Can you update the current changelog for 0.15.0 comparing git commits in relatio
 #Bump to a new snapshot
 @resources/ update version to 0.15.0-SNAPSHOT and pom.xml, maven modules and finally regenerate local skills with ./mvnw clean install -pl skills-generator
 
-@skills-generator/src/main/resources/skill-references/assets/agents/robot-java-coder.md @skills-generator/src/main/resources/skill-references/assets/agents/robot-micronaut-coder.md @skills-generator/src/main/resources/skill-references/assets/agents/robot-quarkus-coder.md @skills-generator/src/main/resources/skill-references/assets/agents/robot-spring-boot-coder.md review @CHANGELOG.md if it is possible to add new capabilities added in this release
+@skills-generator/src/main/resources/skill-references/assets/agents/robot-java-coder.md @skills-generator/src/main/resources/skill-references/assets/agents/robot-java-micronaut-coder.md @skills-generator/src/main/resources/skill-references/assets/agents/robot-java-quarkus-coder.md @skills-generator/src/main/resources/skill-references/assets/agents/robot-java-spring-boot-coder.md review @CHANGELOG.md if it is possible to add new capabilities added in this release
 ```
 
 ## Release process

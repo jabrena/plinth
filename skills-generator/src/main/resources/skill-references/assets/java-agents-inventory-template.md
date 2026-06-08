@@ -14,9 +14,9 @@ Provide a quick checklist of the embedded agents available for installation in t
 | `robot-no-java` | Implement non-Java changes when issue, plan, or spec work does not use Java. |
 | `robot-java-performance` | Coordinate profiling, benchmarking, evidence, and approved performance optimization delegation. |
 | `robot-java-coder` | Implement framework-agnostic Java changes and refactors. |
-| `robot-micronaut-coder` | Implement Micronaut-specific code and architecture changes. |
-| `robot-quarkus-coder` | Implement Quarkus-specific code and architecture changes. |
-| `robot-spring-boot-coder` | Implement Spring Boot-specific code and architecture changes. |
+| `robot-java-micronaut-coder` | Implement Micronaut-specific code and architecture changes. |
+| `robot-java-quarkus-coder` | Implement Quarkus-specific code and architecture changes. |
+| `robot-java-spring-boot-coder` | Implement Spring Boot-specific code and architecture changes. |
 
 ## Installation target options
 

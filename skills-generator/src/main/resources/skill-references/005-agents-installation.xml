@@ -64,13 +64,13 @@
                 <xi:include href="assets/agents/robot-java-coder.md" parse="text"/>
                 ```
                 ```markdown
-                <xi:include href="assets/agents/robot-micronaut-coder.md" parse="text"/>
+                <xi:include href="assets/agents/robot-java-micronaut-coder.md" parse="text"/>
                 ```
                 ```markdown
-                <xi:include href="assets/agents/robot-quarkus-coder.md" parse="text"/>
+                <xi:include href="assets/agents/robot-java-quarkus-coder.md" parse="text"/>
                 ```
                 ```markdown
-                <xi:include href="assets/agents/robot-spring-boot-coder.md" parse="text"/>
+                <xi:include href="assets/agents/robot-java-spring-boot-coder.md" parse="text"/>
                 ```
 
                 Create the destination directory if it does not exist.

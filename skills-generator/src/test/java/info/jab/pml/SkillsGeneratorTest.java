@@ -215,9 +215,9 @@ class SkillsGeneratorTest {
                 .contains("validated `tasks.md`")
                 .contains("Owner: `@robot-tech-lead`")
                 .contains("`@robot-java-coder`")
-                .contains("`@robot-spring-boot-coder`")
-                .contains("`@robot-quarkus-coder`")
-                .contains("`@robot-micronaut-coder`")
+                .contains("`@robot-java-spring-boot-coder`")
+                .contains("`@robot-java-quarkus-coder`")
+                .contains("`@robot-java-micronaut-coder`")
                 .contains("`@robot-no-java`")
                 .contains("file ownership")
                 .contains("Mark OpenSpec tasks complete only after")
@@ -282,9 +282,9 @@ class SkillsGeneratorTest {
 
         private static final List<String> CODER_AGENTS = List.of(
             "robot-java-coder.md",
-            "robot-spring-boot-coder.md",
-            "robot-quarkus-coder.md",
-            "robot-micronaut-coder.md"
+            "robot-java-spring-boot-coder.md",
+            "robot-java-quarkus-coder.md",
+            "robot-java-micronaut-coder.md"
         );
 
         @Test
@@ -401,17 +401,17 @@ class SkillsGeneratorTest {
         @DisplayName("Framework coders must prefer JDBC for relational persistence")
         void should_preferJdbc_when_frameworkCoderSelectsRelationalPersistence() {
             assertThat(loadClasspathResource(
-                "skill-references/assets/agents/robot-spring-boot-coder.md"
+                "skill-references/assets/agents/robot-java-spring-boot-coder.md"
             ))
                 .contains("Prefer `@311-frameworks-spring-jdbc`")
                 .contains("Use `@312-frameworks-spring-data-jdbc` only");
             assertThat(loadClasspathResource(
-                "skill-references/assets/agents/robot-quarkus-coder.md"
+                "skill-references/assets/agents/robot-java-quarkus-coder.md"
             ))
                 .contains("Prefer `@411-frameworks-quarkus-jdbc`")
                 .contains("Use `@412-frameworks-quarkus-panache` only");
             assertThat(loadClasspathResource(
-                "skill-references/assets/agents/robot-micronaut-coder.md"
+                "skill-references/assets/agents/robot-java-micronaut-coder.md"
             ))
                 .contains("Prefer `@511-frameworks-micronaut-jdbc`")
                 .contains("Use `@512-frameworks-micronaut-data` only");

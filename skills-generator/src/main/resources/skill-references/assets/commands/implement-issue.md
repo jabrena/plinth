@@ -21,7 +21,7 @@ A bare issue is context, not an execution contract. When repository policy requi
 ## Owner and delegation
 
 - Owner: `@robot-tech-lead`
-- Delegation targets: `@robot-java-coder`, `@robot-spring-boot-coder`, `@robot-quarkus-coder`, `@robot-micronaut-coder`, or `@robot-no-java`
+- Delegation targets: `@robot-java-coder`, `@robot-java-spring-boot-coder`, `@robot-java-quarkus-coder`, `@robot-java-micronaut-coder`, or `@robot-no-java`
 - The tech lead coordinates delivery and MUST NOT implement application code directly.
 
 ## Workflow

@@ -11,9 +11,9 @@ The embedded agents separate analysis, architecture, technical leadership, and i
 | `robot-tech-lead` | Create implementation plans.<br>Create OpenSpec changes.<br>Coordinate delivery.<br>Select and delegate to implementation agents.<br>Track implementation and verification. | Use `/create-plan`, `/create-spec`, or provide an approved plan/OpenSpec task list for delivery. |
 | `robot-java-performance` | Coordinate profiling and benchmarking.<br>Preserve baseline and measurement evidence.<br>Delegate approved optimizations to coder agents. | Use `/profile` or `/benchmark`. It does not implement application code directly. |
 | `robot-java-coder` | Implement framework-neutral Java and Maven work. | Delegation target selected by the tech lead. |
-| `robot-spring-boot-coder` | Implement Spring Boot work. | Delegation target selected by the tech lead. |
-| `robot-quarkus-coder` | Implement Quarkus work. | Delegation target selected by the tech lead. |
-| `robot-micronaut-coder` | Implement Micronaut work. | Delegation target selected by the tech lead. |
+| `robot-java-spring-boot-coder` | Implement Spring Boot work. | Delegation target selected by the tech lead. |
+| `robot-java-quarkus-coder` | Implement Quarkus work. | Delegation target selected by the tech lead. |
+| `robot-java-micronaut-coder` | Implement Micronaut work. | Delegation target selected by the tech lead. |
 
 The business analyst, architect, tech lead, and Java performance agent do not replace coder agents. The tech lead selects one implementation agent from repository evidence and delegates parallel groups only when dependencies and file ownership permit it. The Java performance agent delegates approved optimizations to the appropriate coder after profiling or benchmark evidence is available.
 

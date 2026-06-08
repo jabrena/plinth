@@ -11,9 +11,9 @@ Los agentes integrados separan análisis, arquitectura, liderazgo técnico e imp
 | `robot-tech-lead` | Crear planes de implementación.<br>Crear cambios OpenSpec.<br>Coordinar la entrega.<br>Seleccionar y delegar en agentes de implementación.<br>Controlar implementación y verificación. | Usa `/create-plan`, `/create-spec` o proporciona un plan/lista de tareas OpenSpec aprobada para la entrega. |
 | `robot-java-performance` | Coordinar profiling y benchmarking.<br>Preservar evidencias de baseline y medición.<br>Delegar optimizaciones aprobadas a coder agents. | Usa `/profile` o `/benchmark`. No implementa código de aplicación directamente. |
 | `robot-java-coder` | Implementar trabajo Java y Maven independiente del framework. | Objetivo de delegación seleccionado por el tech lead. |
-| `robot-spring-boot-coder` | Implementar trabajo Spring Boot. | Objetivo de delegación seleccionado por el tech lead. |
-| `robot-quarkus-coder` | Implementar trabajo Quarkus. | Objetivo de delegación seleccionado por el tech lead. |
-| `robot-micronaut-coder` | Implementar trabajo Micronaut. | Objetivo de delegación seleccionado por el tech lead. |
+| `robot-java-spring-boot-coder` | Implementar trabajo Spring Boot. | Objetivo de delegación seleccionado por el tech lead. |
+| `robot-java-quarkus-coder` | Implementar trabajo Quarkus. | Objetivo de delegación seleccionado por el tech lead. |
+| `robot-java-micronaut-coder` | Implementar trabajo Micronaut. | Objetivo de delegación seleccionado por el tech lead. |
 
 El business analyst, architect, tech lead y Java performance agent no sustituyen a los coder agents. El tech lead selecciona un agente de implementación usando evidencias del repositorio y solo delega grupos en paralelo cuando las dependencias y la propiedad de archivos lo permiten. El Java performance agent delega optimizaciones aprobadas al coder adecuado cuando ya existe evidencia de profiling o benchmark.
 
