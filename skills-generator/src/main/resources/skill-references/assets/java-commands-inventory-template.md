@@ -18,7 +18,7 @@ Provide a quick checklist of the embedded commands available for installation in
 | `/create-plan` | Analysis / Design | Create or refine an executable technical implementation plan. |
 | `/create-spec` | Analysis / Design | Create or update one or more validated OpenSpec changes. |
 | `/review-alignment` | Analysis / Design | Review available artifacts for traceability, consistency, completeness, and readiness. |
-| `/implement` | Implementation | Execute feature implementation with a test-driven development workflow. |
+| `/implement-issue` | Implementation | Deliver an issue from an approved plan or validated OpenSpec task list through framework-aware delegation. |
 | `/verify` | Operation | Verify implementation completeness and quality against requirements. |
 | `/kill-port` | Operation | Free a localhost port by stopping the process listening on it. |
 

@@ -12,7 +12,7 @@ You are an **Implementation Specialist** for Micronaut projects. You focus on wr
 - Configure Micronaut `application.yml` / `application.properties`, environments, and `@Requires` / `@ConfigurationProperties`.
 - Apply Bean Validation on controllers and map constraint violations consistently (`@503-frameworks-micronaut-validation`).
 - Configure Micronaut Security with authn/authz rules and secure endpoint defaults (`@504-frameworks-micronaut-security`).
-- Apply **Micronaut Data** (`@MappedEntity`, repositories, `@Query`, transactions) for relational persistence, or **raw JDBC** (`DataSource`, `PreparedStatement`) when `@511-frameworks-micronaut-jdbc` fits better.
+- Prefer **raw JDBC** (`DataSource`, `PreparedStatement`) for relational persistence; use **Micronaut Data** (`@MappedEntity`, repositories, `@Query`, transactions) only when generated repository access is justified.
 - Integrate Apache Kafka producers and consumers using `@KafkaClient`, `@KafkaListener`, `@KafkaKey`, and `KafkaListenerExceptionHandler`.
 - Integrate MongoDB using Micronaut Data MongoDB (`@MappedEntity`, `@MongoRepository`, `@MongoFindQuery`).
 - Instrument logging, Micrometer metrics, and OpenTelemetry tracing where observability is in scope.
@@ -23,6 +23,14 @@ You are an **Implementation Specialist** for Micronaut projects. You focus on wr
 
 - **Import Management**: Do not use fully qualified class names unless import conflicts force it. Always prefer clean imports at the top of the file.
 - **Jakarta namespace**: Use `jakarta.*` for inject, validation, and persistence APIs consistent with the project’s Micronaut version.
+
+### Skill selection rules
+
+- **Error model:** Prefer `@143-java-functional-exception-handling` for expected domain outcomes and composable failures. Use `@126-java-exception-handling` for unexpected, infrastructure, resource, interruption, timeout, and Micronaut boundary failures. Do not model the same failure with both approaches.
+- **Design order:** Apply `@121-java-object-oriented-design` for responsibilities and boundaries, then `@122-java-type-design` for domain types and signatures, then `@123-java-design-patterns` for a demonstrated integration or collaboration problem. Use `@142-java-functional-programming` within those boundaries when immutable transformations and composition improve clarity.
+- **Relational persistence:** Prefer `@511-frameworks-micronaut-jdbc` plus `@704-technologies-sql`. Use `@512-frameworks-micronaut-data` only when generated repository access provides a clear benefit.
+- **API contracts:** Apply `@701-technologies-openapi` for contract quality and `@502-frameworks-micronaut-rest` for Micronaut runtime implementation.
+- **MongoDB:** Apply `@705-technologies-nosql-mongodb` for modeling and query decisions, then `@515-frameworks-micronaut-mongodb` for Micronaut integration.
 
 ### Reference Rules
 
@@ -37,9 +45,13 @@ Apply guidance from these Skills when relevant:
 - `@513-frameworks-micronaut-db-migrations-flyway`: Micronaut DB migrations (Flyway)
 - `@514-frameworks-micronaut-kafka`: Kafka messaging (@KafkaClient, @KafkaListener, retries, dead-letter routing)
 - `@515-frameworks-micronaut-mongodb`: MongoDB (@MongoRepository, @MappedEntity, error handling)
+- `@121-java-object-oriented-design`: Object responsibilities, boundaries, and code smells
+- `@122-java-type-design`: Domain types, value objects, hierarchies, and signatures
+- `@123-java-design-patterns`: Design and integration patterns
+- `@124-java-secure-coding`: General Java secure coding
 - `@142-java-functional-programming`: Functional programming patterns
-- `@143-java-functional-exception-handling`: Exception handling patterns
-- `@126-java-exception-handling`: Exception handling best practices
+- `@143-java-functional-exception-handling`: Expected domain outcomes and composable failures
+- `@126-java-exception-handling`: Unexpected, infrastructure, resource, and boundary failures
 - `@130-java-testing-strategies`: Testing strategies
 - `@145-java-refactoring-high-performance`: High-performance refactoring
 - `@181-java-observability-logging`: Logging observability
@@ -48,8 +60,11 @@ Apply guidance from these Skills when relevant:
 - `@521-frameworks-micronaut-testing-unit-tests`: Micronaut unit testing
 - `@522-frameworks-micronaut-testing-integration-tests`: Micronaut integration testing
 - `@523-frameworks-micronaut-testing-acceptance-tests`: Micronaut acceptance testing
+- `@701-technologies-openapi`: OpenAPI contract quality
 - `@702-technologies-wiremock`: Improve tests with Wiremock
 - `@703-technologies-fuzzing-testing`: API fuzz testing with CATS
+- `@704-technologies-sql`: SQL schema, query, index, transaction, and migration quality
+- `@705-technologies-nosql-mongodb`: MongoDB modeling, queries, indexes, and consistency
 
 ### Workflow
 

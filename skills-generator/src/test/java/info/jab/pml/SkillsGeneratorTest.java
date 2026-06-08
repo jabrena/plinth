@@ -145,7 +145,7 @@ class SkillsGeneratorTest {
             "create-plan.md",
             "create-spec.md",
             "review-alignment.md",
-            "implement.md",
+            "implement-issue.md",
             "verify.md",
             "kill-port.md"
         );
@@ -200,6 +200,27 @@ class SkillsGeneratorTest {
                 .contains("ADRs")
                 .contains("diagrams")
                 .contains("does not create a commit automatically");
+        }
+
+        @Test
+        @DisplayName("Implement issue command must route executable artifacts through the tech lead")
+        void should_routeExecutableArtifact_when_implementIssueCommandIsInstalled() {
+            String command = loadClasspathResource("skill-references/assets/commands/implement-issue.md");
+
+            assertThat(command)
+                .contains("/implement-issue <approved-plan|openspec-change>")
+                .contains("approved implementation plan")
+                .contains("validated `tasks.md`")
+                .contains("Owner: `@robot-tech-lead`")
+                .contains("`@robot-java-coder`")
+                .contains("`@robot-spring-boot-coder`")
+                .contains("`@robot-quarkus-coder`")
+                .contains("`@robot-micronaut-coder`")
+                .contains("file ownership")
+                .contains("Mark OpenSpec tasks complete only after")
+                .contains("Use `/verify` separately")
+                .contains("request `/review-alignment`")
+                .contains("MUST NOT implement application code directly");
         }
 
         private List<String> readCommandIncludes(String xmlResource) throws Exception {
@@ -270,6 +291,48 @@ class SkillsGeneratorTest {
                 assertThat(installer).contains(coderAgent);
                 assertThat(techLead).contains(coderAgent);
             });
+        }
+
+        @Test
+        @DisplayName("Coder agents must share implementation skill precedence")
+        void should_shareSkillPrecedence_when_coderAgentsImplementChanges() {
+            CODER_AGENTS.forEach(coderAgent -> {
+                String coder = loadClasspathResource(
+                    "skill-references/assets/agents/" + coderAgent
+                );
+
+                assertThat(coder)
+                    .contains("Prefer `@143-java-functional-exception-handling`")
+                    .contains("Use `@126-java-exception-handling`")
+                    .contains("`@121-java-object-oriented-design`")
+                    .contains("`@122-java-type-design`")
+                    .contains("`@123-java-design-patterns`")
+                    .contains("`@142-java-functional-programming`")
+                    .contains("`@124-java-secure-coding`")
+                    .contains("`@701-technologies-openapi`")
+                    .contains("`@704-technologies-sql`")
+                    .contains("`@705-technologies-nosql-mongodb`");
+            });
+        }
+
+        @Test
+        @DisplayName("Framework coders must prefer JDBC for relational persistence")
+        void should_preferJdbc_when_frameworkCoderSelectsRelationalPersistence() {
+            assertThat(loadClasspathResource(
+                "skill-references/assets/agents/robot-spring-boot-coder.md"
+            ))
+                .contains("Prefer `@311-frameworks-spring-jdbc`")
+                .contains("Use `@312-frameworks-spring-data-jdbc` only");
+            assertThat(loadClasspathResource(
+                "skill-references/assets/agents/robot-quarkus-coder.md"
+            ))
+                .contains("Prefer `@411-frameworks-quarkus-jdbc`")
+                .contains("Use `@412-frameworks-quarkus-panache` only");
+            assertThat(loadClasspathResource(
+                "skill-references/assets/agents/robot-micronaut-coder.md"
+            ))
+                .contains("Prefer `@511-frameworks-micronaut-jdbc`")
+                .contains("Use `@512-frameworks-micronaut-data` only");
         }
     }
 
