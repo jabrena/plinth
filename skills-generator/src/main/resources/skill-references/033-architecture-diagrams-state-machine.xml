@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.16.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Java Diagrams Generator with modular step-based configuration</title>
+        <description>Focused UML state machine diagram guidance for the interactive architecture diagrams skill.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer with extensive experience in Java workflow, lifecycle, and state modeling.</role>
+
+    <goal><![CDATA[
+Generate UML state machine diagrams only when selected by the `033-architecture-diagrams` question flow. Use this reference to analyze real entity lifecycles, business workflows, system behaviors, and user interaction states, then produce PlantUML state diagrams that match the selected output organization.
+    ]]></goal>
+
+    <constraints>
+        <constraints-description>Apply this reference only after the SKILL.md question flow selected UML state-machine diagrams.</constraints-description>
+        <constraint-list>
+            <constraint>Read this reference only when the user selected UML state-machine diagrams or All diagrams in the centralized question flow.</constraint>
+            <constraint>Inspect repository code before generating diagrams; do not produce generic state diagrams without lifecycle or workflow analysis.</constraint>
+            <constraint>Use PlantUML state machine syntax and validate renderability before final delivery.</constraint>
+            <constraint>Include guards, triggers, actions, initial states, final states, and error states only when supported by repository evidence.</constraint>
+            <constraint>Organize generated files according to the user's output organization and format selections.</constraint>
+        </constraint-list>
+    </constraints>
+
+    <steps>
+        <step number="1">
+            <step-title>Analyze selected state scope</step-title>
+            <step-content><![CDATA[
+Use the user's state-machine-specific answer:
+
+- Entity lifecycles: analyze domain entities, enum states, state-changing methods, validation rules, and terminal states.
+- Business workflows: analyze approval, payment, shipping, provisioning, background job, or other process orchestration paths.
+- System behaviors: analyze connection, job, transaction, retry, timeout, and recovery states in infrastructure components.
+- User interactions: analyze form, wizard, dialog, navigation, and validation states when UI sources exist.
+
+Reference actual enum values, method names, classes, commands, events, and guards from the repository.
+            ]]></step-content>
+        </step>
+        <step number="2">
+            <step-title>Apply state template guidance</step-title>
+            <step-content><![CDATA[
+Use the following template and guidelines:
+
+]]><xi:include href="assets/architecture/java-uml-state-machine-diagram-template.md" parse="text"/><![CDATA[
+
+State diagrams must reflect actual lifecycle and transition rules. If a lifecycle is implied but not implemented, clearly label it as an inferred candidate and ask for confirmation before generating final files.
+            ]]></step-content>
+        </step>
+        <step number="3">
+            <step-title>Organize state outputs</step-title>
+            <step-content><![CDATA[
+Follow the user's organization preference:
+
+- Single directory: place state `.puml` files under the chosen diagrams directory and use names such as `state-order-lifecycle.puml`.
+- Organized by type: place files under a state-specific folder such as `diagrams/state-machine/`.
+- Organized by package/domain: group state diagrams with the entity, workflow, or component they explain.
+- Integrated documentation: embed or link state diagrams from existing architecture, domain, or README documentation only after confirming the target file.
+
+Never overwrite existing diagram or documentation files without explicit user consent.
+            ]]></step-content>
+        </step>
+        <step number="4">
+            <step-title>Validate state diagrams</step-title>
+            <step-content><![CDATA[
+Before final delivery:
+
+1. Verify PlantUML syntax for every generated state machine diagram.
+2. Re-check states, transitions, guards, actions, and terminal conditions against repository evidence.
+3. Confirm business rules and exceptional paths are accurate.
+4. Confirm file names, links, and documentation references match the selected organization.
+5. Summarize generated state diagrams, classes/enums/workflows inspected, and any unresolved lifecycle assumptions.
+            ]]></step-content>
+        </step>
+    </steps>
+</prompt>
