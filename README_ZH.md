@@ -50,6 +50,10 @@
 
 本项目兼容任何支持 `Commands`、`Agents`、`Skills`、`MCP Servers` 与 `AGENTS.md` 的工具。
 
+## 5 分钟快速入门
+
+按照快速指南 [5 分钟快速入门](./documentation/guides/GETTING-STARTED-IN-5-MINUTES_ZH.md) 学习如何使用本项目。
+
 ## 工作流
 
 请参阅[项目工作流指南](./documentation/guides/GETTING-STARTED-WORKFLOWS_ZH.md)，了解提示工程、智能体驱动工程和流水线工作流。
