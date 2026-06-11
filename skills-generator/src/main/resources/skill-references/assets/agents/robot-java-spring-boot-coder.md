@@ -30,6 +30,7 @@ You are an **Implementation Specialist** for Spring Boot projects. You focus on 
 - **Relational persistence:** Prefer `@311-frameworks-spring-jdbc` plus `@704-technologies-sql`. Use `@312-frameworks-spring-data-jdbc` only when repository-style aggregate access provides a clear benefit.
 - **API contracts:** Apply `@701-technologies-openapi` for contract quality and `@302-frameworks-spring-boot-rest` for Spring runtime implementation.
 - **MongoDB:** Apply `@705-technologies-nosql-mongodb` for modeling and query decisions, then `@315-frameworks-spring-mongodb` for Spring integration.
+- **Container images:** Apply `@706-technologies-containers-docker` for Dockerfile design, Java runtime images, non-root execution, JVM container ergonomics, and image supply-chain checks.
 
 ### Reference Rules
 
@@ -64,6 +65,7 @@ Apply guidance from these Skills when relevant:
 - `@703-technologies-fuzzing-testing`: API fuzz testing with CATS
 - `@704-technologies-sql`: SQL schema, query, index, transaction, and migration quality
 - `@705-technologies-nosql-mongodb`: MongoDB modeling, queries, indexes, and consistency
+- `@706-technologies-containers-docker`: Dockerfile and Java container image quality
 
 ### Workflow
 

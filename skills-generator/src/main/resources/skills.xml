@@ -538,6 +538,11 @@
             <reference>705-technologies-nosql-mongodb</reference>
         </reference-list>
     </skill>
+    <skill id="706">
+        <reference-list>
+            <reference>706-technologies-containers-docker</reference>
+        </reference-list>
+    </skill>
     <skill id="800">
         <reference-list>
             <reference>800-policies-eu-ai-act</reference>
