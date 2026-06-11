@@ -30,7 +30,7 @@
         <constraint-list>
             <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before changing Java or build descriptors in the same change set</constraint>
             <constraint>**SCOPE**: Stay within Dockerfile, container build, image metadata, runtime flags, image scanning, and container operations unless the user asks for framework-specific implementation</constraint>
-            <constraint>**SECRETS**: Never copy credentials, tokens, private keys, `.env` files, or secret-bearing Maven settings into image layers or build logs</constraint>
+            <constraint>**SENSITIVE INPUTS**: Never copy local configuration, repository access material, or environment-specific values into image layers or build logs</constraint>
             <constraint>**SECURITY**: Prefer non-root execution, least-privilege file ownership, micro runtime images, explicit ports, and no privileged container assumptions</constraint>
             <constraint>**JLINK**: Prefer `jlink` custom runtimes for production images when the module graph is known, validated with smoke tests, and compatible with the application's dependencies</constraint>
             <constraint>**MICRO DISTRO**: Prefer micro runtime distributions such as Alpaquita only after checking libc compatibility, required OS certificates, timezone data, diagnostics, and security-scanner support</constraint>
@@ -148,14 +148,14 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]]]></code-block>
             </code-examples>
         </example>
 
-        <example number="4" id="dockerignore-and-secrets">
+        <example number="4" id="dockerignore-and-local-inputs">
             <example-header>
-                <example-title>Keep build context small and secret-free</example-title>
-                <example-subtitle>.dockerignore, no credentials in layers, and explicit artifact inputs</example-subtitle>
+                <example-title>Keep build context small and policy-safe</example-title>
+                <example-subtitle>.dockerignore, no local-only inputs in layers, and explicit artifact inputs</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                A good `.dockerignore` prevents accidental context bloat and reduces the risk of copying credentials into image layers. Build-time secrets should use CI or Docker secret mechanisms rather than committed files.
+                A good `.dockerignore` prevents accidental context bloat and reduces the risk of copying local-only configuration into image layers. Sensitive build inputs should come from CI or Docker secret mechanisms rather than committed files or broad context copies.
                 ]]>
             </example-description>
             <code-examples>
@@ -164,16 +164,14 @@ ENTRYPOINT ["java", "-jar", "/app/app.jar"]]]></code-block>
 target/
 .idea/
 .vscode/
-.env
-*.pem
-*.key
-settings.xml]]></code-block>
+local-config/
+developer-overrides/
+build-output/]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
                     <code-block language="dockerfile"><![CDATA[COPY . /workspace
-ARG MAVEN_PASSWORD
-RUN echo "$MAVEN_PASSWORD" > /root/.m2/password.txt
-# Avoid copying everything and writing secrets into layers.]]></code-block>
+RUN ./mvnw package
+# Avoid copying everything; broad build contexts can include local-only files.]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
