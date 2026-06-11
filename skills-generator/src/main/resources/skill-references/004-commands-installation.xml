@@ -48,7 +48,7 @@
                 Copy these exact source files from `skills-generator/src/main/resources/skill-references/assets/commands/` into the chosen destination directory:
 
                 ```markdown
-                <xi:include href="assets/commands/update-issue-description.md" parse="text"/>
+                <xi:include href="assets/commands/update-issue.md" parse="text"/>
                 ```
                 ```markdown
                 <xi:include href="assets/commands/create-feature-branch.md" parse="text"/>
@@ -87,9 +87,6 @@
                 <xi:include href="assets/commands/benchmark.md" parse="text"/>
                 ```
                 ```markdown
-                <xi:include href="assets/commands/verify.md" parse="text"/>
-                ```
-                ```markdown
                 <xi:include href="assets/commands/kill-port.md" parse="text"/>
                 ```
 
@@ -100,7 +97,7 @@
             <step-constraints>
                 <step-constraint-list>
                     <step-constraint>**MUST** copy from embedded assets, not from external URLs</step-constraint>
-                    <step-constraint>**MUST** install all fifteen commands as one set</step-constraint>
+                    <step-constraint>**MUST** install all fourteen commands as one set</step-constraint>
                     <step-constraint>**MUST** preserve original file names</step-constraint>
                 </step-constraint-list>
             </step-constraints>

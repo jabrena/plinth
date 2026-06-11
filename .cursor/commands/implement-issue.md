@@ -30,16 +30,19 @@ A bare issue is context, not an execution contract. When repository policy requi
 2. Stop and request `/review-alignment` when the issue, ADRs, specification, plan, or task list conflicts materially.
 3. Identify the framework from authoritative artifacts, build files, and code; select the matching specialized coder or `@robot-no-java` when the execution artifact does not use Java.
 4. Extract task groups, dependencies, milestones, verification gates, and expected file ownership.
-5. Serialize dependent or overlapping groups; run groups concurrently only when dependencies and owned files do not conflict.
-6. Delegate each group with task IDs, owned files, acceptance criteria, blocked-by relationships, and focused validation commands.
-7. Integrate delegated results and require changed-file, test, build, risk, and blocker evidence.
-8. Mark OpenSpec tasks complete only after their acceptance criteria and focused verification gates pass.
-9. Report completion against the selected artifact. Use `/verify` separately for independent final completeness and quality validation.
+5. Decide whether the work should run in the current checkout, a new feature branch, or one or more linked worktrees.
+6. Use `/create-feature-branch` for serial work in the current checkout, or `/create-worktree` when independent groups can run safely in parallel.
+7. Serialize dependent or overlapping groups; run groups concurrently only when dependencies and owned files do not conflict.
+8. Delegate each group with task IDs, owned files, acceptance criteria, blocked-by relationships, and focused validation commands.
+9. Integrate delegated results and require changed-file, test, build, risk, and blocker evidence.
+10. Mark OpenSpec tasks complete only after their acceptance criteria and focused verification gates pass.
+11. Report completion against the selected artifact.
 
 ## Output
 
 - Selected execution artifact and source reference
 - Framework decision and coder routing rationale
+- Feature-branch or worktree decision and rationale
 - Serial/parallel execution map with dependencies and file ownership
 - Results and changed files by task or group
 - Test and build evidence

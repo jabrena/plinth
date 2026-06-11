@@ -1,0 +1,194 @@
+package info.jab.pml;
+
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.NodeList;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@DisplayName("Command Index Tests")
+class CommandIndexesTest {
+
+    @Test
+    @DisplayName("Command inventory XML must load command files in installation order")
+    void should_loadCommandFiles_when_commandInventoryIsParsed() {
+        List<String> commandFiles = expectedCommandFiles();
+
+        assertThat(commandFiles)
+            .isNotEmpty()
+            .allSatisfy(commandFile -> assertThat(commandFile).endsWith(".md"));
+        assertThat(new HashSet<>(commandFiles))
+            .withFailMessage("Command inventory must not contain duplicate command files")
+            .hasSize(commandFiles.size());
+    }
+
+    @Test
+    @DisplayName("Command assets must include the complete command bundle")
+    void should_haveCompleteCommandAssets_when_commandBundleIsInstalled() {
+        expectedCommandFiles().forEach(commandFile -> {
+            String resource = "skill-references/assets/commands/" + commandFile;
+            assertThat(getTestResource(resource))
+                .withFailMessage("Command asset missing: %s", resource)
+                .isNotNull();
+        });
+    }
+
+    @Test
+    @DisplayName("Command installer must include the exact command bundle")
+    void should_includeExactCommands_when_commandInstallerUsesXIncludes() throws Exception {
+        List<String> commandIncludes = readCommandIncludes("skill-references/004-commands-installation.xml");
+
+        assertThat(commandIncludes)
+            .containsExactlyElementsOf(expectedCommandFiles().stream()
+                .map(commandFile -> "assets/commands/" + commandFile)
+                .toList());
+    }
+
+    @Test
+    @DisplayName("Command inventory template must list the exact command bundle")
+    void should_listExactCommands_when_inventoryTemplateIsGenerated() {
+        String inventory = loadClasspathResource("skill-references/assets/java-commands-inventory-template.md");
+
+        expectedCommandFiles().stream()
+            .map(commandFile -> commandFile.substring(0, commandFile.length() - ".md".length()))
+            .map(commandName -> "`/" + commandName + "`")
+            .forEach(command -> assertThat(inventory).contains(command));
+
+        long commandRows = inventory.lines()
+            .filter(line -> line.startsWith("| `/"))
+            .count();
+        assertThat(commandRows).isEqualTo(expectedCommandFiles().size());
+    }
+
+    @Test
+    @DisplayName("Issue commands must route through the business analyst and user-story skill")
+    void should_routeIssueCommands_when_issueCommandsAreInstalled() {
+        String createIssue = loadClasspathResource("skill-references/assets/commands/create-issue.md");
+        String updateIssue = loadClasspathResource("skill-references/assets/commands/update-issue.md");
+
+        assertThat(createIssue)
+            .contains("/create-issue [<source>] [<tracker>]")
+            .contains("`@robot-business-analyst`")
+            .contains("`014-agile-user-story` when user-story refinement is required");
+        assertThat(updateIssue)
+            .contains("/update-issue <issue> [<source>] [<tracker>]")
+            .contains("`@robot-business-analyst`")
+            .contains("`014-agile-user-story` when user-story refinement is required")
+            .contains("Present the proposed body before overwriting");
+    }
+
+    @Test
+    @DisplayName("Feature branch command must support analysis and design transition")
+    void should_documentDesignTransition_when_featureBranchCommandIsInstalled() {
+        String command = loadClasspathResource("skill-references/assets/commands/create-feature-branch.md");
+
+        assertThat(command)
+            .contains("issue/change identifier")
+            .contains("safe working tree")
+            .contains("OpenSpec artifacts")
+            .contains("ADRs")
+            .contains("diagrams")
+            .contains("does not create a commit automatically");
+    }
+
+    @Test
+    @DisplayName("Implement issue command must route executable artifacts through the tech lead")
+    void should_routeExecutableArtifact_when_implementIssueCommandIsInstalled() {
+        String command = loadClasspathResource("skill-references/assets/commands/implement-issue.md");
+
+        assertThat(command)
+            .contains("/implement-issue <approved-plan|openspec-change>")
+            .contains("approved implementation plan")
+            .contains("validated `tasks.md`")
+            .contains("Owner: `@robot-tech-lead`")
+            .contains("`@robot-java-coder`")
+            .contains("`@robot-java-spring-boot-coder`")
+            .contains("`@robot-java-quarkus-coder`")
+            .contains("`@robot-java-micronaut-coder`")
+            .contains("`@robot-no-java`")
+            .contains("file ownership")
+            .contains("Mark OpenSpec tasks complete only after")
+            .contains("Decide whether the work should run in the current checkout")
+            .contains("Use `/create-feature-branch`")
+            .contains("`/create-worktree`")
+            .contains("request `/review-alignment`")
+            .contains("MUST NOT implement application code directly");
+    }
+
+    @Test
+    @DisplayName("Performance commands must route to Java performance agent")
+    void should_routePerformanceWorkflows_when_profileAndBenchmarkCommandsAreInstalled() {
+        String profile = loadClasspathResource("skill-references/assets/commands/profile.md");
+        String benchmark = loadClasspathResource("skill-references/assets/commands/benchmark.md");
+
+        assertThat(profile)
+            .contains("/profile <application-or-module>")
+            .contains("Owner: `@robot-java-performance`")
+            .contains("`@161-java-profiling-detect`")
+            .contains("`@162-java-profiling-analyze`")
+            .contains("`@163-java-profiling-refactor`")
+            .contains("`@164-java-profiling-verify`")
+            .contains("Do not optimize without user approval")
+            .contains("non-equivalent measurements");
+        assertThat(benchmark)
+            .contains("/benchmark <target>")
+            .contains("Owner: `@robot-java-performance`")
+            .contains("`@151-java-performance-jmeter`")
+            .contains("`@152-java-performance-gatling`")
+            .contains("Maven/JMH guidance")
+            .contains("JMeter or Gatling")
+            .contains("JMH");
+    }
+
+    private static List<String> expectedCommandFiles() {
+        return CommandIndexes.commandFiles().toList();
+    }
+
+    private List<String> readCommandIncludes(String xmlResource) throws Exception {
+        try (InputStream xmlStream = getTestResource(xmlResource)) {
+            assertThat(xmlStream)
+                .withFailMessage("XML resource not found on classpath: %s", xmlResource)
+                .isNotNull();
+
+            DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+            factory.setNamespaceAware(true);
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document document = builder.parse(xmlStream);
+            NodeList includes = document.getElementsByTagNameNS("http://www.w3.org/2001/XInclude", "include");
+
+            List<String> commandIncludes = new ArrayList<>();
+            for (int i = 0; i < includes.getLength(); i++) {
+                Element include = (Element) includes.item(i);
+                String href = include.getAttribute("href");
+                if (href.startsWith("assets/commands/")) {
+                    commandIncludes.add(href);
+                }
+            }
+            return commandIncludes;
+        }
+    }
+
+    private String loadClasspathResource(String resourceName) {
+        try (InputStream stream = getTestResource(resourceName)) {
+            if (stream == null) {
+                throw new IllegalArgumentException("Resource not found: " + resourceName);
+            }
+            return new String(stream.readAllBytes(), StandardCharsets.UTF_8);
+        } catch (Exception e) {
+            throw new RuntimeException("Failed to load classpath resource: " + resourceName, e);
+        }
+    }
+
+    private InputStream getTestResource(String resourceName) {
+        return CommandIndexesTest.class.getClassLoader().getResourceAsStream(resourceName);
+    }
+}
