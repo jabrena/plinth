@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.16.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need framework-agnostic Docker and container image guidance for Java projects - Dockerfile design, multi-stage Maven builds, runtime image selection, JVM container ergonomics, non-root execution, image metadata, .dockerignore, reproducible builds, vulnerability scanning, SBOM awareness, and production-safe container defaults. This should trigger for requests such as Review Java Dockerfile; Improve Docker image security; Add containerization to a Java project; Optimize Java container image size; Review Docker build reproducibility.</description>
+    <description>Use when you need framework-agnostic Docker and container image guidance for Java projects - Dockerfile design, multi-stage Maven builds, jlink custom runtimes, micro runtime distributions such as Alpaquita, JVM container ergonomics, non-root execution, image metadata, .dockerignore, reproducible builds, vulnerability scanning, SBOM awareness, and production-safe container defaults. This should trigger for requests such as Review Java Dockerfile; Improve Docker image security; Add jlink runtime to a Java container; Add containerization to a Java project; Optimize Java container image size; Review Docker build reproducibility.</description>
   </metadata>
 
   <title>Java container image best practices with Docker</title>
@@ -15,8 +15,8 @@ Help teams build secure, reproducible, and maintainable **Docker container image
 
 **What is covered in this Skill?**
 
-- Dockerfile structure for Java applications: multi-stage builds, Maven dependency caching, deterministic artifact copies, and `.dockerignore`
-- Runtime image selection: minimal JRE images, pinned versions or digests where appropriate, image labels, and explicit entrypoints
+- Dockerfile structure for Java applications: multi-stage builds, Maven dependency caching, deterministic artifact copies, `jlink` custom runtimes, and `.dockerignore`
+- Runtime image selection: micro distributions such as Alpaquita, minimal JRE images, pinned versions or digests where appropriate, image labels, and explicit entrypoints
 - JVM container ergonomics: memory percentage flags, startup behavior, graceful shutdown signals, time zones, and predictable runtime options
 - Security defaults: non-root users, least privilege, no secrets in layers, reduced package managers, vulnerability scanning, SBOM awareness, and avoiding privileged containers
 - Operational readiness: health checks when suitable, stdout/stderr logging, port declaration, image size control, build reproducibility, and CI verification
@@ -29,7 +29,8 @@ Help teams build secure, reproducible, and maintainable **Docker container image
     <constraint-list>
       <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before proposing Java or Maven changes in the same change set</constraint>
       <constraint>**SECRETS**: Never bake credentials, tokens, private keys, Maven settings with secrets, or environment-specific secrets into image layers, labels, arguments, or logs</constraint>
-      <constraint>**SECURITY**: Prefer non-root execution, least-privilege filesystem permissions, minimal runtime images, and explicit container capabilities over privileged defaults</constraint>
+      <constraint>**SECURITY**: Prefer non-root execution, least-privilege filesystem permissions, micro runtime images, and explicit container capabilities over privileged defaults</constraint>
+      <constraint>**JLINK**: Prefer `jlink` custom runtimes for production images when the module graph is known, validated at runtime, and compatible with the application's dependencies</constraint>
       <constraint>**REPRODUCIBILITY**: Pin base image versions intentionally, document digest trade-offs, keep build inputs explicit, and avoid network-dependent runtime startup steps</constraint>
       <constraint>**JVM**: Account for container memory and CPU limits with JVM flags, graceful shutdown behavior, and observable startup failures before claiming production readiness</constraint>
       <constraint>**BOUNDARIES**: Defer Spring Boot runtime behavior to `@301-frameworks-spring-boot-core`, Quarkus runtime behavior to `@401-frameworks-quarkus-core`, Micronaut runtime behavior to `@501-frameworks-micronaut-core`, and Testcontainers setup to the matching testing skill</constraint>
@@ -44,6 +45,7 @@ Help teams build secure, reproducible, and maintainable **Docker container image
     <trigger-list>
         <trigger>Review Java Dockerfile</trigger>
         <trigger>Improve Docker image security</trigger>
+        <trigger>Add jlink runtime to a Java container</trigger>
         <trigger>Add containerization to a Java project</trigger>
         <trigger>Optimize Java container image size</trigger>
         <trigger>Review Docker build reproducibility</trigger>
@@ -51,7 +53,7 @@ Help teams build secure, reproducible, and maintainable **Docker container image
   </triggers>
   <steps>
     <step number="1"><step-title>Read reference and assess container context</step-title><step-content>Read `references/706-technologies-containers-docker.md` and inspect current Dockerfiles, `.dockerignore`, Maven build inputs, image build scripts, CI jobs, registry policy, and deployment constraints before proposing changes.</step-content></step>
-    <step number="2"><step-title>Identify runtime and supply-chain constraints</step-title><step-content>Confirm Java version, build tool, target platform, base-image policy, registry requirements, vulnerability scanner, SBOM expectations, memory limits, exposed ports, and operational readiness needs.</step-content></step>
+    <step number="2"><step-title>Identify runtime and supply-chain constraints</step-title><step-content>Confirm Java version, build tool, `jlink` module requirements, micro distro compatibility, target platform, base-image policy, registry requirements, vulnerability scanner, SBOM expectations, memory limits, exposed ports, and operational readiness needs.</step-content></step>
     <step number="3"><step-title>Apply container-aligned changes</step-title><step-content>Implement or refactor Docker and container build artifacts following the reference patterns and project conventions, keeping framework-specific runtime behavior out of scope unless explicitly requested.</step-content></step>
     <step number="4"><step-title>Run verification and report results</step-title><step-content>Execute appropriate build, image build, scan, smoke-test, and generator checks; summarize what changed, what was verified, and any remaining container risks.</step-content></step>
   </steps>
