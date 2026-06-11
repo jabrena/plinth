@@ -50,6 +50,10 @@ The project generates a set of deliverables at the end of any iteration.
 
 This project is compatible with any tool that supports `Commands`, `Agents`, `Skills`, `MCP Servers` and `AGENTS.md`.
 
+## Getting Started in 5 minutes
+
+Learn to use this project following the quick guide [Getting Started in 5 minutes](./documentation/guides/GETTING-STARTED-IN-5-MINUTES.md).
+
 ## Workflows
 
 Review the [project workflows guide](./documentation/guides/GETTING-STARTED-WORKFLOWS.md) for prompting, agent-driven engineering, and pipeline workflows.
