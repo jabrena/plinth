@@ -62,8 +62,6 @@
 - `cisco-ai-skill-scanner` 使用 strict policy 执行行为扫描，并在发现高严重级别问题时失败。
 - SkillSpector 生成不依赖 LLM 的 Markdown 报告，用于进一步检查 skill 质量，并将报告上传为 workflow artifact。
 
-本地开发时，请先运行 `./mvnw clean verify -pl skills-generator`，再调用这些 scanners。面向公开 `skills/` 目录的 release-only 验证记录在 [CONTRIBUTING.md](./CONTRIBUTING.md) 与 [AGENTS.md](./AGENTS.md) 中。
-
 ## 局限性
 
 ### 缺乏确定性

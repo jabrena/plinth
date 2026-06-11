@@ -62,8 +62,6 @@ Cada push ejecuta validaciones enfocadas en skills dentro de [CI Builds](./.gith
 - `cisco-ai-skill-scanner` ejecuta un análisis de comportamiento con la política strict y falla ante hallazgos de severidad alta.
 - SkillSpector genera un informe Markdown sin LLM para una inspección adicional de calidad de los skills y lo sube como artefacto del workflow.
 
-Para el desarrollo local, ejecuta `./mvnw clean verify -pl skills-generator` antes de invocar los scanners. Las validaciones exclusivas de release para el directorio público `skills/` están documentadas en [CONTRIBUTING.md](./CONTRIBUTING.md) y [AGENTS.md](./AGENTS.md).
-
 ## Limitaciones
 
 ### Falta de determinismo

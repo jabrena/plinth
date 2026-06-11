@@ -62,8 +62,6 @@ Every push runs skill-focused checks in [CI Builds](./.github/workflows/maven.ya
 - `cisco-ai-skill-scanner` runs a behavioral scan with the strict policy and fails on high-severity findings.
 - SkillSpector generates a no-LLM Markdown report for additional skill quality inspection and uploads it as a workflow artifact.
 
-For local development, run `./mvnw clean verify -pl skills-generator` before invoking the scanners. Release-only validation for the public `skills/` directory is documented in [CONTRIBUTING.md](./CONTRIBUTING.md) and [AGENTS.md](./AGENTS.md).
-
 ## Limitations
 
 ### Lack of determinism
