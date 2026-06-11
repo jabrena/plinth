@@ -56,7 +56,7 @@
 
 ## Skill 验证
 
-每次 push 都会在 [CI Builds](./.github/workflows/maven.yaml) 中运行面向 skills 的检查。每项验证都会先从 `skills-generator` 重新生成当前 agent skills，再扫描 `.agents/skills`，因此 CI 验证的是生成后的输出，而不是仓库中过期的内容：
+每次 push 都会在 [CI Builds](./.github/workflows/maven.yaml) 中运行面向 skills 的检查，以维护质量和正确性：
 
 - `skill-check` 使用 `npx skill-check@latest .agents/skills --no-security-scan --format github` 验证生成的 `SKILL.md` 结构和元数据。
 - `cisco-ai-skill-scanner` 使用 strict policy 执行行为扫描，并在发现高严重级别问题时失败。

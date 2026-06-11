@@ -56,7 +56,7 @@ Consulta la [guía de flujos de trabajo del proyecto](./documentation/guides/GET
 
 ## Validaciones de Skills
 
-Cada push ejecuta validaciones enfocadas en skills dentro de [CI Builds](./.github/workflows/maven.yaml). Cada validación regenera los agent skills actuales desde `skills-generator` antes de analizar `.agents/skills`, por lo que CI verifica la salida generada y no contenido obsoleto en el repositorio:
+Cada push ejecuta validaciones enfocadas en skills dentro de [CI Builds](./.github/workflows/maven.yaml) para mantener la calidad y la corrección:
 
 - `skill-check` valida la estructura y los metadatos de los `SKILL.md` generados con `npx skill-check@latest .agents/skills --no-security-scan --format github`.
 - `cisco-ai-skill-scanner` ejecuta un análisis de comportamiento con la política strict y falla ante hallazgos de severidad alta.
