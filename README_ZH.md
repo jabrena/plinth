@@ -54,6 +54,14 @@
 
 请参阅[项目工作流指南](./documentation/guides/GETTING-STARTED-WORKFLOWS_ZH.md)，了解提示工程、智能体驱动工程和流水线工作流。
 
+## Skill 验证
+
+每次 push 都会在 [CI Builds](./.github/workflows/maven.yaml) 中运行面向 skills 的检查，以维护质量和正确性：
+
+- `skill-check` 使用 `npx skill-check@latest .agents/skills --no-security-scan --format github` 验证生成的 `SKILL.md` 结构和元数据。
+- `cisco-ai-skill-scanner` 使用 strict policy 执行行为扫描，并在发现高严重级别问题时失败。
+- SkillSpector 生成不依赖 LLM 的 Markdown 报告，用于进一步检查 skill 质量，并将报告上传为 workflow artifact。
+
 ## 局限性
 
 ### 缺乏确定性

@@ -54,6 +54,14 @@ Este proyecto es compatible con cualquier herramienta que admita `Commands`, `Ag
 
 Consulta la [guía de flujos de trabajo del proyecto](./documentation/guides/GETTING-STARTED-WORKFLOWS_ES.md) para conocer los flujos de prompting, ingeniería dirigida por agents y pipelines.
 
+## Validaciones de Skills
+
+Cada push ejecuta validaciones enfocadas en skills dentro de [CI Builds](./.github/workflows/maven.yaml) para mantener la calidad y la corrección:
+
+- `skill-check` valida la estructura y los metadatos de los `SKILL.md` generados con `npx skill-check@latest .agents/skills --no-security-scan --format github`.
+- `cisco-ai-skill-scanner` ejecuta un análisis de comportamiento con la política strict y falla ante hallazgos de severidad alta.
+- SkillSpector genera un informe Markdown sin LLM para una inspección adicional de calidad de los skills y lo sube como artefacto del workflow.
+
 ## Limitaciones
 
 ### Falta de determinismo
