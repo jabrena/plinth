@@ -93,11 +93,28 @@ class CommandIndexesTest {
 
         assertThat(command)
             .contains("issue/change identifier")
+            .contains("Resolve the repository default branch and the current branch")
+            .contains("current checkout is `main` or the repository default branch")
+            .contains("stop and ask whether to switch to the default branch")
             .contains("safe working tree")
             .contains("OpenSpec artifacts")
             .contains("ADRs")
             .contains("diagrams")
             .contains("does not create a commit automatically");
+    }
+
+    @Test
+    @DisplayName("Worktree command must require default branch review before creating branches")
+    void should_requireDefaultBranchReview_when_worktreeCommandIsInstalled() {
+        String command = loadClasspathResource("skill-references/assets/commands/create-worktree.md");
+
+        assertThat(command)
+            .contains("/create-worktree <issue-or-change|type description>")
+            .contains("Resolve the repository default branch and the current branch")
+            .contains("current checkout is `main` or the repository default branch")
+            .contains("stop and ask whether to switch to the default branch")
+            .contains("git worktree add -b")
+            .contains("Leave existing branches, worktrees, directories, and files unchanged on conflict");
     }
 
     @Test
