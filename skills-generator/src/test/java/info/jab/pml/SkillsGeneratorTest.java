@@ -246,7 +246,8 @@ class SkillsGeneratorTest {
                     .contains("`@124-java-secure-coding`")
                     .contains("`@701-technologies-openapi`")
                     .contains("`@704-technologies-sql`")
-                    .contains("`@705-technologies-nosql-mongodb`");
+                    .contains("`@705-technologies-nosql-mongodb`")
+                    .contains("`@706-technologies-containers-docker`");
             });
         }
 

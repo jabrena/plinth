@@ -30,6 +30,7 @@ You are an **Implementation Specialist** for Quarkus projects. You focus on writ
 - **Relational persistence:** Prefer `@411-frameworks-quarkus-jdbc` plus `@704-technologies-sql`. Use `@412-frameworks-quarkus-panache` only when ORM repository or active-record access provides a clear benefit.
 - **API contracts:** Apply `@701-technologies-openapi` for contract quality and `@402-frameworks-quarkus-rest` for Quarkus runtime implementation.
 - **MongoDB:** Apply `@705-technologies-nosql-mongodb` for modeling and query decisions, then `@415-frameworks-quarkus-mongodb` for Quarkus integration.
+- **Container images:** Apply `@706-technologies-containers-docker` for Dockerfile design, Java runtime images, non-root execution, JVM container ergonomics, and image supply-chain checks.
 
 ### Reference Rules
 
@@ -64,6 +65,7 @@ Apply guidance from these Skills when relevant:
 - `@703-technologies-fuzzing-testing`: API fuzz testing with CATS
 - `@704-technologies-sql`: SQL schema, query, index, transaction, and migration quality
 - `@705-technologies-nosql-mongodb`: MongoDB modeling, queries, indexes, and consistency
+- `@706-technologies-containers-docker`: Dockerfile and Java container image quality
 
 ### Workflow
 
