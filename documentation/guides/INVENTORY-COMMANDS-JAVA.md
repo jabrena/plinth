@@ -8,7 +8,7 @@ Provide a quick checklist of the embedded commands available for installation in
 
 | Command | SDLC phase | Primary purpose |
 | --- | --- | --- |
-| `/update-issue-description` | Analysis / Design | Update GitHub issues with structured user story, acceptance criteria, and resource content. |
+| `/update-issue` | Analysis / Design | Update existing GitHub or Jira issues with structured user story, acceptance criteria, and resource content. |
 | `/create-feature-branch` | Analysis / Design to Implementation | Create and switch to a conventionally named branch for repository-backed analysis, design, or implementation. |
 | `/create-issue` | Analysis | Create or refine a structured issue in GitHub or Jira. |
 | `/create-worktree` | Analysis / Design to Implementation | Create an isolated branch and linked worktree for parallel work. |
@@ -21,7 +21,6 @@ Provide a quick checklist of the embedded commands available for installation in
 | `/implement-issue` | Implementation | Deliver an issue from an approved plan or validated OpenSpec task list through framework-aware delegation. |
 | `/profile` | Operation | Coordinate Java profiling from baseline detection through verified optimization. |
 | `/benchmark` | Operation | Select and coordinate JMeter, Gatling, or JMH performance workflows. |
-| `/verify` | Operation | Verify implementation completeness and quality against requirements. |
 | `/kill-port` | Operation | Free a localhost port by stopping the process listening on it. |
 
 ## Installation target options

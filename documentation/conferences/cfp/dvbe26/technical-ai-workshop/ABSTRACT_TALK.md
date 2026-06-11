@@ -8,7 +8,7 @@ The workshop is designed for all levels and covers the following topics in a pra
 
 - How the SDLC has evolved with AI-native engineering workflows
 - The three core workflows: Prompt Engineering, Agent-driven Engineering, and Pipelines
-- How to use Commands to automate repeatable actions across the development lifecycle — from /update-issue-description and /implement to /verify
+- How to use Commands to automate repeatable actions across the development lifecycle — from /create-issue and /update-issue to /implement-issue
 - How to compose reusable Skills across analysis, design, implementation, and operations phases
 - How to configure and delegate to Agents such as @robot-coordinator, @robot-java-coder, and framework-specific agents for Spring Boot, Quarkus, and Micronaut
 - How to extend agent capabilities with MCP Servers for JavaDocs, JDBC, and Grafana
