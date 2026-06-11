@@ -124,18 +124,27 @@ Java uses JEPs (JDK Enhancement Proposals) to describe new language and platform
 
 ## References
 
-- [https://www.cursor.com/](https://www.cursor.com/)
-- [https://cursor.com/cli](https://cursor.com/cli)
-- [https://www.anthropic.com/claude-code](https://www.anthropic.com/claude-code)
-- [https://github.com/features/copilot](https://github.com/features/copilot)
-- [https://cursor.com/docs/cli/github-actions](https://cursor.com/docs/cli/github-actions)
-- [https://code.claude.com/docs/en/github-actions](https://code.claude.com/docs/en/github-actions)
-- [https://agents.md/](https://agents.md/)
-- [https://agentskills.io/home](https://agentskills.io/home)
-- [https://microsoft.github.io/language-server-protocol/](https://microsoft.github.io/language-server-protocol/)
-- [https://openspec.dev/](https://openspec.dev/)
-- [https://skills.sh/jabrena/cursor-rules-java](https://skills.sh/jabrena/cursor-rules-java)
-- [https://tessl.io/registry/skills/github/jabrena/cursor-rules-java](https://tessl.io/registry/skills/github/jabrena/cursor-rules-java)
+**AI Agents harness:**
+
+- https://www.cursor.com/
+- https://cursor.com/cli
+- https://www.anthropic.com/claude-code
+- https://github.com/features/copilot
+- https://cursor.com/docs/cli/github-actions
+- https://code.claude.com/docs/en/github-actions
+
+**Standards:**
+
+- https://agents.md/
+- https://agentskills.io/home
+- https://microsoft.github.io/language-server-protocol/
+- https://openspec.dev/
+
+**Skill portals:**
+
+- https://skills.sh/jabrena/cursor-rules-java
+- https://github.com/vercel-labs/skills/issues
+- https://tessl.io/registry/skills/github/jabrena/cursor-rules-java
 - https://claudskills.com/author/jabrena/
 - https://agent-skills.cc/zh/skills/jabrena-cursor-rules-java
 - https://shyft.ai/skills/cursor-rules-java
@@ -143,9 +152,13 @@ Java uses JEPs (JDK Enhancement Proposals) to describe new language and platform
 - https://www.awesomeskills.dev/es/skill/jabrena-cursor-rules-java
 - https://github.com/laolaoshiren/claude-code-skills-zh
 - https://github.com/LessUp/awesome-cursorrules-zh
-- [https://github.com/vercel-labs/skills/issues](https://github.com/vercel-labs/skills/issues)
-- [https://openjdk.org/jeps/0](https://openjdk.org/jeps/0)
-- [https://jbake.org/docs/latest/](https://jbake.org/docs/latest/)
+- [https://www.learn-skills.dev/en/for/jabrena](https://www.learn-skills.dev/en/for/jabrena)
+- [https://skillsllm.com/skill/cursor-rules-java](https://skillsllm.com/skill/cursor-rules-java)
+
+**Java:**
+
+- https://openjdk.org/jeps/0
+- https://jbake.org/docs/latest/
 - https://developers.redhat.com/blog/2016/12/09/spring-cloud-for-microservices-compared-to-kubernetes
 
 ## Other developments
@@ -155,4 +168,4 @@ Java uses JEPs (JDK Enhancement Proposals) to describe new language and platform
 - https://github.com/jabrena/ai-agent-harness-monitor-cli
 - [https://github.com/jabrena/setup-cli](https://github.com/jabrena/setup-cli)
 
-Powered by [Cursor](https://www.cursor.com/) & [Codex](https://openai.com/codex/) with ❤️ from [Madrid](https://www.google.com/maps/place/Community+of+Madrid,+Madrid/@40.4983324,-6.3162283,8z/data=!3m1!4b1!4m6!3m5!1s0xd41817a40e033b9:0x10340f3be4bc880!8m2!3d40.4167088!4d-3.5812692!16zL20vMGo0eGc?entry=ttu&g_ep=EgoyMDI1MDgxOC4wIKXMDSoASAFQAw%3D%3D)
+Developed with 2 human hands, [Cursor](https://www.cursor.com/) & [Codex](https://openai.com/codex/) with ❤️ from [Madrid](https://www.google.com/maps/place/Community+of+Madrid,+Madrid/@40.4983324,-6.3162283,8z/data=!3m1!4b1!4m6!3m5!1s0xd41817a40e033b9:0x10340f3be4bc880!8m2!3d40.4167088!4d-3.5812692!16zL20vMGo0eGc?entry=ttu&g_ep=EgoyMDI1MDgxOC4wIKXMDSoASAFQAw%3D%3D)
