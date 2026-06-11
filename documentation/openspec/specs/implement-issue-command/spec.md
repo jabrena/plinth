@@ -37,7 +37,7 @@ The command bundle SHALL provide `/implement-issue` in place of `/implement`, an
 
 ### Requirement: Controlled delegation and verification
 
-`/implement-issue` MUST require framework-aware coder routing, dependency and file-ownership controls, evidence-based completion, and a clear boundary from `/verify`.
+`/implement-issue` MUST require framework-aware coder routing, dependency and file-ownership controls, evidence-based completion, and focused validation reporting within the selected execution artifact.
 
 #### Scenario: Delegate independent task groups
 
@@ -55,7 +55,13 @@ The command bundle SHALL provide `/implement-issue` in place of `/implement`, an
 
 - **WHEN** delegated tasks pass their acceptance criteria and focused checks
 - **THEN** `/implement-issue` reports changed files, test and build evidence, task status, blockers, and risks
-- **AND** `/verify` remains available for independent final completeness and quality validation
+
+#### Scenario: Select branch or worktree execution
+
+- **WHEN** `/implement-issue` reviews the approved plan or OpenSpec task list
+- **THEN** it decides whether the work should run on a feature branch or in one or more linked worktrees
+- **AND** it uses `/create-feature-branch` for serial current-checkout work
+- **AND** it uses `/create-worktree` when independent groups can run safely in parallel
 
 ### Requirement: Coder skill selection
 
