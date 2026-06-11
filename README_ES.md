@@ -50,6 +50,10 @@ El proyecto genera un conjunto de entregables al final de cualquier iteración.
 
 Este proyecto es compatible con cualquier herramienta que admita `Commands`, `Agents`, `Skills`, `MCP Servers` y `AGENTS.md`.
 
+## Primeros pasos en 5 minutos
+
+Aprende a usar este proyecto siguiendo la guía rápida [Primeros pasos en 5 minutos](./documentation/guides/GETTING-STARTED-IN-5-MINUTES_ES.md).
+
 ## Flujos de trabajo
 
 Consulta la [guía de flujos de trabajo del proyecto](./documentation/guides/GETTING-STARTED-WORKFLOWS_ES.md) para conocer los flujos de prompting, ingeniería dirigida por agents y pipelines.
