@@ -1,0 +1,23 @@
+name: sakiladb-mongodb
+
+services:
+  sakiladb:
+    image: mongo:8.0
+    container_name: sakiladb-mongodb
+    restart: unless-stopped
+    environment:
+      MONGO_INITDB_DATABASE: myDatabase
+    ports:
+      - "${SAKILA_MONGODB_PORT:-27017}:27017"
+    volumes:
+      - sakiladb-data:/data/db
+      - ./01-sakila-film-data.js:/docker-entrypoint-initdb.d/01-sakila-film-data.js:ro
+    healthcheck:
+      test: ["CMD-SHELL", "mongosh --quiet --eval 'db.adminCommand({ ping: 1 }).ok'"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+volumes:
+  sakiladb-data:
