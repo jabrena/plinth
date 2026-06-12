@@ -7,6 +7,12 @@ Read [AGENTS.md](./AGENTS.md) for the full contributor guide (tech stack, bounda
 - **Git:** use [Conventional Commits](https://www.conventionalcommits.org/) in the form `type(scope): description`, with types such as `feat`, `fix`, `docs`, `style`, `refactor`, `test`, and `chore` (see AGENTS.md).
 - **Pre-commit (recommended):** this repo includes [pre-commit](https://pre-commit.com/) in [`.pre-commit-config.yaml`](.pre-commit-config.yaml) (YAML checks and a commit-msg hook aligned with the rules above). Install once per clone: `pip install pre-commit` or `brew install pre-commit`, then `pre-commit install --install-hooks`. Details and manual checks are in AGENTS.md under **Pre-commit hooks**.
 
+## Pull Request Policy
+
+Pull requests must be opened by human contributors using human-owned GitHub accounts. The contributor is responsible for understanding, validating, and maintaining the submitted change.
+
+AI coding assistants, generators, and automation may help prepare a contribution, but they must not replace human authorship, review, or accountability. Pull requests opened directly by bots, autonomous agents, or other non-human accounts are not accepted unless they are part of maintainer-approved repository automation.
+
 ## Generator
 
 The unified `skills-generator` module holds all XML sources and Java code used to build **agent skills** under `skills/`.
