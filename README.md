@@ -65,7 +65,7 @@ Every push runs skill-focused checks in [CI Builds](./.github/workflows/maven.ya
 - `skill-check` validates the generated `SKILL.md` structure and metadata with `npx skill-check@latest .agents/skills --no-security-scan --format github`.
 - `cisco-ai-skill-scanner` runs a behavioral scan with the strict policy and fails on high-severity findings.
 - SkillSpector generates a no-LLM Markdown report for additional skill quality inspection and uploads it as a workflow artifact.
-- Snyk Agent Scan scans the generated `.agents/skills` supply chain for agent-skill security risks with `uvx snyk-agent-scan@latest scan .agents/skills --ci --no-bootstrap --dangerously-run-mcp-servers`; CI requires the `SNYK_TOKEN` secret.
+- Snyk Agent Scan scans the generated `.agents/skills` supply chain for agent-skill security risks with verbose error and full-description output; CI requires the `SNYK_TOKEN` secret and uploads the scan report as a workflow artifact.
 
 ## Limitations
 

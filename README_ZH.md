@@ -65,7 +65,7 @@
 - `skill-check` 使用 `npx skill-check@latest .agents/skills --no-security-scan --format github` 验证生成的 `SKILL.md` 结构和元数据。
 - `cisco-ai-skill-scanner` 使用 strict policy 执行行为扫描，并在发现高严重级别问题时失败。
 - SkillSpector 生成不依赖 LLM 的 Markdown 报告，用于进一步检查 skill 质量，并将报告上传为 workflow artifact。
-- Snyk Agent Scan 使用 `uvx snyk-agent-scan@latest scan .agents/skills --ci --no-bootstrap --dangerously-run-mcp-servers` 扫描生成的 `.agents/skills` 供应链，检测 agent skill 安全风险；CI 需要配置 `SNYK_TOKEN` secret。
+- Snyk Agent Scan 使用 verbose、错误详情和完整描述输出扫描生成的 `.agents/skills` 供应链，检测 agent skill 安全风险；CI 需要配置 `SNYK_TOKEN` secret，并将扫描报告上传为 workflow artifact。
 
 ## 局限性
 

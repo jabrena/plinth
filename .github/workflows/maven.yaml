@@ -119,9 +119,26 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Scan generated skills with Snyk Agent Scan
-        run: uvx snyk-agent-scan@latest scan .agents/skills --ci --no-bootstrap --dangerously-run-mcp-servers
+        run: |
+          set -o pipefail
+          uvx snyk-agent-scan@latest scan .agents/skills \
+            --ci \
+            --no-bootstrap \
+            --dangerously-run-mcp-servers \
+            --suppress-mcpserver-io=true \
+            --verbose \
+            --print-errors \
+            --print-full-descriptions \
+            | tee snyk-agent-scan-report.txt
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Upload Snyk Agent Scan report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: snyk-agent-scan-report
+          path: snyk-agent-scan-report.txt
+          if-no-files-found: ignore
 
   pre-commit:
     name: Pre-commit
