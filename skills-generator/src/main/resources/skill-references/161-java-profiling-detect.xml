@@ -19,7 +19,7 @@
         It provides interactive scripts that guide you through identifying specific performance problems (CPU hotspots, memory leaks, concurrency issues, GC problems, or I/O bottlenecks) and then executes targeted profiling commands to collect relevant performance data.
 
         Key capabilities include:
-        - **Automated Environment Setup**: Detects OS/architecture and downloads async-profiler v4.0 automatically
+        - **Automated Environment Setup**: Detects OS/architecture, downloads async-profiler v4.0, and verifies the archive with pinned SHA-256 checksums before extraction
         - **Problem-Driven Profiling**: Guides users through identifying specific performance issues before profiling
         - **Interactive Workflow**: Provides menu-driven interface for selecting appropriate profiling strategies
         - **Comprehensive Data Collection**: Supports CPU profiling, memory allocation tracking, lock contention analysis, GC monitoring, and I/O bottleneck detection
@@ -112,7 +112,7 @@ Use the packaged profiler:
 
 **Purpose:**
 - Detects running Java processes automatically
-- Downloads and configures async-profiler v4.0
+- Downloads, verifies with pinned SHA-256 checksums, and configures async-profiler v4.0
 - Provides interactive menu for different profiling scenarios
 - Generates flamegraphs and analysis reports
 
@@ -165,7 +165,7 @@ Use the packaged profiler:
             <safeguards-item>Ensure proper JVM flags are applied for profiling compatibility before data collection</safeguards-item>
             <safeguards-item>Verify Java processes are running and accessible before attempting to attach profiler</safeguards-item>
             <safeguards-item>Create organized directory structure for profiling results with timestamped files</safeguards-item>
-            <safeguards-item>Validate async-profiler v4.0 installation and compatibility with target Java version</safeguards-item>
+            <safeguards-item>Validate async-profiler v4.0 installation, compatibility with target Java version, and archive integrity with pinned SHA-256 checksums before extracting executable content</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>

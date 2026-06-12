@@ -18,7 +18,7 @@ Set up the Java profiling detection phase: automated environment setup with asyn
 - Run application with profiling JVM flags (run-java-process-for-profiling.sh)
 - Interactive profiling script (profiler/scripts/profile-java-process.sh) — copy exact template
 - Directory structure: profiler/scripts/, profiler/results/, profiler/current/
-- Automated OS/architecture detection and async-profiler download
+- Automated OS/architecture detection and async-profiler download with pinned SHA-256 verification before extraction
 - CPU, memory, lock, GC, I/O profiling modes
 - Flamegraph and JFR output with timestamped results
 

@@ -185,6 +185,56 @@ detect_os_arch() {
     echo -e "${GREEN}Detected platform: $PLATFORM${NC}"
 }
 
+expected_profiler_sha256() {
+    local filename=$1
+
+    case "$filename" in
+        async-profiler-4.1-linux-arm64.tar.gz)
+            echo "d0cb9c97c380672b625c06e5a3ed578e990f4674c6aae8b5249f584c4c9ac50e"
+            ;;
+        async-profiler-4.1-linux-x64.tar.gz)
+            echo "3b13a38a0063f6970d985a379ddaed91bcf37e239a1ea461d09eacf629f3dde1"
+            ;;
+        async-profiler-4.1-macos.zip)
+            echo "c5fb058e212282e9384a26031a05119f5f3750c755b2b5fb6d08a6b67803ead0"
+            ;;
+        *)
+            echo ""
+            ;;
+    esac
+}
+
+verify_profiler_sha256() {
+    local filename=$1
+    local expected
+    local actual
+
+    expected=$(expected_profiler_sha256 "$filename")
+    if [[ -z "$expected" ]]; then
+        echo -e "${RED}No pinned SHA-256 checksum is configured for $filename${NC}"
+        exit 1
+    fi
+
+    if command -v sha256sum >/dev/null 2>&1; then
+        actual=$(sha256sum "$filename" | awk '{print $1}')
+    elif command -v shasum >/dev/null 2>&1; then
+        actual=$(shasum -a 256 "$filename" | awk '{print $1}')
+    else
+        echo -e "${RED}Error: sha256sum or shasum is required to verify async-profiler${NC}"
+        exit 1
+    fi
+
+    if [[ "$actual" != "$expected" ]]; then
+        echo -e "${RED}Checksum verification failed for $filename${NC}"
+        echo "Expected: $expected"
+        echo "Actual:   $actual"
+        rm -f "$filename"
+        exit 1
+    fi
+
+    echo -e "${GREEN}Verified $filename SHA-256: $actual${NC}"
+}
+
 download_profiler() {
     local platform=$1
     local profiler_dir=$2
@@ -239,6 +289,9 @@ download_profiler() {
             rm -f "$filename"
             exit 1
         fi
+
+        # Verify the archive before extracting executable profiler content.
+        verify_profiler_sha256 "$filename"
 
         # Extract the archive
         echo "Extracting $filename..."
