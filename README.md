@@ -54,17 +54,17 @@ This project is compatible with any tool that supports `Commands`, `Agents`, `Sk
 
 Learn to use this project following the quick guide [Getting Started in 5 minutes](./documentation/guides/GETTING-STARTED-IN-5-MINUTES.md).
 
-## Workflows
-
-Review the [project workflows guide](./documentation/guides/GETTING-STARTED-WORKFLOWS.md) for prompting, agent-driven engineering, and pipeline workflows.
-
 ## Skill Validations
 
-Every push runs skill-focused checks in [CI Builds](./.github/workflows/maven.yaml) to maintain quality and correctness:
+Every push runs the following validation checks in [CI Builds](./.github/workflows/maven.yaml) to keep documentation and generated skills correct, consistent, and secure:
 
-- `skill-check` validates the generated `SKILL.md` structure and metadata with `npx skill-check@latest .agents/skills --no-security-scan --format github`.
-- `cisco-ai-skill-scanner` runs a behavioral scan with the strict policy and fails on high-severity findings.
-- SkillSpector generates a no-LLM Markdown report for additional skill quality inspection and uploads it as a workflow artifact.
+| Name | Purpose |
+| --- | --- |
+| 1. [MarkdownValidator](./.github/scripts/MarkdownValidator.java) | Protects the documentation layer by catching Markdown parsing drift and remote link failures before skill-specific checks run. |
+| 2. [skill-check](https://github.com/thedaviddias/skill-check) | Confirms every generated skill follows the expected packaging contract, complementing scanners that focus on behavior or security risk. |
+| 3. [cisco-ai-skill-scanner](https://github.com/cisco-ai-defense/skill-scanner) by Cisco | Adds behavior-oriented security coverage by looking for risky skill flows that structural validation cannot see. |
+| 4. [SkillSpector](https://github.com/NVIDIA/SkillSpector) by NVIDIA | Provides an independent static quality and security review, useful for comparing findings against the other scanners. |
+| 5. [Snyk Agent Scan](https://github.com/snyk/agent-scan) by SNYK | Focuses on agent-skill supply-chain and prompt-risk signals, adding another security perspective alongside Cisco and SkillSpector. |
 
 ## Limitations
 

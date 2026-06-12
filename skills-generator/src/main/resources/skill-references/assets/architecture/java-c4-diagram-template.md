@@ -4,6 +4,8 @@
 
 Generate C4 model diagrams using PlantUML with C4-PlantUML library to visualize system architecture at the supported levels of abstraction: Context, Container, and Component.
 
+Use a vendored, reviewed C4-PlantUML copy in the repository, for example under `diagrams/vendor/C4-PlantUML/`. Generated diagrams must reference trusted local include files only; do not generate remote `!include` URLs.
+
 ### C4 Model Overview
 
 The C4 model provides a hierarchical approach to architectural documentation:
@@ -39,9 +41,7 @@ The C4 model provides a hierarchical approach to architectural documentation:
 #### System Context Diagram
 ```plantuml
 @startuml
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
-!define DEVICONS https://raw.githubusercontent.com/tupadr3/plantuml-icon-font-sprites/master/devicons
-!include DEVICONS/java.puml
+!include ./vendor/C4-PlantUML/C4_Context.puml
 
 title System Context Diagram for E-commerce Platform
 
@@ -65,7 +65,7 @@ Rel(ecommerce, inventory, "Checks stock, updates inventory")
 #### Container Diagram
 ```plantuml
 @startuml
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Container.puml
+!include ./vendor/C4-PlantUML/C4_Container.puml
 
 title Container Diagram for E-commerce Platform
 
@@ -113,7 +113,7 @@ Rel(order_service, email_system, "Sends notifications", "SMTP")
 #### Component Diagram
 ```plantuml
 @startuml
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Component.puml
+!include ./vendor/C4-PlantUML/C4_Component.puml
 
 title Component Diagram for Order Service
 
@@ -154,7 +154,8 @@ Rel(inventory_service, inventory_system, "Updates inventory", "REST API")
 ### PlantUML C4 Features
 
 1. **C4-PlantUML Library Integration**:
-   - Include C4-PlantUML library: `!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml`
+   - Include C4-PlantUML library from a trusted local copy, for example: `!include ./vendor/C4-PlantUML/C4_Context.puml`
+   - Keep C4 library files under project source control or another approved local dependency path
    - Use predefined macros: `Person()`, `System()`, `Container()`, `Component()`
    - Leverage built-in styling and layout
 
@@ -231,7 +232,7 @@ Our e-commerce platform serves customers and administrators, integrating with ex
 
 ```plantuml
 @startuml
-!include https://raw.githubusercontent.com/plantuml-stdlib/C4-PlantUML/master/C4_Context.puml
+!include ./vendor/C4-PlantUML/C4_Context.puml
 
 title E-commerce Platform - System Context
 

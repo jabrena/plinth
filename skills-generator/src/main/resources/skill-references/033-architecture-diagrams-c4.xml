@@ -20,7 +20,8 @@ Generate C4 model diagrams only when selected by the `033-architecture-diagrams`
             <constraint>Read this reference only when the user selected C4 model diagrams or All diagrams in the centralized question flow.</constraint>
             <constraint>Generate only Context, Container, and Component C4 diagrams.</constraint>
             <constraint>Inspect repository source, configuration, dependencies, deployment hints, and documentation before generating diagrams.</constraint>
-            <constraint>Use C4-PlantUML syntax and validate renderability before final delivery.</constraint>
+            <constraint>Use C4-PlantUML syntax with trusted local includes and validate renderability before final delivery.</constraint>
+            <constraint>Do not generate remote `!include` URLs; require a vendored or otherwise trusted local C4-PlantUML copy for Context, Container, and Component diagrams.</constraint>
             <constraint>Organize generated files according to the user's output organization and format selections.</constraint>
         </constraint-list>
     </constraints>

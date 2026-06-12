@@ -33,7 +33,7 @@ jobs:
           distribution: 'graalvm'
           java-version: '25'
       - name: Generate current agent skills
-        run: ./mvnw clean verify -pl skills-generator
+        run: ./mvnw --batch-mode --no-transfer-progress clean verify -pl skills-generator
       - name: Validate generated SKILL.md files
         run: npx skill-check@latest .agents/skills --no-security-scan --format github
         env:
@@ -51,7 +51,7 @@ jobs:
           distribution: 'graalvm'
           java-version: '25'
       - name: Generate current agent skills
-        run: ./mvnw clean verify -pl skills-generator
+        run: ./mvnw --batch-mode --no-transfer-progress clean verify -pl skills-generator
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
@@ -72,7 +72,7 @@ jobs:
           distribution: 'graalvm'
           java-version: '25'
       - name: Generate current agent skills
-        run: ./mvnw clean verify -pl skills-generator
+        run: ./mvnw --batch-mode --no-transfer-progress clean verify -pl skills-generator
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
@@ -95,6 +95,50 @@ jobs:
           name: skillspector-reports
           path: skillspector-report.md
           if-no-files-found: error
+
+  validate-snyk-agent-scan:
+    name: Validate Agent Skills with Snyk Agent Scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: true
+      - uses: actions/setup-java@v5
+        with:
+          distribution: 'graalvm'
+          java-version: '25'
+      - name: Generate current agent skills
+        run: ./mvnw --batch-mode --no-transfer-progress clean verify -pl skills-generator
+      - uses: astral-sh/setup-uv@v7
+      - name: Verify SNYK_TOKEN is configured
+        run: |
+          if [ -z "${SNYK_TOKEN}" ]; then
+            echo "SNYK_TOKEN secret is required to run Snyk Agent Scan."
+            exit 1
+          fi
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Scan generated skills with Snyk Agent Scan
+        run: |
+          set -o pipefail
+          uvx snyk-agent-scan@latest scan .agents/skills \
+            --ci \
+            --no-bootstrap \
+            --dangerously-run-mcp-servers \
+            --suppress-mcpserver-io=true \
+            --verbose \
+            --print-errors \
+            --print-full-descriptions \
+            | tee snyk-agent-scan-report.txt
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+      - name: Upload Snyk Agent Scan report
+        if: always()
+        uses: actions/upload-artifact@v7
+        with:
+          name: snyk-agent-scan-report
+          path: snyk-agent-scan-report.txt
+          if-no-files-found: ignore
 
   pre-commit:
     name: Pre-commit

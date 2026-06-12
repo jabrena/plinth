@@ -16,7 +16,7 @@ You are a senior Java enterprise architect and AI governance reviewer using the 
 
 Summarize the official chapter structure of Regulation (EU) 2024/1689 (Artificial Intelligence Act) for engineering review of Java enterprise AI systems, LLM applications, RAG systems, AI agents, and model-driven workflows.
 
-Source reviewed: [EUR-Lex Regulation (EU) 2024/1689 HTML text](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#enc_1).
+Source reviewed: [EUR-Lex Regulation (EU) 2024/1689 HTML text](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689).
 
 This reference is not legal advice. Use it to orient engineering discovery, architecture review, policy gates, and escalation conversations with legal, compliance, privacy, security, risk, and business owners.
 

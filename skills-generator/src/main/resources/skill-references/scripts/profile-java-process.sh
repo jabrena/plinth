@@ -185,86 +185,38 @@ detect_os_arch() {
     echo -e "${GREEN}Detected platform: $PLATFORM${NC}"
 }
 
-download_profiler() {
+setup_profiler() {
     local platform=$1
     local profiler_dir=$2
-    local version="4.1"
+    local candidate=""
 
-    # For macOS, v4.0 uses .zip format, Linux still uses .tar.gz
-    if [[ "$platform" == "macos" ]]; then
-        local filename="async-profiler-$version-$platform.zip"
-        local extract_cmd="unzip -q"
+    mkdir -p "$profiler_dir"
+
+    if [[ -n "${ASYNC_PROFILER_HOME:-}" ]]; then
+        candidate="$ASYNC_PROFILER_HOME"
+    elif [[ -d "$profiler_dir/current" ]]; then
+        candidate="$profiler_dir/current"
     else
-        local filename="async-profiler-$version-$platform.tar.gz"
-        local extract_cmd="tar -xzf"
+        local matches=("$profiler_dir"/async-profiler-*-"$platform")
+        if [[ -d "${matches[0]}" ]]; then
+            candidate="${matches[0]}"
+        fi
     fi
 
-    local url="https://github.com/async-profiler/async-profiler/releases/download/v$version/$filename"
-
-    if [ ! -d "$profiler_dir/current" ]; then
-        echo "Downloading async-profiler..."
-        echo "URL: $url"
-        mkdir -p "$profiler_dir"
-        cd "$profiler_dir"
-
-        # Keep failed downloads for manual inspection instead of deleting wildcard matches.
-
-        if command -v curl >/dev/null 2>&1; then
-            curl -L -o "$filename" "$url"
-        elif command -v wget >/dev/null 2>&1; then
-            wget -O "$filename" "$url"
-        else
-            echo -e "${RED}Error: Neither curl nor wget is available${NC}"
-            exit 1
-        fi
-
-        # Check if download was successful
-        if [[ ! -f "$filename" ]]; then
-            echo -e "${RED}Download failed: File $filename not found${NC}"
-            exit 1
-        fi
-
-        # Check file size (should be larger than 1MB for a valid download)
-        local file_size
-        if [[ "$OSTYPE" == "darwin"* ]]; then
-            file_size=$(stat -f%z "$filename" 2>/dev/null || echo "0")
-        else
-            file_size=$(stat -c%s "$filename" 2>/dev/null || echo "0")
-        fi
-
-        if [[ "$file_size" -lt 100000 ]]; then  # Less than 100KB
-            echo -e "${RED}Download failed: File is too small ($file_size bytes). This usually means a redirect or error page was downloaded.${NC}"
-            echo -e "${YELLOW}Contents of downloaded file:${NC}"
-            head -10 "$filename" 2>/dev/null || echo "Cannot read file"
-            rm -f "$filename"
-            exit 1
-        fi
-
-        # Extract the archive
-        echo "Extracting $filename..."
-        $extract_cmd "$filename"
-
-        if [[ $? -ne 0 ]]; then
-            echo -e "${RED}Failed to extract $filename${NC}"
-            rm -f "$filename"
-            exit 1
-        fi
-
-        # Create symbolic link
-        ln -sf "async-profiler-$version-$platform" current
-
-        # Clean up archive
-        rm -f "$filename"
-
-        cd - > /dev/null
-        echo -e "${GREEN}Async-profiler downloaded successfully to $profiler_dir${NC}"
-    else
-        echo -e "${GREEN}Async-profiler already available at $profiler_dir${NC}"
+    if [[ -z "$candidate" || ! -x "$candidate/bin/asprof" ]]; then
+        echo -e "${RED}Error: trusted async-profiler installation not found for $platform${NC}"
+        echo "Install async-profiler from a trusted release, verify its checksum or signature,"
+        echo "and either set ASYNC_PROFILER_HOME to that directory or place it at:"
+        echo "  $profiler_dir/current"
+        exit 1
     fi
+
+    ln -sfn "$candidate" "$profiler_dir/current"
+    echo -e "${GREEN}Using trusted async-profiler at $candidate${NC}"
 }
 
 detect_os_arch
-download_profiler "$PLATFORM" "$PROFILER_DIR"
+setup_profiler "$PLATFORM" "$PROFILER_DIR"
 
 # Create results directory if it doesn't exist (inside profiler directory)
 RESULTS_DIR="$PROFILER_DIR/results"

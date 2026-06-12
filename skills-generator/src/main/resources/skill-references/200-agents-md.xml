@@ -81,7 +81,7 @@ Use the following template and guidelines:
 After generating AGENTS.md:
 1. Verify all 6 sections are present
 2. Ensure markdown formatting is correct (headers, lists, code blocks)
-3. Confirm boundaries use ✅ **Always do**, ⚠️ **Ask first**, 🚫 **Never do** formatting
+3. Confirm boundaries use ✅ **Always do**, ⚠ **Ask first**, 🚫 **Never do** formatting
             </step-content>
             <step-constraints>
                 <step-constraint-list>
