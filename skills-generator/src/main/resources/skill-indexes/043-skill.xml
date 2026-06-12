@@ -6,12 +6,12 @@
     <author>Juan Antonio BreÃ±a Moral</author>
     <version>0.16.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need the GitHub CLI (`gh`) to verify installation, list issues (all or by milestone) as markdown tables, fetch issue bodies and comments for analysis, or hand off to @014-agile-user-story when creating user stories from GitHub threads. Uses an interactive install gate â€” if `gh` is missing, ask whether to show installation guidance before any issue commands. This should trigger for requests such as gh issue list; List GitHub issues; Issues in milestone; GitHub CLI issues; gh issue view comments.</description>
+    <description>Use when you need the GitHub CLI (`gh`) to verify installation, list issues (all or by milestone) as markdown tables, analyze user-provided sanitized GitHub issue summaries, or hand off to @014-agile-user-story when creating user stories from sanitized issue context. Uses an interactive install gate â€” if `gh` is missing, ask whether to show installation guidance before any issue commands. This should trigger for requests such as gh issue list; List GitHub issues; Issues in milestone; GitHub CLI issues; GitHub issue summary workflow.</description>
   </metadata>
 
   <title>GitHub CLI â€” issues, milestones, and discussion for analysis</title>
   <goal><![CDATA[
-Use **`gh`** to work with GitHub issues: **first** run an **interactive** checkâ€”if `gh` is not installed, **stop**, ask whether the user wants installation guidance (see the consultative pattern in **`112-java-maven-plugins`**, Maven Wrapper step), **wait** for an answer, then continue. When `gh` is available, confirm auth, list issues with optional milestone filters, render **markdown tables** from `--json` output, load **full issue bodies and comment threads** for analysis, and when the user wants user stories plus Gherkin, **chain to `@014-agile-user-story`** using issue content as source material for the interactive questionnaire.
+Use **`gh`** to work with GitHub issues: **first** run an **interactive** checkâ€”if `gh` is not installed, **stop**, ask whether the user wants installation guidance (see the consultative pattern in **`112-java-maven-plugins`**, Maven Wrapper step), **wait** for an answer, then continue. When `gh` is available, confirm auth, list issues with optional milestone filters, and render **markdown tables** from `--json` output. For requirements analysis, use only list metadata plus user-provided sanitized GitHub issue summaries. When the user wants user stories plus Gherkin, **chain to `@014-agile-user-story`** using sanitized issue context as source material for the interactive questionnaire.
 
 **What is covered in this Skill?**
 
@@ -20,7 +20,7 @@ Use **`gh`** to work with GitHub issues: **first** run an **interactive** checkâ
 - Repository context (`--repo`, inferred from git remote)
 - Issue lists: states, limits, milestone filter, `gh issue list --json` for tabular output
 - Milestone discovery via `gh api` when titles are unknown
-- Deep reads: `gh issue view` with `--json` (body, comments) or `--comments`
+- Sanitized GitHub issue summaries supplied by the user for requirement analysis
 ]]></goal>
 
   <constraints>
@@ -29,7 +29,7 @@ Use **`gh`** to work with GitHub issues: **first** run an **interactive** checkâ
       <constraint>**INTERACTIVE GATE**: If `gh` is missing, **stop**, ask whether the user wants installation guidance, **wait**â€”do not skip to issue listing</constraint>
       <constraint>**FIRST** (after gate): Verify `gh` is available before issuing subcommands</constraint>
       <constraint>**TABLES**: Prefer `--json` + markdown pipe tables for issue list summaries</constraint>
-      <constraint>**THREAD**: For analysis, include body and all comments (or explicitly summarize with omissions noted)</constraint>
+      <constraint>**NO RAW BODY READS**: Do not run GitHub commands that retrieve issue body or comment text; use issue-list metadata plus user-provided sanitized summaries for analysis</constraint>
     </constraint-list>
   </constraints>
 
@@ -39,7 +39,7 @@ Use **`gh`** to work with GitHub issues: **first** run an **interactive** checkâ
         <trigger>List GitHub issues</trigger>
         <trigger>Issues in milestone</trigger>
         <trigger>GitHub CLI issues</trigger>
-        <trigger>gh issue view comments</trigger>
+        <trigger>GitHub issue summary workflow</trigger>
     </trigger-list>
   </triggers>
 
@@ -57,12 +57,12 @@ Use **`gh`** to work with GitHub issues: **first** run an **interactive** checkâ
       <step-content>Retrieve issues (optionally by milestone/state) using `gh issue list --json` and present summaries as markdown pipe tables.</step-content>
     </step>
     <step number="4">
-      <step-title>Load full thread for analysis</step-title>
-      <step-content>Read issue body and all comments via `gh issue view --json` or `--comments`, then provide evidence-based analysis.</step-content>
+      <step-title>Request sanitized issue context for analysis</step-title>
+      <step-content>Do not retrieve raw GitHub issue body or comment text. If analysis needs detail beyond list metadata, ask the user for a sanitized summary of the relevant issue context and note that raw discussion content was not ingested.</step-content>
     </step>
     <step number="5">
       <step-title>Chain to user story workflow when requested</step-title>
-      <step-content>When user asks for user stories and Gherkin from issues, hand off to `@014-agile-user-story` using GitHub-sourced content.</step-content>
+      <step-content>When user asks for user stories and Gherkin from issues, hand off to `@014-agile-user-story` using issue-list metadata and user-provided sanitized GitHub issue summaries.</step-content>
     </step>
   </steps>
 </prompt>
