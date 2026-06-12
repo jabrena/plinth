@@ -65,6 +65,7 @@ Cada push ejecuta validaciones enfocadas en skills dentro de [CI Builds](./.gith
 - `skill-check` valida la estructura y los metadatos de los `SKILL.md` generados con `npx skill-check@latest .agents/skills --no-security-scan --format github`.
 - `cisco-ai-skill-scanner` ejecuta un análisis de comportamiento con la política strict y falla ante hallazgos de severidad alta.
 - SkillSpector genera un informe Markdown sin LLM para una inspección adicional de calidad de los skills y lo sube como artefacto del workflow.
+- Snyk Agent Scan analiza la cadena de suministro de `.agents/skills` generados para detectar riesgos de seguridad en agent skills con `uvx snyk-agent-scan@latest scan .agents/skills --ci --no-bootstrap`; CI requiere el secret `SNYK_TOKEN`.
 
 ## Limitaciones
 
