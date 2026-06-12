@@ -33,7 +33,7 @@ jobs:
           distribution: 'graalvm'
           java-version: '25'
       - name: Generate current agent skills
-        run: ./mvnw clean verify -pl skills-generator
+        run: ./mvnw --batch-mode --no-transfer-progress clean verify -pl skills-generator
       - name: Validate generated SKILL.md files
         run: npx skill-check@latest .agents/skills --no-security-scan --format github
         env:
@@ -51,7 +51,7 @@ jobs:
           distribution: 'graalvm'
           java-version: '25'
       - name: Generate current agent skills
-        run: ./mvnw clean verify -pl skills-generator
+        run: ./mvnw --batch-mode --no-transfer-progress clean verify -pl skills-generator
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
@@ -72,7 +72,7 @@ jobs:
           distribution: 'graalvm'
           java-version: '25'
       - name: Generate current agent skills
-        run: ./mvnw clean verify -pl skills-generator
+        run: ./mvnw --batch-mode --no-transfer-progress clean verify -pl skills-generator
       - uses: actions/setup-python@v6
         with:
           python-version: "3.12"
@@ -108,7 +108,7 @@ jobs:
           distribution: 'graalvm'
           java-version: '25'
       - name: Generate current agent skills
-        run: ./mvnw clean verify -pl skills-generator
+        run: ./mvnw --batch-mode --no-transfer-progress clean verify -pl skills-generator
       - uses: astral-sh/setup-uv@v7
       - name: Verify SNYK_TOKEN is configured
         run: |
