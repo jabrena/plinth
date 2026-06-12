@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Contract-driven API fuzzing with CATS (https://endava.github.io/cats/).
+# Contract-driven API fuzzing with a trusted local CATS image.
 # Runs CATS in Docker (see cats/Dockerfile). API must be reachable from the container.
 set -euo pipefail
 
@@ -9,8 +9,8 @@ CATS_DIR="${REPO_ROOT}/cats"
 CONTRACT=""
 SERVER="${SERVER:-http://localhost:8080}"
 HEALTH_URL="${HEALTH_URL:-${SERVER}/actuator/health}"
-CATS_VERSION="${CATS_VERSION:-13.8.0}"
-CATS_IMAGE="${CATS_IMAGE:-local/cats:${CATS_VERSION}}"
+CATS_IMAGE="${CATS_IMAGE:-local/cats:trusted}"
+CATS_JAR="${CATS_JAR:-${CATS_DIR}/cats.jar}"
 CATS_REBUILD="${CATS_REBUILD:-0}"
 CATS_REPORT_FORMAT="${CATS_REPORT_FORMAT:-HTML_JS}"
 REPORT_DIR="${REPORT_DIR:-${CATS_DIR}/cats-report}"
@@ -34,8 +34,8 @@ Arguments:
 Environment variables:
   SERVER                API base URL (default: http://localhost:8080)
   HEALTH_URL            Readiness probe URL on the host (default: SERVER/actuator/health)
-  CATS_VERSION          CATS release version (default: 13.8.0)
-  CATS_IMAGE            Docker image tag (default: local/cats:CATS_VERSION)
+  CATS_IMAGE            Docker image tag (default: local/cats:trusted)
+  CATS_JAR              Trusted CATS jar in build context (default: cats/cats.jar)
   CATS_REBUILD          Set to 1 to force docker build (default: 0)
   CATS_REPORT_FORMAT    HTML_JS | HTML_ONLY | JUNIT (default: HTML_JS)
   REPORT_DIR            Output directory for reports (default: cats/cats-report)
@@ -224,9 +224,20 @@ validate_report_format() {
 
 ensure_cats_image() {
   if [[ "${CATS_REBUILD}" == "1" ]] || ! docker image inspect "${CATS_IMAGE}" >/dev/null 2>&1; then
+    if [[ ! -f "${CATS_JAR}" ]]; then
+      echo "Trusted CATS jar not found: ${CATS_JAR}" >&2
+      echo "Place a verified CATS jar in cats/cats.jar or set CATS_JAR to a verified local jar." >&2
+      exit 1
+    fi
+    local cats_jar_name
+    cats_jar_name="$(basename "${CATS_JAR}")"
+    if [[ "$(cd "$(dirname "${CATS_JAR}")" && pwd)" != "${CATS_DIR}" ]]; then
+      echo "CATS_JAR must be inside ${CATS_DIR} so Docker can copy it from the build context." >&2
+      exit 1
+    fi
     echo "Building CATS image ${CATS_IMAGE} from ${CATS_DIR}/Dockerfile..."
     docker build \
-      --build-arg "CATS_VERSION=${CATS_VERSION}" \
+      --build-arg "CATS_JAR=${cats_jar_name}" \
       -t "${CATS_IMAGE}" \
       -f "${CATS_DIR}/Dockerfile" \
       "${CATS_DIR}"

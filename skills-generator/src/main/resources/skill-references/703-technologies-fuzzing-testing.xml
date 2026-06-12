@@ -18,7 +18,7 @@
         2. Prioritize negative and boundary scenarios (invalid types, missing required fields, malformed formats, and range violations).
         3. Integrate CATS execution into CI and provide reproducible failure evidence.
         4. Document local execution so contributors can run the same baseline checks before creating pull requests.
-        5. Provide a containerized local CATS installation option using a `cats/Dockerfile` and a `run-cats-fuzz.sh` runner script.
+        5. Provide a containerized local CATS execution option using a trusted local `cats/cats.jar`, a `cats/Dockerfile`, and a `run-cats-fuzz.sh` runner script.
         6. Review CATS reports with the user to surface contract violations, validation gaps, and reproducible failure evidence.
     </goal>
 
@@ -32,14 +32,15 @@
             <constraint>**PRECONDITION**: API contract input (OpenAPI or equivalent) must be available before configuring CATS</constraint>
             <constraint>**CRITICAL SAFETY**: If compilation fails, stop immediately and do not proceed</constraint>
             <constraint>**MANDATORY**: Regenerate skills after XML edits using `./mvnw clean install -pl skills-generator`</constraint>
-            <constraint>**LOCAL INSTALLATION**: Prefer a `cats/Dockerfile` when contributors need repeatable local CATS execution without installing Java tooling or CATS directly on the host</constraint>
+            <constraint>**LOCAL INSTALLATION**: Prefer a `cats/Dockerfile` with a verified local `cats/cats.jar` when contributors need repeatable local CATS execution without installing CATS directly on the host</constraint>
+            <constraint>**SUPPLY CHAIN**: Use only a verified local `cats/cats.jar` or an approved prebuilt image; generated artifacts must depend only on trusted local or approved image inputs</constraint>
             <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after integrating fuzz testing changes</constraint>
         </constraint-list>
     </constraints>
 
     <steps>
         <step number="1">
-            <step-title>Create CATS Dockerfile</step-title>
+            <step-title>Create CATS Dockerfile for a trusted local jar</step-title>
             <step-content>
 Create `cats/Dockerfile` by copying the packaged resource:
 [cats.dockerfile](../assets/cats.dockerfile).
@@ -47,7 +48,8 @@ Create `cats/Dockerfile` by copying the packaged resource:
             <step-constraints>
                 <step-constraint-list>
                     <step-constraint>**MUST** copy the packaged `assets/cats.dockerfile` resource verbatim into `cats/Dockerfile`</step-constraint>
-                    <step-constraint>**DO NOT** modify the template unless the CATS version or base image must change</step-constraint>
+                    <step-constraint>**MUST** require the user to place a verified `cats.jar` in the `cats/` build context before building the image</step-constraint>
+                    <step-constraint>**DO NOT** modify the template unless the base image or trusted jar filename must change</step-constraint>
                 </step-constraint-list>
             </step-constraints>
         </step>
@@ -134,21 +136,21 @@ Review workflow:
             </example-header>
             <example-description>
                 <![CDATA[
-Copy the packaged Dockerfile from Step 1 into `cats/Dockerfile`, add the packaged `run-cats-fuzz.sh` from Step 2, ask the user for the OpenAPI path in Step 3, then review findings in Step 4.
+Copy the packaged Dockerfile from Step 1 into `cats/Dockerfile`, place a verified `cats.jar` in `cats/`, add the packaged `run-cats-fuzz.sh` from Step 2, ask the user for the OpenAPI path in Step 3, then review findings in Step 4.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="bash"><![CDATA[# Step 3: run only after the user provides the OpenAPI path
+                    <code-block language="bash"><![CDATA[# Prerequisite: place a verified CATS jar at cats/cats.jar
+
+# Step 3: run only after the user provides the OpenAPI path
 ./run-cats-fuzz.sh --openapi src/main/resources/openapi/openapi.yaml
 
 # Step 4: review cats/cats-report/index.html for failures]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
-                    <code-block language="bash"><![CDATA[# Avoid: manual host install with version drift across contributors
-curl -fsSL https://github.com/Endava/cats/releases/download/cats-13.8.0/cats_uberjar_13.8.0.tar.gz \
-  | tar -xz -C /usr/local/bin
-java -jar /usr/local/bin/cats.jar --contract openapi.yaml --server http://localhost:8080]]></code-block>
+                    <code-block language="bash"><![CDATA[# Avoid: generated setup that accepts an unverified remote executable source
+docker build --build-arg REMOTE_EXECUTABLE_SOURCE="$UNVERIFIED_SOURCE" -t local/cats:latest cats/]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
@@ -161,7 +163,7 @@ java -jar /usr/local/bin/cats.jar --contract openapi.yaml --server http://localh
             <output-format-item>**IMPLEMENT** CI and local commands so CATS can run consistently with reproducible failure output</output-format-item>
             <output-format-item>**EXECUTE** `./run-cats-fuzz.sh --openapi` only after the user provides the contract path; wait for their answer before running</output-format-item>
             <output-format-item>**REVIEW** CATS report output under `cats/cats-report/` and summarize contract violations, validation gaps, and prioritized fixes</output-format-item>
-            <output-format-item>**DOCUMENT** a Docker-based local installation path using `cats/Dockerfile` and `run-cats-fuzz.sh --openapi` with the contract file path, including image build and execution commands</output-format-item>
+            <output-format-item>**DOCUMENT** a Docker-based local execution path using a verified `cats/cats.jar`, `cats/Dockerfile`, and `run-cats-fuzz.sh --openapi` with the contract file path, including image build and execution commands</output-format-item>
             <output-format-item>**EXPLAIN** what failed, why it failed, and how to reproduce findings locally</output-format-item>
             <output-format-item>**VALIDATE** that generated artifacts and build checks remain consistent after integration</output-format-item>
         </output-format-list>
@@ -170,6 +172,7 @@ java -jar /usr/local/bin/cats.jar --contract openapi.yaml --server http://localh
     <safeguards>
         <safeguards-list>
             <safeguards-item>**BLOCKING SAFETY CHECK**: Always validate compilation before introducing fuzzing changes</safeguards-item>
+            <safeguards-item>**SUPPLY CHAIN**: Use only verified local CATS jars or approved prebuilt images; do not generate download-and-execute setup paths</safeguards-item>
             <safeguards-item>**REPRODUCIBILITY**: Every CI failure must include enough detail for local reproduction</safeguards-item>
             <safeguards-item>**NON-REGRESSION**: Keep existing test suites and build phases unaffected by new fuzzing integration</safeguards-item>
         </safeguards-list>

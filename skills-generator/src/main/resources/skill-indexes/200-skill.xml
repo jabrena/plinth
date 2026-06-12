@@ -22,7 +22,7 @@ Generate a comprehensive AGENTS.md file for Java repositories through a modular,
 - File structure mapping with read/write boundaries
 - Command catalogue for build/test/deploy/run workflows
 - Git workflow conventions: branching strategy, commit message format
-- Contributor boundaries using ✅ Always do / ⚠️ Ask first / 🚫 Never do formatting
+- Contributor boundaries using ✅ Always do / ⚠ Ask first / 🚫 Never do formatting
 ]]></goal>
 
   <constraints>
@@ -59,7 +59,7 @@ Generate a comprehensive AGENTS.md file for Java repositories through a modular,
     </step>
     <step number="4">
       <step-title>Generate AGENTS.md artifact</step-title>
-      <step-content>Create AGENTS.md with ✅ Always do / ⚠️ Ask first / 🚫 Never do boundaries and repository-specific conventions.</step-content>
+      <step-content>Create AGENTS.md with ✅ Always do / ⚠ Ask first / 🚫 Never do boundaries and repository-specific conventions.</step-content>
     </step>
   </steps>
 </prompt>

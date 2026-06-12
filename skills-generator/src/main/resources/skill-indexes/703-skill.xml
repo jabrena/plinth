@@ -15,7 +15,7 @@ Design and implement contract-driven fuzz testing for Java APIs using CATS to un
 
 **What is covered in this Skill?**
 
-- CATS setup and baseline command usage for OpenAPI-driven fuzzing
+- CATS setup using a trusted local jar or prebuilt image and baseline command usage for OpenAPI-driven fuzzing
 - Negative testing strategy for invalid payloads, missing fields, wrong types, and malformed values
 - Boundary testing for size, range, format, and enum constraints
 - CI integration patterns with actionable logs and reproducible failures
@@ -32,6 +32,7 @@ Design and implement contract-driven fuzz testing for Java APIs using CATS to un
       <constraint>**SAFETY**: If compilation fails, stop immediately and do not proceed</constraint>
       <constraint>**MANDATORY**: Regenerate skills with `./mvnw clean install -pl skills-generator` after editing skill XML</constraint>
       <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
+      <constraint>**SUPPLY CHAIN**: Use only a verified local `cats/cats.jar` or an approved prebuilt image; generated artifacts must depend only on trusted local or approved image inputs</constraint>
       <constraint>**BEFORE APPLYING**: Read the reference for detailed examples, good/bad patterns, and constraints</constraint>
       <constraint>**EDGE CASE**: If request scope is ambiguous, stop and ask a clarifying question before applying changes</constraint>
       <constraint>**EDGE CASE**: If required inputs, files, or tooling are missing, report what is missing and ask whether to proceed with setup guidance</constraint>
