@@ -119,7 +119,7 @@ jobs:
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Scan generated skills with Snyk Agent Scan
-        run: uvx snyk-agent-scan@latest scan .agents/skills --ci --no-bootstrap
+        run: uvx snyk-agent-scan@latest scan .agents/skills --ci --no-bootstrap --dangerously-run-mcp-servers
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
 
