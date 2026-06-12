@@ -54,18 +54,17 @@
 
 按照快速指南 [5 分钟快速入门](./documentation/guides/GETTING-STARTED-IN-5-MINUTES_ZH.md) 学习如何使用本项目。
 
-## 工作流
-
-请参阅[项目工作流指南](./documentation/guides/GETTING-STARTED-WORKFLOWS_ZH.md)，了解提示工程、智能体驱动工程和流水线工作流。
-
 ## Skill 验证
 
-每次 push 都会在 [CI Builds](./.github/workflows/maven.yaml) 中运行面向 skills 的检查，以维护质量和正确性：
+每次 push 都会在 [CI Builds](./.github/workflows/maven.yaml) 中运行以下验证检查，以保持文档和生成的 skills 正确、一致且安全：
 
-- `skill-check` 使用 `npx skill-check@latest .agents/skills --no-security-scan --format github` 验证生成的 `SKILL.md` 结构和元数据。
-- `cisco-ai-skill-scanner` 使用 strict policy 执行行为扫描，并在发现高严重级别问题时失败。
-- SkillSpector 生成不依赖 LLM 的 Markdown 报告，用于进一步检查 skill 质量，并将报告上传为 workflow artifact。
-- Snyk Agent Scan 使用 verbose、错误详情和完整描述输出扫描生成的 `.agents/skills` 供应链，检测 agent skill 安全风险；CI 需要配置 `SNYK_TOKEN` secret，并将扫描报告上传为 workflow artifact。
+| 名称 | 用途 |
+| --- | --- |
+| 1. [MarkdownValidator](./.github/scripts/MarkdownValidator.java) | 保护文档层，在运行 skill 专项检查之前发现 Markdown 解析漂移和远程链接故障。 |
+| 2. [skill-check](https://github.com/thedaviddias/skill-check) | 确认每个生成的 skill 符合预期的打包约定，补充更关注行为或安全风险的扫描器。 |
+| 3. [cisco-ai-skill-scanner](https://github.com/cisco-ai-defense/skill-scanner) by Cisco | 提供面向行为的安全覆盖，发现结构校验无法识别的高风险 skill 流程。 |
+| 4. [SkillSpector](https://github.com/NVIDIA/SkillSpector) by NVIDIA | 提供独立的静态质量和安全审查，便于与其他扫描器的发现进行对照。 |
+| 5. [Snyk Agent Scan](https://github.com/snyk/agent-scan) by SNYK | 聚焦 agent skill 的供应链和 prompt 风险信号，与 Cisco 和 SkillSpector 一起提供另一种安全视角。 |
 
 ## 局限性
 

@@ -12,7 +12,15 @@ import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.URLDecoder;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.nio.file.*;
+import java.nio.charset.StandardCharsets;
+import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.Callable;
 import java.util.stream.Stream;
@@ -37,15 +45,22 @@ public class MarkdownValidator implements Callable<Integer> {
     @Parameters(description = "Root directory to scan (default: current directory)")
     String rootDir = ".";
 
-    private static final List<String> MARKDOWN_EXTENSIONS = List.of(".md", ".mdc");
+    private static final List<String> MARKDOWN_EXTENSIONS = List.of(".md");
+    private static final Duration LINK_CHECK_TIMEOUT = Duration.ofSeconds(10);
 
     private final Parser parser;
     private final HtmlRenderer renderer;
+    private final HttpClient httpClient;
+    private final Map<String, Optional<String>> remoteLinkCache = new HashMap<>();
     private final List<ValidationError> errors = new ArrayList<>();
 
     public MarkdownValidator() {
         this.parser = Parser.builder().build();
         this.renderer = HtmlRenderer.builder().build();
+        this.httpClient = HttpClient.newBuilder()
+                .connectTimeout(LINK_CHECK_TIMEOUT)
+                .followRedirects(HttpClient.Redirect.NEVER)
+                .build();
     }
 
     public static void main(String... args) {
@@ -131,6 +146,8 @@ public class MarkdownValidator implements Callable<Integer> {
                 return;
             }
 
+            validateRemoteLinks(file, document);
+
             if (verbose) {
                 System.out.printf("✅ Successfully parsed: %s (%d characters, HTML: %d characters)\n",
                     file.getFileName(), content.length(), html.length());
@@ -138,6 +155,141 @@ public class MarkdownValidator implements Callable<Integer> {
         } catch (Exception e) {
             addError(file, 0, "Failed to parse markdown: " + e.getMessage());
         }
+    }
+
+    private void validateRemoteLinks(Path file, Node document) {
+        document.accept(new AbstractVisitor() {
+            @Override
+            public void visit(Link link) {
+                validateRemoteLink(file, link.getDestination());
+                super.visit(link);
+            }
+
+            @Override
+            public void visit(Image image) {
+                validateRemoteLink(file, image.getDestination());
+                super.visit(image);
+            }
+        });
+    }
+
+    private void validateRemoteLink(Path file, String destination) {
+        if (destination == null || destination.isBlank()) {
+            return;
+        }
+
+        URI uri;
+        try {
+            uri = new URI(destination.strip());
+        } catch (URISyntaxException e) {
+            return;
+        }
+
+        String scheme = uri.getScheme();
+        if (!"http".equalsIgnoreCase(scheme) && !"https".equalsIgnoreCase(scheme)) {
+            return;
+        }
+
+        Optional<String> cachedError = remoteLinkCache.computeIfAbsent(uri.toString(), ignored -> checkRemoteLink(uri));
+        cachedError.ifPresent(message -> addError(file, 0, message));
+    }
+
+    private Optional<String> checkRemoteLink(URI uri) {
+        URI requestUri = removeFragment(uri);
+
+        try {
+            HttpResponse<String> response = requestRemoteLink(requestUri, "HEAD");
+            if (response.statusCode() == 405 || response.statusCode() == 403) {
+                response = requestRemoteLink(requestUri, "GET");
+            }
+
+            int status = response.statusCode();
+            if (status >= 300 && status < 400) {
+                return Optional.of("Remote link redirects instead of resolving directly: " + uri + " (HTTP " + status + ")");
+            }
+            if (status >= 400) {
+                return Optional.of("Remote link is not reachable: " + uri + " (HTTP " + status + ")");
+            }
+
+            if (uri.getFragment() != null && !uri.getFragment().isBlank()) {
+                Optional<String> anchorError = validateRemoteAnchor(uri, requestUri);
+                if (anchorError.isPresent()) {
+                    return anchorError;
+                }
+            }
+
+            return Optional.empty();
+        } catch (java.net.http.HttpTimeoutException e) {
+            return Optional.of("Remote link timed out after " + LINK_CHECK_TIMEOUT.toSeconds() + " seconds: " + uri);
+        } catch (IOException | InterruptedException | IllegalArgumentException e) {
+            if (e instanceof InterruptedException) {
+                Thread.currentThread().interrupt();
+            }
+            return Optional.of("Remote link check failed: " + uri + " (" + e.getMessage() + ")");
+        }
+    }
+
+    private Optional<String> validateRemoteAnchor(URI originalUri, URI requestUri)
+            throws IOException, InterruptedException {
+        HttpResponse<String> anchorResponse = requestRemoteLink(requestUri, "GET");
+
+        int status = anchorResponse.statusCode();
+        if (status >= 300 && status < 400) {
+            return Optional.of("Remote link redirects before anchor validation: " + originalUri + " (HTTP " + status + ")");
+        }
+        if (status >= 400) {
+            return Optional.of("Remote link is not reachable before anchor validation: " + originalUri + " (HTTP " + status + ")");
+        }
+        if (!isHtmlResponse(anchorResponse)) {
+            return Optional.empty();
+        }
+
+        String fragment = URLDecoder.decode(originalUri.getFragment(), StandardCharsets.UTF_8);
+        String html = anchorResponse.body();
+        if (html == null || !containsHtmlAnchor(html, fragment)) {
+            return Optional.of("Remote link anchor was not found: " + originalUri);
+        }
+        return Optional.empty();
+    }
+
+    private HttpResponse<String> requestRemoteLink(URI uri, String method) throws IOException, InterruptedException {
+        HttpRequest.Builder requestBuilder = HttpRequest.newBuilder(uri)
+                .timeout(LINK_CHECK_TIMEOUT)
+                .header("User-Agent", "java-cursor-rules-markdown-validator")
+                .header("Accept", "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+
+        if ("HEAD".equals(method)) {
+            requestBuilder.method("HEAD", HttpRequest.BodyPublishers.noBody());
+        } else {
+            requestBuilder.GET();
+        }
+
+        return httpClient.send(requestBuilder.build(), HttpResponse.BodyHandlers.ofString());
+    }
+
+    private URI removeFragment(URI uri) {
+        try {
+            return new URI(uri.getScheme(), uri.getAuthority(), uri.getPath(), uri.getQuery(), null);
+        } catch (URISyntaxException e) {
+            throw new IllegalArgumentException("Unable to normalize URI: " + uri, e);
+        }
+    }
+
+    private boolean isHtmlResponse(HttpResponse<String> response) {
+        return response.headers()
+                .firstValue("content-type")
+                .map(contentType -> contentType.toLowerCase(Locale.ROOT).contains("text/html"))
+                .orElse(false);
+    }
+
+    private boolean containsHtmlAnchor(String html, String anchor) {
+        return containsExactHtmlAnchor(html, anchor) || containsExactHtmlAnchor(html, "user-content-" + anchor);
+    }
+
+    private boolean containsExactHtmlAnchor(String html, String anchor) {
+        String escapedAnchor = java.util.regex.Pattern.quote(anchor);
+        return java.util.regex.Pattern.compile("\\s(?:id|name)\\s*=\\s*\"" + escapedAnchor + "\"").matcher(html).find()
+                || java.util.regex.Pattern.compile("\\s(?:id|name)\\s*=\\s*'" + escapedAnchor + "'").matcher(html).find();
     }
 
     private void addError(Path file, int lineNumber, String message) {
