@@ -4,6 +4,7 @@ target/
 .vscode/
 .classpath
 .agents
+.env
 dependency-reduced-pom.xml
 docs-local/
 .quarkus/
