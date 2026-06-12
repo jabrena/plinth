@@ -36,6 +36,7 @@ Generate comprehensive Java project diagrams through a modular, step-based inter
       <constraint>**SAFETY**: If validation fails, stop immediately — do not proceed until all validation errors are resolved</constraint>
       <constraint><![CDATA[**BEFORE READING DIAGRAM REFERENCES**: Run the question flow embedded in this SKILL.md first. Ask the diagram preference questions one by one, collect selected diagram families and output preferences, then read only the implementation references selected by the user's answers]]></constraint>
       <constraint>**C4 SCOPE**: C4 diagrams are restricted to Context, Container, and Component diagrams</constraint>
+      <constraint>**SUPPLY CHAIN**: Generated PlantUML diagrams must use trusted local includes only; do not use remote `!include` URLs for C4 or icon libraries</constraint>
     </constraint-list>
   </constraints>
 
