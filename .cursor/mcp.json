@@ -18,6 +18,13 @@
                 "--project",
                 "/workspaces/projects/repo"
             ]
+        },
+        "jbang-jdbc": {
+            "command": "jbang",
+            "args": [
+                "jdbc@quarkiverse/quarkus-mcp-servers",
+                "jdbc:postgresql://localhost:5432/sakila"
+            ]
         }
     }
 }

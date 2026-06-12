@@ -20,7 +20,6 @@ jobs:
           - { name: "Profiling Spring Boot Performance Bottleneck", path: "examples/profiling/spring-boot-performance-bottleneck-demo", goal: "package" }
           - { name: "Serverless AWS Lambda Hello World", path: "examples/serverless/aws-lambda-hello-world", goal: "verify" }
           - { name: "Serverless Azure Function Hello World", path: "examples/serverless/azure-function-hello-world", goal: "verify" }
-          - { name: "Spring Boot", path: "examples/spring-boot-demo/implementation", goal: "verify -Pjacoco" }
           - { name: "Frameworks Spring Boot", path: "examples/frameworks/spring-boot", goal: "verify" }
           - { name: "Frameworks Quarkus", path: "examples/frameworks/quarkus", goal: "verify" }
           - { name: "Frameworks Micronaut", path: "examples/frameworks/micronaut", goal: "verify" }
