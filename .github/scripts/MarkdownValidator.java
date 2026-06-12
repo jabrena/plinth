@@ -225,8 +225,16 @@ public class MarkdownValidator implements Callable<Integer> {
             if (e instanceof InterruptedException) {
                 Thread.currentThread().interrupt();
             }
-            return Optional.of("Remote link check failed: " + uri + " (" + e.getMessage() + ")");
+            return Optional.of("Remote link check failed: " + uri + " (" + describeException(e) + ")");
         }
+    }
+
+    private String describeException(Exception exception) {
+        String message = exception.getMessage();
+        if (message == null || message.isBlank()) {
+            return exception.getClass().getSimpleName();
+        }
+        return message;
     }
 
     private Optional<String> validateRemoteAnchor(URI originalUri, URI requestUri)
@@ -304,8 +312,12 @@ public class MarkdownValidator implements Callable<Integer> {
 
         if (errors.isEmpty()) {
             System.out.println("✅ All markdown files are valid!");
+            System.out.println("VALIDATION_RESULT status=passed errors=0");
         } else {
-            System.out.printf("❌ Found %d validation errors:\n\n", errors.size());
+            System.out.printf("❌ Found %d validation errors.\n\n", errors.size());
+            System.out.println("Human-readable report:");
+            System.out.println("Review each file and reason below, then rerun the validator.");
+            System.out.println();
 
             Map<Path, List<ValidationError>> errorsByFile = new LinkedHashMap<>();
             for (ValidationError error : errors) {
@@ -323,9 +335,25 @@ public class MarkdownValidator implements Callable<Integer> {
                 }
                 System.out.println();
             }
+
+            System.out.println("Agent-readable issue records:");
+            for (ValidationError error : errors) {
+                System.out.printf("MARKDOWN_VALIDATION_ISSUE file=\"%s\" line=%d reason=\"%s\"\n",
+                    escapeConsoleValue(error.file.toString()), error.lineNumber, escapeConsoleValue(error.message));
+            }
+            System.out.println();
+            System.out.printf("VALIDATION_RESULT status=failed errors=%d\n", errors.size());
         }
 
         System.out.println("=".repeat(60));
+    }
+
+    private String escapeConsoleValue(String value) {
+        return value
+                .replace("\\", "\\\\")
+                .replace("\"", "\\\"")
+                .replace("\r", "\\r")
+                .replace("\n", "\\n");
     }
 
     private static class ValidationError {
