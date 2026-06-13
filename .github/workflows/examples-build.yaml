@@ -12,17 +12,19 @@ jobs:
     strategy:
       matrix:
         example:
-          - { name: "Maven", path: "examples/maven/maven-demo", goal: "verify" }
-          - { name: "OpenSpec Requirements Problem 1", path: "examples/openspec/requirements-examples/problem1/implementation", goal: "verify" }
-          - { name: "OpenSpec Spring Boot Demo", path: "examples/openspec/spring-boot-demo/implementation", goal: "verify" }
-          - { name: "Profiling Spring Boot JMeter", path: "examples/profiling/spring-boot-jmeter-demo", goal: "verify" }
-          - { name: "Profiling Spring Boot Memory Leak", path: "examples/profiling/spring-boot-memory-leak-demo", goal: "package" }
-          - { name: "Profiling Spring Boot Performance Bottleneck", path: "examples/profiling/spring-boot-performance-bottleneck-demo", goal: "package" }
-          - { name: "Serverless AWS Lambda Hello World", path: "examples/serverless/aws-lambda-hello-world", goal: "verify" }
-          - { name: "Serverless Azure Function Hello World", path: "examples/serverless/azure-function-hello-world", goal: "verify" }
-          - { name: "Frameworks Spring Boot", path: "examples/frameworks/spring-boot", goal: "verify" }
-          - { name: "Frameworks Quarkus", path: "examples/frameworks/quarkus", goal: "verify" }
-          - { name: "Frameworks Micronaut", path: "examples/frameworks/micronaut", goal: "verify" }
+          - { name: "Maven", path: "examples/maven/maven-demo", goal: "verify", expectedExitCode: 0 }
+          - { name: "Maven Invalid", path: "examples/maven/maven-demo-ko", goal: "validate", expectedExitCode: 1 }
+          - { name: "Maven Multi Module", path: "examples/maven/maven-multi-module-demo", goal: "verify", expectedExitCode: 0 }
+          - { name: "OpenSpec Requirements Problem 1", path: "examples/openspec/requirements-examples/problem1/implementation", goal: "verify", expectedExitCode: 0 }
+          - { name: "OpenSpec Spring Boot Demo", path: "examples/openspec/spring-boot-demo/implementation", goal: "verify", expectedExitCode: 0 }
+          - { name: "Profiling Spring Boot JMeter", path: "examples/profiling/spring-boot-jmeter-demo", goal: "verify", expectedExitCode: 0 }
+          - { name: "Profiling Spring Boot Memory Leak", path: "examples/profiling/spring-boot-memory-leak-demo", goal: "package", expectedExitCode: 0 }
+          - { name: "Profiling Spring Boot Performance Bottleneck", path: "examples/profiling/spring-boot-performance-bottleneck-demo", goal: "package", expectedExitCode: 0 }
+          - { name: "Serverless AWS Lambda Hello World", path: "examples/serverless/aws-lambda-hello-world", goal: "verify", expectedExitCode: 0 }
+          - { name: "Serverless Azure Function Hello World", path: "examples/serverless/azure-function-hello-world", goal: "verify", expectedExitCode: 0 }
+          - { name: "Frameworks Spring Boot", path: "examples/frameworks/spring-boot", goal: "verify", expectedExitCode: 0 }
+          - { name: "Frameworks Quarkus", path: "examples/frameworks/quarkus", goal: "verify", expectedExitCode: 0 }
+          - { name: "Frameworks Micronaut", path: "examples/frameworks/micronaut", goal: "verify", expectedExitCode: 0 }
     steps:
       - uses: actions/checkout@v6
         with:
@@ -32,4 +34,17 @@ jobs:
           distribution: "graalvm" # See 'Supported distributions' for available options
           java-version: "25"
       - name: Build ${{ matrix.example.name }}
-        run: cd ${{ matrix.example.path }} && ./mvnw --batch-mode --no-transfer-progress ${{ matrix.example.goal }} --file pom.xml
+        run: |
+          cd "${{ matrix.example.path }}"
+          set +e
+          ./mvnw --batch-mode --no-transfer-progress ${{ matrix.example.goal }} --file pom.xml
+          actual_exit_code=$?
+          set -e
+
+          expected_exit_code=${{ matrix.example.expectedExitCode }}
+          if [ "${actual_exit_code}" -ne "${expected_exit_code}" ]; then
+            echo "Expected exit code ${expected_exit_code}, got ${actual_exit_code}"
+            exit 1
+          fi
+
+          echo "Maven command exited with expected code ${actual_exit_code}"

@@ -99,6 +99,12 @@ openspec archive <change-name>       # Archive a completed change
 
 ```
 
+## Skill acceptance prompt validation
+
+When regenerating agent skills, check `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md` before promoting the change. If the regenerated local skill output under `.agents/skills/<skill-id>/SKILL.md` changes for a skill described in that file, execute only the listed prompt for that changed skill and verify the acceptance test passes. Do not execute prompts for unchanged skills or run the full prompt inventory by default.
+
+Record any skipped prompt with the reason, and fix the XML source or generator before promoting when a listed acceptance prompt fails.
+
 ## Website generation workflow
 
 1. Edit website sources under `site-generator/content/`, `site-generator/templates/`, or `site-generator/assets/`; never edit `docs/` directly.
