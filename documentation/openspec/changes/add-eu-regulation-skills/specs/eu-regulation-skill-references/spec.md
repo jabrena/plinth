@@ -51,6 +51,26 @@ The new EU regulation skills MUST complement `801-regulations-eu-ai-act` without
 - **AND** `803-regulations-gdpr` is used for personal-data processing, privacy controls, data-subject rights, data transfers, retention, or breach-preparation concerns
 - **AND** multiple regulation skills may be used together when the same Java system crosses those concern boundaries
 
+### Requirement: 801 structure alignment
+
+The DORA and GDPR skill implementations MUST use `801-regulations-eu-ai-act` as the format and structure baseline while adapting the content to each regulation.
+
+#### Scenario: Align skill index structure with 801
+
+- **GIVEN** maintainers implement `802-regulations-dora` or `803-regulations-gdpr`
+- **WHEN** their skill index XML files are inspected
+- **THEN** each skill follows the `801-regulations-eu-ai-act` index structure for metadata, title, goal, constraints, triggers, and workflow steps
+- **AND** each workflow starts with authoritative reference material before implementation review
+- **AND** each workflow includes regulation-specific scope or classification guidance, implementation evidence review, engineering-control recommendations, escalation guidance, and report-oriented conclusions
+
+#### Scenario: Align reference structure with 801
+
+- **GIVEN** maintainers implement `802-regulations-dora` or `803-regulations-gdpr`
+- **WHEN** their skill reference XML files are inspected
+- **THEN** each reference follows the `801-regulations-eu-ai-act` reference structure for metadata, role, goal, examples, output-format, and safeguards
+- **AND** examples translate regulation concerns into Java enterprise architecture and delivery controls
+- **AND** output-format and safeguards remain regulation-specific while preserving the same review posture as `801`: source-first, not legal advice, explicit escalation, evidence-driven findings, and prioritized engineering actions
+
 ### Requirement: Generator registration
 
 The DORA and GDPR skill sources MUST be registered in the generator inventory so local skill generation emits them.

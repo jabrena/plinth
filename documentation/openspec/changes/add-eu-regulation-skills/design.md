@@ -13,13 +13,17 @@ These identifiers keep EU regulation skills in the `800` band after `801-regulat
 
 ### Skill shape
 
-Both skills use the existing XML source pattern:
+Both skills use the existing XML source pattern and the `801-regulations-eu-ai-act` implementation as the structural baseline:
 
 - `skills-generator/src/main/resources/skill-indexes/<id>-skill.xml` defines metadata, title, goal, constraints, triggers, and workflow steps.
 - `skills-generator/src/main/resources/skill-references/<skill-id>.xml` provides detailed examples and output guidance.
 - `skills-generator/src/main/resources/skills.xml` registers the skill id and reference.
 
-Dedicated questionnaire and report assets are not required for the first DORA/GDPR addition. The initial deliverable is regulation-aware engineering guidance with concrete review patterns. Questionnaire/report assets can be added later if issue #848 or follow-up issues request formal review reports comparable to `801`.
+The index XML for `802` and `803` should follow the same reader experience as `801`: clear applicability, explicit "not legal advice" constraints, scope/classification guidance, regulation-specific risk signals, triggers, and a step-by-step review workflow that starts with reference material before implementation review.
+
+The reference XML for `802` and `803` should also follow the `801` shape: `metadata`, `role`, `goal`, examples, `output-format`, and `safeguards`. The content must be regulation-specific, but the structure should remain consistent so generated skills in the `800` band feel predictable to users.
+
+Dedicated questionnaire and report assets are not required for the first DORA/GDPR addition. The initial deliverable is regulation-aware engineering guidance with concrete review patterns and report-oriented output guidance in the reference XML. Questionnaire/report assets can be added later if issue #848 or follow-up issues request formal review reports comparable to `801`.
 
 ### DORA engineering scope
 
