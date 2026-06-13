@@ -12,6 +12,8 @@
 >
 > **Apoya el proyecto:** [Sponsor to pay tokens](https://github.com/sponsors/jabrena)
 
+**Aviso de deprecación:** Los `System prompts/rules` actuales están deprecados y se eliminarán en `v0.16.0`. Si todavía los usas, revisa el [artículo de la versión 0.14.0](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html).
+
 ## Objetivo
 
 Un flujo de trabajo nativo de IA, con criterio propio, para evolucionar las prácticas modernas de `SDLC` en Java Enterprise mediante `Skills`, `Agents`, `Commands` y servidores `MCP` reutilizables.
@@ -43,8 +45,6 @@ El proyecto genera un conjunto de entregables al final de cualquier iteración.
 | 1. [Commands](./documentation/guides/INVENTORY-COMMANDS-JAVA.md) | `@004-commands-installation` Instalar Commands en el proyecto | [`Commands`](./documentation/guides/COMMANDS.md) |
 | 2. [Agents](./documentation/guides/INVENTORY-AGENTS-JAVA.md) | `@005-agents-installation` Instalar Agents en Cursor/Claude | [`Agents`](./documentation/guides/GETTING-STARTED-AGENTS_ES.md)     |
 | 3. [Skills](./documentation/guides/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/cursor-rules-java --all --agent cursor` | [`Skills`](./documentation/guides/GETTING-STARTED-SKILLS_ES.md)     |
-
-**⚠️ Nota:** Si sigues usando los System prompts/rules de este proyecto, revisa [el artículo](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html). Los `System prompts/rules` actuales se eliminarán en la próxima versión (v0.16.0).
 
 ### Compatibilidad
 
@@ -106,78 +106,8 @@ Java usa JEPs (JDK Enhancement Proposals) para describir nuevas características
 
 - [Lista de JEPs](./documentation/jeps/All-JEPS.md)
 
-## Meetups, conferencias, talleres y artículos
+## Recursos adicionales
 
-### Codemotion / Madrid (2026/04/20 - 11:00 - 12:30)
+Las charlas, artículos, enlaces de referencia, portales de skills y proyectos relacionados están en [Referencias del proyecto](./documentation/guides/PROJECT-REFERENCES_ES.md).
 
-- [Taller técnico sobre Cursor para el desarrollo con Java](https://conferences.codemotion.com/madrid/speakers/)
-
-### W-JAX / Munich (2025/11/06 - 10:30 - 11:30)
-
-- [https://jax.de/generative-ai-ecosystem/cursor-ai-101-java-enterprise/](https://jax.de/generative-ai-ecosystem/cursor-ai-101-java-enterprise/)
-
-### Devoxx BE / Antwerp (2025/10/07 - 18:20 - 18:50)
-
-- [https://m.devoxx.com/events/dvbe25/talks/4715/the-power-of-cursor-rules-in-java-enterprise-development](https://m.devoxx.com/events/dvbe25/talks/4715/the-power-of-cursor-rules-in-java-enterprise-development)
-
-### Madrid Jug / Madrid (2025/05/06 - 19:00)
-
-- [https://www.meetup.com/es-ES/madridjug/events/307458529/](https://www.meetup.com/es-ES/madridjug/events/307458529/)
-
-### Blogs
-
-- [Delegating Java tasks to Supervised AI Dev Pipelines](https://www.javaadvent.com/2025/12/delegating-java-tasks-to-supervised-ai-dev-pipelines.html)
-- [https://vibekode.it/blog/cursor-ai-developer-cloud-platform/](https://vibekode.it/blog/cursor-ai-developer-cloud-platform/)
-- [https://www.linkedin.com/pulse/september-rest-story-jvm-weekly-vol-146-artur-skowro%C5%84ski-82lif/?trackingId=wbWPSL65TpCCbdg5ksAWjw%3D%3D](https://www.linkedin.com/pulse/september-rest-story-jvm-weekly-vol-146-artur-skowro%C5%84ski-82lif/?trackingId=wbWPSL65TpCCbdg5ksAWjw%3D%3D)
-- [https://virtuslab.com/blog/ai/providing-library-documentation/](https://virtuslab.com/blog/ai/providing-library-documentation/)
-- https://github.com/the911fund/skill-of-skills
-- https://blog.csdn.net/weixin_42526249/article/details/161176209
-- https://juejin.cn/post/7632095808490340392
-
-## Referencias
-
-**Infraestructura de AI Agents:**
-
-- [https://www.cursor.com/](https://www.cursor.com/)
-- [https://cursor.com/cli](https://cursor.com/cli)
-- [https://www.anthropic.com/claude-code](https://www.anthropic.com/claude-code)
-- [https://github.com/features/copilot](https://github.com/features/copilot)
-- [https://cursor.com/docs/cli/github-actions](https://cursor.com/docs/cli/github-actions)
-- [https://code.claude.com/docs/en/github-actions](https://code.claude.com/docs/en/github-actions)
-
-**Estándares:**
-
-- [https://agents.md/](https://agents.md/)
-- [https://agentskills.io/home](https://agentskills.io/home)
-- [https://microsoft.github.io/language-server-protocol/](https://microsoft.github.io/language-server-protocol/)
-- [https://openspec.dev/](https://openspec.dev/)
-
-**Portales de Skills:**
-
-- [https://skills.sh/jabrena/cursor-rules-java](https://skills.sh/jabrena/cursor-rules-java)
-- [https://github.com/vercel-labs/skills/issues](https://github.com/vercel-labs/skills/issues)
-- [https://tessl.io/registry/skills/github/jabrena/cursor-rules-java](https://tessl.io/registry/skills/github/jabrena/cursor-rules-java)
-- [https://claudskills.com/author/jabrena/](https://claudskills.com/author/jabrena/)
-- [https://agent-skills.cc/zh/skills/jabrena-cursor-rules-java](https://agent-skills.cc/zh/skills/jabrena-cursor-rules-java)
-- [https://shyft.ai/skills/cursor-rules-java](https://shyft.ai/skills/cursor-rules-java)
-- [https://lobehub.com/skills?q=cursor-rules-java](https://lobehub.com/skills?q=cursor-rules-java)
-- [https://www.awesomeskills.dev/es/skill/jabrena-cursor-rules-java](https://www.awesomeskills.dev/es/skill/jabrena-cursor-rules-java)
-- [https://github.com/laolaoshiren/claude-code-skills-zh](https://github.com/laolaoshiren/claude-code-skills-zh)
-- [https://github.com/LessUp/awesome-cursorrules-zh](https://github.com/LessUp/awesome-cursorrules-zh)
-- [https://www.learn-skills.dev/en/for/jabrena](https://www.learn-skills.dev/en/for/jabrena)
-- [https://skillsllm.com/skill/cursor-rules-java](https://skillsllm.com/skill/cursor-rules-java)
-
-**Java:**
-
-- [https://openjdk.org/jeps/0](https://openjdk.org/jeps/0)
-- [https://jbake.org/docs/latest/](https://jbake.org/docs/latest/)
-- [https://developers.redhat.com/blog/2016/12/09/spring-cloud-for-microservices-compared-to-kubernetes](https://developers.redhat.com/blog/2016/12/09/spring-cloud-for-microservices-compared-to-kubernetes)
-
-## Otros desarrollos
-
-- [https://github.com/jabrena/pml](https://github.com/jabrena/pml)
-- [https://github.com/jabrena/cursor-rules-java](https://github.com/jabrena/cursor-rules-java)
-- https://github.com/jabrena/ai-agent-harness-monitor-cli
-- [https://github.com/jabrena/setup-cli](https://github.com/jabrena/setup-cli)
-
-Desarrollado con 2 manos humanas, [Cursor](https://www.cursor.com/) & [Codex](https://openai.com/codex/) con ❤️ desde [Madrid](https://www.google.com/maps/place/Community+of+Madrid,+Madrid/@40.4983324,-6.3162283,8z/data=!3m1!4b1!4m6!3m5!1s0xd41817a40e033b9:0x10340f3be4bc880!8m2!3d40.4167088!4d-3.5812692!16zL20vMGo0eGc?entry=ttu&g_ep=EgoyMDI1MDgxOC4wIKXMDSoASAFQAw%3D%3D)
+Desarrollado por personas con el apoyo de [Cursor](https://www.cursor.com/) y [Codex](https://openai.com/codex/), con ❤️ desde [Madrid](https://www.google.com/maps/place/Community+of+Madrid,+Madrid/@40.4983324,-6.3162283,8z/data=!3m1!4b1!4m6!3m5!1s0xd41817a40e033b9:0x10340f3be4bc880!8m2!3d40.4167088!4d-3.5812692!16zL20vMGo0eGc?entry=ttu&g_ep=EgoyMDI1MDgxOC4wIKXMDSoASAFQAw%3D%3D)
