@@ -41,3 +41,24 @@ and verify that acceptance-tests passes.
 execute @skills-generator/src/test/resources/gherkin/114-java-maven-search.feature
 and verify that acceptance-tests passes.
 ```
+
+## 801-regulations-eu-ai-act
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/801-regulations-eu-ai-act.feature
+and verify that acceptance-tests passes.
+```
+
+## 802-regulations-dora
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/802-regulations-dora.feature
+and verify that acceptance-tests passes.
+```
+
+## 803-regulations-gdpr
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/803-regulations-gdpr.feature
+and verify that acceptance-tests passes.
+```

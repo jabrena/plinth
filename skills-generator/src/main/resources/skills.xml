@@ -556,4 +556,14 @@
                 target="assets/reports/801-eu-ai-act-engineering-review-report-template.md" />
         </resource-list>
     </skill>
+    <skill id="802">
+        <reference-list>
+            <reference>802-regulations-dora</reference>
+        </reference-list>
+    </skill>
+    <skill id="803">
+        <reference-list>
+            <reference>803-regulations-gdpr</reference>
+        </reference-list>
+    </skill>
 </skill-inventory>
