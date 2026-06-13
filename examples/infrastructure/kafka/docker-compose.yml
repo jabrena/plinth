@@ -1,0 +1,96 @@
+name: sakiladb-kafka
+
+services:
+  kafka:
+    image: confluentinc/cp-kafka:8.0.0
+    container_name: sakiladb-kafka
+    restart: unless-stopped
+    environment:
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:29093
+      KAFKA_LISTENERS: PLAINTEXT://kafka:29092,CONTROLLER://kafka:29093,PLAINTEXT_HOST://0.0.0.0:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:${SAKILA_KAFKA_PORT:-9092}
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: false
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+    ports:
+      - "${SAKILA_KAFKA_PORT:-9092}:9092"
+    volumes:
+      - sakiladb-kafka-data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD-SHELL", "kafka-topics --bootstrap-server localhost:9092 --list >/dev/null 2>&1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  schema-registry:
+    image: confluentinc/cp-schema-registry:8.0.0
+    container_name: sakiladb-schema-registry
+    restart: unless-stopped
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      SCHEMA_REGISTRY_HOST_NAME: schema-registry
+      SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: PLAINTEXT://kafka:29092
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
+    ports:
+      - "${SAKILA_SCHEMA_REGISTRY_PORT:-8081}:8081"
+    healthcheck:
+      test: ["CMD-SHELL", "curl --fail --silent http://localhost:8081/subjects >/dev/null"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+
+  sakila-topic-init:
+    image: confluentinc/cp-kafka:8.0.0
+    container_name: sakiladb-kafka-topic-init
+    depends_on:
+      kafka:
+        condition: service_healthy
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SAKILA_TOPIC: sakila.film
+    entrypoint:
+      - /bin/bash
+      - -c
+      - |
+        kafka-topics \
+          --bootstrap-server "$${KAFKA_BOOTSTRAP_SERVERS}" \
+          --create \
+          --if-not-exists \
+          --topic "$${SAKILA_TOPIC}" \
+          --partitions 1 \
+          --replication-factor 1
+    restart: "no"
+
+  sakila-loader:
+    image: confluentinc/cp-schema-registry:8.0.0
+    container_name: sakiladb-kafka-loader
+    depends_on:
+      sakila-topic-init:
+        condition: service_completed_successfully
+      schema-registry:
+        condition: service_healthy
+    environment:
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      SCHEMA_REGISTRY_URL: http://schema-registry:8081
+      SAKILA_TOPIC: sakila.film
+    volumes:
+      - ./data:/data:ro
+      - ./schemas:/schemas:ro
+      - ./scripts:/scripts:ro
+    entrypoint: ["/bin/bash", "/scripts/load-sakila-films.sh"]
+    restart: "no"
+
+volumes:
+  sakiladb-kafka-data:
