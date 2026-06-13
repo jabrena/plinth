@@ -544,10 +544,10 @@
             <reference>706-technologies-containers-docker</reference>
         </reference-list>
     </skill>
-    <skill id="800">
+    <skill id="801">
         <reference-list>
-            <reference>800-regulations-eu-ai-act</reference>
-            <reference>800-regulations-eu-ai-act-chapters-summary</reference>
+            <reference>801-regulations-eu-ai-act</reference>
+            <reference>801-regulations-eu-ai-act-chapters-summary</reference>
         </reference-list>
         <resource-list>
             <resource source="skill-references/assets/questions/800-eu-ai-act-risk-questionnaire.md"

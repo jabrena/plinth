@@ -1,6 +1,6 @@
 # EU AI Act Engineering Review Report
 
-Use this template after the human has answered all four sections of `assets/questions/800-eu-ai-act-risk-questionnaire.md` and matching the relevant examples in `references/800-regulations-eu-ai-act.md`.
+Use this template after the human has answered all four sections of `assets/questions/800-eu-ai-act-risk-questionnaire.md` and matching the relevant examples in `references/801-regulations-eu-ai-act.md`.
 
 This report is not legal advice. Use it as engineering evidence for legal, compliance, privacy, security, risk, architecture, and business-owner review.
 
