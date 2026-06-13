@@ -1,0 +1,65 @@
+{
+  "type": "record",
+  "name": "Film",
+  "namespace": "com.sakila",
+  "doc": "Focused Sakila film record for local Kafka and Schema Registry examples.",
+  "fields": [
+    {
+      "name": "filmId",
+      "type": "int"
+    },
+    {
+      "name": "title",
+      "type": "string"
+    },
+    {
+      "name": "description",
+      "type": "string"
+    },
+    {
+      "name": "releaseYear",
+      "type": "int"
+    },
+    {
+      "name": "languageId",
+      "type": "int"
+    },
+    {
+      "name": "language",
+      "type": "string"
+    },
+    {
+      "name": "rentalDuration",
+      "type": "int"
+    },
+    {
+      "name": "rentalRate",
+      "type": "double"
+    },
+    {
+      "name": "length",
+      "type": "int"
+    },
+    {
+      "name": "replacementCost",
+      "type": "double"
+    },
+    {
+      "name": "rating",
+      "type": "string",
+      "doc": "One of G, PG, PG-13, R, NC-17."
+    },
+    {
+      "name": "specialFeatures",
+      "type": {
+        "type": "array",
+        "items": "string"
+      }
+    },
+    {
+      "name": "lastUpdate",
+      "type": "string",
+      "doc": "ISO-8601 timestamp."
+    }
+  ]
+}
