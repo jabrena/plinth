@@ -4,6 +4,8 @@ Use this template after the human has answered all four sections of `assets/ques
 
 This report is not legal advice. Use it as engineering evidence for legal, compliance, privacy, security, risk, architecture, and business-owner review.
 
+The purpose of this report is to increase awareness of potential gaps in the system and create engineering evidence for qualified review. The response produced from this template does not represent legal advice, a legal opinion, or a final regulatory determination.
+
 ## 1. Review Context
 
 - System or capability name:
@@ -104,10 +106,10 @@ This report is not legal advice. Use it as engineering evidence for legal, compl
 ## 9. Action Plan
 
 | Priority | Action | Owner | Due date | Evidence expected | Status |
-| --- | --- | --- | --- | --- | --- |
-| High |  |  |  |  | Open |
-| Medium |  |  |  |  | Open |
-| Low |  |  |  |  | Open |
+| -------- | ------ | ----- | -------- | ----------------- | ------ |
+| High     |        |       |          |                   | Open   |
+| Medium   |        |       |          |                   | Open   |
+| Low      |        |       |          |                   | Open   |
 
 ## 10. Final Notes
 

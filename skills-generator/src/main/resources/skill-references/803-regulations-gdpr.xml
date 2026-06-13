@@ -22,15 +22,22 @@
 
         This skill does not provide legal advice. It helps engineering teams identify when legal, privacy, data protection officer, compliance, security, or risk owners must review the system before production use.
 
+        The purpose of this skill is to increase awareness of potential gaps in the system and create engineering evidence for qualified review. The response produced by this skill does not represent legal advice, a legal opinion, or a final regulatory determination.
+
         External reference: [GDPR Regulation (EU) 2016/679](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679).
+
+        Questionnaire asset: [GDPR engineering review questionnaire](../assets/questions/803-gdpr-engineering-review-questionnaire.md).
+
+        Report template asset: [GDPR engineering review report template](../assets/reports/803-gdpr-engineering-review-report-template.md).
 
         Use this reference in this order:
 
         1. **Read the policy context and examples first**: understand whether the target system processes personal data, special-category data, user identifiers, behavioral records, telemetry tied to users, logs, exports, backups, or cross-border transfers.
-        2. **Classify the personal-data scope**: identify data subjects, categories, purposes, sources, stores, processors, controllers, vendors, logs, caches, search indexes, exports, retention periods, deletion paths, and privacy owners.
-        3. **Review implementation and privacy evidence**: examine Java code, API DTOs, schemas, repositories, migrations, messages, logs, metrics, traces, access control, retention jobs, deletion workflows, tests, documentation, and vendor integrations.
-        4. **Match the examples to the findings**: use the examples below as reusable evidence and control patterns for gaps discovered during review.
-        5. **Report conclusions and actions**: produce engineering findings, escalation points, evidence inventory, release decision, residual risks, and prioritized actions with owners.
+        2. **Run the questionnaire interactively**: follow the rules at the top of `assets/questions/803-gdpr-engineering-review-questionnaire.md`. Ask the human one question at a time (Questions 1-22); do not infer or self-answer from code or repository inspection. Present only the current question; wait for an answer before the next. Record answers verbatim. Probe "Unknown" responses.
+        3. **Classify the personal-data scope**: identify data subjects, categories, purposes, sources, stores, processors, controllers, vendors, logs, caches, search indexes, exports, retention periods, deletion paths, and privacy owners.
+        4. **Review implementation and privacy evidence**: examine Java code, API DTOs, schemas, repositories, migrations, messages, logs, metrics, traces, access control, retention jobs, deletion workflows, tests, documentation, and vendor integrations.
+        5. **Match the examples to the findings**: use the examples below as reusable evidence and control patterns for gaps discovered during review.
+        6. **Generate the report**: use the report template to produce conclusions, questionnaire findings with answers and gaps, evidence from code review, recommended controls, release decision, residual risks, and prioritized actions with owners.
     </goal>
 
     <constraints>
@@ -39,6 +46,8 @@
         </constraints-description>
         <constraint-list>
             <constraint>**NOT LEGAL ADVICE**: State when a finding requires legal, privacy, data protection officer, compliance, security, or risk-owner review instead of giving legal conclusions</constraint>
+            <constraint>**QUESTIONNAIRE FIRST**: Ask the human every questionnaire question (1-22) before code review or the report; do not infer answers from the codebase</constraint>
+            <constraint>**REPORT REQUIRED**: End the review with an engineering report that records conclusions, actions, owners, evidence, release decision, and residual risks</constraint>
             <constraint>**PERSONAL DATA MAP**: Identify data subjects, categories, sources, purposes, systems, processors, stores, logs, caches, indexes, exports, backups, retention, and deletion paths</constraint>
             <constraint>**MINIMIZATION**: Remove unnecessary fields, broad DTOs, excessive payload logging, unbounded exports, and duplicated personal data from implementation designs</constraint>
             <constraint>**RIGHTS WORKFLOWS**: Verify data-subject rights paths where applicable, including evidence, authentication, authorization, propagation, and auditability</constraint>
@@ -271,18 +280,54 @@
                 </bad-example>
             </code-examples>
         </example>
+
+        <example number="7" id="java-field-level-privacy-policy">
+            <example-header>
+                <example-title>Apply field-level privacy policy before returning DTOs</example-title>
+                <example-subtitle>purpose, authorization, minimization, and audit evidence</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use this pattern when a Java API can return different personal-data fields depending on purpose and requester authority. Keep the policy outside the controller and make denied fields explicit in audit evidence.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[public CustomerProfileResponse viewProfile(CustomerId customerId, Requester requester, Purpose purpose) {
+    CustomerProfile profile = customerRepository.getRequired(customerId);
+    FieldPolicyDecision decision = fieldPolicy.evaluate(requester, purpose, profile);
+
+    audit.recordPersonalDataAccess(
+        customerId,
+        requester.id(),
+        purpose,
+        decision.allowedFields(),
+        decision.deniedFields()
+    );
+
+    return CustomerProfileResponse.from(profile, decision.allowedFields());
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[public CustomerProfile viewProfile(String customerId) {
+    return customerRepository.findById(customerId).orElseThrow();
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
     </examples>
 
     <output-format>
         <output-format-list>
             <output-format-item>**READ** GDPR reference material and example patterns first to understand personal-data protection context before reviewing implementation details</output-format-item>
-            <output-format-item>**SCOPE** personal-data categories, data subjects, purposes, sources, owners, stores, logs, caches, indexes, exports, backups, processors, controllers, vendors, transfers, retention, and deletion paths</output-format-item>
+            <output-format-item>**ASK** the questionnaire questions interactively — one question at a time (Questions 1-22), presenting only the current question and waiting for a human answer before the next; never infer or self-answer from code, repository inspection, or assumptions; record human answers verbatim; probe "Unknown" responses</output-format-item>
+            <output-format-item>**SCOPE** personal-data categories, data subjects, purposes, sources, owners, stores, logs, caches, indexes, exports, backups, processors, controllers, vendors, transfers, retention, and deletion paths from questionnaire answers before code review</output-format-item>
             <output-format-item>**ESCALATE** lawful basis, controller or processor role, special-category data, jurisdiction, transfer mechanism, DPIA need, and regulatory interpretation to legal, privacy, data protection officer, compliance, security, or risk owners</output-format-item>
             <output-format-item>**REVIEW** Java implementation, DTOs, controllers, repositories, schemas, migrations, messages, logs, metrics, traces, retention jobs, deletion workflows, access controls, exports, tests, documentation, and vendor integrations</output-format-item>
             <output-format-item>**IDENTIFY** risk signals from code and privacy evidence: excessive fields, entity exposure, unclear purpose, missing deletion propagation, payload logging, unbounded retention, weak authorization, unreviewed transfer, or missing breach evidence</output-format-item>
-            <output-format-item>**MATCH** the relevant example patterns from the reference: personal-data inventory, minimization DTO, rights workflow, deletion propagation, transfer review, or privacy-safe logging</output-format-item>
+            <output-format-item>**MATCH** the relevant example patterns from the reference: personal-data inventory, minimization DTO, rights workflow, deletion propagation, transfer review, privacy-safe logging, or Java field-level privacy policy</output-format-item>
             <output-format-item>**RECOMMEND** engineering controls: minimization, field-level authorization, pseudonymization, redaction, retention jobs, deletion propagation, rights request orchestration, transfer evidence, breach evidence, privacy-safe observability, and owner escalation</output-format-item>
-            <output-format-item>**REPORT** conclusions and actions with review context, personal-data scope, evidence reviewed, gaps, required escalations, release decision, residual risks, owners, and due dates</output-format-item>
+            <output-format-item>**REPORT** conclusions and actions using the report template, including review context, personal-data processing summary, questionnaire findings with answers and gaps, GDPR privacy risk classification, engineering controls, evidence inventory, residual risks, release decision, and prioritized action plan with owners and due dates</output-format-item>
         </output-format-list>
     </output-format>
 

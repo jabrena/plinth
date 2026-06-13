@@ -19,6 +19,10 @@
 - [x] 3.2 Add `skills-generator/src/main/resources/skill-references/802-regulations-dora.xml`.
 - [x] 3.3 Include engineering controls for ICT risk management, operational resilience, incident preparation, resilience testing, third-party ICT provider risk, backup/recovery, monitoring, and operational evidence.
 - [x] 3.4 Align the `802` skill index and reference structure with `801-regulations-eu-ai-act`, adapting the content to DORA.
+- [x] 3.5 Add `skills-generator/src/main/resources/skill-references/assets/questions/802-dora-engineering-review-questionnaire.md`.
+- [x] 3.6 Add `skills-generator/src/main/resources/skill-references/assets/reports/802-dora-engineering-review-report-template.md`.
+- [x] 3.7 Update `802` workflow and reference output guidance to require questionnaire-first review and report generation.
+- [x] 3.8 Include DORA Java technical examples for operational resilience and release-policy controls.
 
 ## 4. GDPR Skill
 
@@ -26,6 +30,10 @@
 - [x] 4.2 Add `skills-generator/src/main/resources/skill-references/803-regulations-gdpr.xml`.
 - [x] 4.3 Include engineering controls for personal-data inventory, minimization, privacy by design, data-subject rights, retention/deletion, security of processing, data transfers, DPIA escalation, breach evidence, and privacy-safe logging.
 - [x] 4.4 Align the `803` skill index and reference structure with `801-regulations-eu-ai-act`, adapting the content to GDPR.
+- [x] 4.5 Add `skills-generator/src/main/resources/skill-references/assets/questions/803-gdpr-engineering-review-questionnaire.md`.
+- [x] 4.6 Add `skills-generator/src/main/resources/skill-references/assets/reports/803-gdpr-engineering-review-report-template.md`.
+- [x] 4.7 Update `803` workflow and reference output guidance to require questionnaire-first review and report generation.
+- [x] 4.8 Include GDPR Java technical examples for personal-data minimization, rights workflows, privacy-safe logging, or field-level authorization.
 
 ## 5. Gherkin Acceptance Coverage
 
@@ -39,6 +47,8 @@
 - [x] 6.1 Register skill id `802` and reference `802-regulations-dora` in `skills-generator/src/main/resources/skills.xml`.
 - [x] 6.2 Register skill id `803` and reference `803-regulations-gdpr` in `skills-generator/src/main/resources/skills.xml`.
 - [x] 6.3 Confirm generated local skills include `802-regulations-dora` and `803-regulations-gdpr`.
+- [x] 6.4 Register `802` questionnaire and report template resources in `skills-generator/src/main/resources/skills.xml`.
+- [x] 6.5 Register `803` questionnaire and report template resources in `skills-generator/src/main/resources/skills.xml`.
 
 ## 7. Validation
 
@@ -46,6 +56,7 @@
 - [x] 7.2 Run `./mvnw clean install -pl skills-generator`.
 - [x] 7.3 Inspect generated local `802-regulations-dora/SKILL.md` and `803-regulations-gdpr/SKILL.md`.
 - [x] 7.4 Compare generated local `802` and `803` skill structure against generated local `801-regulations-eu-ai-act/SKILL.md` for consistent `800`-band regulation skill format.
-- [x] 7.5 Execute the listed acceptance prompts for `801`, `802`, and `803` from `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md` (verified manually against generated local skill output; no separate automated runner exists).
-- [x] 7.6 Run `./mvnw clean verify -pl skills-generator`.
-- [x] 7.7 Run `openspec validate --all`.
+- [x] 7.5 Inspect generated local DORA and GDPR questionnaire/report assets.
+- [x] 7.6 Execute the listed acceptance prompts for `801`, `802`, and `803` from `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md` (verified manually against generated local skill output; no separate automated runner exists).
+- [x] 7.7 Run `./mvnw clean verify -pl skills-generator`.
+- [x] 7.8 Run `openspec validate --all`.

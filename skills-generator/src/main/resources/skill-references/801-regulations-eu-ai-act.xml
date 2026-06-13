@@ -22,6 +22,8 @@
 
         This skill does not provide legal advice. It helps engineering teams identify when legal, compliance, security, privacy, or risk owners must review the system before production use.
 
+        The purpose of this skill is to increase awareness of potential gaps in the system and create engineering evidence for qualified review. The response produced by this skill does not represent legal advice, a legal opinion, or a final regulatory determination.
+
         External reference: [European Parliament legislative resolution TA-9-2024-0138](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689).
 
         Questionnaire asset: [EU AI Act engineering review questionnaire](../assets/questions/801-eu-ai-act-risk-questionnaire.md).

@@ -22,15 +22,22 @@
 
         This skill does not provide legal advice. It helps engineering teams identify when legal, compliance, security, risk, resilience, procurement, or business-continuity owners must review the system before production reliance.
 
+        The purpose of this skill is to increase awareness of potential gaps in the system and create engineering evidence for qualified review. The response produced by this skill does not represent legal advice, a legal opinion, or a final regulatory determination.
+
         External reference: [DORA Regulation (EU) 2022/2554](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554).
+
+        Questionnaire asset: [DORA engineering review questionnaire](../assets/questions/802-dora-engineering-review-questionnaire.md).
+
+        Report template asset: [DORA engineering review report template](../assets/reports/802-dora-engineering-review-report-template.md).
 
         Use this reference in this order:
 
         1. **Read the policy context and examples first**: understand whether the target system supports a financial entity, important business service, critical ICT function, third-party ICT provider relationship, or operational resilience obligation.
-        2. **Classify the operational scope**: identify the business service, system owner, resilience owner, environments, assets, data stores, dependencies, integrations, providers, recovery expectations, and incident pathways.
-        3. **Review implementation and operational evidence**: examine Java code, configuration, tests, deployment workflows, observability, logs, runbooks, backups, restore evidence, continuity plans, change records, provider documentation, and incident procedures.
-        4. **Match the examples to the findings**: use the examples below as reusable evidence and control patterns for gaps discovered during review.
-        5. **Report conclusions and actions**: produce engineering findings, escalation points, evidence inventory, release decision, residual risks, and prioritized actions with owners.
+        2. **Run the questionnaire interactively**: follow the rules at the top of `assets/questions/802-dora-engineering-review-questionnaire.md`. Ask the human one question at a time (Questions 1-20); do not infer or self-answer from code or repository inspection. Present only the current question; wait for an answer before the next. Record answers verbatim. Probe "Unknown" responses.
+        3. **Classify the operational scope**: identify the business service, system owner, resilience owner, environments, assets, data stores, dependencies, integrations, providers, recovery expectations, and incident pathways.
+        4. **Review implementation and operational evidence**: examine Java code, configuration, tests, deployment workflows, observability, logs, runbooks, backups, restore evidence, continuity plans, change records, provider documentation, and incident procedures.
+        5. **Match the examples to the findings**: use the examples below as reusable evidence and control patterns for gaps discovered during review.
+        6. **Generate the report**: use the report template to produce conclusions, questionnaire findings with answers and gaps, evidence from code review, recommended controls, release decision, residual risks, and prioritized actions with owners.
     </goal>
 
     <constraints>
@@ -39,6 +46,8 @@
         </constraints-description>
         <constraint-list>
             <constraint>**NOT LEGAL ADVICE**: State when a finding requires legal, compliance, security, risk, resilience, business-continuity, or procurement review instead of giving legal conclusions</constraint>
+            <constraint>**QUESTIONNAIRE FIRST**: Ask the human every questionnaire question (1-20) before code review or the report; do not infer answers from the codebase</constraint>
+            <constraint>**REPORT REQUIRED**: End the review with an engineering report that records conclusions, actions, owners, evidence, release decision, and residual risks</constraint>
             <constraint>**SCOPE AND OWNERSHIP**: Identify business service, system owner, operational owner, resilience owner, support model, and provider owner before recommending implementation changes</constraint>
             <constraint>**ICT RISK INVENTORY**: Record applications, APIs, jobs, databases, queues, credentials, deployment environments, network dependencies, cloud services, SaaS providers, and operational runbooks</constraint>
             <constraint>**INCIDENT EVIDENCE**: Require logs, metrics, traces, alert rules, severity criteria, escalation paths, communication handoffs, decision records, and post-incident corrective actions</constraint>
@@ -248,18 +257,63 @@
                 </bad-example>
             </code-examples>
         </example>
+
+        <example number="6" id="java-resilience-release-policy">
+            <example-header>
+                <example-title>Implement a Java resilience release policy</example-title>
+                <example-subtitle>owner review, evidence checks, and release decision</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use this pattern when Java deployment code, platform gates, or internal delivery services decide whether a financial service can move to production. The code should evaluate evidence, not hard-code a blanket approval.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[public ReleaseDecision evaluate(ResilienceReview review) {
+    List<String> blockers = new ArrayList<>();
+
+    requirePresent(review.ictInventory(), "ICT inventory", blockers);
+    requirePresent(review.incidentRunbook(), "incident runbook", blockers);
+    requirePassing(review.restoreTest(), "restore test", blockers);
+    requirePassing(review.providerReview(), "third-party ICT provider review", blockers);
+    requirePresent(review.rollbackPlan(), "rollback plan", blockers);
+
+    if (!blockers.isEmpty()) {
+        return ReleaseDecision.blocked(
+            review.serviceId(),
+            blockers,
+            Escalation.required("resilience", "security", "risk", "business-owner")
+        );
+    }
+
+    return ReleaseDecision.approvedWithEvidence(
+        review.serviceId(),
+        review.evidenceReferences(),
+        review.approvers()
+    );
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[public ReleaseDecision evaluate(ResilienceReview review) {
+    return ReleaseDecision.approved(review.serviceId(), "tests passed");
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
     </examples>
 
     <output-format>
         <output-format-list>
             <output-format-item>**READ** DORA reference material and example patterns first to understand operational resilience context before reviewing implementation details</output-format-item>
-            <output-format-item>**SCOPE** the business service, system owners, resilience owners, environments, ICT assets, data stores, providers, dependencies, and recovery expectations</output-format-item>
+            <output-format-item>**ASK** the questionnaire questions interactively — one question at a time (Questions 1-20), presenting only the current question and waiting for a human answer before the next; never infer or self-answer from code, repository inspection, or assumptions; record human answers verbatim; probe "Unknown" responses</output-format-item>
+            <output-format-item>**SCOPE** the business service, system owners, resilience owners, environments, ICT assets, data stores, providers, dependencies, and recovery expectations from questionnaire answers before code review</output-format-item>
             <output-format-item>**ESCALATE** applicability, financial-entity classification, reporting obligations, outsourcing interpretation, and provider criticality decisions to legal, compliance, risk, resilience, security, procurement, or business-continuity owners</output-format-item>
             <output-format-item>**REVIEW** Java implementation, configuration, tests, runbooks, observability, incident procedures, backup and restore evidence, change records, and provider documentation</output-format-item>
             <output-format-item>**IDENTIFY** risk signals from code and operational evidence: critical business service dependency, ownerless ICT asset, untested recovery, missing alerting, incomplete logs, weak change control, unsupported provider dependency, or missing exit plan</output-format-item>
-            <output-format-item>**MATCH** the relevant example patterns from the reference: ICT inventory, incident routing, recovery evidence, third-party ICT provider risk, or resilience release gate</output-format-item>
+            <output-format-item>**MATCH** the relevant example patterns from the reference: ICT inventory, incident routing, recovery evidence, third-party ICT provider risk, resilience release gate, or Java resilience release policy</output-format-item>
             <output-format-item>**RECOMMEND** engineering controls: inventory updates, monitoring, alerting, evidence-safe logging, incident workflow, backup and restore verification, failover testing, rollback plans, provider monitoring, exit planning, and change approval</output-format-item>
-            <output-format-item>**REPORT** conclusions and actions with review context, operational scope, evidence reviewed, gaps, required escalations, release decision, residual risks, owners, and due dates</output-format-item>
+            <output-format-item>**REPORT** conclusions and actions using the report template, including review context, operational scope, questionnaire findings with answers and gaps, DORA operational resilience classification, engineering controls, evidence inventory, residual risks, release decision, and prioritized action plan with owners and due dates</output-format-item>
         </output-format-list>
     </output-format>
 

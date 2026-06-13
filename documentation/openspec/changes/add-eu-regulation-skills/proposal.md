@@ -8,7 +8,9 @@ Java enterprise teams building AI systems, AI agents, RAG workflows, integration
 
 - Add `802-regulations-dora` for engineering review of Digital Operational Resilience Act concerns in Java enterprise systems.
 - Add `803-regulations-gdpr` for engineering review of General Data Protection Regulation concerns in Java enterprise systems.
-- Model both skills after the `801-regulations-eu-ai-act` format and structure: skill index metadata, title, goal, constraints, triggers, step-by-step workflow, detailed reference role/goal/examples/output-format/safeguards, "not legal advice" constraints, source-first review workflow, explicit escalation to legal/compliance/privacy/security/risk owners, and concrete architecture controls.
+- Model both skills after the `801-regulations-eu-ai-act` format and structure: skill index metadata, title, goal, constraints, triggers, step-by-step workflow, questionnaire-first review, report-template output, detailed reference role/goal/examples/output-format/safeguards, "not legal advice" constraints, source-first review workflow, explicit escalation to legal/compliance/privacy/security/risk owners, and concrete architecture controls.
+- Add DORA and GDPR questionnaire assets plus report templates so each regulation skill can run an interactive review and generate a structured engineering report after execution.
+- Keep the DORA and GDPR technical references implementation-oriented, with Java examples that translate regulation concerns into reviewable architecture and delivery controls.
 - Register both skills in the skill inventory so local skill generation emits `.agents/skills/802-regulations-dora` and `.agents/skills/803-regulations-gdpr`.
 - Keep generated public `skills/` output out of scope unless a release profile is intentionally run later.
 
