@@ -546,8 +546,8 @@
     </skill>
     <skill id="800">
         <reference-list>
-            <reference>800-policies-eu-ai-act</reference>
-            <reference>800-policies-eu-ai-act-chapters-summary</reference>
+            <reference>800-regulations-eu-ai-act</reference>
+            <reference>800-regulations-eu-ai-act-chapters-summary</reference>
         </reference-list>
         <resource-list>
             <resource source="skill-references/assets/questions/800-eu-ai-act-risk-questionnaire.md"
