@@ -36,7 +36,7 @@ class GodStatsControllerAT {
     @DynamicPropertySource
     static void configureOutboundProperties(DynamicPropertyRegistry registry) {
         registry.add("god.outbound.connect-timeout", () -> "150ms");
-        registry.add("god.outbound.read-timeout", () -> "200ms");
+        registry.add("god.outbound.read-timeout", () -> "1s");
         registry.add("god.outbound.urls.greek", () -> wireMockServer.baseUrl() + "/greek");
         registry.add("god.outbound.urls.roman", () -> wireMockServer.baseUrl() + "/roman");
         registry.add("god.outbound.urls.nordic", () -> wireMockServer.baseUrl() + "/nordic");
@@ -81,7 +81,7 @@ class GodStatsControllerAT {
     @Test
     void shouldReturnPartialSumWhenOneSourceTimesOut() {
         stubSource("greek", 0);
-        stubSource("roman", 500);
+        stubSource("roman", 1500);
         stubSource("nordic", 0);
 
         var response = restClient.get()
