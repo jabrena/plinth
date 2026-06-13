@@ -8,12 +8,12 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.16.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to generate Java project diagrams — including UML sequence diagrams, UML class diagrams, C4 model diagrams, UML state machine diagrams, ER (Entity Relationship) diagrams, and bounded-context diagrams — through a modular, step-based interactive process that adapts to your specific visualization needs. This should trigger for requests such as Generate UML diagram; Create sequence diagram; Create class diagram; Create state machine diagram; Create C4 diagram; Create bounded-context diagram; Create context-map diagram.</description>
+    <description>Use when you need to generate Java project diagrams — including UML sequence diagrams, UML class diagrams, C4 model diagrams, UML state machine diagrams, UML Deployment Diagrams, ER (Entity Relationship) diagrams, and bounded-context diagrams — through a modular, step-based interactive process that adapts to your specific visualization needs. This should trigger for requests such as Generate UML diagram; Create sequence diagram; Create class diagram; Create state machine diagram; Create deployment diagram; Create C4 diagram; Create bounded-context diagram; Create context-map diagram.</description>
   </metadata>
 
   <title>Java Diagrams Generator with modular step-based configuration</title>
   <goal><![CDATA[
-Generate comprehensive Java project diagrams through a modular, step-based interactive process that covers UML sequence diagrams, UML class diagrams, C4 model diagrams, UML state machine diagrams, ER (Entity Relationship) diagrams, and bounded-context diagrams using PlantUML syntax. **This is an interactive SKILL**.
+Generate comprehensive Java project diagrams through a modular, step-based interactive process that covers UML sequence diagrams, UML class diagrams, C4 model diagrams, UML state machine diagrams, UML Deployment Diagrams, ER (Entity Relationship) diagrams, and bounded-context diagrams using PlantUML syntax. **This is an interactive SKILL**.
 
 **What is covered in this Skill?**
 
@@ -21,6 +21,7 @@ Generate comprehensive Java project diagrams through a modular, step-based inter
 - UML class diagram generation for package structure and class relationships
 - C4 model diagram generation for Context, Container, and Component diagrams
 - UML state machine diagram generation for entity lifecycles and business workflows
+- UML Deployment Diagram generation for runtime topology, nodes, execution environments, deployed components, data stores, queues, external systems, and communication paths
 - ER diagram generation from SQL schema (DDL, migrations) using PlantUML Chen notation
 - Bounded-context diagram generation for DDD context maps across one or more repositories
 - PlantUML syntax for all diagram types
@@ -46,6 +47,7 @@ Generate comprehensive Java project diagrams through a modular, step-based inter
         <trigger>Create sequence diagram</trigger>
         <trigger>Create class diagram</trigger>
         <trigger>Create state machine diagram</trigger>
+        <trigger>Create deployment diagram</trigger>
         <trigger>Create C4 diagram</trigger>
         <trigger>Generate ER diagram</trigger>
         <trigger>Create bounded-context diagram</trigger>
@@ -76,9 +78,10 @@ After all applicable questions are answered, confirm the selections and map them
 - If UML class diagrams are selected, read `references/033-architecture-diagrams-uml-class.md`.
 - If C4 model diagrams are selected, read `references/033-architecture-diagrams-c4.md`.
 - If UML state-machine diagrams are selected, read `references/033-architecture-diagrams-state-machine.md`.
+- If UML Deployment Diagrams are selected, read `references/033-architecture-diagrams-deployment.md`.
 - If ER diagrams are selected, read `references/033-architecture-diagrams-er.md`.
 - If bounded-context diagrams are selected, read `references/033-architecture-diagrams-bounded-context.md`.
-- If All diagrams is selected, read all six focused diagram-family references.
+- If All diagrams is selected, read all seven focused diagram-family references.
 - If Skip is selected for a diagram family, do not read that diagram-family reference.
 - Do not read unselected diagram-family references.
 ]]></step-content>
