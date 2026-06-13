@@ -18,6 +18,7 @@ Options:
 - UML class diagrams
 - UML state-machine diagrams
 - C4 model diagrams (Context, Container, Component)
+- UML Deployment Diagrams
 - ER diagrams (Entity Relationship)
 - Bounded-context diagrams
 - All diagrams
@@ -108,7 +109,21 @@ For each repository in scope, collect what is available: repository name or path
 
 ---
 
-**Question 9**: How would you like to organize the generated diagram files?
+**Question 9**: For UML Deployment Diagrams, what source material should be used first?
+Ask this question only if you selected "UML Deployment Diagrams" or "All diagrams" in Question 1.
+
+Options:
+- Existing deployment diagram image or topology sketch (I'll provide the image)
+- System description file (I'll provide the file path)
+- Repository documentation, configuration, or deployment descriptors
+- Ask me for missing deployment topology details
+- Skip
+
+When a deployment image or system description file is provided, use it as source material before asking fallback questions. Ask only for missing or ambiguous deployment facts such as actors, services, CI/CD systems, runtime nodes, execution environments, deployed artifacts or components, external systems, data stores, queues, protocols, ports, relationships, and infrastructure or network boundaries.
+
+---
+
+**Question 10**: How would you like to organize the generated diagram files?
 
 Options:
 - Single directory (all diagrams in /diagrams folder)
@@ -118,7 +133,7 @@ Options:
 
 ---
 
-**Question 10**: What file format would you prefer for the diagrams?
+**Question 11**: What file format would you prefer for the diagrams?
 
 Options:
 - PlantUML source files (.puml) only
@@ -128,7 +143,7 @@ Options:
 
 ---
 
-**Question 11**: Would you like to include explanatory documentation with the diagrams?
+**Question 12**: Would you like to include explanatory documentation with the diagrams?
 
 Options:
 - Yes, comprehensive explanations for each diagram
