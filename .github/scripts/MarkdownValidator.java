@@ -86,14 +86,16 @@ public class MarkdownValidator implements Callable<Integer> {
 
         System.out.printf("📄 Found %d markdown files to validate\n", markdownFiles.size());
 
+        int validatedDocuments = 0;
         for (Path file : markdownFiles) {
             validateFile(file);
+            validatedDocuments++;
             if (failFast && !errors.isEmpty()) {
                 break;
             }
         }
 
-        printResults();
+        printResults(validatedDocuments);
         return errors.isEmpty() ? 0 : 1;
     }
 
@@ -307,12 +309,12 @@ public class MarkdownValidator implements Callable<Integer> {
         }
     }
 
-    private void printResults() {
+    private void printResults(int validatedDocuments) {
         System.out.println("\n" + "=".repeat(60));
 
         if (errors.isEmpty()) {
-            System.out.println("✅ All markdown files are valid!");
-            System.out.println("VALIDATION_RESULT status=passed errors=0");
+            System.out.printf("✅ All markdown files are valid! documents_validated=%d\n", validatedDocuments);
+            System.out.printf("VALIDATION_RESULT status=passed errors=0 documents_validated=%d\n", validatedDocuments);
         } else {
             System.out.printf("❌ Found %d validation errors.\n\n", errors.size());
             System.out.println("Human-readable report:");
@@ -342,7 +344,8 @@ public class MarkdownValidator implements Callable<Integer> {
                     escapeConsoleValue(error.file.toString()), error.lineNumber, escapeConsoleValue(error.message));
             }
             System.out.println();
-            System.out.printf("VALIDATION_RESULT status=failed errors=%d\n", errors.size());
+            System.out.printf("VALIDATION_RESULT status=failed errors=%d documents_validated=%d\n",
+                errors.size(), validatedDocuments);
         }
 
         System.out.println("=".repeat(60));

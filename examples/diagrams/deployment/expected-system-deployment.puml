@@ -1,0 +1,93 @@
+@startuml system-deployment
+title Ecommerce Platform - UML Deployment Diagram
+
+skinparam componentStyle rectangle
+skinparam wrapWidth 220
+skinparam shadowing false
+
+actor "Shopper\nweb browser / mobile" as Shopper
+actor "Software Engineer\nXP + GenAI tools" as Engineer
+actor "Platform Engineer" as PlatformEngineer
+actor "Support and Operations" as Operations
+
+cloud "External Systems" as ExternalSystems {
+  component "Identity Provider" as ExternalIdentity
+  component "Payment Gateway" as ExternalPayment
+  component "Email / SMS Provider" as NotificationProvider
+}
+
+frame "Azure Production Environment" as AzureProd {
+  node "Azure Edge" as AzureEdge {
+    node "Azure Front Door\n+ CDN" as FrontDoor
+    node "Web Application Firewall" as Waf
+    node "AKS Ingress Controller" as Ingress
+  }
+
+  node "Azure Kubernetes Service\nCluster: ecommerce-prod\nExecution environment: containers" as Aks {
+    artifact "Validated image tags\nand Kubernetes manifests" as DeploymentArtifacts
+    component "Ecommerce service workloads\nQuarkus containers\nBFF, API gateway, domain services, workers" as EcommerceWorkloads
+  }
+
+  frame "Managed Data Services\nPrivate Link" as DataServices {
+    database "PostgreSQL data stores\nprofile, product, search, cart,\npricing, order, saga, inventory, delivery" as PostgresStores
+    queue "Kafka Backbone\nTopics: order.created, payment.authorized,\nstock.reserved, slot.booked" as KafkaTopics
+  }
+
+  frame "Shared Azure Platform Services" as SharedAzure {
+    storage "Key Vault\nmanaged identities" as KeyVault
+    component "Observability\nAzure Monitor, App Insights,\nLog Analytics" as Observability
+    component "Private DNS" as PrivateDns
+    component "Azure Policy" as AzurePolicy
+    storage "Backup Vault" as BackupVault
+  }
+}
+
+frame "Software Delivery Pipeline" as DeliveryPipeline {
+  node "Git Repository\ntrunk + branches" as GitRepository
+  node "Pull Request\nreview + checks" as PullRequest
+  node "CI/CD Pipeline\ncompile, tests, scans, SBOM" as CicdPipeline
+  storage "Artifactory\nMaven/cache\nrelease bundles" as Artifactory
+  storage "Docker Registry\nACR or JFrog Docker" as DockerRegistry
+  node "CD Pipeline\nGitOps / deploy automation" as CdPipeline
+}
+
+Shopper --> FrontDoor : HTTPS storefront traffic
+FrontDoor --> Waf : edge routing
+Waf --> Ingress : filtered HTTPS traffic
+Ingress --> EcommerceWorkloads : route customer-facing requests
+DeploymentArtifacts --> EcommerceWorkloads : run as container workloads
+
+EcommerceWorkloads --> ExternalIdentity : login integration
+EcommerceWorkloads --> ExternalPayment : payment authorization
+EcommerceWorkloads --> NotificationProvider : transactional notifications
+EcommerceWorkloads --> PostgresStores : read/write service-owned data
+EcommerceWorkloads --> KafkaTopics : publish and consume domain events
+EcommerceWorkloads --> KeyVault : retrieve secrets
+EcommerceWorkloads --> Observability : emit logs, metrics, and traces
+
+Engineer --> GitRepository : commit and push short-lived branch
+GitRepository --> PullRequest : PR opened or updated
+PullRequest --> CicdPipeline : run validation checks
+CicdPipeline --> Artifactory : restore dependencies and publish artifacts
+CicdPipeline --> DockerRegistry : build, scan, sign, and push images
+DockerRegistry --> CdPipeline : validated image tags
+CdPipeline --> Aks : GitOps deploys manifests and validated images
+CdPipeline --> DeploymentArtifacts : materialize release in AKS
+
+PlatformEngineer --> CicdPipeline : maintain delivery templates and release policy
+PlatformEngineer --> SharedAzure : manage Azure platform services
+Operations --> Observability : diagnose alerts and dashboards
+DataServices --> PrivateDns : private name resolution
+DataServices --> BackupVault : backups
+AzurePolicy --> Aks : production policy controls
+
+legend right
+Source: examples/diagrams/deployment/system-example.md
+Default view hides AKS internal service complexity behind aggregate workloads.
+GitOps deploys validated artifacts to Azure Kubernetes Service.
+Only topology facts explicitly described by the source document are represented.
+Ports are omitted because the source describes HTTPS and internal service traffic
+but does not assign concrete port numbers.
+endlegend
+
+@enduml

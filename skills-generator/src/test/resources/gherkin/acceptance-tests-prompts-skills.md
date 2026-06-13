@@ -1,5 +1,12 @@
 # Acceptance Test Prompts for Skills
 
+## 033-architecture-diagrams
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/033-architecture-diagrams.feature
+and verify that acceptance-tests passes.
+```
+
 ## 110-java-maven-best-practices
 
 ```bash
