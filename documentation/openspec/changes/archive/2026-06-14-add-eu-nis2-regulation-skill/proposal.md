@@ -7,8 +7,9 @@ Java enterprise teams building AI-enabled services, platform tooling, CI/CD auto
 ## What Changes
 
 - Add `804-regulations-eu-nis2` for engineering review of Directive (EU) 2022/2555 concerns in Java enterprise systems.
-- Model the skill after `801`, `802`, and `803`: source-first review, "not legal advice" constraints, scope classification, evidence-driven findings, explicit escalation to legal/compliance/security/risk/resilience owners, and concrete Java architecture controls.
-- Register the skill in the generator inventory so local skill generation emits `.agents/skills/804-regulations-eu-nis2`.
+- Model the skill after `801`, `802`, and `803`: source-first review, "not legal advice" constraints, scope classification, evidence-driven findings, explicit escalation to legal/compliance/security/risk/resilience owners, concrete Java architecture controls, and generated engineering review reports.
+- Register the skill, decoupled NIS2 chapters summary, Java engineering examples, and report template in the generator inventory so local skill generation emits `.agents/skills/804-regulations-eu-nis2`.
+- Add Gherkin acceptance coverage and example NIS2 engineering review reports for pull-request based delivery and direct-to-main delivery.
 - Keep generated public `skills/` output out of scope unless a release profile is intentionally run later.
 
 ## Capabilities
@@ -26,7 +27,8 @@ None.
 - Source artifact: GitHub issue [#855](https://github.com/jabrena/cursor-rules-java/issues/855), comment listing the GenAI Regulatory Stack (EU).
 - Existing implementation models: `801-regulations-eu-ai-act`, `802-regulations-dora`, and `803-regulations-gdpr`.
 - External reference: [Directive (EU) 2022/2555](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555).
-- Derivation direction: issue #855 EU regulatory stack plus official EUR-Lex reference plus existing regulation skill pattern -> OpenSpec change artifacts -> XML skill source implementation -> local generated skill validation.
+- Recent implementation evidence: commit `9bd50c97` (`feat(skills): add EU NIS2 regulation skill (#862)`), NIS2 Gherkin acceptance scenarios, and the generated example reports under `examples/regulations/nis2`.
+- Derivation direction: issue #855 EU regulatory stack plus official EUR-Lex reference plus existing regulation skill pattern -> OpenSpec change artifacts -> XML skill source implementation -> local generated skill validation -> acceptance report examples.
 
 ## Change Boundary Assessment
 
@@ -34,4 +36,4 @@ This is one OpenSpec change for NIS2 only because the user requested one change 
 
 ## Impact
 
-XML skill indexes, XML skill references, `skills.xml`, local generated skill output, and OpenSpec artifacts are affected. Generated `.cursor/rules/`, public `skills/`, and `docs/` must not be edited directly.
+XML skill indexes, XML skill references, report assets, `skills.xml`, Gherkin acceptance prompts, NIS2 example reports, local generated skill output, and OpenSpec artifacts are affected. Generated `.cursor/rules/`, public `skills/`, and `docs/` must not be edited directly.

@@ -26,3 +26,6 @@
 - [x] 1.22 Register and validate the generated local `references/804-regulations-eu-nis2-engineering-examples.md` output.
 - [x] 1.23 Rename the NIS2 Directive summary output to `references/804-regulations-eu-nis2-chapters-summary.md` and add direct EUR-Lex chapter links.
 - [x] 1.24 Remove the redundant primary `references/804-regulations-eu-nis2.md` router by using explicit skill id registration.
+- [x] 1.25 Add NIS2 acceptance execution reports under `examples/regulations/nis2` for pull-request based delivery and direct-to-main delivery.
+- [x] 1.26 Review recent commit evidence, current skill XML, Gherkin scenarios, acceptance prompt inventory, and NIS2 example reports, then align OpenSpec proposal, design, specification, and tasks with the implemented shape.
+- [x] 1.27 Re-run OpenSpec and Markdown validation after the OpenSpec alignment update.

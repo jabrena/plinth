@@ -1,10 +1,12 @@
 # EU AI Act Engineering Review Report
 
-Use this template after the human has answered all four sections of `assets/questions/801-eu-ai-act-risk-questionnaire.md` and matching the relevant examples in `references/801-regulations-eu-ai-act.md`.
+Use this template after reviewing `references/801-regulations-eu-ai-act-chapters-summary.md`, the human has answered all four sections of `assets/questions/801-eu-ai-act-risk-questionnaire.md`, and the relevant examples from `references/801-regulations-eu-ai-act-engineering-examples.md` have been matched.
 
 This report is not legal advice. Use it as engineering evidence for legal, compliance, privacy, security, risk, architecture, and business-owner review.
 
 The purpose of this report is to increase awareness of potential gaps in the system and create engineering evidence for qualified review. The response produced from this template does not represent legal advice, a legal opinion, or a final regulatory determination.
+
+Do not include raw secrets, credentials, passwords, API keys, tokens, session IDs, private keys, or connection strings in this report. Replace secret values with `[REDACTED_SECRET]` and document only the secret type, affected component, evidence location, owner, and remediation needed.
 
 ## 1. Review Context
 
@@ -56,16 +58,16 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 
 ## 5. Potential Violation Or Non-Compliance Mapping
 
-This section is not a legal finding. Use it to list concrete potential EU AI Act violation or non-compliance signals from the reviewed evidence and route each item to qualified legal, compliance, privacy, security, risk, or business-owner review. When no violation is confirmed, say so explicitly and keep open items as potential gaps.
+This section is not a legal finding. Use it to list concrete potential EU AI Act violation or non-compliance signals from the reviewed evidence and route each item to qualified legal, compliance, privacy, security, risk, or business-owner review. When no violation is confirmed, say so explicitly and keep open items as potential gaps. Use the chapter and annex links from `references/801-regulations-eu-ai-act-chapters-summary.md`; add more official-source links when one finding spans multiple EU AI Act areas.
 
-| Potential violation or non-compliance signal | EU AI Act reference | Evidence from reviewed system | Current status | Required owner review | Engineering action |
-| -------------------------------------------- | ------------------- | ----------------------------- | -------------- | --------------------- | ------------------ |
-| Prohibited-practice signal | Chapter II / Article 5 | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / privacy / security | TBD |
-| High-risk classification or missing high-risk evidence | Chapter III / Articles 6-49 / Annex III | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / risk / business owner | TBD |
-| Missing transparency or AI-origin disclosure | Chapter IV / Article 50 | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / product owner | TBD |
-| Missing general-purpose model documentation | Chapter V / Articles 51-56 / Annexes XI-XIII | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / model owner / security | TBD |
-| Missing monitoring, incident, or corrective-action evidence | Chapter IX / Articles 72-94 | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / SRE / operations | TBD |
-| Incorrect, incomplete, or unsupported regulatory information | Chapter XII / Articles 99-101 | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / risk owner | TBD |
+| Potential violation or non-compliance signal | EU AI Act reference area | Associated official-source link | Redacted evidence from reviewed system | Current status | Required owner review | Engineering action |
+| -------------------------------------------- | ------------------------ | ------------------------------- | ------------------------------------- | -------------- | --------------------- | ------------------ |
+| Prohibited-practice signal | Prohibited AI practices / Article 5 | [Chapter II](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_II) | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / privacy / security | TBD |
+| High-risk classification or missing high-risk evidence | High-risk AI systems / Articles 6-49 / Annex III | [Chapter III](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_III), [Annex III](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#anx_III) | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / risk / business owner | TBD |
+| Missing transparency or AI-origin disclosure | Transparency obligations / Article 50 | [Chapter IV](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_IV) | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / product owner | TBD |
+| Missing general-purpose model documentation | General-purpose AI models / Articles 51-56 / Annexes XI-XIII | [Chapter V](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_V), [Annex XI](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#anx_XI) | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / model owner / security | TBD |
+| Missing monitoring, incident, or corrective-action evidence | Post-market monitoring and market surveillance / Articles 72-94 | [Chapter IX](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_IX) | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / SRE / operations | TBD |
+| Incorrect, incomplete, or unsupported regulatory information | Penalties / Articles 99-101 | [Chapter XII](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_XII) | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / risk owner | TBD |
 
 ## 6. Engineering Controls
 
@@ -83,6 +85,8 @@ This section is not a legal finding. Use it to list concrete potential EU AI Act
 - Rollback, disablement, withdrawal, or recall path:
 
 ## 7. Evidence Inventory
+
+Only include redacted evidence references. Do not paste raw request payloads, prompts, tool inputs, logs, screenshots, configuration values, credentials, tokens, keys, or connection strings.
 
 - Classification note:
 - Risk management record:

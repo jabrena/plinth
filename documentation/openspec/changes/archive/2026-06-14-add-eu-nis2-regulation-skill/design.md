@@ -38,6 +38,20 @@ The skill must not decide entity classification, member-state applicability, rep
 - Use `804-regulations-eu-nis2` for EU cybersecurity risk-management and critical-sector operational security concerns.
 - Use multiple regulation skills together when the same Java system crosses AI, privacy, resilience, cybersecurity, or sector boundaries.
 
+### Acceptance Evidence and Example Reports
+
+The NIS2 Gherkin feature mirrors adjacent regulation skills with two delivery modes:
+
+- Pull-request based CI/CD review using `examples/diagrams/deployment/system-example-cicd-pr-model.md`.
+- Direct-to-main CI/CD review using `examples/diagrams/deployment/system-example-cicd-model.md`.
+
+Both scenarios use `examples/diagrams/deployment/expected-system-deployment.puml`, `examples/diagrams/deployment/checkout-service-feature-request.md`, and the generated local NIS2 skill. The expected output reports are committed under `examples/regulations/nis2` as reviewable acceptance evidence:
+
+- `NIS2-ENGINEERING-REVIEW-REPORT.md` for the pull-request delivery model.
+- `NIS2-DIRECT-MAIN-ENGINEERING-REVIEW-REPORT.md` for the direct-to-main delivery model.
+
+The reports must stay grounded in the reviewed example files, use the NIS2 chapters summary and engineering examples, frame findings as engineering controls rather than legal advice, and hand off legal applicability, entity classification, incident-reporting duties, cybersecurity risk acceptance, and regulatory interpretation to qualified owners. The direct-to-main report must additionally identify missing pre-merge review, protected-main bypass, and direct-to-main release-policy risks.
+
 ## Validation Strategy
 
 - Validate changed XML files with `xmllint --noout`.
@@ -47,6 +61,7 @@ The skill must not decide entity classification, member-state applicability, rep
 - Inspect generated local `804-regulations-eu-nis2/references/804-regulations-eu-nis2-engineering-examples.md`.
 - Inspect generated local `804-regulations-eu-nis2/assets/reports/804-nis2-engineering-review-report-template.md`.
 - Add and review `skills-generator/src/test/resources/gherkin/804-regulations-eu-nis2.feature` with PR-based and direct-to-main scenarios that write reports under `examples/regulations/nis2`.
+- Review `examples/regulations/nis2/NIS2-ENGINEERING-REVIEW-REPORT.md` and `examples/regulations/nis2/NIS2-DIRECT-MAIN-ENGINEERING-REVIEW-REPORT.md` as acceptance execution evidence.
 - Run `./mvnw clean verify -pl skills-generator`.
 - Run `openspec validate --all`.
 
