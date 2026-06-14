@@ -15,3 +15,10 @@
 - [x] 1.11 Inspect generated local `.agents/skills/804-regulations-eu-nis2/SKILL.md`.
 - [x] 1.12 Run `./mvnw clean verify -pl skills-generator`.
 - [x] 1.13 Run `openspec validate --all`.
+- [x] 1.14 Add `skills-generator/src/main/resources/skill-references/assets/reports/804-nis2-engineering-review-report-template.md`.
+- [x] 1.15 Register the NIS2 report template as a skill resource in `skills-generator/src/main/resources/skills.xml`.
+- [x] 1.16 Update `skills-generator/src/main/resources/skill-indexes/804-skill.xml` and `skills-generator/src/main/resources/skill-references/804-regulations-eu-nis2.xml` so the skill reports conclusions and actions using the NIS2 engineering review report template.
+- [x] 1.17 Add `skills-generator/src/test/resources/gherkin/804-regulations-eu-nis2.feature` with two acceptance-test scenarios modeled after the regulation skill scenarios for PR-based and direct-to-main delivery.
+- [x] 1.18 Ensure the NIS2 Gherkin scenarios write reports under `examples/regulations/nis2`.
+- [x] 1.19 Add `804-regulations-eu-nis2` to `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md`.
+- [x] 1.20 Re-run XML, generator, OpenSpec, and Markdown validation after adding report and acceptance artifacts.

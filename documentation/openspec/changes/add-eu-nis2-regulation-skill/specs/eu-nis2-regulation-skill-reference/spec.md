@@ -18,6 +18,7 @@ The repository MUST define `804-regulations-eu-nis2` as the EU NIS2 cybersecurit
 - **THEN** the guidance frames findings as engineering controls rather than legal advice
 - **AND** it addresses cybersecurity risk management, asset and service inventory, dependency mapping, secure configuration, vulnerability handling, logging and monitoring, incident detection and escalation, backup and recovery, business continuity, supply-chain security, access control, cryptography, secure development, and change control
 - **AND** it recommends escalation to legal, compliance, security, risk, resilience, business-continuity, or executive accountability owners for entity classification, member-state applicability, incident-reporting obligations, and regulatory interpretation
+- **AND** it reports conclusions and actions using the NIS2 engineering review report template
 
 ### Requirement: Relationship to other regulation skills
 
@@ -41,12 +42,32 @@ The NIS2 skill source MUST be registered in the generator inventory so local ski
 
 - **WHEN** `skills-generator/src/main/resources/skills.xml` is inspected
 - **THEN** skill id `804` registers reference `804-regulations-eu-nis2`
+- **AND** skill id `804` packages `assets/reports/804-nis2-engineering-review-report-template.md`
 
 #### Scenario: Generate local NIS2 skill
 
 - **WHEN** `./mvnw clean install -pl skills-generator` is run
 - **THEN** generated local skill output includes `.agents/skills/804-regulations-eu-nis2/SKILL.md`
+- **AND** generated local skill output includes `.agents/skills/804-regulations-eu-nis2/assets/reports/804-nis2-engineering-review-report-template.md`
 - **AND** generated references contain no unresolved include markers or broken local reference paths
+
+### Requirement: Acceptance scenarios
+
+The NIS2 skill MUST have Gherkin acceptance scenarios for the same delivery modes used by adjacent regulation skills.
+
+#### Scenario: Validate NIS2 PR-based delivery review scenario
+
+- **WHEN** `skills-generator/src/test/resources/gherkin/804-regulations-eu-nis2.feature` is inspected
+- **THEN** it includes an acceptance-test scenario for a Java system developed and released through the described CI/CD pull-request pipeline
+- **AND** the requested report output path is under `examples/regulations/nis2`
+- **AND** the scenario expects the skill to read `references/804-regulations-eu-nis2.md` and `assets/reports/804-nis2-engineering-review-report-template.md`
+
+#### Scenario: Validate NIS2 direct-to-main delivery review scenario
+
+- **WHEN** `skills-generator/src/test/resources/gherkin/804-regulations-eu-nis2.feature` is inspected
+- **THEN** it includes an acceptance-test scenario for a Java system committed directly to main and released through the described CI/CD pipeline
+- **AND** the requested report output path is under `examples/regulations/nis2`
+- **AND** the scenario expects the skill to escalate missing pre-merge review, protected-main bypass, cybersecurity risk-management gaps, and ambiguous NIS2 applicability to qualified owners
 
 ### Requirement: Source and generated-output boundaries
 

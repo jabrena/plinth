@@ -582,5 +582,9 @@
         <reference-list>
             <reference>804-regulations-eu-nis2</reference>
         </reference-list>
+        <resource-list>
+            <resource source="skill-references/assets/reports/804-nis2-engineering-review-report-template.md"
+                target="assets/reports/804-nis2-engineering-review-report-template.md" />
+        </resource-list>
     </skill>
 </skill-inventory>

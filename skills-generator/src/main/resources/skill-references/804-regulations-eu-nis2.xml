@@ -26,13 +26,15 @@
 
         External reference: [NIS2 Directive (EU) 2022/2555](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555).
 
+        Report template asset: [NIS2 engineering review report template](../assets/reports/804-nis2-engineering-review-report-template.md).
+
         Use this reference in this order:
 
-        1. **Read the policy context and examples first**: understand whether the target system supports an essential service, important service, critical sector, managed service provider, digital infrastructure provider, or supply-chain dependency.
+        1. **Read the policy context, examples, and report template first**: understand whether the target system supports an essential service, important service, critical sector, managed service provider, digital infrastructure provider, or supply-chain dependency.
         2. **Classify the engineering scope**: identify service owners, security owners, resilience owners, environments, assets, data stores, dependencies, integrations, providers, recovery expectations, vulnerability records, and incident pathways.
         3. **Review implementation and operational evidence**: examine Java code, configuration, tests, deployment workflows, observability, logs, runbooks, backups, restore evidence, vulnerability handling, dependency inventories, change records, provider documentation, and incident procedures.
         4. **Match the examples to the findings**: use the examples below as reusable evidence and control patterns for gaps discovered during review.
-        5. **Report engineering findings**: produce conclusions, NIS2 cybersecurity risk signals, evidence from code and operational review, potential non-compliance signals with qualified owner handoff, recommended controls, residual risks, and prioritized actions with owners.
+        5. **Generate the report**: use the report template to produce conclusions, cybersecurity scope, evidence from code and operational review, potential violation or non-compliance signals with qualified owner handoff, recommended controls, release decision, residual risks, and prioritized actions with owners.
     </goal>
 
     <constraints>
@@ -308,14 +310,14 @@
 
     <output-format>
         <output-format-list>
-            <output-format-item>**READ** NIS2 reference material and example patterns first to understand cybersecurity risk-management context before reviewing implementation details</output-format-item>
+            <output-format-item>**READ** NIS2 reference material, report template, and example patterns first to understand cybersecurity risk-management context before reviewing implementation details</output-format-item>
             <output-format-item>**SCOPE** the service context, possible essential or important entity signals, system owners, security owners, resilience owners, environments, assets, data stores, providers, dependencies, recovery expectations, vulnerability evidence, and incident pathways</output-format-item>
             <output-format-item>**ESCALATE** entity classification, member-state applicability, cybersecurity incident reporting, cross-border service questions, and regulatory interpretation to legal, compliance, security, risk, resilience, or executive accountability owners</output-format-item>
             <output-format-item>**REVIEW** Java implementation, configuration, tests, runbooks, observability, incident procedures, backup and restore evidence, vulnerability records, change records, and provider documentation</output-format-item>
             <output-format-item>**IDENTIFY** risk signals from code and operational evidence: ownerless assets, incomplete dependency inventory, untriaged vulnerabilities, weak secure configuration, missing alerting, incomplete logs, weak change control, unsupported provider dependencies, missing continuity evidence, or unknown incident escalation paths</output-format-item>
             <output-format-item>**MATCH** the relevant example patterns from the reference: asset inventory, incident routing, vulnerability evidence, recovery evidence, supply-chain review, or secure release gate</output-format-item>
             <output-format-item>**RECOMMEND** engineering controls: inventory updates, secure configuration, vulnerability remediation, monitoring, alerting, evidence-safe logging, incident workflow, backup and restore verification, continuity testing, rollback plans, supply-chain monitoring, access control, cryptography, and change approval</output-format-item>
-            <output-format-item>**REPORT** conclusions and actions, including review context, cybersecurity scope, evidence reviewed, NIS2 risk signals, potential non-compliance signals with owner handoff, engineering controls, residual risks, release decision, and prioritized action plan with owners and due dates</output-format-item>
+            <output-format-item>**REPORT** conclusions and actions using `assets/reports/804-nis2-engineering-review-report-template.md`, including review context, cybersecurity scope, evidence reviewed, NIS2 risk signals, potential violation or non-compliance signals with owner handoff, engineering controls, residual risks, release decision, and prioritized action plan with owners and due dates</output-format-item>
         </output-format-list>
     </output-format>
 
