@@ -5,6 +5,55 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.16.0] 2026-06-22
+
+### Added
+
+- **Skills**:
+  - Command inventory and installation workflows for embedded project commands and agents (`@001-commands-inventory`, `@004-commands-installation`, `@005-agents-installation`) (#790, #791)
+  - Architecture design exploration and expanded diagram support, including bounded-context and deployment diagram generation (`@034-architecture-design-exploration`, `@033-architecture-diagrams`) (#819, #820, #822, #852)
+  - Java design patterns, Gatling performance testing, Spring Modulith, and SDKMAN project starter skills for Spring Boot, Quarkus, and Micronaut (`@123-java-design-patterns`, `@152-java-performance-gatling`, `@305-frameworks-spring-boot-modulith`, `@300-frameworks-spring-boot-create-project`, `@400-frameworks-quarkus-create-project`, `@500-frameworks-micronaut-create-project`) (#762, #763, #764, #781)
+  - Mongock migration skills for Spring Boot, Quarkus, and Micronaut (`@316-frameworks-spring-mongodb-migrations-mongock`, `@416-frameworks-quarkus-mongodb-migrations-mongock`, `@516-frameworks-micronaut-mongodb-migrations-mongock`) (#761)
+  - Technology guidance for SQL, MongoDB/NoSQL modeling, and Docker containers (`@704-technologies-sql`, `@705-technologies-nosql-mongodb`, `@706-technologies-containers-docker`) (#773, #776, #778, #838)
+  - Regulation engineering review skills for the EU AI Act, DORA, GDPR, EU NIS2, Cyber Resilience Act, EU Data Act, Digital Services Act, Digital Markets Act, and Digital Omnibus (`@801`-`@809`) (#830, #853, #862, #864, #865, #866, #867, #868)
+
+- **Agents & commands**:
+  - Tech Lead, Java Performance, and default non-Java agents, plus updated architect, business analyst, and framework coder responsibilities (#807, #815)
+  - Embedded command suite for ADRs, diagrams, plans, specs, feature branches, issues, worktrees, design exploration, issue implementation, profiling, benchmarking, and alignment review (#790, #814)
+
+- **Examples**:
+  - Kafka, MongoDB, and PostgreSQL Sakila infrastructure examples (#845, #849)
+  - Maven multi-module acceptance fixture and deployment diagram examples (#850, #852)
+
+- **CI & validation**:
+  - Snyk agent scan validation in the Maven workflow (#841)
+  - Skill acceptance prompt inventory for changed generated skills
+
+### Changed
+
+- **PML & generators**:
+  - Separated local skill generation from release publishing and added runtime resource packaging (#777, #803)
+  - Added command index generation and tests alongside the existing skill index workflow (#790, #791)
+  - Split large skill references into modular files for architecture diagrams, Maven dependencies, Maven plugins, and object-oriented design (#784, #786, #802, #819)
+  - Aligned skill versions and refreshed generated local output for the 0.16.0 cycle (#782)
+
+- **Agents**:
+  - Reworked command routing around specialized agents and replaced coordinator-centered delegation with Tech Lead, Java, framework, performance, and non-Java agent flows (#807, #814, #815, #834)
+
+- **Documentation & website**:
+  - Added five-minute getting-started guidance, skill portal links, validation guidance, project references, and focused README navigation (#833, #835, #836, #851)
+  - Moved workflow documentation into guides and normalized Chinese documentation suffixes from `_CN` to `_ZH` (#797, #798)
+  - Published and generated the 0.15.0 release article and supporting site assets (#752)
+  - Clarified project limitations and human PR policy (#799, #842)
+
+### Removed
+
+- **Agents & commands**:
+  - Removed the legacy `robot-coordinator` agent and replaced the narrow `kill-port-8820` command with a generic `kill-port` command (#807, #790)
+
+- **Documentation**:
+  - Removed `README_CN.md` after migrating Chinese documentation to `README_ZH.md` (#797)
+
 ## [0.15.0] 2026-06-01
 
 ### Added
