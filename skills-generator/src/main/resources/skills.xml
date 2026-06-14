@@ -589,7 +589,7 @@
             <resource source="skill-references/assets/reports/804-nis2-engineering-review-report-template.md"
                 target="assets/reports/804-nis2-engineering-review-report-template.md" />
         </resource-list>
-    </skill>
+    </skill>         
     <skill id="807" skillId="807-regulations-eu-digital-services-act">
         <reference-list>
             <reference>807-regulations-eu-digital-services-act-chapters-summary</reference>
@@ -600,4 +600,14 @@
                 target="assets/reports/807-eu-digital-services-act-engineering-review-report-template.md" />
         </resource-list>
     </skill>
+    <skill id="809" skillId="809-regulations-eu-digital-omnibus">
+      <reference-list>
+          <reference>809-regulations-eu-digital-omnibus-source-summary</reference>
+          <reference>809-regulations-eu-digital-omnibus-engineering-examples</reference>
+      </reference-list>
+      <resource-list>
+          <resource source="skill-references/assets/reports/809-eu-digital-omnibus-engineering-review-report-template.md"
+              target="assets/reports/809-eu-digital-omnibus-engineering-review-report-template.md" />
+      </resource-list>
+    </skill> 
 </skill-inventory>
