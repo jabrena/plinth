@@ -610,6 +610,16 @@
                 target="assets/reports/805-eu-cyber-resilience-act-engineering-review-report-template.md" />
         </resource-list>
     </skill>
+    <skill id="808" skillId="808-regulations-eu-digital-markets-act">
+        <reference-list>
+            <reference>808-regulations-eu-digital-markets-act-chapters-summary</reference>
+            <reference>808-regulations-eu-digital-markets-act-engineering-examples</reference>
+        </reference-list>
+        <resource-list>
+            <resource source="skill-references/assets/reports/808-eu-digital-markets-act-engineering-review-report-template.md"
+                target="assets/reports/808-eu-digital-markets-act-engineering-review-report-template.md" />
+        </resource-list>
+    </skill>
     <skill id="809" skillId="809-regulations-eu-digital-omnibus">
       <reference-list>
           <reference>809-regulations-eu-digital-omnibus-source-summary</reference>
