@@ -84,7 +84,21 @@ Material unanswered questions:
 - **Applicability conclusion for governance review:** Based only on reviewed evidence, classify as a conventional non-financial ecommerce service with operational-resilience and third-party ICT dependency signals. Do not classify it as DORA-regulated without legal, compliance, and risk review.
 - **Required escalation:** Legal/compliance for applicability and reporting duties; risk/resilience for important-service and recovery-target decisions; security for incident evidence, secrets, and privacy-safe logs; procurement/provider owners for third-party ICT risk; architecture/platform for release gates, migration controls, Kafka compatibility, and failover controls; business owners for service criticality and residual risk acceptance.
 
-## 5. Engineering Controls
+## 5. Potential Violation Or Non-Compliance Mapping
+
+No confirmed DORA violation is identified from the reviewed source material. The items below are potential non-compliance signals or evidence gaps that require qualified review if the ecommerce platform is operated by or for a financial entity, supports a regulated important business service, or becomes a critical ICT dependency.
+
+| Potential violation or non-compliance signal | DORA reference | Evidence from reviewed system | Current status | Required owner review | Engineering action |
+| -------------------------------------------- | -------------- | ----------------------------- | -------------- | --------------------- | ------------------ |
+| Applicability, regulated-service, or important-function uncertainty | Articles 1-2 | The materials describe a conventional ecommerce platform with checkout, payment authorization, order, delivery, and operational dependency signals, but do not establish financial-entity or DORA-regulated service status. | Potential gap | Legal / compliance / risk / business owner | Complete applicability and important-business-service classification before regulated production reliance. |
+| Missing ICT risk-management framework, ownership, or asset inventory evidence | Chapter II / Articles 5-16 | Services, PostgreSQL stores, Kafka, Azure, identity, payment, notification, Artifactory, registries, and CI/CD are described, but named owners, criticality, recovery targets, and evidence IDs are missing. | Potential gap | Risk / resilience / security / platform | Create a maintained ICT inventory with owners, criticality, dependencies, RTO/RPO, and evidence links. |
+| Missing incident classification, reporting, or evidence path | Chapter III / Articles 17-23 | Logs, metrics, traces, dashboards, Azure Monitor, App Insights, and alerts are described, but severity criteria, reporting handoff, incident timeline, communication records, and corrective-action evidence are not documented. | Potential gap | Compliance / security / SRE / resilience | Add incident severity policy, escalation paths, evidence retention, regulator/customer handoff decision points, and post-incident corrective-action workflow. |
+| Missing digital operational resilience testing evidence | Chapter IV / Articles 24-27 | Unit, integration, contract, security, architecture, smoke, migration, performance, and deployment checks are described, but restore tests, failover tests, provider outage simulations, dependency failure tests, and incident drills are missing. | Potential gap | Resilience / SRE / QA / risk | Add restore, failover, dependency-failure, provider-outage, Kafka replay, and incident-response drill evidence. |
+| Missing ICT third-party provider risk, contract, monitoring, or exit evidence | Chapter V / Articles 28-44 | Azure, external identity, payment gateway, email/SMS, Artifactory, Docker registry, and container registry are visible provider dependencies, but SLAs, support contacts, criticality, monitoring, subcontractor, concentration, and exit evidence are not documented. | Potential gap | Procurement / risk / legal / platform | Build a third-party ICT provider register with owner, SLA, support path, monitoring, incident notification, concentration review, and exit plan. |
+| Missing change-control evidence for database and Kafka production side effects | Chapter II / Articles 5-16 | PR review and CI/CD checks exist, but explicit database migration approval, Kafka schema compatibility approval, release approval, and production validation evidence are not documented for the delivery-instructions change. | Potential gap | Architecture / platform / database owner / event platform owner | Add migration approval, Kafka contract owner approval, rollout evidence, rollback evidence, and post-deployment monitoring records. |
+| Incorrect, incomplete, or unsupported operational-resilience information | Chapters VI-VII / Articles 45-56 | DORA applicability, reporting duties, owner approvals, provider criticality, recovery targets, and restore/failover evidence are unknown. | Potential gap if represented as DORA-ready without qualification | Legal / compliance / risk owner | Keep unknowns explicit and block DORA-regulated release claims until qualified owners approve the evidence. |
+
+## 6. Engineering Controls
 
 - **ICT asset and dependency inventory:** Create a maintained inventory for CheckoutService, every Quarkus service, PostgreSQL data store, Kafka topic, Azure platform dependency, external provider, secret, artifact repository, container registry, deployment environment, owner, and recovery target.
 - **Operational ownership and support model:** Assign business, technical, operational, security, risk, resilience, and provider owners for checkout, payment, order, inventory, delivery, notification, analytics, CI/CD, and platform services.
@@ -107,7 +121,7 @@ Relevant Java engineering patterns from the DORA reference:
 - Recovery evidence should record backup schedule, RTO/RPO, restore-test result, rollback plan, and continuity owner.
 - Release policy should block or condition production readiness when ICT inventory, incident runbook, restore test, provider review, rollback plan, database migration approval, or Kafka compatibility evidence is missing.
 
-## 6. Evidence Inventory
+## 7. Evidence Inventory
 
 | Artifact | Current evidence from source material | Gap |
 | -------- | ------------------------------------- | --- |
@@ -127,7 +141,7 @@ Relevant Java engineering patterns from the DORA reference:
 | Risk acceptance or exception records | Not described. | Required for missing recovery, provider, owner, migration, privacy, Kafka compatibility, or testing evidence. |
 | Approval records | PR reviews and checks are described. | No DORA resilience approval, provider approval, architecture approval, or residual-risk acceptance. |
 
-## 7. Residual Risks
+## 8. Residual Risks
 
 | Residual risk | Impact | Likelihood | Mitigation | Owner | Acceptance decision |
 | ------------- | ------ | ---------- | ---------- | ----- | ------------------- |
@@ -140,7 +154,7 @@ Relevant Java engineering patterns from the DORA reference:
 | Kafka schema version `3` changes shared event contracts | Older consumers could fail or receive incomplete delivery context | Medium | Contract tests, consumer compatibility tests, schema registry approval, and staged rollout | Event platform / service owners | Requires compatibility evidence |
 | Delivery-instruction note may contain personal data | Inappropriate logs or broad event publication could expose personal data | Medium | Keep free text out of Kafka and logs, add privacy-safe logging tests, and review retention | Security / privacy | Requires privacy review |
 
-## 8. Release Decision
+## 9. Release Decision
 
 - **Decision:** Not approved for DORA-regulated or critical financial-service production reliance based only on reviewed evidence. Conditionally acceptable as a conventional ecommerce example after normal engineering validation, provided it is not operated as or for a regulated financial service.
 - **Conditions:** Complete governance classification, owner assignment, ICT inventory, incident workflow, recovery targets, backup/restore evidence, continuity and failover tests, provider risk evidence, database migration approval, Kafka schema compatibility evidence, privacy-safe logging evidence, and resilience release approval before regulated production use.
@@ -151,7 +165,7 @@ Relevant Java engineering patterns from the DORA reference:
 - **Operational constraints:** Preserve PR review, CI/CD validation, SBOM/provenance, signed immutable images, health checks, observability, migration safety checks, contract tests, privacy-safe logging tests, and rollback controls while adding resilience evidence.
 - **Provider constraints:** Do not treat Azure, external identity provider, external payment gateway, email/SMS provider, Artifactory, Docker registry, or container registry as invisible dependencies; provider controls must be documented.
 
-## 9. Action Plan
+## 10. Action Plan
 
 | Priority | Action | Owner | Due date | Evidence expected | Status |
 | -------- | ------ | ----- | -------- | ----------------- | ------ |
@@ -169,7 +183,7 @@ Relevant Java engineering patterns from the DORA reference:
 | Medium | Run dependency-failure, provider-outage, failover, rollback, data reconciliation, Kafka replay, and incident-response drills for checkout and payment flows. | Resilience / QA / SRE | 2026-08-02 | Drill reports with findings and corrective actions | Open |
 | Low | Annotate the deployment diagram with criticality, owners, recovery targets, and provider dependency classifications after governance review. | Architecture | 2026-08-09 | Updated architecture evidence or ADR | Open |
 
-## 10. Final Notes
+## 11. Final Notes
 
 - **Items requiring legal interpretation:** DORA applicability, financial-entity classification, incident reporting obligations, outsourcing interpretation, and provider criticality.
 - **Items requiring compliance or risk decision:** Service criticality, residual risk acceptance, provider concentration risk, third-party ICT risk posture, and release readiness.

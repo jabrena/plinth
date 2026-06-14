@@ -55,7 +55,20 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 - Applicability conclusion for governance review:
 - Required escalation:
 
-## 5. Engineering Controls
+## 5. Potential Violation Or Non-Compliance Mapping
+
+This section is not a legal finding. Use it to list concrete potential DORA violation or non-compliance signals from the reviewed evidence and route each item to qualified legal, compliance, security, risk, resilience, procurement, business-continuity, architecture, or business-owner review. When no violation is confirmed, say so explicitly and keep open items as potential gaps.
+
+| Potential violation or non-compliance signal | DORA reference | Evidence from reviewed system | Current status | Required owner review | Engineering action |
+| -------------------------------------------- | -------------- | ----------------------------- | -------------- | --------------------- | ------------------ |
+| Applicability, regulated-service, or important-function uncertainty | Articles 1-2 | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / risk / business owner | TBD |
+| Missing ICT risk-management framework, ownership, or asset inventory evidence | Chapter II / Articles 5-16 | TBD | None identified / Potential gap / Confirmed concern | Risk / resilience / security / platform | TBD |
+| Missing incident classification, reporting, or evidence path | Chapter III / Articles 17-23 | TBD | None identified / Potential gap / Confirmed concern | Compliance / security / SRE / resilience | TBD |
+| Missing digital operational resilience testing evidence | Chapter IV / Articles 24-27 | TBD | None identified / Potential gap / Confirmed concern | Resilience / SRE / QA / risk | TBD |
+| Missing ICT third-party provider risk, contract, monitoring, or exit evidence | Chapter V / Articles 28-44 | TBD | None identified / Potential gap / Confirmed concern | Procurement / risk / legal / platform | TBD |
+| Incorrect, incomplete, or unsupported operational-resilience information | Chapters VI-VII / Articles 45-56 | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / risk owner | TBD |
+
+## 6. Engineering Controls
 
 - ICT asset and dependency inventory:
 - Operational ownership and support model:
@@ -71,7 +84,7 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 - Third-party ICT provider controls:
 - Exit, portability, or provider-failure controls:
 
-## 6. Evidence Inventory
+## 7. Evidence Inventory
 
 - ICT inventory:
 - Architecture or dependency diagram:
@@ -88,7 +101,7 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 - Risk acceptance or exception records:
 - Approval records:
 
-## 7. Residual Risks
+## 8. Residual Risks
 
 - Residual risk:
 - Impact:
@@ -97,7 +110,7 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 - Owner:
 - Acceptance decision:
 
-## 8. Release Decision
+## 9. Release Decision
 
 - Decision:
 - Conditions:
@@ -108,7 +121,7 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 - Operational constraints:
 - Provider constraints:
 
-## 9. Action Plan
+## 10. Action Plan
 
 | Priority | Action | Owner | Due date | Evidence expected | Status |
 | -------- | ------ | ----- | -------- | ----------------- | ------ |
@@ -116,7 +129,7 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 | Medium   |        |       |          |                   | Open   |
 | Low      |        |       |          |                   | Open   |
 
-## 10. Final Notes
+## 11. Final Notes
 
 - Items requiring legal interpretation:
 - Items requiring compliance or risk decision:

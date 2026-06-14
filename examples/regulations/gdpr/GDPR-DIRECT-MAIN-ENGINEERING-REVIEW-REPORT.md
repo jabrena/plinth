@@ -88,7 +88,22 @@ Material unanswered questions:
 - **Classification conclusion for governance review:** Classify as personal-data processing with free-text, delivery, database migration, Kafka message, direct-to-main commit policy, CI/CD pipeline, downstream processing, vendor, transfer, retention, deletion, and breach-readiness signals. Do not treat the feature as GDPR-ready without qualified owner review.
 - **Required escalation:** Legal/privacy/DPO for lawful basis, role, transfer, DPIA, rights, and retention interpretation; security/risk for access, encryption, logging, incident, branch policy, and breach evidence; data governance for inventory, minimization, lineage, and deletion; architecture/platform for direct-to-main controls, database migration, and Kafka compatibility; product/business for purpose and feature acceptance; procurement/vendor owners for third-party processing.
 
-## 5. Engineering Controls
+## 5. Potential Violation Or Non-Compliance Mapping
+
+No confirmed GDPR violation is identified from the reviewed source material. The direct-to-main model creates stronger potential non-compliance and evidence gaps because personal-data schema, Kafka, logging, retention, or authorization changes can enter release automation without documented qualified privacy review. The items below require qualified review before treating the checkout delivery-instructions feature as production-ready personal-data processing.
+
+| Potential violation or non-compliance signal | GDPR reference | Evidence from reviewed system | Current status | Required owner review | Engineering action |
+| -------------------------------------------- | -------------- | ----------------------------- | -------------- | --------------------- | ------------------ |
+| Missing lawful-basis, purpose-limitation, minimization, or transparency evidence | Articles 5-6 and Articles 12-14 | The feature adds delivery-instruction fields and a free-text note, but lawful basis, purpose-to-field mapping, transparency notices, and field owners are not documented. | Potential gap | Legal / privacy / DPO / business owner | Document lawful-basis handoff, purposes, transparency obligations, and field-level minimization decisions for every delivery-instruction field. |
+| Missing privacy gate or protected-main control for personal-data changes | Article 25 and Article 32 | Engineers commit directly to `main`; the materials do not document pre-merge privacy review, protected-main policy, code-owner approval, required privacy/security approval, or exception records for personal-data changes. | Potential gap | Privacy / security / platform / engineering leadership | Enforce protected-main controls and require privacy/security approval before personal-data schema, Kafka, logging, retention, or access-control changes can be promoted. |
+| Missing personal-data records, controller/processor, vendor, or role evidence | Articles 28 and 30 | Azure, identity, payment, notification, artifact, registry, and observability providers are described, but controller/processor roles, subprocessors, DPAs, regions, and records of processing are not documented. | Potential gap | Legal / privacy / procurement / data governance | Create records of processing and provider role evidence, including processors, subprocessors, regions, retention, and vendor contacts. |
+| Missing privacy by design/default or field-level access controls | Article 25 | The feature requests controlled values, length limits, Kafka minimization, and service-to-service lookup for the full note, but implementation, field-level authorization, and default access policy are not available. | Potential gap | Privacy / security / architecture / product | Add purpose-specific DTOs, default-deny note access, field-level authorization, and audit evidence for full-note lookups. |
+| Missing data-subject rights, retention, or deletion propagation evidence | Articles 15-22 | Rights workflows, retention periods, deletion jobs, tombstones, Kafka/event retention, cache/index removal, backup handling, and downstream propagation are not documented. | Potential gap | Privacy / DPO / product / platform | Implement rights orchestration and retention/deletion propagation across Order DB, Saga Support, Kafka, logs, analytics, search, backups, and vendors. |
+| Missing security-of-processing or privacy-safe observability evidence | Article 32 | HTTPS, WAF, private networking, Key Vault, managed identities, scans, SBOM, provenance, and rollback exist, but field encryption, pseudonymization, masking, access reviews, redaction, privacy-safe logging evidence, and branch-policy evidence are missing. | Potential gap | Security / privacy / SRE / risk | Add privacy-safe logging tests, redaction controls, hashed subject identifiers, least-privilege access, non-production masking, access review evidence, and branch-policy validation. |
+| Missing breach-response, affected-data, or notification-handoff evidence | Articles 33-34 | Observability exists, but affected personal-data category mapping, containment runbook, privacy/security escalation, notification handoff, and corrective-action workflow are not described. | Potential gap | Security / privacy / DPO / legal | Add breach runbook, affected-data mapping, evidence capture, notification decision handoff, and corrective-action tracking. |
+| Missing DPIA, transfer, or vendor-processing evidence | Article 35 and Chapter V / Articles 44-49 | The change introduces free-text personal data, downstream processing, vendors, Azure runtime, and external providers, but DPIA decision, transfer mechanisms, regions, and vendor reviews are missing. | Potential gap | Legal / privacy / DPO / procurement | Complete DPIA/privacy-review decision and transfer/vendor evidence before production personal-data processing. |
+
+## 6. Engineering Controls
 
 - **Pre-commit review and main-branch protection:** Require protected `main`, mandatory checks, code-owner review, privacy/security approval for personal-data changes, migration review, and Kafka contract review before release automation can deploy.
 - **Data inventory and data-flow evidence:** Add `deliveryInstructions` fields to the personal-data inventory with categories, source, purpose, owner, store, event usage, retention, deletion path, and downstream consumers.
@@ -143,7 +158,7 @@ auditLogger.info(
 
 Preserve breach and audit value without logging raw delivery-note text.
 
-## 6. Evidence Inventory
+## 7. Evidence Inventory
 
 | Artifact | Current evidence from source material | Gap |
 | -------- | ------------------------------------- | --- |
@@ -162,7 +177,7 @@ Preserve breach and audit value without logging raw delivery-note text.
 | Monitoring dashboard or alert evidence | Operations use dashboards, logs, traces, and alerts. | Dashboard IDs, alert rules, data minimization, access control, and retention are not documented. |
 | Approval records | Direct commits to `main` and CI checks are described. | Pre-merge review, branch protection, privacy, legal, DPO, security, data-governance, and residual-risk approvals are missing. |
 
-## 7. Residual Risks
+## 8. Residual Risks
 
 | Residual risk | Impact | Likelihood | Mitigation | Owner | Acceptance decision |
 | ------------- | ------ | ---------- | ---------- | ----- | ------------------- |
@@ -176,7 +191,7 @@ Preserve breach and audit value without logging raw delivery-note text.
 | Vendor and transfer evidence is missing | Unreviewed provider processing or third-country transfer risk | Medium | Provider register, DPA/subprocessor review, region mapping, and transfer assessment | Procurement / legal | Requires governance acceptance |
 | Breach response lacks privacy handoff | Slow or incomplete incident investigation and notification support | Medium | Incident runbook, affected data mapping, escalation path, and evidence retention | Security / privacy | Requires remediation |
 
-## 8. Release Decision
+## 9. Release Decision
 
 - **Decision:** Blocked for production personal-data processing until direct-to-`main` governance controls and GDPR privacy evidence are complete. Development may continue only with synthetic or minimized test data and explicit owner tracking.
 - **Conditions:** Add protected-main enforcement, pre-commit or pre-merge privacy review, required checks, code-owner review, personal-data inventory, lawful-basis handoff, controller/processor role review, DPIA/privacy review decision, vendor and transfer evidence, retention/deletion controls, rights workflows, field-level authorization, privacy-safe observability, database migration review, Kafka schema compatibility evidence, breach evidence, and owner approvals.
@@ -187,7 +202,7 @@ Preserve breach and audit value without logging raw delivery-note text.
 - **Data categories approved:** No approval for production free-text delivery-note processing is granted by this report.
 - **Vendor or transfer constraints:** Do not send delivery-instruction personal data to external identity, payment, notification, observability, cloud, artifact, registry, analytics, support, or AI providers without documented provider, role, region, retention, security, and transfer review.
 
-## 9. Action Plan
+## 10. Action Plan
 
 | Priority | Action | Owner | Due date | Evidence expected | Status |
 | -------- | ------ | ----- | -------- | ----------------- | ------ |
@@ -202,7 +217,7 @@ Preserve breach and audit value without logging raw delivery-note text.
 | Medium | Add breach-response runbook with affected data mapping, containment, escalation, notification handoff, and corrective-action workflow. | Security / privacy / SRE | 2026-07-19 | Runbook, drill result, and evidence-retention policy | Open |
 | Low | Annotate the deployment diagram with personal-data categories, owners, processors, regions, retention, deletion propagation, and direct-to-main governance controls after owner review. | Architecture | 2026-08-02 | Updated diagram or ADR linked to inventory | Open |
 
-## 10. Final Notes
+## 11. Final Notes
 
 - **Items requiring legal interpretation:** Lawful basis, controller/processor roles, jurisdiction, transfer mechanism, DPIA requirement, data-subject rights interpretation, retention obligations, and breach notification requirements.
 - **Items requiring privacy or data protection officer decision:** Personal-data inventory approval, DPIA/privacy review outcome, free-text delivery-note handling, special-category confirmation, rights workflow adequacy, minimization, and residual-risk acceptance.

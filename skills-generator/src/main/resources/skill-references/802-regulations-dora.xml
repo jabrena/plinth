@@ -37,7 +37,7 @@
         3. **Classify the operational scope**: identify the business service, system owner, resilience owner, environments, assets, data stores, dependencies, integrations, providers, recovery expectations, and incident pathways.
         4. **Review implementation and operational evidence**: examine Java code, configuration, tests, deployment workflows, observability, logs, runbooks, backups, restore evidence, continuity plans, change records, provider documentation, and incident procedures.
         5. **Match the examples to the findings**: use the examples below as reusable evidence and control patterns for gaps discovered during review.
-        6. **Generate the report**: use the report template to produce conclusions, questionnaire findings with answers and gaps, evidence from code review, recommended controls, release decision, residual risks, and prioritized actions with owners.
+        6. **Generate the report**: use the report template to produce conclusions, questionnaire findings with answers and gaps, evidence from code review, potential violation or non-compliance signals with DORA article or chapter references, recommended controls, release decision, residual risks, and prioritized actions with owners.
     </goal>
 
     <constraints>
@@ -313,7 +313,7 @@
             <output-format-item>**IDENTIFY** risk signals from code and operational evidence: critical business service dependency, ownerless ICT asset, untested recovery, missing alerting, incomplete logs, weak change control, unsupported provider dependency, or missing exit plan</output-format-item>
             <output-format-item>**MATCH** the relevant example patterns from the reference: ICT inventory, incident routing, recovery evidence, third-party ICT provider risk, resilience release gate, or Java resilience release policy</output-format-item>
             <output-format-item>**RECOMMEND** engineering controls: inventory updates, monitoring, alerting, evidence-safe logging, incident workflow, backup and restore verification, failover testing, rollback plans, provider monitoring, exit planning, and change approval</output-format-item>
-            <output-format-item>**REPORT** conclusions and actions using the report template, including review context, operational scope, questionnaire findings with answers and gaps, DORA operational resilience classification, engineering controls, evidence inventory, residual risks, release decision, and prioritized action plan with owners and due dates</output-format-item>
+            <output-format-item>**REPORT** conclusions and actions using the report template, including review context, operational scope, questionnaire findings with answers and gaps, DORA operational resilience classification, potential violation or non-compliance signals with article or chapter references, engineering controls, evidence inventory, residual risks, release decision, and prioritized action plan with owners and due dates</output-format-item>
         </output-format-list>
     </output-format>
 

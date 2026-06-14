@@ -62,7 +62,21 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 - Classification conclusion for governance review:
 - Required escalation:
 
-## 5. Engineering Controls
+## 5. Potential Violation Or Non-Compliance Mapping
+
+This section is not a legal finding. Use it to list concrete potential GDPR violation or non-compliance signals from the reviewed evidence and route each item to qualified legal, privacy, data protection officer, compliance, security, risk, data-governance, architecture, vendor, or business-owner review. When no violation is confirmed, say so explicitly and keep open items as potential gaps.
+
+| Potential violation or non-compliance signal | GDPR reference | Evidence from reviewed system | Current status | Required owner review | Engineering action |
+| -------------------------------------------- | -------------- | ----------------------------- | -------------- | --------------------- | ------------------ |
+| Missing lawful-basis, purpose-limitation, minimization, or transparency evidence | Articles 5-6 and Articles 12-14 | TBD | None identified / Potential gap / Confirmed concern | Legal / privacy / DPO / business owner | TBD |
+| Missing personal-data records, controller/processor, vendor, or role evidence | Articles 28 and 30 | TBD | None identified / Potential gap / Confirmed concern | Legal / privacy / procurement / data governance | TBD |
+| Missing privacy by design/default or field-level access controls | Article 25 | TBD | None identified / Potential gap / Confirmed concern | Privacy / security / architecture / product | TBD |
+| Missing data-subject rights, retention, or deletion propagation evidence | Articles 15-22 | TBD | None identified / Potential gap / Confirmed concern | Privacy / DPO / product / platform | TBD |
+| Missing security-of-processing or privacy-safe observability evidence | Article 32 | TBD | None identified / Potential gap / Confirmed concern | Security / privacy / SRE / risk | TBD |
+| Missing breach-response, affected-data, or notification-handoff evidence | Articles 33-34 | TBD | None identified / Potential gap / Confirmed concern | Security / privacy / DPO / legal | TBD |
+| Missing DPIA, transfer, or vendor-processing evidence | Article 35 and Chapter V / Articles 44-49 | TBD | None identified / Potential gap / Confirmed concern | Legal / privacy / DPO / procurement | TBD |
+
+## 6. Engineering Controls
 
 - Data inventory and data-flow evidence:
 - Data minimization and DTO design:
@@ -78,7 +92,7 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 - Breach detection, containment, and evidence:
 - Testing and validation:
 
-## 6. Evidence Inventory
+## 7. Evidence Inventory
 
 - Personal-data inventory:
 - Data-flow diagram:
@@ -95,7 +109,7 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 - Monitoring dashboard or alert evidence:
 - Approval records:
 
-## 7. Residual Risks
+## 8. Residual Risks
 
 - Residual risk:
 - Impact:
@@ -104,7 +118,7 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 - Owner:
 - Acceptance decision:
 
-## 8. Release Decision
+## 9. Release Decision
 
 - Decision:
 - Conditions:
@@ -115,7 +129,7 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 - Data categories approved:
 - Vendor or transfer constraints:
 
-## 9. Action Plan
+## 10. Action Plan
 
 | Priority | Action | Owner | Due date | Evidence expected | Status |
 | -------- | ------ | ----- | -------- | ----------------- | ------ |
@@ -123,7 +137,7 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 | Medium   |        |       |          |                   | Open   |
 | Low      |        |       |          |                   | Open   |
 
-## 10. Final Notes
+## 11. Final Notes
 
 - Items requiring legal interpretation:
 - Items requiring privacy or data protection officer decision:
