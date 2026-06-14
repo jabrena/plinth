@@ -35,7 +35,7 @@
 - [x] 5.1 Validate changed XML files with `xmllint --noout`.
 - [x] 5.2 Run `./mvnw clean install -pl skills-generator` to regenerate local skills without refreshing public `skills/`.
 - [x] 5.3 Inspect generated local `033-architecture-diagrams` output for deployment question flow, image/file intake, fallback topology questions, selected-reference mapping, "All diagrams" coverage, and reference links.
-- [x] 5.4 Add or update the `033-architecture-diagrams` Gherkin acceptance test so the deployment diagram scenario uses `examples/diagrams/deployment/system-example.md` as the system description input.
+- [x] 5.4 Add or update the `033-architecture-diagrams` Gherkin acceptance test so the deployment diagram scenario uses `examples/diagrams/deployment/system-example-cicd-pr-model.md` as the system description input.
 - [x] 5.5 Check `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md`; execute only a listed `033-architecture-diagrams` prompt if one exists after implementation changes.
 - [x] 5.6 Run `./mvnw clean verify -pl skills-generator`.
 - [x] 5.7 Run `openspec validate --all`.
