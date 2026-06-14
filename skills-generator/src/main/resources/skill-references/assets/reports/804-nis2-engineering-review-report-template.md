@@ -1,6 +1,6 @@
 # NIS2 Engineering Review Report
 
-Use this template after reviewing `references/804-regulations-eu-nis2.md` and matching the relevant examples for asset inventory, incident escalation, vulnerability evidence, continuity, supply-chain security, and secure release gates.
+Use this template after reviewing `references/804-regulations-eu-nis2-chapters-summary.md` and matching the relevant examples from `references/804-regulations-eu-nis2-engineering-examples.md` for asset inventory, incident escalation, vulnerability evidence, continuity, supply-chain security, and secure release gates.
 
 This report is not legal advice. Use it as engineering evidence for legal, compliance, security, risk, resilience, business-continuity, procurement, executive accountability, architecture, and business-owner review.
 
@@ -44,16 +44,16 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 
 ## 4. Potential Violation Or Non-Compliance Mapping
 
-This section is not a legal finding. Use it to list concrete potential NIS2 violation or non-compliance signals from the reviewed evidence and route each item to qualified legal, compliance, security, risk, resilience, or executive accountability review. When no violation is confirmed, say so explicitly and keep open items as potential gaps.
+This section is not a legal finding. Use it to list concrete potential NIS2 violation or non-compliance signals from the reviewed evidence and route each item to qualified legal, compliance, security, risk, resilience, or executive accountability review. When no violation is confirmed, say so explicitly and keep open items as potential gaps. Use the chapter links from `references/804-regulations-eu-nis2-chapters-summary.md`; add more chapter links when one finding spans multiple NIS2 areas.
 
-| Potential violation or non-compliance signal | NIS2 reference area | Evidence from reviewed system | Current status | Required owner review | Engineering action |
-| -------------------------------------------- | ------------------- | ----------------------------- | -------------- | --------------------- | ------------------ |
-| Unclear essential or important entity scope | Applicability / member-state implementation | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / business owner | TBD |
-| Missing cybersecurity risk-management evidence | Cybersecurity risk-management measures | TBD | None identified / Potential gap / Confirmed concern | Security / risk / architecture | TBD |
-| Missing incident detection, escalation, or evidence | Incident handling / reporting handoff | TBD | None identified / Potential gap / Confirmed concern | Security operations / legal / compliance | TBD |
-| Untested backup, recovery, or continuity controls | Business continuity / crisis management | TBD | None identified / Potential gap / Confirmed concern | Resilience / business-continuity owner | TBD |
-| Incomplete supply-chain or provider risk evidence | Supply-chain security / provider dependencies | TBD | None identified / Potential gap / Confirmed concern | Procurement / security / risk | TBD |
-| Weak access control, cryptography, or secure configuration | Access control / cryptography / secure operations | TBD | None identified / Potential gap / Confirmed concern | Security / platform owner | TBD |
+| Potential violation or non-compliance signal | NIS2 reference area | Associated chapter link | Evidence from reviewed system | Current status | Required owner review | Engineering action |
+| -------------------------------------------- | ------------------- | ----------------------- | ----------------------------- | -------------- | --------------------- | ------------------ |
+| Unclear essential or important entity scope | Applicability / member-state implementation | [Chapter I](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555#cpt_I) | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / business owner | TBD |
+| Missing cybersecurity risk-management evidence | Cybersecurity risk-management measures | [Chapter IV](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555#cpt_IV) | TBD | None identified / Potential gap / Confirmed concern | Security / risk / architecture | TBD |
+| Missing incident detection, escalation, or evidence | Incident handling / reporting handoff | [Chapter IV](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555#cpt_IV) | TBD | None identified / Potential gap / Confirmed concern | Security operations / legal / compliance | TBD |
+| Untested backup, recovery, or continuity controls | Business continuity / crisis management | [Chapter IV](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555#cpt_IV) | TBD | None identified / Potential gap / Confirmed concern | Resilience / business-continuity owner | TBD |
+| Incomplete supply-chain or provider risk evidence | Supply-chain security / provider dependencies | [Chapter IV](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555#cpt_IV) | TBD | None identified / Potential gap / Confirmed concern | Procurement / security / risk | TBD |
+| Weak access control, cryptography, or secure configuration | Access control / cryptography / secure operations | [Chapter IV](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555#cpt_IV) | TBD | None identified / Potential gap / Confirmed concern | Security / platform owner | TBD |
 
 ## 5. Engineering Controls
 

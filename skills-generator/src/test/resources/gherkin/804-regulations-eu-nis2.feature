@@ -15,7 +15,8 @@ Scenario: Review a Java critical-sector service with NIS2 cybersecurity controls
   And the feature request is expected to be developed and released through the described CI/CD pipeline
   And the NIS2 review facts are based only on information present in "examples/diagrams/deployment/system-example-cicd-pr-model.md" and "examples/diagrams/deployment/checkout-service-feature-request.md"
   When the skill ".agents/skills/804-regulations-eu-nis2" is applied to the system description, diagram, and feature request files
-  Then the skill reads "references/804-regulations-eu-nis2.md"
+  Then the skill reads "references/804-regulations-eu-nis2-chapters-summary.md"
+  And the skill reads "references/804-regulations-eu-nis2-engineering-examples.md"
   And the skill reads "assets/reports/804-nis2-engineering-review-report-template.md"
   And the skill frames NIS2 findings as engineering controls rather than legal advice
   And review findings do not use facts outside "examples/diagrams/deployment/system-example-cicd-pr-model.md" and "examples/diagrams/deployment/checkout-service-feature-request.md"
@@ -43,7 +44,8 @@ Scenario: Review a Java critical-sector checkout change with direct-to-main NIS2
   And the feature request is expected to be committed directly to main and released through the described CI/CD pipeline
   And the NIS2 review facts are based only on information present in "examples/diagrams/deployment/system-example-cicd-model.md" and "examples/diagrams/deployment/checkout-service-feature-request.md"
   When the skill ".agents/skills/804-regulations-eu-nis2" is applied to the direct-to-main system description, diagram, and feature request files
-  Then the skill reads "references/804-regulations-eu-nis2.md"
+  Then the skill reads "references/804-regulations-eu-nis2-chapters-summary.md"
+  And the skill reads "references/804-regulations-eu-nis2-engineering-examples.md"
   And the skill reads "assets/reports/804-nis2-engineering-review-report-template.md"
   And the skill frames NIS2 findings as engineering controls rather than legal advice
   And review findings do not use facts outside "examples/diagrams/deployment/system-example-cicd-model.md" and "examples/diagrams/deployment/checkout-service-feature-request.md"
