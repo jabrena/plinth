@@ -1,5 +1,40 @@
 # Acceptance Test Prompts for Skills
 
+## 001-commands-inventory
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/001-commands-inventory.feature
+and verify that acceptance-tests passes.
+```
+
+## 002-agents-inventory
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/002-agents-inventory.feature
+and verify that acceptance-tests passes.
+```
+
+## 003-skills-inventory
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/003-skills-inventory.feature
+and verify that acceptance-tests passes.
+```
+
+## 004-commands-installation
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/004-commands-installation.feature
+and verify that acceptance-tests passes.
+```
+
+## 005-agents-installation
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/005-agents-installation.feature
+and verify that acceptance-tests passes.
+```
+
 ## 033-architecture-diagrams
 
 ```bash
