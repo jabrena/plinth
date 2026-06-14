@@ -77,6 +77,13 @@ execute @skills-generator/src/test/resources/gherkin/805-regulations-eu-cyber-re
 and verify that acceptance-tests passes.
 ```
 
+## 806-regulations-eu-data-act
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/806-regulations-eu-data-act.feature
+and verify that acceptance-tests passes.
+```
+
 ## 807-regulations-eu-digital-services-act
 
 ```bash
