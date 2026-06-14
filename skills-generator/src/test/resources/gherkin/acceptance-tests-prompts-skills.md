@@ -76,3 +76,11 @@ and verify that acceptance-tests passes.
 execute @skills-generator/src/test/resources/gherkin/807-regulations-eu-digital-services-act.feature
 and verify that acceptance-tests passes.
 ```
+
+## 809-regulations-eu-digital-omnibus
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/809-regulations-eu-digital-omnibus.feature
+and verify that acceptance-tests passes.
+```
+
