@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.16.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>DORA Regulation for Java Enterprise Digital Operational Resilience</title>
+        <description>Use as Java-focused DORA engineering examples for ICT inventory, incident routing, recovery evidence, third-party ICT provider risk, resilience release gates, and Java release-policy controls.</description>
+    </metadata>
+
+    <role>You are a senior Java enterprise architect and digital operational resilience reviewer who translates DORA themes into concrete Java engineering examples and reviewable evidence patterns</role>
+
+    <goal>
+        Apply these DORA-aware examples after the regulation summary has been read, the questionnaire has been answered, and the target operational scope is understood.
+
+        These examples are not legal advice. They show engineering patterns that help Java teams create reviewable evidence for legal, compliance, security, risk, resilience, procurement, business-continuity, architecture, and business owners.
+
+        Use this examples reference together with `references/802-regulations-dora-chapters-summary.md`, `assets/questions/802-dora-engineering-review-questionnaire.md`, and the [DORA engineering review report template](../assets/reports/802-dora-engineering-review-report-template.md).
+    </goal>
+
+    <constraints>
+        <constraints-description>
+            Translate DORA concerns into engineering controls for Java enterprise systems without replacing qualified legal, compliance, security, risk, resilience, procurement, business-continuity, architecture, or business-owner review.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**NOT LEGAL ADVICE**: Treat the examples as engineering control patterns and escalation aids, not legal findings</constraint>
+            <constraint>**EVIDENCE FIRST**: Prefer reviewable evidence over claims that controls exist</constraint>
+            <constraint>**OWNER HANDOFFS**: Include business, service, operational, resilience, security, risk, procurement, provider, and compliance owners in control records</constraint>
+            <constraint>**SECURE LOGGING**: Preserve operational evidence without exposing secrets, credentials, personal data, regulated records, or sensitive incident details unnecessarily</constraint>
+            <constraint>**RELEASE READINESS**: Do not mark a system ready when critical resilience controls are undocumented, untested, ownerless, or dependent on unknown providers</constraint>
+        </constraint-list>
+    </constraints>
+
+    <examples>
+        <toc auto-generate="true" />
+
+        <example number="1" id="ict-asset-and-dependency-inventory">
+            <example-header>
+                <example-title>Document ICT assets and operational dependencies</example-title>
+                <example-subtitle>business service, owners, data stores, providers, and recovery targets</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use this pattern when a Java service supports financial operations or an important business service. The inventory creates evidence for operational owners and helps identify failure modes before resilience controls are designed.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="yaml"><![CDATA[ictServiceInventory:
+  service: payment-reconciliation-api
+  businessService: merchant settlement
+  owner: payments-platform
+  resilienceOwner: operational-resilience
+  runtime:
+    application: Spring Boot service
+    environments: [staging, production]
+    database: postgresql-settlement
+    messaging: kafka.payments.reconciliation
+    externalProviders:
+      - name: cloud-managed-postgresql
+        criticality: high
+        supportContact: provider-support-id
+      - name: payment-network-api
+        criticality: high
+        supportContact: vendor-ops-id
+  recovery:
+    rto: PT2H
+    rpo: PT15M
+    lastRestoreTest: 2026-05-18
+  evidence:
+    runbook: runbooks/payment-reconciliation.md
+    dashboards: [grafana:settlement-latency, grafana:reconciliation-errors]
+    alerts: [pagerduty:payment-reconciliation-sev2]]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="yaml"><![CDATA[ictServiceInventory:
+  service: payment-reconciliation-api
+  dependencies: cloud stuff
+  recovery: should be fine]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="2" id="incident-detection-and-routing">
+            <example-header>
+                <example-title>Route operational incidents with evidence</example-title>
+                <example-subtitle>severity, escalation, trace IDs, and corrective actions</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use this pattern when a Java service has critical operations, external dependencies, or reporting handoffs. The goal is to make incidents detectable, reconstructable, and routed to the right owners without leaking sensitive data.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[public IncidentDecision handleOperationalIncident(OperationalIncident incident) {
+    IncidentSeverity severity = severityPolicy.classify(incident);
+    EvidenceRecord evidence = evidenceRecorder.capture(
+        incident.traceId(),
+        incident.serviceName(),
+        severity,
+        incident.startedAt(),
+        incident.affectedDependencyIds()
+    );
+
+    incidentWorkflow.notifyOwners(
+        severity,
+        List.of("service-owner", "security-operations", "resilience-owner", "risk-owner"),
+        evidence.id()
+    );
+
+    correctiveActionBacklog.create(incident.id(), severity, evidence.id());
+    return IncidentDecision.escalated(incident.id(), severity, evidence.id());
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[public void handleOperationalIncident(Exception exception) {
+    logger.error("Something failed", exception);
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="backup-restore-and-continuity-evidence">
+            <example-header>
+                <example-title>Verify backup, restore, and continuity controls</example-title>
+                <example-subtitle>tested recovery beats untested runbooks</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use this pattern when a service owns regulated records, operational data, or critical state. DORA-aware engineering review should ask for restoration evidence and recovery target ownership, not just backup configuration.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="markdown"><![CDATA[Recovery evidence
+
+- Service: customer-ledger-service
+- Data store: ledger-postgresql
+- Backup schedule: every 15 minutes
+- RPO target: 15 minutes
+- RTO target: 2 hours
+- Last restore test: 2026-05-30
+- Restore test result: passed in 47 minutes
+- Rollback plan: deployment/runbooks/customer-ledger-rollback.md
+- Business continuity owner: finance-operations
+- Open gaps:
+  - Add automated alert when backup age exceeds 20 minutes
+  - Repeat restore test after schema migration v42]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="markdown"><![CDATA[Recovery evidence
+
+- Backups are enabled.
+- The cloud provider handles recovery.]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="third-party-ict-provider-risk">
+            <example-header>
+                <example-title>Make third-party ICT provider risk reviewable</example-title>
+                <example-subtitle>criticality, SLAs, incident contacts, exit path, and monitoring</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use this pattern when the system depends on cloud services, SaaS, managed data stores, payment processors, messaging platforms, observability providers, IAM providers, or external APIs.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="yaml"><![CDATA[thirdPartyIctProvider:
+  provider: managed-kafka-platform
+  servicesUsed: [transactions-topic, settlement-events-topic]
+  criticality: high
+  dataClassification: regulated-operational-data
+  controls:
+    contractOwner: procurement
+    serviceOwner: platform-messaging
+    slaReference: contract:kafka-platform-sla
+    incidentNotification: vendor-portal-and-pagerduty
+    monitoringDashboards: [grafana:kafka-lag, grafana:producer-errors]
+    exitPlan: docs/resilience/kafka-provider-exit-plan.md
+    lastFailoverExercise: 2026-04-22
+  reviewDecision: acceptable-with-monitoring]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="yaml"><![CDATA[thirdPartyIctProvider:
+  provider: managed-kafka-platform
+  criticality: unknown
+  exitPlan: none]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="5" id="resilience-release-gate">
+            <example-header>
+                <example-title>Block release until resilience controls are evidenced</example-title>
+                <example-subtitle>controls, tests, owners, exceptions, and residual risk</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use this pattern before production release or when a service becomes part of a regulated operational flow. The release decision should identify missing evidence and route residual risks to accountable owners.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="yaml"><![CDATA[resilienceReleaseGate:
+  service: payment-reconciliation-api
+  decision: conditional-release
+  requiredBeforeGoLive:
+    - restore-test-passed
+    - incident-runbook-reviewed
+    - provider-contacts-verified
+    - sev2-alerts-enabled
+  evidence:
+    restoreTest: evidence:restore-test-2026-05-18
+    incidentRunbook: runbooks/payment-reconciliation.md
+    dashboards: [grafana:settlement-latency]
+  residualRisks:
+    - risk: manual provider escalation outside business hours
+      owner: resilience-owner
+      dueDate: 2026-07-01]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="yaml"><![CDATA[resilienceReleaseGate:
+  service: payment-reconciliation-api
+  decision: release
+  reason: all tests passed locally]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="6" id="java-resilience-release-policy">
+            <example-header>
+                <example-title>Implement a Java resilience release policy</example-title>
+                <example-subtitle>owner review, evidence checks, and release decision</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use this pattern when Java deployment code, platform gates, or internal delivery services decide whether a financial service can move to production. The code should evaluate evidence, not hard-code a blanket approval.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[public ReleaseDecision evaluate(ResilienceReview review) {
+    List<String> blockers = new ArrayList<>();
+
+    requirePresent(review.ictInventory(), "ICT inventory", blockers);
+    requirePresent(review.incidentRunbook(), "incident runbook", blockers);
+    requirePassing(review.restoreTest(), "restore test", blockers);
+    requirePassing(review.providerReview(), "third-party ICT provider review", blockers);
+    requirePresent(review.rollbackPlan(), "rollback plan", blockers);
+
+    if (!blockers.isEmpty()) {
+        return ReleaseDecision.blocked(
+            review.serviceId(),
+            blockers,
+            Escalation.required("resilience", "security", "risk", "business-owner")
+        );
+    }
+
+    return ReleaseDecision.approvedWithEvidence(
+        review.serviceId(),
+        review.evidenceReferences(),
+        review.approvers()
+    );
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[public ReleaseDecision evaluate(ResilienceReview review) {
+    return ReleaseDecision.approved(review.serviceId(), "tests passed");
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>**MATCH** the relevant example patterns: ICT inventory, incident routing, recovery evidence, third-party ICT provider risk, resilience release gate, or Java resilience release policy</output-format-item>
+            <output-format-item>**RECOMMEND** engineering controls: inventory updates, monitoring, alerting, evidence-safe logging, incident workflow, backup and restore verification, failover testing, rollback plans, provider monitoring, exit planning, and change approval</output-format-item>
+            <output-format-item>**REPORT** conclusions and actions using `assets/reports/802-dora-engineering-review-report-template.md`, including review context, operational scope, potential violation or non-compliance signals with official-source links, engineering controls, residual risks, release decision, and prioritized action plan with owners and due dates</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>**GOVERNANCE ESCALATION**: Treat DORA applicability, classification, incident reporting, outsourcing, and provider criticality as governance decisions requiring qualified review</safeguards-item>
+            <safeguards-item>**OPERATIONAL EVIDENCE**: Do not accept undocumented claims that monitoring, backup, recovery, continuity, or provider controls exist; ask for reviewable evidence</safeguards-item>
+            <safeguards-item>**PROVIDER DEPENDENCY**: Treat cloud, SaaS, managed database, messaging, IAM, observability, and payment integrations as ICT dependencies requiring ownership and monitoring</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>

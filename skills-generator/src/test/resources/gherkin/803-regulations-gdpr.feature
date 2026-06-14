@@ -15,7 +15,8 @@ Scenario: Review a Java personal-data service with GDPR privacy controls
   And the feature request is expected to be developed and released through the described CI/CD pipeline
   And the GDPR questionnaire answers are based only on information present in "examples/diagrams/deployment/system-example-cicd-pr-model.md" and "examples/diagrams/deployment/checkout-service-feature-request.md"
   When the skill ".agents/skills/803-regulations-gdpr" is applied to the system description, diagram, and feature request files
-  Then the skill reads "references/803-regulations-gdpr.md"
+  Then the skill reads "references/803-regulations-gdpr-chapters-summary.md"
+  And the skill reads "references/803-regulations-gdpr-engineering-examples.md"
   And the skill reads "assets/questions/803-gdpr-engineering-review-questionnaire.md"
   And the skill reads "assets/reports/803-gdpr-engineering-review-report-template.md"
   And the skill frames GDPR findings as engineering controls rather than legal advice
@@ -26,7 +27,7 @@ Scenario: Review a Java personal-data service with GDPR privacy controls
   And the skill escalates lawful basis, controller or processor role, special-category data, jurisdiction, transfer mechanism, DPIA need, and regulatory interpretation to legal, privacy, data protection officer, compliance, security, or risk owners
   And the skill reviews Java implementation, DTOs, controllers, repositories, schemas, migrations, messages, logs, metrics, traces, retention jobs, deletion workflows, access controls, exports, tests, documentation, and vendor integrations
   And the skill identifies risk signals for excessive fields, entity exposure, unclear purpose, missing deletion propagation, payload logging, unbounded retention, weak authorization, unreviewed transfer, missing breach evidence, database migration, Kafka message contract, CI/CD pipeline, production side-effect, and free-text personal-data handling
-  And the skill maps potential GDPR violation or non-compliance signals to article or chapter references using only the reviewed delivery evidence
+  And the skill maps potential GDPR violation or non-compliance signals to article or chapter references with associated official-source links using only the reviewed delivery evidence
   And the skill analyzes the CheckoutService feature request as a pipeline-delivered change that modifies order database structure, outbound Kafka event data, and delivery instruction personal data
   And the skill uses Java examples to explain personal-data minimization, rights workflows, privacy-safe logging, and field-level authorization controls
   And the skill recommends engineering controls for minimization, field-level authorization, pseudonymization, redaction, retention jobs, deletion propagation, rights request orchestration, transfer evidence, breach evidence, privacy-safe observability, database migration approval, Kafka schema compatibility, and owner escalation
@@ -46,7 +47,8 @@ Scenario: Review a Java personal-data checkout change with direct-to-main GDPR c
   And the feature request is expected to be committed directly to main and released through the described CI/CD pipeline
   And the GDPR questionnaire answers are based only on information present in "examples/diagrams/deployment/system-example-cicd-model.md" and "examples/diagrams/deployment/checkout-service-feature-request.md"
   When the skill ".agents/skills/803-regulations-gdpr" is applied to the direct-to-main system description, diagram, and feature request files
-  Then the skill reads "references/803-regulations-gdpr.md"
+  Then the skill reads "references/803-regulations-gdpr-chapters-summary.md"
+  And the skill reads "references/803-regulations-gdpr-engineering-examples.md"
   And the skill reads "assets/questions/803-gdpr-engineering-review-questionnaire.md"
   And the skill reads "assets/reports/803-gdpr-engineering-review-report-template.md"
   And the skill frames GDPR findings as engineering controls rather than legal advice
@@ -57,7 +59,7 @@ Scenario: Review a Java personal-data checkout change with direct-to-main GDPR c
   And the skill escalates missing pre-merge review, protected-main bypass, lawful basis, controller or processor role, special-category data, jurisdiction, transfer mechanism, DPIA need, and regulatory interpretation to legal, privacy, data protection officer, compliance, security, platform, or risk owners
   And the skill reviews Java implementation, DTOs, controllers, repositories, schemas, migrations, messages, logs, metrics, traces, retention jobs, deletion workflows, access controls, exports, tests, documentation, and vendor integrations
   And the skill identifies risk signals for excessive fields, entity exposure, unclear purpose, missing deletion propagation, payload logging, unbounded retention, weak authorization, unreviewed transfer, missing breach evidence, direct-to-main commit policy, database migration, Kafka message contract, CI/CD pipeline, production side-effect, and free-text personal-data handling
-  And the skill maps potential GDPR violation or non-compliance signals to article or chapter references using only the reviewed direct-to-main delivery evidence
+  And the skill maps potential GDPR violation or non-compliance signals to article or chapter references with associated official-source links using only the reviewed direct-to-main delivery evidence
   And the skill analyzes the CheckoutService feature request as a direct-to-main pipeline-delivered change that modifies order database structure, outbound Kafka event data, and delivery instruction personal data
   And the skill uses Java examples to explain personal-data minimization, rights workflows, privacy-safe logging, and field-level authorization controls
   And the skill recommends engineering controls for pre-commit review, main-branch protection, minimization, field-level authorization, pseudonymization, redaction, retention jobs, deletion propagation, rights request orchestration, transfer evidence, breach evidence, privacy-safe observability, database migration approval, Kafka schema compatibility, and owner escalation
