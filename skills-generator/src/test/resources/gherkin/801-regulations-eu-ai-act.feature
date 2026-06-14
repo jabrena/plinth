@@ -23,6 +23,7 @@ Scenario: Review a Java AI system with EU AI Act controls
   And questionnaire responses do not use facts outside "examples/diagrams/deployment/system-example-cicd-pr-model.md" and "examples/diagrams/deployment/checkout-service-feature-request.md"
   And the skill classifies the capability as AI system, decision support, automated decision, AI agent, tool-calling workflow, RAG, generated artifact pipeline, or not an AI system
   And the skill identifies prohibited-practice, high-risk, sensitive-data, regulated-record, production side-effect, database migration, Kafka message contract, CI/CD pipeline, and enterprise-system-of-record signals
+  And the skill maps potential EU AI Act violation or non-compliance signals to chapter or article references using only the reviewed delivery evidence
   And the skill analyzes the CheckoutService feature request as a pipeline-delivered change that modifies order database structure and outbound Kafka event data
   And the skill escalates prohibited-use, high-risk, sensitive, or ambiguous cases to legal, compliance, privacy, security, or risk owners
   And the skill recommends engineering controls for human oversight, policy gates, least privilege, audit evidence, data governance, database migration approval, Kafka schema compatibility, monitoring, incident response, rollback, and disablement
@@ -50,6 +51,7 @@ Scenario: Review a Java AI-assisted checkout change with direct-to-main CI/CD co
   And questionnaire responses do not use facts outside "examples/diagrams/deployment/system-example-cicd-model.md" and "examples/diagrams/deployment/checkout-service-feature-request.md"
   And the skill classifies the capability as AI system, decision support, automated decision, AI agent, tool-calling workflow, RAG, generated artifact pipeline, or not an AI system
   And the skill identifies prohibited-practice, high-risk, sensitive-data, regulated-record, production side-effect, direct-to-main commit policy, database migration, Kafka message contract, CI/CD pipeline, and enterprise-system-of-record signals
+  And the skill maps potential EU AI Act violation or non-compliance signals to chapter or article references using only the reviewed direct-to-main delivery evidence
   And the skill analyzes the CheckoutService feature request as a direct-to-main pipeline-delivered change that modifies order database structure and outbound Kafka event data
   And the skill escalates missing pre-merge review, protected-main bypass, prohibited-use, high-risk, sensitive, or ambiguous cases to legal, compliance, privacy, security, platform, or risk owners
   And the skill recommends engineering controls for pre-commit review, main-branch protection, policy gates, least privilege, audit evidence, data governance, database migration approval, Kafka schema compatibility, monitoring, incident response, rollback, and disablement

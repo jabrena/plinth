@@ -88,7 +88,22 @@ Material unanswered questions:
 - **Classification conclusion:** The reviewed capability is best classified as an AI-assisted generated-artifact workflow for internal software delivery of a checkout feature that changes database structure and Kafka message data. It is not a deployed customer-facing AI system and not an autonomous AI agent based on current evidence. The direct-to-main delivery model raises stronger engineering-control concerns because AI-assisted artifacts can enter the release path without a pull request pre-merge gate.
 - **Required escalation:** Escalate to legal/compliance for EU territorial scope and AI Act applicability, privacy/security for data exposure and tool permissions, architecture/platform for delivery controls and branch protection, database/Kafka owners for schema and event compatibility, and SRE/operations for monitoring and incident evidence.
 
-## 5. Engineering Controls
+## 5. Potential Violation Or Non-Compliance Mapping
+
+No confirmed EU AI Act violation is identified from the reviewed source material. The direct-to-main model creates stronger potential non-compliance and evidence gaps because AI-assisted artifacts can enter the validated release path without a pull request pre-merge record. The items below require qualified review if EU territorial scope is confirmed, if the GenAI tooling is within the Act's scope, or if the assistant workflow expands into customer-facing AI, RAG over enterprise data, tool calling, or autonomous release actions.
+
+| Potential violation or non-compliance signal | EU AI Act reference | Evidence from reviewed system | Current status | Required owner review | Engineering action |
+| -------------------------------------------- | ------------------- | ----------------------------- | -------------- | --------------------- | ------------------ |
+| Prohibited-practice signal | Chapter II / Article 5 | The reviewed materials describe GenAI assistance for engineering artifacts only. No manipulation, exploitation, social scoring, biometric categorisation, emotion recognition, surveillance, or criminal-risk profiling is described. | None identified | Legal / compliance / privacy / security | Keep a prohibited-use gate before adding customer-facing AI, biometric, workplace-monitoring, or agentic capabilities. |
+| High-risk classification or missing high-risk evidence | Chapter III / Articles 6-49 / Annex III | The checkout feature changes the `orders` schema and Kafka events, but no AI decides employment, education, credit, essential services, insurance, law enforcement, migration, justice, biometrics, or critical infrastructure outcomes. | None identified for current capability; reassess on scope change | Legal / compliance / risk / business owner | Maintain the AI capability classification note and rerun classification if AI output starts influencing shopper eligibility, payment, delivery access, or operational decisions. |
+| Missing human-oversight, record-keeping, or protected-main evidence for AI-assisted release artifacts | Chapter III / Articles 12 and 14 where high-risk obligations apply; Chapter IX evidence expectations where deployed AI obligations apply | Engineers review generated output before committing directly to `main`, but no independent pull request gate, protected-main approval record, CODEOWNERS-style approval, signed-commit policy, or AI-origin acknowledgement is described. | Potential gap | Legal / compliance / platform / engineering leadership | Add required checks, protected-main policy, pair or mob review evidence, AI-origin acknowledgement, and database/Kafka owner approval before production release. |
+| Missing AI-origin transparency or disclosure evidence | Chapter IV / Article 50 | Engineers may use AI-assisted code, tests, documentation, design suggestions, and commit summaries. The source material does not describe AI-origin labels or reviewer acknowledgement for direct commits. | Potential gap | Legal / compliance / engineering leadership | Add direct-commit or release evidence that identifies material AI-generated or AI-modified artifacts. |
+| Missing general-purpose model documentation | Chapter V / Articles 51-56 / Annexes XI-XIII | The source says "GenAI tools" but does not identify provider, model, version, hosting mode, licence, data retention, training-use terms, or systemic-risk status. | Potential gap | Legal / compliance / platform / security | Inventory model/provider details and approved-use boundaries before broad or production-connected use. |
+| Missing AI data-governance evidence for personal or regulated records | Chapter III / Articles 10-12 where high-risk obligations apply; Chapter V downstream model documentation where GPAI applies | The platform contains customer profile, order, payment, delivery instruction, free-text note, secret, log, trace, and security telemetry data. GenAI access to these records is not described. | Potential gap | Privacy / security / compliance | Document which repository, ticket, log, trace, secret, customer, and delivery-instruction data can reach GenAI tools; redact or exclude free-text notes and secrets. |
+| Missing monitoring, incident, or corrective-action evidence | Chapter IX / Articles 72-94 | Azure Monitor, App Insights, logs, traces, metrics, alerts, rollback, and deployment evidence exist for the platform, but AI-assisted direct-to-main monitoring, incident categories, and corrective-action tracking are not described. | Potential gap | Legal / compliance / SRE / operations / security | Track AI-assisted direct commits, policy violations, rejected actions, incidents, corrective actions, and AI-tool disablement evidence. |
+| Incorrect, incomplete, or unsupported regulatory information | Chapter XII / Articles 99-101 | EU territorial scope, model/provider details, GenAI data flows, AI-origin audit evidence, direct-to-main review evidence, and owner approvals are unknown or incomplete in the reviewed materials. | Potential gap if represented as compliant without qualification | Legal / compliance / risk owner | Keep unknowns explicit, avoid claiming compliance, and require qualified review before production expansion or autonomous tooling. |
+
+## 6. Engineering Controls
 
 - **Human oversight and approval gates:** Require explicit reviewer acknowledgement for AI-generated or AI-modified artifacts before commit or merge, require database-owner approval for SQL migrations, require Kafka contract-owner approval for schema changes, require human approval before production deployment when AI-generated changes are material or high-impact, and add independent review evidence when direct-to-main work is accepted through pair or mob programming.
 - **Tool-access restrictions:** Limit GenAI tooling to human-mediated development workflows unless approved. Block direct production credentials, protected-branch writes, deployment changes, secrets access, and database writes. Use scoped credentials, branch allow-lists, policy checks, and revocation paths if tool calling is introduced.
@@ -103,7 +118,7 @@ Material unanswered questions:
 - **Incident response:** Route AI-assisted delivery incidents into the existing incident process. Add severity criteria for data exposure, unauthorized tool access, unsafe generated code, production outage, or regulatory concern.
 - **Rollback, disablement, withdrawal, or recall path:** Preserve existing immutable artifact and rollback capability. Add the ability to disable AI tooling or revoke AI tool credentials quickly if unsafe behavior or data exposure is detected.
 
-## 6. Evidence Inventory
+## 7. Evidence Inventory
 
 | Artifact | Current evidence from source material | Gap |
 | -------- | ------------------------------------- | --- |
@@ -120,7 +135,7 @@ Material unanswered questions:
 | Monitoring dashboard or alert evidence | Azure Monitor, App Insights, Log Analytics, metrics, traces, alerts, and dashboards are described. | Add AI-assisted delivery monitoring and direct-to-main change monitoring. |
 | Operational runbook | Rollback and deployment concerns are described at a high level. | Add AI tool disablement and incident playbook. |
 
-## 7. Residual Risks
+## 8. Residual Risks
 
 | Residual risk | Impact | Likelihood | Mitigation | Owner | Acceptance decision |
 | ------------- | ------ | ---------- | ---------- | ----- | ------------------- |
@@ -134,7 +149,7 @@ Material unanswered questions:
 | Direct-to-main protected-branch bypass | AI-assisted artifacts can enter CI/CD without pull request evidence | Medium | Main branch protection, required checks, signed commits, pair/mob review record, CODEOWNERS-style approvals for risky files | Platform / tech lead | Requires explicit acceptance |
 | Regulatory classification uncertainty | Incorrect EU AI Act obligations or missing review | Medium | Legal/compliance review and periodic reassessment | Legal / compliance | Requires qualified review |
 
-## 8. Release Decision
+## 9. Release Decision
 
 - **Decision:** Approved for development-support use with human review only; not approved for autonomous AI agent tool execution, direct production access, or unreviewed direct-to-main release of AI-generated artifacts.
 - **Conditions:** GenAI outputs remain drafts until accepted by accountable humans. Direct-to-main work must preserve review evidence and satisfy CI, security, database migration, Kafka contract, and deployment controls. AI-origin evidence, model/provider information, branch-protection evidence, and data-handling controls must be added before expanding the capability.
@@ -144,7 +159,7 @@ Material unanswered questions:
 - **Environments approved:** Developer workflow and human-reviewed direct-to-main delivery support only.
 - **Tool scopes approved:** Human-mediated drafting and review support. No direct production write access, protected branch writes, database changes, IAM/secrets access, or automated deployment authority is approved by this report.
 
-## 9. Action Plan
+## 10. Action Plan
 
 | Priority | Action | Owner | Due date | Evidence expected | Status |
 | -------- | ------ | ----- | -------- | ----------------- | ------ |
@@ -161,7 +176,7 @@ Material unanswered questions:
 | Medium | Review EU territorial scope and whether the ecommerce platform or AI-assisted artifacts are used in the EU. | Legal / compliance | 2026-07-19 | Legal/compliance assessment or documented escalation outcome | Open |
 | Low | Train engineering reviewers on AI-origin review risks and evidence expectations. | Engineering manager | 2026-08-02 | Training material and attendance evidence | Open |
 
-## 10. Final Notes
+## 11. Final Notes
 
 - **Items requiring legal interpretation:** EU territorial scope, EU AI Act applicability to internal GenAI-assisted delivery, GPAI/downstream documentation needs, transparency obligations for AI-generated engineering artifacts.
 - **Items requiring architecture decision:** Whether GenAI remains assistant-only or becomes an AI agent with tool calling; how AI-origin metadata is stored; how direct-to-main review evidence is preserved; how approval gates integrate with CI/CD and GitOps deployment; how database migration and Kafka schema approvals are represented in release evidence.

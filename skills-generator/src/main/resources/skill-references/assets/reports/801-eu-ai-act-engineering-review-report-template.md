@@ -54,7 +54,20 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 - Classification conclusion:
 - Required escalation:
 
-## 5. Engineering Controls
+## 5. Potential Violation Or Non-Compliance Mapping
+
+This section is not a legal finding. Use it to list concrete potential EU AI Act violation or non-compliance signals from the reviewed evidence and route each item to qualified legal, compliance, privacy, security, risk, or business-owner review. When no violation is confirmed, say so explicitly and keep open items as potential gaps.
+
+| Potential violation or non-compliance signal | EU AI Act reference | Evidence from reviewed system | Current status | Required owner review | Engineering action |
+| -------------------------------------------- | ------------------- | ----------------------------- | -------------- | --------------------- | ------------------ |
+| Prohibited-practice signal | Chapter II / Article 5 | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / privacy / security | TBD |
+| High-risk classification or missing high-risk evidence | Chapter III / Articles 6-49 / Annex III | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / risk / business owner | TBD |
+| Missing transparency or AI-origin disclosure | Chapter IV / Article 50 | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / product owner | TBD |
+| Missing general-purpose model documentation | Chapter V / Articles 51-56 / Annexes XI-XIII | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / model owner / security | TBD |
+| Missing monitoring, incident, or corrective-action evidence | Chapter IX / Articles 72-94 | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / SRE / operations | TBD |
+| Incorrect, incomplete, or unsupported regulatory information | Chapter XII / Articles 99-101 | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / risk owner | TBD |
+
+## 6. Engineering Controls
 
 - Human oversight and approval gates:
 - Tool-access restrictions:
@@ -69,7 +82,7 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 - Incident response:
 - Rollback, disablement, withdrawal, or recall path:
 
-## 6. Evidence Inventory
+## 7. Evidence Inventory
 
 - Classification note:
 - Risk management record:
@@ -84,7 +97,7 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 - Monitoring dashboard or alert evidence:
 - Operational runbook:
 
-## 7. Residual Risks
+## 8. Residual Risks
 
 - Residual risk:
 - Impact:
@@ -93,7 +106,7 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 - Owner:
 - Acceptance decision:
 
-## 8. Release Decision
+## 9. Release Decision
 
 - Decision:
 - Conditions:
@@ -103,7 +116,7 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 - Environments approved:
 - Tool scopes approved:
 
-## 9. Action Plan
+## 10. Action Plan
 
 | Priority | Action | Owner | Due date | Evidence expected | Status |
 | -------- | ------ | ----- | -------- | ----------------- | ------ |
@@ -111,7 +124,7 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 | Medium   |        |       |          |                   | Open   |
 | Low      |        |       |          |                   | Open   |
 
-## 10. Final Notes
+## 11. Final Notes
 
 - Items requiring legal interpretation:
 - Items requiring architecture decision:

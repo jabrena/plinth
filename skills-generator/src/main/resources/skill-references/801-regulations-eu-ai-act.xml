@@ -36,7 +36,7 @@
         2. **Run the questionnaire interactively**: follow the rules at the top of `assets/questions/801-eu-ai-act-risk-questionnaire.md`. Ask the human one question at a time (Questions 1–23); do not infer or self-answer from code or repository inspection. Present only the current question; wait for an answer before the next. Record answers verbatim. Probe "Unknown" responses. Stop and escalate if prohibited-practice signals appear.
         3. **Review the implementation**: based on questionnaire answers, examine the Java code, configuration, tests, and documentation to verify claims, identify AI capabilities, and detect gaps between answers and implementation.
         4. **Match the examples to the answers and code findings**: use the examples below as reusable evidence and control patterns after the questionnaire and code review have identified the relevant risk shape.
-        5. **Generate the report**: use the report template to produce conclusions, classification, questionnaire findings with answers and gaps, evidence from code review, recommended controls, release decision, residual risks, and prioritized actions with owners.
+        5. **Generate the report**: use the report template to produce conclusions, classification, questionnaire findings with answers and gaps, evidence from code review, potential violation or non-compliance signals with EU AI Act chapter/article references, recommended controls, release decision, residual risks, and prioritized actions with owners.
     </goal>
 
     <constraints>
@@ -428,7 +428,7 @@
             <output-format-item>**MATCH** the relevant example patterns from the reference: classification note, agent approval gate, audit evidence, RAG governance, release gate, database change control, prohibited-practice guard, Annex III classifier, or post-market monitoring</output-format-item>
             <output-format-item>**RECOMMEND** engineering controls from the matched patterns: human oversight, policy gates, least privilege, audit evidence, data governance, monitoring, incident response, and disablement</output-format-item>
             <output-format-item>**SEPARATE** model output from execution: require validation, dry runs, approval, scoping, and rollback before AI agents can call privileged tools</output-format-item>
-            <output-format-item>**REPORT** conclusions and actions using the report template, including review context, capability summary, questionnaire findings with answers and gaps, code review findings, EU AI Act risk classification, engineering controls, evidence inventory, residual risks, release decision, and prioritized action plan with owners and due dates</output-format-item>
+            <output-format-item>**REPORT** conclusions and actions using the report template, including review context, capability summary, questionnaire findings with answers and gaps, code review findings, EU AI Act risk classification, potential violation or non-compliance signals with chapter/article references, engineering controls, evidence inventory, residual risks, release decision, and prioritized action plan with owners and due dates</output-format-item>
         </output-format-list>
     </output-format>
 
