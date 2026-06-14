@@ -7,9 +7,11 @@ Interactive rules:
 1. Ask **one question at a time** in order from Question 1 through Question 20.
 2. Present **only the current question** with its options exactly as written below. Do not batch, preview, or list upcoming questions.
 3. **Stop after each question** and wait for the human's answer before asking the next question.
-4. Record each answer verbatim before moving on. If they answer "Unknown", probe once for clarification or note the gap for escalation.
-5. Do **not** start implementation review, code analysis, resilience classification, or the engineering report until the human has answered (or explicitly deferred) all 20 questions.
-6. If the human selects a material outage, critical provider dependency, untested recovery, or unclear regulated-service signal, record it as a release-readiness concern and escalate to the relevant governance owners.
+4. Record each answer accurately, but redact passwords, API keys, tokens, session IDs, private keys, connection strings, credentials, and secret values as `[REDACTED_SECRET]` before storing or repeating the answer. Record only the secret type, affected component, and control gap.
+5. If they answer "Unknown", probe once for clarification or note the gap for escalation.
+6. Do **not** start implementation review, code analysis, resilience classification, or the engineering report until the human has answered (or explicitly deferred) all 20 questions.
+7. If the human selects a material outage, critical provider dependency, untested recovery, or unclear regulated-service signal, record it as a release-readiness concern and escalate to the relevant governance owners.
+8. Do **not** include raw secrets, credentials, tokens, keys, session IDs, private keys, or connection strings in notes, evidence inventories, summaries, or reports.
 
 The very first message to the human after reading reference materials MUST ask **Question 1 only**. Do not summarize the system, infer answers, show multiple questions, or skip ahead to the report.
 

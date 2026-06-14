@@ -6,6 +6,8 @@ This report is not legal advice. Use it as engineering evidence for legal, compl
 
 The purpose of this report is to increase awareness of potential gaps in the system and create engineering evidence for qualified review. The response produced from this template does not represent legal advice, a legal opinion, or a final regulatory determination.
 
+Do not include raw secrets, credentials, passwords, API keys, tokens, session IDs, private keys, or connection strings in this report. Replace secret values with `[REDACTED_SECRET]` and document only the secret type, affected component, evidence location, owner, and remediation needed.
+
 ## 1. Review Context
 
 - System or capability name:
@@ -58,8 +60,8 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 
 This section is not a legal finding. Use it to list concrete potential EU AI Act violation or non-compliance signals from the reviewed evidence and route each item to qualified legal, compliance, privacy, security, risk, or business-owner review. When no violation is confirmed, say so explicitly and keep open items as potential gaps. Use the chapter and annex links from `references/801-regulations-eu-ai-act-chapters-summary.md`; add more official-source links when one finding spans multiple EU AI Act areas.
 
-| Potential violation or non-compliance signal | EU AI Act reference area | Associated official-source link | Evidence from reviewed system | Current status | Required owner review | Engineering action |
-| -------------------------------------------- | ------------------------ | ------------------------------- | ----------------------------- | -------------- | --------------------- | ------------------ |
+| Potential violation or non-compliance signal | EU AI Act reference area | Associated official-source link | Redacted evidence from reviewed system | Current status | Required owner review | Engineering action |
+| -------------------------------------------- | ------------------------ | ------------------------------- | ------------------------------------- | -------------- | --------------------- | ------------------ |
 | Prohibited-practice signal | Prohibited AI practices / Article 5 | [Chapter II](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_II) | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / privacy / security | TBD |
 | High-risk classification or missing high-risk evidence | High-risk AI systems / Articles 6-49 / Annex III | [Chapter III](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_III), [Annex III](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#anx_III) | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / risk / business owner | TBD |
 | Missing transparency or AI-origin disclosure | Transparency obligations / Article 50 | [Chapter IV](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_IV) | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / product owner | TBD |
@@ -83,6 +85,8 @@ This section is not a legal finding. Use it to list concrete potential EU AI Act
 - Rollback, disablement, withdrawal, or recall path:
 
 ## 7. Evidence Inventory
+
+Only include redacted evidence references. Do not paste raw request payloads, prompts, tool inputs, logs, screenshots, configuration values, credentials, tokens, keys, or connection strings.
 
 - Classification note:
 - Risk management record:

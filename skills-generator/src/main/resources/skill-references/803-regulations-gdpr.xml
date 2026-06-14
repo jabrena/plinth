@@ -33,7 +33,7 @@
         Use this reference in this order:
 
         1. **Read the policy context and examples first**: understand whether the target system processes personal data, special-category data, user identifiers, behavioral records, telemetry tied to users, logs, exports, backups, or cross-border transfers.
-        2. **Run the questionnaire interactively**: follow the rules at the top of `assets/questions/803-gdpr-engineering-review-questionnaire.md`. Ask the human one question at a time (Questions 1-22); do not infer or self-answer from code or repository inspection. Present only the current question; wait for an answer before the next. Record answers verbatim. Probe "Unknown" responses.
+        2. **Run the questionnaire interactively**: follow the rules at the top of `assets/questions/803-gdpr-engineering-review-questionnaire.md`. Ask the human one question at a time (Questions 1-22); do not infer or self-answer from code or repository inspection. Present only the current question; wait for an answer before the next. Record answers accurately after redacting passwords, API keys, tokens, session IDs, private keys, connection strings, credentials, and secret values as `[REDACTED_SECRET]`. Probe "Unknown" responses.
         3. **Classify the personal-data scope**: identify data subjects, categories, purposes, sources, stores, processors, controllers, vendors, logs, caches, search indexes, exports, retention periods, deletion paths, and privacy owners.
         4. **Review implementation and privacy evidence**: examine Java code, API DTOs, schemas, repositories, migrations, messages, logs, metrics, traces, access control, retention jobs, deletion workflows, tests, documentation, and vendor integrations.
         5. **Match the examples to the findings**: use the examples below as reusable evidence and control patterns for gaps discovered during review.
@@ -55,6 +55,7 @@
             <constraint>**SECURITY OF PROCESSING**: Review encryption, least privilege, field-level authorization, audit logging, masking, pseudonymization, secret management, transport security, and breach detection</constraint>
             <constraint>**TRANSFER AND VENDOR REVIEW**: Escalate third-country transfers, subprocessors, SaaS integrations, analytics exports, model providers, and vendor APIs to privacy and legal owners</constraint>
             <constraint>**BREACH READINESS**: Preserve enough evidence to investigate incidents without logging excessive payloads, secrets, or special-category data</constraint>
+            <constraint>**SECRET REDACTION**: Do not record or repeat passwords, API keys, tokens, session IDs, private keys, connection strings, credentials, or secret values from questionnaire answers, code, logs, screenshots, or evidence; replace them with `[REDACTED_SECRET]` and describe only the secret type and storage/control gap</constraint>
         </constraint-list>
     </constraints>
 
@@ -320,7 +321,7 @@
     <output-format>
         <output-format-list>
             <output-format-item>**READ** GDPR reference material and example patterns first to understand personal-data protection context before reviewing implementation details</output-format-item>
-            <output-format-item>**ASK** the questionnaire questions interactively — one question at a time (Questions 1-22), presenting only the current question and waiting for a human answer before the next; never infer or self-answer from code, repository inspection, or assumptions; record human answers verbatim; probe "Unknown" responses</output-format-item>
+            <output-format-item>**ASK** the questionnaire questions interactively — one question at a time (Questions 1-22), presenting only the current question and waiting for a human answer before the next; never infer or self-answer from code, repository inspection, or assumptions; record human answers accurately after redacting secrets, credentials, tokens, keys, session IDs, private keys, and connection strings as `[REDACTED_SECRET]`; probe "Unknown" responses</output-format-item>
             <output-format-item>**SCOPE** personal-data categories, data subjects, purposes, sources, owners, stores, logs, caches, indexes, exports, backups, processors, controllers, vendors, transfers, retention, and deletion paths from questionnaire answers before code review</output-format-item>
             <output-format-item>**ESCALATE** lawful basis, controller or processor role, special-category data, jurisdiction, transfer mechanism, DPIA need, and regulatory interpretation to legal, privacy, data protection officer, compliance, security, or risk owners</output-format-item>
             <output-format-item>**REVIEW** Java implementation, DTOs, controllers, repositories, schemas, migrations, messages, logs, metrics, traces, retention jobs, deletion workflows, access controls, exports, tests, documentation, and vendor integrations</output-format-item>

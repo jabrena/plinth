@@ -6,6 +6,8 @@ This report is not legal advice. Use it as engineering evidence for legal, compl
 
 The purpose of this report is to increase awareness of potential gaps in the system and create engineering evidence for qualified review. The response produced from this template does not represent legal advice, a legal opinion, or a final regulatory determination.
 
+Do not include raw secrets, credentials, passwords, API keys, tokens, session IDs, private keys, or connection strings in this report. Replace secret values with `[REDACTED_SECRET]` and document only the secret type, affected component, evidence location, owner, and remediation needed.
+
 ## 1. Review Context
 
 - System, service, product, or platform:
@@ -59,8 +61,8 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 
 This section is not a legal finding. Use it to list concrete potential DORA violation or non-compliance signals from the reviewed evidence and route each item to qualified legal, compliance, security, risk, resilience, procurement, business-continuity, architecture, or business-owner review. When no violation is confirmed, say so explicitly and keep open items as potential gaps. Use the chapter links from `references/802-regulations-dora-chapters-summary.md`; add more official-source links when one finding spans multiple DORA areas.
 
-| Potential violation or non-compliance signal | DORA reference area | Associated official-source link | Evidence from reviewed system | Current status | Required owner review | Engineering action |
-| -------------------------------------------- | ------------------- | ------------------------------- | ----------------------------- | -------------- | --------------------- | ------------------ |
+| Potential violation or non-compliance signal | DORA reference area | Associated official-source link | Redacted evidence from reviewed system | Current status | Required owner review | Engineering action |
+| -------------------------------------------- | ------------------- | ------------------------------- | ------------------------------------- | -------------- | --------------------- | ------------------ |
 | Applicability, regulated-service, or important-function uncertainty | General provisions / scope | [Chapter I](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554#cpt_I) | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / risk / business owner | TBD |
 | Missing ICT risk-management framework, ownership, or asset inventory evidence | ICT risk management / Articles 5-16 | [Chapter II](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554#cpt_II) | TBD | None identified / Potential gap / Confirmed concern | Risk / resilience / security / platform | TBD |
 | Missing incident classification, reporting, or evidence path | ICT-related incident management and reporting / Articles 17-23 | [Chapter III](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554#cpt_III) | TBD | None identified / Potential gap / Confirmed concern | Compliance / security / SRE / resilience | TBD |
@@ -85,6 +87,8 @@ This section is not a legal finding. Use it to list concrete potential DORA viol
 - Exit, portability, or provider-failure controls:
 
 ## 7. Evidence Inventory
+
+Only include redacted evidence references. Do not paste raw request payloads, logs, screenshots, configuration values, credentials, tokens, keys, or connection strings.
 
 - ICT inventory:
 - Architecture or dependency diagram:
