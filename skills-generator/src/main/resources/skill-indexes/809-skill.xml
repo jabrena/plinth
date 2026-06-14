@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="809-regulations-eu-digital-omnibus">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.16.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when reviewing Java enterprise systems for EU Digital Omnibus proposal-stage simplification impacts across AI, cybersecurity, data, privacy, incident-reporting, compliance evidence, and existing EU regulation skill outputs. This should trigger for requests such as Review Digital Omnibus impact on Java governance controls; Map Digital Omnibus affected regulations; Update evidence inventory for EU digital-rule simplification; Assess AI Act, GDPR, DORA, NIS2, or Data Act workflow impacts from Digital Omnibus proposals.</description>
+  </metadata>
+
+  <title>EU Digital Omnibus Proposal Impact Review for Java Enterprise Systems</title>
+  <goal><![CDATA[
+Use this Skill to review Java enterprise applications, platforms, governance workflows, CI/CD evidence, incident-reporting workflows, data-rights processes, AI governance plans, and regulation-skill outputs for possible EU Digital Omnibus simplification impacts.
+
+Apply this Skill when the main concern is cross-cutting regulatory change tracking across EU digital rules rather than a regulation-specific compliance review.
+
+This Skill is not legal advice. It helps Java engineers, architects, tech leads, platform teams, AI governance owners, privacy engineers, security reviewers, and compliance reviewers identify proposal-stage simplification impacts and engineering evidence that may need qualified review.
+
+The Digital Omnibus is treated as proposal-stage and source-status dependent. Do not present it as a settled single regulation, do not infer final legal obligations, do not relax existing AI Act, GDPR, DORA, NIS2, Data Act, or cybersecurity controls, and do not rewrite conclusions from regulation-specific skills without qualified owner approval.
+
+The main question is:
+
+> How might EU Digital Omnibus simplification proposals affect Java enterprise engineering evidence, workflows, governance timelines, and existing regulation-specific controls?
+
+External reference: [European Commission news, simpler digital rules to help EU businesses grow](https://commission.europa.eu/news-and-media/news/simpler-digital-rules-help-eu-businesses-grow-2025-11-19_en).
+
+External reference: [An agile Digital Rulebook for the EU](https://digital-strategy.ec.europa.eu/en/policies/digital-rulebook).
+
+Digital Omnibus source-status summary reference: [Digital Omnibus source-status summary](references/809-regulations-eu-digital-omnibus-source-summary.md).
+
+Java engineering examples reference: [Digital Omnibus engineering examples](references/809-regulations-eu-digital-omnibus-engineering-examples.md).
+
+Report template asset: [Digital Omnibus engineering review report template](assets/reports/809-eu-digital-omnibus-engineering-review-report-template.md).
+
+## Scope
+
+This Skill applies to:
+
+- Java systems, AI-assisted workflows, data platforms, incident-reporting tools, operational dashboards, evidence inventories, compliance questionnaires, report templates, and CI/CD release gates that may be affected by Digital Omnibus simplification proposals
+- Spring Boot, Quarkus, Micronaut, and framework-agnostic Java services with AI governance, privacy, cybersecurity, resilience, data-access, incident-reporting, or provider-risk evidence
+- Cross-regulation review where Digital Omnibus proposals may affect AI Act timelines, GDPR or ePrivacy evidence, DORA or NIS2 incident reporting, Data Act or data-governance records, cybersecurity reporting flows, or existing EU regulation skill outputs
+- Engineering reviews that need to map affected regulations, source status, evidence inventory updates, change-control impacts, questionnaire or report-template update candidates, workflow consolidation opportunities, and owner escalation
+
+## Digital Omnibus Engineering Review
+
+Treat legislative status, proposal interpretation, applicability, adoption decisions, and any relaxation of regulation-specific controls as governance decisions for legal, compliance, privacy, security, risk, resilience, data-governance, AI governance, business, and executive accountability owners.
+
+Engineering teams should still create evidence that makes those decisions reviewable:
+
+- Which official source and source-status date were checked
+- Which affected regulation areas are mapped to the Java system or governance workflow
+- Which existing regulation skills, questionnaires, reports, runbooks, inventories, and release gates may need updates
+- Which incident-reporting, data-rights, AI governance, provider-risk, or change-control workflows may be consolidated or retimed
+- Which controls must remain unchanged until qualified owners approve the interpretation and adoption path
+]]></goal>
+
+  <constraints>
+    <constraints-description>Translate EU Digital Omnibus proposal-stage simplification concerns into engineering controls for Java enterprise systems. Do not provide legal advice or replace review by qualified legal, compliance, privacy, security, risk, resilience, data-governance, AI governance, product, or executive accountability owners.</constraints-description>
+    <constraint-list>
+      <constraint>**NOT LEGAL ADVICE**: Frame findings as proposal-stage simplification impacts, engineering evidence needs, and escalation points; recommend qualified review for legislative status, applicability, interpretation, adoption decisions, and control relaxation</constraint>
+      <constraint>**SOURCE STATUS FIRST**: Check and report the current official source status before recommending any workflow, evidence, questionnaire, report, timeline, or control change</constraint>
+      <constraint>**OVERLAY ONLY**: Use this Skill as a cross-cutting Digital Omnibus overlay; do not replace regulation-specific review from AI Act, GDPR, DORA, NIS2, Data Act, or other EU regulation skills</constraint>
+      <constraint>**NO SILENT RELAXATION**: Do not reduce existing regulation-specific controls, escalation requirements, reporting workflows, retention evidence, or governance deadlines without qualified owner approval</constraint>
+      <constraint>**AFFECTED-REGULATION MAPPING**: Map each finding to affected areas such as AI Act, GDPR, ePrivacy, DORA, NIS2, Data Act, Data Governance Act, Open Data Directive, Free Flow of Non-Personal Data Regulation, or platform-to-business rules when evidence supports it</constraint>
+      <constraint>**EVIDENCE INVENTORY**: Identify inventories, runbooks, questionnaires, report templates, dashboards, release gates, policy records, and owner assignments that may need updates</constraint>
+      <constraint>**WORKFLOW IMPACTS**: Review incident-reporting consolidation, data-rights workflow changes, AI governance timeline shifts, provider-risk handoffs, and change-control impacts as engineering tasks requiring traceable decisions</constraint>
+      <constraint>**AMBIGUITY ESCALATION**: Escalate ambiguous proposal-stage language, source conflicts, stakeholder disagreement, or missing adoption criteria instead of guessing</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+      <trigger>Review Digital Omnibus impact on Java governance controls</trigger>
+      <trigger>Map Digital Omnibus affected regulations for a Java platform</trigger>
+      <trigger>Update evidence inventory for EU digital-rule simplification proposals</trigger>
+      <trigger>Assess AI Act, GDPR, DORA, NIS2, or Data Act workflow impacts from Digital Omnibus proposals</trigger>
+      <trigger>Check whether incident-reporting, data-rights, AI governance, questionnaire, report-template, or change-control workflows need Digital Omnibus review</trigger>
+    </trigger-list>
+  </triggers>
+  <steps>
+    <step number="1"><step-title>Read source summary, engineering examples, and report template</step-title><step-content>Read `references/809-regulations-eu-digital-omnibus-source-summary.md`, `references/809-regulations-eu-digital-omnibus-engineering-examples.md`, and `assets/reports/809-eu-digital-omnibus-engineering-review-report-template.md` in that order. Use the source summary for official links, proposal-stage status, affected-regulation mapping, source-status checks, and owner escalation. Use the engineering examples for Java control patterns such as evidence inventory updates, change-control impact review, incident-reporting workflow consolidation, data-rights workflow impacts, AI governance timeline changes, compatibility with existing regulation skills, and ambiguity escalation. Do not start implementation review until the source summary, examples reference, and report template are understood.</step-content></step>
+    <step number="2"><step-title>Record source status and affected-regulation scope</step-title><step-content>Identify the official sources checked, source dates where available, reviewed system context, affected regulation areas, existing regulation skills already used, evidence owners, governance owners, delivery path, incident-reporting workflows, data-rights workflows, AI governance timelines, and open applicability or interpretation questions. Escalate legislative status, applicability, interpretation, adoption decisions, and any proposed control relaxation to qualified owners.</step-content></step>
+    <step number="3"><step-title>Review implementation and governance evidence</step-title><step-content>Review Java code, configuration, tests, OpenAPI contracts, data schemas, Kafka contracts, runbooks, monitoring, logging, incident procedures, data-subject or data-rights workflows, AI model or agent governance records, dependency inventories, provider records, release gates, questionnaires, report templates, and existing regulation-skill outputs. Check for gaps between proposed simplification impacts and reviewable evidence.</step-content></step>
+    <step number="4"><step-title>Recommend engineering controls</step-title><step-content>Map Digital Omnibus concerns to engineering actions: source-status checks, affected-regulation mapping, evidence inventory updates, change-control impact records, questionnaire and report-template update candidates, incident-reporting workflow consolidation, data-rights workflow impact review, AI governance timeline review, compatibility checks with existing regulation skills, and escalation for ambiguous proposal-stage language.</step-content></step>
+    <step number="5"><step-title>Generate review report and owner handoffs</step-title><step-content>Use `assets/reports/809-eu-digital-omnibus-engineering-review-report-template.md` to produce a concise engineering review with review context, source-status record, affected-regulation mapping, Digital Omnibus impact signals, engineering controls, evidence inventory updates, compatibility with existing regulation skills, owner handoffs, residual risks, adoption or release decision, and validation steps. State explicitly that legislative status, applicability, interpretation, adoption decisions, and any relaxation of regulation-specific controls require qualified owner review.</step-content></step>
+  </steps>
+</prompt>
