@@ -69,3 +69,10 @@ and verify that acceptance-tests passes.
 execute @skills-generator/src/test/resources/gherkin/804-regulations-eu-nis2.feature
 and verify that acceptance-tests passes.
 ```
+
+## 806-regulations-eu-data-act
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/806-regulations-eu-data-act.feature
+and verify that acceptance-tests passes.
+```
