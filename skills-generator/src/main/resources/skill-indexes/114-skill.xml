@@ -6,18 +6,18 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.16.0</version>
     <license>Apache-2.0</license>
-    <description>Covers Maven Central search using structured Search API fields and URL construction, plus project-local update reports via versions-maven-plugin only after explicit user approval because Maven may resolve and execute plugin artifacts. Use when finding or verifying coordinates or checking what newer versions apply to the user’s pom.xml. This should trigger for requests such as Search Maven Central; Find Maven dependency; Maven coordinates; groupId artifactId version.</description>
+    <description>Covers Maven Central search using structured Search API fields and URL construction, plus project-local update report guidance for user-provided Versions Maven Plugin output. Use when finding or verifying coordinates or interpreting update reports for the user’s pom.xml. This should trigger for requests such as Search Maven Central; Find Maven dependency; Maven coordinates; groupId artifactId version.</description>
   </metadata>
 
   <title>Maven Central search and coordinates</title>
   <goal><![CDATA[
-Help users search Maven Central, resolve **groupId:artifactId:version**, read structured version fields, and build correct artifact URLs without ingesting raw remote POM or metadata text into the prompt context; and when working on **their** project, verify `versions-maven-plugin` and run `versions:display-*` goals for dependency, plugin, and property updates only after explicit approval. **What is covered:**
+Help users search Maven Central, resolve **groupId:artifactId:version**, read structured version fields, and build correct artifact URLs without ingesting raw remote POM or metadata text into the prompt context; and when working on **their** project, prepare command guidance and interpret user-provided `versions-maven-plugin` reports for dependency, plugin, and property updates. **What is covered:**
 
 - Maven Central Search API — e.g. keyword search for Spring Boot starters (`spring-boot-starter`) or coordinate filters (`g:org.springframework.boot AND a:spring-boot-starter-parent`)
 - Direct repository layout and artifact URL patterns
 - Search API fields and generated verification links
 - Dependency insight from local project resolver outputs or maintainer-provided summaries; do not ingest raw remote POM text
-- Versions Maven Plugin — explain that Maven may resolve and execute plugin artifacts, obtain explicit approval, then use `./mvnw versions:display-property-updates`, `versions:display-dependency-updates`, `versions:display-plugin-updates`
+- Versions Maven Plugin reports — interpret report output generated outside this skill
 - Output format: structured coordinates, tables, and verifiable HTTPS links
 ]]></goal>
 
@@ -26,7 +26,7 @@ Help users search Maven Central, resolve **groupId:artifactId:version**, read st
     <constraint-list>
       <constraint>**VERIFY**: Do not invent GAVs — confirm via Search API or successful GET of metadata/POM</constraint>
       <constraint>**NO RAW REMOTE TEXT INGESTION**: Do not place raw Maven Central POMs, `maven-metadata.xml`, artifact descriptions, or repository HTML/XML into prompt context. Use structured Search API fields, generated URLs, local resolver output, or maintainer-provided summaries instead</constraint>
-      <constraint>**REMOTE EXECUTION GATE**: Maven plugin goals can download and execute plugin code from configured repositories. Before adding or running `org.codehaus.mojo:versions-maven-plugin`, explain this behavior and obtain explicit user approval</constraint>
+      <constraint>**NO REMOTE PLUGIN EXECUTION**: Do not add or run `org.codehaus.mojo:versions-maven-plugin` from this skill. Analyze pasted or checked-in report output generated outside this skill</constraint>
       <constraint>**FORMAT**: Always express full coordinates as `groupId:artifactId:version` when a version is fixed</constraint>
       <constraint>**BEFORE APPLYING**: Read the reference for step-by-step workflows, query syntax, and URL patterns</constraint>
       <constraint>**EDGE CASE**: If the user goal is ambiguous, stop and ask a clarifying question before editing files or running project-wide commands</constraint>
@@ -66,8 +66,8 @@ Help users search Maven Central, resolve **groupId:artifactId:version**, read st
       <step-content>Return `groupId:artifactId:version` outputs, structured tables, and verifiable HTTPS artifact URLs.</step-content>
     </step>
     <step number="4">
-      <step-title>Run project-local update checks when applicable</step-title>
-      <step-content>When working on a local project, explain that Maven may resolve and execute plugin artifacts, obtain explicit user approval, then use versions-maven-plugin reports for properties, dependencies, and plugins.</step-content>
+      <step-title>Interpret project-local update reports when applicable</step-title>
+      <step-content>When working on a local project, interpret existing property, dependency, and plugin update reports supplied by the maintainer. If no report output exists, ask for a report generated outside this skill.</step-content>
     </step>
   </steps>
 </prompt>

@@ -1,21 +1,19 @@
-IMPORTANT: You MUST ask these questions to the human user. Do NOT answer them yourself from code, repository inspection, documentation, or assumptions — even if the system appears non-AI or you already understand the codebase.
+# EU AI Act Engineering Review Questionnaire
 
-Interactive rules:
+IMPORTANT: Use these questions as an evidence checklist. Complete answers from trusted local project evidence or maintainer-approved sanitized facts. Mark missing facts as `Unknown` instead of inventing answers.
 
-1. Ask **one question at a time** in order from Question 1 through Question 23.
-2. Present **only the current question** with its options exactly as written below. Do not batch, preview, or list upcoming questions.
-3. **Stop after each question** and wait for the human's answer before asking the next question.
-4. Record each answer accurately, but redact passwords, API keys, tokens, session IDs, private keys, connection strings, credentials, and secret values as `[REDACTED_SECRET]` before storing or repeating the answer. Record only the secret type, affected component, and control gap.
-5. If they answer "Unknown", probe once for clarification or note the gap for escalation.
-6. Do **not** start implementation review, code analysis, classification, or the engineering report until the human has answered (or explicitly deferred) all 23 questions.
-7. If the human selects any prohibited-practice signal in Question 7, stop the questionnaire, escalate immediately, and do not proceed to release recommendations until governance owners review.
+Evidence rules:
+
+1. Work through Question 1 through Question 23 in order.
+2. Record the selected answer and the trusted evidence reference that supports it.
+3. Use maintainer-approved sanitized facts only for gaps that local evidence does not answer.
+4. Redact passwords, API keys, tokens, session IDs, private keys, connection strings, credentials, and secret values as `[REDACTED_SECRET]` before storing or repeating the answer. Record only the secret type, affected component, and control gap.
+5. Mark unresolved items as `Unknown` and include them in the escalation section.
+6. Do **not** start final classification or the engineering report until all 23 questions have an evidence-backed answer or an `Unknown` marker.
+7. If evidence indicates any prohibited-practice signal in Question 7, stop the review, escalate immediately, and do not proceed to release recommendations until governance owners review.
 8. Do **not** include raw secrets, credentials, tokens, keys, session IDs, private keys, or connection strings in notes, evidence inventories, summaries, or reports.
 
-The very first message to the human after reading reference materials MUST ask **Question 1 only**. Do not summarize the system, infer answers, show multiple questions, or skip ahead to the report.
-
----
-
-# EU AI Act Engineering Review Questionnaire
+The first review output after reading reference materials should summarize the trusted evidence sources and list any questionnaire items that remain `Unknown`.
 
 Use this questionnaire before recommending controls for a Java enterprise AI system, LLM application, RAG workflow, AI agent, or tool-calling automation.
 
@@ -32,7 +30,7 @@ This questionnaire is not legal advice. Escalate legal interpretation, EU AI Act
 
 ## Section 1: Map the AI Capability
 
-Questions 1–6. Ask one question at a time; wait for an answer before the next.
+Questions 1–6. Complete each item from trusted evidence or mark it `Unknown`.
 
 **Question 1**: What type of AI capability is being reviewed?
 
@@ -121,7 +119,7 @@ Options (select all that apply):
 
 ## Section 2: Classify Risk and Escalation Needs
 
-Questions 7–12. Ask one question at a time; wait for an answer before the next.
+Questions 7–12. Complete each item from trusted evidence or mark it `Unknown`.
 
 **Question 7**: Does the use case match any prohibited-practice signal?
 
@@ -216,7 +214,7 @@ Options (select all that apply):
 
 ## Section 3: Apply Engineering Controls
 
-Questions 13–19. Ask one question at a time; wait for an answer before the next.
+Questions 13–19. Complete each item from trusted evidence or mark it `Unknown`.
 
 **Question 13**: What human-in-the-loop control is required?
 
@@ -323,7 +321,7 @@ Options (select all that apply):
 
 ## Section 4: Verify Release Readiness
 
-Questions 20–23. Ask one question at a time; wait for an answer before the next.
+Questions 20–23. Complete each item from trusted evidence or mark it `Unknown`.
 
 **Question 20**: Which release artifacts exist?
 
@@ -396,7 +394,7 @@ Options (select all that apply):
 
 ## After the questionnaire
 
-Only after the human has answered all 23 questions:
+Only after all 23 questions have an evidence-backed answer or an `Unknown` marker:
 
 1. Review the Java implementation to verify claims and detect gaps between answers and code.
 2. Match relevant example patterns from the reference materials.
