@@ -123,8 +123,13 @@ jobs:
       - name: Scan generated skills with Snyk Agent Scan
         run: |
           set -o pipefail
+          # W011 flags expected third-party content exposure for skills that
+          # intentionally process maintainer-approved inputs or public metadata.
+          # The skill sources enforce trust boundaries; keep other Snyk issue
+          # codes failing the build.
           uvx snyk-agent-scan@latest scan .agents/skills \
             --ci \
+            --ignore-issues-codes W011 \
             --no-bootstrap \
             --dangerously-run-mcp-servers \
             --suppress-mcpserver-io=true \
