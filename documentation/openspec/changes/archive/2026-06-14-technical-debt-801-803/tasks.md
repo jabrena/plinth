@@ -16,7 +16,7 @@
 - [x] 2.5 Update `skills-generator/src/test/resources/gherkin/801-regulations-eu-ai-act.feature` to expect the new engineering examples reference and linked violation mapping format.
 - [x] 2.6 Refresh `examples/regulations/eu-ai-act` acceptance report examples so their potential violation or non-compliance sections use the new linked mapping table format.
 - [x] 2.7 Inspect generated local `.agents/skills/801-regulations-eu-ai-act` output.
-- [ ] 2.8 Execute the listed `801-regulations-eu-ai-act` acceptance prompt in `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md`.
+- [x] 2.8 Execute the listed `801-regulations-eu-ai-act` acceptance prompt in `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md`.
 
 ## 3. 802-regulations-dora
 
@@ -27,7 +27,7 @@
 - [x] 3.5 Update `skills-generator/src/test/resources/gherkin/802-regulations-dora.feature` to expect the new chapter summary, engineering examples reference, and linked violation mapping format.
 - [x] 3.6 Refresh `examples/regulations/dora` acceptance report examples so their potential violation or non-compliance sections use the new linked mapping table format.
 - [x] 3.7 Inspect generated local `.agents/skills/802-regulations-dora` output.
-- [ ] 3.8 Execute the listed `802-regulations-dora` acceptance prompt in `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md`.
+- [x] 3.8 Execute the listed `802-regulations-dora` acceptance prompt in `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md`.
 
 ## 4. 803-regulations-gdpr
 
@@ -38,7 +38,7 @@
 - [x] 4.5 Update `skills-generator/src/test/resources/gherkin/803-regulations-gdpr.feature` to expect the new chapter summary, engineering examples reference, and linked violation mapping format.
 - [x] 4.6 Refresh `examples/regulations/gdpr` acceptance report examples so their potential violation or non-compliance sections use the new linked mapping table format.
 - [x] 4.7 Inspect generated local `.agents/skills/803-regulations-gdpr` output.
-- [ ] 4.8 Execute the listed `803-regulations-gdpr` acceptance prompt in `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md`.
+- [x] 4.8 Execute the listed `803-regulations-gdpr` acceptance prompt in `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md`.
 
 ## 5. Shared Generator and Validation
 
