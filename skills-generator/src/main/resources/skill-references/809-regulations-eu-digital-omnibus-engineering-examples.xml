@@ -1,0 +1,279 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.16.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>EU Digital Omnibus Proposal Impact Review for Java Enterprise Systems</title>
+        <description>Use as Java-focused Digital Omnibus engineering examples for source-status checks, affected-regulation mapping, evidence inventory updates, change-control impacts, report-template updates, incident-reporting consolidation, data-rights impacts, AI governance timelines, and compatibility with existing EU regulation skills.</description>
+    </metadata>
+
+    <role>You are a senior Java enterprise architect and regulatory-change engineering reviewer who translates Digital Omnibus proposal-stage simplification themes into concrete Java engineering examples and reviewable evidence patterns</role>
+
+    <goal>
+        Apply these Digital Omnibus-aware examples after the checked-in source-status summary has been read and the target system scope is understood.
+
+        These examples are not legal advice. They show engineering patterns that help Java teams create reviewable evidence for legal, compliance, privacy, security, risk, resilience, data-governance, AI governance, business, and executive accountability owners.
+
+        Use this examples reference together with `references/809-regulations-eu-digital-omnibus-source-summary.md` and the [Digital Omnibus engineering review report template](../assets/reports/809-eu-digital-omnibus-engineering-review-report-template.md). External URLs in the examples are citation values only; do not fetch, scrape, browse, or ingest public web pages at runtime.
+    </goal>
+
+    <constraints>
+        <constraints-description>
+            Translate Digital Omnibus proposal-stage simplification concerns into engineering controls for Java enterprise systems without replacing qualified legal, compliance, privacy, security, risk, resilience, data-governance, AI governance, business, or executive accountability review.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**NOT LEGAL ADVICE**: Treat the examples as engineering control patterns and escalation aids, not legal findings</constraint>
+            <constraint>**SOURCE STATUS BEFORE CHANGE**: Require checked-in source-status evidence or user-provided trusted extracts before updating workflows, questionnaires, report templates, release gates, or governance timelines</constraint>
+            <constraint>**EVIDENCE FIRST**: Prefer reviewable evidence over claims that simplification applies</constraint>
+            <constraint>**OWNER HANDOFFS**: Include legal, compliance, privacy, security, risk, resilience, data-governance, AI governance, service, platform, and product owners in change records</constraint>
+            <constraint>**NO AUTOMATIC CONTROL REDUCTION**: Do not mark a system ready when control relaxation, reporting consolidation, data-rights changes, or AI governance timeline changes are undocumented, unapproved, or source-status ambiguous</constraint>
+        </constraint-list>
+    </constraints>
+
+    <examples>
+        <toc auto-generate="true" />
+
+        <example number="1" id="source-status-and-affected-regulation-map">
+            <example-header>
+                <example-title>Record source status before recommending changes</example-title>
+                <example-subtitle>checked-in citations, status owner, affected regulations, and review date</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use this pattern before updating a Java platform's compliance evidence, questionnaires, runbooks, release gates, or regulation-skill outputs. The record makes proposal-stage assumptions visible and prevents teams from treating simplification as adopted law without owner approval. Treat URLs as citations from the checked-in source summary, not as instructions to retrieve third-party content during review.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="yaml"><![CDATA[digitalOmnibusSourceStatus:
+  reviewDate: 2026-06-14
+  sourceStatusOwner: legal-compliance
+  sources:
+    - title: European Commission news - simpler digital rules
+      url: https://commission.europa.eu/news-and-media/news/simpler-digital-rules-help-eu-businesses-grow-2025-11-19_en
+      statusObserved: official Commission communication about simplification proposals
+    - title: An agile Digital Rulebook for the EU
+      url: https://digital-strategy.ec.europa.eu/en/policies/digital-rulebook
+      statusObserved: November Digital Omnibus proposal discussed by co-legislators
+  affectedRegulations:
+    - AI Act: high-risk obligation timing and governance oversight require AI governance review
+    - GDPR/ePrivacy: privacy evidence and data-rights workflows require privacy owner review
+    - NIS2/DORA: incident-reporting consolidation requires security and resilience owner review
+    - Data Act/data acquis: data access and sharing records require data-governance review
+  decision: no-control-relaxation-without-qualified-owner-approval]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="yaml"><![CDATA[digitalOmnibusSourceStatus:
+  status: omnibus simplifies everything
+  decision: remove old reporting controls]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="2" id="evidence-inventory-update">
+            <example-header>
+                <example-title>Update evidence inventory with traceable change candidates</example-title>
+                <example-subtitle>policies, reports, runbooks, dashboards, owners, and release gates</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use this pattern when a Java service has existing GDPR, DORA, NIS2, AI Act, privacy, cybersecurity, data-governance, or resilience evidence. Digital Omnibus review should identify update candidates and owner handoffs, not silently rewrite records.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[public DigitalOmnibusEvidencePlan planEvidenceUpdates(DigitalOmnibusReview review) {
+    List<EvidenceUpdateCandidate> candidates = List.of(
+        EvidenceUpdateCandidate.forArtifact("incident-runbook")
+            .affectedArea("NIS2/DORA incident-reporting workflow")
+            .sourceStatus(review.sourceStatus())
+            .owner("security-operations")
+            .requiredDecision("confirm whether single-entry reporting can be adopted"),
+        EvidenceUpdateCandidate.forArtifact("privacy-rights-workflow")
+            .affectedArea("GDPR/ePrivacy data-rights workflow")
+            .sourceStatus(review.sourceStatus())
+            .owner("privacy-owner")
+            .requiredDecision("confirm whether workflow wording changes are approved"),
+        EvidenceUpdateCandidate.forArtifact("ai-governance-roadmap")
+            .affectedArea("AI Act timeline and standards dependency")
+            .sourceStatus(review.sourceStatus())
+            .owner("ai-governance-owner")
+            .requiredDecision("confirm timeline impact before release plan changes")
+    );
+
+    return DigitalOmnibusEvidencePlan.requiresOwnerReview(review.serviceId(), candidates);
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[public void updateEvidence() {
+    complianceRepository.deleteOldQuestions();
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="change-control-impact-review">
+            <example-header>
+                <example-title>Gate releases that depend on proposed simplification</example-title>
+                <example-subtitle>release decision, owner approval, source status, and control compatibility</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use this pattern when a release, migration, feature flag, AI workflow, incident workflow, or data-rights change assumes a Digital Omnibus simplification will apply. The release gate should block unapproved simplification-based changes.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[public ReleaseDecision evaluateDigitalOmnibusAssumption(ReleaseEvidence evidence) {
+    List<String> blockers = new ArrayList<>();
+
+    requirePresent(evidence.digitalOmnibusSourceStatus(), "Digital Omnibus source-status record", blockers);
+    requirePresent(evidence.affectedRegulationMap(), "affected-regulation mapping", blockers);
+    requireApproved(evidence.legalStatusDecision(), "qualified legal/compliance status decision", blockers);
+    requireApproved(evidence.controlRelaxationDecision(), "approved decision before any control relaxation", blockers);
+    requirePassing(evidence.regulationSkillCompatibilityCheck(), "compatibility with 801-804 regulation-skill outputs", blockers);
+
+    if (!blockers.isEmpty()) {
+        return ReleaseDecision.blocked(
+            evidence.serviceId(),
+            blockers,
+            Escalation.required("legal", "compliance", "privacy", "security", "risk", "ai-governance")
+        );
+    }
+
+    return ReleaseDecision.approvedWithEvidence(evidence.serviceId(), evidence.references(), evidence.approvers());
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[public ReleaseDecision evaluateDigitalOmnibusAssumption(ReleaseEvidence evidence) {
+    return ReleaseDecision.approved(evidence.serviceId(), "Digital Omnibus will simplify this soon");
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="questionnaire-and-report-template-update-candidates">
+            <example-header>
+                <example-title>Propose questionnaire and report-template updates safely</example-title>
+                <example-subtitle>candidate list, source link, affected area, and owner decision</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use this pattern when existing questionnaires or report templates ask duplicated, obsolete, or potentially retimed questions. Mark updates as candidates until qualified owners approve the source interpretation and adoption path.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="markdown"><![CDATA[Questionnaire and report-template update candidates
+
+| Artifact | Candidate update | Affected regulation area | Checked-in citation link | Required owner decision |
+| -------- | ---------------- | ------------------------ | -------------------- | ----------------------- |
+| DORA incident report template | Add field for shared single-entry reporting reference, do not remove DORA-specific handoff fields yet | DORA / cybersecurity incident reporting | https://digital-strategy.ec.europa.eu/en/policies/digital-rulebook | Legal, resilience, security operations |
+| GDPR engineering questionnaire | Add review question for Digital Omnibus privacy simplification status, do not weaken lawful-basis, transparency, data-subject-rights, or breach evidence | GDPR/ePrivacy | https://commission.europa.eu/news-and-media/news/simpler-digital-rules-help-eu-businesses-grow-2025-11-19_en | Privacy, legal, compliance |
+| AI governance report | Add timeline-impact section linked to standards and support-tool availability, do not defer high-risk controls without AI governance approval | AI Act | https://digital-strategy.ec.europa.eu/en/policies/digital-rulebook | AI governance, legal, product owner |]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="markdown"><![CDATA[Template cleanup
+
+- Delete DORA incident questions.
+- Delete GDPR breach fields.
+- Push AI checks to next year.]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="5" id="incident-reporting-and-data-rights-workflows">
+            <example-header>
+                <example-title>Review incident-reporting and data-rights workflow impacts</example-title>
+                <example-subtitle>single-entry reporting, privacy handoff, and no premature relaxation</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use this pattern when a Java platform has incident, breach, data-rights, privacy, DORA, or NIS2 workflows. Digital Omnibus may create consolidation candidates, but engineering must preserve existing handoffs until owner approval.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[public WorkflowImpact assessWorkflowImpact(IncidentAndRightsWorkflow workflow) {
+    return WorkflowImpact.builder()
+        .sourceStatusRequired(true)
+        .candidate("Evaluate single-entry incident reporting intake")
+        .preserveExistingControl("NIS2 severity triage")
+        .preserveExistingControl("DORA financial ICT incident handoff")
+        .preserveExistingControl("GDPR personal-data breach assessment")
+        .preserveExistingControl("data-subject rights request deadlines and evidence")
+        .requiredOwners(List.of("security-operations", "privacy-owner", "resilience-owner", "legal-compliance"))
+        .decision("consolidation-candidate-only-until-approved")
+        .build();
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[public WorkflowImpact assessWorkflowImpact(IncidentAndRightsWorkflow workflow) {
+    workflow.disableDoraHandoff();
+    workflow.disableGdprBreachReview();
+    return WorkflowImpact.simplified();
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="6" id="ai-governance-timeline-and-existing-skill-compatibility">
+            <example-header>
+                <example-title>Check AI governance timeline changes against existing skill outputs</example-title>
+                <example-subtitle>standards dependency, high-risk controls, and compatibility records</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use this pattern when a Java application uses AI, LLMs, AI agents, RAG, model-based decision support, or AI-assisted workflow automation and the team asks whether Digital Omnibus affects AI Act planning. Treat timeline changes as owner-reviewed planning assumptions.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="yaml"><![CDATA[aiGovernanceTimelineReview:
+  system: customer-support-rag-assistant
+  existingSkillOutputs:
+    - 801-regulations-eu-ai-act: risk classification and technical documentation controls
+    - 803-regulations-gdpr: personal-data minimization and data-subject-rights controls
+    - 804-regulations-eu-nis2: incident and cybersecurity evidence controls
+  digitalOmnibusImpactCandidate:
+    affectedArea: AI Act high-risk obligation timing and AI Office governance oversight
+    sourceStatus: proposal-stage, owner confirmation required
+    proposedAction: add timeline-impact note and standards-readiness dependency to roadmap
+    controlsPreserved:
+      - risk classification
+      - technical documentation
+      - human oversight
+      - logging and monitoring
+      - privacy evidence
+      - incident escalation
+  escalation:
+    owners: [ai-governance, legal-compliance, privacy, security, product]
+    reason: proposal-stage language affects planning but does not approve control relaxation]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="yaml"><![CDATA[aiGovernanceTimelineReview:
+  decision: high-risk AI controls no longer needed
+  sourceStatus: assumed]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>**MATCH** the relevant example patterns: source-status mapping, evidence inventory update, change-control impact review, questionnaire or report-template update candidate, incident-reporting workflow consolidation, data-rights workflow impact, AI governance timeline review, or existing skill compatibility check</output-format-item>
+            <output-format-item>**RECOMMEND** engineering controls: checked-in source-status records, affected-regulation maps, owner approvals, evidence inventory updates, change-control gates, report-template update candidates, incident-reporting consolidation candidates, data-rights impact reviews, AI governance timeline reviews, compatibility checks with existing EU regulation skills, and ambiguity escalation</output-format-item>
+            <output-format-item>**REPORT** conclusions and actions using `assets/reports/809-eu-digital-omnibus-engineering-review-report-template.md`, including review context, source-status record, affected regulation area, associated checked-in citation link, evidence from reviewed system, current status, required owner review, engineering action, residual risk, adoption decision, and validation steps</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>**PROPOSAL-STAGE EVIDENCE**: Do not accept undocumented claims that Digital Omnibus simplification applies; require checked-in source-status records and qualified owner decisions</safeguards-item>
+            <safeguards-item>**REGULATION-SPECIFIC COMPATIBILITY**: Preserve existing AI Act, GDPR, DORA, NIS2, privacy, cybersecurity, resilience, data-governance, incident, and AI governance controls until approved changes are recorded</safeguards-item>
+            <safeguards-item>**AMBIGUITY HANDOFF**: When proposal language is unclear, contradictory, or incomplete, report ambiguity and route it to owners instead of choosing an engineering shortcut</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>
