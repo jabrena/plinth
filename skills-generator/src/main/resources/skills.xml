@@ -578,4 +578,14 @@
                 target="assets/reports/803-gdpr-engineering-review-report-template.md" />
         </resource-list>
     </skill>
+    <skill id="804" skillId="804-regulations-eu-nis2">
+        <reference-list>
+            <reference>804-regulations-eu-nis2-chapters-summary</reference>
+            <reference>804-regulations-eu-nis2-engineering-examples</reference>
+        </reference-list>
+        <resource-list>
+            <resource source="skill-references/assets/reports/804-nis2-engineering-review-report-template.md"
+                target="assets/reports/804-nis2-engineering-review-report-template.md" />
+        </resource-list>
+    </skill>
 </skill-inventory>

@@ -134,9 +134,14 @@ class CommandIndexesTest {
             .contains("`@robot-no-java`")
             .contains("file ownership")
             .contains("Mark OpenSpec tasks complete only after")
-            .contains("Decide whether the work should run in the current checkout")
-            .contains("Use `/create-feature-branch`")
+            .contains("Mandatory execution contract")
+            .contains("If the command runner is not `@robot-tech-lead`")
+            .contains("MUST invoke the selected implementation agent")
+            .contains("Branch/worktree gate")
+            .contains("Complete the branch/worktree gate")
+            .contains("execute `/create-feature-branch`")
             .contains("`/create-worktree`")
+            .contains("Do not start implementation before the feature-branch or worktree gate has passed")
             .contains("request `/review-alignment`")
             .contains("MUST NOT implement application code directly");
     }
