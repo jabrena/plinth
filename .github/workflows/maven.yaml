@@ -123,14 +123,8 @@ jobs:
       - name: Scan generated skills with Snyk Agent Scan
         run: |
           set -o pipefail
-          # W011/W012 flag expected exposure/runtime dependencies in skills
-          # that intentionally process maintainer-approved inputs, public
-          # metadata, Maven plugin resolution, or approved Testcontainers images.
-          # The skill sources enforce trust boundaries and explicit approval
-          # gates; keep other Snyk issue codes failing the build.
           uvx snyk-agent-scan@latest scan .agents/skills \
             --ci \
-            --ignore-issues-codes W011,W012 \
             --no-bootstrap \
             --dangerously-run-mcp-servers \
             --suppress-mcpserver-io=true \
