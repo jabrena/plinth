@@ -17,6 +17,8 @@ Apply this Skill to determine what engineering controls are required before the 
 
 This Skill is not legal advice. It helps Java engineers, architects, tech leads, platform teams, and reviewers identify when EU AI Act concerns may apply and how to translate policy expectations into enterprise architecture controls such as policy gates, human oversight, least privilege, audit evidence, monitoring, escalation workflows, and approval processes.
 
+The purpose of this Skill is to increase awareness of potential gaps in the system and create engineering evidence for qualified review. The response produced by this Skill does not represent legal advice, a legal opinion, or a final regulatory determination.
+
 The main question is:
 
 > When does a Java application or AI agent require EU AI Act-aware engineering controls, and what should developers build differently?

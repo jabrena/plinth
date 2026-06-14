@@ -82,7 +82,7 @@ DataServices --> BackupVault : backups
 AzurePolicy --> Aks : production policy controls
 
 legend right
-Source: examples/diagrams/deployment/system-example.md
+Source: examples/diagrams/deployment/system-example-cicd-pr-model.md
 Default view hides AKS internal service complexity behind aggregate workloads.
 GitOps deploys validated artifacts to Azure Kubernetes Service.
 Only topology facts explicitly described by the source document are represented.

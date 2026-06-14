@@ -13,13 +13,26 @@ These identifiers keep EU regulation skills in the `800` band after `801-regulat
 
 ### Skill shape
 
-Both skills use the existing XML source pattern:
+Both skills use the existing XML source pattern and the `801-regulations-eu-ai-act` implementation as the structural baseline:
 
 - `skills-generator/src/main/resources/skill-indexes/<id>-skill.xml` defines metadata, title, goal, constraints, triggers, and workflow steps.
 - `skills-generator/src/main/resources/skill-references/<skill-id>.xml` provides detailed examples and output guidance.
 - `skills-generator/src/main/resources/skills.xml` registers the skill id and reference.
 
-Dedicated questionnaire and report assets are not required for the first DORA/GDPR addition. The initial deliverable is regulation-aware engineering guidance with concrete review patterns. Questionnaire/report assets can be added later if issue #848 or follow-up issues request formal review reports comparable to `801`.
+The index XML for `802` and `803` should follow the same reader experience as `801`: clear applicability, explicit "not legal advice" constraints, scope/classification guidance, regulation-specific risk signals, triggers, and a step-by-step review workflow that starts with reference material and an interactive questionnaire before implementation review.
+
+The reference XML for `802` and `803` should also follow the `801` shape: `metadata`, `role`, `goal`, examples, `output-format`, and `safeguards`. The content must be regulation-specific, but the structure should remain consistent so generated skills in the `800` band feel predictable to users.
+
+Dedicated questionnaire and report assets are required for the DORA/GDPR addition so both skills can run the same formal review flow as `801`: ask one question at a time, record human answers, avoid inferring answers from code, review implementation evidence only after the questionnaire, and generate a structured report using a skill-specific template.
+
+The asset layout mirrors `801`:
+
+- `skills-generator/src/main/resources/skill-references/assets/questions/802-dora-engineering-review-questionnaire.md`
+- `skills-generator/src/main/resources/skill-references/assets/reports/802-dora-engineering-review-report-template.md`
+- `skills-generator/src/main/resources/skill-references/assets/questions/803-gdpr-engineering-review-questionnaire.md`
+- `skills-generator/src/main/resources/skill-references/assets/reports/803-gdpr-engineering-review-report-template.md`
+
+The `skills.xml` resource registration must copy those assets into generated local skills so generated `SKILL.md` workflow steps can reference `assets/questions/...` and `assets/reports/...` paths just like `801`.
 
 ### DORA engineering scope
 
