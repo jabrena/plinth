@@ -4,7 +4,7 @@
       id="809-regulations-eu-digital-omnibus">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
-    <version>0.16.0-SNAPSHOT</version>
+    <version>0.16.0</version>
     <license>Apache-2.0</license>
     <description>Use when reviewing Java enterprise systems for EU Digital Omnibus proposal-stage simplification impacts across AI, cybersecurity, data, privacy, incident-reporting, compliance evidence, and existing EU regulation skill outputs. This should trigger for requests such as Review Digital Omnibus impact on Java governance controls; Map Digital Omnibus affected regulations; Update evidence inventory for EU digital-rule simplification; Assess AI Act, GDPR, DORA, NIS2, or Data Act workflow impacts from Digital Omnibus proposals.</description>
   </metadata>

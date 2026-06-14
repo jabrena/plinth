@@ -3,7 +3,7 @@
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
-        <version>0.16.0-SNAPSHOT</version>
+        <version>0.16.0</version>
         <license>Apache-2.0</license>
         <title>EU Digital Omnibus Proposal Impact Review for Java Enterprise Systems</title>
         <description>Use as a proposal-stage source-status and affected-regulation mapping summary for Digital Omnibus engineering reviews across AI, cybersecurity, privacy, data, incident-reporting, and existing EU regulation skill outputs.</description>

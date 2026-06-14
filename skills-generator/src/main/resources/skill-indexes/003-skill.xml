@@ -4,7 +4,7 @@
       id="003-skills-inventory">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
-    <version>0.16.0-SNAPSHOT</version>
+    <version>0.16.0</version>
     <license>Apache-2.0</license>
     <description>Use when you need to generate a checklist document with Java system prompts, following the embedded template exactly and producing INVENTORY-SKILLS-JAVA.md in the project root. This should trigger for requests such as Create Java system prompts checklist; Generate INVENTORY-SKILLS-JAVA.md; Use @003-skills-inventory.</description>
   </metadata>
