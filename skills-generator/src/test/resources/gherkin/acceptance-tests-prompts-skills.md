@@ -70,6 +70,13 @@ execute @skills-generator/src/test/resources/gherkin/804-regulations-eu-nis2.fea
 and verify that acceptance-tests passes.
 ```
 
+## 805-regulations-eu-cyber-resilience-act
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/805-regulations-eu-cyber-resilience-act.feature
+and verify that acceptance-tests passes.
+```
+
 ## 806-regulations-eu-data-act
 
 ```bash
@@ -84,10 +91,16 @@ execute @skills-generator/src/test/resources/gherkin/807-regulations-eu-digital-
 and verify that acceptance-tests passes.
 ```
 
+## 808-regulations-eu-digital-markets-act
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/808-regulations-eu-digital-markets-act.feature
+and verify that acceptance-tests passes.
+```
+
 ## 809-regulations-eu-digital-omnibus
 
 ```bash
 execute @skills-generator/src/test/resources/gherkin/809-regulations-eu-digital-omnibus.feature
 and verify that acceptance-tests passes.
 ```
-
