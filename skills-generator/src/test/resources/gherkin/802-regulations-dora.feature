@@ -11,6 +11,7 @@ Scenario: Review a Java financial service with DORA operational resilience contr
   And the local generated skill path ".agents/skills/802-regulations-dora"
   And the requested report output path is "examples/regulations/dora/DORA-ENGINEERING-REVIEW-REPORT.md"
   And any existing report at the requested output path must be overwritten
+  And the folder "examples/regulations/dora" has no git changes
   And the feature request is expected to be developed and released through the described CI/CD pipeline
   And the DORA questionnaire answers are based only on information present in "examples/diagrams/deployment/system-example-cicd-pr-model.md" and "examples/diagrams/deployment/checkout-service-feature-request.md"
   When the skill ".agents/skills/802-regulations-dora" is applied to the system description, diagram, and feature request files
@@ -30,6 +31,7 @@ Scenario: Review a Java financial service with DORA operational resilience contr
   And the skill recommends engineering controls for asset inventory, monitoring, alerting, evidence-safe logging, incident workflow, backup and restore verification, failover testing, rollback plans, provider monitoring, exit planning, database migration approval, Kafka schema compatibility, and change approval
   And the skill reports conclusions and actions using the DORA engineering review report template
   And the skill overwrites the DORA engineering review report at "examples/regulations/dora/DORA-ENGINEERING-REVIEW-REPORT.md"
+  And any git changes produced during skill execution and verification are reset
 
 @acceptance-test
 Scenario: Review a Java financial service checkout change with direct-to-main DORA controls
@@ -39,6 +41,7 @@ Scenario: Review a Java financial service checkout change with direct-to-main DO
   And the local generated skill path ".agents/skills/802-regulations-dora"
   And the requested report output path is "examples/regulations/dora/DORA-DIRECT-MAIN-ENGINEERING-REVIEW-REPORT.md"
   And any existing report at the requested output path must be overwritten
+  And the folder "examples/regulations/dora" has no git changes
   And the feature request is expected to be committed directly to main and released through the described CI/CD pipeline
   And the DORA questionnaire answers are based only on information present in "examples/diagrams/deployment/system-example-cicd-model.md" and "examples/diagrams/deployment/checkout-service-feature-request.md"
   When the skill ".agents/skills/802-regulations-dora" is applied to the direct-to-main system description, diagram, and feature request files
@@ -58,3 +61,4 @@ Scenario: Review a Java financial service checkout change with direct-to-main DO
   And the skill recommends engineering controls for pre-commit review, main-branch protection, asset inventory, monitoring, alerting, evidence-safe logging, incident workflow, backup and restore verification, failover testing, rollback plans, provider monitoring, exit planning, database migration approval, Kafka schema compatibility, and change approval
   And the skill reports conclusions and actions using the DORA engineering review report template
   And the skill overwrites the DORA engineering review report at "examples/regulations/dora/DORA-DIRECT-MAIN-ENGINEERING-REVIEW-REPORT.md"
+  And any git changes produced during skill execution and verification are reset

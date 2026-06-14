@@ -11,6 +11,7 @@ Scenario: Review a Java AI system with EU AI Act controls
   And the local generated skill path ".agents/skills/801-regulations-eu-ai-act"
   And the requested report output path is "examples/regulations/eu-ai-act/EU-AI-ACT-ENGINEERING-REVIEW-REPORT.md"
   And any existing report at the requested output path must be overwritten
+  And the folder "examples/regulations/eu-ai-act" has no git changes
   And the feature request is expected to be developed and released through the described CI/CD pipeline
   And the EU AI Act questionnaire answers are based only on information present in "examples/diagrams/deployment/system-example-cicd-pr-model.md" and "examples/diagrams/deployment/checkout-service-feature-request.md"
   When the skill ".agents/skills/801-regulations-eu-ai-act" is applied to the system description, diagram, and feature request files
@@ -27,6 +28,7 @@ Scenario: Review a Java AI system with EU AI Act controls
   And the skill recommends engineering controls for human oversight, policy gates, least privilege, audit evidence, data governance, database migration approval, Kafka schema compatibility, monitoring, incident response, rollback, and disablement
   And the skill reports conclusions and actions using the EU AI Act engineering review report template
   And the skill overwrites the EU AI Act engineering review report at "examples/regulations/eu-ai-act/EU-AI-ACT-ENGINEERING-REVIEW-REPORT.md"
+  And any git changes produced during skill execution and verification are reset
 
 @acceptance-test
 Scenario: Review a Java AI-assisted checkout change with direct-to-main CI/CD controls
@@ -36,6 +38,7 @@ Scenario: Review a Java AI-assisted checkout change with direct-to-main CI/CD co
   And the local generated skill path ".agents/skills/801-regulations-eu-ai-act"
   And the requested report output path is "examples/regulations/eu-ai-act/EU-AI-ACT-DIRECT-MAIN-ENGINEERING-REVIEW-REPORT.md"
   And any existing report at the requested output path must be overwritten
+  And the folder "examples/regulations/eu-ai-act" has no git changes
   And the feature request is expected to be committed directly to main and released through the described CI/CD pipeline
   And the EU AI Act questionnaire answers are based only on information present in "examples/diagrams/deployment/system-example-cicd-model.md" and "examples/diagrams/deployment/checkout-service-feature-request.md"
   When the skill ".agents/skills/801-regulations-eu-ai-act" is applied to the direct-to-main system description, diagram, and feature request files
@@ -52,3 +55,4 @@ Scenario: Review a Java AI-assisted checkout change with direct-to-main CI/CD co
   And the skill recommends engineering controls for pre-commit review, main-branch protection, policy gates, least privilege, audit evidence, data governance, database migration approval, Kafka schema compatibility, monitoring, incident response, rollback, and disablement
   And the skill reports conclusions and actions using the EU AI Act engineering review report template
   And the skill overwrites the EU AI Act engineering review report at "examples/regulations/eu-ai-act/EU-AI-ACT-DIRECT-MAIN-ENGINEERING-REVIEW-REPORT.md"
+  And any git changes produced during skill execution and verification are reset

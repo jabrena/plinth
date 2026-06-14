@@ -11,6 +11,7 @@ Scenario: Review a Java personal-data service with GDPR privacy controls
   And the local generated skill path ".agents/skills/803-regulations-gdpr"
   And the requested report output path is "examples/regulations/gdpr/GDPR-ENGINEERING-REVIEW-REPORT.md"
   And any existing report at the requested output path must be overwritten
+  And the folder "examples/regulations/gdpr" has no git changes
   And the feature request is expected to be developed and released through the described CI/CD pipeline
   And the GDPR questionnaire answers are based only on information present in "examples/diagrams/deployment/system-example-cicd-pr-model.md" and "examples/diagrams/deployment/checkout-service-feature-request.md"
   When the skill ".agents/skills/803-regulations-gdpr" is applied to the system description, diagram, and feature request files
@@ -30,6 +31,7 @@ Scenario: Review a Java personal-data service with GDPR privacy controls
   And the skill recommends engineering controls for minimization, field-level authorization, pseudonymization, redaction, retention jobs, deletion propagation, rights request orchestration, transfer evidence, breach evidence, privacy-safe observability, database migration approval, Kafka schema compatibility, and owner escalation
   And the skill reports conclusions and actions using the GDPR engineering review report template
   And the skill overwrites the GDPR engineering review report at "examples/regulations/gdpr/GDPR-ENGINEERING-REVIEW-REPORT.md"
+  And any git changes produced during skill execution and verification are reset
 
 @acceptance-test
 Scenario: Review a Java personal-data checkout change with direct-to-main GDPR controls
@@ -39,6 +41,7 @@ Scenario: Review a Java personal-data checkout change with direct-to-main GDPR c
   And the local generated skill path ".agents/skills/803-regulations-gdpr"
   And the requested report output path is "examples/regulations/gdpr/GDPR-DIRECT-MAIN-ENGINEERING-REVIEW-REPORT.md"
   And any existing report at the requested output path must be overwritten
+  And the folder "examples/regulations/gdpr" has no git changes
   And the feature request is expected to be committed directly to main and released through the described CI/CD pipeline
   And the GDPR questionnaire answers are based only on information present in "examples/diagrams/deployment/system-example-cicd-model.md" and "examples/diagrams/deployment/checkout-service-feature-request.md"
   When the skill ".agents/skills/803-regulations-gdpr" is applied to the direct-to-main system description, diagram, and feature request files
@@ -58,3 +61,4 @@ Scenario: Review a Java personal-data checkout change with direct-to-main GDPR c
   And the skill recommends engineering controls for pre-commit review, main-branch protection, minimization, field-level authorization, pseudonymization, redaction, retention jobs, deletion propagation, rights request orchestration, transfer evidence, breach evidence, privacy-safe observability, database migration approval, Kafka schema compatibility, and owner escalation
   And the skill reports conclusions and actions using the GDPR engineering review report template
   And the skill overwrites the GDPR engineering review report at "examples/regulations/gdpr/GDPR-DIRECT-MAIN-ENGINEERING-REVIEW-REPORT.md"
+  And any git changes produced during skill execution and verification are reset
