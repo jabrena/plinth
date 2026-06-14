@@ -1,10 +1,12 @@
 # DORA Engineering Review Report
 
-Use this template after the human has answered all four sections of `assets/questions/802-dora-engineering-review-questionnaire.md` and matching the relevant examples in `references/802-regulations-dora.md`.
+Use this template after reviewing `references/802-regulations-dora-chapters-summary.md`, the human has answered all four sections of `assets/questions/802-dora-engineering-review-questionnaire.md`, and the relevant examples from `references/802-regulations-dora-engineering-examples.md` have been matched.
 
 This report is not legal advice. Use it as engineering evidence for legal, compliance, security, risk, resilience, procurement, business-continuity, architecture, and business-owner review.
 
 The purpose of this report is to increase awareness of potential gaps in the system and create engineering evidence for qualified review. The response produced from this template does not represent legal advice, a legal opinion, or a final regulatory determination.
+
+Do not include raw secrets, credentials, passwords, API keys, tokens, session IDs, private keys, or connection strings in this report. Replace secret values with `[REDACTED_SECRET]` and document only the secret type, affected component, evidence location, owner, and remediation needed.
 
 ## 1. Review Context
 
@@ -57,16 +59,16 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 
 ## 5. Potential Violation Or Non-Compliance Mapping
 
-This section is not a legal finding. Use it to list concrete potential DORA violation or non-compliance signals from the reviewed evidence and route each item to qualified legal, compliance, security, risk, resilience, procurement, business-continuity, architecture, or business-owner review. When no violation is confirmed, say so explicitly and keep open items as potential gaps.
+This section is not a legal finding. Use it to list concrete potential DORA violation or non-compliance signals from the reviewed evidence and route each item to qualified legal, compliance, security, risk, resilience, procurement, business-continuity, architecture, or business-owner review. When no violation is confirmed, say so explicitly and keep open items as potential gaps. Use the chapter links from `references/802-regulations-dora-chapters-summary.md`; add more official-source links when one finding spans multiple DORA areas.
 
-| Potential violation or non-compliance signal | DORA reference | Evidence from reviewed system | Current status | Required owner review | Engineering action |
-| -------------------------------------------- | -------------- | ----------------------------- | -------------- | --------------------- | ------------------ |
-| Applicability, regulated-service, or important-function uncertainty | Articles 1-2 | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / risk / business owner | TBD |
-| Missing ICT risk-management framework, ownership, or asset inventory evidence | Chapter II / Articles 5-16 | TBD | None identified / Potential gap / Confirmed concern | Risk / resilience / security / platform | TBD |
-| Missing incident classification, reporting, or evidence path | Chapter III / Articles 17-23 | TBD | None identified / Potential gap / Confirmed concern | Compliance / security / SRE / resilience | TBD |
-| Missing digital operational resilience testing evidence | Chapter IV / Articles 24-27 | TBD | None identified / Potential gap / Confirmed concern | Resilience / SRE / QA / risk | TBD |
-| Missing ICT third-party provider risk, contract, monitoring, or exit evidence | Chapter V / Articles 28-44 | TBD | None identified / Potential gap / Confirmed concern | Procurement / risk / legal / platform | TBD |
-| Incorrect, incomplete, or unsupported operational-resilience information | Chapters VI-VII / Articles 45-56 | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / risk owner | TBD |
+| Potential violation or non-compliance signal | DORA reference area | Associated official-source link | Redacted evidence from reviewed system | Current status | Required owner review | Engineering action |
+| -------------------------------------------- | ------------------- | ------------------------------- | ------------------------------------- | -------------- | --------------------- | ------------------ |
+| Applicability, regulated-service, or important-function uncertainty | General provisions / scope | [Chapter I](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554#cpt_I) | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / risk / business owner | TBD |
+| Missing ICT risk-management framework, ownership, or asset inventory evidence | ICT risk management / Articles 5-16 | [Chapter II](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554#cpt_II) | TBD | None identified / Potential gap / Confirmed concern | Risk / resilience / security / platform | TBD |
+| Missing incident classification, reporting, or evidence path | ICT-related incident management and reporting / Articles 17-23 | [Chapter III](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554#cpt_III) | TBD | None identified / Potential gap / Confirmed concern | Compliance / security / SRE / resilience | TBD |
+| Missing digital operational resilience testing evidence | Digital operational resilience testing / Articles 24-27 | [Chapter IV](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554#cpt_IV) | TBD | None identified / Potential gap / Confirmed concern | Resilience / SRE / QA / risk | TBD |
+| Missing ICT third-party provider risk, contract, monitoring, or exit evidence | ICT third-party risk management / Articles 28-44 | [Chapter V](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554#cpt_V) | TBD | None identified / Potential gap / Confirmed concern | Procurement / risk / legal / platform | TBD |
+| Incorrect, incomplete, or unsupported operational-resilience information | Information sharing / supervision and enforcement / Articles 45-56 | [Chapter VI](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554#cpt_VI), [Chapter VII](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554#cpt_VII) | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / risk owner | TBD |
 
 ## 6. Engineering Controls
 
@@ -85,6 +87,8 @@ This section is not a legal finding. Use it to list concrete potential DORA viol
 - Exit, portability, or provider-failure controls:
 
 ## 7. Evidence Inventory
+
+Only include redacted evidence references. Do not paste raw request payloads, logs, screenshots, configuration values, credentials, tokens, keys, or connection strings.
 
 - ICT inventory:
 - Architecture or dependency diagram:

@@ -15,7 +15,8 @@ Scenario: Review a Java financial service with DORA operational resilience contr
   And the feature request is expected to be developed and released through the described CI/CD pipeline
   And the DORA questionnaire answers are based only on information present in "examples/diagrams/deployment/system-example-cicd-pr-model.md" and "examples/diagrams/deployment/checkout-service-feature-request.md"
   When the skill ".agents/skills/802-regulations-dora" is applied to the system description, diagram, and feature request files
-  Then the skill reads "references/802-regulations-dora.md"
+  Then the skill reads "references/802-regulations-dora-chapters-summary.md"
+  And the skill reads "references/802-regulations-dora-engineering-examples.md"
   And the skill reads "assets/questions/802-dora-engineering-review-questionnaire.md"
   And the skill reads "assets/reports/802-dora-engineering-review-report-template.md"
   And the skill frames DORA findings as engineering controls rather than legal advice
@@ -26,7 +27,7 @@ Scenario: Review a Java financial service with DORA operational resilience contr
   And the skill escalates applicability, financial-entity classification, reporting obligations, outsourcing interpretation, and provider criticality decisions to legal, compliance, security, risk, resilience, procurement, or business-continuity owners
   And the skill reviews Java implementation, configuration, tests, runbooks, observability, incident procedures, backup and restore evidence, change records, and provider documentation
   And the skill identifies risk signals for critical business service dependencies, ownerless ICT assets, untested recovery, missing alerting, incomplete logs, weak change control, unsupported provider dependencies, missing exit plans, database migration, Kafka message contract, CI/CD pipeline, and production side-effect signals
-  And the skill maps potential DORA violation or non-compliance signals to article or chapter references using only the reviewed delivery evidence
+  And the skill maps potential DORA violation or non-compliance signals to article or chapter references with associated official-source links using only the reviewed delivery evidence
   And the skill analyzes the CheckoutService feature request as a pipeline-delivered change that modifies order database structure and outbound Kafka event data
   And the skill uses Java examples to explain operational resilience and release-policy controls
   And the skill recommends engineering controls for asset inventory, monitoring, alerting, evidence-safe logging, incident workflow, backup and restore verification, failover testing, rollback plans, provider monitoring, exit planning, database migration approval, Kafka schema compatibility, and change approval
@@ -46,7 +47,8 @@ Scenario: Review a Java financial service checkout change with direct-to-main DO
   And the feature request is expected to be committed directly to main and released through the described CI/CD pipeline
   And the DORA questionnaire answers are based only on information present in "examples/diagrams/deployment/system-example-cicd-model.md" and "examples/diagrams/deployment/checkout-service-feature-request.md"
   When the skill ".agents/skills/802-regulations-dora" is applied to the direct-to-main system description, diagram, and feature request files
-  Then the skill reads "references/802-regulations-dora.md"
+  Then the skill reads "references/802-regulations-dora-chapters-summary.md"
+  And the skill reads "references/802-regulations-dora-engineering-examples.md"
   And the skill reads "assets/questions/802-dora-engineering-review-questionnaire.md"
   And the skill reads "assets/reports/802-dora-engineering-review-report-template.md"
   And the skill frames DORA findings as engineering controls rather than legal advice
@@ -57,7 +59,7 @@ Scenario: Review a Java financial service checkout change with direct-to-main DO
   And the skill escalates missing pre-merge review, protected-main bypass, weak change control, applicability, financial-entity classification, reporting obligations, outsourcing interpretation, and provider criticality decisions to legal, compliance, security, platform, risk, resilience, procurement, or business-continuity owners
   And the skill reviews Java implementation, configuration, tests, runbooks, observability, incident procedures, backup and restore evidence, change records, and provider documentation
   And the skill identifies risk signals for critical business service dependencies, ownerless ICT assets, untested recovery, missing alerting, incomplete logs, weak change control, unsupported provider dependencies, missing exit plans, direct-to-main commit policy, database migration, Kafka message contract, CI/CD pipeline, and production side-effect signals
-  And the skill maps potential DORA violation or non-compliance signals to article or chapter references using only the reviewed direct-to-main delivery evidence
+  And the skill maps potential DORA violation or non-compliance signals to article or chapter references with associated official-source links using only the reviewed direct-to-main delivery evidence
   And the skill analyzes the CheckoutService feature request as a direct-to-main pipeline-delivered change that modifies order database structure and outbound Kafka event data
   And the skill uses Java examples to explain operational resilience and release-policy controls
   And the skill recommends engineering controls for pre-commit review, main-branch protection, asset inventory, monitoring, alerting, evidence-safe logging, incident workflow, backup and restore verification, failover testing, rollback plans, provider monitoring, exit planning, database migration approval, Kafka schema compatibility, and change approval

@@ -1,10 +1,12 @@
 # GDPR Engineering Review Report
 
-Use this template after the human has answered all four sections of `assets/questions/803-gdpr-engineering-review-questionnaire.md` and matching the relevant examples in `references/803-regulations-gdpr.md`.
+Use this template after reviewing `references/803-regulations-gdpr-chapters-summary.md`, the human has answered all four sections of `assets/questions/803-gdpr-engineering-review-questionnaire.md`, and the relevant examples from `references/803-regulations-gdpr-engineering-examples.md` have been matched.
 
 This report is not legal advice. Use it as engineering evidence for legal, privacy, data protection officer, compliance, security, risk, architecture, and business-owner review.
 
 The purpose of this report is to increase awareness of potential gaps in the system and create engineering evidence for qualified review. The response produced from this template does not represent legal advice, a legal opinion, or a final regulatory determination.
+
+Do not include raw secrets, credentials, passwords, API keys, tokens, session IDs, private keys, or connection strings in this report. Replace secret values with `[REDACTED_SECRET]` and document only the secret type, affected component, evidence location, owner, and remediation needed.
 
 ## 1. Review Context
 
@@ -64,17 +66,17 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 
 ## 5. Potential Violation Or Non-Compliance Mapping
 
-This section is not a legal finding. Use it to list concrete potential GDPR violation or non-compliance signals from the reviewed evidence and route each item to qualified legal, privacy, data protection officer, compliance, security, risk, data-governance, architecture, vendor, or business-owner review. When no violation is confirmed, say so explicitly and keep open items as potential gaps.
+This section is not a legal finding. Use it to list concrete potential GDPR violation or non-compliance signals from the reviewed evidence and route each item to qualified legal, privacy, data protection officer, compliance, security, risk, data-governance, architecture, vendor, or business-owner review. When no violation is confirmed, say so explicitly and keep open items as potential gaps. Use the chapter links from `references/803-regulations-gdpr-chapters-summary.md`; add more official-source links when one finding spans multiple GDPR areas.
 
-| Potential violation or non-compliance signal | GDPR reference | Evidence from reviewed system | Current status | Required owner review | Engineering action |
-| -------------------------------------------- | -------------- | ----------------------------- | -------------- | --------------------- | ------------------ |
-| Missing lawful-basis, purpose-limitation, minimization, or transparency evidence | Articles 5-6 and Articles 12-14 | TBD | None identified / Potential gap / Confirmed concern | Legal / privacy / DPO / business owner | TBD |
-| Missing personal-data records, controller/processor, vendor, or role evidence | Articles 28 and 30 | TBD | None identified / Potential gap / Confirmed concern | Legal / privacy / procurement / data governance | TBD |
-| Missing privacy by design/default or field-level access controls | Article 25 | TBD | None identified / Potential gap / Confirmed concern | Privacy / security / architecture / product | TBD |
-| Missing data-subject rights, retention, or deletion propagation evidence | Articles 15-22 | TBD | None identified / Potential gap / Confirmed concern | Privacy / DPO / product / platform | TBD |
-| Missing security-of-processing or privacy-safe observability evidence | Article 32 | TBD | None identified / Potential gap / Confirmed concern | Security / privacy / SRE / risk | TBD |
-| Missing breach-response, affected-data, or notification-handoff evidence | Articles 33-34 | TBD | None identified / Potential gap / Confirmed concern | Security / privacy / DPO / legal | TBD |
-| Missing DPIA, transfer, or vendor-processing evidence | Article 35 and Chapter V / Articles 44-49 | TBD | None identified / Potential gap / Confirmed concern | Legal / privacy / DPO / procurement | TBD |
+| Potential violation or non-compliance signal | GDPR reference area | Associated official-source link | Redacted evidence from reviewed system | Current status | Required owner review | Engineering action |
+| -------------------------------------------- | ------------------- | ------------------------------- | ------------------------------------- | -------------- | --------------------- | ------------------ |
+| Missing lawful-basis, purpose-limitation, minimization, or transparency evidence | Principles and data-subject information / Articles 5-6 and 12-14 | [Chapter II](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#cpt_II), [Chapter III](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#cpt_III) | TBD | None identified / Potential gap / Confirmed concern | Legal / privacy / DPO / business owner | TBD |
+| Missing personal-data records, controller/processor, vendor, or role evidence | Controller and processor obligations / Articles 24-31 | [Chapter IV](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#cpt_IV) | TBD | None identified / Potential gap / Confirmed concern | Legal / privacy / procurement / data governance | TBD |
+| Missing privacy by design/default or field-level access controls | Data protection by design and by default / Article 25 | [Chapter IV](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#cpt_IV) | TBD | None identified / Potential gap / Confirmed concern | Privacy / security / architecture / product | TBD |
+| Missing data-subject rights, retention, or deletion propagation evidence | Data-subject rights / Articles 15-22 | [Chapter III](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#cpt_III) | TBD | None identified / Potential gap / Confirmed concern | Privacy / DPO / product / platform | TBD |
+| Missing security-of-processing or privacy-safe observability evidence | Security of processing / Article 32 | [Chapter IV](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#cpt_IV) | TBD | None identified / Potential gap / Confirmed concern | Security / privacy / SRE / risk | TBD |
+| Missing breach-response, affected-data, or notification-handoff evidence | Personal-data breach notification / Articles 33-34 | [Chapter IV](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#cpt_IV) | TBD | None identified / Potential gap / Confirmed concern | Security / privacy / DPO / legal | TBD |
+| Missing DPIA, transfer, or vendor-processing evidence | DPIA and international transfers / Article 35 and Articles 44-49 | [Chapter IV](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#cpt_IV), [Chapter V](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#cpt_V) | TBD | None identified / Potential gap / Confirmed concern | Legal / privacy / DPO / procurement | TBD |
 
 ## 6. Engineering Controls
 
@@ -93,6 +95,8 @@ This section is not a legal finding. Use it to list concrete potential GDPR viol
 - Testing and validation:
 
 ## 7. Evidence Inventory
+
+Only include redacted evidence references. Do not paste raw request payloads, logs, screenshots, configuration values, credentials, tokens, keys, or connection strings.
 
 - Personal-data inventory:
 - Data-flow diagram:

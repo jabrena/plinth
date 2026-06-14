@@ -544,10 +544,10 @@
             <reference>706-technologies-containers-docker</reference>
         </reference-list>
     </skill>
-    <skill id="801">
+    <skill id="801" skillId="801-regulations-eu-ai-act">
         <reference-list>
-            <reference>801-regulations-eu-ai-act</reference>
             <reference>801-regulations-eu-ai-act-chapters-summary</reference>
+            <reference>801-regulations-eu-ai-act-engineering-examples</reference>
         </reference-list>
         <resource-list>
             <resource source="skill-references/assets/questions/801-eu-ai-act-risk-questionnaire.md"
@@ -556,9 +556,10 @@
                 target="assets/reports/801-eu-ai-act-engineering-review-report-template.md" />
         </resource-list>
     </skill>
-    <skill id="802">
+    <skill id="802" skillId="802-regulations-dora">
         <reference-list>
-            <reference>802-regulations-dora</reference>
+            <reference>802-regulations-dora-chapters-summary</reference>
+            <reference>802-regulations-dora-engineering-examples</reference>
         </reference-list>
         <resource-list>
             <resource source="skill-references/assets/questions/802-dora-engineering-review-questionnaire.md"
@@ -567,9 +568,10 @@
                 target="assets/reports/802-dora-engineering-review-report-template.md" />
         </resource-list>
     </skill>
-    <skill id="803">
+    <skill id="803" skillId="803-regulations-gdpr">
         <reference-list>
-            <reference>803-regulations-gdpr</reference>
+            <reference>803-regulations-gdpr-chapters-summary</reference>
+            <reference>803-regulations-gdpr-engineering-examples</reference>
         </reference-list>
         <resource-list>
             <resource source="skill-references/assets/questions/803-gdpr-engineering-review-questionnaire.md"

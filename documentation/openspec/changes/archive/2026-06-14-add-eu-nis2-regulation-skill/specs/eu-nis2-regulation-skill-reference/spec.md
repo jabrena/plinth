@@ -73,6 +73,27 @@ The NIS2 skill MUST have Gherkin acceptance scenarios for the same delivery mode
 - **AND** the requested report output path is under `examples/regulations/nis2`
 - **AND** the scenario expects the skill to escalate missing pre-merge review, protected-main bypass, cybersecurity risk-management gaps, and ambiguous NIS2 applicability to qualified owners
 
+### Requirement: Acceptance report evidence
+
+The NIS2 skill MUST include reviewable example reports produced from the acceptance scenarios.
+
+#### Scenario: Validate pull-request delivery NIS2 report evidence
+
+- **WHEN** `examples/regulations/nis2/NIS2-ENGINEERING-REVIEW-REPORT.md` is inspected
+- **THEN** it identifies the reviewed pull-request based CI/CD system description, deployment diagram, feature request, generated chapters summary, generated engineering examples, and report template as source materials
+- **AND** it scopes service context, possible essential or important entity signals, sector signals, owners, assets, data stores, IAM, CI/CD, providers, runtime dependencies, monitoring, alerting, and operational runbooks
+- **AND** it maps potential NIS2 violation or non-compliance signals to directive topic areas without asserting a legal finding
+- **AND** it recommends engineering controls for asset inventory, secure configuration, vulnerability management, incident escalation, evidence-safe logging, monitoring, backup, restore, continuity, rollback, supply-chain security, access control, cryptography, database migration approval, Kafka schema compatibility, and change approval
+- **AND** it routes entity classification, member-state applicability, incident-reporting obligations, cybersecurity risk acceptance, and regulatory interpretation to qualified owners
+
+#### Scenario: Validate direct-to-main NIS2 report evidence
+
+- **WHEN** `examples/regulations/nis2/NIS2-DIRECT-MAIN-ENGINEERING-REVIEW-REPORT.md` is inspected
+- **THEN** it identifies the reviewed direct-to-main CI/CD system description, deployment diagram, feature request, generated chapters summary, generated engineering examples, and report template as source materials
+- **AND** it maps direct-to-main cybersecurity risk signals including missing pre-merge review, protected-main bypass, ownerless assets, incomplete dependency evidence, missing incident escalation, untested continuity, database migration risk, Kafka message contract risk, and production side-effect risk
+- **AND** it recommends controls for pre-commit review, main-branch protection, cybersecurity change-control evidence, asset inventory, secure configuration, vulnerability management, incident escalation, backup and restore verification, supply-chain monitoring, access control, cryptography, migration approval, Kafka compatibility, and release approval
+- **AND** it blocks or conditions production release until direct-to-main delivery has equivalent cybersecurity review evidence and qualified owner handoffs
+
 ### Requirement: Source and generated-output boundaries
 
 The implementation MUST edit XML sources and validate generated local skill output without directly editing generated legacy or release outputs.
