@@ -14,7 +14,7 @@
     <goal><![CDATA[
 Summarize the official chapter, article, and annex structure of Regulation (EU) 2024/2847, the Cyber Resilience Act, for engineering review of Java products, libraries, agents, plugins, connected components, product APIs, update mechanisms, CI/CD pipelines, and product security evidence.
 
-Source reviewed: [EUR-Lex Regulation (EU) 2024/2847 HTML text](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R2847).
+Source provenance: EUR-Lex Regulation (EU) 2024/2847 HTML text was reviewed while authoring this bundled summary. Do not fetch or ingest external regulatory web pages at runtime.
 
 This reference is not legal advice. Use it to orient engineering discovery, architecture review, product security evidence collection, release gates, and escalation conversations with legal, compliance, product, product-security, market-access, security, risk, support, executive accountability, and business owners.
 
@@ -22,7 +22,7 @@ Use `references/805-regulations-eu-cyber-resilience-act-engineering-examples.md`
 
 Report template asset: [Cyber Resilience Act engineering review report template](../assets/reports/805-eu-cyber-resilience-act-engineering-review-report-template.md).
 
-## [Chapter I: General provisions (Articles 1-12)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R2847#cpt_I)
+## Chapter I: General provisions (Articles 1-12)
 
 Sets the scope for products with digital elements, product categories, procurement considerations, and interaction with other Union frameworks such as NIS2 and the EU AI Act. For Java teams, this chapter is the starting point for determining whether a service, library, agent, plugin, connected component, remote processing solution, or platform module needs CRA-aware product security evidence.
 
@@ -45,7 +45,7 @@ Engineering impact:
 - Record product owner, manufacturer or supplier signals, support owner, security owner, market geography, intended purpose, reasonably foreseeable use, and reasonably foreseeable misuse.
 - Treat product classification, important or critical category, high-risk AI interaction, procurement obligations, and scope exclusions as qualified owner decisions; engineering should collect evidence, not make legal determinations.
 
-## [Chapter II: Obligations of economic operators and provisions in relation to free and open-source software (Articles 13-26)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R2847#cpt_II)
+## Chapter II: Obligations of economic operators and provisions in relation to free and open-source software (Articles 13-26)
 
 Defines the most direct obligations for product security engineering: manufacturer risk assessment, secure design, due diligence for third-party components, vulnerability handling, support periods, security updates, documentation, user information, reporting, and economic-operator handoffs.
 
@@ -70,7 +70,7 @@ Engineering impact:
 - Link threat models, secure defaults, vulnerability intake, coordinated disclosure policy, security advisory workflow, update delivery mechanism, SBOM records, dependency review, and support-period decisions to the release record.
 - Escalate economic-operator role, manufacturer status, importer or distributor obligations, substantial modification, Article 14 reporting duties, and open-source steward status to qualified owners.
 
-## [Chapter III: Conformity of the product with digital elements (Articles 27-34)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R2847#cpt_III)
+## Chapter III: Conformity of the product with digital elements (Articles 27-34)
 
 Defines presumption of conformity, EU declaration of conformity, CE marking, technical documentation, and conformity assessment procedures. For engineering review, this chapter explains why product security evidence must be traceable, test-backed, and suitable for qualified conformity or market-access review.
 
@@ -88,7 +88,7 @@ Engineering impact:
 - Treat technical documentation as an engineering artifact: architecture, threat model, risk assessment, test reports, SBOM, vulnerability handling process, update mechanism, user instructions, and release evidence should be reviewable.
 - Do not decide conformity assessment route, CE marking, certification, or declaration completeness as an engineer unless qualified and authorised; route decisions to product, legal, compliance, market-access, and notified-body owners.
 
-## [Chapter IV: Notification of conformity assessment bodies (Articles 35-51)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R2847#cpt_IV)
+## Chapter IV: Notification of conformity assessment bodies (Articles 35-51)
 
 Defines notifying authorities, notified bodies, competence, impartiality, subcontracting, notification changes, operational obligations, appeals, information sharing, and coordination.
 
@@ -101,7 +101,7 @@ Engineering impact:
 - When a product category requires third-party assessment or certification, engineering evidence should be reproducible, testable, and suitable for independent review.
 - Escalate notified-body involvement, assessment scope, certificates, and quality assurance routes to qualified conformity and market-access owners.
 
-## [Chapter V: Market surveillance and enforcement (Articles 52-60)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R2847#cpt_V)
+## Chapter V: Market surveillance and enforcement (Articles 52-60)
 
 Defines market surveillance, access to data and documentation, procedures for significant cybersecurity risk, Union safeguard procedures, formal non-compliance, joint activities, and sweeps.
 
@@ -120,7 +120,7 @@ Engineering impact:
 - Keep documentation, tests, vulnerability records, update evidence, SBOMs, and support-period decisions accessible and defensible.
 - Treat missing, incomplete, misleading, or untraceable evidence as a product security release risk.
 
-## [Chapter VI: Delegated powers and committee procedure (Articles 61-62)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R2847#cpt_VI)
+## Chapter VI: Delegated powers and committee procedure (Articles 61-62)
 
 Defines delegated acts and committee procedure for updates and implementing measures.
 
@@ -132,7 +132,7 @@ Engineering impact:
 - Treat CRA implementation as evolving. Track delegated acts, implementing acts, harmonised standards, common specifications, certification schemes, and guidance.
 - Revisit product security evidence when a product category, support period, reporting procedure, or documentation expectation changes.
 
-## [Chapter VII: Confidentiality and penalties (Articles 63-65)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R2847#cpt_VII)
+## Chapter VII: Confidentiality and penalties (Articles 63-65)
 
 Defines confidentiality, penalties, and representative actions.
 
@@ -145,7 +145,7 @@ Engineering impact:
 - Preserve product security evidence while redacting source code, secrets, exploit details, personal data, and sensitive vulnerability information where disclosure would be unsafe.
 - Escalate penalty exposure and consumer action risks to legal, compliance, product, market-access, and executive owners.
 
-## [Chapter VIII: Transitional and final provisions (Articles 66-71)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R2847#cpt_VIII)
+## Chapter VIII: Transitional and final provisions (Articles 66-71)
 
 Covers amendments, transitional provisions, evaluation, entry into force, and application dates.
 

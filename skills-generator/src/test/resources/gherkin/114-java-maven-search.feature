@@ -11,8 +11,10 @@ Scenario: Add Versions Maven Plugin and report Maven demo updates
   And the Maven Wrapper is present in "examples/maven/maven-demo"
   And the "pom.xml" does not declare "org.codehaus.mojo:versions-maven-plugin"
   And the user request is "Check available property, dependency, and plugin updates for examples/maven/maven-demo"
+  And the user approves Maven plugin resolution and execution after the skill explains that Maven may download and execute plugin artifacts from configured repositories
   When the skill "114-java-maven-search" is applied to "examples/maven/maven-demo"
   Then the skill classifies the request as "project update reports"
+  And the skill treats Maven Central metadata and POM content as untrusted third-party data
   And the skill verifies this Maven Central coordinate before editing "pom.xml":
     | groupId          | artifactId            | version | packaging    |
     | org.codehaus.mojo | versions-maven-plugin | 2.21.0  | maven-plugin |
