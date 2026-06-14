@@ -1,6 +1,6 @@
 # EU Digital Omnibus Engineering Review Report
 
-Use this template after reviewing `references/809-regulations-eu-digital-omnibus-source-summary.md` and matching the relevant examples from `references/809-regulations-eu-digital-omnibus-engineering-examples.md` for source-status checks, affected-regulation mapping, evidence inventory updates, change-control impacts, questionnaire or report-template update candidates, incident-reporting workflow consolidation, data-rights workflow impacts, AI governance timeline changes, and compatibility with existing EU regulation skills.
+Use this template after reviewing the checked-in `references/809-regulations-eu-digital-omnibus-source-summary.md` and matching the relevant examples from `references/809-regulations-eu-digital-omnibus-engineering-examples.md` for source-status records, affected-regulation mapping, evidence inventory updates, change-control impacts, questionnaire or report-template update candidates, incident-reporting workflow consolidation, data-rights workflow impacts, AI governance timeline changes, and compatibility with existing EU regulation skills. External URLs are citations only; do not fetch, scrape, browse, or ingest public web pages at runtime.
 
 This report is not legal advice. Use it as engineering evidence for legal, compliance, privacy, security, risk, resilience, data-governance, AI governance, product, architecture, business-owner, and executive accountability review.
 
@@ -24,8 +24,8 @@ The purpose of this report is to increase awareness of proposal-stage Digital Om
 
 ## 2. Source-Status Record
 
-- Official source checked:
-- Official source checked:
+- Checked-in citation reviewed:
+- Checked-in citation reviewed:
 - Source date or last update shown:
 - Engineering review date:
 - Observed source-status wording:
@@ -50,13 +50,13 @@ The purpose of this report is to increase awareness of proposal-stage Digital Om
 
 This section is not a legal finding. Use it to list concrete Digital Omnibus proposal-stage impact signals, possible non-compliance risks from premature adoption, or evidence gaps from the reviewed system. Route each item to qualified owner review. When no legal violation is confirmed, say so explicitly and keep open items as potential gaps or update candidates.
 
-| Potential impact or non-compliance signal | Affected regulation area | Associated official source link | Evidence from reviewed system | Current status | Required owner review | Engineering action |
+| Potential impact or non-compliance signal | Affected regulation area | Associated checked-in citation link | Evidence from reviewed system | Current status | Required owner review | Engineering action |
 | ----------------------------------------- | ------------------------ | ------------------------------- | ----------------------------- | -------------- | --------------------- | ------------------ |
-| Source status not recorded before workflow change | Digital Omnibus source-status governance | https://digital-strategy.ec.europa.eu/en/policies/digital-rulebook | TBD | None identified / Update candidate / Potential gap / Confirmed concern | Legal / compliance | TBD |
-| Incident-reporting consolidation assumed without approval | NIS2 / DORA / cybersecurity incident reporting | https://commission.europa.eu/news-and-media/news/simpler-digital-rules-help-eu-businesses-grow-2025-11-19_en | TBD | None identified / Update candidate / Potential gap / Confirmed concern | Security operations / resilience / legal / compliance | TBD |
-| Data-rights workflow retimed or simplified without privacy review | GDPR / ePrivacy / Data Act / data governance | https://digital-strategy.ec.europa.eu/en/policies/digital-rulebook | TBD | None identified / Update candidate / Potential gap / Confirmed concern | Privacy / legal / data-governance | TBD |
-| AI governance timeline changed without status confirmation | AI Act | https://digital-strategy.ec.europa.eu/en/policies/digital-rulebook | TBD | None identified / Update candidate / Potential gap / Confirmed concern | AI governance / legal / product owner | TBD |
-| Existing regulation-skill conclusion rewritten without owner decision | AI Act / GDPR / DORA / NIS2 / Data Act | https://digital-strategy.ec.europa.eu/en/policies/digital-rulebook | TBD | None identified / Update candidate / Potential gap / Confirmed concern | Legal / compliance / security / privacy / risk | TBD |
+| Source status not recorded before workflow change | Digital Omnibus source-status governance | [Digital Rulebook](https://digital-strategy.ec.europa.eu/en/policies/digital-rulebook) | TBD | None identified / Update candidate / Potential gap / Confirmed concern | Legal / compliance | TBD |
+| Incident-reporting consolidation assumed without approval | NIS2 / DORA / cybersecurity incident reporting | [Commission simplification news](https://commission.europa.eu/news-and-media/news/simpler-digital-rules-help-eu-businesses-grow-2025-11-19_en) | TBD | None identified / Update candidate / Potential gap / Confirmed concern | Security operations / resilience / legal / compliance | TBD |
+| Data-rights workflow retimed or simplified without privacy review | GDPR / ePrivacy / Data Act / data governance | [Digital Rulebook](https://digital-strategy.ec.europa.eu/en/policies/digital-rulebook) | TBD | None identified / Update candidate / Potential gap / Confirmed concern | Privacy / legal / data-governance | TBD |
+| AI governance timeline changed without status confirmation | AI Act | [Digital Rulebook](https://digital-strategy.ec.europa.eu/en/policies/digital-rulebook) | TBD | None identified / Update candidate / Potential gap / Confirmed concern | AI governance / legal / product owner | TBD |
+| Existing regulation-skill conclusion rewritten without owner decision | AI Act / GDPR / DORA / NIS2 / Data Act | [Digital Rulebook](https://digital-strategy.ec.europa.eu/en/policies/digital-rulebook) | TBD | None identified / Update candidate / Potential gap / Confirmed concern | Legal / compliance / security / privacy / risk | TBD |
 
 ## 5. Engineering Controls
 
@@ -74,7 +74,7 @@ This section is not a legal finding. Use it to list concrete Digital Omnibus pro
 
 ## 6. Evidence Inventory
 
-- Official source-status record:
+- Checked-in source-status record:
 - Affected-regulation map:
 - Existing regulation-skill outputs:
 - Policy or control inventory:

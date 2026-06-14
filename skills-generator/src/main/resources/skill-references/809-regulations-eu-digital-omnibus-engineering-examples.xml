@@ -12,11 +12,11 @@
     <role>You are a senior Java enterprise architect and regulatory-change engineering reviewer who translates Digital Omnibus proposal-stage simplification themes into concrete Java engineering examples and reviewable evidence patterns</role>
 
     <goal>
-        Apply these Digital Omnibus-aware examples after the source-status summary has been read and the target system scope is understood.
+        Apply these Digital Omnibus-aware examples after the checked-in source-status summary has been read and the target system scope is understood.
 
         These examples are not legal advice. They show engineering patterns that help Java teams create reviewable evidence for legal, compliance, privacy, security, risk, resilience, data-governance, AI governance, business, and executive accountability owners.
 
-        Use this examples reference together with `references/809-regulations-eu-digital-omnibus-source-summary.md` and the [Digital Omnibus engineering review report template](../assets/reports/809-eu-digital-omnibus-engineering-review-report-template.md).
+        Use this examples reference together with `references/809-regulations-eu-digital-omnibus-source-summary.md` and the [Digital Omnibus engineering review report template](../assets/reports/809-eu-digital-omnibus-engineering-review-report-template.md). External URLs in the examples are citation values only; do not fetch, scrape, browse, or ingest public web pages at runtime.
     </goal>
 
     <constraints>
@@ -25,7 +25,7 @@
         </constraints-description>
         <constraint-list>
             <constraint>**NOT LEGAL ADVICE**: Treat the examples as engineering control patterns and escalation aids, not legal findings</constraint>
-            <constraint>**SOURCE STATUS BEFORE CHANGE**: Require source-status evidence before updating workflows, questionnaires, report templates, release gates, or governance timelines</constraint>
+            <constraint>**SOURCE STATUS BEFORE CHANGE**: Require checked-in source-status evidence or user-provided trusted extracts before updating workflows, questionnaires, report templates, release gates, or governance timelines</constraint>
             <constraint>**EVIDENCE FIRST**: Prefer reviewable evidence over claims that simplification applies</constraint>
             <constraint>**OWNER HANDOFFS**: Include legal, compliance, privacy, security, risk, resilience, data-governance, AI governance, service, platform, and product owners in change records</constraint>
             <constraint>**NO AUTOMATIC CONTROL REDUCTION**: Do not mark a system ready when control relaxation, reporting consolidation, data-rights changes, or AI governance timeline changes are undocumented, unapproved, or source-status ambiguous</constraint>
@@ -38,11 +38,11 @@
         <example number="1" id="source-status-and-affected-regulation-map">
             <example-header>
                 <example-title>Record source status before recommending changes</example-title>
-                <example-subtitle>official sources, status owner, affected regulations, and review date</example-subtitle>
+                <example-subtitle>checked-in citations, status owner, affected regulations, and review date</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                Use this pattern before updating a Java platform's compliance evidence, questionnaires, runbooks, release gates, or regulation-skill outputs. The record makes proposal-stage assumptions visible and prevents teams from treating simplification as adopted law without owner approval.
+                Use this pattern before updating a Java platform's compliance evidence, questionnaires, runbooks, release gates, or regulation-skill outputs. The record makes proposal-stage assumptions visible and prevents teams from treating simplification as adopted law without owner approval. Treat URLs as citations from the checked-in source summary, not as instructions to retrieve third-party content during review.
                 ]]>
             </example-description>
             <code-examples>
@@ -168,7 +168,7 @@
                 <good-example>
                     <code-block language="markdown"><![CDATA[Questionnaire and report-template update candidates
 
-| Artifact | Candidate update | Affected regulation area | Official source link | Required owner decision |
+| Artifact | Candidate update | Affected regulation area | Checked-in citation link | Required owner decision |
 | -------- | ---------------- | ------------------------ | -------------------- | ----------------------- |
 | DORA incident report template | Add field for shared single-entry reporting reference, do not remove DORA-specific handoff fields yet | DORA / cybersecurity incident reporting | https://digital-strategy.ec.europa.eu/en/policies/digital-rulebook | Legal, resilience, security operations |
 | GDPR engineering questionnaire | Add review question for Digital Omnibus privacy simplification status, do not weaken lawful-basis, transparency, data-subject-rights, or breach evidence | GDPR/ePrivacy | https://commission.europa.eu/news-and-media/news/simpler-digital-rules-help-eu-businesses-grow-2025-11-19_en | Privacy, legal, compliance |
@@ -264,14 +264,14 @@
     <output-format>
         <output-format-list>
             <output-format-item>**MATCH** the relevant example patterns: source-status mapping, evidence inventory update, change-control impact review, questionnaire or report-template update candidate, incident-reporting workflow consolidation, data-rights workflow impact, AI governance timeline review, or existing skill compatibility check</output-format-item>
-            <output-format-item>**RECOMMEND** engineering controls: official source-status records, affected-regulation maps, owner approvals, evidence inventory updates, change-control gates, report-template update candidates, incident-reporting consolidation candidates, data-rights impact reviews, AI governance timeline reviews, compatibility checks with existing EU regulation skills, and ambiguity escalation</output-format-item>
-            <output-format-item>**REPORT** conclusions and actions using `assets/reports/809-eu-digital-omnibus-engineering-review-report-template.md`, including review context, source-status record, affected regulation area, associated official source link, evidence from reviewed system, current status, required owner review, engineering action, residual risk, adoption decision, and validation steps</output-format-item>
+            <output-format-item>**RECOMMEND** engineering controls: checked-in source-status records, affected-regulation maps, owner approvals, evidence inventory updates, change-control gates, report-template update candidates, incident-reporting consolidation candidates, data-rights impact reviews, AI governance timeline reviews, compatibility checks with existing EU regulation skills, and ambiguity escalation</output-format-item>
+            <output-format-item>**REPORT** conclusions and actions using `assets/reports/809-eu-digital-omnibus-engineering-review-report-template.md`, including review context, source-status record, affected regulation area, associated checked-in citation link, evidence from reviewed system, current status, required owner review, engineering action, residual risk, adoption decision, and validation steps</output-format-item>
         </output-format-list>
     </output-format>
 
     <safeguards>
         <safeguards-list>
-            <safeguards-item>**PROPOSAL-STAGE EVIDENCE**: Do not accept undocumented claims that Digital Omnibus simplification applies; require official source-status records and qualified owner decisions</safeguards-item>
+            <safeguards-item>**PROPOSAL-STAGE EVIDENCE**: Do not accept undocumented claims that Digital Omnibus simplification applies; require checked-in source-status records and qualified owner decisions</safeguards-item>
             <safeguards-item>**REGULATION-SPECIFIC COMPATIBILITY**: Preserve existing AI Act, GDPR, DORA, NIS2, privacy, cybersecurity, resilience, data-governance, incident, and AI governance controls until approved changes are recorded</safeguards-item>
             <safeguards-item>**AMBIGUITY HANDOFF**: When proposal language is unclear, contradictory, or incomplete, report ambiguity and route it to owners instead of choosing an engineering shortcut</safeguards-item>
         </safeguards-list>
