@@ -8,8 +8,6 @@
 
 > **Idiomas:** [English](./README.md) · [中文](./README_ZH.md)
 >
-> **Website:** https://jabrena.github.io/cursor-rules-java/
->
 > **Apoya el proyecto:** [Sponsor to pay tokens](https://github.com/sponsors/jabrena)
 
 ## Objetivo
@@ -18,7 +16,7 @@ Un flujo de trabajo nativo de IA, con criterio propio, para evolucionar las prá
 
 ## Últimas actualizaciones
 
-Descubre cómo evoluciona el proyecto mediante nuevos skills, mejoras y correcciones en el [CHANGELOG](./CHANGELOG.md).
+Explora el contenido publicado más reciente en el [sitio web del proyecto](https://jabrena.github.io/cursor-rules-java/) y sigue su evolución mediante nuevos skills, mejoras y correcciones en el [CHANGELOG](./CHANGELOG.md).
 
 ## Empieza en 60 segundos
 
@@ -73,7 +71,7 @@ Implementa y mejora aplicaciones Java con orientación sobre Maven, diseño, pro
 | **Skills** | [110-java-maven-best-practices](https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices) · [111-java-maven-dependencies](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) · [121-java-object-oriented-design](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) · [124-java-secure-coding](https://www.skills.sh/jabrena/cursor-rules-java/124-java-secure-coding) · [143-java-functional-exception-handling](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) |
 | **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [JavaDocs](https://www.javadocs.dev/mcp) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) |
 
-### Cumplimiento
+### Cumplimiento (Alpha)
 
 Revisa sistemas Java, modelos de IA y cómo se utilizan las herramientas de IA generativa en aplicaciones y pipelines de entrega para identificar controles de ingeniería, evidencias y derivaciones a responsables cualificados relacionados con IA, datos, seguridad, producto, plataforma, mercado y gobernanza. **<u>Estos skills apoyan la concienciación técnica y no proporcionan asesoramiento jurídico.</u>**
 
@@ -149,7 +147,7 @@ Este proyecto apoya el trabajo de ingeniería de software, pero no sustituye el 
 
 ### Acceso a datos corporativos
 
-Actúa con precaución cuando un problema involucre bases de datos corporativas u otros datos sensibles de la organización. Antes de conceder acceso a un flujo de trabajo asistido por IA, evalúa los riesgos de autorización, privacidad, filtración, retención y modificación accidental de datos. Aplica acceso con privilegios mínimos, revisión humana, validación y monitorización. Consulta [OWASP GenAI Data Security Risks & Mitigations 2026](https://genai.owasp.org/resource/owasp-genai-data-security-risks-mitigations-2026/), [The EU Artificial Intelligence Act](https://artificialintelligenceact.eu/) y los nuevos [skills sobre regulaciones](#cumplimiento).
+Actúa con precaución cuando un problema involucre bases de datos corporativas u otros datos sensibles de la organización. Antes de conceder acceso a un flujo de trabajo asistido por IA, evalúa los riesgos de autorización, privacidad, filtración, retención y modificación accidental de datos. Aplica acceso con privilegios mínimos, revisión humana, validación y monitorización. Consulta [OWASP GenAI Data Security Risks & Mitigations 2026](https://genai.owasp.org/resource/owasp-genai-data-security-risks-mitigations-2026/), [The EU Artificial Intelligence Act](https://artificialintelligenceact.eu/) y los nuevos [skills sobre regulaciones](#cumplimiento-alpha).
 
 ## Contribuir
 

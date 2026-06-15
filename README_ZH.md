@@ -8,8 +8,6 @@
 
 > **语言：** [English](./README.md) · [Español](./README_ES.md)
 >
-> **Website:** https://jabrena.github.io/cursor-rules-java/
->
 > **支持项目：** [Sponsor to pay tokens](https://github.com/sponsors/jabrena)
 
 ## 目标
@@ -18,7 +16,7 @@
 
 ## 最新动态
 
-通过 [CHANGELOG](./CHANGELOG.md) 了解项目如何通过新 skills、改进和修复持续演进。
+访问[项目网站](https://jabrena.github.io/cursor-rules-java/)探索最新发布的内容，并通过 [CHANGELOG](./CHANGELOG.md) 了解新 skills、改进和修复如何推动项目持续演进。
 
 ## 60 秒开始使用
 
@@ -73,7 +71,7 @@ npx skills add jabrena/cursor-rules-java --skill '*' --agent cursor -y
 | **Skills** | [110-java-maven-best-practices](https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices) · [111-java-maven-dependencies](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) · [121-java-object-oriented-design](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) · [124-java-secure-coding](https://www.skills.sh/jabrena/cursor-rules-java/124-java-secure-coding) · [143-java-functional-exception-handling](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) |
 | **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [JavaDocs](https://www.javadocs.dev/mcp) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) |
 
-### 合规
+### 合规 (Alpha)
 
 审查 Java 系统、AI 模型，以及 GenAI 工具在应用程序和交付流水线中的使用方式，以识别涉及 AI、数据、安全、产品、平台、市场和治理的法规感知工程控制、证据及向合格责任人的移交。**<u>这些 skills 用于提升工程认知，不构成法律建议。</u>**
 
@@ -149,7 +147,7 @@ npx skills add jabrena/cursor-rules-java --skill '*' --agent cursor -y
 
 ### 访问企业数据
 
-当问题涉及企业数据库或其他组织敏感数据时，请谨慎使用。在向 AI 辅助工作流授予访问权限之前，应评估授权、隐私、数据泄露、数据保留和意外修改等风险，并实施最小权限访问、人工审查、验证和监控。请参阅 [OWASP GenAI Data Security Risks & Mitigations 2026](https://genai.owasp.org/resource/owasp-genai-data-security-risks-mitigations-2026/)、[The EU Artificial Intelligence Act](https://artificialintelligenceact.eu/) 以及新的[法规 skills](#合规)。
+当问题涉及企业数据库或其他组织敏感数据时，请谨慎使用。在向 AI 辅助工作流授予访问权限之前，应评估授权、隐私、数据泄露、数据保留和意外修改等风险，并实施最小权限访问、人工审查、验证和监控。请参阅 [OWASP GenAI Data Security Risks & Mitigations 2026](https://genai.owasp.org/resource/owasp-genai-data-security-risks-mitigations-2026/)、[The EU Artificial Intelligence Act](https://artificialintelligenceact.eu/) 以及新的[法规 skills](#合规-alpha)。
 
 ## 贡献
 

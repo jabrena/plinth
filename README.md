@@ -8,8 +8,6 @@
 
 > **Languages:** [Español](./README_ES.md) · [中文](./README_ZH.md)
 >
-> **Website:** https://jabrena.github.io/cursor-rules-java/
->
 > **Support the project:** [Sponsor to pay tokens](https://github.com/sponsors/jabrena)
 
 ## Goal
@@ -18,7 +16,7 @@ An opinionated AI-native workflow for evolving modern Java Enterprise `SDLC` pra
 
 ## Latest Updates
 
-See how the project evolves through new skills, improvements, and fixes in the [CHANGELOG](./CHANGELOG.md).
+Explore the latest published content on the [project website](https://jabrena.github.io/cursor-rules-java/) and follow its evolution through new skills, improvements, and fixes in the [CHANGELOG](./CHANGELOG.md).
 
 ## Start in 60 seconds
 
@@ -73,7 +71,7 @@ Implement and improve Java applications with Maven, design, coding, testing, sec
 | **Skills** | [110-java-maven-best-practices](https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices) · [111-java-maven-dependencies](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) · [121-java-object-oriented-design](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) · [124-java-secure-coding](https://www.skills.sh/jabrena/cursor-rules-java/124-java-secure-coding) · [143-java-functional-exception-handling](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) |
 | **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [JavaDocs](https://www.javadocs.dev/mcp) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) |
 
-### Compliance
+### Compliance (Alpha)
 
 Review Java systems, AI models, and how GenAI tools are used across applications and delivery pipelines for regulation-aware engineering controls, evidence, and qualified owner handoffs spanning AI, data, security, product, platform, market, and governance. **<u>These skills support engineering awareness and do not provide legal advice.</u>**
 
@@ -149,7 +147,7 @@ This project supports software engineering work; it does not replace engineering
 
 ### Access to corporate data
 
-Use caution when a problem involves corporate databases or other sensitive organizational data. Before granting an AI-assisted workflow access, assess authorization, privacy, data leakage, retention, and unintended modification risks. Apply least-privilege access, human review, validation, and monitoring. See [OWASP GenAI Data Security Risks & Mitigations 2026](https://genai.owasp.org/resource/owasp-genai-data-security-risks-mitigations-2026/), [The EU Artificial Intelligence Act](https://artificialintelligenceact.eu/), and the new [regulation skills](#compliance).
+Use caution when a problem involves corporate databases or other sensitive organizational data. Before granting an AI-assisted workflow access, assess authorization, privacy, data leakage, retention, and unintended modification risks. Apply least-privilege access, human review, validation, and monitoring. See [OWASP GenAI Data Security Risks & Mitigations 2026](https://genai.owasp.org/resource/owasp-genai-data-security-risks-mitigations-2026/), [The EU Artificial Intelligence Act](https://artificialintelligenceact.eu/), and the new [regulation skills](#compliance-alpha).
 
 ## Contribute
 
