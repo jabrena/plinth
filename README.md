@@ -71,7 +71,7 @@ Implement and improve Java applications with Maven, design, coding, testing, sec
 
 ### Compliance
 
-Review Java systems for regulation-aware engineering controls, evidence, and qualified owner handoffs across AI, data, security, product, platform, market, and governance layers. **<u>These skills support engineering awareness and do not provide legal advice.</u>**
+Review Java systems, AI models, and how GenAI tools are used across applications and delivery pipelines for regulation-aware engineering controls, evidence, and qualified owner handoffs spanning AI, data, security, product, platform, market, and governance. **<u>These skills support engineering awareness and do not provide legal advice.</u>**
 
 | Regulation | Skill |
 | --- | --- |
@@ -84,7 +84,7 @@ Review Java systems for regulation-aware engineering controls, evidence, and qua
 | [Digital Services Act](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2065) | `807-regulations-eu-digital-services-act` |
 | [Digital Markets Act](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R1925) | `808-regulations-eu-digital-markets-act` |
 
-**Note:** Waiting for the OWASP [EU Compliance MCP](https://genai.owasp.org/solution/eu-compliance-mcp/).
+**Note:** This set of skills could be a good complement for the future [OWASP EU Compliance MCP](https://genai.owasp.org/solution/eu-compliance-mcp/).
 
 ### Operate
 

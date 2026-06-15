@@ -71,7 +71,7 @@ npx skills add jabrena/cursor-rules-java --skill '*' --agent cursor -y
 
 ### 合规
 
-从 AI、数据、安全、产品、平台、市场和治理层面审查 Java 系统所需的法规感知工程控制、证据以及向合格责任人的移交。**<u>这些 skills 用于提升工程认知，不构成法律建议。</u>**
+审查 Java 系统、AI 模型，以及 GenAI 工具在应用程序和交付流水线中的使用方式，以识别涉及 AI、数据、安全、产品、平台、市场和治理的法规感知工程控制、证据及向合格责任人的移交。**<u>这些 skills 用于提升工程认知，不构成法律建议。</u>**
 
 | 法规 | Skill |
 | --- | --- |
@@ -84,7 +84,7 @@ npx skills add jabrena/cursor-rules-java --skill '*' --agent cursor -y
 | [Digital Services Act](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2065) | `807-regulations-eu-digital-services-act` |
 | [Digital Markets Act](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R1925) | `808-regulations-eu-digital-markets-act` |
 
-**注意：** 正在等待 OWASP [EU Compliance MCP](https://genai.owasp.org/solution/eu-compliance-mcp/)。
+**注意：** 这组 skills 可以很好地补充未来的 [OWASP EU Compliance MCP](https://genai.owasp.org/solution/eu-compliance-mcp/)。
 
 ### 运维
 

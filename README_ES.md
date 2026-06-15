@@ -71,7 +71,7 @@ Implementa y mejora aplicaciones Java con orientación sobre Maven, diseño, pro
 
 ### Cumplimiento
 
-Revisa sistemas Java para identificar controles de ingeniería, evidencias y derivaciones a responsables cualificados relacionados con regulaciones en las capas de IA, datos, seguridad, producto, plataforma, mercado y gobernanza. **<u>Estos skills apoyan la concienciación técnica y no proporcionan asesoramiento jurídico.</u>**
+Revisa sistemas Java, modelos de IA y cómo se utilizan las herramientas de IA generativa en aplicaciones y pipelines de entrega para identificar controles de ingeniería, evidencias y derivaciones a responsables cualificados relacionados con IA, datos, seguridad, producto, plataforma, mercado y gobernanza. **<u>Estos skills apoyan la concienciación técnica y no proporcionan asesoramiento jurídico.</u>**
 
 | Regulación | Skill |
 | --- | --- |
@@ -84,7 +84,7 @@ Revisa sistemas Java para identificar controles de ingeniería, evidencias y der
 | [Digital Services Act](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2065) | `807-regulations-eu-digital-services-act` |
 | [Digital Markets Act](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R1925) | `808-regulations-eu-digital-markets-act` |
 
-**Nota:** A la espera del OWASP [EU Compliance MCP](https://genai.owasp.org/solution/eu-compliance-mcp/).
+**Nota:** Este conjunto de skills podría ser un buen complemento para el futuro [OWASP EU Compliance MCP](https://genai.owasp.org/solution/eu-compliance-mcp/).
 
 ### Operar
 
