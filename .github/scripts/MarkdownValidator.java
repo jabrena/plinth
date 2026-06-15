@@ -250,6 +250,9 @@ public class MarkdownValidator implements Callable<Integer> {
         if (status >= 400) {
             return Optional.of("Remote link is not reachable before anchor validation: " + originalUri + " (HTTP " + status + ")");
         }
+        if (status != 200) {
+            return Optional.empty();
+        }
         if (!isHtmlResponse(anchorResponse)) {
             return Optional.empty();
         }
