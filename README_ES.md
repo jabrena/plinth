@@ -8,7 +8,7 @@
 
 > **Idiomas:** [English](./README.md) · [中文](./README_ZH.md)
 >
-> **Apoya el proyecto:** [Sponsor to pay tokens](https://github.com/sponsors/jabrena)
+> **Ayuda a crecer este proyecto:** [Conviértete en patrocinador](https://github.com/sponsors/jabrena)
 
 ## Objetivo
 
