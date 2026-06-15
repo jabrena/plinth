@@ -44,6 +44,7 @@
                 <good-example>
                     <code-block language="xml"><![CDATA[<properties>
     <mongock.version>5.5.1</mongock.version>
+    <testcontainers.mongodb.version>1.21.3</testcontainers.mongodb.version>
 </properties>
 
 <dependencyManagement>
@@ -71,6 +72,22 @@
         <groupId>io.micronaut.mongodb</groupId>
         <artifactId>micronaut-mongo-sync</artifactId>
     </dependency>
+
+    <!-- Test dependencies -->
+    <!-- org.testcontainers:mongodb is NOT managed by the Micronaut platform BOM;
+         always declare an explicit version. -->
+    <dependency>
+        <groupId>org.testcontainers</groupId>
+        <artifactId>mongodb</artifactId>
+        <version>${testcontainers.mongodb.version}</version>
+        <scope>test</scope>
+    </dependency>
+    <!-- assertj-core is managed by the Micronaut platform BOM but must be declared explicitly. -->
+    <dependency>
+        <groupId>org.assertj</groupId>
+        <artifactId>assertj-core</artifactId>
+        <scope>test</scope>
+    </dependency>
 </dependencies>]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
@@ -84,7 +101,27 @@
             </code-examples>
         </example>
 
-        <example number="2" id="micronaut-mongock-runner-bean">
+        <example number="2" id="micronaut-mongock-configuration">
+            <example-header>
+                <example-title>application.properties</example-title>
+                <example-subtitle>Configure MongoDB URI and database name for the standalone runner</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                The `MongockMigrationRunner` bean reads `mongodb.database` via `@Value`. Declare both `mongodb.uri` and `mongodb.database` in `application.properties` for local development and non-test environments. In tests, these values are overridden dynamically by `TestPropertyProvider` pointing to a Testcontainers MongoDB instance — the static values in `application.properties` are never used during test execution.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="properties"><![CDATA[mongodb.uri=mongodb://localhost:27017
+mongodb.database=mydb]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="properties"><![CDATA[# Bad: omitting mongodb.database forces the runner bean to fail at startup
+# because @Value("${mongodb.database}") has no value to bind]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="micronaut-mongock-runner-bean">
             <example-header>
                 <example-title>Runner bean</example-title>
                 <example-subtitle>Wire a controlled Mongock standalone runner through Micronaut</example-subtitle>
@@ -139,7 +176,7 @@ class MigrationController {
             </code-examples>
         </example>
 
-        <example number="3" id="micronaut-mongock-change-unit">
+        <example number="4" id="micronaut-mongock-change-unit">
             <example-header>
                 <example-title>ChangeUnit design</example-title>
                 <example-subtitle>Inject MongoDatabase from the sync driver; do not use MongoClient or Micronaut Data repositories</example-subtitle>
@@ -187,36 +224,79 @@ class OrdersAddStatusChange {
             </code-examples>
         </example>
 
-        <example number="4" id="micronaut-mongock-testing">
+        <example number="5" id="micronaut-mongock-testing">
             <example-header>
                 <example-title>Testing migrations</example-title>
                 <example-subtitle>Run Micronaut migration wiring against Testcontainers MongoDB; verify changelog records and side effects</example-subtitle>
             </example-header>
             <example-description><![CDATA[
-                Use `@MicronautTest` with MongoDB Testcontainers or Micronaut Test Resources so the same runner and driver execute against a real MongoDB instance. Verify that the `mongockChangeLog` collection has EXECUTED records for every expected change unit, and check at least one physical side effect (index or document shape) to confirm the migration ran — do not merely assert that the context loaded.
+                Use `@MicronautTest` with `TestPropertyProvider` and a static `MongoDBContainer` so the same runner and driver execute against a real MongoDB instance. Micronaut resolves `mongodb.uri` at context creation time, before beans are injected, so `TestPropertyProvider` (not `@Property`) is the only way to supply a dynamic Testcontainers URI. Also annotate the class with `@TestInstance(Lifecycle.PER_CLASS)` — this is required for `TestPropertyProvider` to work correctly with `@MicronautTest`. Verify that the `mongockChangeLog` collection has EXECUTED records for every expected change unit, and check at least one physical side effect (index or document shape) to confirm the migration ran — do not merely assert that the context loaded.
+
+                If the project already has other `@MicronautTest` classes, those will also fail with `MongoTimeoutException` after `micronaut-mongo-sync` is added (see safeguard EXISTING TEST IMPACT). Update them to also implement `TestPropertyProvider` using a shared static container.
             ]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[@MicronautTest
-class MongockMigrationTest {
+                    <code-block language="java"><![CDATA[import com.mongodb.client.MongoClient;
+import io.micronaut.test.extensions.junit5.annotation.MicronautTest;
+import io.micronaut.test.support.TestPropertyProvider;
+import jakarta.inject.Inject;
+import org.bson.Document;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
+import org.testcontainers.containers.MongoDBContainer;
+import org.testcontainers.utility.DockerImageName;
 
-    @Inject MongoClient mongoClient;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import static org.assertj.core.api.Assertions.assertThat;
+
+@MicronautTest
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+class MongockMigrationTest implements TestPropertyProvider {
+
+    static final MongoDBContainer MONGODB =
+        new MongoDBContainer(DockerImageName.parse("mongo:7.0"));
+
+    @Override
+    public Map<String, String> getProperties() {
+        if (!MONGODB.isRunning()) {
+            MONGODB.start();
+        }
+        return Map.of(
+            "mongodb.uri", MONGODB.getConnectionString(),
+            "mongodb.database", "testdb"
+        );
+    }
+
+    @Inject
+    MongoClient mongoClient;
 
     @Test
     void allExpectedMigrationsExecutedSuccessfully() {
-        List<Document> changelog = mongoClient.getDatabase("orders")
+        List<Document> changelog = mongoClient.getDatabase("testdb")
             .getCollection("mongockChangeLog")
-            .find().into(new ArrayList<>());
+            .find()
+            .into(new ArrayList<>());
+
         List<String> executedIds = changelog.stream()
             .filter(d -> "EXECUTED".equals(d.getString("state")))
             .map(d -> d.getString("changeId"))
             .toList();
+
         assertThat(executedIds).contains("orders-add-status");
     }
 }]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[// Bad: a pure Mockito test of the runner does not verify lock/history collections or MongoDB updates]]></code-block>
+                    <code-block language="java"><![CDATA[// Bad: bare @MicronautTest without TestPropertyProvider.
+// Micronaut resolves mongodb.uri at context creation — the context will fail to start
+// with MongoTimeoutException because no real MongoDB is reachable at localhost:27017.
+@MicronautTest
+class MongockMigrationTest {
+    @Inject MongoClient mongoClient; // context never starts; injection never happens
+}]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
@@ -240,6 +320,7 @@ class MongockMigrationTest {
             <safeguards-item>**STARTUP TIME**: Do not run long backfills in a startup listener if probes or rollout windows can interrupt them repeatedly</safeguards-item>
             <safeguards-item>**RUNNER CLAIMS**: Do not invent Micronaut-specific Mongock coordinates; verify official artifacts or use the standalone runner pattern</safeguards-item>
             <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before recommending dependency or migration changes</safeguards-item>
+            <safeguards-item>**EXISTING TEST IMPACT**: Adding `micronaut-mongo-sync` to a project that did not previously include MongoDB will cause every existing `@MicronautTest` class to fail with `MongoTimeoutException` — Micronaut auto-configures a `MongoClient` at context creation and attempts to reach `mongodb.uri`. Update every `@MicronautTest` class in the project to implement `TestPropertyProvider` and supply a Testcontainers-based `mongodb.uri`, or share a common `TestPropertyProvider` interface backed by a single static `MongoDBContainer`.</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>

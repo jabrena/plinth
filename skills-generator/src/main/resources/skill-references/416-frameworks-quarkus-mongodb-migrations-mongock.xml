@@ -26,7 +26,8 @@
             <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements; include a MongoDB-backed Quarkus test where feasible</constraint>
             <constraint>**EXTENSION COMPATIBILITY**: Verify the Quarkiverse Mongock extension version against the active Quarkus platform BOM before adding dependencies; the extension version and the Quarkus platform version must align</constraint>
             <constraint>**DEFAULT CLIENT LIMIT**: If the application uses multiple MongoDB clients, confirm the extension supports that topology before implementing migrations</constraint>
-            <constraint>**RUNNER NOTE**: The Quarkiverse Mongock extension integrates Mongock through Quarkus CDI — it is NOT the same as the Spring Boot runner (`mongock-springboot-v3`) and is NOT affected by the Spring Boot 3/4 version split. CDI beans including `MongoClient` are injectable into `@ChangeUnit` methods</constraint>
+            <constraint>**RUNNER NOTE**: The Quarkiverse Mongock extension wires Mongock through `MongockStandalone` (not a CDI-aware runner). `@ChangeUnit` instances are created by Mongock via reflection — CDI `@Inject` field injection and `@Execution` method-parameter injection do NOT work. To access `MongoClient` or other CDI beans inside a `@ChangeUnit`, use `Arc.container().instance(MongoClient.class).get()` directly in the method body. The extension is NOT the same as `mongock-springboot-v3` and is NOT affected by the Spring Boot 3/4 version split.</constraint>
+            <constraint>**VERSION GAP**: If `quarkus-mongock` latest release targets a Quarkus version significantly older than the active platform (check https://github.com/quarkiverse/quarkus-mongock/releases), the production `quarkus:build` may fail with `UnsatisfiedResolutionException` for `MongoClient`. In that case STOP and document the incompatibility — do not apply changes that break the production build.</constraint>
         </constraint-list>
     </constraints>
 
@@ -101,7 +102,7 @@ quarkus.mongock.migrate-at-start=false]]></code-block>
                 <example-subtitle>Use stable MongoDB collection operations via MongoClient rather than mutable Panache entity APIs</example-subtitle>
             </example-header>
             <example-description><![CDATA[
-                `@ChangeUnit` classes should remain compilable and meaningful after the domain model evolves. When using the Quarkiverse extension, any Quarkus CDI bean — including `MongoClient` — can be injected into `@ChangeUnit` methods. Prefer stable collection names and raw field operations so the migration works regardless of how Panache entities or repositories evolve later.
+                `@ChangeUnit` classes should remain compilable and meaningful after the domain model evolves. The Quarkiverse extension uses `MongockStandalone` — Mongock instantiates `@ChangeUnit` classes directly via reflection, outside of CDI. Neither `@Inject` field injection nor `@Execution` method-parameter injection will receive CDI beans. Access `MongoClient` (or any other CDI bean) programmatically via `Arc.container().instance(MongoClient.class).get()` inside each method body. Prefer stable collection names and raw field operations so the migration works regardless of how Panache entities or repositories evolve later.
             ]]></example-description>
             <code-examples>
                 <good-example>
@@ -111,35 +112,53 @@ import com.mongodb.client.model.Updates;
 import io.mongock.api.annotations.ChangeUnit;
 import io.mongock.api.annotations.Execution;
 import io.mongock.api.annotations.RollbackExecution;
+import io.quarkus.arc.Arc;
 
 @ChangeUnit(id = "orders-add-status", order = "001", author = "platform")
 public class OrdersAddStatusChange {
 
     @Execution
-    public void execute(MongoClient mongoClient) {
+    public void execute() {
+        MongoClient mongoClient = Arc.container().instance(MongoClient.class).get();
         mongoClient.getDatabase("orders")
             .getCollection("orders")
             .updateMany(Filters.exists("status", false), Updates.set("status", "PENDING"));
     }
 
     @RollbackExecution
-    public void rollback(MongoClient mongoClient) {
+    public void rollback() {
+        MongoClient mongoClient = Arc.container().instance(MongoClient.class).get();
         mongoClient.getDatabase("orders")
             .getCollection("orders")
             .updateMany(Filters.eq("status", "PENDING"), Updates.unset("status"));
     }
 }]]></code-block>
                 </good-example>
-                <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[// Bad: coupling migrations to Panache entity methods that may change later
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Bad: @Inject field injection does not work — Mongock creates @ChangeUnit instances
+// via reflection outside of CDI, so mongoClient will be null at runtime.
 @ChangeUnit(id = "orders-add-status", order = "001", author = "platform")
-class OrdersAddStatusChange {
+public class OrdersAddStatusChange {
+    @Inject MongoClient mongoClient; // null — CDI never sets this field
+
     @Execution
-    void execute() {
-        OrderEntity.listAll().forEach(order -> {
-            order.status = "PENDING";
-            order.update();
-        });
+    public void execute() {
+        mongoClient.getDatabase("orders") // NullPointerException
+            .getCollection("orders")
+            .updateMany(Filters.exists("status", false), Updates.set("status", "PENDING"));
+    }
+}]]></code-block>
+                </bad-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Bad: method-parameter injection does not work either — MongockStandalone does not
+// register MongoClient as a changeset dependency, so getParameter() throws at runtime.
+@ChangeUnit(id = "orders-add-status", order = "001", author = "platform")
+public class OrdersAddStatusChange {
+    @Execution
+    public void execute(MongoClient mongoClient) { // runtime error: parameter not found
+        mongoClient.getDatabase("orders")
+            .getCollection("orders")
+            .updateMany(Filters.exists("status", false), Updates.set("status", "PENDING"));
     }
 }]]></code-block>
                 </bad-example>
@@ -222,7 +241,7 @@ class MongockMigrationTest {
         <output-format-list>
             <output-format-item>**ANALYZE** Quarkus MongoDB setup: platform version, Quarkiverse Mongock extension version, default MongoDB client, migration execution mode, and tests</output-format-item>
             <output-format-item>**CATEGORIZE** migration risks (EXTENSION COMPATIBILITY, DEFAULT CLIENT, LOCKING, IDEMPOTENCY, DOMAIN COUPLING, TEST GAP) by impact</output-format-item>
-            <output-format-item>**APPLY** Quarkus-aligned fixes: Quarkiverse extension coordinates, `quarkus.mongock.*` properties, stable `@ChangeUnit` classes using CDI-injected `MongoClient`, and Quarkus Dev Services tests</output-format-item>
+            <output-format-item>**APPLY** Quarkus-aligned fixes: Quarkiverse extension coordinates (only when compatible with the active Quarkus platform), `quarkus.mongock.*` properties, stable `@ChangeUnit` classes using `Arc.container().instance(MongoClient.class).get()` for MongoDB access, and Quarkus Dev Services tests</output-format-item>
             <output-format-item>**ALIGN** with `@415-frameworks-quarkus-mongodb` for normal MongoDB/Panache Mongo design while keeping migrations independent</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before changes and `./mvnw clean verify` after changes</output-format-item>
         </output-format-list>
@@ -236,6 +255,8 @@ class MongockMigrationTest {
             <safeguards-item>**EXTENSION LIMITS**: Re-check Quarkiverse Mongock limitations for multiple clients, native mode, and transaction behavior during Quarkus upgrades. Check https://github.com/quarkiverse/quarkus-mongock for the latest compatible version</safeguards-item>
             <safeguards-item>**WRONG RUNNER**: Do not add `mongock-springboot-v3` to a Quarkus project — it is unrelated to Quarkus CDI and will not function. Use `quarkus-mongock` from Quarkiverse instead</safeguards-item>
             <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before recommending dependency or migration changes</safeguards-item>
+            <safeguards-item>**VERSION GAP**: If the latest `quarkus-mongock` release targets a Quarkus version significantly older than the active platform (e.g. extension built for 3.19.3 while project uses 3.35.4), the production `quarkus:build` will fail with `UnsatisfiedResolutionException` for `MongoClient` even though `@QuarkusTest` tests may appear to pass. Do NOT apply changes in this case — revert, document the incompatibility, and check https://github.com/quarkiverse/quarkus-mongock/releases for a compatible release.</safeguards-item>
+            <safeguards-item>**CDI INJECTION IN CHANGUNIT**: Neither `@Inject` field injection nor `@Execution` method-parameter injection works inside `@ChangeUnit` classes. Always use `Arc.container().instance(Type.class).get()` to access CDI beans programmatically.</safeguards-item>
         </safeguards-list>
     </safeguards>
 </prompt>
