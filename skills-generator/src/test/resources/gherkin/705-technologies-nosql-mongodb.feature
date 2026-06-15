@@ -21,3 +21,4 @@ Scenario: Review MongoDB seed data and modeling choices without framework coupli
   And the skill reviews aggregation pipeline stage ordering, "$match" pushdown, "$project", "$lookup", "$unwind", "$group", and memory controls where applicable
   And the skill does not concatenate untrusted input into query documents, aggregation stages, JSON strings, JavaScript expressions, or "$where"
   And the folder "examples/infrastructure/mongodb" has no git changes unless the user explicitly requested MongoDB artifact edits
+  And any git changes produced during skill execution and verification are reset

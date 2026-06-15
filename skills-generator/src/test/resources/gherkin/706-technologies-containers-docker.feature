@@ -2,6 +2,7 @@ Feature: Validate changes from usage of Java Docker container skill
 
 Background:
   Given the skill "706-technologies-containers-docker"
+  And the folder "examples/frameworks/quarkus" has no git changes
 
 @acceptance-test
 Scenario: Review Quarkus Java Dockerfiles for secure container defaults
@@ -21,3 +22,4 @@ Scenario: Review Quarkus Java Dockerfiles for secure container defaults
   And the skill reports vulnerability scanning, SBOM, health check, logging, image size, and CI verification follow-ups
   And the skill asks a clarifying question before editing container artifacts if Java version, build tool, deployment platform, base-image policy, registry policy, or scanner requirements are material and missing
   And the folder "examples/frameworks/quarkus" has no git changes unless the user explicitly requested Docker artifact edits
+  And any git changes produced during skill execution and verification are reset
