@@ -23,10 +23,18 @@ Explore the latest published content on the [project website](https://jabrena.gi
 Install every skill for your preferred agent:
 
 ```bash
+# Cursor
 npx skills add jabrena/cursor-rules-java --skill '*' --agent cursor -y
-```
 
-Replace `cursor` with `claude-code`, `codex`, or `github-copilot` when needed.
+# Claude Code
+npx skills add jabrena/cursor-rules-java --skill '*' --agent claude-code -y
+
+# Codex
+npx skills add jabrena/cursor-rules-java --skill '*' --agent codex -y
+
+# GitHub Copilot
+npx skills add jabrena/cursor-rules-java --skill '*' --agent github-copilot -y
+```
 
 ### See it in action
 

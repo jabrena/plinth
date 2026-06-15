@@ -23,10 +23,18 @@
 为你常用的智能体安装全部 skills：
 
 ```bash
+# Cursor
 npx skills add jabrena/cursor-rules-java --skill '*' --agent cursor -y
-```
 
-根据需要将 `cursor` 替换为 `claude-code`、`codex` 或 `github-copilot`。
+# Claude Code
+npx skills add jabrena/cursor-rules-java --skill '*' --agent claude-code -y
+
+# Codex
+npx skills add jabrena/cursor-rules-java --skill '*' --agent codex -y
+
+# GitHub Copilot
+npx skills add jabrena/cursor-rules-java --skill '*' --agent github-copilot -y
+```
 
 ### 查看实际效果
 
