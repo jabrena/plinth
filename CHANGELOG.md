@@ -15,7 +15,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Java design patterns, Gatling performance testing, Spring Modulith, and SDKMAN project starter skills for Spring Boot, Quarkus, and Micronaut (`@123-java-design-patterns`, `@152-java-performance-gatling`, `@305-frameworks-spring-boot-modulith`, `@300-frameworks-spring-boot-create-project`, `@400-frameworks-quarkus-create-project`, `@500-frameworks-micronaut-create-project`) (#762, #763, #764, #781)
   - Mongock migration skills for Spring Boot, Quarkus, and Micronaut (`@316-frameworks-spring-mongodb-migrations-mongock`, `@416-frameworks-quarkus-mongodb-migrations-mongock`, `@516-frameworks-micronaut-mongodb-migrations-mongock`) (#761)
   - Technology guidance for SQL, MongoDB/NoSQL modeling, and Docker containers (`@704-technologies-sql`, `@705-technologies-nosql-mongodb`, `@706-technologies-containers-docker`) (#773, #776, #778, #838)
-  - Regulation engineering review skills for the EU AI Act, DORA, GDPR, EU NIS2, Cyber Resilience Act, EU Data Act, Digital Services Act, Digital Markets Act, and Digital Omnibus (`@801`-`@809`) (#830, #853, #862, #864, #865, #866, #867, #868)
+  - Regulation engineering review skills for the EU AI Act, DORA, GDPR, EU NIS2, Cyber Resilience Act, EU Data Act, Digital Services Act, and Digital Markets Act (`@801`-`@808`) (#830, #853, #862, #864, #865, #866, #867)
 
 - **Agents & commands**:
   - Tech Lead, Java Performance, and default non-Java agents, plus updated architect, business analyst, and framework coder responsibilities (#807, #815)
