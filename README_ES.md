@@ -155,7 +155,7 @@ Este proyecto apoya el trabajo de ingeniería de software, pero no sustituye el 
 
 ### Acceso a datos corporativos
 
-Actúa con precaución cuando un problema involucre bases de datos corporativas u otros datos sensibles de la organización. Antes de conceder acceso a un flujo de trabajo asistido por IA, evalúa los riesgos de autorización, privacidad, filtración, retención y modificación accidental de datos. Aplica acceso con privilegios mínimos, revisión humana, validación y monitorización. Consulta [OWASP GenAI Data Security Risks & Mitigations 2026](https://genai.owasp.org/resource/owasp-genai-data-security-risks-mitigations-2026/), [The EU Artificial Intelligence Act](https://artificialintelligenceact.eu/) y los nuevos [skills sobre regulaciones](#cumplimiento-alpha).
+Actúa con precaución cuando un problema involucre bases de datos corporativas u otros datos sensibles de la organización. Antes de conceder acceso a un flujo de trabajo asistido por IA, evalúa los riesgos de autorización, privacidad, filtración, retención y modificación accidental de datos. Aplica acceso con privilegios mínimos, revisión humana, validación y monitorización. Consulta [OWASP GenAI Data Security Risks & Mitigations 2026](https://genai.owasp.org/resource/owasp-genai-data-security-risks-mitigations-2026/) y el nuevo conjunto de [skills sobre regulaciones de la UE](#cumplimiento-alpha).
 
 ## Contribuir
 

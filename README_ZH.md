@@ -155,7 +155,7 @@ npx skills add jabrena/cursor-rules-java --skill '*' --agent github-copilot -y
 
 ### 访问企业数据
 
-当问题涉及企业数据库或其他组织敏感数据时，请谨慎使用。在向 AI 辅助工作流授予访问权限之前，应评估授权、隐私、数据泄露、数据保留和意外修改等风险，并实施最小权限访问、人工审查、验证和监控。请参阅 [OWASP GenAI Data Security Risks & Mitigations 2026](https://genai.owasp.org/resource/owasp-genai-data-security-risks-mitigations-2026/)、[The EU Artificial Intelligence Act](https://artificialintelligenceact.eu/) 以及新的[法规 skills](#合规-alpha)。
+当问题涉及企业数据库或其他组织敏感数据时，请谨慎使用。在向 AI 辅助工作流授予访问权限之前，应评估授权、隐私、数据泄露、数据保留和意外修改等风险，并实施最小权限访问、人工审查、验证和监控。请参阅 [OWASP GenAI Data Security Risks & Mitigations 2026](https://genai.owasp.org/resource/owasp-genai-data-security-risks-mitigations-2026/) 以及新的[欧盟法规 skills](#合规-alpha)。
 
 ## 贡献
 
