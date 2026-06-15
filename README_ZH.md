@@ -12,11 +12,30 @@
 >
 > **支持项目：** [Sponsor to pay tokens](https://github.com/sponsors/jabrena)
 
-**弃用通知：** 当前的 `System prompts/rules` 已弃用，并将在 `v0.16.0` 中移除。如果你仍在使用它们，请阅读 [0.14.0 版本文章](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html)。
-
 ## 目标
 
 一套带有明确观点的 AI 原生工作流，通过可复用的 `Skills`、`Agents`、`Commands` 与 `MCP servers`，持续演进现代 Java 企业级 `SDLC` 实践。
+
+## 60 秒开始使用
+
+为你常用的智能体安装全部 skills：
+
+```bash
+npx skills add jabrena/cursor-rules-java --skill '*' --agent cursor -y
+```
+
+根据需要将 `cursor` 替换为 `claude-code`、`codex` 或 `github-copilot`。有关 commands、agents 和其他安装选项，请参阅 [5 分钟快速入门](./documentation/guides/GETTING-STARTED-IN-5-MINUTES_ZH.md)。
+
+### 查看实际效果
+
+向你的智能体提出：
+
+```text
+使用 @110-java-maven-best-practices 审查此 Maven 项目。
+解释发现的问题，应用已批准的改进，并验证构建。
+```
+
+该 skill 会引导智能体完成结构化的 Maven 审查，同时由你决定是否接受建议的变更。
 
 当你的团队需要演进基于 Java 的产品或服务时，本项目可帮助你回答 [五个为什么](https://en.wikipedia.org/wiki/Five_whys)：
 
@@ -44,7 +63,7 @@
 | --------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | 1. [Commands](./documentation/guides/INVENTORY-COMMANDS-JAVA.md) | `@004-commands-installation` 在项目中安装 Commands | [`Commands`](./documentation/guides/COMMANDS.md) |
 | 2. [Agents](./documentation/guides/INVENTORY-AGENTS-JAVA.md) | `@005-agents-installation` 在 Cursor/Claude 中安装 Agents | [`Agents`](./documentation/guides/GETTING-STARTED-AGENTS_ZH.md)     |
-| 3. [Skills](./documentation/guides/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/cursor-rules-java --all --agent cursor` | [`Skills`](./documentation/guides/GETTING-STARTED-SKILLS_ZH.md)     |
+| 3. [Skills](./documentation/guides/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/cursor-rules-java --skill '*' --agent cursor -y` | [`Skills`](./documentation/guides/GETTING-STARTED-SKILLS_ZH.md)     |
 
 ### 兼容性
 
@@ -53,6 +72,10 @@
 ## 5 分钟快速入门
 
 按照快速指南 [5 分钟快速入门](./documentation/guides/GETTING-STARTED-IN-5-MINUTES_ZH.md) 学习如何使用本项目。
+
+### 从旧版规则迁移
+
+当前的 `System prompts/rules` 已弃用，并将在 `v0.16.0` 中移除。如果你仍在使用它们，请阅读 [0.14.0 版本文章](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html)。
 
 ## Skill 验证
 
@@ -90,7 +113,11 @@
 
 ## 贡献
 
-请参阅 [CONTRIBUTING.md](./CONTRIBUTING.md)，了解约定、生成器工作流、测试以及如何提交 pull request。
+- 按照 [5 分钟快速入门](./documentation/guides/GETTING-STARTED-IN-5-MINUTES_ZH.md) 操作，并告诉我们哪些体验可以改进。
+- [浏览 skill 清单](./documentation/guides/INVENTORY-SKILLS-JAVA.md)，并提出尚未覆盖的 Java 工作流。
+- [创建 issue](https://github.com/jabrena/cursor-rules-java/issues)，报告问题或提出改进建议。
+- 阅读 [CONTRIBUTING.md](./CONTRIBUTING.md)，改进 skill、agent、command 或项目指南。
+- 如果这些工作流对你的 Java 项目有所帮助，请为本仓库加星。
 
 ## Architecture Decision Records (ADR)
 

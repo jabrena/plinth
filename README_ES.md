@@ -12,11 +12,30 @@
 >
 > **Apoya el proyecto:** [Sponsor to pay tokens](https://github.com/sponsors/jabrena)
 
-**Aviso de deprecación:** Los `System prompts/rules` actuales están deprecados y se eliminarán en `v0.16.0`. Si todavía los usas, revisa el [artículo de la versión 0.14.0](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html).
-
 ## Objetivo
 
 Un flujo de trabajo nativo de IA, con criterio propio, para evolucionar las prácticas modernas de `SDLC` en Java Enterprise mediante `Skills`, `Agents`, `Commands` y servidores `MCP` reutilizables.
+
+## Empieza en 60 segundos
+
+Instala todos los skills para tu agente preferido:
+
+```bash
+npx skills add jabrena/cursor-rules-java --skill '*' --agent cursor -y
+```
+
+Sustituye `cursor` por `claude-code`, `codex` o `github-copilot` cuando sea necesario. Consulta la [guía de 5 minutos](./documentation/guides/GETTING-STARTED-IN-5-MINUTES_ES.md) para instalar commands, agents y explorar otras opciones.
+
+### Míralo en acción
+
+Pide a tu agente:
+
+```text
+Usa @110-java-maven-best-practices para revisar este proyecto Maven.
+Explica los hallazgos, aplica las mejoras aprobadas y valida el build.
+```
+
+El skill guía al agente mediante una revisión estructurada de Maven mientras tú mantienes el control sobre los cambios propuestos.
 
 Te ayuda a responder los [Five whys](https://en.wikipedia.org/wiki/Five_whys) cuando tu equipo necesita evolucionar un producto o servicio basado en Java:
 
@@ -44,7 +63,7 @@ El proyecto genera un conjunto de entregables al final de cualquier iteración.
 | --------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | 1. [Commands](./documentation/guides/INVENTORY-COMMANDS-JAVA.md) | `@004-commands-installation` Instalar Commands en el proyecto | [`Commands`](./documentation/guides/COMMANDS.md) |
 | 2. [Agents](./documentation/guides/INVENTORY-AGENTS-JAVA.md) | `@005-agents-installation` Instalar Agents en Cursor/Claude | [`Agents`](./documentation/guides/GETTING-STARTED-AGENTS_ES.md)     |
-| 3. [Skills](./documentation/guides/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/cursor-rules-java --all --agent cursor` | [`Skills`](./documentation/guides/GETTING-STARTED-SKILLS_ES.md)     |
+| 3. [Skills](./documentation/guides/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/cursor-rules-java --skill '*' --agent cursor -y` | [`Skills`](./documentation/guides/GETTING-STARTED-SKILLS_ES.md)     |
 
 ### Compatibilidad
 
@@ -53,6 +72,10 @@ Este proyecto es compatible con cualquier herramienta que admita `Commands`, `Ag
 ## Primeros pasos en 5 minutos
 
 Aprende a usar este proyecto siguiendo la guía rápida [Primeros pasos en 5 minutos](./documentation/guides/GETTING-STARTED-IN-5-MINUTES_ES.md).
+
+### Migración desde las reglas heredadas
+
+Los `System prompts/rules` actuales están deprecados y se eliminarán en `v0.16.0`. Si todavía los usas, revisa el [artículo de la versión 0.14.0](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html).
 
 ## Validaciones de Skills
 
@@ -90,7 +113,11 @@ Actúa con precaución cuando un problema involucre bases de datos corporativas 
 
 ## Contribuir
 
-Consulta [CONTRIBUTING.md](./CONTRIBUTING.md) para convenciones, flujos del generador, pruebas y cómo abrir un pull request.
+- Sigue la [guía de 5 minutos](./documentation/guides/GETTING-STARTED-IN-5-MINUTES_ES.md) y cuéntanos dónde puede mejorar la experiencia.
+- [Explora el inventario de skills](./documentation/guides/INVENTORY-SKILLS-JAVA.md) y propón un flujo de trabajo Java que falte.
+- [Abre una issue](https://github.com/jabrena/cursor-rules-java/issues) para informar de un problema o sugerir una mejora.
+- Lee [CONTRIBUTING.md](./CONTRIBUTING.md) para mejorar un skill, agent, command o guía del proyecto.
+- Da una estrella al repositorio si estos flujos ayudan a tus proyectos Java.
 
 ## Architecture Decision Records (ADR)
 
