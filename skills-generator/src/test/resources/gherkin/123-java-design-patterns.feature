@@ -2,6 +2,7 @@ Feature: Validate changes from usage of Java design patterns skill
 
 Background:
   Given the skill "123-java-design-patterns"
+  And the analysis sandbox folder "examples/skills/analysis" has no git changes
 
 @acceptance-test
 Scenario: Recommend REST API patterns from a concrete design pressure
@@ -9,6 +10,8 @@ Scenario: Recommend REST API patterns from a concrete design pressure
   And the user request is "Review the REST controller design and recommend Java design patterns only where useful"
   And the local generated skill path ".agents/skills/123-java-design-patterns"
   And the folder "examples/frameworks/spring-boot" has no git changes
+  And the requested analysis output path is "examples/skills/analysis/SPRING-BOOT-SUM-CONTROLLER-REST-PATTERNS-ANALYSIS.md"
+  And any existing report at the requested output path must be overwritten
   When the skill ".agents/skills/123-java-design-patterns" is applied to the example project
   Then the skill identifies the concrete design pressure before naming any pattern
   And the skill reads "references/123-rest-api-patterns.md"
@@ -17,4 +20,7 @@ Scenario: Recommend REST API patterns from a concrete design pressure
   And each recommended pattern includes benefit, cost, and when-not-to-use guidance
   And the skill keeps code unchanged unless the user explicitly asks for implementation
   And the skill reports remaining trade-offs and validation that would be required for code changes
+  And the skill writes the pattern analysis outcome to "examples/skills/analysis/SPRING-BOOT-SUM-CONTROLLER-REST-PATTERNS-ANALYSIS.md"
+  And the generated analysis file reflects the whole review including design pressures, pattern recommendations with benefit-cost-when-not-to-use guidance, explicit no-pattern decisions, remaining trade-offs, and validation steps for code changes
   And the folder "examples/frameworks/spring-boot" has no git changes
+  And any git changes produced under "examples/skills/analysis" during skill execution and verification are reset
