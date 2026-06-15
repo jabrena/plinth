@@ -4,7 +4,7 @@ description: Use when you need MongoDB with Spring Data MongoDB — including Ma
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Spring Boot — MongoDB
 
@@ -488,15 +488,17 @@ class OrderRepositoryIT {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** MongoDB code: document mapping completeness, index declarations, repository query safety, service transaction placement, error handling specificity, and DTO vs document leakage
-- **CATEGORIZE** issues by impact (SECURITY for injection risk, CORRECTNESS for missing @Version or transactions, PERFORMANCE for missing indexes or unbounded queries, MAINTAINABILITY for mutable documents or missing factory methods)
-- **APPLY** Spring Data MongoDB–aligned fixes: explicit collection, @Field, @CompoundIndex, @Version where appropriate, safe Criteria-based queries, service-layer boundaries, exception translation
+- **CATEGORIZE** issues by impact (SECURITY for injection risk, CORRECTNESS for missing @Version or transactions, PERFORMANCE for missing indexes or queries without explicit pagination and result limits, MAINTAINABILITY for mutable documents or missing factory methods)
+- **APPLY** Spring Data MongoDB–aligned fixes: explicit collection, @Field, @CompoundIndex, @Version where appropriate, safe Criteria-based queries, bounded pagination with an explicit maximum page size, service-layer boundaries, exception translation
 - **IMPLEMENT** changes so document model, indexes, repositories, and tests stay consistent
 - **EXPLAIN** trade-offs (MongoRepository derived finders vs MongoTemplate Criteria, embedded Flapdoodle vs Testcontainers, single-document writes vs multi-document transactions)
 - **TEST** repository behaviour with `@DataMongoTest` + Testcontainers and full flows with `@SpringBootTest` when needed; never mock repositories inside persistence slice tests
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

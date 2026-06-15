@@ -4,7 +4,7 @@ description: Use when you need to review, improve, or build Quarkus applications
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Quarkus Core Guidelines
 
@@ -822,6 +822,7 @@ public class BrokenBean {
 }
 ```
 
+
 ## Output Format
 
 - **ENSURE** every Quarkus project has a `@QuarkusMain` class with a static `main` method using `Quarkus.run(args)` — create one if missing
@@ -831,6 +832,7 @@ public class BrokenBean {
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits
 - **DETECT** CDI scope ambiguity (multiple unqualified implementations of the same type) and missing bean disambiguation (`@Default`, `@Alternative`, `@Named`)
 - **EXPLAIN** what changed and why: improved startup safety, better testability, narrower scopes, or cleaner cross-cutting separation via interceptors and events
+
 
 ## Safeguards
 

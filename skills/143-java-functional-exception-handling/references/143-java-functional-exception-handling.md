@@ -4,7 +4,7 @@ description: Use when you need to apply functional exception handling best pract
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Java Functional Exception handling Best Practices
 
@@ -1405,6 +1405,7 @@ public class FileProcessor {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** Java code to identify specific functional exception handling opportunities and categorize them by impact (CRITICAL, MAINTAINABILITY, PERFORMANCE, EXPRESSIVENESS) and area (exception overuse, monadic error handling gaps, functional error composition, error type design)
@@ -1414,6 +1415,7 @@ public class FileProcessor {
 - **REFACTOR** code systematically following the functional exception handling improvement roadmap: First replace exception overuse with Optional and Either types for predictable failures, then establish comprehensive error type design with sealed classes and enums, implement functional composition patterns for error handling pipelines, integrate VAVR library for advanced functional error handling, establish structured logging and monitoring compatible with functional approaches, and create consistent functional error handling patterns across the entire codebase
 - **EXPLAIN** the applied functional exception handling improvements and their benefits: Error handling clarity through monadic types and functional composition, maintainability improvements via consistent functional error patterns, performance gains from eliminating exception overhead in normal failure cases, code expressiveness enhancements through functional error composition, and overall robustness improvements through type-safe functional error handling
 - **VALIDATE** that all applied functional exception handling refactoring compiles successfully, maintains existing functionality, preserves error handling semantics, achieves expected functional benefits, and follows functional programming best practices through comprehensive testing and verification
+
 
 ## Safeguards
 

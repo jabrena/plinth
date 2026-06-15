@@ -1,9 +1,51 @@
 # Acceptance Test Prompts for Skills
 
+## 001-commands-inventory
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/001-commands-inventory.feature
+and verify that acceptance-tests passes.
+```
+
+## 002-agents-inventory
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/002-agents-inventory.feature
+and verify that acceptance-tests passes.
+```
+
+## 003-skills-inventory
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/003-skills-inventory.feature
+and verify that acceptance-tests passes.
+```
+
+## 004-commands-installation
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/004-commands-installation.feature
+and verify that acceptance-tests passes.
+```
+
+## 005-agents-installation
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/005-agents-installation.feature
+and verify that acceptance-tests passes.
+```
+
 ## 033-architecture-diagrams
 
 ```bash
 execute @skills-generator/src/test/resources/gherkin/033-architecture-diagrams.feature
+and verify that acceptance-tests passes.
+```
+
+## 034-architecture-design-exploration
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/034-architecture-design-exploration.feature
 and verify that acceptance-tests passes.
 ```
 
@@ -39,6 +81,90 @@ and verify that acceptance-tests passes.
 
 ```bash
 execute @skills-generator/src/test/resources/gherkin/114-java-maven-search.feature
+and verify that acceptance-tests passes.
+```
+
+## 123-java-design-patterns
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/123-java-design-patterns.feature
+and verify that acceptance-tests passes.
+```
+
+## 152-java-performance-gatling
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/152-java-performance-gatling.feature
+and verify that acceptance-tests passes.
+```
+
+## 300-frameworks-spring-boot-create-project
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/300-frameworks-spring-boot-create-project.feature
+and verify that acceptance-tests passes.
+```
+
+## 305-frameworks-spring-boot-modulith
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/305-frameworks-spring-boot-modulith.feature
+and verify that acceptance-tests passes.
+```
+
+## 316-frameworks-spring-mongodb-migrations-mongock
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/316-frameworks-spring-mongodb-migrations-mongock.feature
+and verify that acceptance-tests passes.
+```
+
+## 400-frameworks-quarkus-create-project
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/400-frameworks-quarkus-create-project.feature
+and verify that acceptance-tests passes.
+```
+
+## 416-frameworks-quarkus-mongodb-migrations-mongock
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/416-frameworks-quarkus-mongodb-migrations-mongock.feature
+and verify that acceptance-tests passes.
+```
+
+## 500-frameworks-micronaut-create-project
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/500-frameworks-micronaut-create-project.feature
+and verify that acceptance-tests passes.
+```
+
+## 516-frameworks-micronaut-mongodb-migrations-mongock
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/516-frameworks-micronaut-mongodb-migrations-mongock.feature
+and verify that acceptance-tests passes.
+```
+
+## 704-technologies-sql
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/704-technologies-sql.feature
+and verify that acceptance-tests passes.
+```
+
+## 705-technologies-nosql-mongodb
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/705-technologies-nosql-mongodb.feature
+and verify that acceptance-tests passes.
+```
+
+## 706-technologies-containers-docker
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/706-technologies-containers-docker.feature
 and verify that acceptance-tests passes.
 ```
 
@@ -95,12 +221,5 @@ and verify that acceptance-tests passes.
 
 ```bash
 execute @skills-generator/src/test/resources/gherkin/808-regulations-eu-digital-markets-act.feature
-and verify that acceptance-tests passes.
-```
-
-## 809-regulations-eu-digital-omnibus
-
-```bash
-execute @skills-generator/src/test/resources/gherkin/809-regulations-eu-digital-omnibus.feature
 and verify that acceptance-tests passes.
 ```

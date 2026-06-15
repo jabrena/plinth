@@ -3,17 +3,18 @@
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
-        <version>0.16.0-SNAPSHOT</version>
+        <version>0.16.0</version>
         <license>Apache-2.0</license>
         <title>Create a Checklist with all Java steps to use with system prompts for Java</title>
-        <description>Use when you need to generate a checklist document with Java system prompts, following the embedded template exactly and producing INVENTORY-SKILLS-JAVA.md in the project root.</description>
+        <description>Use when you need to generate a checklist document with Java system prompts from skills.xml, following the embedded section template and producing INVENTORY-SKILLS-JAVA.md.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Java software development</role>
 
-    <goal> Your task is to create a comprehensive step-by-step guide that follows the exact format
-        and structure defined in the embedded template below. Create a markdown file named
-        `INVENTORY-SKILLS-JAVA.md` with the following content:
+    <goal> Your task is to create a comprehensive step-by-step guide that follows the exact
+        section structure defined in the embedded template below and derives the inventory rows from
+        `skills-generator/src/main/resources/skills.xml`. Create a markdown file named
+        `INVENTORY-SKILLS-JAVA.md` with this structure:
 
         ```markdown
         <xi:include href="assets/java-skills-list-template.md" parse="text" />
@@ -21,29 +22,34 @@
     </goal>
 
     <constraints>
-        <constraints-description>**MANDATORY REQUIREMENT**: Follow the embedded template EXACTLY -
-            do not add, remove, or modify any steps, sections, or cursor rules that are not
-            explicitly shown in the template. ### What NOT to Include:</constraints-description>
+        <constraints-description>**MANDATORY REQUIREMENT**: Follow the embedded section template and
+            use `skills-generator/src/main/resources/skills.xml` as the single source of truth for
+            skill rows. ### What NOT to Include:</constraints-description>
         <constraint-list>
-            <constraint>**DO NOT** create additional steps beyond what's shown in the template</constraint>
-            <constraint>**DO NOT** add cursor rules that are not explicitly listed in the embedded
-                template</constraint>
-            <constraint>**DO NOT** expand or elaborate on sections beyond what the template shows</constraint>
-            <constraint>**ONLY** use cursor rules that appear in the embedded template</constraint>
-            <constraint>**ONLY** use the exact wording and structure from the template</constraint>
-            <constraint>If a cursor rule exists in the workspace but is not in the template, **DO
-                NOT** include it</constraint>
+            <constraint>**DO NOT** create additional sections beyond what is shown in the template</constraint>
+            <constraint>**SECTION ORDER**: Keep `Regulations skills` as the final inventory section before the closing note</constraint>
+            <constraint>**DO NOT** add skill rows that are absent from `skills.xml`</constraint>
+            <constraint>**DO NOT** omit any skill declared in `skills.xml`</constraint>
+            <constraint>**ONLY** use the `skillId` attribute as the generated skill id when it exists</constraint>
+            <constraint>**ONLY** use the single `reference-list/reference` value as the generated
+                skill id when `skillId` is absent</constraint>
+            <constraint>If a skill has multiple references and no `skillId`, stop and report the
+                inventory source issue instead of guessing a generated id</constraint>
         </constraint-list>
     </constraints>
 
     <output-format>
         <output-format-list>
             <output-format-item>**File Creation**: Generate the complete markdown file named
-                `INVENTORY-SKILLS-JAVA.md` in the project root directory</output-format-item>
-            <output-format-item>**Template Adherence**: Follow the embedded template structure and
-                content exactly - no additions, modifications, or omissions</output-format-item>
+                `INVENTORY-SKILLS-JAVA.md` at the requested output path, or in the project root
+                directory when no explicit path is requested</output-format-item>
+            <output-format-item>**Template Adherence**: Follow the embedded section structure and
+                populate one table row for every skill declared in `skills.xml`, including the
+                final `Regulations skills` section</output-format-item>
             <output-format-item>**File Handling**: If `INVENTORY-SKILLS-JAVA.md` already exists,
                 overwrite it completely with the new generated content</output-format-item>
+            <output-format-item>**Validation**: Before finishing, compare generated row ids against
+                `skills.xml` effective skill ids and confirm there are no missing or extra rows</output-format-item>
         </output-format-list>
     </output-format>
 </prompt>

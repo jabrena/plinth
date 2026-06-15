@@ -4,7 +4,7 @@ description: Use when you need to write or improve integration tests for Quarkus
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Quarkus Integration Testing
 
@@ -649,6 +649,7 @@ class HelloResourceIT extends BaseIntegrationTest {
 // list — extract BaseIntegrationTest and extend it.
 ```
 
+
 ## Output Format
 
 - **ANALYZE** integration tests: scope vs unit overlap, whether Dev Services suffices or `QuarkusTestResourceLifecycleManager` is required (and that Spring Boot `@ServiceConnection` does not apply), HTTP assertion quality, data isolation strategy, naming conventions, container lifecycle efficiency, and whether duplicated Quarkus test setup should become an abstract `BaseIntegrationTest`
@@ -657,6 +658,7 @@ class HelloResourceIT extends BaseIntegrationTest {
 - **IMPLEMENT** incrementally; keep `mvn verify` green after each step; align test class suffixes (`*Test` / `*Tests` for Surefire, `*IT` / `*AT` for Failsafe) and configure both Maven plugins explicitly; when several `*IT` classes share bootstrap, **define an abstract `BaseIntegrationTest` first**, then concrete subclasses (same layering as `BaseAcceptanceTest` in `@423-frameworks-quarkus-testing-acceptance-tests`)
 - **EXPLAIN** when to use `@421-frameworks-quarkus-testing-unit-tests` vs `@QuarkusTest` vs `@QuarkusIntegrationTest` if concerns are being mixed
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive test changes
+
 
 ## Safeguards
 

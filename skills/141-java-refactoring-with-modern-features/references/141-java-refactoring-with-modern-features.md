@@ -4,7 +4,7 @@ description: Use when you need to refactor Java code to adopt modern Java featur
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Modern Java Development Guidelines (Java 8+)
 
@@ -1156,6 +1156,7 @@ public class TraditionalConstructorExample {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** Java code to identify specific modern feature refactoring opportunities and categorize them by impact (CRITICAL, MAINTAINABILITY, PERFORMANCE, READABILITY) and area (lambda expressions, stream API, Optional usage, java.time API, collection factories, text blocks, pattern matching, flexible constructor bodies, module import declarations)
@@ -1165,6 +1166,7 @@ public class TraditionalConstructorExample {
 - **REFACTOR** code systematically following the modern Java improvement roadmap: First convert anonymous classes to lambda expressions and method references for immediate readability gains, then replace Iterator loops with Stream API operations for functional programming benefits, introduce Optional for null-safe method signatures and operations, migrate Date/Calendar usage to modern java.time API, adopt collection factory methods and modern collection patterns, apply text blocks and var inference for code clarity, implement pattern matching where supported for cleaner conditional logic, upgrade constructor patterns with flexible constructor bodies (Java 25), and simplify module dependencies with import declarations (Java 25)
 - **EXPLAIN** the applied modern Java improvements and their benefits: Code readability enhancements through lambda expressions and method references, maintainability improvements via Stream API and functional programming patterns, null-safety gains from Optional adoption, date/time handling improvements through java.time API, performance benefits from parallel streams, constructor flexibility gains from flexible constructor bodies (Java 25), module organization improvements through import declarations (Java 25), and overall code modernization through contemporary Java idioms and patterns
 - **VALIDATE** that all applied modern Java refactoring compiles successfully, maintains existing functionality, preserves business logic integrity, achieves expected performance characteristics, and follows modern Java best practices through comprehensive testing and verification
+
 
 ## Safeguards
 

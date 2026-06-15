@@ -4,7 +4,7 @@ description: Use when you need framework-agnostic WireMock guidance — stub des
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # WireMock best practices
 
@@ -96,6 +96,7 @@ Description: Pair **specific** `urlPath`, HTTP method, and required headers with
   "response": { "status": 200, "body": "{}" }
 }
 ```
+
 
 ## Output Format
 

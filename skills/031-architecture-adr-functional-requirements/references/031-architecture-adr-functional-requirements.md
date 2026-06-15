@@ -4,7 +4,7 @@ description: Use when the user wants to document CLI and/or REST API architectur
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Create ADRs for Functional Requirements (CLI and/or REST API)
 
@@ -27,12 +27,12 @@ Facilitate conversational discovery to create Architectural Decision Records (AD
 Before starting, run `date` in the terminal to ensure accurate timestamps in the ADR document. Use this for all `[Current Date]` placeholders in the generated ADR.
 ### Step 2: Conversational Information Gathering
 
-Ask one or two questions at a time. Build on previous answers. Acknowledge and validate responses before moving on. Complete **Surface discovery** (Phase 0 in the template) before Initial Context when the conversation does not already state the interface type.
+Pose one or two discovery questions at a time. Build on answers from the current session only. Acknowledge and validate responses before moving on. Complete **Surface discovery** (Phase 0 in the template) before Initial Context when the conversation does not already state the interface type.
 
 ```markdown
 **Phase 1: Conversational Information Gathering**
 
-Ask one or two questions at a time. Build on previous answers. Acknowledge and validate responses before moving on. Adjust depth to interface complexity (CLI, REST/HTTP API, or both); skip irrelevant areas and dive deeper where needed.
+Pose one or two discovery questions at a time. Build on current-session answers. Acknowledge and validate responses before moving on. Adjust depth to interface complexity (CLI, REST/HTTP API, or both); skip irrelevant areas and dive deeper where needed.
 
 ---
 
@@ -154,12 +154,12 @@ Only after thorough conversation: "Based on our discussion, I'd like to create a
 
 #### Step Constraints
 
-- **MUST** read template files fresh using file_search and read_file tools before asking questions
-- **MUST NOT** use cached or remembered questions from previous interactions
+- **MUST** load bundled template files from the current workspace before asking questions
+- **MUST** ignore prior-session content unless the user provides it again in the current conversation
 - **MUST** infer CLI vs REST/HTTP API from the workspace when the user provides project context; **MUST** ask a single clarifying question when inference is unclear or conflicting
 - **MUST** ask one or two questions at a time—never all at once
 - **MUST** WAIT for user response and acknowledge before proceeding
-- **MUST** build on previous answers and adapt follow-up questions
+- **MUST** build on current-session answers and adapt follow-up questions
 - **MUST NOT** assume answers or provide defaults without user input
 - **MUST** cover Surface discovery (when needed), Initial Context, Functional Requirements, Technical Decisions, and Decision Synthesis before proposing ADR creation
 - **MUST** only propose ADR creation after user validates the summary ("Does this accurately capture your requirements?")
@@ -258,6 +258,7 @@ After generating the ADR, provide:
 - Plan regular reviews as the system evolves
 - Link to user stories, requirements, implementation tasks
 
+
 ## Output Format
 
 - Ask questions conversationally (1-2 at a time), following the template phases
@@ -266,10 +267,12 @@ After generating the ADR, provide:
 - Use current date from Step 1 in the ADR
 - Include Next Steps and ADR Management recommendations after generation
 
+
 ## Safeguards
 
-- Always read template files fresh using file_search and read_file tools
+- Always load bundled template files from the current workspace for the active session
+- Do not include secrets, credentials, unrelated file contents, or hidden/private context in the ADR
 - Never proceed to ADR generation without completing conversational discovery and user validation
 - Never assume or invent requirements—use only what the user provided
-- Create ADR when: clear context, key decisions identified, alternatives explored, understanding validated
+- Proceed with ADR output only after the user validates the requirements, key decisions, alternatives, and trade-offs
 - Continue conversation when: requirements unclear, decisions arbitrary, alternatives not explored, stakeholders uncertain

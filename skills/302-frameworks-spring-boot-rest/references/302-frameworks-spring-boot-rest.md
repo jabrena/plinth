@@ -4,7 +4,7 @@ description: Use when you need to design, review, or improve REST APIs with Spri
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Java REST API Design Principles
 
@@ -1063,6 +1063,7 @@ class OrphanUserController {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** controllers and supporting types for REST semantics: HTTP verbs, URI shape, status codes, DTO boundaries, versioning, deprecation/sunset/`Link` headers, `produces`/`consumes` and vendor media types, ISO-8601 time fields, pagination/sort/filter bounds, Bean Validation on request DTOs, idempotency headers and conflict behavior, ETag/preconditions, cache headers for public vs private data, error handling, security annotations/config, and (when API-first) alignment between `openapi.yaml` and generated `*Api` interfaces vs controller implementations
@@ -1071,6 +1072,7 @@ class OrphanUserController {
 - **IMPLEMENT** incrementally: preserve public API contracts when possible; use deprecation and versioning for breaking changes; keep error shapes backward compatible unless versioning allows a break
 - **EXPLAIN** trade-offs (e.g., URI vs header versioning, custom ErrorResponse vs ProblemDetail) when multiple valid options exist
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits; exercise critical endpoints in integration tests where available
+
 
 ## Safeguards
 

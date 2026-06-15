@@ -4,7 +4,7 @@ description: Use when you need to add or review Flyway database migrations in a 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Spring — Database migrations (Flyway)
 
@@ -42,7 +42,6 @@ Description: Spring Boot manages Flyway versions via its BOM. Declare `flyway-co
 **Good example:**
 
 ```xml
-<!-- pom.xml — Flyway + PostgreSQL support (adjust artifact to your DB) -->
 <dependency>
     <groupId>org.flywaydb</groupId>
     <artifactId>flyway-core</artifactId>
@@ -56,11 +55,10 @@ Description: Spring Boot manages Flyway versions via its BOM. Declare `flyway-co
 **Bad example:**
 
 ```xml
-<!-- Bad: relying on an outdated Flyway without the database module Flyway 10+ expects -->
 <dependency>
     <groupId>org.flywaydb</groupId>
     <artifactId>flyway-core</artifactId>
-    <version>8.0.0</version> <!-- pinned old version fighting Spring Boot BOM -->
+    <version>8.0.0</version>
 </dependency>
 ```
 
@@ -156,6 +154,7 @@ public class V3__LoadProdData extends BaseJavaMigration {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** current Flyway setup: dependencies, locations, Spring properties, migration history strategy, and alignment with JDBC/Data JDBC code
@@ -164,6 +163,7 @@ public class V3__LoadProdData extends BaseJavaMigration {
 - **COORDINATE** with `@311-frameworks-spring-jdbc` / `@312-frameworks-spring-data-jdbc` so entities and SQL match applied migrations
 - **TEST** with integration tests hitting a real database (e.g. Testcontainers) after migration changes
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

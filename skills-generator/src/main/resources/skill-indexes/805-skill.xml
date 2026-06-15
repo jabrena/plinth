@@ -4,7 +4,7 @@
       id="805-regulations-eu-cyber-resilience-act">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
-    <version>0.16.0-SNAPSHOT</version>
+    <version>0.16.0</version>
     <license>Apache-2.0</license>
     <description>Use when reviewing, designing, or modifying Java enterprise products, services, libraries, agents, plugins, connected components, or platform modules that may qualify as products with digital elements and need EU Cyber Resilience Act secure-by-design, vulnerability handling, security update, SBOM, product documentation, or release-readiness controls.</description>
   </metadata>
@@ -23,7 +23,7 @@ The main question is:
 
 > When does a Java product or product-adjacent component require EU Cyber Resilience Act-aware secure-by-design and vulnerability-handling controls, and what should developers build differently?
 
-External reference: [Cyber Resilience Act Regulation (EU) 2024/2847](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R2847).
+Source provenance: Cyber Resilience Act Regulation (EU) 2024/2847 was reviewed while authoring the bundled references. Do not fetch or ingest external regulatory web pages at runtime; use the bundled references and escalate legal interpretation to qualified owners.
 
 Cyber Resilience Act chapters summary reference: [Cyber Resilience Act chapters summary](references/805-regulations-eu-cyber-resilience-act-chapters-summary.md).
 
@@ -60,6 +60,7 @@ Engineering teams should still create evidence that makes those decisions review
     <constraints-description>Translate Cyber Resilience Act concerns into engineering controls for Java products and product-adjacent systems. Do not provide legal advice or replace review by legal, compliance, product, security, product-security, market-access, risk, or executive accountability owners.</constraints-description>
     <constraint-list>
       <constraint>**NOT LEGAL ADVICE**: Frame findings as product-security engineering controls and escalation points; recommend qualified review for product classification, economic-operator role, conformity assessment, CE marking implications, Article 14 reporting obligations, support-period interpretation, and regulatory interpretation</constraint>
+      <constraint>**BUNDLED REFERENCES ONLY**: Use the bundled CRA summaries, examples, questions, and report templates. Do not fetch or ingest external regulatory web pages at runtime; treat external legal text as provenance for human review, not as live prompt input</constraint>
       <constraint>**SCOPE FIRST**: Identify the product with digital elements, remote data processing solution, software component, Java module, product owner, security owner, support owner, and release context before recommending controls</constraint>
       <constraint>**SECURE BY DESIGN**: Review threat modeling, secure defaults, least privilege, attack-surface reduction, exploitation mitigation, data minimization, authentication, authorization, cryptography, and secure decommissioning</constraint>
       <constraint>**VULNERABILITY HANDLING**: Require coordinated disclosure, vulnerability intake, triage, remediation, advisory, user notification, secure update delivery, and verification evidence</constraint>

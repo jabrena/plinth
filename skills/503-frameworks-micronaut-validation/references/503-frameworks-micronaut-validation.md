@@ -4,7 +4,7 @@ description: Use when you need to design, review, or improve validation in Micro
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Micronaut Validation Guidelines
 
@@ -271,12 +271,14 @@ record PasswordForm(String password, String confirmPassword) { }
 if (!p1.equals(p2)) throw new IllegalArgumentException("mismatch");
 ```
 
+
 ## Output Format
 
 - **ANALYZE** controllers, factories, and configuration beans for missing `@Valid`, missing cascades, and inconsistent 400 bodies
 - **APPLY** Bean Validation at HTTP boundaries and on `@ConfigurationProperties`; centralize `ConstraintViolationException` handling
 - **ALIGN** error responses with RFC 7807 Problem Details (`ValidationProblemBody` record) from `@502-frameworks-micronaut-rest`
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

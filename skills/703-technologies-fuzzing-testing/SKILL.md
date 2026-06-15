@@ -4,7 +4,7 @@ description: Use when you need to add or review fuzz testing for Java APIs with 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Java fuzz testing with CATS
 
@@ -12,7 +12,7 @@ Design and implement contract-driven fuzz testing for Java APIs using CATS to un
 
 **What is covered in this Skill?**
 
-- CATS setup and baseline command usage for OpenAPI-driven fuzzing
+- CATS setup using a trusted local jar or prebuilt image and baseline command usage for OpenAPI-driven fuzzing
 - Negative testing strategy for invalid payloads, missing fields, wrong types, and malformed values
 - Boundary testing for size, range, format, and enum constraints
 - CI integration patterns with actionable logs and reproducible failures
@@ -29,6 +29,7 @@ Before applying any fuzz testing changes, ensure the project compiles. If compil
 - **SAFETY**: If compilation fails, stop immediately and do not proceed
 - **MANDATORY**: Regenerate skills with `./mvnw clean install -pl skills-generator` after editing skill XML
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
+- **SUPPLY CHAIN**: Use only a verified local `cats/cats.jar` or an approved prebuilt image; generated artifacts must depend only on trusted local or approved image inputs
 - **BEFORE APPLYING**: Read the reference for detailed examples, good/bad patterns, and constraints
 - **EDGE CASE**: If request scope is ambiguous, stop and ask a clarifying question before applying changes
 - **EDGE CASE**: If required inputs, files, or tooling are missing, report what is missing and ask whether to proceed with setup guidance

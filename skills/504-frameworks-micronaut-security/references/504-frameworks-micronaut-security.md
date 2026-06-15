@@ -4,7 +4,7 @@ description: Use when you need to design, review, or improve security in Microna
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Micronaut Security Guidelines
 
@@ -257,12 +257,14 @@ Document: cookie session login uses CSRF tokens or SameSite=strict cookies; APIs
 Cookie session for SPA + state-changing POST without CSRF defense — vulnerable to cross-site form posts
 ```
 
+
 ## Output Format
 
 - **ANALYZE** `@Secured` coverage, intercept URL maps, JWT config, CORS, and error responses for authz failures
 - **CATEGORIZE** issues: anonymous-by-default, weak JWT secrets, overbroad CORS, missing role checks, information disclosure
 - **APPLY** least-privilege rules, secure token configuration, and JSON/Problem responses for 401/403
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

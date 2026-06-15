@@ -4,7 +4,7 @@ description: Use when you need to write or review programmatic JDBC in Quarkus �
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Quarkus JDBC — programmatic SQL
 
@@ -842,6 +842,7 @@ public void upsertByName(String name) {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** JDBC code for SQL injection risk, parameter binding style, try-with-resources coverage, transaction boundaries, missing `Optional` on single-row queries, exception translation, batch opportunities, and streaming gaps for large result sets
@@ -851,6 +852,7 @@ public void upsertByName(String name) {
 - **TEST** with `@QuarkusTest` and Dev Services for realistic database coverage; avoid mocking `DataSource` or `Connection` — use real schema with test profiles
 - **RECOMMEND** Panache (`@412-frameworks-quarkus-panache`) when CRUD and entity-state management dominate; keep raw JDBC for ad-hoc SQL, reporting, and bulk ETL
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits
+
 
 ## Safeguards
 

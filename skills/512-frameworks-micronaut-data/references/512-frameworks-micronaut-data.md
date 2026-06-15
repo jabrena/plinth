@@ -4,7 +4,7 @@ description: Use when you need data access with Micronaut Data — including JDB
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Micronaut Data Guidelines
 
@@ -354,6 +354,7 @@ class CustomerRepositoryIT {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** persistence code: `@MappedEntity` mapping, generated repository interfaces, `@Query` safety and compile-time validation, `Pageable`/`Page` usage, `io.micronaut.transaction.annotation.Transactional` placement, projection interfaces, `@Version` usage, and load patterns (single query vs N+1)
@@ -363,6 +364,7 @@ class CustomerRepositoryIT {
 - **EXPLAIN** trade-offs (JDBC vs JPA Micronaut Data runtime, native SQL vs JPQL, `Page` vs full lists, projection interfaces vs full entities, fetch joins vs extra queries)
 - **TEST** repository behaviour with `@MicronautTest` and `TestPropertyProvider` (e.g. Testcontainers Postgres); never mock repositories inside persistence tests meant to verify SQL
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

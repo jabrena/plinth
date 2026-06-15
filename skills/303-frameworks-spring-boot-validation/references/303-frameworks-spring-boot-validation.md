@@ -4,7 +4,7 @@ description: Use when you need to design, review, or improve validation in Sprin
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Spring Boot Validation Guidelines
 
@@ -379,6 +379,7 @@ ResponseEntity<Map<String, Object>> bad(MethodArgumentNotValidException ex) {
 // Ad hoc Map shape — not RFC 7807; leaks framework wording; only covers one exception type
 ```
 
+
 ## Output Format
 
 - **ANALYZE** controllers and configuration beans for missing `@Valid`, missing `@Validated`, wrong groups, and uncascaded nested DTOs
@@ -386,6 +387,7 @@ ResponseEntity<Map<String, Object>> bad(MethodArgumentNotValidException ex) {
 - **APPLY** declarative Bean Validation; add `@ControllerAdvice` mapping for `MethodArgumentNotValidException`, `ConstraintViolationException`, and `HandlerMethodValidationException` (Spring Boot 4+) as appropriate
 - **STANDARDIZE** validation error payloads as RFC 7807 `ProblemDetail` (Spring Boot) with a `violations` extension property, aligned with `@302-frameworks-spring-boot-rest`
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

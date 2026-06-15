@@ -4,7 +4,7 @@ description: Use when you need to design, review, or improve REST APIs with Quar
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Quarkus REST API Guidelines
 
@@ -213,7 +213,7 @@ GET    /api/v1/orders/{orderId}
 GET    /api/v1/orders/{orderId}/items
 POST   /api/v1/orders
 PUT    /api/v1/orders/{orderId}
-DELETE /api/v1/orders/{orderId}
+PATCH  /api/v1/orders/{orderId}/status
 ```
 
 **Bad example:**
@@ -1111,6 +1111,7 @@ public class DriftResource {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** resources for HTTP misuse, URI shape, status codes, DTO boundaries, versioning, deprecation/sunset/Link headers, `@Produces`/`@Consumes` declarations, ISO-8601 time fields, pagination bounds, Bean Validation on request DTOs, idempotency, ETag/concurrency, Cache-Control correctness, ExceptionMapper coverage, security annotations, and (when API-first) consistency between `openapi.yaml` and generated Jakarta REST API interfaces vs resource implementations
@@ -1119,6 +1120,7 @@ public class DriftResource {
 - **IMPLEMENT** incrementally: preserve public API contracts where possible; use deprecation and versioning for breaking changes; keep error shapes backward compatible unless versioning allows a break
 - **EXPLAIN** trade-offs (e.g., URI vs header versioning, blocking vs reactive patterns, `@Blocking` vs `@RunOnVirtualThread`) when multiple valid options exist
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits; exercise critical endpoints in integration tests where available
+
 
 ## Safeguards
 

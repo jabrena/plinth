@@ -8,33 +8,106 @@
 
 > **语言：** [English](./README.md) · [Español](./README_ES.md)
 >
-> **Website:** https://jabrena.github.io/cursor-rules-java/
->
-> **支持项目：** [Sponsor to pay tokens](https://github.com/sponsors/jabrena)
-
-**弃用通知：** 当前的 `System prompts/rules` 已弃用，并将在 `v0.16.0` 中移除。如果你仍在使用它们，请阅读 [0.14.0 版本文章](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html)。
+> **帮助项目成长：** [成为赞助者](https://github.com/sponsors/jabrena)
 
 ## 目标
 
 一套带有明确观点的 AI 原生工作流，通过可复用的 `Skills`、`Agents`、`Commands` 与 `MCP servers`，持续演进现代 Java 企业级 `SDLC` 实践。
 
-当你的团队需要演进基于 Java 的产品或服务时，本项目可帮助你回答 [五个为什么](https://en.wikipedia.org/wiki/Five_whys)：
+## 最新动态
 
-| 问题       | 角色               | 领域             | 支持内容                                                                                                                                                                                                             |
-| ---------- | ------------------ | ---------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 什么 / 何时 | PO, BA, EA, SA, TL | Agile & Planning | `User Stories`、`GitHub Issues` 与 `Jira` |
-| 为什么     | EA, SL, TL         | Architecture     | `ADRs` 与 `UML` / `C4` / `ER` 图表 |
-| 如何 | SA, TL, SWE | Spec-Driven      | `AI Plan mode` 与 `OpenSpec` |
-| 如何       | TL, SWE            | Java development | 基于 Maven 的构建系统、`Design`、`Coding`、`Testing`、`Observability`、`Refactoring & JMH Benchmarking`、JMeter 性能测试、Async profiler/OpenJDK 工具性能分析、`Documentation`、`Spring Boot`、`Quarkus`、`Micronaut`、`OpenAPI`、`WireMock` 与 `AGENTS.md` |
+访问[项目网站](https://jabrena.github.io/cursor-rules-java/)探索最新发布的内容，并通过 [CHANGELOG](./CHANGELOG.md) 了解新 skills、改进和修复如何推动项目持续演进。
 
-想法清晰后，你可以用结构化方式实现它：
+## 60 秒开始使用
 
-|               | 分析 / 设计 | 实现 | 运维 |
-| ------------- | ----------------- | -------------- | --------- |
-| Commands      | `/create-issue` · [`/update-issue`](./.cursor/commands/update-issue.md) · `/explore-design` · `/create-adr` · `/create-diagram` · `/create-plan` · `/create-spec` · `/review-alignment` | [`/create-feature-branch`](./.cursor/commands/create-feature-branch.md) · [`/create-worktree`](./.cursor/commands/create-worktree.md) · [`/implement-issue`](./.cursor/commands/implement-issue.md) · [`/kill-port`](./.cursor/commands/kill-port.md) | [`/profile`](./.cursor/commands/profile.md) · [`/benchmark`](./.cursor/commands/benchmark.md) |
-| [Agents](./documentation/guides/GETTING-STARTED-AGENTS_ZH.md)        | `@robot-business-analyst` · `@robot-architect` · `@robot-tech-lead` | `@robot-tech-lead` · `@robot-no-java` · `@robot-java-coder` · `@robot-java-spring-boot-coder` · `@robot-java-quarkus-coder` · `@robot-java-micronaut-coder` | `@robot-java-performance` |
-| [Skills](./documentation/guides/GETTING-STARTED-SKILLS_ZH.md)        | [014-agile-user-story](https://www.skills.sh/jabrena/cursor-rules-java/014-agile-user-story) · [030-architecture-adr-general](https://www.skills.sh/jabrena/cursor-rules-java/030-architecture-adr-general) · [033-architecture-diagrams](https://www.skills.sh/jabrena/cursor-rules-java/033-architecture-diagrams) · [041-planning-plan-mode](https://www.skills.sh/jabrena/cursor-rules-java/041-planning-plan-mode) · [200-agents-md](https://www.skills.sh/jabrena/cursor-rules-java/200-agents-md) ... | [110-java-maven-best-practices](https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices) · [121-java-object-oriented-design](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) · [124-java-secure-coding](https://www.skills.sh/jabrena/cursor-rules-java/124-java-secure-coding) · [111-java-maven-dependencies](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) · [143-java-functional-exception-handling](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) ... | [151-java-performance-jmeter](https://www.skills.sh/jabrena/cursor-rules-java/151-java-performance-jmeter) · [162-java-profiling-analyze](https://www.skills.sh/jabrena/cursor-rules-java/162-java-profiling-analyze) · [161-java-profiling-detect](https://www.skills.sh/jabrena/cursor-rules-java/161-java-profiling-detect) · [163-java-profiling-refactor](https://www.skills.sh/jabrena/cursor-rules-java/163-java-profiling-refactor) · [164-java-profiling-verify](https://www.skills.sh/jabrena/cursor-rules-java/164-java-profiling-verify) ... |
-| [MCP Servers](./documentation/guides/THIRD-PARTIES.md)   | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [JavaDocs](https://www.javadocs.dev/mcp) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) · [Graphana](https://grafana.com/docs/grafana/latest/developer-resources/mcp/) |
+为你常用的智能体安装全部 skills：
+
+```bash
+# Cursor
+npx skills add jabrena/cursor-rules-java --skill '*' --agent cursor -y
+
+# Claude Code
+npx skills add jabrena/cursor-rules-java --skill '*' --agent claude-code -y
+
+# Codex
+npx skills add jabrena/cursor-rules-java --skill '*' --agent codex -y
+
+# GitHub Copilot
+npx skills add jabrena/cursor-rules-java --skill '*' --agent github-copilot -y
+```
+
+### 查看实际效果
+
+向你的智能体提出：
+
+```text
+使用 @110-java-maven-best-practices 审查此 Maven 项目。
+解释发现的问题，应用已批准的改进，并验证构建。
+```
+
+该 skill 会引导智能体完成结构化的 Maven 审查，同时由你决定是否接受建议的变更。
+
+## 5 分钟上手指南
+
+按照快速指南 [5 分钟快速入门](./documentation/guides/GETTING-STARTED-IN-5-MINUTES_ZH.md) 学习如何使用本项目。
+
+### 从旧版规则迁移
+
+当前的 `System prompts/rules` 已弃用，并将在 `v0.16.0` 中移除。如果你仍在使用它们，请阅读 [0.14.0 版本文章](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html)。
+
+## 选择你的路径
+
+### 规划
+
+通过 user stories、GitHub Issues 或 Jira、ADR、图表、AI plan mode 和 OpenSpec，将想法转化为可执行的变更。
+
+| 资源 | 可用选项 |
+| --- | --- |
+| **Commands** | `/create-issue` · [`/update-issue`](./.cursor/commands/update-issue.md) · `/explore-design` · `/create-adr` · `/create-diagram` · `/create-plan` · `/create-spec` · `/review-alignment` |
+| **Agents** | `@robot-business-analyst` · `@robot-architect` · `@robot-tech-lead` |
+| **Skills** | [014-agile-user-story](https://www.skills.sh/jabrena/cursor-rules-java/014-agile-user-story) · [030-architecture-adr-general](https://www.skills.sh/jabrena/cursor-rules-java/030-architecture-adr-general) · [033-architecture-diagrams](https://www.skills.sh/jabrena/cursor-rules-java/033-architecture-diagrams) · [041-planning-plan-mode](https://www.skills.sh/jabrena/cursor-rules-java/041-planning-plan-mode) · [200-agents-md](https://www.skills.sh/jabrena/cursor-rules-java/200-agents-md) |
+| **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) |
+
+### 构建
+
+借助 Maven、设计、编码、测试、安全、文档、Spring Boot、Quarkus、Micronaut、OpenAPI 和 WireMock 指南，实现并改进 Java 应用程序。
+
+| 资源 | 可用选项 |
+| --- | --- |
+| **Commands** | [`/create-feature-branch`](./.cursor/commands/create-feature-branch.md) · [`/create-worktree`](./.cursor/commands/create-worktree.md) · [`/implement-issue`](./.cursor/commands/implement-issue.md) · [`/kill-port`](./.cursor/commands/kill-port.md) |
+| **Agents** | `@robot-tech-lead` · `@robot-no-java` · `@robot-java-coder` · `@robot-java-spring-boot-coder` · `@robot-java-quarkus-coder` · `@robot-java-micronaut-coder` |
+| **Skills** | [110-java-maven-best-practices](https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices) · [111-java-maven-dependencies](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) · [121-java-object-oriented-design](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) · [124-java-secure-coding](https://www.skills.sh/jabrena/cursor-rules-java/124-java-secure-coding) · [143-java-functional-exception-handling](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) |
+| **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [JavaDocs](https://www.javadocs.dev/mcp) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) |
+
+### 合规 (Alpha)
+
+审查 Java 系统、AI 模型，以及 GenAI 工具在应用程序和交付流水线中的使用方式，以识别涉及 AI、数据、安全、产品、平台、市场和治理的法规感知工程控制、证据及向合格责任人的移交。**<u>这些 skills 用于提升工程认知，不构成法律建议。</u>**
+
+| 法规 | Skill |
+| --- | --- |
+| [EU AI Act](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689) | `801-regulations-eu-ai-act` |
+| [DORA](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554) | `802-regulations-dora` |
+| [GDPR](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679) | `803-regulations-gdpr` |
+| [NIS2](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555) | `804-regulations-eu-nis2` |
+| [Cyber Resilience Act](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R2847) | `805-regulations-eu-cyber-resilience-act` |
+| [Data Act](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32023R2854) | `806-regulations-eu-data-act` |
+| [Digital Services Act](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2065) | `807-regulations-eu-digital-services-act` |
+| [Digital Markets Act](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R1925) | `808-regulations-eu-digital-markets-act` |
+
+**注意：** 这组 skills 可以很好地补充未来的 [OWASP EU Compliance MCP](https://genai.owasp.org/solution/eu-compliance-mcp/)。
+
+### 运维
+
+通过可观测性、profiling、benchmarking 和性能测试来衡量并改进生产行为。
+
+| 资源 | 可用选项 |
+| --- | --- |
+| **Commands** | [`/profile`](./.cursor/commands/profile.md) · [`/benchmark`](./.cursor/commands/benchmark.md) |
+| **Agents** | `@robot-java-performance` |
+| **Skills** | [151-java-performance-jmeter](https://www.skills.sh/jabrena/cursor-rules-java/151-java-performance-jmeter) · [161-java-profiling-detect](https://www.skills.sh/jabrena/cursor-rules-java/161-java-profiling-detect) · [162-java-profiling-analyze](https://www.skills.sh/jabrena/cursor-rules-java/162-java-profiling-analyze) · [163-java-profiling-refactor](https://www.skills.sh/jabrena/cursor-rules-java/163-java-profiling-refactor) · [164-java-profiling-verify](https://www.skills.sh/jabrena/cursor-rules-java/164-java-profiling-verify) |
+| **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) · [Grafana](https://grafana.com/docs/grafana/latest/developer-resources/mcp/) |
+
+浏览完整的 [Commands](./documentation/guides/INVENTORY-COMMANDS-JAVA.md)、[Agents](./documentation/guides/INVENTORY-AGENTS-JAVA.md)、[Skills](./documentation/guides/INVENTORY-SKILLS-JAVA.md) 和 [MCP Servers](./documentation/guides/THIRD-PARTIES.md) 清单。
 
 ## 交付物
 
@@ -44,15 +117,11 @@
 | --------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | 1. [Commands](./documentation/guides/INVENTORY-COMMANDS-JAVA.md) | `@004-commands-installation` 在项目中安装 Commands | [`Commands`](./documentation/guides/COMMANDS.md) |
 | 2. [Agents](./documentation/guides/INVENTORY-AGENTS-JAVA.md) | `@005-agents-installation` 在 Cursor/Claude 中安装 Agents | [`Agents`](./documentation/guides/GETTING-STARTED-AGENTS_ZH.md)     |
-| 3. [Skills](./documentation/guides/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/cursor-rules-java --all --agent cursor` | [`Skills`](./documentation/guides/GETTING-STARTED-SKILLS_ZH.md)     |
+| 3. [Skills](./documentation/guides/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/cursor-rules-java --skill '*' --agent cursor -y` | [`Skills`](./documentation/guides/GETTING-STARTED-SKILLS_ZH.md)     |
 
 ### 兼容性
 
 本项目兼容任何支持 `Commands`、`Agents`、`Skills`、`MCP Servers` 与 `AGENTS.md` 的工具。
-
-## 5 分钟快速入门
-
-按照快速指南 [5 分钟快速入门](./documentation/guides/GETTING-STARTED-IN-5-MINUTES_ZH.md) 学习如何使用本项目。
 
 ## Skill 验证
 
@@ -86,19 +155,19 @@
 
 ### 访问企业数据
 
-当问题涉及企业数据库或其他组织敏感数据时，请谨慎使用。在向 AI 辅助工作流授予访问权限之前，应评估授权、隐私、数据泄露、数据保留和意外修改等风险，并实施最小权限访问、人工审查、验证和监控。请参阅 [OWASP GenAI Data Security Risks & Mitigations 2026](https://genai.owasp.org/resource/owasp-genai-data-security-risks-mitigations-2026/) 和 [The EU Artificial Intelligence Act](https://artificialintelligenceact.eu/)。
+当问题涉及企业数据库或其他组织敏感数据时，请谨慎使用。在向 AI 辅助工作流授予访问权限之前，应评估授权、隐私、数据泄露、数据保留和意外修改等风险，并实施最小权限访问、人工审查、验证和监控。请参阅 [OWASP GenAI Data Security Risks & Mitigations 2026](https://genai.owasp.org/resource/owasp-genai-data-security-risks-mitigations-2026/) 以及新的[欧盟法规 skills](#合规-alpha)。
 
 ## 贡献
 
-请参阅 [CONTRIBUTING.md](./CONTRIBUTING.md)，了解约定、生成器工作流、测试以及如何提交 pull request。
+- 按照 [5 分钟快速入门](./documentation/guides/GETTING-STARTED-IN-5-MINUTES_ZH.md) 操作，并告诉我们哪些体验可以改进。
+- [浏览 skill 清单](./documentation/guides/INVENTORY-SKILLS-JAVA.md)，并提出尚未覆盖的 Java 工作流。
+- [创建 issue](https://github.com/jabrena/cursor-rules-java/issues)，报告问题或提出改进建议。
+- 阅读 [CONTRIBUTING.md](./CONTRIBUTING.md)，改进 skill、agent、command 或项目指南。
+- 如果这些工作流对你的 Java 项目有所帮助，请为本仓库加星。
 
 ## Architecture Decision Records (ADR)
 
 - 查看 [ADR 索引](./documentation/adr/README.md) 获取完整列表。
-
-## 更新日志
-
-- 查看 [CHANGELOG](./CHANGELOG.md) 了解详情。
 
 ## 自 Java 8 起的 Java JEP
 

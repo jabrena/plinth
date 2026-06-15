@@ -4,7 +4,7 @@ description: Use when you need MongoDB persistence in Micronaut — including Ma
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Micronaut — MongoDB
 
@@ -411,15 +411,17 @@ class OrderRepositoryTest {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** MongoDB code: `@MappedEntity` mapping completeness, `@MongoRepository` query safety, service transaction boundaries, error handling specificity, pagination strategy, and DTO vs entity leakage
-- **CATEGORIZE** issues by impact (SECURITY for filter injection, CORRECTNESS for missing transactions or generic exception handling, PERFORMANCE for unbounded queries or missing indexes, MAINTAINABILITY for mutable entities or entity leakage at API boundaries)
-- **APPLY** Micronaut Data MongoDB–aligned fixes: explicit `@MappedEntity` collection, `@MappedProperty` field mappings, `@MongoRepository` with bound-parameter queries, service-layer `@Transactional`, and typed exception translation
+- **CATEGORIZE** issues by impact (SECURITY for filter injection, CORRECTNESS for missing transactions or generic exception handling, PERFORMANCE for missing indexes or queries without explicit pagination and result limits, MAINTAINABILITY for mutable entities or entity leakage at API boundaries)
+- **APPLY** Micronaut Data MongoDB–aligned fixes: explicit `@MappedEntity` collection, `@MappedProperty` field mappings, `@MongoRepository` with bound-parameter queries, bounded `Pageable` requests with an explicit maximum page size, service-layer `@Transactional`, and typed exception translation
 - **IMPLEMENT** changes so document model, repository interfaces, services, and tests stay consistent
 - **EXPLAIN** trade-offs (derived finder vs `@MongoFindQuery`, sync driver vs reactive, multi-document transactions vs application idempotency, `Page` vs full list returns)
 - **TEST** repository behaviour with `@MicronautTest` + `TestPropertyProvider` + Testcontainers; use `PER_CLASS` lifecycle, verify the build executes the selected test class naming pattern, and never mock repositories inside persistence tests meant to verify MongoDB behaviour
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

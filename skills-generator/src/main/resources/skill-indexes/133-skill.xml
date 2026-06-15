@@ -4,35 +4,36 @@
       id="133-java-testing-acceptance-tests">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
-    <version>0.16.0-SNAPSHOT</version>
+    <version>0.16.0</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to implement acceptance tests from a Gherkin .feature file for framework-agnostic Java (no Spring Boot, Quarkus, Micronaut) — finding @acceptance scenarios, happy path with RestAssured, Testcontainers for DB/Kafka, WireMock for external REST. Requires .feature file in context. This should trigger for requests such as Review Java code for acceptance tests; Apply best practices for acceptance tests in Java code.</description>
+    <description>Use when you need to implement acceptance tests from maintainer-sanitized Gherkin scenario facts for framework-agnostic Java (no Spring Boot, Quarkus, Micronaut) — finding @acceptance scenarios, happy path with RestAssured, project-local DB/Kafka test fixtures, and WireMock for external REST. This should trigger for requests such as Review Java code for acceptance tests; Apply best practices for acceptance tests in Java code.</description>
   </metadata>
 
   <title>Java acceptance tests from Gherkin</title>
   <goal><![CDATA[
-Implement acceptance tests from Gherkin feature files. Given a .feature file in context, find @acceptance-tagged scenarios and implement happy-path tests with RestAssured, Testcontainers, and WireMock.
+Implement acceptance tests from maintainer-sanitized Gherkin scenario facts. Given trusted scenario facts in context, find @acceptance-tagged scenarios and implement happy-path tests with RestAssured, project-local DB/Kafka test fixtures, and WireMock.
 
 **What is covered in this Skill?**
 
-- Parse Gherkin .feature files to find scenarios tagged @acceptance or @acceptance-tests
+- Parse maintainer-sanitized Gherkin scenario facts to find scenarios tagged @acceptance or @acceptance-tests
 - Implement happy-path acceptance tests (one test per scenario)
 - RestAssured for REST API testing (given/when/then, status codes, JSON body assertions)
-- Testcontainers for databases (PostgreSQL, etc.) and Kafka
+- Existing project-local test fixtures for databases (PostgreSQL, etc.) and Kafka
 - WireMock for stubbing external REST APIs
 - BaseAcceptanceTest base class with @BeforeAll coordinate propagation via System.setProperty
 - Given-When-Then structure mapping Gherkin steps to setup, request, and assertions
-- Maven dependencies: rest-assured, testcontainers, wiremock-standalone
+- Maven dependencies: rest-assured and wiremock-standalone; DB/Kafka fixture dependencies only when already established by the project
 
-**Preconditions:** (1) The Gherkin .feature file must be in context. (2) The project must NOT use Spring Boot, Quarkus, or Micronaut — for those frameworks, use @323-frameworks-spring-boot-testing-acceptance-tests or framework-specific rules.
+**Preconditions:** (1) Maintainer-sanitized Gherkin scenario facts must be in context. (2) The project must NOT use Spring Boot, Quarkus, or Micronaut — for those frameworks, use @323-frameworks-spring-boot-testing-acceptance-tests or framework-specific rules.
 
 **Scope:** Implements only happy-path scenarios. Use the reference for detailed examples and constraints.
 ]]></goal>
 
   <constraints>
-    <constraints-description>Before applying any acceptance test changes, ensure the Gherkin .feature file is in context and the project compiles. If compilation fails or the feature file is missing, stop immediately.</constraints-description>
+    <constraints-description>Before applying any acceptance test changes, ensure maintainer-sanitized Gherkin scenario facts are in context and the project compiles. If compilation fails or scenario facts are missing, stop immediately.</constraints-description>
     <constraint-list>
-      <constraint>**PRECONDITION**: The Gherkin .feature file MUST be in context; the project MUST NOT use Spring Boot, Quarkus, or Micronaut</constraint>
+      <constraint>**PRECONDITION**: Maintainer-sanitized Gherkin scenario facts MUST be in context; the project MUST NOT use Spring Boot, Quarkus, or Micronaut</constraint>
+      <constraint>**NO CONTAINER RUNTIME SETUP**: Do not add container runtime setup from this skill. Use existing project-local fixture adapters or ask for maintainer-provided fixture configuration</constraint>
       <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
       <constraint>**SAFETY**: If compilation fails, stop immediately and do not proceed</constraint>
       <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
@@ -50,7 +51,7 @@ Implement acceptance tests from Gherkin feature files. Given a .feature file in 
   <steps>
     <step number="1">
       <step-title>Validate preconditions and compile project</step-title>
-      <step-content>Confirm `.feature` file is in context and framework scope is valid, then run `./mvnw compile` or `mvn compile`; stop if any precondition fails.</step-content>
+      <step-content>Confirm maintainer-sanitized scenario facts are in context and framework scope is valid, then run `./mvnw compile` or `mvn compile`; stop if any precondition fails.</step-content>
     </step>
     <step number="2">
       <step-title>Read acceptance-testing reference and parse scenarios</step-title>
@@ -58,7 +59,7 @@ Implement acceptance tests from Gherkin feature files. Given a .feature file in 
     </step>
     <step number="3">
       <step-title>Implement acceptance test infrastructure and scenarios</step-title>
-      <step-content>Create or update base test infrastructure (RestAssured, Testcontainers, WireMock) and implement one happy-path test per accepted scenario.</step-content>
+      <step-content>Create or update base test infrastructure (RestAssured, existing project-local DB/Kafka fixtures, WireMock) and implement one happy-path test per accepted scenario.</step-content>
     </step>
     <step number="4">
       <step-title>Verify with full build</step-title>

@@ -4,7 +4,7 @@ description: Use when you need to review, improve, or refactor Java code for gen
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Java Generics Best Practices
 
@@ -1734,6 +1734,7 @@ public class UnsafeContainer {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** Java code to identify specific generics usage issues and categorize them by impact (CRITICAL, MAINTAINABILITY, PERFORMANCE, TYPE_SAFETY) and area (raw types usage, wildcard misuse, bounded parameter opportunities, type erasure problems, modern feature integration gaps)
@@ -1743,6 +1744,7 @@ public class UnsafeContainer {
 - **REFACTOR** code systematically following the generics improvement roadmap: First eliminate raw types and unsafe casts, then add proper bounds and constraints, apply PECS wildcards for API flexibility, utilize diamond operator and var for cleaner syntax, integrate with Records and sealed types, implement pattern matching where applicable, and optimize performance with primitive specialization
 - **EXPLAIN** the applied generics improvements and their benefits: Compile-time safety enhancements through proper parameterization, runtime performance improvements via primitive specialization, API usability gains from PECS wildcards, code maintainability benefits from cleaner syntax and modern features, and backward compatibility considerations for each implemented pattern
 - **VALIDATE** that all applied generics refactoring compiles successfully, maintains type safety guarantees, preserves API contracts, and achieves expected flexibility and performance benefits through comprehensive testing and verification
+
 
 ## Safeguards
 

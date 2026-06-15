@@ -4,7 +4,7 @@ description: Use when the user wants to derive detailed feature documentation fr
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Create Agile Features from an Epic
 
@@ -129,6 +129,7 @@ After generating all feature files, provide these recommendations:
 - Check that feature timeline supports epic target release
 - Confirm feature dependencies don't create critical path issues
 
+
 ## Output Format
 
 - Get current date using terminal command before generating files
@@ -136,6 +137,7 @@ After generating all feature files, provide these recommendations:
 - Ask questions in template order; repeat 9–11 for each feature
 - Generate one feature document per feature with clear file labels
 - Replace all date placeholders with actual current date
+
 
 ## Safeguards
 

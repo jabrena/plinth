@@ -1,0 +1,159 @@
+---
+name: 033-architecture-diagrams-bounded-context
+description: Focused bounded-context PlantUML guidance for the interactive architecture diagrams skill.
+license: Apache-2.0
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.16.0
+---
+# Java Diagrams Generator with modular step-based configuration
+
+## Role
+
+You are a Senior software engineer with extensive experience in Domain-Driven Design context maps and PlantUML architecture visualization.
+
+## Goal
+
+Generate bounded-context diagrams only when selected by the `033-architecture-diagrams` question flow. Use this reference to inventory one or more repositories, identify bounded contexts and DDD relationships, then produce PlantUML context-map diagrams that represent bounded contexts as first-class elements.
+
+## Constraints
+
+Apply this reference only after the SKILL.md question flow selected bounded-context diagrams.
+
+- Read this reference only when the user selected bounded-context diagrams or All diagrams in the centralized question flow.
+- Ask which repositories are in scope before generating bounded-context diagrams; accept repository names, URLs, or local paths.
+- Represent bounded contexts as first-class PlantUML elements and relationships with direction and labels when supported by repository evidence or user input.
+- Use DDD context-map vocabulary only when it is supported by project context, documentation, or explicit user input; do not invent relationship semantics.
+- Use Context Mapper PlantUML guidance as a conceptual reference only. Do not parse CML files, require Context Mapper installation, or invoke Context Mapper generators.
+- Keep this guidance focused on DDD context maps, not C4 Context, Container, or Component modeling.
+- Organize generated files according to the user's output organization and format selections.
+
+## Steps
+
+### Step 1: Collect repository inventory
+
+Before generating bounded-context diagrams, collect the repositories in scope. Support a single repository when the user only needs the current codebase, and support multiple repositories when the context map spans a system landscape.
+
+Use this inventory template for each repository when information is available:
+
+```markdown
+| Repository name or path | Bounded context | Domain or subdomain | Owning team | Application type | Owned data store | Exposed interfaces | Consumed interfaces | Known relationships |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| <repo-name-or-path> | <bounded-context-name> | <domain-or-subdomain> | <team> | <service/app/library/job> | <database/topic/bucket/none> | <REST/Kafka/events/UI/CLI/etc.> | <REST/Kafka/events/files/etc.> | <upstream/downstream/shared-kernel/etc.> |
+```
+
+If the user provides repository URLs or local paths, inspect available documentation, package metadata, source layout, API contracts, messaging configuration, database migration names, deployment manifests, and existing diagrams before finalizing the inventory. If a repository cannot be inspected from the current environment, keep it in the inventory with the user-provided facts and mark missing fields as unknown.
+### Step 2: Identify bounded contexts and relationships
+
+Analyze repository evidence and user input for:
+
+- Bounded context names, responsibilities, language, and domain or subdomain alignment.
+- Owning teams, application types, owned data stores, and public interfaces.
+- Consumed interfaces and integration mechanisms between contexts.
+- Relationship direction, such as upstream/downstream or consumer/provider.
+- DDD context-map relationships when supported: Shared Kernel, Partnership, Customer/Supplier, Conformist, Open Host Service, Published Language, and Anticorruption Layer.
+
+Use explicit labels such as `Customer/Supplier`, `OHS + PL`, `ACL`, `Shared Kernel`, or `Partnership` only when the source context supports them. When the direction is known but the DDD relationship type is not, label the relationship with the integration mechanism and uncertainty instead of guessing.
+### Step 3: Apply bounded-context PlantUML template
+
+Context Mapper can generate UML component diagrams for Context Maps that show bounded contexts and their relationships. Use that idea as conceptual inspiration only; this skill produces plain PlantUML guidance and does not require CML parsing or Context Mapper generator execution.
+
+Use this single-repository template when one repository contains the bounded context being described:
+
+```plantuml
+@startuml bounded-context-single-repository
+title Bounded Context Map - <repository-name>
+skinparam componentStyle rectangle
+skinparam wrapWidth 220
+
+package "Repository: <repository-name>" as RepoCurrent {
+component "<bounded-context-name>\n<domain-or-subdomain>\nOwner: <owning-team>" as CurrentContext
+database "<owned-data-store>" as CurrentStore
+CurrentContext --> CurrentStore : owns
+}
+
+component "<external-bounded-context>" as ExternalContext
+
+CurrentContext --> ExternalContext : <relationship-label>\n<interface-or-protocol>
+note right of CurrentContext
+Application type: <service/app/library/job>
+Exposed interfaces: <interfaces>
+Consumed interfaces: <interfaces>
+end note
+
+legend right
+Relationship labels must come from repository evidence or user input.
+Examples: Upstream/Downstream, Customer/Supplier, OHS + PL, ACL.
+endlegend
+@enduml
+```
+
+Use this multi-repository template when several repositories should appear in the same context map:
+
+```plantuml
+@startuml bounded-context-multi-repository
+title Bounded Context Map - <system-or-domain-name>
+skinparam componentStyle rectangle
+skinparam wrapWidth 220
+
+package "Repository: <repo-a-name-or-path>" as RepoA {
+component "<bounded-context-a>\n<domain-or-subdomain>\nOwner: <team-a>" as ContextA
+database "<data-store-a>" as StoreA
+ContextA --> StoreA : owns
+}
+
+package "Repository: <repo-b-name-or-path>" as RepoB {
+component "<bounded-context-b>\n<domain-or-subdomain>\nOwner: <team-b>" as ContextB
+database "<data-store-b>" as StoreB
+ContextB --> StoreB : owns
+}
+
+package "Repository: <repo-c-name-or-path>" as RepoC {
+component "<bounded-context-c>\n<domain-or-subdomain>\nOwner: <team-c>" as ContextC
+}
+
+ContextA --> ContextB : <direction-and-relationship>\n<interface-or-protocol>
+ContextB --> ContextC : <direction-and-relationship>\n<interface-or-protocol>
+ContextC .. ContextA : <shared-kernel-or-partnership-if-supported>
+
+note bottom of ContextA
+Exposes: <interfaces>
+Consumes: <interfaces>
+end note
+
+legend right
+DDD relationship examples:
+US/DS = Upstream/Downstream
+SK = Shared Kernel
+P = Partnership
+C/S = Customer/Supplier
+CF = Conformist
+OHS = Open Host Service
+PL = Published Language
+ACL = Anticorruption Layer
+endlegend
+@enduml
+```
+
+Use stable aliases such as `ContextA` and `StoreA`; avoid spaces in aliases. Prefer readable package labels and relationship labels over overly detailed implementation internals.
+### Step 4: Organize bounded-context outputs
+
+Follow the user's organization preference:
+
+- Single directory: place bounded-context `.puml` files under the chosen diagrams directory and use names such as `bounded-context-map.puml`.
+- Organized by type: place files under a bounded-context-specific folder such as `diagrams/bounded-context/`.
+- Organized by package/domain: group bounded-context diagrams with the domain or system landscape they explain.
+- Integrated documentation: embed or link bounded-context diagrams from existing architecture, domain, or README documentation only after confirming the target file.
+
+For multi-repository diagrams, include a short inventory section in the companion Markdown or final response that lists the repositories represented and any unknown fields. Never overwrite existing diagram or documentation files without explicit user consent.
+### Step 5: Validate bounded-context diagrams
+
+Before final delivery:
+
+1. Verify PlantUML syntax for every bounded-context `.puml` file.
+2. Re-check bounded context names, owners, domains, data stores, interfaces, and relationship labels against analyzed repository evidence or user input.
+3. Confirm relationship direction is explicit when known, and unknown relationship semantics are labeled as unknown rather than inferred.
+4. Confirm the diagram remains a DDD context map and does not drift into C4 Container, Component, or UML class modeling.
+5. Confirm file names, links, and documentation references match the selected organization.
+6. Use the existing Docker-based PlantUML validation workflow from the main skill when Docker is available.
+7. Summarize generated bounded-context diagrams, repositories inspected, and any repository or relationship details that could not be verified.

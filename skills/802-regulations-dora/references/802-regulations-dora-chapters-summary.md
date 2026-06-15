@@ -1,0 +1,181 @@
+---
+name: 802-regulations-dora-chapters-summary
+description: Use as a chapter-by-chapter and article-by-article summary of Regulation (EU) 2022/2554 to enrich Java enterprise operational-resilience reviews with DORA context.
+license: Apache-2.0
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.16.0
+---
+# DORA Regulation for Java Enterprise Digital Operational Resilience
+
+## Role
+
+You are a senior Java enterprise architect and digital operational resilience reviewer using the DORA article structure to map regulatory themes to engineering controls and owner handoffs
+
+## Goal
+
+Summarize the official chapter and article structure of Regulation (EU) 2022/2554 (DORA) for engineering review of Java enterprise systems, platforms, integrations, operational workflows, and ICT provider dependencies.
+
+Source reviewed: [EUR-Lex Regulation (EU) 2022/2554 HTML text](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554).
+
+This reference is not legal advice. Use it to orient engineering discovery, architecture review, operational evidence collection, release gates, and escalation conversations with legal, compliance, security, risk, resilience, business-continuity, procurement, architecture, and business owners.
+
+Use `references/802-regulations-dora-engineering-examples.md` for Java examples and implementation control patterns. Keep this chapters summary focused on DORA Regulation structure and article-level obligations.
+
+Questionnaire asset: [DORA engineering review questionnaire](../assets/questions/802-dora-engineering-review-questionnaire.md).
+
+Report template asset: [DORA engineering review report template](../assets/reports/802-dora-engineering-review-report-template.md).
+
+## [Chapter I: General provisions (Articles 1-4)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554#cpt_I)
+
+Sets the subject matter, scope, definitions, and proportionality context for digital operational resilience in financial entities. For Java teams, this chapter is the starting point for deciding whether a service, platform, provider integration, or operational workflow may support a financial entity, important business service, or ICT function.
+
+Article map:
+- Article 1, Subject matter: establishes uniform requirements for ICT risk management, incident reporting, resilience testing, information sharing, and ICT third-party risk.
+- Article 2, Scope: identifies financial entities and related providers in scope.
+- Article 3, Definitions: defines ICT risk, ICT-related incident, major ICT-related incident, critical or important function, ICT third-party service provider, digital operational resilience, threat-led penetration testing, and related terms.
+- Article 4, Proportionality principle: requires requirements to reflect size, risk profile, nature, scale, and complexity.
+
+Engineering impact:
+- Record whether the Java system supports a financial entity, important business service, critical or important function, or ICT third-party provider relationship.
+- Record business owner, operational owner, resilience owner, security owner, provider owner, and legal/compliance owner.
+- Treat applicability and entity classification as qualified owner decisions; engineering should collect evidence, not make legal determinations.
+
+## [Chapter II: ICT risk management (Articles 5-16)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554#cpt_II)
+
+Defines governance, ICT risk-management framework expectations, systems and tools protection, detection, response, recovery, backup, communication, learning, and documentation. This is the most direct source for Java operational-resilience controls.
+
+Article map:
+- Article 5, Governance and organisation: requires management responsibility for ICT risk.
+- Article 6, ICT risk management framework: requires a sound, comprehensive, and well-documented framework.
+- Article 7, ICT systems, protocols and tools: requires appropriate, reliable, resilient, and secure ICT systems.
+- Article 8, Identification: requires identification of ICT-supported business functions, assets, dependencies, and information assets.
+- Article 9, Protection and prevention: covers protection, prevention, security policies, access control, and configuration.
+- Article 10, Detection: requires mechanisms to detect anomalous activities and ICT incidents.
+- Article 11, Response and recovery: requires response and recovery policies, continuity plans, and crisis communication.
+- Article 12, Backup policies and procedures, restoration and recovery: covers backup, restore, and recovery procedures.
+- Article 13, Learning and evolving: requires lessons learned, post-incident review, and continuous improvement.
+- Article 14, Communication: requires communication plans for ICT incidents and vulnerabilities.
+- Article 15, Further harmonisation of ICT risk management tools, methods, processes and policies: supports technical standards.
+- Article 16, Simplified ICT risk management framework: allows simplified requirements for certain entities.
+
+Engineering impact:
+- Require release evidence for ICT inventory, dependency mapping, secure configuration, access control, monitoring, alerting, backup, restore, continuity, rollback, communication, and lessons-learned workflows.
+- Treat database migrations, Kafka contracts, IAM changes, dependency upgrades, provider changes, and emergency fixes as operational resilience events requiring traceable review.
+
+## [Chapter III: ICT-related incident management, classification and reporting (Articles 17-23)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554#cpt_III)
+
+Defines incident management process, classification, reporting obligations, feedback, and supervisory coordination. For engineering review, these articles explain why incidents must be detectable, triageable, reconstructable, and routed to qualified owners.
+
+Article map:
+- Article 17, ICT-related incident management process: requires processes to monitor, handle, and follow up ICT incidents.
+- Article 18, Classification of ICT-related incidents and cyber threats: defines classification criteria and materiality.
+- Article 19, Reporting of major ICT-related incidents and voluntary notification of significant cyber threats: sets reporting and notification expectations.
+- Article 20, Harmonisation of reporting content and templates: supports common reporting content and templates.
+- Article 21, Centralisation of reporting of major ICT-related incidents: covers possible centralisation.
+- Article 22, Supervisory feedback: covers feedback from competent authorities.
+- Article 23, Operational or security payment-related incidents: addresses payment-related incident reporting.
+
+Engineering impact:
+- Maintain incident runbooks with severity criteria, evidence capture, containment, escalation, communication handoffs, and corrective action records.
+- Make logs, metrics, traces, affected assets, affected customers, provider dependencies, and change history reconstructable for reporting and internal review.
+
+## [Chapter IV: Digital operational resilience testing (Articles 24-27)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554#cpt_IV)
+
+Requires testing of ICT tools, systems, and processes, including advanced testing for certain entities. Engineering teams should treat resilience testing as evidence, not optional documentation.
+
+Article map:
+- Article 24, General requirements for the performance of digital operational resilience testing: requires testing programmes proportionate to risk.
+- Article 25, Testing of ICT tools and systems: covers vulnerability assessments, scans, open-source analysis, network security assessments, gap analyses, physical security reviews, questionnaires, and compatibility testing where relevant.
+- Article 26, Advanced testing of ICT tools, systems and processes based on threat-led penetration testing: requires TLPT for selected financial entities.
+- Article 27, Requirements for testers for carrying out TLPT: defines tester requirements.
+
+Engineering impact:
+- Preserve evidence from restore tests, failover tests, incident drills, penetration tests, vulnerability scans, capacity tests, compatibility tests, and corrective actions.
+- Block or condition release when critical recovery, monitoring, or provider-failure controls are untested.
+
+## [Chapter V: Managing of ICT third-party risk (Articles 28-44)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554#cpt_V)
+
+Defines ICT third-party risk-management principles, contractual provisions, exit strategies, critical provider oversight, and supervisory cooperation. Java teams should not treat cloud services, SaaS tools, managed databases, messaging platforms, observability providers, IAM, payment providers, or external APIs as invisible dependencies.
+
+Article map:
+- Articles 28-30: require ICT third-party risk-management strategy, registers of information, pre-contract assessment, concentration-risk consideration, termination rights, and contractual content.
+- Articles 31-44: establish critical ICT third-party service provider designation, oversight, lead overseer powers, cooperation, fees, and follow-up.
+
+Engineering impact:
+- Record providers, criticality, service owner, contract owner, support contacts, SLAs, data locations, monitoring, incident notification paths, concentration risks, portability, and exit plans.
+- Tie provider failure modes to dashboards, alerts, runbooks, continuity tests, and release decisions.
+
+## [Chapter VI: Information-sharing arrangements (Article 45)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554#cpt_VI)
+
+Supports voluntary information-sharing arrangements for cyber threat information and intelligence among financial entities.
+
+Article map:
+- Article 45, Information-sharing arrangements on cyber threat information and intelligence: enables trusted communities to share cyber threat and vulnerability information while respecting confidentiality and data protection.
+
+Engineering impact:
+- Design evidence-safe sharing: redact secrets, personal data, provider-confidential details, and exploit-sensitive data.
+- Track indicators, threat intelligence, mitigations, and lessons learned without exposing regulated records unnecessarily.
+
+## [Chapter VII: Competent authorities (Articles 46-56)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554#cpt_VII)
+
+Defines competent authority powers, cooperation, administrative penalties, remedial measures, professional secrecy, and information exchange. This chapter explains why operational resilience evidence must be audit-ready.
+
+Article map:
+- Articles 46-56: cover competent authorities, cooperation structures, exercise of powers, administrative penalties, remedial measures, publication, appeals, professional secrecy, and information exchange.
+
+Engineering impact:
+- Keep resilience policies, inventories, test evidence, incident records, provider records, corrective actions, and owner approvals accessible and defensible.
+- Treat missing, stale, or unsupported evidence as a material engineering risk.
+
+## [Chapter VIII: Delegated acts (Article 57)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554#cpt_VIII)
+
+Explains delegated powers connected to DORA.
+
+Engineering impact:
+- Treat DORA implementation as a moving target. Track regulatory technical standards, implementing technical standards, delegated acts, and supervisory guidance.
+
+## [Chapter IX: Transitional and final provisions (Articles 58-64)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554#cpt_IX)
+
+Covers review, amendments, application timing, and final provisions.
+
+Engineering impact:
+- Review long-lived Java systems when service scope, provider dependency, financial-entity support, or operational criticality changes.
+- Keep delivery plans aligned with current DORA application timelines and amendments.
+
+## Engineering review focus
+
+When reviewing a Java enterprise system for DORA-aware controls, connect article themes to evidence:
+- Applicability and owners: Articles 1-4
+- Governance and ICT risk management: Articles 5-16
+- Incident readiness and reporting: Articles 17-23
+- Resilience testing: Articles 24-27
+- Third-party ICT provider risk: Articles 28-44
+- Information sharing: Article 45
+- Supervision, evidence, and enforcement: Articles 46-56
+- Future review: Articles 57-64
+
+## Constraints
+
+Use this reference as DORA Regulation context for Java engineering review. Do not provide legal advice or replace review by legal, compliance, security, risk, resilience, business-continuity, procurement, architecture, or business owners.
+
+- **NOT LEGAL ADVICE**: State when an article mapping requires legal, compliance, risk, resilience, security, procurement, or business-owner review instead of giving legal conclusions
+- **SUMMARY ONLY**: Keep this reference focused on DORA chapters, articles, and engineering implications; use the engineering examples reference for Java patterns
+- **ARTICLE MAPPING**: Map findings to regulation topic areas such as applicability, ICT risk management, incident reporting, resilience testing, third-party ICT risk, information sharing, supervision, or enforcement
+- **OWNER ESCALATION**: Escalate applicability, financial-entity classification, reporting obligations, outsourcing interpretation, provider criticality, and risk acceptance to qualified owners
+- **EVIDENCE ORIENTATION**: Use article summaries to identify what engineering evidence is missing or weak, not to certify compliance
+
+
+## Output Format
+
+- **READ** this DORA chapters summary before applying Java examples or generating the review report
+- **MAP** reviewed findings to DORA topic areas and article groups using only reviewed evidence
+- **ESCALATE** legal applicability, entity classification, reporting duties, outsourcing interpretation, provider criticality, and regulatory interpretation to qualified owners
+- **HAND OFF** implementation control patterns to `references/802-regulations-dora-engineering-examples.md`
+
+
+## Safeguards
+
+- **DO NOT CERTIFY COMPLIANCE**: This reference supports engineering review and owner handoff only
+- **CHECK CURRENT STANDARDS**: Regulatory technical standards and supervisory expectations may add detail beyond this summary
+- **KEEP FACTS GROUNDED**: Do not infer financial-entity status, important-function scope, provider criticality, or reporting obligations without reviewed evidence and qualified owner input

@@ -1,0 +1,336 @@
+---
+name: 805-regulations-eu-cyber-resilience-act-engineering-examples
+description: Use as Java-focused Cyber Resilience Act engineering examples for secure-by-design development, vulnerability handling, coordinated disclosure, security updates, SBOM evidence, product security documentation, support-period signaling, and release gates.
+license: Apache-2.0
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.16.0
+---
+# EU Cyber Resilience Act Regulation for Java Product Security Engineering
+
+## Role
+
+You are a senior Java enterprise architect and product security reviewer who translates Cyber Resilience Act themes into concrete Java engineering examples and reviewable evidence patterns
+
+## Goal
+
+Apply these Cyber Resilience Act-aware examples after the regulation summary has been read and the target product-security scope is understood.
+
+These examples are not legal advice. They show engineering patterns that help Java teams create reviewable evidence for legal, compliance, product, product-security, security, support, market-access, risk, and executive accountability owners.
+
+Use this examples reference together with `references/805-regulations-eu-cyber-resilience-act-chapters-summary.md` and the [Cyber Resilience Act engineering review report template](../assets/reports/805-eu-cyber-resilience-act-engineering-review-report-template.md).
+
+## Constraints
+
+Translate Cyber Resilience Act concerns into engineering controls for Java products and product-adjacent systems without replacing qualified legal, compliance, product, product-security, market-access, security, support, risk, or executive accountability review.
+
+- **NOT LEGAL ADVICE**: Treat the examples as engineering control patterns and escalation aids, not legal findings, conformity assessment conclusions, or CE marking decisions
+- **EVIDENCE FIRST**: Prefer reviewable evidence over claims that secure-by-design, vulnerability handling, update, SBOM, documentation, or support controls exist
+- **OWNER HANDOFFS**: Include product, manufacturer-role, security, support, release, legal, compliance, market-access, and risk owners in control records
+- **SECURE LOGGING**: Preserve security evidence without exposing secrets, credentials, personal data, support tokens, private keys, exploit details, or sensitive incident details unnecessarily
+- **RELEASE READINESS**: Do not mark a product ready when critical product-security, update, vulnerability, dependency, documentation, support-period, or owner handoff controls are undocumented, untested, ownerless, or unresolved
+
+## Examples
+
+### Table of contents
+
+- Example 1: Document product security scope and owners
+- Example 2: Review threat model and secure defaults
+- Example 3: Track vulnerabilities and coordinated disclosure
+- Example 4: Verify secure update delivery
+- Example 5: Make dependency and SBOM evidence reviewable
+- Example 6: Document product security instructions and support signaling
+- Example 7: Block release until CRA evidence is complete
+
+### Example 1: Document product security scope and owners
+
+Title: product context, intended purpose, support period, update path, and owner handoffs
+Description: Use this pattern when a Java application, library, agent, plugin, SDK, connected component, gateway, or remote processing solution may support a product with digital elements. The inventory creates evidence for product, legal, compliance, product-security, support, and market-access owners without making a legal classification decision.
+
+**Good example:**
+
+```yaml
+craProductSecurityScope:
+  product: checkout-device-gateway
+  component: delivery-instructions-java-service
+  intendedPurpose: receive checkout delivery preferences and publish delivery slot events
+  possibleProductWithDigitalElementsSignal: connected software component used by a managed checkout product
+  classificationDecisionOwner: product-compliance
+  manufacturerRoleDecisionOwner: legal-market-access
+  productOwner: checkout-platform
+  productSecurityOwner: product-security
+  supportOwner: customer-support
+  environments: [staging, production]
+  supportPeriod:
+    proposedEnd: 2031-12
+    rationaleEvidence: evidence:support-period-review-2026-06
+  securityUpdatePath:
+    mechanism: signed container image plus rollout controller
+    rollback: previous signed image
+    advisoryChannel: security-advisories/checkout-device-gateway
+  evidence:
+    threatModel: docs/security/threat-model-checkout-device-gateway.md
+    sbom: evidence:sbom-2026-06-14
+    coordinatedDisclosurePolicy: security/CVD.md
+    userInstructions: docs/product/secure-operation.md
+```
+
+**Bad example:**
+
+```yaml
+craProductSecurityScope:
+  product: checkout stuff
+  owner: platform
+  updates: CI deploys it
+  classification: probably not applicable
+```
+
+
+### Example 2: Review threat model and secure defaults
+
+Title: intended use, foreseeable misuse, attack surface, authentication, authorization, and crypto
+Description: Use this pattern during design and release review. CRA-aware engineering should connect threat model decisions to secure-by-default configuration, least privilege, cryptography, data minimization, and exploitation mitigation evidence.
+
+**Good example:**
+
+```java
+public ReleaseDecision evaluateSecureDefaults(CraSecurityReview review) {
+    List<String> blockers = new ArrayList<>();
+
+    requirePresent(review.threatModel(), "threat model for intended and foreseeable use", blockers);
+    requirePassing(review.authenticationReview(), "authentication review", blockers);
+    requirePassing(review.authorizationReview(), "least-privilege authorization review", blockers);
+    requirePassing(review.cryptoReview(), "state-of-the-art transport and storage protection", blockers);
+    requirePassing(review.loggingReview(), "sensitive-data-safe logging", blockers);
+    requirePassing(review.attackSurfaceReview(), "external interface and attack-surface reduction", blockers);
+
+    if (!blockers.isEmpty()) {
+        return ReleaseDecision.blocked(
+            review.productId(),
+            blockers,
+            Escalation.required("product-security", "architecture", "product-owner")
+        );
+    }
+
+    return ReleaseDecision.approvedWithEvidence(
+        review.productId(),
+        review.evidenceReferences(),
+        review.approvers()
+    );
+}
+```
+
+**Bad example:**
+
+```java
+public boolean secureEnough() {
+    return true; // defaults are handled by the framework
+}
+```
+
+
+### Example 3: Track vulnerabilities and coordinated disclosure
+
+Title: intake, triage, remediation, advisory, user notification, and reporting handoff
+Description: Use this pattern when reviewing vulnerability handling for Java products and components. CRA-aware engineering should make vulnerability decisions traceable, coordinate with component maintainers, and escalate Article 14 reporting interpretation to qualified owners.
+
+**Good example:**
+
+```yaml
+vulnerabilityHandling:
+  product: checkout-device-gateway
+  vulnerability: CVE-2026-1042
+  affectedComponent: org.example:delivery-client:2.4.1
+  discoveredBy: external-researcher
+  intakeChannel: security@example.com
+  coordinatedDisclosurePolicy: security/CVD.md
+  severity: high
+  exploitationStatus: unknown
+  article14ReportingDecisionOwner: legal-product-security
+  remediation:
+    targetVersion: org.example:delivery-client:2.4.3
+    securityUpdate: release:2026.06.18-security
+    advisory: advisory:CRA-2026-004
+    userMitigation: disable optional callback endpoint until update is installed
+  verification:
+    regressionTests: passed
+    scannerRun: evidence:vulnerability-scan-2026-06-18
+    affectedUsersNotified: pending-owner-approval
+```
+
+**Bad example:**
+
+```yaml
+vulnerabilityHandling:
+  vulnerability: CVE-2026-1042
+  decision: wait for next quarterly release
+  users: not notified
+```
+
+
+### Example 4: Verify secure update delivery
+
+Title: signed artifacts, advisory messages, automatic update defaults, rollback, and availability
+Description: Use this pattern for products that deliver Java services, agents, installers, container images, libraries, or plugins. CRA-aware engineering should show that security updates can be distributed securely, promptly, and separately from feature updates where feasible.
+
+**Good example:**
+
+```markdown
+Security update evidence
+
+- Product: checkout-device-gateway
+- Update package: registry.example.com/checkout-device-gateway@sha256:abc123
+- Signature: cosign bundle evidence:update-signature-2026-06-18
+- Advisory: security-advisories/CRA-2026-004.md
+- User action: automatic update enabled by default with clear opt-out for business users
+- Feature changes included: none
+- Rollback package: registry.example.com/checkout-device-gateway@sha256:prev789
+- Validation: smoke tests, migration compatibility tests, vulnerability regression tests
+- Availability commitment: update remains available through support period evidence:support-policy-2026
+```
+
+**Bad example:**
+
+```markdown
+Security update evidence
+
+- Update: latest Docker tag
+- Signature: not used
+- Advisory: Slack message
+- Rollback: rebuild old code if needed
+```
+
+
+### Example 5: Make dependency and SBOM evidence reviewable
+
+Title: libraries, Maven plugins, containers, generated clients, and third-party components
+Description: Use this pattern when the product depends on Java libraries, Maven plugins, containers, generated clients, runtime images, CI/CD actions, or third-party services. The goal is to connect SBOM output to vulnerability handling and product release decisions.
+
+**Good example:**
+
+```yaml
+dependencyEvidence:
+  product: checkout-device-gateway
+  sbom:
+    format: CycloneDX
+    location: evidence/sbom/checkout-device-gateway-2026-06-14.json
+    includesTopLevelDependencies: true
+  components:
+    - coordinate: io.quarkus:quarkus-rest
+      version: 3.24.0
+      owner: platform-runtime
+      vulnerabilityMonitoring: evidence:dependency-scan-2026-06-14
+    - coordinate: org.example:delivery-client
+      version: 2.4.3
+      owner: checkout-platform
+      vulnerabilityMonitoring: evidence:dependency-scan-2026-06-18
+  containerBaseImage:
+    name: eclipse-temurin:25-jre
+    digestPinned: true
+    scanEvidence: evidence:image-scan-2026-06-14
+  releaseDecision: acceptable-with-open-medium-findings-owned
+```
+
+**Bad example:**
+
+```yaml
+dependencyEvidence:
+  sbom: generated somewhere in CI
+  dependencies: managed by Maven
+  vulnerabilities: scanner did not block
+```
+
+
+### Example 6: Document product security instructions and support signaling
+
+Title: secure operation, vulnerability contact, support end, decommissioning, and user guidance
+Description: Use this pattern before release or substantial modification. CRA-aware engineering should provide user instructions and technical documentation that product, support, and market-access owners can review.
+
+**Good example:**
+
+```markdown
+Product security documentation evidence
+
+- Product identifier: checkout-device-gateway 2026.06
+- Intended purpose: connect checkout order events to delivery-slot systems
+- Vulnerability contact: security@example.com
+- Coordinated disclosure policy: security/CVD.md
+- Secure installation: docs/product/secure-installation.md
+- Secure operation: docs/product/secure-operation.md
+- Security update instructions: docs/product/security-updates.md
+- Secure decommissioning: docs/product/secure-decommissioning.md
+- Support period end: 2031-12
+- End-of-support user notice: in-product notification and support portal article
+- SBOM access: available to qualified customers and authorities via support workflow
+- Technical documentation evidence: docs/product/technical-documentation-index.md
+```
+
+**Bad example:**
+
+```markdown
+Product security documentation evidence
+
+- Docs: README
+- Vulnerabilities: open a GitHub issue
+- Support period: until we stop maintaining it
+```
+
+
+### Example 7: Block release until CRA evidence is complete
+
+Title: secure-by-design, updates, SBOM, documentation, support, and owner decisions
+Description: Use this pattern before placing a product or product-adjacent change into a release stream. The release decision should identify missing engineering evidence and route legal or conformity questions to qualified owners.
+
+**Good example:**
+
+```java
+public ReleaseDecision evaluate(CraEngineeringReview review) {
+    List<String> blockers = new ArrayList<>();
+
+    requirePresent(review.productSecurityScope(), "product security scope inventory", blockers);
+    requirePresent(review.productClassificationOwnerDecision(), "qualified product classification handoff", blockers);
+    requirePresent(review.threatModel(), "threat model and secure defaults evidence", blockers);
+    requirePassing(review.vulnerabilityHandlingReview(), "vulnerability handling review", blockers);
+    requirePassing(review.securityUpdateMechanism(), "secure security-update mechanism", blockers);
+    requirePresent(review.sbom(), "SBOM evidence", blockers);
+    requirePresent(review.productSecurityDocumentation(), "product security documentation", blockers);
+    requirePresent(review.supportPeriodDisclosure(), "support-period and end-of-support signaling", blockers);
+    requirePresent(review.conformityOwnerDecision(), "qualified conformity and CE marking handoff", blockers);
+
+    if (!blockers.isEmpty()) {
+        return ReleaseDecision.blocked(
+            review.productId(),
+            blockers,
+            Escalation.required("product", "product-security", "legal", "compliance", "market-access")
+        );
+    }
+
+    return ReleaseDecision.approvedWithEvidence(
+        review.productId(),
+        review.evidenceReferences(),
+        review.approvers()
+    );
+}
+```
+
+**Bad example:**
+
+```java
+public ReleaseDecision evaluate(CraEngineeringReview review) {
+    return ReleaseDecision.approved(review.productId(), "CI passed");
+}
+```
+
+
+## Output Format
+
+- **MATCH** the relevant example patterns: product security scope inventory, threat model and secure defaults, vulnerability and coordinated disclosure evidence, security update delivery, dependency and SBOM evidence, product documentation and support-period signaling, or CRA release readiness gate
+- **RECOMMEND** engineering controls: secure-by-design development, threat modeling, secure defaults, vulnerability remediation, coordinated disclosure, security advisory workflow, secure update delivery, SBOM publication, dependency monitoring, authentication, authorization, cryptography, sensitive-data-safe logging, user instructions, support-period disclosure, end-of-support notices, and release approval
+- **REPORT** conclusions and actions using `assets/reports/805-eu-cyber-resilience-act-engineering-review-report-template.md`, including review context, product-security scope, evidence reviewed, CRA risk signals, potential violation or non-compliance signals with owner handoff, engineering controls, residual risks, release decision, and prioritized action plan with owners and due dates
+
+
+## Safeguards
+
+- **PRODUCT SECURITY EVIDENCE**: Do not accept undocumented claims that secure-by-design controls, vulnerability handling, updates, SBOMs, product documentation, or support-period controls exist; ask for reviewable evidence
+- **PRODUCT RELIANCE**: Apply stronger controls when a Java product or component supports identity, access management, security tooling, network management, connected devices, remote processing, customer data, safety-relevant functions, or critical-sector users
+- **SUPPLY-CHAIN DEPENDENCY**: Treat libraries, Maven plugins, CI/CD actions, generated clients, containers, cloud services, update infrastructure, and open-source components as product inputs requiring ownership and monitoring

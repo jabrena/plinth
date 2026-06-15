@@ -4,7 +4,7 @@ description: Use when you need to set up, review, or improve Java integration te
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Java Integration testing guidelines
 
@@ -470,6 +470,7 @@ class PaymentServiceIT extends BaseIntegrationTest {
 }
 ```
 
+
 ## Output Format
 
 - **ASK** Step 1 questions one at a time, collecting REST topology before generating any code
@@ -479,6 +480,7 @@ class PaymentServiceIT extends BaseIntegrationTest {
 - **GENERATE** WireMock JSON mapping files (one per confirmed external service) when REST integration was selected — place them under `src/test/resources/wiremock/mappings/{service-name}/`
 - **EXPLAIN** the key design decisions in the generated code (System.setProperty() coordinate propagation, WireMockExtension lifecycle)
 - **VALIDATE** that all generated code compiles by running `./mvnw test-compile` after the files are written
+
 
 ## Safeguards
 
