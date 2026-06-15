@@ -149,7 +149,7 @@ This project supports software engineering work; it does not replace engineering
 
 ### Access to corporate data
 
-Use caution when a problem involves corporate databases or other sensitive organizational data. Before granting an AI-assisted workflow access, assess authorization, privacy, data leakage, retention, and unintended modification risks. Apply least-privilege access, human review, validation, and monitoring. See [OWASP GenAI Data Security Risks & Mitigations 2026](https://genai.owasp.org/resource/owasp-genai-data-security-risks-mitigations-2026/) and the [The EU Artificial Intelligence Act](https://artificialintelligenceact.eu/).
+Use caution when a problem involves corporate databases or other sensitive organizational data. Before granting an AI-assisted workflow access, assess authorization, privacy, data leakage, retention, and unintended modification risks. Apply least-privilege access, human review, validation, and monitoring. See [OWASP GenAI Data Security Risks & Mitigations 2026](https://genai.owasp.org/resource/owasp-genai-data-security-risks-mitigations-2026/), [The EU Artificial Intelligence Act](https://artificialintelligenceact.eu/), and the new [regulation skills](#compliance).
 
 ## Contribute
 
@@ -162,10 +162,6 @@ Use caution when a problem involves corporate databases or other sensitive organ
 ## Architecture Decision Records (ADR)
 
 - Review the [ADR index](./documentation/adr/README.md) for the complete list.
-
-## Changelog
-
-- Review the [CHANGELOG](./CHANGELOG.md) for further details.
 
 ## Java JEPs from Java 8 onward
 

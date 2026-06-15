@@ -17,6 +17,7 @@ Scenario: Generate skills inventory with every skill declared in skills.xml
   And the generated inventory file includes the heading "# Skills for Java"
   And the generated inventory file includes the section "## Inventory"
   And the generated inventory file includes the section "## Installation"
+  And the generated inventory file includes the final section "## Regulations skills"
   And the generated inventory file includes one inventory row for every skill declared in "skills-generator/src/main/resources/skills.xml"
   And each generated skill row uses the skillId attribute when the source skill declares one
   And each generated skill row uses the single reference name when the source skill does not declare a skillId attribute

@@ -27,6 +27,7 @@
             skill rows. ### What NOT to Include:</constraints-description>
         <constraint-list>
             <constraint>**DO NOT** create additional sections beyond what is shown in the template</constraint>
+            <constraint>**SECTION ORDER**: Keep `Regulations skills` as the final inventory section before the closing note</constraint>
             <constraint>**DO NOT** add skill rows that are absent from `skills.xml`</constraint>
             <constraint>**DO NOT** omit any skill declared in `skills.xml`</constraint>
             <constraint>**ONLY** use the `skillId` attribute as the generated skill id when it exists</constraint>
@@ -43,7 +44,8 @@
                 `INVENTORY-SKILLS-JAVA.md` at the requested output path, or in the project root
                 directory when no explicit path is requested</output-format-item>
             <output-format-item>**Template Adherence**: Follow the embedded section structure and
-                populate one table row for every skill declared in `skills.xml`</output-format-item>
+                populate one table row for every skill declared in `skills.xml`, including the
+                final `Regulations skills` section</output-format-item>
             <output-format-item>**File Handling**: If `INVENTORY-SKILLS-JAVA.md` already exists,
                 overwrite it completely with the new generated content</output-format-item>
             <output-format-item>**Validation**: Before finishing, compare generated row ids against
