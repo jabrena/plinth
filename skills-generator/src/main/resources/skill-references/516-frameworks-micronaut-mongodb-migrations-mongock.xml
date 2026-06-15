@@ -24,7 +24,8 @@
             <constraint>**PREREQUISITE**: Project must compile successfully before Mongock, MongoDB, or migration edits</constraint>
             <constraint>**CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE</constraint>
             <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements; include a MongoDB-backed Micronaut test where feasible</constraint>
-            <constraint>**COMPATIBILITY**: Verify whether the selected Mongock version documents a compatible Micronaut runner before recommending Micronaut-specific runner coordinates</constraint>
+            <constraint>**COMPATIBILITY**: Verify whether the selected Mongock version documents a compatible Micronaut runner before recommending Micronaut-specific runner coordinates. No verified Micronaut-specific Mongock runner exists in Mongock 5.x — always use the standalone runner</constraint>
+            <constraint>**INJECTABLE TYPE**: With `mongock-standalone` + `mongodb-sync-v4-driver`, Mongock resolves `@ChangeUnit` method parameters from the driver's database handle. The injectable type is `MongoDatabase` — not `MongoClient`. Do not declare `MongoClient` as a `@ChangeUnit` method parameter</constraint>
         </constraint-list>
     </constraints>
 
@@ -34,14 +35,18 @@
         <example number="1" id="micronaut-mongock-dependencies">
             <example-header>
                 <example-title>Maven coordinates</example-title>
-                <example-subtitle>Use the Mongock BOM with the standalone runner and MongoDB sync driver when no compatible Micronaut runner is verified</example-subtitle>
+                <example-subtitle>Use the Mongock BOM with the standalone runner and MongoDB sync driver</example-subtitle>
             </example-header>
             <example-description><![CDATA[
-                Mongock architecture lets runners and drivers be combined. When a Micronaut-specific runner is unavailable or not verified for the project version, use `mongock-standalone` with `mongodb-sync-v4-driver` and wire execution as a Micronaut bean. Keep Micronaut MongoDB dependencies aligned with the Micronaut BOM.
+                Mongock architecture lets runners and drivers be combined. No verified Micronaut-specific runner exists in Mongock 5.x, so always use `mongock-standalone` with `mongodb-sync-v4-driver` and wire execution as a Micronaut bean. Keep Micronaut MongoDB dependencies aligned with the Micronaut BOM. This is the same standalone pattern proven effective for Spring Boot 4.x projects where the Spring Boot-specific runner is also unavailable.
             ]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="xml"><![CDATA[<dependencyManagement>
+                    <code-block language="xml"><![CDATA[<properties>
+    <mongock.version>5.5.1</mongock.version>
+</properties>
+
+<dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>io.mongock</groupId>
@@ -115,6 +120,7 @@ public class MongockMigrationRunner {
         MongockStandalone.builder()
             .setDriver(MongoSync4Driver.withDefaultLock(mongoClient, databaseName))
             .addMigrationScanPackage("com.example.migrations.mongo")
+            .setTransactionEnabled(false)
             .buildRunner()
             .execute();
     }
@@ -136,14 +142,14 @@ class MigrationController {
         <example number="3" id="micronaut-mongock-change-unit">
             <example-header>
                 <example-title>ChangeUnit design</example-title>
-                <example-subtitle>Use stable MongoDB operations rather than Micronaut Data repositories</example-subtitle>
+                <example-subtitle>Inject MongoDatabase from the sync driver; do not use MongoClient or Micronaut Data repositories</example-subtitle>
             </example-header>
             <example-description><![CDATA[
-                Keep old migrations compilable when Micronaut Data documents and repositories evolve. Use low-level MongoDB collection operations, explicit field names, and small idempotent updates.
+                With the standalone runner and `mongodb-sync-v4-driver`, Mongock resolves `@ChangeUnit` method parameters from the driver's database handle. The type that Mongock makes available is `MongoDatabase` — not `MongoClient`. Use raw MongoDB collection operations (`Filters`, `Updates`) via `MongoDatabase` so the migration remains compilable after the domain model evolves. Do not inject Micronaut Data repositories or domain records that may change.
             ]]></example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[import com.mongodb.client.MongoClient;
+                    <code-block language="java"><![CDATA[import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.model.Filters;
 import com.mongodb.client.model.Updates;
 import io.mongock.api.annotations.ChangeUnit;
@@ -154,27 +160,27 @@ import io.mongock.api.annotations.RollbackExecution;
 public class OrdersAddStatusChange {
 
     @Execution
-    public void execute(MongoClient mongoClient) {
-        mongoClient.getDatabase("orders")
-            .getCollection("orders")
+    public void execute(MongoDatabase mongoDatabase) {
+        mongoDatabase.getCollection("orders")
             .updateMany(Filters.exists("status", false), Updates.set("status", "PENDING"));
     }
 
     @RollbackExecution
-    public void rollback(MongoClient mongoClient) {
-        mongoClient.getDatabase("orders")
-            .getCollection("orders")
+    public void rollback(MongoDatabase mongoDatabase) {
+        mongoDatabase.getCollection("orders")
             .updateMany(Filters.eq("status", "PENDING"), Updates.unset("status"));
     }
 }]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[// Bad: repository methods and document records may change after this migration has run
+                    <code-block language="java"><![CDATA[// Bad: MongoClient is not injectable from the standalone sync driver's parameter resolver.
+// Also couples the migration to a repository that may change after this migration has run.
 @ChangeUnit(id = "orders-add-status", order = "001", author = "platform")
 class OrdersAddStatusChange {
     @Execution
-    void execute(OrderRepository repository) {
-        repository.findAll().forEach(order -> repository.update(order.withStatus("PENDING")));
+    void execute(MongoClient mongoClient) {  // not injectable via MongoSync4Driver
+        mongoClient.getDatabase("orders").getCollection("orders")
+            .updateMany(Filters.exists("status", false), Updates.set("status", "PENDING"));
     }
 }]]></code-block>
                 </bad-example>
@@ -184,10 +190,10 @@ class OrdersAddStatusChange {
         <example number="4" id="micronaut-mongock-testing">
             <example-header>
                 <example-title>Testing migrations</example-title>
-                <example-subtitle>Run Micronaut migration wiring against Testcontainers MongoDB</example-subtitle>
+                <example-subtitle>Run Micronaut migration wiring against Testcontainers MongoDB; verify changelog records and side effects</example-subtitle>
             </example-header>
             <example-description><![CDATA[
-                Use `@MicronautTest` with MongoDB Testcontainers or Micronaut Test Resources so the same runner and driver execute against a real MongoDB instance. Verify the migrated collection state rather than only mocking the runner.
+                Use `@MicronautTest` with MongoDB Testcontainers or Micronaut Test Resources so the same runner and driver execute against a real MongoDB instance. Verify that the `mongockChangeLog` collection has EXECUTED records for every expected change unit, and check at least one physical side effect (index or document shape) to confirm the migration ran — do not merely assert that the context loaded.
             ]]></example-description>
             <code-examples>
                 <good-example>
@@ -197,13 +203,15 @@ class MongockMigrationTest {
     @Inject MongoClient mongoClient;
 
     @Test
-    void appliesOrderStatusMigration() {
-        List<Document> orders = mongoClient.getDatabase("orders")
-            .getCollection("orders")
-            .find()
-            .into(new ArrayList<>());
-
-        assertThat(orders).allSatisfy(order -> assertThat(order).containsKey("status"));
+    void allExpectedMigrationsExecutedSuccessfully() {
+        List<Document> changelog = mongoClient.getDatabase("orders")
+            .getCollection("mongockChangeLog")
+            .find().into(new ArrayList<>());
+        List<String> executedIds = changelog.stream()
+            .filter(d -> "EXECUTED".equals(d.getString("state")))
+            .map(d -> d.getString("changeId"))
+            .toList();
+        assertThat(executedIds).contains("orders-add-status");
     }
 }]]></code-block>
                 </good-example>
@@ -217,8 +225,8 @@ class MongockMigrationTest {
     <output-format>
         <output-format-list>
             <output-format-item>**ANALYZE** Micronaut MongoDB setup: Micronaut version, MongoDB client type, available Mongock runner, driver, scan package, and startup policy</output-format-item>
-            <output-format-item>**CATEGORIZE** migration risks (RUNNER COMPATIBILITY, LOCKING, IDEMPOTENCY, DOMAIN COUPLING, STARTUP TIME, TEST GAP) by impact</output-format-item>
-            <output-format-item>**APPLY** Micronaut-aligned fixes: compatible Mongock dependencies, explicit runner bean/job, stable `@ChangeUnit` classes, and Testcontainers checks</output-format-item>
+            <output-format-item>**CATEGORIZE** migration risks (RUNNER COMPATIBILITY, INJECTABLE TYPE, LOCKING, IDEMPOTENCY, DOMAIN COUPLING, STARTUP TIME, TEST GAP) by impact</output-format-item>
+            <output-format-item>**APPLY** Micronaut-aligned fixes: standalone runner + sync driver, `MongoDatabase` in `@ChangeUnit` methods, startup runner bean, and Testcontainers checks verifying changelog records and side effects</output-format-item>
             <output-format-item>**ALIGN** with `@515-frameworks-micronaut-mongodb` for normal document/repository design while keeping migrations independent</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before changes and `./mvnw clean verify` after changes</output-format-item>
         </output-format-list>
@@ -227,6 +235,7 @@ class MongockMigrationTest {
     <safeguards>
         <safeguards-list>
             <safeguards-item>**DO NOT EDIT APPLIED MIGRATIONS**: Once a `@ChangeUnit` has run in a shared environment, add a new ordered change instead of modifying it</safeguards-item>
+            <safeguards-item>**INJECTABLE TYPE**: With `mongodb-sync-v4-driver`, Mongock injects `MongoDatabase` into `@ChangeUnit` methods — not `MongoClient`. Declaring `MongoClient` as a method parameter will cause a runtime error</safeguards-item>
             <safeguards-item>**IDEMPOTENCY**: Write migrations so interrupted non-transactional execution can safely continue on the next run</safeguards-item>
             <safeguards-item>**STARTUP TIME**: Do not run long backfills in a startup listener if probes or rollout windows can interrupt them repeatedly</safeguards-item>
             <safeguards-item>**RUNNER CLAIMS**: Do not invent Micronaut-specific Mongock coordinates; verify official artifacts or use the standalone runner pattern</safeguards-item>
