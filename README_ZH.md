@@ -16,6 +16,10 @@
 
 一套带有明确观点的 AI 原生工作流，通过可复用的 `Skills`、`Agents`、`Commands` 与 `MCP servers`，持续演进现代 Java 企业级 `SDLC` 实践。
 
+## 最新动态
+
+通过 [CHANGELOG](./CHANGELOG.md) 了解项目如何通过新 skills、改进和修复持续演进。
+
 ## 60 秒开始使用
 
 为你常用的智能体安装全部 skills：
@@ -24,7 +28,7 @@
 npx skills add jabrena/cursor-rules-java --skill '*' --agent cursor -y
 ```
 
-根据需要将 `cursor` 替换为 `claude-code`、`codex` 或 `github-copilot`。有关 commands、agents 和其他安装选项，请参阅 [5 分钟快速入门](./documentation/guides/GETTING-STARTED-IN-5-MINUTES_ZH.md)。
+根据需要将 `cursor` 替换为 `claude-code`、`codex` 或 `github-copilot`。
 
 ### 查看实际效果
 

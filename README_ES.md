@@ -16,6 +16,10 @@
 
 Un flujo de trabajo nativo de IA, con criterio propio, para evolucionar las prácticas modernas de `SDLC` en Java Enterprise mediante `Skills`, `Agents`, `Commands` y servidores `MCP` reutilizables.
 
+## Últimas actualizaciones
+
+Descubre cómo evoluciona el proyecto mediante nuevos skills, mejoras y correcciones en el [CHANGELOG](./CHANGELOG.md).
+
 ## Empieza en 60 segundos
 
 Instala todos los skills para tu agente preferido:
@@ -24,7 +28,7 @@ Instala todos los skills para tu agente preferido:
 npx skills add jabrena/cursor-rules-java --skill '*' --agent cursor -y
 ```
 
-Sustituye `cursor` por `claude-code`, `codex` o `github-copilot` cuando sea necesario. Consulta la [guía de 5 minutos](./documentation/guides/GETTING-STARTED-IN-5-MINUTES_ES.md) para instalar commands, agents y explorar otras opciones.
+Sustituye `cursor` por `claude-code`, `codex` o `github-copilot` cuando sea necesario.
 
 ### Míralo en acción
 

@@ -16,6 +16,10 @@
 
 An opinionated AI-native workflow for evolving modern Java Enterprise `SDLC` practices through reusable `Skills`, `Agents`, `Commands` & `MCP servers`.
 
+## Latest Updates
+
+See how the project evolves through new skills, improvements, and fixes in the [CHANGELOG](./CHANGELOG.md).
+
 ## Start in 60 seconds
 
 Install every skill for your preferred agent:
@@ -24,7 +28,7 @@ Install every skill for your preferred agent:
 npx skills add jabrena/cursor-rules-java --skill '*' --agent cursor -y
 ```
 
-Replace `cursor` with `claude-code`, `codex`, or `github-copilot` when needed. See the [5-minute guide](./documentation/guides/GETTING-STARTED-IN-5-MINUTES.md) for commands, agents, and other installation options.
+Replace `cursor` with `claude-code`, `codex`, or `github-copilot` when needed.
 
 ### See it in action
 
