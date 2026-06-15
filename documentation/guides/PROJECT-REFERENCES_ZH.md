@@ -47,6 +47,7 @@
 
 - [AGENTS.md](https://agents.md/)
 - [Agent Skills](https://agentskills.io/home)
+- [AAIF](https://aaif.io/)
 - [Language Server Protocol](https://microsoft.github.io/language-server-protocol/)
 - [OpenSpec](https://openspec.dev/)
 

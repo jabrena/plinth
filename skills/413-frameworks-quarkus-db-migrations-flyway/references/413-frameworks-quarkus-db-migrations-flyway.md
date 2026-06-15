@@ -4,7 +4,7 @@ description: Use when you need to add or review Flyway database migrations in a 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Quarkus — Database migrations (Flyway)
 
@@ -42,7 +42,6 @@ Description: Quarkus Flyway integrates with Agroal datasources. Declare `quarkus
 **Good example:**
 
 ```xml
-<!-- pom.xml fragments -->
 <dependency>
     <groupId>io.quarkus</groupId>
     <artifactId>quarkus-flyway</artifactId>
@@ -56,7 +55,6 @@ Description: Quarkus Flyway integrates with Agroal datasources. Declare `quarkus
 **Bad example:**
 
 ```xml
-<!-- Bad: Flyway without a JDBC driver extension — datasource may be incomplete -->
 <dependency>
     <groupId>io.quarkus</groupId>
     <artifactId>quarkus-flyway</artifactId>
@@ -135,6 +133,7 @@ quarkus.datasource.audit.jdbc.url=jdbc:postgresql://localhost/audit
 quarkus.flyway.locations=classpath:db/migration
 ```
 
+
 ## Output Format
 
 - **ANALYZE** Quarkus Flyway setup: extensions, datasource config, migration locations, migrate-at-start, and test profile behavior
@@ -143,6 +142,7 @@ quarkus.flyway.locations=classpath:db/migration
 - **ALIGN** with `@412-frameworks-quarkus-panache` entities or `@411-frameworks-quarkus-jdbc` SQL
 - **TEST** with `@QuarkusTest` and a real database (Dev Services or Testcontainers) after migration changes
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

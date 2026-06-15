@@ -4,7 +4,7 @@
       id="803-regulations-gdpr">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
-    <version>0.16.0-SNAPSHOT</version>
+    <version>0.16.0</version>
     <license>Apache-2.0</license>
     <description>Use when reviewing, designing, or modifying Java enterprise systems that process personal data and need GDPR-aware engineering controls. This should trigger for requests such as Review a Java service for GDPR privacy controls; Design data-subject rights workflows; Add retention, deletion, pseudonymization, or privacy-safe logging; Assess data transfer, DPIA, breach evidence, or processor/controller boundary concerns before production release.</description>
   </metadata>
@@ -29,9 +29,9 @@ GDPR chapters summary reference: [GDPR chapters summary](references/803-regulati
 
 Java engineering examples reference: [GDPR engineering examples](references/803-regulations-gdpr-engineering-examples.md).
 
-Questionnaire asset: [GDPR engineering review questionnaire](../assets/questions/803-gdpr-engineering-review-questionnaire.md).
+Questionnaire asset: [GDPR engineering review questionnaire](assets/questions/803-gdpr-engineering-review-questionnaire.md).
 
-Report template asset: [GDPR engineering review report template](../assets/reports/803-gdpr-engineering-review-report-template.md).
+Report template asset: [GDPR engineering review report template](assets/reports/803-gdpr-engineering-review-report-template.md).
 
 ## Scope
 

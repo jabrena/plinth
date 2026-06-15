@@ -4,7 +4,7 @@ description: Use when you need Kafka in Quarkus with SmallRye Reactive Messaging
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Quarkus — Kafka messaging
 
@@ -426,6 +426,7 @@ class SumControllerMessagingIT {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** Kafka code: guidance tier (minimal vs production), channel/topic binding, build-time serialization, producer key strategy, consumer return type, failure strategy, and idempotency guards
@@ -435,6 +436,7 @@ class SumControllerMessagingIT {
 - **EXPLAIN** trade-offs (minimal vs production event shape, void vs Uni return, Dev Services vs Testcontainers, when explicit serializers are required)
 - **TEST** with `@QuarkusTest` and Dev Services for fast feedback; use `@QuarkusTestResource` + Testcontainers when explicit broker wiring is required
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

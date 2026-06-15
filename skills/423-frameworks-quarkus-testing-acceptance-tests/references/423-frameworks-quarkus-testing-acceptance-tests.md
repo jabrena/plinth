@@ -4,7 +4,7 @@ description: Use when you need to implement acceptance tests from a Gherkin .fea
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Quarkus acceptance tests from Gherkin
 
@@ -399,6 +399,7 @@ class UserRegistrationAcceptanceTest extends BaseAcceptanceTest { }  // ← wron
 class UserRegistrationTest extends BaseAcceptanceTest { }  // ← should be UserRegistrationAT
 ```
 
+
 ## Output Format
 
 - **ANALYZE** the `.feature` file: feature name, scenarios, tags, and steps; confirm Quarkus and acceptance tags
@@ -407,6 +408,7 @@ class UserRegistrationTest extends BaseAcceptanceTest { }  // ← should be User
 - **IMPLEMENT** one REST Assured test per acceptance scenario with `@DisplayName` mirroring Gherkin titles
 - **DOCUMENT** Maven dependencies, Surefire/Failsafe split, and WireMock layout
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

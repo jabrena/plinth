@@ -4,7 +4,7 @@ description: Use when you need to apply functional programming principles in Jav
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Java Functional Programming rules
 
@@ -975,6 +975,7 @@ public class ConcurrentFunctional {
 
 ```
 
+
 ## Output Format
 
 - **ANALYZE** Java code to identify specific functional programming opportunities and categorize them by impact (CRITICAL, MAINTAINABILITY, PERFORMANCE, EXPRESSIVENESS) and area (immutability violations, side effects, imperative patterns, non-functional constructs, type safety gaps)
@@ -987,6 +988,7 @@ public class ConcurrentFunctional {
 - **STANDARDIZE** idiomatic `Optional` usage: prefer map/flatMap/filter/orElse*; avoid `isPresent()` + `get()` patterns; encode absence explicitly in return types
 - **HARDEN** Stream collectors: specify merge functions for `toMap`, use downstream collectors (`mapping`, `flatMapping`, `filtering`, `teeing`), and return unmodifiable results
 - **VERIFY LANGUAGE LEVEL** for used features (records, sealed types, switch/record patterns, gatherers) and provide alternatives if the project's Java version is lower
+
 
 ## Safeguards
 

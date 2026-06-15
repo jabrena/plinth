@@ -4,7 +4,7 @@ description: Use when you need to design, review, or improve security in Quarkus
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Quarkus Security Guidelines
 
@@ -242,12 +242,14 @@ System.out.println("Bearer " + token);
 // Secret exfiltration via logs
 ```
 
+
 ## Output Format
 
 - **ANALYZE** annotations, `application.properties` auth policies, OIDC setup, CORS, and exception mapping for 401/403
 - **CATEGORIZE** issues: anonymous-by-default, missing role checks, IDOR via client-supplied identifiers, weak CORS, secret leakage
 - **APPLY** least-privilege route and method security, correct OIDC config, and stable auth error bodies
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

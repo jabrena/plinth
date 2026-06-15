@@ -4,7 +4,7 @@ description: Use when you need to review, improve, or refactor Java code for typ
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Type Design Thinking in Java
 
@@ -865,6 +865,7 @@ class BadProductService {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** Java code to identify specific type design issues and categorize them by impact (CRITICAL, MAINTAINABILITY, TYPE_SAFETY, READABILITY) and type design area (naming conventions, type hierarchies, generic usage, primitive obsession, type safety)
@@ -874,6 +875,7 @@ class BadProductService {
 - **REFACTOR** code systematically following the type design improvement roadmap: First identify and replace primitive obsession with domain-specific types, then establish proper generic type parameters and bounds, apply consistent naming conventions across the codebase, refactor unsafe type operations to type-safe alternatives, implement appropriate precision types for calculations, and organize type hierarchies with clear abstractions and inheritance relationships
 - **EXPLAIN** the applied type design improvements and their benefits: Type safety enhancements through proper generic usage and value objects, maintainability improvements via domain-driven naming and clear hierarchies, readability gains from expressive type names and interfaces, calculation accuracy through precision-appropriate numeric types, and code robustness from eliminated primitive obsession and unsafe operations
 - **VALIDATE** that all applied type design refactoring compiles successfully, maintains existing functionality, preserves type safety guarantees, follows established naming conventions, and achieves the intended design improvements through comprehensive testing and verification
+
 
 ## Safeguards
 

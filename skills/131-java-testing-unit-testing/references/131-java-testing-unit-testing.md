@@ -4,7 +4,7 @@ description: Use when you need to review, improve, or write Java unit tests for 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Java Unit testing guidelines
 
@@ -689,6 +689,7 @@ class CursorAgentReflectionTest {
 // bypasses access modifiers, requires reflection boilerplate and exception handling
 ```
 
+
 ## Output Format
 
 - **ANALYZE** Java test code to identify specific unit testing issues and categorize them by impact (CRITICAL, MAINTAINABILITY, PERFORMANCE, COVERAGE, RELIABILITY) and testing area (framework usage, assertion style, test structure, test independence, coverage gaps)
@@ -698,6 +699,7 @@ class CursorAgentReflectionTest {
 - **REFACTOR** test code systematically following the unit testing improvement roadmap: First migrate test framework to JUnit 5 with modern annotations and capabilities, then adopt AssertJ for expressive assertions and better error messages, restructure tests using Given-When-Then methodology with descriptive naming, ensure test independence by eliminating shared state and order dependencies, implement comprehensive boundary testing and edge case coverage, integrate parameterized testing for thorough validation, and establish proper mocking strategies for external dependencies and complex interactions
 - **EXPLAIN** the applied unit testing improvements and their benefits: Test maintainability enhancements through JUnit 5 modern features and clear test structure, readability improvements via AssertJ expressive assertions and Given-When-Then organization, reliability gains from test independence and proper state management, coverage improvements through comprehensive boundary testing and parameterized validation, and debugging capabilities enhancement through descriptive test names and detailed assertion messages
 - **VALIDATE** that all applied unit testing refactoring compiles successfully, maintains existing test functionality, improves test reliability and maintainability, achieves comprehensive test coverage, and follows established testing best practices through comprehensive verification and test execution
+
 
 ## Safeguards
 

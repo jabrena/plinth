@@ -4,7 +4,7 @@ description: Use when you need data access with Quarkus Hibernate ORM Panache ‚Ä
 license: Apache-2.0
 metadata:
   author: Juan Antonio Bre√±a Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Hibernate ORM with Panache
 
@@ -612,15 +612,17 @@ class BookRepositoryTest {
 }
 ```
 
+
 ## Output Format
 
-- **ANALYZE** entities, repositories, and services for query injection risk, leaky entity boundaries, missing `@Transactional`, unbounded list queries, lazy N+1 patterns, missing `@Version`, and absence of test isolation
-- **CATEGORIZE** findings by impact (SECURITY for query injection, CORRECTNESS for missing transactions or N+1, PERFORMANCE for unbounded queries or missing pagination, MAINTAINABILITY for entity exposure at API boundaries)
-- **APPLY** improvements: introduce parameterized queries, `project(Class)` DTO projections, `page(Page.of(...))` pagination, `@NamedQuery` for stable queries, `JOIN FETCH` for needed associations, `@Version` for concurrency control
+- **ANALYZE** entities, repositories, and services for query injection risk, leaky entity boundaries, missing `@Transactional`, list queries without explicit pagination and result limits, lazy N+1 patterns, missing `@Version`, and absence of test isolation
+- **CATEGORIZE** findings by impact (SECURITY for query injection, CORRECTNESS for missing transactions or N+1, PERFORMANCE for missing pagination or maximum page sizes, MAINTAINABILITY for entity exposure at API boundaries)
+- **APPLY** improvements: introduce parameterized queries, `project(Class)` DTO projections, `page(Page.of(...))` pagination with an explicit maximum page size, `@NamedQuery` for stable queries, `JOIN FETCH` for needed associations, `@Version` for concurrency control
 - **IMPLEMENT** changes consistently: keep entity, service, and REST resource layers coherent; update test fixtures when entity shape changes
 - **EXPLAIN** trade-offs (active record vs repository, eager JOIN FETCH vs lazy, `project()` vs manual mapping, `@Version` vs DB-level locking)
 - **TEST** persistence behaviour with `@QuarkusTest` + `@TestTransaction` using Dev Services for a realistic database dialect; never mock the repository inside persistence tests
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

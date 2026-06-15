@@ -4,7 +4,7 @@ description: Use when building or reviewing Micronaut applications — Micronaut
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Micronaut Core Guidelines
 

@@ -1,0 +1,189 @@
+---
+name: 803-regulations-gdpr-chapters-summary
+description: Use as a chapter-by-chapter and article-by-article summary of Regulation (EU) 2016/679 to enrich Java enterprise privacy engineering reviews with GDPR context.
+license: Apache-2.0
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.16.0
+---
+# GDPR Regulation for Java Enterprise Personal Data Protection
+
+## Role
+
+You are a senior Java enterprise architect and privacy engineering reviewer using the GDPR article structure to map regulatory themes to engineering controls and owner handoffs
+
+## Goal
+
+Summarize the official chapter and article structure of Regulation (EU) 2016/679 (GDPR) for engineering review of Java enterprise applications, APIs, data pipelines, integrations, batch jobs, AI workflows, and operational tooling that process personal data.
+
+Source reviewed: [EUR-Lex Regulation (EU) 2016/679 HTML text](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679).
+
+This reference is not legal advice. Use it to orient engineering discovery, architecture review, privacy evidence collection, release gates, and escalation conversations with legal, privacy, data protection officer, compliance, security, risk, data-governance, architecture, vendor, and business owners.
+
+Use `references/803-regulations-gdpr-engineering-examples.md` for Java examples and implementation control patterns. Keep this chapters summary focused on GDPR Regulation structure and article-level obligations.
+
+Questionnaire asset: [GDPR engineering review questionnaire](../assets/questions/803-gdpr-engineering-review-questionnaire.md).
+
+Report template asset: [GDPR engineering review report template](../assets/reports/803-gdpr-engineering-review-report-template.md).
+
+## [Chapter I: General provisions (Articles 1-4)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#cpt_I)
+
+Sets the subject matter, territorial scope, material scope, and definitions. For Java teams, this chapter is the starting point for deciding whether data processed by a service, API, message flow, log stream, analytics export, AI workflow, vendor integration, or operational tool is personal data in scope.
+
+Article map:
+- Article 1, Subject matter and objectives: protects fundamental rights and personal data while enabling free movement of personal data.
+- Article 2, Material scope: defines when automated and filing-system processing is in scope.
+- Article 3, Territorial scope: defines establishment, goods or services, monitoring, and public international law scope.
+- Article 4, Definitions: defines personal data, processing, controller, processor, recipient, consent, personal data breach, biometric data, health data, supervisory authority, and related terms.
+
+Engineering impact:
+- Record personal-data categories, data subjects, processing purposes, deployment geography, controllers, processors, vendors, and owners.
+- Treat territorial scope, controller/processor role, and legal interpretation as qualified owner decisions; engineering should collect evidence, not make legal determinations.
+
+## [Chapter II: Principles (Articles 5-11)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#cpt_II)
+
+Defines the principles and conditions for processing, consent, special-category data, criminal-offence data, and processing without identification. These principles translate directly into Java data modeling, DTO design, logging, retention, and purpose-specific processing.
+
+Article map:
+- Article 5, Principles relating to processing of personal data: covers lawfulness, fairness, transparency, purpose limitation, data minimisation, accuracy, storage limitation, integrity, confidentiality, and accountability.
+- Article 6, Lawfulness of processing: defines lawful-basis conditions.
+- Article 7, Conditions for consent: defines consent evidence and withdrawal expectations.
+- Article 8, Child consent for information society services: covers child consent age and parental responsibility.
+- Article 9, Special categories of personal data: covers sensitive data categories and exceptions.
+- Article 10, Criminal convictions and offences: restricts processing under official authority or Union/Member State law.
+- Article 11, Processing which does not require identification: covers cases where identification is unnecessary.
+
+Engineering impact:
+- Require field-level purpose mapping, minimization, retention, accuracy, privacy-safe logging, consent/preference evidence where applicable, and owner handoffs for lawful basis.
+- Apply stronger controls for health, biometric, children's, criminal-offence, or other sensitive data.
+
+## [Chapter III: Rights of the data subject (Articles 12-23)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#cpt_III)
+
+Defines transparency, information, access, rectification, erasure, restriction, portability, objection, automated decision-making protections, and possible restrictions.
+
+Article map:
+- Articles 12-14: cover transparent information, communication, and information provided to data subjects.
+- Article 15: right of access.
+- Article 16: right to rectification.
+- Article 17: right to erasure.
+- Article 18: right to restriction of processing.
+- Article 19: notification obligation for rectification, erasure, or restriction.
+- Article 20: data portability.
+- Article 21: right to object.
+- Article 22: automated individual decision-making, including profiling.
+- Article 23: possible restrictions by Union or Member State law.
+
+Engineering impact:
+- Make rights workflows executable across primary stores, derived stores, caches, indexes, exports, backups, and downstream topics where applicable.
+- Preserve request authentication, authorization, fulfillment evidence, propagation evidence, and owner review without overexposing personal data.
+
+## [Chapter IV: Controller and processor (Articles 24-43)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#cpt_IV)
+
+Defines controller and processor responsibilities, privacy by design/default, processor obligations, records of processing, cooperation, security of processing, breach notification, DPIA, prior consultation, DPO, certification, and codes of conduct.
+
+Article map:
+- Articles 24-31: cover controller responsibility, data protection by design and by default, joint controllers, representatives, processors, processing under authority, records of processing, and cooperation.
+- Article 32: security of processing.
+- Articles 33-34: personal-data breach notification to supervisory authority and communication to data subjects.
+- Articles 35-36: data protection impact assessment and prior consultation.
+- Articles 37-39: data protection officer designation, position, and tasks.
+- Articles 40-43: codes of conduct, monitoring, certification, and certification bodies.
+
+Engineering impact:
+- Require privacy by design/default, least privilege, encryption, pseudonymization, audit evidence, secure configuration, breach evidence, DPIA handoff, records of processing, processor inventories, and vendor controls.
+- Treat logs, metrics, traces, exports, backups, model prompts, and support tooling as processing surfaces.
+
+## [Chapter V: Transfers of personal data to third countries or international organisations (Articles 44-50)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#cpt_V)
+
+Defines transfer principles, adequacy, safeguards, binding corporate rules, derogations, and international cooperation.
+
+Article map:
+- Articles 44-50: cover general transfer principles, adequacy decisions, appropriate safeguards, binding corporate rules, transfers not authorised by Union law, derogations, international cooperation, and related conditions.
+
+Engineering impact:
+- Record regions, subprocessors, SaaS vendors, model providers, analytics exports, support tooling, data categories, transfer mechanisms, and review owners.
+- Block or condition release when transfer, vendor, or subprocessor evidence is missing.
+
+## [Chapter VI: Independent supervisory authorities (Articles 51-59)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#cpt_VI)
+
+Defines supervisory authority independence, competence, tasks, and powers.
+
+Engineering impact:
+- Keep privacy evidence structured enough to answer supervisory authority requests through qualified owners.
+- Treat unsupported records, incomplete evidence, or non-reconstructable processing paths as material risk.
+
+## [Chapter VII: Cooperation and consistency (Articles 60-76)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#cpt_VII)
+
+Defines cooperation among supervisory authorities, mutual assistance, joint operations, consistency mechanisms, urgency procedures, and the European Data Protection Board.
+
+Engineering impact:
+- Expect cross-border, multi-entity, or multi-provider processing questions during regulatory review or incidents.
+- Preserve controller, processor, geography, vendor, transfer, and incident evidence in a form that can support coordinated review.
+
+## [Chapter VIII: Remedies, liability and penalties (Articles 77-84)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#cpt_VIII)
+
+Defines complaint rights, judicial remedies, compensation, administrative fines, and penalties. Engineering teams should understand why missing privacy controls cannot be treated as informal backlog only.
+
+Engineering impact:
+- Treat missing minimization, unclear purpose, absent rights workflows, weak security, incomplete breach evidence, and unsupported transfer records as release risks.
+- Keep decisions, approvals, exceptions, test evidence, and corrective actions defensible.
+
+## [Chapter IX: Provisions relating to specific processing situations (Articles 85-91)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#cpt_IX)
+
+Addresses expression and information, official documents, national identification numbers, employment, research, statistics, archiving, secrecy, and churches or religious associations.
+
+Engineering impact:
+- Escalate employment, national identifier, research, statistics, archiving, official-document, journalism, or secrecy-related processing to qualified owners.
+- Avoid encoding broad assumptions for special processing contexts without policy and legal review.
+
+## [Chapter X: Delegated acts and implementing acts (Articles 92-93)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#cpt_X)
+
+Explains delegated and implementing act procedures.
+
+Engineering impact:
+- Track guidance, EDPB opinions, national authority guidance, standards, and internal policy updates that affect privacy controls.
+
+## [Chapter XI: Final provisions (Articles 94-99)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679#cpt_XI)
+
+Covers repeal, relationship with previous legislation, relationship with ePrivacy rules, evaluation, review, and entry into force.
+
+Engineering impact:
+- Review long-lived Java systems when processing purpose, data categories, geography, provider chain, retention, or operating context changes.
+- Coordinate GDPR controls with ePrivacy, sectoral privacy rules, cybersecurity rules, AI governance, and internal data-governance policy.
+
+## Engineering review focus
+
+When reviewing a Java enterprise system for GDPR-aware controls, connect article themes to evidence:
+- Scope and roles: Articles 1-4, 24-31
+- Principles, lawful basis, minimization, and consent: Articles 5-11
+- Data-subject rights: Articles 12-23
+- Privacy by design/default, security, breach, DPIA, DPO, and records: Articles 24-43
+- Transfers and vendor processing: Articles 44-50
+- Supervisory evidence and cooperation: Articles 51-76
+- Remedies, liability, penalties, and special processing contexts: Articles 77-91
+- Future review: Articles 92-99
+
+## Constraints
+
+Use this reference as GDPR Regulation context for Java engineering review. Do not provide legal advice or replace review by legal, privacy, data protection officer, compliance, security, risk, data-governance, architecture, vendor, or business owners.
+
+- **NOT LEGAL ADVICE**: State when an article mapping requires legal, privacy, DPO, compliance, security, risk, data-governance, or business-owner review instead of giving legal conclusions
+- **SUMMARY ONLY**: Keep this reference focused on GDPR chapters, articles, and engineering implications; use the engineering examples reference for Java patterns
+- **ARTICLE MAPPING**: Map findings to regulation topic areas such as personal-data scope, principles, data-subject rights, controller/processor obligations, security, breach, DPIA, transfers, supervision, or penalties
+- **OWNER ESCALATION**: Escalate lawful basis, controller/processor role, special-category data, transfer mechanism, DPIA need, jurisdiction, and risk acceptance to qualified owners
+- **EVIDENCE ORIENTATION**: Use article summaries to identify what engineering evidence is missing or weak, not to certify compliance
+
+
+## Output Format
+
+- **READ** this GDPR chapters summary before applying Java examples or generating the review report
+- **MAP** reviewed findings to GDPR topic areas and article groups using only reviewed evidence
+- **ESCALATE** lawful basis, controller/processor role, special-category processing, transfer mechanism, DPIA need, breach notification, and regulatory interpretation to qualified owners
+- **HAND OFF** implementation control patterns to `references/803-regulations-gdpr-engineering-examples.md`
+
+
+## Safeguards
+
+- **DO NOT CERTIFY COMPLIANCE**: This reference supports engineering review and owner handoff only
+- **CHECK CURRENT GUIDANCE**: Supervisory authority guidance, EDPB guidance, sectoral rules, and national law may add detail beyond this summary
+- **KEEP FACTS GROUNDED**: Do not infer lawful basis, controller/processor role, special-category scope, transfer validity, DPIA status, or breach duties without reviewed evidence and qualified owner input

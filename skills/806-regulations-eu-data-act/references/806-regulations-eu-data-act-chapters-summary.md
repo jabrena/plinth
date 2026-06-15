@@ -1,0 +1,232 @@
+---
+name: 806-regulations-eu-data-act-chapters-summary
+description: Use as a chapter-by-chapter and article-by-article summary of Regulation (EU) 2023/2854 to enrich Java enterprise data access, portability, interoperability, and cloud-switching reviews with EU Data Act context.
+license: Apache-2.0
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.16.0
+---
+# EU Data Act Regulation for Java Enterprise Data Access and Portability Engineering
+
+## Role
+
+You are a senior Java enterprise architect and data-governance engineering reviewer using the EU Data Act article structure to map regulatory themes to engineering controls and owner handoffs
+
+## Goal
+
+Summarize the official chapter and article structure of Regulation (EU) 2023/2854 (EU Data Act) for engineering review of Java enterprise systems, SaaS platforms, connected-product integrations, APIs, event streams, data spaces, cloud services, operational workflows, and data-sharing processes.
+
+Source reviewed: [EUR-Lex Regulation (EU) 2023/2854 HTML text](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32023R2854).
+
+This reference is not legal advice. Use it to orient engineering discovery, architecture review, data-governance evidence collection, release gates, and escalation conversations with legal, compliance, privacy, data governance, security, product, procurement, cloud, risk, business, and provider owners.
+
+Use `references/806-regulations-eu-data-act-engineering-examples.md` for Java examples and implementation control patterns. Keep this chapters summary focused on Data Act structure and article-level engineering implications.
+
+Report template asset: [EU Data Act engineering review report template](../assets/reports/806-eu-data-act-engineering-review-report-template.md).
+
+## [Chapter I: General provisions (Articles 1-2)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32023R2854#cpt_I)
+
+Sets the Data Act scope, relationship with personal-data law, data-processing services, non-personal data safeguards, connected-product and related-service concepts, and core definitions. For Java teams, this chapter is the first scoping checkpoint for APIs, Kafka topics, export jobs, metadata catalogs, connected-product integrations, data spaces, smart contracts, and cloud services.
+
+Article map:
+- Article 1, Subject matter and scope: covers product data and related service data access, data holder to data recipient sharing, public-sector exceptional-need requests, switching between data processing services, safeguards against unlawful third-country access to non-personal data, and interoperability standards.
+- Article 2, Definitions: defines data, metadata, personal data, non-personal data, connected product, related service, data processing service, user, data holder, data recipient, product data, related service data, readily available data, trade secret, customer, switching, exportable data, smart contract, interoperability, open interoperability specification, common specification, and harmonised standard.
+
+Engineering impact:
+- Record whether the Java system handles product data, related service data, exportable data, metadata, non-personal data, personal data, mixed datasets, trade secrets, cloud customer data, or data-space data.
+- Record possible roles: user, data holder, data recipient, third-party recipient, customer, provider of data processing services, participant in a data space, smart-contract vendor, public-sector requester, and provider owner.
+- Treat applicability, data holder status, user entitlement, data recipient role, contract interpretation, cloud-switching obligations, and regulatory interpretation as qualified owner decisions.
+
+## [Chapter II: Business-to-consumer and business-to-business data sharing (Articles 3-7)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32023R2854#cpt_II)
+
+Defines user access to connected-product and related-service data and the right to make data available to third parties. For engineering review, this chapter maps directly to access APIs, machine-readable exports, metadata, authorization, purpose limits, trade-secret controls, user experience, and third-party sharing workflows.
+
+Article map:
+- Article 3, Obligation to make product data and related service data accessible to the user: requires access by default, secure access, machine-readable formats, relevant metadata, and pre-contract information about data type, format, volume, retention, access, retrieval, deletion, and sharing.
+- Article 4, Rights and obligations of users and data holders: covers user access when data cannot be directly accessed, security-based restrictions, non-neutral interface concerns, request verification minimization, trade-secret protection, refusals or suspensions, personal-data legal-basis handoff, non-personal data use by data holders, and third-party disclosure boundaries.
+- Article 5, Right of the user to share data with third parties: covers user-directed third-party access, metadata, secure and machine-readable sharing, gatekeeper restrictions, verification minimization, trade-secret protection, refusals or suspensions, and personal-data rights.
+- Article 6, Obligations of third parties receiving data at the request of the user: covers purpose limitation, deletion, no manipulation of user choices, profiling limits, onward sharing controls, gatekeeper restrictions, competing-product limits, security impact limits, trade-secret confidentiality, and consumer re-sharing rights.
+- Article 7, Scope of business-to-consumer and business-to-business data-sharing obligations: sets scope exclusions for certain micro, small, and newly medium-sized enterprises and invalidates contract terms that undermine Chapter II rights.
+
+Engineering impact:
+- Design data access endpoints, export jobs, and event-sharing workflows with entitlement checks, purpose recording, recipient identity, format guarantees, metadata, quality-of-service evidence, and audit trails.
+- Avoid collecting request verification data beyond what is necessary; do not keep access logs longer than required for request execution, infrastructure security, and maintenance.
+- Identify trade secrets and sensitive commercial data in metadata and route confidentiality measures, refusals, suspensions, or exceptions to qualified legal, data-governance, security, and product owners.
+- Coordinate with GDPR controls whenever personal data or mixed datasets are involved.
+
+## [Chapter III: Obligations for data holders obliged to make data available pursuant to Union law (Articles 8-12)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32023R2854#cpt_III)
+
+Defines fair, reasonable, non-discriminatory, transparent data-sharing arrangements, compensation, dispute settlement, technical protection measures, and scope. For engineering teams, this chapter drives access-policy evidence, terms enforcement, pricing or cost evidence, secure data-sharing mechanisms, and misuse response.
+
+Article map:
+- Article 8, Conditions under which data holders make data available to data recipients: requires fair, reasonable, non-discriminatory, and transparent arrangements, prevents discriminatory access, limits unnecessary compliance information, and preserves trade-secret limits unless otherwise required.
+- Article 9, Compensation for making data available: addresses reasonable, non-discriminatory compensation and the basis for calculating compensation.
+- Article 10, Dispute settlement: establishes dispute settlement paths for users, data holders, data recipients, customers, and providers of data processing services.
+- Article 11, Technical protection measures on the unauthorised use or disclosure of data: allows technical protection measures such as smart contracts and encryption while preventing them from undermining access rights; addresses erasure, notification, compensation, and misuse controls.
+- Article 12, Scope of obligations for data holders obliged pursuant to Union law to make data available: applies the chapter to business-to-business statutory data-sharing obligations and limits contract terms that exclude or vary the chapter.
+
+Engineering impact:
+- Capture data-sharing terms, request conditions, recipient classes, rate limits, throttling, compensation calculation evidence where relevant, and non-discrimination evidence.
+- Implement misuse detection, access revocation, erasure workflows, recipient notification, technical protection measures, encryption, smart-contract controls where used, and audit records.
+- Route dispute settlement, compensation, contract fairness, trade-secret, and statutory sharing interpretations to qualified owners.
+
+## [Chapter IV: Unfair contractual terms related to data access and use between enterprises (Article 13)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32023R2854#cpt_IV)
+
+Addresses unfair contractual terms unilaterally imposed on another enterprise. For engineering review, this chapter supports evidence that data access and export behavior are not contradicted by one-sided contract terms, hidden platform restrictions, or service terms that prevent usable copies, switching, or fair data use.
+
+Article map:
+- Article 13, Unfair contractual terms unilaterally imposed on another enterprise: addresses terms concerning access, use, liability, remedies, termination, unilateral interpretation, data conformity, commercially sensitive data, trade secrets, copies of generated data, switching, and substantive changes to data sharing conditions.
+
+Engineering impact:
+- Keep contract evidence linked to API behavior, export behavior, metadata commitments, switching support, and customer-facing documentation.
+- Escalate contract interpretation, fairness, pricing, remedies, and unilateral term concerns to legal, procurement, product, and business owners.
+
+## [Chapter V: Making data available to public sector bodies, the Commission, the European Central Bank and Union bodies on the basis of an exceptional need (Articles 14-22)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32023R2854#cpt_V)
+
+Defines exceptional-need requests from public-sector bodies and Union institutions. For Java teams, this chapter requires operational request intake, identity and legal-basis verification, metadata, purpose limitation, data minimization, anonymization or pseudonymization handoff, trade-secret confidentiality, request publication evidence, and erasure tracking.
+
+Article map:
+- Article 14, Obligation to make data available on the basis of an exceptional need: requires data holders to make data and relevant metadata available when a qualified requester demonstrates exceptional need.
+- Article 15, Exceptional need to use data: limits exceptional need to public emergencies or specific non-personal data needs where other means are exhausted.
+- Article 16, Relationship with other obligations: clarifies interaction with other reporting, compliance, information-access, criminal, administrative, customs, and tax obligations.
+- Article 17, Requests for data to be made available: requires clear written requests specifying data, metadata, exceptional need, purpose, intended use, retention or erasure, sharing, personal-data safeguards, legal task, deadlines, publication, and notification.
+- Article 18, Compliance with requests for data: covers timely availability, modification or refusal deadlines, control over requested data, anonymization, pseudonymization, and competent-authority escalation.
+- Article 19, Obligations of public sector bodies, the Commission, the European Central Bank and Union bodies: covers purpose limitation, confidentiality, integrity, secure transfer, deletion, trade secrets, and responsibility for security.
+- Article 20, Compensation in cases of an exceptional need: covers free emergency response data and fair compensation for other exceptional-need requests.
+- Article 21, Sharing of data obtained in the context of an exceptional need with research organisations or statistical bodies: covers onward sharing for research, analytics, statistics, compatible purpose, and notification.
+- Article 22, Mutual assistance and cross-border cooperation: covers cross-border request review and cooperation.
+
+Engineering impact:
+- Implement request workflows with requester verification, legal-basis capture, purpose, dataset scope, metadata, deadlines, approval routing, anonymization or pseudonymization decisions, secure transfer, erasure, publication, notification, and audit logs.
+- Preserve evidence that requests are specific, proportionate, limited, and reviewed by legal, compliance, privacy, data-governance, security, and business owners.
+- Do not decide public-sector exceptional need or legal validity in engineering code; create handoff evidence.
+
+## [Chapter VI: Switching between data processing services (Articles 23-31)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32023R2854#cpt_VI)
+
+Defines obligations for providers of data processing services to remove obstacles to switching, support exportable data and digital assets, maintain continuity, publish data structures and formats, reduce switching charges, and support technical switching. For Java and platform teams, this chapter maps to cloud exit runbooks, exportable data catalogs, open interfaces, migration tooling, continuity controls, secure transfer, and erasure evidence.
+
+Article map:
+- Article 23, Removing obstacles to effective switching: requires removal of commercial, technical, contractual, and organisational obstacles to terminating, switching, porting exportable data and digital assets, achieving functional equivalence where relevant, and unbundling where feasible.
+- Article 24, Scope of the technical obligations: clarifies the source provider scope for technical obligations.
+- Article 25, Contractual terms concerning switching: requires contract clauses for switching, assistance, continuity, security, exit strategy support, notice period, exportable data categories, exempted provider-internal data, retrieval period, erasure, and switching charges.
+- Article 26, Information obligation of providers of data processing services: requires information on switching procedures, porting methods, formats, restrictions, technical limitations, and an online register of data structures, data formats, standards, and open interoperability specifications.
+- Article 27, Obligation of good faith: requires parties to cooperate in good faith to make switching effective, transfer data on time, and maintain service continuity.
+- Article 28, Contractual transparency obligations on international access and transfer: requires publication of jurisdiction and measures preventing conflicting international governmental access or transfer of non-personal data.
+- Article 29, Gradual withdrawal of switching charges: phases out switching charges and requires clear information about standard fees, early termination penalties, and reduced switching charges.
+- Article 30, Technical aspects of switching: requires reasonable measures, documentation, technical support, tools, open interfaces, structured machine-readable exports, standards or specifications, and security or trade-secret boundaries.
+- Article 31, Specific regime for certain data processing services: identifies custom-built and non-production service exclusions and disclosure obligations.
+
+Engineering impact:
+- Maintain an exportable data inventory with formats, schemas, metadata, ownership, storage locations, digital assets, excluded trade-secret or provider-internal categories, retrieval periods, and erasure behavior.
+- Build and test provider exit runbooks, export APIs, bulk exports, secure transfer, import validation, rollback, business-continuity, monitoring, and customer communication.
+- Keep international access safeguards for non-personal data reviewable through jurisdiction, contractual, technical, organisational, and legal measure records.
+
+## [Chapter VII: Unlawful international governmental access and transfer of non-personal data (Article 32)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32023R2854#cpt_VII)
+
+Requires providers of data processing services to prevent international and third-country governmental access or transfer of non-personal data held in the Union where that would conflict with Union or Member State law.
+
+Article map:
+- Article 32, International governmental access and transfer: covers technical, organisational, legal, contractual measures, international agreement checks, proportionality, specificity, legal review, national-security handoff, minimum-data response, and customer notification where permitted.
+
+Engineering impact:
+- Track Union data residency, data classification, non-personal datasets, customer ownership, access request intake, legal review, minimum-data extraction, customer notification, and audit evidence.
+- Escalate international access, transfer, national-security, trade-secret, and commercially sensitive-data questions to legal, compliance, security, cloud, and provider owners.
+
+## [Chapter VIII: Interoperability (Articles 33-36)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32023R2854#cpt_VIII)
+
+Defines interoperability requirements for data spaces, data sharing mechanisms, data processing services, in-parallel use, and smart contracts. For Java teams, this chapter maps to API descriptions, schemas, vocabularies, metadata, terms of use, quality of service, open interfaces, semantic compatibility, policy portability, auditability, and smart-contract controls.
+
+Article map:
+- Article 33, Essential requirements regarding interoperability of data, data sharing mechanisms and services, and common European data spaces: covers machine-readable dataset descriptions, use restrictions, licences, collection methodology, data quality, uncertainty, data structures, formats, vocabularies, classifications, APIs, terms of use, quality of service, bulk download, real-time access, and smart-contract automation.
+- Article 34, Interoperability for the purposes of in-parallel use of data processing services: applies switching-related requirements to parallel use and limits data egress charges to incurred costs.
+- Article 35, Interoperability of data processing services: covers open interoperability specifications and harmonised standards for transport, syntactic, semantic, behavioral, policy, application, metadata, portability, and functional-equivalence aspects.
+- Article 36, Essential requirements regarding smart contracts for executing data sharing agreements: covers robustness, access control, safe termination and interruption, data archiving, continuity, governance-layer controls, consistency with agreement terms, conformity assessment, and EU declaration of conformity.
+
+Engineering impact:
+- Publish API contracts, schema versions, metadata, quality-of-service details, bulk export behavior, event contracts, vocabularies, and usage restrictions in discoverable, machine-readable forms.
+- Review smart-contract or workflow automation for access control, safe interruption, archiveability, auditability, and consistency with data-sharing terms.
+- Treat interoperability and standards conformance as release-gate evidence, not just documentation.
+
+## [Chapter IX: Implementation and enforcement (Articles 37-42)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32023R2854#cpt_IX)
+
+Defines competent authorities, data coordinators, complaint rights, judicial remedies, penalties, model contractual terms, standard contractual clauses, and the role of the European Data Innovation Board.
+
+Article map:
+- Article 37, Competent authorities and data coordinators: covers authority designation, data coordinator role, complaints, investigations, penalties, monitoring, cooperation, GDPR authority interaction, switching-charge enforcement, Chapter V request examination, legal representatives, information requests, and confidentiality.
+- Article 38, Right to lodge a complaint: gives natural and legal persons complaint rights with competent authorities.
+- Article 39, Right to an effective judicial remedy: covers judicial remedy for legally binding decisions and authority inaction.
+- Article 40, Penalties: requires effective, proportionate, and dissuasive penalties and references GDPR-level fines for certain Chapter II, III, and V infringements within competent authority scope.
+- Article 41, Model contractual terms and standard contractual clauses: requires non-binding model contractual terms for data access and use and standard contractual clauses for cloud computing contracts.
+- Article 42, Role of the EDIB: supports consistent application, cooperation, standards, implementing acts, delegated acts, and interoperability guidelines.
+
+Engineering impact:
+- Keep data access, data sharing, switching, complaint, dispute, request, refusal, suspension, deletion, and owner approval evidence audit-ready.
+- Treat false, missing, stale, or unsupported evidence as a release risk.
+- Coordinate with GDPR, sectoral, data-governance, cloud, procurement, and security owners when authority requests or complaints involve mixed obligations.
+
+## [Chapter X: Sui generis right under Directive 96/9/EC (Article 43)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32023R2854#cpt_X)
+
+Clarifies that the database sui generis right does not apply to databases containing data obtained from or generated by connected products or related services within the scope of the Data Act.
+
+Article map:
+- Article 43, Databases containing certain data: addresses database-right limits for connected-product and related-service data.
+
+Engineering impact:
+- Do not use database-right assumptions as an engineering reason to block access or portability workflows without legal review.
+- Route intellectual-property and database-right interpretations to legal and product owners.
+
+## [Chapter XI: Final provisions (Articles 44-50)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32023R2854#cpt_XI)
+
+Covers relationship with other Union data access laws, delegated and implementing acts, amendments, evaluation, entry into force, and application dates.
+
+Article map:
+- Article 44, Other Union legal acts governing rights and obligations on data access and use: preserves specific data access and use obligations in other Union acts and research access law.
+- Article 45, Exercise of the delegation: governs delegated powers.
+- Article 46, Committee procedure: defines committee procedure for implementing acts.
+- Article 47, Amendment to Regulation (EU) 2017/2394: amends consumer protection cooperation legislation.
+- Article 48, Amendment to Directive (EU) 2020/1828: amends representative actions legislation.
+- Article 49, Evaluation and review: requires Commission evaluation and review.
+- Article 50, Entry into force and application: sets entry into force and application timing.
+
+Engineering impact:
+- Track evolving model terms, standards, implementing acts, delegated acts, sector-specific data-space requirements, and cloud-switching guidance.
+- Review long-lived Java services when product scope, data roles, API exposure, cloud provider, data-space participation, or export obligations change.
+
+## Engineering review focus
+
+When reviewing a Java enterprise system for Data Act-aware controls, connect article themes to evidence:
+- Applicability and role scoping: Articles 1, 2, 7, 12, 24, 31, 44
+- User access and third-party sharing: Articles 3, 4, 5, 6
+- Data holder obligations and technical protection: Articles 8, 9, 10, 11, 12
+- Contract evidence: Articles 13, 25, 28, 29, 41
+- Public-sector exceptional-need requests: Articles 14-22
+- Cloud switching and portability: Articles 23-31, 34, 35
+- Non-personal data and international access safeguards: Articles 28, 32, 37
+- Interoperability, metadata, standards, and smart contracts: Articles 33-36, 42, 45, 46
+- Enforcement, complaints, penalties, and evidence: Articles 37-42
+- Database right and future review: Articles 43-50
+
+## Constraints
+
+Use this reference as EU Data Act context for Java engineering review. Do not provide legal advice or replace review by legal, compliance, privacy, data governance, security, product, procurement, cloud, risk, or business owners.
+
+- **NOT LEGAL ADVICE**: State when an article mapping requires qualified owner review instead of giving legal conclusions
+- **SUMMARY ONLY**: Keep this reference focused on Data Act chapters, articles, and engineering implications; use the engineering examples reference for Java patterns
+- **ARTICLE MAPPING**: Map findings to Data Act topic areas such as access, sharing, portability, metadata, interoperability, public-sector requests, cloud switching, non-personal data safeguards, or enforcement
+- **OWNER ESCALATION**: Escalate applicability, data holder status, user entitlement, data recipient role, trade-secret decisions, contract interpretation, cloud-switching obligations, international access restrictions, and regulatory interpretation to qualified owners
+- **EVIDENCE ORIENTATION**: Use article summaries to identify what engineering evidence is missing or weak, not to certify compliance
+
+
+## Output Format
+
+- **READ** this EU Data Act chapters summary before applying Java examples or generating the review report
+- **MAP** reviewed findings to Data Act topic areas and article groups using only reviewed evidence
+- **ESCALATE** legal applicability, data holder status, user entitlement, recipient roles, trade-secret decisions, contract interpretation, cloud-switching obligations, international access restrictions, and regulatory interpretation to qualified owners
+- **HAND OFF** implementation control patterns to `references/806-regulations-eu-data-act-engineering-examples.md`
+
+
+## Safeguards
+
+- **DO NOT CERTIFY COMPLIANCE**: This reference supports engineering review and owner handoff only
+- **CHECK RELATED LAW**: Personal-data, privacy, sector-specific, competition, IP, trade-secret, and cloud-contract obligations may add or override engineering expectations
+- **KEEP FACTS GROUNDED**: Do not infer data holder status, user entitlement, data recipient role, exceptional need, cloud-switching obligation, or trade-secret outcome without reviewed evidence and qualified owner input

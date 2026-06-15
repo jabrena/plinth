@@ -4,7 +4,7 @@ description: Use when you need to write or review programmatic JDBC in Micronaut
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Micronaut JDBC — programmatic SQL
 
@@ -843,6 +843,7 @@ public void upsertByName(String name) {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** JDBC code for SQL injection risk, parameter binding style, try-with-resources coverage, transaction boundaries, missing `Optional` on single-row queries, exception translation, batch opportunities, and streaming gaps for large result sets
@@ -852,6 +853,7 @@ public void upsertByName(String name) {
 - **TEST** with `@MicronautTest` and Testcontainers (or a test `DataSource`) for realistic database coverage; avoid mocking `DataSource` or `Connection` for behaviour you care about — use real schema with test configuration
 - **RECOMMEND** Micronaut Data (`@512-frameworks-micronaut-data`) when generated repositories and entities fit; keep raw JDBC for ad-hoc SQL, reporting, bulk ETL, and database-specific SQL
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits
+
 
 ## Safeguards
 

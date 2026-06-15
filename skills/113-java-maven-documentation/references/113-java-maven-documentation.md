@@ -4,7 +4,7 @@ description: Use when you need to create a DEVELOPER.md file for a Maven project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Create DEVELOPER.md for the Maven projects
 
@@ -405,6 +405,7 @@ Only include a plugin subsection if the plugin appears in the project `pom.xml`.
 - Only create subsections for plugins actually found in the project `pom.xml` during Step 2
 - For plugins not in the catalog, still add a subsection using your knowledge of the plugin's goals
 - Include a maximum of 8 goals per plugin
+
 
 
 ## Output Format

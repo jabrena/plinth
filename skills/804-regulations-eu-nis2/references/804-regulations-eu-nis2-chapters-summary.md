@@ -1,0 +1,249 @@
+---
+name: 804-regulations-eu-nis2-chapters-summary
+description: Use as a chapter-by-chapter and article-by-article summary of Directive (EU) 2022/2555 to enrich Java enterprise cybersecurity and operational-resilience reviews with NIS2 context.
+license: Apache-2.0
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.16.0
+---
+# NIS2 Regulation for Java Enterprise Cybersecurity Risk Management
+
+## Role
+
+You are a senior Java enterprise architect and cybersecurity risk-management reviewer using the NIS2 Directive article structure to map regulatory themes to engineering controls and owner handoffs
+
+## Goal
+
+Summarize the official chapter, article, and annex structure of Directive (EU) 2022/2555 (NIS2) for engineering review of Java enterprise systems, platforms, managed-service-provider tooling, CI/CD pipelines, operational workflows, and critical-sector services.
+
+Source reviewed: [EUR-Lex Directive (EU) 2022/2555 HTML text](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555).
+
+This reference is not legal advice. Use it to orient engineering discovery, architecture review, cybersecurity evidence collection, release gates, and escalation conversations with legal, compliance, security, risk, resilience, business-continuity, procurement, executive accountability, and business owners.
+
+Use `references/804-regulations-eu-nis2-engineering-examples.md` for Java examples and implementation control patterns. Keep this chapters summary focused on NIS2 Directive structure and article-level obligations.
+
+Report template asset: [NIS2 engineering review report template](../assets/reports/804-nis2-engineering-review-report-template.md).
+
+## [Chapter I: General provisions (Articles 1-6)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555#cpt_I)
+
+Sets the scope, entity classification model, relationship with sector-specific Union acts, minimum harmonisation posture, and definitions. For Java teams, this chapter is the starting point for deciding whether a service, platform, provider integration, SaaS dependency, cloud-hosted workflow, or public-sector system needs NIS2-aware cybersecurity evidence.
+
+Article map:
+- Article 1, Subject matter: establishes a high common level of cybersecurity across the Union and sets Member State, entity, information-sharing, supervision, and enforcement obligations.
+- Article 2, Scope: defines which public and private entities, size thresholds, special inclusions, exemptions, data-protection interactions, and national-security boundaries matter.
+- Article 3, Essential and important entities: distinguishes essential and important entities and requires Member States to establish and update entity lists.
+- Article 4, Sector-specific Union legal acts: explains when equivalent sector-specific cybersecurity or notification rules supersede NIS2 provisions.
+- Article 5, Minimum harmonisation: allows Member States to adopt or maintain higher cybersecurity requirements consistent with Union law.
+- Article 6, Definitions: defines key terms such as network and information system, security of network and information systems, incident, near miss, cyber threat, vulnerability, risk, cybersecurity risk-management measures, significant cyber threat, cloud computing service, managed service provider, managed security service provider, online marketplace, online search engine, social networking services platform, and trust service provider.
+
+Engineering impact:
+- Record whether the Java system supports an Annex I or Annex II sector, an essential or important entity, a critical entity, a managed service provider, a digital infrastructure provider, or another supply-chain dependency.
+- Record Member State geography, entity owner, service owner, security owner, resilience owner, provider owner, and legal/compliance owner.
+- Treat applicability and classification as qualified owner decisions; engineering should collect evidence, not make legal determinations.
+
+## [Chapter II: Coordinated cybersecurity frameworks (Articles 7-13)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555#cpt_II)
+
+Defines Member State cybersecurity strategies, competent authorities, crisis-management authorities, CSIRTs, coordinated vulnerability disclosure, and national cooperation. For engineering review, these articles explain why systems need incident pathways, vulnerability disclosure processes, and evidence that can be shared with the right authorities and internal owners.
+
+Article map:
+- Article 7, National cybersecurity strategy: requires national cybersecurity strategies covering governance, assets, risk, preparedness, recovery, supply-chain security, procurement, vulnerability management, education, information sharing, SME support, and active cyber protection.
+- Article 8, Competent authorities and single points of contact: requires Member States to designate cybersecurity competent authorities and single points of contact with adequate resources.
+- Article 9, National cyber crisis management frameworks: requires cyber crisis management authorities, crisis capabilities, assets, procedures, and national large-scale incident and crisis response plans.
+- Article 10, Computer security incident response teams (CSIRTs): requires CSIRTs with secure communication infrastructure, incident-handling responsibility, cooperation, and ENISA assistance paths.
+- Article 11, Requirements, technical capabilities and tasks of CSIRTs: covers CSIRT availability, secure sites, request routing, confidentiality, staffing, redundancy, monitoring, early warning, incident response, forensic analysis, proactive scanning, and vulnerability coordination.
+- Article 12, Coordinated vulnerability disclosure and a European vulnerability database: establishes CSIRT vulnerability disclosure coordination and ENISA's European vulnerability database.
+- Article 13, Cooperation at national level: requires cooperation among competent authorities, single points of contact, CSIRTs, law enforcement, data protection authorities, DORA authorities, CER authorities, and other sectoral authorities.
+
+Engineering impact:
+- Maintain incident runbooks with severity triage, evidence capture, containment, escalation, reporting handoffs, and contacts.
+- Maintain vulnerability intake, triage, disclosure, remediation, exception, and verification records.
+- Make logs, metrics, traces, alert evidence, affected assets, and provider dependencies reconstructable for internal and external handoffs.
+
+## [Chapter III: Cooperation at Union and international level (Articles 14-19)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555#cpt_III)
+
+Creates Union-level cooperation structures for strategic coordination, operational CSIRT cooperation, large-scale crisis coordination, international agreements, ENISA reporting, and peer review.
+
+Article map:
+- Article 14, Cooperation Group: establishes strategic cooperation, implementation guidance, best-practice exchange, supply-chain risk assessments, mutual-assistance discussion, peer-review methods, and emerging-threat assessment.
+- Article 15, CSIRTs network: establishes operational cooperation, information exchange, coordinated response, cross-border incident assistance, vulnerability disclosure support, and interoperability of information-sharing protocols.
+- Article 16, European cyber crisis liaison organisation network (EU-CyCLONe): supports coordinated management of large-scale cybersecurity incidents and crises.
+- Article 17, International cooperation: permits Union agreements with third countries or international organisations for participation in NIS2 cooperation structures, subject to data protection law.
+- Article 18, Report on the state of cybersecurity in the Union: requires ENISA's biennial report covering threat landscape, capability maturity, cyber hygiene, peer-review outcomes, and policy recommendations.
+- Article 19, Peer reviews: establishes voluntary peer reviews of risk-management measures, reporting obligations, authority capabilities, CSIRT capabilities, mutual assistance, information sharing, and cross-border or cross-sector issues.
+
+Engineering impact:
+- Expect cross-border, cross-sector, and provider dependency questions during serious incidents or regulatory review.
+- Keep cybersecurity evidence structured enough to support peer reviews, authority requests, supply-chain assessments, and lessons-learned reports.
+- Treat incident and vulnerability taxonomy, evidence quality, and information-sharing readiness as architecture concerns.
+
+## [Chapter IV: Cybersecurity risk-management measures and reporting obligations (Articles 20-25)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555#cpt_IV)
+
+This chapter is the most direct source for Java engineering controls. It covers governance liability, baseline risk-management measures, supply-chain assessment, incident notification timelines, certification, and standards.
+
+Article map:
+- Article 20, Governance: requires management bodies of essential and important entities to approve cybersecurity risk-management measures, oversee implementation, and follow training.
+- Article 21, Cybersecurity risk-management measures: requires appropriate and proportionate technical, operational, and organisational measures, including risk analysis, information system security, incident handling, business continuity, backup, disaster recovery, crisis management, supply-chain security, secure acquisition/development/maintenance, vulnerability handling and disclosure, effectiveness assessment, cyber hygiene, training, cryptography and encryption, HR security, access control, asset management, MFA or continuous authentication, secure communications, and emergency communications.
+- Article 22, Union level coordinated security risk assessments of critical supply chains: allows coordinated risk assessments for critical ICT services, systems, or product supply chains.
+- Article 23, Reporting obligations: defines significant incidents, recipient communication, early warning within 24 hours, incident notification within 72 hours, intermediate reporting on request, final reporting not later than one month, trust-service-provider timing, cross-border sharing, public communication, ENISA summary reporting, CER information sharing, and implementing acts.
+- Article 24, Use of European cybersecurity certification schemes: allows Member States to require certified ICT products, services, or processes and encourages qualified trust services.
+- Article 25, Standardisation: encourages European and international standards and technical specifications for network and information system security.
+
+Engineering impact:
+- Require release evidence for risk analysis, asset inventory, secure configuration, vulnerability handling, dependency and provider review, incident handling, monitoring, alerting, backup, restore, continuity, access control, cryptography, and change approval.
+- Build incident timelines into runbooks: early warning, 72-hour notification data, intermediate updates, final report, affected-recipient communication, and law-enforcement handoff where relevant.
+- Treat database migrations, Kafka contracts, IAM changes, dependency upgrades, provider changes, and emergency fixes as cybersecurity risk events requiring traceable review.
+
+## [Chapter V: Jurisdiction and registration (Articles 26-28)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555#cpt_V)
+
+Defines jurisdiction, entity registry obligations, and DNS registration-data obligations. For Java systems with SaaS, cloud, domain, DNS, marketplace, search, social networking, managed service, or managed security service responsibilities, these articles affect ownership and registration evidence.
+
+Article map:
+- Article 26, Jurisdiction and territoriality: defines jurisdiction by establishment, service provision, main establishment, Union representative, and mutual-assistance scenarios.
+- Article 27, Registry of entities: requires ENISA to maintain a registry for DNS, TLD, domain registration, cloud, data centre, CDN, managed service, managed security service, online marketplace, online search engine, and social networking platform providers.
+- Article 28, Database of domain name registration data: requires accurate and complete domain registration data, verification procedures, public non-personal data, and timely access for legitimate access seekers under data-protection law.
+
+Engineering impact:
+- Record main establishment, Member States served, representative where needed, IP ranges where relevant, and service categories.
+- For DNS or domain-related Java platforms, align data quality, access workflows, retention, disclosure policies, and privacy controls with domain registration-data expectations.
+
+## [Chapter VI: Information sharing (Articles 29-30)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555#cpt_VI)
+
+Supports voluntary sharing of cyber-threat, vulnerability, near-miss, indicator, technique, procedure, and defensive information within communities of essential and important entities.
+
+Article map:
+- Article 29, Cybersecurity information-sharing arrangements: enables voluntary cybersecurity information sharing among in-scope entities, other entities, suppliers, and service providers for prevention, detection, response, recovery, awareness, containment, vulnerability remediation, and collaborative research.
+- Article 30, Voluntary notification of relevant information: allows voluntary notification of incidents, cyber threats, and near misses by essential and important entities and other entities, without creating additional obligations only because of the voluntary notification.
+
+Engineering impact:
+- Design evidence-safe threat and vulnerability sharing: redact secrets, personal data, exploit details, provider-confidential data, and regulated records.
+- Track near misses, indicators, configuration recommendations, and mitigation outcomes even when mandatory notification is not triggered.
+
+## [Chapter VII: Supervision and enforcement (Articles 31-37)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555#cpt_VII)
+
+Defines supervision, enforcement, fines, personal-data breach coordination, penalties, and mutual assistance. For engineering teams, this chapter explains why evidence must be audit-ready and why missing controls cannot be treated as informal backlog only.
+
+Article map:
+- Article 31, General aspects concerning supervision and enforcement: requires effective supervision, risk-based prioritisation, GDPR supervisory authority cooperation, and operational independence where applicable.
+- Article 32, Supervisory and enforcement measures in relation to essential entities: enables inspections, supervision, security audits, scans, information requests, data/document access, implementation evidence requests, warnings, binding instructions, orders, monitoring officers, public statements, fines, temporary suspension, and temporary management-function prohibitions.
+- Article 33, Supervisory and enforcement measures in relation to important entities: establishes ex post supervisory measures and enforcement powers for important entities.
+- Article 34, General conditions for imposing administrative fines on essential and important entities: sets fine conditions and maximums for Article 21 and 23 infringements, including at least EUR 10,000,000 or 2% worldwide annual turnover for essential entities and EUR 7,000,000 or 1.4% for important entities.
+- Article 35, Infringements entailing a personal data breach: requires coordination with GDPR supervisory authorities and avoids duplicate administrative fines for the same conduct where GDPR fines apply.
+- Article 36, Penalties: requires Member States to establish effective, proportionate, and dissuasive penalties.
+- Article 37, Mutual assistance: establishes cross-border supervisory and enforcement cooperation, information requests, inspections, targeted audits, and joint supervisory actions.
+
+Engineering impact:
+- Keep cybersecurity policies, audit evidence, scan results, vulnerability triage, incident notifications, corrective actions, and owner approvals accessible and defensible.
+- Treat false, grossly inaccurate, missing, or obstructed evidence as a material risk.
+- Coordinate privacy, incident, and cybersecurity evidence when an incident may involve personal data.
+
+## [Chapter VIII: Delegated and implementing acts (Articles 38-39)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555#cpt_VIII)
+
+Explains how the Commission can adopt delegated acts and implementing acts connected to NIS2.
+
+Article map:
+- Article 38, Exercise of the delegation: governs the Commission's delegated power, including Article 24 certification-related delegated acts.
+- Article 39, Committee procedure: defines the committee procedure for implementing acts.
+
+Engineering impact:
+- Treat NIS2 implementation as a moving target. Track implementing acts, technical and methodological requirements, certification expectations, guidance, and standards.
+- Keep secure configuration and release policies adaptable to updated sectoral or provider-specific requirements.
+
+## [Chapter IX: Final provisions (Articles 40-46)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555#cpt_IX)
+
+Covers review, transposition, amendments, repeal of the previous NIS Directive, entry into force, and addressees.
+
+Article map:
+- Article 40, Review: requires Commission review by 17 October 2027 and every 36 months thereafter.
+- Article 41, Transposition: requires Member States to adopt and publish measures by 17 October 2024 and apply them from 18 October 2024.
+- Article 42, Amendment of Regulation (EU) No 910/2014: deletes Article 19 of the eIDAS Regulation from 18 October 2024.
+- Article 43, Amendment of Directive (EU) 2018/1972: deletes Articles 40 and 41 of the European Electronic Communications Code from 18 October 2024.
+- Article 44, Repeal: repeals Directive (EU) 2016/1148 from 18 October 2024 and maps references through Annex III.
+- Article 45, Entry into force: sets entry into force on the twentieth day following publication in the Official Journal.
+- Article 46, Addressees: addresses the Directive to the Member States.
+
+Engineering impact:
+- Track national transposition, local sector guidance, review cycles, and changes in implementation obligations.
+- Review long-lived Java systems when service scope, Member State coverage, provider role, or criticality changes.
+
+## Annex map for engineering review
+
+The annexes provide the sector and correlation structure that engineering teams need for scoping and traceability.
+
+## Annex I: Sectors of high criticality
+
+Lists sectors and entity types of high criticality:
+- Energy: electricity, district heating and cooling, oil, gas, hydrogen
+- Transport: air, rail, water, road
+- Banking
+- Financial market infrastructures
+- Health
+- Drinking water
+- Waste water
+- Digital infrastructure
+- ICT service management (business-to-business)
+- Public administration
+- Space
+
+Engineering impact:
+- Use Annex I as the first critical-sector scoping checklist for Java platforms, APIs, data stores, CI/CD paths, and provider dependencies.
+- Apply stronger evidence requirements when a service supports health, energy, transport, banking, financial infrastructure, public administration, digital infrastructure, ICT service management, or space services.
+
+## Annex II: Other critical sectors
+
+Lists other critical sectors:
+- Postal and courier services
+- Waste management
+- Manufacture, production, and distribution of chemicals
+- Production, processing, and distribution of food
+- Manufacturing: medical devices and in vitro diagnostics, computer/electronic/optical products, electrical equipment, machinery and equipment, motor vehicles/trailers/semi-trailers, other transport equipment
+- Digital providers: online marketplaces, online search engines, social networking services platforms
+- Research
+
+Engineering impact:
+- Do not limit NIS2 triage to classic infrastructure. Manufacturing, digital providers, food, research, and provider platforms may also need review.
+- Ask whether Java services are internal tooling, production services, managed platforms, or supply-chain dependencies for Annex II entities.
+
+## Annex III: Correlation table
+
+Maps provisions from Directive (EU) 2016/1148 to Directive (EU) 2022/2555.
+
+Engineering impact:
+- Use the correlation table when reviewing legacy NIS controls, older policies, historical runbooks, or audit evidence that still references Directive (EU) 2016/1148.
+- Prefer updating evidence and internal controls to NIS2 article names, especially Articles 20, 21, 23, 31-37, and Annex I/II scope.
+
+## Engineering review focus
+
+When reviewing a Java enterprise system for NIS2-aware controls, connect article themes to evidence:
+- Applicability and owners: Articles 2, 3, 4, 6, 26, 27, Annex I, Annex II
+- Governance and risk ownership: Articles 7, 20, 21
+- Incident readiness and reporting: Articles 9, 10, 11, 13, 16, 23, 30
+- Vulnerability and supply-chain handling: Articles 7, 12, 21, 22, 29
+- Continuity, backup, and recovery: Articles 9, 11, 21
+- Certification, standards, and evolving requirements: Articles 24, 25, 38, 39
+- Supervision, evidence, and enforcement: Articles 31-37
+- Legacy mapping and future review: Articles 40-44, Annex III
+
+## Constraints
+
+Use this reference as NIS2 Directive context for Java engineering review. Do not provide legal advice or replace review by legal, compliance, security, risk, resilience, business-continuity, procurement, executive accountability, or business owners.
+
+- **NOT LEGAL ADVICE**: State when an article mapping requires legal, compliance, security, risk, resilience, or executive accountability review instead of giving legal conclusions
+- **SUMMARY ONLY**: Keep this reference focused on NIS2 Directive chapters, articles, annexes, and engineering implications; use the engineering examples reference for Java patterns
+- **ARTICLE MAPPING**: Map findings to directive topic areas such as applicability, governance, risk management, incident reporting, supply-chain security, supervision, enforcement, or sector scope
+- **OWNER ESCALATION**: Escalate entity classification, Member State applicability, incident-reporting obligations, regulatory interpretation, and risk acceptance to qualified owners
+- **EVIDENCE ORIENTATION**: Use article summaries to identify what engineering evidence is missing or weak, not to certify compliance
+
+
+## Output Format
+
+- **READ** this NIS2 chapters summary before applying Java examples or generating the review report
+- **MAP** reviewed findings to NIS2 topic areas and article groups using only reviewed evidence
+- **ESCALATE** legal applicability, entity classification, Member State transposition, incident-reporting duties, and regulatory interpretation to qualified owners
+- **HAND OFF** implementation control patterns to `references/804-regulations-eu-nis2-engineering-examples.md`
+
+
+## Safeguards
+
+- **DO NOT CERTIFY COMPLIANCE**: This reference supports engineering review and owner handoff only
+- **CHECK NATIONAL TRANSPOSITION**: Member State implementation may add or clarify obligations beyond this summary
+- **KEEP FACTS GROUNDED**: Do not infer entity classification, sector scope, provider responsibility, or incident-reporting obligations without reviewed evidence and qualified owner input

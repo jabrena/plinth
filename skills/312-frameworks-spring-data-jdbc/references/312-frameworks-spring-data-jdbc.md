@@ -4,7 +4,7 @@ description: Use when you need to use Spring Data JDBC with Java records — inc
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Spring Data JDBC with Records
 
@@ -1097,6 +1097,7 @@ class CustomerService {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** persistence code: record/entity mapping, repository APIs, aggregate shape, `@Query` safety, transaction placement, and load patterns (single query vs extra round-trips)
@@ -1106,6 +1107,7 @@ class CustomerService {
 - **EXPLAIN** trade-offs (aggregate size vs query size, explicit SQL vs derived queries, `@Embedded` vs FK reference)
 - **TEST** repository behavior with `@DataJdbcTest` slices seeded via `@Sql`; never mock repositories inside persistence tests
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

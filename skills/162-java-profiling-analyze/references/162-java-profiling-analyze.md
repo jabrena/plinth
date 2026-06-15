@@ -4,7 +4,7 @@ description: Use when you need to analyze Java profiling data collected during t
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Java Profiling Workflow / Step 2 / Analyze profiling data
 
@@ -221,19 +221,22 @@ Focus on high-priority items first.
 3. Plan validation and monitoring approach
 4. Schedule follow-up profiling sessions
 
-**Tools and Techniques:**
+**Approved Analysis Scope:**
 
-**Analysis Tools:**
-- **async-profiler**: Flamegraph generation and CPU/memory profiling
-- **JFR (Java Flight Recorder)**: Low-overhead continuous profiling
-- **JProfiler/YourKit**: Commercial profiling tools for deep analysis
-- **GCViewer**: Garbage collection log analysis
+Select only the user-approved, already installed analyzer needed for the available evidence:
+- **async-profiler**: Existing flamegraph or CPU/memory recording analysis
+- **JFR (Java Flight Recorder)**: Existing JFR recording analysis
+- **JProfiler/YourKit**: Existing export analysis when the project already uses the selected commercial profiler
+- **GCViewer**: Existing garbage collection log analysis
+
+Do not install, launch, or access any profiler outside the selected evidence source.
 
 **Visualization Techniques:**
 - **Flamegraphs**: Call stack visualization
 - **Heatmaps**: Temporal analysis of hotspots
 - **Allocation tracking**: Memory usage patterns
 - **Thread dumps**: Concurrency analysis
+
 
 ## Output Format
 
@@ -242,6 +245,7 @@ Focus on high-priority items first.
 - Prioritize findings using the Impact/Effort scoring framework
 - Generate actionable recommendations with clear implementation steps and expected outcomes
 - Correlate multiple profiling results to identify patterns and validate findings
+
 
 ## Safeguards
 

@@ -4,7 +4,7 @@ description: Use when you need framework-agnostic OpenAPI 3.x guidance — spec 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # OpenAPI 3.x best practices
 
@@ -57,8 +57,8 @@ info:
     name: Apache-2.0
     url: https://www.apache.org/licenses/LICENSE-2.0.html
 servers:
-  - url: https://api.example.com/v2
-    description: Production
+  - url: /v2
+    description: Relative API base path resolved against the trusted deployment host
 tags:
   - name: Orders
     description: Create and query orders
@@ -120,6 +120,7 @@ paths:
         "200":
           description: OK
 ```
+
 
 ## Output Format
 

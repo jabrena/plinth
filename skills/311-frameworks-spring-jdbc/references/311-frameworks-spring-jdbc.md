@@ -4,7 +4,7 @@ description: Use when you need to write or review programmatic JDBC with Spring 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Spring JDBC — JdbcClient (Spring Framework 7+)
 
@@ -1139,6 +1139,7 @@ class BatchImportService {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** JDBC usage: SQL safety, parameter style, mapping approach, transaction boundaries, batch opportunities, exception handling, and whether Spring Data JDBC would simplify the case
@@ -1148,6 +1149,7 @@ class BatchImportService {
 - **TEST** with `@JdbcTest` slice and `@Sql` fixture annotations; verify repository behaviour with integration tests before and after refactoring
 - **EXPLAIN** when to keep programmatic JDBC vs adopt `@312-frameworks-spring-data-jdbc`
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

@@ -4,7 +4,7 @@ description: Use when you need to generate Architecture Decision Records (ADRs) 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Java ADR Generator with interactive conversational approach
 
@@ -418,6 +418,7 @@ ls -la docs/decisions/  # or the directory chosen in Step 1
 - **MUST** include recommendations for ADR maintenance and distribution
 
 
+
 ## Output Format
 
 - Ask ADR questions one by one following the conversational process exactly in Step 2
@@ -427,6 +428,7 @@ ls -la docs/decisions/  # or the directory chosen in Step 1
 - Create the ADR file in the location specified by the user
 - Provide clear progress feedback showing which phase is being executed
 - Provide comprehensive summary of the ADR generated
+
 
 ## Safeguards
 

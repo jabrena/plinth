@@ -4,7 +4,7 @@ description: Use when you need to write fast unit tests for Quarkus applications
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Quarkus Unit Testing
 
@@ -641,6 +641,7 @@ class OrderServiceSpec {          // ✘ "Spec" suffix — Surefire skips this c
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** the test suite: identify which tests need `@QuarkusTest` vs plain JUnit + Mockito, flag unnecessary Quarkus bootstrap for pure domain logic, and spot missing `@InjectMock` / `@InjectSpy` separations, copy-pasted methods suitable for `@ParameterizedTest`, and flaky time or env coupling
@@ -649,6 +650,7 @@ class OrderServiceSpec {          // ✘ "Spec" suffix — Surefire skips this c
 - **IMPLEMENT** changes incrementally; keep tests green after each step and verify with `./mvnw clean verify`
 - **EXPLAIN** when to use `@131-java-testing-unit-testing` vs `@QuarkusTest` vs `@422-frameworks-quarkus-testing-integration-tests` if the user is mixing concerns
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive test refactors
+
 
 ## Safeguards
 

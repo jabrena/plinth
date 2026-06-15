@@ -1,0 +1,271 @@
+---
+name: 805-regulations-eu-cyber-resilience-act-chapters-summary
+description: Use as a chapter-by-chapter, article-by-article, and annex-level summary of Regulation (EU) 2024/2847 to enrich Java product security reviews with Cyber Resilience Act context.
+license: Apache-2.0
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.16.0
+---
+# EU Cyber Resilience Act Regulation for Java Product Security Engineering
+
+## Role
+
+You are a senior Java enterprise architect and product security reviewer using the Cyber Resilience Act article structure to map product-security themes to engineering controls and owner handoffs
+
+## Goal
+
+Summarize the official chapter, article, and annex structure of Regulation (EU) 2024/2847, the Cyber Resilience Act, for engineering review of Java products, libraries, agents, plugins, connected components, product APIs, update mechanisms, CI/CD pipelines, and product security evidence.
+
+Source provenance: EUR-Lex Regulation (EU) 2024/2847 HTML text was reviewed while authoring this bundled summary. Do not fetch or ingest external regulatory web pages at runtime.
+
+This reference is not legal advice. Use it to orient engineering discovery, architecture review, product security evidence collection, release gates, and escalation conversations with legal, compliance, product, product-security, market-access, security, risk, support, executive accountability, and business owners.
+
+Use `references/805-regulations-eu-cyber-resilience-act-engineering-examples.md` for Java examples and implementation control patterns. Keep this chapters summary focused on Cyber Resilience Act structure and article-level obligations.
+
+Report template asset: [Cyber Resilience Act engineering review report template](../assets/reports/805-eu-cyber-resilience-act-engineering-review-report-template.md).
+
+## Chapter I: General provisions (Articles 1-12)
+
+Sets the scope for products with digital elements, product categories, procurement considerations, and interaction with other Union frameworks such as NIS2 and the EU AI Act. For Java teams, this chapter is the starting point for determining whether a service, library, agent, plugin, connected component, remote processing solution, or platform module needs CRA-aware product security evidence.
+
+Article map:
+- Article 1, Subject matter: establishes rules for making products with digital elements available, essential cybersecurity requirements for design, development, production, vulnerability handling, and market surveillance.
+- Article 2, Scope: applies to products with digital elements made available on the market whose intended purpose or reasonably foreseeable use includes a direct or indirect logical or physical data connection to a device or network, with exclusions and interaction with sectoral rules.
+- Article 3, Definitions: defines product with digital elements, remote data processing, cybersecurity risk, software bill of materials, vulnerability, actively exploited vulnerability, incident, economic operator, manufacturer, support period, substantial modification, and CE marking.
+- Article 4, Free movement: protects free movement for compliant products and addresses prototypes or unfinished software used for testing.
+- Article 5, Procurement or use of products with digital elements: allows additional procurement or use requirements and requires public procurement consideration of Annex I requirements and vulnerability handling.
+- Article 6, Requirements for products with digital elements: requires products to meet Annex I Part I and manufacturers' processes to meet Annex I Part II.
+- Article 7, Important products with digital elements: identifies important product categories in Annex III and related conformity assessment implications.
+- Article 8, Critical products with digital elements: covers critical categories in Annex IV and potential European cybersecurity certification requirements.
+- Article 9, Stakeholder consultation: requires consultation when preparing implementing measures, technical descriptions, and reviews.
+- Article 10, Enhancing skills in a cyber resilient digital environment: promotes cybersecurity skills and support for authorities and economic operators.
+- Article 11, General product safety: aligns product safety rules for risks not covered by CRA cybersecurity requirements.
+- Article 12, High-risk AI systems: explains interaction with EU AI Act high-risk AI systems and CRA cybersecurity requirements.
+
+Engineering impact:
+- Record whether the Java software, component, agent, plugin, API, remote processing solution, or update service may be part of a product with digital elements.
+- Record product owner, manufacturer or supplier signals, support owner, security owner, market geography, intended purpose, reasonably foreseeable use, and reasonably foreseeable misuse.
+- Treat product classification, important or critical category, high-risk AI interaction, procurement obligations, and scope exclusions as qualified owner decisions; engineering should collect evidence, not make legal determinations.
+
+## Chapter II: Obligations of economic operators and provisions in relation to free and open-source software (Articles 13-26)
+
+Defines the most direct obligations for product security engineering: manufacturer risk assessment, secure design, due diligence for third-party components, vulnerability handling, support periods, security updates, documentation, user information, reporting, and economic-operator handoffs.
+
+Article map:
+- Article 13, Obligations of manufacturers: requires secure design, cybersecurity risk assessment, third-party component due diligence, vulnerability documentation and remediation, support-period determination, coordinated vulnerability disclosure policies, security update availability, technical documentation, conformity assessment, EU declaration of conformity, CE marking, user information, support-period disclosure, corrective measures, authority cooperation, and SBOM-related implementation acts.
+- Article 14, Reporting obligations of manufacturers: sets notifications for actively exploited vulnerabilities and severe incidents, including early warning within 24 hours, 72-hour notification, final reports, user information, and ENISA or CSIRT handoff through a single reporting platform.
+- Article 15, Voluntary reporting: allows voluntary notification of vulnerabilities, cyber threats, incidents, and near misses.
+- Article 16, Establishment of a single reporting platform: establishes ENISA-managed notification routing and security handling.
+- Article 17, Other provisions related to reporting: covers ENISA trends, public awareness, European vulnerability database additions, helpdesk support, and liability effect of notification.
+- Article 18, Authorised representatives: describes representative mandates and retained manufacturer obligations.
+- Article 19, Obligations of importers: requires importers to verify conformity assessment, CE marking, documentation, manufacturer obligations, vulnerability escalation, corrective measures, and authority cooperation.
+- Article 20, Obligations of distributors: requires distributors to verify CE marking, documentation, manufacturer and importer obligations, vulnerability escalation, corrective measures, and authority cooperation.
+- Article 21, Cases in which obligations of manufacturers apply to importers and distributors: applies manufacturer obligations when importers or distributors market under their name or substantially modify products.
+- Article 22, Other cases in which obligations of manufacturers apply: applies manufacturer obligations to other actors carrying out substantial modifications and making the product available.
+- Article 23, Identification of economic operators: requires traceability of supplied and supplied-to economic operators for 10 years.
+- Article 24, Obligations of open-source software stewards: requires verifiable cybersecurity policy, vulnerability handling support, authority cooperation, and certain reporting obligations where applicable.
+- Article 25, Security attestation of free and open-source software: enables voluntary security attestation programmes for free and open-source software.
+- Article 26, Guidance: requires Commission guidance on scope, remote data processing, free and open-source software, support periods, other Union acts, and substantial modification.
+
+Engineering impact:
+- Require secure-by-design evidence across planning, design, development, production, delivery, maintenance, and support-period phases.
+- Link threat models, secure defaults, vulnerability intake, coordinated disclosure policy, security advisory workflow, update delivery mechanism, SBOM records, dependency review, and support-period decisions to the release record.
+- Escalate economic-operator role, manufacturer status, importer or distributor obligations, substantial modification, Article 14 reporting duties, and open-source steward status to qualified owners.
+
+## Chapter III: Conformity of the product with digital elements (Articles 27-34)
+
+Defines presumption of conformity, EU declaration of conformity, CE marking, technical documentation, and conformity assessment procedures. For engineering review, this chapter explains why product security evidence must be traceable, test-backed, and suitable for qualified conformity or market-access review.
+
+Article map:
+- Article 27, Presumption of conformity: allows harmonised standards, common specifications, or European cybersecurity certification schemes to support presumption of conformity.
+- Article 28, EU declaration of conformity: requires declaration structure, language, updates, single declaration for multiple Union acts, and manufacturer responsibility.
+- Article 29, General principles of the CE marking: applies CE marking general principles.
+- Article 30, Rules and conditions for affixing the CE marking: sets CE marking placement, software placement, notified body number where relevant, and possible security labels or support-period marks.
+- Article 31, Technical documentation: requires documentation containing the means used to satisfy Annex I, before market placement and continuously updated at least during the support period.
+- Article 32, Conformity assessment procedures for products with digital elements: defines internal control, EU-type examination, full quality assurance, certification, and special routes for important and critical products.
+- Article 33, Support measures for microenterprises and small and medium-sized enterprises, including start-ups: covers support, regulatory sandboxes, and simplified technical documentation.
+- Article 34, Mutual recognition agreements: enables mutual recognition agreements for conformity assessment.
+
+Engineering impact:
+- Treat technical documentation as an engineering artifact: architecture, threat model, risk assessment, test reports, SBOM, vulnerability handling process, update mechanism, user instructions, and release evidence should be reviewable.
+- Do not decide conformity assessment route, CE marking, certification, or declaration completeness as an engineer unless qualified and authorised; route decisions to product, legal, compliance, market-access, and notified-body owners.
+
+## Chapter IV: Notification of conformity assessment bodies (Articles 35-51)
+
+Defines notifying authorities, notified bodies, competence, impartiality, subcontracting, notification changes, operational obligations, appeals, information sharing, and coordination.
+
+Article map:
+- Articles 35-38: notification, notifying authorities, authority requirements, and information obligations.
+- Articles 39-47: requirements for notified bodies, presumption of conformity, subsidiaries, application, notification procedure, identification, changes, competence challenges, and operational obligations.
+- Articles 48-51: appeal, information obligations, exchange of experience, and coordination of notified bodies.
+
+Engineering impact:
+- When a product category requires third-party assessment or certification, engineering evidence should be reproducible, testable, and suitable for independent review.
+- Escalate notified-body involvement, assessment scope, certificates, and quality assurance routes to qualified conformity and market-access owners.
+
+## Chapter V: Market surveillance and enforcement (Articles 52-60)
+
+Defines market surveillance, access to data and documentation, procedures for significant cybersecurity risk, Union safeguard procedures, formal non-compliance, joint activities, and sweeps.
+
+Article map:
+- Article 52, Market surveillance and control of products with digital elements in the Union market: designates surveillance authorities and cooperation with CSIRTs, ENISA, data protection authorities, and ADCO.
+- Article 53, Access to data and documentation: grants market surveillance access to data required to assess design, development, production, and vulnerability handling.
+- Article 54, Procedure at national level concerning products with digital elements presenting a significant cybersecurity risk: covers evaluation, corrective action, withdrawal, recall, and Union-wide coordination.
+- Article 55, Union safeguard procedure: covers objections, Commission evaluation, and treatment of standards, certification schemes, or common specification shortcomings.
+- Article 56, Procedure at Union level concerning products with digital elements presenting a significant cybersecurity risk: allows Union-level corrective or restrictive measures.
+- Article 57, Compliant products with digital elements which present a significant cybersecurity risk: allows corrective action even for compliant products when significant risks remain.
+- Article 58, Formal non-compliance: addresses CE marking, declarations, notified body identification, and missing technical documentation.
+- Article 59, Joint activities of market surveillance authorities: supports coordinated compliance activities.
+- Article 60, Sweeps: supports coordinated checks for product categories or products.
+
+Engineering impact:
+- Keep documentation, tests, vulnerability records, update evidence, SBOMs, and support-period decisions accessible and defensible.
+- Treat missing, incomplete, misleading, or untraceable evidence as a product security release risk.
+
+## Chapter VI: Delegated powers and committee procedure (Articles 61-62)
+
+Defines delegated acts and committee procedure for updates and implementing measures.
+
+Article map:
+- Article 61, Exercise of the delegation: governs delegated powers for scope, product categories, support periods, notification conditions, security attestation, certification, declaration, and technical documentation updates.
+- Article 62, Committee procedure: establishes committee procedure for implementing acts.
+
+Engineering impact:
+- Treat CRA implementation as evolving. Track delegated acts, implementing acts, harmonised standards, common specifications, certification schemes, and guidance.
+- Revisit product security evidence when a product category, support period, reporting procedure, or documentation expectation changes.
+
+## Chapter VII: Confidentiality and penalties (Articles 63-65)
+
+Defines confidentiality, penalties, and representative actions.
+
+Article map:
+- Article 63, Confidentiality: protects intellectual property, confidential business information, trade secrets, inspection and investigation effectiveness, public and national security, and proceedings integrity.
+- Article 64, Penalties: establishes administrative fine ranges for Annex I, Articles 13 and 14, other economic-operator obligations, technical documentation, CE marking, conformity, and misleading information.
+- Article 65, Representative actions: applies representative actions for consumer collective interests.
+
+Engineering impact:
+- Preserve product security evidence while redacting source code, secrets, exploit details, personal data, and sensitive vulnerability information where disclosure would be unsafe.
+- Escalate penalty exposure and consumer action risks to legal, compliance, product, market-access, and executive owners.
+
+## Chapter VIII: Transitional and final provisions (Articles 66-71)
+
+Covers amendments, transitional provisions, evaluation, entry into force, and application dates.
+
+Article map:
+- Articles 66-68: amend Regulation (EU) 2019/1020, Directive (EU) 2020/1828, and Regulation (EU) No 168/2013.
+- Article 69, Transitional provisions: addresses certificates and products placed on the market before 11 December 2027, with Article 14 reporting obligations applying to in-scope products placed on the market before that date.
+- Article 70, Evaluation and review: sets review and single reporting platform assessment timing.
+- Article 71, Entry into force and application: applies the Regulation from 11 December 2027, with Article 14 from 11 September 2026 and Chapter IV from 11 June 2026.
+
+Engineering impact:
+- Track readiness dates, legacy product modifications, reporting obligations, and support-period commitments for long-lived Java products.
+- Review product security release gates before substantial modifications, product category changes, or support lifecycle changes.
+
+## Annex map for engineering review
+
+The annexes provide essential cybersecurity requirements, user information, product category, declaration, documentation, and conformity assessment structures that engineering teams need for evidence traceability.
+
+## Annex I: Essential cybersecurity requirements
+
+Part I covers product properties:
+- Risk-appropriate cybersecurity in design, development, and production
+- No known exploitable vulnerabilities when made available on the market
+- Secure-by-default configuration and reset capability
+- Security updates, automatic update defaults where applicable, notification, opt-out, and postponement
+- Protection against unauthorised access through authentication, identity, and access controls
+- Confidentiality, integrity, data minimisation, availability, resilience, attack-surface reduction, exploitation mitigation, activity recording and monitoring, and secure data removal or transfer
+
+Part II covers vulnerability handling:
+- Identify and document vulnerabilities and components, including SBOMs in commonly used machine-readable format
+- Address and remediate vulnerabilities without delay and provide security updates separately from functionality updates where technically feasible
+- Apply regular tests and reviews
+- Publicly disclose fixed vulnerability information when appropriate
+- Enforce coordinated vulnerability disclosure
+- Provide vulnerability reporting contact address
+- Securely distribute updates, including automatic security updates where applicable
+- Disseminate security updates without delay and free of charge unless tailor-made business-user terms apply
+
+Engineering impact:
+- Map code, configuration, tests, threat models, SBOMs, update mechanisms, CVD policy, advisory process, and logging controls directly to Annex I Part I and Part II evidence.
+
+## Annex II: Information and instructions to the user
+
+Requires manufacturer contact details, vulnerability reporting contact, product identification, intended purpose, security properties, significant cybersecurity risk circumstances, declaration access, technical security support, support-period end date, secure installation and operation guidance, security-relevant update instructions, secure decommissioning guidance, automatic update opt-out information, integrator guidance, and optional SBOM access information.
+
+Engineering impact:
+- Product teams need user-facing security documentation, support-period disclosure, secure update instructions, secure decommissioning instructions, and integrator guidance before release.
+
+## Annex III: Important products with digital elements
+
+Lists Class I and Class II important products including identity and privileged access management systems, browsers, password managers, anti-malware, VPNs, network management, SIEM, boot managers, PKI, network interfaces, operating systems, routers, security-related processors and microcontrollers, smart home security products, toys, wearables, hypervisors, container runtimes, firewalls, intrusion detection and prevention systems, and tamper-resistant chips.
+
+Engineering impact:
+- Java services, agents, libraries, installers, device gateways, identity modules, update clients, container tooling, security tooling, or management systems should be checked for important-product signals.
+
+## Annex IV: Critical products with digital elements
+
+Lists critical categories such as hardware devices with security boxes, smart meter gateways and secure cryptoprocessing devices, and smartcards or similar secure elements.
+
+Engineering impact:
+- Escalate critical-product signals immediately to product, security, legal, compliance, market-access, and certification owners.
+
+## Annex V and Annex VI: EU declaration of conformity
+
+Provide the full and simplified EU declaration structures.
+
+Engineering impact:
+- Engineers should provide traceable product identification, standards, certification, test evidence, and technical documentation inputs, but qualified owners decide declaration completeness and CE marking implications.
+
+## Annex VII: Content of the technical documentation
+
+Requires general product description, intended purpose, software versions affecting compliance, user information, design and development information, architecture, vulnerability handling process information, SBOM, coordinated vulnerability disclosure policy, vulnerability reporting contact, secure update distribution choices, production and monitoring processes, cybersecurity risk assessment, support-period rationale, standards or certification references, test reports, EU declaration copy, and SBOM where requested by market surveillance authorities.
+
+Engineering impact:
+- Technical documentation should be generated from engineering evidence rather than reconstructed after release.
+- Architecture diagrams, threat models, SBOMs, test reports, update mechanism descriptions, CVD policy, support-period rationale, and release decisions should be linked before release approval.
+
+## Annex VIII: Conformity assessment procedures
+
+Defines internal control, EU-type examination, conformity to type based on internal production control, and full quality assurance procedures.
+
+Engineering impact:
+- Map evidence to the chosen assessment route only after qualified owners select that route.
+- Keep evidence reproducible and versioned so independent reviewers can assess design, development, production, and vulnerability handling.
+
+## Engineering review focus
+
+When reviewing a Java product or product-adjacent component for CRA-aware controls, connect article themes to evidence:
+- Scope and product category: Articles 1-8, 11-12, Annex III, Annex IV
+- Manufacturer and economic-operator obligations: Articles 13, 18-23
+- Vulnerability handling and reporting: Articles 13-17, 24-25, Annex I Part II
+- Secure-by-design product properties: Article 6, Annex I Part I
+- Technical documentation, conformity, and CE marking: Articles 27-32, Annex V, Annex VI, Annex VII, Annex VIII
+- User instructions and support-period signaling: Article 13, Annex II, Annex VII
+- Market surveillance, corrective action, and evidence access: Articles 52-60
+- Confidentiality, penalties, and consumer actions: Articles 63-65
+- Transition and readiness dates: Articles 69-71
+
+## Constraints
+
+Use this reference as Cyber Resilience Act context for Java product security engineering review. Do not provide legal advice or replace review by legal, compliance, product, product-security, security, market-access, risk, support, executive accountability, or business owners.
+
+- **NOT LEGAL ADVICE**: State when an article mapping requires legal, compliance, product, product-security, security, market-access, risk, support, or executive accountability review instead of giving legal conclusions
+- **SUMMARY ONLY**: Keep this reference focused on Cyber Resilience Act chapters, articles, annexes, and engineering implications; use the engineering examples reference for Java patterns
+- **ARTICLE MAPPING**: Map findings to regulation topic areas such as scope, product category, economic-operator role, secure-by-design requirements, vulnerability handling, reporting, conformity, CE marking, technical documentation, support period, market surveillance, or penalties
+- **OWNER ESCALATION**: Escalate product classification, economic-operator role, conformity assessment, CE marking implications, Article 14 reporting obligations, support-period interpretation, and regulatory interpretation to qualified owners
+- **EVIDENCE ORIENTATION**: Use article summaries to identify what engineering evidence is missing or weak, not to certify compliance
+
+
+## Output Format
+
+- **READ** this Cyber Resilience Act chapters summary before applying Java examples or generating the review report
+- **MAP** reviewed findings to Cyber Resilience Act topic areas and article groups using only reviewed evidence
+- **ESCALATE** product classification, economic-operator role, conformity assessment, CE marking, Article 14 reporting duties, support-period interpretation, and regulatory interpretation to qualified owners
+- **HAND OFF** implementation control patterns to `references/805-regulations-eu-cyber-resilience-act-engineering-examples.md`
+
+
+## Safeguards
+
+- **DO NOT CERTIFY COMPLIANCE**: This reference supports engineering review and owner handoff only
+- **CHECK CURRENT GUIDANCE**: Delegated acts, implementing acts, harmonised standards, common specifications, and market-surveillance guidance may change implementation expectations
+- **KEEP FACTS GROUNDED**: Do not infer product category, operator role, conformity route, reporting obligation, support-period adequacy, or CE marking implication without reviewed evidence and qualified owner input

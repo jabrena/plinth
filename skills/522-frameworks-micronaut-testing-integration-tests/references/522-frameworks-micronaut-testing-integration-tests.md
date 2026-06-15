@@ -4,7 +4,7 @@ description: Use when you need to write or improve integration tests for Microna
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Micronaut Integration Testing
 
@@ -277,6 +277,7 @@ class OrderRepositoryIT extends BaseIntegrationTest {
 // use one abstract BaseIntegrationTest and extend it.
 ```
 
+
 ## Output Format
 
 - **ANALYZE** integration tests: scope (IT vs unit overlap), Testcontainers and TestPropertyProvider wiring (no Spring `@ServiceConnection`), HttpClient assertion quality, data isolation, naming (`*Test`/`*Tests` vs `*IT`/`*AT`), container lifecycle, and whether duplicated Micronaut test setup should become an abstract `BaseIntegrationTest`
@@ -285,6 +286,7 @@ class OrderRepositoryIT extends BaseIntegrationTest {
 - **IMPLEMENT** incrementally; keep `mvn verify` green; align Surefire/Failsafe conventions for `*IT` and `*AT` if the project uses them; when several `*IT` classes share the same stack, **define an abstract `BaseIntegrationTest` first**, then concrete subclasses (same layering as `BaseAcceptanceTest` in `@523-frameworks-micronaut-testing-acceptance-tests`)
 - **EXPLAIN** when to use `@521-frameworks-micronaut-testing-unit-tests` vs full-stack `@MicronautTest` integration
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

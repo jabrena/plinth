@@ -4,7 +4,7 @@ description: Use when you need to write or improve integration tests — includi
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Spring Boot Integration Testing
 
@@ -716,7 +716,6 @@ Description: Configure `maven-surefire-plugin` to include only `*Test` / `*Tests
 <build>
     <plugins>
 
-        <!-- Surefire: fast unit tests only (*Test, *Tests) — "test" phase -->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
@@ -727,14 +726,12 @@ Description: Configure `maven-surefire-plugin` to include only `*Test` / `*Tests
                     <include>**/*Tests.java</include>
                 </includes>
                 <excludes>
-                    <!-- Prevent Surefire from picking up IT/AT classes -->
                     <exclude>**/*IT.java</exclude>
                     <exclude>**/*AT.java</exclude>
                 </excludes>
             </configuration>
         </plugin>
 
-        <!-- Failsafe: integration (*IT) and acceptance (*AT) tests — "integration-test" / "verify" phases -->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-failsafe-plugin</artifactId>
@@ -748,9 +745,7 @@ Description: Configure `maven-surefire-plugin` to include only `*Test` / `*Tests
             <executions>
                 <execution>
                     <goals>
-                        <!-- Runs IT/AT tests in "integration-test" phase -->
                         <goal>integration-test</goal>
-                        <!-- Fails the build in "verify" phase if any IT/AT test failed -->
                         <goal>verify</goal>
                     </goals>
                 </execution>
@@ -760,12 +755,6 @@ Description: Configure `maven-surefire-plugin` to include only `*Test` / `*Tests
     </plugins>
 </build>
 
-<!--
-    Resulting lifecycle:
-      mvn test          → Surefire: *Test, *Tests only (fast)
-      mvn verify        → Surefire: *Test, *Tests  +  Failsafe: *IT, *AT (full safety net)
-      mvn test -DskipITs → skip Failsafe without skipping Surefire
--->
 ```
 
 **Bad example:**
@@ -774,19 +763,12 @@ Description: Configure `maven-surefire-plugin` to include only `*Test` / `*Tests
 <build>
     <plugins>
 
-        <!-- Bad: Surefire only — default includes pick up *IT classes too.
-             *IT tests run in the "test" phase (wrong phase, wrong speed budget).
-             No Failsafe means no "verify" gate: if an IT fails, mvn verify may still
-             report BUILD SUCCESS because Surefire doesn't use the Failsafe safety net. -->
         <plugin>
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-surefire-plugin</artifactId>
             <version>3.5.5</version>
-            <!-- No <includes> / <excludes>: default pattern matches
-                 *Test, *Tests, *TestCase, Test*, AND *IT — mixes phases -->
         </plugin>
 
-        <!-- Missing: maven-failsafe-plugin with integration-test + verify goals -->
 
     </plugins>
 </build>
@@ -903,6 +885,7 @@ class OrderApiIT extends BaseIntegrationTest {
 // fix by extracting BaseIntegrationTest and extending it.
 ```
 
+
 ## Output Format
 
 - **ANALYZE** integration tests: scope (IT vs unit overlap), Testcontainers wiring (`@ServiceConnection` vs `@DynamicPropertySource` vs unnecessary `@Bean` containers), HTTP assertion quality, data isolation, naming, container lifecycle, and whether duplicated stacks should become an abstract `BaseIntegrationTest` or a shared `@ImportTestcontainers` declaration
@@ -911,6 +894,7 @@ class OrderApiIT extends BaseIntegrationTest {
 - **IMPLEMENT** incrementally; keep `mvn verify` green; align Surefire/Failsafe conventions for `*IT` if the project uses them; when several `*IT` classes share the same full-stack setup, **define an abstract `BaseIntegrationTest` first**, then concrete `*IT` subclasses (parallel to `BaseAcceptanceTest` in `@323-frameworks-spring-boot-testing-acceptance-tests`)
 - **EXPLAIN** when to use `@321-frameworks-spring-boot-testing-unit-tests` vs full-stack integration
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

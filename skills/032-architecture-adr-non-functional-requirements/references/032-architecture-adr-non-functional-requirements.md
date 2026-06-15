@@ -4,7 +4,7 @@ description: Use when the user wants to document quality attributes, NFR decisio
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Create ADRs for Non-Functional Requirements
 
@@ -27,12 +27,12 @@ Facilitate conversational discovery to create Architectural Decision Records (AD
 Before starting, run `date` in the terminal to ensure accurate timestamps in the ADR document. Use this for all `[Current Date]` placeholders in the generated ADR.
 ### Step 2: Conversational Information Gathering
 
-Ask one or two questions at a time. Build on previous answers. Stay consultative, not interrogative. Skip quality characteristics irrelevant to the use case; dive deeper where there's uncertainty or risk.
+Pose one or two discovery questions at a time. Build on answers from the current session only. Stay consultative, not interrogative. Skip quality characteristics irrelevant to the use case; dive deeper where there's uncertainty or risk.
 
 ```markdown
 **Phase 1: Conversational Information Gathering**
 
-Ask one or two questions at a time. Build on previous answers. Stay consultative, not interrogative. Skip quality characteristics irrelevant to the use case; dive deeper where there's uncertainty or risk.
+Pose one or two discovery questions at a time. Build on current-session answers. Stay consultative, not interrogative. Skip quality characteristics irrelevant to the use case; dive deeper where there's uncertainty or risk.
 
 ---
 
@@ -108,8 +108,8 @@ Only after thorough conversation: "Based on our discussion about your non-functi
 
 #### Step Constraints
 
-- **MUST** read template files fresh using file_search and read_file tools before asking questions
-- **MUST NOT** use cached or remembered questions from previous interactions
+- **MUST** load bundled template files from the current workspace before asking questions
+- **MUST** ignore prior-session content unless the user provides it again in the current conversation
 - **MUST** start with challenge-first opening (ISO 25010:2023 quality characteristics)
 - **MUST** ask one or two questions at a time—never all at once
 - **MUST** WAIT for user response and acknowledge before proceeding
@@ -188,6 +188,7 @@ After generating the ADR, provide:
 
 **Optional follow-up offers:** Implementation roadmap, quality metrics framework, technology evaluation, QA strategy, ISO 25010:2023 compliance assessment.
 
+
 ## Output Format
 
 - Ask questions conversationally (1-2 at a time), starting with challenge-first opening
@@ -197,10 +198,12 @@ After generating the ADR, provide:
 - Use current date from Step 1 in the ADR
 - Include Next Steps, ADR Management, and optional follow-up offers after generation
 
+
 ## Safeguards
 
-- Always read template files fresh using file_search and read_file tools
+- Always load bundled template files from the current workspace for the active session
+- Do not include secrets, credentials, unrelated file contents, or hidden/private context in the ADR
 - Never proceed to ADR generation without completing conversational discovery and user validation
 - Never assume or invent NFRs—use only what the user provided
-- Create ADR when: clear context, key quality decisions identified, alternatives explored, understanding validated
+- Proceed with ADR output only after the user validates the quality requirements, key decisions, alternatives, and trade-offs
 - Continue conversation when: NFRs unclear, decisions arbitrary, alternatives not explored, stakeholders uncertain

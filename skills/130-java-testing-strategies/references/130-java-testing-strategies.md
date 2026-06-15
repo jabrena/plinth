@@ -4,7 +4,7 @@ description: Use when you need to apply testing strategies for Java code — inc
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Java testing strategies
 
@@ -233,6 +233,7 @@ public class UserValidationPoorTest {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** Java test code to identify gaps in test strategy coverage — RIGHT-BICEP dimensions, A-TRIP characteristics, and CORRECT boundary conditions
@@ -241,6 +242,7 @@ public class UserValidationPoorTest {
 - **IMPLEMENT** comprehensive boundary testing and quality characteristics following RIGHT-BICEP, A-TRIP, and CORRECT principles
 - **EXPLAIN** the applied strategies and their benefits for test coverage, reliability, and maintainability
 - **VALIDATE** that all applied changes compile successfully and tests pass
+
 
 ## Safeguards
 

@@ -1,0 +1,342 @@
+---
+name: 112-java-maven-plugins-profile-jmh
+description: JMH profile guidance for Java microbenchmark support.
+license: Apache-2.0
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.16.0
+---
+# Maven Plugins: pom.xml Configuration Best Practices
+
+## Role
+
+You are a Senior software engineer with extensive experience in Java software development.
+
+## Tone
+
+Treat the user as a knowledgeable partner. Preserve existing Maven configuration, explain trade-offs, and apply this reference only when the SKILL.md question flow selected this plugin or profile.
+
+## Goal
+
+Configure JMH profile only when selected by the user in `112-java-maven-plugins`. Read this reference after the SKILL.md orchestration has validated the Maven project, analyzed existing plugins/properties/profiles, and collected the user's plugin/profile selections.
+
+## Constraints
+
+Apply only the selected JMH profile configuration and preserve existing project configuration.
+
+- Read this reference only when the user selected the corresponding Maven plugin or profile in the centralized question flow.
+- Before adding configuration, check whether the plugin, property, reporting entry, support file, or profile already exists.
+- Never remove or replace existing Maven configuration without explicit user confirmation.
+- Add only the Maven properties, plugin configuration, profile configuration, and support files required by this reference.
+
+## Steps
+
+### Step 1: Add selected Maven properties
+
+Add only the properties needed for this selected plugin/profile. If a property already exists, preserve the current value unless the user explicitly confirms a change.
+
+```xml
+<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+<maven.version>3.9.10</maven.version>
+<jmh.version>1.37</jmh.version>
+<maven-plugin-build-helper.version>3.4.0</maven-plugin-build-helper.version>
+<maven-plugin-compiler.version>3.13.0</maven-plugin-compiler.version>
+<java.version>[USER_SELECTED_JAVA_VERSION]</java.version>
+<maven-plugin-shade.version>3.5.1</maven-plugin-shade.version>
+```
+            ### Step 2: JMH (Java Microbenchmark Harness) Profile Configuration
+
+**Purpose**: Configure JMH (Java Microbenchmark Harness) profile for performance benchmarking with proper source directories and build configuration.
+
+**Dependencies**: Only execute if user selected "JMH" in the SKILL.md question flow. Requires completion of the SKILL.md orchestration steps and selected property handling.
+
+**CRITICAL PRESERVATION RULE**: Only ADD this profile if it doesn't already exist. Never REPLACE or REMOVE existing profiles.
+
+**CRITICAL PREREQUISITE**: This step requires the project to be a single-module Maven project. Multi-module projects are not supported for JMH integration.
+
+## Pre-Implementation Checks
+
+**BEFORE adding JMH profile, perform these mandatory checks:**
+
+1. **Check for multi-module configuration**: Scan pom.xml for `<modules>` section
+
+If `<modules>` section exists: **STOP IMMEDIATELY** and inform user: "JMH profile cannot be added to multi-module Maven projects. JMH requires a single-module project structure for proper benchmark execution. Please configure JMH in individual modules instead."
+
+2. **Check for existing JMH profile**:
+
+If `<profiles>` section with `jmh` profile already exists: Ask user "JMH profile already exists. Do you want to enhance the existing configuration? (y/n)"
+
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing configuration elements only.
+
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "JMH" in the SKILL.md question flow AND project is single-module.
+
+## JMH Profile Configuration
+
+**ADD this profile to the `<profiles>` section in pom.xml ONLY if it doesn't already exist:**
+
+```xml
+<profile>
+<id>jmh</id>
+<activation>
+    <activeByDefault>false</activeByDefault>
+</activation>
+<dependencies>
+    <dependency>
+        <groupId>org.openjdk.jmh</groupId>
+        <artifactId>jmh-core</artifactId>
+        <version>${jmh.version}</version>
+    </dependency>
+    <dependency>
+        <groupId>org.openjdk.jmh</groupId>
+        <artifactId>jmh-generator-annprocess</artifactId>
+        <version>${jmh.version}</version>
+        <scope>provided</scope>
+    </dependency>
+</dependencies>
+<build>
+    <plugins>
+        <!-- Add benchmark source directory -->
+        <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>build-helper-maven-plugin</artifactId>
+            <version>${maven-plugin-build-helper.version}</version>
+            <executions>
+                <execution>
+                    <id>add-jmh-source</id>
+                    <phase>generate-sources</phase>
+                    <goals>
+                        <goal>add-source</goal>
+                    </goals>
+                    <configuration>
+                        <sources>
+                            <source>src/jmh/java</source>
+                        </sources>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+
+        <!-- Compile JMH benchmarks -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-compiler-plugin</artifactId>
+            <version>${maven-plugin-compiler.version}</version>
+            <configuration>
+                <release>${java.version}</release>
+                <annotationProcessorPaths>
+                    <path>
+                        <groupId>org.openjdk.jmh</groupId>
+                        <artifactId>jmh-generator-annprocess</artifactId>
+                        <version>${jmh.version}</version>
+                    </path>
+                </annotationProcessorPaths>
+            </configuration>
+        </plugin>
+
+        <!-- Create executable benchmark JAR -->
+        <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-shade-plugin</artifactId>
+            <version>${maven-plugin-shade.version}</version>
+            <executions>
+                <execution>
+                    <phase>package</phase>
+                    <goals>
+                        <goal>shade</goal>
+                    </goals>
+                    <configuration>
+                        <finalName>jmh-benchmarks</finalName>
+                        <transformers>
+                            <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                <mainClass>org.openjdk.jmh.Main</mainClass>
+                            </transformer>
+                            <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
+                        </transformers>
+                        <filters>
+                            <filter>
+                                <!-- Exclude signatures -->
+                                <artifact>*:*</artifact>
+                                <excludes>
+                                    <exclude>META-INF/*.SF</exclude>
+                                    <exclude>META-INF/*.DSA</exclude>
+                                    <exclude>META-INF/*.RSA</exclude>
+                                    <exclude>META-INF/MANIFEST.MF</exclude>
+                                </excludes>
+                            </filter>
+                        </filters>
+                    </configuration>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+</profile>
+```
+
+## Directory Structure Setup
+
+**After adding the profile, create the benchmark source directory:**
+
+```bash
+# Create JMH source directory
+mkdir -p src/jmh/java
+
+# Create sample benchmark directory structure based on main package
+# Example: if main package is com.example.demo, create:
+mkdir -p src/jmh/java/com/example/demo/benchmarks
+```
+
+## Implementation Guidelines
+
+1. **Verify single-module structure**: Ensure no `<modules>` section exists in pom.xml
+2. **Create benchmark source directory**: `src/jmh/java` for benchmark classes
+3. **Follow JMH naming conventions**: Benchmark classes should end with `Benchmark` suffix
+4. **Package structure**: Mirror main source package structure in `src/jmh/java`
+
+## Sample Benchmark Class
+
+**Create a sample benchmark in `src/jmh/java/[your-package]/benchmarks/FibonacciBenchmark.java`:**
+
+```java
+package info.jab.benchmarks;
+
+import org.openjdk.jmh.annotations.Benchmark;
+import org.openjdk.jmh.annotations.BenchmarkMode;
+import org.openjdk.jmh.annotations.Fork;
+import org.openjdk.jmh.annotations.Measurement;
+import org.openjdk.jmh.annotations.Mode;
+import org.openjdk.jmh.annotations.OutputTimeUnit;
+import org.openjdk.jmh.annotations.Scope;
+import org.openjdk.jmh.annotations.State;
+import org.openjdk.jmh.annotations.Warmup;
+import org.openjdk.jmh.results.format.ResultFormatType;
+import org.openjdk.jmh.runner.Runner;
+import org.openjdk.jmh.runner.RunnerException;
+import org.openjdk.jmh.runner.options.Options;
+import org.openjdk.jmh.runner.options.OptionsBuilder;
+import java.util.concurrent.TimeUnit;
+
+@BenchmarkMode(Mode.AverageTime)
+@OutputTimeUnit(TimeUnit.NANOSECONDS)
+@State(Scope.Benchmark)
+@Fork(value = 2, jvmArgs = {"-Xms2G", "-Xmx2G"})
+@Warmup(iterations = 3)
+@Measurement(iterations = 5)
+public class FibonacciBenchmark {
+
+private static final int FIBONACCI_N = 20;
+
+@Benchmark
+public long testFibonacciRecursive() {
+    return FibonacciCalculator.fibonacciRecursive(FIBONACCI_N);
+}
+
+@Benchmark
+public long testFibonacciIterative() {
+    return FibonacciCalculator.fibonacciIterative(FIBONACCI_N);
+}
+
+/**
+    * Inner class that implements Fibonacci calculation in two different ways
+    */
+static class FibonacciCalculator {
+
+    /**
+        * Recursive implementation of Fibonacci sequence
+        * Time complexity: O(2^n) - exponential
+        * Space complexity: O(n) - due to call stack
+        */
+    public static long fibonacciRecursive(int n) {
+        if (n <= 1) {
+            return n;
+        }
+        return fibonacciRecursive(n - 1) + fibonacciRecursive(n - 2);
+    }
+
+    /**
+        * Iterative implementation of Fibonacci sequence
+        * Time complexity: O(n) - linear
+        * Space complexity: O(1) - constant
+        */
+    public static long fibonacciIterative(int n) {
+        if (n <= 1) {
+            return n;
+        }
+
+        long prev = 0;
+        long curr = 1;
+
+        for (int i = 2; i <= n; i++) {
+            long next = prev + curr;
+            prev = curr;
+            curr = next;
+        }
+
+        return curr;
+    }
+}
+
+/**
+    * Main method to run benchmarks with JSON output configuration
+    */
+public static void main(String[] args) throws RunnerException {
+    Options options = new OptionsBuilder()
+            .include(FibonacciBenchmark.class.getSimpleName())
+            .resultFormat(ResultFormatType.JSON)
+            .result("jmh-fibonacci-benchmark-results.json")
+            .build();
+
+    new Runner(options).run();
+}
+}
+```
+
+## Validation
+
+After adding this profile, verify the configuration:
+
+```bash
+# Test JMH profile compilation
+./mvnw clean compile -Pjmh
+
+# Build JMH benchmarks
+./mvnw clean package -Pjmh
+
+# Verify JAR creation
+ls target/jmh-benchmarks.jar
+
+# List available benchmarks
+java -jar target/jmh-benchmarks.jar -l
+
+# Show help
+java -jar target/jmh-benchmarks.jar -h
+
+# Run benchmark
+java -cp target/jmh-benchmarks.jar info.jab.demo.benchmarks.FibonacciBenchmark -wi 1 -i 1 -f 1
+
+# Verify that results are generated
+ls jmh-fibonacci-benchmark-results.json
+
+# Share references to JMH
+
+- https://openjdk.org/projects/code-tools/jmh/
+- https://jmh.morethan.io
+```
+                
+            
+            
+#### Step Constraints
+
+- **MUST** only add JMH profile if "JMH" was selected in the SKILL.md question flow
+- **MUST** verify project is single-module (no `<modules>` section) before proceeding
+- **MUST** check if profile already exists before adding
+- **MUST** ask user permission before modifying existing profile configuration
+- **MUST** use selected version properties for plugin and dependency versions
+- **MUST** create `src/jmh/java` directory structure for benchmarks
+- **MUST** skip this step entirely if JMH was not selected OR if project has modules
+- **MUST** stop immediately and inform user if multi-module project detected
+- **MUST** configure build-helper-maven-plugin to add JMH source directory
+- **MUST** configure maven-shade-plugin to create executable benchmark JAR
+- **MUST** verify that JSON report is generated by executing benchmark and checking for `jmh-fibonacci-benchmark-results.json fil`

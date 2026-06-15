@@ -4,7 +4,7 @@ description: Use when you need to design or implement Kafka messaging in Spring 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Spring Boot — Kafka messaging
 

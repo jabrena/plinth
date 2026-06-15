@@ -4,7 +4,7 @@ description: Use when you need to implement or improve distributed tracing with 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Java Distributed Tracing with OpenTelemetry
 
@@ -417,12 +417,14 @@ public final class ShippingServiceBad {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** tracing gaps across span modeling, propagation, and semantic consistency
 - **APPLY** OpenTelemetry instrumentation with clear parent/child relationships and stable names
 - **HARDEN** attributes/events/status and remove sensitive or high-cardinality data
 - **VALIDATE** end-to-end trace continuity in tests and runtime backends
+
 
 ## Safeguards
 

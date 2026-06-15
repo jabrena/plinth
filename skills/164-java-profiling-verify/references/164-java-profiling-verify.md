@@ -4,7 +4,7 @@ description: Use when you need to verify Java performance optimizations by compa
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Java Profiling Workflow / Step 4 / Verify results
 
@@ -329,6 +329,7 @@ echo "Final results: $(ls profiler/docs/profiling-final-results-[0-9][0-9][0-9][
 ```
 
             
+
 ## Output Format
 
 - Generate post-refactoring profiling reports using identical test conditions as baseline
@@ -337,6 +338,7 @@ echo "Final results: $(ls profiler/docs/profiling-final-results-[0-9][0-9][0-9][
 - Validate that performance optimization goals were achieved through rigorous measurement
 - Identify any performance regressions introduced during optimization efforts
 - Provide clear recommendations for production deployment and ongoing monitoring
+
 
 ## Safeguards
 
