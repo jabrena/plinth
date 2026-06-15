@@ -4,7 +4,7 @@ description: Use when you need to generate or improve Java project documentation
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Java Documentation Generator with modular step-based configuration
 
@@ -64,9 +64,9 @@ Options:
 **Question 2**: What is your preferred approach for handling existing documentation files?
 
 Options:
-- Overwrite existing files (replace content completely)
+- Apply an approved replacement to existing files
 - Add new information (merge with existing content intelligently)
-- Create backup before modifying (save original as .backup)
+- Create backup before approved edits (save original as .backup)
 - Skip files that already exist
 
 ---
@@ -334,9 +334,9 @@ package [package.name];
 
 ## File Handling Options
 
-### Overwrite
-- Replace existing file content completely
-- Create backup with .backup extension before overwriting
+### Approved Replacement
+- Apply replacement content only after explicit user approval
+- Create backup with .backup extension before applying the replacement
 
 ### Add New Information
 - Parse existing README.md to identify existing sections
@@ -390,9 +390,9 @@ package [package.name];
 
 **Based on user selection in Step 1:**
 
-- **Overwrite**: Replace existing README.md completely (after creating backup)
+- **Apply approved replacement**: Replace existing README.md only after explicit user approval and backup creation
 - **Add new information**: Intelligently merge with existing content, adding missing sections
-- **Create backup**: Save original as README.md.backup before modifying
+- **Create backup**: Save original as README.md.backup before applying approved edits
 - **Skip files**: Only generate README.md if it doesn't already exist
 
 ## Content Quality Requirements
@@ -417,7 +417,7 @@ After generating README.md files, verify they contain:
 - **MUST** use codebase_search extensively to understand project functionality
 - **MUST** generate accurate and comprehensive software descriptions
 - **MUST** follow user's file handling preference from Step 1
-- **MUST** create backups if overwriting existing files
+- **MUST** create backups before applying approved replacements to existing files
 - **MUST** respect documentation style preference from Step 1
 - **MUST** read implementation template fresh using file_search and read_file tools
 - **MUST NOT** use generic or placeholder content
@@ -510,9 +510,9 @@ package [package.name];
 
 **Based on user selection in Step 1:**
 
-- **Overwrite**: Replace existing package-info.java completely (after creating backup)
+- **Apply approved replacement**: Replace existing package-info.java only after explicit user approval and backup creation
 - **Add new information**: Enhance existing package-info.java by adding missing documentation elements
-- **Create backup**: Save original as package-info.java.backup before modifying
+- **Create backup**: Save original as package-info.java.backup before applying approved edits
 - **Skip files**: Only generate package-info.java if it doesn't already exist in the package
 
 ## Content Quality Requirements
@@ -548,7 +548,7 @@ After generating package-info.java files:
 - **MUST** follow user's detail level preference from Step 1
 - **MUST** follow user's file handling preference from Step 1
 - **MUST** use proper Javadoc formatting and syntax
-- **MUST** create backups if overwriting existing files
+- **MUST** create backups before applying approved replacements to existing files
 - **MUST** include valid {@link} references to main classes
 - **MUST** ensure all generated files compile without errors
 - **MUST NOT** use generic or templated descriptions
@@ -631,9 +631,9 @@ After generating package-info.java files:
 
 **Based on user selection in Step 1:**
 
-- **Overwrite**: Replace existing Javadoc completely (after creating backup)
+- **Apply approved replacement**: Replace existing Javadoc only after explicit user approval and backup creation
 - **Add new information**: Enhance existing Javadoc by adding missing tags and descriptions
-- **Create backup**: Save original files with .backup extension before modifying
+- **Create backup**: Save original files with .backup extension before applying approved edits
 - **Skip files**: Only add Javadoc where none exists
 
 ## Content Quality Requirements
@@ -670,7 +670,7 @@ After enhancing Javadoc:
 - **MUST** follow user's detail level preference from Step 1
 - **MUST** follow user's file handling preference from Step 1
 - **MUST** use proper Javadoc formatting and syntax
-- **MUST** create backups if overwriting existing documentation
+- **MUST** create backups before applying approved replacements to existing documentation
 - **MUST** include all necessary @param, @return, and @throws tags
 - **MUST** ensure all generated Javadoc compiles without errors
 - **MUST** validate Javadoc generation with `./mvnw javadoc:javadoc`
@@ -775,6 +775,7 @@ If validation passes, documentation generation is complete and successful.
 - **MUST** run final `./mvnw clean verify` to ensure project builds successfully
 
 
+
 ## Output Format
 
 - Ask documentation questions one by one following the template exactly in Step 1
@@ -785,11 +786,12 @@ If validation passes, documentation generation is complete and successful.
 - Provide clear progress feedback showing which step is being executed
 - Provide comprehensive summary of all documentation generated
 
+
 ## Safeguards
 
-- **NEVER remove or replace existing documentation** without explicit user consent and backup
-- **ASK USER before overriding** any existing documentation files
-- **CREATE BACKUPS** when overwriting existing files
+- **NEVER remove or replace existing project documentation** without explicit user consent and backup
+- **ASK USER before applying a replacement** to any existing project documentation files
+- **CREATE BACKUPS** before applying approved replacements to existing files
 - Verify changes with the command: `mvn compile` for package-info.java validation
 - Verify changes with the command: `mvn javadoc:javadoc` for Javadoc validation
 - Always read template files fresh using file_search and read_file tools

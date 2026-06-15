@@ -1,0 +1,374 @@
+---
+name: 121-java-object-oriented-design-methods
+description: Method design guidance covering validation, defensive copies, signatures, collections, and Optional.
+license: Apache-2.0
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.16.0
+---
+# Java Object-Oriented Design Guidelines
+
+## Role
+
+You are a Senior software engineer with extensive experience in Java software development.
+
+## Goal
+
+Improve method contracts when the skill orchestration identifies parameter, defensive-copy, signature, null-return, or Optional problems.
+Read this reference only after `121-java-object-oriented-design` has compiled the project and classified this concern as applicable.
+
+## Constraints
+
+Apply only guidance relevant to the diagnosed concern and preserve observable behavior.
+
+- Read this reference only when the SKILL.md orchestration maps the request or code problem to this concern.
+- Apply focused, incremental refactorings and preserve existing business behavior.
+- Do not broaden the change into unrelated object-oriented design concerns.
+
+## Examples
+
+### Table of contents
+
+- Example 1: Method Design
+- Example 2: Check Parameters for Validity
+- Example 3: Make Defensive Copies When Needed
+- Example 4: Design Method Signatures Carefully
+- Example 5: Return Empty Collections or Arrays, Not Nulls
+- Example 6: Return Optionals Judiciously
+
+### Example 1: Method Design
+
+Title: Design Methods for Clarity, Safety, and Usability
+Description: Well-designed methods are the building blocks of maintainable code. These practices ensure methods are robust, clear, and easy to use correctly.
+
+### Example 2: Check Parameters for Validity
+
+Title: Validate method parameters early and clearly
+Description: Fail fast by checking parameters at the beginning of methods. This makes debugging easier and prevents corruption of object state.
+
+**Good example:**
+
+```java
+public class MathUtils {
+    /**
+     * Returns a BigInteger whose value is (this mod m).
+     * @param m the modulus, which must be positive
+     * @return this mod m
+     * @throws ArithmeticException if m <= 0
+     */
+    public BigInteger mod(BigInteger m) {
+        if (m.signum() <= 0) {
+            throw new ArithmeticException("Modulus <= 0: " + m);
+        }
+        // ... do the computation
+        return this;
+    }
+
+    /**
+     * Returns the index of the first occurrence of needle in haystack,
+     * or -1 if needle is not contained in haystack.
+     * @param haystack the string to search in
+     * @param needle the string to search for
+     * @throws NullPointerException if haystack or needle is null
+     */
+    public static int indexOf(String haystack, String needle) {
+        Objects.requireNonNull(haystack, "haystack");
+        Objects.requireNonNull(needle, "needle");
+        // ... do the search
+        return haystack.indexOf(needle);
+    }
+}
+```
+
+**Bad example:**
+
+```java
+public class MathUtils {
+    public BigInteger mod(BigInteger m) {
+        // No parameter validation - could cause confusing errors later
+        // ... do the computation
+        return this;
+    }
+
+    public static int indexOf(String haystack, String needle) {
+        // No null checks - will throw NullPointerException at some random point
+        return haystack.indexOf(needle);
+    }
+}
+```
+
+### Example 3: Make Defensive Copies When Needed
+
+Title: Protect against malicious or accidental modification of mutable parameters
+Description: When accepting mutable objects as parameters or returning them, make defensive copies to maintain class invariants.
+
+**Good example:**
+
+```java
+public final class Period {
+    private final Date start;
+    private final Date end;
+
+    /**
+     * @param start the beginning of the period
+     * @param end the end of the period; must not precede start
+     * @throws IllegalArgumentException if start is after end
+     * @throws NullPointerException if start or end is null
+     */
+    public Period(Date start, Date end) {
+        this.start = new Date(start.getTime());  // Defensive copy
+        this.end = new Date(end.getTime());      // Defensive copy
+
+        if (this.start.compareTo(this.end) > 0) {
+            throw new IllegalArgumentException(this.start + " after " + this.end);
+        }
+    }
+
+    public Date start() {
+        return new Date(start.getTime());  // Defensive copy on return
+    }
+
+    public Date end() {
+        return new Date(end.getTime());    // Defensive copy on return
+    }
+}
+```
+
+**Bad example:**
+
+```java
+public final class Period {
+    private final Date start;
+    private final Date end;
+
+    public Period(Date start, Date end) {
+        if (start.compareTo(end) > 0) {
+            throw new IllegalArgumentException(start + " after " + end);
+        }
+        this.start = start;  // No defensive copy - client can modify after construction
+        this.end = end;      // No defensive copy - client can modify after construction
+    }
+
+    public Date start() {
+        return start;  // No defensive copy - client can modify internal state
+    }
+
+    public Date end() {
+        return end;    // No defensive copy - client can modify internal state
+    }
+}
+```
+
+### Example 4: Design Method Signatures Carefully
+
+Title: Choose method names carefully and avoid long parameter lists
+Description: Good method signatures are self-documenting and hard to use incorrectly.
+
+**Good example:**
+
+```java
+public class UserService {
+    // Clear, descriptive method names
+    public User createUser(String username, String email, LocalDate birthDate) {
+        // Implementation
+        return new User(username, email, birthDate);
+    }
+
+    // Use builder pattern for many parameters
+    public static class UserBuilder {
+        private String username;
+        private String email;
+        private LocalDate birthDate;
+        private String firstName;
+        private String lastName;
+        private Address address;
+
+        public UserBuilder username(String username) { this.username = username; return this; }
+        public UserBuilder email(String email) { this.email = email; return this; }
+        public UserBuilder birthDate(LocalDate birthDate) { this.birthDate = birthDate; return this; }
+        public UserBuilder firstName(String firstName) { this.firstName = firstName; return this; }
+        public UserBuilder lastName(String lastName) { this.lastName = lastName; return this; }
+        public UserBuilder address(Address address) { this.address = address; return this; }
+
+        public User build() {
+            return new User(this);
+        }
+    }
+
+    // Use helper classes to group related parameters
+    public void updateUserProfile(User user, ProfileUpdate update) {
+        // Implementation
+    }
+}
+
+class ProfileUpdate {
+    private final String firstName;
+    private final String lastName;
+    private final Address address;
+
+    // Constructor and getters
+}
+```
+
+**Bad example:**
+
+```java
+public class UserService {
+    // Unclear method name and too many parameters
+    public User doUserStuff(String s1, String s2, int d, int m, int y,
+                           String s3, String s4, String s5, String s6, String s7) {
+        // What do these parameters mean?
+        return new User(s1, s2, LocalDate.of(y, m, d));
+    }
+
+    // Ambiguous parameter types
+    public void updateUser(String username, String data) {
+        // What kind of data? How is it formatted?
+    }
+}
+```
+
+### Example 5: Return Empty Collections or Arrays, Not Nulls
+
+Title: Never return null from methods that return collections or arrays
+Description: Returning null forces clients to handle null checks and is a common source of bugs.
+
+**Good example:**
+
+```java
+public class ShoppingCart {
+    private final List<Item> items = new ArrayList<>();
+
+    /**
+     * Returns a list of items in the cart.
+     * @return the items in the cart (never null, but may be empty)
+     */
+    public List<Item> getItems() {
+        return new ArrayList<>(items);  // Return copy of list, never null
+    }
+
+    /**
+     * Returns items matching the given category.
+     * @param category the category to filter by
+     * @return matching items (never null, but may be empty)
+     */
+    public List<Item> getItemsByCategory(String category) {
+        return items.stream()
+                   .filter(item -> category.equals(item.getCategory()))
+                   .collect(Collectors.toList());  // Returns empty list if no matches
+    }
+
+    /**
+     * Returns an array of item names.
+     * @return array of item names (never null, but may be empty)
+     */
+    public String[] getItemNames() {
+        return items.stream()
+                   .map(Item::getName)
+                   .toArray(String[]::new);  // Returns empty array if no items
+    }
+}
+```
+
+**Bad example:**
+
+```java
+public class ShoppingCart {
+    private final List<Item> items = new ArrayList<>();
+
+    public List<Item> getItems() {
+        return items.isEmpty() ? null : new ArrayList<>(items);  // Bad: returns null
+    }
+
+    public List<Item> getItemsByCategory(String category) {
+        List<Item> result = items.stream()
+                                .filter(item -> category.equals(item.getCategory()))
+                                .collect(Collectors.toList());
+        return result.isEmpty() ? null : result;  // Bad: returns null
+    }
+
+    public String[] getItemNames() {
+        if (items.isEmpty()) {
+            return null;  // Bad: returns null instead of empty array
+        }
+        return items.stream()
+                   .map(Item::getName)
+                   .toArray(String[]::new);
+    }
+}
+```
+
+### Example 6: Return Optionals Judiciously
+
+Title: Use Optional for methods that may not return a value, but use it carefully
+Description: Optional is intended for return types where there might legitimately be no result and the client needs to perform special processing.
+
+**Good example:**
+
+```java
+public class UserRepository {
+    private final Map<String, User> users = new HashMap<>();
+
+    /**
+     * Finds a user by username.
+     * @param username the username to search for
+     * @return an Optional containing the user if found, empty otherwise
+     */
+    public Optional<User> findByUsername(String username) {
+        return Optional.ofNullable(users.get(username));
+    }
+
+    /**
+     * Gets the maximum age among all users.
+     * @return an Optional containing the max age if users exist, empty otherwise
+     */
+    public OptionalInt getMaxAge() {
+        return users.values().stream()
+                   .mapToInt(User::getAge)
+                   .max();
+    }
+}
+
+// Usage
+Optional<User> user = repository.findByUsername("john");
+if (user.isPresent()) {
+    System.out.println("Found user: " + user.get().getName());
+} else {
+    System.out.println("User not found");
+}
+
+// Or with functional style
+repository.findByUsername("john")
+         .ifPresentOrElse(
+             u -> System.out.println("Found: " + u.getName()),
+             () -> System.out.println("User not found")
+         );
+```
+
+**Bad example:**
+
+```java
+public class UserRepository {
+    private final Map<String, User> users = new HashMap<>();
+
+    // Bad: Using Optional for fields
+    private Optional<String> defaultUsername = Optional.empty();
+
+    // Bad: Using Optional for parameters
+    public void updateUser(Optional<String> username, Optional<String> email) {
+        // This makes the API harder to use
+    }
+
+    // Bad: Using Optional for collections
+    public Optional<List<User>> getAllUsers() {
+        return users.isEmpty() ? Optional.empty() : Optional.of(new ArrayList<>(users.values()));
+        // Should just return empty list instead
+    }
+
+    // Bad: Optional in performance-critical code where null would be fine
+    public Optional<User> findByUsernameInLoop(String username) {
+        // If this is called in a tight loop, the Optional allocation overhead matters
+        return Optional.ofNullable(users.get(username));
+    }
+}
+```

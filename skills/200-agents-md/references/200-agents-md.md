@@ -4,7 +4,7 @@ description: Use when you need to generate an AGENTS.md file for a Java reposito
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # AGENTS.md Generator for Java repositories
 
@@ -231,7 +231,7 @@ Document each command with a comment and the command. Use a bash code block:
 After generating AGENTS.md:
 1. Verify all 6 sections are present
 2. Ensure markdown formatting is correct (headers, lists, code blocks)
-3. Confirm boundaries use ✅ **Always do**, ⚠️ **Ask first**, 🚫 **Never do** formatting
+3. Confirm boundaries use ✅ **Always do**, ⚠ **Ask first**, 🚫 **Never do** formatting
 
 #### Step Constraints
 
@@ -242,6 +242,7 @@ After generating AGENTS.md:
 - **MUST** ask user about existing AGENTS.md before overwriting
 
 
+
 ## Output Format
 
 - Ask questions one by one following the template exactly in Step 1
@@ -249,6 +250,7 @@ After generating AGENTS.md:
 - Map each question answer to the corresponding AGENTS.md section
 - Follow the implementation template structure for output format
 - Provide clear progress feedback showing which step is being executed
+
 
 ## Safeguards
 

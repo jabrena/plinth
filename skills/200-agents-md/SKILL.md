@@ -4,7 +4,7 @@ description: Use when you need to generate an AGENTS.md file for a Java reposito
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # AGENTS.md Generator for Java repositories
 
@@ -18,7 +18,7 @@ Generate a comprehensive AGENTS.md file for Java repositories through a modular,
 - File structure mapping with read/write boundaries
 - Command catalogue for build/test/deploy/run workflows
 - Git workflow conventions: branching strategy, commit message format
-- Contributor boundaries using ✅ Always do / ⚠️ Ask first / 🚫 Never do formatting
+- Contributor boundaries using ✅ Always do / ⚠ Ask first / 🚫 Never do formatting
 
 ## Constraints
 
@@ -52,7 +52,7 @@ Gather role, tech stack, commands, workflow, and boundaries in a modular step-ba
 
 4. **Generate AGENTS.md artifact**
 
-Create AGENTS.md with ✅ Always do / ⚠️ Ask first / 🚫 Never do boundaries and repository-specific conventions.
+Create AGENTS.md with ✅ Always do / ⚠ Ask first / 🚫 Never do boundaries and repository-specific conventions.
 
 ## Reference
 

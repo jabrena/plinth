@@ -4,7 +4,7 @@ description: Use when you need to write unit tests for Spring Boot applications 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Spring Boot Unit Testing with Mockito
 
@@ -843,6 +843,7 @@ class MockExternalServiceClient implements ExternalServiceClient { }
 class FakeExternalServiceClient implements ExternalServiceClient { }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** the test suite: pure Mockito vs slice tests, unnecessary `@SpringBootTest`, missing `@MockitoBean`/`@MockBean`, JSON coverage, and flaky time or environment
@@ -851,6 +852,7 @@ class FakeExternalServiceClient implements ExternalServiceClient { }
 - **IMPLEMENT** changes incrementally; keep tests green after each step
 - **EXPLAIN** when to use `@131-java-testing-unit-testing` vs `@322-frameworks-spring-boot-testing-integration-tests` if the user is mixing concerns
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive test refactors
+
 
 ## Safeguards
 

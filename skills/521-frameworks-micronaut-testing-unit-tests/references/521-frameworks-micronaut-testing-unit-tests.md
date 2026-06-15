@@ -4,7 +4,7 @@ description: Use when you need to write unit tests for Micronaut applications �
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Micronaut Unit Testing
 
@@ -393,6 +393,7 @@ class OrderServiceSpec {          // ✘ "Spec" suffix — Surefire skips this c
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** the test suite: which tests need `@MicronautTest` vs plain JUnit + Mockito, unnecessary container bootstrap for pure domain logic, missing `@MockBean`/`@Replaces` for collaborators, weak `HttpClient` assertions, copy-pasted methods suitable for `@ParameterizedTest`, flaky time or environment coupling, and non-deterministic config without `@Property`
@@ -401,6 +402,7 @@ class OrderServiceSpec {          // ✘ "Spec" suffix — Surefire skips this c
 - **IMPLEMENT** changes incrementally; keep tests green after each step and verify with `./mvnw clean verify`
 - **EXPLAIN** when to use `@131-java-testing-unit-testing` vs `@MicronautTest` vs `@522-frameworks-micronaut-testing-integration-tests` if the user is mixing concerns
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive test refactors
+
 
 ## Safeguards
 

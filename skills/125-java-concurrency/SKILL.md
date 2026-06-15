@@ -1,10 +1,10 @@
 ---
 name: 125-java-concurrency
-description: Use when you need to apply Java concurrency best practices — including thread safety fundamentals, ExecutorService thread pool management, concurrent design patterns like Producer-Consumer, asynchronous programming with CompletableFuture, immutability and safe publication, deadlock avoidance, virtual threads, scoped values, backpressure, cancellation discipline, and observability for concurrent systems. This should trigger for requests such as Review Java code for concurrency. Part of cursor-rules-java project
+description: Use when you need to apply Java concurrency best practices — including thread safety fundamentals, ExecutorService thread pool management, concurrent design patterns like Producer-Consumer, asynchronous programming with CompletableFuture, immutability and safe publication, deadlock avoidance, virtual threads, structured concurrency, scoped values, backpressure, cancellation discipline, and observability for concurrent systems. This should trigger for requests such as Review Java code for concurrency. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Java rules for Concurrency objects
 
@@ -19,6 +19,7 @@ Identify and apply Java concurrency best practices to improve thread safety, sca
 - Immutability and safe publication (`volatile`, static initializers)
 - Lock contention and false-sharing performance optimization
 - Virtual threads (`Executors.newVirtualThreadPerTaskExecutor()`) for I/O-bound scalability
+- Structured Concurrency (`StructuredTaskScope`) for related subtasks in Java 27 preview
 - `ScopedValue` over `ThreadLocal` for immutable cross-task data
 - Cooperative cancellation and `InterruptedException` discipline
 - Backpressure with bounded queues and `CallerRunsPolicy`
@@ -55,7 +56,7 @@ Read `references/125-java-concurrency.md` and identify thread-safety, coordinati
 
 3. **Apply concurrency improvements**
 
-Implement suitable concurrency patterns, cancellation discipline, and fit-for-purpose primitives.
+Implement suitable concurrency patterns, structured task scopes where they fit related subtasks, cancellation discipline, and fit-for-purpose primitives.
 
 4. **Verify with full build**
 

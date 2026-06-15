@@ -4,7 +4,7 @@ description: Use when you need MongoDB in Quarkus with MongoDB Panache — inclu
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Quarkus — MongoDB
 
@@ -329,6 +329,7 @@ class OrderRepositoryTest {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** MongoDB code: entity mapping correctness, query parameter safety, service persistence boundaries, error handling specificity, and DTO vs entity leakage
@@ -338,6 +339,7 @@ class OrderRepositoryTest {
 - **EXPLAIN** trade-offs (active record vs repository, Dev Services vs Testcontainers, multi-document transactions vs single-document atomicity and application-level idempotency)
 - **TEST** persistence behaviour with `@QuarkusTest` using Dev Services and explicit cleanup; never mock repositories inside persistence tests
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

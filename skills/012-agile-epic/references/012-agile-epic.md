@@ -4,7 +4,7 @@ description: Use when the user wants to create an agile epic, define large bodie
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Create Agile Epics
 
@@ -127,6 +127,7 @@ After generating the content, provide these additional recommendations:
 - Ensure all user stories clearly contribute to the epic's success criteria
 - Monitor progress and adjust scope if needed to meet timeline constraints
 
+
 ## Output Format
 
 - Get current date using terminal command before starting
@@ -135,6 +136,7 @@ After generating the content, provide these additional recommendations:
 - Generate epic document only after all information is gathered
 - Use exact filename provided by the user
 - Replace all date placeholders with actual current date
+
 
 ## Safeguards
 

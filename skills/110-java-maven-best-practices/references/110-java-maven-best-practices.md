@@ -4,7 +4,7 @@ description: Use when you need to improve your Maven pom.xml using best practice
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Maven Best Practices
 
@@ -63,7 +63,6 @@ Description: Use the `<dependencyManagement>` section in parent POMs or import B
 **Good example:**
 
 ```xml
-<!-- Parent POM -->
 <project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.example</groupId>
@@ -89,7 +88,6 @@ Description: Use the `<dependencyManagement>` section in parent POMs or import B
         <version>${junit.version}</version>
         <scope>test</scope>
       </dependency>
-      <!-- Import a BOM -->
       <dependency>
           <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-dependencies</artifactId>
@@ -101,7 +99,6 @@ Description: Use the `<dependencyManagement>` section in parent POMs or import B
   </dependencyManagement>
 </project>
 
-<!-- Child POM -->
 <project>
   <modelVersion>4.0.0</modelVersion>
   <parent>
@@ -115,12 +112,10 @@ Description: Use the `<dependencyManagement>` section in parent POMs or import B
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
-      <!-- Version is inherited from parent's dependencyManagement -->
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <!-- Version and scope inherited -->
     </dependency>
   </dependencies>
 </project>
@@ -130,7 +125,6 @@ Description: Use the `<dependencyManagement>` section in parent POMs or import B
 **Bad example:**
 
 ```xml
-<!-- Child POM hardcoding versions -->
 <project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.example</groupId>
@@ -141,12 +135,12 @@ Description: Use the `<dependencyManagement>` section in parent POMs or import B
     <dependency>
       <groupId>org.springframework</groupId>
       <artifactId>spring-context</artifactId>
-      <version>5.3.20</version> <!-- Hardcoded, may differ from parent's intention -->
+      <version>5.3.20</version>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>5.8.1</version> <!-- Different version, potential conflict -->
+      <version>5.8.1</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -183,13 +177,12 @@ my-app/
 ```text
 my-app/
 ├── pom.xml
-├── sources/  <!-- Non-standard -->
+├── sources/
 │   └── com/example/myapp/App.java
-├── res/      <!-- Non-standard -->
+├── res/
 │   └── config.properties
-└── tests/    <!-- Non-standard -->
+└── tests/
     └── com/example/myapp/AppTest.java
-<!-- This would require explicit configuration in pom.xml to specify source/resource directories -->
 
 ```
 
@@ -201,9 +194,7 @@ Description: Use `<pluginManagement>` in a parent POM to define plugin versions 
 **Good example:**
 
 ```xml
-<!-- Parent POM -->
 <project>
-  <!-- ... -->
   <build>
     <pluginManagement>
       <plugins>
@@ -221,15 +212,12 @@ Description: Use `<pluginManagement>` in a parent POM to define plugin versions 
   </build>
 </project>
 
-<!-- Child POM -->
 <project>
-  <!-- ... -->
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <!-- Version and basic configuration inherited -->
       </plugin>
     </plugins>
   </build>
@@ -240,17 +228,15 @@ Description: Use `<pluginManagement>` in a parent POM to define plugin versions 
 **Bad example:**
 
 ```xml
-<!-- Child POM -->
 <project>
-  <!-- ... -->
   <build>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version> <!-- Different version, potentially older/incompatible -->
+        <version>3.8.1</version>
         <configuration>
-          <source>11</source>   <!-- Different configuration -->
+          <source>11</source>
           <target>11</target>
         </configuration>
       </plugin>
@@ -269,7 +255,6 @@ Description: Use Maven profiles to customize build settings for different enviro
 
 ```xml
 <project>
-  <!-- ... -->
   <profiles>
     <profile>
       <id>dev</id>
@@ -297,7 +282,6 @@ Description: Use Maven profiles to customize build settings for different enviro
                 <goals><goal>run</goal></goals>
                 <configuration>
                   <target>
-                    <!-- Minify JS/CSS for prod -->
                     <echo>Simulating minification for prod</echo>
                   </target>
                 </configuration>
@@ -309,19 +293,16 @@ Description: Use Maven profiles to customize build settings for different enviro
     </profile>
   </profiles>
 </project>
-<!-- Activation: mvn clean install -P prod -->
+Run with: mvn clean install -P prod
 
 ```
 
 **Bad example:**
 
 ```xml
-<!-- Commented out sections for different environments -->
 <project>
-  <!-- ... -->
   <properties>
-    <!-- <database.url>jdbc:h2:mem:devdb</database.url> -->
-    <database.url>jdbc:postgresql://prodserver/mydb</database.url> <!-- Manually switch by commenting/uncommenting -->
+    <database.url>jdbc:postgresql://prodserver/mydb</database.url>
   </properties>
 </project>
 
@@ -340,7 +321,6 @@ Description: Organize your `pom.xml` sections in a consistent order (e.g., proje
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <!-- Project Coordinates -->
     <groupId>com.example</groupId>
     <artifactId>my-app</artifactId>
     <version>1.0.0-SNAPSHOT</version>
@@ -348,41 +328,28 @@ Description: Organize your `pom.xml` sections in a consistent order (e.g., proje
     <name>My Application</name>
     <description>A sample application.</description>
 
-    <!-- Parent (if any) -->
-    <!-- ... -->
 
-    <!-- Properties -->
     <properties>
         <java.version>17</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <some.library.version>2.5.1</some.library.version>
     </properties>
 
-    <!-- Dependency Management -->
     <dependencyManagement>
-        <!-- ... -->
     </dependencyManagement>
 
-    <!-- Dependencies -->
     <dependencies>
         <dependency>
             <groupId>org.some.library</groupId>
             <artifactId>some-library-core</artifactId>
             <version>${some.library.version}</version>
         </dependency>
-        <!-- ... -->
     </dependencies>
 
-    <!-- Build Configuration -->
     <build>
-        <!-- ... -->
     </build>
 
-    <!-- Profiles (if any) -->
-    <!-- ... -->
 
-    <!-- Repositories and Plugin Repositories (if needed) -->
-    <!-- ... -->
 </project>
 
 ```
@@ -390,18 +357,16 @@ Description: Organize your `pom.xml` sections in a consistent order (e.g., proje
 **Bad example:**
 
 ```xml
-<!-- Haphazard order, missing properties for versions -->
 <project>
   <dependencies>
     <dependency>
       <groupId>org.some.library</groupId>
       <artifactId>some-library-core</artifactId>
-      <version>2.5.1</version> <!-- Version hardcoded, repeated elsewhere -->
+      <version>2.5.1</version>
     </dependency>
   </dependencies>
   <modelVersion>4.0.0</modelVersion>
   <build>
-    <!-- ... -->
   </build>
   <groupId>com.example</groupId>
   <properties>
@@ -422,7 +387,6 @@ Description: Prefer dependencies from Maven Central. If custom repositories are 
 
 ```xml
 <project>
-  <!-- ... -->
   <repositories>
     <repository>
       <id>my-internal-repo</id>
@@ -436,24 +400,18 @@ Description: Prefer dependencies from Maven Central. If custom repositories are 
     </pluginRepository>
   </pluginRepositories>
 </project>
-<!-- Better: Configure these in settings.xml and use a repository manager -->
 
 ```
 
 **Bad example:**
 
 ```xml
-<!-- No explicit repository for a non-central artifact, relying on developer's local settings or transitive ones -->
 <project>
-  <!-- ... -->
   <dependencies>
     <dependency>
       <groupId>com.internal.stuff</groupId>
       <artifactId>internal-lib</artifactId>
       <version>1.0</version>
-      <!-- If this is not in Maven Central, the build will fail unless
-           the repository is configured in settings.xml or a parent POM.
-           Relying on implicit configurations makes builds less portable. -->
     </dependency>
   </dependencies>
 </project>
@@ -475,28 +433,23 @@ Description: Define all dependency and plugin versions in the `<properties>` sec
   <version>1.0.0</version>
 
   <properties>
-    <!-- Core build properties -->
     <java.version>17</java.version>
     <maven.version>3.9.10</maven.version>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-    <!-- Dependency versions -->
     <jackson.version>2.15.3</jackson.version>
     <junit.version>5.10.1</junit.version>
     <mockito.version>5.7.0</mockito.version>
     <logback.version>1.4.11</logback.version>
 
-    <!-- Maven plugin versions -->
     <maven-plugin-compiler.version>3.14.0</maven-plugin-compiler.version>
     <maven-plugin-surefire.version>3.5.3</maven-plugin-surefire.version>
     <maven-plugin-failsafe.version>3.5.3</maven-plugin-failsafe.version>
     <maven-plugin-enforcer.version>3.5.0</maven-plugin-enforcer.version>
 
-    <!-- Third-party plugin versions -->
     <maven-plugin-jacoco.version>0.8.13</maven-plugin-jacoco.version>
 
-    <!-- Quality thresholds -->
     <coverage.level>80</coverage.level>
     <mutation.level>70</mutation.level>
   </properties>
@@ -551,7 +504,6 @@ Description: Define all dependency and plugin versions in the `<properties>` sec
 **Bad example:**
 
 ```xml
-<!-- Hardcoded versions scattered throughout the POM -->
 <project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.example</groupId>
@@ -567,23 +519,23 @@ Description: Define all dependency and plugin versions in the `<properties>` sec
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.15.3</version> <!-- Hardcoded version -->
+      <version>2.15.3</version>
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-core</artifactId>
-      <version>2.15.2</version> <!-- Different version of same library family! -->
+      <version>2.15.2</version>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-api</artifactId>
-      <version>5.10.1</version> <!-- Hardcoded version -->
+      <version>5.10.1</version>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter-engine</artifactId>
-      <version>5.9.3</version> <!-- Different JUnit version! -->
+      <version>5.9.3</version>
       <scope>test</scope>
     </dependency>
   </dependencies>
@@ -593,21 +545,21 @@ Description: Define all dependency and plugin versions in the `<properties>` sec
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.11.0</version> <!-- Hardcoded plugin version -->
+        <version>3.11.0</version>
         <configuration>
-          <source>17</source> <!-- Hardcoded Java version instead of using property -->
+          <source>17</source>
           <target>17</target>
         </configuration>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
-        <version>3.2.2</version> <!-- Hardcoded plugin version -->
+        <version>3.2.2</version>
       </plugin>
       <plugin>
         <groupId>org.jacoco</groupId>
         <artifactId>jacoco-maven-plugin</artifactId>
-        <version>0.8.10</version> <!-- Hardcoded and potentially outdated -->
+        <version>0.8.10</version>
       </plugin>
     </plugins>
   </build>
@@ -624,7 +576,6 @@ Description: In a multi-module project the root POM acts as both aggregator (via
 **Good example:**
 
 ```xml
-<!-- Root aggregator / parent POM -->
 <project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.example</groupId>
@@ -632,7 +583,6 @@ Description: In a multi-module project the root POM acts as both aggregator (via
   <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
 
-  <!-- Declare all child modules -->
   <modules>
     <module>my-api</module>
     <module>my-service</module>
@@ -660,7 +610,6 @@ Description: In a multi-module project the root POM acts as both aggregator (via
         <version>${junit.version}</version>
         <scope>test</scope>
       </dependency>
-      <!-- Cross-module dependency managed here -->
       <dependency>
         <groupId>com.example</groupId>
         <artifactId>my-api</artifactId>
@@ -690,34 +639,28 @@ Description: In a multi-module project the root POM acts as both aggregator (via
   </build>
 </project>
 
-<!-- Child module POM (my-service/pom.xml) -->
 <project>
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.example</groupId>
     <artifactId>my-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <!-- relativePath tells Maven where to find the parent without a repository lookup -->
     <relativePath>../pom.xml</relativePath>
   </parent>
   <artifactId>my-service</artifactId>
-  <!-- No <groupId> or <version> — inherited from parent -->
 
   <dependencies>
     <dependency>
       <groupId>com.example</groupId>
       <artifactId>my-api</artifactId>
-      <!-- Version managed centrally in root dependencyManagement -->
     </dependency>
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <!-- Version managed centrally in root dependencyManagement -->
     </dependency>
     <dependency>
       <groupId>org.junit.jupiter</groupId>
       <artifactId>junit-jupiter</artifactId>
-      <!-- Version and scope managed centrally -->
     </dependency>
   </dependencies>
 </project>
@@ -727,36 +670,31 @@ Description: In a multi-module project the root POM acts as both aggregator (via
 **Bad example:**
 
 ```xml
-<!-- Root POM without <modules> declaration -->
 <project>
   <modelVersion>4.0.0</modelVersion>
   <groupId>com.example</groupId>
   <artifactId>my-parent</artifactId>
   <version>1.0.0-SNAPSHOT</version>
   <packaging>pom</packaging>
-  <!-- Missing <modules> — child modules won't be built with the root -->
 </project>
 
-<!-- Child module POM (my-service/pom.xml) with redundant management -->
 <project>
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.example</groupId>          <!-- Duplicated from parent -->
+  <groupId>com.example</groupId>
   <artifactId>my-service</artifactId>
-  <version>1.0.0-SNAPSHOT</version>       <!-- Not inherited — version drift risk -->
+  <version>1.0.0-SNAPSHOT</version>
   <parent>
     <groupId>com.example</groupId>
     <artifactId>my-parent</artifactId>
     <version>1.0.0-SNAPSHOT</version>
-    <!-- Missing <relativePath> — forces Maven to look in local repository -->
   </parent>
 
-  <!-- Redundant dependencyManagement duplicated across child modules -->
   <dependencyManagement>
     <dependencies>
       <dependency>
         <groupId>com.fasterxml.jackson.core</groupId>
         <artifactId>jackson-databind</artifactId>
-        <version>2.16.0</version> <!-- Differs from sibling module's 2.17.0 — version drift! -->
+        <version>2.16.0</version>
       </dependency>
     </dependencies>
   </dependencyManagement>
@@ -772,9 +710,7 @@ Description: Version drift occurs when the same artifact is declared at differen
 **Good example:**
 
 ```xml
-<!-- Root POM: single source of truth for all versions -->
 <project>
-  <!-- ... -->
   <properties>
     <logback.version>1.5.6</logback.version>
     <slf4j.version>2.0.13</slf4j.version>
@@ -796,7 +732,6 @@ Description: Version drift occurs when the same artifact is declared at differen
   </dependencyManagement>
 </project>
 
-<!-- my-service/pom.xml — no version, inherits from root -->
 <dependencies>
   <dependency>
     <groupId>ch.qos.logback</groupId>
@@ -804,7 +739,6 @@ Description: Version drift occurs when the same artifact is declared at differen
   </dependency>
 </dependencies>
 
-<!-- my-web/pom.xml — no version, inherits from root (same version guaranteed) -->
 <dependencies>
   <dependency>
     <groupId>ch.qos.logback</groupId>
@@ -817,28 +751,25 @@ Description: Version drift occurs when the same artifact is declared at differen
 **Bad example:**
 
 ```xml
-<!-- my-service/pom.xml — hardcodes version -->
 <dependencies>
   <dependency>
     <groupId>ch.qos.logback</groupId>
     <artifactId>logback-classic</artifactId>
-    <version>1.4.11</version> <!-- Version A -->
+    <version>1.4.11</version>
   </dependency>
 </dependencies>
 
-<!-- my-web/pom.xml — different hardcoded version for same artifact -->
 <dependencies>
   <dependency>
     <groupId>ch.qos.logback</groupId>
     <artifactId>logback-classic</artifactId>
-    <version>1.5.6</version> <!-- Version B — version drift! -->
+    <version>1.5.6</version>
   </dependency>
 </dependencies>
 
-<!-- Result: Maven resolves each module independently.
-     Depending on classpath ordering, the wrong version may be used at runtime. -->
 
 ```
+
 
 ## Output Format
 
@@ -850,6 +781,7 @@ Description: Version drift occurs when the same artifact is declared at differen
 - **REFACTOR** Maven configuration systematically following the improvement roadmap: First centralize version management through properties and dependencyManagement, then standardize plugin configurations with current versions, organize POM structure following Maven conventions, optimize dependency scopes and eliminate unused dependencies, secure repository configurations, and enhance build profiles for different environments
 - **EXPLAIN** the applied Maven improvements and their benefits: Build reliability enhancements through centralized dependency management, maintenance simplification via property-based versioning, performance improvements from optimized plugin configurations, security strengthening through proper repository management, and development productivity gains from standardized build practices
 - **VALIDATE** that all applied Maven changes compile successfully, maintain existing build behavior, preserve dependency compatibility, follow Maven best practices, and achieve the intended build improvements through comprehensive testing and verification
+
 
 ## Safeguards
 

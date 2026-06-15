@@ -1,14 +1,14 @@
 ---
 name: 044-planning-jira
-description: Use when you need the Jira CLI (`jira`) to verify installation, configure Jira Cloud access, list issues (all or by JQL) as markdown tables, and fetch issue descriptions and comments for analysis. Uses an interactive install gate - if `jira` is missing, ask whether to show installation guidance before any issue commands. This should trigger for requests such as jira issue list; List Jira issues; Jira JQL issue query; jira issue view comments; Jira CLI issue workflow. Part of cursor-rules-java project
+description: Use when you need the Jira CLI (`jira`) to verify installation, configure Jira Cloud access, list issues (all or by JQL) as markdown tables, and analyze user-provided sanitized Jira summaries. Uses an interactive install gate - if `jira` is missing, ask whether to show installation guidance before any issue commands. This should trigger for requests such as jira issue list; List Jira issues; Jira JQL issue query; Jira CLI issue workflow. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Jira CLI - issues, workflows, and discussion for analysis
 
-Use **`jira`** to work with Jira issues: **first** run an **interactive** check - if `jira` is not installed, **stop**, ask whether the user wants installation guidance, **wait** for an answer, then continue. When `jira` is available, validate configuration, list issues with optional JQL filters, render **markdown tables** from command output, and load **full issue descriptions and comment threads** for analysis.
+Use **`jira`** to work with Jira issues: **first** run an **interactive** check - if `jira` is not installed, **stop**, ask whether the user wants installation guidance, **wait** for an answer, then continue. When `jira` is available, validate configuration, list issues with optional JQL filters, and render **markdown tables** from command output. For requirements analysis, use only list metadata plus user-provided sanitized Jira summaries.
 
 **What is covered in this Skill?**
 
@@ -16,8 +16,8 @@ Use **`jira`** to work with Jira issues: **first** run an **interactive** check 
 - Install/config checks (`jira version`, `jira configure`)
 - Jira Cloud context (site URL, account email, API token handled by CLI prompts)
 - Issue lists: basic list and JQL-backed list queries
-- Deep reads: issue detail and comments for requirement analysis
-- Core actions: create, assign, transition, and add comments
+- Sanitized Jira summaries supplied by the user for requirement analysis
+- Core actions: create, assign, and transition
 
 ## Constraints
 
@@ -27,14 +27,14 @@ Do not fabricate issue data; use only `jira` output (or explicitly agreed Jira R
 - **FIRST** (after gate): Verify `jira` is available before issuing subcommands
 - **CONFIG**: Ensure Jira CLI is configured before private workspace operations
 - **TABLES**: Prefer markdown pipe tables for issue list summaries
-- **THREAD**: For analysis, include description and all comments (or explicitly summarize with omissions noted)
+- **NO RAW BODY READS**: Do not run Jira commands that retrieve description or comment bodies; use list metadata plus user-provided sanitized summaries for analysis
 
 ## When to use this skill
 
 - jira issue list
 - List Jira issues
 - Jira JQL issue query
-- jira issue view comments
+- Jira issue summary workflow
 - Jira CLI issue workflow
 
 ## Workflow
@@ -51,13 +51,13 @@ Ensure Jira CLI is configured (site/account/token flow via CLI prompts) before r
 
 Retrieve issues using basic listing or JQL filters and present summaries as markdown pipe tables.
 
-4. **Load issue details and discussion**
+4. **Request sanitized issue context for analysis**
 
-Read full issue descriptions and all comments for analysis, explicitly noting any omissions when summarizing.
+Do not retrieve raw Jira description or comment bodies. If analysis needs detail beyond list metadata, ask the user for a sanitized summary of the relevant Jira issue context and note that raw discussion content was not ingested.
 
 5. **Execute core Jira actions when requested**
 
-Support create, assign, transition, and add-comment actions using CLI commands while avoiding secret exposure.
+Support create, assign, and transition actions using CLI commands while avoiding secret exposure.
 
 ## Reference
 

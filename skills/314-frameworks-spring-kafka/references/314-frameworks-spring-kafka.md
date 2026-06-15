@@ -4,7 +4,7 @@ description: Use when you need Kafka with Spring Boot — including Maven depend
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Spring Boot — Kafka messaging
 
@@ -504,6 +504,7 @@ spring.kafka.listener.auto-startup=false
 // Also disables the listener in full-stack IT unless every class overrides properties.
 ```
 
+
 ## Output Format
 
 - **ANALYZE** Kafka code: event schema versioning, producer key strategy, listener group isolation, error handler registration, idempotency guards, and test coverage
@@ -513,6 +514,7 @@ spring.kafka.listener.auto-startup=false
 - **EXPLAIN** trade-offs (at-least-once vs exactly-once, fixed vs exponential backoff, in-process vs Testcontainers Kafka)
 - **TEST** with Testcontainers `@ServiceConnection` for full-stack `*IT` tests; use `@EmbeddedKafka` for in-process serialization tests; `@MockitoBean KafkaTemplate` only for context-load tests without a broker
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

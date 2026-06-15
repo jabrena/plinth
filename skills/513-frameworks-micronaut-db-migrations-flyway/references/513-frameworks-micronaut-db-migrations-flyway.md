@@ -4,7 +4,7 @@ description: Use when you need to add or review Flyway database migrations in a 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Micronaut — Database migrations (Flyway)
 
@@ -42,7 +42,6 @@ Description: Use the Micronaut BOM to align versions. Combine `micronaut-flyway`
 **Good example:**
 
 ```xml
-<!-- pom.xml — illustrative; align versions with micronaut-parent / BOM -->
 <dependency>
     <groupId>io.micronaut.flyway</groupId>
     <artifactId>micronaut-flyway</artifactId>
@@ -61,7 +60,6 @@ Description: Use the Micronaut BOM to align versions. Combine `micronaut-flyway`
 **Bad example:**
 
 ```xml
-<!-- Bad: Flyway without a configured DataSource bean / JDBC stack -->
 <dependency>
     <groupId>io.micronaut.flyway</groupId>
     <artifactId>micronaut-flyway</artifactId>
@@ -146,6 +144,7 @@ Description: Prefer `@MicronautTest` with a Testcontainers-managed database and 
 // — drifts and hides migration failures
 ```
 
+
 ## Output Format
 
 - **ANALYZE** Micronaut Flyway wiring: BOM dependencies, datasource config, `flyway.datasources.*`, and migration locations
@@ -154,6 +153,7 @@ Description: Prefer `@MicronautTest` with a Testcontainers-managed database and 
 - **ALIGN** with `@512-frameworks-micronaut-data` or `@511-frameworks-micronaut-jdbc` access patterns
 - **TEST** with `@MicronautTest` and a containerized database mirroring production dialect
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

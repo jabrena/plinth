@@ -4,11 +4,11 @@ description: Facilitates conversational discovery to create Architectural Decisi
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Create ADRs for Non-Functional Requirements
 
-Guide stakeholders through a structured conversation to uncover and document architectural decisions for quality attributes using the ISO/IEC 25010:2023 quality model. **This is an interactive SKILL**. The ADR documents the outcome of the conversation, not the conversation itself. Act as an architecture consultant: challenge-first, consultative, adaptive.
+Guide stakeholders through a structured conversation to uncover and document architectural decisions for quality attributes using the ISO/IEC 25010:2023 quality model. **This is an interactive SKILL**. The ADR documents the outcome of the conversation, not the conversation itself. Act as an architecture consultant: challenge-first, consultative, adaptive. Use only the current conversation and repository files explicitly available in the current session.
 
 **What is covered in this Skill?**
 
@@ -21,12 +21,12 @@ Guide stakeholders through a structured conversation to uncover and document arc
 
 ## Constraints
 
-Use challenge-first, consultative discovery—ask 1-2 questions at a time, build on answers, tailor to NFR category. Only create ADR after thorough conversation and user confirmation.
+Use challenge-first, consultative discovery in small batches, build on answers, tailor to NFR category. Only create ADR after thorough conversation and user confirmation.
 
-- **MANDATORY**: Run `date` before starting to get accurate timestamps for the ADR
-- **MUST**: Read the reference template fresh—do not use cached questions
+- **MANDATORY**: Use the local shell `date` command before starting to get accurate timestamps for the ADR
+- **MUST**: Load the bundled reference template during the current session; ignore prior-session content unless the user provides it again
 - **MUST**: Start with challenge-first opening (ISO 25010:2023 quality characteristics)
-- **MUST**: Ask one or two questions at a time; never all at once
+- **MUST**: Pose one or two discovery questions at a time; never all at once
 - **MUST**: Validate summary with user (Does this accurately capture your quality needs?) before proposing ADR creation
 - **MUST**: Wait for user to confirm proceed before generating the ADR
 
@@ -41,15 +41,15 @@ Use challenge-first, consultative discovery—ask 1-2 questions at a time, build
 
 0. **Get current date**
 
-Run `date` before discovery and use it for ADR timestamps.
+Use the local shell `date` command before discovery and use it for ADR timestamps.
 
-1. **Read reference and open with quality challenge**
+1. **Load reference and open with quality challenge**
 
-Read `references/032-architecture-adr-non-functional-requirements.md` and begin with the challenge-first ISO 25010:2023 quality characteristics framing.
+Load `references/032-architecture-adr-non-functional-requirements.md` from this skill and begin with the challenge-first ISO 25010:2023 quality characteristics framing.
 
-2. **Run consultative NFR discovery**
+2. **Conduct consultative NFR discovery**
 
-Ask one or two questions at a time to capture drivers, constraints, quality priorities, options, and trade-off preferences tailored to the primary NFR category.
+Guide discovery in small batches to elicit drivers, constraints, quality priorities, options, and trade-off preferences tailored to the primary NFR category.
 
 Step constraints:
 - Never ask all discovery questions at once

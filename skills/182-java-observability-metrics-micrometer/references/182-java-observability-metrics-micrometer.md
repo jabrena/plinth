@@ -4,7 +4,7 @@ description: Use when you need to implement or improve Java metrics observabilit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Java Metrics Observability with Micrometer
 
@@ -444,6 +444,7 @@ public class InvoiceServiceBad {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** current instrumentation and classify issues by cardinality, semantic correctness, naming consistency, and operational value
@@ -451,6 +452,7 @@ public class InvoiceServiceBad {
 - **APPLY** Micrometer best practices directly in code with minimal, explicit, and reusable instrumentation points
 - **EXPLAIN** how each metric supports dashboards, alerts, and SLO/SLA reporting
 - **VALIDATE** correctness through tests and runtime endpoint checks, including expected labels and values
+
 
 ## Safeguards
 

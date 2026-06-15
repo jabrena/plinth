@@ -4,7 +4,7 @@ description: Use when you need to apply data-oriented programming best practices
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Java Data-Oriented Programming Best Practices
 
@@ -889,6 +889,7 @@ class HiddenTransformationExample {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** Java code to identify specific data-oriented programming opportunities and categorize them by impact (CRITICAL, MAINTAINABILITY, PERFORMANCE, CLARITY) and area (data-behavior separation, immutability violations, impure functions, nested data structures, generic vs specific types, validation approaches)
@@ -898,6 +899,7 @@ class HiddenTransformationExample {
 - **REFACTOR** code systematically following the data-oriented programming improvement roadmap: First separate data from behavior by extracting Records and utility classes, then establish immutability through Records and immutable collections, extract pure functions from data processing operations, flatten complex nested structures using ID-based relationships, implement generic and flexible data types for extensibility, establish clear validation boundaries and patterns, and create composable data transformation and processing pipelines
 - **EXPLAIN** the applied data-oriented programming improvements and their benefits: Code clarity enhancements through clean data-behavior separation and immutable data structures, maintainability improvements via pure functions and composable data operations, reasoning simplification through predictable data transformations, performance optimizations from efficient data structures and processing patterns, and flexibility gains from generic data types and modular data processing approaches
 - **VALIDATE** that all applied data-oriented programming refactoring compiles successfully, maintains behavioral equivalence, preserves data integrity, achieves expected clarity and maintainability benefits, and follows data-oriented programming best practices through comprehensive testing and verification
+
 
 ## Safeguards
 

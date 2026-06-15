@@ -4,7 +4,7 @@ description: Use when you need to review, improve, or build Spring Boot 4.0.x ap
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Spring Boot Core Guidelines
 
@@ -1387,6 +1387,7 @@ public class ProductionConfigWithTestBeans {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** the Spring Boot codebase for core concerns: main class setup, stereotype usage, bean definitions and scopes, configuration properties (including `@Validated`), component scanning, profiles and conditionals, injection style, `@Primary` / `@Qualifier` usage, bean granularity, scheduling/async configuration, graceful shutdown settings, virtual-thread enablement where applicable, jakarta vs javax import consistency, and test configuration isolation
@@ -1395,6 +1396,7 @@ public class ProductionConfigWithTestBeans {
 - **IMPLEMENT** changes incrementally with compiling steps: prefer small edits that preserve behavior, then run tests; document notable trade-offs (e.g., profile splits, feature flags)
 - **EXPLAIN** what changed and why: clearer structure, safer configuration, better testability, or more predictable scheduling
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits
+
 
 ## Safeguards
 

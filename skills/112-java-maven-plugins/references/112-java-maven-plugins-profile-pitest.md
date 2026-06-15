@@ -1,0 +1,154 @@
+---
+name: 112-java-maven-plugins-profile-pitest
+description: PiTest profile guidance for mutation testing.
+license: Apache-2.0
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.16.0
+---
+# Maven Plugins: pom.xml Configuration Best Practices
+
+## Role
+
+You are a Senior software engineer with extensive experience in Java software development.
+
+## Tone
+
+Treat the user as a knowledgeable partner. Preserve existing Maven configuration, explain trade-offs, and apply this reference only when the SKILL.md question flow selected this plugin or profile.
+
+## Goal
+
+Configure PiTest profile only when selected by the user in `112-java-maven-plugins`. Read this reference after the SKILL.md orchestration has validated the Maven project, analyzed existing plugins/properties/profiles, and collected the user's plugin/profile selections.
+
+## Constraints
+
+Apply only the selected PiTest profile configuration and preserve existing project configuration.
+
+- Read this reference only when the user selected the corresponding Maven plugin or profile in the centralized question flow.
+- Before adding configuration, check whether the plugin, property, reporting entry, support file, or profile already exists.
+- Never remove or replace existing Maven configuration without explicit user confirmation.
+- Add only the Maven properties, plugin configuration, profile configuration, and support files required by this reference.
+
+## Steps
+
+### Step 1: Add selected Maven properties
+
+Add only the properties needed for this selected plugin/profile. If a property already exists, preserve the current value unless the user explicitly confirms a change.
+
+```xml
+<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+<maven.version>3.9.10</maven.version>
+<java.version>[USER_SELECTED_JAVA_VERSION]</java.version>
+<maven-plugin-pitest.version>1.19.4</maven-plugin-pitest.version>
+<coverage.level>[USER_SELECTED_COVERAGE_THRESHOLD]</coverage.level>
+<maven-plugin-pitest-junit5.version>1.2.3</maven-plugin-pitest-junit5.version>
+```
+            ### Step 2: PiTest Mutation Testing Profile Configuration
+
+**Purpose**: Configure PiTest mutation testing profile to analyze test quality by introducing mutations and verifying test detection.
+
+**Dependencies**: Only execute if user selected "Mutation testing (PiTest)" in the SKILL.md question flow. Requires completion of the SKILL.md orchestration steps and selected property handling.
+
+**CRITICAL PRESERVATION RULE**: Only ADD this profile if it doesn't already exist. Never REPLACE or REMOVE existing profiles.
+
+## Pre-Implementation Check
+
+**BEFORE adding PiTest profile, check if it already exists in the pom.xml:**
+
+If `<profiles>` section with `pitest` profile already exists: Ask user "PiTest profile already exists. Do you want to enhance the existing configuration? (y/n)"
+
+If user says "n": Skip this step entirely.
+If user says "y": Proceed with adding missing configuration elements only.
+
+**CONDITIONAL EXECUTION**: Only execute this step if user selected "Mutation testing (PiTest)" in the SKILL.md question flow.
+
+## PiTest Profile Configuration
+
+**ADD this profile to the `<profiles>` section in pom.xml ONLY if it doesn't already exist:**
+
+```xml
+<profile>
+<id>pitest</id>
+<activation>
+    <activeByDefault>false</activeByDefault>
+</activation>
+<build>
+    <plugins>
+        <plugin>
+            <groupId>org.pitest</groupId>
+            <artifactId>pitest-maven</artifactId>
+            <version>${maven-plugin-pitest.version}</version>
+            <configuration>
+                <targetClasses>
+                    <param>REPLACE_WITH_ACTUAL_PACKAGE.*</param>
+                </targetClasses>
+                <targetTests>
+                    <param>REPLACE_WITH_ACTUAL_PACKAGE.*</param>
+                </targetTests>
+                <outputFormats>
+                    <outputFormat>HTML</outputFormat>
+                    <outputFormat>XML</outputFormat>
+                </outputFormats>
+                <mutationThreshold>${coverage.level}</mutationThreshold>
+                <coverageThreshold>${coverage.level}</coverageThreshold>
+                <timestampedReports>false</timestampedReports>
+                <verbose>false</verbose>
+            </configuration>
+            <dependencies>
+                <dependency>
+                    <groupId>org.pitest</groupId>
+                    <artifactId>pitest-junit5-plugin</artifactId>
+                    <version>${maven-plugin-pitest-junit5.version}</version>
+                </dependency>
+            </dependencies>
+            <executions>
+                <execution>
+                    <id>pitest-mutation-testing</id>
+                    <goals>
+                        <goal>mutationCoverage</goal>
+                    </goals>
+                    <phase>verify</phase>
+                </execution>
+            </executions>
+        </plugin>
+    </plugins>
+</build>
+</profile>
+```
+
+## Implementation Guidelines
+
+1. **Update package names**: Replace `REPLACE_WITH_ACTUAL_PACKAGE` with the project's actual base package
+2. **Configure thresholds**: Use coverage threshold values from the selected mutation threshold
+
+## Usage Examples
+
+```bash
+# Run mutation testing
+./mvnw clean verify -Ppitest
+
+# View mutation test reports
+open target/pit-reports/index.html
+```
+
+## Validation
+
+After adding this profile, verify the configuration:
+
+```bash
+# Test PiTest profile
+./mvnw clean verify -Ppitest
+```
+                
+            
+            
+#### Step Constraints
+
+- **MUST** only add PiTest profile if mutation testing was selected in the SKILL.md question flow
+- **MUST** check if profile already exists before adding
+- **MUST** ask user permission before modifying existing profile configuration
+- **MUST** update targetClasses and targetTests to match actual project structure
+- **MUST** use coverage threshold values from the SKILL.md question flow
+- **MUST** use selected version properties for plugin versions
+- **MUST** skip this step entirely if mutation testing was not selected

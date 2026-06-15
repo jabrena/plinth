@@ -4,7 +4,7 @@ description: Use when you need to design, review, or improve security in Spring 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Spring Boot Security Guidelines
 
@@ -69,7 +69,7 @@ class ApiSecurityConfig {
 
 ```java
 http.authorizeHttpRequests(r -> r.anyRequest().permitAll());
-// Entire API world-readable
+// Every endpoint is public
 ```
 
 ### Example 2: Method-level security
@@ -279,12 +279,14 @@ http.headers(h -> h.frameOptions(f -> f.sameOrigin()));
 // Misapplied on an API that should deny framing entirely for admin UIs
 ```
 
+
 ## Output Format
 
 - **ANALYZE** SecurityFilterChain rules, method security, CSRF/session model, CORS, authentication mechanism, and error handling for 401/403
 - **CATEGORIZE** issues: misconfigured `permitAll`, missing authorization on admin routes, unsafe CSRF disable, overly broad CORS, weak password storage, information disclosure in errors
 - **APPLY** least-privilege matchers, correct stateless/session strategy, strong password encoding, and JSON/Problem Details for security failures
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes; add integration tests for forbidden and unauthenticated access
+
 
 ## Safeguards
 

@@ -4,7 +4,7 @@ description: Use when you need to review, improve, or build Micronaut applicatio
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Micronaut Core Guidelines
 
@@ -660,6 +660,7 @@ public class BrokenBean {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** the Micronaut codebase for bootstrap, bean scopes, factory usage, configuration binding, environment and `@Requires` usage, controller thickness, scheduling, event-loop blocking risk, shutdown settings, and Jakarta vs legacy javax imports
@@ -668,6 +669,7 @@ public class BrokenBean {
 - **IMPLEMENT** incrementally with compiling steps between edits
 - **EXPLAIN** trade-offs (e.g., prototype vs singleton, blocking executor choice) when multiple valid options exist
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after substantive edits
+
 
 ## Safeguards
 

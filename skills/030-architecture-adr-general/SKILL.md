@@ -4,11 +4,11 @@ description: Use when you need to generate Architecture Decision Records (ADRs) 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Java ADR Generator with interactive conversational approach
 
-Generate Architecture Decision Records (ADRs) for Java projects through an interactive, conversational process that systematically gathers all necessary context to produce well-structured ADR documents. **This is an interactive SKILL**.
+Generate Architecture Decision Records (ADRs) for Java projects through an interactive, conversational process that elicits the decision inputs needed for a well-structured ADR. **This is an interactive SKILL**. Use only the current conversation and repository files explicitly available in the current session; do not expose, persist, or reuse unrelated user/project context.
 
 **What is covered in this Skill?**
 
@@ -46,9 +46,9 @@ Handle ambiguity and blockers explicitly to avoid implicit assumptions.
 
 ## Workflow
 
-1. **Read ADR reference and gather context**
+1. **Load ADR reference and elicit decision inputs**
 
-Read `references/030-architecture-adr-general.md`, then collect context, stakeholders, decision drivers, options, and trade-offs through conversation.
+Load `references/030-architecture-adr-general.md` from this skill, then elicit stakeholders, decision drivers, options, and trade-offs through the current conversation only.
 
 2. **Synthesize and confirm decision**
 

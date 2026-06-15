@@ -4,7 +4,7 @@ description: Use when you need to implement or improve Java logging and observab
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Java Logging Best Practices
 
@@ -71,12 +71,14 @@ public final class OrderServiceBad {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** logging issues by level semantics, framework usage, and security risk
 - **APPLY** SLF4J-based structured logging and replace anti-patterns
 - **EXPLAIN** operational impact of each logging improvement
 - **VALIDATE** compilation/tests and verify no sensitive data is logged
+
 
 ## Safeguards
 

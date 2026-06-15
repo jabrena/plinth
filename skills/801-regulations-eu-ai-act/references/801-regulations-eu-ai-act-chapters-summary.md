@@ -1,0 +1,289 @@
+---
+name: 801-regulations-eu-ai-act-chapters-summary
+description: Use as a chapter-by-chapter summary of Regulation (EU) 2024/1689 to enrich Java enterprise AI system and AI agent reviews with EU AI Act context.
+license: Apache-2.0
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.16.0
+---
+# EU AI Act Regulation for Java Enterprise Development with AI Systems and AI Agents
+
+## Role
+
+You are a senior Java enterprise architect and AI governance reviewer using the EU AI Act chapter structure to map regulatory themes to engineering controls
+
+## Goal
+
+Summarize the official chapter structure of Regulation (EU) 2024/1689 (Artificial Intelligence Act) for engineering review of Java enterprise AI systems, LLM applications, RAG systems, AI agents, and model-driven workflows.
+
+Source reviewed: [EUR-Lex Regulation (EU) 2024/1689 HTML text](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689).
+
+This reference is not legal advice. Use it to orient engineering discovery, architecture review, policy gates, and escalation conversations with legal, compliance, privacy, security, risk, and business owners.
+
+Use `references/801-regulations-eu-ai-act-engineering-examples.md` for Java examples and implementation control patterns. Keep this chapters summary focused on EU AI Act structure, article groups, annexes, and owner handoffs.
+
+Questionnaire asset: [EU AI Act engineering review questionnaire](../assets/questions/801-eu-ai-act-risk-questionnaire.md).
+
+Report template asset: [EU AI Act engineering review report template](../assets/reports/801-eu-ai-act-engineering-review-report-template.md).
+
+## [Chapter I: General provisions (Articles 1-4)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_I)
+
+Defines the subject matter, scope, key definitions, and AI literacy expectations. For Java teams, this chapter is the starting point for deciding whether an application, model integration, AI agent, generated artifact pipeline, or third-country service falls within the Regulation. Pay special attention to definitions such as provider, deployer, operator, intended purpose, substantial modification, high-risk AI system, general-purpose AI model, and post-market monitoring.
+
+Engineering impact:
+- Record the AI capability, intended purpose, operators, users, deployment geography, and whether outputs are used in the Union.
+- Distinguish provider, deployer, importer, distributor, product manufacturer, and affected-person roles.
+- Include AI literacy and operational training as part of rollout readiness for teams using AI systems or agents.
+
+## [Chapter II: Prohibited AI practices (Article 5)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_II)
+
+Lists AI practices that are prohibited because they present unacceptable risk. Themes include manipulative or deceptive techniques, exploitation of vulnerabilities, certain social scoring practices, individual risk assessment for criminal offending, untargeted scraping for facial recognition databases, emotion recognition in workplace and education contexts except narrow safety or medical cases, certain biometric categorisation, and restricted real-time remote biometric identification in publicly accessible spaces for law enforcement.
+
+Engineering impact:
+- Add an early prohibited-use gate before implementation or tool access.
+- Escalate immediately when a use case involves manipulation, exploitation, social scoring, biometric identification, emotion recognition, workplace or education monitoring, or law-enforcement-style surveillance.
+- Treat prompt, model, retrieval, and agent design as insufficient safeguards when the intended use itself is prohibited.
+
+## [Chapter III: High-risk AI systems (Articles 6-49)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_III)
+
+Defines high-risk classification and the obligations around high-risk AI systems. It covers classification rules, possible amendments to high-risk use cases, mandatory requirements, provider and deployer obligations, notified authorities and bodies, standards, conformity assessment, registration, CE marking, and certificates. Core requirements include risk management, data governance, technical documentation, record keeping, transparency and instructions for use, human oversight, accuracy, robustness, cybersecurity, quality management, corrective actions, logging, and conformity assessment.
+
+Engineering impact:
+- Build a classification workflow for Annex I and Annex III signals before coding or procurement.
+- For high-risk systems, require requirements traceability, risk management files, dataset governance, logging, human oversight design, security controls, test evidence, monitoring, and conformity evidence.
+- Review role changes carefully: substantial modification, changed intended purpose, rebranding, or integration of a general-purpose AI model can shift obligations.
+- Treat deployer context as material: real-world use, affected groups, operational procedures, and human authority can change the risk profile.
+
+## [Chapter IV: Transparency obligations for providers and deployers of certain AI systems (Article 50)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_IV)
+
+Creates transparency obligations for certain AI systems even when they are not necessarily high-risk. It covers interaction with AI systems, synthetic content marking, emotion recognition or biometric categorisation disclosures, deep fake labelling, and AI-generated or manipulated text published to inform the public on matters of public interest.
+
+Engineering impact:
+- Add user-facing disclosure when people interact with AI unless obvious from context.
+- Implement machine-readable marking or provenance controls for generated or manipulated content where applicable.
+- Label deep fakes and public-interest AI-generated text unless an applicable human review or editorial responsibility exception applies.
+- Include transparency requirements in API, UI, content pipeline, and logging acceptance criteria.
+
+## [Chapter V: General-purpose AI models (Articles 51-56)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_V)
+
+Defines general-purpose AI models with systemic risk and sets obligations for providers of general-purpose AI models. It covers classification, provider obligations, authorised representatives, obligations for models with systemic risk, and codes of practice. Themes include technical documentation, information for downstream providers, copyright policy, training-content summaries, model evaluation, systemic risk assessment and mitigation, incident reporting, cybersecurity, and cooperation with the AI Office.
+
+Engineering impact:
+- When using a general-purpose model, collect model documentation, intended-use boundaries, provider notices, licence terms, and downstream integration constraints.
+- For internally provided or fine-tuned general-purpose models, assess whether provider obligations or systemic-risk obligations may apply.
+- Track model version, provenance, training-data summary availability, copyright policy, evaluations, known limitations, and incident reporting path.
+- Make downstream system teams aware that model-level compliance does not replace application-level risk controls.
+
+## [Chapter VI: Measures in support of innovation (Articles 57-63)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_VI)
+
+Establishes AI regulatory sandboxes, real-world testing rules, consent and safeguards, and measures for SMEs and start-ups. It supports controlled experimentation while preserving health, safety, fundamental rights, and regulatory oversight.
+
+Engineering impact:
+- Use sandbox or pre-production environments for uncertain AI capabilities before production exposure.
+- For real-world testing, require a plan, oversight, limits, safeguards, consent where required, data protection controls, and stop criteria.
+- Support SMEs and internal product teams with templates, guidance, test environments, and clear compliance onboarding.
+
+## [Chapter VII: Governance (Articles 64-70)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_VII)
+
+Creates the governance structure for implementation and enforcement, including the AI Office, scientific panel, European Artificial Intelligence Board, advisory forum, and national competent authorities. It also establishes single points of contact and cooperation mechanisms.
+
+Engineering impact:
+- Identify internal owners who can interact with national competent authorities, market surveillance authorities, notified bodies, and sector regulators.
+- Maintain evidence and technical documentation in a form that can support authority requests.
+- Align enterprise governance with external supervisory structures: AI office, model risk, security, privacy, legal, and product ownership.
+
+## [Chapter VIII: EU database for high-risk AI systems (Article 71)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_VIII)
+
+Establishes an EU database for high-risk AI systems listed in Annex III. Providers and, in some cases, deployers must register required information before placing systems on the market, putting them into service, or using them.
+
+Engineering impact:
+- Treat high-risk registration data as a release artifact.
+- Keep system identity, provider, deployer, intended purpose, conformity status, certificates, and public-facing information consistent across documentation, deployment metadata, and governance records.
+- Add registration checks to release readiness for high-risk systems.
+
+## [Chapter IX: Post-market monitoring, information sharing and market surveillance (Articles 72-94)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_IX)
+
+Defines post-market monitoring, serious incident reporting, market surveillance, authority access, mutual assistance, safeguards, confidentiality, protection of reporting persons, rights to explanation for individual decision-making, guidance on rights, and procedural safeguards.
+
+Engineering impact:
+- Design post-market monitoring before launch, not after incidents occur.
+- Track real-world performance, misuse, serious incidents, complaints, corrective actions, withdrawals, recalls, and interactions with other systems.
+- Provide audit evidence for impacted individuals and authorities, including decision context where individual decision-making rights apply.
+- Add incident reporting, escalation, rollback, and disablement runbooks for AI systems and AI agents.
+
+## [Chapter X: Codes of conduct and guidelines (Articles 95-96)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_X)
+
+Encourages voluntary codes of conduct and Commission guidelines to support practical implementation. These measures can extend good practices beyond mandatory high-risk obligations and help align market expectations.
+
+Engineering impact:
+- Use voluntary controls for non-high-risk AI systems when user impact, enterprise data, or operational side effects justify stronger governance.
+- Track relevant guidelines, standards, codes of practice, and internal control frameworks as architecture decision inputs.
+- Prefer reusable enterprise patterns for transparency, human oversight, logging, robustness, cybersecurity, and data governance.
+
+## [Chapter XI: Delegation of power and committee procedure (Articles 97-98)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_XI)
+
+Sets rules for delegated acts and committee procedure. This allows parts of the regulatory framework to evolve over time, including updates that may affect high-risk areas, technical expectations, or implementation details.
+
+Engineering impact:
+- Treat EU AI Act compliance as a living obligation, not a one-time checklist.
+- Monitor delegated acts, implementing acts, harmonised standards, common specifications, guidance, and codes of practice.
+- Build configuration and governance processes that can adapt when classifications or obligations change.
+
+## [Chapter XII: Penalties (Articles 99-101)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_XII)
+
+Requires Member States to establish effective, proportionate, and dissuasive penalties and sets administrative fine ceilings for prohibited practices, non-compliance, incorrect information, and general-purpose AI model obligations. It also addresses fines for Union institutions, bodies, offices, and agencies.
+
+Engineering impact:
+- Treat compliance failures as enterprise risk with financial, operational, reputational, and regulatory consequences.
+- Make policy gates, approvals, audit trails, and incident evidence defensible.
+- Escalate missing documentation, misleading information, ignored incidents, or prohibited-use signals as release blockers.
+
+## [Chapter XIII: Final provisions (Articles 102-113)](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#cpt_XIII)
+
+Contains amendments to sectoral legislation, transitional provisions, evaluation and review clauses, entry into force, and phased application dates. It explains how the AI Act interacts with existing product, transport, aviation, maritime, railway, vehicle, cybersecurity, and other Union legal frameworks.
+
+Engineering impact:
+- Check sector-specific legislation alongside the AI Act when AI is embedded in products or regulated infrastructure.
+- Track phased applicability dates and transitional provisions in delivery plans.
+- Review legacy or already-deployed systems when their design, intended purpose, or operating context changes.
+- Keep long-lived AI systems ready for future evaluation, review, and regulatory updates.
+
+## Annex map for engineering review
+
+The annexes turn the chapter obligations into concrete classification lists, documentation content, registration data, conformity procedures, and model-level transparency artifacts. Use them as operational checklists when a Java enterprise system may be high-risk, uses general-purpose AI models, performs real-world testing, or integrates with regulated products or public-sector systems.
+
+## [Annex I: Union harmonisation legislation](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#anx_I)
+
+Lists product and sector legislation that matters when an AI system is a product or safety component covered by Union harmonisation rules. Section A covers New Legislative Framework legislation such as machinery, toys, recreational craft, lifts, explosive-atmosphere equipment, radio equipment, pressure equipment, cableways, personal protective equipment, gas appliances, medical devices, and in vitro diagnostic medical devices. Section B covers other legislation such as civil aviation security, vehicles, marine equipment, rail interoperability, motor vehicles, and unmanned aircraft.
+
+Engineering impact:
+- Check Annex I before treating a Java AI capability as only a software application.
+- If AI controls a product safety component, medical device workflow, vehicle, rail, aviation, marine, or machinery-related function, involve product compliance and safety engineering early.
+- Align AI Act evidence with existing product conformity, CE marking, cybersecurity, and sectoral safety files.
+
+## [Annex II: Criminal offences for real-time remote biometric identification exceptions](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#anx_II)
+
+Lists serious criminal offences referenced by Article 5 for tightly limited law-enforcement use of real-time remote biometric identification in publicly accessible spaces. Examples include terrorism, trafficking in human beings, sexual exploitation of children, narcotics and weapons trafficking, murder or grievous bodily injury, kidnapping, International Criminal Court crimes, unlawful seizure of aircraft or ships, rape, environmental crime, organised or armed robbery, sabotage, and participation in a criminal organisation involved in those offences.
+
+Engineering impact:
+- Treat any biometric identification use case as high-scrutiny and likely outside ordinary enterprise application scope.
+- Do not build generic exceptions into biometric tooling; require explicit legal authority, purpose limitation, audit evidence, and approval workflow.
+- For corporate systems, escalate immediately if a requested feature resembles law-enforcement biometric identification or watchlist matching.
+
+## [Annex III: High-risk AI systems](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#anx_III)
+
+Lists high-risk AI use-case areas under Article 6(2): biometrics, critical infrastructure, education and vocational training, employment and worker management, access to essential private and public services, law enforcement, migration/asylum/border control, and administration of justice and democratic processes. It includes examples such as remote biometric identification, emotion recognition, safety components for critical infrastructure, admissions and learning assessment, recruitment and worker monitoring, public benefit eligibility, creditworthiness, life and health insurance pricing, emergency dispatch or triage, law-enforcement risk tools, migration assessments, judicial assistance, and election influence systems.
+
+Engineering impact:
+- Use Annex III as the main triage checklist for Java enterprise AI systems and AI agents.
+- Build a classification record that states whether the system falls into any Annex III area or why it does not.
+- Treat employment, education, essential services, credit, insurance, emergency response, justice, migration, biometrics, and critical infrastructure as release-blocking review domains until classification is complete.
+
+## [Annex IV: Technical documentation for high-risk AI systems](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#anx_IV)
+
+Defines the minimum technical documentation for high-risk AI systems. It requires a general system description, intended purpose, versions, interfaces, hardware or software dependencies, UI and instructions for use, development methods, architecture, design logic, data requirements, training and validation data characteristics, human oversight measures, predetermined changes, validation and testing procedures, performance metrics, cybersecurity measures, risk management, lifecycle changes, standards or common specifications, EU declaration of conformity, and post-market monitoring.
+
+Engineering impact:
+- Turn Annex IV into the documentation backbone for high-risk AI delivery.
+- Keep architecture, data lineage, model/version metadata, test evidence, human oversight design, cybersecurity controls, and post-market monitoring together.
+- For AI agents, document tool interfaces, permission scopes, approval flows, dry-run behavior, rollback paths, and audit logs as part of system architecture and risk management.
+
+## [Annex V: EU declaration of conformity](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#anx_V)
+
+Specifies the information required in the EU declaration of conformity: AI system identification, provider or authorised representative, provider responsibility statement, conformity statement, personal-data-law statement where applicable, harmonised standards or common specifications, notified body and certificate details where applicable, place and date of issue, signatory identity and authority, and signature.
+
+Engineering impact:
+- Treat the declaration of conformity as a release artifact for applicable high-risk systems.
+- Ensure system identifiers, versions, provider details, standards, certificates, and privacy statements match the technical documentation and deployed artifact.
+- Keep declaration generation controlled by release governance, not ad hoc documentation.
+
+## [Annex VI: Conformity assessment based on internal control](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#anx_VI)
+
+Describes the internal-control conformity procedure. The provider verifies that the quality management system complies with Article 17, examines technical documentation for compliance with Chapter III Section 2 requirements, and verifies that design, development, and post-market monitoring are consistent with the technical documentation.
+
+Engineering impact:
+- Use this path where internal control is permitted, but still require evidence, not self-attestation by assertion.
+- Connect quality management, technical documentation, testing, risk management, and post-market monitoring in the release checklist.
+- Require independent internal review for high-risk Java AI systems before production deployment.
+
+## [Annex VII: Conformity assessment with quality management and technical documentation assessment](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#anx_VII)
+
+Defines the notified-body assessment path for quality management and technical documentation. It covers application content, quality management assessment, ongoing maintenance, change notification, technical documentation review, access to training/validation/testing data where necessary, additional evidence or testing, certificate issuance or refusal, assessment of changes, and surveillance audits.
+
+Engineering impact:
+- Prepare for external review when a notified body assessment applies.
+- Keep training, validation, testing, model, architecture, risk, and quality records accessible under controlled confidentiality.
+- Route substantial changes through change impact assessment before deployment.
+
+## [Annex VIII: EU database registration information for high-risk AI systems](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#anx_VIII)
+
+Specifies information that providers and deployers must submit for registration under Article 49. Provider information includes contact details, authorised representative, AI system trade name and traceability reference, intended purpose, concise data/input and operating-logic description, system status, certificate details, Member States, declaration of conformity, instructions for use, and optional URL. Providers claiming an Annex III system is not high-risk must register their grounds. Deployers registering under Article 49(3) provide deployer details, provider database URL, fundamental-rights impact assessment summary, and data-protection impact assessment summary where applicable.
+
+Engineering impact:
+- Treat registration data as structured release metadata for high-risk systems.
+- Keep public registry descriptions consistent with architecture, risk classification, instructions for use, and governance records.
+- For deployers, link fundamental-rights impact assessment and data-protection impact assessment outputs to production approval.
+
+## [Annex IX: Real-world testing registration information](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#anx_IX)
+
+Lists the registration information for high-risk AI systems tested in real-world conditions under Article 60. It includes a Union-wide unique testing identifier, provider or prospective provider and deployer contact details, system description and intended purpose, summary of the testing plan, and information on suspension or termination.
+
+Engineering impact:
+- Require a real-world testing plan before exposing users or operational environments to experimental AI.
+- Track testing identity, participants, scope, safeguards, stop criteria, and termination status.
+- Link test registration to sandbox governance, consent handling, monitoring, and incident response.
+
+## [Annex X: Large-scale IT systems in freedom, security and justice](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#anx_X)
+
+Lists EU legislative acts for large-scale IT systems in the area of freedom, security and justice, including Schengen Information System, Visa Information System, Eurodac, Entry/Exit System, European Travel Information and Authorisation System, ECRIS-TCN, and interoperability frameworks.
+
+Engineering impact:
+- Escalate immediately when AI integrates with border, visa, asylum, law-enforcement, criminal-record, or interoperability systems.
+- Treat these systems as highly regulated, rights-impacting, and audit-sensitive.
+- Require public-sector, security, privacy, and legal owners before any AI or agent capability can query, enrich, automate, or act on these systems.
+
+## [Annex XI: Technical documentation for providers of general-purpose AI models](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#anx_XI)
+
+Defines technical documentation for general-purpose AI model providers under Article 53(1)(a). Section 1 covers model tasks, intended integration uses, acceptable use policies, release and distribution methods, architecture and parameter count, input/output modalities and formats, licence, integration means, design and training process, data provenance and curation, compute resources, training time, and energy consumption. Section 2 adds systemic-risk information such as evaluation strategies and results, adversarial testing or red teaming, model adaptations, and system architecture.
+
+Engineering impact:
+- Request Annex XI-style documentation from model providers before enterprise integration.
+- For internally trained, fine-tuned, or hosted general-purpose models, maintain model cards and technical files that cover architecture, data, compute, licence, evaluations, red-team results, and energy information where available.
+- Use systemic-risk documentation to decide whether stronger security, monitoring, misuse, and incident-response controls are required.
+
+## [Annex XII: Transparency information for downstream providers](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#anx_XII)
+
+Specifies transparency information that general-purpose AI model providers must give downstream providers integrating the model into AI systems. It includes model tasks and integration use, acceptable use policies, release and distribution methods, interactions with external hardware or software, relevant software versions, architecture and parameter count, input/output modality and format, licence, integration requirements, input/output size limits such as context window length, and data information where applicable.
+
+Engineering impact:
+- Make Annex XII-style information a procurement and architecture intake requirement for LLMs and foundation models.
+- Capture model limits, context window, modalities, licence, acceptable use, integration dependencies, and data provenance before designing product behavior.
+- Ensure downstream Java application teams understand model constraints rather than hiding them behind a generic API wrapper.
+
+## [Annex XIII: Criteria for general-purpose AI models with systemic risk](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=OJ:L_202401689#anx_XIII)
+
+Lists criteria for deciding whether a general-purpose AI model has capabilities or impact equivalent to systemic-risk classification. Criteria include number of parameters, quality or size of the dataset, amount of compute used for training, input and output modalities, benchmark and evaluation capabilities, adaptability, autonomy, scalability, tool access, market reach, and number of registered end users.
+
+Engineering impact:
+- Use Annex XIII as an escalation checklist for powerful internal or third-party models.
+- Track reach, registered business users, end users, modalities, tool access, autonomy, benchmark results, and compute indicators.
+- Apply stronger controls when model capability, distribution scale, or tool access could create systemic or cross-sector impact.
+
+## Constraints
+
+Use this chapter map to orient engineering review, not to make final legal determinations.
+
+- **NOT LEGAL ADVICE**: Escalate legal interpretation, classification disputes, and jurisdiction questions to qualified legal or compliance owners
+- **SUMMARY ONLY**: Keep this reference focused on EU AI Act chapters, article groups, annexes, and engineering implications; use the engineering examples reference for Java patterns
+- **SOURCE FIRST**: When a requirement matters for implementation, verify the exact article text in the official EUR-Lex source before relying on this summary
+- **ENGINEERING FOCUS**: Translate chapter themes into architecture, documentation, release, monitoring, and operational controls for Java enterprise systems
+- **LIFECYCLE**: Revisit this chapter map when the AI system intended purpose, user population, deployment geography, model, data source, tool permission, or regulatory guidance changes
+
+
+## Output Format
+
+- **MAP** the AI capability to relevant chapters, article ranges, and annexes before recommending controls
+- **CLASSIFY** whether the use case raises prohibited-practice, high-risk, transparency, general-purpose model, sandbox, governance, registration, monitoring, conformity, or penalty concerns
+- **TRANSLATE** chapter and annex obligations into engineering artifacts: policy gates, technical documentation, registration data, conformity evidence, logs, tests, monitoring, approvals, and runbooks
+- **ESCALATE** ambiguous or rights-impacting cases to legal, compliance, privacy, security, risk, and business owners
+- **HAND OFF** implementation control patterns to `references/801-regulations-eu-ai-act-engineering-examples.md`

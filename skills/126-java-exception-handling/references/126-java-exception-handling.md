@@ -4,7 +4,7 @@ description: Use when you need to apply Java exception handling best practices ‚
 license: Apache-2.0
 metadata:
   author: Juan Antonio Bre√±a Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Java Exception Handling Guidelines
 
@@ -2498,6 +2498,7 @@ public class BadUser {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** Java code to identify specific exception handling issues and categorize them by severity (CRITICAL, HIGH, MEDIUM, LOW) and exception handling area (validation, resource management, security, thread safety, documentation, exception design)
@@ -2507,6 +2508,7 @@ public class BadUser {
 - **REFACTOR** code systematically following the exception handling improvement roadmap: First implement critical input validation to prevent invalid state and security vulnerabilities, then establish automatic resource management to prevent resource leaks, apply security measures to protect sensitive information in exceptions, implement proper thread safety in exception handling, design and apply well-structured exception hierarchies, and complete comprehensive exception documentation for maintainability and debugging support
 - **EXPLAIN** the applied exception handling improvements and their benefits: Reliability enhancements through comprehensive input validation and resource management, security improvements via protected error messages and secure exception handling, maintainability gains from well-structured exception hierarchies and comprehensive documentation, thread safety improvements through proper interruption handling, and debugging capabilities enhancement through detailed exception information and recovery guidance
 - **VALIDATE** that all applied exception handling refactoring compiles successfully, maintains existing functionality, improves error handling robustness, eliminates security vulnerabilities, and achieves the intended reliability and maintainability improvements through comprehensive testing and verification
+
 
 ## Safeguards
 

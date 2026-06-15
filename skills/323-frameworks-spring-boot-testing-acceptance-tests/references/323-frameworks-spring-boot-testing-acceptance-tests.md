@@ -4,7 +4,7 @@ description: Use when you need to implement acceptance tests from a Gherkin .fea
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Spring Boot acceptance tests from Gherkin
 
@@ -464,6 +464,7 @@ class MockExternalServiceClient implements ExternalServiceClient { }
 class FakeExternalServiceClient implements ExternalServiceClient { }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** the provided `.feature` file: feature name, scenarios, tags, and steps; confirm Spring Boot and acceptance tags
@@ -472,6 +473,7 @@ class FakeExternalServiceClient implements ExternalServiceClient { }
 - **IMPLEMENT** one `TestRestTemplate`-based test per acceptance scenario, mapping Given/When/Then; annotate with `@DisplayName` mirroring the Gherkin scenario title; assert with AssertJ on `ResponseEntity`; verify WireMock interactions where external calls are expected
 - **DOCUMENT** Maven test dependencies and WireMock file layout; note that `TestRestTemplate` is included in `spring-boot-starter-test`; show Surefire/Failsafe three-tier split (`*Test` → Surefire, `*IT` + `*AT` → Failsafe) and name acceptance test classes with the `AT` suffix
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

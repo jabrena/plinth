@@ -4,7 +4,7 @@ description: Use when you need to design, review, or improve validation in Quark
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Quarkus Validation Guidelines
 
@@ -280,12 +280,14 @@ if (!a.equals(b)) throw new IllegalArgumentException("mismatch");
 // Duplicated across resources
 ```
 
+
 ## Output Format
 
 - **ANALYZE** JAX-RS resources and config mappings for missing `@Valid`, missing cascades, and inconsistent 400 bodies
 - **APPLY** Bean Validation at REST boundaries; add `quarkus-http-problem` for RFC 7807 validation responses
 - **ALIGN** validation errors with `HttpValidationProblem` / `application/problem+json` from `@402-frameworks-quarkus-rest`
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

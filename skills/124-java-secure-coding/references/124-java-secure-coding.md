@@ -4,7 +4,7 @@ description: Use when you need to apply Java secure coding best practices — in
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Java Secure coding guidelines
 
@@ -125,7 +125,7 @@ public class UnsafeInputProcessor {
 
     public String loadFile(String userPath) {
         // VULNERABLE: No validation allows path traversal attacks
-        // User could pass "../../etc/passwd" to access sensitive files
+        // User could pass traversal segments to access sensitive files
         return readFileContent(userPath);
     }
 }
@@ -229,7 +229,7 @@ public class VulnerableDataAccess {
 
     public void executeCommand(String userCommand) {
         // EXTREMELY DANGEROUS: Command injection vulnerability
-        String command = "ls " + userCommand; // User could inject "; rm -rf /"
+        String command = "ls " + userCommand; // User could inject destructive shell syntax
         try {
             Runtime.getRuntime().exec(command);
         } catch (Exception e) {
@@ -785,6 +785,7 @@ public class InsecureOutput {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** Java code to identify specific security vulnerabilities and categorize them by severity (CRITICAL, HIGH, MEDIUM, LOW) and vulnerability type (injection, authentication, authorization, cryptography, data exposure, secrets management, deserialization, configuration, supply-chain)
@@ -796,6 +797,7 @@ public class InsecureOutput {
 - **VALIDATE** that all applied security changes compile successfully, maintain existing functionality, eliminate identified vulnerabilities, follow security best practices, and do not introduce new security risks through comprehensive testing and security verification
 - **SUPPLY-CHAIN** include dependency and build pipeline considerations: pin and verify dependency versions, remove unused dependencies, scan for known CVEs (e.g., OWASP Dependency-Check), and verify artifact integrity (checksums/signatures).
 - **CONFIGURE** secure defaults: ensure debug features and detailed error pages are disabled in production, and protect management interfaces with authentication and network policies.
+
 
 ## Safeguards
 

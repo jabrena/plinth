@@ -4,7 +4,7 @@ description: Use when you need Kafka in Micronaut — including Maven dependency
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Micronaut — Kafka messaging
 
@@ -579,6 +579,7 @@ app.kafka.messaging.enabled=false
 # Duplicate resource name 'application.properties' on classpath (main + test)
 ```
 
+
 ## Output Format
 
 - **ANALYZE** Kafka code: guidance tier (minimal vs production), `@Serdeable` coverage, consumer group isolation, producer key strategy, listener offset/error strategy, test wiring, and idempotency guards
@@ -588,6 +589,7 @@ app.kafka.messaging.enabled=false
 - **EXPLAIN** trade-offs (minimal vs production event shape, SYNC vs ASYNC offset strategy, retry strategies vs `RESUME_AT_NEXT_RECORD`, Testcontainers vs broker-less unit tests)
 - **TEST** with `@MicronautTest` + Testcontainers Kafka in Failsafe `*IT` classes; use `application-test.properties` and `@Requires` for broker-less `*Test` classes; never mock `@KafkaClient` in integration tests meant to verify messaging behaviour
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
+
 
 ## Safeguards
 

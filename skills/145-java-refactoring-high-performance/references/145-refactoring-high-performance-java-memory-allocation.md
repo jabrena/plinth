@@ -4,7 +4,7 @@ description: Use when you need to improve Java memory behavior in hot paths — 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.15.0
+  version: 0.16.0
 ---
 # Java rules for High Performance
 
@@ -1188,6 +1188,7 @@ final class DuplicatedStrings {
 }
 ```
 
+
 ## Output Format
 
 - **ANALYZE** Java hot paths by category: allocation, boxing, loops and lambdas, data structures, API shape, concurrency pools and queues, parsing and I/O, persistence and cache usage in code
@@ -1196,6 +1197,7 @@ final class DuplicatedStrings {
 - **VALIDATE** with before/after behavior checks and, when available, comparable measurements; summarize impact clearly
 - **SUMMARY** list files changed, techniques applied, expected effect, and keep-or-revert recommendation
 - **TRADE-OFFS** state complexity cost versus expected gain; flag where readability or API clarity should win
+
 
 ## Safeguards
 
