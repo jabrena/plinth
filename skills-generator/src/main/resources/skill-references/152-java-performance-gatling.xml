@@ -88,13 +88,65 @@ If the user wants Gatling bound to the Maven lifecycle, configure an execution f
             <step-content>
                 Create simulations as Java test sources under `src/test/java` using a package that matches the project conventions.
 
+                **Complete Java Simulation Example:**
+```java
+<![CDATA[package com.example.performance;
+
+import io.gatling.javaapi.core.*;
+import io.gatling.javaapi.http.*;
+import java.time.Duration;
+
+import static io.gatling.javaapi.core.CoreDsl.*;
+import static io.gatling.javaapi.http.HttpDsl.*;
+
+public class ExampleSimulation extends Simulation {
+
+    // Configurable base URL
+    private static final String BASE_URL = System.getProperty("gatling.baseUrl", "http://localhost:8080");
+
+    // HTTP protocol configuration
+    HttpProtocolBuilder httpProtocol = http
+            .baseUrl(BASE_URL)
+            .acceptHeader("application/json")
+            .contentTypeHeader("application/json");
+
+    // Scenario definition
+    ScenarioBuilder exampleScenario = scenario("Example Load Test")
+            .exec(
+                    http("GET /api/example")
+                            .get("/api/example")
+                            .check(status().is(200))
+            );
+
+    // Load injection profile
+    {
+        setUp(
+                exampleScenario.injectOpen(
+                        rampUsers(10).during(Duration.ofSeconds(10)),  // Ramp up to 10 users
+                        constantUsersPerSec(2).during(Duration.ofSeconds(30)) // 2 users/sec for 30s
+                ).protocols(httpProtocol)
+        ).assertions(
+                global().responseTime().max().lt(2000), // Max response time under 2 seconds
+                global().successfulRequests().percent().gt(95.0) // 95% success rate
+        );
+    }
+}]]>
+```
+
                 **Simulation Guidance:**
                 - Use descriptive simulation class names ending with `Simulation`
+                - **CRITICAL**: Import `java.time.Duration` for time specifications
+                - **INJECTION PROFILES**: Use `constantUsersPerSec()` not `constantUsers()`, `rampUsers().during(Duration.ofSeconds())` for proper timing
                 - Keep base URLs configurable through system properties or environment variables when appropriate
                 - Use explicit scenario names that describe the user journey under load
                 - Define injection profiles that match the requested load model
                 - Add assertions only when the expected latency, success rate, or throughput target is clear
                 - Keep feeders and request body templates under `src/test/resources`
+
+                **Common Compilation Issues:**
+                - Missing import: `import java.time.Duration;`
+                - Wrong method: `constantUsers()` → use `constantUsersPerSec()` instead
+                - Duration syntax: Use `Duration.ofSeconds(30)` not just `30`
             </step-content>
         </step>
 
