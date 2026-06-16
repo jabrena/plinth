@@ -37,15 +37,19 @@ Can you update the current changelog for 0.16.0 comparing git commits in relatio
 
 ## Release process
 
-- [ ] Update CHANGELOG.md
-- [ ] Remove SNAPSHOT from .xml, .md & pom.xml
-- [ ] Last review in docs (Manual)
-- [ ] Review git changes for hidden issues (Manual) https://github.com/jabrena/cursor-rules-java/compare/0.15.0...feature/release-0160
-- [ ] Verify if all features were tested propertly
-- [ ] Review if Agents need to add more Skills
-- [ ] Review Skill validation output
-- [ ] Review Skill security validation
-- [ ] Refresh public skills/ release output with `./mvnw clean install -pl skills-generator -P release`
+- [x] Update CHANGELOG.md
+- [x] Remove SNAPSHOT from .xml, .md & pom.xml
+- [x] Review git changes for hidden issues (Manual) https://github.com/jabrena/cursor-rules-java/compare/0.15.0...feature/release-0160
+- [x] Verify if all features were tested propertly
+- [x] Review if Agents need to add more Skills
+- [x] Review Skill validation output
+- [x] Review Skill security validation
+- [x] Last review in docs (Manual)
+- [x] Refresh public skills/ release output with `./mvnw clean install -pl skills-generator -P release`
+- [x] Verify that Pipeline is in Green
+
+---
+
 - [ ] Update Skills Registry
 - [ ] Tag repository
 - [ ] Create article

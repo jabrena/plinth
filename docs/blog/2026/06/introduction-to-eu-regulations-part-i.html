@@ -1,0 +1,510 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Introduction to EU regulations Part I - Skills & Agents for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../../feed.xml" title="Skills & Agents for Java"/>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../../css/prettify.css">
+  <link rel="icon" type="image/png" href="../../../images/java-icon.png">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../../index.html">Skills & Agents for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li><a href="https://forms.gle/TpNXENjmu45wuXoi6" target="_blank">Share feedback</a></li>
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Conferences</a>
+    <div class="navlinks-children">
+      <a href="https://jabrena.github.io/cursor-rules-java/codemotion-madrid-2026/index.html" target="_blank">Codemotion Madrid 2026</a>
+      <a href="https://jabrena.github.io/cursor-rules-java/dvbe25/index.html" target="_blank">Devoxx BE 2025</a>
+      <a href="https://jabrena.github.io/101-cursor/" target="_blank">WJAX-2025</a>
+    </div>
+  </li>
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../../courses/java-generics/index.html">Java Generics</a>
+      <a href="../../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
+    </div>
+  </li>
+  <li><a href="../../../archive.html">Archive</a></li>
+  <li><a href="https://jabrena-github-io.translate.goog/cursor-rules-java/?_x_tr_sl=en&_x_tr_tl=cn&_x_tr_hl=en-US&_x_tr_pto=wapp">Translate</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="post-heading">
+<h1>Introduction to EU regulations Part I</h1>
+<span class="post-meta">
+  <i class="fa fa-calendar-o"></i>
+  2026-06-16
+    &nbsp;
+    <i class="fa fa-pencil"></i>
+    MyRobot
+</span>
+<span class="blog-tags">
+  &nbsp;
+  <i class="fa fa-tags"></i>
+    <a href="../../../tags/blog.html">blog</a>
+    <a href="../../../tags/skills.html">skills</a>
+    <a href="../../../tags/java.html">java</a>
+    <a href="../../../tags/regulations.html">regulations</a>
+    <a href="../../../tags/eu.html">eu</a>
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="blog-post">
+<h2>Why this topic matters</h2>
+<p>Modern Java Enterprise systems are no longer reviewed only for code quality, performance, and availability. Many systems now process personal data, call AI models, automate decisions, operate critical services, integrate with cloud providers, expose online platform workflows, or participate in digital markets.</p>
+<p>That means engineering teams need a practical way to translate regulatory concerns into technical evidence.</p>
+<p>The new <code>regulations</code> skills in this project are designed for that purpose. They do not replace lawyers, compliance officers, privacy teams, security teams, risk owners, or business owners. Instead, they help Java engineers prepare better review material: scope, evidence, gaps, risks, owner handoffs, release decisions, and action plans.</p>
+<p>This is the first article in a series about using those skills in real engineering work.</p>
+<h2>The skills covered in this article</h2>
+<p>The current EU regulatory skill family includes:</p>
+<ul>
+<li><code>@801-regulations-eu-ai-act</code></li>
+<li><code>@802-regulations-dora</code></li>
+<li><code>@803-regulations-gdpr</code></li>
+<li><code>@804-regulations-eu-nis2</code></li>
+<li><code>@805-regulations-eu-cyber-resilience-act</code></li>
+<li><code>@806-regulations-eu-data-act</code></li>
+<li><code>@807-regulations-eu-digital-services-act</code></li>
+<li><code>@808-regulations-eu-digital-markets-act</code></li>
+</ul>
+<p>The common pattern is simple:</p>
+<ol>
+<li>Classify the system scope.</li>
+<li>Review local implementation evidence.</li>
+<li>Map regulatory concerns to engineering controls.</li>
+<li>Produce a report for qualified owner review.</li>
+</ol>
+<h2>EU AI Act</h2>
+<p>The <code>EU AI Act</code> introduces a risk-based framework for AI systems. The European Commission describes it as a legal framework that addresses AI risks and supports trustworthy AI in Europe.</p>
+<p>Use <code>@801-regulations-eu-ai-act</code> when a Java system uses AI models, LLMs, RAG, AI agents, tool calling, generated artifacts, or model-driven decision support.</p>
+<p>The main benefit is that it helps the team separate ordinary AI assistance from higher-risk workflows. For example, a summarization service, a RAG assistant, and an AI agent that can execute database changes do not deserve the same engineering controls.</p>
+<p>The skill helps produce evidence for:</p>
+<ul>
+<li>AI system or AI agent classification</li>
+<li>Prohibited-practice or high-risk signals</li>
+<li>Human oversight and approval gates</li>
+<li>Tool access and least privilege</li>
+<li>Prompt, model, retrieval, tool-call, and decision auditability</li>
+<li>Monitoring, incident routing, rollback, and owner handoff</li>
+</ul>
+<p>To receive a good report, provide the AI use case, affected users, model/provider information, RAG sources, tool permissions, generated outputs, approval workflow, logs, monitoring evidence, and any known legal or compliance owner.</p>
+<p><strong>Official reference:</strong> <a href="https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai">https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai</a></p>
+<p><strong>Legal text:</strong> <a href="https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng">https://eur-lex.europa.eu/eli/reg/2024/1689/oj/eng</a></p>
+<h2>DORA</h2>
+<p><code>DORA</code>, the Digital Operational Resilience Act, focuses on ICT risk and cyber resilience across the financial sector. The European Commission describes DORA as a harmonised EU-wide framework to manage ICT and cyber risks across financial services, including critical third-party ICT providers.</p>
+<p>Use <code>@802-regulations-dora</code> when a Java system supports a financial entity, important business service, critical ICT function, payment flow, trading, lending, insurance, accounting, managed service, or third-party ICT provider integration.</p>
+<p>The main benefit is operational clarity. The skill asks whether the system has an asset inventory, incident flow, monitoring, backup, restore, resilience testing, third-party provider evidence, and exit plan.</p>
+<p>The skill helps produce evidence for:</p>
+<ul>
+<li>Business service and ICT dependency inventory</li>
+<li>Incident detection, classification, escalation, and reconstruction</li>
+<li>Backup, restore, continuity, failover, and rollback controls</li>
+<li>Digital operational resilience testing</li>
+<li>Third-party ICT provider monitoring, contracts, SLAs, and exit paths</li>
+<li>Release decision and residual-risk ownership</li>
+</ul>
+<p>To receive a good report, provide service ownership, dependency diagrams, production topology, data stores, message brokers, cloud and SaaS providers, RTO/RPO expectations, runbooks, incident workflow, alert rules, backup and restore test evidence, and provider documentation.</p>
+<p><strong>Official reference:</strong> <a href="https://finance.ec.europa.eu/regulation-and-supervision/financial-services-legislation/implementing-and-delegated-acts/digital-operational-resilience-regulation_en">https://finance.ec.europa.eu/regulation-and-supervision/financial-services-legislation/implementing-and-delegated-acts/digital-operational-resilience-regulation_en</a></p>
+<p><strong>Legal text:</strong> <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554">https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554</a></p>
+<h2>GDPR</h2>
+<p><code>GDPR</code> remains the core EU data protection regulation. The European Commission explains that it creates rights and obligations for individuals, controllers, and processors around personal data.</p>
+<p>Use <code>@803-regulations-gdpr</code> when a Java system collects, stores, transforms, logs, exports, deletes, or shares personal data.</p>
+<p>The main benefit is privacy engineering discipline. The skill pushes the team to identify personal data before discussing implementation changes. It also keeps the report focused on engineering controls instead of pretending to make a legal determination.</p>
+<p>The skill helps produce evidence for:</p>
+<ul>
+<li>Personal-data inventory and data flows</li>
+<li>Processing purposes and owner handoff for lawful-basis review</li>
+<li>Controller, processor, vendor, or subprocessor boundaries</li>
+<li>Data minimization and privacy-by-design controls</li>
+<li>Data-subject rights workflows</li>
+<li>Retention, deletion, cache invalidation, search-index removal, and backup handling</li>
+<li>Privacy-safe logging, breach evidence, and transfer-review concerns</li>
+</ul>
+<p>To receive a good report, provide DTOs, schemas, APIs, logs, caches, indexes, exports, backups, retention rules, deletion jobs, vendor integrations, data-subject request workflows, privacy owner, and known transfer or DPIA concerns.</p>
+<p><strong>Official reference:</strong> <a href="https://commission.europa.eu/law/law-topic/data-protection_en">https://commission.europa.eu/law/law-topic/data-protection_en</a></p>
+<p><strong>Legal text:</strong> <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679">https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679</a></p>
+<h2>NIS2</h2>
+<p><code>NIS2</code> is the EU cybersecurity directive for essential and important entities across critical sectors. The Commission explains that it introduces cybersecurity risk-management measures, reporting requirements, cooperation, supervision, and enforcement.</p>
+<p>Use <code>@804-regulations-eu-nis2</code> when a Java system supports critical-sector services, essential or important entities, managed service providers, supply-chain dependencies, or cybersecurity incident escalation.</p>
+<p>The main benefit is stronger cybersecurity evidence. Instead of only saying &quot;we use secure coding&quot;, the report asks for inventories, hardening, vulnerabilities, logging, monitoring, access control, cryptography, backup, recovery, and supply-chain evidence.</p>
+<p>The skill helps produce evidence for:</p>
+<ul>
+<li>Asset and service inventory</li>
+<li>Secure configuration and vulnerability handling</li>
+<li>Dependency and provider risk</li>
+<li>Incident detection, containment, escalation, and post-incident review</li>
+<li>Backup, recovery, continuity, and rollback</li>
+<li>Access control, MFA signals, secrets handling, encryption, and privileged operation auditability</li>
+<li>Secure change control for releases, configuration, IAM, dependencies, and emergency fixes</li>
+</ul>
+<p>To receive a good report, provide sector context, service criticality, architecture, dependency inventory, SBOM or dependency scan evidence, vulnerability records, CI/CD workflow, IAM model, secrets handling, monitoring, runbooks, incident process, backup/restore tests, and security owner.</p>
+<p><strong>Official reference:</strong> <a href="https://digital-strategy.ec.europa.eu/en/policies/nis2-directive">https://digital-strategy.ec.europa.eu/en/policies/nis2-directive</a></p>
+<p><strong>Legal text:</strong> <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555">https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555</a></p>
+<h2>Cyber Resilience Act</h2>
+<p>The <code>Cyber Resilience Act</code> introduces mandatory cybersecurity requirements for products with digital elements. The Commission explains that manufacturers must address cybersecurity across planning, design, development, maintenance, and vulnerability handling.</p>
+<p>Use <code>@805-regulations-eu-cyber-resilience-act</code> when a Java product, library, service, agent tool, desktop app, device backend, embedded integration, or software component may be distributed or made available as a product with digital elements.</p>
+<p>The main benefit is product-security readiness. The skill moves the review from &quot;does the service run?&quot; to &quot;can we prove secure-by-design, vulnerability handling, update delivery, documentation, and lifecycle support?&quot;</p>
+<p>The skill helps produce evidence for:</p>
+<ul>
+<li>Product and component scope</li>
+<li>Secure-by-design controls</li>
+<li>Vulnerability disclosure and coordinated remediation</li>
+<li>Security update mechanisms</li>
+<li>Dependency, SBOM, build, signing, and release evidence</li>
+<li>User-facing security documentation</li>
+<li>Support period, incident routing, and recall or withdrawal paths</li>
+</ul>
+<p>To receive a good report, provide product description, distribution model, component inventory, build pipeline, dependency metadata, SBOM, release signing, update mechanism, vulnerability intake process, security tests, support policy, user documentation, and product/security owner.</p>
+<p><strong>Official reference:</strong> <a href="https://digital-strategy.ec.europa.eu/en/policies/cyber-resilience-act">https://digital-strategy.ec.europa.eu/en/policies/cyber-resilience-act</a></p>
+<p><strong>Legal text:</strong> <a href="https://eur-lex.europa.eu/eli/reg/2024/2847/oj/eng">https://eur-lex.europa.eu/eli/reg/2024/2847/oj/eng</a></p>
+<h2>Data Act</h2>
+<p>The <code>Data Act</code> is designed to improve access to and use of data, especially data from connected products and related services. The Commission explains that it clarifies who can use what data and under which conditions, and it supports data sharing, cloud switching, and interoperability.</p>
+<p>Use <code>@806-regulations-eu-data-act</code> when a Java system supports connected products, related services, data access APIs, data-sharing request workflows, data recipients, cloud switching, portability, data spaces, or smart-contract-like automation.</p>
+<p>The main benefit is making data access reviewable. The skill asks who the user, data holder, data recipient, third party, provider, or public-sector requester is before recommending technical controls.</p>
+<p>The skill helps produce evidence for:</p>
+<ul>
+<li>Dataset, metadata, API, Kafka topic, object store, and export inventory</li>
+<li>Entitlement, authorization, purpose, refusal, suspension, deletion, and audit evidence</li>
+<li>Machine-readable exports, API contracts, schemas, and metadata</li>
+<li>Cloud switching and provider-exit runbooks</li>
+<li>Non-personal data safeguards and mixed-dataset privacy handoff</li>
+<li>Trade-secret and commercially sensitive data owner handoff</li>
+<li>Complaint, dispute, request, and release-gate evidence</li>
+</ul>
+<p>To receive a good report, provide dataset inventory, API contracts, event schemas, metadata catalogs, user and recipient roles, authorization rules, request workflow, export formats, cloud provider details, switching runbooks, trade-secret concerns, privacy concerns, and data owner.</p>
+<p><strong>Official reference:</strong> <a href="https://digital-strategy.ec.europa.eu/en/policies/data-act">https://digital-strategy.ec.europa.eu/en/policies/data-act</a></p>
+<p><strong>Legal text:</strong> <a href="https://eur-lex.europa.eu/eli/reg/2023/2854/oj/eng">https://eur-lex.europa.eu/eli/reg/2023/2854/oj/eng</a></p>
+<h2>Digital Services Act</h2>
+<p>The <code>Digital Services Act</code> introduces rules for online services used by European citizens, including marketplaces, social networks, app stores, and online travel or accommodation platforms.</p>
+<p>Use <code>@807-regulations-eu-digital-services-act</code> when a Java system supports hosting, online platforms, marketplaces, content moderation, notice-and-action flows, complaints, appeals, recommender systems, advertising, trader traceability, transparency reporting, or VLOP/VLOSE evidence.</p>
+<p>The main benefit is trust-and-safety traceability. The skill helps the team make content decisions, notices, appeals, recommender explanations, ad metadata, and transparency reports auditable.</p>
+<p>The skill helps produce evidence for:</p>
+<ul>
+<li>Intermediary, hosting, platform, marketplace, search, or recommender scope</li>
+<li>Notice intake, validation, triage, action, response, and misuse protection</li>
+<li>Content decision audit logs and statement-of-reasons records</li>
+<li>Complaint, appeal, reinstatement, and out-of-court dispute workflows</li>
+<li>Recommender, ranking, advertising, and user-control evidence</li>
+<li>Trader traceability and marketplace controls</li>
+<li>VLOP/VLOSE risk, audit, crisis-response, researcher-access, and transparency evidence where applicable</li>
+</ul>
+<p>To receive a good report, provide platform role, user-generated content flows, moderation policies, notice and authority-order workflows, decision logs, appeal records, recommender/ranking logic, ad metadata, trader data, transparency report jobs, VLOP/VLOSE scale signals, and trust-and-safety owner.</p>
+<p><strong>Official reference:</strong> <a href="https://digital-strategy.ec.europa.eu/en/policies/digital-services-act">https://digital-strategy.ec.europa.eu/en/policies/digital-services-act</a></p>
+<p><strong>Legal text:</strong> <a href="https://eur-lex.europa.eu/eli/reg/2022/2065/oj/eng">https://eur-lex.europa.eu/eli/reg/2022/2065/oj/eng</a></p>
+<h2>Digital Markets Act</h2>
+<p>The <code>Digital Markets Act</code> focuses on large digital platforms designated as gatekeepers. The Commission explains that gatekeepers provide core platform services such as search engines, app stores, messenger services, and other major platform services, and must follow specific obligations and prohibitions.</p>
+<p>Use <code>@808-regulations-eu-digital-markets-act</code> when a Java system may support gatekeeper-platform concerns, core platform services, interoperability, business-user data access, consent-dependent data combination, ranking, self-preferencing, advertising transparency, or anti-circumvention controls.</p>
+<p>The main benefit is platform governance evidence. The skill helps platform teams document whether an API, export, ranking change, consent flow, interoperability interface, or access term needs qualified owner review before release.</p>
+<p>The skill helps produce evidence for:</p>
+<ul>
+<li>Core platform service and gatekeeper-scope signals</li>
+<li>Business-user and end-user journey maps</li>
+<li>Interoperability interfaces and access terms</li>
+<li>Business-user data access and export workflows</li>
+<li>Consent and preference records</li>
+<li>Ranking, search, recommendation, advertising, and self-preferencing audit signals</li>
+<li>Anti-circumvention guardrails</li>
+<li>Compliance evidence handoff and release gates</li>
+</ul>
+<p>To receive a good report, provide platform scope, user scale signals, business-user journeys, data access APIs, export workflows, consent and preference records, ranking experiment evidence, advertising metrics, interoperability contracts, access policies, change records, and platform governance owner.</p>
+<p><strong>Official reference:</strong> <a href="https://digital-markets-act.ec.europa.eu/about-dma_en">https://digital-markets-act.ec.europa.eu/about-dma_en</a></p>
+<p><strong>Legal text:</strong> <a href="https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R1925">https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R1925</a></p>
+<h2>What is required to receive a good report?</h2>
+<p>The quality of the report depends on the quality of the evidence. The skills work best when the user provides concrete project material, not only a generic question.</p>
+<p>At minimum, provide:</p>
+<ul>
+<li>The system name, repository, business service, and deployment geography</li>
+<li>The regulation or skill you want to use</li>
+<li>The business owner, technical owner, and likely compliance, legal, privacy, security, risk, or product owner</li>
+<li>The architecture context: APIs, databases, queues, jobs, caches, logs, cloud services, SaaS providers, and external integrations</li>
+<li>The data context: personal data, non-personal data, regulated records, generated content, AI outputs, user-generated content, exports, backups, and retention</li>
+<li>The operational context: environments, release process, monitoring, alerts, incident workflow, runbooks, backup and restore evidence, and rollback path</li>
+<li>The evidence context: code paths, configuration files, tests, dashboards, diagrams, policies, tickets, prior reviews, and known open questions</li>
+<li>Redacted samples only; never paste passwords, tokens, private keys, connection strings, session IDs, or raw sensitive payloads</li>
+</ul>
+<p>The best prompt is usually specific:</p>
+<pre><code class="language-text">Use @803-regulations-gdpr to review this Java service for GDPR-aware privacy engineering controls.
+Scope: customer profile API, EU users, production and staging.
+Evidence: DTOs, database schema, logs, retention job, deletion workflow, vendor integration, and privacy owner notes.
+Goal: produce an engineering review report with gaps, owner handoffs, release decision, and prioritized actions.
+</code></pre>
+<p>The weakest prompt is vague:</p>
+<pre><code class="language-text">Is this compliant?
+</code></pre>
+<p>Compliance is a qualified governance decision. These skills help engineering teams prepare the evidence that makes that decision possible.</p>
+<h2>Example: ecommerce CI/CD PR model</h2>
+<p>As a practical example, consider <a href="https://github.com/jabrena/cursor-rules-java/blob/main/examples/diagrams/deployment/system-example-cicd-pr-model.md">system-example-cicd-pr-model.md</a>.</p>
+<pre><code class="language-text">                           +----------------------+
+                           |       Shopper        |
+                           | Web browser / mobile |
+                           +----------+-----------+
+                                      |
+                                      | HTTPS
+                                      v
+  +-----------------------------------------------------------------------+
+  | Azure Edge                                                            |
+  |                                                                       |
+  | +------------------+     +------------------+     +----------------+ |
+  | | Azure Front Door | --&gt; | Web Application | --&gt; | AKS Ingress    | |
+  | | + CDN            |     | Firewall         |     | Controller     | |
+  | +------------------+     +------------------+     +-------+--------+ |
+  +-----------------------------------------------------------------------+
+                                                              |
+                                                              v
+  +-----------------------------------------------------------------------+
+  | Azure Kubernetes Service - ecommerce-prod, Java Quarkus services       |
+  |                                                                       |
+  | +----------------+      +----------------+      +-------------------+ |
+  | | Web Storefront | ---&gt; | API Gateway    | ---&gt; | Identity Service  | |
+  | | Quarkus BFF    |      | Quarkus REST   |      | Quarkus OIDC      | |
+  | +-------+--------+      +-------+--------+      +---------+---------+ |
+  |         |                       |                         |           |
+  |         |                       |                         v           |
+  |         |                       |              +-------------------+  |
+  |         |                       |              | User Profile DB   |  |
+  |         |                       |              | Azure PostgreSQL  |  |
+  |         |                       |              +-------------------+  |
+  |         |                       |                                      |
+  |         |                       +------------------+------------------+
+  |         |                                          |
+  |         v                                          v
+  | +----------------+      +----------------+      +-------------------+ |
+  | | Catalog        | ---&gt; | Search Service |      | Cart Service      | |
+  | | Quarkus REST   |      | Quarkus FTS    |      | Quarkus REST      | |
+  | +-------+--------+      +-------+--------+      +---------+---------+ |
+  |         |                       |                         |           |
+  |         v                       v                         v           |
+  | +----------------+      +----------------+      +-------------------+ |
+  | | Product DB     |      | Search Index   |      | Cart DB           | |
+  | | PostgreSQL     |      | PostgreSQL FTS |      | PostgreSQL        | |
+  | +----------------+      +----------------+      +-------------------+ |
+  |                                                                       |
+  | +----------------+      +----------------+      +-------------------+ |
+  | | Pricing and    | ---&gt; | Checkout       | ---&gt; | Payment Service   | |
+  | | Quarkus REST   |      | Quarkus Saga   |      | Quarkus adapter   | |
+  | +-------+--------+      +-------+--------+      +---------+---------+ |
+  |         |                       |                         |           |
+  |         v                       v                         v           |
+  | +----------------+      +----------------+      +-------------------+ |
+  | | Pricing DB     |      | Order DB       |      | External Payment  | |
+  | | PostgreSQL     |      | PostgreSQL     |      | Gateway           | |
+  | +----------------+      +-------+--------+      +-------------------+ |
+  |                                 |                                     |
+  |                                 v                                     |
+  |                        +----------------+                             |
+  |                        | Saga Support   |                             |
+  |                        | PostgreSQL     |                             |
+  |                        +-------+--------+                             |
+  |                                | publish events                       |
+  |                                v                                      |
+  | +-------------------------------------------------------------------+ |
+  | | Kafka Backbone                                                    | |
+  | | Kafka topics                                                      | |
+  | | order.created, payment.authorized, stock.reserved, slot.booked    | |
+  | +----------------+------------------+----------------+---------------+ |
+  |                  |                  |                |                 |
+  |                  v                  v                v                 |
+  | +----------------+      +----------------+      +-------------------+ |
+  | | Inventory      |      | Delivery Slot  |      | Notification      | |
+  | | Quarkus REST   |      | Quarkus REST   |      | Quarkus worker    | |
+  | +-------+--------+      +-------+--------+      +---------+---------+ |
+  |         |                       |                         |           |
+  |         v                       v                         v           |
+  | +----------------+      +----------------+      +-------------------+ |
+  | | Inventory DB   |      | Delivery DB    |      | Email / SMS       | |
+  | | PostgreSQL     |      | PostgreSQL     |      | Provider          | |
+  | +----------------+      +----------------+      +-------------------+ |
+  +-----------------------------------------------------------------------+
+
+  +-----------------------------------------------------------------------+
+  | Shared Azure Platform Services                                        |
+  |                                                                       |
+  | Key Vault | Azure Monitor | Log Analytics | App Insights | Private DNS |
+  | Private Link | Managed Identities | Azure Policy | Backup Vault        |
+  +-----------------------------------------------------------------------+
+</code></pre>
+<p>The model describes a fictional ecommerce platform built with Java and Quarkus services, PostgreSQL databases, Kafka events, Azure runtime services, Artifactory, Docker image publication, PR-based CI/CD automation, security scans, SBOM generation, signed images, GitOps deployment, monitoring, logs, traces, and rollback decisions.</p>
+<p>That is the kind of source material a regulation skill needs.</p>
+<pre><code class="language-text">system-example-cicd-pr-model.md
+        |
+        +--&gt; Delivery pipeline evidence
+        |       Software engineer + GenAI tools
+        |       Pull request review
+        |       CI checks, tests, scans, SBOM
+        |       Artifactory, signed images, GitOps deployment
+        |
+        +--&gt; System or domain evidence
+        |       Shopper journey
+        |       Java Quarkus services
+        |       PostgreSQL, Kafka, logs, traces
+        |       Azure Key Vault, Monitor, backup, rollback
+        |
+        +--&gt; Regulation skill review
+                Classify scope
+                Collect implementation and operational evidence
+                Run the relevant EU regulation skills
+                Produce engineering report and owner handoffs
+</code></pre>
+<p>For regulations, it is usually not enough to review one isolated class or one controller. You need to analyze the whole system, or at least a bounded domain or subdomain with clear ownership.</p>
+<p>In this ecommerce example, a useful review scope could be:</p>
+<ul>
+<li>The whole ecommerce platform, when reviewing operational resilience, cybersecurity, platform risk, or release readiness.</li>
+<li>The checkout domain, when reviewing payments, orders, inventory reservation, delivery slot booking, sagas, data flows, and incident impact.</li>
+<li>The identity and user profile subdomain, when reviewing personal data, consent, account access, logging, and deletion.</li>
+<li>The CI/CD pipeline, when reviewing generated artifacts, SBOMs, vulnerability scans, signed images, deployment approvals, and rollback paths.</li>
+</ul>
+<p>The regulation skills work better when the user provides both system evidence and pipeline evidence. The system evidence shows what the software does. The pipeline evidence shows how changes become production behavior.</p>
+<p>Using <code>system-example-cicd-pr-model</code> as evidence, the most important first questions per regulation could be:</p>
+<ul>
+<li><strong>EU AI Act:</strong> Does the GenAI-assisted delivery process or any production AI capability generate code, decisions, recommendations, SQL, migrations, runbooks, or tool actions that require human approval and audit evidence?</li>
+<li><strong>DORA:</strong> If this ecommerce platform supports regulated financial operations or payment flows for a financial entity, can the team prove incident handling, recovery, continuity, resilience testing, and third-party ICT provider control?</li>
+<li><strong>GDPR:</strong> Which personal data appears in identity, profile, cart, order, payment, delivery, notification, logs, traces, analytics, backups, and support workflows?</li>
+<li><strong>NIS2:</strong> If the platform supports an essential or important service, can the team prove asset inventory, secure configuration, vulnerability handling, incident escalation, access control, cryptography, and supply-chain security?</li>
+<li><strong>Cyber Resilience Act:</strong> If parts of the platform are distributed as products with digital elements, can the team prove secure-by-design development, vulnerability disclosure, update delivery, SBOM, signing, and lifecycle support?</li>
+<li><strong>Data Act:</strong> If connected products, related services, data access APIs, cloud switching, or data-sharing workflows are involved, can the team prove data inventory, entitlement checks, machine-readable exports, audit logs, and owner handoffs?</li>
+<li><strong>Digital Services Act:</strong> If the ecommerce system becomes a marketplace or online platform, can the team prove notice-and-action, trader traceability, recommender explanations, advertising transparency, complaint handling, and moderation evidence?</li>
+<li><strong>Digital Markets Act:</strong> If the system belongs to a potential gatekeeper platform or core platform service, can the team prove interoperability, business-user data access, consent and preference evidence, ranking audit signals, and anti-circumvention controls?</li>
+</ul>
+<p>These questions do not decide compliance. They identify the highest-value engineering evidence to collect before qualified owners make a decision.</p>
+<h2>Takeaways for using the EU regulation skills</h2>
+<p>The new EU regulation skills are most useful when they are treated as engineering review tools, not as generic compliance prompts.</p>
+<p>Key takeaways:</p>
+<ul>
+<li>Start with scope. Decide whether the review covers the whole system, a bounded domain, a subdomain, a product, a platform workflow, a data flow, or a CI/CD pipeline.</li>
+<li>Use one skill when the regulatory concern is clear. Combine skills only when the system actually crosses boundaries.</li>
+<li>Provide evidence, not opinions. The best inputs are architecture diagrams, code paths, DTOs, schemas, logs, runbooks, test results, dependency inventories, SBOMs, dashboards, tickets, ownership notes, and release records.</li>
+<li>Keep owner handoff explicit. The skills should identify legal, compliance, privacy, security, risk, product, platform, procurement, or business owners who must make qualified decisions.</li>
+<li>Ask for an engineering report. The useful output is a structured report with scope, evidence reviewed, risk signals, potential gaps, controls, residual risks, release decision, and prioritized actions.</li>
+<li>Treat &quot;Unknown&quot; as a finding. If the team cannot prove data ownership, recovery evidence, consent history, incident routing, vulnerability handling, or platform scope, the report should say so.</li>
+<li>Never paste secrets or raw sensitive data. Use redacted examples and evidence references.</li>
+</ul>
+<p>Common combinations:</p>
+<ul>
+<li>A RAG assistant processing employee data may need <code>@801-regulations-eu-ai-act</code> and <code>@803-regulations-gdpr</code>.</li>
+<li>A payment platform may need <code>@802-regulations-dora</code>, <code>@803-regulations-gdpr</code>, and <code>@804-regulations-eu-nis2</code>.</li>
+<li>A connected product backend may need <code>@805-regulations-eu-cyber-resilience-act</code>, <code>@806-regulations-eu-data-act</code>, and <code>@803-regulations-gdpr</code>.</li>
+<li>A marketplace with recommender systems may need <code>@807-regulations-eu-digital-services-act</code>, <code>@803-regulations-gdpr</code>, and possibly <code>@808-regulations-eu-digital-markets-act</code>.</li>
+</ul>
+<p>The purpose is not to turn developers into lawyers. The purpose is to make engineering evidence visible before production decisions are made.</p>
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena/cursor-rules-java" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2026 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../../js/jquery-1.11.2.min.js"></script>
+<script src="../../../js/bootstrap.min.js"></script>
+<script src="../../../js/prettify.js"></script>
+<script src="../../../js/run_prettify.js"></script>
+<script src="../../../js/main.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13CV90H4J4');
+</script>
+
+</body>
+</html>
