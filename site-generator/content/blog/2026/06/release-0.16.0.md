@@ -8,16 +8,17 @@ status=published
 
 ## Summary
 
-`0.16.0` is not only another release with more skills. It is a step toward a more governed, team-ready way to use AI agents in Java Enterprise software delivery.
+An opinionated, AI-native workflow for modern Java Enterprise delivery, now organized around reusable `Skills`, role-specific `Agents`, team `Commands`, and validation gates.
 
 The project now supports three complementary paths: `Plan`, `Build`, and `Operate`.
 
-Previous releases expanded the catalog with Java, Maven, Spring Boot, Quarkus, Micronaut, Kafka, MongoDB, Observability, testing, OpenSpec, and planning guidance. This release strengthens the operating model around those capabilities:
+Previous releases expanded the catalog with Java, Maven, Spring Boot, Quarkus, Micronaut, Kafka, MongoDB, Observability, Testing, OpenSpec, and planning guidance. This release strengthens the operating model around those capabilities:
 
-- [Workflow evolution](#workflow-evolution)
-- [Zero trust with the generated skills](#zero-trust-with-the-generated-skills)
-- [How to self-validate a Skill](#how-to-self-validate-a-skill)
-- [Skill auto-update and generated output discipline](#skill-auto-update-and-generated-output-discipline)
+- [The Workflow continue evolving](#workflow-evolution)
+- [What is the Top 10 Skills in Skills.sh?](#what-is-the-top-10-skills-in-skillssh)
+- [Applying Zero Trust with your Agent skills](#applying-zero-trust-with-your-agent-skills)
+- [Improving the approach to test deterministic behavior of Agent Skills](#improving-the-approach-to-test-deterministic-behavior-of-agent-skills)
+- [Decoupling changes in daily development with the artifacts used by Skill registries](#decoupling-changes-in-daily-development-with-the-artifacts-used-by-skill-registries)
 - [Improving the way to install Agents and Commands](#improving-the-way-to-install-agents-and-commands)
 - [New capabilities for JVM Frameworks](#new-capabilities-for-jvm-frameworks)
 - [Increasing the Engineering awareness with EU regulations](#increasing-the-engineering-awareness-with-eu-regulations)
@@ -28,9 +29,11 @@ Thanks to our community members in `Singapore`, `Hong Kong`, `Hanoi`, `London`, 
 
 **Help this project grow:** [If this project helps your team, become a sponsor and support the next wave of Java AI engineering workflows.](https://github.com/sponsors/jabrena)
 
-## Workflow evolution
+<a id="workflow-evolution"></a>
 
-The project started with reusable `system prompts`: opinionated Markdown guidance for Java, Maven, testing, architecture, performance, and framework work. That was useful because teams could point an AI assistant at a consistent body of engineering expectations instead of rewriting the same instructions for every conversation.
+## The Workflow continue evolving
+
+The project started with reusable `rules / system prompts`: opinionated Markdown guidance for Java, Maven, testing, architecture, performance, and framework work. That was useful because teams could point an AI assistant at a consistent body of engineering expectations instead of rewriting the same instructions for every conversation. But as documented in [`ADR-002`](https://github.com/jabrena/cursor-rules-java/blob/main/documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md), automatic activation through broad `.java` frontmatter did not scale: multiple rules could enter the context at the same time, increasing latency, consuming context, and making answers less deterministic.
 
 The next step was `Skills`. Skills turned those prompts into packaged, discoverable capabilities with references, assets, validation rules, and release output. A skill is smaller than a full agent, but more durable than a pasted prompt. It gives an AI assistant a focused way to perform one type of work with the same rules every time.
 
@@ -39,7 +42,7 @@ The next step was `Skills`. Skills turned those prompts into packaged, discovera
 In practice, the operating model now looks like this:
 
 ```text
-Command -> Agent -> Skills -> Evidence -> Review
+Command -> Agent -> Skills -> Change
 ```
 
 That model is organized around three delivery paths:
@@ -93,13 +96,28 @@ Operate
       @152-java-performance-gatling
 ```
 
-`Plan` turns needs into reviewable artifacts: issues, ADRs, diagrams, OpenSpec changes, and alignment checks.
+In coming releases, this model will be improved but `the pillars` are stablished in this release.
 
-`Build` turns approved work into implementation using the technical lead agent and specialized Java framework agents.
+<a id="what-is-the-top-10-skills-in-skillssh"></a>
 
-`Operate` turns runtime questions into profiling and benchmark evidence, so performance work can be discussed with measurements instead of guesses.
+## What is the Top 10 Skills in Skills.sh?
 
-## Zero trust with the generated skills
+The project has `106 skills` and use the following [Skills.sh](https://www.skills.sh/jabrena/cursor-rules-java) as the main Skill registry and it has `10.0K total installs`. These are the current top 10 skills:
+
+1. [`110-java-maven-best-practices`](https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices) - [maven](https://www.skills.sh/search?q=maven)
+2. [`121-java-object-oriented-design`](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) - [java object oriented](https://www.skills.sh/search?q=java%20object%20oriented)
+3. [`124-java-secure-coding`](https://www.skills.sh/jabrena/cursor-rules-java/124-java-secure-coding) - [java security](https://www.skills.sh/search?q=java%20security)
+4. [`131-java-testing-unit-testing`](https://www.skills.sh/jabrena/cursor-rules-java/131-java-testing-unit-testing) - [java unit testing](https://www.skills.sh/search?q=java%20unit%20testing)
+5. [`142-java-functional-programming`](https://www.skills.sh/jabrena/cursor-rules-java/142-java-functional-programming) - [java functional programming](https://www.skills.sh/search?q=java%20functional%20programming)
+6. [`128-java-generics`](https://www.skills.sh/jabrena/cursor-rules-java/128-java-generics) - [java generics](https://www.skills.sh/search?q=java%20generics)
+7. [`111-java-maven-dependencies`](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) - [maven](https://www.skills.sh/search?q=maven)
+8. [`141-java-refactoring-with-modern-features`](https://www.skills.sh/jabrena/cursor-rules-java/141-java-refactoring-with-modern-features)
+9. [`125-java-concurrency`](https://www.skills.sh/jabrena/cursor-rules-java/125-java-concurrency) - [java concurrency](https://www.skills.sh/search?q=java%20concurrency)
+10. [`143-java-functional-exception-handling`](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) - [java functional programming](https://www.skills.sh/search?q=java%20functional%20programming)
+
+<a id="applying-zero-trust-with-your-agent-skills"></a>
+
+## Applying Zero Trust with your Agent skills
 
 `Skills` are not ordinary Markdown files. They are executable guidance for AI agents. A skill can tell an agent how to read code, run commands, inspect evidence, write files, install tools, or make a technical recommendation.
 
@@ -131,7 +149,9 @@ Common risks include:
 
 Further information: [How to validate skills?](/cursor-rules-java/blog/2026/06/skill-validators-pipeline.html)
 
-## How to self-validate a Skill
+<a id="improving-the-approach-to-test-deterministic-behavior-of-agent-skills"></a>
+
+## Improving the approach to test deterministic behavior of Agent Skills
 
 If you generate skills locally, validate them before you publish or use them in a shared workflow.
 
@@ -184,7 +204,9 @@ This is intentionally deterministic. The scenario fixes the example project, the
 
 In the next release cycle, this validation model will continue to grow. The plan is to add Gherkin files gradually for all skills, commands, and agents, so every important workflow can move from "the prompt looks good" to "the behavior has an executable acceptance criterion."
 
-## Skill auto-update and generated output discipline
+<a id="decoupling-changes-in-daily-development-with-the-artifacts-used-by-skill-registries"></a>
+
+## Decoupling changes in daily development with the artifacts used by Skill registries
 
 One of the most important delivery upgrades in `0.16.0` is not only what the skills contain. It is where generated skills are published during iteration.
 
@@ -232,6 +254,8 @@ Does the changed skill still behave as expected for its intended workflow?
 
 That is especially useful for skills that guide interactive work, such as planning, architecture, framework migration, or database changes.
 
+<a id="improving-the-way-to-install-agents-and-commands"></a>
+
 ## Improving the way to install Agents and Commands
 
 This release makes it easier to treat AI-agent workflows as shared team infrastructure.
@@ -253,6 +277,8 @@ A team can use those workflows to align on:
 The benefit is not only convenience. It is shared language.
 
 Instead of every developer inventing a different prompt for planning, ADRs, diagrams, profiling, benchmarking, feature branches, worktrees, or issue implementation, the project can provide a common command and agent layer.
+
+<a id="new-capabilities-for-jvm-frameworks"></a>
 
 ## New capabilities for JVM Frameworks
 
@@ -311,6 +337,8 @@ Micronaut skills:
 - [`@521-frameworks-micronaut-testing-unit-tests`](https://www.skills.sh/jabrena/cursor-rules-java/521-frameworks-micronaut-testing-unit-tests)
 - [`@522-frameworks-micronaut-testing-integration-tests`](https://www.skills.sh/jabrena/cursor-rules-java/522-frameworks-micronaut-testing-integration-tests)
 - [`@523-frameworks-micronaut-testing-acceptance-tests`](https://www.skills.sh/jabrena/cursor-rules-java/523-frameworks-micronaut-testing-acceptance-tests)
+
+<a id="increasing-the-engineering-awareness-with-eu-regulations"></a>
 
 ## Increasing the Engineering awareness with EU regulations
 
