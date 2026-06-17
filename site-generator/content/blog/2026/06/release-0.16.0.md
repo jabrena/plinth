@@ -6,32 +6,32 @@ author=Juan Antonio Breña Moral
 status=published
 ~~~~~~
 
-## Summary
+## What is the purpose?
 
 An opinionated, AI-native workflow for modern Java Enterprise delivery, now organized around reusable `Skills`, role-specific `Agents`, team `Commands`, and validation gates.
 
 The project now supports three complementary paths: `Plan`, `Build`, and `Operate`.
 
-Previous releases expanded the catalog with Java, Maven, Spring Boot, Quarkus, Micronaut, Kafka, MongoDB, Observability, Testing, OpenSpec, and planning guidance. This release strengthens the operating model around those capabilities:
+Previous releases expanded the catalog with Java, Maven, Spring Boot, Quarkus, Micronaut, Kafka, MongoDB, Observability, Testing, OpenSpec, and planning guidance. 
 
-- [The Workflow continue evolving](#workflow-evolution)
-- [What is the Top 10 Skills in Skills.sh?](#what-is-the-top-10-skills-in-skillssh)
+This release strengthens the operating model around those capabilities:
+
+- [Enriching the workflow with Commands and Agents, not only Skills](#enriching-the-workflow-with-commands-and-agents-not-only-skills)
+- [What are the Top 10 Skills from this project in Skills.sh?](#what-are-the-top-10-skills-from-this-project-in-skillssh)
 - [Applying Zero Trust with your Agent skills](#applying-zero-trust-with-your-agent-skills)
-- [Improving the approach to test deterministic behavior of Agent Skills](#improving-the-approach-to-test-deterministic-behavior-of-agent-skills)
+- [Improving the approach to test the behavior of an Agent Skills](#improving-the-approach-to-test-the-behavior-of-an-agent-skills)
 - [Decoupling changes in daily development with the artifacts used by Skill registries](#decoupling-changes-in-daily-development-with-the-artifacts-used-by-skill-registries)
 - [Improving the way to install Agents and Commands](#improving-the-way-to-install-agents-and-commands)
-- [New capabilities for JVM Frameworks](#new-capabilities-for-jvm-frameworks)
+- [New capabilities for Java Enterprise Frameworks](#new-capabilities-for-java-enterprise-frameworks)
 - [Increasing the Engineering awareness with EU regulations](#increasing-the-engineering-awareness-with-eu-regulations)
-
-The project continues to focus on an opinionated, AI-native workflow for evolving modern Java Enterprise `SDLC` practices through reusable `Skills`, `Agents`, `Commands`, and `MCP servers`.
 
 Thanks to our community members in `Singapore`, `Hong Kong`, `Hanoi`, `London`, and `New York`. 👋👋👋
 
 **Help this project grow:** [If this project helps your team, become a sponsor and support the next wave of Java AI engineering workflows.](https://github.com/sponsors/jabrena)
 
-<a id="workflow-evolution"></a>
+<a id="enriching-the-workflow-with-commands-and-agents-not-only-skills"></a>
 
-## The Workflow continue evolving
+## Enriching the workflow with Commands and Agents, not only Skills
 
 The project started with reusable `rules / system prompts`: opinionated Markdown guidance for Java, Maven, testing, architecture, performance, and framework work. That was useful because teams could point an AI assistant at a consistent body of engineering expectations instead of rewriting the same instructions for every conversation. But as documented in [`ADR-002`](https://github.com/jabrena/cursor-rules-java/blob/main/documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md), automatic activation through broad `.java` frontmatter did not scale: multiple rules could enter the context at the same time, increasing latency, consuming context, and making answers less deterministic.
 
@@ -98,9 +98,9 @@ Operate
 
 In coming releases, this model will be improved but `the pillars` are stablished in this release.
 
-<a id="what-is-the-top-10-skills-in-skillssh"></a>
+<a id="what-are-the-top-10-skills-from-this-project-in-skillssh"></a>
 
-## What is the Top 10 Skills in Skills.sh?
+## What are the Top 10 Skills from this project in Skills.sh?
 
 The project has `106 skills` and use the following [Skills.sh](https://www.skills.sh/jabrena/cursor-rules-java) as the main Skill registry and it has `10.0K total installs`. These are the current top 10 skills:
 
@@ -149,9 +149,9 @@ Common risks include:
 
 Further information: [How to validate skills?](/cursor-rules-java/blog/2026/06/skill-validators-pipeline.html)
 
-<a id="improving-the-approach-to-test-deterministic-behavior-of-agent-skills"></a>
+<a id="improving-the-approach-to-test-the-behavior-of-an-agent-skills"></a>
 
-## Improving the approach to test deterministic behavior of Agent Skills
+## Improving the approach to test the behavior of an Agent Skills
 
 If you generate skills locally, validate them before you publish or use them in a shared workflow.
 
@@ -278,9 +278,9 @@ The benefit is not only convenience. It is shared language.
 
 Instead of every developer inventing a different prompt for planning, ADRs, diagrams, profiling, benchmarking, feature branches, worktrees, or issue implementation, the project can provide a common command and agent layer.
 
-<a id="new-capabilities-for-jvm-frameworks"></a>
+<a id="new-capabilities-for-java-enterprise-frameworks"></a>
 
-## New capabilities for JVM Frameworks
+## New capabilities for Java Enterprise Frameworks
 
 `0.16.0` keeps the framework support organized around the three Java Enterprise stacks used by the project: `Spring Boot 4.0.x`, `Quarkus 3.x`, and `Micronaut 4.x`.
 
