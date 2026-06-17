@@ -13,10 +13,10 @@
 - [x] 1.9 Include engineering controls for content decision audit logs, moderation workflow state, notice intake and response tracking, recommender and ranking explanation evidence, ad transparency metadata, user controls, complaint and appeal workflows, risk assessment evidence, incident escalation, data access for auditors or researchers where applicable, and privacy-safe observability.
 - [x] 1.10 Update `807-skill.xml` so the workflow reads chapter summary, engineering examples, and report template before implementation review.
 - [x] 1.11 Register skill id `807` with explicit `skillId="807-regulations-eu-digital-services-act"`, references, and report template resource in `skills-generator/src/main/resources/skills.xml`.
-- [x] 1.12 Add `skills-generator/src/test/resources/gherkin/807-regulations-eu-digital-services-act.feature` with pull-request and direct-to-main acceptance scenarios modeled after `801-804`.
+- [x] 1.12 Add `skills-generator/src/test/resources/gherkin/skills/807-regulations-eu-digital-services-act.feature` with pull-request and direct-to-main acceptance scenarios modeled after `801-804`.
 - [x] 1.13 Ensure the Gherkin scenarios require reading the chapters summary, engineering examples, and report template, and require linked violation mapping in generated reports.
 - [x] 1.14 Add Digital Services Act report examples under `examples/regulations/eu-digital-services-act`.
-- [x] 1.15 Add `807-regulations-eu-digital-services-act` to `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md`.
+- [x] 1.15 Add `807-regulations-eu-digital-services-act` to `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`.
 - [x] 1.16 Validate changed XML files with `xmllint --noout`.
 - [x] 1.17 Run `./mvnw clean install -pl skills-generator`.
 - [x] 1.18 Inspect generated local `.agents/skills/807-regulations-eu-digital-services-act/SKILL.md`.

@@ -41,7 +41,7 @@ The skill must not provide legal conclusions about lawful basis, controller/proc
 - Validate changed XML files with `xmllint --noout`.
 - Run `./mvnw clean install -pl skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
 - Inspect generated local `822-regulations-uk-gdpr/SKILL.md`.
-- Check `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md`; record that no listed acceptance prompt exists for `822` unless added by this change.
+- Check `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`; record that no listed acceptance prompt exists for `822` unless added by this change.
 - Run `./mvnw clean verify -pl skills-generator`.
 - Run `openspec validate --all`.
 

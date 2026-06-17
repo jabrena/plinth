@@ -12,10 +12,10 @@
 - [ ] 1.8 Include engineering controls for personal-data inventory, minimization, lawful-basis handoff, purpose limitation, privacy by design, data-subject rights, retention/deletion, security of processing, data transfers, DPIA escalation, breach evidence, and privacy-safe logging.
 - [ ] 1.9 Update `822-skill.xml` so the workflow reads chapter summary, engineering examples, and report template before implementation review.
 - [ ] 1.10 Register skill id `822` with explicit `skillId="822-regulations-uk-gdpr"`, references, and report template resource in `skills-generator/src/main/resources/skills.xml`.
-- [ ] 1.11 Add `skills-generator/src/test/resources/gherkin/822-regulations-uk-gdpr.feature` with pull-request and direct-to-main acceptance scenarios modeled after `801-804`.
+- [ ] 1.11 Add `skills-generator/src/test/resources/gherkin/skills/822-regulations-uk-gdpr.feature` with pull-request and direct-to-main acceptance scenarios modeled after `801-804`.
 - [ ] 1.12 Ensure the Gherkin scenarios require reading the chapters summary, engineering examples, and report template, and require linked violation mapping in generated reports.
 - [ ] 1.13 Add UK GDPR report examples under `examples/regulations/uk-gdpr`.
-- [ ] 1.14 Add `822-regulations-uk-gdpr` to `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md`.
+- [ ] 1.14 Add `822-regulations-uk-gdpr` to `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`.
 - [ ] 1.15 Validate changed XML files with `xmllint --noout`.
 - [ ] 1.16 Run `./mvnw clean install -pl skills-generator`.
 - [ ] 1.17 Inspect generated local `.agents/skills/822-regulations-uk-gdpr/SKILL.md`.

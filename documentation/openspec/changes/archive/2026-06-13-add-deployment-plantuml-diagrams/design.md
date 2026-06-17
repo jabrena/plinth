@@ -67,4 +67,4 @@ Implementation should edit XML sources under `skills-generator/src/main/resource
 8. Run `./mvnw clean install -pl skills-generator` to regenerate local skills without refreshing public `skills/`.
 9. Inspect generated local `033-architecture-diagrams/SKILL.md` and reference links for deployment selection, topology intake, "All diagrams" coverage, and reference links.
 10. Run `./mvnw clean verify -pl skills-generator` before promoting the implementation.
-11. Check `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md`; as of this change, `033-architecture-diagrams` is not listed, so no listed skill acceptance prompt is required unless that inventory changes.
+11. Check `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`; as of this change, `033-architecture-diagrams` is not listed, so no listed skill acceptance prompt is required unless that inventory changes.

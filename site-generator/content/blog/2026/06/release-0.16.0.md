@@ -165,12 +165,12 @@ That command generates local agent skills under `.agents/skills` without refresh
 
 `0.16.0` also adds a new layer for behavioral validation: acceptance criteria written in `Gherkin`.
 
-The prompt inventory lives in `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md`. When a generated local skill changes and that skill is listed in the inventory, run only the matching prompt for that changed skill.
+The prompt inventory lives in `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`. When a generated local skill changes and that skill is listed in the inventory, run only the matching prompt for that changed skill.
 
 For example, the Maven dependencies skill is validated with this prompt:
 
 ```text
-execute @skills-generator/src/test/resources/gherkin/111-java-maven-dependencies.feature
+execute @skills-generator/src/test/resources/gherkin/skills/111-java-maven-dependencies.feature
 and verify that acceptance-tests passes.
 ```
 

@@ -37,10 +37,10 @@
 
 ## 5. Gherkin Acceptance Coverage
 
-- [x] 5.1 Add `skills-generator/src/test/resources/gherkin/801-regulations-eu-ai-act.feature` for the existing EU AI Act skill.
-- [x] 5.2 Add `skills-generator/src/test/resources/gherkin/802-regulations-dora.feature` for the DORA skill.
-- [x] 5.3 Add `skills-generator/src/test/resources/gherkin/803-regulations-gdpr.feature` for the GDPR skill.
-- [x] 5.4 Register the `801`, `802`, and `803` Gherkin prompts in `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md`.
+- [x] 5.1 Add `skills-generator/src/test/resources/gherkin/skills/801-regulations-eu-ai-act.feature` for the existing EU AI Act skill.
+- [x] 5.2 Add `skills-generator/src/test/resources/gherkin/skills/802-regulations-dora.feature` for the DORA skill.
+- [x] 5.3 Add `skills-generator/src/test/resources/gherkin/skills/803-regulations-gdpr.feature` for the GDPR skill.
+- [x] 5.4 Register the `801`, `802`, and `803` Gherkin prompts in `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`.
 
 ## 6. Generator Registration
 
@@ -57,6 +57,6 @@
 - [x] 7.3 Inspect generated local `802-regulations-dora/SKILL.md` and `803-regulations-gdpr/SKILL.md`.
 - [x] 7.4 Compare generated local `802` and `803` skill structure against generated local `801-regulations-eu-ai-act/SKILL.md` for consistent `800`-band regulation skill format.
 - [x] 7.5 Inspect generated local DORA and GDPR questionnaire/report assets.
-- [x] 7.6 Execute the listed acceptance prompts for `801`, `802`, and `803` from `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md` (verified manually against generated local skill output; no separate automated runner exists).
+- [x] 7.6 Execute the listed acceptance prompts for `801`, `802`, and `803` from `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` (verified manually against generated local skill output; no separate automated runner exists).
 - [x] 7.7 Run `./mvnw clean verify -pl skills-generator`.
 - [x] 7.8 Run `openspec validate --all`.

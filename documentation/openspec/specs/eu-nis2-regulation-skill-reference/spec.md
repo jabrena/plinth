@@ -64,14 +64,14 @@ The NIS2 skill MUST have Gherkin acceptance scenarios for the same delivery mode
 
 #### Scenario: Validate NIS2 PR-based delivery review scenario
 
-- **WHEN** `skills-generator/src/test/resources/gherkin/804-regulations-eu-nis2.feature` is inspected
+- **WHEN** `skills-generator/src/test/resources/gherkin/skills/804-regulations-eu-nis2.feature` is inspected
 - **THEN** it includes an acceptance-test scenario for a Java system developed and released through the described CI/CD pull-request pipeline
 - **AND** the requested report output path is under `examples/regulations/nis2`
 - **AND** the scenario expects the skill to read `references/804-regulations-eu-nis2-chapters-summary.md`, `references/804-regulations-eu-nis2-engineering-examples.md`, and `assets/reports/804-nis2-engineering-review-report-template.md`
 
 #### Scenario: Validate NIS2 direct-to-main delivery review scenario
 
-- **WHEN** `skills-generator/src/test/resources/gherkin/804-regulations-eu-nis2.feature` is inspected
+- **WHEN** `skills-generator/src/test/resources/gherkin/skills/804-regulations-eu-nis2.feature` is inspected
 - **THEN** it includes an acceptance-test scenario for a Java system committed directly to main and released through the described CI/CD pipeline
 - **AND** the requested report output path is under `examples/regulations/nis2`
 - **AND** the scenario expects the skill to escalate missing pre-merge review, protected-main bypass, cybersecurity risk-management gaps, and ambiguous NIS2 applicability to qualified owners
