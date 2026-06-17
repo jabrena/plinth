@@ -115,7 +115,7 @@ Review Java systems, AI models, and how GenAI tools are used across applications
 
 Explore the complete [Commands](./documentation/guides/INVENTORY-COMMANDS-JAVA.md), [Agents](./documentation/guides/INVENTORY-AGENTS-JAVA.md), [Skills](./documentation/guides/INVENTORY-SKILLS-JAVA.md), and [MCP Servers](./documentation/guides/THIRD-PARTIES.md) inventories.
 
-## Deliverables
+## Project Components
 
 The project generates a set of deliverables at the end of any iteration.
 

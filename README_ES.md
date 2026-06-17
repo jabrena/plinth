@@ -115,7 +115,7 @@ Revisa sistemas Java, modelos de IA y cómo se utilizan las herramientas de IA g
 
 Explora los inventarios completos de [Commands](./documentation/guides/INVENTORY-COMMANDS-JAVA.md), [Agents](./documentation/guides/INVENTORY-AGENTS-JAVA.md), [Skills](./documentation/guides/INVENTORY-SKILLS-JAVA.md) y [MCP Servers](./documentation/guides/THIRD-PARTIES.md).
 
-## Entregables
+## Componentes del proyecto
 
 El proyecto genera un conjunto de entregables al final de cualquier iteración.
 

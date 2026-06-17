@@ -115,7 +115,7 @@ npx skills add jabrena/cursor-rules-java --skill '*' --agent github-copilot -y
 
 浏览完整的 [Commands](./documentation/guides/INVENTORY-COMMANDS-JAVA.md)、[Agents](./documentation/guides/INVENTORY-AGENTS-JAVA.md)、[Skills](./documentation/guides/INVENTORY-SKILLS-JAVA.md) 和 [MCP Servers](./documentation/guides/THIRD-PARTIES.md) 清单。
 
-## 交付物
+## 项目组件
 
 项目会在每次迭代结束时生成一组交付物。
 
