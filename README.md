@@ -14,6 +14,12 @@
 
 An opinionated AI-native workflow for evolving modern Java Enterprise `SDLC` practices through reusable `Skills`, `Agents`, `Commands` & `MCP servers`.
 
+## Project at a glance
+
+- 14 Commands
+- 9 Agents
+- 106 Skills
+
 ## Latest Updates
 
 Explore the latest published content on the [project website](https://jabrena.github.io/cursor-rules-java/) and follow its evolution through new skills, improvements, and fixes in the [CHANGELOG](./CHANGELOG.md).
@@ -79,6 +85,17 @@ Implement and improve Java applications with Maven, design, coding, testing, sec
 | **Skills** | [110-java-maven-best-practices](https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices) · [111-java-maven-dependencies](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) · [121-java-object-oriented-design](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) · [124-java-secure-coding](https://www.skills.sh/jabrena/cursor-rules-java/124-java-secure-coding) · [143-java-functional-exception-handling](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) |
 | **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [JavaDocs](https://www.javadocs.dev/mcp) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) |
 
+### Operate
+
+Measure and improve production behavior through observability, profiling, benchmarking, and performance testing.
+
+| Resource | Available options |
+| --- | --- |
+| **Commands** | [`/profile`](./.cursor/commands/profile.md) · [`/benchmark`](./.cursor/commands/benchmark.md) |
+| **Agents** | `@robot-java-performance` |
+| **Skills** | [151-java-performance-jmeter](https://www.skills.sh/jabrena/cursor-rules-java/151-java-performance-jmeter) · [161-java-profiling-detect](https://www.skills.sh/jabrena/cursor-rules-java/161-java-profiling-detect) · [162-java-profiling-analyze](https://www.skills.sh/jabrena/cursor-rules-java/162-java-profiling-analyze) · [163-java-profiling-refactor](https://www.skills.sh/jabrena/cursor-rules-java/163-java-profiling-refactor) · [164-java-profiling-verify](https://www.skills.sh/jabrena/cursor-rules-java/164-java-profiling-verify) |
+| **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) · [Grafana](https://grafana.com/docs/grafana/latest/developer-resources/mcp/) |
+
 ### Compliance (Alpha)
 
 Review Java systems, AI models, and how GenAI tools are used across applications and delivery pipelines for regulation-aware engineering controls, evidence, and qualified owner handoffs spanning AI, data, security, product, platform, market, and governance. **<u>These skills support engineering awareness and do not provide legal advice.</u>**
@@ -96,20 +113,9 @@ Review Java systems, AI models, and how GenAI tools are used across applications
 
 **Note:** This set of skills could be a good complement for the future [OWASP EU Compliance MCP](https://genai.owasp.org/solution/eu-compliance-mcp/).
 
-### Operate
-
-Measure and improve production behavior through observability, profiling, benchmarking, and performance testing.
-
-| Resource | Available options |
-| --- | --- |
-| **Commands** | [`/profile`](./.cursor/commands/profile.md) · [`/benchmark`](./.cursor/commands/benchmark.md) |
-| **Agents** | `@robot-java-performance` |
-| **Skills** | [151-java-performance-jmeter](https://www.skills.sh/jabrena/cursor-rules-java/151-java-performance-jmeter) · [161-java-profiling-detect](https://www.skills.sh/jabrena/cursor-rules-java/161-java-profiling-detect) · [162-java-profiling-analyze](https://www.skills.sh/jabrena/cursor-rules-java/162-java-profiling-analyze) · [163-java-profiling-refactor](https://www.skills.sh/jabrena/cursor-rules-java/163-java-profiling-refactor) · [164-java-profiling-verify](https://www.skills.sh/jabrena/cursor-rules-java/164-java-profiling-verify) |
-| **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) · [Grafana](https://grafana.com/docs/grafana/latest/developer-resources/mcp/) |
-
 Explore the complete [Commands](./documentation/guides/INVENTORY-COMMANDS-JAVA.md), [Agents](./documentation/guides/INVENTORY-AGENTS-JAVA.md), [Skills](./documentation/guides/INVENTORY-SKILLS-JAVA.md), and [MCP Servers](./documentation/guides/THIRD-PARTIES.md) inventories.
 
-## Deliverables
+## Project Components
 
 The project generates a set of deliverables at the end of any iteration.
 

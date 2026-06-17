@@ -57,6 +57,7 @@ Esta página reúne charlas, artículos, enlaces de referencia, portales de skil
 - [Issues de Vercel Labs skills](https://github.com/vercel-labs/skills/issues)
 - [Registro de skills de Tessl](https://tessl.io/registry/skills/github/jabrena/cursor-rules-java)
 - [Página de autor en ClaudSkills](https://claudskills.com/author/jabrena/)
+- [Categoría de skills Java en Claude Marketplaces](https://claudemarketplaces.com/skills/category/java)
 - [Portal chino de Agent Skills](https://agent-skills.cc/zh/skills/jabrena-cursor-rules-java)
 - [Página de skill en Shyft](https://shyft.ai/skills/cursor-rules-java)
 - [Búsqueda de skills en LobeHub](https://lobehub.com/skills?q=cursor-rules-java)
