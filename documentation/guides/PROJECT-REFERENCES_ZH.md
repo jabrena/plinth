@@ -57,6 +57,7 @@
 - [Vercel Labs skills issues](https://github.com/vercel-labs/skills/issues)
 - [Tessl skill registry](https://tessl.io/registry/skills/github/jabrena/cursor-rules-java)
 - [ClaudSkills 作者页](https://claudskills.com/author/jabrena/)
+- [Claude Marketplaces Java skills 分类](https://claudemarketplaces.com/skills/category/java)
 - [Agent Skills 中文门户](https://agent-skills.cc/zh/skills/jabrena-cursor-rules-java)
 - [Shyft skill 页面](https://shyft.ai/skills/cursor-rules-java)
 - [LobeHub skills 搜索](https://lobehub.com/skills?q=cursor-rules-java)

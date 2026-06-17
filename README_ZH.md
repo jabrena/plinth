@@ -14,6 +14,12 @@
 
 一套带有明确观点的 AI 原生工作流，通过可复用的 `Skills`、`Agents`、`Commands` 与 `MCP servers`，持续演进现代 Java 企业级 `SDLC` 实践。
 
+## 项目概览
+
+- 14 Commands
+- 9 Agents
+- 106 Skills
+
 ## 最新动态
 
 访问[项目网站](https://jabrena.github.io/cursor-rules-java/)探索最新发布的内容，并通过 [CHANGELOG](./CHANGELOG.md) 了解新 skills、改进和修复如何推动项目持续演进。
@@ -79,6 +85,17 @@ npx skills add jabrena/cursor-rules-java --skill '*' --agent github-copilot -y
 | **Skills** | [110-java-maven-best-practices](https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices) · [111-java-maven-dependencies](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) · [121-java-object-oriented-design](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) · [124-java-secure-coding](https://www.skills.sh/jabrena/cursor-rules-java/124-java-secure-coding) · [143-java-functional-exception-handling](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) |
 | **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [JavaDocs](https://www.javadocs.dev/mcp) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) |
 
+### 运维
+
+通过可观测性、profiling、benchmarking 和性能测试来衡量并改进生产行为。
+
+| 资源 | 可用选项 |
+| --- | --- |
+| **Commands** | [`/profile`](./.cursor/commands/profile.md) · [`/benchmark`](./.cursor/commands/benchmark.md) |
+| **Agents** | `@robot-java-performance` |
+| **Skills** | [151-java-performance-jmeter](https://www.skills.sh/jabrena/cursor-rules-java/151-java-performance-jmeter) · [161-java-profiling-detect](https://www.skills.sh/jabrena/cursor-rules-java/161-java-profiling-detect) · [162-java-profiling-analyze](https://www.skills.sh/jabrena/cursor-rules-java/162-java-profiling-analyze) · [163-java-profiling-refactor](https://www.skills.sh/jabrena/cursor-rules-java/163-java-profiling-refactor) · [164-java-profiling-verify](https://www.skills.sh/jabrena/cursor-rules-java/164-java-profiling-verify) |
+| **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) · [Grafana](https://grafana.com/docs/grafana/latest/developer-resources/mcp/) |
+
 ### 合规 (Alpha)
 
 审查 Java 系统、AI 模型，以及 GenAI 工具在应用程序和交付流水线中的使用方式，以识别涉及 AI、数据、安全、产品、平台、市场和治理的法规感知工程控制、证据及向合格责任人的移交。**<u>这些 skills 用于提升工程认知，不构成法律建议。</u>**
@@ -95,17 +112,6 @@ npx skills add jabrena/cursor-rules-java --skill '*' --agent github-copilot -y
 | [Digital Markets Act](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R1925) | `808-regulations-eu-digital-markets-act` |
 
 **注意：** 这组 skills 可以很好地补充未来的 [OWASP EU Compliance MCP](https://genai.owasp.org/solution/eu-compliance-mcp/)。
-
-### 运维
-
-通过可观测性、profiling、benchmarking 和性能测试来衡量并改进生产行为。
-
-| 资源 | 可用选项 |
-| --- | --- |
-| **Commands** | [`/profile`](./.cursor/commands/profile.md) · [`/benchmark`](./.cursor/commands/benchmark.md) |
-| **Agents** | `@robot-java-performance` |
-| **Skills** | [151-java-performance-jmeter](https://www.skills.sh/jabrena/cursor-rules-java/151-java-performance-jmeter) · [161-java-profiling-detect](https://www.skills.sh/jabrena/cursor-rules-java/161-java-profiling-detect) · [162-java-profiling-analyze](https://www.skills.sh/jabrena/cursor-rules-java/162-java-profiling-analyze) · [163-java-profiling-refactor](https://www.skills.sh/jabrena/cursor-rules-java/163-java-profiling-refactor) · [164-java-profiling-verify](https://www.skills.sh/jabrena/cursor-rules-java/164-java-profiling-verify) |
-| **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) · [Grafana](https://grafana.com/docs/grafana/latest/developer-resources/mcp/) |
 
 浏览完整的 [Commands](./documentation/guides/INVENTORY-COMMANDS-JAVA.md)、[Agents](./documentation/guides/INVENTORY-AGENTS-JAVA.md)、[Skills](./documentation/guides/INVENTORY-SKILLS-JAVA.md) 和 [MCP Servers](./documentation/guides/THIRD-PARTIES.md) 清单。
 
