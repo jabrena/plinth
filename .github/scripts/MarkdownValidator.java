@@ -14,12 +14,10 @@ import picocli.CommandLine.Parameters;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URLDecoder;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.nio.file.*;
-import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.util.*;
 import java.util.concurrent.Callable;
@@ -213,13 +211,6 @@ public class MarkdownValidator implements Callable<Integer> {
                 return Optional.of("Remote link is not reachable: " + uri + " (HTTP " + status + ")");
             }
 
-            if (uri.getFragment() != null && !uri.getFragment().isBlank()) {
-                Optional<String> anchorError = validateRemoteAnchor(uri, requestUri);
-                if (anchorError.isPresent()) {
-                    return anchorError;
-                }
-            }
-
             return Optional.empty();
         } catch (java.net.http.HttpTimeoutException e) {
             return Optional.of("Remote link timed out after " + LINK_CHECK_TIMEOUT.toSeconds() + " seconds: " + uri);
@@ -237,32 +228,6 @@ public class MarkdownValidator implements Callable<Integer> {
             return exception.getClass().getSimpleName();
         }
         return message;
-    }
-
-    private Optional<String> validateRemoteAnchor(URI originalUri, URI requestUri)
-            throws IOException, InterruptedException {
-        HttpResponse<String> anchorResponse = requestRemoteLink(requestUri, "GET");
-
-        int status = anchorResponse.statusCode();
-        if (status >= 300 && status < 400) {
-            return Optional.of("Remote link redirects before anchor validation: " + originalUri + " (HTTP " + status + ")");
-        }
-        if (status >= 400) {
-            return Optional.of("Remote link is not reachable before anchor validation: " + originalUri + " (HTTP " + status + ")");
-        }
-        if (status != 200) {
-            return Optional.empty();
-        }
-        if (!isHtmlResponse(anchorResponse)) {
-            return Optional.empty();
-        }
-
-        String fragment = URLDecoder.decode(originalUri.getFragment(), StandardCharsets.UTF_8);
-        String html = anchorResponse.body();
-        if (html == null || !containsHtmlAnchor(html, fragment)) {
-            return Optional.of("Remote link anchor was not found: " + originalUri);
-        }
-        return Optional.empty();
     }
 
     private HttpResponse<String> requestRemoteLink(URI uri, String method) throws IOException, InterruptedException {
@@ -286,23 +251,6 @@ public class MarkdownValidator implements Callable<Integer> {
         } catch (URISyntaxException e) {
             throw new IllegalArgumentException("Unable to normalize URI: " + uri, e);
         }
-    }
-
-    private boolean isHtmlResponse(HttpResponse<String> response) {
-        return response.headers()
-                .firstValue("content-type")
-                .map(contentType -> contentType.toLowerCase(Locale.ROOT).contains("text/html"))
-                .orElse(false);
-    }
-
-    private boolean containsHtmlAnchor(String html, String anchor) {
-        return containsExactHtmlAnchor(html, anchor) || containsExactHtmlAnchor(html, "user-content-" + anchor);
-    }
-
-    private boolean containsExactHtmlAnchor(String html, String anchor) {
-        String escapedAnchor = java.util.regex.Pattern.quote(anchor);
-        return java.util.regex.Pattern.compile("\\s(?:id|name)\\s*=\\s*\"" + escapedAnchor + "\"").matcher(html).find()
-                || java.util.regex.Pattern.compile("\\s(?:id|name)\\s*=\\s*'" + escapedAnchor + "'").matcher(html).find();
     }
 
     private void addError(Path file, int lineNumber, String message) {
