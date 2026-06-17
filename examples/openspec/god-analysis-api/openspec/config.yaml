@@ -1,0 +1,6 @@
+# OpenSpec project configuration for the God Analysis API example.
+schemaVersion: 1
+project:
+  name: god-analysis-api-openspec-example
+  description: OpenSpec change derived from examples/requirements/problem1.
+

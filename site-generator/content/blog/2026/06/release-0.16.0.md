@@ -27,13 +27,13 @@ This release strengthens the operating model around those capabilities:
 
 Thanks to our community members in `Singapore`, `Hong Kong`, `Hanoi`, `London`, and `New York`. 👋👋👋
 
-**Help this project grow:** [If this project helps your team, become a sponsor and support the next wave of Java AI engineering workflows.](https://github.com/sponsors/jabrena)
+**Help this project grow:** [If this project helps your team, become a sponsor.](https://github.com/sponsors/jabrena)
 
 <a id="enriching-the-workflow-with-commands-and-agents-not-only-skills"></a>
 
 ## Enriching the workflow with Commands and Agents, not only Skills
 
-The project started with reusable `rules / system prompts`: opinionated Markdown guidance for Java, Maven, testing, architecture, performance, and framework work. That was useful because teams could point an AI assistant at a consistent body of engineering expectations instead of rewriting the same instructions for every conversation. But as documented in [`ADR-002`](https://github.com/jabrena/cursor-rules-java/blob/main/documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md), automatic activation through broad `.java` frontmatter did not scale: multiple rules could enter the context at the same time, increasing latency, consuming context, and making answers less deterministic.
+The project started more than one year back with a set of reusable `rules / system prompts`: opinionated Markdown guidance for Java, Maven, testing, architecture, performance, and framework work. That was useful because teams could point an AI assistant at a consistent body of engineering expectations instead of rewriting the same instructions for every conversation. But as documented in [`ADR-002`](https://github.com/jabrena/cursor-rules-java/blob/main/documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md), automatic activation through broad `.java` frontmatter did not scale well: multiple rules could enter the context at the same time, increasing latency, consuming context, and making answers less deterministic.
 
 The next step was `Skills`. Skills turned those prompts into packaged, discoverable capabilities with references, assets, validation rules, and release output. A skill is smaller than a full agent, but more durable than a pasted prompt. It gives an AI assistant a focused way to perform one type of work with the same rules every time.
 
@@ -42,7 +42,7 @@ The next step was `Skills`. Skills turned those prompts into packaged, discovera
 In practice, the operating model now looks like this:
 
 ```text
-Command -> Agent -> Skills -> Change
+Command -> Agent -> Skills -> Change in your repository
 ```
 
 That model is organized around three delivery paths:
@@ -102,7 +102,7 @@ In coming releases, this model will be improved but `the pillars` are stablished
 
 ## What are the Top 10 Skills from this project in Skills.sh?
 
-The project has `106 skills` and use the following [Skills.sh](https://www.skills.sh/jabrena/cursor-rules-java) as the main Skill registry and it has `10.0K total installs`. These are the current top 10 skills:
+The project has `106 skills` and use the following [Skills.sh](https://www.skills.sh/jabrena/cursor-rules-java) as the main Skill registry and it has `10.0K` total installs. These are the current top 10 skills:
 
 1. [`110-java-maven-best-practices`](https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices) - [maven](https://www.skills.sh/search?q=maven)
 2. [`121-java-object-oriented-design`](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) - [java object oriented](https://www.skills.sh/search?q=java%20object%20oriented)
