@@ -15,8 +15,6 @@ jobs:
           - { name: "Maven", path: "examples/maven/maven-demo", goal: "verify", expectedExitCode: 0 }
           - { name: "Maven Invalid", path: "examples/maven/maven-demo-ko", goal: "validate", expectedExitCode: 1 }
           - { name: "Maven Multi Module", path: "examples/maven/maven-multi-module-demo", goal: "verify", expectedExitCode: 0 }
-          - { name: "OpenSpec Requirements Problem 1", path: "examples/openspec/requirements-examples/problem1/implementation", goal: "verify", expectedExitCode: 0 }
-          - { name: "OpenSpec Spring Boot Demo", path: "examples/openspec/spring-boot-demo/implementation", goal: "verify", expectedExitCode: 0 }
           - { name: "Profiling Spring Boot JMeter", path: "examples/profiling/spring-boot-jmeter-demo", goal: "verify", expectedExitCode: 0 }
           - { name: "Profiling Spring Boot Memory Leak", path: "examples/profiling/spring-boot-memory-leak-demo", goal: "package", expectedExitCode: 0 }
           - { name: "Profiling Spring Boot Performance Bottleneck", path: "examples/profiling/spring-boot-performance-bottleneck-demo", goal: "package", expectedExitCode: 0 }
