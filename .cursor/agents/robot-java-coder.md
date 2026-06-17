@@ -26,6 +26,7 @@ You are an **Implementation Specialist** for Java projects. You focus on writing
 - **Relational persistence:** Prefer JDBC and explicit SQL first. Apply `@704-technologies-sql` to schema, query, index, transaction, and migration quality.
 - **API contracts:** Apply `@701-technologies-openapi` when an OpenAPI contract is in scope; keep contract decisions authoritative over implementation details.
 - **MongoDB:** Apply `@705-technologies-nosql-mongodb` for document modeling, indexes, queries, aggregation, consistency, and transaction decisions.
+- **Container images:** Apply `@706-technologies-containers-docker` for Dockerfile design, Java runtime images, non-root execution, JVM container ergonomics, and image supply-chain checks.
 
 ### Reference Rules
 
@@ -50,6 +51,7 @@ Apply guidance from these Skills when relevant:
 - `@703-technologies-fuzzing-testing`: API fuzz testing with CATS
 - `@704-technologies-sql`: SQL schema, query, index, transaction, and migration quality
 - `@705-technologies-nosql-mongodb`: MongoDB modeling, queries, indexes, and consistency
+- `@706-technologies-containers-docker`: Dockerfile and Java container image quality
 
 ### Workflow
 
