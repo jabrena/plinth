@@ -153,28 +153,26 @@ Further information: [How to validate skills?](/cursor-rules-java/blog/2026/06/s
 
 ## Improving the approach to test the behavior of an Agent Skills
 
-If you generate skills locally, validate them before you publish or use them in a shared workflow.
+During the lifecycle of any element in this project, the elements suffer changes and interacting with different models and tools, the behaviour could not be the same. In the past the testing was pretty tedious and manual but in this release, we have added `Gherkin` files to be executed to model to improve the testing experience defining acceptance criterias.
 
-For local generated output, run:
+In this release, we run a `Spike` to validate the idea and we added `Gherkin` support for all Skills created/updated in this release, reducing the testing time.
+
+Lets review 2 examples to share the value.
+
+### Gherkin example for a Skill
+
+Skills has a prompt inventory and it lives in `acceptance-tests-prompts-skills.md`. When a generated local skill changes, now it is possible to run only the matching prompt for that changed skill.
+
+**@111-java-maven-dependencies:**
+
+The inventory has a prompt to validate the Skill:
 
 ```bash
-./mvnw clean install -pl skills-generator
-```
-
-That command generates local agent skills under `.agents/skills` without refreshing the public `skills/` release output.
-
-`0.16.0` also adds a new layer for behavioral validation: acceptance criteria written in `Gherkin`.
-
-The prompt inventory lives in `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`. When a generated local skill changes and that skill is listed in the inventory, run only the matching prompt for that changed skill.
-
-For example, the Maven dependencies skill is validated with this prompt:
-
-```text
 execute @skills-generator/src/test/resources/gherkin/skills/111-java-maven-dependencies.feature
 and verify that acceptance-tests passes.
 ```
 
-The linked Gherkin scenario makes the expected behavior reviewable:
+And the prompt point to the following `Gherkin` file:
 
 ```gherkin
 Feature: Validate changes from usage of Maven dependencies skill
@@ -200,7 +198,90 @@ Scenario: Add JSpecify and Error Prone + NullAway to Maven demo
   And any git changes produced during skill execution and verification are reset
 ```
 
-This is intentionally deterministic. The scenario fixes the example project, the selected dependency answers, the expected `pom.xml` changes, the expected `.mvn/jvm.config` changes, the validation command, the accepted compiler failure, and the cleanup expectation. The goal is not to test every possible conversation. The goal is to prove that the changed skill still follows its intended workflow against a stable fixture.
+The scenario fixes the example project, the selected dependency answers, the expected `pom.xml` changes, the expected `.mvn/jvm.config` changes, the validation command, the accepted compiler failure, and the cleanup expectation. The goal is not to test every possible conversation. The goal is to prove that the changed skill still follows its intended workflow against a stable fixture.
+
+### Gherkin example for a Command
+
+**/implement-issue:**
+
+Using this prompt:
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
+and verify that acceptance-tests passes.
+```
+
+It is possible to run the following `Gherkin` file:
+
+```bash
+Feature: Validate implement-issue command with the God Analysis API OpenSpec example
+
+Background:
+  Given the command prompt file ".cursor/commands/implement-issue.md"
+  And the OpenSpec project path "examples/openspec/god-analysis-api"
+  And the OpenSpec change path "examples/openspec/god-analysis-api/openspec/changes/add-god-analysis-api"
+  And the implementation target directory "examples/openspec/god-analysis-api/demo"
+  And the implementation target directory starts empty except for ".gitkeep"
+
+@acceptance-test
+Scenario: Implement God Analysis API from a validated OpenSpec change
+  Remark: Acceptance execution must use the implement-issue command contract and must not implement outside the requested demo directory.
+  Given the OpenSpec change "add-god-analysis-api" contains "proposal.md", "design.md", "tasks.md", and "specs/god-analysis-api/spec.md"
+  And the OpenSpec change is validated with "openspec validate --all" from "examples/openspec/god-analysis-api"
+  And the command prompt source ".cursor/commands/implement-issue.md" is read before execution
+  When the user executes the prompt "/implement-issue examples/openspec/god-analysis-api/openspec/changes/add-god-analysis-api implement in examples/openspec/god-analysis-api/demo"
+  Then the command loads the selected OpenSpec "tasks.md" as the execution contract
+  And the command confirms the selected OpenSpec change is current, validated, and internally consistent
+  And the command identifies the implementation as a Spring Boot MVC Java service from the OpenSpec design and technology constraints
+  And the command routes implementation work through "@robot-tech-lead" and the appropriate Java Spring Boot implementation agent
+  And the command reports using the current branch as the isolation strategy before implementation starts
+  And all generated implementation files are created under "examples/openspec/god-analysis-api/demo"
+  And the implementation provides "GET /api/v1/gods/stats/sum"
+  And the implementation covers the documented happy path sum "78179288397447443426"
+  And the implementation covers the documented partial timeout sum "78101109179220212216"
+  And the implementation rejects missing, empty, multi-character, and invalid query parameters with HTTP 400
+  And the implementation does not add WebFlux, WebClient, Rest Assured, Resilience4j Retry, Spring Retry, or custom retry loops for US-001
+  And the command runs the focused Maven verification command from "examples/openspec/god-analysis-api/demo"
+  And the command marks OpenSpec tasks complete only after their acceptance criteria and verification gates pass
+  And the command reports changed files, validation evidence, updated OpenSpec task status, risks, and blockers
+  And any git changes produced under "examples/openspec/god-analysis-api/demo" during command execution and verification are reset
+```
+
+The execution of this command involve several parts from this project:
+
+```
+Build
+  /implement-issue
+    @robot-tech-lead
+      /create-feature-branch
+      /create-worktree
+      /review-alignment
+      @robot-java-coder
+      @robot-java-spring-boot-coder
+      @robot-java-quarkus-coder
+      @robot-java-micronaut-coder
+      @robot-no-java
+```
+
+In this case, the command will use internally `@robot-java-spring-boot-coder`:
+
+[![asciicast](https://asciinema.org/a/1257803.svg)](https://asciinema.org/a/1257803)
+
+*Running the test over Codex CLI for Spring boot variant*
+
+![](/cursor-rules-java/images/2026/6/vscode-codex.png)
+
+*Running the test over VSCode + Codex Plugin*
+
+[![asciicast](https://asciinema.org/a/1257861.svg)](https://asciinema.org/a/1257861)
+
+*Running the test over Codex CLI for Quarkus variant*
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
+and verify that acceptance-tests passes. 
+Implement it but using Quarkus, not Spring boot as the default requirement.
+```
 
 In the next release cycle, this validation model will continue to grow. The plan is to add Gherkin files gradually for all skills, commands, and agents, so every important workflow can move from "the prompt looks good" to "the behavior has an executable acceptance criterion."
 
