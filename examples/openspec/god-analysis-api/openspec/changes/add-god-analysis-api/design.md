@@ -26,6 +26,11 @@ For each selected source, retrieve a list of god names. Include only names whose
 first Unicode code point exactly matches the requested `filter`. Matching is
 case-sensitive.
 
+The documented source data returns god names with uppercase initial letters,
+including `Nike`, `Nemesis`, `Neptun`, and `Njord`. Therefore `filter=N` is the
+meaningful filter for the documented aggregate examples. Lowercase `filter=n`
+is a valid request, but it returns no matches for the current documented data.
+
 For each included name, convert every Unicode code point to its decimal integer
 string, concatenate those strings, parse the result as a large integer, and add
 it to the total. Return the total as a decimal string to avoid JSON numeric
@@ -70,4 +75,3 @@ story.
 None for this example. Future work such as caching, authentication, rate
 limiting, circuit breakers, or retry policies should be captured in separate
 changes if product scope requires them.
-

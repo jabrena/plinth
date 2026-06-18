@@ -16,7 +16,7 @@ The primary consumers are educational and research platforms with moderately tec
 ### Core API Operations
 - **Primary endpoint:** `GET /api/v1/gods/stats/sum`
 - **Query parameters:**
-  - `filter`: Case-sensitive name filtering (e.g., `filter=n` matches only names starting with lowercase 'n')
+  - `filter`: Case-sensitive name filtering by first Unicode code point. The documented source data uses uppercase initial letters, so `filter=N` matches `Nike`, `Nemesis`, `Neptun`, and `Njord`; lowercase `filter=n` is valid but returns no matches for the current documented data.
   - `sources`: Comma-separated pantheon selection (e.g., `sources=greek,roman,nordic`)
 - **Response format:** JSON object containing a `sum` field with the calculated aggregate value
 
@@ -42,7 +42,7 @@ The primary consumers are educational and research platforms with moderately tec
 ## Technical Decisions
 
 ### Language & Framework
-**Decision:** Java 26 with Spring Boot 4.0.4
+**Decision:** Java 25 with Spring Boot 4.0.4
 **Rationale:** Leverages team expertise with modern Java features and mature Spring ecosystem for REST API development.
 
 ### REST/HTTP API

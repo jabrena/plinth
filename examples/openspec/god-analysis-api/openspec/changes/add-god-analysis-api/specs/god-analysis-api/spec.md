@@ -9,7 +9,7 @@ parameters `filter` and `sources`.
 
 - **GIVEN** the God Analysis API is available at `/api/v1`
 - **AND** Greek, Roman, and Nordic source APIs return their documented god-name data
-- **WHEN** a client sends `GET /gods/stats/sum?filter=n&sources=greek,roman,nordic`
+- **WHEN** a client sends `GET /gods/stats/sum?filter=N&sources=greek,roman,nordic`
 - **THEN** the response status is `200`
 - **AND** the response body contains JSON field `sum`
 - **AND** `sum` is `78179288397447443426`
@@ -33,7 +33,7 @@ when required query parameters are missing, empty, or invalid.
 
 #### Scenario: Missing sources is rejected
 
-- **WHEN** a client sends `GET /gods/stats/sum?filter=n`
+- **WHEN** a client sends `GET /gods/stats/sum?filter=N`
 - **THEN** the response status is `400`
 - **AND** the response body contains an error message
 
@@ -78,13 +78,23 @@ configurable HTTP URLs.
 The system MUST include only names whose first Unicode code point exactly
 matches `filter`, MUST perform matching case-sensitively, MUST convert each
 included name by concatenating decimal Unicode code point values, and MUST sum
-the converted values using a large integer representation.
+the converted values using a large integer representation. The documented source
+data uses uppercase initial letters, so `filter=N` is the meaningful filter for
+the documented aggregate examples. Lowercase `filter=n` is valid but returns no
+matches for the current documented data.
 
-#### Scenario: Lowercase filter is case-sensitive
+#### Scenario: Uppercase filter matches documented source data
+
+- **WHEN** the request uses `filter=N`
+- **THEN** only names starting with uppercase `N` contribute to `sum`
+- **AND** names starting with lowercase `n` do not contribute
+
+#### Scenario: Lowercase filter is valid but has no documented matches
 
 - **WHEN** the request uses `filter=n`
-- **THEN** only names starting with lowercase `n` contribute to `sum`
-- **AND** names starting with uppercase `N` do not contribute
+- **AND** the documented source data contains no names starting with lowercase `n`
+- **THEN** the response status is `200`
+- **AND** `sum` is `0`
 
 #### Scenario: Name contribution uses concatenated code point values
 
@@ -109,7 +119,7 @@ or fail.
 
 - **GIVEN** the Nordic API is configured to respond after the timeout threshold
 - **AND** the Roman API is configured to respond after the timeout threshold
-- **WHEN** a client sends `GET /gods/stats/sum?filter=n&sources=greek,roman,nordic`
+- **WHEN** a client sends `GET /gods/stats/sum?filter=N&sources=greek,roman,nordic`
 - **THEN** the response status is `200`
 - **AND** the response body contains JSON field `sum`
 - **AND** `sum` is `78101109179220212216`
@@ -136,4 +146,3 @@ fixtures and timeout behavior.
 - **WHEN** acceptance or integration tests simulate timeout behavior
 - **THEN** WireMock stubs are reset between tests
 - **AND** timeout scenarios do not depend on test execution order
-

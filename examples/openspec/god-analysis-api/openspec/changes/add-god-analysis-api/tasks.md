@@ -16,10 +16,9 @@
 - [ ] 1.12 Add OpenAPI documentation matching the source contract.
 - [ ] 1.13 Add unit tests for conversion, filtering, source parsing, and aggregation.
 - [ ] 1.14 Add controller validation tests for all error-handling scenarios.
-- [ ] 1.15 Add WireMock-backed acceptance or integration tests for the happy path expected sum `78179288397447443426`.
-- [ ] 1.16 Add WireMock-backed timeout tests for partial result expected sum `78101109179220212216`.
+- [ ] 1.15 Add WireMock-backed acceptance or integration tests for `filter=N` happy path expected sum `78179288397447443426`.
+- [ ] 1.16 Add WireMock-backed timeout tests for `filter=N` partial result expected sum `78101109179220212216`.
 - [ ] 1.17 Ensure WireMock stubs are reset between tests.
 - [ ] 1.18 Verify no WebFlux, `WebClient`, Rest Assured, Resilience4j Retry, Spring Retry, or custom retry loop is introduced for US-001.
 - [ ] 1.19 Run the relevant Maven test or verification command for the implementation module.
 - [ ] 1.20 Run `openspec validate --all` from `examples/openspec/god-analysis-api`.
-

@@ -276,7 +276,7 @@ src/test/resources/
 
 ## Decision Outcome
 
-**Chosen platform: Spring Boot 4.0.4 with Spring MVC and Java 26** (align module `java.version` with repo standard if not 26).
+**Chosen platform: Spring Boot 4.0.4 with Spring MVC and Java 25**.
 
 **Architecture: Traditional Servlet Stack Only** - No reactive programming dependencies.
 
@@ -378,13 +378,13 @@ java.lang.NullPointerException: Cannot invoke "Object.hashCode()" because "key" 
 1. **Rest Assured 5.x is implemented in Groovy** (`RequestSpecificationImpl` and related classes).
 2. On **send**, Rest Assured invokes **`applyProxySettings`**, which uses **Groovy metaprogramming** (`MetaClassImpl.setProperty` / `getMetaProperty`).
 3. That path ends up calling **`ConcurrentHashMap.get`** with a **`null` key** (property name resolution yields `null`). **`ConcurrentHashMap` does not permit `null` keys**; the JVM throws `NullPointerException` when computing `hashCode` for the key.
-4. The issue is **not** fixed by “using Java 25 instead of 26” in isolation: it is a **Groovy / Rest Assured internal** interaction with **modern JDKs (Java 21+)** and the way nulls propagate through meta-property lookup—**brittle across JDK updates**.
+4. The issue is **not** fixed by changing JDK versions within the supported modern Java range: it is a **Groovy / Rest Assured internal** interaction with **modern JDKs (Java 21+)** and the way nulls propagate through meta-property lookup—**brittle across JDK updates**.
 
 ### Why we discard Rest Assured (instead of mitigating)
 
 | Mitigation idea | Why we reject it for this project |
 |-----------------|-------------------------------------|
-| Pin an older JDK only for tests | Conflicts with **org standard** (Java 25/26) and CI matrix; hides real breakage. |
+| Pin an older JDK only for tests | Conflicts with the **org standard** (Java 25) and CI matrix; hides real breakage. |
 | Pin older Groovy / Rest Assured versions | Ongoing **dependency roulette**; security and Boot alignment suffer. |
 | Rely on proxy / env workarounds | **Non-deterministic** across laptops and CI; root cause remains in Groovy layer. |
 | Wait for upstream fix | **Unbounded**; acceptance tests must run **now** on the chosen stack. |

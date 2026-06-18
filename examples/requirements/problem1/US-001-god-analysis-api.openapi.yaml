@@ -9,8 +9,10 @@ info:
     **Processing rules** (from requirements):
     - **Decimal conversion:** For each character in a name, use its Unicode integer value and concatenate
       those digits as a string (e.g. `Zeus` → `90101117115`), then contribute that string's numeric value to the total.
-    - **Filter:** `filter` is case-sensitive; only names whose first character exactly matches the filter
-      character are included (e.g. `filter=n` matches `n…`; `filter=N` matches no names in the documented scenarios).
+    - **Filter:** `filter` accepts exactly one Unicode code point and matching is case-sensitive.
+      The documented source data uses uppercase initials, so `filter=N` matches names such as
+      `Nike`, `Nemesis`, `Neptun`, and `Njord`; lowercase `filter=n` is valid but returns no
+      matches for the current documented data.
     - **Timeouts:** External source calls use a configured timeout (e.g. 5 seconds). If a source times out,
       the aggregate is computed from the remaining sources only (HTTP 200 with partial logical result).
     - **Authentication:** Public API; no authentication required.
@@ -55,7 +57,7 @@ paths:
             type: string
             minLength: 1
             maxLength: 1
-          example: "n"
+          example: "N"
         - name: sources
           in: query
           required: true
@@ -76,11 +78,11 @@ paths:
                 $ref: "#/components/schemas/GodStatsSumResponse"
               examples:
                 happyPath:
-                  summary: Acceptance test — filter n, all three sources
+                  summary: Acceptance test — filter N, all three sources
                   value:
                     sum: "78179288397447443426"
-                uppercaseFilterNoMatch:
-                  summary: Case-sensitive filter N — no lowercase-n names
+                lowercaseFilterNoMatch:
+                  summary: Case-sensitive filter n — no lowercase-n names in documented data
                   value:
                     sum: "0"
         "400":

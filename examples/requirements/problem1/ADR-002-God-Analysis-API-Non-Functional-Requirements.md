@@ -6,9 +6,9 @@
 
 ## Context
 
-The God Analysis API is an internal service that aggregates mythology data from three external APIs (Greek, Roman, and Nordic sources) to provide cross-pantheon analysis capabilities. The service performs data transformation (Unicode character conversion and filtering) and serves other internal services within our system architecture.
+The God Analysis API serves educational and research consumers by aggregating mythology data from three external APIs (Greek, Roman, and Nordic sources) to provide cross-pantheon analysis capabilities. The service performs data transformation (Unicode character conversion and filtering) and exposes predictable API behavior for research, reporting, and educational applications.
 
-The primary quality challenge is ensuring reliable service delivery despite the inherent unreliability of external API dependencies. The external mythology APIs (hosted on my-json-server.typicode.com) exhibit variable response times and occasional failures that could impact the availability and reliability of our internal service.
+The primary quality challenge is ensuring reliable service delivery despite the inherent unreliability of external API dependencies. The external mythology APIs (hosted on my-json-server.typicode.com) exhibit variable response times and occasional failures that could impact the availability and reliability of the public educational/research API.
 
 **Scope alignment:** This ADR intentionally does **not** require automatic HTTP retries. Outbound calls use Spring `RestClient` with configured connect/read timeouts (see [ADR-003-God-Analysis-API-Technology-Stack.md](ADR-003-God-Analysis-API-Technology-Stack.md)). That keeps implementation and operations simpler than introducing a retry library and backoff policy.
 
@@ -24,7 +24,7 @@ The primary quality challenge is ensuring reliable service delivery despite the 
 **Availability:**
 - Service must remain responsive and operational despite external dependency issues
 - No single point of failure from external API dependencies
-- Predictable behavior for internal service consumers
+- Predictable behavior for educational and research consumers
 
 **Recoverability (without retries):**
 - Isolation per source: one slow or failing source must not block successful retrieval from others beyond bounded waits (timeouts)
@@ -98,7 +98,7 @@ The primary quality challenge is ensuring reliable service delivery despite the 
 
 **Positive:**
 - Robust service that continues operating despite external dependency failures
-- Predictable behavior for internal service consumers
+- Predictable behavior for educational and research consumers
 - Isolated failure handling prevents cascading issues
 - Parallel execution minimizes response time impact
 - Simpler implementation and tests than retry + backoff policies

@@ -5,15 +5,19 @@ data across Greek, Roman, and Nordic sources for research, reporting, and
 educational use cases.
 
 The source requirements define one focused capability: fetch selected god-name
-sources, filter names by a case-sensitive prefix, transform matching names into
-Unicode-derived decimal values, and return the aggregate sum.
+sources, filter names by a case-sensitive one-code-point prefix, transform
+matching names into Unicode-derived decimal values, and return the aggregate
+sum. The documented source data uses uppercase initial letters, so `filter=N`
+is the meaningful filter for the documented aggregate examples; lowercase
+`filter=n` is valid but returns no matches for that data.
 
 ## What Changes
 
 - Add `GET /api/v1/gods/stats/sum`.
 - Require `filter` and `sources` query parameters.
 - Fetch Greek, Roman, and Nordic source APIs selected by `sources`.
-- Filter names whose first Unicode code point matches `filter` exactly.
+- Filter names whose first Unicode code point matches `filter` exactly and
+  case-sensitively.
 - Convert each included name by concatenating decimal Unicode code point values,
   parse that concatenated value as a number, and sum all included names.
 - Return the aggregate as JSON `{ "sum": "<decimal-string>" }`.
@@ -57,4 +61,3 @@ An implementation would affect the application REST controller, domain service,
 outbound source client, configuration, error handling, OpenAPI documentation,
 and unit, integration, and acceptance tests. The original source requirements in
 `examples/requirements/problem1` are not modified by this change.
-
