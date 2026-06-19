@@ -7,7 +7,7 @@ jobs:
     name: Validate Markdown Files
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: true  # Fetches all submodules
       - uses: actions/setup-java@v5
@@ -25,7 +25,7 @@ jobs:
     name: Validate Agent Skills with skill-check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: true
       - uses: actions/setup-java@v5
@@ -43,7 +43,7 @@ jobs:
     name: Validate Agent Skills with Skill Scanner
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: true
       - uses: actions/setup-java@v5
@@ -64,7 +64,7 @@ jobs:
     name: Validate Agent Skills with SkillSpector
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: true
       - uses: actions/setup-java@v5
@@ -100,7 +100,7 @@ jobs:
     name: Validate Agent Skills with Snyk Agent Scan
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: true
       - uses: actions/setup-java@v5
@@ -146,7 +146,7 @@ jobs:
     name: Pre-commit
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: true
       - uses: actions/setup-python@v6
@@ -165,7 +165,7 @@ jobs:
     name: Package Agents and Skills
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
         with:
           submodules: true
       - name: Create agents archive
