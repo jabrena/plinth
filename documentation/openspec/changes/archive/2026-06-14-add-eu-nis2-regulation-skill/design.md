@@ -60,7 +60,7 @@ The reports must stay grounded in the reviewed example files, use the NIS2 chapt
 - Inspect generated local `804-regulations-eu-nis2/references/804-regulations-eu-nis2-chapters-summary.md`.
 - Inspect generated local `804-regulations-eu-nis2/references/804-regulations-eu-nis2-engineering-examples.md`.
 - Inspect generated local `804-regulations-eu-nis2/assets/reports/804-nis2-engineering-review-report-template.md`.
-- Add and review `skills-generator/src/test/resources/gherkin/804-regulations-eu-nis2.feature` with PR-based and direct-to-main scenarios that write reports under `examples/regulations/nis2`.
+- Add and review `skills-generator/src/test/resources/gherkin/skills/804-regulations-eu-nis2.feature` with PR-based and direct-to-main scenarios that write reports under `examples/regulations/nis2`.
 - Review `examples/regulations/nis2/NIS2-ENGINEERING-REVIEW-REPORT.md` and `examples/regulations/nis2/NIS2-DIRECT-MAIN-ENGINEERING-REVIEW-REPORT.md` as acceptance execution evidence.
 - Run `./mvnw clean verify -pl skills-generator`.
 - Run `openspec validate --all`.

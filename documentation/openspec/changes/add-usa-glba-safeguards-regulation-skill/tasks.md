@@ -12,10 +12,10 @@
 - [ ] 1.8 Include engineering controls for customer-information inventory, risk assessment evidence, access controls, encryption, secure development, change management, monitoring, vulnerability management, incident response, service-provider oversight, retention/disposal, and audit-ready safeguards evidence.
 - [ ] 1.9 Update `831-skill.xml` so the workflow reads section summary, engineering examples, and report template before implementation review.
 - [ ] 1.10 Register skill id `831` with explicit `skillId="831-regulations-usa-glba-safeguards"`, references, and report template resource in `skills-generator/src/main/resources/skills.xml`.
-- [ ] 1.11 Add `skills-generator/src/test/resources/gherkin/831-regulations-usa-glba-safeguards.feature` with pull-request and direct-to-main acceptance scenarios modeled after `801-804`.
+- [ ] 1.11 Add `skills-generator/src/test/resources/gherkin/skills/831-regulations-usa-glba-safeguards.feature` with pull-request and direct-to-main acceptance scenarios modeled after `801-804`.
 - [ ] 1.12 Ensure the Gherkin scenarios require reading the summary, engineering examples, and report template, and require linked violation or safeguards-gap mapping in generated reports.
 - [ ] 1.13 Add GLBA Safeguards report examples under `examples/regulations/usa-glba-safeguards`.
-- [ ] 1.14 Add `831-regulations-usa-glba-safeguards` to `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md`.
+- [ ] 1.14 Add `831-regulations-usa-glba-safeguards` to `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`.
 - [ ] 1.15 Validate changed XML files with `xmllint --noout`.
 - [ ] 1.16 Run `./mvnw clean install -pl skills-generator`.
 - [ ] 1.17 Inspect generated local `.agents/skills/831-regulations-usa-glba-safeguards/SKILL.md`.

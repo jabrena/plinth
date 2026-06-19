@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>What&apos;s new in Cursor rules for Java 0.16.0? - Skills & Agents for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../../feed.xml" title="Skills & Agents for Java"/>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../../css/prettify.css">
+  <link rel="icon" type="image/png" href="../../../images/java-icon.png">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../../index.html">Skills & Agents for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li><a href="https://forms.gle/TpNXENjmu45wuXoi6" target="_blank">Share feedback</a></li>
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Conferences</a>
+    <div class="navlinks-children">
+      <a href="https://jabrena.github.io/cursor-rules-java/codemotion-madrid-2026/index.html" target="_blank">Codemotion Madrid 2026</a>
+      <a href="https://jabrena.github.io/cursor-rules-java/dvbe25/index.html" target="_blank">Devoxx BE 2025</a>
+      <a href="https://jabrena.github.io/101-cursor/" target="_blank">WJAX-2025</a>
+    </div>
+  </li>
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../../courses/java-generics/index.html">Java Generics</a>
+      <a href="../../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
+    </div>
+  </li>
+  <li><a href="../../../archive.html">Archive</a></li>
+  <li><a href="https://jabrena-github-io.translate.goog/cursor-rules-java/?_x_tr_sl=en&_x_tr_tl=cn&_x_tr_hl=en-US&_x_tr_pto=wapp">Translate</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="post-heading">
+<h1>What's new in Cursor rules for Java 0.16.0?</h1>
+<span class="post-meta">
+  <i class="fa fa-calendar-o"></i>
+  2026-06-22
+    &nbsp;
+    <i class="fa fa-pencil"></i>
+    Juan Antonio Breña Moral
+</span>
+<span class="blog-tags">
+  &nbsp;
+  <i class="fa fa-tags"></i>
+    <a href="../../../tags/blog.html">blog</a>
+    <a href="../../../tags/skills.html">skills</a>
+    <a href="../../../tags/java.html">java</a>
+    <a href="../../../tags/agents.html">agents</a>
+    <a href="../../../tags/regulations.html">regulations</a>
+    <a href="../../../tags/commands.html">commands</a>
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="blog-post">
+<h2>What is the purpose?</h2>
+<p>An opinionated, AI-native development workflow for Java Enterprise: reusable <code>Skills</code>, <code>Agents</code>, <code>Commands</code>, and third-party <code>MCP servers</code> combined with a human-in-the-loop model to modernize real-world SDLC practices.</p>
+<p>Starting with this release, the project provides a way to express any <code>SDLC</code> action through 3 phases: <code>Plan</code>, <code>Build</code>, and <code>Operate</code>. <code>Software engineers</code> can use this model in user interfaces or terminals when they write a <code>User prompt</code>.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-bash">Build
+  /implement-issue
+    @robot-tech-lead
+      /create-feature-branch
+      /create-worktree
+      /review-alignment
+      @robot-java-coder
+      @robot-java-spring-boot-coder
+      @robot-java-quarkus-coder
+      @robot-java-micronaut-coder
+      @robot-no-java
+</code></pre>
+<p>We will go into more detail later, but first, let's review the features that have evolved since the last release:</p>
+<ul>
+<li><a href="#enriching-the-workflow-with-commands-and-agents-not-only-skills">Enriching the workflow with Commands and Agents, not only Skills</a></li>
+<li><a href="#what-are-the-top-10-skills-from-this-project-in-skillssh">What are the Top 10 Skills from this project in Skills.sh?</a></li>
+<li><a href="#applying-zero-trust-with-your-agent-skills">Applying Zero Trust with your Agent skills</a></li>
+<li><a href="#improving-the-approach-to-test-the-behavior-of-an-agent-skills">Improving the approach to test the behavior of Agent Skills</a></li>
+<li><a href="#improving-the-way-to-install-agents-and-commands">Improving the way to install Agents and Commands</a></li>
+<li><a href="#new-capabilities-for-java-enterprise-frameworks">New capabilities for Java Enterprise Frameworks</a></li>
+<li><a href="#increasing-the-engineering-awareness-with-eu-regulations">Increasing engineering awareness with EU regulations</a></li>
+</ul>
+<p>Thanks to our community members in <code>Singapore</code>, <code>Hong Kong</code>, <code>Hanoi</code>, <code>London</code>, and <code>New York</code>. 👋👋👋</p>
+<p><strong>Help this project grow:</strong> <a href="https://github.com/sponsors/jabrena">If this project helps your team, become a sponsor.</a></p>
+<h2>Enriching the workflow with Commands and Agents, not only Skills</h2>
+<p><a id="enriching-the-workflow-with-commands-and-agents-not-only-skills"></a></p>
+<p>The project started more than a year ago with a set of reusable <code>rules / system prompts</code>. They were useful because teams could point an AI assistant at a consistent body of engineering expectations instead of rewriting the same instructions for every conversation. But as documented in <a href="https://github.com/jabrena/cursor-rules-java/blob/main/documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md"><code>ADR-002</code></a>, automatic activation through broad <code>.java</code> frontmatter did not scale well: multiple rules could enter the context at the same time, increasing latency, consuming context, and making answers less deterministic. In 2026, with the rise of <code>Skills</code> and continued use of system prompts, evolving into <code>Skills</code> was a natural step. Release <code>0.16.0</code> moves further toward connected workflows. <code>Commands</code> become the entry points that a team can run. <code>Agents</code> become the role-specific workers that interpret the task. <code>Skills</code> become the reusable knowledge and procedures each agent applies.</p>
+<p>In practice, the operating model now looks like this:</p>
+<pre><code class="language-text">Command -&gt; Agent -&gt; Skills -&gt; Change in your repository
+</code></pre>
+<p>That model is organized around three delivery paths:</p>
+<pre><code class="language-text">Plan
+  /create-issue
+    @robot-business-analyst
+      @043-planning-github-issues
+      @044-planning-jira
+      @014-agile-user-story
+  /create-adr
+    @robot-architect
+      @030-architecture-adr-general
+      @031-architecture-adr-functional-requirements
+      @032-architecture-adr-non-functional-requirements
+  /create-diagram
+    @robot-architect
+      @033-architecture-diagrams
+  /create-spec
+    @robot-tech-lead
+      @042-planning-openspec
+  /explore-design
+    @robot-architect
+      @034-architecture-design-exploration
+  /review-alignment
+    @robot-business-analyst
+
+Build
+  /implement-issue
+    @robot-tech-lead
+      /create-feature-branch
+      /create-worktree
+      /review-alignment
+      @robot-java-coder
+      @robot-java-spring-boot-coder
+      @robot-java-quarkus-coder
+      @robot-java-micronaut-coder
+      @robot-no-java
+
+Operate
+  /profile
+    @robot-java-performance
+      @161-java-profiling-detect
+      @162-java-profiling-analyze
+      @163-java-profiling-refactor
+      @164-java-profiling-verify
+  /benchmark
+    @robot-java-performance
+      @151-java-performance-jmeter
+      @152-java-performance-gatling
+</code></pre>
+<p>In coming releases, this model will be expanded in different ways, but its pillars are established in this release.</p>
+<p>In other projects, you can find useful <code>Skills</code>, <code>Agents</code>, or <code>Commands</code>, but not always a fully connected workflow designed with <code>Java</code> in mind.</p>
+<h2>What are the Top 10 Skills from this project in Skills.sh?</h2>
+<p><a id="what-are-the-top-10-skills-from-this-project-in-skillssh"></a></p>
+<p>The project has <code>106 skills</code> and uses <a href="https://www.skills.sh/jabrena/cursor-rules-java">Skills.sh</a> as its main skill registry. It has served <code>11.0K</code> installs in total. These are the current top 10 skills used by users there:</p>
+<ol>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices"><code>110-java-maven-best-practices</code></a> - <a href="https://www.skills.sh/search?q=maven">maven</a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design"><code>121-java-object-oriented-design</code></a> - <a href="https://www.skills.sh/search?q=java%20object%20oriented">java object oriented</a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/124-java-secure-coding"><code>124-java-secure-coding</code></a> - <a href="https://www.skills.sh/search?q=java%20security">java security</a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/131-java-testing-unit-testing"><code>131-java-testing-unit-testing</code></a> - <a href="https://www.skills.sh/search?q=java%20unit%20testing">java unit testing</a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/142-java-functional-programming"><code>142-java-functional-programming</code></a> - <a href="https://www.skills.sh/search?q=java%20functional%20programming">java functional programming</a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/128-java-generics"><code>128-java-generics</code></a> - <a href="https://www.skills.sh/search?q=java%20generics">java generics</a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies"><code>111-java-maven-dependencies</code></a> - <a href="https://www.skills.sh/search?q=maven">maven</a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/141-java-refactoring-with-modern-features"><code>141-java-refactoring-with-modern-features</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/125-java-concurrency"><code>125-java-concurrency</code></a> - <a href="https://www.skills.sh/search?q=java%20concurrency">java concurrency</a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling"><code>143-java-functional-exception-handling</code></a> - <a href="https://www.skills.sh/search?q=java%20functional%20programming">java functional programming</a></li>
+</ol>
+<p><strong>What is your favorite <code>Skill</code> from this project?</strong> You could share it here: <a href="https://github.com/jabrena/cursor-rules-java/discussions/804">https://github.com/jabrena/cursor-rules-java/discussions/804</a></p>
+<h2>Applying Zero Trust with your Agent skills</h2>
+<p><a id="applying-zero-trust-with-your-agent-skills"></a></p>
+<p><code>Skills</code> are not ordinary Markdown files. They are executable guidance for AI agents. A skill can tell an agent how to read code, run commands, inspect evidence, write files, install tools, or make a technical recommendation.</p>
+<p>That is useful, but it also means generated skills need a <code>zero trust</code> review mindset. In <code>0.15.0</code>, the project introduced its first validators for generated skills. In <code>0.16.0</code>, that support has grown into a broader validation stack with multiple independent gates:</p>
+<ul>
+<li><code>MarkdownValidator</code> checks that project documentation and generated Markdown remain parseable and healthy.</li>
+<li><code>skill-check</code> validates the skill package structure.</li>
+<li><code>cisco-ai-skill-scanner</code> scans generated skills recursively with behavioral scanning and a strict policy.</li>
+<li><code>SkillSpector</code> adds another static quality and security review.</li>
+<li><code>Snyk Agent Scan</code> adds supply-chain and prompt-risk signals.</li>
+</ul>
+<p>The point is not to claim that a generated skill is perfect. The point is to make suspicious behavior visible before maintainers or users rely on it.</p>
+<p>Common risks include:</p>
+<ul>
+<li>Prompt injection patterns</li>
+<li>Data exfiltration instructions</li>
+<li>Suspicious command execution</li>
+<li>Hidden or obfuscated content</li>
+<li>Excessive agency</li>
+<li>Supply-chain risk</li>
+<li>Description-behavior mismatch</li>
+<li>Insecure credential handling</li>
+<li>System modification and privilege escalation</li>
+<li>Untrusted content and indirect prompt injection</li>
+<li>Tool poisoning and tool shadowing</li>
+</ul>
+<p>If you are interested in this kind of validation, I recommend reading the following article: <a href="/cursor-rules-java/blog/2026/06/skill-validators-pipeline.html">How to validate skills?</a></p>
+<h2>Improving the approach to test the behavior of Agent Skills</h2>
+<p><a id="improving-the-approach-to-test-the-behavior-of-an-agent-skills"></a></p>
+<p>All elements in this project change for different reasons, so it is necessary to invest time in the release process to ensure that they continue adding value for software engineers and AI agents running in pipelines.</p>
+<p>During this release, we ran a <code>Spike</code> to validate an improved testing process. We added <code>Gherkin</code> support for all skills created or updated in this release, reducing testing time and generating evidence for specific deterministic behaviors.</p>
+<p>Let's review 2 examples to show the value of the new tests.</p>
+<h3>Example to validate a skill</h3>
+<p>All skills have an acceptance-test inventory, and it lives in <code>acceptance-tests-prompts-skills.md</code>. When a generated skill changes for any reason, it is now possible to run only the matching prompt for that changed skill. Let's review the scenario for <code>@111-java-maven-dependencies</code>.</p>
+<p><strong>@111-java-maven-dependencies:</strong></p>
+<p>The inventory has a prompt to validate the skill:</p>
+<pre><code class="language-bash">execute @skills-generator/src/test/resources/gherkin/skills/111-java-maven-dependencies.feature
+and verify that acceptance-tests pass.
+</code></pre>
+<p>You can run the following <code>Gherkin</code> file:</p>
+<pre><code class="language-gherkin">Feature: Validate changes from usage of Maven dependencies skill
+
+Background:
+  Given the skill &quot;111-java-maven-dependencies&quot;
+
+@acceptance-test
+Scenario: Add JSpecify and Error Prone + NullAway to Maven demo
+  Given the example project &quot;examples/maven/maven-demo&quot;
+  And the example project has a baseline &quot;pom.xml&quot;
+  And the folder &quot;examples/maven/maven-demo&quot; has no git changes
+  And the dependency selection answers are:
+    | question                  | answer                           |
+    | code-quality dependencies | JSpecify; Error Prone + NullAway |
+    | main project package name | info.jab                         |
+  When the skill &quot;111-java-maven-dependencies&quot; is applied to &quot;examples/maven/maven-demo&quot;
+  Then &quot;./mvnw validate&quot; succeeds in &quot;examples/maven/maven-demo&quot;
+  And the &quot;pom.xml&quot; declares selected dependencies and compiler plugin arguments
+  And &quot;.mvn/jvm.config&quot; contains the required JVM arguments
+  And &quot;./mvnw clean verify&quot; fails during compile in &quot;examples/maven/maven-demo&quot;
+  And the verification failure is accepted because &quot;-Xlint:all&quot; and &quot;-Werror&quot; convert existing warnings into errors
+  And any git changes produced during skill execution and verification are reset
+</code></pre>
+<p>For this particular skill, the scenario fixes the example project, the selected dependency answers, the expected <code>pom.xml</code> changes, the expected <code>.mvn/jvm.config</code> changes, the validation command, the accepted compiler failure, and the cleanup expectation. The goal is not to test every possible conversation. The goal is to prove that the changed skill still follows its intended workflow against a stable fixture.</p>
+<p>Let's review another, more complex scenario.</p>
+<h3>Example to validate a command</h3>
+<p>All commands have an acceptance-test inventory, and it lives in <code>acceptance-tests-prompts-skills.md</code>. When a generated command changes for any reason, it is now possible to run only the matching prompt for that changed command. Let's review the scenario for <code>@/implement-issue</code>.</p>
+<p>As example, lets try to solve the first problem from the project <code>Latency problems:</code> <a href="https://github.com/jabrena/latency-problems/blob/master/docs/problem1/README.md">https://github.com/jabrena/latency-problems/blob/master/docs/problem1/README.md</a></p>
+<pre><code class="language-bash"># Problem 1
+
+## User Story Statement
+
+- **As an** API consumer / data analyst
+- **I want to** consume God APIs (Greek, Roman &amp; Nordic), filter gods whose names start with a requested letter, convert each filtered god name into a decimal representation, and return the sum of those values
+- **So that** I can perform cross-pantheon analysis and aggregate mythology data for research, reporting, or educational applications.
+
+**Notes:**
+
+- Decimal conversion: For each god name, each character is converted to its Unicode integer value and those integers are concatenated as strings (for example, `Zeus` -&gt; `90101117115`). The final result is the numeric sum of all per-name string representations.
+- Case sensitivity: The `filter` parameter accepts exactly one Unicode code point and matching is case-sensitive. The documented source data returns god names with uppercase initial letters, such as `Nike`, `Nemesis`, `Neptun`, and `Njord`, so `filter=N` is the meaningful value for the documented aggregate examples. A lowercase `filter=n` is valid but returns no matches for the current documented data.
+- HTTP timeouts: Outbound calls use Spring `RestClient` with connect/read timeouts set once in configuration (defaults in `application.yml`; optional environment variable overrides). There is no automatic retry of failed or timed-out requests; aggregation continues with the sources that return in time.
+- Configuration: Single default configuration with environment variable overrides for operational flexibility.
+- Data sources:
+  - Greek API: https://my-json-server.typicode.com/jabrena/latency-problems/greek
+  - Roman API: https://my-json-server.typicode.com/jabrena/latency-problems/roman
+  - Nordic API: https://my-json-server.typicode.com/jabrena/latency-problems/nordic
+</code></pre>
+<p>Given this <code>User story</code> and the <code>OpenSpec</code> change defined here: <a href="https://github.com/jabrena/cursor-rules-java/tree/main/examples/openspec">https://github.com/jabrena/cursor-rules-java/tree/main/examples/openspec</a> you could be able to implement using the new command <code>/implement-issue</code>. Lets see how to do it and how to validate it.</p>
+<p><strong>/implement-issue:</strong></p>
+<p>Using this prompt:</p>
+<pre><code class="language-bash">execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
+and verify that acceptance-tests pass.
+</code></pre>
+<p>You can run the following <code>Gherkin</code> file:</p>
+<pre><code class="language-bash">Feature: Validate implement-issue command with the God Analysis API OpenSpec example
+
+Background:
+  Given the command prompt file &quot;.cursor/commands/implement-issue.md&quot;
+  And the OpenSpec project path &quot;examples/openspec/god-analysis-api&quot;
+  And the OpenSpec change path &quot;examples/openspec/god-analysis-api/openspec/changes/add-god-analysis-api&quot;
+  And the implementation target directory &quot;examples/openspec/god-analysis-api/demo&quot;
+  And the implementation target directory starts empty except for &quot;.gitkeep&quot;
+
+@acceptance-test
+Scenario: Implement God Analysis API from a validated OpenSpec change
+  Remark: Acceptance execution must use the implement-issue command contract and must not implement outside the requested demo directory.
+  Given the OpenSpec change &quot;add-god-analysis-api&quot; contains &quot;proposal.md&quot;, &quot;design.md&quot;, &quot;tasks.md&quot;, and &quot;specs/god-analysis-api/spec.md&quot;
+  And the OpenSpec change is validated with &quot;openspec validate --all&quot; from &quot;examples/openspec/god-analysis-api&quot;
+  And the command prompt source &quot;.cursor/commands/implement-issue.md&quot; is read before execution
+  When the user executes the prompt &quot;/implement-issue examples/openspec/god-analysis-api/openspec/changes/add-god-analysis-api implement in examples/openspec/god-analysis-api/demo&quot;
+  Then the command loads the selected OpenSpec &quot;tasks.md&quot; as the execution contract
+  And the command confirms the selected OpenSpec change is current, validated, and internally consistent
+  And the command identifies the implementation as a Spring Boot MVC Java service from the OpenSpec design and technology constraints
+  And the command routes implementation work through &quot;@robot-tech-lead&quot; and the appropriate Java Spring Boot implementation agent
+  And the command reports using the current branch as the isolation strategy before implementation starts
+  And all generated implementation files are created under &quot;examples/openspec/god-analysis-api/demo&quot;
+  And the implementation provides &quot;GET /api/v1/gods/stats/sum&quot;
+  And the implementation covers the documented happy path sum &quot;78179288397447443426&quot;
+  And the implementation covers the documented partial timeout sum &quot;78101109179220212216&quot;
+  And the implementation rejects missing, empty, multi-character, and invalid query parameters with HTTP 400
+  And the implementation does not add WebFlux, WebClient, Rest Assured, Resilience4j Retry, Spring Retry, or custom retry loops for US-001
+  And the command runs the focused Maven verification command from &quot;examples/openspec/god-analysis-api/demo&quot;
+  And the command marks OpenSpec tasks complete only after their acceptance criteria and verification gates pass
+  And the command reports changed files, validation evidence, updated OpenSpec task status, risks, and blockers
+  And any git changes produced under &quot;examples/openspec/god-analysis-api/demo&quot; during command execution and verification are reset
+</code></pre>
+<p>Under the hood, this <code>Gherkin</code> file triggers the following set of project elements, which can be located in <code>.agents/**</code> or in other locations depending on your preferred tool and installation method:</p>
+<pre><code>Build
+  /implement-issue
+    @robot-tech-lead
+      /create-feature-branch
+      /create-worktree
+      /review-alignment
+      @robot-java-coder
+      @robot-java-spring-boot-coder
+      @robot-java-quarkus-coder
+      @robot-java-micronaut-coder
+      @robot-no-java
+</code></pre>
+<p>In this case, the command internally uses the agent <code>@robot-tech-lead</code>, which redirects to the specific agent <code>@robot-java-spring-boot-coder</code> based on the analysis of the specification and this is the result:</p>
+<p><a href="https://asciinema.org/a/1257803"><img src="https://asciinema.org/a/1257803.svg" alt="asciicast" /></a></p>
+<p><em>Running the test with Codex CLI for the Spring Boot variant</em></p>
+<p><img src="/cursor-rules-java/images/2026/6/vscode-codex.png" alt="" /></p>
+<p><em>Running the test with VS Code + Codex plugin</em></p>
+<p>But if you refine a bit the prompt, you could implement the requirement in <code>Quarkus</code>:</p>
+<pre><code class="language-bash">execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
+and verify that acceptance-tests pass. 
+Implement it using Quarkus, not Spring Boot, as the default requirement.
+</code></pre>
+<p>In this case, the agent <code>@robot-tech-lead</code> redirects the workload to the specific agent <code>@robot-java-quarkus-coder</code>:</p>
+<p><a href="https://asciinema.org/a/1257861"><img src="https://asciinema.org/a/1257861.svg" alt="asciicast" /></a></p>
+<p><em>Running the test with Codex CLI for the Quarkus variant</em></p>
+<p>Or, if required, the agent <code>@robot-tech-lead</code> redirects to the specific agent <code>@robot-java-micronaut-coder</code>:</p>
+<pre><code class="language-bash">execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
+and verify that acceptance-tests pass. 
+Implement it using Micronaut, not Spring Boot, as the default requirement.
+</code></pre>
+<p>And the project will implement the feature without any issue:</p>
+<p><a href="https://asciinema.org/a/1258091"><img src="https://asciinema.org/a/1258091.svg" alt="asciicast" /></a></p>
+<p><em>Running the test with Codex CLI for the Micronaut variant</em></p>
+<p>So, it you observe one of the unique features from this project is the capacity to implement requirements in multiple Java frameworks.</p>
+<h2>Improving the way to install Agents and Commands</h2>
+<p><a id="improving-the-way-to-install-agents-and-commands"></a></p>
+<p>With the rise of <code>Skills</code>, there is a need for public registries for them. But what happens with <code>Agents</code>, <code>Commands</code>, or other files? The reality is that <code>Agents</code> and <code>Commands</code> are often treated as second-class citizens.</p>
+<p>To take advantage of the public registry and the process for generating skills from <code>XML</code> sources, it is relatively easy to embed commands and agents in a <code>Meta Skill</code>. Once you have installed the skills, you can see the following inventory and installation workflows:</p>
+<ul>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/001-commands-inventory"><code>@001-commands-inventory</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/002-agents-inventory"><code>@002-agents-inventory</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/003-skills-inventory"><code>@003-skills-inventory</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/004-commands-installation"><code>@004-commands-installation</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/005-agents-installation"><code>@005-agents-installation</code></a></li>
+</ul>
+<p>Then you can use them to install assets or generate the inventory files.</p>
+<h2>New capabilities for Java Enterprise Frameworks</h2>
+<p><a id="new-capabilities-for-java-enterprise-frameworks"></a></p>
+<p>In this new release, we have added a few new Java framework capabilities:</p>
+<ul>
+<li><strong>Project creation:</strong> starter skills for Spring Boot, Quarkus, and Micronaut, helping teams bootstrap Maven-based services with the expected Java version, framework baseline, package structure, and verification commands from the first commit: <code>@300-frameworks-spring-boot-create-project</code>, <code>@400-frameworks-quarkus-create-project</code>, <code>@500-frameworks-micronaut-create-project</code>.</li>
+<li><strong>Spring Modulith:</strong> dedicated guidance for modular monolith design with Spring Boot: <code>@305-frameworks-spring-boot-modulith</code>.</li>
+<li><strong>MongoDB migrations:</strong> Mongock migration skills for Spring Boot, Quarkus, and Micronaut: <code>@316-frameworks-spring-mongodb-migrations-mongock</code>, <code>@416-frameworks-quarkus-mongodb-migrations-mongock</code>, <code>@516-frameworks-micronaut-mongodb-migrations-mongock</code>.</li>
+</ul>
+<p>The value is that teams can pick the framework lane first, then apply the matching skills for project creation, REST APIs, validation, security, persistence, messaging, migrations, MongoDB, and tests. If you use one of the main Java frameworks, you can review the following skills:</p>
+<p><strong>Spring Boot skills:</strong></p>
+<ul>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/300-frameworks-spring-boot-create-project"><code>@300-frameworks-spring-boot-create-project</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/301-frameworks-spring-boot-core"><code>@301-frameworks-spring-boot-core</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/302-frameworks-spring-boot-rest"><code>@302-frameworks-spring-boot-rest</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/303-frameworks-spring-boot-validation"><code>@303-frameworks-spring-boot-validation</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/304-frameworks-spring-boot-security"><code>@304-frameworks-spring-boot-security</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/305-frameworks-spring-boot-modulith"><code>@305-frameworks-spring-boot-modulith</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/311-frameworks-spring-jdbc"><code>@311-frameworks-spring-jdbc</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/312-frameworks-spring-data-jdbc"><code>@312-frameworks-spring-data-jdbc</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/313-frameworks-spring-db-migrations-flyway"><code>@313-frameworks-spring-db-migrations-flyway</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/314-frameworks-spring-kafka"><code>@314-frameworks-spring-kafka</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/315-frameworks-spring-mongodb"><code>@315-frameworks-spring-mongodb</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/316-frameworks-spring-mongodb-migrations-mongock"><code>@316-frameworks-spring-mongodb-migrations-mongock</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/321-frameworks-spring-boot-testing-unit-tests"><code>@321-frameworks-spring-boot-testing-unit-tests</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/322-frameworks-spring-boot-testing-integration-tests"><code>@322-frameworks-spring-boot-testing-integration-tests</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/323-frameworks-spring-boot-testing-acceptance-tests"><code>@323-frameworks-spring-boot-testing-acceptance-tests</code></a></li>
+</ul>
+<p><strong>Quarkus skills:</strong></p>
+<ul>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/400-frameworks-quarkus-create-project"><code>@400-frameworks-quarkus-create-project</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/401-frameworks-quarkus-core"><code>@401-frameworks-quarkus-core</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/402-frameworks-quarkus-rest"><code>@402-frameworks-quarkus-rest</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/403-frameworks-quarkus-validation"><code>@403-frameworks-quarkus-validation</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/404-frameworks-quarkus-security"><code>@404-frameworks-quarkus-security</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/411-frameworks-quarkus-jdbc"><code>@411-frameworks-quarkus-jdbc</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/412-frameworks-quarkus-panache"><code>@412-frameworks-quarkus-panache</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/413-frameworks-quarkus-db-migrations-flyway"><code>@413-frameworks-quarkus-db-migrations-flyway</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/414-frameworks-quarkus-kafka"><code>@414-frameworks-quarkus-kafka</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/415-frameworks-quarkus-mongodb"><code>@415-frameworks-quarkus-mongodb</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/416-frameworks-quarkus-mongodb-migrations-mongock"><code>@416-frameworks-quarkus-mongodb-migrations-mongock</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/421-frameworks-quarkus-testing-unit-tests"><code>@421-frameworks-quarkus-testing-unit-tests</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/422-frameworks-quarkus-testing-integration-tests"><code>@422-frameworks-quarkus-testing-integration-tests</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/423-frameworks-quarkus-testing-acceptance-tests"><code>@423-frameworks-quarkus-testing-acceptance-tests</code></a></li>
+</ul>
+<p><strong>Micronaut skills:</strong></p>
+<ul>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/500-frameworks-micronaut-create-project"><code>@500-frameworks-micronaut-create-project</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/501-frameworks-micronaut-core"><code>@501-frameworks-micronaut-core</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/502-frameworks-micronaut-rest"><code>@502-frameworks-micronaut-rest</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/503-frameworks-micronaut-validation"><code>@503-frameworks-micronaut-validation</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/504-frameworks-micronaut-security"><code>@504-frameworks-micronaut-security</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/511-frameworks-micronaut-jdbc"><code>@511-frameworks-micronaut-jdbc</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/512-frameworks-micronaut-data"><code>@512-frameworks-micronaut-data</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/513-frameworks-micronaut-db-migrations-flyway"><code>@513-frameworks-micronaut-db-migrations-flyway</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/514-frameworks-micronaut-kafka"><code>@514-frameworks-micronaut-kafka</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/515-frameworks-micronaut-mongodb"><code>@515-frameworks-micronaut-mongodb</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/516-frameworks-micronaut-mongodb-migrations-mongock"><code>@516-frameworks-micronaut-mongodb-migrations-mongock</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/521-frameworks-micronaut-testing-unit-tests"><code>@521-frameworks-micronaut-testing-unit-tests</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/522-frameworks-micronaut-testing-integration-tests"><code>@522-frameworks-micronaut-testing-integration-tests</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/523-frameworks-micronaut-testing-acceptance-tests"><code>@523-frameworks-micronaut-testing-acceptance-tests</code></a></li>
+</ul>
+<h2>Increasing engineering awareness with EU regulations</h2>
+<p><a id="increasing-the-engineering-awareness-with-eu-regulations"></a></p>
+<p>EU regulations are becoming part of the daily software engineering context, not something that only appears at the end of a release. Modern Java systems process personal data, integrate third-party services, expose APIs, run distributed infrastructure, and increasingly include AI models, RAG pipelines, agents, tool calling, or generated decision support.</p>
+<p>For software development teams, the value is practical: regulations help turn vague risk into reviewable engineering questions. They push teams to identify the system scope, data flows, operational controls, human oversight, audit evidence, incident paths, and ownership boundaries before a change reaches production.</p>
+<p>This becomes even more important with GenAI tooling. When prompts, embeddings, generated code, agent actions, and tool calls enter the SDLC, teams need a repeatable way to ask what data is being used, what decisions are automated, what evidence is kept, and which legal, security, privacy, risk, or product owners must review the work.</p>
+<p><code>0.16.0</code> introduces a new alpha family of regulation engineering review skills:</p>
+<ul>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/801-regulations-eu-ai-act"><code>@801-regulations-eu-ai-act</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/802-regulations-dora"><code>@802-regulations-dora</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/803-regulations-gdpr"><code>@803-regulations-gdpr</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/804-regulations-eu-nis2"><code>@804-regulations-eu-nis2</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/805-regulations-eu-cyber-resilience-act"><code>@805-regulations-eu-cyber-resilience-act</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/806-regulations-eu-data-act"><code>@806-regulations-eu-data-act</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/807-regulations-eu-digital-services-act"><code>@807-regulations-eu-digital-services-act</code></a></li>
+<li><a href="https://www.skills.sh/jabrena/cursor-rules-java/808-regulations-eu-digital-markets-act"><code>@808-regulations-eu-digital-markets-act</code></a></li>
+</ul>
+<p>These skills are engineering review aids. <em>They do not provide legal advice and they do not replace qualified legal, compliance, privacy, security, risk, product, or governance owners.</em></p>
+<p>For distributed systems using GenAI tools, a practical review set is:</p>
+<ul>
+<li><code>EU AI Act</code> when the system uses AI models, LLMs, RAG, AI agents, tool calling, or generated decision support.</li>
+<li><code>GDPR</code> when the system processes personal data in prompts, logs, embeddings, retrieval sources, exports, backups, or generated outputs.</li>
+<li><code>NIS2</code> when the system supports essential or important services, cybersecurity incident flows, supply-chain dependencies, or critical operations.</li>
+<li><code>DORA</code> when the system supports financial entities, important business services, ICT risk, third-party ICT providers, or operational resilience evidence.</li>
+<li><code>Cyber Resilience Act</code> when a product, library, agent tool, or software component may be distributed as a product with digital elements.</li>
+<li><code>Data Act</code> when the system exposes data access, sharing, portability, cloud switching, connected-product data, or interoperability workflows.</li>
+<li><code>Digital Services Act</code> when the system supports hosting, platforms, marketplaces, content moderation, recommender systems, advertising, or transparency reporting.</li>
+<li><code>Digital Markets Act</code> when the system supports gatekeeper-platform concerns, core platform services, interoperability, data access, ranking, or self-preferencing controls.</li>
+</ul>
+<p>If you are interested in this set of skills, I recommend reading the following article: <a href="/cursor-rules-java/blog/2026/06/introduction-to-eu-regulations-part-i.html">Introduction to EU regulations Part I</a></p>
+<h2>Next steps</h2>
+<p>The next phase is already visible in the <a href="https://github.com/jabrena/cursor-rules-java/milestone/11"><code>v0.17.0</code> milestone</a>. The backlog continues the same direction as <code>0.16.0</code>: make agent workflows more useful, more deterministic, and easier to adopt in real teams.</p>
+<p>Functionally, the next workstreams are:</p>
+<ul>
+<li>Expand executable acceptance coverage for <code>Skills</code>, <code>Agents</code>, and <code>Commands</code>, so important behavior is checked with stable <code>Gherkin</code> scenarios instead of relying only on package shape or manual review.</li>
+<li>Add LLM engineering references such as <code>Karpathy's LLM Wiki</code>, so agent and skill guidance can stay closer to widely used mental models for building with language models.</li>
+<li>Improve analysis methods, including <code>the hamburger method</code> and <code>the two-step method</code>, so discovery work can become more structured before teams generate ADRs, specs, plans, or implementation tasks.</li>
+<li>Extend Maven guidance with <code>JavaMoney</code> support in the Maven plugin workflow, improving how teams introduce money and currency handling into enterprise builds.</li>
+<li>Complete the <code>EU regulation</code> review family, so teams can map distributed-system and <code>GenAI</code> decisions against a broader set of engineering evidence patterns.</li>
+</ul>
+<p>Enjoy.</p>
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena/cursor-rules-java" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2026 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../../js/jquery-1.11.2.min.js"></script>
+<script src="../../../js/bootstrap.min.js"></script>
+<script src="../../../js/prettify.js"></script>
+<script src="../../../js/run_prettify.js"></script>
+<script src="../../../js/main.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13CV90H4J4');
+</script>
+
+</body>
+</html>

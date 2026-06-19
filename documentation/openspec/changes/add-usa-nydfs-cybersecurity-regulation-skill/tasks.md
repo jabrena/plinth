@@ -12,10 +12,10 @@
 - [ ] 1.8 Include engineering controls for cybersecurity governance, asset inventory, risk assessment, MFA, IAM, least privilege, secure configuration, encryption, vulnerability management, application security, logging, incident response, business continuity, disaster recovery, third-party service-provider security, audit trails, and certification evidence.
 - [ ] 1.9 Update `832-skill.xml` so the workflow reads section summary, engineering examples, and report template before implementation review.
 - [ ] 1.10 Register skill id `832` with explicit `skillId="832-regulations-usa-nydfs-cybersecurity"`, references, and report template resource in `skills-generator/src/main/resources/skills.xml`.
-- [ ] 1.11 Add `skills-generator/src/test/resources/gherkin/832-regulations-usa-nydfs-cybersecurity.feature` with pull-request and direct-to-main acceptance scenarios modeled after `801-804`.
+- [ ] 1.11 Add `skills-generator/src/test/resources/gherkin/skills/832-regulations-usa-nydfs-cybersecurity.feature` with pull-request and direct-to-main acceptance scenarios modeled after `801-804`.
 - [ ] 1.12 Ensure the Gherkin scenarios require reading the summary, engineering examples, and report template, and require linked violation or cybersecurity-gap mapping in generated reports.
 - [ ] 1.13 Add NYDFS cybersecurity report examples under `examples/regulations/usa-nydfs-cybersecurity`.
-- [ ] 1.14 Add `832-regulations-usa-nydfs-cybersecurity` to `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md`.
+- [ ] 1.14 Add `832-regulations-usa-nydfs-cybersecurity` to `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`.
 - [ ] 1.15 Validate changed XML files with `xmllint --noout`.
 - [ ] 1.16 Run `./mvnw clean install -pl skills-generator`.
 - [ ] 1.17 Inspect generated local `.agents/skills/832-regulations-usa-nydfs-cybersecurity/SKILL.md`.
