@@ -32,7 +32,6 @@ later, we will enter in details about all current possiblities but now, lets sho
 - [What are the Top 10 Skills from this project in Skills.sh?](#what-are-the-top-10-skills-from-this-project-in-skillssh)
 - [Applying Zero Trust with your Agent skills](#applying-zero-trust-with-your-agent-skills)
 - [Improving the approach to test the behavior of an Agent Skills](#improving-the-approach-to-test-the-behavior-of-an-agent-skills)
-- [Decoupling changes in daily development with the artifacts used by Skill registries](#decoupling-changes-in-daily-development-with-the-artifacts-used-by-skill-registries)
 - [Improving the way to install Agents and Commands](#improving-the-way-to-install-agents-and-commands)
 - [New capabilities for Java Enterprise Frameworks](#new-capabilities-for-java-enterprise-frameworks)
 - [Increasing the Engineering awareness with EU regulations](#increasing-the-engineering-awareness-with-eu-regulations)
@@ -163,15 +162,15 @@ If you are interesting in this kind of validation, I recommend to read the follo
 
 <a id="improving-the-approach-to-test-the-behavior-of-an-agent-skills"></a>
 
-During the lifecycle of any element in this project, the elements suffer changes and interacting with different models and tools, the behaviour could not be the same. In the past the testing was pretty tedious and manual but in this release, we have added `Gherkin` files to be executed to model to improve the testing experience defining acceptance criterias.
+All elements in this project suffer changes due different reasons but it is necessary to invest time in the release process to ensure that all elements continue adding value for the Software engineers or AI Agents running in pipelines. 
 
-In this release, we run a `Spike` to validate the idea and we added `Gherkin` support for all Skills created/updated in this release, reducing the testing time.
+During this release, we run a `Spike` to validate the idea to improve the testing process and we added `Gherkin` support for all Skills created/updated in this release, reducing the testing time and generating in the process evidences about certain deterministic behaviours.
 
-Lets review 2 examples to share the value.
+Lets review 2 examples to share the value of the new tests.
 
-### Gherkin example for a Skill
+### Example to validate a Skill
 
-Skills has a prompt inventory and it lives in `acceptance-tests-prompts-skills.md`. When a generated local skill changes, now it is possible to run only the matching prompt for that changed skill.
+All Skills has a acceptance tests inventory and it lives in `acceptance-tests-prompts-skills.md`. When a generated skill changes by any reason, now it is possible to run only the matching prompt for that changed skill. Lets review the scenario about `@111-java-maven-dependencies`.
 
 **@111-java-maven-dependencies:**
 
@@ -182,7 +181,7 @@ execute @skills-generator/src/test/resources/gherkin/skills/111-java-maven-depen
 and verify that acceptance-tests passes.
 ```
 
-And the prompt point to the following `Gherkin` file:
+It is possible to run the following `Gherkin` file:
 
 ```gherkin
 Feature: Validate changes from usage of Maven dependencies skill
@@ -208,9 +207,13 @@ Scenario: Add JSpecify and Error Prone + NullAway to Maven demo
   And any git changes produced during skill execution and verification are reset
 ```
 
-The scenario fixes the example project, the selected dependency answers, the expected `pom.xml` changes, the expected `.mvn/jvm.config` changes, the validation command, the accepted compiler failure, and the cleanup expectation. The goal is not to test every possible conversation. The goal is to prove that the changed skill still follows its intended workflow against a stable fixture.
+For this particular Skill, t  he scenario fixes the example project, the selected dependency answers, the expected `pom.xml` changes, the expected `.mvn/jvm.config` changes, the validation command, the accepted compiler failure, and the cleanup expectation. The goal is not to test every possible conversation. The goal is to prove that the changed skill still follows its intended workflow against a stable fixture.
 
-### Gherkin example for a Command
+Lets review another more complex scenario.
+
+### Example to validate a Command
+
+All Command has a acceptance tests inventory and it lives in `acceptance-tests-prompts-skills.md`. When a generated command changes by any reason, now it is possible to run only the matching prompt for that changed command. Lets review the scenario about `@/implement-issue`.
 
 **/implement-issue:**
 
@@ -257,7 +260,7 @@ Scenario: Implement God Analysis API from a validated OpenSpec change
   And any git changes produced under "examples/openspec/god-analysis-api/demo" during command execution and verification are reset
 ```
 
-The execution of this command involve several parts from this project:
+This `Gherkin` file under the hood will trigger the following set of elements from the project which depending of the installation could be located in `.agents/**` or in another parts depending of your favourite tool:
 
 ```
 Build
@@ -273,7 +276,7 @@ Build
       @robot-no-java
 ```
 
-In this case, the command will use internally `@robot-java-spring-boot-coder`:
+In this case, the command will use internally the agent `@robot-tech-lead` which redirecdt to the specific agent `@robot-java-spring-boot-coder` based on the analysis of the specification:
 
 [![asciicast](https://asciinema.org/a/1257803.svg)](https://asciinema.org/a/1257803)
 
@@ -283,13 +286,7 @@ In this case, the command will use internally `@robot-java-spring-boot-coder`:
 
 *Running the test over VSCode + Codex Plugin*
 
-[![asciicast](https://asciinema.org/a/1257861.svg)](https://asciinema.org/a/1257861)
-
-*Running the test over Codex CLI for Quarkus variant*
-
-[![asciicast](https://asciinema.org/a/1258091.svg)](https://asciinema.org/a/1258091)
-
-*Running the test over Codex CLI for Micronaut variant*
+But if you change a bit the requirements in order to implement with `Quarkus`:
 
 ```bash
 execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
@@ -297,57 +294,27 @@ and verify that acceptance-tests passes.
 Implement it but using Quarkus, not Spring boot as the default requirement.
 ```
 
+The agent `@robot-tech-lead` which redirect to the specific agent `@robot-java-quarkus-coder`:
+
+[![asciicast](https://asciinema.org/a/1257861.svg)](https://asciinema.org/a/1257861)
+
+*Running the test over Codex CLI for Quarkus variant*
+
+Or the agent `@robot-tech-lead` which redirect to the specific agent `@robot-java-micronaut-coder` if required:
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
+and verify that acceptance-tests passes. 
+Implement it but using Micronaut, not Spring boot as the default requirement.
+```
+
+And this project will implement the feature without any issue:
+
+[![asciicast](https://asciinema.org/a/1258091.svg)](https://asciinema.org/a/1258091)
+
+*Running the test over Codex CLI for Micronaut variant*
+
 In the next release cycle, this validation model will continue to grow. The plan is to add Gherkin files gradually for all skills, commands, and agents, so every important workflow can move from "the prompt looks good" to "the behavior has an executable acceptance criterion."
-
-## Decoupling changes in daily development with the artifacts used by Skill registries
-
-<a id="decoupling-changes-in-daily-development-with-the-artifacts-used-by-skill-registries"></a>
-
-One of the most important delivery upgrades in `0.16.0` is not only what the skills contain. It is where generated skills are published during iteration.
-
-Before this release, it was too easy for generated output to land directly in the public `skills/` folder while a change was still being tested. That folder is not just an internal build artifact. It is the public release surface consumed by external catalogs and portals such as `skills.sh`.
-
-That matters because a half-finished skill can be valid Markdown, pass a first structural check, and still be wrong for real users. If that intermediate output appears in `skills/`, downstream consumers may index something that was only meant to be a local experiment.
-
-`0.16.0` makes the delivery path cleaner:
-
-```text
-XML source -> generator -> .agents/skills -> validation -> skills/
-```
-
-The `.agents/skills` folder becomes the local staging area. Maintainers can regenerate skills, inspect the result, run prompt acceptance checks, and keep iterating without publishing those intermediate artifacts to public consumers.
-
-The `skills/` folder becomes the intentional release output. It should only change when the project is ready to publish a stable version of the generated skills.
-
-This is a big upgrade for delivery discipline:
-
-- Local iteration is faster because generated skills are immediately available to agents.
-- Public consumers avoid unfinished skills during the middle of a change.
-- Release diffs become easier to review because `skills/` represents a deliberate publishing event.
-- Portals such as `skills.sh` receive cleaner release artifacts instead of work-in-progress output.
-
-The mental model is simple:
-
-```text
-Use .agents/skills while building.
-Publish skills/ when releasing.
-```
-
-This release also adds runtime resource packaging, command index generation, and tests alongside the existing skill index workflow.
-
-Another important addition is the `Skill acceptance prompt inventory`. Scanner checks answer questions like:
-
-- Is the package valid?
-- Does the package contain risky instructions?
-- Does the generated content look structurally correct?
-
-Acceptance prompts answer a different question:
-
-```text
-Does the changed skill still behave as expected for its intended workflow?
-```
-
-That is especially useful for skills that guide interactive work, such as planning, architecture, framework migration, or database changes.
 
 ## Improving the way to install Agents and Commands
 
