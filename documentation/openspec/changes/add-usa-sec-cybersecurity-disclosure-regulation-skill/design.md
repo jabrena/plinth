@@ -40,7 +40,7 @@ The skill must not determine materiality, disclosure timing, public filing conte
 - Validate changed XML files with `xmllint --noout`.
 - Run `./mvnw clean install -pl skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
 - Inspect generated local `833-regulations-usa-sec-cybersecurity-disclosure/SKILL.md`.
-- Check `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md`; record that no listed acceptance prompt exists for `833` unless added by this change.
+- Check `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`; record that no listed acceptance prompt exists for `833` unless added by this change.
 - Run `./mvnw clean verify -pl skills-generator`.
 - Run `openspec validate --all`.
 

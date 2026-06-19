@@ -41,7 +41,7 @@ The skill should frame these concerns as Java enterprise engineering controls: s
 - Validate changed XML files with `xmllint --noout`.
 - Run `./mvnw clean install -pl skills-generator` to regenerate local skills into `.agents/skills` without refreshing public `skills/`.
 - Inspect generated local `821-regulations-uk-operational-resilience/SKILL.md`.
-- Check `skills-generator/src/test/resources/gherkin/acceptance-tests-prompts-skills.md`; record that no listed acceptance prompt exists for `821` unless added by this change.
+- Check `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`; record that no listed acceptance prompt exists for `821` unless added by this change.
 - Run `./mvnw clean verify -pl skills-generator`.
 - Run `openspec validate --all`.
 
