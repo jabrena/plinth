@@ -59,7 +59,7 @@ Learn to use this project following the quick guide [Getting Started in 5 minute
 
 ### Migrating from legacy rules
 
-Current `System prompts/rules` are deprecated and will be removed in `v0.16.0`. If you still use them, review the [release 0.14.0 article](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html).
+Current `System prompts/rules` are deprecated and will be removed in `v0.17.0`. If you still use them, review the [release 0.14.0 article](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html).
 
 ## Choose your path
 

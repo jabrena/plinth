@@ -162,16 +162,24 @@ jobs:
           pre-commit run conventional-pre-commit --hook-stage commit-msg --commit-msg-filename /tmp/commit-msg.txt
 
   package-agent-artifacts:
-    name: Package Agents and Skills
+    name: Package Commands, Agents, and Skills
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
         with:
           submodules: true
+      - name: Create commands archive
+        run: cd .cursor && zip -r ../commands.zip commands
       - name: Create agents archive
         run: cd .cursor && zip -r ../agents.zip agents
       - name: Create skills archive
         run: zip -r skills.zip skills
+      - name: Upload commands.zip
+        uses: actions/upload-artifact@v7
+        with:
+          name: commands.zip
+          path: commands.zip
+          if-no-files-found: error
       - name: Upload agents.zip
         uses: actions/upload-artifact@v7
         with:
