@@ -196,7 +196,7 @@ Operate
 /review-alignment between the issue #xxx and the change #yyy
 /implement-issue based on OpenSpec change #yyy
 </code></pre>
-<p>In coming releases, this model will be enriched in different ways, but its pillars are established in this release.</p>
+<p>In upcoming releases, this model will be enriched in different ways, but its pillars are established in this release.</p>
 <p>In other projects, you can find useful <code>Skills</code>, <code>Agents</code>, or <code>Commands</code>, but not always a fully connected workflow designed with <code>Java</code> in mind.</p>
 <h2>What are the Top 10 Skills from this project in Skills.sh?</h2>
 <p><a id="what-are-the-top-10-skills-from-this-project-in-skillssh"></a></p>
@@ -381,6 +381,7 @@ Implement it using Micronaut, not Spring Boot, as the default requirement.
 <p><a href="https://asciinema.org/a/1258091"><img src="https://asciinema.org/a/1258091.svg" alt="asciicast" /></a></p>
 <p><em>Running the test with Codex CLI for the Micronaut variant</em></p>
 <p><strong>As you can see, one of the unique features of this project is the ability to implement requirements across multiple Java frameworks.</strong> With this idea in mind, you can explore moving from one framework to another during a <code>Spike</code>, evaluate how complex the change is, identify which annotations change, and discover which features are framework-specific. If you have good tests, the journey becomes easier.</p>
+<p>Another benefit discovered through this new testing approach is that by following the test execution, we can find issues with skills and reinforce them after each test run. One example is the lack of support for <code>Mongock</code> in <code>Spring Boot 4.0.x</code>, but now the skill is able to provide a workaround, consistent with the solutions for <code>Quarkus</code> and <code>Micronaut</code>.</p>
 <h2>Improving the way to install Agents and Commands</h2>
 <p><a id="improving-the-way-to-install-agents-and-commands"></a></p>
 <p>With the rise of <code>Skills</code>, there is a need for public registries for them. But what happens to <code>Agents</code>, <code>Commands</code>, or other files? The reality is that <code>Agents</code> and <code>Commands</code> are often treated as second-class citizens.</p>
@@ -393,6 +394,13 @@ Implement it using Micronaut, not Spring Boot, as the default requirement.
 <li><a href="https://www.skills.sh/jabrena/cursor-rules-java/005-agents-installation"><code>@005-agents-installation</code></a></li>
 </ul>
 <p>Then you can use them to install assets or generate the inventory files.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-bash">install @004-commands-installation cursor
+install @004-commands-installation claude-code
+install @004-commands-installation codex
+install @004-commands-installation github-copilot
+</code></pre>
+<p><strong>Note:</strong> It is a good practice after releasing a new version to download all <code>Skills</code> and then install the <code>Agents</code> and <code>Commands</code> aligned.</p>
 <h2>New capabilities for Java Enterprise Frameworks</h2>
 <p><a id="new-capabilities-for-java-enterprise-frameworks"></a></p>
 <p>In this new release, we have added a few new Java framework capabilities:</p>
@@ -470,7 +478,7 @@ Implement it using Micronaut, not Spring Boot, as the default requirement.
 <li><a href="https://www.skills.sh/jabrena/cursor-rules-java/807-regulations-eu-digital-services-act"><code>@807-regulations-eu-digital-services-act</code></a></li>
 <li><a href="https://www.skills.sh/jabrena/cursor-rules-java/808-regulations-eu-digital-markets-act"><code>@808-regulations-eu-digital-markets-act</code></a></li>
 </ul>
-<p>These skills are engineering review aids. <em>They do not provide legal advice and they do not replace qualified legal, compliance, privacy, security, risk, product, or governance owners.</em></p>
+<p>These skills are engineering review aids. <strong><em>They do not provide legal advice and they do not replace qualified legal, compliance, privacy, security, risk, product, or governance owners.</em></strong></p>
 <p>For distributed systems using GenAI tools, a practical review set is:</p>
 <ul>
 <li><code>EU AI Act</code> when the system uses AI models, LLMs, RAG, AI agents, tool calling, or generated decision support.</li>
@@ -488,8 +496,9 @@ Implement it using Micronaut, not Spring Boot, as the default requirement.
 <p>Functionally, the next workstreams are:</p>
 <ul>
 <li>Expand executable acceptance coverage for <code>Skills</code>, <code>Agents</code>, and <code>Commands</code>, so important behavior is checked with stable <code>Gherkin</code> scenarios instead of relying only on package shape or manual review.</li>
-<li>Add LLM engineering references such as <code>Karpathy's LLM Wiki</code>, so agent and skill guidance can stay closer to widely used mental models for building with language models.</li>
-<li>Improve analysis methods, including <code>the hamburger method</code> and <code>the two-step method</code>, so discovery work can become more structured before teams generate ADRs, specs, plans, or implementation tasks.</li>
+<li>Improve analysis methods, including <a href="https://gojko.net/2012/01/23/splitting-user-stories-the-hamburger-method/"><code>the hamburger method</code></a> from <a href="https://gojko.net/about/">Gojko Adzic</a> and <a href="https://newsletter.kentbeck.com/p/mastering-programming"><code>the two-step method</code></a> from <a href="https://kentbeck.com/">Kent Beck</a>, so discovery work can become more structured before teams generate ADRs, Specs or implementation tasks.</li>
+<li>Improve a few references with fewer examples and add more triggers to increase auto-discovery.</li>
+<li>Add new capabilities such as <a href="https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f"><code>Karpathy's LLM Wiki</code></a>; when analyzing a particular feature, take into consideration other aspects of the whole distributed system.</li>
 <li>Extend Maven guidance with <code>JavaMoney</code> support in the Maven plugin workflow, improving how teams introduce money and currency handling into enterprise builds.</li>
 <li>Complete the <code>EU regulation</code> review family, so teams can map distributed-system and <code>GenAI</code> decisions against a broader set of engineering evidence patterns.</li>
 </ul>

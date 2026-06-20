@@ -116,7 +116,7 @@ Create AGENTS.md #It will trigger the skill @200-agents-md
 /implement-issue based on OpenSpec change #yyy
 ```
 
-In coming releases, this model will be enriched in different ways, but its pillars are established in this release.
+In upcoming releases, this model will be enriched in different ways, but its pillars are established in this release.
 
 In other projects, you can find useful `Skills`, `Agents`, or `Commands`, but not always a fully connected workflow designed with `Java` in mind.
 
@@ -360,6 +360,8 @@ And the project will implement the feature without any issues:
 
 **As you can see, one of the unique features of this project is the ability to implement requirements across multiple Java frameworks.** With this idea in mind, you can explore moving from one framework to another during a `Spike`, evaluate how complex the change is, identify which annotations change, and discover which features are framework-specific. If you have good tests, the journey becomes easier.
 
+Another benefit discovered through this new testing approach is that by following the test execution, we can find issues with skills and reinforce them after each test run. One example is the lack of support for `Mongock` in `Spring Boot 4.0.x`, but now the skill is able to provide a workaround, consistent with the solutions for `Quarkus` and `Micronaut`.
+
 ## Improving the way to install Agents and Commands
 
 <a id="improving-the-way-to-install-agents-and-commands"></a>
@@ -375,6 +377,17 @@ To take advantage of the public registry and the process for generating skills f
 - [`@005-agents-installation`](https://www.skills.sh/jabrena/cursor-rules-java/005-agents-installation)
 
 Then you can use them to install assets or generate the inventory files.
+
+**Example:**
+
+```bash
+install @004-commands-installation cursor
+install @004-commands-installation claude-code
+install @004-commands-installation codex
+install @004-commands-installation github-copilot
+```
+
+**Note:** It is a good practice after releasing a new version to download all `Skills` and then install the `Agents` and `Commands` aligned.
 
 ## New capabilities for Java Enterprise Frameworks
 
@@ -461,7 +474,7 @@ This becomes even more important with GenAI tooling. When prompts, embeddings, g
 - [`@807-regulations-eu-digital-services-act`](https://www.skills.sh/jabrena/cursor-rules-java/807-regulations-eu-digital-services-act)
 - [`@808-regulations-eu-digital-markets-act`](https://www.skills.sh/jabrena/cursor-rules-java/808-regulations-eu-digital-markets-act)
 
-These skills are engineering review aids. _They do not provide legal advice and they do not replace qualified legal, compliance, privacy, security, risk, product, or governance owners._
+These skills are engineering review aids. **_They do not provide legal advice and they do not replace qualified legal, compliance, privacy, security, risk, product, or governance owners._**
 
 For distributed systems using GenAI tools, a practical review set is:
 
@@ -483,8 +496,9 @@ The next phase is already visible in the [`v0.17.0` milestone](https://github.co
 Functionally, the next workstreams are:
 
 - Expand executable acceptance coverage for `Skills`, `Agents`, and `Commands`, so important behavior is checked with stable `Gherkin` scenarios instead of relying only on package shape or manual review.
-- Add LLM engineering references such as `Karpathy's LLM Wiki`, so agent and skill guidance can stay closer to widely used mental models for building with language models.
-- Improve analysis methods, including `the hamburger method` and `the two-step method`, so discovery work can become more structured before teams generate ADRs, specs, plans, or implementation tasks.
+- Improve analysis methods, including [`the hamburger method`](https://gojko.net/2012/01/23/splitting-user-stories-the-hamburger-method/) from [Gojko Adzic](https://gojko.net/about/) and [`the two-step method`](https://newsletter.kentbeck.com/p/mastering-programming) from [Kent Beck](https://kentbeck.com/), so discovery work can become more structured before teams generate ADRs, Specs or implementation tasks.
+- Improve a few references with fewer examples and add more triggers to increase auto-discovery.
+- Add new capabilities such as [`Karpathy's LLM Wiki`](https://gist.github.com/karpathy/442a6bf555914893e9891c11519de94f); when analyzing a particular feature, take into consideration other aspects of the whole distributed system.
 - Extend Maven guidance with `JavaMoney` support in the Maven plugin workflow, improving how teams introduce money and currency handling into enterprise builds.
 - Complete the `EU regulation` review family, so teams can map distributed-system and `GenAI` decisions against a broader set of engineering evidence patterns.
 
