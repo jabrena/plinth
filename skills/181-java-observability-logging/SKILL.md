@@ -1,6 +1,6 @@
 ---
 name: 181-java-observability-logging
-description: Use when you need to implement or improve Java logging and observability — including selecting SLF4J with Logback/Log4j2, applying proper log levels (ERROR, WARN, INFO, DEBUG, TRACE), parameterized logging, secure logging without sensitive data exposure, environment-specific configuration, log aggregation and monitoring, or validating logging through tests. This should trigger for requests such as Improve logging; Apply logging; Refactor logging; Add logging support. Part of cursor-rules-java project
+description: Use when you need to implement or improve Java logging and observability — including selecting SLF4J with Logback/Log4j2, applying proper log levels (ERROR, WARN, INFO, DEBUG, TRACE), parameterized logging, correlation context, secure logging without sensitive data exposure, environment-specific configuration, log aggregation, monitoring, and alerting. This should trigger for requests such as Improve logging; Apply logging; Refactor logging; Add logging support. Part of cursor-rules-java project
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -8,7 +8,7 @@ metadata:
 ---
 # Java Logging Best Practices
 
-Implement effective Java logging following standardized frameworks, meaningful log levels, core practices (parameterized logging, exception handling, no sensitive data), flexible configuration, security-conscious logging, monitoring and alerting, and comprehensive logging validation through testing.
+Implement effective Java logging following standardized frameworks, meaningful log levels, core practices (parameterized logging, exception handling, no sensitive data), explicit correlation context, flexible configuration, security-conscious logging, monitoring, and alerting.
 
 **What is covered in this Skill?**
 
@@ -18,7 +18,6 @@ Implement effective Java logging following standardized frameworks, meaningful l
 - Configuration: environment-specific (logback.xml, log4j2.xml), output formats, log rotation
 - Security: mask sensitive data, control log access, secure transmission, GDPR/HIPAA compliance
 - Log monitoring and alerting: centralized aggregation (ELK, Splunk, Loki), automated alerts
-- Logging validation through testing: assert log messages, verify formats, test levels, measure performance impact
 
 **Scope:** The reference is organized by examples (good/bad code patterns) for each core area. Apply recommendations based on applicable examples.
 
