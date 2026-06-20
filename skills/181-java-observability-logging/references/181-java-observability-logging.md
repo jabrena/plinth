@@ -1,6 +1,6 @@
 ---
 name: 181-java-observability-logging
-description: Use when you need to implement or improve Java logging and observability — including selecting SLF4J with Logback/Log4j2, applying proper log levels, parameterized logging, secure logging without sensitive data exposure, environment-specific configuration, log aggregation and monitoring, or validating logging through tests.
+description: Use when you need to implement or improve Java logging and observability — including selecting SLF4J with Logback/Log4j2, applying proper log levels, parameterized logging, secure logging without sensitive data exposure, environment-specific configuration, log aggregation, and monitoring.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
@@ -32,6 +32,11 @@ Logging improvements must preserve security and operational stability.
 ### Table of contents
 
 - Example 1: Use Structured and Parameterized Logging
+- Example 2: Apply Appropriate Logging Levels
+- Example 3: Follow Core Logging Practices
+- Example 4: Configure Logging Thoughtfully
+- Example 5: Implement Secure Logging
+- Example 6: Establish Monitoring and Alerting
 
 ### Example 1: Use Structured and Parameterized Logging
 
@@ -67,6 +72,376 @@ public final class OrderServiceBad {
     public void process(String orderId, String token) {
         // BAD: no framework, no level semantics, leaks sensitive data
         System.out.println("order=" + orderId + ", token=" + token);
+    }
+}
+```
+
+
+### Example 2: Apply Appropriate Logging Levels
+
+Title: Use ERROR, WARN, INFO, DEBUG, and TRACE consistently
+Description: Reserve ERROR for failures that require attention, WARN for recoverable or degraded conditions, INFO for important business events, DEBUG for troubleshooting details, and TRACE for fine-grained flow diagnostics.
+
+**Good example:**
+
+```java
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public final class OrderProcessor {
+    private static final Logger logger = LoggerFactory.getLogger(OrderProcessor.class);
+
+    public void process(String orderId, String correlationId) {
+        logger.trace("event=order.process.entered orderId={} correlationId={}", orderId, correlationId);
+        logger.info("event=order.processing orderId={} correlationId={}", orderId, correlationId);
+
+        try {
+            logger.debug("event=order.inventory.validation_started orderId={} correlationId={}", orderId, correlationId);
+            validateInventory(orderId);
+            logger.info("event=order.processed orderId={} correlationId={}", orderId, correlationId);
+        } catch (InventoryException ex) {
+            logger.warn("event=order.backorder_created orderId={} correlationId={} reason=insufficient_inventory",
+                    orderId, correlationId, ex);
+            createBackorder(orderId);
+        } catch (PaymentException ex) {
+            logger.error("event=order.payment_failed orderId={} correlationId={}", orderId, correlationId, ex);
+            throw new OrderProcessingException("Payment failed", ex);
+        }
+    }
+
+    private void validateInventory(String orderId) throws InventoryException {
+        // business validation
+    }
+
+    private void createBackorder(String orderId) {
+        // fallback flow
+    }
+
+    private static final class InventoryException extends Exception {}
+    private static final class PaymentException extends Exception {}
+    private static final class OrderProcessingException extends RuntimeException {
+        OrderProcessingException(String message, Throwable cause) {
+            super(message, cause);
+        }
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public final class BadLevelUsage {
+    private static final Logger logger = LoggerFactory.getLogger(BadLevelUsage.class);
+
+    public void processUser(String userId) {
+        logger.info("Method entry: processUser with parameter: " + userId);
+
+        if (userId == null) {
+            logger.error("User ID is null"); // expected validation condition, not an ERROR
+            return;
+        }
+
+        logger.warn("User ID is not null, proceeding");
+
+        try {
+            logger.error("Successfully processed user " + userId);
+        } catch (Exception ex) {
+            logger.info("An error occurred: " + ex.getMessage()); // stack trace lost
+        }
+    }
+}
+```
+
+
+### Example 3: Follow Core Logging Practices
+
+Title: Parameterize messages, preserve exceptions, and guard expensive debug logs
+Description: Use parameterized messages, include exceptions as the final logging argument, mask sensitive values, and guard expensive log-message construction.
+
+**Good example:**
+
+```java
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.UUID;
+
+public final class PaymentService {
+    private static final Logger logger = LoggerFactory.getLogger(PaymentService.class);
+
+    public void processPayment(String accountRef, String amount, String cardNumber) {
+        String correlationId = UUID.randomUUID().toString();
+
+        try {
+            logger.info("event=payment.started accountRef={} amount={} correlationId={}",
+                    accountRef, amount, correlationId);
+            logger.debug("event=payment.card_supplied accountRef={} card={}", accountRef, maskCard(cardNumber));
+
+            if (logger.isDebugEnabled()) {
+                logger.debug("event=payment.validation_details correlationId={} details={}",
+                        correlationId, buildValidationDetails(accountRef, amount));
+            }
+
+            charge(accountRef, amount, cardNumber);
+            logger.info("event=payment.completed accountRef={} correlationId={}", accountRef, correlationId);
+        } catch (PaymentException ex) {
+            logger.error("event=payment.failed accountRef={} correlationId={}", accountRef, correlationId, ex);
+            throw ex;
+        }
+    }
+
+    private String maskCard(String cardNumber) {
+        return cardNumber == null || cardNumber.length() < 8
+                ? "[masked]"
+                : "****" + cardNumber.substring(cardNumber.length() - 4);
+    }
+
+    private String buildValidationDetails(String accountRef, String amount) {
+        return "accountRef=" + accountRef + ", amount=" + amount;
+    }
+
+    private void charge(String accountRef, String amount, String cardNumber) {
+        // payment gateway call
+    }
+
+    private static final class PaymentException extends RuntimeException {}
+}
+```
+
+**Bad example:**
+
+```java
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public final class PoorLoggingPractices {
+    private static final Logger logger = LoggerFactory.getLogger(PoorLoggingPractices.class);
+
+    public void processPayment(String userId, String amount, String cardNumber, String ssn) {
+        logger.info("Processing payment for user: " + userId + " amount: " + amount);
+        logger.debug("Credit card: " + cardNumber + ", SSN: " + ssn);
+
+        try {
+            logger.debug("Payment details: " + buildExpensiveDebugString(userId, amount, cardNumber));
+            charge(userId, amount, cardNumber);
+        } catch (Exception ex) {
+            logger.info("Payment failed: " + ex.getMessage());
+            logger.error("Payment failed for card: " + cardNumber + " and SSN: " + ssn);
+        }
+    }
+
+    private String buildExpensiveDebugString(String userId, String amount, String cardNumber) {
+        return userId + amount + cardNumber;
+    }
+
+    private void charge(String userId, String amount, String cardNumber) {
+        // payment gateway call
+    }
+}
+```
+
+
+### Example 4: Configure Logging Thoughtfully
+
+Title: Use external configuration, useful patterns, rotation, and environment-specific levels
+Description: Keep logging configuration outside application code. Include timestamps, levels, logger names, thread information, correlation context, and rotation or retention settings appropriate for the runtime environment.
+
+**Good example:**
+
+```xml
+<!-- logback-spring.xml or logback.xml -->
+<configuration>
+    <springProfile name="dev">
+        <logger name="com.example" level="DEBUG"/>
+    </springProfile>
+
+    <springProfile name="prod">
+        <logger name="com.example" level="INFO"/>
+    </springProfile>
+
+    <appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>logs/application.log</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>logs/application.%d{yyyy-MM-dd}.log.gz</fileNamePattern>
+            <maxHistory>30</maxHistory>
+            <totalSizeCap>3GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder>
+            <pattern>%d{ISO8601} %-5level [%thread] %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="ROLLING"/>
+    </root>
+</configuration>
+```
+
+**Bad example:**
+
+```xml
+<!-- Bad: too noisy, no useful context, no rotation -->
+<configuration>
+    <root level="TRACE">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>
+```
+
+
+### Example 5: Implement Secure Logging
+
+Title: Mask sensitive data and prevent log injection
+Description: Treat logs as security-sensitive records. Sanitize untrusted text, mask or omit secrets and personal data, avoid detailed attacker feedback, and log audit events with controlled context.
+
+**Good example:**
+
+```java
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public final class SecureLoggingService {
+    private static final Logger logger = LoggerFactory.getLogger(SecureLoggingService.class);
+
+    public void register(String registrationId, String email, String password, String creditCard) {
+        String safeRegistrationId = sanitize(registrationId);
+        String emailDomain = emailDomain(email);
+        boolean cardSupplied = creditCard != null && !creditCard.isBlank();
+
+        logger.info("event=registration.started registrationId={} emailDomain={}",
+                safeRegistrationId, emailDomain);
+        logger.debug("event=registration.payment_method_present registrationId={} supplied={}",
+                safeRegistrationId, cardSupplied);
+
+        try {
+            createAccount(registrationId, email, password, creditCard);
+            logger.info("event=security.registration_completed registrationId={}", safeRegistrationId);
+        } catch (ValidationException ex) {
+            logger.warn("event=registration.validation_failed registrationId={} code={}",
+                    safeRegistrationId, ex.code());
+        }
+    }
+
+    private String sanitize(String value) {
+        return value == null ? "[null]" : value.replaceAll("[\\r\\n\\t]", "_");
+    }
+
+    private String emailDomain(String email) {
+        int at = email == null ? -1 : email.indexOf('@');
+        return at < 0 || at == email.length() - 1 ? "[unknown]" : sanitize(email.substring(at + 1));
+    }
+
+    private void createAccount(String registrationId, String email, String password, String creditCard) {
+        // account creation
+    }
+
+    private static final class ValidationException extends RuntimeException {
+        private final String code;
+
+        ValidationException(String code) {
+            super(code);
+            this.code = code;
+        }
+
+        String code() {
+            return code;
+        }
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public final class InsecureLoggingService {
+    private static final Logger logger = LoggerFactory.getLogger(InsecureLoggingService.class);
+
+    public void register(String username, String password, String ssn, String creditCard) {
+        logger.debug("Registration username={}, password={}", username, password);
+        logger.info("Processing SSN {} with credit card {}", ssn, creditCard);
+    }
+
+    public void authenticate(String username, String password, String token) {
+        logger.warn("Login failed for username={}, password={}, token={}", username, password, token);
+    }
+}
+```
+
+
+### Example 6: Establish Monitoring and Alerting
+
+Title: Emit searchable operational events for aggregation systems
+Description: Use centralized log aggregation and alertable event names for security alerts, health checks, failures, and operational metrics. Include request or correlation identifiers so teams can trace a problem across services.
+
+**Good example:**
+
+```java
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import java.util.UUID;
+
+public final class MonitoredService {
+    private static final Logger logger = LoggerFactory.getLogger(MonitoredService.class);
+
+    public void handleApiRequest(String endpoint, String payload) {
+        String requestId = UUID.randomUUID().toString();
+        long start = System.nanoTime();
+
+        try {
+            logger.info("event=api.request_received requestId={} endpoint={}", requestId, endpoint);
+
+            if (payload != null && payload.contains("<script>")) {
+                logger.warn("event=security.input_rejected requestId={} reason=potential_xss endpoint={}",
+                        requestId, endpoint);
+                return;
+            }
+
+            process(endpoint, payload);
+            long durationMs = (System.nanoTime() - start) / 1_000_000;
+
+            logger.info("event=api.request_completed requestId={} endpoint={} durationMs={} status=success",
+                    requestId, endpoint, durationMs);
+        } catch (RuntimeException ex) {
+            long durationMs = (System.nanoTime() - start) / 1_000_000;
+            logger.error("event=api.request_failed requestId={} endpoint={} durationMs={} status=error",
+                    requestId, endpoint, durationMs, ex);
+            throw ex;
+        }
+    }
+
+    private void process(String endpoint, String payload) {
+        // request handling
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+public final class UnmonitoredService {
+    private static final Logger logger = LoggerFactory.getLogger(UnmonitoredService.class);
+
+    public void doWork() {
+        try {
+            logger.info("Work started");
+            unstableOperation();
+            logger.info("Work finished");
+        } catch (Exception ex) {
+            logger.error("Error during work", ex);
+            // If this only goes to local disk and no alert watches it, operations may miss it.
+        }
+    }
+
+    private void unstableOperation() throws Exception {
+        throw new Exception("Random failure");
     }
 }
 ```
