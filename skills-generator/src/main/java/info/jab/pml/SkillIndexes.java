@@ -3,7 +3,10 @@ package info.jab.pml;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.stream.Stream;
+import org.jspecify.annotations.Nullable;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -42,7 +45,7 @@ public final class SkillIndexes {
             validateSkillSummaryExists(numericId, entry.useXml());
             String skillId = entry.requiresSystemPrompt()
                 ? resolveSkillId(entry)
-                : entry.skillId();
+                : requireConfiguredSkillId(entry);
             skillIds.add(skillId);
         }
 
@@ -60,7 +63,7 @@ public final class SkillIndexes {
             validateSkillSummaryExists(numericId, entry.useXml());
             String skillId = entry.requiresSystemPrompt()
                 ? resolveSkillId(entry)
-                : entry.skillId();
+                : requireConfiguredSkillId(entry);
             descriptors.add(new SkillDescriptor(
                 skillId,
                 entry.requiresSystemPrompt(),
@@ -106,6 +109,14 @@ public final class SkillIndexes {
         return entry.references().getFirst();
     }
 
+    private static String requireConfiguredSkillId(InventoryEntry entry) {
+        if (entry.skillId() == null || entry.skillId().isBlank()) {
+            throw new RuntimeException("Entry with id " + entry.numericId()
+                + " has requiresSystemPrompt=false but no skillId specified.");
+        }
+        return entry.skillId();
+    }
+
     /**
      * Loads and parses skills.xml.
      */
@@ -133,7 +144,7 @@ public final class SkillIndexes {
                 if (!(skillNodes.item(i) instanceof Element skillEl)) {
                     continue;
                 }
-                if (skillEl.getParentNode() != root) {
+                if (!skillEl.getParentNode().isSameNode(root)) {
                     continue;
                 }
                 String numericId = skillEl.getAttribute("id");
@@ -183,7 +194,7 @@ public final class SkillIndexes {
         if (!el.hasAttribute(name)) {
             return defaultValue;
         }
-        String v = el.getAttribute(name).trim().toLowerCase();
+        String v = el.getAttribute(name).trim().toLowerCase(Locale.ROOT);
         return "true".equals(v) || "yes".equals(v) || "1".equals(v);
     }
 
@@ -270,7 +281,7 @@ public final class SkillIndexes {
             cl = SkillIndexes.class.getClassLoader();
         }
         InputStream in = cl.getResourceAsStream(name);
-        if (in == null && cl != SkillIndexes.class.getClassLoader()) {
+        if (in == null && !Objects.equals(cl, SkillIndexes.class.getClassLoader())) {
             in = SkillIndexes.class.getClassLoader().getResourceAsStream(name);
         }
         return in;
@@ -287,7 +298,7 @@ public final class SkillIndexes {
     public record InventoryEntry(
         String numericId,
         boolean requiresSystemPrompt,
-        String skillId,
+        @Nullable String skillId,
         boolean useXml,
         List<String> references,
         List<SkillResource> resources

@@ -10,6 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -288,7 +289,10 @@ class SkillsGeneratorTest {
                     "041-planning-plan-mode",
                     "042-planning-openspec"
                 );
-            assertThat(descriptors.get("034-architecture-design-exploration").references())
+            SkillIndexes.SkillDescriptor descriptor = Objects.requireNonNull(
+                descriptors.get("034-architecture-design-exploration")
+            );
+            assertThat(descriptor.references())
                 .containsExactly("034-architecture-design-exploration");
         }
 
@@ -467,7 +471,10 @@ class SkillsGeneratorTest {
                 throw new IllegalStateException("No <version> element in parent pom.xml");
             }
             String version = versionNodes.item(0).getTextContent();
-            return version != null ? version.trim() : null;
+            if (version == null) {
+                throw new IllegalStateException("Parent pom.xml <version> element has no text content");
+            }
+            return version.trim();
         }
     }
 

@@ -378,21 +378,6 @@ class SkillReferenceGeneratorTest {
         }
 
         /**
-         * Determines if a rule is a template generation rule rather than a code analysis rule.
-         */
-        private boolean isTemplateGenerationRule(String content, String baseFileName) {
-            // Check for template generation indicators
-            boolean hasTemplateReference = content.contains("embedded template") ||
-                                         content.contains("template EXACTLY") ||
-                                         content.contains("markdown file named");
-
-            boolean isChecklistGuide = baseFileName.contains("checklist-guide");
-            boolean isDocumentationRule = baseFileName.contains("documentation");
-
-            return hasTemplateReference || isChecklistGuide || isDocumentationRule;
-        }
-
-        /**
          * Validates that example numbering is consistent and sequential.
          */
         private void validateExampleNumberingConsistency(String[] lines, String baseFileName) {
@@ -578,10 +563,13 @@ class SkillReferenceGeneratorTest {
         private String getElementText(Element parent, String tagName) {
             NodeList nodes = parent.getElementsByTagName(tagName);
             if (nodes.getLength() == 0) {
-                return null;
+                throw new IllegalStateException("Missing element <" + tagName + ">");
             }
             String text = nodes.item(0).getTextContent();
-            return text != null ? text.trim() : null;
+            if (text == null) {
+                throw new IllegalStateException("Element <" + tagName + "> has no text content");
+            }
+            return text.trim();
         }
     }
 }
