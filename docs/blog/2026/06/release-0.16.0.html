@@ -108,7 +108,7 @@
 <article role="main" class="blog-post">
 <h2>What is the purpose?</h2>
 <p>An opinionated, AI-native development workflow for Java Enterprise: reusable <code>Skills</code>, <code>Agents</code>, <code>Commands</code>, and third-party <code>MCP servers</code> combined with a human-in-the-loop model to modernize real-world SDLC practices.</p>
-<p>Starting with this release, the project provides a way to express any <code>SDLC</code> action through 3 phases: <code>Plan</code>, <code>Build</code>, and <code>Operate</code>. <code>Software engineers</code> can use this model in user interfaces or terminals when they write a <code>User prompt</code>.</p>
+<p>Starting with this release, the project introduces a simple way to describe any <code>SDLC</code> action through three phases: <code>Plan</code>, <code>Build</code>, and <code>Operate</code>. <code>Software engineers</code> can use this structure when writing a <code>User prompt</code> in an AI user interface or terminal.</p>
 <p><strong>Example:</strong></p>
 <pre><code class="language-bash">Build
   /implement-issue
@@ -122,7 +122,7 @@
       @robot-java-micronaut-coder
       @robot-no-java
 </code></pre>
-<p>We will go into more detail later, but first, let's review the features that have evolved since the last release:</p>
+<p>We will go into more detail later, but first, let's review the most interesting features added in this release:</p>
 <ul>
 <li><a href="#enriching-the-workflow-with-commands-and-agents-not-only-skills">Enriching the workflow with Commands and Agents, not only Skills</a></li>
 <li><a href="#what-are-the-top-10-skills-from-this-project-in-skillssh">What are the Top 10 Skills from this project in Skills.sh?</a></li>
@@ -133,16 +133,16 @@
 <li><a href="#increasing-the-engineering-awareness-with-eu-regulations">Increasing engineering awareness with EU regulations</a></li>
 </ul>
 <p>Thanks to our community members in <code>Singapore</code>, <code>Hong Kong</code>, <code>Hanoi</code>, <code>London</code>, and <code>New York</code>. 👋👋👋</p>
+<p>If you have questions about the project, how to customize it for your team, how to use the skills in daily work, or how to solve tooling issues, use <a href="https://github.com/jabrena/cursor-rules-java/discussions"><code>GitHub Discussions</code></a>.</p>
 <p><strong>Help this project grow:</strong> <a href="https://github.com/sponsors/jabrena">If this project helps your team, become a sponsor.</a></p>
 <h2>Enriching the workflow with Commands and Agents, not only Skills</h2>
 <p><a id="enriching-the-workflow-with-commands-and-agents-not-only-skills"></a></p>
-<p>The project started more than a year ago with a set of reusable <code>rules / system prompts</code>. They were useful because teams could point an AI assistant at a consistent body of engineering expectations instead of rewriting the same instructions for every conversation. But as documented in <a href="https://github.com/jabrena/cursor-rules-java/blob/main/documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md"><code>ADR-002</code></a>, automatic activation through broad <code>.java</code> frontmatter did not scale well: multiple rules could enter the context at the same time, increasing latency, consuming context, and making answers less deterministic. In 2026, with the rise of <code>Skills</code> and continued use of system prompts, evolving into <code>Skills</code> was a natural step. Release <code>0.16.0</code> moves further toward connected workflows. <code>Commands</code> become the entry points that a team can run. <code>Agents</code> become the role-specific workers that interpret the task. <code>Skills</code> become the reusable knowledge and procedures each agent applies.</p>
-<p>In practice, the operating model now looks like this:</p>
-<pre><code class="language-text">Command -&gt; Agent -&gt; Skills -&gt; Change in your repository
-</code></pre>
+<p>The project started more than a year ago with a set of reusable <code>rules / system prompts</code>. That approach worked well after removing the restriction that associated rules with particular files, as described in <a href="https://github.com/jabrena/cursor-rules-java/blob/main/documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md"><code>ADR-002</code></a>. With the rise of <code>Skills</code>, it was a good decision to convert that material into skills and use the new capabilities provided by <code>Skill registries</code> like <a href="https://www.skills.sh/">https://www.skills.sh/</a> and other registries.</p>
+<p>In this release, we go further by adding new semantics for expressing the actions a software engineer performs while solving a problem.</p>
 <p>That model is organized around three delivery paths:</p>
 <pre><code class="language-text">Plan
   /create-issue
+  /update-issue
     @robot-business-analyst
       @043-planning-github-issues
       @044-planning-jira
@@ -188,7 +188,15 @@ Operate
       @151-java-performance-jmeter
       @152-java-performance-gatling
 </code></pre>
-<p>In coming releases, this model will be expanded in different ways, but its pillars are established in this release.</p>
+<p>Of course, you can continue using the project in the classic way: add the Java class and a particular skill to the context, or describe the action in natural language and let the <code>AI agent harness tools</code> trigger the right skill. However, combining commands with agents and skills gives you more benefits.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="language-bash">Create AGENTS.md #It will trigger the skill @200-agents-md
+/update-issue from github #xxx and use User Story format.
+/create-spec using ideas from github issue #xxx
+/review-alignment between the issue #xxx and the change #yyy
+/implement-issue based on OpenSpec change #yyy
+</code></pre>
+<p>In coming releases, this model will be enriched in different ways, but its pillars are established in this release.</p>
 <p>In other projects, you can find useful <code>Skills</code>, <code>Agents</code>, or <code>Commands</code>, but not always a fully connected workflow designed with <code>Java</code> in mind.</p>
 <h2>What are the Top 10 Skills from this project in Skills.sh?</h2>
 <p><a id="what-are-the-top-10-skills-from-this-project-in-skillssh"></a></p>
@@ -205,7 +213,7 @@ Operate
 <li><a href="https://www.skills.sh/jabrena/cursor-rules-java/125-java-concurrency"><code>125-java-concurrency</code></a> - <a href="https://www.skills.sh/search?q=java%20concurrency">java concurrency</a></li>
 <li><a href="https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling"><code>143-java-functional-exception-handling</code></a> - <a href="https://www.skills.sh/search?q=java%20functional%20programming">java functional programming</a></li>
 </ol>
-<p><strong>What is your favorite <code>Skill</code> from this project?</strong> You could share it here: <a href="https://github.com/jabrena/cursor-rules-java/discussions/804">https://github.com/jabrena/cursor-rules-java/discussions/804</a></p>
+<p><strong>What is your favorite <code>Skill</code> from this project?</strong> You can share it here: <a href="https://github.com/jabrena/cursor-rules-java/discussions/804">https://github.com/jabrena/cursor-rules-java/discussions/804</a></p>
 <h2>Applying Zero Trust with your Agent skills</h2>
 <p><a id="applying-zero-trust-with-your-agent-skills"></a></p>
 <p><code>Skills</code> are not ordinary Markdown files. They are executable guidance for AI agents. A skill can tell an agent how to read code, run commands, inspect evidence, write files, install tools, or make a technical recommendation.</p>
@@ -235,9 +243,9 @@ Operate
 <p>If you are interested in this kind of validation, I recommend reading the following article: <a href="/cursor-rules-java/blog/2026/06/skill-validators-pipeline.html">How to validate skills?</a></p>
 <h2>Improving the approach to test the behavior of Agent Skills</h2>
 <p><a id="improving-the-approach-to-test-the-behavior-of-an-agent-skills"></a></p>
-<p>All elements in this project change for different reasons, so it is necessary to invest time in the release process to ensure that they continue adding value for software engineers and AI agents running in pipelines.</p>
+<p>All elements in this project change for different reasons, so it is necessary to invest time in the release process to ensure that they continue to add value for software engineers and AI agents running in pipelines.</p>
 <p>During this release, we ran a <code>Spike</code> to validate an improved testing process. We added <code>Gherkin</code> support for all skills created or updated in this release, reducing testing time and generating evidence for specific deterministic behaviors.</p>
-<p>Let's review 2 examples to show the value of the new tests.</p>
+<p>Let's review two examples to show the value of the new tests.</p>
 <h3>Example to validate a skill</h3>
 <p>All skills have an acceptance-test inventory, and it lives in <code>acceptance-tests-prompts-skills.md</code>. When a generated skill changes for any reason, it is now possible to run only the matching prompt for that changed skill. Let's review the scenario for <code>@111-java-maven-dependencies</code>.</p>
 <p><strong>@111-java-maven-dependencies:</strong></p>
@@ -272,7 +280,7 @@ Scenario: Add JSpecify and Error Prone + NullAway to Maven demo
 <p>Let's review another, more complex scenario.</p>
 <h3>Example to validate a command</h3>
 <p>All commands have an acceptance-test inventory, and it lives in <code>acceptance-tests-prompts-skills.md</code>. When a generated command changes for any reason, it is now possible to run only the matching prompt for that changed command. Let's review the scenario for <code>@/implement-issue</code>.</p>
-<p>As example, lets try to solve the first problem from the project <code>Latency problems:</code> <a href="https://github.com/jabrena/latency-problems/blob/master/docs/problem1/README.md">https://github.com/jabrena/latency-problems/blob/master/docs/problem1/README.md</a></p>
+<p>As an example, let's try to solve the first problem from the project <code>Latency problems</code>: <a href="https://github.com/jabrena/latency-problems/blob/master/docs/problem1/README.md">https://github.com/jabrena/latency-problems/blob/master/docs/problem1/README.md</a></p>
 <pre><code class="language-bash"># Problem 1
 
 ## User Story Statement
@@ -292,7 +300,7 @@ Scenario: Add JSpecify and Error Prone + NullAway to Maven demo
   - Roman API: https://my-json-server.typicode.com/jabrena/latency-problems/roman
   - Nordic API: https://my-json-server.typicode.com/jabrena/latency-problems/nordic
 </code></pre>
-<p>Given this <code>User story</code> and the <code>OpenSpec</code> change defined here: <a href="https://github.com/jabrena/cursor-rules-java/tree/main/examples/openspec">https://github.com/jabrena/cursor-rules-java/tree/main/examples/openspec</a> you could be able to implement using the new command <code>/implement-issue</code>. Lets see how to do it and how to validate it.</p>
+<p>Given this <code>User story</code> and the <code>OpenSpec</code> change defined here: <a href="https://github.com/jabrena/cursor-rules-java/tree/main/examples/openspec">https://github.com/jabrena/cursor-rules-java/tree/main/examples/openspec</a>, you can implement it using the new <code>/implement-issue</code> command. Let's see how to do it and how to validate it.</p>
 <p><strong>/implement-issue:</strong></p>
 <p>Using this prompt:</p>
 <pre><code class="language-bash">execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
@@ -344,12 +352,12 @@ Scenario: Implement God Analysis API from a validated OpenSpec change
       @robot-java-micronaut-coder
       @robot-no-java
 </code></pre>
-<p>In this case, the command internally uses the agent <code>@robot-tech-lead</code>, which redirects to the specific agent <code>@robot-java-spring-boot-coder</code> based on the analysis of the specification and this is the result:</p>
+<p>In this case, the command internally uses the agent <code>@robot-tech-lead</code>, which redirects to the specific agent <code>@robot-java-spring-boot-coder</code> based on the analysis of the specification, and this is the result:</p>
 <p><a href="https://asciinema.org/a/1257803"><img src="https://asciinema.org/a/1257803.svg" alt="asciicast" /></a></p>
 <p><em>Running the test with Codex CLI for the Spring Boot variant</em></p>
 <p><img src="/cursor-rules-java/images/2026/6/vscode-codex.png" alt="" /></p>
 <p><em>Running the test with VS Code + Codex plugin</em></p>
-<p>But if you refine a bit the prompt, you could implement the requirement in <code>Quarkus</code>:</p>
+<p>But if you refine the prompt a bit, you can implement the requirement in <code>Quarkus</code>:</p>
 <pre><code class="language-bash">execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
 and verify that acceptance-tests pass. 
 Implement it using Quarkus, not Spring Boot, as the default requirement.
@@ -362,14 +370,14 @@ Implement it using Quarkus, not Spring Boot, as the default requirement.
 and verify that acceptance-tests pass. 
 Implement it using Micronaut, not Spring Boot, as the default requirement.
 </code></pre>
-<p>And the project will implement the feature without any issue:</p>
+<p>And the project will implement the feature without any issues:</p>
 <p><a href="https://asciinema.org/a/1258091"><img src="https://asciinema.org/a/1258091.svg" alt="asciicast" /></a></p>
 <p><em>Running the test with Codex CLI for the Micronaut variant</em></p>
-<p>So, it you observe one of the unique features from this project is the capacity to implement requirements in multiple Java frameworks.</p>
+<p>As you can see, one of the unique features of this project is the ability to implement requirements across multiple Java frameworks.</p>
 <h2>Improving the way to install Agents and Commands</h2>
 <p><a id="improving-the-way-to-install-agents-and-commands"></a></p>
-<p>With the rise of <code>Skills</code>, there is a need for public registries for them. But what happens with <code>Agents</code>, <code>Commands</code>, or other files? The reality is that <code>Agents</code> and <code>Commands</code> are often treated as second-class citizens.</p>
-<p>To take advantage of the public registry and the process for generating skills from <code>XML</code> sources, it is relatively easy to embed commands and agents in a <code>Meta Skill</code>. Once you have installed the skills, you can see the following inventory and installation workflows:</p>
+<p>With the rise of <code>Skills</code>, there is a need for public registries for them. But what happens to <code>Agents</code>, <code>Commands</code>, or other files? The reality is that <code>Agents</code> and <code>Commands</code> are often treated as second-class citizens.</p>
+<p>To take advantage of the public registry and the process for generating skills from <code>XML</code> sources, it is relatively easy to embed commands and agents in a <code>Meta Skill</code>. Once you have installed the skills, you can use the following inventory and installation workflows:</p>
 <ul>
 <li><a href="https://www.skills.sh/jabrena/cursor-rules-java/001-commands-inventory"><code>@001-commands-inventory</code></a></li>
 <li><a href="https://www.skills.sh/jabrena/cursor-rules-java/002-agents-inventory"><code>@002-agents-inventory</code></a></li>
