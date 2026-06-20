@@ -126,16 +126,16 @@ In other projects, you can find useful `Skills`, `Agents`, or `Commands`, but no
 
 The project has `106 skills` and uses [Skills.sh](https://www.skills.sh/jabrena/cursor-rules-java) as its main skill registry. It has served `11.0K` installs in total. These are the current top 10 skills used by users there:
 
-1. [`110-java-maven-best-practices`](https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices) - [maven](https://www.skills.sh/search?q=maven)
-2. [`121-java-object-oriented-design`](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) - [java object oriented](https://www.skills.sh/search?q=java%20object%20oriented)
-3. [`124-java-secure-coding`](https://www.skills.sh/jabrena/cursor-rules-java/124-java-secure-coding) - [java security](https://www.skills.sh/search?q=java%20security)
-4. [`131-java-testing-unit-testing`](https://www.skills.sh/jabrena/cursor-rules-java/131-java-testing-unit-testing) - [java unit testing](https://www.skills.sh/search?q=java%20unit%20testing)
-5. [`142-java-functional-programming`](https://www.skills.sh/jabrena/cursor-rules-java/142-java-functional-programming) - [java functional programming](https://www.skills.sh/search?q=java%20functional%20programming)
-6. [`128-java-generics`](https://www.skills.sh/jabrena/cursor-rules-java/128-java-generics) - [java generics](https://www.skills.sh/search?q=java%20generics)
-7. [`111-java-maven-dependencies`](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) - [maven](https://www.skills.sh/search?q=maven)
+1. [`110-java-maven-best-practices`](https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices) - search query: [maven](https://www.skills.sh/search?q=maven)
+2. [`121-java-object-oriented-design`](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) - search query: [java object oriented](https://www.skills.sh/search?q=java%20object%20oriented)
+3. [`124-java-secure-coding`](https://www.skills.sh/jabrena/cursor-rules-java/124-java-secure-coding) - search query: [java security](https://www.skills.sh/search?q=java%20security)
+4. [`131-java-testing-unit-testing`](https://www.skills.sh/jabrena/cursor-rules-java/131-java-testing-unit-testing) - search query: [java unit testing](https://www.skills.sh/search?q=java%20unit%20testing)
+5. [`142-java-functional-programming`](https://www.skills.sh/jabrena/cursor-rules-java/142-java-functional-programming) - search query: [java functional programming](https://www.skills.sh/search?q=java%20functional%20programming)
+6. [`128-java-generics`](https://www.skills.sh/jabrena/cursor-rules-java/128-java-generics) - search query: [java generics](https://www.skills.sh/search?q=java%20generics)
+7. [`111-java-maven-dependencies`](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) - search query: [maven](https://www.skills.sh/search?q=maven)
 8. [`141-java-refactoring-with-modern-features`](https://www.skills.sh/jabrena/cursor-rules-java/141-java-refactoring-with-modern-features)
-9. [`125-java-concurrency`](https://www.skills.sh/jabrena/cursor-rules-java/125-java-concurrency) - [java concurrency](https://www.skills.sh/search?q=java%20concurrency)
-10. [`143-java-functional-exception-handling`](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) - [java functional programming](https://www.skills.sh/search?q=java%20functional%20programming)
+9. [`125-java-concurrency`](https://www.skills.sh/jabrena/cursor-rules-java/125-java-concurrency) - search query: [java concurrency](https://www.skills.sh/search?q=java%20concurrency)
+10. [`143-java-functional-exception-handling`](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) - search query: [java functional programming](https://www.skills.sh/search?q=java%20functional%20programming)
 
 **What is your favorite `Skill` from this project?** You can share it here: https://github.com/jabrena/cursor-rules-java/discussions/804
 
@@ -155,7 +155,7 @@ That is useful, but it also means generated skills need a `zero trust` review mi
 
 The point is not to claim that a generated skill is perfect. The point is to make suspicious behavior visible before maintainers or users rely on it.
 
-Common risks include:
+Common skill risks include:
 
 - Prompt injection patterns
 - Data exfiltration instructions
@@ -169,21 +169,23 @@ Common risks include:
 - Untrusted content and indirect prompt injection
 - Tool poisoning and tool shadowing
 
+**Note:** The project runs an analysis for all skills on every commit using the tools described above. https://github.com/jabrena/cursor-rules-java/blob/main/.github/workflows/maven.yaml
+
 If you are interested in this kind of validation, I recommend reading the following article: [How to validate skills?](/cursor-rules-java/blog/2026/06/skill-validators-pipeline.html)
 
 ## Improving the approach to test the behavior of Agent Skills
 
 <a id="improving-the-approach-to-test-the-behavior-of-an-agent-skills"></a>
 
-All elements in this project change for different reasons, so it is necessary to invest time in the release process to ensure that they continue to add value for software engineers and AI agents running in pipelines.
+During the evolution of this project, files change over time for different reasons. After each change, it is necessary to validate them again, so the release process includes time to ensure they continue to add value for software engineers and AI agents running in pipelines.
 
-During this release, we ran a `Spike` to validate an improved testing process. We added `Gherkin` support for all skills created or updated in this release, reducing testing time and generating evidence for specific deterministic behaviors.
+During this release, we ran a `Spike` to validate an idea for improving the testing process. We added `Gherkin` support for all skills created or updated in this release, and the results were successful. Testing time was reduced, and more importantly, the project now generates evidence for specific deterministic behaviors from the skills under test.
 
 Let's review two examples to show the value of the new tests.
 
 ### Example to validate a skill
 
-All skills have an acceptance-test inventory, and it lives in `acceptance-tests-prompts-skills.md`. When a generated skill changes for any reason, it is now possible to run only the matching prompt for that changed skill. Let's review the scenario for `@111-java-maven-dependencies`.
+All skills have an acceptance-test inventory file, and it lives in `acceptance-tests-prompts-skills.md`. When a generated skill changes for any reason, it is now possible to run only the matching prompt for that changed skill. Let's review the scenario for `@111-java-maven-dependencies`.
 
 **@111-java-maven-dependencies:**
 
@@ -194,7 +196,7 @@ execute @skills-generator/src/test/resources/gherkin/skills/111-java-maven-depen
 and verify that acceptance-tests pass.
 ```
 
-You can run the following `Gherkin` file:
+That prompt is linked with the following `Gherkin` file:
 
 ```gherkin
 Feature: Validate changes from usage of Maven dependencies skill
@@ -220,15 +222,19 @@ Scenario: Add JSpecify and Error Prone + NullAway to Maven demo
   And any git changes produced during skill execution and verification are reset
 ```
 
-For this particular skill, the scenario fixes the example project, the selected dependency answers, the expected `pom.xml` changes, the expected `.mvn/jvm.config` changes, the validation command, the accepted compiler failure, and the cleanup expectation. The goal is not to test every possible conversation. The goal is to prove that the changed skill still follows its intended workflow against a stable fixture.
+For that particular skill, the scenario fixes the example project, the selected dependency answers, the expected `pom.xml` changes, the expected `.mvn/jvm.config` changes, the validation command, the accepted compiler failure, and the cleanup expectation. The goal is not to test every possible conversation. The goal is to prove that the changed skill still follows its intended workflow against a stable fixture. A `Gherkin` file cannot cover every possible use case, so it focuses on the most important ones.
 
-Let's review another, more complex scenario.
+> "Program testing can be used to show the presence of bugs, but never to show their absence!"
+>
+> - Edsger W. Dijkstra
+
+Let's review another, more complex scenario and one of the key features included in this release.
 
 ### Example to validate a command
 
-All commands have an acceptance-test inventory, and it lives in `acceptance-tests-prompts-skills.md`. When a generated command changes for any reason, it is now possible to run only the matching prompt for that changed command. Let's review the scenario for `@/implement-issue`.
+All commands have an acceptance-test inventory file, and it lives in `acceptance-tests-prompts-skills.md`. When a generated command changes for any reason, it is now possible to run only the matching prompt for that changed command. Let's review the scenario about the command `/implement-issue`.
 
-As an example, let's try to solve the first problem from the project `Latency problems`: https://github.com/jabrena/latency-problems/blob/master/docs/problem1/README.md
+To demonstrate the new capabilities, let's try to solve the first problem from the project [`Latency problems`](https://github.com/jabrena/latency-problems/blob/master/docs/problem1/README.md):
 
 ```bash
 # Problem 1
@@ -298,7 +304,7 @@ Scenario: Implement God Analysis API from a validated OpenSpec change
   And any git changes produced under "examples/openspec/god-analysis-api/demo" during command execution and verification are reset
 ```
 
-Under the hood, this `Gherkin` file triggers the following set of project elements, which can be located in `.agents/**` or in other locations depending on your preferred tool and installation method:
+When the prompt is executed, under the hood the `Gherkin` file triggers the agents and skills:
 
 ```
 Build
@@ -314,7 +320,7 @@ Build
       @robot-no-java
 ```
 
-In this case, the command internally uses the agent `@robot-tech-lead`, which redirects to the specific agent `@robot-java-spring-boot-coder` based on the analysis of the specification, and this is the result:
+In this case, the command internally uses the agent `@robot-tech-lead`, which redirects to the specific agent `@robot-java-spring-boot-coder` based on the analysis of the specification. That agent handles specific `Java skills` and specific `Spring Boot skills`. This is the result for a `Spring Boot` implementation:
 
 [![asciicast](https://asciinema.org/a/1257803.svg)](https://asciinema.org/a/1257803)
 
@@ -332,13 +338,13 @@ and verify that acceptance-tests pass.
 Implement it using Quarkus, not Spring Boot, as the default requirement.
 ```
 
-In this case, the agent `@robot-tech-lead` redirects the workload to the specific agent `@robot-java-quarkus-coder`:
+In this case, the agent `@robot-tech-lead` redirects the workload to the specific agent `@robot-java-quarkus-coder`, which handles specific `Java skills` and specific `Quarkus skills`. This is the result for a `Quarkus` implementation:
 
 [![asciicast](https://asciinema.org/a/1257861.svg)](https://asciinema.org/a/1257861)
 
 *Running the test with Codex CLI for the Quarkus variant*
 
-Or, if required, the agent `@robot-tech-lead` redirects to the specific agent `@robot-java-micronaut-coder`:
+Or, if required, the agent `@robot-tech-lead` redirects to the specific agent `@robot-java-micronaut-coder`, which handles specific `Java skills` and specific `Micronaut skills`. This is the result for a `Micronaut` implementation:
 
 ```bash
 execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
@@ -352,7 +358,7 @@ And the project will implement the feature without any issues:
 
 *Running the test with Codex CLI for the Micronaut variant*
 
-As you can see, one of the unique features of this project is the ability to implement requirements across multiple Java frameworks.
+**As you can see, one of the unique features of this project is the ability to implement requirements across multiple Java frameworks.** With this idea in mind, you can explore moving from one framework to another during a `Spike`, evaluate how complex the change is, identify which annotations change, and discover which features are framework-specific. If you have good tests, the journey becomes easier.
 
 ## Improving the way to install Agents and Commands
 
