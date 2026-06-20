@@ -25,7 +25,6 @@ Logging improvements must preserve security and operational stability.
 - **NO SENSITIVE DATA**: Never log passwords, tokens, secrets, or personal data in plain text
 - **LEVEL DISCIPLINE**: Use consistent levels and avoid noisy INFO/DEBUG misuse in hot paths
 - **PARAMETERIZED LOGGING**: Prefer placeholders instead of string concatenation
-- **CORRELATION CONTEXT**: Include request, trace, correlation, tenant, or job identifiers when they help operations reconstruct failures without exposing personal data
 - **VALIDATE**: Confirm log behavior through tests and run full verification after changes
 
 ## Examples
