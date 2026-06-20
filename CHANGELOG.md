@@ -35,6 +35,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Separated local skill generation from release publishing and added runtime resource packaging (#777, #803)
   - Added command index generation and tests alongside the existing skill index workflow (#790, #791)
   - Split large skill references into modular files for architecture diagrams, Maven dependencies, Maven plugins, and object-oriented design (#784, #786, #802, #819)
+  - Expanded `@181-java-observability-logging` with structured SLF4J examples, secure logging patterns, correlation context, log configuration guidance, and monitoring-oriented events
   - Aligned skill versions and refreshed generated local output for the 0.16.0 cycle (#782)
 
 - **Agents**:
