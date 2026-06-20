@@ -9,6 +9,7 @@
         <groupId>info.jab</groupId>
         <artifactId>cursor-rules-java</artifactId>
         <version>0.16.0</version>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
     <artifactId>cursor-rules-java-site</artifactId>

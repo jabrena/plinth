@@ -3,6 +3,7 @@ package info.jab.pml;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -49,7 +50,7 @@ public final class CommandIndexes {
                 if (!(commandNodes.item(i) instanceof Element commandEl)) {
                     continue;
                 }
-                if (commandEl.getParentNode() != root) {
+                if (!commandEl.getParentNode().isSameNode(root)) {
                     continue;
                 }
                 String file = commandEl.getAttribute("file").trim();
@@ -78,7 +79,7 @@ public final class CommandIndexes {
             cl = CommandIndexes.class.getClassLoader();
         }
         InputStream in = cl.getResourceAsStream(name);
-        if (in == null && cl != CommandIndexes.class.getClassLoader()) {
+        if (in == null && !Objects.equals(cl, CommandIndexes.class.getClassLoader())) {
             in = CommandIndexes.class.getClassLoader().getResourceAsStream(name);
         }
         return in;

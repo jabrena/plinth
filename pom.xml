@@ -58,6 +58,9 @@
         <junit.version>6.1.0</junit.version>
         <assertj.version>3.27.7</assertj.version>
         <jackson.version>2.22.0</jackson.version>
+        <jspecify.version>1.0.0</jspecify.version>
+        <error-prone.version>2.50.0</error-prone.version>
+        <nullaway.version>0.13.7</nullaway.version>
 
         <!-- Core build plugin versions -->
         <maven-plugin-compiler.version>3.15.0</maven-plugin-compiler.version>
@@ -113,6 +116,12 @@
                 <version>${jackson.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.jspecify</groupId>
+                <artifactId>jspecify</artifactId>
+                <version>${jspecify.version}</version>
+                <scope>provided</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

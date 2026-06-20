@@ -16,6 +16,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
 import javax.xml.transform.stream.StreamSource;
+import org.jspecify.annotations.Nullable;
 import org.w3c.dom.Document;
 import org.xml.sax.InputSource;
 
@@ -161,7 +162,7 @@ public final class SkillsGenerator {
                 throw new RuntimeException("Skill resource not found: " + resourceName
                     + ". Each skill in SkillIndexes must have a matching file in skill-indexes/.");
             }
-            String content = new String(stream.readAllBytes());
+            String content = new String(stream.readAllBytes(), StandardCharsets.UTF_8);
             return appendProjectTagToDescription(content);
         } catch (Exception e) {
             throw new RuntimeException("Failed to load skill: " + resourceName, e);
@@ -276,7 +277,7 @@ public final class SkillsGenerator {
         return dash > 0 ? skillId.substring(0, dash) : skillId;
     }
 
-    private InputStream getResource(String name) {
+    private @Nullable InputStream getResource(String name) {
         return Optional.ofNullable(getClass().getClassLoader().getResourceAsStream(name))
             .or(() -> Optional.ofNullable(Thread.currentThread().getContextClassLoader().getResourceAsStream(name)))
             .orElse(null);
