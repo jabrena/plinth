@@ -20,3 +20,7 @@
 - [x] 1.16 Check `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md` and run only listed prompts for changed Flyway skills, if any.
 - [x] 1.17 Run `./mvnw clean verify -pl skills-generator`.
 - [x] 1.18 Run `openspec validate --all`.
+- [x] 1.19 Add Gherkin acceptance feature files for the Spring Boot, Quarkus, and Micronaut Flyway skills.
+- [x] 1.20 Register the Flyway acceptance prompts in `skills-generator/src/test/resources/gherkin/skills/acceptance-tests-prompts-skills.md`.
+- [x] 1.21 Re-run `./mvnw clean verify -pl skills-generator`.
+- [x] 1.22 Re-run `openspec validate --all`.

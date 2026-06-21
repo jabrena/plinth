@@ -112,6 +112,13 @@ execute @skills-generator/src/test/resources/gherkin/skills/305-frameworks-sprin
 and verify that acceptance-tests passes.
 ```
 
+## 313-frameworks-spring-db-migrations-flyway
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/313-frameworks-spring-db-migrations-flyway.feature
+and verify that acceptance-tests passes.
+```
+
 ## 316-frameworks-spring-mongodb-migrations-mongock
 
 ```bash
@@ -126,6 +133,13 @@ execute @skills-generator/src/test/resources/gherkin/skills/400-frameworks-quark
 and verify that acceptance-tests passes.
 ```
 
+## 413-frameworks-quarkus-db-migrations-flyway
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/413-frameworks-quarkus-db-migrations-flyway.feature
+and verify that acceptance-tests passes.
+```
+
 ## 416-frameworks-quarkus-mongodb-migrations-mongock
 
 ```bash
@@ -137,6 +151,13 @@ and verify that acceptance-tests passes.
 
 ```bash
 execute @skills-generator/src/test/resources/gherkin/skills/500-frameworks-micronaut-create-project.feature
+and verify that acceptance-tests passes.
+```
+
+## 513-frameworks-micronaut-db-migrations-flyway
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/513-frameworks-micronaut-db-migrations-flyway.feature
 and verify that acceptance-tests passes.
 ```
 
