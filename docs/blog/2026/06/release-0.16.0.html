@@ -109,7 +109,6 @@
 <h2>What is the purpose?</h2>
 <p>An opinionated, AI-native development workflow for Java Enterprise: reusable <code>Skills</code>, <code>Agents</code>, <code>Commands</code>, and third-party <code>MCP servers</code> combined with a human-in-the-loop model to modernize real-world SDLC practices.</p>
 <p>Starting with this release, the project introduces a simple way to describe any <code>SDLC</code> action through three phases: <code>Plan</code>, <code>Build</code>, and <code>Operate</code>. <code>Software engineers</code> can use this structure when writing a <code>User prompt</code> in an AI user interface or terminal.</p>
-<p><strong>Example:</strong></p>
 <pre><code class="language-bash">Build
   /implement-issue
     @robot-tech-lead
@@ -131,6 +130,8 @@
 <li><a href="#improving-the-way-to-install-agents-and-commands">Improving the way to install Agents and Commands</a></li>
 <li><a href="#new-capabilities-for-java-enterprise-frameworks">New capabilities for Java Enterprise Frameworks</a></li>
 <li><a href="#increasing-the-engineering-awareness-with-eu-regulations">Increasing engineering awareness with EU regulations</a></li>
+<li><a href="#what-trends-from-radar-34-follow-this-project">What trends from Radar #34 follow this project?</a></li>
+<li><a href="#next-steps">Next steps</a></li>
 </ul>
 <p>Thanks to our community members in <code>Singapore</code>, <code>Hong Kong</code>, <code>Hanoi</code>, <code>London</code>, and <code>New York</code>. 👋👋👋</p>
 <p>If you have questions about the project, how to customize it for your team, how to use the skills in daily work, or how to solve tooling issues, use <a href="https://github.com/jabrena/cursor-rules-java/discussions"><code>GitHub Discussions</code></a>.</p>
@@ -366,7 +367,7 @@ Scenario: Implement God Analysis API from a validated OpenSpec change
 <p><em>Running the test with VS Code + Codex plugin</em></p>
 <p>But if you refine the prompt a bit, you can implement the requirement in <code>Quarkus</code>:</p>
 <pre><code class="language-bash">execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
-and verify that acceptance-tests pass. 
+and verify that acceptance-tests pass.
 Implement it using Quarkus, not Spring Boot, as the default requirement.
 </code></pre>
 <p>In this case, the agent <code>@robot-tech-lead</code> redirects the workload to the specific agent <code>@robot-java-quarkus-coder</code>, which handles specific <code>Java skills</code> and specific <code>Quarkus skills</code>. This is the result for a <code>Quarkus</code> implementation:</p>
@@ -374,7 +375,7 @@ Implement it using Quarkus, not Spring Boot, as the default requirement.
 <p><em>Running the test with Codex CLI for the Quarkus variant</em></p>
 <p>Or, if required, the agent <code>@robot-tech-lead</code> redirects to the specific agent <code>@robot-java-micronaut-coder</code>, which handles specific <code>Java skills</code> and specific <code>Micronaut skills</code>. This is the result for a <code>Micronaut</code> implementation:</p>
 <pre><code class="language-bash">execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
-and verify that acceptance-tests pass. 
+and verify that acceptance-tests pass.
 Implement it using Micronaut, not Spring Boot, as the default requirement.
 </code></pre>
 <p>And the project will implement the feature without any issues:</p>
@@ -491,7 +492,32 @@ install @004-commands-installation github-copilot
 <li><code>Digital Markets Act</code> when the system supports gatekeeper-platform concerns, core platform services, interoperability, data access, ranking, or self-preferencing controls.</li>
 </ul>
 <p>If you are interested in this set of skills, I recommend reading the following article: <a href="/cursor-rules-java/blog/2026/06/introduction-to-eu-regulations-part-i.html">Introduction to EU regulations Part I</a></p>
+<h2> What trends from Radar #34 follow this project?</h2>
+<p><a id="what-trends-from-radar-34-follow-this-project"></a></p>
+<p>The <a href="https://www.thoughtworks.com/radar">Thoughtworks Technology Radar Vol. 34</a> (April 2026) maps the current technology landscape across four rings: Adopt, Trial, Assess, and Caution. Several blips align directly with the direction this project has been taking. Lets review what recommendations matches with this project.</p>
+<p><strong>Adopt</strong></p>
+<ul>
+<li><strong>Curated shared instructions for software teams</strong> — The Radar explicitly calls out <code>AGENTS.md</code> as a distribution mechanism for AI guidance, anchored into service templates so every new repository inherits the latest agent workflows. This project has been doing exactly that from the start. See <a href="https://www.skills.sh/jabrena/cursor-rules-java/200-agents-md"><code>@200-agents-md</code></a>.</li>
+<li><strong>Context engineering</strong> — Treating the context window as a design surface rather than a static text box is now a foundational concern. The skill system in this project is a practical application of that principle: skills are loaded on demand, not front-loaded into a monolithic prompt.</li>
+<li><strong>Zero trust architecture</strong> — The Radar recommends ZTA as a non-negotiable default for agent deployments: never trust, always verify, least-privilege access. The <a href="#applying-zero-trust-with-your-agent-skills">Applying Zero Trust with Agent Skills</a> section in this release directly addresses this applied to skill-based agent workflows.</li>
+</ul>
+<p><strong>Trial</strong></p>
+<ul>
+<li><strong>Agent Skills</strong> — The Radar places Agent Skills in Trial, noting they are an open standard for modularizing context, reducing token consumption and providing a controlled alternative to MCP. This project is one of the early skill registries on <a href="https://www.skills.sh/jabrena/cursor-rules-java">skills.sh</a>, shipping skills for Java Enterprise workflows.</li>
+<li><strong>Feedback sensors for coding agents</strong> — Deterministic quality gates wired into agent workflows so failures trigger self-correction. This project uses <code>skill-check</code> and <code>skill-scanner</code> as post-generation feedback sensors, and is now expanding coverage with <code>Gherkin</code> acceptance tests for Skills, Agents and Commands.</li>
+<li><strong>Progressive context disclosure</strong> — Agents should load only what is needed for the current task. The <code>001-commands-inventory</code>, <code>002-agents-inventory</code>, and <code>003-skills-inventory</code> skills serve as lightweight discovery indexes before detailed skill content is loaded.</li>
+<li><strong>Mutation testing</strong> — The Radar highlights <code>Pitest</code> for Java as a way to verify that a passing test suite genuinely validates behavior. The Java testing skills in this project include guidance on mutation testing as a quality signal. Use <a href="https://www.skills.sh/jabrena/cursor-rules-java/112-java-maven-plugins"><code>@112-java-maven-plugins</code></a> to add and configure the Pitest Maven plugin.</li>
+<li><strong>Mapping code smells to refactoring techniques</strong> — The Radar recommends Agent Skills and slash commands for mapping legacy patterns to specific refactoring approaches. This project covers this for Java across multiple dimensions: <a href="https://www.skills.sh/jabrena/cursor-rules-java/141-java-refactoring-with-modern-features"><code>@141-java-refactoring-with-modern-features</code></a> for modernising existing code, <a href="https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design"><code>@121-java-object-oriented-design</code></a> for OOP principles and code smells, <a href="https://www.skills.sh/jabrena/cursor-rules-java/122-java-type-design"><code>@122-java-type-design</code></a> for type-level design decisions, <a href="https://www.skills.sh/jabrena/cursor-rules-java/142-java-functional-programming"><code>@142-java-functional-programming</code></a> for functional style, and <a href="https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling"><code>@143-java-functional-exception-handling</code></a> for functional error handling patterns.</li>
+</ul>
+<p><strong>Assess</strong></p>
+<ul>
+<li><strong>Architecture drift reduction with LLMs</strong> — The Radar mentions <code>ArchUnit</code> as a deterministic structural tool to combine with LLM-powered evaluation. Use <a href="https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies"><code>@111-java-maven-dependencies</code></a> to add ArchUnit to a Java project.</li>
+<li><strong>Code intelligence as agentic tooling</strong> — The Radar calls out the Serena MCP server for semantic code retrieval. This project already enables <code>serena</code> as one of its configured MCP servers, giving agents structured access to the codebase rather than relying on text search.</li>
+</ul>
+<p><strong>Cross-cutting theme: Putting coding agents on a leash</strong></p>
+<p>The Radar's editorial theme explicitly names <code>OpenSpec</code> alongside <code>GitHub Spec-Kit</code> as a spec-driven development framework for structuring workflows through planning, design and implementation. It also calls out <code>HITL</code> as a necessary counterweight to agent autonomy, and <code>Agent Skills</code> as a safer alternative to unrestricted MCP access. All three are central to this project.</p>
 <h2>Next steps</h2>
+<p><a id="next-steps"></a></p>
 <p>The next phase is already visible in the <a href="https://github.com/jabrena/cursor-rules-java/milestone/11"><code>v0.17.0</code> milestone</a>. The backlog continues the same direction as <code>0.16.0</code>: make agent workflows more useful, more deterministic, and easier to adopt in real teams.</p>
 <p>Functionally, the next workstreams are:</p>
 <ul>
