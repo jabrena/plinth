@@ -12,8 +12,6 @@ An opinionated, AI-native development workflow for Java Enterprise: reusable `Sk
 
 Starting with this release, the project introduces a simple way to describe any `SDLC` action through three phases: `Plan`, `Build`, and `Operate`. `Software engineers` can use this structure when writing a `User prompt` in an AI user interface or terminal.
 
-**Example:**
-
 ```bash
 Build
   /implement-issue
@@ -37,6 +35,8 @@ We will go into more detail later, but first, let's review the most interesting 
 - [Improving the way to install Agents and Commands](#improving-the-way-to-install-agents-and-commands)
 - [New capabilities for Java Enterprise Frameworks](#new-capabilities-for-java-enterprise-frameworks)
 - [Increasing engineering awareness with EU regulations](#increasing-the-engineering-awareness-with-eu-regulations)
+- [What trends from Radar #34 follow this project?](#what-trends-from-radar-34-follow-this-project)
+- [Next steps](#next-steps)
 
 Thanks to our community members in `Singapore`, `Hong Kong`, `Hanoi`, `London`, and `New York`. 👋👋👋
 
@@ -334,7 +334,7 @@ But if you refine the prompt a bit, you can implement the requirement in `Quarku
 
 ```bash
 execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
-and verify that acceptance-tests pass. 
+and verify that acceptance-tests pass.
 Implement it using Quarkus, not Spring Boot, as the default requirement.
 ```
 
@@ -348,7 +348,7 @@ Or, if required, the agent `@robot-tech-lead` redirects to the specific agent `@
 
 ```bash
 execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
-and verify that acceptance-tests pass. 
+and verify that acceptance-tests pass.
 Implement it using Micronaut, not Spring Boot, as the default requirement.
 ```
 
@@ -489,7 +489,38 @@ For distributed systems using GenAI tools, a practical review set is:
 
 If you are interested in this set of skills, I recommend reading the following article: [Introduction to EU regulations Part I](/cursor-rules-java/blog/2026/06/introduction-to-eu-regulations-part-i.html)
 
+## What trends from Radar #34 follow this project?
+
+<a id="what-trends-from-radar-34-follow-this-project"></a>
+
+The [Thoughtworks Technology Radar Vol. 34](https://www.thoughtworks.com/radar) (April 2026) maps the current technology landscape across four rings: Adopt, Trial, Assess, and Caution. Several blips align directly with the direction this project has been taking. Lets review what recommendations matches with this project.
+
+**Adopt**
+
+- **Curated shared instructions for software teams** — The Radar explicitly calls out `AGENTS.md` as a distribution mechanism for AI guidance, anchored into service templates so every new repository inherits the latest agent workflows. This project has been doing exactly that from the start. See [`@200-agents-md`](https://www.skills.sh/jabrena/cursor-rules-java/200-agents-md).
+- **Context engineering** — Treating the context window as a design surface rather than a static text box is now a foundational concern. The skill system in this project is a practical application of that principle: skills are loaded on demand, not front-loaded into a monolithic prompt.
+- **Zero trust architecture** — The Radar recommends ZTA as a non-negotiable default for agent deployments: never trust, always verify, least-privilege access. The [Applying Zero Trust with Agent Skills](#applying-zero-trust-with-your-agent-skills) section in this release directly addresses this applied to skill-based agent workflows.
+
+**Trial**
+
+- **Agent Skills** — The Radar places Agent Skills in Trial, noting they are an open standard for modularizing context, reducing token consumption and providing a controlled alternative to MCP. This project is one of the early skill registries on [skills.sh](https://www.skills.sh/jabrena/cursor-rules-java), shipping skills for Java Enterprise workflows.
+- **Feedback sensors for coding agents** — Deterministic quality gates wired into agent workflows so failures trigger self-correction. This project uses `skill-check` and `skill-scanner` as post-generation feedback sensors, and is now expanding coverage with `Gherkin` acceptance tests for Skills, Agents and Commands.
+- **Progressive context disclosure** — Agents should load only what is needed for the current task. The `001-commands-inventory`, `002-agents-inventory`, and `003-skills-inventory` skills serve as lightweight discovery indexes before detailed skill content is loaded.
+- **Mutation testing** — The Radar highlights `Pitest` for Java as a way to verify that a passing test suite genuinely validates behavior. The Java testing skills in this project include guidance on mutation testing as a quality signal. Use [`@112-java-maven-plugins`](https://www.skills.sh/jabrena/cursor-rules-java/112-java-maven-plugins) to add and configure the Pitest Maven plugin.
+- **Mapping code smells to refactoring techniques** — The Radar recommends Agent Skills and slash commands for mapping legacy patterns to specific refactoring approaches. This project covers this for Java across multiple dimensions: [`@141-java-refactoring-with-modern-features`](https://www.skills.sh/jabrena/cursor-rules-java/141-java-refactoring-with-modern-features) for modernising existing code, [`@121-java-object-oriented-design`](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) for OOP principles and code smells, [`@122-java-type-design`](https://www.skills.sh/jabrena/cursor-rules-java/122-java-type-design) for type-level design decisions, [`@142-java-functional-programming`](https://www.skills.sh/jabrena/cursor-rules-java/142-java-functional-programming) for functional style, and [`@143-java-functional-exception-handling`](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) for functional error handling patterns.
+
+**Assess**
+
+- **Architecture drift reduction with LLMs** — The Radar mentions `ArchUnit` as a deterministic structural tool to combine with LLM-powered evaluation. Use [`@111-java-maven-dependencies`](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) to add ArchUnit to a Java project.
+- **Code intelligence as agentic tooling** — The Radar calls out the Serena MCP server for semantic code retrieval. This project already enables `serena` as one of its configured MCP servers, giving agents structured access to the codebase rather than relying on text search.
+
+**Cross-cutting theme: Putting coding agents on a leash**
+
+The Radar's editorial theme explicitly names `OpenSpec` alongside `GitHub Spec-Kit` as a spec-driven development framework for structuring workflows through planning, design and implementation. It also calls out `HITL` as a necessary counterweight to agent autonomy, and `Agent Skills` as a safer alternative to unrestricted MCP access. All three are central to this project.
+
 ## Next steps
+
+<a id="next-steps"></a>
 
 The next phase is already visible in the [`v0.17.0` milestone](https://github.com/jabrena/cursor-rules-java/milestone/11). The backlog continues the same direction as `0.16.0`: make agent workflows more useful, more deterministic, and easier to adopt in real teams.
 
