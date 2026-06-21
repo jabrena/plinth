@@ -336,6 +336,8 @@
     <skill id="313">
         <reference-list>
             <reference>313-frameworks-spring-db-migrations-flyway</reference>
+            <reference>313-frameworks-spring-db-migrations-flyway-antipatterns</reference>
+            <reference>313-frameworks-spring-db-migrations-flyway-parallel-change</reference>
         </reference-list>
     </skill>
     <skill id="314">
@@ -406,6 +408,8 @@
     <skill id="413">
         <reference-list>
             <reference>413-frameworks-quarkus-db-migrations-flyway</reference>
+            <reference>413-frameworks-quarkus-db-migrations-flyway-antipatterns</reference>
+            <reference>413-frameworks-quarkus-db-migrations-flyway-parallel-change</reference>
         </reference-list>
     </skill>
     <skill id="414">
@@ -476,6 +480,8 @@
     <skill id="513">
         <reference-list>
             <reference>513-frameworks-micronaut-db-migrations-flyway</reference>
+            <reference>513-frameworks-micronaut-db-migrations-flyway-antipatterns</reference>
+            <reference>513-frameworks-micronaut-db-migrations-flyway-parallel-change</reference>
         </reference-list>
     </skill>
     <skill id="514">
