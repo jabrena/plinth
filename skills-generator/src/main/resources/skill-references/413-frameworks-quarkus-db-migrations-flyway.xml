@@ -138,6 +138,7 @@ quarkus.flyway.locations=classpath:db/migration]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
+
     </examples>
 
     <output-format>
@@ -146,7 +147,9 @@ quarkus.flyway.locations=classpath:db/migration]]></code-block>
             <output-format-item>**CATEGORIZE** issues (EXTENSION, CONFIG, SCRIPT, ENTITY MISMATCH) by impact</output-format-item>
             <output-format-item>**APPLY** Quarkus-aligned fixes: correct `pom.xml`, `application.properties`, and forward-only SQL</output-format-item>
             <output-format-item>**ALIGN** with `@412-frameworks-quarkus-panache` entities or `@411-frameworks-quarkus-jdbc` SQL</output-format-item>
+            <output-format-item>**SAFEGUARD DATA** by checking renames, type changes, defaults, enum/status changes, timezone changes, repeatable migrations, broad updates, and unique/index changes for preservation risks</output-format-item>
             <output-format-item>**TEST** with `@QuarkusTest` and a real database (Dev Services or Testcontainers) after migration changes</output-format-item>
+            <output-format-item>**CHECK ORDERING** for duplicate versions, branch-dependent migrations, and unsafe `outOfOrder=true` assumptions</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
         </output-format-list>
     </output-format>
@@ -156,6 +159,8 @@ quarkus.flyway.locations=classpath:db/migration]]></code-block>
             <safeguards-item>**FORWARD ONLY**: Never rewrite migrations that already applied in shared environments</safeguards-item>
             <safeguards-item>**PANACHE SYNC**: Adding `@Version` or columns requires matching DDL in Flyway before rollout</safeguards-item>
             <safeguards-item>**DEV SERVICES**: Dev databases are ephemeral — do not treat them as migration history sources of truth</safeguards-item>
+            <safeguards-item>**PARALLEL CHANGE**: Expand, migrate, and contract across separate deployable steps for renames, type changes, backfills, and relationship-table changes</safeguards-item>
+            <safeguards-item>**BRANCH ORDERING**: Detect duplicate versions and branch-only dependencies in CI; treat `outOfOrder=true` as an exceptional operational choice</safeguards-item>
             <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before recommending schema or build changes</safeguards-item>
         </safeguards-list>
     </safeguards>

@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt>
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.17.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Spring — Database migrations (Flyway)</title>
+        <description>Apply Martin Fowler's Parallel Change technique to Spring Boot Flyway migrations as an expand, migrate, contract workflow.</description>
+    </metadata>
+
+    <role>You are a Senior software engineer who applies incremental database-change workflows with Spring Boot and Flyway</role>
+
+    <goal>
+        Use Parallel Change when a Flyway migration changes schema shape or data interpretation. Prefer multiple small forward-only migrations over one destructive migration so old and new application versions can coexist safely during rollout.
+    </goal>
+
+    <examples>
+        <toc auto-generate="true" />
+
+        <example number="1" id="parallel-change-workflow">
+            <example-header>
+                <example-title>Parallel Change workflow</example-title>
+                <example-subtitle>Expand, migrate, and contract across separate deployable steps</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                1. Expand: add the new column, table, index, or constraint in a backward-compatible way while the old schema shape still works.
+                2. Migrate: backfill or dual-write data, update reads safely, and verify old and new paths during rollout.
+                3. Contract: remove the old column, table, or access path only after all deployed code and data have moved to the new shape.
+
+                Use this workflow for column renames, type changes, large-table backfills, relationship-table changes, enum/status transitions, timezone changes, defaults, and unique/index changes.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="sql"><![CDATA[-- V10__expand_customer_name.sql
+ALTER TABLE customers ADD COLUMN given_name VARCHAR(120);
+
+-- V11__migrate_customer_name.sql
+UPDATE customers
+SET given_name = first_name
+WHERE given_name IS NULL AND first_name IS NOT NULL;
+
+-- Application release: write both first_name and given_name; read given_name with fallback.
+
+-- V12__contract_customer_name.sql
+ALTER TABLE customers ALTER COLUMN given_name SET NOT NULL;
+ALTER TABLE customers DROP COLUMN first_name;]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="sql"><![CDATA[-- Bad: expands, migrates, and contracts in one deploy with no compatibility window
+ALTER TABLE customers RENAME COLUMN first_name TO given_name;
+ALTER TABLE customers ALTER COLUMN given_name SET NOT NULL;]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+</prompt>

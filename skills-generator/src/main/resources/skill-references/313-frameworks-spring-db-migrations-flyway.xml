@@ -159,6 +159,7 @@ public class V3__LoadProdData extends BaseJavaMigration {
                 </bad-example>
             </code-examples>
         </example>
+
     </examples>
 
     <output-format>
@@ -167,7 +168,9 @@ public class V3__LoadProdData extends BaseJavaMigration {
             <output-format-item>**CATEGORIZE** gaps (MISSING MODULE, NAMING, CONFIG, OPERATIONS) and risk (data loss, downtime, checksum mismatch)</output-format-item>
             <output-format-item>**APPLY** Spring Boot–aligned fixes: correct artifacts, script layout, `spring.flyway.*` tuning, and forward-only migration discipline</output-format-item>
             <output-format-item>**COORDINATE** with `@311-frameworks-spring-jdbc` / `@312-frameworks-spring-data-jdbc` so entities and SQL match applied migrations</output-format-item>
+            <output-format-item>**SAFEGUARD DATA** by checking renames, type changes, defaults, enum/status changes, timezone changes, repeatable migrations, broad updates, and unique/index changes for preservation risks</output-format-item>
             <output-format-item>**TEST** with integration tests hitting a real database (e.g. Testcontainers) after migration changes</output-format-item>
+            <output-format-item>**CHECK ORDERING** for duplicate versions, branch-dependent migrations, and unsafe `outOfOrder=true` assumptions</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
         </output-format-list>
     </output-format>
@@ -178,6 +181,8 @@ public class V3__LoadProdData extends BaseJavaMigration {
             <safeguards-item>**CHECKSUMS**: Changing a applied file breaks `validate-on-migrate` — use repair only with operational awareness</safeguards-item>
             <safeguards-item>**ROLLBACK**: Flyway does not auto-rollback; plan forward migrations (or manual runbooks) for reversibility</safeguards-item>
             <safeguards-item>**LOCKS**: Long DDL can block traffic — schedule risky changes and prefer online migration patterns for large tables</safeguards-item>
+            <safeguards-item>**PARALLEL CHANGE**: Expand, migrate, and contract across separate deployable steps for renames, type changes, backfills, and relationship-table changes</safeguards-item>
+            <safeguards-item>**BRANCH ORDERING**: Detect duplicate versions and branch-only dependencies in CI; treat `outOfOrder=true` as an exceptional operational choice</safeguards-item>
             <safeguards-item>**SECRETS**: Never put secrets inside migration sources committed to Git</safeguards-item>
             <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before recommending schema or build changes</safeguards-item>
         </safeguards-list>
