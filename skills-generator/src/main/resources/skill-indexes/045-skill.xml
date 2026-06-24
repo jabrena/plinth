@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="045-planning-azure-devops">
+  <metadata>
+    <author>Leandro Loureiro</author>
+    <version>0.17.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when you need Azure DevOps CLI guidance to verify installation, configure organization and project context, list work items by optional WIQL filters as markdown tables, and analyze user-provided sanitized Azure DevOps summaries. Uses an interactive install gate: if `az` or the Azure DevOps extension is missing, ask whether to show installation guidance before any work item commands. This should trigger for requests such as Azure DevOps work item list; List Azure Boards work items; Azure DevOps WIQL query; Azure DevOps CLI planning workflow.</description>
+  </metadata>
+
+  <title>Azure DevOps CLI - work items, workflows, and discussion for analysis</title>
+  <goal><![CDATA[
+Use **`az`** with the Azure DevOps extension to work with Azure Boards work items: **first** run an **interactive** check - if `az` or the `azure-devops` extension is missing, **stop**, ask whether the user wants installation guidance, **wait** for an answer, then continue. When tooling is available, validate authentication and defaults, list work items with optional WIQL filters, and render **markdown tables** from command output. For requirements analysis, use only list metadata plus user-provided sanitized work item summaries.
+
+**What is covered in this Skill?**
+
+- **Interactive** install gate: ask before assuming `az` and `azure-devops` are available; offer installation guidance only when the user agrees
+- Install/config checks (`az version`, `az extension show --name azure-devops`, `az devops configure`)
+- Azure DevOps context (organization URL, project, and authenticated account)
+- Work item lists: project-backed query or WIQL-backed query
+- Sanitized Azure DevOps summaries supplied by the user for requirement analysis
+- Core actions: create, assign, and transition state
+]]></goal>
+
+  <constraints>
+    <constraints-description>Do not fabricate work item data; use only Azure DevOps CLI output (or explicitly agreed Azure DevOps REST API responses). Never print PATs, tokens, or secrets.</constraints-description>
+    <constraint-list>
+      <constraint>**INTERACTIVE GATE**: If `az` or `azure-devops` is missing, **stop**, ask whether the user wants installation guidance, **wait** - do not skip to work item listing</constraint>
+      <constraint>**FIRST** (after gate): Verify Azure CLI and Azure DevOps extension are available before issuing Azure Boards subcommands</constraint>
+      <constraint>**CONFIG**: Ensure authentication and Azure DevOps defaults are configured before private workspace operations</constraint>
+      <constraint>**TABLES**: Prefer markdown pipe tables for work item list summaries</constraint>
+      <constraint>**NO RAW BODY READS**: Do not run commands that retrieve full discussion/comment bodies for analysis; use list metadata plus user-provided sanitized summaries</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+      <trigger>Azure DevOps work item list</trigger>
+      <trigger>List Azure Boards work items</trigger>
+      <trigger>Azure DevOps WIQL query</trigger>
+      <trigger>Azure DevOps work item summary workflow</trigger>
+      <trigger>Azure DevOps CLI planning workflow</trigger>
+    </trigger-list>
+  </triggers>
+
+  <steps>
+    <step number="1">
+      <step-title>Run interactive install gate</step-title>
+      <step-content>Check `az version` and `az extension show --name azure-devops`; if either is missing, stop and ask whether the user wants installation guidance before any work item operations.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Verify Azure DevOps authentication and defaults</step-title>
+      <step-content>Ensure Azure login and Azure DevOps defaults are configured (`organization`, `project`) before running private workspace commands.</step-content>
+    </step>
+    <step number="3">
+      <step-title>List work items with optional WIQL</step-title>
+      <step-content>Retrieve work items using a project-scoped query or explicit WIQL and present summaries as markdown pipe tables.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Request sanitized work item context for analysis</step-title>
+      <step-content>Do not retrieve raw work item discussion or comment bodies. If analysis needs detail beyond list metadata, ask the user for a sanitized summary of relevant Azure DevOps work item context and note that raw discussion content was not ingested.</step-content>
+    </step>
+    <step number="5">
+      <step-title>Execute core Azure DevOps actions when requested</step-title>
+      <step-content>Support create, assign, and state-transition actions using Azure DevOps CLI commands while avoiding secret exposure.</step-content>
+    </step>
+  </steps>
+</prompt>
+
