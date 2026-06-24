@@ -1,6 +1,8 @@
 name: CI Builds
 
-on: [push]
+on:
+  push:
+  pull_request:
 
 jobs:
   validate-markdown:
@@ -98,6 +100,7 @@ jobs:
 
   validate-snyk-agent-scan:
     name: Validate Agent Skills with Snyk Agent Scan
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6

@@ -1,5 +1,15 @@
 # Acceptance Test Prompts for Skills
 
+## Notes when you execute the Acceptance tests
+
+If you observe issues in the execution of any skill, 
+maybe it is an opportunity to improve it.
+
+Ask the model to review the execution and propose improvement on it.
+Later make a PR to submit the improvement.
+
+---
+
 ## 001-commands-inventory
 
 ```bash
@@ -46,6 +56,13 @@ and verify that acceptance-tests passes.
 
 ```bash
 execute @skills-generator/src/test/resources/gherkin/skills/034-architecture-design-exploration.feature
+and verify that acceptance-tests passes.
+```
+
+## 042-planning-openspec
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/042-planning-openspec.feature
 and verify that acceptance-tests passes.
 ```
 
@@ -126,6 +143,13 @@ execute @skills-generator/src/test/resources/gherkin/skills/316-frameworks-sprin
 and verify that acceptance-tests passes.
 ```
 
+## 323-frameworks-spring-boot-testing-acceptance-tests
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/323-frameworks-spring-boot-testing-acceptance-tests.feature
+and verify that acceptance-tests passes.
+```
+
 ## 400-frameworks-quarkus-create-project
 
 ```bash
@@ -158,6 +182,13 @@ and verify that acceptance-tests passes.
 
 ```bash
 execute @skills-generator/src/test/resources/gherkin/skills/513-frameworks-micronaut-db-migrations-flyway.feature
+and verify that acceptance-tests passes.
+```
+
+## 514-frameworks-micronaut-kafka
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/514-frameworks-micronaut-kafka.feature
 and verify that acceptance-tests passes.
 ```
 
