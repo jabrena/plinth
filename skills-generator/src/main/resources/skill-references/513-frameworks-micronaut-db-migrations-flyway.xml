@@ -149,6 +149,7 @@ flyway:
                 </bad-example>
             </code-examples>
         </example>
+
     </examples>
 
     <output-format>
@@ -157,7 +158,9 @@ flyway:
             <output-format-item>**CATEGORIZE** gaps (DEPENDENCY, CONFIG, SCRIPT, TEST DRIFT) by severity</output-format-item>
             <output-format-item>**APPLY** Micronaut-aligned fixes: coordinates, YAML/properties, and versioned SQL</output-format-item>
             <output-format-item>**ALIGN** with `@512-frameworks-micronaut-data` or `@511-frameworks-micronaut-jdbc` access patterns</output-format-item>
+            <output-format-item>**SAFEGUARD DATA** by checking renames, type changes, defaults, enum/status changes, timezone changes, repeatable migrations, broad updates, and unique/index changes for preservation risks</output-format-item>
             <output-format-item>**TEST** with `@MicronautTest` and a containerized database mirroring production dialect</output-format-item>
+            <output-format-item>**CHECK ORDERING** for duplicate versions, branch-dependent migrations, and unsafe `outOfOrder=true` assumptions</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
         </output-format-list>
     </output-format>
@@ -166,6 +169,8 @@ flyway:
         <safeguards-list>
             <safeguards-item>**IMMUTABLE APPLIED MIGRATIONS**: Do not modify files after they have run in shared environments</safeguards-item>
             <safeguards-item>**DATASOURCE SCOPE**: Configure Flyway for each datasource that needs independent schema</safeguards-item>
+            <safeguards-item>**PARALLEL CHANGE**: Expand, migrate, and contract across separate deployable steps for renames, type changes, backfills, and relationship-table changes</safeguards-item>
+            <safeguards-item>**BRANCH ORDERING**: Detect duplicate versions and branch-only dependencies in CI; treat `outOfOrder=true` as an exceptional operational choice</safeguards-item>
             <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before recommending schema or build changes</safeguards-item>
         </safeguards-list>
     </safeguards>

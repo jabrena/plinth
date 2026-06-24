@@ -423,7 +423,9 @@ class KafkaConfig {
             </example-header>
             <example-description><![CDATA[For `*IT` classes that POST to HTTP and assert a `@KafkaListener` received an event, start a `KafkaContainer` with Testcontainers and wire it via `@ServiceConnection` (Spring Boot 4.x). Do not set `spring.kafka.bootstrap-servers=localhost:9092` in shared `src/test/resources/application.properties` — that overrides the container port.
 
-Declare `NewTopic` in a `@TestConfiguration` imported only by the IT class. Enable listeners in the IT (`spring.kafka.listener.auto-startup=true`) while keeping them disabled in unit tests. Use Maven Failsafe for `*IT` classes. Testcontainers 2.x Maven artifacts are `testcontainers-kafka` and `testcontainers-junit-jupiter`. Cross-reference `@322-frameworks-spring-boot-testing-integration-tests` for HTTP client and container lifecycle details.]]></example-description>
+Declare `NewTopic` in a `@TestConfiguration` imported only by the IT class. Enable listeners in the IT (`spring.kafka.listener.auto-startup=true`) while keeping them disabled in unit tests. Use Maven Failsafe for `*IT` classes. Testcontainers 2.x Maven artifacts are `testcontainers-kafka` and `testcontainers-junit-jupiter`. Cross-reference `@322-frameworks-spring-boot-testing-integration-tests` for HTTP client and container lifecycle details.
+
+Resolve the Kafka container image from trusted project or CI configuration instead of hard-coding a public registry image in reusable guidance. Prefer organization-approved images pinned by digest.]]></example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[import org.apache.kafka.clients.admin.NewTopic;
@@ -447,7 +449,11 @@ class OrderCreatedIT {
 
     @Container
     @ServiceConnection
-    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("apache/kafka-native:3.8.0"));
+    static KafkaContainer kafka = new KafkaContainer(approvedKafkaImage());
+
+    private static DockerImageName approvedKafkaImage() {
+        return DockerImageName.parse(System.getProperty("test.kafka.image"));
+    }
 
     @Test
     void createOrder_publishesOrderCreatedEvent() {

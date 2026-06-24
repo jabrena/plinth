@@ -299,7 +299,9 @@ public Uni<Void> onOrderCreated(OrderCreatedEvent event) {
                 <example-title>Integration test with Testcontainers</example-title>
                 <example-subtitle>@QuarkusTestResource wires Kafka bootstrap servers before startup</example-subtitle>
             </example-header>
-            <example-description><![CDATA[Use Dev Services for zero-config `@QuarkusTest` runs when no `kafka.bootstrap.servers` is set. When the spec or CI requires an explicit broker, start a `KafkaContainer` via `QuarkusTestResourceLifecycleManager` and return `kafka.bootstrap.servers` (and per-channel bootstrap overrides if needed) from `start()` before Quarkus boots. Assert async delivery with Awaitility against an in-memory store populated by the consumer. Do not use Spring Boot patterns (`@ServiceConnection`, `@DynamicPropertySource`) — see `@422-frameworks-quarkus-testing-integration-tests`.]]></example-description>
+            <example-description><![CDATA[Use Dev Services for zero-config `@QuarkusTest` runs when no `kafka.bootstrap.servers` is set. When the spec or CI requires an explicit broker, start a `KafkaContainer` via `QuarkusTestResourceLifecycleManager` and return `kafka.bootstrap.servers` (and per-channel bootstrap overrides if needed) from `start()` before Quarkus boots. Assert async delivery with Awaitility against an in-memory store populated by the consumer. Do not use Spring Boot patterns (`@ServiceConnection`, `@DynamicPropertySource`) — see `@422-frameworks-quarkus-testing-integration-tests`.
+
+Resolve the Kafka container image from trusted project or CI configuration instead of hard-coding a public registry image in reusable guidance. Prefer organization-approved images pinned by digest.]]></example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[import io.quarkus.test.common.QuarkusTestResource;
@@ -325,13 +327,17 @@ public class KafkaTestResource implements QuarkusTestResourceLifecycleManager {
 
     @Override
     public Map<String, String> start() {
-        kafka = new KafkaContainer(DockerImageName.parse("apache/kafka-native:3.8.0"));
+        kafka = new KafkaContainer(approvedKafkaImage());
         kafka.start();
         String bootstrapServers = kafka.getBootstrapServers();
         return Map.of(
             "kafka.bootstrap.servers", bootstrapServers,
             "mp.messaging.outgoing.sum-calculated-out.bootstrap.servers", bootstrapServers,
             "mp.messaging.incoming.sum-calculated-in.bootstrap.servers", bootstrapServers);
+    }
+
+    private static DockerImageName approvedKafkaImage() {
+        return DockerImageName.parse(System.getProperty("test.kafka.image"));
     }
 
     @Override
@@ -379,7 +385,11 @@ class SumControllerMessagingIT {
                     <code-block language="java"><![CDATA[@QuarkusTest
 class SumControllerMessagingIT {
 
-    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("apache/kafka-native:3.8.0"));
+    static KafkaContainer kafka = new KafkaContainer(approvedKafkaImage());
+
+    private static DockerImageName approvedKafkaImage() {
+        return DockerImageName.parse(System.getProperty("test.kafka.image"));
+    }
 
     @BeforeAll
     static void startContainer() {
