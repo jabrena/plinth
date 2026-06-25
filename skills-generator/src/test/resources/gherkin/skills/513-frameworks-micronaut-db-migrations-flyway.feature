@@ -17,7 +17,7 @@ Scenario: Add safe Flyway migration guidance to the Micronaut example
   And the skill inspects "pom.xml", Micronaut datasource configuration, "flyway.datasources.*" configuration, migration locations, and JDBC or Micronaut Data persistence patterns
   And the skill recommends a versioned Flyway migration under "src/main/resources/db/migration"
   And the skill uses Parallel Change with expand, migrate, and contract steps when the change is data-sensitive
-  And the skill recommends "@MicronautTest" with Testcontainers verification against the production database dialect when feasible
+  And the skill requires "@MicronautTest" with Testcontainers verification against the target production database dialect
   And "./mvnw clean verify" or "mvn clean verify" is run after improvements
   And any git changes produced during skill execution and verification are reset
 
@@ -34,5 +34,5 @@ Scenario: Avoid a breaking Flyway migration in the Micronaut example
   And the skill requires explicit human review before proceeding with the breaking migration
   And the skill rejects "outOfOrder=true" as a default fix for branch-ordering problems
   And the skill recommends a safer forward-only Parallel Change sequence instead
-  And the skill requires migration tests that assert preserved item names from a previous-release data snapshot
+  And the skill requires migration tests that assert preserved item names from a previous-release data snapshot using Testcontainers for the target production database dialect
   And any git changes produced during skill execution and verification are reset

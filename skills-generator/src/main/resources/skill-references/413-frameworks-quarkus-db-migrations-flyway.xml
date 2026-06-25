@@ -139,16 +139,57 @@ quarkus.flyway.locations=classpath:db/migration]]></code-block>
             </code-examples>
         </example>
 
+        <example number="5" id="quarkus-first-flyway-migration">
+            <example-header>
+                <example-title>First Flyway migration in a Quarkus project</example-title>
+                <example-subtitle>Bootstrap the datasource, Flyway extension, migration folder, and production-dialect verification together</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                When a Quarkus project has no datasource, no JDBC or Panache persistence layer, and no Flyway setup yet, treat the request as a bootstrap plus migration change. Add `quarkus-flyway` together with the matching `quarkus-jdbc-*` driver, configure `quarkus.flyway.migrate-at-start=true` and `classpath:db/migration`, then create a versioned migration under `src/main/resources/db/migration`. For data-sensitive changes such as `status` to `status_v2`, keep the first migration in the expand phase: add the new nullable column, backfill from the old value, keep the old column available, and defer `NOT NULL` plus dropping the old column to later deployable contract migrations.
+
+                Verify the migration with the production database dialect when feasible. In Quarkus tests, Dev Services or Testcontainers can start PostgreSQL, MySQL, or another matching database without hardcoded datasource URLs. For semantic changes, add or recommend a previous-release fixture test that loads representative old rows, runs Flyway, and asserts the business meaning is preserved after migration.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="sql"><![CDATA[-- src/main/resources/db/migration/V1__expand_order_status_v2.sql
+ALTER TABLE orders ADD COLUMN status_v2 VARCHAR(40);
+
+UPDATE orders
+SET status_v2 = CASE status
+    WHEN 'P' THEN 'PENDING'
+    WHEN 'S' THEN 'SHIPPED'
+    WHEN 'C' THEN 'CANCELLED'
+    ELSE 'UNKNOWN'
+END
+WHERE status_v2 IS NULL;
+
+-- Later deployable steps:
+-- 1. Release code that writes both status and status_v2 and reads status_v2 with fallback.
+-- 2. Verify previous-release data snapshots keep the same business meaning.
+-- 3. Contract only after rollout: SET NOT NULL on status_v2, then DROP status.]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="sql"><![CDATA[-- Bad: combines expand, semantic rewrite, and contract in one migration
+UPDATE orders SET status = 'PENDING' WHERE status = 'P';
+ALTER TABLE orders ADD COLUMN status_v2 VARCHAR(40) NOT NULL DEFAULT 'PENDING';
+ALTER TABLE orders DROP COLUMN status;]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
     </examples>
 
     <output-format>
         <output-format-list>
             <output-format-item>**ANALYZE** Quarkus Flyway setup: extensions, datasource config, migration locations, migrate-at-start, and test profile behavior</output-format-item>
             <output-format-item>**CATEGORIZE** issues (EXTENSION, CONFIG, SCRIPT, ENTITY MISMATCH) by impact</output-format-item>
+            <output-format-item>**BOOTSTRAP** first-time Flyway projects by adding `quarkus-flyway`, the matching `quarkus-jdbc-*` driver, `quarkus.flyway.*` configuration, and `src/main/resources/db/migration` together</output-format-item>
             <output-format-item>**APPLY** Quarkus-aligned fixes: correct `pom.xml`, `application.properties`, and forward-only SQL</output-format-item>
             <output-format-item>**ALIGN** with `@412-frameworks-quarkus-panache` entities or `@411-frameworks-quarkus-jdbc` SQL</output-format-item>
             <output-format-item>**SAFEGUARD DATA** by checking renames, type changes, defaults, enum/status changes, timezone changes, repeatable migrations, broad updates, and unique/index changes for preservation risks</output-format-item>
-            <output-format-item>**TEST** with `@QuarkusTest` and a real database (Dev Services or Testcontainers) after migration changes</output-format-item>
+            <output-format-item>**TEST** with `@QuarkusTest` and a real production-dialect database using Dev Services or Testcontainers after migration changes; for semantic changes, include previous-release fixture data that proves business meaning is preserved</output-format-item>
             <output-format-item>**CHECK ORDERING** for duplicate versions, branch-dependent migrations, and unsafe `outOfOrder=true` assumptions</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
         </output-format-list>
@@ -159,7 +200,8 @@ quarkus.flyway.locations=classpath:db/migration]]></code-block>
             <safeguards-item>**FORWARD ONLY**: Never rewrite migrations that already applied in shared environments</safeguards-item>
             <safeguards-item>**PANACHE SYNC**: Adding `@Version` or columns requires matching DDL in Flyway before rollout</safeguards-item>
             <safeguards-item>**DEV SERVICES**: Dev databases are ephemeral — do not treat them as migration history sources of truth</safeguards-item>
-            <safeguards-item>**PARALLEL CHANGE**: Expand, migrate, and contract across separate deployable steps for renames, type changes, backfills, and relationship-table changes</safeguards-item>
+            <safeguards-item>**PARALLEL CHANGE**: Expand, migrate, and contract across separate deployable steps for renames, type changes, backfills, relationship-table changes, and enum/status meaning changes</safeguards-item>
+            <safeguards-item>**FIRST SETUP**: If no datasource or migration chain exists, add Flyway, the JDBC driver, configuration, and versioned migration layout as one coherent bootstrap; avoid hardcoded test datasource URLs when Dev Services or Testcontainers can provide the production dialect</safeguards-item>
             <safeguards-item>**BRANCH ORDERING**: Detect duplicate versions and branch-only dependencies in CI; treat `outOfOrder=true` as an exceptional operational choice</safeguards-item>
             <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before recommending schema or build changes</safeguards-item>
         </safeguards-list>

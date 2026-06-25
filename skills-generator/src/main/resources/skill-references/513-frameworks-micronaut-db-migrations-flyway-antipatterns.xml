@@ -21,6 +21,7 @@
             <constraint>**BRANCH ORDERING**: Detect duplicate version numbers and migrations that assume another branch migration already ran</constraint>
             <constraint>**OUT OF ORDER**: Treat `outOfOrder=true` as an exceptional operational decision, not a default fix for branch conflicts</constraint>
             <constraint>**REPEATABLE MIGRATIONS**: Review repeatable scripts for destructive operations because checksum changes make them rerun</constraint>
+            <constraint>**TESTCONTAINERS REQUIRED**: Require `@MicronautTest` migration verification with Testcontainers for the target production database dialect; reject H2 or hand-written DDL substitutes for migration safety checks</constraint>
         </constraint-list>
     </constraints>
 
@@ -161,20 +162,21 @@ flyway.datasources.default.out-of-order=true]]></code-block>
             </example-header>
             <example-description>
                 <![CDATA[
-                A passing Micronaut context test is not enough. Migration tests should exercise the real Flyway chain and assert preserved values across renames, backfills, defaults, enum/status changes, timezone changes, repeatable migrations, broad updates, and unique/index changes. Prefer Testcontainers with the production dialect over H2 when production uses PostgreSQL, MySQL, or another specific database.
+                A passing Micronaut context test is not enough. Migration tests should exercise the real Flyway chain and assert preserved values across renames, backfills, defaults, enum/status changes, timezone changes, repeatable migrations, broad updates, and unique/index changes. Always use Testcontainers with the target production dialect instead of H2 or hand-written test DDL.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[// Micronaut test intent:
-// - Use @MicronautTest with Testcontainers for the production dialect.
+// - Use @MicronautTest with Testcontainers for the target production dialect.
 // - Run Flyway against an empty schema and assert all migrations apply.
 // - Load a previous-release fixture, migrate, then assert preserved business data.
 // - Fail fast on duplicate V* prefixes and unexpected out-of-order migrations.]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[// Bad: @MicronautTest starts against H2 with hand-written DDL
-// while production uses PostgreSQL/MySQL and Flyway migrations are never exercised.]]></code-block>
+                    <code-block language="java"><![CDATA[// Bad: @MicronautTest starts against H2 or hand-written DDL
+// while production uses PostgreSQL/MySQL and Flyway migrations are never exercised
+// against the target dialect.]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
