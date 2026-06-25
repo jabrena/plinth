@@ -1,0 +1,49 @@
+# .github/workflows/update-issue-with-codex.yml
+name: Update issue with Codex
+
+on:
+  issues:
+    types: [labeled]
+
+permissions:
+  contents: read
+  issues: write
+
+jobs:
+  update-issue:
+    if: github.event.label.name == '/update-issue'
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Ask Codex to rewrite issue body
+        id: codex
+        uses: openai/codex-action@v1
+        with:
+          openai-api-key: ${{ secrets.OPENAI_API_KEY }}
+          sandbox: read-only
+          prompt: |
+            Rewrite this GitHub issue description using 
+            the Skill @014-agile-user-story which is located in /skills/014-agile-user-story
+            to convert the current description into an User Story format.
+            and not make questions
+            
+            Issue title:
+            ${{ github.event.issue.title }}
+
+            Current issue body:
+            ${{ github.event.issue.body }}
+
+      - name: Update issue description
+        uses: actions/github-script@v7
+        env:
+          NEW_BODY: ${{ steps.codex.outputs.final-message }}
+        with:
+          script: |
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.payload.issue.number,
+              body: process.env.NEW_BODY
+            })
