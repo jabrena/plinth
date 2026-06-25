@@ -19,6 +19,7 @@ Scenario: Add Mongock migration guidance to the Micronaut example
   And the skill selects Mongock runner and driver coordinates compatible with the Micronaut project
   And the skill wires migration execution through Micronaut beans or documents the standalone runner trade-off when required
   And the skill configures migration scan packages and startup versus controlled-job execution policy
+  And the skill avoids deprecated Mongock transaction APIs such as "setTransactionEnabled(false)"
   And the skill creates or recommends "@ChangeUnit" migrations with "@Execution", rollback hooks, explicit ordering, and idempotent operations
   And the skill warns about Mongock antipatterns including applied ChangeUnit edits, Micronaut Data coupling, non-idempotent updates, test property gaps, hidden lock failures, and tests that only verify startup
   And the skill explains MongoDB parallel change as expand, migrate, contract for document-shape changes, field renames, embedded structures, required fields, status values, and index rollout
