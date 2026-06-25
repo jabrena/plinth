@@ -45,7 +45,7 @@ Apply Mongock migration guidelines for Micronaut and Micronaut Data MongoDB.
   </triggers>
 
   <steps>
-    <step number="1"><step-title>Read reference and inspect MongoDB setup</step-title><step-content>Read `references/516-frameworks-micronaut-mongodb-migrations-mongock.md` and inspect `pom.xml`, Micronaut MongoDB configuration, and existing `@515-frameworks-micronaut-mongodb` persistence patterns.</step-content></step>
+    <step number="1"><step-title>Read references and inspect MongoDB setup</step-title><step-content>Read `references/516-frameworks-micronaut-mongodb-migrations-mongock.md`, `references/516-frameworks-micronaut-mongodb-migrations-mongock-antipatterns.md`, and `references/516-frameworks-micronaut-mongodb-migrations-mongock-parallel-change.md`, then inspect `pom.xml`, Micronaut MongoDB configuration, and existing `@515-frameworks-micronaut-mongodb` persistence patterns.</step-content></step>
     <step number="2"><step-title>Choose runner, driver, and execution policy</step-title><step-content>Select compatible Mongock coordinates, wire the runner through Micronaut beans, configure migration scan packages, and decide startup vs controlled-job execution.</step-content></step>
     <step number="3"><step-title>Apply framework-aligned migrations</step-title><step-content>Implement/refactor `@ChangeUnit` classes with idempotent operations, explicit ordering, rollback hooks, and safe lock/transaction settings.</step-content></step>
     <step number="4"><step-title>Run verification and report results</step-title><step-content>Execute build/tests, including `@MicronautTest` with Testcontainers MongoDB where feasible, and summarize outcomes and follow-up risks.</step-content></step>

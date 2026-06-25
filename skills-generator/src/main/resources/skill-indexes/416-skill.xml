@@ -32,6 +32,7 @@ Apply Mongock migration guidelines for Quarkus and Quarkus MongoDB client/Panach
       <constraint>**SAFETY**: If compilation fails, stop immediately</constraint>
       <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
       <constraint>**BEFORE APPLYING**: Read the reference for detailed rules and good/bad patterns</constraint>
+      <constraint>**EXTENSION COMPATIBILITY**: Before adding `quarkus-mongock`, verify the latest Quarkiverse Mongock release and Quarkus extension catalog compatibility with the active Quarkus platform. If the latest extension targets a significantly older Quarkus version, stop and document the incompatibility instead of applying changes.</constraint>
       <constraint>**EDGE CASE**: If the application uses multiple MongoDB clients, verify Quarkiverse Mongock support before applying a default-client migration design</constraint>
     </constraint-list>
   </constraints>
@@ -45,8 +46,8 @@ Apply Mongock migration guidelines for Quarkus and Quarkus MongoDB client/Panach
   </triggers>
 
   <steps>
-    <step number="1"><step-title>Read reference and inspect MongoDB setup</step-title><step-content>Read `references/416-frameworks-quarkus-mongodb-migrations-mongock.md` and inspect `pom.xml`, Quarkus MongoDB configuration, and existing `@415-frameworks-quarkus-mongodb` persistence patterns.</step-content></step>
-    <step number="2"><step-title>Choose extension and execution policy</step-title><step-content>Configure `quarkus-mongock`, MongoDB connection settings, migration scan behavior, and startup vs explicit `MongockFactory` execution.</step-content></step>
+    <step number="1"><step-title>Read references and inspect MongoDB setup</step-title><step-content>Read `references/416-frameworks-quarkus-mongodb-migrations-mongock.md`, `references/416-frameworks-quarkus-mongodb-migrations-mongock-antipatterns.md`, and `references/416-frameworks-quarkus-mongodb-migrations-mongock-parallel-change.md`, then inspect `pom.xml`, Quarkus MongoDB configuration, and existing `@415-frameworks-quarkus-mongodb` persistence patterns.</step-content></step>
+    <step number="2"><step-title>Verify extension compatibility and execution policy</step-title><step-content>Verify the Quarkiverse `quarkus-mongock` release and Quarkus extension catalog compatibility before configuring MongoDB connection settings, migration scan behavior, and startup vs explicit `MongockFactory` execution.</step-content></step>
     <step number="3"><step-title>Apply framework-aligned migrations</step-title><step-content>Implement/refactor `@ChangeUnit` classes with idempotent operations, explicit ordering, rollback hooks, and safe lock/transaction settings.</step-content></step>
     <step number="4"><step-title>Run verification and report results</step-title><step-content>Execute build/tests, including Quarkus tests with Dev Services or Testcontainers MongoDB where feasible, and summarize outcomes and follow-up risks.</step-content></step>
   </steps>

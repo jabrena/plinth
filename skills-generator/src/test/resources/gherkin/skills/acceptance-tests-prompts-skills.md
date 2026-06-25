@@ -8,6 +8,11 @@ maybe it is an opportunity to improve it.
 Ask the model to review the execution and propose improvement on it.
 Later make a PR to submit the improvement.
 
+```bash
+After the execution of the gherkin file, 
+do you see an opportunity to improve this skill?
+```
+
 ---
 
 ## 001-commands-inventory
