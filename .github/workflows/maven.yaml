@@ -217,7 +217,7 @@ jobs:
         run: |
           set -euo pipefail
 
-          for i in {1..20}; do
+          for i in {1..50}; do
             RESPONSE="$(curl --fail --silent --show-error \
               --request GET \
               --url "https://www.virustotal.com/api/v3/analyses/${ANALYSIS_ID}" \
