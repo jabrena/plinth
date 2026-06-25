@@ -33,18 +33,22 @@
         <example number="1" id="maven-flyway-dependencies">
             <example-header>
                 <example-title>Maven coordinates</example-title>
-                <example-subtitle>Add Flyway on the classpath; use database-specific Flyway modules when required by your Flyway major version</example-subtitle>
+                <example-subtitle>Use Spring Boot Flyway support; add database-specific Flyway modules when required by your dialect</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                Spring Boot manages Flyway versions via its BOM. Declare `flyway-core` (often transitively via `spring-boot-starter-jdbc` + explicit Flyway, or a dedicated starter pattern used in your project). For PostgreSQL and recent Flyway releases, add the matching `flyway-database-postgresql` artifact so Flyway can talk to the dialect. Keep JDBC driver and Flyway versions compatible with your Spring Boot BOM.
+                Spring Boot manages Flyway versions via its BOM. For Spring Boot 4.x, prefer `spring-boot-starter-flyway` so Boot contributes Flyway auto-configuration and creates the `Flyway` bean. Pair it with JDBC/DataSource support as needed. For PostgreSQL and recent Flyway releases, add the matching `flyway-database-postgresql` artifact so Flyway can talk to the dialect. Keep JDBC driver and Flyway versions compatible with your Spring Boot BOM.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="xml"><![CDATA[<dependency>
-    <groupId>org.flywaydb</groupId>
-    <artifactId>flyway-core</artifactId>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-jdbc</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-flyway</artifactId>
 </dependency>
 <dependency>
     <groupId>org.flywaydb</groupId>
@@ -160,6 +164,56 @@ public class V3__LoadProdData extends BaseJavaMigration {
             </code-examples>
         </example>
 
+        <example number="5" id="migration-smoke-test">
+            <example-header>
+                <example-title>Migration smoke test</example-title>
+                <example-subtitle>Verify Spring Boot wires Flyway and applies the migration chain</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Add or update a Spring Boot test that proves Flyway auto-configuration is active. The test should load the application context, inject `Flyway`, assert that expected migrations are applied, and verify the migrated schema through JDBC. Prefer Testcontainers with the production database dialect when production does not use an embedded database.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[@SpringBootTest
+class FlywayMigrationTest {
+
+    @Autowired
+    Flyway flyway;
+
+    @Autowired
+    JdbcTemplate jdbcTemplate;
+
+    @Test
+    void appliesCustomerMigration() {
+        assertThat(flyway.info().applied()).hasSize(1);
+
+        Integer customerTableCount = jdbcTemplate.queryForObject(
+            """
+            SELECT COUNT(*)
+            FROM INFORMATION_SCHEMA.TABLES
+            WHERE TABLE_NAME = 'CUSTOMERS'
+            """,
+            Integer.class);
+
+        assertThat(customerTableCount).isEqualTo(1);
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Bad: only checks that the web context starts; it never proves Flyway ran.
+@SpringBootTest
+class ApplicationTests {
+
+    @Test
+    void contextLoads() {
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
     </examples>
 
     <output-format>
@@ -169,7 +223,7 @@ public class V3__LoadProdData extends BaseJavaMigration {
             <output-format-item>**APPLY** Spring Boot–aligned fixes: correct artifacts, script layout, `spring.flyway.*` tuning, and forward-only migration discipline</output-format-item>
             <output-format-item>**COORDINATE** with `@311-frameworks-spring-jdbc` / `@312-frameworks-spring-data-jdbc` so entities and SQL match applied migrations</output-format-item>
             <output-format-item>**SAFEGUARD DATA** by checking renames, type changes, defaults, enum/status changes, timezone changes, repeatable migrations, broad updates, and unique/index changes for preservation risks</output-format-item>
-            <output-format-item>**TEST** with integration tests hitting a real database (e.g. Testcontainers) after migration changes</output-format-item>
+            <output-format-item>**TEST** with integration tests hitting a real database (e.g. Testcontainers) after migration changes; include a Spring Boot migration smoke test that injects `Flyway` and asserts applied migrations</output-format-item>
             <output-format-item>**CHECK ORDERING** for duplicate versions, branch-dependent migrations, and unsafe `outOfOrder=true` assumptions</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes</output-format-item>
         </output-format-list>
