@@ -167,8 +167,7 @@ jobs:
               --base "${BASE_BRANCH}" \
               --title "docs(openspec): create spec for issue #${ISSUE_NUMBER}" \
               --body-file "${body_file}" \
-              --label openspec \
-              --label codex)"
+              --label "/create-spec")"
           fi
 
           echo "pull-request-url=${pr_url}" >> "${GITHUB_OUTPUT}"
