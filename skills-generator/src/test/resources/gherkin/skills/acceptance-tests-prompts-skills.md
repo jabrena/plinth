@@ -134,6 +134,13 @@ execute @skills-generator/src/test/resources/gherkin/skills/305-frameworks-sprin
 and verify that acceptance-tests passes.
 ```
 
+## 311-frameworks-spring-jdbc
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/311-frameworks-spring-jdbc.feature
+and verify that acceptance-tests passes.
+```
+
 ## 313-frameworks-spring-db-migrations-flyway
 
 ```bash
