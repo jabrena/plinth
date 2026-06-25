@@ -274,7 +274,7 @@ my-app/
         <activeByDefault>true</activeByDefault>
       </activation>
       <properties>
-        <database.url>jdbc:h2:mem:devdb</database.url>
+        <database.url>jdbc:postgresql://localhost:5432/devdb</database.url>
       </properties>
     </profile>
     <profile>
