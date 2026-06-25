@@ -36,6 +36,8 @@ None.
 ## Source and Derivation
 
 - Source artifact: GitHub issue [#877](https://github.com/jabrena/cursor-rules-java/issues/877).
+- Issue number: 877.
+- Later PR target branch: `docs/issue-877-add-skill-about-2-steps-method-from-kent-beck-051-design-two`.
 - Local source files read for planning: `.codex/issue/title.txt`, `.codex/issue/body.md`, and `.codex/issue/url.txt`.
 - Trust basis: `/create-spec` issue label is maintainer approval to read the full issue body in this non-interactive workflow.
 - Derivation direction: issue #877 title/body/url -> sanitized planning summary -> OpenSpec change artifacts -> XML skill source implementation -> local generated skill validation.
