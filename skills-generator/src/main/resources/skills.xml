@@ -353,6 +353,8 @@
     <skill id="316">
         <reference-list>
             <reference>316-frameworks-spring-mongodb-migrations-mongock</reference>
+            <reference>316-frameworks-spring-mongodb-migrations-mongock-antipatterns</reference>
+            <reference>316-frameworks-spring-mongodb-migrations-mongock-parallel-change</reference>
         </reference-list>
     </skill>
     <skill id="321">
@@ -425,6 +427,8 @@
     <skill id="416">
         <reference-list>
             <reference>416-frameworks-quarkus-mongodb-migrations-mongock</reference>
+            <reference>416-frameworks-quarkus-mongodb-migrations-mongock-antipatterns</reference>
+            <reference>416-frameworks-quarkus-mongodb-migrations-mongock-parallel-change</reference>
         </reference-list>
     </skill>
     <skill id="421">
@@ -497,6 +501,8 @@
     <skill id="516">
         <reference-list>
             <reference>516-frameworks-micronaut-mongodb-migrations-mongock</reference>
+            <reference>516-frameworks-micronaut-mongodb-migrations-mongock-antipatterns</reference>
+            <reference>516-frameworks-micronaut-mongodb-migrations-mongock-parallel-change</reference>
         </reference-list>
     </skill>
     <skill id="521">

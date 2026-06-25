@@ -13,17 +13,17 @@ The repository already has separate Mongock skills for Spring Boot, Quarkus, and
 
 ### Target Skill References
 
-Update the three framework-specific Mongock reference XML files and, if the detailed guidance becomes too large for the main references, add focused supplemental references for each framework:
+Update the three framework-specific Mongock reference XML files and add focused supplemental references for each framework:
 
 - `316-frameworks-spring-mongodb-migrations-mongock.xml`
-- Optional: `316-frameworks-spring-mongodb-migrations-mongock-antipatterns.xml`
-- Optional: `316-frameworks-spring-mongodb-migrations-mongock-document-evolution.xml`
+- `316-frameworks-spring-mongodb-migrations-mongock-antipatterns.xml`
+- `316-frameworks-spring-mongodb-migrations-mongock-parallel-change.xml`
 - `416-frameworks-quarkus-mongodb-migrations-mongock.xml`
-- Optional: `416-frameworks-quarkus-mongodb-migrations-mongock-antipatterns.xml`
-- Optional: `416-frameworks-quarkus-mongodb-migrations-mongock-document-evolution.xml`
+- `416-frameworks-quarkus-mongodb-migrations-mongock-antipatterns.xml`
+- `416-frameworks-quarkus-mongodb-migrations-mongock-parallel-change.xml`
 - `516-frameworks-micronaut-mongodb-migrations-mongock.xml`
-- Optional: `516-frameworks-micronaut-mongodb-migrations-mongock-antipatterns.xml`
-- Optional: `516-frameworks-micronaut-mongodb-migrations-mongock-document-evolution.xml`
+- `516-frameworks-micronaut-mongodb-migrations-mongock-antipatterns.xml`
+- `516-frameworks-micronaut-mongodb-migrations-mongock-parallel-change.xml`
 
 No new skill id is required. The improvement belongs inside the existing framework-specific Mongock skills.
 
@@ -98,4 +98,4 @@ Implementation must edit XML sources under `skills-generator/src/main/resources/
 
 ## Open Questions
 
-- Whether to add supplemental reference XML files or keep the new guidance inside the existing three references can be decided during implementation based on readability and generated skill size.
+- None. Issue #902 clarifies that each Mongock skill should follow the Flyway reference split: framework integration, antipatterns, and parallel change.
