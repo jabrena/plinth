@@ -7,10 +7,11 @@ Options:
 - Error Prone + NullAway (enhanced compiler analysis and compile-time nullness checking; requires JSpecify)
 - VAVR (functional programming support with Try/Either and immutable collections)
 - ArchUnit (architecture testing with JUnit 5, `test` scope)
+- JavaMoney (Money and Currency API support with JSR 354 and Moneta)
 - None
 - Other (specify)
 
-**Recommendation**: Select JSpecify for better null-safety annotations. Add Error Prone + NullAway when you want stronger compile-time analysis. Add VAVR only when functional programming patterns are useful for the project. Add ArchUnit when you want automated architecture governance.
+**Recommendation**: Select JSpecify for better null-safety annotations. Add Error Prone + NullAway when you want stronger compile-time analysis. Add VAVR only when functional programming patterns are useful for the project. Add ArchUnit when you want automated architecture governance. Add JavaMoney when the domain needs explicit monetary amounts, currencies, formatting, conversion, or precision-safe money calculations.
 
 **Selection notes**:
 - If Error Prone + NullAway is selected, also select JSpecify unless the project already has equivalent nullness annotations configured.

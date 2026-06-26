@@ -33,10 +33,13 @@ A bare issue is context, not an execution contract. When repository policy requi
 
 ## Branch/worktree gate
 
+- Before choosing a branch or worktree strategy, inspect the workspace with `git status --short`.
+- If the workspace is dirty, stop immediately and report the changed/untracked paths. Do not create a feature branch, create a worktree, delegate implementation, or ask for approval to continue in the dirty checkout.
+- Continue only after the user cleans, commits, or stashes the workspace and reruns `/implement-issue`.
 - Determine whether the selected artifact should run in the current checkout, a new feature branch, or one or more linked worktrees.
 - If the work is serial and the current checkout is not already a safe, suitable feature branch, execute `/create-feature-branch` before delegating implementation.
 - If independent groups can run in parallel or need isolation, execute `/create-worktree` for each independent branch/worktree before delegating implementation.
-- Do not start implementation on `main`, the repository default branch, or a dirty checkout unless the user explicitly approves that exception after being warned.
+- Do not start implementation on `main` or the repository default branch unless the user explicitly approves that exception after being warned.
 - If branch or worktree creation is blocked by unsafe git state, existing branches, existing worktrees, or ambiguous base references, stop and ask the user how to proceed.
 
 ## Workflow
@@ -69,6 +72,7 @@ A bare issue is context, not an execution contract. When repository policy requi
 - Do not implement from a stale, unapproved, missing, or conflicting execution artifact.
 - Do not continue in the original command runner when `@robot-tech-lead` has not accepted the orchestration handoff.
 - Do not start implementation before the feature-branch or worktree gate has passed.
+- Do not bypass a dirty workspace by asking for approval to continue; stop and resume only after the workspace is clean.
 - Do not treat a written plan to delegate as delegation; invoke the selected implementation agent.
 - Do not silently change issue scope, requirements, ADR decisions, or plan approach.
 - Do not run dependent groups before prerequisite verification gates pass.

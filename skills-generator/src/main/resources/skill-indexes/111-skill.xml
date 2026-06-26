@@ -8,12 +8,12 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to add or evaluate Maven dependencies that improve code quality — including nullness annotations (JSpecify), static analysis (Error Prone + NullAway), functional programming (VAVR), or architecture testing (ArchUnit) — and want a consultative, question-driven approach that adds only what you actually need. This should trigger for requests such as Add Maven dependencies; Add JSpecify nullness dependencies; Add Error Prone NullAway dependencies; Add VAVR functional dependencies; Add ArchUnit architecture testing dependencies.</description>
+    <description>Use when you need to add or evaluate Maven dependencies that improve code quality or domain modeling — including nullness annotations (JSpecify), static analysis (Error Prone + NullAway), functional programming (VAVR), architecture testing (ArchUnit), or money and currency support (JavaMoney) — and want a consultative, question-driven approach that adds only what you actually need. This should trigger for requests such as Add Maven dependencies; Add JSpecify nullness dependencies; Add Error Prone NullAway dependencies; Add VAVR functional dependencies; Add ArchUnit architecture testing dependencies; Add JavaMoney dependencies.</description>
   </metadata>
 
   <title>Add Maven dependencies for improved code quality</title>
   <goal><![CDATA[
-Add essential Maven dependencies that enhance code quality and safety through a consultative, question-driven approach. **This is an interactive SKILL**.
+Add essential Maven dependencies that enhance code quality, safety, and domain modeling through a consultative, question-driven approach. **This is an interactive SKILL**.
 
 **What is covered in this Skill?**
 
@@ -21,6 +21,7 @@ Add essential Maven dependencies that enhance code quality and safety through a 
 - Error Prone + NullAway: (enhanced static analysis with compile-time null checking)
 - VAVR: (functional programming with Try/Either and immutable collections)
 - ArchUnit: (architecture rule enforcement, `test` scope)
+- JavaMoney: (Money and Currency API support with JSR 354 and Moneta)
 ]]></goal>
 
   <constraints>
@@ -39,6 +40,7 @@ Add essential Maven dependencies that enhance code quality and safety through a 
         <trigger>Add Error Prone NullAway dependencies</trigger>
         <trigger>Add VAVR functional dependencies</trigger>
         <trigger>Add ArchUnit architecture testing dependencies</trigger>
+        <trigger>Add JavaMoney dependencies</trigger>
     </trigger-list>
   </triggers>
 
@@ -60,6 +62,7 @@ After all applicable questions are answered, confirm the selections and map them
 - If enhanced compiler analysis is selected, use the Error Prone + NullAway section from `references/111-java-maven-dependencies-jspecify.md`.
 - If VAVR is selected, read `references/111-java-maven-dependencies-vavr.md`.
 - If ArchUnit is selected, read `references/111-java-maven-dependencies-archunit.md`.
+- If JavaMoney is selected, read `references/111-java-maven-dependencies-javamoney.md`.
 - Do not read or apply unselected dependency-family references.
 ]]></step-content>
     </step>
