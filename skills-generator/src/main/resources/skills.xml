@@ -106,6 +106,7 @@
             <reference>111-java-maven-dependencies-jspecify</reference>
             <reference>111-java-maven-dependencies-vavr</reference>
             <reference>111-java-maven-dependencies-archunit</reference>
+            <reference>111-java-maven-dependencies-javamoney</reference>
         </reference-list>
     </skill>
     <skill id="112" skillId="112-java-maven-plugins">
