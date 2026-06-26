@@ -96,6 +96,11 @@
             <reference>051-design-two-steps-methods</reference>
         </reference-list>
     </skill>
+    <skill id="052" skillId="052-design-hamburger-method">
+        <reference-list>
+            <reference>052-design-hamburger-method</reference>
+        </reference-list>
+    </skill>
     <skill id="110">
         <reference-list>
             <reference>110-java-maven-best-practices</reference>
