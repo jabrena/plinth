@@ -18,16 +18,18 @@ Create or update one or more OpenSpec changes from the available issue, design, 
 ## Owning Agent
 `@robot-tech-lead`
 
-## Associated Skill
-`042-planning-openspec`
+## Associated Skills
+- `042-planning-openspec`
+- `051-design-two-steps-methods` for every OpenSpec change so preparatory work, behavior change, and verification remain explicitly sequenced
 
 ## Workflow
 1. Identify the available source artifacts and their authority.
 2. Assess whether the scope fits one reviewable change.
-3. For broad scope, propose independently valuable changes and dependencies for approval.
-4. Create or update the approved OpenSpec proposal, design, specifications, and tasks.
-5. Record derivation direction, source links, and unresolved questions.
-6. Validate the resulting OpenSpec changes.
+3. Apply the two-step method so OpenSpec separates behavior-preserving preparation from behavior-changing work and validates each step.
+4. For broad scope, propose independently valuable changes and dependencies for approval.
+5. Create or update the approved OpenSpec proposal, design, specifications, and tasks.
+6. Record derivation direction, source links, and unresolved questions.
+7. Validate the resulting OpenSpec changes.
 
 ## Output
 - One OpenSpec change, or an approved map of multiple changes

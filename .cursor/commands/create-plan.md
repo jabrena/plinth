@@ -18,15 +18,17 @@ Create or refine an executable technical implementation plan from the available 
 ## Owning Agent
 `@robot-tech-lead`
 
-## Associated Skill
-`041-planning-plan-mode`
+## Associated Skills
+- `041-planning-plan-mode`
+- `051-design-two-steps-methods` for every plan so preparatory work, behavior change, and verification remain explicitly sequenced
 
 ## Workflow
 1. Identify the available source artifacts and their authority.
 2. Resolve material implementation questions without inventing requirements.
-3. Define the technical approach, affected areas, ordered tasks, risks, and verification.
-4. Record source links and any assumptions or unresolved blockers.
-5. Present the plan for approval.
+3. Apply the two-step method so the plan orders behavior-preserving preparation, behavior-preservation validation, the intended behavior change, and final verification.
+4. Define the technical approach, affected areas, ordered tasks, risks, and verification.
+5. Record source links and any assumptions or unresolved blockers.
+6. Present the plan for approval.
 
 ## Output
 - Executable implementation plan
