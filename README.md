@@ -90,6 +90,7 @@ Turn an idea into an actionable change with user stories, GitHub Issues or Jira,
     @052-design-hamburger-method
     @053-design-simple-rules
     @054-design-tdd
+    @055-design-parallel-change
     @121-java-object-oriented-design
     @122-java-type-design
     @123-java-design-patterns

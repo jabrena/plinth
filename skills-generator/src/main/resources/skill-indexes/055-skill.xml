@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="055-design-parallel-change"
+      interactive="true">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.17.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when a database schema or data-meaning change needs Parallel Change, including expand, migrate, and contract sequencing for column renames, type or data reinterpretation, large-table backfills, relationship-table changes, enum/status transitions, timezone/default changes, and index or uniqueness changes. This should trigger before framework-specific Flyway implementation guidance when deciding whether a migration needs a compatibility window or whether a simpler migration is sufficient.</description>
+  </metadata>
+
+  <title>Parallel Change Design</title>
+  <goal><![CDATA[
+Guide Java Enterprise developers through Parallel Change for database migration scenarios. **This is an interactive SKILL**.
+
+**What is covered in this Skill?**
+
+- Deciding whether a database migration needs a compatibility window
+- Sequencing database changes as expand, migrate, and contract deployable steps
+- Preserving old and new application versions during rollout and rollback windows
+- Handling column renames, type or data reinterpretation, large backfills, relationship-table changes, and index or uniqueness changes
+- Explaining tradeoffs such as temporary dual paths, extra migrations, verification effort, and delayed cleanup
+- Routing framework-specific implementation to Spring Boot, Quarkus, or Micronaut Flyway skills after the design approach is clear
+]]></goal>
+
+  <constraints>
+    <constraints-description>Use Parallel Change as a database migration design pattern, then hand off implementation details to the framework-specific migration skill when needed.</constraints-description>
+    <constraint-list>
+      <constraint>**MUST** read `references/055-design-parallel-change.md` before applying Parallel Change guidance</constraint>
+      <constraint>**MUST** explain expand, migrate, and contract as separate deployable steps when recommending Parallel Change</constraint>
+      <constraint>**MUST** decide whether Parallel Change is needed before recommending framework-specific Flyway implementation details</constraint>
+      <constraint>**MUST** recommend a simpler single migration when the change is additive, immediately safe, and does not require old and new application versions to coexist</constraint>
+      <constraint>**MUST** describe the compatibility, data-preservation, verification, and cleanup tradeoffs of the chosen approach</constraint>
+      <constraint>**MUST** use framework-specific Flyway skills for Spring Boot, Quarkus, or Micronaut implementation details after the migration strategy is selected</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+      <trigger>Apply Parallel Change to this database migration</trigger>
+      <trigger>Use expand migrate contract for this schema change</trigger>
+      <trigger>Plan a safe column rename migration</trigger>
+      <trigger>Plan a zero-downtime database migration</trigger>
+      <trigger>Should this Flyway migration use Parallel Change?</trigger>
+      <trigger>Design a safe backfill and contract migration</trigger>
+      <trigger>Decide if this schema change needs a compatibility window</trigger>
+    </trigger-list>
+  </triggers>
+
+  <steps>
+    <step number="1">
+      <step-title>Classify the Migration Risk</step-title>
+      <step-content>Read `references/055-design-parallel-change.md`, then identify the schema shape, data meaning, application read/write path, rollout window, rollback expectation, and production-data risk affected by the migration.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Choose Parallel Change or Simpler Migration</step-title>
+      <step-content>Recommend Parallel Change when old and new application versions or data interpretations must coexist. Recommend a simpler forward-only migration when the change is additive, small, immediately safe, and does not require a compatibility window.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Design Expand, Migrate, Contract</step-title>
+      <step-content>For Parallel Change, separate expand, migrate, and contract into independently deployable steps. Keep the old shape valid during expand and migrate; contract only after all deployed code and data have moved to the new shape.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Plan Verification and Operations</step-title>
+      <step-content>Define previous-release fixture checks, row-count expectations, duplicate detection, backfill monitoring, rollback behavior, and cleanup ownership. Prefer production-dialect migration tests and production-like data samples where feasible.</step-content>
+    </step>
+    <step number="5">
+      <step-title>Route Framework Implementation</step-title>
+      <step-content>After the strategy is clear, use `313-frameworks-spring-db-migrations-flyway`, `413-frameworks-quarkus-db-migrations-flyway`, or `513-frameworks-micronaut-db-migrations-flyway` for framework-specific Flyway dependencies, configuration, migration locations, and tests.</step-content>
+    </step>
+    <step number="6">
+      <step-title>Report the Migration Plan</step-title>
+      <step-content>Report the chosen approach, rejected alternative, expand/migrate/contract sequence or simpler migration, verification evidence, cleanup trigger, tradeoffs, skipped checks, and remaining risks.</step-content>
+    </step>
+  </steps>
+</prompt>

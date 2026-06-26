@@ -6,7 +6,7 @@
         <version>0.17.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
         <title>Embedded agents installer</title>
-        <description>Use when you need to install the embedded robot agents into either .cursor/agents or .claude/agents, selecting the destination interactively and copying the embedded agent definitions from project assets.</description>
+        <description>Use when you need to install the embedded robot agents into .github/agents, .claude/agents, .cursor/agents, or .codex/agents, selecting the destination interactively and copying the embedded agent definitions from project assets.</description>
     </metadata>
 
     <role>You are a Java project assistant focused on safe agent bootstrap and reproducible file installation workflows.</role>
@@ -15,7 +15,7 @@
 
     <goal>
         Install a predefined set of embedded agent definitions from repository assets into the user-selected target directory.
-        The installer supports two destinations: `.cursor/agents` and `.claude/agents`.
+        The installer supports four destinations: `.github/agents`, `.claude/agents`, `.cursor/agents`, and `.codex/agents`.
         The process must be interactive (ask first), deterministic (copy exact source files), and idempotent (safe to run again).
     </goal>
 
@@ -27,8 +27,10 @@
 
                 ```markdown
                 Where do you want to install the embedded agents?
+                - .github/agents
                 - .cursor/agents
                 - .claude/agents
+                - .codex/agents
                 ```
 
                 Wait for the user answer and do not copy any file before the destination is explicit.
