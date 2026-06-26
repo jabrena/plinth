@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      id="053-design-simple-rules"
+      interactive="true">
+  <metadata>
+    <author>Juan Antonio Breña Moral</author>
+    <version>0.17.0-SNAPSHOT</version>
+    <license>Apache-2.0</license>
+    <description>Use when Java design, refactoring, or implementation tradeoffs should be evaluated with Kent Beck's simple design rules: passes the tests, reveals intention, has no duplication, and has the fewest elements. This should trigger for requests such as Apply simple design rules; Review this design with Beck's rules; Choose between these refactoring options; Keep this Java design simple.</description>
+  </metadata>
+
+  <title>Simple Design Rules</title>
+  <goal><![CDATA[
+Guide Java developers through Kent Beck's simple design rules when evaluating design and refactoring choices. **This is an interactive SKILL**.
+
+**What is covered in this Skill?**
+
+- Using tests as the first correctness boundary before design cleanup
+- Revealing intention and maximizing clarity before abstraction pressure
+- Reducing duplication without hiding domain meaning or worsening readability
+- Treating fewer elements as the final simplification pressure after correctness, clarity, and duplication
+- Comparing Java design and refactoring options with the ordered rules
+- Reporting the chosen option, tradeoffs, validation signal, and remaining risk
+]]></goal>
+
+  <constraints>
+    <constraints-description>Apply simple design rules in priority order, and do not optimize later rules by weakening earlier rules.</constraints-description>
+    <constraint-list>
+      <constraint>**MUST** read `references/053-design-simple-rules.md` before applying the rules</constraint>
+      <constraint>**MUST** evaluate the rules in this order: passes the tests, reveals intention, has no duplication, has the fewest elements</constraint>
+      <constraint>**MUST** treat passing tests as the correctness boundary before design cleanup</constraint>
+      <constraint>**MUST** prefer clear intention over abstraction for its own sake</constraint>
+      <constraint>**MUST** reduce duplication only when the result preserves or improves clarity</constraint>
+      <constraint>**MUST** consider fewer elements only after correctness, clarity, and duplication have been addressed</constraint>
+    </constraint-list>
+  </constraints>
+
+  <triggers>
+    <trigger-list>
+      <trigger>Apply simple design rules</trigger>
+      <trigger>Use Beck's simple design rules</trigger>
+      <trigger>Review this design with simple design rules</trigger>
+      <trigger>Choose between these refactoring options</trigger>
+      <trigger>Keep this Java design simple</trigger>
+      <trigger>Does this design pass the simple design rules?</trigger>
+    </trigger-list>
+  </triggers>
+
+  <steps>
+    <step number="1">
+      <step-title>Anchor Correctness</step-title>
+      <step-content>Read `references/053-design-simple-rules.md`, then identify the behavior under discussion and the tests, characterization checks, build checks, or manual evidence that define whether the code works.</step-content>
+    </step>
+    <step number="2">
+      <step-title>Reveal Intention</step-title>
+      <step-content>Evaluate whether names, types, responsibilities, control flow, API shape, and test descriptions make the domain decision clear to a future maintainer.</step-content>
+    </step>
+    <step number="3">
+      <step-title>Reduce Duplication Carefully</step-title>
+      <step-content>Find repeated knowledge, policy, mappings, validation, queries, or workflow decisions. Remove duplication only when the abstraction keeps the intent easier to understand.</step-content>
+    </step>
+    <step number="4">
+      <step-title>Minimize Elements Last</step-title>
+      <step-content>After correctness, clarity, and duplication are handled, remove unnecessary classes, methods, parameters, branches, layers, configuration, or indirection that no longer pay for themselves.</step-content>
+    </step>
+    <step number="5">
+      <step-title>Compare Options and Report</step-title>
+      <step-content>Compare available design or refactoring options against the ordered rules. Recommend the option that satisfies the earlier rules best, describe rejected tradeoffs, and name the verification signal.</step-content>
+    </step>
+  </steps>
+</prompt>

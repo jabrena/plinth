@@ -85,6 +85,13 @@ execute @skills-generator/src/test/resources/gherkin/skills/052-design-hamburger
 and verify that acceptance-tests passes.
 ```
 
+## 053-design-simple-rules
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/053-design-simple-rules.feature
+and verify that acceptance-tests passes.
+```
+
 ## 110-java-maven-best-practices
 
 ```bash
