@@ -93,6 +93,10 @@ Plan
       @051-design-two-steps-methods
       @052-design-hamburger-method
       @053-design-simple-rules
+      @054-design-tdd
+      @121-java-object-oriented-design
+      @122-java-type-design
+      @123-java-design-patterns
   /explore-design
     @robot-architect
       @034-architecture-design-exploration

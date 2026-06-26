@@ -92,6 +92,13 @@ execute @skills-generator/src/test/resources/gherkin/skills/053-design-simple-ru
 and verify that acceptance-tests passes.
 ```
 
+## 054-design-tdd
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/054-design-tdd.feature
+and verify that acceptance-tests passes.
+```
+
 ## 110-java-maven-best-practices
 
 ```bash
