@@ -84,13 +84,16 @@ Plan
   /create-plan
     @robot-tech-lead
       @041-planning-plan-mode
+      @051-design-two-steps-methods
+      @052-design-hamburger-method
   /create-spec
     @robot-tech-lead
       @042-planning-openspec
+      @051-design-two-steps-methods
+      @052-design-hamburger-method
   /explore-design
     @robot-architect
       @034-architecture-design-exploration
-      @051-design-two-steps-methods
   /review-alignment
     @robot-business-analyst
   /review-breaking-changes
