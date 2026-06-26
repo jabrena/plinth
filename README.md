@@ -84,12 +84,6 @@ Turn an idea into an actionable change with user stories, GitHub Issues or Jira,
 /create-diagram
 @robot-architect
     @033-architecture-diagrams
-/create-plan
-@robot-tech-lead
-    @041-planning-plan-mode
-    @051-design-two-steps-methods
-    @052-design-hamburger-method
-    @053-design-simple-rules
 /create-spec
 @robot-tech-lead
     @042-planning-openspec
