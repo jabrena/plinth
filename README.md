@@ -16,9 +16,9 @@ An opinionated AI-native workflow for evolving modern Java Enterprise `SDLC` pra
 
 ## Project at a glance
 
-- 14 Commands
+- 15 Commands
 - 9 Agents
-- 106 Skills
+- 107 Skills
 
 ## Latest Updates
 
@@ -63,38 +63,95 @@ Current `System prompts/rules` are deprecated and will be removed in `v0.17.0`. 
 
 ## Choose your path
 
+Commands compose the workflow by routing work to the right agent and skill set:
+
 ### Plan
 
 Turn an idea into an actionable change with user stories, GitHub Issues or Jira, ADRs, diagrams, AI plan mode, and OpenSpec.
 
-| Resource | Available options |
-| --- | --- |
-| **Commands** | `/create-issue` · [`/update-issue`](./.cursor/commands/update-issue.md) · `/explore-design` · `/create-adr` · `/create-diagram` · `/create-plan` · `/create-spec` · `/review-alignment` |
-| **Agents** | `@robot-business-analyst` · `@robot-architect` · `@robot-tech-lead` |
-| **Skills** | [014-agile-user-story](https://www.skills.sh/jabrena/cursor-rules-java/014-agile-user-story) · [030-architecture-adr-general](https://www.skills.sh/jabrena/cursor-rules-java/030-architecture-adr-general) · [033-architecture-diagrams](https://www.skills.sh/jabrena/cursor-rules-java/033-architecture-diagrams) · [041-planning-plan-mode](https://www.skills.sh/jabrena/cursor-rules-java/041-planning-plan-mode) · [200-agents-md](https://www.skills.sh/jabrena/cursor-rules-java/200-agents-md) |
-| **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) |
+```text
+/create-issue
+/update-issue
+@robot-business-analyst
+    @043-planning-github-issues
+    @044-planning-jira
+    @014-agile-user-story
+/create-adr
+@robot-architect
+    @030-architecture-adr-general
+    @031-architecture-adr-functional-requirements
+    @032-architecture-adr-non-functional-requirements
+/create-diagram
+@robot-architect
+    @033-architecture-diagrams
+/create-plan
+@robot-tech-lead
+    @041-planning-plan-mode
+/create-spec
+@robot-tech-lead
+    @042-planning-openspec
+    @051-design-two-steps-methods
+/explore-design
+@robot-architect
+    @034-architecture-design-exploration
+/review-alignment
+@robot-business-analyst
+/review-breaking-changes
+@robot-tech-lead
+
+MCP Servers
+    Jbang-Quarkus-JDBC
+    MongoDB
+    JavaDocs
+    Serena-LSP
+    Grafana
+```
 
 ### Build
 
 Implement and improve Java applications with Maven, design, coding, testing, security, documentation, Spring Boot, Quarkus, Micronaut, OpenAPI, and WireMock guidance.
 
-| Resource | Available options |
-| --- | --- |
-| **Commands** | [`/create-feature-branch`](./.cursor/commands/create-feature-branch.md) · [`/create-worktree`](./.cursor/commands/create-worktree.md) · [`/implement-issue`](./.cursor/commands/implement-issue.md) · [`/kill-port`](./.cursor/commands/kill-port.md) |
-| **Agents** | `@robot-tech-lead` · `@robot-no-java` · `@robot-java-coder` · `@robot-java-spring-boot-coder` · `@robot-java-quarkus-coder` · `@robot-java-micronaut-coder` |
-| **Skills** | [110-java-maven-best-practices](https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices) · [111-java-maven-dependencies](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) · [121-java-object-oriented-design](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) · [124-java-secure-coding](https://www.skills.sh/jabrena/cursor-rules-java/124-java-secure-coding) · [143-java-functional-exception-handling](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) |
-| **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [JavaDocs](https://www.javadocs.dev/mcp) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) |
+```text
+/implement-issue
+@robot-tech-lead
+    /create-feature-branch
+    /create-worktree
+    @robot-java-coder
+    @robot-java-spring-boot-coder
+    @robot-java-quarkus-coder
+    @robot-java-micronaut-coder
+    @robot-no-java
+/kill-port
+
+MCP Servers
+    Jbang-Quarkus-JDBC
+    MongoDB
+    JavaDocs
+    Serena-LSP
+```
 
 ### Operate
 
 Measure and improve production behavior through observability, profiling, benchmarking, and performance testing.
 
-| Resource | Available options |
-| --- | --- |
-| **Commands** | [`/profile`](./.cursor/commands/profile.md) · [`/benchmark`](./.cursor/commands/benchmark.md) |
-| **Agents** | `@robot-java-performance` |
-| **Skills** | [151-java-performance-jmeter](https://www.skills.sh/jabrena/cursor-rules-java/151-java-performance-jmeter) · [161-java-profiling-detect](https://www.skills.sh/jabrena/cursor-rules-java/161-java-profiling-detect) · [162-java-profiling-analyze](https://www.skills.sh/jabrena/cursor-rules-java/162-java-profiling-analyze) · [163-java-profiling-refactor](https://www.skills.sh/jabrena/cursor-rules-java/163-java-profiling-refactor) · [164-java-profiling-verify](https://www.skills.sh/jabrena/cursor-rules-java/164-java-profiling-verify) |
-| **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) · [Grafana](https://grafana.com/docs/grafana/latest/developer-resources/mcp/) |
+```text
+/profile
+@robot-java-performance
+    @161-java-profiling-detect
+    @162-java-profiling-analyze
+    @163-java-profiling-refactor
+    @164-java-profiling-verify
+/benchmark
+@robot-java-performance
+    @151-java-performance-jmeter
+    @152-java-performance-gatling
+
+MCP Servers
+    Jbang-Quarkus-JDBC
+    MongoDB
+    Serena-LSP
+    Grafana
+```
 
 ### Compliance (Alpha)
 

@@ -78,6 +78,9 @@
                 <xi:include href="assets/commands/review-alignment.md" parse="text"/>
                 ```
                 ```markdown
+                <xi:include href="assets/commands/review-breaking-changes.md" parse="text"/>
+                ```
+                ```markdown
                 <xi:include href="assets/commands/implement-issue.md" parse="text"/>
                 ```
                 ```markdown
@@ -97,7 +100,7 @@
             <step-constraints>
                 <step-constraint-list>
                     <step-constraint>**MUST** copy from embedded assets, not from external URLs</step-constraint>
-                    <step-constraint>**MUST** install all fourteen commands as one set</step-constraint>
+                    <step-constraint>**MUST** install all fifteen commands as one set</step-constraint>
                     <step-constraint>**MUST** preserve original file names</step-constraint>
                 </step-constraint-list>
             </step-constraints>
