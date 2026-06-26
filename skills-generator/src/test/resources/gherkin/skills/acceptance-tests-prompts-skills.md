@@ -99,6 +99,13 @@ execute @skills-generator/src/test/resources/gherkin/skills/054-design-tdd.featu
 and verify that acceptance-tests passes.
 ```
 
+## 055-design-parallel-change
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/055-design-parallel-change.feature
+and verify that acceptance-tests passes.
+```
+
 ## 110-java-maven-best-practices
 
 ```bash

@@ -7,7 +7,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to install the embedded robot agents into either .cursor/agents or .claude/agents, selecting the destination interactively and copying the embedded agent definitions from project assets. This should trigger for requests such as Install embedded agents; Bootstrap .cursor/agents; Bootstrap .claude/agents; Copy robot agents.</description>
+    <description>Use when you need to install the embedded robot agents into .github/agents, .claude/agents, .cursor/agents, or .codex/agents, selecting the destination interactively and copying the embedded agent definitions from project assets. This should trigger for requests such as Install embedded agents; Bootstrap .github/agents; Bootstrap .cursor/agents; Bootstrap .claude/agents; Bootstrap .codex/agents; Copy robot agents.</description>
   </metadata>
 
   <title>Embedded agents installer</title>
@@ -16,7 +16,7 @@ Install a predefined set of embedded agent definitions from repository assets in
 
 **What is covered in this Skill?**
 
-- Interactive target selection (`.cursor/agents` or `.claude/agents`)
+- Interactive target selection (`.github/agents`, `.claude/agents`, `.cursor/agents`, or `.codex/agents`)
 - Deterministic copy of all embedded agents defined via XInclude from `assets/agents`
 - Idempotent re-installation with clear overwrite reporting
 ]]></goal>
@@ -24,7 +24,7 @@ Install a predefined set of embedded agent definitions from repository assets in
   <constraints>
     <constraints-description>This skill installs only the embedded robot agents bundle and must ask for destination before writing files.</constraints-description>
     <constraint-list>
-      <constraint>**MUST** ask the user to choose `.cursor/agents` or `.claude/agents` before installing</constraint>
+      <constraint>**MUST** ask the user to choose `.github/agents`, `.claude/agents`, `.cursor/agents`, or `.codex/agents` before installing</constraint>
       <constraint>**MUST** copy all embedded agent files defined in `references/005-agents-installation.md`</constraint>
       <constraint>**MUST** preserve file names from the reference content and report overwrite actions</constraint>
     </constraint-list>
@@ -33,8 +33,10 @@ Install a predefined set of embedded agent definitions from repository assets in
   <triggers>
     <trigger-list>
       <trigger>Install embedded agents</trigger>
+      <trigger>Bootstrap .github/agents</trigger>
       <trigger>Bootstrap .cursor/agents</trigger>
       <trigger>Bootstrap .claude/agents</trigger>
+      <trigger>Bootstrap .codex/agents</trigger>
       <trigger>Copy robot agents</trigger>
     </trigger-list>
   </triggers>
@@ -42,7 +44,7 @@ Install a predefined set of embedded agent definitions from repository assets in
   <steps>
     <step number="1">
       <step-title>Choose destination</step-title>
-      <step-content>Ask exactly one question to choose `.cursor/agents` or `.claude/agents` and wait for an explicit answer before copying files.</step-content>
+      <step-content>Ask exactly one question to choose `.github/agents`, `.claude/agents`, `.cursor/agents`, or `.codex/agents` and wait for an explicit answer before copying files.</step-content>
       <step-constraints>
         <step-constraint-list>
           <step-constraint>Do not copy any file until destination is explicitly confirmed</step-constraint>
