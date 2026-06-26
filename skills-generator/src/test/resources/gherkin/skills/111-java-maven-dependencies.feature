@@ -27,6 +27,8 @@ Scenario: Add JSpecify and Error Prone + NullAway to Maven demo
     | groupId              | artifactId      |
     | io.vavr              | vavr            |
     | com.tngtech.archunit | archunit-junit5 |
+    | org.javamoney        | moneta          |
+    | javax.money          | money-api       |
   And the "pom.xml" declares the Maven compiler plugin with centralized version property:
     | groupId                  | artifactId            | property                      | propertyValue |
     | org.apache.maven.plugins | maven-compiler-plugin | maven-plugin-compiler.version | 3.14.0        |
