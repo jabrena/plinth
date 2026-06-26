@@ -101,6 +101,11 @@
             <reference>052-design-hamburger-method</reference>
         </reference-list>
     </skill>
+    <skill id="053" skillId="053-design-simple-rules">
+        <reference-list>
+            <reference>053-design-simple-rules</reference>
+        </reference-list>
+    </skill>
     <skill id="110">
         <reference-list>
             <reference>110-java-maven-best-practices</reference>
