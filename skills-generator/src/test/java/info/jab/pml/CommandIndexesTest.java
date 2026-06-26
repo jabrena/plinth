@@ -150,6 +150,28 @@ class CommandIndexesTest {
     }
 
     @Test
+    @DisplayName("Breaking change review command must assess plans and specs read-only")
+    void should_reviewBreakingChanges_when_commandIsInstalled() {
+        String command = loadClasspathResource("skill-references/assets/commands/review-breaking-changes.md");
+
+        assertThat(command)
+            .contains("/review-breaking-changes <plan|openspec-change|spec>")
+            .contains("Approved implementation plan")
+            .contains("OpenSpec change directory")
+            .contains("OpenSpec specification file")
+            .contains("Owning Agent")
+            .contains("`@robot-tech-lead`")
+            .contains("affected contracts, generated outputs, commands, skills, agents, documentation")
+            .contains("`BREAKING`")
+            .contains("`POTENTIALLY BREAKING`")
+            .contains("`NON-BREAKING`")
+            .contains("`UNKNOWN`")
+            .contains("READY WITH BREAKING-CHANGE WARNINGS")
+            .contains("Keep the review read-only")
+            .contains("Do not modify plans, specs, source files, generated outputs, or issue descriptions");
+    }
+
+    @Test
     @DisplayName("Performance commands must route to Java performance agent")
     void should_routePerformanceWorkflows_when_profileAndBenchmarkCommandsAreInstalled() {
         String profile = loadClasspathResource("skill-references/assets/commands/profile.md");

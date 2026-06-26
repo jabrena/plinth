@@ -16,9 +16,9 @@ Un flujo de trabajo nativo de IA, con criterio propio, para evolucionar las prá
 
 ## Proyecto de un vistazo
 
-- 14 Commands
+- 15 Commands
 - 9 Agents
-- 106 Skills
+- 107 Skills
 
 ## Últimas actualizaciones
 
@@ -63,15 +63,86 @@ Los `System prompts/rules` actuales están deprecados y se eliminarán en `v0.16
 
 ## Elige tu camino
 
+Los commands componen el flujo de trabajo dirigiendo cada tarea al agente y al conjunto de skills adecuados:
+
+```text
+Plan
+  /create-issue
+  /update-issue
+    @robot-business-analyst
+      @043-planning-github-issues
+      @044-planning-jira
+      @014-agile-user-story
+  /create-adr
+    @robot-architect
+      @030-architecture-adr-general
+      @031-architecture-adr-functional-requirements
+      @032-architecture-adr-non-functional-requirements
+  /create-diagram
+    @robot-architect
+      @033-architecture-diagrams
+  /create-plan
+    @robot-tech-lead
+      @041-planning-plan-mode
+  /create-spec
+    @robot-tech-lead
+      @042-planning-openspec
+  /explore-design
+    @robot-architect
+      @034-architecture-design-exploration
+      @051-design-two-steps-methods
+  /review-alignment
+    @robot-business-analyst
+  /review-breaking-changes
+    @robot-tech-lead
+
+Build
+  /implement-issue
+      @robot-tech-lead
+      /create-feature-branch
+      /create-worktree
+      @robot-java-coder
+      @robot-java-spring-boot-coder
+      @robot-java-quarkus-coder
+      @robot-java-micronaut-coder
+      @robot-no-java
+  /kill-port
+
+  MCP Servers
+    Jbang-Quarkus-JDBC
+    MongoDB
+    JavaDocs
+    Serena-LSP
+
+Operate
+  /profile
+    @robot-java-performance
+      @161-java-profiling-detect
+      @162-java-profiling-analyze
+      @163-java-profiling-refactor
+      @164-java-profiling-verify
+  /benchmark
+    @robot-java-performance
+      @151-java-performance-jmeter
+      @152-java-performance-gatling
+
+MCP Servers
+  Jbang-Quarkus-JDBC
+  MongoDB
+  JavaDocs
+  Serena-LSP
+  Grafana
+```
+
 ### Planificar
 
 Convierte una idea en un cambio accionable mediante user stories, GitHub Issues o Jira, ADRs, diagramas, AI plan mode y OpenSpec.
 
 | Recurso | Opciones disponibles |
 | --- | --- |
-| **Commands** | `/create-issue` · [`/update-issue`](./.cursor/commands/update-issue.md) · `/explore-design` · `/create-adr` · `/create-diagram` · `/create-plan` · `/create-spec` · `/review-alignment` |
+| **Commands** | `/create-issue` · [`/update-issue`](./.cursor/commands/update-issue.md) · `/explore-design` · `/create-adr` · `/create-diagram` · `/create-plan` · `/create-spec` · `/review-alignment` · [`/review-breaking-changes`](./.cursor/commands/review-breaking-changes.md) |
 | **Agents** | `@robot-business-analyst` · `@robot-architect` · `@robot-tech-lead` |
-| **Skills** | [014-agile-user-story](https://www.skills.sh/jabrena/cursor-rules-java/014-agile-user-story) · [030-architecture-adr-general](https://www.skills.sh/jabrena/cursor-rules-java/030-architecture-adr-general) · [033-architecture-diagrams](https://www.skills.sh/jabrena/cursor-rules-java/033-architecture-diagrams) · [041-planning-plan-mode](https://www.skills.sh/jabrena/cursor-rules-java/041-planning-plan-mode) · [200-agents-md](https://www.skills.sh/jabrena/cursor-rules-java/200-agents-md) |
+| **Skills** | [014-agile-user-story](https://www.skills.sh/jabrena/cursor-rules-java/014-agile-user-story) · [030-architecture-adr-general](https://www.skills.sh/jabrena/cursor-rules-java/030-architecture-adr-general) · [031-architecture-adr-functional-requirements](https://www.skills.sh/jabrena/cursor-rules-java/031-architecture-adr-functional-requirements) · [032-architecture-adr-non-functional-requirements](https://www.skills.sh/jabrena/cursor-rules-java/032-architecture-adr-non-functional-requirements) · [033-architecture-diagrams](https://www.skills.sh/jabrena/cursor-rules-java/033-architecture-diagrams) · [034-architecture-design-exploration](https://www.skills.sh/jabrena/cursor-rules-java/034-architecture-design-exploration) · [041-planning-plan-mode](https://www.skills.sh/jabrena/cursor-rules-java/041-planning-plan-mode) · [042-planning-openspec](https://www.skills.sh/jabrena/cursor-rules-java/042-planning-openspec) · [043-planning-github-issues](https://www.skills.sh/jabrena/cursor-rules-java/043-planning-github-issues) · [044-planning-jira](https://www.skills.sh/jabrena/cursor-rules-java/044-planning-jira) · [051-design-two-steps-methods](https://www.skills.sh/jabrena/cursor-rules-java/051-design-two-steps-methods) · [200-agents-md](https://www.skills.sh/jabrena/cursor-rules-java/200-agents-md) |
 | **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) |
 
 ### Construir
