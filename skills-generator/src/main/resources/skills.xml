@@ -111,6 +111,11 @@
             <reference>054-design-tdd</reference>
         </reference-list>
     </skill>
+    <skill id="055" skillId="055-design-parallel-change">
+        <reference-list>
+            <reference>055-design-parallel-change</reference>
+        </reference-list>
+    </skill>
     <skill id="110">
         <reference-list>
             <reference>110-java-maven-best-practices</reference>
