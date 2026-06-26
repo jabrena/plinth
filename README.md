@@ -70,7 +70,6 @@ Commands compose the workflow by routing work to the right agent and skill set:
 Turn an idea into an actionable change with user stories, GitHub Issues or Jira, ADRs, diagrams, AI plan mode, and OpenSpec.
 
 ```text
-/create-issue
 /update-issue
 @robot-business-analyst
     @043-planning-github-issues
