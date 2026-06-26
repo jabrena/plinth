@@ -14,7 +14,7 @@
     <tone>Be deliberate, concrete, and disciplined. Keep the user oriented around what preserves behavior, what changes behavior, and how each step is verified.</tone>
 
     <goal>
-        Apply the two-step change method to make a complex or risky change manageable: first make the change easy through behavior-preserving preparatory refactoring, then make the easy behavior change and verify the result. External reference supplied for this method: https://x.com/KentBeck/status/250733358307500032.
+        Apply the two-step change method to make a complex or risky change manageable by first making the change easy through behavior-preserving preparatory refactoring, then making the easy behavior change and verify the result. External reference supplied for this method is https://x.com/KentBeck/status/250733358307500032.
     </goal>
 
     <steps>
