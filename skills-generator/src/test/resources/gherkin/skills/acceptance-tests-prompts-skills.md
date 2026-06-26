@@ -78,6 +78,13 @@ execute @skills-generator/src/test/resources/gherkin/skills/051-design-two-steps
 and verify that acceptance-tests passes.
 ```
 
+## 052-design-hamburger-method
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/052-design-hamburger-method.feature
+and verify that acceptance-tests passes.
+```
+
 ## 110-java-maven-best-practices
 
 ```bash
