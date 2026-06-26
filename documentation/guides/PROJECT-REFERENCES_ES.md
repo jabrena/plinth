@@ -66,6 +66,11 @@ Esta página reúne charlas, artículos, enlaces de referencia, portales de skil
 - [Traducción china de Awesome Cursor Rules](https://github.com/LessUp/awesome-cursorrules-zh)
 - [Página de autor en learn-skills.dev](https://www.learn-skills.dev/en/for/jabrena)
 - [SkillsLLM cursor-rules-java](https://skillsllm.com/skill/cursor-rules-java)
+- [Página de herramienta cursor-rules-java en 911 Fund](https://skills.911fund.io/tools/jabrena-cursor-rules-java)
+- [Comparativa de SkillsLLM entre cursor-rules-java y superpowers](https://skillsllm.com/compare/cursor-rules-java-vs-superpowers)
+- [Página de skill cursor-rules-java en Cross AI Tools](https://crossaitools.com/skills/jabrena/cursor-rules-java)
+- [Página de skill cursor-rules-java en 77taoletao](https://77taoletao.com/skills/83)
+- [Reglas del directorio Open Claw](https://open-claw.directory/rules)
 
 ### Java
 
