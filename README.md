@@ -18,7 +18,7 @@ An opinionated AI-native workflow for evolving modern Java Enterprise `SDLC` pra
 
 - 15 Commands
 - 9 Agents
-- 107 Skills
+- 109 Skills
 
 ## Latest Updates
 
@@ -89,11 +89,13 @@ Turn an idea into an actionable change with user stories, GitHub Issues or Jira,
     @041-planning-plan-mode
     @051-design-two-steps-methods
     @052-design-hamburger-method
+    @053-design-simple-rules
 /create-spec
 @robot-tech-lead
     @042-planning-openspec
     @051-design-two-steps-methods
     @052-design-hamburger-method
+    @053-design-simple-rules
 /explore-design
 @robot-architect
     @034-architecture-design-exploration
