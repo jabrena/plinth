@@ -71,6 +71,13 @@ execute @skills-generator/src/test/resources/gherkin/skills/042-planning-openspe
 and verify that acceptance-tests passes.
 ```
 
+## 051-design-two-steps-methods
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/051-design-two-steps-methods.feature
+and verify that acceptance-tests passes.
+```
+
 ## 110-java-maven-best-practices
 
 ```bash
