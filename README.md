@@ -18,7 +18,7 @@ An opinionated AI-native workflow for evolving modern Java Enterprise `SDLC` pra
 
 - 15 Commands
 - 9 Agents
-- 111 Skills
+- 112 Skills
 
 ## Latest Updates
 
