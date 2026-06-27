@@ -28,6 +28,7 @@ Create or update one or more OpenSpec changes from the available issue, design, 
 - `121-java-object-oriented-design` when object responsibilities, boundaries, or collaboration design affect the specification
 - `122-java-type-design` when domain types, value objects, invariants, signatures, or invalid-state modeling affect the specification
 - `123-java-design-patterns` when a demonstrated collaboration or integration problem requires pattern selection before requirements are finalized
+- `130-java-testing-strategies` when testing strategy, boundary coverage, flakiness, or verification quality affect requirements or acceptance criteria
 
 ## Workflow
 1. Identify the available source artifacts and their authority.
@@ -39,9 +40,10 @@ Create or update one or more OpenSpec changes from the available issue, design, 
 7. Apply TDD guidance when testing-related requirements need test-first acceptance boundaries, next-behavior sequencing, or verification-driven tasking.
 8. Apply Parallel Change guidance when database migration requirements need expand, migrate, contract sequencing before framework-specific implementation detail.
 9. Apply Java design skills in order when the spec needs design detail: object-oriented responsibilities, type design, then design-pattern selection only for a demonstrated problem.
-10. Create or update the approved OpenSpec proposal, design, specifications, and tasks.
-11. Record derivation direction, source links, and unresolved questions.
-12. Validate the resulting OpenSpec changes.
+10. Apply testing-strategy guidance when requirements or acceptance criteria need RIGHT-BICEP coverage, A-TRIP quality, or CORRECT boundary analysis.
+11. Create or update the approved OpenSpec proposal, design, specifications, and tasks.
+12. Record derivation direction, source links, and unresolved questions.
+13. Validate the resulting OpenSpec changes.
 
 ## Output
 - One OpenSpec change, or an approved map of multiple changes

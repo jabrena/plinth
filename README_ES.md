@@ -18,7 +18,7 @@ Un flujo de trabajo nativo de IA, con criterio propio, para evolucionar las prá
 
 - 15 Commands
 - 9 Agents
-- 109 Skills
+- 111 Skills
 
 ## Últimas actualizaciones
 
@@ -81,12 +81,6 @@ Plan
   /create-diagram
     @robot-architect
       @033-architecture-diagrams
-  /create-plan
-    @robot-tech-lead
-      @041-planning-plan-mode
-      @051-design-two-steps-methods
-      @052-design-hamburger-method
-      @053-design-simple-rules
   /create-spec
     @robot-tech-lead
       @042-planning-openspec
@@ -98,6 +92,7 @@ Plan
       @121-java-object-oriented-design
       @122-java-type-design
       @123-java-design-patterns
+      @130-java-testing-strategies
   /explore-design
     @robot-architect
       @034-architecture-design-exploration

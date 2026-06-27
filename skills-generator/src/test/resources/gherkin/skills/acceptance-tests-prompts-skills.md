@@ -148,6 +148,20 @@ execute @skills-generator/src/test/resources/gherkin/skills/123-java-design-patt
 and verify that acceptance-tests passes.
 ```
 
+## 130-java-testing-strategies
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/130-java-testing-strategies.feature
+and verify that acceptance-tests passes.
+```
+
+## 133-java-testing-acceptance-tests
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/133-java-testing-acceptance-tests.feature
+and verify that acceptance-tests passes.
+```
+
 ## 152-java-performance-gatling
 
 ```bash
@@ -243,6 +257,20 @@ and verify that acceptance-tests passes.
 
 ```bash
 execute @skills-generator/src/test/resources/gherkin/skills/516-frameworks-micronaut-mongodb-migrations-mongock.feature
+and verify that acceptance-tests passes.
+```
+
+## 701-technologies-openapi
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/701-technologies-openapi.feature
+and verify that acceptance-tests passes.
+```
+
+## 702-technologies-wiremock
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/702-technologies-wiremock.feature
 and verify that acceptance-tests passes.
 ```
 

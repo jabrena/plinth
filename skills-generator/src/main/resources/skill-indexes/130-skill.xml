@@ -27,7 +27,11 @@ Apply proven testing strategies (RIGHT-BICEP, A-TRIP, CORRECT) to design and ver
       <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before applying any change</constraint>
       <constraint>**SAFETY**: If compilation fails, stop immediately and do not proceed — compilation failure is a blocking condition</constraint>
       <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
-      <constraint>**BEFORE APPLYING**: Read the reference for detailed examples, good/bad patterns, and constraints</constraint>
+      <constraint>**BEFORE APPLYING**: Read only the testing-strategy references selected by the user's concern before changing tests</constraint>
+      <constraint>**FOCUSED ROUTING**: For missing behavior coverage or RIGHT-BICEP requests, read `references/130-java-testing-strategies-right-bicep.md` by default</constraint>
+      <constraint>**FOCUSED ROUTING**: For flaky, brittle, manual, order-dependent, shared-state, or maintainability requests, read `references/130-java-testing-strategies-a-trip.md` by default</constraint>
+      <constraint>**FOCUSED ROUTING**: For boundary-condition or CORRECT requests, read `references/130-java-testing-strategies-correct.md` by default</constraint>
+      <constraint>**BROAD REVIEW**: For broad test-strategy reviews, combine RIGHT-BICEP, A-TRIP, and CORRECT references and categorize findings by technique</constraint>
       <constraint>**EDGE CASE**: If the user goal is ambiguous, stop and ask a clarifying question before editing files or running project-wide commands</constraint>
       <constraint>**EDGE CASE**: If required context, files, credentials, or tools are missing, report the blocker explicitly and ask whether to proceed with setup or fallback guidance</constraint>
       <constraint>**EDGE CASE**: If requested changes conflict with project constraints or safety boundaries, explain the conflict and ask for user confirmation on the preferred trade-off</constraint>
@@ -37,8 +41,11 @@ Apply proven testing strategies (RIGHT-BICEP, A-TRIP, CORRECT) to design and ver
   <triggers>
     <trigger-list>
         <trigger>Review Java code for testing strategies</trigger>
+        <trigger>Find missing Java test cases or behavior coverage gaps</trigger>
         <trigger>Apply RIGHT-BICEP testing strategies in Java code</trigger>
+        <trigger>Review flaky, brittle, order-dependent, or hard-to-maintain Java tests</trigger>
         <trigger>Apply A-TRIP testing strategies in Java code</trigger>
+        <trigger>Review Java boundary condition tests</trigger>
         <trigger>Apply CORRECT boundary condition verification in Java code</trigger>
     </trigger-list>
   </triggers>
@@ -49,12 +56,21 @@ Apply proven testing strategies (RIGHT-BICEP, A-TRIP, CORRECT) to design and ver
       <step-content>Run `./mvnw compile` or `mvn compile` and stop immediately if compilation fails.</step-content>
     </step>
     <step number="2">
-      <step-title>Read testing-strategies reference</step-title>
-      <step-content>Read `references/130-java-testing-strategies.md` and map current tests to RIGHT-BICEP, A-TRIP, and CORRECT gaps.</step-content>
+      <step-title>Select focused testing-strategy references</step-title>
+      <step-content><![CDATA[
+Route the request before reading references:
+
+- Read `references/130-java-testing-strategies-right-bicep.md` when the request asks what to test, which behavior is missing, whether assertions prove the right result, how to force errors, how to cross-check, or how to add performance guardrails.
+- Read `references/130-java-testing-strategies-a-trip.md` when the request asks why tests are flaky, brittle, manual, slow to run locally, order-dependent, shared-state dependent, unclear, or hard to maintain.
+- Read `references/130-java-testing-strategies-correct.md` when the request asks for boundary-condition review, CORRECT analysis, invalid input handling, conformance, ordering, range, external reference, existence, cardinality, or time cases.
+- For broad test-strategy reviews, read all three focused references and organize findings by RIGHT-BICEP, A-TRIP, and CORRECT.
+
+Do not require unrelated references for a narrow request unless the user's concern crosses technique boundaries.
+]]></step-content>
     </step>
     <step number="3">
       <step-title>Apply strategy-driven test improvements</step-title>
-      <step-content>Improve or add tests to cover missing boundaries, quality characteristics, and verification depth.</step-content>
+      <step-content>Improve or add tests using the selected technique: produce a RIGHT-BICEP gap matrix for missing behavior coverage, an A-TRIP quality finding list for test reliability and maintainability issues, a CORRECT boundary checklist for boundary reviews, or all three sections for broad reviews.</step-content>
     </step>
     <step number="4">
       <step-title>Verify with full build</step-title>

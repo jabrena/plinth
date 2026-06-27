@@ -20,6 +20,17 @@
         3. **Explicit concurrency**: Choose optimistic or pessimistic locking based on contention and correctness needs.
         4. **Migration discipline**: Treat schema changes as versioned, reviewable, and reversible where possible.
         5. **Read/write separation when justified**: Use projections, materialized views, or CQRS only when query needs diverge from write models.
+
+        ### Pattern selection matrix
+
+        | Design pressure | Candidate pattern | Use when | Avoid when | Validation signal |
+        |---|---|---|---|---|
+        | Domain code depends on storage details | Repository | Use cases need domain-oriented persistence operations | A trivial CRUD adapter would only mirror the ORM | Repository tests cover domain queries and persistence mapping |
+        | Concurrent writers can lose updates | Optimistic locking | Conflicts are possible but not constant | High-contention workflows need serialized or pessimistic handling | Stale version tests fail with a conflict |
+        | Multiple writes share an invariant | Transaction boundary or unit of work | A use case must commit or rollback related changes together | Each write is independent and eventual consistency is acceptable | Rollback tests leave no partial state |
+        | Object graph boundaries are unclear | Aggregate boundary | Invariants must be enforced inside one consistency boundary | Reporting queries only need denormalized reads | Tests prove invariant enforcement and repository boundaries |
+        | Schema meaning must change safely | Migration or parallel change | Existing data or clients need compatible rollout | A disposable database can be recreated safely | Migration tests run from old schema to new schema |
+        | Queries overload persistence | Projection, fetch plan, or query object | Reads need bounded result sets or joined data | Simple primary-key lookup is enough | SQL/log tests show bounded query count and indexes |
     </goal>
 
     <constraints>
@@ -40,7 +51,7 @@
                 <example-title>Use Repository for Domain-Oriented Persistence</example-title>
                 <example-subtitle>Expose collection-like operations instead of database details</example-subtitle>
             </example-header>
-            <example-description><![CDATA[Use repositories to protect domain code from SQL, ORM, or storage details. Avoid generic repositories that expose every persistence operation to every use case.]]></example-description>
+            <example-description><![CDATA[Use repositories to protect domain code from SQL, ORM, or storage details. Benefit: use cases speak in domain operations. Cost: repositories can become anemic pass-through layers if they mirror tables. Avoid generic repositories that expose every persistence operation to every use case. Validate repository contracts with mapping and domain-query tests.]]></example-description>
             <code-examples>
                 <good-example>
                     <code-block language="java"><![CDATA[import java.util.Optional;
@@ -74,7 +85,7 @@ interface GenericRepository {
                 <example-title>Use Optimistic Locking for Lost Update Protection</example-title>
                 <example-subtitle>Reject stale writes instead of silently overwriting data</example-subtitle>
             </example-header>
-            <example-description><![CDATA[Use optimistic locking when concurrent edits are possible and conflicts are expected to be occasional. Return a conflict response or retry according to the use case.]]></example-description>
+            <example-description><![CDATA[Use optimistic locking when concurrent edits are possible and conflicts are expected to be occasional. Benefit: stale writes fail instead of overwriting newer data. Cost: callers must handle conflicts and sometimes retry. Avoid it for high-contention workflows that need serialized decisions. Validate stale version updates and user-visible conflict handling.]]></example-description>
             <code-examples>
                 <good-example>
                     <code-block language="sql"><![CDATA[UPDATE orders
@@ -86,6 +97,107 @@ interface GenericRepository {
                     <code-block language="sql"><![CDATA[UPDATE orders
    SET status = ?
  WHERE id = ?;]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="transaction-boundary-unit-of-work">
+            <example-header>
+                <example-title>Use Transaction Boundary for Use-Case Consistency</example-title>
+                <example-subtitle>Commit related changes together or not at all</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[Use an explicit transaction boundary when several writes protect one invariant. Benefit: partial updates cannot escape after failures. Cost: longer transactions hold resources and can increase contention. Avoid wrapping independent operations that can safely complete separately. Validate rollback behavior, isolation assumptions, and transaction timeout settings.]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[final class ConfirmOrderUseCase {
+    private final OrderRepository orders;
+    private final InvoiceRepository invoices;
+
+    @Transactional
+    void confirm(OrderId orderId) {
+        Order order = orders.requireById(orderId);
+        order.confirm();
+        invoices.createFor(order);
+        orders.save(order);
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[final class ConfirmOrderUseCase {
+    void confirm(OrderId orderId) {
+        orders.saveConfirmed(orderId);
+        paymentClient.charge(orderId);
+        invoices.createFor(orderId);
+        // If invoice creation fails, the order may remain confirmed without an invoice.
+    }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="aggregate-boundary">
+            <example-header>
+                <example-title>Use Aggregate Boundary for Consistency Rules</example-title>
+                <example-subtitle>Keep invariants inside the object graph that owns them</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[Use an aggregate boundary when related entities must enforce invariants together. Benefit: writes have a clear consistency owner. Cost: large aggregates can load too much data and serialize unrelated changes. Avoid aggregates for reporting-only joins or independent lifecycles. Validate invariant tests and repository methods that load and save only aggregate roots.]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[import java.util.ArrayList;
+import java.util.List;
+
+record Order(OrderId id, List<OrderLine> lines) {
+    Order {
+        lines = List.copyOf(lines);
+        if (lines.isEmpty()) {
+            throw new IllegalArgumentException("order must have at least one line");
+        }
+    }
+
+    Order addLine(OrderLine line) {
+        var next = new ArrayList<>(lines);
+        next.add(line);
+        return new Order(id, next);
+    }
+}
+
+interface OrderRepository {
+    Order requireById(OrderId id);
+    void save(Order order);
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[interface OrderLineRepository {
+    void insertLine(String orderId, String sku, int quantity);
+}
+
+// Any caller can create an invalid order with zero lines
+// or bypass order-level quantity rules.]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="5" id="migration-parallel-change">
+            <example-header>
+                <example-title>Use Migration or Parallel Change for Data Meaning Changes</example-title>
+                <example-subtitle>Evolve schemas without forcing a flag-day deployment</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[Use versioned migrations and parallel change when schema or data meaning must change while old code may still run. Benefit: deploys become reversible and observable. Cost: temporary dual-read or dual-write logic must be removed later. Avoid it for disposable databases or new tables with no consumers. Validate migration from production-like snapshots, backfill checks, and removal tasks.]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="sql"><![CDATA[-- V12__add_customer_display_name.sql
+ALTER TABLE customers ADD COLUMN display_name VARCHAR(200);
+
+-- Backfill before reads depend on the new column.
+UPDATE customers
+   SET display_name = first_name || ' ' || last_name
+ WHERE display_name IS NULL;]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="sql"><![CDATA[ALTER TABLE customers DROP COLUMN first_name;
+ALTER TABLE customers DROP COLUMN last_name;
+
+-- Old application versions and reports now fail immediately.]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
