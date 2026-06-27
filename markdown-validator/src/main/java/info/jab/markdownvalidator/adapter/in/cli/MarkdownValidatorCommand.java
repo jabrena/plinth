@@ -5,7 +5,6 @@ import info.jab.markdownvalidator.adapter.out.http.HttpClientRemoteLinkRequester
 import info.jab.markdownvalidator.application.MarkdownDocumentValidator;
 import info.jab.markdownvalidator.application.MarkdownValidationService;
 import info.jab.markdownvalidator.application.RemoteLinkValidator;
-import info.jab.markdownvalidator.application.SequentialValidationRunner;
 import info.jab.markdownvalidator.application.StructuredValidationRunner;
 import info.jab.markdownvalidator.application.port.RemoteLinkRequester;
 import info.jab.markdownvalidator.domain.ValidationReport;
@@ -14,7 +13,6 @@ import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.Callable;
-import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
@@ -51,22 +49,13 @@ public class MarkdownValidatorCommand implements Callable<Integer> {
     private final PrintStream err;
 
     public MarkdownValidatorCommand() {
-        this(
-                new HttpClientRemoteLinkRequester(LINK_CHECK_TIMEOUT),
-                Math.max(1, Math.min(Runtime.getRuntime().availableProcessors(), 8)),
-                System.out,
-                System.err);
+        this(new HttpClientRemoteLinkRequester(LINK_CHECK_TIMEOUT), System.out, System.err);
     }
 
-    MarkdownValidatorCommand(RemoteLinkRequester remoteLinkRequester, int parallelism, PrintStream out, PrintStream err) {
+    MarkdownValidatorCommand(RemoteLinkRequester remoteLinkRequester, PrintStream out, PrintStream err) {
         this.out = out;
         this.err = err;
-        this.validationService = createValidationService(remoteLinkRequester, parallelism, out);
-    }
-
-    public static void main(String... args) {
-        int exitCode = new CommandLine(new MarkdownValidatorCommand()).execute(args);
-        System.exit(exitCode);
+        this.validationService = createValidationService(remoteLinkRequester, out);
     }
 
     @Override
@@ -89,13 +78,9 @@ public class MarkdownValidatorCommand implements Callable<Integer> {
         return report.passed() ? 0 : 1;
     }
 
-    private MarkdownValidationService createValidationService(
-            RemoteLinkRequester remoteLinkRequester, int parallelism, PrintStream out) {
+    private MarkdownValidationService createValidationService(RemoteLinkRequester remoteLinkRequester, PrintStream out) {
         RemoteLinkValidator remoteLinkValidator = new RemoteLinkValidator(remoteLinkRequester, LINK_CHECK_TIMEOUT);
         MarkdownDocumentValidator documentValidator = new MarkdownDocumentValidator(remoteLinkValidator);
-        return new MarkdownValidationService(
-                new FileSystemMarkdownFileFinder(out),
-                new SequentialValidationRunner(documentValidator),
-                new StructuredValidationRunner(documentValidator, parallelism));
+        return new MarkdownValidationService(new FileSystemMarkdownFileFinder(out), new StructuredValidationRunner(documentValidator));
     }
 }

@@ -100,7 +100,7 @@ class MarkdownValidatorTest {
     }
 
     private static MarkdownValidatorCommand validator(RemoteLinkRequester requester, Output output) {
-        return new MarkdownValidatorCommand(requester, 1, output.out(), output.err());
+        return new MarkdownValidatorCommand(requester, output.out(), output.err());
     }
 
     private static final class Output {

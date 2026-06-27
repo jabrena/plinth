@@ -1,12 +1,17 @@
 package info.jab.markdownvalidator.application;
 
 import info.jab.markdownvalidator.application.port.MarkdownFileFinder;
-import info.jab.markdownvalidator.domain.FileValidationResult;
+import info.jab.markdownvalidator.application.port.RemoteLinkRequester;
+import info.jab.markdownvalidator.application.port.RemoteLinkResponse;
 import info.jab.markdownvalidator.domain.ValidationReport;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -19,60 +24,64 @@ class MarkdownValidationServiceTest {
 
     @Test
     void validate_returnsRootMissingReportWhenRootDoesNotExist() throws IOException {
-        RecordingRunner sequentialRunner = new RecordingRunner("sequential");
-        MarkdownValidationService service = service(new FixedFinder(List.of()), sequentialRunner, new RecordingRunner("parallel"));
+        MarkdownValidationService service = service(new FixedFinder(List.of()), new CountingRequester(Map.of()));
 
         ValidationReport report = service.validate(tempDir.resolve("missing"), List.of("docs"), false, false);
 
         assertThat(report.rootMissing()).isTrue();
-        assertThat(sequentialRunner.wasCalled()).isFalse();
     }
 
     @Test
     void validate_returnsEmptyReportWhenNoMarkdownFilesExist() throws IOException {
-        RecordingRunner sequentialRunner = new RecordingRunner("sequential");
-        MarkdownValidationService service = service(new FixedFinder(List.of()), sequentialRunner, new RecordingRunner("parallel"));
+        MarkdownValidationService service = service(new FixedFinder(List.of()), new CountingRequester(Map.of()));
 
         ValidationReport report = service.validate(tempDir, List.of("docs"), false, false);
 
         assertThat(report.noMarkdownFiles()).isTrue();
         assertThat(report.documentsValidated()).isZero();
-        assertThat(sequentialRunner.wasCalled()).isFalse();
     }
 
     @Test
-    void validate_usesSequentialRunnerWhenFailFastIsEnabled() throws IOException {
-        Path file = Files.createFile(tempDir.resolve("a.md"));
-        RecordingRunner sequentialRunner = new RecordingRunner("sequential");
-        RecordingRunner parallelRunner = new RecordingRunner("parallel");
-        MarkdownValidationService service = service(new FixedFinder(List.of(file)), sequentialRunner, parallelRunner);
+    void validate_stopsAfterFirstFailureWhenFailFastIsEnabled() throws IOException {
+        Path first = markdownFile("a.md", "[bad](https://example.test/a)");
+        Path second = markdownFile("b.md", "[bad](https://example.test/b)");
+        CountingRequester requester = new CountingRequester(
+                Map.of(URI.create("https://example.test/a"), 404, URI.create("https://example.test/b"), 404));
+        MarkdownValidationService service = service(new FixedFinder(List.of(first, second)), requester);
 
-        ValidationReport report = service.validate(tempDir, List.of("docs"), true, true);
+        ValidationReport report = service.validate(tempDir, List.of("docs"), true, false);
 
-        assertThat(report.documentsFound()).isEqualTo(1);
-        assertThat(report.results()).extracting(result -> result.file()).containsExactly(Path.of("sequential.md"));
-        assertThat(sequentialRunner.wasCalled()).isTrue();
-        assertThat(parallelRunner.wasCalled()).isFalse();
+        assertThat(report.documentsFound()).isEqualTo(2);
+        assertThat(report.documentsValidated()).isEqualTo(1);
+        assertThat(report.passed()).isFalse();
+        assertThat(requester.requestedUris()).containsExactly(URI.create("https://example.test/a"));
     }
 
     @Test
-    void validate_usesParallelRunnerByDefault() throws IOException {
-        Path file = Files.createFile(tempDir.resolve("a.md"));
-        RecordingRunner sequentialRunner = new RecordingRunner("sequential");
-        RecordingRunner parallelRunner = new RecordingRunner("parallel");
-        MarkdownValidationService service = service(new FixedFinder(List.of(file)), sequentialRunner, parallelRunner);
+    void validate_checksAllFilesWhenFailFastIsDisabled() throws IOException {
+        Path first = markdownFile("a.md", "[bad](https://example.test/a)");
+        Path second = markdownFile("b.md", "[bad](https://example.test/b)");
+        CountingRequester requester = new CountingRequester(
+                Map.of(URI.create("https://example.test/a"), 404, URI.create("https://example.test/b"), 404));
+        MarkdownValidationService service = service(new FixedFinder(List.of(first, second)), requester);
 
         ValidationReport report = service.validate(tempDir, List.of("docs"), false, false);
 
-        assertThat(report.documentsFound()).isEqualTo(1);
-        assertThat(report.results()).extracting(result -> result.file()).containsExactly(Path.of("parallel.md"));
-        assertThat(sequentialRunner.wasCalled()).isFalse();
-        assertThat(parallelRunner.wasCalled()).isTrue();
+        assertThat(report.documentsFound()).isEqualTo(2);
+        assertThat(report.documentsValidated()).isEqualTo(2);
+        assertThat(report.errors()).hasSize(2);
+        assertThat(requester.requestedUris())
+                .containsExactlyInAnyOrder(URI.create("https://example.test/a"), URI.create("https://example.test/b"));
     }
 
-    private static MarkdownValidationService service(
-            MarkdownFileFinder finder, ValidationRunner sequentialRunner, ValidationRunner parallelRunner) {
-        return new MarkdownValidationService(finder, sequentialRunner, parallelRunner);
+    private Path markdownFile(String name, String content) throws IOException {
+        return Files.writeString(tempDir.resolve(name), content);
+    }
+
+    private static MarkdownValidationService service(MarkdownFileFinder finder, RemoteLinkRequester requester) {
+        RemoteLinkValidator remoteLinkValidator = new RemoteLinkValidator(requester, Duration.ofSeconds(10));
+        MarkdownDocumentValidator documentValidator = new MarkdownDocumentValidator(remoteLinkValidator);
+        return new MarkdownValidationService(finder, new StructuredValidationRunner(documentValidator));
     }
 
     private record FixedFinder(List<Path> files) implements MarkdownFileFinder {
@@ -83,23 +92,27 @@ class MarkdownValidationServiceTest {
         }
     }
 
-    private static final class RecordingRunner implements ValidationRunner {
+    private static final class CountingRequester implements RemoteLinkRequester {
 
-        private final String name;
-        private boolean called;
+        private final Map<URI, Integer> statusCodes;
+        private final List<URI> requestedUris = new ArrayList<>();
 
-        private RecordingRunner(String name) {
-            this.name = name;
+        private CountingRequester(Map<URI, Integer> statusCodes) {
+            this.statusCodes = statusCodes;
         }
 
         @Override
-        public List<FileValidationResult> validate(List<Path> markdownFiles, boolean verbose) {
-            called = true;
-            return List.of(FileValidationResult.failed(Path.of(name + ".md"), name, verbose));
+        public RemoteLinkResponse request(URI uri, String method, Duration timeout) {
+            synchronized (requestedUris) {
+                requestedUris.add(uri);
+            }
+            return new RemoteLinkResponse(statusCodes.getOrDefault(uri, 200));
         }
 
-        private boolean wasCalled() {
-            return called;
+        private List<URI> requestedUris() {
+            synchronized (requestedUris) {
+                return List.copyOf(requestedUris);
+            }
         }
     }
 }

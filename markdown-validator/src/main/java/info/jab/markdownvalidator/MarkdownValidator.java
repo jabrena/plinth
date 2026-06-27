@@ -8,9 +8,7 @@
 //SOURCES application/MarkdownDocumentValidator.java
 //SOURCES application/MarkdownValidationService.java
 //SOURCES application/RemoteLinkValidator.java
-//SOURCES application/SequentialValidationRunner.java
 //SOURCES application/StructuredValidationRunner.java
-//SOURCES application/ValidationRunner.java
 //SOURCES application/port/MarkdownFileFinder.java
 //SOURCES application/port/RemoteLinkRequester.java
 //SOURCES application/port/RemoteLinkResponse.java
@@ -26,6 +24,7 @@
 package info.jab.markdownvalidator;
 
 import info.jab.markdownvalidator.adapter.in.cli.MarkdownValidatorCommand;
+import picocli.CommandLine;
 
 public final class MarkdownValidator {
 
@@ -33,6 +32,7 @@ public final class MarkdownValidator {
     }
 
     public static void main(String... args) {
-        MarkdownValidatorCommand.main(args);
+        int exitCode = new CommandLine(new MarkdownValidatorCommand()).execute(args);
+        System.exit(exitCode);
     }
 }

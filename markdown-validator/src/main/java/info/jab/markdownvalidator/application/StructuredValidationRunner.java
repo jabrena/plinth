@@ -9,19 +9,22 @@ import java.util.concurrent.StructuredTaskScope;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
 
-public final class StructuredValidationRunner implements ValidationRunner {
+public final class StructuredValidationRunner {
+
+    private static final int MAX_WORKERS = 8;
 
     private final MarkdownDocumentValidator documentValidator;
-    private final int parallelism;
 
-    public StructuredValidationRunner(MarkdownDocumentValidator documentValidator, int parallelism) {
+    public StructuredValidationRunner(MarkdownDocumentValidator documentValidator) {
         this.documentValidator = documentValidator;
-        this.parallelism = Math.max(1, parallelism);
     }
 
-    @Override
-    public List<FileValidationResult> validate(List<Path> markdownFiles, boolean verbose) {
-        int workerCount = Math.min(parallelism, markdownFiles.size());
+    public List<FileValidationResult> validate(List<Path> markdownFiles, boolean failFast, boolean verbose) {
+        if (failFast) {
+            return validateUntilFirstFailure(markdownFiles, verbose);
+        }
+
+        int workerCount = Math.min(MAX_WORKERS, markdownFiles.size());
         List<List<IndexedPath>> chunks = chunks(markdownFiles, workerCount);
 
         try (var scope = StructuredTaskScope.open(
@@ -43,6 +46,18 @@ public final class StructuredValidationRunner implements ValidationRunner {
             return List.of(FileValidationResult.failed(
                     Path.of("."), "Validation failed unexpectedly: " + describeThrowable(e), verbose));
         }
+    }
+
+    private List<FileValidationResult> validateUntilFirstFailure(List<Path> markdownFiles, boolean verbose) {
+        List<FileValidationResult> results = new ArrayList<>();
+        for (Path file : markdownFiles) {
+            FileValidationResult result = documentValidator.validate(file, verbose);
+            results.add(result);
+            if (!result.errors().isEmpty()) {
+                break;
+            }
+        }
+        return List.copyOf(results);
     }
 
     private List<IndexedResult> validateChunk(List<IndexedPath> chunk, boolean verbose) {

@@ -11,16 +11,11 @@ import java.util.List;
 public final class MarkdownValidationService {
 
     private final MarkdownFileFinder fileFinder;
-    private final ValidationRunner sequentialRunner;
-    private final ValidationRunner parallelRunner;
+    private final StructuredValidationRunner validationRunner;
 
-    public MarkdownValidationService(
-            MarkdownFileFinder fileFinder,
-            ValidationRunner sequentialRunner,
-            ValidationRunner parallelRunner) {
+    public MarkdownValidationService(MarkdownFileFinder fileFinder, StructuredValidationRunner validationRunner) {
         this.fileFinder = fileFinder;
-        this.sequentialRunner = sequentialRunner;
-        this.parallelRunner = parallelRunner;
+        this.validationRunner = validationRunner;
     }
 
     public ValidationReport validate(Path root, List<String> targetDirectories, boolean failFast, boolean verbose)
@@ -34,8 +29,7 @@ public final class MarkdownValidationService {
             return ValidationReport.empty(root);
         }
 
-        ValidationRunner runner = failFast ? sequentialRunner : parallelRunner;
-        List<FileValidationResult> results = runner.validate(markdownFiles, verbose);
+        List<FileValidationResult> results = validationRunner.validate(markdownFiles, failFast, verbose);
         return ValidationReport.completed(root, markdownFiles.size(), results);
     }
 }
