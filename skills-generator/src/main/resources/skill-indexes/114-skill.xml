@@ -45,20 +45,23 @@ Route Maven version-related requests to one of two workflows:
 
   <triggers>
     <trigger-list>
-        <trigger>Search Maven Central</trigger>
-        <trigger>Find Maven dependency</trigger>
-        <trigger>Maven coordinates</trigger>
-        <trigger>groupId artifactId version</trigger>
-        <trigger>Latest version Maven</trigger>
-        <trigger>maven-metadata.xml</trigger>
-        <trigger>Download JAR from Maven Central</trigger>
-        <trigger>Download javadocs</trigger>
-        <trigger>Dependency tree transitive</trigger>
-        <trigger>display-property-updates</trigger>
+        <trigger>Outdated Maven dependencies</trigger>
+        <trigger>Maven dependency updates</trigger>
+        <trigger>Maven plugin updates</trigger>
+        <trigger>Maven property version updates</trigger>
         <trigger>display-dependency-updates</trigger>
         <trigger>display-plugin-updates</trigger>
-        <trigger>Update Maven properties</trigger>
-        <trigger>Outdated Maven dependencies</trigger>
+        <trigger>display-property-updates</trigger>
+        <trigger>Maven dependency tree analysis</trigger>
+        <trigger>What can I update in pom.xml</trigger>
+        <trigger>Search Maven Central</trigger>
+        <trigger>Find Maven dependency coordinates</trigger>
+        <trigger>Verify Maven coordinates</trigger>
+        <trigger>Browse Maven artifact versions</trigger>
+        <trigger>Latest artifact version on Maven Central</trigger>
+        <trigger>Construct Maven Central artifact URL</trigger>
+        <trigger>Download JAR from Maven Central</trigger>
+        <trigger>Download javadocs from Maven Central</trigger>
     </trigger-list>
   </triggers>
 
