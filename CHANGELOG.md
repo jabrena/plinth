@@ -45,9 +45,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **CI & validation**:
   - Removed the legacy script-based Markdown validator and validation script after moving Markdown validation into the Maven module (#946)
 
-- **OpenSpec**:
-  - Dropped superseded UK and US regulation skill proposals in favor of the scoped EU regulation and ISO 42001 skill set (#949)
-
 ## [0.16.0] 2026-06-22
 
 ### Added
