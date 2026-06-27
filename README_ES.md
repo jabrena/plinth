@@ -18,7 +18,7 @@ Un flujo de trabajo nativo de IA, con criterio propio, para evolucionar las prá
 
 - 15 Commands
 - 9 Agents
-- 112 Skills
+- 116 Skills
 
 ## Últimas actualizaciones
 

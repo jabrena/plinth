@@ -18,7 +18,7 @@
 
 - 15 Commands
 - 9 Agents
-- 112 Skills
+- 116 Skills
 
 ## 最新动态
 
