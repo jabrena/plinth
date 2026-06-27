@@ -169,6 +169,13 @@ execute @skills-generator/src/test/resources/gherkin/skills/055-design-parallel-
 and verify that acceptance-tests passes.
 ```
 
+## 056-design-avoid-breaking-changes
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/056-design-avoid-breaking-changes.feature
+and verify that acceptance-tests passes.
+```
+
 ## 110-java-maven-best-practices
 
 ```bash

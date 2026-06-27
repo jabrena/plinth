@@ -10,13 +10,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 - **Skills**:
-  - Design method skills for two-step changes, the hamburger method, simple design rules, TDD, and parallel change (`@051-design-two-steps-methods`, `@052-design-hamburger-method`, `@053-design-simple-rules`, `@054-design-tdd`, `@055-design-parallel-change`) (#925, #928, #930, #935, #937)
+  - Design method skills for two-step changes, the hamburger method, simple design rules, TDD, parallel change, and breaking-change avoidance (`@051-design-two-steps-methods`, `@052-design-hamburger-method`, `@053-design-simple-rules`, `@054-design-tdd`, `@055-design-parallel-change`, `@056-design-avoid-breaking-changes`) (#925, #928, #930, #935, #937, #954)
   - Onion Architecture technology guidance (`@707-technologies-onion-architecture`) with framework agent routing support (#945)
   - Regulation engineering review skills for EU MiFID II, EU Market Abuse Regulation, EU Product Liability Directive, and ISO 42001 (`@810`-`@813`) with questionnaires, report templates, examples, and acceptance prompts (#949, #950)
   - JavaMoney dependency guidance for Maven dependency selection (`@111-java-maven-dependencies`) (#926)
 
 - **Agents & commands**:
-  - `review-breaking-changes` command for release and compatibility review workflows (#927)
   - Acceptance-test prompt inventories and Gherkin coverage for agents, commands, and a broader set of generated skills (#951)
 
 - **CI & validation**:
@@ -40,6 +39,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - **Agents & commands**:
+  - Removed the `review-breaking-changes` command in favor of the `@056-design-avoid-breaking-changes` skill workflow (#954)
   - Removed retired command assets for `create-issue`, `create-plan`, and `kill-port`; command guidance now points to the supported command set (#951)
 
 - **CI & validation**:

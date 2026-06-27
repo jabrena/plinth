@@ -8,7 +8,6 @@
     <command file="create-diagram.md"/>
     <command file="create-spec.md"/>
     <command file="review-alignment.md"/>
-    <command file="review-breaking-changes.md"/>
     <command file="implement-issue.md"/>
     <command file="profile.md"/>
     <command file="benchmark.md"/>

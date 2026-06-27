@@ -16,9 +16,9 @@
 
 ## 项目概览
 
-- 12 Commands
+- 11 Commands
 - 9 Agents
-- 116 Skills
+- 117 Skills
 
 ## 最新动态
 
@@ -88,6 +88,7 @@ Plan
       @053-design-simple-rules
       @054-design-tdd
       @055-design-parallel-change
+      @056-design-avoid-breaking-changes
       @121-java-object-oriented-design
       @122-java-type-design
       @123-java-design-patterns
@@ -97,8 +98,6 @@ Plan
       @034-architecture-design-exploration
   /review-alignment
     @robot-business-analyst
-  /review-breaking-changes
-    @robot-tech-lead
 
 Build
   /implement-issue
@@ -142,9 +141,9 @@ MCP Servers
 
 | 资源 | 可用选项 |
 | --- | --- |
-| **Commands** | [`/update-issue`](./.cursor/commands/update-issue.md) · `/explore-design` · `/create-adr` · `/create-diagram` · `/create-spec` · `/review-alignment` · [`/review-breaking-changes`](./.cursor/commands/review-breaking-changes.md) |
+| **Commands** | [`/update-issue`](./.cursor/commands/update-issue.md) · `/explore-design` · `/create-adr` · `/create-diagram` · `/create-spec` · `/review-alignment` |
 | **Agents** | `@robot-business-analyst` · `@robot-architect` · `@robot-tech-lead` |
-| **Skills** | [014-agile-user-story](https://www.skills.sh/jabrena/cursor-rules-java/014-agile-user-story) · [030-architecture-adr-general](https://www.skills.sh/jabrena/cursor-rules-java/030-architecture-adr-general) · [031-architecture-adr-functional-requirements](https://www.skills.sh/jabrena/cursor-rules-java/031-architecture-adr-functional-requirements) · [032-architecture-adr-non-functional-requirements](https://www.skills.sh/jabrena/cursor-rules-java/032-architecture-adr-non-functional-requirements) · [033-architecture-diagrams](https://www.skills.sh/jabrena/cursor-rules-java/033-architecture-diagrams) · [034-architecture-design-exploration](https://www.skills.sh/jabrena/cursor-rules-java/034-architecture-design-exploration) · [041-planning-plan-mode](https://www.skills.sh/jabrena/cursor-rules-java/041-planning-plan-mode) · [042-planning-openspec](https://www.skills.sh/jabrena/cursor-rules-java/042-planning-openspec) · [043-planning-github-issues](https://www.skills.sh/jabrena/cursor-rules-java/043-planning-github-issues) · [044-planning-jira](https://www.skills.sh/jabrena/cursor-rules-java/044-planning-jira) · [051-design-two-steps-methods](https://www.skills.sh/jabrena/cursor-rules-java/051-design-two-steps-methods) · [052-design-hamburger-method](https://www.skills.sh/jabrena/cursor-rules-java/052-design-hamburger-method) · [053-design-simple-rules](https://www.skills.sh/jabrena/cursor-rules-java/053-design-simple-rules) · [200-agents-md](https://www.skills.sh/jabrena/cursor-rules-java/200-agents-md) |
+| **Skills** | [014-agile-user-story](https://www.skills.sh/jabrena/cursor-rules-java/014-agile-user-story) · [030-architecture-adr-general](https://www.skills.sh/jabrena/cursor-rules-java/030-architecture-adr-general) · [031-architecture-adr-functional-requirements](https://www.skills.sh/jabrena/cursor-rules-java/031-architecture-adr-functional-requirements) · [032-architecture-adr-non-functional-requirements](https://www.skills.sh/jabrena/cursor-rules-java/032-architecture-adr-non-functional-requirements) · [033-architecture-diagrams](https://www.skills.sh/jabrena/cursor-rules-java/033-architecture-diagrams) · [034-architecture-design-exploration](https://www.skills.sh/jabrena/cursor-rules-java/034-architecture-design-exploration) · [041-planning-plan-mode](https://www.skills.sh/jabrena/cursor-rules-java/041-planning-plan-mode) · [042-planning-openspec](https://www.skills.sh/jabrena/cursor-rules-java/042-planning-openspec) · [043-planning-github-issues](https://www.skills.sh/jabrena/cursor-rules-java/043-planning-github-issues) · [044-planning-jira](https://www.skills.sh/jabrena/cursor-rules-java/044-planning-jira) · [051-design-two-steps-methods](https://www.skills.sh/jabrena/cursor-rules-java/051-design-two-steps-methods) · [052-design-hamburger-method](https://www.skills.sh/jabrena/cursor-rules-java/052-design-hamburger-method) · [053-design-simple-rules](https://www.skills.sh/jabrena/cursor-rules-java/053-design-simple-rules) · [056-design-avoid-breaking-changes](https://www.skills.sh/jabrena/cursor-rules-java/056-design-avoid-breaking-changes) · [200-agents-md](https://www.skills.sh/jabrena/cursor-rules-java/200-agents-md) |
 | **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) |
 
 ### 构建

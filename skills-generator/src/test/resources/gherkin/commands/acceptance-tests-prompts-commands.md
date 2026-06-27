@@ -86,13 +86,6 @@ execute @skills-generator/src/test/resources/gherkin/commands/review-alignment.f
 and verify that acceptance-tests passes.
 ```
 
-## /review-breaking-changes
-
-```bash
-execute @skills-generator/src/test/resources/gherkin/commands/review-breaking-changes.feature
-and verify that acceptance-tests passes.
-```
-
 ## /update-issue
 
 ```bash
