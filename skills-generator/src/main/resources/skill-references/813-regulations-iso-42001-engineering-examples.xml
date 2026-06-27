@@ -1,0 +1,322 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.17.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>ISO/IEC 42001 AI Management System Guidance for GenAI Java Engineering</title>
+        <description>Use as Java-focused ISO/IEC 42001 engineering examples for GenAI development controls, generated code review, dependency provenance, prompt and data boundaries, AI-enabled business logic, monitoring, and corrective action.</description>
+    </metadata>
+
+    <role>You are a senior Java enterprise architect and AI governance reviewer who translates ISO/IEC 42001 AI management system themes into concrete Java engineering examples and reviewable evidence patterns</role>
+
+    <goal>
+        Apply these ISO/IEC 42001-aware examples after the AI management system summary has been read and the target GenAI Java delivery scope is understood.
+
+        These examples are not legal advice, certification advice, audit advice, audit conclusions, or final conformity decisions. They show engineering patterns that help Java teams create reviewable evidence for AI governance, legal, compliance, privacy, security, risk, platform, product, procurement, model-provider, architecture, and business owners.
+
+        Use this examples reference together with `references/813-regulations-iso-42001-chapters-summary.md`.
+    </goal>
+
+    <constraints>
+        <constraints-description>
+            Translate ISO/IEC 42001 AI management system concerns into engineering controls for GenAI Java development without replacing qualified legal, certification, audit, compliance, privacy, security, risk, product, procurement, model-provider, or business-owner review.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**NOT LEGAL, CERTIFICATION, OR AUDIT ADVICE**: Treat the examples as engineering control patterns and escalation aids, not certification readiness, audit findings, legal compliance, or final conformity decisions</constraint>
+            <constraint>**EVIDENCE FIRST**: Prefer reviewable evidence over claims that generated code, model use, dependency selection, prompt handling, data protection, monitoring, or corrective action is controlled</constraint>
+            <constraint>**OWNER HANDOFFS**: Include AI governance, legal, compliance, privacy, security, platform, product, procurement, model-provider, risk, architecture, release, and accountable business owners in control records</constraint>
+            <constraint>**CONFIDENTIALITY BY DESIGN**: Preserve evidence without unnecessarily exposing source code, secrets, credentials, personal data, customer data, regulated data, trade secrets, prompts, or sensitive model outputs</constraint>
+            <constraint>**RELEASE READINESS**: Do not mark GenAI-assisted work or AI-enabled Java behavior ready when scope, risk treatment, generated-code review, dependency provenance, data boundaries, bias review, monitoring, incident handling, corrective action, or owner handoffs are undocumented, untested, ownerless, or unresolved</constraint>
+        </constraint-list>
+    </constraints>
+
+    <examples>
+        <toc auto-generate="true" />
+
+        <example number="1" id="ai-management-scope-inventory">
+            <example-header>
+                <example-title>Document GenAI delivery scope and owners</example-title>
+                <example-subtitle>AI inventory, lifecycle stage, model provider, data classes, generated artifacts, and handoffs</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                Use this pattern when a Java team uses an LLM, RAG workflow, AI-assisted coding tool, AI agent, generated dependency, generated implementation, or AI-enabled business rule. The inventory creates evidence for management-system review without claiming certification readiness.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="yaml"><![CDATA[aiManagementScope:
+  capability: checkout-risk-explanation-assistant
+  javaModules:
+    - checkout-service
+    - risk-explanation-api
+  lifecycleStage: pre-release-review
+  aiUse:
+    - rag-answer-generation
+    - ai-assisted-java-implementation
+    - generated-test-suggestions
+  modelProvider: approved-enterprise-llm-gateway
+  modelVersion: risk-review-2026-06-01
+  promptCatalog: prompts/risk-explanation/v4
+  dataClasses:
+    allowed: [product-policy-documents, synthetic-test-orders]
+    prohibited: [payment-card-data, secrets, raw-customer-support-logs]
+  generatedArtifacts:
+    - src/main/java/com/acme/checkout/RiskExplanationService.java
+    - pom.xml dependency suggestion for vector-store client
+  owners:
+    systemOwner: checkout-platform
+    dataOwner: risk-knowledge-base
+    securityOwner: appsec
+    privacyOwner: privacy-engineering
+    aiGovernanceOwner: responsible-ai-office
+    releaseOwner: checkout-release
+  evidence:
+    riskRecord: evidence/ai-risk/checkout-risk-explanation.yml
+    dependencyDecision: evidence/dependencies/vector-store-client.md
+    reviewPullRequest: PR-1842]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="yaml"><![CDATA[aiManagementScope:
+  capability: chatbot
+  aiUsed: yes
+  owner: developers
+  evidence: trust the generated code]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="2" id="hallucinated-code-review-gate">
+            <example-header>
+                <example-title>Gate hallucinated or incorrect generated Java code</example-title>
+                <example-subtitle>source verification, tests, static analysis, architecture fit, and human review</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                Use this pattern when AI-generated Java code, SQL, migrations, tests, or API contracts enter a branch. The goal is to prove that generated implementation behavior is understood and verified by accountable engineers.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[public ReviewDecision evaluateGeneratedChange(GeneratedChange change) {
+    List<String> blockers = new ArrayList<>();
+
+    requireLinkedRequirement(change.requirementRef(), "requirement or issue reference", blockers);
+    requirePassing(change.unitTests(), "unit tests for generated behavior", blockers);
+    requirePassing(change.integrationTests(), "integration tests for affected contracts", blockers);
+    requirePassing(change.staticAnalysis(), "static analysis and style checks", blockers);
+    requirePassing(change.securityReview(), "secure coding review", blockers);
+    requirePresent(change.sourceVerification(), "trusted source verification for model claims", blockers);
+    requirePresent(change.humanReviewerApproval(), "human engineering approval", blockers);
+
+    if (!blockers.isEmpty()) {
+        return ReviewDecision.blocked(change.id(), blockers);
+    }
+
+    return ReviewDecision.approvedWithEvidence(change.id(), change.evidenceRefs());
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[public boolean generatedCodeIsReady() {
+    return aiAssistantSaidItCompiles();
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="secure-generated-implementation-controls">
+            <example-header>
+                <example-title>Block insecure generated implementation patterns</example-title>
+                <example-subtitle>authorization, validation, injection resistance, secrets, logging, and policy checks</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                Use this pattern when generated controllers, services, repositories, clients, agents, or configuration may introduce insecure defaults, missing authorization, injection, weak crypto, broad logging, or unsafe error handling.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="markdown"><![CDATA[Generated implementation security review
+
+- Endpoint authorization checked against existing policy annotations and integration tests.
+- User input validated with Bean Validation and domain-specific constraints.
+- SQL and vector-store queries use parameterized APIs; no generated string concatenation.
+- Prompt inputs are treated as untrusted data and cannot override tool policy.
+- Secrets are loaded from approved secret storage and never copied into prompts or logs.
+- Generated logs include trace IDs and policy decisions, not raw prompts or sensitive records.
+- Static analysis, dependency scanning, and security tests pass in CI.
+- AppSec owner approved residual risk for model-provider boundary.]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="markdown"><![CDATA[Generated implementation security review
+
+- The generated controller looked normal.
+- The model recommended disabling auth in tests, so we kept that for now.
+- Raw prompts are logged for debugging.]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="generated-dependency-provenance">
+            <example-header>
+                <example-title>Validate generated dependency and supply-chain suggestions</example-title>
+                <example-subtitle>Maven coordinates, repository policy, SBOM, license, vulnerability, provenance, and malicious-package checks</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                Use this pattern when an AI tool suggests Maven dependencies, plugins, container images, build actions, SDKs, or transitive libraries. Generated dependency suggestions must pass the same supply-chain governance as human suggestions.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="yaml"><![CDATA[generatedDependencyDecision:
+  requestedCapability: vector-search-client
+  suggestedBy: approved-coding-assistant
+  mavenCoordinate: com.example:vector-client:2.4.1
+  controls:
+    repositoryAllowed: true
+    dependencyPolicyApproved: true
+    sbomUpdated: true
+    vulnerabilityScan: pass
+    licenseReview: approved
+    maintainerReputation: reviewed
+    typosquatCheck: pass
+    transitiveDependencyReview: pass
+    generatedCodeUsesStableApi: true
+  owners:
+    platformOwner: java-platform
+    securityOwner: appsec
+    legalOwner: open-source-program-office
+  decision: approved-with-evidence]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="yaml"><![CDATA[generatedDependencyDecision:
+  suggestedBy: model
+  mavenCoordinate: copied-from-answer
+  decision: add-to-pom-now]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="5" id="prompt-ip-confidentiality-boundary">
+            <example-header>
+                <example-title>Protect source code, IP, and confidential data in prompts</example-title>
+                <example-subtitle>approved provider routes, minimization, redaction, access control, and evidence-safe logging</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                Use this pattern when developers, pipelines, support tools, or AI agents may send source code, tickets, logs, customer data, regulated data, proprietary algorithms, or business rules to an LLM.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[public PromptPayload preparePrompt(CodeReviewRequest request) {
+    DataClassification classification = classifier.classify(request.contextRefs());
+    promptPolicy.requireApprovedProvider(classification, request.modelProvider());
+
+    PromptPayload payload = promptMinimizer.minimize(request.contextRefs(), classification);
+    PromptPayload redacted = redactor.redactSecretsAndPersonalData(payload);
+
+    audit.recordPromptUse(PromptAuditEvent.builder()
+            .requestId(request.id())
+            .provider(request.modelProvider().id())
+            .classification(classification.name())
+            .contextRefs(request.contextRefs())
+            .redactionApplied(true)
+            .rawPromptStored(false)
+            .build());
+
+    return redacted;
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[public String askModel(String sourceCode, String logs) {
+    return externalLlm.ask("Fix this production issue:\n" + sourceCode + "\n" + logs);
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="6" id="biased-generated-business-logic-review">
+            <example-header>
+                <example-title>Review biased generated business logic before release</example-title>
+                <example-subtitle>domain owner approval, impact testing, protected attributes, explanations, and monitoring</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                Use this pattern when generated code or model output influences eligibility, pricing, ranking, fraud handling, customer treatment, employment, credit, insurance, healthcare, education, access, or other rights-impacting workflows.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="markdown"><![CDATA[Generated business logic fairness review
+
+- Capability: AI-suggested risk explanation rules for checkout orders.
+- Generated rule path: src/main/java/com/acme/risk/GeneratedExplanationRules.java.
+- Affected groups: customers receiving different explanation wording and support paths.
+- Sensitive attribute policy: protected attributes and proxies excluded from generated rules.
+- Test evidence:
+  - synthetic cohort tests for disparate messaging outcomes
+  - regression tests for supported locales
+  - domain-owner review of rule wording and thresholds
+  - privacy review of input attributes
+  - legal/compliance escalation for ambiguous customer-impact risk
+- Runtime controls:
+  - rule version logged
+  - explanation override path exists
+  - user complaint signal routed to AI governance backlog
+  - rollback feature flag exists]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="markdown"><![CDATA[Generated business logic fairness review
+
+- The model wrote better ranking rules.
+- No one complained in testing.
+- Release and watch metrics later.]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="7" id="regulatory-non-compliance-owner-escalation">
+            <example-header>
+                <example-title>Escalate regulatory non-compliance signals without making legal conclusions</example-title>
+                <example-subtitle>routing across ISO/IEC 42001, EU AI Act, GDPR, CRA, product liability, and sector owners</example-subtitle>
+            </example-header>
+            <example-description><![CDATA[
+                Use this pattern when a GenAI Java feature may touch AI governance, privacy, cybersecurity, product, sector, or contractual obligations. Engineering should identify evidence and route the question, not issue final legal or conformity decisions.
+            ]]></example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="yaml"><![CDATA[regulatorySignalRouting:
+  capability: customer-support-rag-assistant
+  signals:
+    personalDataInPrompts:
+      routeTo: 803-regulations-gdpr
+      owners: [privacy-engineering, legal-privacy]
+      evidence: [prompt-redaction-policy, retention-config, model-provider-dpa]
+    aiManagementSystem:
+      routeTo: 813-regulations-iso-42001
+      owners: [responsible-ai-office, platform-owner]
+      evidence: [ai-inventory-record, risk-treatment-plan, monitoring-dashboard]
+    productCybersecurity:
+      routeTo: 805-regulations-eu-cyber-resilience-act
+      owners: [product-security]
+      evidence: [sbom, vulnerability-handling-procedure]
+  engineeringConclusion: controls-and-evidence-gaps-recorded
+  legalConclusion: required-from-qualified-owners]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="yaml"><![CDATA[regulatorySignalRouting:
+  conclusion: compliant
+  reason: the assistant says ISO 42001 is covered]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>**MATCH** the relevant example patterns: AI management scope inventory, generated-code review gate, secure generated implementation controls, generated dependency provenance, prompt/IP/confidentiality boundary, biased generated business logic review, or regulatory signal routing</output-format-item>
+            <output-format-item>**RECOMMEND** engineering controls: human review, test evidence, static analysis, secure coding review, dependency policy gates, approved model-provider routes, prompt minimization, redaction, access control, RAG source governance, bias testing, monitoring, incident response, rollback, disablement, corrective action, and owner escalation</output-format-item>
+            <output-format-item>**REPORT** conclusions as engineering controls and evidence gaps, never as legal advice, certification advice, audit conclusions, compliance approval, or final ISO/IEC 42001 conformity decisions</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>**OWNER ESCALATION**: Treat ISO/IEC 42001 certification scope, audit conclusions, conformity, official interpretation, legal compliance, and final risk acceptance as qualified owner decisions</safeguards-item>
+            <safeguards-item>**MODEL OUTPUTS ARE UNTRUSTED**: Never let model-generated code, dependencies, prompts, SQL, migrations, business rules, or tool actions bypass ordinary engineering review and policy gates</safeguards-item>
+            <safeguards-item>**DATA BOUNDARIES**: Treat prompts, retrieved content, source code, logs, customer records, and tool results as data requiring classification, minimization, redaction, access control, retention rules, and provider-boundary review</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>

@@ -18,6 +18,7 @@ The repository MUST define `813-regulations-iso-42001` as the ISO/IEC 42001 skil
 - **THEN** the skill explains how ISO/IEC 42001 applies to AI management practices in Java software delivery
 - **AND** the skill provides practical review guidance for prompts, model usage, generated code, dependencies, data handling, and AI-enabled business logic
 - **AND** the guidance frames findings as engineering controls and evidence gaps rather than legal advice, certification advice, audit conclusions, or final conformity decisions
+- **AND** the skill produces findings and action items using an ISO/IEC 42001 engineering review report template
 
 #### Scenario: ISO/IEC 42001 scope maps GenAI risks to engineering controls
 
@@ -53,6 +54,8 @@ The ISO/IEC 42001 skill source MUST be registered in the generator inventory so 
 
 - **WHEN** `./mvnw clean install -pl skills-generator` is run
 - **THEN** generated local skill output includes `.agents/skills/813-regulations-iso-42001/SKILL.md`
+- **AND** generated local skill output includes `.agents/skills/813-regulations-iso-42001/assets/questions/813-iso-42001-engineering-review-questionnaire.md`
+- **AND** generated local skill output includes `.agents/skills/813-regulations-iso-42001/assets/reports/813-iso-42001-engineering-review-report-template.md`
 - **AND** generated references contain no unresolved include markers or broken local reference paths
 
 ### Requirement: Source and generated-output boundaries

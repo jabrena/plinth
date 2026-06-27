@@ -378,3 +378,10 @@ and verify that acceptance-tests passes.
 execute @skills-generator/src/test/resources/gherkin/skills/812-regulations-eu-product-liability-directive.feature
 and verify that acceptance-tests passes.
 ```
+
+## 813-regulations-iso-42001
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/813-regulations-iso-42001.feature
+and verify that acceptance-tests passes.
+```
