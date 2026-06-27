@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to add or review Flyway database migrations in a Quarkus application — quarkus-flyway extension, db/migration scripts, quarkus.flyway.* configuration, migrate-at-start, and alignment with JDBC or Panache. This should trigger for requests such as Add or review Flyway migrations in a Quarkus project; Configure quarkus-flyway or db/migration layout.</description>
+    <description>Use when you need to add or review Flyway database migrations in a Quarkus application — quarkus-flyway extension, db/migration scripts, quarkus.flyway.* configuration, migrate-at-start, and alignment with JDBC or Panache. This should trigger for requests such as Add or review Flyway migrations in a Quarkus project; Configure quarkus-flyway or db/migration layout; Add versioned Flyway SQL migrations for Quarkus; Review Quarkus database migration ordering; Configure Flyway clean migrate or baselines in Quarkus.</description>
   </metadata>
 
   <title>Quarkus — Database migrations (Flyway)</title>
@@ -43,6 +43,9 @@ Apply Flyway migration guidelines for Quarkus.
     <trigger-list>
         <trigger>Add or review Flyway migrations in a Quarkus project</trigger>
         <trigger>Configure quarkus-flyway or db/migration layout</trigger>
+        <trigger>Add versioned Flyway SQL migrations for Quarkus</trigger>
+        <trigger>Review Quarkus database migration ordering</trigger>
+        <trigger>Configure Flyway clean migrate or baselines in Quarkus</trigger>
     </trigger-list>
   </triggers>
   <steps>

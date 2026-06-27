@@ -22,6 +22,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 class SkillTriggerInventoryTest {
 
     private static final Logger logger = LoggerFactory.getLogger(SkillTriggerInventoryTest.class);
+    private static final int MINIMUM_TRIGGER_COUNT = 5;
 
     @Test
     @DisplayName("Should report trigger counts for every skill")
@@ -42,6 +43,18 @@ class SkillTriggerInventoryTest {
         assertThat(reportPath)
             .exists()
             .isRegularFile();
+
+        List<SkillTriggerCount> belowMinimumTriggerCount = counts.stream()
+            .filter(count -> count.triggers() < MINIMUM_TRIGGER_COUNT)
+            .toList();
+
+        assertThat(belowMinimumTriggerCount)
+            .withFailMessage(
+                "Skills with fewer than %d triggers: %s",
+                MINIMUM_TRIGGER_COUNT,
+                formatBelowMinimumTriggerCount(belowMinimumTriggerCount)
+            )
+            .isEmpty();
     }
 
     private SkillTriggerCount countTriggers(SkillIndexes.InventoryEntry entry) {
@@ -99,6 +112,12 @@ class SkillTriggerInventoryTest {
         Files.writeString(reportPath, report);
         logger.info("Skill trigger count report saved to: {}", reportPath.toAbsolutePath());
         return reportPath;
+    }
+
+    private String formatBelowMinimumTriggerCount(List<SkillTriggerCount> counts) {
+        return counts.stream()
+            .map(count -> count.skillId() + "=" + count.triggers())
+            .collect(Collectors.joining(", "));
     }
 
     private record SkillTriggerCount(String skillId, String skillName, int triggers) {}

@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to add or review Mongock MongoDB data migrations in a Micronaut application — including Mongock runner/driver selection, Micronaut bean wiring, migration scan packages, @ChangeUnit classes, lock/transaction settings, and Testcontainers verification. This should trigger for requests such as Add Mongock migrations in Micronaut; Review Micronaut MongoDB data migrations; Configure Mongock change units with Micronaut Data MongoDB.</description>
+    <description>Use when you need to add or review Mongock MongoDB data migrations in a Micronaut application — including Mongock runner/driver selection, Micronaut bean wiring, migration scan packages, @ChangeUnit classes, lock/transaction settings, and Testcontainers verification. This should trigger for requests such as Add Mongock migrations in Micronaut; Review Micronaut MongoDB data migrations; Configure Mongock change units with Micronaut Data MongoDB; Create Mongock change units for Micronaut MongoDB; Review Mongock migration ordering in a Micronaut service.</description>
   </metadata>
 
   <title>Micronaut - MongoDB migrations (Mongock)</title>
@@ -41,6 +41,8 @@ Apply Mongock migration guidelines for Micronaut and Micronaut Data MongoDB.
         <trigger>Add Mongock migrations in Micronaut</trigger>
         <trigger>Review Micronaut MongoDB data migrations</trigger>
         <trigger>Configure Mongock change units with Micronaut Data MongoDB</trigger>
+        <trigger>Create Mongock change units for Micronaut MongoDB</trigger>
+        <trigger>Review Mongock migration ordering in a Micronaut service</trigger>
     </trigger-list>
   </triggers>
 

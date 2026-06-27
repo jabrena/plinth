@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to use Spring Data JDBC with Java records — including entity design with records, repository pattern, immutable updates, aggregate relationships, custom queries, transaction management, and avoiding N+1 problems. This should trigger for requests such as Review Java code for Spring Data JDBC; Apply best practices for Spring Data JDBC in Java code.</description>
+    <description>Use when you need to use Spring Data JDBC with Java records — including entity design with records, repository pattern, immutable updates, aggregate relationships, custom queries, transaction management, and avoiding N+1 problems. This should trigger for requests such as Review Java code for Spring Data JDBC; Apply best practices for Spring Data JDBC in Java code; Model Spring Data JDBC aggregates with Java records; Review Spring Data JDBC repositories and aggregate boundaries; Improve optimistic locking or domain events in Spring Data JDBC.</description>
   </metadata>
 
   <title>Spring Data JDBC with Records</title>
@@ -45,6 +45,9 @@ Apply Spring Data JDBC guidelines with Java records.
     <trigger-list>
         <trigger>Review Java code for Spring Data JDBC</trigger>
         <trigger>Apply best practices for Spring Data JDBC in Java code</trigger>
+        <trigger>Model Spring Data JDBC aggregates with Java records</trigger>
+        <trigger>Review Spring Data JDBC repositories and aggregate boundaries</trigger>
+        <trigger>Improve optimistic locking or domain events in Spring Data JDBC</trigger>
     </trigger-list>
   </triggers>
 
