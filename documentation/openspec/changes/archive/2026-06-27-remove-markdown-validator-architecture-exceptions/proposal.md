@@ -10,7 +10,7 @@ Those exceptions hide two design concerns: the CLI adapter performs outbound ada
 
 ## What Changes
 
-- Refactor Markdown validator startup so object creation and adapter wiring live in an explicit composition/bootstrap boundary.
+- Refactor Markdown validator startup so object creation and adapter wiring live in the executable entry point as an explicit composition root.
 - Keep `MarkdownValidatorCommand` focused on CLI parsing, command execution, and reporting.
 - Preserve existing command-line behavior, defaults, validation behavior, JBang usage, and Maven module entry point.
 - Replace the current ArchUnit dependency exceptions with a rule structure that models the allowed composition boundary explicitly.

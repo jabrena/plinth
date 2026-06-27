@@ -1,5 +1,10 @@
 package info.jab.markdownvalidator.adapter.in.cli;
 
+import info.jab.markdownvalidator.adapter.out.filesystem.FileSystemMarkdownFileFinder;
+import info.jab.markdownvalidator.application.MarkdownDocumentValidator;
+import info.jab.markdownvalidator.application.MarkdownValidationService;
+import info.jab.markdownvalidator.application.RemoteLinkValidator;
+import info.jab.markdownvalidator.application.StructuredValidationRunner;
 import info.jab.markdownvalidator.application.port.RemoteLinkRequester;
 import info.jab.markdownvalidator.application.port.RemoteLinkResponse;
 import java.io.IOException;
@@ -80,7 +85,11 @@ class MarkdownValidatorTest {
     }
 
     private static MarkdownValidatorCommand validator(RemoteLinkRequester requester) {
-        return new MarkdownValidatorCommand(requester);
+        RemoteLinkValidator remoteLinkValidator = new RemoteLinkValidator(requester, Duration.ofSeconds(10));
+        MarkdownDocumentValidator documentValidator = new MarkdownDocumentValidator(remoteLinkValidator);
+        MarkdownValidationService validationService =
+                new MarkdownValidationService(new FileSystemMarkdownFileFinder(), new StructuredValidationRunner(documentValidator));
+        return new MarkdownValidatorCommand(validationService);
     }
 
     private record FixedRequester(int statusCode) implements RemoteLinkRequester {

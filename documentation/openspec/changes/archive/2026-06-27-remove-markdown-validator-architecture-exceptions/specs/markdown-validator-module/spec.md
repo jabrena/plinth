@@ -2,7 +2,7 @@
 
 ### Requirement: Explicit Markdown validator composition boundary
 
-The Markdown validator module MUST model executable startup and object wiring as an explicit composition boundary instead of hiding concrete dependency wiring through dependency-specific architecture-test exceptions.
+The Markdown validator module MUST model executable startup and object wiring through the existing entry point instead of hiding concrete dependency wiring through dependency-specific architecture-test exceptions.
 
 #### Scenario: CLI command does not construct outbound adapters
 
@@ -16,18 +16,18 @@ The Markdown validator module MUST model executable startup and object wiring as
 
 - **GIVEN** the Markdown validator executable entry point starts the application
 - **WHEN** it creates the CLI command and application services
-- **THEN** concrete inbound and outbound adapter wiring is owned by a named composition or bootstrap boundary
+- **THEN** concrete inbound and outbound adapter wiring is owned by the executable entry point as composition root
 - **AND** that boundary is represented explicitly in the architecture test
 - **AND** the supported `MarkdownValidator` main class and JBang-compatible entry point remain available
 
 ### Requirement: Architecture test without dependency-specific ignores
 
-The Markdown validator architecture test MUST enforce the module boundaries without the current dependency-specific `ignoreDependency(...)` entries.
+The Markdown validator architecture test MUST enforce the `adapter`, `application`, and `domain` scaffold boundaries without the current dependency-specific `ignoreDependency(...)` entries.
 
 #### Scenario: Onion boundaries pass without current ignores
 
 - **GIVEN** the Markdown validator ArchUnit test is executed
-- **WHEN** the architecture rule checks domain, application, inbound adapter, outbound adapter, and composition boundaries
+- **WHEN** the architecture rule checks domain, application, inbound adapter, and outbound adapter boundaries
 - **THEN** the rule passes without ignoring the dependency from `MarkdownValidator` to `MarkdownValidatorCommand`
 - **AND** the rule passes without ignoring the dependency from `MarkdownValidatorCommand` to `FileSystemMarkdownFileFinder`
 - **AND** the rule passes without ignoring the dependency from `MarkdownValidatorCommand` to `HttpClientRemoteLinkRequester`

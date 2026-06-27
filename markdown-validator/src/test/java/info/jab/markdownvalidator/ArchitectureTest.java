@@ -4,14 +4,21 @@ import com.tngtech.archunit.core.importer.ImportOption;
 import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
-import info.jab.markdownvalidator.adapter.in.cli.MarkdownValidatorCommand;
-import info.jab.markdownvalidator.adapter.out.filesystem.FileSystemMarkdownFileFinder;
-import info.jab.markdownvalidator.adapter.out.http.HttpClientRemoteLinkRequester;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Set;
+import org.junit.jupiter.api.Test;
 
-import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static com.tngtech.archunit.library.Architectures.onionArchitecture;
+import static org.assertj.core.api.Assertions.assertThat;
 
-@AnalyzeClasses(packages = "info.jab.markdownvalidator", importOptions = ImportOption.DoNotIncludeTests.class)
+@AnalyzeClasses(
+        packages = {
+            "info.jab.markdownvalidator.adapter",
+            "info.jab.markdownvalidator.application",
+            "info.jab.markdownvalidator.domain"
+        },
+        importOptions = ImportOption.DoNotIncludeTests.class)
 class ArchitectureTest {
 
     @ArchTest
@@ -21,18 +28,19 @@ class ArchitectureTest {
             .adapter("cli", "info.jab.markdownvalidator.adapter.in.cli..")
             .adapter("filesystem", "info.jab.markdownvalidator.adapter.out.filesystem..")
             .adapter("http", "info.jab.markdownvalidator.adapter.out.http..")
-            .withOptionalLayers(true)
-            .ignoreDependency(
-                    "info.jab.markdownvalidator.MarkdownValidator",
-                    "info.jab.markdownvalidator.adapter.in.cli.MarkdownValidatorCommand")
-            .ignoreDependency(MarkdownValidatorCommand.class, FileSystemMarkdownFileFinder.class)
-            .ignoreDependency(MarkdownValidatorCommand.class, HttpClientRemoteLinkRequester.class);
+            .withOptionalLayers(true);
 
-    @ArchTest
-    static final ArchRule application_does_not_depend_on_adapters = noClasses()
-            .that()
-            .resideInAPackage("info.jab.markdownvalidator.application..")
-            .should()
-            .dependOnClassesThat()
-            .resideInAPackage("info.jab.markdownvalidator.adapter..");
+    @Test
+    void markdownValidatorPackage_containsOnlyExpectedScaffoldPackages() throws Exception {
+        Path packagePath = Path.of("src/main/java/info/jab/markdownvalidator");
+
+        Set<String> packageDirectories;
+        try (var paths = Files.list(packagePath)) {
+            packageDirectories = paths.filter(Files::isDirectory)
+                    .map(path -> path.getFileName().toString())
+                    .collect(java.util.stream.Collectors.toSet());
+        }
+
+        assertThat(packageDirectories).containsExactlyInAnyOrder("adapter", "application", "domain");
+    }
 }

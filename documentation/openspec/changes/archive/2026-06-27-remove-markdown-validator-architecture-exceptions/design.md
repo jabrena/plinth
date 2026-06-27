@@ -5,22 +5,22 @@ The Markdown validator module follows an onion-style architecture with domain, a
 The suppressed dependencies reveal two responsibility issues:
 
 - The CLI command builds outbound adapter implementations, so the inbound adapter knows concrete outbound adapters.
-- The executable entry point depends on the CLI adapter without a named bootstrap or composition boundary in the architecture rule.
+- The executable entry point depends on the CLI adapter while also acting as application composition root.
 
 The refactoring should make those responsibilities explicit while preserving command-line behavior.
 
 ## Decisions
 
-### Composition Boundary
+### Composition Root
 
-Introduce or clarify a composition/bootstrap boundary for Markdown validator startup. This boundary owns concrete object creation and wires together:
+Keep Markdown validator startup wiring in the existing `MarkdownValidator` entry point. This composition root owns concrete object creation and wires together:
 
 - `FileSystemMarkdownFileFinder`
 - `HttpClientRemoteLinkRequester`
 - application validators and services
 - the CLI command object consumed by Picocli
 
-The composition boundary may depend on inbound and outbound adapters because its role is to assemble the executable application. That permission must be visible in the architecture test as a named rule or layer, not as dependency-specific `ignoreDependency(...)` exceptions.
+The composition root may depend on inbound and outbound adapters because its role is to assemble the executable application. The architecture test should focus on the maintained scaffold packages: `adapter`, `application`, and `domain`.
 
 ### CLI Command Responsibility
 
@@ -39,13 +39,13 @@ Preserve the documented main class and JBang-compatible entry point from the exi
 
 ### Architecture Rule Shape
 
-Remove the dependency-specific `ignoreDependency(...)` entries from `ArchitectureTest`. If a composition boundary remains necessary, represent it explicitly in the test through a named package/layer decision so the rule explains the architecture instead of hiding individual dependencies.
+Remove the dependency-specific `ignoreDependency(...)` entries from `ArchitectureTest`. Keep the rule simple by checking dependencies within the maintained `adapter`, `application`, and `domain` scaffold, while leaving the executable entry point outside those layers.
 
 ### Two-Step Change Sequence
 
 Use the two-step method:
 
-1. Behavior-preserving preparation: move object creation out of the CLI command and introduce the composition boundary without changing command behavior.
+1. Behavior-preserving preparation: move object creation out of the CLI command and into the executable entry point without changing command behavior.
 2. Architecture enforcement change: remove the dependency-specific ignores and update the architecture test to describe the allowed composition boundary explicitly.
 
 ## Validation Strategy
@@ -57,9 +57,9 @@ Use the two-step method:
 
 ## Risks
 
-- ArchUnit's onion architecture helper may not model composition roots directly. If so, the implementation should use a clear named architecture rule that preserves onion constraints for domain, application, and adapters while explicitly allowing bootstrap composition.
+- ArchUnit's onion architecture helper may not model an executable composition root directly. If so, the implementation should use a clear architecture rule that preserves constraints for domain, application, and adapters while keeping the entry point outside the scaffold layers.
 - The JBang source directives in `MarkdownValidator.java` must stay aligned with any moved or added production classes.
 
 ## Open Questions
 
-None for the specification. Implementation may choose the exact package and class names for the composition boundary as long as the architecture rule and supported entry point remain clear.
+None for this change.
