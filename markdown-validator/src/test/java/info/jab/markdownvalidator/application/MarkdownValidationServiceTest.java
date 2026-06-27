@@ -12,6 +12,9 @@ import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicInteger;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -59,6 +62,36 @@ class MarkdownValidationServiceTest {
                 .containsExactlyInAnyOrder(URI.create("https://example.test/a"), URI.create("https://example.test/b"));
     }
 
+    @Test
+    void validate_skipsRemoteImages() throws IOException {
+        Path document = markdownFile("image.md", "![diagram](https://example.test/missing.png)");
+        CountingRequester requester =
+                new CountingRequester(Map.of(URI.create("https://example.test/missing.png"), 404));
+        MarkdownValidationService service = service(new FixedFinder(List.of(document)), requester);
+
+        ValidationReport report = service.validate(tempDir, List.of("docs"), false);
+
+        assertThat(report.passed()).isTrue();
+        assertThat(report.errors()).isEmpty();
+        assertThat(requester.requestedUris()).isEmpty();
+    }
+
+    @Test
+    void validate_checksLinksWithinDocumentInParallel() throws IOException {
+        Path document = markdownFile(
+                "links.md", "[first](https://example.test/first)%n[second](https://example.test/second)%n".formatted());
+        ConcurrentRequester requester = new ConcurrentRequester(2);
+        MarkdownValidationService service = service(new FixedFinder(List.of(document)), requester);
+
+        ValidationReport report = service.validate(tempDir, List.of("docs"), false);
+
+        assertThat(report.passed()).isTrue();
+        assertThat(requester.maxConcurrentRequests()).isGreaterThanOrEqualTo(2);
+        assertThat(requester.requestedUris())
+                .containsExactlyInAnyOrder(
+                        URI.create("https://example.test/first"), URI.create("https://example.test/second"));
+    }
+
     private Path markdownFile(String name, String content) throws IOException {
         return Files.writeString(tempDir.resolve(name), content);
     }
@@ -92,6 +125,47 @@ class MarkdownValidationServiceTest {
                 requestedUris.add(uri);
             }
             return new RemoteLinkResponse(statusCodes.getOrDefault(uri, 200));
+        }
+
+        private List<URI> requestedUris() {
+            synchronized (requestedUris) {
+                return List.copyOf(requestedUris);
+            }
+        }
+    }
+
+    private static final class ConcurrentRequester implements RemoteLinkRequester {
+
+        private final CountDownLatch expectedRequestsStarted;
+        private final AtomicInteger activeRequests = new AtomicInteger();
+        private final AtomicInteger maxConcurrentRequests = new AtomicInteger();
+        private final List<URI> requestedUris = new ArrayList<>();
+
+        private ConcurrentRequester(int expectedRequests) {
+            this.expectedRequestsStarted = new CountDownLatch(expectedRequests);
+        }
+
+        @Override
+        public RemoteLinkResponse request(URI uri, String method, Duration timeout) {
+            synchronized (requestedUris) {
+                requestedUris.add(uri);
+            }
+            int active = activeRequests.incrementAndGet();
+            maxConcurrentRequests.accumulateAndGet(active, Math::max);
+            expectedRequestsStarted.countDown();
+            try {
+                expectedRequestsStarted.await(1, TimeUnit.SECONDS);
+                return new RemoteLinkResponse(200);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                return new RemoteLinkResponse(500);
+            } finally {
+                activeRequests.decrementAndGet();
+            }
+        }
+
+        private int maxConcurrentRequests() {
+            return maxConcurrentRequests.get();
         }
 
         private List<URI> requestedUris() {

@@ -7,9 +7,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.StructuredTaskScope;
+import java.util.stream.Stream;
 import org.commonmark.node.AbstractVisitor;
-import org.commonmark.node.Image;
 import org.commonmark.node.Link;
 import org.commonmark.node.Node;
 import org.commonmark.parser.Parser;
@@ -51,20 +54,54 @@ public final class MarkdownDocumentValidator {
     }
 
     private List<ValidationError> validateRemoteLinks(Path file, Node document) {
-        List<ValidationError> errors = new ArrayList<>();
+        List<LinkDestination> links = remoteLinkDestinations(document);
+        if (links.isEmpty()) {
+            return List.of();
+        }
+
+        try (var scope = StructuredTaskScope.open(
+                StructuredTaskScope.Joiner.<IndexedValidationError>allSuccessfulOrThrow(),
+                config -> config.withName("remote-link-validation"))) {
+            for (LinkDestination link : links) {
+                scope.fork(() -> new IndexedValidationError(
+                        link.index(), remoteLinkValidator.validate(file, link.destination())));
+            }
+
+            Stream<StructuredTaskScope.Subtask<IndexedValidationError>> subtasks = scope.join();
+            return subtasks.map(StructuredTaskScope.Subtask::get)
+                    .sorted(Comparator.comparingInt(IndexedValidationError::index))
+                    .flatMap(indexedError -> indexedError.error().stream())
+                    .toList();
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            return List.of(new ValidationError(file, 0, "Remote link validation interrupted: " + describeThrowable(e)));
+        } catch (RuntimeException e) {
+            return List.of(new ValidationError(
+                    file, 0, "Remote link validation failed unexpectedly: " + describeThrowable(e)));
+        }
+    }
+
+    private static List<LinkDestination> remoteLinkDestinations(Node document) {
+        List<LinkDestination> links = new ArrayList<>();
         document.accept(new AbstractVisitor() {
             @Override
             public void visit(Link link) {
-                remoteLinkValidator.validate(file, link.getDestination()).ifPresent(errors::add);
+                links.add(new LinkDestination(links.size(), link.getDestination()));
                 super.visit(link);
             }
-
-            @Override
-            public void visit(Image image) {
-                remoteLinkValidator.validate(file, image.getDestination()).ifPresent(errors::add);
-                super.visit(image);
-            }
         });
-        return List.copyOf(errors);
+        return List.copyOf(links);
     }
+
+    private static String describeThrowable(Throwable throwable) {
+        String message = throwable.getMessage();
+        if (message == null || message.isBlank()) {
+            return throwable.getClass().getSimpleName();
+        }
+        return message;
+    }
+
+    private record LinkDestination(int index, String destination) {}
+
+    private record IndexedValidationError(int index, Optional<ValidationError> error) {}
 }
