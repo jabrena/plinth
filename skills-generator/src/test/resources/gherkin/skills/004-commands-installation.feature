@@ -23,18 +23,15 @@ Scenario: Install embedded commands into the GitHub commands destination
     | fileName                 |
     | update-issue.md          |
     | create-feature-branch.md |
-    | create-issue.md          |
     | create-worktree.md       |
     | explore-design.md        |
     | create-adr.md            |
     | create-diagram.md        |
-    | create-plan.md           |
     | create-spec.md           |
     | review-alignment.md      |
     | implement-issue.md       |
     | profile.md               |
     | benchmark.md             |
-    | kill-port.md             |
   And each installed command file matches its same-named embedded asset content
   And the skill reports the selected destination, created files, overwrite actions, and an optional verification step
   And any git changes produced under "examples/skills/installers" during skill execution and verification are reset

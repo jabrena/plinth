@@ -20,7 +20,7 @@ public final class CommandIndexes {
     /**
      * Returns command asset file names in installation order.
      *
-     * @return stream of command file names, for example {@code create-issue.md}
+     * @return stream of command file names, for example {@code update-issue.md}
      */
     public static Stream<String> commandFiles() {
         return loadInventory().stream();

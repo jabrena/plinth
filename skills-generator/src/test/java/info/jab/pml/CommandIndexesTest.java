@@ -70,15 +70,10 @@ class CommandIndexesTest {
     }
 
     @Test
-    @DisplayName("Issue commands must route through the business analyst and user-story skill")
-    void should_routeIssueCommands_when_issueCommandsAreInstalled() {
-        String createIssue = loadClasspathResource("skill-references/assets/commands/create-issue.md");
+    @DisplayName("Update issue command must route through the business analyst and user-story skill")
+    void should_routeUpdateIssueCommand_when_issueCommandsAreInstalled() {
         String updateIssue = loadClasspathResource("skill-references/assets/commands/update-issue.md");
 
-        assertThat(createIssue)
-            .contains("/create-issue [<source>] [<tracker>]")
-            .contains("`@robot-business-analyst`")
-            .contains("`014-agile-user-story` when user-story refinement is required");
         assertThat(updateIssue)
             .contains("/update-issue <issue> [<source>] [<tracker>]")
             .contains("`@robot-business-analyst`")

@@ -21,18 +21,15 @@ Scenario: Generate embedded commands inventory with every command asset
     | assetFile                | command                  |
     | update-issue.md          | /update-issue            |
     | create-feature-branch.md | /create-feature-branch   |
-    | create-issue.md          | /create-issue            |
     | create-worktree.md       | /create-worktree         |
     | explore-design.md        | /explore-design          |
     | create-adr.md            | /create-adr              |
     | create-diagram.md        | /create-diagram          |
-    | create-plan.md           | /create-plan             |
     | create-spec.md           | /create-spec             |
     | review-alignment.md      | /review-alignment        |
     | implement-issue.md       | /implement-issue         |
     | profile.md               | /profile                 |
     | benchmark.md             | /benchmark               |
-    | kill-port.md             | /kill-port               |
   And every command row in the generated file corresponds to a same-named source file in "skills-generator/src/main/resources/skill-references/assets/commands"
   And no command asset from "skills-generator/src/main/resources/skill-references/assets/commands" is missing from the generated inventory
   And the generated inventory file does not include command rows outside the embedded command assets directory

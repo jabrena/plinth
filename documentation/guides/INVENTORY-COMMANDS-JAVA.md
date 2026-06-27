@@ -10,18 +10,15 @@ Provide a quick checklist of the embedded commands available for installation in
 | --- | --- | --- |
 | `/update-issue` | Analysis / Design | Update existing GitHub or Jira issues with structured user story, acceptance criteria, and resource content. |
 | `/create-feature-branch` | Analysis / Design to Implementation | Create and switch to a conventionally named branch for repository-backed analysis, design, or implementation. |
-| `/create-issue` | Analysis | Create or refine a structured issue in GitHub or Jira. |
 | `/create-worktree` | Analysis / Design to Implementation | Create an isolated branch and linked worktree for parallel work. |
 | `/explore-design` | Design | Compare technical approaches and obtain an approved design direction. |
 | `/create-adr` | Design | Record an architectural decision, alternatives, rationale, and consequences. |
 | `/create-diagram` | Design | Create a focused architecture or design diagram from approved artifacts. |
-| `/create-plan` | Analysis / Design | Create or refine an executable technical implementation plan. |
 | `/create-spec` | Analysis / Design | Create or update one or more validated OpenSpec changes. |
 | `/review-alignment` | Analysis / Design | Review available artifacts for traceability, consistency, completeness, and readiness. |
 | `/implement-issue` | Implementation | Deliver an issue from an approved plan or validated OpenSpec task list through framework-aware delegation. |
 | `/profile` | Operation | Coordinate Java profiling from baseline detection through verified optimization. |
 | `/benchmark` | Operation | Select and coordinate JMeter, Gatling, or JMH performance workflows. |
-| `/kill-port` | Operation | Free a localhost port by stopping the process listening on it. |
 
 ## Installation target options
 
