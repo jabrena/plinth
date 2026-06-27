@@ -39,7 +39,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Removed
 
 - **Agents & commands**:
-  - Removed the `review-breaking-changes` command in favor of the `@056-design-avoid-breaking-changes` skill workflow (#954)
   - Removed retired command assets for `create-issue`, `create-plan`, and `kill-port`; command guidance now points to the supported command set (#951)
 
 - **CI & validation**:
