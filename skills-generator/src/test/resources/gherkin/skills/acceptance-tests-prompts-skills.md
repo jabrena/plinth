@@ -357,3 +357,24 @@ and verify that acceptance-tests passes.
 execute @skills-generator/src/test/resources/gherkin/skills/808-regulations-eu-digital-markets-act.feature
 and verify that acceptance-tests passes.
 ```
+
+## 810-regulations-eu-mifid-ii
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/810-regulations-eu-mifid-ii.feature
+and verify that acceptance-tests passes.
+```
+
+## 811-regulations-eu-market-abuse-regulation
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/811-regulations-eu-market-abuse-regulation.feature
+and verify that acceptance-tests passes.
+```
+
+## 812-regulations-eu-product-liability-directive
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/812-regulations-eu-product-liability-directive.feature
+and verify that acceptance-tests passes.
+```
