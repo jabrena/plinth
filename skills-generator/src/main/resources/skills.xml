@@ -208,9 +208,11 @@
             <reference>128-java-generics</reference>
         </reference-list>
     </skill>
-    <skill id="130">
+    <skill id="130" skillId="130-java-testing-strategies">
         <reference-list>
-            <reference>130-java-testing-strategies</reference>
+            <reference>130-java-testing-strategies-right-bicep</reference>
+            <reference>130-java-testing-strategies-a-trip</reference>
+            <reference>130-java-testing-strategies-correct</reference>
         </reference-list>
     </skill>
     <skill id="131">

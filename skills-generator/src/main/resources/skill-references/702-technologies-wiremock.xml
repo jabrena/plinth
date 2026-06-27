@@ -46,22 +46,31 @@
             </example-header>
             <example-description>
                 <![CDATA[
-                Register stubs in the narrowest scope (per test method or a fresh rule set) or reset WireMock between tests. Leaked stubs cause **order-dependent** failures and masked assertions.
+                Register stubs in the narrowest scope (per test method or a fresh rule set) and reset WireMock state between tests. `resetAll()` removes stubs and clears the request journal; use it before each scenario when a server instance is reused. Leaked stubs cause **order-dependent** failures and masked assertions.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="text"><![CDATA[
-                // Conceptual: register stubs inside each test OR reset before each test
-                // - Before each test: reset all stubs and request journal
-                // - Register only what this scenario needs
-                ]]></code-block>
+                    <code-block language="java"><![CDATA[
+@BeforeEach
+void resetWireMock() {
+    wireMockServer.resetAll();
+}
+
+@Test
+void returnsCurrentOrder() {
+    wireMockServer.stubFor(get(urlPathEqualTo("/api/v1/orders/123"))
+            .willReturn(okJson("{\"id\":\"123\",\"status\":\"OPEN\"}")));
+
+    // Exercise the system under test and verify only this scenario's traffic.
+}
+]]></code-block>
                 </good-example>
                 <bad-example>
                     <code-block language="text"><![CDATA[
-                // Anti-pattern: @BeforeAll registers many stubs shared by all tests
-                // without reset — later tests depend on accidental overlap
-                ]]></code-block>
+// Anti-pattern: @BeforeAll registers many stubs shared by all tests
+// without reset. Later tests depend on accidental overlap and journal state.
+]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
@@ -73,7 +82,7 @@
             </example-header>
             <example-description>
                 <![CDATA[
-                Pair **specific** `urlPath`, HTTP method, and required headers with **verify** (or journal checks) so the test proves the collaboration you care about. Overly broad `urlMatching` can let tests pass when the client never called the dependency correctly.
+                Pair **specific** `urlPath`, HTTP method, and required headers with **verify** or request journal checks so the test proves the collaboration you care about. Overly broad `urlMatching` can let tests pass when the client never called the dependency correctly.
                 ]]>
             </example-description>
             <code-examples>
@@ -96,6 +105,241 @@
   "request": {
     "method": "GET",
     "urlPattern": ".*"
+  },
+  "response": { "status": 200, "body": "{}" }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="java-dsl-stub">
+            <example-header>
+                <example-title>Programmatic Java DSL stub</example-title>
+                <example-subtitle>prefer readable executable stubs for scenario-specific behavior</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use the Java DSL when the test needs dynamic values, local readability, or verification next to the scenario. Match method, path, headers, query parameters, and body shape explicitly enough to catch regressions.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+wireMockServer.stubFor(post(urlPathEqualTo("/api/v1/payments"))
+        .withHeader("Content-Type", containing("application/json"))
+        .withHeader("Idempotency-Key", matching("[a-zA-Z0-9-]{20,}"))
+        .withQueryParam("tenant", equalTo("acme"))
+        .withRequestBody(matchingJsonPath("$.amount", equalTo("42.50")))
+        .withRequestBody(matchingJsonPath("$.currency", equalTo("EUR")))
+        .willReturn(created()
+                .withHeader("Content-Type", "application/json")
+                .withBody("{\"paymentId\":\"pay-123\",\"status\":\"ACCEPTED\"}")));
+
+// After exercising the system under test:
+wireMockServer.verify(postRequestedFor(urlPathEqualTo("/api/v1/payments"))
+        .withHeader("Idempotency-Key", matching(".+"))
+        .withRequestBody(matchingJsonPath("$.currency", equalTo("EUR"))));
+]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[
+wireMockServer.stubFor(any(anyUrl())
+        .willReturn(okJson("{}")));
+
+// This hides wrong methods, paths, missing headers, and malformed payloads.
+]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="body-file-fixtures">
+            <example-header>
+                <example-title>bodyFileName fixtures</example-title>
+                <example-subtitle>keep large or reusable payloads out of inline mappings</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use `bodyFileName` for large, shared, or contract-like responses. Keep mappings under `wiremock/mappings` and response bodies under `wiremock/__files` (or the equivalent test classpath root used by the project) so fixtures are easy to review and version.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="text"><![CDATA[
+src/test/resources/wiremock/
+  mappings/
+    get-order-123.json
+  __files/
+    orders/
+      order-123-response.json
+
+// mappings/get-order-123.json
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/v1/orders/123"
+  },
+  "response": {
+    "status": 200,
+    "headers": { "Content-Type": "application/json" },
+    "bodyFileName": "orders/order-123-response.json"
+  }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="json"><![CDATA[{
+  "request": { "method": "GET", "urlPath": "/api/v1/orders/123" },
+  "response": {
+    "status": 200,
+    "body": "{ \"large\": \"payload copied into many mapping files\" }"
+  }
+}]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="5" id="dynamic-port-base-url">
+            <example-header>
+                <example-title>Dynamic port and base URL propagation</example-title>
+                <example-subtitle>avoid fixed localhost ports in parallel test runs</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Start WireMock on a dynamic port and propagate the runtime base URL into the system under test through the project's normal configuration mechanism. Keep this guidance framework-agnostic; delegate `@SpringBootTest`, `@QuarkusTest`, `@MicronautTest`, extension lifecycle, and `BaseIntegrationTest` wiring to the integration-test skills.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+WireMockServer wireMockServer = new WireMockServer(options().dynamicPort());
+wireMockServer.start();
+
+String dependencyBaseUrl = wireMockServer.baseUrl();
+// Pass dependencyBaseUrl to the client or application configuration at runtime.
+// Examples: constructor argument, test configuration property, environment value,
+// or system property owned by the test harness.
+]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="text"><![CDATA[
+external.orders.base-url=http://localhost:8089
+
+// Fixed shared ports collide with other processes and parallel test runs.
+]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="6" id="request-journal-debugging">
+            <example-header>
+                <example-title>Request journal debugging</example-title>
+                <example-subtitle>diagnose unmatched requests and near misses</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use the request journal when a test fails because no stub matched or because an expected call never arrived. Inspect unmatched requests and near misses to identify wrong paths, missing headers, broad matchers, or body shape mismatches; clear the journal with reset behavior between tests.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+List<LoggedRequest> unmatched = wireMockServer.findAllUnmatchedRequests();
+assertThat(unmatched).as("unexpected outbound HTTP calls").isEmpty();
+
+wireMockServer.findNearMissesForAllUnmatchedRequests()
+        .forEach(nearMiss -> {
+            LoggedRequest request = nearMiss.getRequest();
+            RequestPattern pattern = nearMiss.getStubMapping().getRequest();
+            // Log request URL, method, headers, body, and the closest stub pattern.
+        });
+]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="text"><![CDATA[
+// Anti-pattern: make the stub broader until the test passes.
+// Fix the client call or the intended matcher after inspecting journal evidence.
+]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="7" id="fault-delay-resilience">
+            <example-header>
+                <example-title>Fault and delay scenarios</example-title>
+                <example-subtitle>test resilience deliberately, not accidentally</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Use WireMock faults, delays, and error statuses in resilience-specific tests. Keep happy-path stubs fast and deterministic; do not add random delays or broad failure behavior to default stubs.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[
+wireMockServer.stubFor(get(urlPathEqualTo("/api/v1/recommendations"))
+        .willReturn(aResponse()
+                .withStatus(503)
+                .withHeader("Content-Type", "application/json")
+                .withFixedDelay(750)
+                .withBody("{\"error\":\"dependency temporarily unavailable\"}")));
+
+wireMockServer.stubFor(get(urlPathEqualTo("/api/v1/stream"))
+        .willReturn(aResponse()
+                .withFault(Fault.CONNECTION_RESET_BY_PEER)));
+]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[
+wireMockServer.stubFor(any(anyUrl())
+        .willReturn(aResponse()
+                .withRandomDelay(new LogNormalRandomDelayDistribution(90, 0.1))
+                .withFault(Fault.MALFORMED_RESPONSE_CHUNK)));
+
+// This makes unrelated happy-path tests flaky and hard to diagnose.
+]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="8" id="query-header-body-matching">
+            <example-header>
+                <example-title>Query, header, and body matching</example-title>
+                <example-subtitle>match the contract detail that matters</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Prefer `urlPathEqualTo` plus explicit query, header, and body matchers over one broad URL regex. Match required contract fields and avoid matching volatile fields unless the test is about them.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="json"><![CDATA[{
+  "request": {
+    "method": "POST",
+    "urlPath": "/api/v1/search",
+    "queryParameters": {
+      "page": { "equalTo": "1" },
+      "size": { "equalTo": "25" }
+    },
+    "headers": {
+      "Accept": { "contains": "application/json" },
+      "X-Correlation-Id": { "matches": "[a-f0-9-]{36}" }
+    },
+    "bodyPatterns": [
+      { "matchesJsonPath": "$.filters[?(@.field == 'status' && @.value == 'ACTIVE')]" }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": { "Content-Type": "application/json" },
+    "jsonBody": { "items": [], "total": 0 }
+  }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="json"><![CDATA[{
+  "request": {
+    "method": "POST",
+    "urlPattern": "/api/v1/.*"
   },
   "response": { "status": 200, "body": "{}" }
 }]]></code-block>
