@@ -676,4 +676,40 @@
                 target="assets/reports/808-eu-digital-markets-act-engineering-review-report-template.md" />
         </resource-list>
     </skill>
+    <skill id="810" skillId="810-regulations-eu-mifid-ii">
+        <reference-list>
+            <reference>810-regulations-eu-mifid-ii-chapters-summary</reference>
+            <reference>810-regulations-eu-mifid-ii-engineering-examples</reference>
+        </reference-list>
+        <resource-list>
+            <resource source="skill-references/assets/questions/810-mifid-ii-engineering-review-questionnaire.md"
+                target="assets/questions/810-mifid-ii-engineering-review-questionnaire.md" />
+            <resource source="skill-references/assets/reports/810-mifid-ii-engineering-review-report-template.md"
+                target="assets/reports/810-mifid-ii-engineering-review-report-template.md" />
+        </resource-list>
+    </skill>
+    <skill id="811" skillId="811-regulations-eu-market-abuse-regulation">
+        <reference-list>
+            <reference>811-regulations-eu-market-abuse-regulation-chapters-summary</reference>
+            <reference>811-regulations-eu-market-abuse-regulation-engineering-examples</reference>
+        </reference-list>
+        <resource-list>
+            <resource source="skill-references/assets/questions/811-market-abuse-regulation-engineering-review-questionnaire.md"
+                target="assets/questions/811-market-abuse-regulation-engineering-review-questionnaire.md" />
+            <resource source="skill-references/assets/reports/811-market-abuse-regulation-engineering-review-report-template.md"
+                target="assets/reports/811-market-abuse-regulation-engineering-review-report-template.md" />
+        </resource-list>
+    </skill>
+    <skill id="812" skillId="812-regulations-eu-product-liability-directive">
+        <reference-list>
+            <reference>812-regulations-eu-product-liability-directive-chapters-summary</reference>
+            <reference>812-regulations-eu-product-liability-directive-engineering-examples</reference>
+        </reference-list>
+        <resource-list>
+            <resource source="skill-references/assets/questions/812-product-liability-directive-engineering-review-questionnaire.md"
+                target="assets/questions/812-product-liability-directive-engineering-review-questionnaire.md" />
+            <resource source="skill-references/assets/reports/812-product-liability-directive-engineering-review-report-template.md"
+                target="assets/reports/812-product-liability-directive-engineering-review-report-template.md" />
+        </resource-list>
+    </skill>
 </skill-inventory>
