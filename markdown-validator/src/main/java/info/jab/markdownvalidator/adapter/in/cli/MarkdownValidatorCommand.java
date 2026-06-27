@@ -8,11 +8,12 @@ import info.jab.markdownvalidator.application.RemoteLinkValidator;
 import info.jab.markdownvalidator.application.StructuredValidationRunner;
 import info.jab.markdownvalidator.application.port.RemoteLinkRequester;
 import info.jab.markdownvalidator.domain.ValidationReport;
-import java.io.PrintStream;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.Callable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import picocli.CommandLine.Command;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
@@ -24,6 +25,7 @@ import picocli.CommandLine.Parameters;
         description = "Validates markdown files from specified directories")
 public class MarkdownValidatorCommand implements Callable<Integer> {
 
+    private static final Logger logger = LoggerFactory.getLogger(MarkdownValidatorCommand.class);
     static final List<String> DEFAULT_TARGET_DIRECTORIES = List.of(".cursor/rules", "skills", ".cursor/agents");
     static final Duration LINK_CHECK_TIMEOUT = Duration.ofSeconds(10);
 
@@ -40,42 +42,38 @@ public class MarkdownValidatorCommand implements Callable<Integer> {
     String rootDir = ".";
 
     private final MarkdownValidationService validationService;
-    private final PrintStream out;
-    private final PrintStream err;
 
     public MarkdownValidatorCommand() {
-        this(new HttpClientRemoteLinkRequester(LINK_CHECK_TIMEOUT), System.out, System.err);
+        this(new HttpClientRemoteLinkRequester(LINK_CHECK_TIMEOUT));
     }
 
-    MarkdownValidatorCommand(RemoteLinkRequester remoteLinkRequester, PrintStream out, PrintStream err) {
-        this.out = out;
-        this.err = err;
-        this.validationService = createValidationService(remoteLinkRequester, out);
+    MarkdownValidatorCommand(RemoteLinkRequester remoteLinkRequester) {
+        this.validationService = createValidationService(remoteLinkRequester);
     }
 
     @Override
     public Integer call() throws Exception {
         Path root = Path.of(rootDir);
-        out.println("🔍 Starting markdown validation...");
+        logger.info("event=markdown.validation.started root={} targetDirectories={}", root, targetDirectories);
 
         ValidationReport report = validationService.validate(root, targetDirectories, verbose);
 
         if (report.rootMissing()) {
-            err.println("❌ Root directory does not exist: " + root);
+            logger.error("event=markdown.validation.root_missing root={}", root);
             return 1;
         }
         if (report.noMarkdownFiles()) {
-            out.println("⚠️  No markdown files found in target directories");
+            logger.info("event=markdown.validation.no_files root={} targetDirectories={}", root, targetDirectories);
             return 0;
         }
 
-        new ConsoleValidationReporter(out).print(report);
+        new ConsoleValidationReporter().print(report);
         return report.passed() ? 0 : 1;
     }
 
-    private MarkdownValidationService createValidationService(RemoteLinkRequester remoteLinkRequester, PrintStream out) {
+    private MarkdownValidationService createValidationService(RemoteLinkRequester remoteLinkRequester) {
         RemoteLinkValidator remoteLinkValidator = new RemoteLinkValidator(remoteLinkRequester, LINK_CHECK_TIMEOUT);
         MarkdownDocumentValidator documentValidator = new MarkdownDocumentValidator(remoteLinkValidator);
-        return new MarkdownValidationService(new FileSystemMarkdownFileFinder(out), new StructuredValidationRunner(documentValidator));
+        return new MarkdownValidationService(new FileSystemMarkdownFileFinder(), new StructuredValidationRunner(documentValidator));
     }
 }

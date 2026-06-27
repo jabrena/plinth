@@ -2,21 +2,20 @@ package info.jab.markdownvalidator.adapter.out.filesystem;
 
 import info.jab.markdownvalidator.application.port.MarkdownFileFinder;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Stream;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class FileSystemMarkdownFileFinder implements MarkdownFileFinder {
 
+    private static final Logger logger = LoggerFactory.getLogger(FileSystemMarkdownFileFinder.class);
     private static final List<String> MARKDOWN_EXTENSIONS = List.of(".md");
 
-    private final PrintStream out;
-
-    public FileSystemMarkdownFileFinder(PrintStream out) {
-        this.out = out;
+    public FileSystemMarkdownFileFinder() {
     }
 
     @Override
@@ -33,13 +32,14 @@ public final class FileSystemMarkdownFileFinder implements MarkdownFileFinder {
         Path dir = root.resolve(targetDir);
         if (!Files.isDirectory(dir)) {
             if (verbose) {
-                out.printf("⚠️  Directory not found: %s%n", dir);
+                logger.info("event=markdown.directory_missing path={}", dir);
             }
             return Stream.empty();
         }
         try {
             return Files.walk(dir);
         } catch (IOException e) {
+            logger.warn("event=markdown.directory_walk_failed path={}", dir, e);
             return Stream.of(dir);
         }
     }

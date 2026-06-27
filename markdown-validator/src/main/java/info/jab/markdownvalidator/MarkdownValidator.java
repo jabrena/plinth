@@ -2,9 +2,11 @@
 
 //JAVA 25
 //JAVAC_OPTIONS --enable-preview --release 25
-//JAVA_OPTIONS --enable-preview
+//JAVA_OPTIONS --enable-preview -Dlogback.configurationFile=markdown-validator/src/main/resources/logback.xml
 //DEPS info.picocli:picocli:4.7.5
 //DEPS org.commonmark:commonmark:0.21.0
+//DEPS org.slf4j:slf4j-api:2.0.18
+//DEPS ch.qos.logback:logback-classic:1.5.36
 //SOURCES application/MarkdownDocumentValidator.java
 //SOURCES application/MarkdownValidationService.java
 //SOURCES application/RemoteLinkValidator.java
