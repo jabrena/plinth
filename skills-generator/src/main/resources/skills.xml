@@ -157,9 +157,10 @@
             <reference>113-java-maven-documentation</reference>
         </reference-list>
     </skill>
-    <skill id="114">
+    <skill id="114" skillId="114-java-maven-search">
         <reference-list>
-            <reference>114-java-maven-search</reference>
+            <reference>114-maven-project-version-updates</reference>
+            <reference>114-maven-central-search</reference>
         </reference-list>
     </skill>
     <skill id="121" skillId="121-java-object-oriented-design">
