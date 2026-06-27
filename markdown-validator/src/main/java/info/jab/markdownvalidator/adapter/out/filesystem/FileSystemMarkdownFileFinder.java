@@ -19,8 +19,8 @@ public final class FileSystemMarkdownFileFinder implements MarkdownFileFinder {
     }
 
     @Override
-    public List<Path> findMarkdownFiles(Path root, List<String> targetDirectories, boolean verbose) throws IOException {
-        try (Stream<Path> paths = targetDirectories.stream().flatMap(targetDir -> walkTarget(root, targetDir, verbose))) {
+    public List<Path> findMarkdownFiles(Path root, List<String> targetDirectories) throws IOException {
+        try (Stream<Path> paths = targetDirectories.stream().flatMap(targetDir -> walkTarget(root, targetDir))) {
             return paths.filter(Files::isRegularFile)
                     .filter(FileSystemMarkdownFileFinder::isMarkdownFile)
                     .sorted(Comparator.comparing(Path::toString))
@@ -28,12 +28,10 @@ public final class FileSystemMarkdownFileFinder implements MarkdownFileFinder {
         }
     }
 
-    private Stream<Path> walkTarget(Path root, String targetDir, boolean verbose) {
+    private Stream<Path> walkTarget(Path root, String targetDir) {
         Path dir = root.resolve(targetDir);
         if (!Files.isDirectory(dir)) {
-            if (verbose) {
-                logger.info("event=markdown.directory_missing path={}", dir);
-            }
+            logger.debug("event=markdown.directory_missing path={}", dir);
             return Stream.empty();
         }
         try {

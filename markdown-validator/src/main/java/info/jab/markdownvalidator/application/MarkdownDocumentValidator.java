@@ -28,28 +28,28 @@ public final class MarkdownDocumentValidator {
         this.remoteLinkValidator = remoteLinkValidator;
     }
 
-    public FileValidationResult validate(Path file, boolean verbose) {
+    public FileValidationResult validate(Path file) {
         try {
-            return validateContent(file, Files.readString(file), verbose);
+            return validateContent(file, Files.readString(file));
         } catch (IOException e) {
-            return FileValidationResult.failed(file, "Failed to read file: " + e.getMessage(), verbose);
+            return FileValidationResult.failed(file, "Failed to read file: " + e.getMessage());
         }
     }
 
-    private FileValidationResult validateContent(Path file, String content, boolean verbose) {
+    private FileValidationResult validateContent(Path file, String content) {
         try {
             Node document = parser.parse(content);
             String html = renderer.render(document);
 
             if (html == null) {
-                return FileValidationResult.failed(file, "HTML rendering produced null output", verbose);
+                return FileValidationResult.failed(file, "HTML rendering produced null output");
             }
 
             ParseSummary summary = new ParseSummary(file.getFileName().toString(), content.length(), html.length());
             List<ValidationError> errors = validateRemoteLinks(file, document);
-            return FileValidationResult.of(file, summary, errors, verbose);
+            return FileValidationResult.of(file, summary, errors);
         } catch (Exception e) {
-            return FileValidationResult.failed(file, "Failed to parse markdown: " + e.getMessage(), verbose);
+            return FileValidationResult.failed(file, "Failed to parse markdown: " + e.getMessage());
         }
     }
 

@@ -5,5 +5,5 @@ import java.nio.file.Path;
 import java.util.List;
 
 public interface MarkdownFileFinder {
-    List<Path> findMarkdownFiles(Path root, List<String> targetDirectories, boolean verbose) throws IOException;
+    List<Path> findMarkdownFiles(Path root, List<String> targetDirectories) throws IOException;
 }

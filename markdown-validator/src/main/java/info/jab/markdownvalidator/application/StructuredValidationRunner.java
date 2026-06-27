@@ -15,14 +15,14 @@ public final class StructuredValidationRunner {
         this.documentValidator = documentValidator;
     }
 
-    public List<FileValidationResult> validate(List<Path> markdownFiles, boolean verbose) {
+    public List<FileValidationResult> validate(List<Path> markdownFiles) {
         try (var scope = StructuredTaskScope.open(
                 StructuredTaskScope.Joiner.<IndexedResult>allSuccessfulOrThrow(),
                 config -> config.withName("markdown-validation"))) {
             for (int index = 0; index < markdownFiles.size(); index++) {
                 int resultIndex = index;
                 Path file = markdownFiles.get(index);
-                scope.fork(() -> new IndexedResult(resultIndex, documentValidator.validate(file, verbose)));
+                scope.fork(() -> new IndexedResult(resultIndex, documentValidator.validate(file)));
             }
             Stream<StructuredTaskScope.Subtask<IndexedResult>> subtasks = scope.join();
             return subtasks.map(StructuredTaskScope.Subtask::get)
@@ -31,11 +31,10 @@ public final class StructuredValidationRunner {
                     .toList();
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            return List.of(FileValidationResult.failed(
-                    Path.of("."), "Validation interrupted: " + describeThrowable(e), verbose));
+            return List.of(FileValidationResult.failed(Path.of("."), "Validation interrupted: " + describeThrowable(e)));
         } catch (RuntimeException e) {
-            return List.of(FileValidationResult.failed(
-                    Path.of("."), "Validation failed unexpectedly: " + describeThrowable(e), verbose));
+            return List.of(
+                    FileValidationResult.failed(Path.of("."), "Validation failed unexpectedly: " + describeThrowable(e)));
         }
     }
 

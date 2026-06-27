@@ -23,7 +23,7 @@ class FileSystemMarkdownFileFinderTest {
         Path a = Files.writeString(nested.resolve("a.md"), "# A");
         FileSystemMarkdownFileFinder finder = new FileSystemMarkdownFileFinder();
 
-        List<Path> files = finder.findMarkdownFiles(tempDir, List.of("docs"), false);
+        List<Path> files = finder.findMarkdownFiles(tempDir, List.of("docs"));
 
         assertThat(files).containsExactly(b, a);
     }
@@ -32,7 +32,7 @@ class FileSystemMarkdownFileFinderTest {
     void findMarkdownFiles_ignoresMissingDirectories() throws IOException {
         FileSystemMarkdownFileFinder finder = new FileSystemMarkdownFileFinder();
 
-        List<Path> files = finder.findMarkdownFiles(tempDir, List.of("missing"), true);
+        List<Path> files = finder.findMarkdownFiles(tempDir, List.of("missing"));
 
         assertThat(files).isEmpty();
     }

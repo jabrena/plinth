@@ -47,7 +47,7 @@ The repository MUST keep a JBang-compatible way to run Markdown validation after
 
 - **GIVEN** contributors and CI need a JBang-compatible Markdown validation command
 - **WHEN** the validator implementation is moved into the Maven module
-- **THEN** they can run `jbang markdown-validator/src/main/java/info/jab/markdownvalidator/MarkdownValidator.java --verbose .`
+- **THEN** they can run `jbang markdown-validator/src/main/java/info/jab/markdownvalidator/MarkdownValidator.java .`
 - **AND** that entry point is the Maven module main class
 
 ### Requirement: CI Markdown validation integration

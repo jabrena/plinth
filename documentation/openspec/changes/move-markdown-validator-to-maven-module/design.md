@@ -3,7 +3,7 @@
 Issue #941 asks for a dedicated Maven module for the Markdown validator because the current JBang script has grown in responsibility and CI runtime. The previous script lived at `.github/scripts/MarkdownValidator.java` and was called from `.github/workflows/maven.yaml` with:
 
 ```bash
-jbang .github/scripts/MarkdownValidator.java --verbose .
+jbang markdown-validator/src/main/java/info/jab/markdownvalidator/MarkdownValidator.java .
 ```
 
 The repository currently has `skills-generator` and `site-generator` modules registered in the root `pom.xml`.
@@ -19,7 +19,7 @@ Markdown validation remains available to contributors and CI, but the validator 
 Before changing the validator implementation, record the current local runtime for the existing command:
 
 ```bash
-jbang .github/scripts/MarkdownValidator.java --verbose .
+jbang markdown-validator/src/main/java/info/jab/markdownvalidator/MarkdownValidator.java .
 ```
 
 Run from a representative clean checkout and capture the command, machine context when useful, elapsed time, and whether remote-link network conditions affected the result. This local baseline complements the CI baseline from issue #941 and becomes the before value for the implementation PR.

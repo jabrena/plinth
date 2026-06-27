@@ -2,11 +2,8 @@ package info.jab.markdownvalidator.adapter.in.cli;
 
 import info.jab.markdownvalidator.application.port.RemoteLinkRequester;
 import info.jab.markdownvalidator.application.port.RemoteLinkResponse;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.net.URI;
-import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
@@ -25,9 +22,8 @@ class MarkdownValidatorTest {
     void commandLine_preservesCurrentOptionsAndDefaults() {
         MarkdownValidatorCommand validator = validator(new FixedRequester(200));
 
-        new CommandLine(validator).parseArgs("--verbose", "--directories", "docs,skills", tempDir.toString());
+        new CommandLine(validator).parseArgs("--directories", "docs,skills", tempDir.toString());
 
-        assertThat(validator.verbose).isTrue();
         assertThat(validator.targetDirectories).containsExactly("docs", "skills");
         assertThat(validator.rootDir).isEqualTo(tempDir.toString());
 
@@ -50,11 +46,11 @@ class MarkdownValidatorTest {
     }
 
     @Test
-    void call_reportsMissingTargetDirectoriesInVerboseModeAndSucceedsWithNoFiles() {
+    void call_succeedsWhenTargetDirectoriesAreMissing() {
         MarkdownValidatorCommand validator = validator(new FixedRequester(200));
         validator.targetDirectories = java.util.List.of("missing");
 
-        int exitCode = new CommandLine(validator).execute("--verbose", tempDir.toString());
+        int exitCode = new CommandLine(validator).execute(tempDir.toString());
 
         assertThat(exitCode).isZero();
     }
@@ -66,35 +62,9 @@ class MarkdownValidatorTest {
         MarkdownValidatorCommand validator = validator(new FixedRequester(200));
         validator.targetDirectories = java.util.List.of("docs");
 
-        int exitCode = new CommandLine(validator).execute("--verbose", tempDir.toString());
+        int exitCode = new CommandLine(validator).execute(tempDir.toString());
 
         assertThat(exitCode).isZero();
-    }
-
-    @Test
-    void call_keepsStandardOutputQuiet() throws IOException {
-        Path docs = Files.createDirectories(tempDir.resolve("docs"));
-        Files.writeString(docs.resolve("guide.md"), "# Title%n%n[OK](https://example.test/ok)%n".formatted());
-        MarkdownValidatorCommand validator = validator(new FixedRequester(200));
-        validator.targetDirectories = java.util.List.of("docs");
-        ByteArrayOutputStream stdout = new ByteArrayOutputStream();
-        ByteArrayOutputStream stderr = new ByteArrayOutputStream();
-        PrintStream originalOut = System.out;
-        PrintStream originalErr = System.err;
-
-        int exitCode;
-        try {
-            System.setOut(new PrintStream(stdout, true, StandardCharsets.UTF_8));
-            System.setErr(new PrintStream(stderr, true, StandardCharsets.UTF_8));
-            exitCode = new CommandLine(validator).execute(tempDir.toString());
-        } finally {
-            System.setOut(originalOut);
-            System.setErr(originalErr);
-        }
-
-        assertThat(exitCode).isZero();
-        assertThat(stdout.toString(StandardCharsets.UTF_8)).isEmpty();
-        assertThat(stderr.toString(StandardCharsets.UTF_8)).isEmpty();
     }
 
     @Test

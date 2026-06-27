@@ -29,9 +29,6 @@ public class MarkdownValidatorCommand implements Callable<Integer> {
     static final List<String> DEFAULT_TARGET_DIRECTORIES = List.of(".cursor/rules", "skills", ".cursor/agents");
     static final Duration LINK_CHECK_TIMEOUT = Duration.ofSeconds(10);
 
-    @Option(names = { "-v", "--verbose" }, description = "Enable verbose output")
-    boolean verbose;
-
     @Option(
             names = { "-d", "--directories" },
             description = "Directories to scan for markdown files (default: .cursor/rules,skills,.cursor/agents)",
@@ -56,7 +53,7 @@ public class MarkdownValidatorCommand implements Callable<Integer> {
         Path root = Path.of(rootDir);
         logger.info("event=markdown.validation.started root={} targetDirectories={}", root, targetDirectories);
 
-        ValidationReport report = validationService.validate(root, targetDirectories, verbose);
+        ValidationReport report = validationService.validate(root, targetDirectories);
 
         if (report.rootMissing()) {
             logger.error("event=markdown.validation.root_missing root={}", root);

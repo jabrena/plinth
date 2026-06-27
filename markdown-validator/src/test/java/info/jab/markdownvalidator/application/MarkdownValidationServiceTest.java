@@ -29,7 +29,7 @@ class MarkdownValidationServiceTest {
     void validate_returnsRootMissingReportWhenRootDoesNotExist() throws IOException {
         MarkdownValidationService service = service(new FixedFinder(List.of()), new CountingRequester(Map.of()));
 
-        ValidationReport report = service.validate(tempDir.resolve("missing"), List.of("docs"), false);
+        ValidationReport report = service.validate(tempDir.resolve("missing"), List.of("docs"));
 
         assertThat(report.rootMissing()).isTrue();
     }
@@ -38,7 +38,7 @@ class MarkdownValidationServiceTest {
     void validate_returnsEmptyReportWhenNoMarkdownFilesExist() throws IOException {
         MarkdownValidationService service = service(new FixedFinder(List.of()), new CountingRequester(Map.of()));
 
-        ValidationReport report = service.validate(tempDir, List.of("docs"), false);
+        ValidationReport report = service.validate(tempDir, List.of("docs"));
 
         assertThat(report.noMarkdownFiles()).isTrue();
         assertThat(report.documentsValidated()).isZero();
@@ -52,7 +52,7 @@ class MarkdownValidationServiceTest {
                 Map.of(URI.create("https://example.test/a"), 404, URI.create("https://example.test/b"), 404));
         MarkdownValidationService service = service(new FixedFinder(List.of(first, second)), requester);
 
-        ValidationReport report = service.validate(tempDir, List.of("docs"), false);
+        ValidationReport report = service.validate(tempDir, List.of("docs"));
 
         assertThat(report.documentsFound()).isEqualTo(2);
         assertThat(report.documentsValidated()).isEqualTo(2);
@@ -69,7 +69,7 @@ class MarkdownValidationServiceTest {
                 new CountingRequester(Map.of(URI.create("https://example.test/missing.png"), 404));
         MarkdownValidationService service = service(new FixedFinder(List.of(document)), requester);
 
-        ValidationReport report = service.validate(tempDir, List.of("docs"), false);
+        ValidationReport report = service.validate(tempDir, List.of("docs"));
 
         assertThat(report.passed()).isTrue();
         assertThat(report.errors()).isEmpty();
@@ -83,7 +83,7 @@ class MarkdownValidationServiceTest {
         ConcurrentRequester requester = new ConcurrentRequester(2);
         MarkdownValidationService service = service(new FixedFinder(List.of(document)), requester);
 
-        ValidationReport report = service.validate(tempDir, List.of("docs"), false);
+        ValidationReport report = service.validate(tempDir, List.of("docs"));
 
         assertThat(report.passed()).isTrue();
         assertThat(requester.maxConcurrentRequests()).isGreaterThanOrEqualTo(2);
@@ -105,7 +105,7 @@ class MarkdownValidationServiceTest {
     private record FixedFinder(List<Path> files) implements MarkdownFileFinder {
 
         @Override
-        public List<Path> findMarkdownFiles(Path root, List<String> targetDirectories, boolean verbose) {
+        public List<Path> findMarkdownFiles(Path root, List<String> targetDirectories) {
             return files;
         }
     }

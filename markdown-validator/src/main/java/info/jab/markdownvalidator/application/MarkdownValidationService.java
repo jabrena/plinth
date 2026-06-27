@@ -18,17 +18,17 @@ public final class MarkdownValidationService {
         this.validationRunner = validationRunner;
     }
 
-    public ValidationReport validate(Path root, List<String> targetDirectories, boolean verbose) throws IOException {
+    public ValidationReport validate(Path root, List<String> targetDirectories) throws IOException {
         if (!Files.exists(root)) {
             return ValidationReport.rootMissing(root);
         }
 
-        List<Path> markdownFiles = fileFinder.findMarkdownFiles(root, targetDirectories, verbose);
+        List<Path> markdownFiles = fileFinder.findMarkdownFiles(root, targetDirectories);
         if (markdownFiles.isEmpty()) {
             return ValidationReport.empty(root);
         }
 
-        List<FileValidationResult> results = validationRunner.validate(markdownFiles, verbose);
+        List<FileValidationResult> results = validationRunner.validate(markdownFiles);
         return ValidationReport.completed(root, markdownFiles.size(), results);
     }
 }
