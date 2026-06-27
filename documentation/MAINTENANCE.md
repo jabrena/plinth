@@ -28,7 +28,7 @@ Can you analyze the last Java version, Java 26 from @All-JEPS.md if exist some J
 Review that the list doesn´t any broken link to @/.cursor with .md files
 
 # Prompt to provide a release changelog
-Can you update the current changelog for 0.16.0 comparing git commits in relation to 0.15.0 tag. Use  @https://keepachangelog.com/en/1.1.0/  rules
+Can you update the current changelog for 0.17.0 comparing git commits in relation to 0.16.0 tag. Use  @https://keepachangelog.com/en/1.1.0/  rules
 
 #Bump to a new snapshot
 @resources/ update version to 0.16.0 and pom.xml, maven modules and finally regenerate local skills with ./mvnw clean install -pl skills-generator
@@ -37,16 +37,16 @@ Can you update the current changelog for 0.16.0 comparing git commits in relatio
 
 ## Release process
 
-- [x] Update CHANGELOG.md
-- [x] Remove SNAPSHOT from .xml, .md & pom.xml
-- [x] Review git changes for hidden issues (Manual) https://github.com/jabrena/cursor-rules-java/compare/0.15.0...feature/release-0160
-- [x] Verify if all features were tested propertly
-- [x] Review if Agents need to add more Skills
-- [x] Review Skill validation output
-- [x] Review Skill security validation
-- [x] Last review in docs (Manual)
-- [x] Refresh public skills/ release output with `./mvnw clean install -pl skills-generator -P release`
-- [x] Verify that Pipeline is in Green
+- [ ] Update CHANGELOG.md
+- [ ] Remove SNAPSHOT from .xml, .md & pom.xml
+- [ ] Review git changes for hidden issues (Manual) https://github.com/jabrena/cursor-rules-java/compare/0.16.0...feature/release-0170
+- [ ] Verify if all features were tested propertly
+- [ ] Review if Agents need to add more Skills
+- [ ] Review Skill validation output
+- [ ] Review Skill security validation
+- [ ] Last review in docs (Manual)
+- [ ] Refresh public skills/ release output with `./mvnw clean install -pl skills-generator -P release`
+- [ ] Verify that Pipeline is in Green
 
 ---
 
