@@ -4,7 +4,7 @@
       id="114-java-maven-search">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
-    <version>0.17.0-SNAPSHOT</version>
+    <version>0.17.0</version>
     <license>Apache-2.0</license>
     <description>Routes Maven version questions to the right workflow by choosing project-local update report interpretation for a user’s own pom.xml, or explicit Maven Central artifact discovery using structured Search API fields and repository URL construction. Use when interpreting dependency, plugin, or property update reports; searching Maven Central; finding Maven coordinates; verifying groupId artifactId version; browsing versions; or constructing artifact URLs.</description>
   </metadata>

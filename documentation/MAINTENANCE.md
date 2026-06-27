@@ -31,7 +31,7 @@ Review that the list doesn´t any broken link to @/.cursor with .md files
 Can you update the current changelog for 0.17.0 comparing git commits in relation to 0.16.0 tag. Use  @https://keepachangelog.com/en/1.1.0/  rules
 
 #Bump to a new snapshot
-@resources/ update version to 0.16.0 and pom.xml, maven modules and finally regenerate local skills with ./mvnw clean install -pl skills-generator
+@resources/ update version to 0.17.0 and pom.xml, maven modules and finally regenerate local skills with ./mvnw clean install -pl skills-generator
 
 ```
 
@@ -73,11 +73,11 @@ cd target && npx skills add jabrena/cursor-rules-java --all --agent cursor && cd
 Can you update the current changelog for 0.14.0 comparing git commits in relation to 0.13.0 tag. Use  @https://keepachangelog.com/en/1.1.0/  rules
 
 # Maven command to update the maven version to next minor version
-./mvnw versions:set -DnewVersion=0.15.0-SNAPSHOT
+./mvnw versions:set -DnewVersion=0.17.0
 ./mvnw versions:commit
 
 # Prompt to update the project to a new version
-Update xml files from @resources/ and update the version to 0.15.0-SNAPSHOT removing Snapshot.
+Update xml files from @resources/ and update the version to 0.17.0 removing Snapshot.
 Update @pom.xml with the new version 0.15.0-SNAPSHOT Regenerate local skills with ./mvnw clean install -pl skills-generator. If preparing release output, refresh skills/ with ./mvnw clean install -pl skills-generator -P release
 
 Update md files from @resources/ and update the version to 0.15.0 removing Snapshot.

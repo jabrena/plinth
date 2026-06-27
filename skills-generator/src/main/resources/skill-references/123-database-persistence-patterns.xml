@@ -2,7 +2,7 @@
 <prompt xmlns:xi="http://www.w3.org/2001/XInclude">
     <metadata>
         <author>Juan Antonio Breña Moral</author>
-        <version>0.17.0-SNAPSHOT</version>
+        <version>0.17.0</version>
         <license>Apache-2.0</license>
         <title>Java Design and Integration Patterns</title>
         <description>Use when designing or reviewing database and persistence patterns — repositories, unit of work, data mapper, aggregate boundaries, optimistic locking, migrations, CQRS read models, soft delete, multi-tenancy, sharding, connection pools, and N+1 avoidance.</description>

@@ -4,7 +4,7 @@
       id="707-technologies-onion-architecture">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
-    <version>0.17.0-SNAPSHOT</version>
+    <version>0.17.0</version>
     <license>Apache-2.0</license>
     <description>Use when you need framework-agnostic Onion architecture guidance for Java projects - dependency direction between domain, application/use-case, ports, adapters, and infrastructure; package or module boundary review; infrastructure leakage detection; optional ArchUnit architecture tests; and evidence-backed remediation. This should trigger for requests such as Review Onion architecture; Review architecture boundaries; Enforce dependency direction; Add ArchUnit Onion architecture tests; Detect infrastructure leakage in domain code; Improve ports and adapters boundaries.</description>
   </metadata>
