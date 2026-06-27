@@ -10,18 +10,18 @@ Evidence rules:
 4. Redact passwords, API keys, tokens, session IDs, private keys, connection strings, credentials, trading credentials, broker secrets, venue secrets, client confidential information, and confidential trading strategy details as `[REDACTED_SECRET]` or `[REDACTED_SENSITIVE]` before storing or repeating the answer. Record only the type, affected component, and control gap.
 5. Mark unresolved items as `Unknown` and include them in the escalation section.
 6. Do **not** start final classification or the engineering report until all 20 questions have an evidence-backed answer or an `Unknown` marker.
-7. If evidence indicates investment advice, portfolio management, order execution, dealing on own account, algorithmic trading, direct electronic access, retail-client impact, unclear client classification, missing suitability or appropriateness evidence, missing best-execution evidence, or transaction-reporting concerns, record it as a compliance escalation item before release recommendations.
+7. If evidence indicates investment advice, portfolio management, order-execution evidence, dealing on own account, algorithmic-trading governance, direct-electronic-access governance, retail-client impact, unclear client classification, missing suitability or appropriateness evidence, missing best-execution evidence, or transaction-reporting concerns, record it as a compliance escalation item before release recommendations.
 8. Do **not** include raw secrets, credentials, tokens, keys, session IDs, private keys, connection strings, trading credentials, broker secrets, venue secrets, client confidential information, or confidential trading strategy in notes, evidence inventories, summaries, or reports.
 
 The first review output after reading reference materials should summarize the trusted evidence sources and list any questionnaire items that remain `Unknown`.
 
 ---
 
-Use this questionnaire before recommending controls for a Java enterprise system that supports investment services, investment activities, financial instruments, client onboarding, advisory workflows, portfolio management, order handling, execution, algorithmic trading, market access, transaction evidence, or regulated record keeping.
+Use this questionnaire before recommending controls for a Java enterprise system that supports investment services, investment activities, financial instruments, client onboarding, advisory workflows, portfolio management, order-handling evidence, execution evidence, algorithmic-trading governance, market-access governance, transaction evidence, or regulated record keeping.
 
 **Purpose:**
 
-- Resolve gaps about investment-service scope, financial instruments, clients, order flows, trading venues, algorithms, records, and owners.
+- Resolve gaps about investment-service scope, financial instruments, clients, order-evidence flows, trading-venue evidence, algorithm governance, records, and owners.
 - Identify MiFID II engineering signals without making legal conclusions.
 - Map investment-service concerns to engineering controls and reviewable evidence.
 - Decide which owners must review the system before production use.
@@ -41,9 +41,9 @@ Options:
 - Client onboarding, classification, entitlement, or product-governance workflow
 - Investment advice, recommendation, or suitability workflow
 - Appropriateness, knowledge, experience, warning, or disclosure workflow
-- Order reception, transmission, routing, execution, aggregation, allocation, cancellation, or correction workflow
+- Order reception, transmission, routing-evidence, execution-evidence, aggregation, allocation, cancellation, or correction workflow
 - Portfolio management or discretionary management workflow
-- Algorithmic trading, smart order routing, quoting, hedging, or market-making workflow
+- Algorithmic-trading governance, smart-order-routing evidence, quoting evidence, hedging evidence, or market-making evidence workflow
 - Trading venue, broker, market data, direct electronic access, or market-connectivity integration
 - Transaction, audit, record-keeping, reporting, monitoring, or compliance evidence workflow
 - No investment-service concern expected (specify)
@@ -59,7 +59,7 @@ Options (select all that apply):
 - Dealing on own account
 - Portfolio management
 - Investment advice
-- Underwriting or placing financial instruments
+- Underwriting or placement evidence for financial instruments
 - Operation of a trading facility
 - Ancillary services, custody, safekeeping, research, or foreign exchange connected to investment services
 - No investment service or activity expected
@@ -175,7 +175,7 @@ Options (select all that apply):
 - Advice or personal recommendation classification
 - Product target-market or distribution restriction
 - Best-execution policy interpretation
-- Algorithmic trading or direct electronic access obligation
+- Algorithmic-trading or direct-electronic-access governance obligation
 - Transaction reporting, record keeping, or retention interpretation
 - No interpretation gap identified
 - Unknown
@@ -186,12 +186,12 @@ Options (select all that apply):
 
 Questions 11-15. Complete each item from trusted evidence or mark it `Unknown`.
 
-**Question 11**: Does the system process orders, executions, allocations, cancellations, or corrections?
+**Question 11**: Does the system record or review order, execution, allocation, cancellation, or correction evidence?
 
 Options (select all that apply):
 
 - Order entry or order validation
-- Order routing or execution venue selection
+- Order-routing evidence or execution-venue-selection evidence
 - Aggregation or allocation
 - Cancellation, amendment, correction, or bust workflow
 - Execution confirmation or client report
@@ -212,25 +212,25 @@ Options (select all that apply):
 - Not applicable
 - Unknown
 
-**Question 13**: Are algorithmic trading, high-frequency trading, market making, or direct electronic access involved?
+**Question 13**: Are algorithmic-trading governance, high-frequency-trading evidence, market-making evidence, or direct-electronic-access governance involved?
 
 Options (select all that apply):
 
-- Algorithmic trading logic
-- Smart order routing or automated venue selection
+- Algorithmic-trading governance logic
+- Smart-order-routing evidence or automated-venue-selection evidence
 - High-frequency trading technique signal
 - Market making, quoting, hedging, or liquidity provision
 - Direct electronic access or sponsored access
-- Pre-trade risk controls, throttles, circuit breakers, or kill switches
-- No algorithmic trading or direct electronic access expected
+- Pre-trade-risk-control evidence, throttles, circuit breakers, or emergency-stop evidence
+- No algorithmic-trading or direct-electronic-access governance expected
 - Unknown
 
-**Question 14**: Are trading venue, broker, market data, clearing, or reporting integrations involved?
+**Question 14**: Are trading venue, broker, market data, clearing, or reporting integration evidence involved?
 
 Options (select all that apply):
 
 - Regulated market, MTF, OTF, systematic internaliser, broker, or venue gateway
-- FIX, binary protocol, REST, messaging, or file-based trading integration
+- Trading protocol, REST, messaging, or file-based integration evidence
 - Market data feed or reference data feed
 - Clearing, settlement, custody, or safekeeping integration
 - Transaction reporting, publication, or reconciliation integration
@@ -238,13 +238,13 @@ Options (select all that apply):
 - No external trading integration expected
 - Unknown
 
-**Question 15**: Which trading controls are evidenced and tested?
+**Question 15**: Which trading-control evidence is documented and tested?
 
 Options (select all that apply):
 
 - Pre-trade risk checks
 - Order throttling or order-to-trade controls
-- Circuit breaker or kill switch
+- Circuit breaker or emergency-stop evidence
 - Market data stale-feed protection
 - Algorithm inventory and owner approval
 - Simulation, market replay, stress, or failover tests
@@ -264,7 +264,7 @@ Questions 16-20. Complete each item from trusted evidence or mark it `Unknown`.
 Options (select all that apply):
 
 - Client classification, advice, suitability, or appropriateness records
-- Order, execution, allocation, cancellation, or correction records
+- Order, execution, allocation, cancellation, or correction evidence records
 - Transaction reporting or reconciliation evidence
 - Algorithm deployment, approval, and monitoring records
 - Clock synchronisation and timestamp precision evidence
@@ -279,7 +279,7 @@ Options (select all that apply):
 
 - Metrics, logs, traces, dashboards, and alerts for regulated workflows
 - Evidence-safe logging with secret and personal-data redaction
-- Trading, order, algorithm, venue, or report failure alerts
+- Trading-control, order-evidence, algorithm-governance, venue-evidence, or report-failure alerts
 - Compliance or operations monitoring dashboard
 - Incident escalation and post-incident review workflow
 - Complaint or client-impact escalation workflow
@@ -294,7 +294,7 @@ Options (select all that apply):
 - Compliance, risk, trading, operations, or legal approval gate
 - Algorithm inventory and deployment approval
 - Database migration approval and rollback evidence
-- Kafka, FIX, API, file, or reporting schema compatibility check
+- Kafka, trading-protocol, API, file, or reporting schema compatibility check
 - Feature flag, canary, rollback, or emergency stop control
 - Production release record and owner signoff
 - Direct-to-main change path or missing pre-merge review concern
@@ -321,8 +321,8 @@ Options (select all that apply):
 - Unclear regulated-service scope or investment-firm status
 - Unclear client category, advice classification, or client-impact decision
 - Missing suitability, appropriateness, product governance, or disclosure evidence
-- Missing order handling, best-execution, or client-instruction evidence
-- Missing algorithmic trading, market access, kill-switch, or risk-control evidence
+- Missing order-handling, best-execution, or client-instruction evidence
+- Missing algorithmic-trading governance, market-access governance, emergency-stop, or risk-control evidence
 - Missing timestamp, record-keeping, retention, replay, or audit evidence
 - Missing compliance, legal, risk, trading, operations, security, or data-protection owner approval
 - Critical controls are documented and release can proceed with conditions

@@ -12,13 +12,13 @@
     <role>You are a senior Java enterprise architect and financial-services compliance reviewer using the MiFID II structure to map investment-service regulatory themes to engineering controls and owner handoffs</role>
 
     <goal><![CDATA[
-Summarize the official title, chapter, article, and annex structure of Directive 2014/65/EU (MiFID II) for engineering review of Java enterprise systems, investment-service tooling, trading platforms, advisory workflows, client onboarding services, order management systems, algorithmic trading controls, market-connectivity gateways, CI/CD pipelines, and operational workflows.
+Summarize the official title, chapter, article, and annex structure of Directive 2014/65/EU (MiFID II) for engineering evidence review of Java enterprise systems, investment-service tooling, advisory workflows, client onboarding services, order-lifecycle record systems, algorithmic-trading governance evidence, market-connectivity governance, CI/CD pipelines, and operational workflows.
 
 Source reviewed: [EUR-Lex Directive 2014/65/EU (MiFID II)](https://eur-lex.europa.eu/eli/dir/2014/65/oj/eng).
 
 This reference is not legal advice. Use it to orient engineering discovery, architecture review, compliance evidence collection, release gates, and escalation conversations with legal, compliance, risk, product, operations, trading, market-structure, data-protection, security, executive accountability, and business owners.
 
-Use `810-regulations-eu-mifid-ii-engineering-examples.md` for Java examples and implementation control patterns. Keep this chapters summary focused on MiFID II Directive structure and article-level themes.
+Use `810-regulations-eu-mifid-ii-engineering-examples.md` for Java evidence examples and review-control patterns. Keep this chapters summary focused on MiFID II Directive structure and article-level themes.
 
 Questionnaire asset: [MiFID II engineering review questionnaire](../assets/questions/810-mifid-ii-engineering-review-questionnaire.md).
 
@@ -26,7 +26,7 @@ Report template asset: [MiFID II engineering review report template](../assets/r
 
 ## [Title I: Scope and definitions](https://eur-lex.europa.eu/eli/dir/2014/65/oj/eng)
 
-Sets the subject matter, scope, exemptions, and definitions for investment services, investment activities, financial instruments, investment firms, trading venues, client categories, algorithmic trading, direct electronic access, and related market concepts. For Java teams, this title is the starting point for identifying whether an application, API, order flow, advisory workflow, trading gateway, market data integration, or algorithm may need MiFID II-aware evidence.
+Sets the subject matter, scope, exemptions, and definitions for investment services, investment activities, financial instruments, investment firms, trading venues, client categories, algorithmic trading, direct electronic access, and related market concepts. For Java teams, this title is the starting point for identifying whether an application, API, order-evidence flow, advisory workflow, market-connectivity evidence, market data integration, or algorithm-governance record may need MiFID II-aware evidence.
 
 Article map:
 - Article 1, Subject matter: establishes rules for investment firms, market operators, data reporting services providers, and third-country firms providing investment services or activities through branches.
@@ -35,7 +35,7 @@ Article map:
 - Article 4, Definitions: defines investment services and activities, financial instruments, investment advice, execution, dealing, portfolio management, client categories, trading venues, algorithmic trading, high-frequency algorithmic trading technique, direct electronic access, and related concepts.
 
 Engineering impact:
-- Record whether the Java system supports investment advice, portfolio management, order reception and transmission, order execution, dealing on own account, underwriting, placing, operation of a trading facility, ancillary services, or market connectivity.
+- Record whether the Java system supports investment advice, portfolio management, order-reception evidence, order-transmission evidence, order-execution evidence, dealing-on-own-account evidence, underwriting evidence, placement evidence, operation-of-a-trading-facility evidence, ancillary services, or market-connectivity evidence.
 - Record financial-instrument types, client types, trading venues, brokers, market data sources, product owners, compliance owners, risk owners, operations owners, trading owners, and technical owners.
 - Treat scope, exemption, investment-firm status, jurisdiction, client category, financial-instrument classification, and investment-service classification as qualified owner decisions.
 
@@ -53,7 +53,7 @@ Article map:
 
 Engineering impact:
 - Treat client classification, suitability, appropriateness, advice evidence, product governance, conflicts, best execution, order handling, client instructions, tied-agent data, and eligible-counterparty workflows as audit-relevant engineering surfaces.
-- Require evidence for client disclosures, acknowledgements, warnings, suitability reports, order state transitions, execution venues, routing decisions, execution quality, aggregation and allocation, transaction reconstruction, algorithm inventory, deployment approvals, monitoring alerts, and incident escalation.
+- Require evidence for client disclosures, acknowledgements, warnings, suitability reports, order state transitions, execution-venue records, routing-decision records, execution-quality records, aggregation and allocation, transaction reconstruction, algorithm inventory, deployment approvals, monitoring alerts, and incident escalation.
 - Escalate legal classification, investment advice, product target market, inducements, conflicts, best-execution policy interpretation, and eligible-counterparty treatment to qualified owners.
 
 ## [Title III: Regulated markets](https://eur-lex.europa.eu/eli/dir/2014/65/oj/eng)
@@ -68,7 +68,7 @@ Article map:
 - Articles 51-57: admission of instruments, suspension/removal, access arrangements, monitoring, position limits, position-management controls, and position reporting.
 
 Engineering impact:
-- Preserve evidence for trading-system resilience, capacity, throttling, circuit breakers, pre-trade controls, algorithm testing, direct electronic access permissions, timestamp precision, clock-source configuration, order-to-trade metrics, market-making obligations, and commodity-derivatives position controls.
+- Preserve evidence for trading-system resilience, capacity, throttling, circuit breakers, pre-trade controls, algorithm testing, direct-electronic-access governance, timestamp precision, clock-source configuration, order-to-trade metrics, market-making evidence, and commodity-derivatives position controls.
 - Make trading venue integrations observable and reconstructable without exposing credentials, venue secrets, confidential strategies, or unnecessary personal data.
 - Escalate venue rule interpretation, market-making commitments, direct electronic access, tick-size interpretation, and position-limit decisions to trading, compliance, risk, and legal owners.
 
@@ -111,7 +111,7 @@ Covers delegated acts, implementing acts, reports, reviews, transposition, amend
 
 Engineering impact:
 - Track regulatory-change intake for long-lived Java systems, especially trading controls, reporting fields, client disclosure workflows, product governance, algorithmic controls, and retention rules.
-- Review systems when product scope, instrument coverage, order routing, algorithm logic, market connectivity, reporting schemas, client journeys, or owner decisions change.
+- Review systems when product scope, instrument coverage, order-evidence logic, algorithm-governance logic, market-connectivity evidence, reporting schemas, client journeys, or owner decisions change.
 
 ## Annex map for engineering review
 

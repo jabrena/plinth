@@ -1,6 +1,6 @@
 # MiFID II Engineering Review Report
 
-Use this template after reviewing `../../references/810-regulations-eu-mifid-ii-chapters-summary.md`, answering or explicitly deferring `../questions/810-mifid-ii-engineering-review-questionnaire.md`, and matching the relevant examples from `../../references/810-regulations-eu-mifid-ii-engineering-examples.md` for investment-service scope, client classification, suitability, appropriateness, order handling, best execution, algorithmic trading, record keeping, monitoring, and compliance evidence handoff.
+Use this template after reviewing `../../references/810-regulations-eu-mifid-ii-chapters-summary.md`, answering or explicitly deferring `../questions/810-mifid-ii-engineering-review-questionnaire.md`, and matching the relevant examples from `../../references/810-regulations-eu-mifid-ii-engineering-examples.md` for investment-service scope, client classification, suitability, appropriateness, order-handling evidence, best-execution evidence, algorithmic-trading governance, record keeping, monitoring, and compliance evidence handoff.
 
 This report is not legal advice. Use it as engineering evidence for legal, compliance, risk, product, operations, trading, market-structure, data-protection, security, architecture, executive accountability, and business-owner review.
 
@@ -29,7 +29,7 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 - Possible investment-firm or trading-venue signal:
 - Financial instruments or product types:
 - Client or counterparty categories:
-- Advisory, portfolio, order, execution, trading, reporting, or record-keeping workflow:
+- Advisory, portfolio, order-evidence, execution-evidence, trading-governance, reporting, or record-keeping workflow:
 - Deployment geography:
 - Environments in scope:
 - External venues, brokers, data vendors, or reporting providers:
@@ -53,9 +53,9 @@ The purpose of this report is to increase awareness of potential gaps in the sys
 - Data stores, queues, topics, files, indexes, caches, and reporting stores:
 - Client onboarding, classification, entitlement, and product-governance workflows:
 - Suitability, appropriateness, advice, disclosure, warning, and report workflows:
-- Order entry, validation, routing, execution, aggregation, allocation, cancellation, and correction workflows:
-- Best-execution, client-instruction, venue-selection, and execution-quality evidence:
-- Algorithmic trading, smart order routing, market making, direct electronic access, and market-access controls:
+- Order entry, validation, routing-evidence, execution-evidence, aggregation, allocation, cancellation, and correction workflows:
+- Best-execution, client-instruction, venue-selection evidence, and execution-quality evidence:
+- Algorithmic-trading governance, smart-order-routing evidence, market-making evidence, direct-electronic-access governance, and market-access governance controls:
 - Clock synchronisation, timestamp precision, retention, replay, and reconstruction:
 - IAM, secrets, keys, trading credentials, and privileged operations:
 - CI/CD workflows and deployment paths:
@@ -70,8 +70,8 @@ This section is not a legal finding. Use it to list concrete potential MiFID II 
 | -------------------------------------------- | ----------------------- | ------------------------------- | ----------------------------- | -------------- | --------------------- | ------------------ |
 | Unclear investment-service scope, investment-firm status, financial-instrument classification, client category, jurisdiction, or exemption | Scope / definitions / exemptions / annexes | [Title I and Annexes](https://eur-lex.europa.eu/eli/dir/2014/65/oj/eng) | TBD | None identified / Potential gap / Confirmed concern | Legal / compliance / product / risk | TBD |
 | Missing client classification, product governance, suitability, appropriateness, advice, warning, disclosure, or client-report evidence | Investor protection / client information / suitability / appropriateness | [Title II](https://eur-lex.europa.eu/eli/dir/2014/65/oj/eng) | TBD | None identified / Potential gap / Confirmed concern | Product / compliance / legal / risk | TBD |
-| Missing order handling, client instruction, aggregation, allocation, cancellation, correction, best-execution, venue-selection, or execution-quality evidence | Best execution / client order handling / transaction evidence | [Title II](https://eur-lex.europa.eu/eli/dir/2014/65/oj/eng) | TBD | None identified / Potential gap / Confirmed concern | Trading / operations / compliance / architecture | TBD |
-| Missing algorithmic trading, market access, pre-trade risk, throttle, circuit breaker, kill switch, simulation, deployment approval, or monitoring evidence | Algorithmic trading / organisational requirements / systems resilience | [Title II and Title III](https://eur-lex.europa.eu/eli/dir/2014/65/oj/eng) | TBD | None identified / Potential gap / Confirmed concern | Trading / risk / operations / compliance / security | TBD |
+| Missing order-handling, client instruction, aggregation, allocation, cancellation, correction, best-execution, venue-selection, or execution-quality evidence | Best execution / client order handling / transaction evidence | [Title II](https://eur-lex.europa.eu/eli/dir/2014/65/oj/eng) | TBD | None identified / Potential gap / Confirmed concern | Trading / operations / compliance / architecture | TBD |
+| Missing algorithmic-trading governance, market-access governance, pre-trade-risk evidence, throttle evidence, circuit-breaker evidence, emergency-stop evidence, simulation, deployment approval, or monitoring evidence | Algorithmic trading / organisational requirements / systems resilience | [Title II and Title III](https://eur-lex.europa.eu/eli/dir/2014/65/oj/eng) | TBD | None identified / Potential gap / Confirmed concern | Trading / risk / operations / compliance / security | TBD |
 | Missing timestamp precision, clock synchronisation, immutable audit trail, record retention, replay, or reconstruction evidence | Record keeping / business clocks / auditability | [Article 50 and related record-keeping areas](https://eur-lex.europa.eu/eli/dir/2014/65/oj/eng) | TBD | None identified / Potential gap / Confirmed concern | Operations / compliance / architecture / security | TBD |
 | Missing trading venue, broker, data vendor, reporting provider, transaction reporting, publication, reconciliation, or correction evidence | Regulated markets / data reporting / provider integrations | [Title III and Title V](https://eur-lex.europa.eu/eli/dir/2014/65/oj/eng) | TBD | None identified / Potential gap / Confirmed concern | Operations / reporting / compliance / legal | TBD |
 | Incomplete monitoring, incident, complaint, change-control, release approval, owner handoff, or competent-authority evidence path | Supervision / competent authorities / sanctions / governance evidence | [Titles VI-VIII](https://eur-lex.europa.eu/eli/dir/2014/65/oj/eng) | TBD | None identified / Potential gap / Confirmed concern | Compliance / risk / operations / executive accountability | TBD |
@@ -82,13 +82,13 @@ This section is not a legal finding. Use it to list concrete potential MiFID II 
 - Client classification and entitlement records:
 - Product governance and target-market evidence:
 - Suitability, appropriateness, advice, warning, and client-report workflows:
-- Order lifecycle audit:
+- Order lifecycle evidence audit:
 - Client instruction capture:
 - Best-execution policy and execution-quality metrics:
 - Aggregation, allocation, cancellation, correction, and reconstruction:
 - Algorithm inventory and deployment approval:
-- Pre-trade risk checks:
-- Throttling, circuit breakers, kill switches, and emergency stop:
+- Pre-trade-risk evidence:
+- Throttling, circuit breakers, and emergency-stop evidence:
 - Market data stale-feed protection:
 - Trading venue, broker, and reporting provider controls:
 - Clock synchronisation and timestamp precision:
@@ -113,7 +113,7 @@ This section is not a legal finding. Use it to list concrete potential MiFID II 
 - Best-execution review evidence:
 - Algorithm inventory:
 - Algorithm testing, simulation, market replay, or stress evidence:
-- Kill-switch, throttle, or circuit-breaker test evidence:
+- Emergency-stop, throttle, or circuit-breaker test evidence:
 - Clock synchronisation evidence:
 - Retention, replay, reconstruction, or audit evidence:
 - Transaction reporting or reconciliation evidence:
@@ -159,8 +159,8 @@ This section is not a legal finding. Use it to list concrete potential MiFID II 
 - Items requiring investment-service or investment-firm classification:
 - Items requiring jurisdiction or cross-border review:
 - Items requiring client category, advice, suitability, or appropriateness decision:
-- Items requiring best-execution or order handling review:
-- Items requiring algorithmic trading, direct electronic access, or market-access review:
+- Items requiring best-execution or order-handling review:
+- Items requiring algorithmic-trading governance, direct-electronic-access governance, or market-access governance review:
 - Items requiring transaction reporting, record keeping, retention, or data-protection review:
 - Items requiring security exception:
 - Items requiring architecture decision:

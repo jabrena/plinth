@@ -6,7 +6,7 @@
         <version>0.17.0-SNAPSHOT</version>
         <license>Apache-2.0</license>
         <title>MiFID II Regulation for Java Enterprise Investment Service Controls</title>
-        <description>Use as Java-focused MiFID II engineering examples for investment-service scope triage, client classification, suitability, appropriateness, order handling, best execution, algorithmic trading controls, record keeping, monitoring, and compliance evidence handoff.</description>
+        <description>Use as Java-focused MiFID II engineering examples for investment-service scope triage, client classification, suitability, appropriateness, order-handling evidence, best-execution evidence, algorithmic-trading governance controls, record keeping, monitoring, and compliance evidence handoff.</description>
     </metadata>
 
     <role>You are a senior Java enterprise architect and financial-services compliance reviewer who translates MiFID II themes into concrete Java engineering examples and reviewable evidence patterns</role>
@@ -25,7 +25,8 @@
         </constraints-description>
         <constraint-list>
             <constraint>**NOT LEGAL ADVICE**: Treat the examples as engineering control patterns and escalation aids, not legal findings</constraint>
-            <constraint>**EVIDENCE FIRST**: Prefer reviewable evidence over claims that client classification, suitability, appropriateness, order handling, best execution, algorithmic trading, timestamping, or record-keeping controls exist</constraint>
+            <constraint>**EVIDENCE FIRST**: Prefer reviewable evidence over claims that client classification, suitability, appropriateness, order-handling, best-execution, algorithmic-trading governance, timestamping, or record-keeping controls exist</constraint>
+            <constraint>**REVIEW ONLY**: Use these examples for offline evidence review, auditability, control design, and owner handoff; live trading operations remain outside their scope</constraint>
             <constraint>**OWNER HANDOFFS**: Include product, compliance, risk, operations, trading, data, security, architecture, and legal owners in control records</constraint>
             <constraint>**SAFE EVIDENCE**: Preserve MiFID II evidence without exposing secrets, trading credentials, broker secrets, venue secrets, personal data, client confidential information, business secrets, or confidential trading strategy</constraint>
             <constraint>**RELEASE READINESS**: Do not mark a system ready when critical MiFID II controls are undocumented, untested, ownerless, not reconstructable, or dependent on unclear regulatory interpretation</constraint>
@@ -42,16 +43,16 @@
             </example-header>
             <example-description>
                 <![CDATA[
-                Use this pattern when a Java system touches investment advice, portfolio management, order reception, order routing, execution, market access, product governance, transaction evidence, or client records. The goal is not to decide legal applicability, but to make the system scope reviewable by qualified owners.
+                Use this pattern when a Java system touches investment advice, portfolio management, order reception records, order-handling records, execution evidence, market-access governance, product governance, transaction evidence, or client records. The goal is not to decide legal applicability or operate trading workflows, but to make the system scope reviewable by qualified owners.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
                     <code-block language="yaml"><![CDATA[mifidScopeInventory:
-  service: equity-order-routing-api
+  service: equity-order-evidence-api
   possibleInvestmentServiceSignals:
-    - reception and transmission of orders
-    - execution of orders on behalf of clients
+    - order reception evidence
+    - execution evidence for owner review
   financialInstruments: [listed-equities, etfs]
   clientCategories: [retail, professional]
   tradingVenues: [regulated-market, mtf]
@@ -62,8 +63,8 @@
     risk: trading-risk
     operations: brokerage-operations
   evidence:
-    architectureDecision: adr-2026-014-order-routing
-    dataLineage: lineage:order-routing-v4
+    architectureDecision: adr-2026-014-order-evidence
+    dataLineage: lineage:order-evidence-v4
     ownerReview: evidence:mifid-scope-review-2026-06
   openQuestions:
     - legal confirmation of service classification
@@ -190,41 +191,36 @@
             </example-header>
             <example-description>
                 <![CDATA[
-                Use this pattern when an order management or routing service receives, validates, routes, aggregates, allocates, executes, cancels, or corrects orders. The review should make order decisions reconstructable from evidence, including client instructions and routing policy versions.
+                Use this pattern when an order management service records evidence about received, validated, aggregated, allocated, cancelled, corrected, routed, or executed orders. The review should make order decisions reconstructable from stored evidence, including client instructions and policy versions, without causing live order activity.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="java"><![CDATA[public RoutedOrder route(ClientOrder order) {
-    orderPolicy.requireTradable(order.instrumentId(), order.clientId());
-    ClientInstruction instruction = instructionStore.currentInstruction(order.orderId());
-    RoutingDecision decision = routingPolicy.selectVenue(
-        order,
-        instruction,
-        executionPolicy.currentVersion(),
-        marketData.snapshot(order.instrumentId())
+                    <code-block language="java"><![CDATA[public OrderDecisionEvidence reviewOrderDecision(OrderDecisionRecord record) {
+    ClientInstruction instruction = instructionStore.requireInstruction(record.orderId());
+    ExecutionPolicyVersion policy = executionPolicyRegistry.requireVersion(record.policyVersion());
+    MarketSnapshotReference snapshot = marketDataEvidence.requireSnapshot(record.marketSnapshotId());
+
+    OrderDecisionEvidence evidence = new OrderDecisionEvidence(
+        record.orderId(),
+        record.clientId(),
+        record.instrumentId(),
+        instruction.id(),
+        policy.version(),
+        record.selectedVenue(),
+        snapshot.id(),
+        record.decisionTimestamp(),
+        evidenceHasher.hash(record.safeDecisionPayload())
     );
 
-    RoutedOrder routed = gateway.submit(decision.venue(), order);
-
-    orderAudit.record(new OrderRoutingAuditEvent(
-        order.orderId(),
-        order.clientId(),
-        order.instrumentId(),
-        instruction.id(),
-        decision.policyVersion(),
-        decision.venue(),
-        routed.venueOrderId(),
-        clock.instant()
-    ));
-
-    bestExecutionMetrics.recordDecision(order, decision);
-    return routed;
+    orderEvidenceStore.append(evidence);
+    bestExecutionEvidence.record(evidence);
+    return evidence;
 }]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
-                    <code-block language="java"><![CDATA[public RoutedOrder route(ClientOrder order) {
-    return gateway.submit("DEFAULT_VENUE", order);
+                    <code-block language="java"><![CDATA[public void saveOrderEvidence(OrderDecisionRecord record) {
+    log.info("order decision {}", record);
 }]]></code-block>
                 </bad-example>
             </code-examples>
@@ -233,11 +229,11 @@
         <example number="5" id="algorithmic-trading-release-gate">
             <example-header>
                 <example-title>Gate algorithmic trading releases with controls and approvals</example-title>
-                <example-subtitle>algorithm inventory, testing, throttles, kill switch, monitoring, and change control</example-subtitle>
+                <example-subtitle>algorithm inventory, testing, throttles, emergency stop, monitoring, and change control</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                Use this pattern when a Java deployment changes algorithmic trading logic, market-access connectivity, throttling, pricing, hedging, quoting, smart order routing, or automated order generation. The release gate should fail closed when approval, testing, monitoring, or operational control evidence is missing.
+                Use this pattern when a Java deployment changes algorithmic-trading governance logic, market-access connectivity configuration, throttling controls, pricing evidence, hedging evidence, quoting evidence, smart-order-routing evidence, or automated-order-generation evidence. The release gate should fail closed when approval, testing, monitoring, or operational control evidence is missing; the example is for review records and must not operate trading workflows.
                 ]]>
             </example-description>
             <code-examples>
@@ -259,9 +255,9 @@
     throttling: orders-per-second policy v3
     maxOrderValue: risk-limit-policy v5
     circuitBreaker: enabled
-    manualKillSwitch: runbook:algo-kill-switch
+    emergencyStopEvidence: runbook:algo-emergency-stop
   monitoring:
-    dashboards: [algo-latency, order-rejects, throttle-events, kill-switch-state]
+    dashboards: [algo-latency, order-rejects, throttle-events, emergency-stop-state]
     alerts: [unexpected-order-rate, venue-reject-spike, stale-market-data]
   approvals:
     trading: approved
@@ -332,7 +328,7 @@
                 <good-example>
                     <code-block language="markdown"><![CDATA[| Potential violation or non-compliance signal | MiFID II reference area | Associated official-source link | Evidence from reviewed system | Current status | Required owner review | Engineering action |
 | --- | --- | --- | --- | --- | --- | --- |
-| Missing owner-approved algorithm deployment evidence | Algorithmic trading / organisational requirements | https://eur-lex.europa.eu/eli/dir/2014/65/oj/eng | Deployment changes smart-router-v7 but no risk or compliance approval record was provided | Potential gap | Trading / risk / compliance / operations | Add release gate requiring algorithm inventory, market replay, kill-switch test, and owner approval evidence |]]></code-block>
+| Missing owner-approved algorithm deployment evidence | Algorithmic trading / organisational requirements | https://eur-lex.europa.eu/eli/dir/2014/65/oj/eng | Deployment changes smart-router-v7 but no risk or compliance approval record was provided | Potential gap | Trading / risk / compliance / operations | Add release gate requiring algorithm inventory, market replay, emergency-stop test, and owner approval evidence |]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
                     <code-block language="markdown"><![CDATA[System is MiFID II compliant. No further action.]]></code-block>
