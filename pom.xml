@@ -58,6 +58,8 @@
         <junit.version>6.1.0</junit.version>
         <assertj.version>3.27.7</assertj.version>
         <jackson.version>2.22.0</jackson.version>
+        <picocli.version>4.7.5</picocli.version>
+        <commonmark.version>0.21.0</commonmark.version>
         <jspecify.version>1.0.0</jspecify.version>
         <error-prone.version>2.50.0</error-prone.version>
         <nullaway.version>0.13.7</nullaway.version>
@@ -81,6 +83,7 @@
     </properties>
 
     <modules>
+        <module>markdown-validator</module>
         <module>skills-generator</module>
         <module>site-generator</module>
     </modules>
@@ -109,6 +112,16 @@
                 <artifactId>assertj-core</artifactId>
                 <version>${assertj.version}</version>
                 <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>info.picocli</groupId>
+                <artifactId>picocli</artifactId>
+                <version>${picocli.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.commonmark</groupId>
+                <artifactId>commonmark</artifactId>
+                <version>${commonmark.version}</version>
             </dependency>
             <dependency>
                 <groupId>com.fasterxml.jackson</groupId>
