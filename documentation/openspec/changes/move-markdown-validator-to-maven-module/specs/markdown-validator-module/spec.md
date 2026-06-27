@@ -64,6 +64,13 @@ The GitHub Actions Markdown validation job MUST use the supported validator entr
 
 The validator redesign MUST preserve deterministic results while reducing avoidable sequential validation work.
 
+#### Scenario: Capture local runtime before implementation changes
+
+- **GIVEN** maintainers are about to change the Markdown validator implementation
+- **WHEN** implementation work begins
+- **THEN** they first run the current local validator command and record elapsed time
+- **AND** they record the command used, relevant environment notes, and any network caveats that could affect remote-link checks
+
 #### Scenario: Parallelize safe validation work
 
 - **GIVEN** Markdown files can be validated independently
@@ -81,7 +88,8 @@ The validator redesign MUST preserve deterministic results while reducing avoida
 
 #### Scenario: Verify runtime improvement
 
-- **GIVEN** issue #941 records a CI Markdown validation runtime around 40 seconds
+- **GIVEN** maintainers recorded a local runtime baseline before changing the validator implementation
 - **WHEN** the validator redesign is complete
-- **THEN** maintainers can run the repository Markdown validation command
-- **AND** the result can be compared with the recorded baseline where practical
+- **THEN** they run the repository Markdown validation command with the same local timing approach
+- **AND** they compare the post-change local runtime with the pre-change local baseline
+- **AND** they compare runtime against the issue #941 CI baseline where practical

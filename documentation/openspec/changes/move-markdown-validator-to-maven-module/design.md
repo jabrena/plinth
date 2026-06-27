@@ -14,6 +14,16 @@ Markdown validation remains available to contributors and CI, but the validator 
 
 ## Two-Step Change Strategy
 
+### Step 0: Local Timing Baseline
+
+Before changing the validator implementation, record the current local runtime for the existing command:
+
+```bash
+jbang .github/scripts/MarkdownValidator.java --verbose .
+```
+
+Run from a representative clean checkout and capture the command, machine context when useful, elapsed time, and whether remote-link network conditions affected the result. This local baseline complements the CI baseline from issue #941 and becomes the before value for the implementation PR.
+
 ### Step 1: Behavior-Preserving Preparation
 
 Create the Maven module and move the existing validator behavior into it without intentionally changing validation rules, command options, target directories, exit-code semantics, or reported validation failures.
@@ -37,6 +47,7 @@ Validation after Step 2:
 - Run focused tests for parallel validation, shared remote-link caching, fail-fast behavior, and deterministic result aggregation.
 - Run the Maven build for the validator module.
 - Run the repository Markdown validation command.
+- Record the post-change local runtime using the same local timing approach used before implementation.
 - Compare runtime against the current CI baseline recorded in issue #941 where practical.
 
 ## Design Constraints
