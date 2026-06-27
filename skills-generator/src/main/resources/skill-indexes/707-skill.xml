@@ -34,7 +34,7 @@ Help teams review and improve **Onion architecture** boundaries in Java applicat
       <constraint>**ADAPTERS**: Adapters and infrastructure code may depend inward on application or domain contracts; adapters must not become shared domain logic or depend on each other unnecessarily</constraint>
       <constraint>**ARCHUNIT OPTIONAL**: Treat ArchUnit as an optional verification approach selected when it fits the project; do not require adding it before Onion architecture guidance is useful</constraint>
       <constraint>**DEPENDENCIES**: Route Maven dependency evaluation, including ArchUnit dependency additions, to `111-java-maven-dependencies`</constraint>
-      <constraint>**FRAMEWORK ROUTING**: Defer Spring Boot runtime wiring to `@301-frameworks-spring-boot-core`, Quarkus runtime wiring to `@401-frameworks-quarkus-core`, and Micronaut runtime wiring to `@501-frameworks-micronaut-core`</constraint>
+      <constraint>**FRAMEWORK ROUTING**: Defer Spring Boot, Quarkus, and Micronaut runtime wiring to the matching framework-specific skill without embedding direct framework skill links in this guidance</constraint>
       <constraint>**MANDATORY**: Regenerate skills with `./mvnw clean install -pl skills-generator` after editing skill or system-prompt XML in this repo</constraint>
       <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` before promoting changes</constraint>
       <constraint>**EDGE CASE**: If package layout, module boundaries, framework ownership, or persistence strategy is ambiguous and affects the review, ask a clarifying question before editing architecture-sensitive code</constraint>

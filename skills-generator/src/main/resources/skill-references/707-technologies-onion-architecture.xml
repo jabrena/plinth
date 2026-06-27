@@ -20,6 +20,8 @@
         4. **Check dependency direction**: inspect packages, modules, imports, Maven module dependencies, package-private boundaries, tests, and naming conventions to confirm inward-only dependencies.
         5. **Use optional verification**: recommend ArchUnit-style architecture tests when they fit the project, while routing dependency additions to `111-java-maven-dependencies`.
 
+        Use the original Palermo Onion Architecture tenets as review anchors: an independent object model, inner-layer interfaces implemented by outer layers, coupling directed toward the center, and application core code that can compile and run apart from infrastructure.
+
         Defer Spring Boot, Quarkus, and Micronaut runtime wiring to their matching framework skills when the fix depends on bean registration, module runtime configuration, controller implementation, repository annotations, or framework-specific persistence behavior.
     </goal>
 
@@ -33,10 +35,12 @@
             <constraint>**DOMAIN INDEPENDENCE**: Domain code must not depend on Spring, Quarkus, Micronaut, Jakarta persistence, web APIs, messaging clients, database clients, HTTP clients, or infrastructure configuration</constraint>
             <constraint>**APPLICATION PORTS**: Application/use-case code may depend on domain objects and ports/interfaces, but not on concrete persistence, web, messaging, or external-service adapters</constraint>
             <constraint>**ADAPTER DIRECTION**: Adapters and infrastructure may depend inward on application or domain contracts; neither domain nor application code should depend outward on adapters</constraint>
+            <constraint>**INFRASTRUCTURE EXTERNAL**: Treat databases, file systems, web services, message brokers, HTTP clients, framework configuration, and I/O mechanisms as outer-layer details that must not become the center of the design</constraint>
+            <constraint>**CORE COMPILATION**: Prefer a package or module structure where the application core can compile and be tested without concrete infrastructure implementations</constraint>
             <constraint>**EVIDENCE**: Report violations with package, class, import, module dependency, test, or build-file evidence; separate confirmed findings from assumptions</constraint>
             <constraint>**ARCHUNIT OPTIONAL**: Use ArchUnit examples as optional verification patterns, not as a mandatory prerequisite for useful Onion architecture review</constraint>
             <constraint>**DEPENDENCY ROUTING**: When ArchUnit or other Maven dependencies need to be added or evaluated, route that decision to `111-java-maven-dependencies`</constraint>
-            <constraint>**FRAMEWORK ROUTING**: Route Spring Boot runtime wiring to `@301-frameworks-spring-boot-core`, Quarkus runtime wiring to `@401-frameworks-quarkus-core`, and Micronaut runtime wiring to `@501-frameworks-micronaut-core`</constraint>
+            <constraint>**FRAMEWORK ROUTING**: Route Spring Boot, Quarkus, and Micronaut runtime wiring to the matching framework-specific skill without embedding direct framework skill links in this reference</constraint>
             <constraint>**MANDATORY**: After editing generator XML, run `./mvnw clean install -pl skills-generator` and `./mvnw clean verify` as appropriate</constraint>
         </constraint-list>
     </constraints>
@@ -200,12 +204,107 @@ class OnionArchitectureTest {
                     <code-block language="text"><![CDATA[Architecture finding:
 - Confirmed: `orders.domain.Order` imports `jakarta.persistence.Entity`, coupling the domain core to persistence.
 - Remediation: move persistence annotations to an adapter DTO/entity or mapper in `orders.adapter.persistence`, and keep `orders.domain.Order` persistence-agnostic.
-- Routing: detailed Spring Data repository configuration belongs with `@301-frameworks-spring-boot-core` or the relevant Spring data skill.]]></code-block>
+- Routing: detailed Spring Data repository configuration belongs with the matching Spring framework or data skill.]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
                     <code-block language="text"><![CDATA[Avoid turning an Onion architecture review into framework runtime instructions such as:
 "Add @Service to the use case, @Repository to the adapter, and enable component scanning here."
 That advice belongs to the matching framework skill.]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="5" id="palermo-tenets-review">
+            <example-header>
+                <example-title>Review against the original Onion Architecture tenets</example-title>
+                <example-subtitle>independent model, inward interfaces, outer implementations, and infrastructure-free core checks</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Palermo's Onion Architecture series is useful as a review checklist: the application is built around an independent object model; inner layers define interfaces that outer layers implement; coupling points toward the center; and the application core can compile and run without concrete infrastructure. This also means a user interface or outer adapter may call any inner layer it legitimately needs, while inner layers must not call outward.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="text"><![CDATA[Onion architecture review anchors:
+- Independent core: `orders.domain` and `orders.application` compile without `orders.adapter.persistence`.
+- Interfaces inside: `OrderRepository` and `PaymentPort` are declared in the application/core package.
+- Implementations outside: JPA, HTTP, messaging, and scheduler adapters implement those ports in outer packages.
+- Coupling direction: adapters depend on core contracts; core packages do not import adapter packages.
+- Infrastructure external: database and broker choices are replaceable outer-layer details, not the center of the model.
+- Runtime assembly: dependency injection or manual composition wires concrete adapters at the edge; it is not itself a core Onion tenet.]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="text"><![CDATA[Architecture smell:
+- The "domain" module cannot compile unless the JPA module, database client, or framework runtime is present.
+- Repository interfaces live beside concrete database implementations, forcing use cases to depend on outer packages.
+- Tests for core business behavior require a real database or broker when a port-level fake would prove the rule.]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="6" id="onion-scaffolding">
+            <example-header>
+                <example-title>Start with scaffolding that preserves dependency direction</example-title>
+                <example-subtitle>packages or modules should make the application core visible without making infrastructure central</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Scaffolding is useful when it communicates the intended dependency direction from day one. Keep the initial layout small and honest: create core packages for domain and application contracts, outer packages for adapters, and a thin bootstrap/composition area for runtime assembly. Do not create empty layers, generic "common" buckets, or framework-centered packages that hide where business rules belong.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="text"><![CDATA[src/main/java/com/example/orders/
+  domain/
+    model/
+      Order.java
+      OrderId.java
+      Money.java
+    service/
+      PricingPolicy.java
+  application/
+    PlaceOrderUseCase.java
+    PlaceOrderCommand.java
+    port/
+      OrderRepository.java
+      PaymentPort.java
+  adapter/
+    in/
+      rest/
+        PlaceOrderController.java
+    out/
+      persistence/
+        JpaOrderRepository.java
+        OrderEntity.java
+        OrderMapper.java
+      payment/
+        PaymentClientAdapter.java
+  bootstrap/
+    ApplicationAssembly.java
+
+Scaffolding checks:
+- `domain` imports only Java and domain types.
+- `application` depends on `domain` and its own ports, not adapter implementations.
+- `adapter` packages depend inward on `application` or `domain` contracts.
+- `bootstrap` wires concrete adapters to ports at the edge.
+- Empty packages are avoided until a real use case needs them.]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="text"><![CDATA[src/main/java/com/example/orders/
+  controller/
+  service/
+  repository/
+  entity/
+  util/
+  config/
+
+Scaffolding smell:
+- Business behavior tends to collect in `service` without clear use-case boundaries.
+- Persistence entities become the domain model because `entity` is treated as central.
+- Repository interfaces and implementations are mixed together.
+- `util` becomes a dependency sink used by every layer.
+- The package names describe frameworks or technical stereotypes, not inward dependency direction.]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
@@ -215,6 +314,8 @@ That advice belongs to the matching framework skill.]]></code-block>
         <output-format-list>
             <output-format-item>**REVIEW** package structure, module boundaries, imports, Maven module dependencies, tests, framework entry points, persistence adapters, messaging adapters, and external-service clients before making architecture claims</output-format-item>
             <output-format-item>**MAP** domain models, domain services, application/use-case services, ports/interfaces, inbound adapters, outbound adapters, and infrastructure concerns using code evidence</output-format-item>
+            <output-format-item>**SCAFFOLD** new or reorganized code with small, honest packages or modules that show domain, application ports, adapters, and bootstrap/composition boundaries without empty layer theater</output-format-item>
+            <output-format-item>**CHECK** Palermo-style tenets: independent object model, interfaces in inner layers, implementations in outer layers, center-directed coupling, and application core compilation or tests without concrete infrastructure</output-format-item>
             <output-format-item>**IDENTIFY** confirmed violations: domain imports of infrastructure/framework APIs, use cases depending on concrete adapters, adapters depending on each other unnecessarily, infrastructure logic leaking into the domain, or package dependencies pointing outward</output-format-item>
             <output-format-item>**SEPARATE** confirmed findings from assumptions, inferred conventions, and missing context</output-format-item>
             <output-format-item>**PROPOSE** minimal remediation steps that preserve inward dependency direction: extract ports, move adapter DTOs/entities outward, add mappers, invert dependencies, split modules, or relocate misplaced behavior</output-format-item>
