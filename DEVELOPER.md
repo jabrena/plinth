@@ -49,6 +49,7 @@ This is a multi-module project. The following modules are declared in the root `
 
 | Module | Artifact ID | Commands | Description |
 |--------|-------------|----------|-------------|
+| markdown-validator | markdown-validator | `./mvnw clean verify -pl markdown-validator`<br>`./mvnw clean verify -pl markdown-validator -P cyclomatic-complexity`<br>`jbang markdown-validator/src/main/java/info/jab/markdownvalidator/MarkdownValidator.java .` | Maven-owned Markdown validator used by contributors and CI. The JBang-compatible entrypoint lives in this module. |
 | skills-generator | cursor-rules-java-skills-generator | `./mvnw clean verify -pl skills-generator`<br>`./mvnw clean install -pl skills-generator`<br>`./mvnw clean install -pl skills-generator -P release` | Unified XML → skills generator: produces agent skills into `skills-generator/target/skills`, copies local output into `.agents/skills`, and refreshes `skills/` only through the explicit `release` profile. |
 | site-generator | cursor-rules-java-site | `./mvnw clean verify -pl site-generator`<br>`./mvnw clean generate-resources jbake:inline -pl site-generator -P local-preview`<br>`./mvnw clean generate-resources -pl site-generator -P site-update` | JBake-based static site generator for documentation and GitHub Pages. |
 
@@ -58,11 +59,24 @@ The following profiles are declared in this project. Activate them with `-P <pro
 
 | Profile ID | Command | Activation | Description |
 |------------|---------|------------|-------------|
+| cyclomatic-complexity | `./mvnw clean verify -pl markdown-validator -P cyclomatic-complexity` | manual | Runs PMD cyclomatic complexity analysis for the Markdown validator module using `pmd/pmd-cyclomatic-complexity.xml`. |
 | security | `./mvnw clean verify -P security` | manual | Runs OWASP dependency-check-maven to scan for known vulnerabilities; fails on CVSS ≥ 7. |
 | find-bugs | `./mvnw clean verify -P find-bugs` | manual | Runs PMD and SpotBugs static analysis with max effort and low threshold. |
 | release | `./mvnw clean install -pl skills-generator -P release` | manual | Cleans and refreshes the public `skills/` release output instead of copying generated skills to `.agents/skills`. |
 | local-preview | `./mvnw clean generate-resources jbake:inline -pl site-generator -P local-preview` | manual | Generates site to `target/docs-local` and serves it locally (site-generator). |
 | site-update | `./mvnw clean generate-resources -pl site-generator -P site-update` | manual | Regenerates the static site into `docs/` for GitHub Pages (site-generator). |
+
+## Markdown Validator Notes
+
+The `markdown-validator` module intentionally enables Java 25 preview features
+because its validation runner uses structured concurrency. Keep the Maven
+compiler, Surefire, and JBang `--enable-preview` flags aligned when changing
+that module entrypoint.
+
+The module follows a small Onion architecture package layout:
+`domain` holds validation records, `application` holds use cases and policies,
+`application.port` defines outbound contracts, and `adapter.in` / `adapter.out`
+contain CLI, filesystem, and HTTP details.
 
 ## Plugin Goals Reference
 

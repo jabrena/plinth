@@ -111,7 +111,7 @@
 <h2>Validator inventory</h2>
 <h3>MarkdownValidator</h3>
 <p><code>MarkdownValidator</code> protects the documentation layer before the skill scanners run.</p>
-<pre><code class="language-bash">jbang .github/scripts/MarkdownValidator.java --verbose .
+<pre><code class="language-bash">jbang markdown-validator/src/main/java/info/jab/markdownvalidator/MarkdownValidator.java .
 </code></pre>
 <p>It checks that Markdown files can be parsed and that remote links remain healthy. This is not a skill-security scanner, but it catches broken documentation early, including documentation that explains how users install, review, and operate the skills.</p>
 <h3>skill-check</h3>
