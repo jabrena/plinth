@@ -16,7 +16,7 @@
 
 ## 项目概览
 
-- 15 Commands
+- 12 Commands
 - 9 Agents
 - 116 Skills
 
@@ -67,7 +67,6 @@ Commands 通过把工作路由到合适的 agent 与 skill 集合来组合完整
 
 ```text
 Plan
-  /create-issue
   /update-issue
     @robot-business-analyst
       @043-planning-github-issues
@@ -111,8 +110,6 @@ Build
       @robot-java-quarkus-coder
       @robot-java-micronaut-coder
       @robot-no-java
-  /kill-port
-
   MCP Servers
     Jbang-Quarkus-JDBC
     MongoDB
@@ -145,7 +142,7 @@ MCP Servers
 
 | 资源 | 可用选项 |
 | --- | --- |
-| **Commands** | `/create-issue` · [`/update-issue`](./.cursor/commands/update-issue.md) · `/explore-design` · `/create-adr` · `/create-diagram` · `/create-plan` · `/create-spec` · `/review-alignment` · [`/review-breaking-changes`](./.cursor/commands/review-breaking-changes.md) |
+| **Commands** | [`/update-issue`](./.cursor/commands/update-issue.md) · `/explore-design` · `/create-adr` · `/create-diagram` · `/create-spec` · `/review-alignment` · [`/review-breaking-changes`](./.cursor/commands/review-breaking-changes.md) |
 | **Agents** | `@robot-business-analyst` · `@robot-architect` · `@robot-tech-lead` |
 | **Skills** | [014-agile-user-story](https://www.skills.sh/jabrena/cursor-rules-java/014-agile-user-story) · [030-architecture-adr-general](https://www.skills.sh/jabrena/cursor-rules-java/030-architecture-adr-general) · [031-architecture-adr-functional-requirements](https://www.skills.sh/jabrena/cursor-rules-java/031-architecture-adr-functional-requirements) · [032-architecture-adr-non-functional-requirements](https://www.skills.sh/jabrena/cursor-rules-java/032-architecture-adr-non-functional-requirements) · [033-architecture-diagrams](https://www.skills.sh/jabrena/cursor-rules-java/033-architecture-diagrams) · [034-architecture-design-exploration](https://www.skills.sh/jabrena/cursor-rules-java/034-architecture-design-exploration) · [041-planning-plan-mode](https://www.skills.sh/jabrena/cursor-rules-java/041-planning-plan-mode) · [042-planning-openspec](https://www.skills.sh/jabrena/cursor-rules-java/042-planning-openspec) · [043-planning-github-issues](https://www.skills.sh/jabrena/cursor-rules-java/043-planning-github-issues) · [044-planning-jira](https://www.skills.sh/jabrena/cursor-rules-java/044-planning-jira) · [051-design-two-steps-methods](https://www.skills.sh/jabrena/cursor-rules-java/051-design-two-steps-methods) · [052-design-hamburger-method](https://www.skills.sh/jabrena/cursor-rules-java/052-design-hamburger-method) · [053-design-simple-rules](https://www.skills.sh/jabrena/cursor-rules-java/053-design-simple-rules) · [200-agents-md](https://www.skills.sh/jabrena/cursor-rules-java/200-agents-md) |
 | **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) |
@@ -156,7 +153,7 @@ MCP Servers
 
 | 资源 | 可用选项 |
 | --- | --- |
-| **Commands** | [`/create-feature-branch`](./.cursor/commands/create-feature-branch.md) · [`/create-worktree`](./.cursor/commands/create-worktree.md) · [`/implement-issue`](./.cursor/commands/implement-issue.md) · [`/kill-port`](./.cursor/commands/kill-port.md) |
+| **Commands** | [`/create-feature-branch`](./.cursor/commands/create-feature-branch.md) · [`/create-worktree`](./.cursor/commands/create-worktree.md) · [`/implement-issue`](./.cursor/commands/implement-issue.md) |
 | **Agents** | `@robot-tech-lead` · `@robot-no-java` · `@robot-java-coder` · `@robot-java-spring-boot-coder` · `@robot-java-quarkus-coder` · `@robot-java-micronaut-coder` |
 | **Skills** | [110-java-maven-best-practices](https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices) · [111-java-maven-dependencies](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) · [121-java-object-oriented-design](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) · [124-java-secure-coding](https://www.skills.sh/jabrena/cursor-rules-java/124-java-secure-coding) · [143-java-functional-exception-handling](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) |
 | **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [JavaDocs](https://www.javadocs.dev/mcp) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) |

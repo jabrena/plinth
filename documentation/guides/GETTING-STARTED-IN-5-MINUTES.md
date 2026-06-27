@@ -80,7 +80,7 @@ The installer supports `.cursor/agents` and `.claude/agents`.
 
 This project organizes AI-assisted Java work around four building blocks:
 
-- `Commands` are the entry points, such as `/create-issue`, `/update-issue`, `/create-plan`, `/create-spec`, and `/implement-issue`.
+- `Commands` are the entry points, such as `/update-issue`, `/create-spec`, and `/implement-issue`.
 - `Agents` define responsibilities, such as business analysis, architecture, technical leadership, Java implementation, or performance work.
 - `Skills` provide focused Java, framework, testing, documentation, security, and observability practices.
 - `MCP Servers` connect agents to external tools and project context when available.
@@ -88,7 +88,7 @@ This project organizes AI-assisted Java work around four building blocks:
 A common path is:
 
 ```text
-/create-issue -> /create-plan or /create-spec -> /implement-issue -> /profile or /benchmark
+/update-issue -> /create-spec -> /implement-issue -> /profile or /benchmark
 ```
 
 For documentation-only or planning work, you may stop after the issue, plan, specification, ADR, or diagram is complete.

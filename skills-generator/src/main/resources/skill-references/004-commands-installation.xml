@@ -54,9 +54,6 @@
                 <xi:include href="assets/commands/create-feature-branch.md" parse="text"/>
                 ```
                 ```markdown
-                <xi:include href="assets/commands/create-issue.md" parse="text"/>
-                ```
-                ```markdown
                 <xi:include href="assets/commands/create-worktree.md" parse="text"/>
                 ```
                 ```markdown
@@ -67,9 +64,6 @@
                 ```
                 ```markdown
                 <xi:include href="assets/commands/create-diagram.md" parse="text"/>
-                ```
-                ```markdown
-                <xi:include href="assets/commands/create-plan.md" parse="text"/>
                 ```
                 ```markdown
                 <xi:include href="assets/commands/create-spec.md" parse="text"/>
@@ -89,9 +83,6 @@
                 ```markdown
                 <xi:include href="assets/commands/benchmark.md" parse="text"/>
                 ```
-                ```markdown
-                <xi:include href="assets/commands/kill-port.md" parse="text"/>
-                ```
 
                 Create the destination directory if it does not exist.
 
@@ -100,7 +91,7 @@
             <step-constraints>
                 <step-constraint-list>
                     <step-constraint>**MUST** copy from embedded assets, not from external URLs</step-constraint>
-                    <step-constraint>**MUST** install all fifteen commands as one set</step-constraint>
+                    <step-constraint>**MUST** install all twelve commands as one set</step-constraint>
                     <step-constraint>**MUST** preserve original file names</step-constraint>
                 </step-constraint-list>
             </step-constraints>
