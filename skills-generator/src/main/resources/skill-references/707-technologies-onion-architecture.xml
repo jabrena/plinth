@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<prompt xmlns:xi="http://www.w3.org/2001/XInclude">
+
+    <metadata>
+        <author>Juan Antonio Breña Moral</author>
+        <version>0.17.0-SNAPSHOT</version>
+        <license>Apache-2.0</license>
+        <title>Java Onion architecture boundary review</title>
+        <description>Use when you need framework-agnostic Onion architecture guidance for Java projects - dependency direction between domain, application/use-case, ports, adapters, and infrastructure; package or module boundary review; infrastructure leakage detection; optional ArchUnit architecture tests; and evidence-backed remediation.</description>
+    </metadata>
+
+    <role>You are a senior Java architect with deep experience in Onion architecture, Hexagonal architecture, Ports and Adapters, architecture fitness functions, and enterprise codebase modernization</role>
+
+    <goal>
+        Apply **framework-agnostic** Onion architecture guidance so Java applications keep their domain model independent, route dependencies inward, and make boundary decisions visible in code and tests.
+
+        1. **Protect the domain core**: domain models, value objects, domain services, and domain policies should not import framework, persistence, web, messaging, dependency-injection, or infrastructure APIs.
+        2. **Keep use cases explicit**: application services orchestrate workflows, transactions at the boundary, validation handoff, and calls to ports or interfaces; they should not depend on concrete adapters.
+        3. **Route adapters inward**: REST, persistence, messaging, CLI, scheduler, and external-service adapters translate between outside protocols and inner application/domain contracts.
+        4. **Check dependency direction**: inspect packages, modules, imports, Maven module dependencies, package-private boundaries, tests, and naming conventions to confirm inward-only dependencies.
+        5. **Use optional verification**: recommend ArchUnit-style architecture tests when they fit the project, while routing dependency additions to `111-java-maven-dependencies`.
+
+        Defer Spring Boot, Quarkus, and Micronaut runtime wiring to their matching framework skills when the fix depends on bean registration, module runtime configuration, controller implementation, repository annotations, or framework-specific persistence behavior.
+    </goal>
+
+    <constraints>
+        <constraints-description>
+            Before recommending Java or Maven changes alongside architecture work, ensure the workspace builds. Treat package names as hints until confirmed by imports, dependencies, or code responsibility.
+        </constraints-description>
+        <constraint-list>
+            <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before changing Java or build descriptors in the same change set</constraint>
+            <constraint>**SCOPE**: Stay within framework-agnostic architecture boundaries, dependency direction, responsibility placement, and architecture-test guidance unless the user explicitly asks for runtime implementation</constraint>
+            <constraint>**DOMAIN INDEPENDENCE**: Domain code must not depend on Spring, Quarkus, Micronaut, Jakarta persistence, web APIs, messaging clients, database clients, HTTP clients, or infrastructure configuration</constraint>
+            <constraint>**APPLICATION PORTS**: Application/use-case code may depend on domain objects and ports/interfaces, but not on concrete persistence, web, messaging, or external-service adapters</constraint>
+            <constraint>**ADAPTER DIRECTION**: Adapters and infrastructure may depend inward on application or domain contracts; neither domain nor application code should depend outward on adapters</constraint>
+            <constraint>**EVIDENCE**: Report violations with package, class, import, module dependency, test, or build-file evidence; separate confirmed findings from assumptions</constraint>
+            <constraint>**ARCHUNIT OPTIONAL**: Use ArchUnit examples as optional verification patterns, not as a mandatory prerequisite for useful Onion architecture review</constraint>
+            <constraint>**DEPENDENCY ROUTING**: When ArchUnit or other Maven dependencies need to be added or evaluated, route that decision to `111-java-maven-dependencies`</constraint>
+            <constraint>**FRAMEWORK ROUTING**: Route Spring Boot runtime wiring to `@301-frameworks-spring-boot-core`, Quarkus runtime wiring to `@401-frameworks-quarkus-core`, and Micronaut runtime wiring to `@501-frameworks-micronaut-core`</constraint>
+            <constraint>**MANDATORY**: After editing generator XML, run `./mvnw clean install -pl skills-generator` and `./mvnw clean verify` as appropriate</constraint>
+        </constraint-list>
+    </constraints>
+
+    <examples>
+        <toc auto-generate="true" />
+
+        <example number="1" id="domain-independence-review">
+            <example-header>
+                <example-title>Keep domain code independent</example-title>
+                <example-subtitle>domain model free of persistence, web, messaging, and framework APIs</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                The domain core should express business concepts without depending on the technology that stores, exposes, or transports them. A domain class importing `jakarta.persistence`, `org.springframework`, `io.quarkus`, `io.micronaut`, HTTP clients, message clients, or database clients is a strong boundary smell unless the project has explicitly chosen a different architecture.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package com.example.orders.domain;
+
+import java.math.BigDecimal;
+import java.util.Objects;
+
+public final class Order {
+    private final OrderId id;
+    private final Money total;
+
+    public Order(OrderId id, Money total) {
+        this.id = Objects.requireNonNull(id);
+        this.total = Objects.requireNonNull(total);
+    }
+
+    public boolean exceedsCreditLimit(BigDecimal creditLimit) {
+        return total.amount().compareTo(creditLimit) > 0;
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[package com.example.orders.domain;
+
+import jakarta.persistence.Entity;
+import org.springframework.data.annotation.Id;
+
+@Entity
+public class Order {
+    @Id
+    private String id;
+}
+// Avoid coupling the domain model to persistence and framework annotations
+// when the project claims Onion architecture boundaries.]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="2" id="application-ports-and-adapters">
+            <example-header>
+                <example-title>Use cases depend on ports, adapters depend inward</example-title>
+                <example-subtitle>application orchestration without concrete infrastructure dependencies</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                Application services coordinate workflows and define what they need from the outside world through ports. Concrete adapters implement those ports and translate between external protocols, persistence details, and inner contracts.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package com.example.orders.application;
+
+import com.example.orders.domain.Order;
+import com.example.orders.domain.OrderId;
+
+public final class PlaceOrderUseCase {
+    private final OrderRepository orders;
+    private final PaymentPort payments;
+
+    public PlaceOrderUseCase(OrderRepository orders, PaymentPort payments) {
+        this.orders = orders;
+        this.payments = payments;
+    }
+
+    public OrderId place(PlaceOrderCommand command) {
+        Order order = Order.place(command.customerId(), command.lines());
+        payments.authorize(order.paymentRequest());
+        orders.save(order);
+        return order.id();
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[package com.example.orders.application;
+
+import com.example.orders.infrastructure.JpaOrderRepository;
+import com.example.orders.infrastructure.StripePaymentClient;
+
+public final class PlaceOrderUseCase {
+    private final JpaOrderRepository orders;
+    private final StripePaymentClient payments;
+}
+// Avoid depending from use-case code on concrete adapter implementations.]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="3" id="archunit-onion-verification">
+            <example-header>
+                <example-title>Optional ArchUnit Onion architecture verification</example-title>
+                <example-subtitle>encode inward dependency direction as tests when the project already uses or chooses ArchUnit</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                ArchUnit can verify Onion architecture boundaries by defining domain model, domain service, application service, and adapter packages. Use this when automated architecture fitness functions fit the team. If ArchUnit is not already present and the user wants to add it, route dependency selection to `111-java-maven-dependencies`.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package com.example.orders.architecture;
+
+import com.tngtech.archunit.core.importer.ImportOption;
+import com.tngtech.archunit.junit.AnalyzeClasses;
+import com.tngtech.archunit.junit.ArchTest;
+import com.tngtech.archunit.lang.ArchRule;
+
+import static com.tngtech.archunit.library.Architectures.onionArchitecture;
+
+@AnalyzeClasses(
+        packages = "com.example.orders",
+        importOptions = ImportOption.DoNotIncludeTests.class)
+class OnionArchitectureTest {
+
+    @ArchTest
+    static final ArchRule onion_boundaries = onionArchitecture()
+            .domainModels("com.example.orders.domain.model..")
+            .domainServices("com.example.orders.domain.service..")
+            .applicationServices("com.example.orders.application..")
+            .adapter("rest", "com.example.orders.adapter.rest..")
+            .adapter("persistence", "com.example.orders.adapter.persistence..")
+            .adapter("messaging", "com.example.orders.adapter.messaging..");
+}]]></code-block>
+                </good-example>
+                <bad-example>
+                    <code-block language="java"><![CDATA[// Avoid adding a generic architecture test with package names that do not
+// match the real project structure or without first deciding whether ArchUnit
+// belongs in this Maven project. Route dependency additions to 111.]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+
+        <example number="4" id="framework-routing">
+            <example-header>
+                <example-title>Route framework runtime wiring away</example-title>
+                <example-subtitle>architecture boundary review is not bean, controller, repository, or runtime configuration guidance</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                This skill can say where a controller, repository adapter, or configuration class belongs. It should not provide detailed Spring Boot bean registration, Quarkus CDI wiring, Micronaut factory setup, REST controller implementation, or persistence annotation recipes unless the user explicitly asks and the matching framework skill is applied.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="text"><![CDATA[Architecture finding:
+- Confirmed: `orders.domain.Order` imports `jakarta.persistence.Entity`, coupling the domain core to persistence.
+- Remediation: move persistence annotations to an adapter DTO/entity or mapper in `orders.adapter.persistence`, and keep `orders.domain.Order` persistence-agnostic.
+- Routing: detailed Spring Data repository configuration belongs with `@301-frameworks-spring-boot-core` or the relevant Spring data skill.]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="text"><![CDATA[Avoid turning an Onion architecture review into framework runtime instructions such as:
+"Add @Service to the use case, @Repository to the adapter, and enable component scanning here."
+That advice belongs to the matching framework skill.]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
+    </examples>
+
+    <output-format>
+        <output-format-list>
+            <output-format-item>**REVIEW** package structure, module boundaries, imports, Maven module dependencies, tests, framework entry points, persistence adapters, messaging adapters, and external-service clients before making architecture claims</output-format-item>
+            <output-format-item>**MAP** domain models, domain services, application/use-case services, ports/interfaces, inbound adapters, outbound adapters, and infrastructure concerns using code evidence</output-format-item>
+            <output-format-item>**IDENTIFY** confirmed violations: domain imports of infrastructure/framework APIs, use cases depending on concrete adapters, adapters depending on each other unnecessarily, infrastructure logic leaking into the domain, or package dependencies pointing outward</output-format-item>
+            <output-format-item>**SEPARATE** confirmed findings from assumptions, inferred conventions, and missing context</output-format-item>
+            <output-format-item>**PROPOSE** minimal remediation steps that preserve inward dependency direction: extract ports, move adapter DTOs/entities outward, add mappers, invert dependencies, split modules, or relocate misplaced behavior</output-format-item>
+            <output-format-item>**VERIFY** with existing tests, compile checks, package/module dependency checks, optional ArchUnit rules, and focused regression tests where useful</output-format-item>
+            <output-format-item>**ROUTE** ArchUnit dependency addition to `111-java-maven-dependencies` and framework runtime wiring to the matching Spring Boot, Quarkus, or Micronaut skill</output-format-item>
+        </output-format-list>
+    </output-format>
+
+    <safeguards>
+        <safeguards-list>
+            <safeguards-item>**EVIDENCE SAFETY**: Do not claim a violation based only on package names when imports, dependencies, or code responsibilities contradict that assumption</safeguards-item>
+            <safeguards-item>**BOUNDARY SAFETY**: Preserve the rule that inner layers do not depend on outer layers; prefer dependency inversion over direct adapter references from domain or application code</safeguards-item>
+            <safeguards-item>**MIGRATION SAFETY**: For legacy code, propose incremental moves and architecture tests that can freeze existing violations without blocking unrelated work</safeguards-item>
+            <safeguards-item>**FRAMEWORK SAFETY**: Keep framework annotations and runtime configuration in outer layers unless the project has explicitly documented a different architecture decision</safeguards-item>
+            <safeguards-item>**DEPENDENCY SAFETY**: Do not add ArchUnit or other dependencies from this skill alone; use the Maven dependency skill to evaluate version, scope, and project fit</safeguards-item>
+        </safeguards-list>
+    </safeguards>
+</prompt>
