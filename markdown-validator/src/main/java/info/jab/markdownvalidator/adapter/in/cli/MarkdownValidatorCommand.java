@@ -1,15 +1,8 @@
 package info.jab.markdownvalidator.adapter.in.cli;
 
-import info.jab.markdownvalidator.adapter.out.filesystem.FileSystemMarkdownFileFinder;
-import info.jab.markdownvalidator.adapter.out.http.HttpClientRemoteLinkRequester;
-import info.jab.markdownvalidator.application.MarkdownDocumentValidator;
 import info.jab.markdownvalidator.application.MarkdownValidationService;
-import info.jab.markdownvalidator.application.RemoteLinkValidator;
-import info.jab.markdownvalidator.application.StructuredValidationRunner;
-import info.jab.markdownvalidator.application.port.RemoteLinkRequester;
 import info.jab.markdownvalidator.domain.ValidationReport;
 import java.nio.file.Path;
-import java.time.Duration;
 import java.util.List;
 import java.util.concurrent.Callable;
 import org.slf4j.Logger;
@@ -27,7 +20,6 @@ public class MarkdownValidatorCommand implements Callable<Integer> {
 
     private static final Logger logger = LoggerFactory.getLogger(MarkdownValidatorCommand.class);
     static final List<String> DEFAULT_TARGET_DIRECTORIES = List.of(".cursor/rules", "skills", ".cursor/agents");
-    static final Duration LINK_CHECK_TIMEOUT = Duration.ofSeconds(10);
 
     @Option(
             names = { "-d", "--directories" },
@@ -40,12 +32,8 @@ public class MarkdownValidatorCommand implements Callable<Integer> {
 
     private final MarkdownValidationService validationService;
 
-    public MarkdownValidatorCommand() {
-        this(new HttpClientRemoteLinkRequester(LINK_CHECK_TIMEOUT));
-    }
-
-    MarkdownValidatorCommand(RemoteLinkRequester remoteLinkRequester) {
-        this.validationService = createValidationService(remoteLinkRequester);
+    public MarkdownValidatorCommand(MarkdownValidationService validationService) {
+        this.validationService = validationService;
     }
 
     @Override
@@ -66,11 +54,5 @@ public class MarkdownValidatorCommand implements Callable<Integer> {
 
         new ConsoleValidationReporter().print(report);
         return report.passed() ? 0 : 1;
-    }
-
-    private MarkdownValidationService createValidationService(RemoteLinkRequester remoteLinkRequester) {
-        RemoteLinkValidator remoteLinkValidator = new RemoteLinkValidator(remoteLinkRequester, LINK_CHECK_TIMEOUT);
-        MarkdownDocumentValidator documentValidator = new MarkdownDocumentValidator(remoteLinkValidator);
-        return new MarkdownValidationService(new FileSystemMarkdownFileFinder(), new StructuredValidationRunner(documentValidator));
     }
 }

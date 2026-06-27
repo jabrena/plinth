@@ -26,15 +26,31 @@
 package info.jab.markdownvalidator;
 
 import info.jab.markdownvalidator.adapter.in.cli.MarkdownValidatorCommand;
+import info.jab.markdownvalidator.adapter.out.filesystem.FileSystemMarkdownFileFinder;
+import info.jab.markdownvalidator.adapter.out.http.HttpClientRemoteLinkRequester;
+import info.jab.markdownvalidator.application.MarkdownDocumentValidator;
+import info.jab.markdownvalidator.application.MarkdownValidationService;
+import info.jab.markdownvalidator.application.RemoteLinkValidator;
+import info.jab.markdownvalidator.application.StructuredValidationRunner;
+import java.time.Duration;
 import picocli.CommandLine;
 
 public final class MarkdownValidator {
+
+    private static final Duration LINK_CHECK_TIMEOUT = Duration.ofSeconds(10);
 
     private MarkdownValidator() {
     }
 
     public static void main(String... args) {
-        int exitCode = new CommandLine(new MarkdownValidatorCommand()).execute(args);
+        int exitCode = new CommandLine(new MarkdownValidatorCommand(createValidationService())).execute(args);
         System.exit(exitCode);
+    }
+
+    private static MarkdownValidationService createValidationService() {
+        RemoteLinkValidator remoteLinkValidator =
+                new RemoteLinkValidator(new HttpClientRemoteLinkRequester(LINK_CHECK_TIMEOUT), LINK_CHECK_TIMEOUT);
+        MarkdownDocumentValidator documentValidator = new MarkdownDocumentValidator(remoteLinkValidator);
+        return new MarkdownValidationService(new FileSystemMarkdownFileFinder(), new StructuredValidationRunner(documentValidator));
     }
 }
