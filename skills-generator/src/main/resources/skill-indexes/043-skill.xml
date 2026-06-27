@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need GitHub CLI (`gh`) installation/authentication guidance and a sanitized GitHub issue inventory workflow. The agent does not ingest GitHub issue or milestone output directly; it asks the user for sanitized issue summaries before analysis or @014-agile-user-story handoff. This should trigger for requests such as GitHub issue summary workflow; GitHub CLI setup for issues; Prepare sanitized GitHub issue inventory.</description>
+    <description>Use when you need GitHub CLI (`gh`) installation/authentication guidance and a sanitized GitHub issue inventory workflow. The agent does not ingest GitHub issue or milestone output directly; it asks the user for sanitized issue summaries before analysis or @014-agile-user-story handoff. This should trigger for requests such as GitHub issue summary workflow; GitHub CLI setup for issues; Prepare sanitized GitHub issue inventory; Analyze GitHub issues with gh CLI; Summarize milestones and issue discussions safely.</description>
   </metadata>
 
   <title>GitHub CLI — issues, milestones, and discussion for analysis</title>
@@ -38,6 +38,8 @@ Use **`gh`** only for installation/authentication guidance. The agent must not i
         <trigger>GitHub issue summary workflow</trigger>
         <trigger>GitHub CLI setup for issues</trigger>
         <trigger>Prepare sanitized GitHub issue inventory</trigger>
+        <trigger>Analyze GitHub issues with gh CLI</trigger>
+        <trigger>Summarize milestones and issue discussions safely</trigger>
     </trigger-list>
   </triggers>
 

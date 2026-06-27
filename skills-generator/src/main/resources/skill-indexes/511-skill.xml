@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need programmatic JDBC in Micronaut — pooled DataSource, parameterized SQL, io.micronaut.transaction.annotation.Transactional, batching, and domain exception translation. This should trigger for requests such as Review JDBC or SQL data access in a Micronaut project; Improve transactions and parameter binding for Micronaut JDBC; Translate SQLException to domain exceptions or stream large result sets; Fix self-invocation bypassing @Transactional in Micronaut.</description>
+    <description>Use when you need programmatic JDBC in Micronaut — pooled DataSource, parameterized SQL, io.micronaut.transaction.annotation.Transactional, batching, and domain exception translation. This should trigger for requests such as Review JDBC or SQL data access in a Micronaut project; Improve transactions and parameter binding for Micronaut JDBC; Translate SQLException to domain exceptions or stream large result sets; Fix self-invocation bypassing @Transactional in Micronaut; Review Hikari or pooled datasource usage in Micronaut JDBC.</description>
   </metadata>
 
   <title>Micronaut JDBC — programmatic SQL</title>
@@ -48,6 +48,7 @@ Apply programmatic JDBC patterns in Micronaut with safe SQL and clear transactio
         <trigger>Improve transactions and parameter binding for Micronaut JDBC</trigger>
         <trigger>Translate SQLException to domain exceptions or stream large result sets</trigger>
         <trigger>Fix self-invocation bypassing @Transactional in Micronaut</trigger>
+        <trigger>Review Hikari or pooled datasource usage in Micronaut JDBC</trigger>
     </trigger-list>
   </triggers>
   <steps>

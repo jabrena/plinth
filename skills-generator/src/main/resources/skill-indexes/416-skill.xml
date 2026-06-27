@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to add or review Mongock MongoDB data migrations in a Quarkus application — including the Quarkiverse Mongock extension, Quarkus MongoDB client configuration, migrate-at-start, @ChangeUnit classes, lock/transaction settings, and Quarkus test verification. This should trigger for requests such as Add Mongock migrations in Quarkus; Configure quarkus-mongock; Review Quarkus MongoDB data migrations.</description>
+    <description>Use when you need to add or review Mongock MongoDB data migrations in a Quarkus application — including the Quarkiverse Mongock extension, Quarkus MongoDB client configuration, migrate-at-start, @ChangeUnit classes, lock/transaction settings, and Quarkus test verification. This should trigger for requests such as Add Mongock migrations in Quarkus; Configure quarkus-mongock; Review Quarkus MongoDB data migrations; Create Mongock change units for Quarkus MongoDB; Review Mongock migration ordering in a Quarkus service.</description>
   </metadata>
 
   <title>Quarkus - MongoDB migrations (Mongock)</title>
@@ -42,6 +42,8 @@ Apply Mongock migration guidelines for Quarkus and Quarkus MongoDB client/Panach
         <trigger>Add Mongock migrations in Quarkus</trigger>
         <trigger>Configure quarkus-mongock</trigger>
         <trigger>Review Quarkus MongoDB data migrations</trigger>
+        <trigger>Create Mongock change units for Quarkus MongoDB</trigger>
+        <trigger>Review Mongock migration ordering in a Quarkus service</trigger>
     </trigger-list>
   </triggers>
 

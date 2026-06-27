@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to apply Java concurrency best practices — including thread safety fundamentals, ExecutorService thread pool management, concurrent design patterns like Producer-Consumer, asynchronous programming with CompletableFuture, immutability and safe publication, deadlock avoidance, virtual threads, structured concurrency, scoped values, backpressure, cancellation discipline, and observability for concurrent systems. This should trigger for requests such as Review Java code for concurrency.</description>
+    <description>Use when you need to apply Java concurrency best practices — including thread safety fundamentals, ExecutorService thread pool management, concurrent design patterns like Producer-Consumer, asynchronous programming with CompletableFuture, immutability and safe publication, deadlock avoidance, virtual threads, structured concurrency, scoped values, backpressure, cancellation discipline, and observability for concurrent systems. This should trigger for requests such as Review Java code for concurrency; Review Java code for thread safety; Fix race conditions in Java concurrency code; Choose ExecutorService or virtual threads in Java; Improve synchronization and shared mutable state handling; Apply structured concurrency for related Java subtasks.</description>
   </metadata>
 
   <title>Java rules for Concurrency objects</title>
@@ -48,6 +48,11 @@ Identify and apply Java concurrency best practices to improve thread safety, sca
   <triggers>
     <trigger-list>
         <trigger>Review Java code for concurrency</trigger>
+        <trigger>Review Java code for thread safety</trigger>
+        <trigger>Fix race conditions in Java concurrency code</trigger>
+        <trigger>Choose ExecutorService or virtual threads in Java</trigger>
+        <trigger>Improve synchronization and shared mutable state handling</trigger>
+        <trigger>Apply structured concurrency for related Java subtasks</trigger>
     </trigger-list>
   </triggers>
 

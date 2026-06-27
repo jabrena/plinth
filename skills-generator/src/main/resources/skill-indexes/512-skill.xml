@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need data access with Micronaut Data — @MappedEntity, CrudRepository/PageableRepository, @Query with parameters, @Transactional services, projections, @Version, and @MicronautTest with TestPropertyProvider and Testcontainers. For raw java.sql access without generated repositories, use @511-frameworks-micronaut-jdbc. This should trigger for requests such as Review or implement Micronaut Data repositories and entities; Add transactions, pagination, or projections in Micronaut persistence layer.</description>
+    <description>Use when you need data access with Micronaut Data — @MappedEntity, CrudRepository/PageableRepository, @Query with parameters, @Transactional services, projections, @Version, and @MicronautTest with TestPropertyProvider and Testcontainers. For raw java.sql access without generated repositories, use @511-frameworks-micronaut-jdbc. This should trigger for requests such as Review or implement Micronaut Data repositories and entities; Add transactions, pagination, or projections in Micronaut persistence layer; Model Micronaut Data entities and repositories; Review Micronaut Data transactions and pageable queries; Improve projections or optimistic locking with Micronaut Data.</description>
   </metadata>
 
   <title>Micronaut Data Guidelines</title>
@@ -44,6 +44,9 @@ Apply Micronaut Data patterns for relational repositories and safe SQL.
     <trigger-list>
         <trigger>Review or implement Micronaut Data repositories and entities</trigger>
         <trigger>Add transactions, pagination, or projections in Micronaut persistence layer</trigger>
+        <trigger>Model Micronaut Data entities and repositories</trigger>
+        <trigger>Review Micronaut Data transactions and pageable queries</trigger>
+        <trigger>Improve projections or optimistic locking with Micronaut Data</trigger>
     </trigger-list>
   </triggers>
   <steps>

@@ -32,4 +32,14 @@ Install a predefined set of embedded project commands from repository assets int
     </constraint-list>
   </constraints>
 
+  <triggers>
+    <trigger-list>
+        <trigger>Install embedded commands</trigger>
+        <trigger>Bootstrap .cursor/command from project assets</trigger>
+        <trigger>Bootstrap .claude/commands from embedded commands</trigger>
+        <trigger>Copy project commands into .codex/commands</trigger>
+        <trigger>Install command suite into .github/commands</trigger>
+    </trigger-list>
+  </triggers>
+
 </prompt>

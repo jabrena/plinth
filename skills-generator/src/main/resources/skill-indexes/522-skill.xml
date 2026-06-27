@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to write or improve integration tests for Micronaut — @MicronautTest, HttpClient, TestPropertyProvider with Testcontainers, transactional test mode where appropriate, and Maven Surefire/Failsafe splits for *Test, *Tests, *IT, and *AT. This should trigger for requests such as Add Micronaut integration tests with Testcontainers; Wire dynamic datasource or broker URLs for @MicronautTest.</description>
+    <description>Use when you need to write or improve integration tests for Micronaut — @MicronautTest, HttpClient, TestPropertyProvider with Testcontainers, transactional test mode where appropriate, and Maven Surefire/Failsafe splits for *Test, *Tests, *IT, and *AT. This should trigger for requests such as Add Micronaut integration tests with Testcontainers; Wire dynamic datasource or broker URLs for @MicronautTest; Write @MicronautTest integration tests with Testcontainers; Configure replacement beans for Micronaut integration tests; Review Micronaut integration test lifecycle and resources.</description>
   </metadata>
 
   <title>Micronaut Integration Testing</title>
@@ -42,6 +42,9 @@ Prove real wiring in Micronaut with containers and HTTP.
     <trigger-list>
         <trigger>Add Micronaut integration tests with Testcontainers</trigger>
         <trigger>Wire dynamic datasource or broker URLs for @MicronautTest</trigger>
+        <trigger>Write @MicronautTest integration tests with Testcontainers</trigger>
+        <trigger>Configure replacement beans for Micronaut integration tests</trigger>
+        <trigger>Review Micronaut integration test lifecycle and resources</trigger>
     </trigger-list>
   </triggers>
   <steps>

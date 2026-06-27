@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to generate a checklist document with embedded commands inventory, following the embedded template exactly and producing INVENTORY-COMMANDS-JAVA.md in the project root. This should trigger for requests such as Create embedded commands inventory checklist; Generate INVENTORY-COMMANDS-JAVA.md; Use @001-commands-inventory.</description>
+    <description>Use when you need to generate a checklist document with embedded commands inventory, following the embedded template exactly and producing INVENTORY-COMMANDS-JAVA.md in the project root. This should trigger for requests such as Create embedded commands inventory checklist; Generate INVENTORY-COMMANDS-JAVA.md; Use @001-commands-inventory; Inventory embedded Java project commands; List command files bundled for Java agents.</description>
   </metadata>
 
   <title>Create a Checklist with embedded commands inventory for Java</title>
@@ -37,6 +37,8 @@ Create a comprehensive checklist document for embedded commands inventory by fol
       <trigger>Create embedded commands inventory checklist</trigger>
       <trigger>Generate INVENTORY-COMMANDS-JAVA.md</trigger>
       <trigger>Use @001-commands-inventory</trigger>
+        <trigger>Inventory embedded Java project commands</trigger>
+        <trigger>List command files bundled for Java agents</trigger>
     </trigger-list>
   </triggers>
 

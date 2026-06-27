@@ -7,7 +7,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Guides the creation of agile user stories and Gherkin feature files. Use when the user wants to create a user story, write acceptance criteria, define Gherkin scenarios, or author BDD feature files. This should trigger for requests such as Create a user story; Write a user story; I need to write a user story.</description>
+    <description>Guides the creation of agile user stories and Gherkin feature files. Use when the user wants to create a user story, write acceptance criteria, define Gherkin scenarios, or author BDD feature files. This should trigger for requests such as Create a user story; Write a user story; I need to write a user story; Create Gherkin scenarios for a user story; Split feature requirements into user stories.</description>
   </metadata>
 
   <title>Create Agile User Stories and Gherkin Feature Files</title>
@@ -41,6 +41,8 @@ Guide the agent to ask targeted questions to gather sanitized story facts and Gh
         <trigger>Create a user story</trigger>
         <trigger>Write a user story</trigger>
         <trigger>I need to write a user story</trigger>
+        <trigger>Create Gherkin scenarios for a user story</trigger>
+        <trigger>Split feature requirements into user stories</trigger>
     </trigger-list>
   </triggers>
 

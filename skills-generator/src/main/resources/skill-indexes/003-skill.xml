@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to generate a checklist document with Java system prompts from skills.xml, following the embedded section template and producing INVENTORY-SKILLS-JAVA.md. This should trigger for requests such as Create Java system prompts checklist; Generate INVENTORY-SKILLS-JAVA.md; Use @003-skills-inventory.</description>
+    <description>Use when you need to generate a checklist document with Java system prompts from skills.xml, following the embedded section template and producing INVENTORY-SKILLS-JAVA.md. This should trigger for requests such as Create Java system prompts checklist; Generate INVENTORY-SKILLS-JAVA.md; Use @003-skills-inventory; Inventory Java cursor rule skills; List available Java system prompt skills.</description>
   </metadata>
 
   <title>Create a Checklist with all Java steps to use with system prompts for Java</title>
@@ -39,6 +39,8 @@ Create a comprehensive step-by-step checklist document for Java system prompts b
       <trigger>Create Java system prompts checklist</trigger>
       <trigger>Generate INVENTORY-SKILLS-JAVA.md</trigger>
       <trigger>Use @003-skills-inventory</trigger>
+        <trigger>Inventory Java cursor rule skills</trigger>
+        <trigger>List available Java system prompt skills</trigger>
     </trigger-list>
   </triggers>
 

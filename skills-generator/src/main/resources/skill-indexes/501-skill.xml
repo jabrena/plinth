@@ -8,7 +8,7 @@
     <license>Apache-2.0</license>
     <description><![CDATA[
         Use when building or reviewing Micronaut applications — Micronaut.run bootstrap, @Singleton/@Prototype, @Factory beans, @ConfigurationProperties, environments, @Requires, @Controller vs services, @Scheduled, graceful shutdown, @ExecuteOn for blocking work, and Jakarta-consistent APIs. This should trigger for requests such as Review Java code for Micronaut application structure and beans; Apply best practices for Micronaut configuration, @Requires, and factories; Improve scheduling, shutdown, or threading in Micronaut services.
-        ]]></description>
+        ]]>; Review Micronaut dependency injection scopes and factories; Configure Micronaut @Requires conditions for environments.</description>
   </metadata>
 
   <title>Micronaut Core Guidelines</title>
@@ -48,6 +48,8 @@ Apply Micronaut core guidelines for DI, configuration, HTTP adapters, and operat
         <trigger>Review Java code for Micronaut application structure and beans</trigger>
         <trigger>Apply best practices for Micronaut configuration, @Requires, and factories</trigger>
         <trigger>Improve scheduling, shutdown, or threading in Micronaut services</trigger>
+        <trigger>Review Micronaut dependency injection scopes and factories</trigger>
+        <trigger>Configure Micronaut @Requires conditions for environments</trigger>
     </trigger-list>
   </triggers>
   <steps>

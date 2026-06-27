@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to refactor Java code based on profiling analysis findings — including reviewing docs/profiling-problem-analysis and docs/profiling-solutions, identifying specific performance bottlenecks, and implementing targeted code changes to address CPU, memory, or threading issues. This should trigger for requests such as Refactor the code with profiling; Apply profiling; Refactor the code with profiling; Optimize hot path.</description>
+    <description>Use when you need to refactor Java code based on profiling analysis findings — including reviewing docs/profiling-problem-analysis and docs/profiling-solutions, identifying specific performance bottlenecks, and implementing targeted code changes to address CPU, memory, or threading issues. This should trigger for requests such as Refactor the code with profiling; Apply profiling; Optimize hot path; Reduce allocations found in profiling; Fix CPU bottlenecks from profiling analysis.</description>
   </metadata>
 
   <title>Java Profiling Workflow / Step 3 / Refactor code to fix issues</title>
@@ -38,8 +38,9 @@ Implement refactoring based on profiling analysis: review profiling-problem-anal
     <trigger-list>
         <trigger>Refactor the code with profiling</trigger>
         <trigger>Apply profiling</trigger>
-        <trigger>Refactor the code with profiling</trigger>
         <trigger>Optimize hot path</trigger>
+        <trigger>Reduce allocations found in profiling</trigger>
+        <trigger>Fix CPU bottlenecks from profiling analysis</trigger>
         <trigger>Performance refactoring</trigger>
     </trigger-list>
   </triggers>

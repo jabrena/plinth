@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to create a new Maven-based Spring Boot 4.0.x project using SDKMAN-managed Java and Spring Boot CLI tooling. This should trigger for requests such as Create a Spring Boot Maven project; Bootstrap Spring Boot project with SDKMAN; Generate a new Spring Boot service.</description>
+    <description>Use when you need to create a new Maven-based Spring Boot 4.0.x project using SDKMAN-managed Java and Spring Boot CLI tooling. This should trigger for requests such as Create a Spring Boot Maven project; Bootstrap Spring Boot project with SDKMAN; Generate a new Spring Boot service; Create Spring Boot 4 Maven project; Scaffold Spring Boot service with Java 25.</description>
   </metadata>
 
   <title>Create Spring Boot Maven Project</title>
@@ -41,6 +41,8 @@ Create a new Spring Boot Maven project through SDKMAN-managed tooling, aligned w
       <trigger>Create a Spring Boot Maven project</trigger>
       <trigger>Bootstrap Spring Boot project with SDKMAN</trigger>
       <trigger>Generate a new Spring Boot service</trigger>
+        <trigger>Create Spring Boot 4 Maven project</trigger>
+        <trigger>Scaffold Spring Boot service with Java 25</trigger>
     </trigger-list>
   </triggers>
 

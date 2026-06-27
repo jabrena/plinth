@@ -8,7 +8,7 @@
     <license>Apache-2.0</license>
     <description><![CDATA[
         Use when building or reviewing core Quarkus applications with CDI beans and scopes, SmallRye Config and profiles, lifecycle, interceptors and events, virtual threads, and test-friendly design. This should trigger for requests such as Review Java code for Quarkus application structure and CDI; Apply best practices for Quarkus configuration and beans; Improve CDI interceptors, events, or programmatic injection in Quarkus; Add virtual-thread configuration or tune CDI lifecycle.
-        ]]></description>
+        ]]>; Review Quarkus CDI bean lifecycle and configuration.</description>
   </metadata>
 
   <title>Quarkus Core Guidelines</title>
@@ -50,6 +50,7 @@ Apply Quarkus core guidelines for CDI beans, configuration, profiles, and lifecy
         <trigger>Apply best practices for Quarkus configuration and beans</trigger>
         <trigger>Improve CDI interceptors, events, or programmatic injection in Quarkus</trigger>
         <trigger>Add virtual-thread configuration or tune CDI lifecycle</trigger>
+        <trigger>Review Quarkus CDI bean lifecycle and configuration</trigger>
     </trigger-list>
   </triggers>
   <steps>
