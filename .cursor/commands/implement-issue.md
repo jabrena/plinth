@@ -16,7 +16,7 @@ Deliver a GitHub issue through an approved implementation plan or a validated Op
 - An OpenSpec change containing a validated `tasks.md`
 - Optional task or group selection, branch/worktree context, and implementation constraints
 
-A bare issue is context, not an execution contract. When repository policy requires structured planning and neither executable artifact exists, stop and direct the user to `/create-plan` or `/create-spec`.
+A bare issue is context, not an execution contract. When repository policy requires structured planning and neither executable artifact exists, stop and direct the user to provide an approved implementation plan or run `/create-spec`.
 
 ## Owner and delegation
 

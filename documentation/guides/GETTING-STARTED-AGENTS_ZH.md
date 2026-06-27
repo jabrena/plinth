@@ -6,9 +6,9 @@
 
 | Agent | 职责 | 用法 |
 | --- | --- | --- |
-| `robot-business-analyst` | 创建或完善 GitHub/Jira issue。<br>以只读方式检查对齐、可追溯性和就绪状态。 | 使用 `/create-issue` 或 `/review-alignment`。它不会实现代码或静默修改工件。 |
+| `robot-business-analyst` | 完善 GitHub/Jira issue。<br>以只读方式检查对齐、可追溯性和就绪状态。 | 使用 `/update-issue` 或 `/review-alignment`。它不会实现代码或静默修改工件。 |
 | `robot-architect` | 探索设计方案。<br>创建 ADR。<br>创建架构图。 | 使用 `/explore-design`、`/create-adr` 或 `/create-diagram`。它将已批准的约束交给 tech lead。 |
-| `robot-tech-lead` | 创建实现计划。<br>创建 OpenSpec change。<br>协调交付。<br>选择实现 Agent 并委托工作。<br>跟踪实现与验证。 | 使用 `/create-plan`、`/create-spec`，或提供已批准的计划/OpenSpec 任务列表进行交付。 |
+| `robot-tech-lead` | 创建 OpenSpec change。<br>协调交付。<br>选择实现 Agent 并委托工作。<br>跟踪实现与验证。 | 使用 `/create-spec`，或提供已批准的计划/OpenSpec 任务列表进行交付。 |
 | `robot-java-performance` | 协调 profiling 和 benchmarking。<br>保留 baseline 与测量证据。<br>将已批准的优化委托给 coder agents。 | 使用 `/profile` 或 `/benchmark`。它不会直接实现应用代码。 |
 | `robot-java-coder` | 实现与框架无关的 Java 和 Maven 工作。 | 由 tech lead 选择的委托目标。 |
 | `robot-java-spring-boot-coder` | 实现 Spring Boot 工作。 | 由 tech lead 选择的委托目标。 |

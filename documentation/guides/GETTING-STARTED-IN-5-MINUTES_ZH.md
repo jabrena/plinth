@@ -80,7 +80,7 @@ install @005-agents-installation claude-code
 
 本项目围绕四个构建块组织 AI 辅助的 Java 工作：
 
-- `Commands` 是入口点，例如 `/create-issue`、`/update-issue`、`/create-plan`、`/create-spec` 和 `/implement-issue`。
+- `Commands` 是入口点，例如 `/update-issue`、`/create-spec` 和 `/implement-issue`。
 - `Agents` 定义职责，例如业务分析、架构、技术领导、Java 实现或性能工作。
 - `Skills` 提供面向 Java、框架、测试、文档、安全和可观测性的具体实践。
 - `MCP Servers` 在可用时把 agents 连接到外部工具和项目上下文。
@@ -88,7 +88,7 @@ install @005-agents-installation claude-code
 一个常见路径是：
 
 ```text
-/create-issue -> /create-plan or /create-spec -> /implement-issue -> /profile or /benchmark
+/update-issue -> /create-spec -> /implement-issue -> /profile or /benchmark
 ```
 
 对于只涉及文档或规划的工作，你可以在 issue、plan、specification、ADR 或 diagram 完成后停止。

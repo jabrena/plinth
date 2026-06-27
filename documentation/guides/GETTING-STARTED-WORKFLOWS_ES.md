@@ -6,14 +6,13 @@ El análisis y el diseño son componibles. Empieza desde los artefactos autorita
 
 1. Ejecuta opcionalmente `/create-feature-branch` antes de versionar artefactos de análisis y diseño.
 2. Usa `/create-worktree` cuando cambios hijos independientes puedan ejecutarse en ramas aisladas.
-3. Ejecuta `/create-issue` para crear o refinar la necesidad registrada en GitHub o Jira.
+3. Ejecuta `/update-issue` para refinar la necesidad registrada en GitHub o Jira.
 4. Ejecuta `/explore-design` cuando existan alternativas técnicas relevantes sin resolver.
 5. Ejecuta `/create-adr` para decisiones duraderas y `/create-diagram` para vistas de arquitectura útiles.
-6. Ejecuta `/create-plan` desde un issue, diseño aprobado, ADRs, OpenSpec o una combinación válida.
-7. Ejecuta `/create-spec` desde un issue, diseño aprobado, ADRs, plan, OpenSpec existente o una combinación válida.
-8. Ejecuta `/review-alignment` antes de la entrega cuando los artefactos puedan discrepar o la preparación sea incierta.
-9. Pide a `@robot-tech-lead` que entregue el plan o `tasks.md` de OpenSpec seleccionado.
-10. Usa `/profile` o `/benchmark` con `@robot-java-performance` cuando necesites evidencia de rendimiento después de la implementación.
+6. Ejecuta `/create-spec` desde un issue, diseño aprobado, ADRs, plan existente, OpenSpec existente o una combinación válida.
+7. Ejecuta `/review-alignment` antes de la entrega cuando los artefactos puedan discrepar o la preparación sea incierta.
+8. Pide a `@robot-tech-lead` que entregue el plan o `tasks.md` de OpenSpec seleccionado.
+9. Usa `/profile` o `/benchmark` con `@robot-java-performance` cuando necesites evidencia de rendimiento después de la implementación.
 
 Las rutas comunes incluyen issue a plan, issue a OpenSpec, plan a OpenSpec y OpenSpec existente a plan. `/create-spec` puede proponer varios cambios OpenSpec cuando los resultados tengan límites independientes de valor, propiedad, entrega, riesgo, rollback o despliegue. El usuario aprueba ese mapa antes de crear los cambios.
 

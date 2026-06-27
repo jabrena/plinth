@@ -80,7 +80,7 @@ El instalador soporta `.cursor/agents` y `.claude/agents`.
 
 Este proyecto organiza el trabajo Java asistido por IA alrededor de cuatro bloques:
 
-- `Commands` son los puntos de entrada, como `/create-issue`, `/update-issue`, `/create-plan`, `/create-spec` y `/implement-issue`.
+- `Commands` son los puntos de entrada, como `/update-issue`, `/create-spec` y `/implement-issue`.
 - `Agents` definen responsabilidades, como análisis de negocio, arquitectura, liderazgo técnico, implementación Java o trabajo de rendimiento.
 - `Skills` aportan prácticas enfocadas para Java, frameworks, testing, documentación, seguridad y observabilidad.
 - `MCP Servers` conectan los agentes con herramientas externas y contexto del proyecto cuando están disponibles.
@@ -88,7 +88,7 @@ Este proyecto organiza el trabajo Java asistido por IA alrededor de cuatro bloqu
 Una ruta habitual es:
 
 ```text
-/create-issue -> /create-plan or /create-spec -> /implement-issue -> /profile or /benchmark
+/update-issue -> /create-spec -> /implement-issue -> /profile or /benchmark
 ```
 
 Para trabajo solo de documentación o planificación, puedes detenerte cuando el issue, plan, especificación, ADR o diagrama esté completo.

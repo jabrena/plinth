@@ -16,7 +16,7 @@ An opinionated AI-native workflow for evolving modern Java Enterprise `SDLC` pra
 
 ## Project at a glance
 
-- 15 Commands
+- 12 Commands
 - 9 Agents
 - 116 Skills
 
@@ -125,8 +125,6 @@ Implement and improve Java applications with Maven, design, coding, testing, sec
     @robot-java-quarkus-coder
     @robot-java-micronaut-coder
     @robot-no-java
-/kill-port
-
 MCP Servers
     Jbang-Quarkus-JDBC
     MongoDB
