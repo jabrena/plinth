@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to add or review Flyway database migrations in a Spring Boot application — Maven dependencies, db/migration scripts, spring.flyway.* configuration, baseline and validation, and alignment with JDBC or Spring Data JDBC. This should trigger for requests such as Add or review Flyway migrations in a Spring Boot project; Configure spring.flyway or db/migration layout.</description>
+    <description>Use when you need to add or review Flyway database migrations in a Spring Boot application — Maven dependencies, db/migration scripts, spring.flyway.* configuration, baseline and validation, and alignment with JDBC or Spring Data JDBC. This should trigger for requests such as Add or review Flyway migrations in a Spring Boot project; Configure spring.flyway or db/migration layout; Add versioned Flyway SQL migrations for Spring Boot; Review Spring Boot database migration ordering; Fix repeatable Flyway migrations in a Spring project.</description>
   </metadata>
 
   <title>Spring — Database migrations (Flyway)</title>
@@ -44,6 +44,9 @@ Apply Flyway migration guidelines for Spring Boot.
     <trigger-list>
         <trigger>Add or review Flyway migrations in a Spring Boot project</trigger>
         <trigger>Configure spring.flyway or db/migration layout</trigger>
+        <trigger>Add versioned Flyway SQL migrations for Spring Boot</trigger>
+        <trigger>Review Spring Boot database migration ordering</trigger>
+        <trigger>Fix repeatable Flyway migrations in a Spring project</trigger>
     </trigger-list>
   </triggers>
 

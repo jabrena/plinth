@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to create a new Maven-based Micronaut 4.x project using SDKMAN-managed Java and Micronaut CLI tooling. This should trigger for requests such as Create a Micronaut Maven project; Bootstrap Micronaut project with SDKMAN; Generate a new Micronaut service.</description>
+    <description>Use when you need to create a new Maven-based Micronaut 4.x project using SDKMAN-managed Java and Micronaut CLI tooling. This should trigger for requests such as Create a Micronaut Maven project; Bootstrap Micronaut project with SDKMAN; Generate a new Micronaut service; Create Micronaut 4 Maven project; Scaffold Micronaut service with Java 25.</description>
   </metadata>
 
   <title>Create Micronaut Maven Project</title>
@@ -41,6 +41,8 @@ Create a new Micronaut Maven project through SDKMAN-managed tooling, aligned wit
       <trigger>Create a Micronaut Maven project</trigger>
       <trigger>Bootstrap Micronaut project with SDKMAN</trigger>
       <trigger>Generate a new Micronaut service</trigger>
+        <trigger>Create Micronaut 4 Maven project</trigger>
+        <trigger>Scaffold Micronaut service with Java 25</trigger>
     </trigger-list>
   </triggers>
 

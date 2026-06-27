@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to set up Gatling performance testing for a Java Maven project — including adding Gatling dependencies and the Gatling Maven plugin, creating Java simulations, running gatling:test, configuring a simulation class, and reviewing generated reports. This should trigger for requests such as Add Gatling performance testing; Apply Gatling performance testing; Create a Gatling simulation; Add Gatling support.</description>
+    <description>Use when you need to set up Gatling performance testing for a Java Maven project — including adding Gatling dependencies and the Gatling Maven plugin, creating Java simulations, running gatling:test, configuring a simulation class, and reviewing generated reports. This should trigger for requests such as Add Gatling performance testing; Apply Gatling performance testing; Create a Gatling simulation; Add Gatling support; Review Gatling performance test assertions and feeders.</description>
   </metadata>
 
   <title>Run performance tests based on Gatling</title>
@@ -45,6 +45,7 @@ Provide a complete Gatling performance testing setup for Java Maven projects by 
         <trigger>Apply Gatling performance testing</trigger>
         <trigger>Create a Gatling simulation</trigger>
         <trigger>Add Gatling support</trigger>
+        <trigger>Review Gatling performance test assertions and feeders</trigger>
     </trigger-list>
   </triggers>
 

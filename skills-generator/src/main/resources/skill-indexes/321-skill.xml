@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to write unit tests for Spring Boot applications — including pure unit tests with @ExtendWith(MockitoExtension.class) for @Service/@Component, slice tests with @WebMvcTest and @MockitoBean for controllers, @JsonTest for JSON serialization, parameterized tests with @CsvSource/@MethodSource, test profiles, and @TestConfiguration. For framework-agnostic Java use @131-java-testing-unit-testing. For integration tests use @322-frameworks-spring-boot-testing-integration-tests. This should trigger for requests such as Review Java code for Spring Boot unit tests; Apply best practices for Spring Boot unit tests in Java code.</description>
+    <description>Use when you need to write unit tests for Spring Boot applications — including pure unit tests with @ExtendWith(MockitoExtension.class) for @Service/@Component, slice tests with @WebMvcTest and @MockitoBean for controllers, @JsonTest for JSON serialization, parameterized tests with @CsvSource/@MethodSource, test profiles, and @TestConfiguration. For framework-agnostic Java use @131-java-testing-unit-testing. For integration tests use @322-frameworks-spring-boot-testing-integration-tests. This should trigger for requests such as Review Java code for Spring Boot unit tests; Apply best practices for Spring Boot unit tests in Java code; Write Mockito-first unit tests for Spring Boot services; Avoid unnecessary @SpringBootTest in Spring unit tests; Review Spring Boot slice-free unit test design.</description>
   </metadata>
 
   <title>Spring Boot Unit Testing with Mockito</title>
@@ -42,6 +42,9 @@ Apply Spring Boot unit testing guidelines with Mockito.
     <trigger-list>
         <trigger>Review Java code for Spring Boot unit tests</trigger>
         <trigger>Apply best practices for Spring Boot unit tests in Java code</trigger>
+        <trigger>Write Mockito-first unit tests for Spring Boot services</trigger>
+        <trigger>Avoid unnecessary @SpringBootTest in Spring unit tests</trigger>
+        <trigger>Review Spring Boot slice-free unit test design</trigger>
     </trigger-list>
   </triggers>
 

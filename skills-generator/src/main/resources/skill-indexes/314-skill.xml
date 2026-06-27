@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to design or implement Kafka messaging in Spring Boot — including topic design, producer/consumer implementation, JSON serialization with Boot factory customizers, Testcontainers `@ServiceConnection` integration tests, retries and dead-letter topics, idempotency, and error handling. This should trigger for requests such as Add Kafka in Spring Boot; Review Spring Kafka consumers; Improve retries and DLT in Spring Kafka.</description>
+    <description>Use when you need to design or implement Kafka messaging in Spring Boot — including topic design, producer/consumer implementation, JSON serialization with Boot factory customizers, Testcontainers `@ServiceConnection` integration tests, retries and dead-letter topics, idempotency, and error handling. This should trigger for requests such as Add Kafka in Spring Boot; Review Spring Kafka consumers; Improve retries and DLT in Spring Kafka; Configure Spring Kafka topics serializers or listener containers; Add Spring Kafka dead-letter topic handling.</description>
   </metadata>
 
   <title>Spring Boot — Kafka messaging</title>
@@ -29,6 +29,8 @@ Apply Spring Kafka guidance with concrete examples for design, implementation, a
         <trigger>Add Kafka in Spring Boot</trigger>
         <trigger>Review Spring Kafka consumers/producers</trigger>
         <trigger>Improve retries, dead-letter topics, or idempotency in Spring Kafka</trigger>
+        <trigger>Configure Spring Kafka topics serializers or listener containers</trigger>
+        <trigger>Add Spring Kafka dead-letter topic handling</trigger>
     </trigger-list>
   </triggers>
 

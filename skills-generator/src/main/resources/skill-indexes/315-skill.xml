@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to design or implement MongoDB data access in Spring Boot — including document modeling, Spring Data Mongo repositories/templates, indexing, optimistic concurrency, and error handling. This should trigger for requests such as Add MongoDB in Spring Boot; Review Spring Data Mongo design; Improve error handling for Mongo writes.</description>
+    <description>Use when you need to design or implement MongoDB data access in Spring Boot — including document modeling, Spring Data Mongo repositories/templates, indexing, optimistic concurrency, and error handling. This should trigger for requests such as Add MongoDB in Spring Boot; Review Spring Data Mongo design; Improve error handling for Mongo writes; Model MongoDB documents for a Spring Boot service; Configure Spring Data MongoDB indexes or transactions.</description>
   </metadata>
 
   <title>Spring Boot — MongoDB</title>
@@ -29,6 +29,8 @@ Apply Spring Data MongoDB guidance with concrete examples for design, implementa
         <trigger>Add MongoDB in Spring Boot</trigger>
         <trigger>Review Spring Data Mongo repositories/documents</trigger>
         <trigger>Improve duplicate key handling, retries, or optimistic locking in Mongo flows</trigger>
+        <trigger>Model MongoDB documents for a Spring Boot service</trigger>
+        <trigger>Configure Spring Data MongoDB indexes or transactions</trigger>
     </trigger-list>
   </triggers>
 

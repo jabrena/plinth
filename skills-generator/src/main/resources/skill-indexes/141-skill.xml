@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to refactor Java code to adopt modern Java features (Java 8+) — including migrating anonymous classes to lambdas, replacing Iterator loops with Stream API, adopting Optional for null safety, switching from legacy Date/Calendar to java.time, using collection factory methods, applying text blocks, var inference, or leveraging Java 25 features like flexible constructor bodies and module import declarations. This should trigger for requests such as Review Java code for modern Java development; Apply best practices for modern Java development in Java code.</description>
+    <description>Use when you need to refactor Java code to adopt modern Java features (Java 8+) — including migrating anonymous classes to lambdas, replacing Iterator loops with Stream API, adopting Optional for null safety, switching from legacy Date/Calendar to java.time, using collection factory methods, applying text blocks, var inference, or leveraging Java 25 features like flexible constructor bodies and module import declarations. This should trigger for requests such as Review Java code for modern Java development; Apply best practices for modern Java development in Java code; Modernize Java code with records pattern matching or switch expressions; Replace legacy idioms with modern Java features; Adopt Java 8+ language features safely.</description>
   </metadata>
 
   <title>Modern Java Development Guidelines (Java 8+)</title>
@@ -44,6 +44,9 @@ Identify and apply modern Java (Java 8+) refactoring opportunities to improve re
     <trigger-list>
         <trigger>Review Java code for modern Java development</trigger>
         <trigger>Apply best practices for modern Java development in Java code</trigger>
+        <trigger>Modernize Java code with records pattern matching or switch expressions</trigger>
+        <trigger>Replace legacy idioms with modern Java features</trigger>
+        <trigger>Adopt Java 8+ language features safely</trigger>
     </trigger-list>
   </triggers>
 
