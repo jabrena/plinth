@@ -18,7 +18,7 @@ An opinionated AI-native workflow for evolving modern Java Enterprise `SDLC` pra
 
 - 15 Commands
 - 9 Agents
-- 109 Skills
+- 111 Skills
 
 ## Latest Updates
 
@@ -94,6 +94,7 @@ Turn an idea into an actionable change with user stories, GitHub Issues or Jira,
     @121-java-object-oriented-design
     @122-java-type-design
     @123-java-design-patterns
+    @130-java-testing-strategies
 /explore-design
 @robot-architect
     @034-architecture-design-exploration

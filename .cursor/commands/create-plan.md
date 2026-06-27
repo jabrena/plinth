@@ -28,6 +28,7 @@ Create or refine an executable technical implementation plan from the available 
 - `121-java-object-oriented-design` when object responsibilities, boundaries, or collaboration design affect the plan
 - `122-java-type-design` when domain types, value objects, invariants, signatures, or invalid-state modeling affect the plan
 - `123-java-design-patterns` when a demonstrated collaboration or integration problem requires pattern selection before tasking
+- `130-java-testing-strategies` when testing strategy, boundary coverage, flakiness, or verification quality affect tasking
 
 ## Workflow
 1. Identify the available source artifacts and their authority.
@@ -38,9 +39,10 @@ Create or refine an executable technical implementation plan from the available 
 6. Apply TDD guidance when creating testing-related plans so tasks identify the next behavior, failing-test-first signal, smallest passing change, and refactoring verification.
 7. Apply Parallel Change guidance when database migration work needs expand, migrate, contract sequencing before framework-specific implementation tasks.
 8. Apply Java design skills in order when the plan needs design detail: object-oriented responsibilities, type design, then design-pattern selection only for a demonstrated problem.
-9. Define the technical approach, affected areas, ordered tasks, risks, and verification.
-10. Record source links and any assumptions or unresolved blockers.
-11. Present the plan for approval.
+9. Apply testing-strategy guidance when plan tasks need RIGHT-BICEP coverage, A-TRIP quality, or CORRECT boundary analysis.
+10. Define the technical approach, affected areas, ordered tasks, risks, and verification.
+11. Record source links and any assumptions or unresolved blockers.
+12. Present the plan for approval.
 
 ## Output
 - Executable implementation plan
