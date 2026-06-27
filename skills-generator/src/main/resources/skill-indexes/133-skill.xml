@@ -6,7 +6,7 @@
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to implement acceptance tests from maintainer-sanitized Gherkin scenario facts for framework-agnostic Java (no Spring Boot, Quarkus, Micronaut) — confirming @acceptance scenarios before coding, happy path with RestAssured, project-local DB/Kafka test fixtures, WireMock for external REST only, and *AT classes run by Failsafe. This should trigger for requests such as Review Java code for acceptance tests; Apply best practices for acceptance tests in Java code.</description>
+    <description>Use when you need to implement acceptance tests from maintainer-sanitized Gherkin scenario facts for framework-agnostic Java (no Spring Boot, Quarkus, Micronaut) — confirming @acceptance scenarios before coding, happy path with RestAssured, DB/Kafka test fixtures, WireMock for external REST only, and *AT classes run by Failsafe. This should trigger for requests such as Review Java code for acceptance tests; Apply best practices for acceptance tests in Java code.</description>
   </metadata>
 
   <title>Java acceptance tests from Gherkin</title>
