@@ -50,7 +50,8 @@
                 <configuration>
                     <release>${java.version}</release>
                     <compilerArgs>
-                        <arg>-Xlint:all</arg>
+                        <arg>--enable-preview</arg>
+                        <arg>-Xlint:all,-preview</arg>
                         <arg>-Werror</arg>
                     </compilerArgs>
                 </configuration>
@@ -60,6 +61,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <configuration>
+                    <argLine>--enable-preview</argLine>
                     <skipAfterFailureCount>1</skipAfterFailureCount>
                     <includes>
                         <include>**/*Test.java</include>
@@ -69,6 +71,77 @@
                     </excludes>
                 </configuration>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.5.0</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <mainClass>info.jab.markdownvalidator.MarkdownValidator</mainClass>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <!-- Cyclomatic Complexity Analysis Profile -->
+        <profile>
+            <id>cyclomatic-complexity</id>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <!-- PMD Plugin for Cyclomatic Complexity Analysis -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-pmd-plugin</artifactId>
+                        <configuration>
+                            <rulesets>
+                                <ruleset>${maven.multiModuleProjectDirectory}/pmd/pmd-cyclomatic-complexity.xml</ruleset>
+                            </rulesets>
+                            <printFailingErrors>true</printFailingErrors>
+                            <linkXRef>false</linkXRef>
+                            <minimumTokens>100</minimumTokens>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>pmd-check</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>pmd-report</id>
+                                <phase>site</phase>
+                                <goals>
+                                    <goal>pmd</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <reporting>
+                <plugins>
+                    <!-- PMD Report Plugin -->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-pmd-plugin</artifactId>
+                        <configuration>
+                            <rulesets>
+                                <ruleset>${maven.multiModuleProjectDirectory}/pmd/pmd-cyclomatic-complexity.xml</ruleset>
+                            </rulesets>
+                            <linkXRef>false</linkXRef>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </reporting>
+        </profile>
+    </profiles>
 </project>

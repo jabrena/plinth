@@ -78,7 +78,7 @@ jobs:
           curl -Ls https://sh.jbang.dev | bash -s - app setup
           echo "$HOME/.jbang/bin" >> $GITHUB_PATH
       - name: Validate Markdown Files
-        run: jbang .github/scripts/MarkdownValidator.java --verbose .
+        run: jbang markdown-validator/src/main/java/info/jab/markdownvalidator/MarkdownValidator.java --verbose .
 
   validate-skill-check:
     name: Validate Agent Skills with skill-check

@@ -21,7 +21,7 @@ For that reason, this project validates generated skills with several independen
 `MarkdownValidator` protects the documentation layer before the skill scanners run.
 
 ```bash
-jbang .github/scripts/MarkdownValidator.java --verbose .
+jbang markdown-validator/src/main/java/info/jab/markdownvalidator/MarkdownValidator.java --verbose .
 ```
 
 It checks that Markdown files can be parsed and that remote links remain healthy. This is not a skill-security scanner, but it catches broken documentation early, including documentation that explains how users install, review, and operate the skills.

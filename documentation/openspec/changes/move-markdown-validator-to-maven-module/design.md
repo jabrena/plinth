@@ -1,6 +1,6 @@
 ## Context
 
-Issue #941 asks for a dedicated Maven module for the Markdown validator because the current JBang script has grown in responsibility and CI runtime. The current script lives at `.github/scripts/MarkdownValidator.java` and is called from `.github/workflows/maven.yaml` with:
+Issue #941 asks for a dedicated Maven module for the Markdown validator because the current JBang script has grown in responsibility and CI runtime. The previous script lived at `.github/scripts/MarkdownValidator.java` and was called from `.github/workflows/maven.yaml` with:
 
 ```bash
 jbang .github/scripts/MarkdownValidator.java --verbose .
@@ -10,7 +10,7 @@ The repository currently has `skills-generator` and `site-generator` modules reg
 
 ## Intended Behavior Change
 
-Markdown validation remains available to contributors and CI, but the validator implementation becomes a Maven-owned Java component with a clearer design and faster execution. CI should continue to validate Markdown when Markdown files change, and local contributors should retain a JBang-compatible command path.
+Markdown validation remains available to contributors and CI, but the validator implementation becomes a Maven-owned Java component with a clearer design and faster execution. CI should continue to validate Markdown when Markdown files change, and local contributors should run the Maven module main class directly with JBang.
 
 ## Two-Step Change Strategy
 
@@ -28,7 +28,7 @@ Run from a representative clean checkout and capture the command, machine contex
 
 Create the Maven module and move the existing validator behavior into it without intentionally changing validation rules, command options, target directories, exit-code semantics, or reported validation failures.
 
-The existing script should become a thin JBang-compatible entry point, or equivalent wrapper, that calls the Maven module main class using `//SOURCES` as needed. This preserves the current contributor workflow while giving the implementation a proper module boundary.
+The Maven module main class should become the supported JBang-compatible entry point. This removes the old checked-in wrapper while giving the implementation a proper module boundary.
 
 Validation after Step 1:
 
@@ -53,7 +53,7 @@ Validation after Step 2:
 ## Design Constraints
 
 - Preserve the current command-line contract unless a compatibility change is explicitly documented.
-- Keep JBang support; contributors should not lose the existing script-style invocation path.
+- Keep JBang support through `markdown-validator/src/main/java/info/jab/markdownvalidator/MarkdownValidator.java`.
 - Keep CI behavior aligned with the existing `validate-markdown` job trigger.
 - Use bounded parallelism and deterministic error aggregation.
 - Preserve HTTP timeout behavior and interruption handling.

@@ -9,7 +9,7 @@
 - [x] 1.5 Add a dedicated Maven module for the Markdown validator and register it in the root `pom.xml`.
 - [x] 1.6 Move the current validator implementation into the Maven module without changing validation behavior.
 - [x] 1.7 Add characterization or unit tests covering current command options, default target directories, Markdown parsing/rendering, remote-link filtering, fail-fast behavior, and exit-code semantics.
-- [x] 1.8 Keep `.github/scripts/MarkdownValidator.java` as a thin JBang-compatible entry point that calls the module main class using `//SOURCES` as needed.
+- [x] 1.8 Make `markdown-validator/src/main/java/info/jab/markdownvalidator/MarkdownValidator.java` the JBang-compatible entry point and remove the obsolete `.github/scripts/MarkdownValidator.java` wrapper.
 - [x] 1.9 Run the new module verification after extraction to prove behavior is preserved.
 - [x] 1.10 Review the validator algorithm and identify safe parallelization boundaries.
 - [x] 1.11 Implement bounded parallel validation where it improves runtime while keeping error aggregation deterministic.

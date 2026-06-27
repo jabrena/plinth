@@ -8,7 +8,7 @@ The current validator is a CI-oriented JBang script that has grown beyond a smal
 
 - Add a dedicated Maven module for the Markdown validator.
 - Move the validator implementation out of `.github/scripts/MarkdownValidator.java` while preserving the existing command-line behavior needed by contributors and CI.
-- Keep JBang execution supported by using a thin entry point that calls the Maven module main class with `//SOURCES` as needed.
+- Keep JBang execution supported by making the Maven module main class directly runnable with `jbang`.
 - Review the current algorithm and apply safe parallel execution where it improves validation time without making results nondeterministic.
 - Consider Java structural concurrency for file and remote-link validation work.
 - Update the GitHub Actions Markdown validation step to use the supported entry point.
@@ -26,7 +26,8 @@ None.
 ## Source and Derivation
 
 - Source artifact: GitHub issue [#941](https://github.com/jabrena/cursor-rules-java/issues/941).
-- Current implementation: `.github/scripts/MarkdownValidator.java`.
+- Previous implementation: `.github/scripts/MarkdownValidator.java`.
+- New implementation: `markdown-validator/src/main/java/info/jab/markdownvalidator/MarkdownValidator.java`.
 - Current CI call site: `.github/workflows/maven.yaml`.
 - Current Maven module registry: root `pom.xml`.
 - Derivation direction: issue #941 -> OpenSpec change artifacts -> Maven module implementation -> CI/JBang validation.

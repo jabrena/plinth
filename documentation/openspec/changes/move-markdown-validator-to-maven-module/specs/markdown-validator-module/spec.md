@@ -11,12 +11,13 @@ The repository MUST provide a dedicated Maven module for the Markdown validator 
 - **THEN** the root build registers the new validator module
 - **AND** the module can be built and tested through Maven
 
-#### Scenario: Move validator behavior out of the CI script
+#### Scenario: Move validator behavior into the Maven module
 
 - **GIVEN** the current validator implementation lives in `.github/scripts/MarkdownValidator.java`
 - **WHEN** the validator module is implemented
 - **THEN** the validator behavior is owned by the Maven module
-- **AND** `.github/scripts/MarkdownValidator.java` no longer contains the full validator implementation
+- **AND** `markdown-validator/src/main/java/info/jab/markdownvalidator/MarkdownValidator.java` is the module main class
+- **AND** `.github/scripts/MarkdownValidator.java` is no longer required
 
 ### Requirement: Compatibility with existing validator behavior
 
@@ -42,12 +43,12 @@ The module extraction MUST preserve the existing validator command-line behavior
 
 The repository MUST keep a JBang-compatible way to run Markdown validation after the Maven module is introduced.
 
-#### Scenario: Run validator through the existing script path
+#### Scenario: Run validator through the module main source
 
-- **GIVEN** contributors and CI can run `jbang .github/scripts/MarkdownValidator.java --verbose .`
+- **GIVEN** contributors and CI need a JBang-compatible Markdown validation command
 - **WHEN** the validator implementation is moved into the Maven module
-- **THEN** a supported JBang-compatible entry point remains available from `.github/scripts/MarkdownValidator.java`
-- **AND** the entry point delegates to the Maven module main class using `//SOURCES` or an equivalent supported JBang mechanism
+- **THEN** they can run `jbang markdown-validator/src/main/java/info/jab/markdownvalidator/MarkdownValidator.java --verbose .`
+- **AND** that entry point is the Maven module main class
 
 ### Requirement: CI Markdown validation integration
 
