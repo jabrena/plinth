@@ -295,6 +295,13 @@ execute @skills-generator/src/test/resources/gherkin/skills/706-technologies-con
 and verify that acceptance-tests passes.
 ```
 
+## 707-technologies-onion-architecture
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/707-technologies-onion-architecture.feature
+and verify that acceptance-tests passes.
+```
+
 ## 801-regulations-eu-ai-act
 
 ```bash
