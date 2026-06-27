@@ -56,10 +56,6 @@ public final class RemoteLinkValidator {
             }
 
             int status = response.statusCode();
-            if (status >= 300 && status < 400) {
-                return Optional.of(
-                        "Remote link redirects instead of resolving directly: " + uri + " (HTTP " + status + ")");
-            }
             if (status >= 400) {
                 return Optional.of("Remote link is not reachable: " + uri + " (HTTP " + status + ")");
             }

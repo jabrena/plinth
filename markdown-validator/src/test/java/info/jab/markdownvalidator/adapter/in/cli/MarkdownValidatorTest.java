@@ -26,10 +26,9 @@ class MarkdownValidatorTest {
         Output output = new Output();
         MarkdownValidatorCommand validator = validator(new FixedRequester(200), output);
 
-        new CommandLine(validator).parseArgs("--verbose", "--fail-fast", "--directories", "docs,skills", tempDir.toString());
+        new CommandLine(validator).parseArgs("--verbose", "--directories", "docs,skills", tempDir.toString());
 
         assertThat(validator.verbose).isTrue();
-        assertThat(validator.failFast).isTrue();
         assertThat(validator.targetDirectories).containsExactly("docs", "skills");
         assertThat(validator.rootDir).isEqualTo(tempDir.toString());
 

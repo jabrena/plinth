@@ -19,11 +19,7 @@ public final class StructuredValidationRunner {
         this.documentValidator = documentValidator;
     }
 
-    public List<FileValidationResult> validate(List<Path> markdownFiles, boolean failFast, boolean verbose) {
-        if (failFast) {
-            return validateUntilFirstFailure(markdownFiles, verbose);
-        }
-
+    public List<FileValidationResult> validate(List<Path> markdownFiles, boolean verbose) {
         int workerCount = Math.min(MAX_WORKERS, markdownFiles.size());
         List<List<IndexedPath>> chunks = chunks(markdownFiles, workerCount);
 
@@ -46,18 +42,6 @@ public final class StructuredValidationRunner {
             return List.of(FileValidationResult.failed(
                     Path.of("."), "Validation failed unexpectedly: " + describeThrowable(e), verbose));
         }
-    }
-
-    private List<FileValidationResult> validateUntilFirstFailure(List<Path> markdownFiles, boolean verbose) {
-        List<FileValidationResult> results = new ArrayList<>();
-        for (Path file : markdownFiles) {
-            FileValidationResult result = documentValidator.validate(file, verbose);
-            results.add(result);
-            if (!result.errors().isEmpty()) {
-                break;
-            }
-        }
-        return List.copyOf(results);
     }
 
     private List<IndexedResult> validateChunk(List<IndexedPath> chunk, boolean verbose) {

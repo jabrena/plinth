@@ -27,9 +27,9 @@ The module extraction MUST preserve the existing validator command-line behavior
 
 - **GIVEN** contributors use the current Markdown validator command-line interface
 - **WHEN** the implementation is moved into the Maven module
-- **THEN** the validator still supports verbose mode, fail-fast mode, configurable target directories, and a root directory parameter
+- **THEN** the validator still supports verbose mode, configurable target directories, and a root directory parameter
 - **AND** the default target directories remain compatible with the existing script defaults
-- **AND** success and failure exit-code semantics remain compatible with the existing script
+- **AND** success and failure exit-code semantics remain compatible with the supported validator behavior
 
 #### Scenario: Preserve validation responsibilities
 

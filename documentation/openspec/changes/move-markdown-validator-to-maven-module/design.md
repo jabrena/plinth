@@ -32,7 +32,7 @@ The Maven module main class should become the supported JBang-compatible entry p
 
 Validation after Step 1:
 
-- Run the new module tests or characterization tests for current parsing, remote-link filtering, fail-fast, default directory, missing directory, and exit-code behavior.
+- Run the new module tests or characterization tests for current parsing, remote-link filtering, default directory, missing directory, and exit-code behavior.
 - Run the Maven build for the new module.
 - Run the JBang entry point against a representative repository checkout.
 
@@ -44,7 +44,7 @@ The behavior change is the improved runtime profile, not a change to which Markd
 
 Validation after Step 2:
 
-- Run focused tests for parallel validation, shared remote-link caching, fail-fast behavior, and deterministic result aggregation.
+- Run focused tests for parallel validation, shared remote-link caching, and deterministic result aggregation.
 - Run the Maven build for the validator module.
 - Run the repository Markdown validation command.
 - Record the post-change local runtime using the same local timing approach used before implementation.

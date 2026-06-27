@@ -26,7 +26,7 @@ class MarkdownValidationServiceTest {
     void validate_returnsRootMissingReportWhenRootDoesNotExist() throws IOException {
         MarkdownValidationService service = service(new FixedFinder(List.of()), new CountingRequester(Map.of()));
 
-        ValidationReport report = service.validate(tempDir.resolve("missing"), List.of("docs"), false, false);
+        ValidationReport report = service.validate(tempDir.resolve("missing"), List.of("docs"), false);
 
         assertThat(report.rootMissing()).isTrue();
     }
@@ -35,40 +35,25 @@ class MarkdownValidationServiceTest {
     void validate_returnsEmptyReportWhenNoMarkdownFilesExist() throws IOException {
         MarkdownValidationService service = service(new FixedFinder(List.of()), new CountingRequester(Map.of()));
 
-        ValidationReport report = service.validate(tempDir, List.of("docs"), false, false);
+        ValidationReport report = service.validate(tempDir, List.of("docs"), false);
 
         assertThat(report.noMarkdownFiles()).isTrue();
         assertThat(report.documentsValidated()).isZero();
     }
 
     @Test
-    void validate_stopsAfterFirstFailureWhenFailFastIsEnabled() throws IOException {
+    void validate_checksAllFilesWhenSomeDocumentsFail() throws IOException {
         Path first = markdownFile("a.md", "[bad](https://example.test/a)");
         Path second = markdownFile("b.md", "[bad](https://example.test/b)");
         CountingRequester requester = new CountingRequester(
                 Map.of(URI.create("https://example.test/a"), 404, URI.create("https://example.test/b"), 404));
         MarkdownValidationService service = service(new FixedFinder(List.of(first, second)), requester);
 
-        ValidationReport report = service.validate(tempDir, List.of("docs"), true, false);
-
-        assertThat(report.documentsFound()).isEqualTo(2);
-        assertThat(report.documentsValidated()).isEqualTo(1);
-        assertThat(report.passed()).isFalse();
-        assertThat(requester.requestedUris()).containsExactly(URI.create("https://example.test/a"));
-    }
-
-    @Test
-    void validate_checksAllFilesWhenFailFastIsDisabled() throws IOException {
-        Path first = markdownFile("a.md", "[bad](https://example.test/a)");
-        Path second = markdownFile("b.md", "[bad](https://example.test/b)");
-        CountingRequester requester = new CountingRequester(
-                Map.of(URI.create("https://example.test/a"), 404, URI.create("https://example.test/b"), 404));
-        MarkdownValidationService service = service(new FixedFinder(List.of(first, second)), requester);
-
-        ValidationReport report = service.validate(tempDir, List.of("docs"), false, false);
+        ValidationReport report = service.validate(tempDir, List.of("docs"), false);
 
         assertThat(report.documentsFound()).isEqualTo(2);
         assertThat(report.documentsValidated()).isEqualTo(2);
+        assertThat(report.passed()).isFalse();
         assertThat(report.errors()).hasSize(2);
         assertThat(requester.requestedUris())
                 .containsExactlyInAnyOrder(URI.create("https://example.test/a"), URI.create("https://example.test/b"));

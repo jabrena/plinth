@@ -18,8 +18,7 @@ public final class MarkdownValidationService {
         this.validationRunner = validationRunner;
     }
 
-    public ValidationReport validate(Path root, List<String> targetDirectories, boolean failFast, boolean verbose)
-            throws IOException {
+    public ValidationReport validate(Path root, List<String> targetDirectories, boolean verbose) throws IOException {
         if (!Files.exists(root)) {
             return ValidationReport.rootMissing(root);
         }
@@ -29,7 +28,7 @@ public final class MarkdownValidationService {
             return ValidationReport.empty(root);
         }
 
-        List<FileValidationResult> results = validationRunner.validate(markdownFiles, failFast, verbose);
+        List<FileValidationResult> results = validationRunner.validate(markdownFiles, verbose);
         return ValidationReport.completed(root, markdownFiles.size(), results);
     }
 }

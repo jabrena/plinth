@@ -31,11 +31,6 @@ public class MarkdownValidatorCommand implements Callable<Integer> {
     boolean verbose;
 
     @Option(
-            names = { "-f", "--fail-fast" },
-            description = "Stop on first validation error")
-    boolean failFast;
-
-    @Option(
             names = { "-d", "--directories" },
             description = "Directories to scan for markdown files (default: .cursor/rules,skills,.cursor/agents)",
             split = ",")
@@ -63,7 +58,7 @@ public class MarkdownValidatorCommand implements Callable<Integer> {
         Path root = Path.of(rootDir);
         out.println("🔍 Starting markdown validation...");
 
-        ValidationReport report = validationService.validate(root, targetDirectories, failFast, verbose);
+        ValidationReport report = validationService.validate(root, targetDirectories, verbose);
 
         if (report.rootMissing()) {
             err.println("❌ Root directory does not exist: " + root);

@@ -18,7 +18,7 @@ public final class HttpClientRemoteLinkRequester implements RemoteLinkRequester 
         this.connectTimeout = connectTimeout;
         this.httpClient = HttpClient.newBuilder()
                 .connectTimeout(connectTimeout)
-                .followRedirects(HttpClient.Redirect.NEVER)
+                .followRedirects(HttpClient.Redirect.NORMAL)
                 .build();
     }
 

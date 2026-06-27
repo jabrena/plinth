@@ -69,17 +69,6 @@ class RemoteLinkValidatorTest {
     }
 
     @Test
-    void validate_reportsRedirectsAsFailures() {
-        CountingRequester requester = new CountingRequester(Map.of(URI.create("https://example.test/moved"), 301));
-        RemoteLinkValidator validator = new RemoteLinkValidator(requester, TIMEOUT);
-
-        Optional<?> result = validator.validate(DOCUMENT, "https://example.test/moved");
-
-        assertThat(result).isPresent();
-        assertThat(result.orElseThrow().toString()).contains("redirects instead of resolving directly");
-    }
-
-    @Test
     void validate_reportsBrokenRemoteLinks() {
         CountingRequester requester = new CountingRequester(Map.of(URI.create("https://example.test/missing"), 404));
         RemoteLinkValidator validator = new RemoteLinkValidator(requester, TIMEOUT);
