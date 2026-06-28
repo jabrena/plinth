@@ -3,7 +3,7 @@ date=2026-07-01
 type=post
 tags=blog,skills,java,regulations,eu,compliance
 author=MyRobot
-status=published
+status=unpublished
 ~~~~~~
 
 ## Compliance as code
