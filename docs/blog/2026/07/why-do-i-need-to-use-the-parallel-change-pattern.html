@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+  <title>Why Do I Need to Use the Parallel Change Pattern? - Skills & Agents for Java</title>
+  <meta name="author" content="" />
+  <meta name="description" content="">
+  <link rel="alternate" type="application/atom+xml" href="../../../feed.xml" title="Skills & Agents for Java"/>
+
+  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="../../../css/bootstrap.min.css">
+  <link rel="stylesheet" href="../../../css/bootstrap-social.css" />
+  <link rel="stylesheet" href="../../../css/main.css" />
+
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic" />
+  <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800" />
+
+  <link rel="stylesheet" href="../../../css/asciidoctor.css">
+  <link rel="stylesheet" href="../../../css/prettify.css">
+  <link rel="icon" type="image/png" href="../../../images/java-icon.png">
+</head>
+
+<body>
+<nav class="navbar navbar-default navbar-fixed-top navbar-custom">
+<div class="container-fluid">
+
+<div class="navbar-header">
+<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#main-navbar">
+  <span class="sr-only">Toggle navigation</span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+  <span class="icon-bar"></span>
+</button>
+<a class="navbar-brand" href="../../../index.html">Skills & Agents for Java</a>
+</div>
+
+<div class="collapse navbar-collapse" id="main-navbar">
+<ul class="nav navbar-nav navbar-right">
+  <li><a href="https://forms.gle/TpNXENjmu45wuXoi6" target="_blank">Share feedback</a></li>
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Conferences</a>
+    <div class="navlinks-children">
+      <a href="https://jabrena.github.io/cursor-rules-java/codemotion-madrid-2026/index.html" target="_blank">Codemotion Madrid 2026</a>
+      <a href="https://jabrena.github.io/cursor-rules-java/dvbe25/index.html" target="_blank">Devoxx BE 2025</a>
+      <a href="https://jabrena.github.io/101-cursor/" target="_blank">WJAX-2025</a>
+    </div>
+  </li>
+  <li class="navlinks-container">
+    <a class="navlinks-parent" href="javascript:void(0)">Courses</a>
+    <div class="navlinks-children">
+      <a href="../../../courses/system-prompts-java/index.html">System prompts for Java</a>
+      <a href="../../../courses/java-generics/index.html">Java Generics</a>
+      <a href="../../../courses/profile-memory-leak/index.html">Memory Leak Profiling</a>
+    </div>
+  </li>
+  <li><a href="../../../archive.html">Archive</a></li>
+  <li><a href="https://jabrena-github-io.translate.goog/cursor-rules-java/?_x_tr_sl=en&_x_tr_tl=cn&_x_tr_hl=en-US&_x_tr_pto=wapp">Translate</a></li>
+</ul>
+</div>
+
+
+
+</div>
+</nav>
+
+
+
+<header class="header-section">
+
+
+<div class="intro-header no-img">
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<div class="post-heading">
+<h1>Why Do I Need to Use the Parallel Change Pattern?</h1>
+<span class="post-meta">
+  <i class="fa fa-calendar-o"></i>
+  2026-07-02
+    &nbsp;
+    <i class="fa fa-pencil"></i>
+    MyRobot
+</span>
+<span class="blog-tags">
+  &nbsp;
+  <i class="fa fa-tags"></i>
+    <a href="../../../tags/blog.html">blog</a>
+    <a href="../../../tags/skills.html">skills</a>
+    <a href="../../../tags/agents.html">agents</a>
+    <a href="../../../tags/design.html">design</a>
+    <a href="../../../tags/software-engineering.html">software-engineering</a>
+    <a href="../../../tags/java.html">java</a>
+</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</header>
+
+
+<div class="container">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<article role="main" class="blog-post">
+<h2>The hidden risk in fast code generation</h2>
+<p>AI coding tools are very good at producing a complete-looking change from a short request.</p>
+<p>That is useful when the change is local. It becomes risky when the change crosses compatibility boundaries: database schemas, public APIs, event contracts, configuration keys, command outputs, generated artifacts, or workflows consumed by other services.</p>
+<p>A human engineer hears &quot;rename this field&quot; and often asks follow-up questions:</p>
+<ul>
+<li>Is the old version still deployed?</li>
+<li>Do external consumers read this value?</li>
+<li>Does rollback need the old shape?</li>
+<li>Is there production data that needs semantic mapping?</li>
+<li>Can we prove the old path is unused before removing it?</li>
+</ul>
+<p>An AI agent may skip those questions unless the workflow forces them into the plan.</p>
+<p>That is why this project includes explicit compatibility and parallel-change skills:</p>
+<ul>
+<li><code>@055-design-parallel-change</code></li>
+<li><code>@056-design-avoid-breaking-changes</code></li>
+</ul>
+<p>These skills move the agent away from &quot;generate the final state&quot; and toward &quot;design the path from current state to target state&quot;.</p>
+<h2>The big-bang refactor problem</h2>
+<p>Many AI-generated changes are shaped like a big-bang refactor:</p>
+<ol>
+<li>Rename the database column.</li>
+<li>Update the entity field.</li>
+<li>Update DTOs, mappers, tests, documentation, and examples.</li>
+<li>Delete the old code.</li>
+<li>Declare the work complete.</li>
+</ol>
+<p>That patch may compile. It may even pass unit tests. But it can still fail in production during a rolling deployment, delayed worker execution, cached projection rebuild, external integration call, reporting query, or rollback.</p>
+<p>The problem is not that the generated code is syntactically wrong. The problem is that the change assumes the world switches from old to new at the same instant.</p>
+<p>Production rarely behaves that way.</p>
+<h2>Parallel change</h2>
+<p>Parallel change is a design pattern for changing a system while old and new versions coexist.</p>
+<p>Instead of replacing old behavior immediately, the team creates a compatibility window:</p>
+<ol>
+<li><strong>Expand</strong> the system so the old and new shapes can both exist.</li>
+<li><strong>Migrate</strong> reads, writes, data, jobs, and clients gradually.</li>
+<li><strong>Contract</strong> the old shape only after evidence proves it is unused.</li>
+</ol>
+<p>For database work, this means avoiding destructive changes in the first migration. A column rename is not only a rename. It is a compatibility problem.</p>
+<p>The safe shape often looks like this:</p>
+<pre><code class="language-text">Phase     Goal
+--------- ------------------------------------------------------------
+Expand    Add the new column or table while preserving the old shape
+Migrate   Backfill, dual-write, compare old and new behavior
+Contract  Remove the old column or table after rollout evidence exists
+</code></pre>
+<p>This is slower than a one-shot migration, but it is much easier to deploy, observe, and roll back.</p>
+<h2>Expand-contract migrations</h2>
+<p>Expand-contract is especially important for database evolution because DDL success is not the same as business safety.</p>
+<p>For example, an AI agent might propose:</p>
+<pre><code class="language-sql">ALTER TABLE customers RENAME COLUMN full_name TO display_name;
+</code></pre>
+<p>That looks clean. It is also dangerous during a rolling deployment because old application instances still expect <code>full_name</code>.</p>
+<p>A safer plan separates the change:</p>
+<pre><code class="language-sql">-- Expand
+ALTER TABLE customers ADD COLUMN display_name VARCHAR(200);
+
+-- Migrate
+UPDATE customers
+SET display_name = full_name
+WHERE display_name IS NULL AND full_name IS NOT NULL;
+
+-- Application release:
+-- read display_name with fallback to full_name;
+-- write both values while old and new versions coexist.
+
+-- Contract, later:
+-- set constraints and drop full_name only after old readers are gone.
+</code></pre>
+<p>The key difference is not the SQL. The key difference is the deployment story.</p>
+<h2>Strangler-style replacement</h2>
+<p>The same idea applies outside the database.</p>
+<p>The strangler pattern replaces part of a system by routing behavior gradually to the new implementation while the old implementation remains available. It is valuable when a team is replacing a module, endpoint, workflow, integration, rules engine, or legacy subsystem.</p>
+<p>An AI agent asked to &quot;modernize this service&quot; may try to rewrite everything in one patch. That is hard to review and hard to trust.</p>
+<p>A strangler-style plan asks different questions:</p>
+<ul>
+<li>What is the smallest behavior that can move first?</li>
+<li>Can old and new paths run side by side?</li>
+<li>Can traffic be routed by feature flag, tenant, endpoint, or workflow?</li>
+<li>What evidence proves the new path is equivalent or intentionally different?</li>
+<li>What is the cleanup trigger for removing the old path?</li>
+</ul>
+<p>This turns replacement into a sequence of reviewable slices.</p>
+<h2>Backward compatibility is an engineering requirement</h2>
+<p>Backward compatibility is not only an API concern.</p>
+<p>It also applies to:</p>
+<ul>
+<li>Database schema and data meaning</li>
+<li>Event payloads and Kafka topics</li>
+<li>REST response fields and error formats</li>
+<li>Configuration keys and defaults</li>
+<li>CLI command names, flags, output, and exit codes</li>
+<li>Generated skills, commands, documentation, and public release output</li>
+<li>Monitoring, dashboards, alerts, and runbooks</li>
+</ul>
+<p><code>@056-design-avoid-breaking-changes</code> makes those surfaces visible before the agent edits the code. It asks whether the change is confirmed breaking, potentially breaking, non-breaking, or unknown.</p>
+<p>That classification matters because different risks need different responses. Some changes need a compatibility window. Some need aliases, deprecation notes, migration guidance, release notes, or owner decisions. Some are additive and can stay simple.</p>
+<h2>Why explicit skills help AI agents</h2>
+<p>Prompting an agent with &quot;be careful&quot; is weak.</p>
+<p>Giving the agent a concrete skill is stronger because the workflow becomes inspectable:</p>
+<ul>
+<li>Classify the migration risk.</li>
+<li>Decide whether parallel change is needed.</li>
+<li>Separate expand, migrate, and contract.</li>
+<li>Preserve rollback compatibility.</li>
+<li>Name the verification evidence.</li>
+<li>Define the cleanup trigger.</li>
+<li>Route framework-specific Flyway work only after the strategy is clear.</li>
+</ul>
+<p>That sequence protects the team from the most tempting AI shortcut: generating the target architecture without designing the transition.</p>
+<h2>A practical rule</h2>
+<p>When an AI-generated change removes, renames, narrows, reinterprets, or rewires something that another version or consumer may still use, pause.</p>
+<p>Ask whether this is really one change or three:</p>
+<pre><code class="language-text">1. Expand safely.
+2. Migrate with evidence.
+3. Contract after proof.
+</code></pre>
+<p>That tiny pause can prevent a clean-looking patch from becoming a production incident.</p>
+<h2>Share your experience</h2>
+<p>If you are using AI agents for migrations, refactoring, API evolution, or compatibility-sensitive Java work, share what you are learning with the project.</p>
+<p>Use <a href="https://github.com/jabrena/cursor-rules-java/discussions">GitHub Discussions</a> to post where parallel change helps, where the workflow feels heavy, and which compatibility risks agents still miss.</p>
+
+</article>
+</div>
+</div>
+</div>
+
+<footer>
+<div class="container beautiful-jekyll-footer">
+<div class="row">
+<div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+<ul class="list-inline text-center footer-links">
+    <li>
+    <a href="https://twitter.com/juanantoniobm" title="Twitter">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-twitter fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="https://github.com/jabrena/cursor-rules-java" title="GitHub">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-github fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+  <li>
+    <a href="../../../feed.xml" title="RSS">
+      <span class="fa-stack fa-lg">
+        <i class="fa fa-circle fa-stack-2x"></i>
+        <i class="fa fa-rss fa-stack-1x fa-inverse"></i>
+      </span>
+    </a>
+  </li>
+</ul>
+<p class="copyright text-muted">
+&copy; Juan Antonio Breña Moral, 2026 |
+Baked with <a href="http://jbake.org">JBake v2.7.0</a>
+</p>
+<p class="theme-by text-muted">
+  Theme by <a href="https://github.com/Yamane/beautiful-jbake/" target="_blank">beautiful-jbake</a>
+  adapted from <a href="http://deanattali.com/beautiful-jekyll/" target="_blank">beautiful-jekyll</a>
+</p>
+</div>
+</div>
+</div>
+</footer>
+
+<script src="../../../js/jquery-1.11.2.min.js"></script>
+<script src="../../../js/bootstrap.min.js"></script>
+<script src="../../../js/prettify.js"></script>
+<script src="../../../js/run_prettify.js"></script>
+<script src="../../../js/main.js"></script>
+
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-13CV90H4J4"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'G-13CV90H4J4');
+</script>
+
+</body>
+</html>
