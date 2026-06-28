@@ -2,15 +2,25 @@
 <feed xmlns='http://www.w3.org/2005/Atom' xml:lang='en'>
   <id>https://jabrena.github.io/cursor-rules-java/</id>
   <title>Skills & Agents for Java</title>
-  <updated>2026-06-28T22:04:52+0200</updated>
+  <updated>2026-06-28T22:30:49+0200</updated>
   <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java/" />
   <link rel='self' type='application/atom+xml' href='https://jabrena.github.io/cursor-rules-java//feed.xml' />
+  <entry>
+    <id>https://jabrena.github.io/cursor-rules-java//blog/2026/07/introduction-to-eu-regulations-part-ii.html</id>
+    <title>Introduction to EU regulations Part II</title>
+    <link></link>
+    <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2026/07/introduction-to-eu-regulations-part-ii.html" />
+    <updated>2026-07-01T00:00:00+0200</updated>
+    <summary>Compliance as code
+The first article introduced the EU regulatory skill family and focused on broad digital regulation: AI systems, operational resilience, privacy, cybersecurity, product security, data access, online platforms, and digital markets.
+This second article explains the remaining regulation and ISO skills added for the future 0.17.0 release, and connects them to a more specialized idea:...</summary>
+  </entry>
   <entry>
     <id>https://jabrena.github.io/cursor-rules-java//blog/2026/06/from-code-generation-to-software-engineering.html</id>
     <title>From Code Generation to Software Engineering: Why AI Agents Need Design Skills</title>
     <link></link>
     <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2026/06/from-code-generation-to-software-engineering.html" />
-    <updated>2026-06-28T00:00:00+0200</updated>
+    <updated>2026-06-29T00:00:00+0200</updated>
     <summary>The shift from generation to engineering
 The first wave of AI-assisted development was mostly about speed. Ask the model for a class, a test, a migration, a controller, a README section, or a refactoring, then review what came back.
 That capability is useful, but it is not the same as software engineering.
