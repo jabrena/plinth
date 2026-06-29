@@ -14,6 +14,10 @@
 
 An opinionated AI-native workflow for evolving modern Java Enterprise `SDLC` practices through reusable `Skills`, `Agents`, `Commands` & `MCP servers`.
 
+## What is a Plinch?
+
+> A `plinth` represents the solid foundation or platform used to support statues or artworks in art and sculpture. It served as a structural and symbolic foundation for columns, statues, and entire temple podiums. Romans inherited the idea from Greek architecture but expanded its use to emphasize monumentality, hierarchy, and imperial power.
+
 ## Project at a glance
 
 - 12 Commands
