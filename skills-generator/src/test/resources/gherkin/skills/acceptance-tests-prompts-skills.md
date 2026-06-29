@@ -1,3 +1,10 @@
+# Acceptance Test Prompts for Skills
+
+## Notes when you execute the Acceptance tests
+
+If you observe issues in the execution of any skill,
+maybe it is an opportunity to improve it.
+
 Ask the model to review the execution and propose improvement on it.
 Later make a PR to submit the improvement.
 
