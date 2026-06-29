@@ -11,6 +11,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - **Skills**:
   - Design method skills for two-step changes, the hamburger method, simple design rules, TDD, parallel change, and breaking-change avoidance (`@051-design-two-steps-methods`, `@052-design-hamburger-method`, `@053-design-simple-rules`, `@054-design-tdd`, `@055-design-parallel-change`, `@056-design-avoid-breaking-changes`) (#925, #928, #930, #935, #937, #954)
+  - Azure DevOps planning workflow for safe Azure Boards work item ID discovery, WIQL-backed queries, and create/update actions through `az` (`@045-planning-azure-devops`) (#966, #967)
   - Onion Architecture technology guidance (`@707-technologies-onion-architecture`) with framework agent routing support (#945)
   - Regulation engineering review skills for EU MiFID II, EU Market Abuse Regulation, EU Product Liability Directive, and ISO 42001 (`@810`-`@813`) with questionnaires, report templates, examples, and acceptance prompts (#949, #950)
   - JavaMoney dependency guidance for Maven dependency selection (`@111-java-maven-dependencies`) (#926)
