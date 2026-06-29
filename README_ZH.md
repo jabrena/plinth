@@ -71,6 +71,7 @@ Plan
     @robot-business-analyst
       @043-planning-github-issues
       @044-planning-jira
+      @045-planning-azure-devops
       @014-agile-user-story
   /create-adr
     @robot-architect

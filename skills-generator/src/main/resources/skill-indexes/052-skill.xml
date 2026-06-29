@@ -73,7 +73,7 @@ Guide Java teams through the Hamburger Method for splitting oversized work into 
     </step>
     <step number="6">
       <step-title>Self-Check and Route Follow-Up</step-title>
-      <step-content>Check every slice for value, size, testability, deliverability, and issue-tracking suitability. Route implementation planning through `041-planning-plan-mode`, spec-level changes through `042-planning-openspec`, GitHub issue work through `043-planning-github-issues`, and Jira work through `044-planning-jira`.</step-content>
+      <step-content>Check every slice for value, size, testability, deliverability, and issue-tracking suitability. Route implementation planning through `041-planning-plan-mode`, spec-level changes through `042-planning-openspec`, GitHub issue work through `043-planning-github-issues`, Jira work through `044-planning-jira`, and Azure DevOps work through `045-planning-azure-devops`.</step-content>
     </step>
   </steps>
 </prompt>

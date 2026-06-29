@@ -184,13 +184,14 @@ Route follow-up through the existing planning skills:
 - Use `042-planning-openspec` when a slice introduces a separate product, workflow, or architectural decision
 - Use `043-planning-github-issues` for GitHub-backed issue creation or updates
 - Use `044-planning-jira` for Jira-backed issue creation or updates
+- Use `045-planning-azure-devops` for Azure DevOps-backed work item creation or updates
 
 Mechanical implementation tasks such as registry updates, acceptance prompt coverage, generated-output inspection, or release validation remain ordinary task or issue work unless they introduce a separate reviewed capability.
             ]]></step-content>
             <step-constraints>
                 <step-constraint-list>
                     <step-constraint>**MUST** ask before creating or updating tracker work</step-constraint>
-                    <step-constraint>**MUST** route GitHub and Jira tracking through the dedicated tracker skills</step-constraint>
+                    <step-constraint>**MUST** route GitHub, Jira, and Azure DevOps tracking through the dedicated tracker skills</step-constraint>
                     <step-constraint>**MUST** route plan and OpenSpec changes through the dedicated planning skills</step-constraint>
                 </step-constraint-list>
             </step-constraints>

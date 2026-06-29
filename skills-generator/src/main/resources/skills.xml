@@ -116,6 +116,11 @@
             <reference>055-design-parallel-change</reference>
         </reference-list>
     </skill>
+    <skill id="045">
+        <reference-list>
+            <reference>045-planning-azure-devops</reference>
+        </reference-list>
+    </skill>
     <skill id="056" skillId="056-design-avoid-breaking-changes">
         <reference-list>
             <reference>056-design-avoid-breaking-changes</reference>
@@ -640,7 +645,7 @@
             <resource source="skill-references/assets/reports/804-nis2-engineering-review-report-template.md"
                 target="assets/reports/804-nis2-engineering-review-report-template.md" />
         </resource-list>
-    </skill>         
+    </skill>
     <skill id="805" skillId="805-regulations-eu-cyber-resilience-act">
         <reference-list>
             <reference>805-regulations-eu-cyber-resilience-act-chapters-summary</reference>

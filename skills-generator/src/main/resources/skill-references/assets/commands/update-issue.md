@@ -24,6 +24,7 @@ Update an existing project issue description with structured, evidence-backed co
 
 - `043-planning-github-issues`
 - `044-planning-jira`
+- `045-planning-azure-devops`
 - `014-agile-user-story` when user-story refinement is required
 
 ## Workflow

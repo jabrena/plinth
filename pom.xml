@@ -54,16 +54,16 @@
 
         <!-- Dependency versions -->
         <slf4j.version>2.0.18</slf4j.version>
-        <logback.version>1.5.36</logback.version>
-        <junit.version>6.1.0</junit.version>
+        <logback.version>1.5.37</logback.version>
+        <junit.version>6.1.1</junit.version>
         <assertj.version>3.27.7</assertj.version>
         <jackson.version>2.22.0</jackson.version>
-        <picocli.version>4.7.5</picocli.version>
-        <commonmark.version>0.21.0</commonmark.version>
+        <picocli.version>4.7.7</picocli.version>
+        <commonmark.version>0.29.0</commonmark.version>
         <jspecify.version>1.0.0</jspecify.version>
         <error-prone.version>2.50.0</error-prone.version>
         <nullaway.version>0.13.7</nullaway.version>
-        <archunit.version>1.4.1</archunit.version>
+        <archunit.version>1.4.2</archunit.version>
 
         <!-- Core build plugin versions -->
         <maven-plugin-compiler.version>3.15.0</maven-plugin-compiler.version>
