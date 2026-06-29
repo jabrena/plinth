@@ -6,7 +6,7 @@
     <author>Leandro Loureiro</author>
     <version>0.17.0-SNAPSHOT</version>
     <license>Apache-2.0</license>
-    <description>Use when you need Azure DevOps CLI guidance to verify installation, configure organization and project context, list work items by optional WIQL filters as markdown tables, and analyze user-provided sanitized Azure DevOps summaries. Uses an interactive install gate: if `az` or the Azure DevOps extension is missing, ask whether to show installation guidance before any work item commands. This should trigger for requests such as Azure DevOps work item list; List Azure Boards work items; Azure DevOps WIQL query; Azure DevOps CLI planning workflow.</description>
+    <description>Use when you need Azure DevOps CLI guidance to verify installation, configure organization and project context, list work items by optional WIQL filters as markdown tables, and analyze user-provided sanitized Azure DevOps summaries. Uses an interactive install gate - if `az` or the Azure DevOps extension is missing, ask whether to show installation guidance before any work item commands. This should trigger for requests such as Azure DevOps work item list; List Azure Boards work items; Azure DevOps WIQL query; Azure DevOps CLI planning workflow.</description>
   </metadata>
 
   <title>Azure DevOps CLI - work items, workflows, and discussion for analysis</title>

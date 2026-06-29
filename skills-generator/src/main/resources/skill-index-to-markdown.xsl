@@ -6,37 +6,6 @@
 
   <xsl:output method="text" encoding="UTF-8" indent="no"/>
 
-  <!-- Escape double quotes inside a YAML double-quoted string -->
-  <xsl:template name="escape-yaml-string">
-    <xsl:param name="text"/>
-    <xsl:call-template name="string-replace">
-      <xsl:with-param name="text" select="$text"/>
-      <xsl:with-param name="search" select="'&quot;'"/>
-      <xsl:with-param name="replace" select="'\&quot;'"/>
-    </xsl:call-template>
-  </xsl:template>
-
-  <!-- Generic string replace template for XSLT 1.0 -->
-  <xsl:template name="string-replace">
-    <xsl:param name="text"/>
-    <xsl:param name="search"/>
-    <xsl:param name="replace"/>
-    <xsl:choose>
-      <xsl:when test="contains($text, $search)">
-        <xsl:value-of select="substring-before($text, $search)"/>
-        <xsl:value-of select="$replace"/>
-        <xsl:call-template name="string-replace">
-          <xsl:with-param name="text" select="substring-after($text, $search)"/>
-          <xsl:with-param name="search" select="$search"/>
-          <xsl:with-param name="replace" select="$replace"/>
-        </xsl:call-template>
-      </xsl:when>
-      <xsl:otherwise>
-        <xsl:value-of select="$text"/>
-      </xsl:otherwise>
-    </xsl:choose>
-  </xsl:template>
-
   <!-- Support both legacy <skill> and PML <prompt> root elements -->
   <xsl:template match="/skill">
     <xsl:call-template name="generate-skill-markdown">
@@ -59,11 +28,9 @@
 name: </xsl:text>
     <xsl:value-of select="@id"/>
     <xsl:text>
-description: "</xsl:text>
-    <xsl:call-template name="escape-yaml-string">
-      <xsl:with-param name="text" select="$description"/>
-    </xsl:call-template>
-    <xsl:text>"
+description: </xsl:text>
+    <xsl:value-of select="$description"/>
+    <xsl:text>
 license: </xsl:text>
     <xsl:value-of select="metadata/license"/>
     <xsl:text>
