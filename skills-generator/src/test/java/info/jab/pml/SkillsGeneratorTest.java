@@ -589,9 +589,16 @@ class SkillsGeneratorTest {
 
     private String appendProjectTagToDescription(String content) {
         return content.lines()
-            .map(line -> line.startsWith("description:") && !line.endsWith(" Part of cursor-rules-java project")
-                ? line + " Part of cursor-rules-java project"
-                : line)
+            .map(line -> {
+                if (line.startsWith("description:") && !line.contains(" Part of cursor-rules-java project")) {
+                    // Handle quoted description: insert tag before closing quote
+                    if (line.endsWith("\"")) {
+                        return line.substring(0, line.length() - 1) + " Part of cursor-rules-java project\"";
+                    }
+                    return line + " Part of cursor-rules-java project";
+                }
+                return line;
+            })
             .collect(Collectors.joining(System.lineSeparator(), "", System.lineSeparator()));
     }
 

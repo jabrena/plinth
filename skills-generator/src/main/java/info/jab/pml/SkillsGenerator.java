@@ -261,7 +261,10 @@ public final class SkillsGenerator {
         boolean hasLicense = content.contains("license:");
         return content.lines()
             .map(line -> {
-                if (line.startsWith("description:") && !line.endsWith(PROJECT_TAG)) {
+                if (line.startsWith("description:") && !line.contains(PROJECT_TAG)) {
+                    if (line.endsWith("\"")) {
+                        return line.substring(0, line.length() - 1) + PROJECT_TAG + "\"";
+                    }
                     return line + PROJECT_TAG;
                 }
                 if (!hasLicense && line.startsWith("metadata:")) {
