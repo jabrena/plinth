@@ -79,7 +79,7 @@
 <h1>From Code Generation to Software Engineering: Why AI Agents Need Design Skills</h1>
 <span class="post-meta">
   <i class="fa fa-calendar-o"></i>
-  2026-06-29
+  2026-06-30
     &nbsp;
     <i class="fa fa-pencil"></i>
     MyRobot
@@ -145,8 +145,11 @@
 <li><code>@130-java-testing-strategies</code></li>
 </ul>
 <h3>Two-step changes</h3>
-<p>The two-step method is one of the most important design heuristics for agents because it stops the model from mixing two different activities: preparing the design and changing the behavior.</p>
-<p>A behavior-preserving preparation might rename concepts, extract a collaborator, move logic behind an interface, add characterization tests, or separate a tangled dependency. The intended behavior change comes after that preparation is verified.</p>
+<p>The two-step method is one of the most important design heuristics for agents because it stops the model from mixing two different activities: making the next change easy and making the change itself.</p>
+<p><a href="https://kentbeck.com/">Kent Beck</a> captured the idea in a compact rule: for each desired change, first make the change easy, then make the easy change. The preparation can be hard, but it should preserve behavior. The intended behavior change comes only after that preparation is verified.</p>
+<blockquote class="twitter-tweet"><p lang="en" dir="ltr">for each desired change, make the change easy (warning: this may be hard), then make the easy change</p>&mdash; Kent Beck (@KentBeck) <a href="https://x.com/KentBeck/status/250733358307500032?ref_src=twsrc%5Etfw">September 25, 2012</a></blockquote>
+<script async src="https://platform.twitter.com/widgets.js" charset="utf-8"></script>
+<p>In practice, the first step might rename concepts, extract a collaborator, move logic behind an interface, add characterization tests, or separate a tangled dependency. None of those steps should change what the system does. They should make the intended change smaller, more local, and easier to review.</p>
 <p>For AI agents, this matters because they can produce large patches very quickly. A large patch that refactors and changes behavior at the same time is difficult to review. When something fails, the team cannot easily tell whether the new behavior is wrong or the preparation damaged existing behavior.</p>
 <p><code>@051-design-two-steps-methods</code> gives the agent a sequence:</p>
 <ol>
@@ -159,12 +162,14 @@
 <p>This turns a risky leap into a controlled path.</p>
 <h3>The hamburger method</h3>
 <p>Large features are dangerous when they are decomposed horizontally. A plan that says &quot;build all repositories, then all services, then all controllers, then all tests&quot; creates a long interval where nothing is truly usable.</p>
-<p>The hamburger method pushes the team to find the smallest useful vertical slice first. The first slice should include just enough domain behavior, persistence, API, validation, and verification to prove the shape of the solution.</p>
-<p>For agents, this is a major upgrade. Instead of generating a full architecture from a large prompt, the agent learns to ask: what is the first thin slice that delivers real value and teaches us something about the design?</p>
+<p>The hamburger method, associated with <a href="https://gojko.net/">Gojko Adzic</a>, pushes the team to find the smallest useful vertical slice first. Instead of delivering one layer at a time, the team builds a thin slice through the whole product: a bit of user-visible behavior, a bit of domain logic, a bit of persistence or integration, and enough verification to know whether the idea works.</p>
+<p>The metaphor matters because a hamburger is not useful if someone serves only the bread, only the filling, or only the sauce. Software has the same problem. A repository layer by itself is not product feedback. A controller without behavior is not product feedback. A test suite for a design that users cannot exercise is not product feedback.</p>
+<p>For agents, this is a major upgrade. Instead of generating a full architecture from a large prompt, the agent learns to ask: what is the first thin slice that delivers real value and teaches us something about the design? That slice may be deliberately small: one command, one endpoint, one workflow path, one validation rule, or one state transition. The important part is that it crosses enough boundaries to expose real design evidence.</p>
 <p><code>@052-design-hamburger-method</code> helps turn broad requests into a sequence of independently valuable slices. That makes implementation easier to review, easier to test, and easier to stop when the design evidence changes.</p>
 <h3>TDD as design pressure</h3>
-<p>TDD is often described as a testing practice, but for agents it is even more valuable as a design practice.</p>
-<p>When an agent starts with production code, it can accidentally optimize for implementation convenience. When it starts with a failing test, it must first express the behavior from the outside. That pressure improves naming, boundaries, error handling, and the shape of collaborators.</p>
+<p>Test-driven development, invented by <a href="https://kentbeck.com/">Kent Beck</a>, is often described as a testing practice. For agents it is even more valuable as a design practice.</p>
+<p>When an agent starts with production code, it can accidentally optimize for implementation convenience. When it starts with a failing test, it must first express the behavior from the outside: what input matters, what outcome is observable, what error should be reported, and what contract the caller can rely on. That pressure improves naming, boundaries, error handling, and the shape of collaborators.</p>
+<p>The useful part is not only &quot;write tests first&quot;. The useful part is the short feedback loop. A failing test narrows the intent. The smallest passing implementation avoids speculative design. The refactoring step improves the structure while the behavior is protected. For an AI agent, that sequence is a guardrail against generating a large plausible implementation before the design has been tested by an example.</p>
 <p><code>@054-design-tdd</code> gives the agent a disciplined loop:</p>
 <ol>
 <li>List candidate behaviors and edge cases.</li>
@@ -173,17 +178,40 @@
 <li>Make the smallest change that passes.</li>
 <li>Refactor while the test suite is green.</li>
 </ol>
-<p>The result is not only better test coverage. It is better design feedback during the change.</p>
+<p>The result is not only better test coverage. It is better design feedback during the change, because every step forces the agent to connect implementation choices to executable behavior.</p>
+<h3>Simple design rules</h3>
+<p>Simple design is not minimalism for its own sake. It is an ordering of priorities. <a href="https://kentbeck.com/">Kent Beck</a> described a compact set of rules for evaluating design quality, and <a href="https://martinfowler.com/bliki/BeckDesignRules.html">Martin Fowler's article on Beck's design rules</a> is a useful reference because it makes the ordering explicit.</p>
+<p>That ordering is important for agents because they can produce several plausible designs very quickly. Without a priority sequence, the model may optimize for the wrong thing: fewer files, a familiar pattern, a clever abstraction, or a tidy-looking class hierarchy. Simple design asks a stricter question: which design keeps behavior verified and makes the next change easier to understand?</p>
+<p><code>@053-design-simple-rules</code> follows a practical sequence:</p>
+<ol>
+<li>The design passes the tests.</li>
+<li>The design reveals intention.</li>
+<li>The design removes duplication.</li>
+<li>The design has the fewest elements.</li>
+</ol>
+<p>This ordering matters. An agent should not remove duplication by hiding intent. It should not reduce the number of classes by making one class harder to understand. It should not introduce an abstraction because the prompt asked for a pattern.</p>
+<p>For example, a generated helper may reduce repeated lines but make the domain language harder to see. A generic framework-style abstraction may reduce the number of concepts in one file while adding indirection across the codebase. A single large service may look simpler than several small collaborators until a reviewer tries to understand the behavior it protects.</p>
+<p>Simple design rules give the agent a way to compare alternatives without drifting into taste-based arguments. The question becomes: which option keeps behavior verified, communicates intent, reduces real duplication, and avoids unnecessary parts? That makes design review more concrete: the team can ask the agent to justify its choice against the rules, not against vague preferences such as &quot;clean&quot; or &quot;elegant&quot;.</p>
 <h3>Parallel change</h3>
 <p>Database and data-meaning changes are where naive code generation can become especially risky. A generated migration may work locally while still breaking a rolling deployment, a delayed consumer, a cached projection, or a reporting pipeline.</p>
-<p>Parallel change exists for this reason. Instead of replacing old behavior with new behavior in one step, it creates a compatibility period:</p>
+<p><a href="https://martinfowler.com/bliki/ParallelChange.html">Parallel change</a>, also known as &quot;expand and contract&quot;, was documented by <a href="https://www.dtsato.com/blog/about/">Danilo Sato</a> in an article published on <a href="https://martinfowler.com/">Martin Fowler's website</a> in May 2014. The useful insight is that a backward-incompatible change does not have to be deployed as a single switch-over moment.</p>
+<p>Parallel change exists for this reason. Instead of replacing old behavior with new behavior in one step, it creates a compatibility period. The team first expands the system so both shapes can work, then migrates usage gradually, then contracts the old path after there is evidence that nothing still depends on it.</p>
 <ol>
 <li>Expand the system so old and new shapes can coexist.</li>
 <li>Migrate reads, writes, data, and clients gradually.</li>
 <li>Contract the old path only after evidence shows it is unused.</li>
 </ol>
+<p>This is especially important for AI agents because the local code change is rarely the whole system change. A field rename may affect database rows, API clients, JSON payloads, search indexes, reports, events, dashboards, tests, documentation, and support scripts. If the agent only edits the code it can see, it may accidentally turn a small request into a production compatibility problem.</p>
+<p>The expand step might add a nullable column, dual-write old and new fields, accept both API shapes, or publish both event versions. The migrate step moves readers, writers, data, and consumers while telemetry shows which path is still active. The contract step removes the legacy shape only when the team has evidence that rollback risk is acceptable.</p>
 <p><code>@055-design-parallel-change</code> helps the agent reason about schema shape, data meaning, application read/write paths, rollout windows, rollback expectations, and production-data risk before proposing implementation steps.</p>
 <p>That is the difference between &quot;generate a migration&quot; and &quot;design a migration&quot;.</p>
+<h3>Java design skills in the same planning loop</h3>
+<p>The design-method skills are intentionally combined with Java-specific skills in the README workflow.</p>
+<p><code>@121-java-object-oriented-design</code> helps the agent review responsibilities, cohesion, coupling, encapsulation, and code smells. This matters during OpenSpec planning because many implementation failures begin as vague object boundaries in the spec.</p>
+<p><code>@122-java-type-design</code> focuses attention on records, enums, sealed hierarchies, generics, nullability, value objects, and domain types. Good type choices reduce the amount of defensive code the agent has to generate later.</p>
+<p><code>@123-java-design-patterns</code> helps evaluate whether a pattern is actually useful for the problem. An AI agent can easily over-apply patterns because pattern-shaped code looks sophisticated. In an OpenSpec flow, the skill should justify the pattern against the requirement, not against aesthetic preference.</p>
+<p><code>@130-java-testing-strategies</code> complements TDD by broadening the verification conversation. Some behaviors need unit tests. Others need integration tests, contract tests, acceptance scenarios, property-style checks, or manual evidence. During OpenSpec planning, that distinction belongs in the tasks, not as an afterthought after code generation.</p>
+<p>Together, these Java skills connect design heuristics to implementation reality. They help the agent ask: what should the model of the system be, what types should carry the meaning, what patterns are justified, and how will the team know the behavior works?</p>
 <h3>Breaking-change avoidance</h3>
 <p>AI agents need explicit compatibility thinking because they often optimize for the local request. If the prompt says &quot;rename this field&quot;, the model may rename the field. A human engineer has to ask who depends on that field.</p>
 <p>Breaking-change avoidance makes compatibility surfaces visible:</p>
@@ -198,24 +226,6 @@
 <li>Test fixtures and examples</li>
 </ul>
 <p><code>@056-design-avoid-breaking-changes</code> gives the agent a review posture before it changes those surfaces. The goal is not to forbid breaking changes forever. The goal is to make them deliberate, documented, versioned, and coordinated.</p>
-<h3>Simple design rules</h3>
-<p>Simple design is not minimalism for its own sake. It is an ordering of priorities.</p>
-<p><code>@053-design-simple-rules</code> follows a practical sequence:</p>
-<ol>
-<li>The design passes the tests.</li>
-<li>The design reveals intention.</li>
-<li>The design removes duplication.</li>
-<li>The design has the fewest elements.</li>
-</ol>
-<p>This ordering matters. An agent should not remove duplication by hiding intent. It should not reduce the number of classes by making one class harder to understand. It should not introduce an abstraction because the prompt asked for a pattern.</p>
-<p>Simple design rules give the agent a way to compare alternatives without drifting into taste-based arguments. The question becomes: which option keeps behavior verified, communicates intent, reduces real duplication, and avoids unnecessary parts?</p>
-<h3>Java design skills in the same planning loop</h3>
-<p>The design-method skills are intentionally combined with Java-specific skills in the README workflow.</p>
-<p><code>@121-java-object-oriented-design</code> helps the agent review responsibilities, cohesion, coupling, encapsulation, and code smells. This matters during OpenSpec planning because many implementation failures begin as vague object boundaries in the spec.</p>
-<p><code>@122-java-type-design</code> focuses attention on records, enums, sealed hierarchies, generics, nullability, value objects, and domain types. Good type choices reduce the amount of defensive code the agent has to generate later.</p>
-<p><code>@123-java-design-patterns</code> helps evaluate whether a pattern is actually useful for the problem. An AI agent can easily over-apply patterns because pattern-shaped code looks sophisticated. In an OpenSpec flow, the skill should justify the pattern against the requirement, not against aesthetic preference.</p>
-<p><code>@130-java-testing-strategies</code> complements TDD by broadening the verification conversation. Some behaviors need unit tests. Others need integration tests, contract tests, acceptance scenarios, property-style checks, or manual evidence. During OpenSpec planning, that distinction belongs in the tasks, not as an afterthought after code generation.</p>
-<p>Together, these Java skills connect design heuristics to implementation reality. They help the agent ask: what should the model of the system be, what types should carry the meaning, what patterns are justified, and how will the team know the behavior works?</p>
 <h2>Share your experience</h2>
 <p>If you are using these workflows, experimenting with OpenSpec, or trying to introduce design skills into AI-assisted delivery, share your experience with the project.</p>
 <p>Use <a href="https://github.com/jabrena/cursor-rules-java/discussions">GitHub Discussions</a> to post what is working, where the workflow feels unclear, which doubts you have, and what worries you about applying agents to real Java systems.</p>
