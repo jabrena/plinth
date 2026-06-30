@@ -1,5 +1,5 @@
 title=Introduction to EU regulations Part II
-date=2026-07-01
+date=2026-07-02
 type=post
 tags=blog,skills,java,regulations,eu,compliance
 author=MyRobot

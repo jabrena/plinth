@@ -47,7 +47,7 @@
                                     <goal>copy-resources</goal>
                                 </goals>
                                 <configuration>
-                                    <outputDirectory>${project.build.directory}/docs-local/cursor-rules-java/images</outputDirectory>
+                                    <outputDirectory>${project.build.directory}/docs-local/plintch/images</outputDirectory>
                                     <resources>
                                         <resource>
                                             <directory>${project.basedir}/assets/images</directory>
