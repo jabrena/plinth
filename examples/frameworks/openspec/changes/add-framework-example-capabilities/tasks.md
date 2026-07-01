@@ -20,5 +20,4 @@
 - [ ] 1.18 Add or confirm Quarkus REST adapter validation tests for missing required request fields.
 - [ ] 1.19 Verify Hexagonal dependency direction: domain/application do not import controller, DTO, Quarkus, or Jakarta REST packages.
 - [ ] 1.20 Run focused Maven verification from `examples/frameworks/generated`.
-- [ ] 1.21 Run the existing CATS workflow against the shared OpenAPI contract with the Quarkus example as the runnable target, or record why it is skipped.
 - [ ] 1.22 Run `openspec validate --all` from `examples/frameworks`.

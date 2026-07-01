@@ -36,6 +36,7 @@ creating empty layer theater:
 
 ```text
 info.jab.ms
+├── MainApplication
 ├── domain
 │   └── SumCalculator
 ├── application
@@ -44,45 +45,46 @@ info.jab.ms
 │       └── in
 │           ├── CalculateSumCommand
 │           └── CalculateSumUseCase
-├── controller
-│   └── SumController
-└── dto
-    ├── SumRequest
-    └── SumResponse
+├── adapter
+│   └── in
+│       └── rest
+│           └── controller
+│               ├── SumController
+│               └── dto
+│                   ├── SumRequest
+│                   └── SumResponse
 ```
 
 Dependency direction:
 
+- `MainApplication` is a thin Quarkus bootstrap entry point; it does not
+  orchestrate use cases or contain business behavior.
 - `domain` contains the arithmetic rule and imports only Java/domain types.
-- `application` defines the inbound port and orchestrates the domain rule.
-- `controller` is the Quarkus REST driving adapter and calls the inbound port.
-- `dto` contains HTTP request/response DTOs used by the REST adapter.
-- `domain` and `application` do not import Quarkus, Jakarta REST, controller,
-  or DTO packages.
+- `application` contains the inbound port, command, and use-case implementation;
+  it depends on `domain` and its own port contracts, not adapters.
+- `adapter.in.rest.controller` is the REST driving adapter. It translates HTTP
+  requests into `CalculateSumCommand`, calls `CalculateSumUseCase`, and
+  translates the result into the HTTP response.
+- `adapter.in.rest.controller.dto` contains request/response DTOs scoped to the
+  REST adapter boundary; DTOs are not shared with domain or application code.
+- No outbound port or driven adapter is required for this slice because the sum
+  rule has no persistence, messaging, filesystem, or external HTTP dependency.
+- Dependency direction is outward-to-inward: REST adapter -> application inbound
+  port -> application use case -> domain.
+- `domain` and `application` do not import Quarkus, Jakarta REST, adapter,
+  controller, or DTO packages.
 
-## Java 25 and Concurrency Model
+## Java 25 and Execution Model
 
-The Quarkus implementation targets Java 25. Virtual threads are production
-ready, while Java 25 structured concurrency is a preview API. If the
-implementation introduces related parallel calls inside the use case, it must
-use Java structured concurrency (`StructuredTaskScope`) so subtasks succeed,
-fail, cancel, and join as one bounded operation.
+The Quarkus implementation targets Java 25. The sum rule is synchronous and does
+not require parallel orchestration or Java preview concurrency APIs.
 
-Concurrency decisions:
+Execution decisions:
 
 - Configure the Quarkus module for Java 25.
-- Enable Java preview features in compile, test, and runtime execution when
-  `StructuredTaskScope` is used.
 - Configure Quarkus virtual-thread support explicitly in
   `application.properties` with `quarkus.virtual-threads.enabled=true`.
-- Run the REST adapter on virtual threads when the endpoint executes blocking
-  or related parallel work, using Quarkus REST virtual-thread support.
-- Do not pool virtual threads.
-- Keep structured-concurrency orchestration in the application layer or a
-  framework-independent collaborator; the domain rule remains simple and
-  synchronous.
-- Preserve interruption and cancellation discipline: propagate or restore
-  interruption and avoid swallowing failures from subtasks.
+- Keep the domain and application sum flow simple and synchronous.
 
 ## Two-Step Implementation Guidance
 
@@ -101,7 +103,8 @@ Do not add other scenarios from `SPEC.md` in this change.
 
 - Quarkus uses Quarkus REST or Jakarta HTTP endpoint conventions.
 - Quarkus Bean Validation validates request DTOs at the REST adapter boundary.
-- CDI wires the controller adapter to the inbound use-case implementation.
+- CDI wires the REST driving adapter to the inbound use-case implementation
+  without moving framework annotations into domain code.
 - Java 25 is the runtime and compilation baseline for the Quarkus example.
 - Quarkus virtual-thread support is enabled explicitly in application
   configuration.
@@ -117,8 +120,6 @@ Do not add other scenarios from `SPEC.md` in this change.
 - A-TRIP: keep use-case tests automatic, repeatable, independent, and free from
   Quarkus boot; keep REST adapter tests focused on routing, validation,
   serialization, and status codes.
-- Concurrency: when structured concurrency is introduced, test success,
-  failure, cancellation, and interruption behavior for related parallel calls.
 - Hexagonal boundary verification can be a lightweight package/import review or
   optional architecture test if the project later chooses to add an
   architecture-test dependency.

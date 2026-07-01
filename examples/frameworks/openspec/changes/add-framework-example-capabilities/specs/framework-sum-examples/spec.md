@@ -58,11 +58,11 @@ application inbound port.
 - **THEN** they instantiate the core classes directly
 - **AND** they do not require `@QuarkusTest`
 
-### Requirement: Quarkus implementation targets Java 25 concurrency model
+### Requirement: Quarkus implementation targets Java 25 execution model
 
 The Quarkus implementation MUST use Java 25 as its compile and runtime baseline,
-MUST configure virtual-thread support explicitly, and MUST use Java structured
-concurrency for related parallel calls introduced by the application use case.
+MUST configure virtual-thread support explicitly, and MUST keep the sum flow
+simple and synchronous.
 
 #### Scenario: Java 25 is configured
 
@@ -75,19 +75,6 @@ concurrency for related parallel calls introduced by the application use case.
 - **WHEN** the Quarkus application configuration is inspected
 - **THEN** virtual-thread support is explicitly enabled
 - **AND** the REST adapter runs on virtual threads when it performs blocking or parallel work
-
-#### Scenario: Structured concurrency coordinates related parallel calls
-
-- **WHEN** the application use case introduces related parallel calls
-- **THEN** those calls are coordinated with Java structured concurrency
-- **AND** failure of one subtask cancels or fails the bounded operation predictably
-- **AND** interruption is propagated or restored rather than swallowed
-
-#### Scenario: Structured concurrency preview is enabled when used
-
-- **WHEN** Java 25 `StructuredTaskScope` is used
-- **THEN** Java preview features are enabled for compile, test, and runtime execution
-- **AND** verification commands exercise the preview-enabled configuration
 
 ### Requirement: Isolated OpenAPI example documents REST behavior
 
