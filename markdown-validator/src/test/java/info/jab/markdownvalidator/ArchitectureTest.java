@@ -7,9 +7,10 @@ import com.tngtech.archunit.lang.ArchRule;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
-import static com.tngtech.archunit.library.Architectures.onionArchitecture;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @AnalyzeClasses(
@@ -22,23 +23,46 @@ import static org.assertj.core.api.Assertions.assertThat;
 class ArchitectureTest {
 
     @ArchTest
-    static final ArchRule onion_architecture_boundaries = onionArchitecture()
-            .domainModels("info.jab.markdownvalidator.domain..")
-            .applicationServices("info.jab.markdownvalidator.application..")
-            .adapter("cli", "info.jab.markdownvalidator.adapter.in.cli..")
-            .adapter("filesystem", "info.jab.markdownvalidator.adapter.out.filesystem..")
-            .adapter("http", "info.jab.markdownvalidator.adapter.out.http..")
-            .withOptionalLayers(true);
+    static final ArchRule should_keep_application_core_independent_from_adapters = noClasses()
+            .that()
+            .resideInAnyPackage("info.jab.markdownvalidator.domain..", "info.jab.markdownvalidator.application..")
+            .should()
+            .dependOnClassesThat()
+            .resideInAPackage("info.jab.markdownvalidator.adapter..");
+
+    @ArchTest
+    static final ArchRule should_keep_domain_independent_from_application_services = noClasses()
+            .that()
+            .resideInAPackage("info.jab.markdownvalidator.domain..")
+            .should()
+            .dependOnClassesThat()
+            .resideInAPackage("info.jab.markdownvalidator.application..");
+
+    @ArchTest
+    static final ArchRule should_keep_driving_adapters_independent_from_driven_adapters = noClasses()
+            .that()
+            .resideInAPackage("info.jab.markdownvalidator.adapter.in..")
+            .should()
+            .dependOnClassesThat()
+            .resideInAPackage("info.jab.markdownvalidator.adapter.out..");
+
+    @ArchTest
+    static final ArchRule should_keep_driven_adapters_independent_from_driving_adapters = noClasses()
+            .that()
+            .resideInAPackage("info.jab.markdownvalidator.adapter.out..")
+            .should()
+            .dependOnClassesThat()
+            .resideInAPackage("info.jab.markdownvalidator.adapter.in..");
 
     @Test
-    void markdownValidatorPackage_containsOnlyExpectedScaffoldPackages() throws Exception {
+    void shouldContainOnlyExpectedScaffoldPackagesInMarkdownValidatorPackage() throws Exception {
         Path packagePath = Path.of("src/main/java/info/jab/markdownvalidator");
 
         Set<String> packageDirectories;
         try (var paths = Files.list(packagePath)) {
             packageDirectories = paths.filter(Files::isDirectory)
                     .map(path -> path.getFileName().toString())
-                    .collect(java.util.stream.Collectors.toSet());
+                    .collect(Collectors.toSet());
         }
 
         assertThat(packageDirectories).containsExactlyInAnyOrder("adapter", "application", "domain");
