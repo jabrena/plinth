@@ -311,6 +311,101 @@ Scaffolding smell:
                 </bad-example>
             </code-examples>
         </example>
+
+        <example number="7" id="archunit-scaffolding-verification">
+            <example-header>
+                <example-title>Verify scaffold and dependency direction</example-title>
+                <example-subtitle>combine ArchUnit boundary rules with a package-shape check</example-subtitle>
+            </example-header>
+            <example-description>
+                <![CDATA[
+                When a project starts from the small scaffold above, architecture tests can protect both dependency direction and the intended top-level package shape. Keep the rules focused on the packages that communicate Hexagonal boundaries: `domain`, `application`, and `adapter`. Do not use these tests to force empty technical layers or framework-centered package names.
+                ]]>
+            </example-description>
+            <code-examples>
+                <good-example>
+                    <code-block language="java"><![CDATA[package com.example.orders.architecture;
+
+import com.tngtech.archunit.core.importer.ImportOption;
+import com.tngtech.archunit.junit.AnalyzeClasses;
+import com.tngtech.archunit.junit.ArchTest;
+import com.tngtech.archunit.lang.ArchRule;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.Set;
+import java.util.stream.Collectors;
+import org.junit.jupiter.api.Test;
+
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
+import static org.assertj.core.api.Assertions.assertThat;
+
+@AnalyzeClasses(
+        packages = {
+            "com.example.orders.adapter",
+            "com.example.orders.application",
+            "com.example.orders.domain"
+        },
+        importOptions = ImportOption.DoNotIncludeTests.class)
+class ArchitectureTest {
+
+    @ArchTest
+    static final ArchRule should_keep_application_core_independent_from_adapters = noClasses()
+            .that()
+            .resideInAnyPackage("com.example.orders.domain..", "com.example.orders.application..")
+            .should()
+            .dependOnClassesThat()
+            .resideInAPackage("com.example.orders.adapter..");
+
+    @ArchTest
+    static final ArchRule should_keep_domain_independent_from_application_services = noClasses()
+            .that()
+            .resideInAPackage("com.example.orders.domain..")
+            .should()
+            .dependOnClassesThat()
+            .resideInAPackage("com.example.orders.application..");
+
+    @ArchTest
+    static final ArchRule should_keep_driving_adapters_independent_from_driven_adapters = noClasses()
+            .that()
+            .resideInAPackage("com.example.orders.adapter.in..")
+            .should()
+            .dependOnClassesThat()
+            .resideInAPackage("com.example.orders.adapter.out..");
+
+    @ArchTest
+    static final ArchRule should_keep_driven_adapters_independent_from_driving_adapters = noClasses()
+            .that()
+            .resideInAPackage("com.example.orders.adapter.out..")
+            .should()
+            .dependOnClassesThat()
+            .resideInAPackage("com.example.orders.adapter.in..");
+
+    @Test
+    void should_contain_only_expected_hexagonal_scaffold_packages() throws Exception {
+        Path packagePath = Path.of("src/main/java/com/example/orders");
+
+        Set<String> packageDirectories;
+        try (var paths = Files.list(packagePath)) {
+            packageDirectories = paths.filter(Files::isDirectory)
+                    .map(path -> path.getFileName().toString())
+                    .collect(Collectors.toSet());
+        }
+
+        assertThat(packageDirectories)
+                .containsExactlyInAnyOrder("adapter", "application", "domain");
+    }
+}]]></code-block>
+                </good-example>
+                <bad-example last-item="true">
+                    <code-block language="java"><![CDATA[// Avoid validating a scaffold like this:
+assertThat(packageDirectories).contains("controller", "service", "repository", "entity");
+
+// Those names describe technical stereotypes instead of Hexagonal boundaries.
+// They also allow business rules, persistence details, and transport concerns
+// to drift into the same layer without making dependency direction visible.]]></code-block>
+                </bad-example>
+            </code-examples>
+        </example>
     </examples>
 
     <output-format>
