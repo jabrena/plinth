@@ -1,0 +1,108 @@
+openapi: 3.1.0
+info:
+  title: Sum API
+  description: |
+    Basic sum endpoint shared by the framework examples under `examples/frameworks/`.
+    Accepts two integer parameters and returns their sum.
+  version: 1.0.0
+
+servers:
+  - url: http://localhost:8080
+    description: Local development
+
+paths:
+  /api/v1/sum:
+    post:
+      operationId: sum
+      summary: Add two integers
+      tags:
+        - sum
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SumRequest"
+            example:
+              param1: 10
+              param2: 32
+      responses:
+        "200":
+          description: Sum computed successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SumResponse"
+              example:
+                result: 42
+        "400":
+          description: Request validation failed
+          content:
+            application/problem+json:
+              schema:
+                $ref: "#/components/schemas/ValidationProblemDetail"
+              example:
+                type: https://example.com/problems/validation-error
+                title: Validation Error
+                status: 400
+                detail: One or more request fields failed validation.
+                instance: /api/v1/sum
+                violations:
+                  - "param1: must not be null"
+
+components:
+  schemas:
+    SumRequest:
+      type: object
+      required:
+        - param1
+        - param2
+      properties:
+        param1:
+          type: integer
+          format: int32
+          nullable: false
+        param2:
+          type: integer
+          format: int32
+          nullable: false
+
+    SumResponse:
+      type: object
+      properties:
+        result:
+          type: integer
+          format: int32
+
+    ValidationProblemDetail:
+      type: object
+      required:
+        - type
+        - title
+        - status
+        - detail
+        - instance
+        - violations
+      properties:
+        type:
+          type: string
+          format: uri
+          example: https://example.com/problems/validation-error
+        title:
+          type: string
+          example: Validation Error
+        status:
+          type: integer
+          example: 400
+        detail:
+          type: string
+          example: One or more request fields failed validation.
+        instance:
+          type: string
+          example: /api/v1/sum
+        violations:
+          type: array
+          items:
+            type: string
+          example:
+            - "param1: must not be null"

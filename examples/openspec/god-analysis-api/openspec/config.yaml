@@ -2,5 +2,4 @@
 schemaVersion: 1
 project:
   name: god-analysis-api-openspec-example
-  description: OpenSpec change derived from examples/requirements/problem1.
-
+  description: OpenSpec change derived from examples/openspec/god-analysis-api/requirements/problem1.

@@ -1,0 +1,5 @@
+# OpenSpec project configuration for the framework examples.
+schemaVersion: 1
+project:
+  name: framework-examples-openspec
+  description: OpenSpec changes for Quarkus framework examples derived from the REST scenario in examples/frameworks/SPEC.md.
