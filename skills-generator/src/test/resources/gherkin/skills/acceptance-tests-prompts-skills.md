@@ -743,10 +743,10 @@ execute @skills-generator/src/test/resources/gherkin/skills/706-technologies-con
 and verify that acceptance-tests passes.
 ```
 
-## 707-technologies-onion-architecture
+## 707-technologies-hexagonal-architecture
 
 ```bash
-execute @skills-generator/src/test/resources/gherkin/skills/707-technologies-onion-architecture.feature
+execute @skills-generator/src/test/resources/gherkin/skills/707-technologies-hexagonal-architecture.feature
 and verify that acceptance-tests passes.
 ```
 

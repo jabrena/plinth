@@ -25,6 +25,7 @@ That is why this project is adding explicit design skills for AI agents. In the 
     @053-design-simple-rules
     @054-design-tdd
     @055-design-parallel-change
+    @056-design-avoid-breaking-changes
     @121-java-object-oriented-design
     @122-java-type-design
     @123-java-design-patterns

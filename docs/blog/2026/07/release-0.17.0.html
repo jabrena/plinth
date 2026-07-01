@@ -174,8 +174,12 @@ Contract  Remove the old shape only after rollout evidence exists
 <p><strong>⚠️ AVOID RUNNING DATABASE MIGRATION TASKS WITHOUT HITL.</strong><br />
 Human-in-the-loop review is necessary because migrations can destroy or reinterpret production data, block critical tables, break rollback paths, and affect systems that are not visible in the local codebase. An agent can draft the plan, checks, and scripts, but a qualified human owner should review the migration intent, data impact, rollback strategy, monitoring evidence, and execution window before it reaches production.</p>
 </blockquote>
-<p><strong>Note:</strong> If you Domain/Subdomain has Microservices associated with Databases, and you are adopting GenAI tools maybe you should review the current architecture to mitigate potential database production issues. <a href="https://genai.owasp.org/">https://genai.owasp.org/</a></p>
+<p><strong>Note:</strong> If you Domain/Subdomain has Microservices associated with Databases, and you are adopting GenAI tools maybe you should review the current architecture to mitigate potential database production issues.</p>
 <p>If you want to go deeper into this topic, I recommend reading: <a href="/cursor-rules-java/blog/2026/07/why-do-i-need-to-use-the-parallel-change-pattern.html">Why Do I Need to Use the Parallel Change Pattern?</a></p>
+<ul>
+<li><a href="https://machinelearning.apple.com/research/illusion-of-thinking">https://machinelearning.apple.com/research/illusion-of-thinking</a></li>
+<li><a href="https://genai.owasp.org/">https://genai.owasp.org/</a></li>
+</ul>
 <p><a id="making-architecture-boundaries-visible-with-onion-architecture"></a></p>
 <h2>Making architecture boundaries visible with Onion Architecture</h2>
 <p>This release adds <a href="https://www.skills.sh/jabrena/cursor-rules-java/707-technologies-onion-architecture"><code>@707-technologies-onion-architecture</code></a>, a framework-agnostic skill for reviewing Java application boundaries.</p>

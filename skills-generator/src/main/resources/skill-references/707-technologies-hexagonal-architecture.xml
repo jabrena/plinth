@@ -5,22 +5,22 @@
         <author>Juan Antonio Breña Moral</author>
         <version>0.17.0</version>
         <license>Apache-2.0</license>
-        <title>Java Onion architecture boundary review</title>
-        <description>Use when you need framework-agnostic Onion architecture guidance for Java projects - dependency direction between domain, application/use-case, ports, adapters, and infrastructure; package or module boundary review; infrastructure leakage detection; optional ArchUnit architecture tests; and evidence-backed remediation.</description>
+        <title>Java Hexagonal architecture boundary review</title>
+        <description>Use when you need framework-agnostic Hexagonal architecture guidance for Java projects - ports and adapters boundaries, application core independence, driving and driven adapters, dependency direction, infrastructure leakage detection, optional architecture tests, and evidence-backed remediation.</description>
     </metadata>
 
-    <role>You are a senior Java architect with deep experience in Onion architecture, Hexagonal architecture, Ports and Adapters, architecture fitness functions, and enterprise codebase modernization</role>
+    <role>You are a senior Java architect with deep experience in Hexagonal architecture, Ports and Adapters, architecture fitness functions, and enterprise codebase modernization</role>
 
     <goal>
-        Apply **framework-agnostic** Onion architecture guidance so Java applications keep their domain model independent, route dependencies inward, and make boundary decisions visible in code and tests.
+        Apply **framework-agnostic** Hexagonal architecture guidance so Java applications keep their application core independent, expose behavior through ports, place driving and driven adapters outside the core, and make boundary decisions visible in code and tests.
 
         1. **Protect the domain core**: domain models, value objects, domain services, and domain policies should not import framework, persistence, web, messaging, dependency-injection, or infrastructure APIs.
-        2. **Keep use cases explicit**: application services orchestrate workflows, transactions at the boundary, validation handoff, and calls to ports or interfaces; they should not depend on concrete adapters.
-        3. **Route adapters inward**: REST, persistence, messaging, CLI, scheduler, and external-service adapters translate between outside protocols and inner application/domain contracts.
-        4. **Check dependency direction**: inspect packages, modules, imports, Maven module dependencies, package-private boundaries, tests, and naming conventions to confirm inward-only dependencies.
+        2. **Keep use cases explicit**: application services orchestrate workflows, transactions at the boundary, validation handoff, and calls to inbound or outbound ports; they should not depend on concrete adapters.
+        3. **Separate adapters by intent**: driving adapters such as REST, CLI, messaging consumers, schedulers, or tests call inbound ports; driven adapters such as persistence, message publishers, HTTP clients, and filesystem integrations implement outbound ports.
+        4. **Check dependency direction**: inspect packages, modules, imports, Maven module dependencies, package-private boundaries, tests, and naming conventions to confirm adapters depend on the core rather than the core depending on adapters.
         5. **Use optional verification**: recommend ArchUnit-style architecture tests when they fit the project, while routing dependency additions to `111-java-maven-dependencies`.
 
-        Use the original Palermo Onion Architecture tenets as review anchors: an independent object model, inner-layer interfaces implemented by outer layers, coupling directed toward the center, and application core code that can compile and run apart from infrastructure.
+        Use Cockburn's Ports and Adapters framing as the primary review anchor: the application is exercised through ports, external technologies are replaceable adapters, and the core business behavior can be tested without UI, database, broker, or framework runtime dependencies.
 
         Defer Spring Boot, Quarkus, and Micronaut runtime wiring to their matching framework skills when the fix depends on bean registration, module runtime configuration, controller implementation, repository annotations, or framework-specific persistence behavior.
     </goal>
@@ -33,12 +33,12 @@
             <constraint>**MANDATORY**: Run `./mvnw compile` or `mvn compile` before changing Java or build descriptors in the same change set</constraint>
             <constraint>**SCOPE**: Stay within framework-agnostic architecture boundaries, dependency direction, responsibility placement, and architecture-test guidance unless the user explicitly asks for runtime implementation</constraint>
             <constraint>**DOMAIN INDEPENDENCE**: Domain code must not depend on Spring, Quarkus, Micronaut, Jakarta persistence, web APIs, messaging clients, database clients, HTTP clients, or infrastructure configuration</constraint>
-            <constraint>**APPLICATION PORTS**: Application/use-case code may depend on domain objects and ports/interfaces, but not on concrete persistence, web, messaging, or external-service adapters</constraint>
-            <constraint>**ADAPTER DIRECTION**: Adapters and infrastructure may depend inward on application or domain contracts; neither domain nor application code should depend outward on adapters</constraint>
+            <constraint>**APPLICATION PORTS**: Application/use-case code may depend on domain objects and inbound/outbound ports, but not on concrete persistence, web, messaging, or external-service adapters</constraint>
+            <constraint>**ADAPTER DIRECTION**: Driving adapters call inbound ports and driven adapters implement outbound ports; neither domain nor application code should depend outward on adapters</constraint>
             <constraint>**INFRASTRUCTURE EXTERNAL**: Treat databases, file systems, web services, message brokers, HTTP clients, framework configuration, and I/O mechanisms as outer-layer details that must not become the center of the design</constraint>
             <constraint>**CORE COMPILATION**: Prefer a package or module structure where the application core can compile and be tested without concrete infrastructure implementations</constraint>
             <constraint>**EVIDENCE**: Report violations with package, class, import, module dependency, test, or build-file evidence; separate confirmed findings from assumptions</constraint>
-            <constraint>**ARCHUNIT OPTIONAL**: Use ArchUnit examples as optional verification patterns, not as a mandatory prerequisite for useful Onion architecture review</constraint>
+            <constraint>**ARCHUNIT OPTIONAL**: Use ArchUnit examples as optional verification patterns, not as a mandatory prerequisite for useful Hexagonal architecture review</constraint>
             <constraint>**DEPENDENCY ROUTING**: When ArchUnit or other Maven dependencies need to be added or evaluated, route that decision to `111-java-maven-dependencies`</constraint>
             <constraint>**FRAMEWORK ROUTING**: Route Spring Boot, Quarkus, and Micronaut runtime wiring to the matching framework-specific skill without embedding direct framework skill links in this reference</constraint>
             <constraint>**MANDATORY**: After editing generator XML, run `./mvnw clean install -pl skills-generator` and `./mvnw clean verify` as appropriate</constraint>
@@ -91,19 +91,19 @@ public class Order {
     private String id;
 }
 // Avoid coupling the domain model to persistence and framework annotations
-// when the project claims Onion architecture boundaries.]]></code-block>
+// when the project claims Hexagonal architecture boundaries.]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
 
         <example number="2" id="application-ports-and-adapters">
             <example-header>
-                <example-title>Use cases depend on ports, adapters depend inward</example-title>
-                <example-subtitle>application orchestration without concrete infrastructure dependencies</example-subtitle>
+                <example-title>Use cases depend on ports, adapters stay outside</example-title>
+                <example-subtitle>application orchestration without concrete adapter dependencies</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                Application services coordinate workflows and define what they need from the outside world through ports. Concrete adapters implement those ports and translate between external protocols, persistence details, and inner contracts.
+                Application services coordinate workflows and define what they need from the outside world through ports. Driving adapters call inbound ports; driven adapters implement outbound ports and translate between external protocols, persistence details, and core contracts.
                 ]]>
             </example-description>
             <code-examples>
@@ -145,14 +145,14 @@ public final class PlaceOrderUseCase {
             </code-examples>
         </example>
 
-        <example number="3" id="archunit-onion-verification">
+        <example number="3" id="archunit-hexagonal-verification">
             <example-header>
-                <example-title>Optional ArchUnit Onion architecture verification</example-title>
-                <example-subtitle>encode inward dependency direction as tests when the project already uses or chooses ArchUnit</example-subtitle>
+                <example-title>Optional ArchUnit Hexagonal architecture verification</example-title>
+                <example-subtitle>encode ports and adapters boundaries as tests when the project already uses or chooses ArchUnit</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                ArchUnit can verify Onion architecture boundaries by defining domain model, domain service, application service, and adapter packages. Use this when automated architecture fitness functions fit the team. If ArchUnit is not already present and the user wants to add it, route dependency selection to `111-java-maven-dependencies`.
+                ArchUnit can verify Hexagonal architecture boundaries with package rules: the application core does not depend on adapter packages, driving adapters may access inbound ports, and driven adapters implement outbound ports. Use this when automated architecture fitness functions fit the team. If ArchUnit is not already present and the user wants to add it, route dependency selection to `111-java-maven-dependencies`.
                 ]]>
             </example-description>
             <code-examples>
@@ -164,21 +164,21 @@ import com.tngtech.archunit.junit.AnalyzeClasses;
 import com.tngtech.archunit.junit.ArchTest;
 import com.tngtech.archunit.lang.ArchRule;
 
-import static com.tngtech.archunit.library.Architectures.onionArchitecture;
+import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.noClasses;
 
 @AnalyzeClasses(
         packages = "com.example.orders",
         importOptions = ImportOption.DoNotIncludeTests.class)
-class OnionArchitectureTest {
+class HexagonalArchitectureTest {
 
     @ArchTest
-    static final ArchRule onion_boundaries = onionArchitecture()
-            .domainModels("com.example.orders.domain.model..")
-            .domainServices("com.example.orders.domain.service..")
-            .applicationServices("com.example.orders.application..")
-            .adapter("rest", "com.example.orders.adapter.rest..")
-            .adapter("persistence", "com.example.orders.adapter.persistence..")
-            .adapter("messaging", "com.example.orders.adapter.messaging..");
+    static final ArchRule core_does_not_depend_on_adapters = noClasses()
+            .that().resideInAnyPackage(
+                    "com.example.orders.domain..",
+                    "com.example.orders.application..")
+            .should().dependOnClassesThat().resideInAnyPackage(
+                    "com.example.orders.adapter..",
+                    "com.example.orders.infrastructure..");
 }]]></code-block>
                 </good-example>
                 <bad-example>
@@ -207,32 +207,33 @@ class OnionArchitectureTest {
 - Routing: detailed Spring Data repository configuration belongs with the matching Spring framework or data skill.]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
-                    <code-block language="text"><![CDATA[Avoid turning an Onion architecture review into framework runtime instructions such as:
+                    <code-block language="text"><![CDATA[Avoid turning a Hexagonal architecture review into framework runtime instructions such as:
 "Add @Service to the use case, @Repository to the adapter, and enable component scanning here."
 That advice belongs to the matching framework skill.]]></code-block>
                 </bad-example>
             </code-examples>
         </example>
 
-        <example number="5" id="palermo-tenets-review">
+        <example number="5" id="ports-and-adapters-review">
             <example-header>
-                <example-title>Review against the original Onion Architecture tenets</example-title>
-                <example-subtitle>independent model, inward interfaces, outer implementations, and infrastructure-free core checks</example-subtitle>
+                <example-title>Review against Ports and Adapters responsibilities</example-title>
+                <example-subtitle>application core, inbound ports, outbound ports, driving adapters, and driven adapters</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                Palermo's Onion Architecture series is useful as a review checklist: the application is built around an independent object model; inner layers define interfaces that outer layers implement; coupling points toward the center; and the application core can compile and run without concrete infrastructure. This also means a user interface or outer adapter may call any inner layer it legitimately needs, while inner layers must not call outward.
+                Hexagonal architecture is useful as a review checklist: application behavior is available through inbound ports; external needs are expressed as outbound ports; driving adapters translate incoming protocols into use-case calls; driven adapters translate outbound port calls into persistence, messaging, HTTP, filesystem, or other infrastructure actions; and the core can compile and be tested without concrete infrastructure.
                 ]]>
             </example-description>
             <code-examples>
                 <good-example>
-                    <code-block language="text"><![CDATA[Onion architecture review anchors:
+                    <code-block language="text"><![CDATA[Hexagonal architecture review anchors:
 - Independent core: `orders.domain` and `orders.application` compile without `orders.adapter.persistence`.
-- Interfaces inside: `OrderRepository` and `PaymentPort` are declared in the application/core package.
-- Implementations outside: JPA, HTTP, messaging, and scheduler adapters implement those ports in outer packages.
+- Inbound ports inside: `PlaceOrderUseCase` or `PlaceOrderPort` is declared in the application/core package and is called by driving adapters.
+- Outbound ports inside: `OrderRepository` and `PaymentPort` are declared in the application/core package and implemented by driven adapters.
+- Implementations outside: JPA, HTTP, messaging, and scheduler adapters translate between external APIs and ports.
 - Coupling direction: adapters depend on core contracts; core packages do not import adapter packages.
 - Infrastructure external: database and broker choices are replaceable outer-layer details, not the center of the model.
-- Runtime assembly: dependency injection or manual composition wires concrete adapters at the edge; it is not itself a core Onion tenet.]]></code-block>
+- Runtime assembly: dependency injection or manual composition wires concrete adapters at the edge; it is not itself core business behavior.]]></code-block>
                 </good-example>
                 <bad-example last-item="true">
                     <code-block language="text"><![CDATA[Architecture smell:
@@ -243,14 +244,14 @@ That advice belongs to the matching framework skill.]]></code-block>
             </code-examples>
         </example>
 
-        <example number="6" id="onion-scaffolding">
+        <example number="6" id="hexagonal-scaffolding">
             <example-header>
                 <example-title>Start with scaffolding that preserves dependency direction</example-title>
-                <example-subtitle>packages or modules should make the application core visible without making infrastructure central</example-subtitle>
+                <example-subtitle>packages or modules should make ports, adapters, and the application core visible</example-subtitle>
             </example-header>
             <example-description>
                 <![CDATA[
-                Scaffolding is useful when it communicates the intended dependency direction from day one. Keep the initial layout small and honest: create core packages for domain and application contracts, outer packages for adapters, and a thin bootstrap/composition area for runtime assembly. Do not create empty layers, generic "common" buckets, or framework-centered packages that hide where business rules belong.
+                Scaffolding is useful when it communicates the intended dependency direction from day one. Keep the initial layout small and honest: create core packages for domain behavior, application use cases, and ports; create adapter packages for driving and driven integrations; and keep runtime assembly at the edge. Do not create empty layers, generic "common" buckets, or framework-centered packages that hide where business rules belong.
                 ]]>
             </example-description>
             <code-examples>
@@ -267,8 +268,11 @@ That advice belongs to the matching framework skill.]]></code-block>
     PlaceOrderUseCase.java
     PlaceOrderCommand.java
     port/
-      OrderRepository.java
-      PaymentPort.java
+      in/
+        PlaceOrderPort.java
+      out/
+        OrderRepository.java
+        PaymentPort.java
   adapter/
     in/
       rest/
@@ -286,7 +290,7 @@ That advice belongs to the matching framework skill.]]></code-block>
 Scaffolding checks:
 - `domain` imports only Java and domain types.
 - `application` depends on `domain` and its own ports, not adapter implementations.
-- `adapter` packages depend inward on `application` or `domain` contracts.
+- Driving adapters call inbound ports; driven adapters implement outbound ports.
 - `bootstrap` wires concrete adapters to ports at the edge.
 - Empty packages are avoided until a real use case needs them.]]></code-block>
                 </good-example>
@@ -313,12 +317,12 @@ Scaffolding smell:
     <output-format>
         <output-format-list>
             <output-format-item>**REVIEW** package structure, module boundaries, imports, Maven module dependencies, tests, framework entry points, persistence adapters, messaging adapters, and external-service clients before making architecture claims</output-format-item>
-            <output-format-item>**MAP** domain models, domain services, application/use-case services, ports/interfaces, inbound adapters, outbound adapters, and infrastructure concerns using code evidence</output-format-item>
+            <output-format-item>**MAP** domain models, domain services, application/use-case services, inbound ports, outbound ports, driving adapters, driven adapters, and infrastructure concerns using code evidence</output-format-item>
             <output-format-item>**SCAFFOLD** new or reorganized code with small, honest packages or modules that show domain, application ports, adapters, and bootstrap/composition boundaries without empty layer theater</output-format-item>
-            <output-format-item>**CHECK** Palermo-style tenets: independent object model, interfaces in inner layers, implementations in outer layers, center-directed coupling, and application core compilation or tests without concrete infrastructure</output-format-item>
+            <output-format-item>**CHECK** Ports and Adapters tenets: core behavior available through inbound ports, external needs expressed as outbound ports, adapters outside the core, replaceable infrastructure, and application core compilation or tests without concrete infrastructure</output-format-item>
             <output-format-item>**IDENTIFY** confirmed violations: domain imports of infrastructure/framework APIs, use cases depending on concrete adapters, adapters depending on each other unnecessarily, infrastructure logic leaking into the domain, or package dependencies pointing outward</output-format-item>
             <output-format-item>**SEPARATE** confirmed findings from assumptions, inferred conventions, and missing context</output-format-item>
-            <output-format-item>**PROPOSE** minimal remediation steps that preserve inward dependency direction: extract ports, move adapter DTOs/entities outward, add mappers, invert dependencies, split modules, or relocate misplaced behavior</output-format-item>
+            <output-format-item>**PROPOSE** minimal remediation steps that preserve core-to-adapter dependency direction: extract ports, move adapter DTOs/entities outward, add mappers, invert dependencies, split modules, or relocate misplaced behavior</output-format-item>
             <output-format-item>**VERIFY** with existing tests, compile checks, package/module dependency checks, optional ArchUnit rules, and focused regression tests where useful</output-format-item>
             <output-format-item>**ROUTE** ArchUnit dependency addition to `111-java-maven-dependencies` and framework runtime wiring to the matching Spring Boot, Quarkus, or Micronaut skill</output-format-item>
         </output-format-list>
@@ -327,7 +331,7 @@ Scaffolding smell:
     <safeguards>
         <safeguards-list>
             <safeguards-item>**EVIDENCE SAFETY**: Do not claim a violation based only on package names when imports, dependencies, or code responsibilities contradict that assumption</safeguards-item>
-            <safeguards-item>**BOUNDARY SAFETY**: Preserve the rule that inner layers do not depend on outer layers; prefer dependency inversion over direct adapter references from domain or application code</safeguards-item>
+            <safeguards-item>**BOUNDARY SAFETY**: Preserve the rule that the application core does not depend on adapters; prefer dependency inversion over direct adapter references from domain or application code</safeguards-item>
             <safeguards-item>**MIGRATION SAFETY**: For legacy code, propose incremental moves and architecture tests that can freeze existing violations without blocking unrelated work</safeguards-item>
             <safeguards-item>**FRAMEWORK SAFETY**: Keep framework annotations and runtime configuration in outer layers unless the project has explicitly documented a different architecture decision</safeguards-item>
             <safeguards-item>**DEPENDENCY SAFETY**: Do not add ArchUnit or other dependencies from this skill alone; use the Maven dependency skill to evaluate version, scope, and project fit</safeguards-item>
