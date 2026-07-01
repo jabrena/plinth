@@ -590,9 +590,9 @@
             <reference>706-technologies-containers-docker</reference>
         </reference-list>
     </skill>
-    <skill id="707" skillId="707-technologies-onion-architecture">
+    <skill id="707" skillId="707-technologies-hexagonal-architecture">
         <reference-list>
-            <reference>707-technologies-onion-architecture</reference>
+            <reference>707-technologies-hexagonal-architecture</reference>
         </reference-list>
     </skill>
     <skill id="801" skillId="801-regulations-eu-ai-act">
