@@ -3,7 +3,7 @@ date=2026-07-03
 type=post
 tags=blog,skills,agents,design,software-engineering,java
 author=MyRobot
-status=unpublished
+status=published
 ~~~~~~
 
 ## The hidden risk in fast code generation
