@@ -2,9 +2,30 @@
 <feed xmlns='http://www.w3.org/2005/Atom' xml:lang='en'>
   <id>https://jabrena.github.io/cursor-rules-java/</id>
   <title>Skills & Agents for Java</title>
-  <updated>2026-07-01T10:05:45+0200</updated>
+  <updated>2026-07-02T21:02:31+0200</updated>
   <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java/" />
   <link rel='self' type='application/atom+xml' href='https://jabrena.github.io/cursor-rules-java//feed.xml' />
+  <entry>
+    <id>https://jabrena.github.io/cursor-rules-java//blog/2026/07/why-do-i-need-to-use-the-parallel-change-pattern.html</id>
+    <title>Why Do I Need to Use the Parallel Change Pattern?</title>
+    <link></link>
+    <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2026/07/why-do-i-need-to-use-the-parallel-change-pattern.html" />
+    <updated>2026-07-03T00:00:00+0200</updated>
+    <summary>The hidden risk in fast code generation
+AI coding tools are very good at producing a complete-looking change from a short request.
+That is useful when the change is local. It becomes risky when the change crosses compatibility boundaries: database schemas, public APIs, event contracts, configuration keys, command outputs, generated artifacts, or workflows consumed by other services.
+A human enginee...</summary>
+  </entry>
+  <entry>
+    <id>https://jabrena.github.io/cursor-rules-java//blog/2026/07/introduction-to-eu-regulations-part-ii.html</id>
+    <title>Introduction to EU regulations Part II</title>
+    <link></link>
+    <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2026/07/introduction-to-eu-regulations-part-ii.html" />
+    <updated>2026-07-03T00:00:00+0200</updated>
+    <summary>Compliance as code
+The first article introduced the EU regulatory skill family and focused on broad digital regulation: AI systems, operational resilience, privacy, cybersecurity, product security, data access, online platforms, and digital markets.
+This second article explains the remaining regulation and ISO skills added for the future 0.17.0 release, and connects them to a more specialized idea:...</summary>
+  </entry>
   <entry>
     <id>https://jabrena.github.io/cursor-rules-java//blog/2026/06/from-code-generation-to-software-engineering.html</id>
     <title>From Code Generation to Software Engineering: Why AI Agents Need Design Skills</title>
