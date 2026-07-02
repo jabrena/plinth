@@ -2,14 +2,16 @@ Feature: Validate changes from usage of OpenAPI technology skill
 
 Background:
   Given the skill "701-technologies-openapi"
+  And the repository has no git changes
 
 @acceptance-test
 Scenario: Fix a bad OpenAPI contract without framework coupling
   Given the bad OpenAPI contract file "examples/requirements/bad-openapi-spec/openapi.yaml"
-  And the user request is "Use the OpenAPI skill to review examples/requirements/bad-openapi-spec/openapi.yaml and fix the contract issues with concrete YAML changes"
+  And the user request is "Use the OpenAPI skill to review examples/requirements/bad-openapi-spec/openapi.yaml, fix the contract issues with concrete YAML changes, verify the result, and reset generated contract changes after verification"
   And the local generated skill path ".agents/skills/701-technologies-openapi"
   When the skill ".agents/skills/701-technologies-openapi" is applied to the bad OpenAPI contract
   Then the skill reads "references/701-technologies-openapi.md"
+  And the skill verifies the repository has no uncommitted changes before fixing the bad OpenAPI contract
   And the skill reviews the bad OpenAPI file for API metadata, versioning, paths, operationIds, request bodies, responses, and content types
   And the skill identifies the vague title and version, missing servers, missing tags, and absent operationIds
   And the skill identifies reusable schema issues in "Order" and "CreateOrderRequest", including required fields, formats, enums, money precision, nullability or optionality, and examples that do not match the declared schema
@@ -21,3 +23,4 @@ Scenario: Fix a bad OpenAPI contract without framework coupling
   And the skill recommends validation, linting, or breaking-change checks without requiring one specific external tool for every project
   And the skill avoids framework-specific controller, server stub, or runtime OpenAPI wiring recommendations unless the user explicitly requests implementation help
   And the skill routes Spring Boot, Quarkus, or Micronaut implementation concerns to the appropriate framework REST skills when needed
+  And any git changes produced during skill execution and verification are reset
