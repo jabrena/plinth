@@ -57,8 +57,9 @@ info.jab.ms
 
 Dependency direction:
 
-- `MainApplication` is a thin Quarkus bootstrap entry point; it does not
-  orchestrate use cases or contain business behavior.
+- `MainApplication` is decorated with `@QuarkusMain` as the Quarkus bootstrap
+  entry point; it remains thin and does not orchestrate use cases or contain
+  business behavior.
 - `domain` contains the arithmetic rule and imports only Java/domain types.
 - `application` contains the inbound port, command, and use-case implementation;
   it depends on `domain` and its own port contracts, not adapters.
