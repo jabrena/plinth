@@ -3,7 +3,7 @@ date=2026-07-06
 type=post
 tags=blog,skills,java,agents,design,regulations,validation
 author=Juan Antonio Breña Moral
-status=published
+status=unpublished
 ~~~~~~
 
 In this release, we introduce new improvements in the development workflow but one of the most important changes is the project name, changing the repository name from `cursor-rules-java` to `plinch`.
