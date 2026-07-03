@@ -7,4 +7,5 @@ target/
 .env
 dependency-reduced-pom.xml
 docs-local/
+docs/**/*-draft.html
 .quarkus/
