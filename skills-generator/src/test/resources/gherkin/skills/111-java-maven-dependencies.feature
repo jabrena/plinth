@@ -4,7 +4,7 @@ Background:
   Given the skill "111-java-maven-dependencies"
 
 @acceptance-test
-Scenario: Add JSpecify and Error Prone + NullAway to Maven demo
+Scenario: Add JSpecify with Error Prone and NullAway to Maven demo
   Given the example project "examples/maven/maven-demo"
   And the example project has a baseline "pom.xml"
   And the folder "examples/maven/maven-demo" has no git changes
@@ -15,11 +15,11 @@ Scenario: Add JSpecify and Error Prone + NullAway to Maven demo
   When the skill "111-java-maven-dependencies" is applied to "examples/maven/maven-demo"
   Then "./mvnw validate" succeeds in "examples/maven/maven-demo"
   And the "pom.xml" declares these dependency version properties:
-    | property                       | propertyValue |
-    | jspecify.version               | 1.0.0         |
-    | error-prone.version            | 2.35.1        |
-    | nullaway.version               | 0.12.0        |
-    | maven-plugin-compiler.version  | 3.14.0        |
+    | property                      | propertyValue |
+    | jspecify.version              | 1.0.0         |
+    | error-prone.version           | 2.35.1        |
+    | nullaway.version              | 0.12.0        |
+    | maven-plugin-compiler.version | 3.14.0        |
   And the "pom.xml" declares these selected dependencies:
     | groupId      | artifactId | version             | scope    |
     | org.jspecify | jspecify   | ${jspecify.version} | provided |
@@ -72,4 +72,79 @@ Scenario: Add JSpecify and Error Prone + NullAway to Maven demo
     | COMPILATION WARNING                  |
     | COMPILATION ERROR                    |
     | warnings found and -Werror specified |
+  And any git changes produced during skill execution and verification are reset
+
+@acceptance-test
+Scenario: Add VAVR to Maven demo
+  Given the example project "examples/maven/maven-demo"
+  And the example project has a baseline "pom.xml"
+  And the folder "examples/maven/maven-demo" has no git changes
+  And the dependency selection answers are:
+    | question                  | answer |
+    | code-quality dependencies | VAVR   |
+  When the skill "111-java-maven-dependencies" is applied to "examples/maven/maven-demo"
+  Then "./mvnw validate" succeeds in "examples/maven/maven-demo"
+  And the "pom.xml" declares these dependency version properties:
+    | property     | propertyValue |
+    | vavr.version | 0.10.6        |
+  And the "pom.xml" declares these selected dependencies:
+    | groupId | artifactId | version         | scope   |
+    | io.vavr | vavr       | ${vavr.version} | compile |
+  And the "pom.xml" does not declare these unselected dependencies:
+    | groupId              | artifactId      |
+    | org.jspecify         | jspecify        |
+    | com.tngtech.archunit | archunit-junit5 |
+    | org.javamoney        | moneta          |
+    | javax.money          | money-api       |
+  And "./mvnw clean verify" succeeds in "examples/maven/maven-demo"
+  And any git changes produced during skill execution and verification are reset
+
+@acceptance-test
+Scenario: Add ArchUnit to Maven demo
+  Given the example project "examples/maven/maven-demo"
+  And the example project has a baseline "pom.xml"
+  And the folder "examples/maven/maven-demo" has no git changes
+  And the dependency selection answers are:
+    | question                  | answer   |
+    | code-quality dependencies | ArchUnit |
+  When the skill "111-java-maven-dependencies" is applied to "examples/maven/maven-demo"
+  Then "./mvnw validate" succeeds in "examples/maven/maven-demo"
+  And the "pom.xml" declares these dependency version properties:
+    | property         | propertyValue |
+    | archunit.version | 1.4.1         |
+  And the "pom.xml" declares these selected dependencies:
+    | groupId              | artifactId      | version             | scope |
+    | com.tngtech.archunit | archunit-junit5 | ${archunit.version} | test  |
+  And the "pom.xml" does not declare these unselected dependencies:
+    | groupId       | artifactId |
+    | org.jspecify  | jspecify   |
+    | io.vavr       | vavr       |
+    | org.javamoney | moneta     |
+    | javax.money   | money-api  |
+  And "./mvnw clean verify" succeeds in "examples/maven/maven-demo"
+  And any git changes produced during skill execution and verification are reset
+
+@acceptance-test
+Scenario: Add JavaMoney to Maven demo
+  Given the example project "examples/maven/maven-demo"
+  And the example project has a baseline "pom.xml"
+  And the folder "examples/maven/maven-demo" has no git changes
+  And the dependency selection answers are:
+    | question                  | answer    |
+    | code-quality dependencies | JavaMoney |
+  When the skill "111-java-maven-dependencies" is applied to "examples/maven/maven-demo"
+  Then "./mvnw validate" succeeds in "examples/maven/maven-demo"
+  And the "pom.xml" declares these dependency version properties:
+    | property                 | propertyValue |
+    | javamoney-moneta.version | 1.4.5         |
+  And the "pom.xml" declares these selected dependencies:
+    | groupId       | artifactId | version                    | scope   | type |
+    | org.javamoney | moneta     | ${javamoney-moneta.version} | compile | pom  |
+  And the "pom.xml" does not declare these unselected dependencies:
+    | groupId              | artifactId      |
+    | org.jspecify         | jspecify        |
+    | io.vavr              | vavr            |
+    | com.tngtech.archunit | archunit-junit5 |
+    | javax.money          | money-api       |
+  And "./mvnw clean verify" succeeds in "examples/maven/maven-demo"
   And any git changes produced during skill execution and verification are reset
