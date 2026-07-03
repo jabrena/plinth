@@ -2,21 +2,25 @@ Feature: Validate changes from usage of OpenAPI technology skill
 
 Background:
   Given the skill "701-technologies-openapi"
+  And the repository has no git changes
 
 @acceptance-test
-Scenario: Review OpenAPI contract quality without framework coupling
-  Given an OpenAPI contract or OpenAPI diff is provided by the user
-  And the user request is "Review this OpenAPI contract for schema, parameter, error, security, example, and breaking-change risks"
+Scenario: Fix a bad OpenAPI contract without framework coupling
+  Given the bad OpenAPI contract file "examples/requirements/bad-openapi-spec/openapi.yaml"
+  And the user request is "Use the OpenAPI skill to review examples/requirements/bad-openapi-spec/openapi.yaml, fix the contract issues with concrete YAML changes, verify the result, and reset generated contract changes after verification"
   And the local generated skill path ".agents/skills/701-technologies-openapi"
-  When the skill ".agents/skills/701-technologies-openapi" is applied to the OpenAPI contract or diff
+  When the skill ".agents/skills/701-technologies-openapi" is applied to the bad OpenAPI contract
   Then the skill reads "references/701-technologies-openapi.md"
-  And the skill reviews API metadata, versioning, paths, operationIds, request bodies, responses, and content types
-  And the skill identifies concrete issues in reusable schemas, required fields, formats, enums, nullability, and examples where present
-  And the skill identifies under-specified path, query, or header parameters, including pagination, filtering, or sorting contracts where applicable
-  And the skill identifies inconsistent error contracts and recommends Problem Details or an equivalent reusable error envelope with appropriate problem content types
-  And the skill reviews security schemes, global security requirements, operation-level overrides, scopes, and optional-auth mismatches
-  And the skill distinguishes additive changes from breaking changes such as removed paths, changed status semantics, newly required fields, incompatible enum changes, or schema type changes
-  And the skill proposes concrete OpenAPI YAML or JSON snippets or precise edit lists to fix the findings
+  And the skill verifies the repository has no uncommitted changes before fixing the bad OpenAPI contract
+  And the skill reviews the bad OpenAPI file for API metadata, versioning, paths, operationIds, request bodies, responses, and content types
+  And the skill identifies the vague title and version, missing servers, missing tags, and absent operationIds
+  And the skill identifies reusable schema issues in "Order" and "CreateOrderRequest", including required fields, formats, enums, money precision, nullability or optionality, and examples that do not match the declared schema
+  And the skill identifies under-specified path, query, and header parameters, including the invalid "orderId" path parameter, pagination bounds, filtering enum values, sorting format, and correlation-id format
+  And the skill identifies inconsistent error contracts for "400" and "404" and recommends Problem Details or an equivalent reusable error envelope with "application/problem+json"
+  And the skill identifies the JWT security mismatch and proposes "components.securitySchemes" plus appropriate global or operation-level security requirements
+  And the skill distinguishes additive changes from breaking changes in the file, including the changed "orderId" type, removed "PENDING" enum value, newly required "trackingNumber", and incompatible examples
+  And the skill fixes or proposes concrete OpenAPI YAML snippets or precise edit lists for the bad file
   And the skill recommends validation, linting, or breaking-change checks without requiring one specific external tool for every project
   And the skill avoids framework-specific controller, server stub, or runtime OpenAPI wiring recommendations unless the user explicitly requests implementation help
   And the skill routes Spring Boot, Quarkus, or Micronaut implementation concerns to the appropriate framework REST skills when needed
+  And any git changes produced during skill execution and verification are reset

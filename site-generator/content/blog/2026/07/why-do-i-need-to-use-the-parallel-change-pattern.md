@@ -1,5 +1,5 @@
 title=Why Do I Need to Use the Parallel Change Pattern?
-date=2026-07-03
+date=2026-07-04
 type=post
 tags=blog,skills,agents,design,software-engineering,java
 author=MyRobot

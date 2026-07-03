@@ -8,7 +8,7 @@
     <parent>
         <groupId>info.jab</groupId>
         <artifactId>cursor-rules-java</artifactId>
-        <version>0.17.0-SNAPSHOT</version>
+        <version>0.17.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -47,7 +47,7 @@
                                     <goal>copy-resources</goal>
                                 </goals>
                                 <configuration>
-                                    <outputDirectory>${project.build.directory}/docs-local/cursor-rules-java/images</outputDirectory>
+                                    <outputDirectory>${project.build.directory}/docs-local/plintch/images</outputDirectory>
                                     <resources>
                                         <resource>
                                             <directory>${project.basedir}/assets/images</directory>

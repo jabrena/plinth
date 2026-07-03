@@ -10,6 +10,8 @@ Scenario: Create an OpenSpec change from an approved source artifact
   And the command prompt source ".cursor/commands/create-spec.md" is read before execution
   When the create-spec command is applied to the request
   Then the command identifies the source artifact, change name, affected specs, proposal, design needs, and task list
+  And the command routes OpenSpec creation through "@robot-tech-lead"
+  And the command applies "056-design-avoid-breaking-changes" when the spec affects compatibility surfaces
   And the command creates or updates OpenSpec artifacts only under "documentation/openspec" when edits are requested
   And the command validates OpenSpec structure before claiming the change is ready
   And the command reports changed files, validation evidence, assumptions, and unresolved planning risks

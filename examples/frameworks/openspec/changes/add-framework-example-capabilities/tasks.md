@@ -1,0 +1,23 @@
+## 1. Implementation
+
+- [ ] 1.1 Review only the REST scenario in `examples/frameworks/SPEC.md`.
+- [ ] 1.2 Confirm `examples/frameworks/openspec/changes/add-framework-example-capabilities/examples/openapi.yaml` matches the intended `POST /api/v1/sum` contract.
+- [ ] 1.3 Keep the shared `examples/frameworks/openapi.yaml` aligned with the isolated OpenAPI example if the REST contract changes during implementation.
+- [ ] 1.4 Characterize the existing Quarkus `POST /api/v1/sum` behavior before refactoring.
+- [ ] 1.5 Confirm the Quarkus module compiles and runs tests on Java 25.
+- [ ] 1.6 Configure Quarkus virtual-thread support explicitly with `quarkus.virtual-threads.enabled=true`.
+- [ ] 1.7 Enable Java preview features for compile, test, and runtime execution if Java 25 structured concurrency is used.
+- [ ] 1.8 Introduce a framework-independent domain component for the sum rule.
+- [ ] 1.9 Introduce an application inbound port and use-case implementation for calculating sums.
+- [ ] 1.10 Use Java 25 structured concurrency for any related parallel calls introduced by the application use case.
+- [ ] 1.11 Keep the Quarkus REST controller in the controller package as a driving adapter that calls the inbound port.
+- [ ] 1.12 Run the Quarkus REST adapter on virtual threads when it performs blocking or parallel work.
+- [ ] 1.13 Keep request/response DTOs at the REST adapter boundary and require integer `param1` and `param2`.
+- [ ] 1.14 Ensure successful Quarkus responses return an integer `result`.
+- [ ] 1.15 Add or confirm pure unit tests for the domain/application sum behavior without booting Quarkus.
+- [ ] 1.16 Add or confirm structured-concurrency tests for success, failure, cancellation, and interruption when parallel calls are present.
+- [ ] 1.17 Add or confirm Quarkus REST adapter tests for `{"param1":10,"param2":32}` returning result `42`.
+- [ ] 1.18 Add or confirm Quarkus REST adapter validation tests for missing required request fields.
+- [ ] 1.19 Verify Hexagonal dependency direction: domain/application do not import controller, DTO, Quarkus, or Jakarta REST packages.
+- [ ] 1.20 Run focused Maven verification from `examples/frameworks/generated`.
+- [ ] 1.22 Run `openspec validate --all` from `examples/frameworks`.

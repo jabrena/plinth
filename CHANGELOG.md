@@ -5,6 +5,46 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.17.0] 2026-07-06
+
+### Added
+
+- **Skills**:
+  - Design method skills for two-step changes, the hamburger method, simple design rules, TDD, parallel change, and breaking-change avoidance (`@051-design-two-steps-methods`, `@052-design-hamburger-method`, `@053-design-simple-rules`, `@054-design-tdd`, `@055-design-parallel-change`, `@056-design-avoid-breaking-changes`) (#925, #928, #930, #935, #937, #954)
+  - Azure DevOps planning workflow for safe Azure Boards work item ID discovery, WIQL-backed queries, and create/update actions through `az` (`@045-planning-azure-devops`) (#966, #967)
+  - Onion Architecture technology guidance (`@707-technologies-onion-architecture`) with framework agent routing support (#945)
+  - Regulation engineering review skills for EU MiFID II, EU Market Abuse Regulation, EU Product Liability Directive, and ISO 42001 (`@810`-`@813`) with questionnaires, report templates, examples, and acceptance prompts (#949, #950)
+  - JavaMoney dependency guidance for Maven dependency selection (`@111-java-maven-dependencies`) (#926)
+
+- **Agents & commands**:
+  - Acceptance-test prompt inventories and Gherkin coverage for agents, commands, and a broader set of generated skills (#951)
+
+- **CI & validation**:
+  - VirusTotal checks in the Maven workflow (#910)
+  - Codex-backed OpenSpec workflow for generating specs from issues, including branch creation, generated PR labeling, and blocked-run tolerance (#914, #915, #917, #918)
+  - Issue update workflow automation (#912)
+  - Maven-based `markdown-validator` module with CLI, remote-link validation, unit tests, PMD configuration, and architecture tests (#946, #947)
+
+### Changed
+
+- **Skills**:
+  - Expanded Flyway and Mongock migration guidance for Spring Boot, Quarkus, and Micronaut with migration safety, antipattern, and parallel-change coverage (#901, #908, #909)
+  - Improved design pattern, Java testing strategy, acceptance testing, OpenAPI, and WireMock guidance with richer examples and reference structure (#943)
+  - Split Maven search guidance into Maven Central lookup and project version update workflows (`@114-java-maven-search`) (#948)
+  - Enforced minimum trigger coverage across generated skill indexes (#944)
+  - Removed `h2` headings from guidance examples to keep generated skill content flatter and more consistent (#920)
+
+- **Documentation & website**:
+  - Refreshed README navigation and localized README content for the new design, regulation, command, and validator capabilities (#927, #933, #934, #945, #949, #950)
+
+### Removed
+
+- **Agents & commands**:
+  - Removed retired command assets for `create-issue`, `create-plan`, and `kill-port`; command guidance now points to the supported command set (#951)
+
+- **CI & validation**:
+  - Removed the legacy script-based Markdown validator and validation script after moving Markdown validation into the Maven module (#946)
+
 ## [0.16.0] 2026-06-22
 
 ### Added

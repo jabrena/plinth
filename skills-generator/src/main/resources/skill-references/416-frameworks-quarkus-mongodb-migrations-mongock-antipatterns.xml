@@ -2,7 +2,7 @@
 <prompt>
     <metadata>
         <author>Juan Antonio Breña Moral</author>
-        <version>0.17.0-SNAPSHOT</version>
+        <version>0.17.0</version>
         <license>Apache-2.0</license>
         <title>Quarkus - MongoDB migrations (Mongock)</title>
         <description>Review Quarkus Mongock migrations for unsafe MongoDB document changes, non-idempotent operations, Panache/domain coupling, lock risks, and missing migration verification.</description>

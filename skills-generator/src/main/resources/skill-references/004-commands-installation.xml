@@ -3,7 +3,7 @@
 
     <metadata>
         <author>Juan Antonio Breña Moral</author>
-        <version>0.17.0-SNAPSHOT</version>
+        <version>0.17.0</version>
         <license>Apache-2.0</license>
         <title>Embedded commands installer</title>
         <description>Use when you need to install the embedded project commands into command directories (.github/commands, .claude/commands, .cursor/command, .codex/commands), selecting the destination interactively and copying the embedded command definitions from project assets.</description>
@@ -72,9 +72,6 @@
                 <xi:include href="assets/commands/review-alignment.md" parse="text"/>
                 ```
                 ```markdown
-                <xi:include href="assets/commands/review-breaking-changes.md" parse="text"/>
-                ```
-                ```markdown
                 <xi:include href="assets/commands/implement-issue.md" parse="text"/>
                 ```
                 ```markdown
@@ -91,7 +88,7 @@
             <step-constraints>
                 <step-constraint-list>
                     <step-constraint>**MUST** copy from embedded assets, not from external URLs</step-constraint>
-                    <step-constraint>**MUST** install all twelve commands as one set</step-constraint>
+                    <step-constraint>**MUST** install all eleven commands as one set</step-constraint>
                     <step-constraint>**MUST** preserve original file names</step-constraint>
                 </step-constraint-list>
             </step-constraints>

@@ -1,0 +1,112 @@
+openapi: 3.0.3
+info:
+  title: API
+  version: "1"
+  description: |
+    Draft Orders API. Production endpoints are protected with JWT bearer tokens.
+    This draft was copied from a previous v1 contract without a compatibility review.
+x-previous-contract-summary:
+  orderId: string uuid
+  statusValues: [PENDING, CONFIRMED, CANCELLED]
+  trackingNumber: optional
+paths:
+  /orders:
+    get:
+      summary: Search orders
+      parameters:
+        - name: page
+          in: query
+        - name: size
+          in: query
+        - name: status
+          in: query
+        - name: sort
+          in: query
+        - name: X-Correlation-Id
+          in: header
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Order"
+              example:
+                - id: 123
+                  status: SHIPPED
+                  totalAmount: 42.9
+    post:
+      summary: Create order
+      requestBody:
+        content:
+          "*/*":
+            schema:
+              type: object
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              example:
+                foo: bar
+        "400":
+          description: Bad Request
+  /orders/{orderId}:
+    get:
+      summary: Find order
+      parameters:
+        - name: orderId
+          in: path
+          required: false
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Order"
+        "404":
+          description: Not Found
+components:
+  schemas:
+    Order:
+      type: object
+      required: [id, status, totalAmount, createdAt, trackingNumber]
+      properties:
+        id:
+          type: integer
+          example: 123
+        status:
+          type: string
+          enum: [CONFIRMED, CANCELLED]
+          example: SHIPPED
+        totalAmount:
+          type: number
+          example: 42.9
+        customerEmail:
+          type: string
+          example: not-an-email
+        createdAt:
+          type: string
+          example: "yesterday"
+        trackingNumber:
+          type: string
+        items:
+          type: array
+          items:
+            type: object
+    CreateOrderRequest:
+      type: object
+      properties:
+        customerId:
+          type: string
+        currency:
+          type: string
+        items:
+          type: array
+          items:
+            type: object

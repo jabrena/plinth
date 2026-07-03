@@ -8,7 +8,7 @@
     <parent>
         <groupId>info.jab</groupId>
         <artifactId>cursor-rules-java</artifactId>
-        <version>0.17.0-SNAPSHOT</version>
+        <version>0.17.0</version>
         <relativePath>../pom.xml</relativePath>
     </parent>
 
@@ -100,62 +100,4 @@
             </plugin>
         </plugins>
     </build>
-
-    <profiles>
-        <!-- Cyclomatic Complexity Analysis Profile -->
-        <profile>
-            <id>cyclomatic-complexity</id>
-            <activation>
-                <activeByDefault>false</activeByDefault>
-            </activation>
-            <build>
-                <plugins>
-                    <!-- PMD Plugin for Cyclomatic Complexity Analysis -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-pmd-plugin</artifactId>
-                        <configuration>
-                            <rulesets>
-                                <ruleset>${maven.multiModuleProjectDirectory}/pmd/pmd-cyclomatic-complexity.xml</ruleset>
-                            </rulesets>
-                            <printFailingErrors>true</printFailingErrors>
-                            <linkXRef>false</linkXRef>
-                            <minimumTokens>100</minimumTokens>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>pmd-check</id>
-                                <phase>verify</phase>
-                                <goals>
-                                    <goal>check</goal>
-                                </goals>
-                            </execution>
-                            <execution>
-                                <id>pmd-report</id>
-                                <phase>site</phase>
-                                <goals>
-                                    <goal>pmd</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-            <reporting>
-                <plugins>
-                    <!-- PMD Report Plugin -->
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-pmd-plugin</artifactId>
-                        <configuration>
-                            <rulesets>
-                                <ruleset>${maven.multiModuleProjectDirectory}/pmd/pmd-cyclomatic-complexity.xml</ruleset>
-                            </rulesets>
-                            <linkXRef>false</linkXRef>
-                        </configuration>
-                    </plugin>
-                </plugins>
-            </reporting>
-        </profile>
-    </profiles>
 </project>

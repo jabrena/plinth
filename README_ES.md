@@ -14,11 +14,15 @@
 
 Un flujo de trabajo nativo de IA, con criterio propio, para evolucionar las prácticas modernas de `SDLC` en Java Enterprise mediante `Skills`, `Agents`, `Commands` y servidores `MCP` reutilizables.
 
+## ¿Qué es un Plinth?
+
+> Un `plinth` representa la base sólida o plataforma usada para sostener estatuas u obras de arte en el arte y la escultura. Servía como fundamento estructural y simbólico para columnas, estatuas y podios completos de templos. Los romanos heredaron la idea de la arquitectura griega, pero ampliaron su uso para enfatizar la monumentalidad, la jerarquía y el poder imperial.
+
 ## Proyecto de un vistazo
 
-- 12 Commands
+- 11 Commands
 - 9 Agents
-- 116 Skills
+- 117 Skills
 
 ## Últimas actualizaciones
 
@@ -59,7 +63,7 @@ Aprende a usar este proyecto siguiendo la guía rápida [Primeros pasos en 5 min
 
 ### Migración desde las reglas heredadas
 
-Los `System prompts/rules` actuales están deprecados y se eliminarán en `v0.16.0`. Si todavía los usas, revisa el [artículo de la versión 0.14.0](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html).
+Los `System prompts/rules` actuales están deprecados y se eliminarán en `v0.17.0`. Si todavía los usas, revisa el [artículo de la versión 0.14.0](https://jabrena.github.io/plinth/blog/2026/04/release-0.14.0.html).
 
 ## Elige tu camino
 
@@ -89,6 +93,7 @@ Plan
       @053-design-simple-rules
       @054-design-tdd
       @055-design-parallel-change
+      @056-design-avoid-breaking-changes
       @121-java-object-oriented-design
       @122-java-type-design
       @123-java-design-patterns
@@ -98,8 +103,6 @@ Plan
       @034-architecture-design-exploration
   /review-alignment
     @robot-business-analyst
-  /review-breaking-changes
-    @robot-tech-lead
 
 Build
   /implement-issue
@@ -143,9 +146,9 @@ Convierte una idea en un cambio accionable mediante user stories, GitHub Issues 
 
 | Recurso | Opciones disponibles |
 | --- | --- |
-| **Commands** | [`/update-issue`](./.cursor/commands/update-issue.md) · `/explore-design` · `/create-adr` · `/create-diagram` · `/create-spec` · `/review-alignment` · [`/review-breaking-changes`](./.cursor/commands/review-breaking-changes.md) |
+| **Commands** | [`/update-issue`](./.cursor/commands/update-issue.md) · `/explore-design` · `/create-adr` · `/create-diagram` · `/create-spec` · `/review-alignment` |
 | **Agents** | `@robot-business-analyst` · `@robot-architect` · `@robot-tech-lead` |
-| **Skills** | [014-agile-user-story](https://www.skills.sh/jabrena/cursor-rules-java/014-agile-user-story) · [030-architecture-adr-general](https://www.skills.sh/jabrena/cursor-rules-java/030-architecture-adr-general) · [031-architecture-adr-functional-requirements](https://www.skills.sh/jabrena/cursor-rules-java/031-architecture-adr-functional-requirements) · [032-architecture-adr-non-functional-requirements](https://www.skills.sh/jabrena/cursor-rules-java/032-architecture-adr-non-functional-requirements) · [033-architecture-diagrams](https://www.skills.sh/jabrena/cursor-rules-java/033-architecture-diagrams) · [034-architecture-design-exploration](https://www.skills.sh/jabrena/cursor-rules-java/034-architecture-design-exploration) · [041-planning-plan-mode](https://www.skills.sh/jabrena/cursor-rules-java/041-planning-plan-mode) · [042-planning-openspec](https://www.skills.sh/jabrena/cursor-rules-java/042-planning-openspec) · [043-planning-github-issues](https://www.skills.sh/jabrena/cursor-rules-java/043-planning-github-issues) · [044-planning-jira](https://www.skills.sh/jabrena/cursor-rules-java/044-planning-jira) · [051-design-two-steps-methods](https://www.skills.sh/jabrena/cursor-rules-java/051-design-two-steps-methods) · [052-design-hamburger-method](https://www.skills.sh/jabrena/cursor-rules-java/052-design-hamburger-method) · [053-design-simple-rules](https://www.skills.sh/jabrena/cursor-rules-java/053-design-simple-rules) · [200-agents-md](https://www.skills.sh/jabrena/cursor-rules-java/200-agents-md) |
+| **Skills** | [014-agile-user-story](https://www.skills.sh/jabrena/cursor-rules-java/014-agile-user-story) · [030-architecture-adr-general](https://www.skills.sh/jabrena/cursor-rules-java/030-architecture-adr-general) · [031-architecture-adr-functional-requirements](https://www.skills.sh/jabrena/cursor-rules-java/031-architecture-adr-functional-requirements) · [032-architecture-adr-non-functional-requirements](https://www.skills.sh/jabrena/cursor-rules-java/032-architecture-adr-non-functional-requirements) · [033-architecture-diagrams](https://www.skills.sh/jabrena/cursor-rules-java/033-architecture-diagrams) · [034-architecture-design-exploration](https://www.skills.sh/jabrena/cursor-rules-java/034-architecture-design-exploration) · [041-planning-plan-mode](https://www.skills.sh/jabrena/cursor-rules-java/041-planning-plan-mode) · [042-planning-openspec](https://www.skills.sh/jabrena/cursor-rules-java/042-planning-openspec) · [043-planning-github-issues](https://www.skills.sh/jabrena/cursor-rules-java/043-planning-github-issues) · [044-planning-jira](https://www.skills.sh/jabrena/cursor-rules-java/044-planning-jira) · [051-design-two-steps-methods](https://www.skills.sh/jabrena/cursor-rules-java/051-design-two-steps-methods) · [052-design-hamburger-method](https://www.skills.sh/jabrena/cursor-rules-java/052-design-hamburger-method) · [053-design-simple-rules](https://www.skills.sh/jabrena/cursor-rules-java/053-design-simple-rules) · [056-design-avoid-breaking-changes](https://www.skills.sh/jabrena/cursor-rules-java/056-design-avoid-breaking-changes) · [200-agents-md](https://www.skills.sh/jabrena/cursor-rules-java/200-agents-md) |
 | **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) |
 
 ### Construir

@@ -29,7 +29,6 @@ You are an **Implementation Specialist** for Micronaut projects. You focus on wr
 
 - **Error model:** Prefer `@143-java-functional-exception-handling` for expected domain outcomes and composable failures. Use `@126-java-exception-handling` for unexpected, infrastructure, resource, interruption, timeout, and Micronaut boundary failures. Do not model the same failure with both approaches.
 - **Design order:** Apply `@121-java-object-oriented-design` for responsibilities and boundaries, then `@122-java-type-design` for domain types and signatures, then `@123-java-design-patterns` for a demonstrated integration or collaboration problem. Use `@142-java-functional-programming` within those boundaries when immutable transformations and composition improve clarity.
-- **Onion architecture:** Apply `@707-technologies-onion-architecture` when the requirement asks for Onion architecture style, inward dependency direction, domain/application/adapter scaffolding, architecture boundary review, or optional ArchUnit Onion architecture tests; keep framework runtime wiring in outer layers.
 - **Relational persistence:** Prefer `@511-frameworks-micronaut-jdbc` plus `@704-technologies-sql`. Use `@512-frameworks-micronaut-data` only when generated repository access provides a clear benefit.
 - **API contracts:** Apply `@701-technologies-openapi` for contract quality and `@502-frameworks-micronaut-rest` for Micronaut runtime implementation.
 - **MongoDB:** Apply `@705-technologies-nosql-mongodb` for modeling and query decisions, then `@515-frameworks-micronaut-mongodb` for Micronaut integration.
@@ -55,7 +54,6 @@ Apply guidance from these Skills when relevant:
 - `@121-java-object-oriented-design`: Object responsibilities, boundaries, and code smells
 - `@122-java-type-design`: Domain types, value objects, hierarchies, and signatures
 - `@123-java-design-patterns`: Design and integration patterns
-- `@707-technologies-onion-architecture`: Onion architecture boundaries, scaffolding, inward dependencies, and optional ArchUnit checks
 - `@124-java-secure-coding`: General Java secure coding
 - `@142-java-functional-programming`: Functional programming patterns
 - `@143-java-functional-exception-handling`: Expected domain outcomes and composable failures

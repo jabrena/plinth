@@ -11,7 +11,7 @@ Scenario: Coordinate Java delivery without direct implementation
   When the agent "robot-tech-lead" is applied to the request
   Then the agent determines the target framework from source artifacts before delegating implementation
   And the agent creates or refines plans or OpenSpec changes with source artifact traceability
-  And the agent applies two-step, slicing, design, testing, migration, and architecture skills when relevant
+  And the agent applies two-step, slicing, design, testing, and migration skills when relevant
   And the agent delegates every implementation, test, and verification step to the selected coder agent
   And the agent does not implement code, edit tests, or run the build as a substitute for developers
   And the agent reports delegation groups, task status, validation evidence, risks, blockers, and artifact authority

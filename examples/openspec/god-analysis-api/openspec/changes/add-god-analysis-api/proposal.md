@@ -39,12 +39,12 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: `examples/requirements/problem1/US-001_God_Analysis_API.md`.
-- Acceptance source: `examples/requirements/problem1/US-001_god_analysis_api.feature`.
-- HTTP contract source: `examples/requirements/problem1/US-001-god-analysis-api.openapi.yaml`.
-- Functional decision source: `examples/requirements/problem1/ADR-001-God-Analysis-API-Functional-Requirements.md`.
-- Non-functional decision source: `examples/requirements/problem1/ADR-002-God-Analysis-API-Non-Functional-Requirements.md`.
-- Technology decision source: `examples/requirements/problem1/ADR-003-God-Analysis-API-Technology-Stack.md`.
+- Source artifact: `examples/openspec/god-analysis-api/requirements/problem1/US-001_God_Analysis_API.md`.
+- Acceptance source: `examples/openspec/god-analysis-api/requirements/problem1/US-001_god_analysis_api.feature`.
+- HTTP contract source: `examples/openspec/god-analysis-api/requirements/problem1/US-001-god-analysis-api.openapi.yaml`.
+- Functional decision source: `examples/openspec/god-analysis-api/requirements/problem1/ADR-001-God-Analysis-API-Functional-Requirements.md`.
+- Non-functional decision source: `examples/openspec/god-analysis-api/requirements/problem1/ADR-002-God-Analysis-API-Non-Functional-Requirements.md`.
+- Technology decision source: `examples/openspec/god-analysis-api/requirements/problem1/ADR-003-God-Analysis-API-Technology-Stack.md`.
 - Derivation direction: source requirements and decisions -> OpenSpec change
   artifacts -> implementation and tests.
 
@@ -59,5 +59,6 @@ testing constraints are part of the same deployable outcome.
 
 An implementation would affect the application REST controller, domain service,
 outbound source client, configuration, error handling, OpenAPI documentation,
-and unit, integration, and acceptance tests. The original source requirements in
-`examples/requirements/problem1` are not modified by this change.
+and unit, integration, and acceptance tests. The OpenSpec change records the
+capability without rewriting the source requirements in
+`examples/openspec/god-analysis-api/requirements/problem1`.
