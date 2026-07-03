@@ -14,6 +14,10 @@
 
 一套带有明确观点的 AI 原生工作流，通过可复用的 `Skills`、`Agents`、`Commands` 与 `MCP servers`，持续演进现代 Java 企业级 `SDLC` 实践。
 
+## 什么是 Plinth？
+
+> `plinth` 指艺术和雕塑中用于支撑雕像或艺术品的坚实基座或平台。它曾是柱子、雕像和整座神庙台基的结构性与象征性基础。罗马人从希腊建筑中继承了这一理念，并进一步扩展其用途，以强调纪念性、等级秩序和帝国权力。
+
 ## 项目概览
 
 - 11 Commands
@@ -59,7 +63,7 @@ npx skills add jabrena/cursor-rules-java --skill '*' --agent github-copilot -y
 
 ### 从旧版规则迁移
 
-当前的 `System prompts/rules` 已弃用，并将在 `v0.16.0` 中移除。如果你仍在使用它们，请阅读 [0.14.0 版本文章](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html)。
+当前的 `System prompts/rules` 已弃用，并将在 `v0.17.0` 中移除。如果你仍在使用它们，请阅读 [0.14.0 版本文章](https://jabrena.github.io/plinth/blog/2026/04/release-0.14.0.html)。
 
 ## 选择你的路径
 

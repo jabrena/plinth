@@ -14,6 +14,10 @@
 
 Un flujo de trabajo nativo de IA, con criterio propio, para evolucionar las prácticas modernas de `SDLC` en Java Enterprise mediante `Skills`, `Agents`, `Commands` y servidores `MCP` reutilizables.
 
+## ¿Qué es un Plinth?
+
+> Un `plinth` representa la base sólida o plataforma usada para sostener estatuas u obras de arte en el arte y la escultura. Servía como fundamento estructural y simbólico para columnas, estatuas y podios completos de templos. Los romanos heredaron la idea de la arquitectura griega, pero ampliaron su uso para enfatizar la monumentalidad, la jerarquía y el poder imperial.
+
 ## Proyecto de un vistazo
 
 - 11 Commands
@@ -59,7 +63,7 @@ Aprende a usar este proyecto siguiendo la guía rápida [Primeros pasos en 5 min
 
 ### Migración desde las reglas heredadas
 
-Los `System prompts/rules` actuales están deprecados y se eliminarán en `v0.16.0`. Si todavía los usas, revisa el [artículo de la versión 0.14.0](https://jabrena.github.io/cursor-rules-java/blog/2026/04/release-0.14.0.html).
+Los `System prompts/rules` actuales están deprecados y se eliminarán en `v0.17.0`. Si todavía los usas, revisa el [artículo de la versión 0.14.0](https://jabrena.github.io/plinth/blog/2026/04/release-0.14.0.html).
 
 ## Elige tu camino
 
