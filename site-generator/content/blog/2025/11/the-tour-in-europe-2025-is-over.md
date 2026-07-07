@@ -24,7 +24,7 @@ Videos about the talks:
 
 and the associated Slides:
 
-- [jabrena/plinth](https://github.com/jabrena/plinth)
+- https://jabrena.github.io/plinth/dvbe25/index.html
 - https://jabrena.github.io/101-cursor/
 
 ## Emerging new solutions from the Gemba
