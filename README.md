@@ -26,7 +26,7 @@ An opinionated AI-native workflow for evolving modern Java Enterprise `SDLC` pra
 
 ## Latest Updates
 
-Explore the latest published content on [jabrena/plinth](https://github.com/jabrena/plinth) and follow its evolution through new skills, improvements, and fixes in the [CHANGELOG](./CHANGELOG.md).
+Explore the latest published content on https://jabrena.github.io/plinth/ and follow its evolution through new skills, improvements, and fixes in the [CHANGELOG](./CHANGELOG.md).
 
 ## Start in 60 seconds
 
