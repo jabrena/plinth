@@ -26,7 +26,7 @@ Un flujo de trabajo nativo de IA, con criterio propio, para evolucionar las prá
 
 ## Últimas actualizaciones
 
-Explora el contenido publicado más reciente en [jabrena/plinth](https://github.com/jabrena/plinth) y sigue su evolución mediante nuevos skills, mejoras y correcciones en el [CHANGELOG](./CHANGELOG.md).
+Explora el contenido publicado más reciente en https://jabrena.github.io/plinth/ y sigue su evolución mediante nuevos skills, mejoras y correcciones en el [CHANGELOG](./CHANGELOG.md).
 
 ## Empieza en 60 segundos
 
