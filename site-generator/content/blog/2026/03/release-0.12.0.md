@@ -35,7 +35,7 @@ Let's walk through each feature. You can also review the [CHANGELOG.md](https://
 
 ## Why Skills?
 
-![](/plintch/images/2026/3/skills-everywhere.png)
+![](/plinth/images/2026/3/skills-everywhere.png)
 
 The [AI Assistants](https://aws.amazon.com/en/blogs/devops/aws-named-as-a-leader-in-the-2025-gartner-magic-quadrant-for-ai-code-assistants/) market is reshaping how we build software. A growing number of tools offer similar capabilities, yet until recently there was no standard way to extend them across vendors. `Cursor` pioneered `System prompts`, but that approach lacked a shared specification for others to adopt. A `Skill` fills that gap: it extends AI agents with specialized knowledge and workflows that work across different products.
 
@@ -131,7 +131,7 @@ npx skills install jabrena/plinth --all --agent cursor
 
 One feature I like: Security pipelines that audit Skills for safety.
 
-[![](/plintch/images/2026/3/skill-security-audit.png)](https://skills.sh/jabrena/plinth/110-java-maven-best-practices)
+[![](/plinth/images/2026/3/skill-security-audit.png)](https://skills.sh/jabrena/plinth/110-java-maven-best-practices)
 
 **Source:** https://skills.sh/jabrena/plinth/110-java-maven-best-practices
 
@@ -454,7 +454,7 @@ In 2026, AI tools are essential—but which ones you use depends on your organiz
 
 With Agile (Intents, Epics, User Stories, Tasks), start by reviewing your backlog and ensuring tasks are ready for development.
 
-[![](/plintch/images/2026/3/agile.png)](https://learn.microsoft.com/en-us/azure/devops/boards/backlogs/define-features-epics?view=azure-devops&tabs=agile-process)
+[![](/plinth/images/2026/3/agile.png)](https://learn.microsoft.com/en-us/azure/devops/boards/backlogs/define-features-epics?view=azure-devops&tabs=agile-process)
 
 **Source:** https://learn.microsoft.com/en-us/azure/devops/boards/backlogs/define-features-epics?view=azure-devops&tabs=agile-process
 
@@ -462,7 +462,7 @@ Use [`System prompts for Agile`](https://github.com/jabrena/cursor-rules-agile) 
 
 These tools boost delivery. To keep pace, consider a Double Agile Loop for defining User Stories:
 
-[![](/plintch/images/2026/3/double-agile-loop.png)](https://www.stride.build/blog/what-is-dual-track-agile-and-how-does-it-work)
+[![](/plinth/images/2026/3/double-agile-loop.png)](https://www.stride.build/blog/what-is-dual-track-agile-and-how-does-it-work)
 
 **Source:** https://www.stride.build/blog/what-is-dual-track-agile-and-how-does-it-work
 
@@ -522,7 +522,7 @@ Next, create a Plan. Cursor and Claude both support plan generation.
 
 Review and iterate until the Plan is stable, then hand it to the model. Include design artifacts, OAS files, and Gherkin in the context.
 
-![](/plintch/images/2026/3/workflow.png)
+![](/plinth/images/2026/3/workflow.png)
 
 Expect to iterate. Have the model verify its own changes rather than doing it manually. `AGENTS.md` helps here—it documents the technical details the model needs.
 
@@ -534,7 +534,7 @@ When executing the plan, you can choose:
 
 Depending on your preferences, you can build a plan that includes a task list like this:
 
-![](/plintch/images/2026/3/plan-task-list-example.png)
+![](/plinth/images/2026/3/plan-task-list-example.png)
 
 Read this section carefully and explore this approach. In the following Git repository, you could find other non-trivial problems: https://github.com/jabrena/latency-problems that you could solve with this approach.
 
@@ -542,7 +542,7 @@ Read this section carefully and explore this approach. In the following Git repo
 
 If you are interested in adding `AI Capabilities` to your pipelines:
 
-![](/plintch/images/2026/3/workflow-pipelines.png)
+![](/plinth/images/2026/3/workflow-pipelines.png)
 
 I recommend reading the following article: https://www.javaadvent.com/2025/12/delegating-java-tasks-to-supervised-ai-dev-pipelines.html
 
@@ -578,7 +578,7 @@ Since the previous version, the project has invested time improving the current 
 
 If you followed the article, the project is evolving from `System prompts` to `Skills`—and continues to advance practices such as curated shared instructions for software teams and `AGENTS.md`, both recognized in the [Thoughtworks Technology Radar](https://www.thoughtworks.com/radar/techniques). During the time between [`v0.11.0`](https://github.com/jabrena/plinth/releases/tag/0.11.0) to [`v0.12.0`](https://github.com/jabrena/plinth/releases/tag/0.12.0), new elements have appeared in the market, such as: `Subagents`, `Commands`, `Hooks`, `Plugins`, `Spec-driven`. In the next release, the project will review how to use `Skills` with **Subagents**.
 
-![](/plintch/images/2026/3/subagents.png)
+![](/plinth/images/2026/3/subagents.png)
 
 **Source:** https://code.claude.com/docs/en/agent-teams
 
@@ -598,6 +598,6 @@ Putting this in perspective, this kind of product has improved performance so mu
 
 If you feel stuck using this project or have questions, you can attend the following Workshop at `Codemotion Madrid 2026`:
 
-[![](/plintch/images/2026/3/codemotion-madrid-2026.jpg)](https://conferences.codemotion.com/madrid/)
+[![](/plinth/images/2026/3/codemotion-madrid-2026.jpg)](https://conferences.codemotion.com/madrid/)
 
 https://conferences.codemotion.com/madrid/workshop/

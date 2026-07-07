@@ -326,7 +326,7 @@ In this case, the command internally uses the agent `@robot-tech-lead`, which re
 
 *Running the test with Codex CLI for the Spring Boot variant*
 
-![](/plintch/images/2026/6/vscode-codex.png)
+![](/plinth/images/2026/6/vscode-codex.png)
 
 *Running the test with VS Code + Codex plugin*
 

@@ -135,7 +135,7 @@ Take a look at the following [Getting Started](https://github.com/jabrena/plinth
 
 Drawing on ideas from others, it is impressive to see the new processes that [Juan Macias](https://x.com/juanmacias) is developing:
 
-[![](/plintch/images/2026/3/juan-macias.png)](https://x.com/juanmacias/status/2037973784674611648?s=20)
+[![](/plinth/images/2026/3/juan-macias.png)](https://x.com/juanmacias/status/2037973784674611648?s=20)
 
 I recommend reading [The broken telephone](https://thebrokentelephone.com/) and the associated [GitHub repository](https://github.com/darkspock/thebrokentelephone_sample).
 
@@ -233,15 +233,15 @@ When the plan is revised and you agree with it, you can invoke the new Agent: `/
 
 This agent will review the plan and repository and, depending on the context, it will delegate the coding tasks to a specific agent. Specialized agents are currently available for Pure Java, Spring Boot, Quarkus, and Micronaut.
 
-![](/plintch/images/2026/3/robot-coordinator-example.jpg)
+![](/plinth/images/2026/3/robot-coordinator-example.jpg)
 
 When you achieve the first milestone, you can review whether the implementation matches the coding standards and continue until the end of all tasks in the task list.
 
-![](/plintch/images/2026/3/robot-quarkus-coder-example.jpg)
+![](/plinth/images/2026/3/robot-quarkus-coder-example.jpg)
 
 Using incremental review, you can minimize potential deviations and commit small parts.
 
-![](/plintch/images/2026/3/robot-coordinator-example2.png)
+![](/plinth/images/2026/3/robot-coordinator-example2.png)
 
 If you have good ADRs and you invested time in a plan, the time spent on refactorings should be minimized. Indeed, I recommend making small commits per milestone.
 
@@ -283,6 +283,6 @@ Some interesting skills to review:
 
 If you feel stuck using this project or have questions, you can attend the following workshop at `Codemotion Madrid 2026`:
 
-[![](/plintch/images/2026/3/codemotion-madrid-2026.jpg)](https://conferences.codemotion.com/madrid/)
+[![](/plinth/images/2026/3/codemotion-madrid-2026.jpg)](https://conferences.codemotion.com/madrid/)
 
 https://conferences.codemotion.com/madrid/workshop/

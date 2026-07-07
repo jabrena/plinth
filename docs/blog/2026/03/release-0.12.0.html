@@ -124,7 +124,7 @@
 </ul>
 <p>Let's walk through each feature. You can also review the <a href="https://github.com/jabrena/plinth/blob/main/CHANGELOG.md#0120-2026-03-08">CHANGELOG.md</a></p>
 <h2>Why Skills?</h2>
-<p><img src="/plintch/images/2026/3/skills-everywhere.png" alt="" /></p>
+<p><img src="/plinth/images/2026/3/skills-everywhere.png" alt="" /></p>
 <p>The <a href="https://aws.amazon.com/en/blogs/devops/aws-named-as-a-leader-in-the-2025-gartner-magic-quadrant-for-ai-code-assistants/">AI Assistants</a> market is reshaping how we build software. A growing number of tools offer similar capabilities, yet until recently there was no standard way to extend them across vendors. <code>Cursor</code> pioneered <code>System prompts</code>, but that approach lacked a shared specification for others to adopt. A <code>Skill</code> fills that gap: it extends AI agents with specialized knowledge and workflows that work across different products.</p>
 <p>This project has long focused on <code>Prompt engineering</code> and maintains a curated collection of <code>System prompts</code> (formerly Cursor rules). As Skills gained traction, we recognized that a Skill is essentially a System prompt with a standardized format—and that migrating to this format would keep the project relevant as the ecosystem evolves.</p>
 <p>Each <code>Skill</code> lives in a <code>SKILL.md</code> file. The specification allows up to 600 lines per file, though files in the <code>references</code> folder may exceed that limit.</p>
@@ -199,7 +199,7 @@ npx skills add https://github.com/jabrena/plinth \
 npx skills install jabrena/plinth --all --agent cursor
 </code></pre>
 <p>One feature I like: Security pipelines that audit Skills for safety.</p>
-<p><a href="https://skills.sh/jabrena/plinth/110-java-maven-best-practices"><img src="/plintch/images/2026/3/skill-security-audit.png" alt="" /></a></p>
+<p><a href="https://skills.sh/jabrena/plinth/110-java-maven-best-practices"><img src="/plinth/images/2026/3/skill-security-audit.png" alt="" /></a></p>
 <p><strong>Source:</strong> <a href="https://skills.sh/jabrena/plinth/110-java-maven-best-practices">https://skills.sh/jabrena/plinth/110-java-maven-best-practices</a></p>
 <p><strong>Note:</strong> I recommend skills.sh and similar sites—Skills there have passed security audits. Be aware that Skills can include scripts, which may be an attack vector.</p>
 <h3>What are SkillsJars?</h3>
@@ -456,11 +456,11 @@ META-INF/skills/jabrena/plinth/111-java-maven-dependencies/references/111-java-m
 <h2>How to use Prompts, Agents.md, Skills &amp; MCP/CLI tools in your daily workflow?</h2>
 <p>In 2026, AI tools are essential—but which ones you use depends on your organization and project. Check with your <code>Platform Engineering team</code> to see which AI tools, Skills, and MCP/CLI tools are approved.</p>
 <p>With Agile (Intents, Epics, User Stories, Tasks), start by reviewing your backlog and ensuring tasks are ready for development.</p>
-<p><a href="https://learn.microsoft.com/en-us/azure/devops/boards/backlogs/define-features-epics?view=azure-devops&amp;tabs=agile-process"><img src="/plintch/images/2026/3/agile.png" alt="" /></a></p>
+<p><a href="https://learn.microsoft.com/en-us/azure/devops/boards/backlogs/define-features-epics?view=azure-devops&amp;tabs=agile-process"><img src="/plinth/images/2026/3/agile.png" alt="" /></a></p>
 <p><strong>Source:</strong> <a href="https://learn.microsoft.com/en-us/azure/devops/boards/backlogs/define-features-epics?view=azure-devops&amp;tabs=agile-process">https://learn.microsoft.com/en-us/azure/devops/boards/backlogs/define-features-epics?view=azure-devops&amp;tabs=agile-process</a></p>
 <p>Use <a href="https://github.com/jabrena/cursor-rules-agile"><code>System prompts for Agile</code></a> to improve analysis and design: Epics, Features, User Stories (with <a href="https://cucumber.io/docs/gherkin/reference">Gherkin</a>), diagrams, and solutions for functional and non-functional requirements (<a href="https://iso25000.com/index.php/en/iso-25000-standards/iso-25010">ISO-25010</a>).</p>
 <p>These tools boost delivery. To keep pace, consider a Double Agile Loop for defining User Stories:</p>
-<p><a href="https://www.stride.build/blog/what-is-dual-track-agile-and-how-does-it-work"><img src="/plintch/images/2026/3/double-agile-loop.png" alt="" /></a></p>
+<p><a href="https://www.stride.build/blog/what-is-dual-track-agile-and-how-does-it-work"><img src="/plinth/images/2026/3/double-agile-loop.png" alt="" /></a></p>
 <p><strong>Source:</strong> <a href="https://www.stride.build/blog/what-is-dual-track-agile-and-how-does-it-work">https://www.stride.build/blog/what-is-dual-track-agile-and-how-does-it-work</a></p>
 <h3>Solving a User Story with a Prompt Engineering approach</h3>
 <p>Suppose you pick up this <a href="https://github.com/jabrena/latency-problems/blob/master/docs/problem1/README.md">User Story</a> from the backlog:</p>
@@ -506,7 +506,7 @@ So that I can perform cross-pantheon analysis and aggregate mythology data for r
 <li><a href="https://code.claude.com/docs/en/common-workflows#use-plan-mode-for-safe-code-analysis">https://code.claude.com/docs/en/common-workflows#use-plan-mode-for-safe-code-analysis</a></li>
 </ul>
 <p>Review and iterate until the Plan is stable, then hand it to the model. Include design artifacts, OAS files, and Gherkin in the context.</p>
-<p><img src="/plintch/images/2026/3/workflow.png" alt="" /></p>
+<p><img src="/plinth/images/2026/3/workflow.png" alt="" /></p>
 <p>Expect to iterate. Have the model verify its own changes rather than doing it manually. <code>AGENTS.md</code> helps here—it documents the technical details the model needs.</p>
 <p>When executing the plan, you can choose:</p>
 <ul>
@@ -515,11 +515,11 @@ So that I can perform cross-pantheon analysis and aggregate mythology data for r
 <li>Implement using London style (outside-in)</li>
 </ul>
 <p>Depending on your preferences, you can build a plan that includes a task list like this:</p>
-<p><img src="/plintch/images/2026/3/plan-task-list-example.png" alt="" /></p>
+<p><img src="/plinth/images/2026/3/plan-task-list-example.png" alt="" /></p>
 <p>Read this section carefully and explore this approach. In the following Git repository, you could find other non-trivial problems: <a href="https://github.com/jabrena/latency-problems">https://github.com/jabrena/latency-problems</a> that you could solve with this approach.</p>
 <h3>Enhance your pipeline with AI Tools</h3>
 <p>If you are interested in adding <code>AI Capabilities</code> to your pipelines:</p>
-<p><img src="/plintch/images/2026/3/workflow-pipelines.png" alt="" /></p>
+<p><img src="/plinth/images/2026/3/workflow-pipelines.png" alt="" /></p>
 <p>I recommend reading the following article: <a href="https://www.javaadvent.com/2025/12/delegating-java-tasks-to-supervised-ai-dev-pipelines.html">https://www.javaadvent.com/2025/12/delegating-java-tasks-to-supervised-ai-dev-pipelines.html</a></p>
 <h2>But not everything is perfect—your repository is full of configuration folders</h2>
 <p>Currently, every product has a particular folder like <code>.cursor</code>, <code>.claude</code>, <code>.agents</code>, <code>.ai</code>, etc. This is horrible, but it is part of the game. At some point, these kinds of configuration folders should be unified, meanwhile, we need to have patience.</p>
@@ -547,7 +547,7 @@ So that I can perform cross-pantheon analysis and aggregate mythology data for r
 </ul>
 <h2>Conclusions</h2>
 <p>If you followed the article, the project is evolving from <code>System prompts</code> to <code>Skills</code>—and continues to advance practices such as curated shared instructions for software teams and <code>AGENTS.md</code>, both recognized in the <a href="https://www.thoughtworks.com/radar/techniques">Thoughtworks Technology Radar</a>. During the time between <a href="https://github.com/jabrena/plinth/releases/tag/0.11.0"><code>v0.11.0</code></a> to <a href="https://github.com/jabrena/plinth/releases/tag/0.12.0"><code>v0.12.0</code></a>, new elements have appeared in the market, such as: <code>Subagents</code>, <code>Commands</code>, <code>Hooks</code>, <code>Plugins</code>, <code>Spec-driven</code>. In the next release, the project will review how to use <code>Skills</code> with <strong>Subagents</strong>.</p>
-<p><img src="/plintch/images/2026/3/subagents.png" alt="" /></p>
+<p><img src="/plinth/images/2026/3/subagents.png" alt="" /></p>
 <p><strong>Source:</strong> <a href="https://code.claude.com/docs/en/agent-teams">https://code.claude.com/docs/en/agent-teams</a></p>
 <p>When you talk with people using these technologies, you notice that software delivery has increased—but design and requirements gathering must keep pace on quality too. If you accelerate delivery without investing in requirements, you end up with fast products that conceal potential design flaws.</p>
 <pre><code>------------- Design phase ----------- | Planning  | ----- Development -----
@@ -559,7 +559,7 @@ Jira / Github / Azure Devops / RedMine &gt; Plan Mode &gt; Agent Mode to deliver
 <p>Putting this in perspective, this kind of product has improved performance so much that you can now pick a complex feature and, if the requirements are complete, execution using techniques like <code>Plan mode</code> will help greatly—without the poor experience from the <a href="https://jabrena.github.io/101-cursor/v010/index.html#/10/15">past (Madrid Jug - May 2025)</a>. Using <code>Plan Mode</code> doesn't require you to change how you organize your requirements, unlike new SDD tools such as Spec-kit.</p>
 <h2>Do you still have questions about the project?</h2>
 <p>If you feel stuck using this project or have questions, you can attend the following Workshop at <code>Codemotion Madrid 2026</code>:</p>
-<p><a href="https://conferences.codemotion.com/madrid/"><img src="/plintch/images/2026/3/codemotion-madrid-2026.jpg" alt="" /></a></p>
+<p><a href="https://conferences.codemotion.com/madrid/"><img src="/plinth/images/2026/3/codemotion-madrid-2026.jpg" alt="" /></a></p>
 <p><a href="https://conferences.codemotion.com/madrid/workshop/">https://conferences.codemotion.com/madrid/workshop/</a></p>
 
 </article>

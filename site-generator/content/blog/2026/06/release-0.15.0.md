@@ -12,11 +12,11 @@ An opinionated, AI-native workflow for evolving modern Java Enterprise `SDLC` pr
 
 It helps you answer the `Five Whys` when your team needs to evolve a Java-based product or service:
 
-![](/plintch/images/2026/6/scope.png)
+![](/plinth/images/2026/6/scope.png)
 
 Once the idea is clear, you can implement it in a structured way:
 
-![](/plintch/images/2026/6/workflow.png)
+![](/plinth/images/2026/6/workflow.png)
 
 Thanks to our community members in `Singapore`, `Hanoi`, `Hong Kong`, `Milan`, and `New York`. 👋👋👋
 
@@ -59,7 +59,7 @@ In this release, the project continues to add new features to improve support fo
 
 Observability is an essential aspect of any application:
 
-[![](/plintch/images/2026/6/ms-concerns.webp)](https://developers.redhat.com/blog/2016/12/09/spring-cloud-for-microservices-compared-to-kubernetes)
+[![](/plinth/images/2026/6/ms-concerns.webp)](https://developers.redhat.com/blog/2016/12/09/spring-cloud-for-microservices-compared-to-kubernetes)
 
 In this release, we completed support for the main concepts related to observability: `Logging`, `Metrics` & `Tracing`:
 
@@ -69,7 +69,7 @@ In this release, we completed support for the main concepts related to observabi
 
 Now, using any supported framework with OTEL, you can easily send continuous profiling data to Grafana:
 
-![](/plintch/images/2026/6/piroscope-demo.png)
+![](/plinth/images/2026/6/piroscope-demo.png)
 
 https://grafana.com/oss/pyroscope/
 
@@ -77,7 +77,7 @@ https://grafana.com/oss/pyroscope/
 
 In this release, fuzz testing was improved to make it easier to use: `@703-technologies-fuzzing-testing`.
 
-![](/plintch/images/2026/6/cats.png)
+![](/plinth/images/2026/6/cats.png)
 
 https://github.com/Endava/cats
 
@@ -106,7 +106,7 @@ This project focuses mainly on the following categories, and that scope continue
 
 ### Codex
 
-![](/plintch/images/2026/6/codex.png)
+![](/plinth/images/2026/6/codex.png)
 
 Recently, I tested Codex running in `VS Code`, and the experience was fantastic. Codex understands `AGENTS.md` and skills located in `.agents/skills`.
 
@@ -116,7 +116,7 @@ Using Codex, you can run the `Agents` provided by the project without any change
 
 Recently, Gartner updated the Magic Quadrant.
 
-![](/plintch/images/2026/6/magic-cuadrant-agents.jpg)
+![](/plinth/images/2026/6/magic-cuadrant-agents.jpg)
 
 https://cursor.com/lp/2026-gartner-mq
 
@@ -126,7 +126,7 @@ https://cursor.com/lp/2026-gartner-mq
 
 Last month, the project was presented and used at the tech conference `Codemotion Madrid 2026`. The workshop had sold out a few weeks before, and participants rated the session 4.5/5.
 
-[![](/plintch/images/2026/6/codemotion-madrid-workshop.jpg)](https://conferences.codemotion.com/madrid/)
+[![](/plinth/images/2026/6/codemotion-madrid-workshop.jpg)](https://conferences.codemotion.com/madrid/)
 
 **Slides:** [jabrena/plinth](https://github.com/jabrena/plinth)
 
@@ -134,13 +134,13 @@ Last month, the project was presented and used at the tech conference `Codemotio
 
 Every year, `MadridJUG` organizes `JMad`, a Java tech event based on `OpenSpace`.
 
-[![](/plintch/images/2026/6/IMG_8268.jpg)](https://jmad.madridjug.es/)
+[![](/plinth/images/2026/6/IMG_8268.jpg)](https://jmad.madridjug.es/)
 
 `JMad` is a nice opportunity to exchange ideas and have good debates about the topics Java developers want to discuss.
 
 This year's agenda was:
 
-![](/plintch/images/2026/6/IMG_2584.webp)
+![](/plinth/images/2026/6/IMG_2584.webp)
 
 This year, several AI topics were discussed, including `AI Governance` and how to manage `Skills` in your team, unit, or company.
 

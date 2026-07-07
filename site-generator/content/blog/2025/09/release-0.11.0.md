@@ -106,7 +106,7 @@ Using specialized behaviours such as `@behaviour-progressive-learning` creativel
 
 Little by little, organizations will evolve current `data pipeline` adding new features combining multiple system prompts for different use cases such as `automatic coding`, `code refactoring`, `continuous profiling`, and more.
 
-![](/plintch/images/2025/9/data-pipeline-workflow.png)
+![](/plinth/images/2025/9/data-pipeline-workflow.png)
 
 ## New UML state machine diagrams for better understanding in complex dependencies.
 
@@ -123,7 +123,7 @@ https://github.com/jabrena/kafka/tree/trunk/clients/src/main/java/org/apache/kaf
 
 **Result:**
 
-![](/plintch/images/2025/9/0.11.0-uml-state-machine-diagram-example.png)
+![](/plinth/images/2025/9/0.11.0-uml-state-machine-diagram-example.png)
 
 With this visualization, you can see whether something is missing in your Java integration.
 
@@ -131,7 +131,7 @@ With this visualization, you can see whether something is missing in your Java i
 
 In this release, the script `profile-java-process.sh`, included in  `@161-java-profiling-detect`, was updated to include the latest release (v4.1) of the popular profiling tool `Async-profiler`. In addition, the script added new `JFR` options available in `Java 25` and earlier.
 
-![](/plintch/images/2025/9/0.11.0-profiling-menu.png)
+![](/plinth/images/2025/9/0.11.0-profiling-menu.png)
 
 In recent months, I have been inspired by the work of outstanding engineers in this field: [Francesco Nigro](https://x.com/forked_franz), [Jaromir Hamala](https://x.com/jerrinot), [Johannes Bechberger](https://x.com/parttimen3rd), [Erik Gahlin](https://x.com/ErikGahlin), [Marcus Hirt](https://x.com/hirt) & [Brendan Gregg](https://x.com/brendangregg). I highly recommend following them.
 
@@ -160,6 +160,6 @@ If you feel stuck using this project or have questions, you can attend the follo
 - https://devoxx.be/app/talk/4715/the-power-of-cursor-rules-in-java-enterprise-development
 - https://devoxx.be/app/talk/4708/101-cursor-ai-learning-to-use-for-java-enterprise-projects/
 
-[![](/plintch/images/2025/9/devoxx-logo.png)](https://devoxx.be/)
+[![](/plinth/images/2025/9/devoxx-logo.png)](https://devoxx.be/)
 
-![](/plintch/images/2025/9/0.11.0-github-stats.png)
+![](/plinth/images/2025/9/0.11.0-github-stats.png)

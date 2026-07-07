@@ -16,7 +16,7 @@ The project is no longer only a collection of `Cursor rules for Java`, today the
 
 The metaphor comes from classical Roman architecture. In the old Roman empire, durable engineering depended on foundations, proportions, materials, load paths, maintenance, and repeatable methods. [Marcus Vitruvius Pollio](https://en.wikipedia.org/wiki/Vitruvius), described architecture around the enduring qualities often summarized as `firmitas`, `utilitas`, and `venustas`: [strength, usefulness, and beauty](https://en.wikipedia.org/wiki/Firmness,_commodity,_and_delight).
 
-![](/plintch/images/2026/7/firmitas-utilitas-venustas.png)
+![](/plinth/images/2026/7/firmitas-utilitas-venustas.png)
 
 That is a useful analogy for modern software engineering with AI.
 
