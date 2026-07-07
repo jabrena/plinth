@@ -28,6 +28,7 @@ An AI agent can generate code quickly, but speed is not enough. A team still nee
 
 Once it was explained the repository name change, lets continue with the article reviewing the new features included in the release:
 
+- [Community first!](#community-first)
 - [Enhancing OpenSpec Changes](#enhancing-openspec-changes)
 - [Improving migration safety with Flyway, Mongock, and Parallel Change](#improving-migration-safety-with-flyway-mongock-and-parallel-change)
 - [Making architecture boundaries visible with Hexagonal Architecture](#making-architecture-boundaries-visible-with-hexagonal-architecture)
@@ -40,6 +41,16 @@ Once it was explained the repository name change, lets continue with the article
 If you have questions about the project, how to customize it for your team, how to use the skills in daily work, or how to solve tooling issues, use [`GitHub Discussions`](https://github.com/jabrena/plinth/discussions).
 
 **Help this project grow:** [If this project helps your team, become a sponsor.](https://github.com/sponsors/jabrena)
+
+<a id="community-first"></a>
+
+## Community first!
+
+In the journey to evolve a tecnical repository into a OSS Product, I am trying to put more enphasis in the community. Many thanks [Leandro](https://github.com/lealoureiro) for your contribution.
+
+[![](/plinth/images/2026/7/the-first-pr.png)](https://github.com/jabrena/plinth/pull/966)
+
+If you use the project, you could participate as [IC](https://github.com/jabrena/plinth/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22) or sharing your experience in [`Github Discussions`](https://github.com/jabrena/plinth/discussions).
 
 <a id="enhancing-openspec-changes"></a>
 
