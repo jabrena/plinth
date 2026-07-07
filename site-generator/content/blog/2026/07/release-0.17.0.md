@@ -3,12 +3,14 @@ date=2026-07-06
 type=post
 tags=blog,skills,java,agents,design,regulations,validation
 author=Juan Antonio Breña Moral
-status=draft
+status=published
 ~~~~~~
 
-In this release, we introduce new improvements in the development workflow but one of the most important changes is the project name, changing the repository name from `cursor-rules-java` to `plinch`.
+This release brings several improvements to the development workflow, but the most visible change is the new project identity: the repository moves from `cursor-rules-java` to `plinth`.
 
-## Why Plinch?
+Thanks to our community members in [`Urumqi`](https://www.google.com/maps/search/?api=1&query=Urumqi), [`Singapore`](https://www.google.com/maps/search/?api=1&query=Singapore), [`Des Moines`](https://www.google.com/maps/search/?api=1&query=Des+Moines), [`Bengaluru`](https://www.google.com/maps/search/?api=1&query=Bengaluru), and [`Flint Hill`](https://www.google.com/maps/search/?api=1&query=Flint+Hill+Virginia). 👋👋👋
+
+## Why Plinth?
 
 In civil architecture, a `plinth` is the base that supports what people actually see. It is not the column, the arch, the road, or the aqueduct, but without a good plinth the visible structure loses alignment, load-bearing capacity, and long-term stability. That image fits the project better than the original name. 
 
@@ -22,15 +24,18 @@ That is a useful analogy for modern software engineering with AI.
 
 An AI agent can generate code quickly, but speed is not enough. A team still needs a stable base: requirements, design constraints, compatibility strategy, tests, security checks, architecture boundaries, operational evidence, and human review. Without that base, the generated work may look impressive while resting on weak assumptions.
 
+---
+
 Once it was explained the repository name change, lets continue with the article reviewing the new features included in the release:
 
 - [Enhancing OpenSpec Changes](#enhancing-openspec-changes)
 - [Improving migration safety with Flyway, Mongock, and Parallel Change](#improving-migration-safety-with-flyway-mongock-and-parallel-change)
-- [Making architecture boundaries visible with Onion Architecture](#making-architecture-boundaries-visible-with-onion-architecture)
+- [Making architecture boundaries visible with Hexagonal Architecture](#making-architecture-boundaries-visible-with-hexagonal-architecture)
 - [Improving Maven guidance](#improving-maven-guidance)
 - [Extending EU regulations and ISO engineering review skills](#extending-eu-regulations-and-iso-engineering-review-skills)
-- [Improving CI and documentation validation](#improving-ci-and-documentation-validation)
+- [Improving security gates in the pipeline with VirusTotal](#improving-security-gates-in-the-pipeline-with-virustotal)
 - [Next steps](#next-steps)
+- [Do you still have questions about the project?](#doubts)
 
 If you have questions about the project, how to customize it for your team, how to use the skills in daily work, or how to solve tooling issues, use [`GitHub Discussions`](https://github.com/jabrena/plinth/discussions).
 
@@ -51,7 +56,18 @@ This release adds a new family of design skills:
 - [`@055-design-parallel-change`](https://www.skills.sh/jabrena/plinth/055-design-parallel-change)
 - [`@056-design-avoid-breaking-changes`](https://www.skills.sh/jabrena/plinth/056-design-avoid-breaking-changes)
 
+> Repeat with me: 
+> “SDD is not Aladdin’s lamp—it won’t grant every software wish”.
+
 The goal is to move an agent from "generate the final patch" to "understand the change path". If you are interested in this direction, I recommend reading the following article: [From code generation to software engineering](/cursor-rules-java/blog/2026/06/from-code-generation-to-software-engineering.html)
+
+If you are interested to improve your LEAN skills, [Eduardo Ferro](https://www.eferro.net/) has published an excellent book.
+
+[![](/plinth/images/2026/7/menos-software-mas-impacto.jpg)](https://menos-software.eferro.net/)
+
+---
+
+In the another hand, I recommend to watch one of the latest [Talk](https://www.youtube.com/watch?v=35dH6q18UtI) from [Simon Martinelli](https://martinelli.ch/) about `Spec Driven development`, personally I like the common sense in the ideas from him.
 
 <a id="improving-migration-safety-with-flyway-mongock-and-parallel-change"></a>
 
@@ -96,16 +112,20 @@ Human-in-the-loop review is necessary because migrations can destroy or reinterp
 
 If you want to go deeper into this topic, I recommend reading: [Why Do I Need to Use the Parallel Change Pattern?](/cursor-rules-java/blog/2026/07/why-do-i-need-to-use-the-parallel-change-pattern.html)
 
+Other interesting readings:
+
 - https://machinelearning.apple.com/research/illusion-of-thinking
 - https://genai.owasp.org/
 
-<a id="making-architecture-boundaries-visible-with-onion-architecture"></a>
+<a id="making-architecture-boundaries-visible-with-hexagonal-architecture"></a>
 
-## Making architecture boundaries visible with Onion Architecture
+## Making architecture boundaries visible with Hexagonal Architecture
 
-This release adds [`@707-technologies-onion-architecture`](https://www.skills.sh/jabrena/plinth/707-technologies-onion-architecture), a framework-agnostic skill for reviewing Java application boundaries.
+This release adds [`@707-technologies-hexagonal-architecture`](https://www.skills.sh/jabrena/plinth/707-technologies-hexagonal-architecture), a framework-agnostic skill for reviewing Java application boundaries.
 
-The skill helps engineers and agents inspect whether dependency direction and responsibility placement are consistent with Onion Architecture:
+The hexagonal architecture, or ports and adapters architecture, is an architectural style used in software design. It aims at creating loosely coupled application components that can be easily connected to their software environment by means of ports and adapters. 
+
+The skill helps engineers and agents inspect whether dependency direction and responsibility placement are consistent with Hexagonal Architecture:
 
 - Domain code should not depend on framework adapters.
 - Application services should coordinate use cases without becoming infrastructure code.
@@ -116,18 +136,45 @@ The skill also includes `ArchUnit`-aware verification guidance without forcing e
 
 ```java
 @ArchTest
-static final ArchRule onion_architecture_boundaries = onionArchitecture()
-        .domainModels("info.jab.markdownvalidator.domain..")
-        .applicationServices("info.jab.markdownvalidator.application..")
-        .adapter("cli", "info.jab.markdownvalidator.adapter.in.cli..")
-        .adapter("filesystem", "info.jab.markdownvalidator.adapter.out.filesystem..")
-        .adapter("http", "info.jab.markdownvalidator.adapter.out.http..")
-        .withOptionalLayers(true);
+static final ArchRule should_keep_application_core_independent_from_adapters = noClasses()
+        .that()
+        .resideInAnyPackage("info.jab.domain..", "info.jab.mv.application..")
+        .should()
+        .dependOnClassesThat()
+        .resideInAPackage("info.jab.mv.adapter..");
+
+@ArchTest
+static final ArchRule should_keep_domain_independent_from_application_services = noClasses()
+        .that()
+        .resideInAPackage("info.jab.mv.domain..")
+        .should()
+        .dependOnClassesThat()
+        .resideInAPackage("info.jab.mv.application..");
+
+@ArchTest
+static final ArchRule should_keep_driving_adapters_independent_from_driven_adapters = noClasses()
+        .that()
+        .resideInAPackage("info.jab.mv.adapter.in..")
+        .should()
+        .dependOnClassesThat()
+        .resideInAPackage("info.jab.mv.adapter.out..");
+
+@ArchTest
+static final ArchRule should_keep_driven_adapters_independent_from_driving_adapters = noClasses()
+        .that()
+        .resideInAPackage("info.jab.mv.adapter.out..")
+        .should()
+        .dependOnClassesThat()
+        .resideInAPackage("info.jab.mv.adapter.in..");
 ```
 
-https://www.archunit.org/userguide/html/000_Index.html#_onion_architecture
+https://www.archunit.org/userguide/html/000_Index.html
 
 For framework agents, the skill is useful before making changes in `Spring Boot`, `Quarkus`, or `Micronaut` applications. It gives the agent a boundary review language before it starts moving packages, introducing adapters, or changing service responsibilities.
+
+If you are interested in this approach, I recommend the [Alistair Cockburn](https://alistair.cockburn.us/hexagonal-architecture)`s book:
+
+[![](/plinth/images/2026/7/hexagonal-architecture-explained.jpg)](https://www.amazon.com/Hexagonal-Architecture-Explained-Alistair-Cockburn/dp/173751978X)
 
 <a id="improving-maven-guidance"></a>
 
@@ -192,39 +239,35 @@ The current regulation and standard review coverage is:
 
 If you are interested in this topic, I recommend reading both articles: [Introduction to EU regulations Part I](/cursor-rules-java/blog/2026/06/introduction-to-eu-regulations-part-i.html) and [Introduction to EU regulations Part II](/cursor-rules-java/blog/2026/07/introduction-to-eu-regulations-part-ii.html)
 
-<a id="improving-ci-and-documentation-validation"></a>
+<a id="improving-security-gates-in-the-pipeline-with-virustotal"></a>
 
-## Improving CI and documentation validation
+## Improving security gates in the pipeline with VirusTotal
 
-This release also improves the validation story around generated content and documentation.
+This release also strengthens the validation path around generated content, release artifacts, and documentation.
 
-The Maven workflow now includes `VirusTotal` checks. In this [example analysis](https://gist.github.com/jabrena/0972041d41c6f1352e518ed4d4ae3c05), `VirusTotal` used `75` security applications/engines and reported `0 malicious` and `0 suspicious` detections: `ALYac`, `APEX`, `AVG`, `Acronis`, `AhnLab-V3`, `Alibaba`, `Antiy-AVL`, `Arcabit`, `Avast`, `Avast-Mobile`, `Avira`, `BitDefender`, `BitDefenderFalx`, `Bkav`, `CAT-QuickHeal`, `CMC`, `CTX`, `ClamAV`, `CrowdStrike`, `Cylance`, `Cynet`, `DeepInstinct`, `DrWeb`, `ESET-NOD32`, `Elastic`, `Emsisoft`, `F-Secure`, `Fortinet`, `GData`, `Google`, `Gridinsoft`, `Ikarus`, `Jiangmin`, `K7AntiVirus`, `K7GW`, `Kaspersky`, `Kingsoft`, `Lionic`, `Malwarebytes`, `MaxSecure`, `McAfeeD`, `MicroWorld-eScan`, `Microsoft`, `NANO-Antivirus`, `Paloalto`, `Panda`, `Rising`, `SUPERAntiSpyware`, `Sangfor`, `SentinelOne`, `Skyhigh`, `Sophos`, `Symantec`, `SymantecMobileInsight`, `TACHYON`, `Tencent`, `Trapmine`, `TrellixENS`, `TrendMicro`, `TrendMicro-HouseCall`, `Trustlook`, `VBA32`, `VIPRE`, `Varist`, `ViRobot`, `VirIT`, `Webroot`, `Xcitium`, `Yandex`, `Zillya`, `ZoneAlarm`, `Zoner`, `alibabacloud`, `huorong`, `tehtris`. The project also adds a Codex-backed OpenSpec workflow for generating specs from issues, including branch creation, generated PR labeling, and tolerance for blocked runs.
+The Pipeline now includes `VirusTotal` checks before generated artifacts are promoted. In the latest scan, `VirusTotal` evaluated the artifact with `75` security applications/engines. This is not a replacement for the build, tests, or human review, but it gives maintainers one more piece of evidence when deciding whether a generated artifact is ready to publish.
 
-For documentation, the previous script-based Markdown validator has been replaced by a Maven-based `markdown-validator` module. The new module includes:
+The scan included the following applications/engines: `ALYac`, `APEX`, `AVG`, `Acronis`, `AhnLab-V3`, `Alibaba`, `Antiy-AVL`, `Arcabit`, `Avast`, `Avast-Mobile`, `Avira`, `BitDefender`, `BitDefenderFalx`, `Bkav`, `CAT-QuickHeal`, `CMC`, `CTX`, `ClamAV`, `CrowdStrike`, `Cylance`, `Cynet`, `DeepInstinct`, `DrWeb`, `ESET-NOD32`, `Elastic`, `Emsisoft`, `F-Secure`, `Fortinet`, `GData`, `Google`, `Gridinsoft`, `Ikarus`, `Jiangmin`, `K7AntiVirus`, `K7GW`, `Kaspersky`, `Kingsoft`, `Lionic`, `Malwarebytes`, `MaxSecure`, `McAfeeD`, `MicroWorld-eScan`, `Microsoft`, `NANO-Antivirus`, `Paloalto`, `Panda`, `Rising`, `SUPERAntiSpyware`, `Sangfor`, `SentinelOne`, `Skyhigh`, `Sophos`, `Symantec`, `SymantecMobileInsight`, `TACHYON`, `Tencent`, `Trapmine`, `TrellixENS`, `TrendMicro`, `TrendMicro-HouseCall`, `Trustlook`, `VBA32`, `VIPRE`, `Varist`, `ViRobot`, `VirIT`, `Webroot`, `Xcitium`, `Yandex`, `Zillya`, `ZoneAlarm`, `Zoner`, `alibabacloud`, `huorong`, `tehtris`.
 
-- A CLI entry point.
-- Remote-link validation.
-- Unit tests.
-- PMD configuration.
-- Architecture tests.
+---
 
-This change makes documentation validation a first-class project module instead of a loose script beside the build.
-
-The important point is the same as with skill validation: generated and maintained text is part of the product. It needs tests, structure, and repeatable feedback.
+[Secur0](https://secur0.com/en) is a security platform that helps organizations find vulnerabilities through ethical hackers, bug bounty programs, and pentesting conducted by verified experts. Recently, `Plinth` drew attention from `Secur0`, which plans to review the project for potential vulnerabilities in the coming months. This adds another external security signal to the release process.
 
 <a id="next-steps"></a>
 
 ## Next steps
 
-The next phase is to keep connecting the workflow pieces so they feel natural in daily engineering work.
+For the next release, we plan to work on a few topics:
 
-Functionally, the next workstreams are:
+- Improve the behavior of `/create-spec` and compare with the different actions from `Spec-kit` and others. **Quality first!**
+- Update the `Spring Boot` support for `4.1.0`.
+- Going down the rabbit hole in the EU Regulation ecosystem for GenAI.
+- Add a Skill about `JVM Flags`.
 
-- Continue expanding executable acceptance coverage for `Skills`, `Agents`, and `Commands`, especially where generated guidance affects file edits, command execution, or release evidence.
-- Make the design workflow easier to apply from real issues, so `two-step`, `hamburger`, `TDD`, `simple rules`, `parallel change`, and `breaking-change` review are selected at the right time.
-- Improve framework routing so architecture and migration decisions are made before a `Spring Boot`, `Quarkus`, or `Micronaut` agent edits implementation files.
-- Keep improving Maven dependency and version workflows, with better separation between discovery, recommendation, and project modification.
-- Continue refining regulation engineering review skills so they produce useful owner handoff reports without pretending to replace qualified human review.
-- Improve the OpenSpec-based automation path from issue to proposal, spec, implementation, validation, and release notes.
+<a id="doubts"></a>
 
-Enjoy.
+## Do you still have questions about the project?
+
+If you feel stuck using this project or have questions, you can attend the following workshop at `JCConf 2026`:
+
+[![](/plinth/images/2026/7/jcconf-2026.png)](https://jcconf.tw/2026/)
