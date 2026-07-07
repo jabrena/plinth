@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#876](https://github.com/jabrena/cursor-rules-java/issues/876) scopes the next EU regulation-skill batch to three explicit deliverables. This change covers the first deliverable: `810-regulations-eu-mifid-ii`.
+GitHub issue [#876](https://github.com/jabrena/plinth/issues/876) scopes the next EU regulation-skill batch to three explicit deliverables. This change covers the first deliverable: `810-regulations-eu-mifid-ii`.
 
 Java enterprise teams that build investment-service systems, algorithmic trading workflows, order handling, client classification, suitability, appropriateness, or AI-assisted investment decision support need MiFID II-aware engineering guidance. The guidance must help teams produce reviewable evidence for compliance owners without turning the skill into legal advice.
 
@@ -23,7 +23,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#876](https://github.com/jabrena/cursor-rules-java/issues/876).
+- Source artifact: GitHub issue [#876](https://github.com/jabrena/plinth/issues/876).
 - Existing implementation model: `801-regulations-eu-ai-act`, `802-regulations-dora`, and `803-regulations-gdpr`.
 - Official source: [Directive 2014/65/EU (MiFID II), EUR-Lex](https://eur-lex.europa.eu/eli/dir/2014/65/oj/eng).
 - Derivation direction: issue #876 plus official MiFID II reference plus existing regulation skill pattern -> OpenSpec change artifacts -> XML skill source implementation -> local generated skill validation.

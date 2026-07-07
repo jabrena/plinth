@@ -4,6 +4,9 @@ This repository develop System Prompts, Skills & Agents but in the ecosystem exi
 
 ## Skills
 
+- https://agentskillshub.top/skill/jabrena/plinth/
+- https://mcpapp-store.com/skills?q=Mongock+
+- https://jvmskills.com/
 - https://skills.sh/teachingai/agent-skills/maven-search
 - https://github.com/making/claude-skills
 - https://github.com/levnikolaevich/claude-code-skills/tree/master/skills-catalog

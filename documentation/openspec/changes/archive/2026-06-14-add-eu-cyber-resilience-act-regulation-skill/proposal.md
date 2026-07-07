@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#855](https://github.com/jabrena/cursor-rules-java/issues/855) identifies the Cyber Resilience Act (CRA) as a pending part of the GenAI Regulatory Stack (EU). CRA guidance should be planned separately because security-by-design duties for products with digital elements have a different engineering focus than AI governance, privacy, financial ICT resilience, or critical-sector cybersecurity operations.
+GitHub issue [#855](https://github.com/jabrena/plinth/issues/855) identifies the Cyber Resilience Act (CRA) as a pending part of the GenAI Regulatory Stack (EU). CRA guidance should be planned separately because security-by-design duties for products with digital elements have a different engineering focus than AI governance, privacy, financial ICT resilience, or critical-sector cybersecurity operations.
 
 Java enterprise teams shipping libraries, services, agents, plugins, connected products, APIs, or platform components need CRA-aware guidance for secure-by-design development, vulnerability handling, update mechanisms, SBOM and dependency evidence, product security documentation, and coordinated disclosure workflows.
 
@@ -23,7 +23,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#855](https://github.com/jabrena/cursor-rules-java/issues/855), comment listing the GenAI Regulatory Stack (EU).
+- Source artifact: GitHub issue [#855](https://github.com/jabrena/plinth/issues/855), comment listing the GenAI Regulatory Stack (EU).
 - Existing implementation models: `801-regulations-eu-ai-act`, `802-regulations-dora`, and `803-regulations-gdpr`.
 - External reference: [Regulation (EU) 2024/2847](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32024R2847).
 - Derivation direction: issue #855 EU regulatory stack plus official EUR-Lex reference plus existing regulation skill pattern -> OpenSpec change artifacts -> XML skill source implementation -> local generated skill validation.

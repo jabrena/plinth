@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#875](https://github.com/jabrena/cursor-rules-java/issues/875) requests adding `javamoney.github.io` dependency guidance to `111-java-maven-dependencies`.
+GitHub issue [#875](https://github.com/jabrena/plinth/issues/875) requests adding `javamoney.github.io` dependency guidance to `111-java-maven-dependencies`.
 
 The Maven dependencies skill currently guides users through selected dependency families such as JSpecify, Error Prone with NullAway, VAVR, and ArchUnit. Maintainers need JavaMoney guidance available from the skill so agents can recognize when a Maven project needs Money and Currency API support and can direct users to the JavaMoney resource without editing generated output directly.
 
@@ -34,7 +34,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#875](https://github.com/jabrena/cursor-rules-java/issues/875).
+- Source artifact: GitHub issue [#875](https://github.com/jabrena/plinth/issues/875).
 - Source authority: issue #875 provides the user story, acceptance criteria, implementation notes, and INVEST validation for this OpenSpec change.
 - Derivation direction: GitHub issue #875 -> sanitized planning summary -> OpenSpec change artifacts -> XML skill source implementation -> local generated skill validation.
 

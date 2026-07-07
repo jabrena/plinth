@@ -261,7 +261,7 @@ Compliance is a qualified governance decision. These skills help engineering tea
 
 ## Example: ecommerce CI/CD PR model
 
-As a practical example, consider [system-example-cicd-pr-model.md](https://github.com/jabrena/cursor-rules-java/blob/main/examples/diagrams/deployment/system-example-cicd-pr-model.md).
+As a practical example, consider [system-example-cicd-pr-model.md](https://github.com/jabrena/plinth/blob/main/examples/diagrams/deployment/system-example-cicd-pr-model.md).
 
 ```text
                            +----------------------+

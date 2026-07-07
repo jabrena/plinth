@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#895](https://github.com/jabrena/cursor-rules-java/issues/895) requests stronger Flyway guidance across the framework-specific skills. The current Spring Boot, Quarkus, and Micronaut Flyway skills cover dependency setup, script locations, naming, configuration, and basic verification, but they need more explicit advice about migration antipatterns, production data safety, branch-ordering risks, and incremental database-change techniques.
+GitHub issue [#895](https://github.com/jabrena/plinth/issues/895) requests stronger Flyway guidance across the framework-specific skills. The current Spring Boot, Quarkus, and Micronaut Flyway skills cover dependency setup, script locations, naming, configuration, and basic verification, but they need more explicit advice about migration antipatterns, production data safety, branch-ordering risks, and incremental database-change techniques.
 
 Maintainers need these skills to help users avoid subtle schema and data migration failures such as destructive renames, unsafe defaults, broad updates, repeatable migration surprises, and out-of-order branch migrations.
 
@@ -23,7 +23,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#895](https://github.com/jabrena/cursor-rules-java/issues/895).
+- Source artifact: GitHub issue [#895](https://github.com/jabrena/plinth/issues/895).
 - Existing implementation targets:
   - `skills-generator/src/main/resources/skill-references/313-frameworks-spring-db-migrations-flyway.xml`
   - `skills-generator/src/main/resources/skill-references/413-frameworks-quarkus-db-migrations-flyway.xml`

@@ -28,6 +28,6 @@ The generator SHALL provide embedded command assets for `/create-worktree`, `/ex
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#954](https://github.com/jabrena/cursor-rules-java/issues/954).
-- Related source artifact: GitHub issue [#886](https://github.com/jabrena/cursor-rules-java/issues/886).
+- Source artifact: GitHub issue [#954](https://github.com/jabrena/plinth/issues/954).
+- Related source artifact: GitHub issue [#886](https://github.com/jabrena/plinth/issues/886).
 - Derivation direction: command-to-skill conversion decision -> modified command bundle requirements -> command retirement and README update implementation.

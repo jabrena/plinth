@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#939](https://github.com/jabrena/cursor-rules-java/issues/939) asks for a skill that explains ISO/IEC 42001 in the same practical style as the existing EU AI Act skill, with emphasis on GenAI development with Java.
+GitHub issue [#939](https://github.com/jabrena/plinth/issues/939) asks for a skill that explains ISO/IEC 42001 in the same practical style as the existing EU AI Act skill, with emphasis on GenAI development with Java.
 
 Java enterprise teams using AI-assisted development, LLM integrations, RAG workflows, agents, generated code, external model providers, and AI-enabled business logic need source-first guidance that translates ISO/IEC 42001 AI management system concerns into reviewable engineering controls. The skill must help teams identify actionable evidence and escalation points without presenting legal, certification, or audit advice.
 
@@ -24,7 +24,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#939](https://github.com/jabrena/cursor-rules-java/issues/939).
+- Source artifact: GitHub issue [#939](https://github.com/jabrena/plinth/issues/939).
 - Official source references from issue #939:
   - [ISO - ISO/IEC 42001 explained](https://www.iso.org/home/insights-news/resources/iso-42001-explained-what-it-is.html)
   - [ISO/IEC 42001 standard page](https://www.iso.org/standard/42001)

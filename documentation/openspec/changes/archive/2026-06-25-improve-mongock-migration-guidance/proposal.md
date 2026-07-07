@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#902](https://github.com/jabrena/cursor-rules-java/issues/902) requests richer Mongock guidance across the framework-specific MongoDB migration skills. The current Spring Boot, Quarkus, and Micronaut Mongock skills cover runner setup, `@ChangeUnit` classes, lock behavior, and basic MongoDB-backed verification, but they need more explicit NoSQL migration-safety guidance and more examples focused on document-shape evolution.
+GitHub issue [#902](https://github.com/jabrena/plinth/issues/902) requests richer Mongock guidance across the framework-specific MongoDB migration skills. The current Spring Boot, Quarkus, and Micronaut Mongock skills cover runner setup, `@ChangeUnit` classes, lock behavior, and basic MongoDB-backed verification, but they need more explicit NoSQL migration-safety guidance and more examples focused on document-shape evolution.
 
 Maintainers need these skills to help users avoid subtle MongoDB data migration failures such as non-idempotent updates, unsafe document reshaping, domain-model coupling inside old migrations, long startup backfills, hidden lock failures, and unverified runner compatibility.
 
@@ -23,9 +23,9 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#902](https://github.com/jabrena/cursor-rules-java/issues/902).
+- Source artifact: GitHub issue [#902](https://github.com/jabrena/plinth/issues/902).
 - Supporting source artifact: maintainer-authored issue comment with MongoDB-oriented improvement ideas.
-- Related pattern source: GitHub issue [#895](https://github.com/jabrena/cursor-rules-java/issues/895) and OpenSpec change `improve-flyway-migration-guidance`, used as a structural precedent only.
+- Related pattern source: GitHub issue [#895](https://github.com/jabrena/plinth/issues/895) and OpenSpec change `improve-flyway-migration-guidance`, used as a structural precedent only.
 - Existing implementation targets:
   - `skills-generator/src/main/resources/skill-references/316-frameworks-spring-mongodb-migrations-mongock.xml`
   - `skills-generator/src/main/resources/skill-references/416-frameworks-quarkus-mongodb-migrations-mongock.xml`

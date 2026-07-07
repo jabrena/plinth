@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#847](https://github.com/jabrena/cursor-rules-java/issues/847) requests UML Deployment Diagram support for `033-architecture-diagrams` using PlantUML. The current skill supports UML sequence, UML class, C4 Context/Container/Component, UML state-machine, ER, and bounded-context diagrams, but it does not offer a dedicated deployment topology path.
+GitHub issue [#847](https://github.com/jabrena/plinth/issues/847) requests UML Deployment Diagram support for `033-architecture-diagrams` using PlantUML. The current skill supports UML sequence, UML class, C4 Context/Container/Component, UML state-machine, ER, and bounded-context diagrams, but it does not offer a dedicated deployment topology path.
 
 Users who need to document deployed Java enterprise systems currently have to approximate runtime infrastructure with C4 or component diagrams. That makes runtime nodes, execution environments, deployed artifacts, infrastructure boundaries, external systems, and communication protocols less explicit than they should be.
 
@@ -27,7 +27,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#847](https://github.com/jabrena/cursor-rules-java/issues/847), milestone `v0.16.0`.
+- Source artifact: GitHub issue [#847](https://github.com/jabrena/plinth/issues/847), milestone `v0.16.0`.
 - External reference: [PlantUML Deployment Diagram](https://plantuml.com/es/deployment-diagram).
 - Related existing capability: `architecture-diagram-skill-references`.
 - Derivation direction: issue #847 plus PlantUML reference link -> OpenSpec change artifacts -> implementation tasks. The issue remains the source for problem, scope, acceptance criteria, and implementation constraints; the PlantUML reference informs syntax-oriented deployment diagram guidance.

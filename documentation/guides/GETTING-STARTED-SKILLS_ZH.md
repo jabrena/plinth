@@ -22,25 +22,25 @@ brew install node
 sudo apt install nodejs npm
 
 # Install at User level
-npx skills add jabrena/cursor-rules-java --global --agent cursor --all
-npx skills add jabrena/cursor-rules-java --global --agent claude-code --skill '*' -y
+npx skills add jabrena/plinth --global --agent cursor --all
+npx skills add jabrena/plinth --global --agent claude-code --skill '*' -y
 
 npx skills remove --global --agent cursor -y
 npx skills remove --global --agent claude-code --skill '*' -y
 npx skills remove --global -y \
-  $(jq -r '.skills | to_entries[] | select(.value.source == "jabrena/cursor-rules-java") | .key' ~/.agents/.skill-lock.json)
+  $(jq -r '.skills | to_entries[] | select(.value.source == "jabrena/plinth") | .key' ~/.agents/.skill-lock.json)
 
 # Install at project level
 npx skills --help
-npx skills add jabrena/cursor-rules-java --list
-npx skills add jabrena/cursor-rules-java --agent cursor --all
-npx skills add jabrena/cursor-rules-java --agent claude-code --all
+npx skills add jabrena/plinth --list
+npx skills add jabrena/plinth --agent cursor --all
+npx skills add jabrena/plinth --agent claude-code --all
 ```
 
 ### 使用 Claude plugins
 
 ```bash
-claude plugin marketplace add https://github.com/jabrena/cursor-rules-java
+claude plugin marketplace add https://github.com/jabrena/plinth
 ```
 
 ### 使用 Skillsjars

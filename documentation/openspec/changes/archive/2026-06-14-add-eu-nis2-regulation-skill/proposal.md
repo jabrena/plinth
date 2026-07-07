@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#855](https://github.com/jabrena/cursor-rules-java/issues/855) adds a GenAI Regulatory Stack (EU) comment that extends the existing EU regulation skills beyond `801-regulations-eu-ai-act`, `802-regulations-dora`, and `803-regulations-gdpr`. NIS2 remains pending from that stack and needs its own reviewable OpenSpec change because cybersecurity obligations for critical and important entities differ from AI governance, financial ICT resilience, and privacy controls.
+GitHub issue [#855](https://github.com/jabrena/plinth/issues/855) adds a GenAI Regulatory Stack (EU) comment that extends the existing EU regulation skills beyond `801-regulations-eu-ai-act`, `802-regulations-dora`, and `803-regulations-gdpr`. NIS2 remains pending from that stack and needs its own reviewable OpenSpec change because cybersecurity obligations for critical and important entities differ from AI governance, financial ICT resilience, and privacy controls.
 
 Java enterprise teams building AI-enabled services, platform tooling, CI/CD automation, operational systems, or critical-sector integrations need NIS2-aware engineering guidance for cybersecurity risk management, incident handling, supply-chain security, vulnerability management, and audit-ready operational evidence.
 
@@ -24,7 +24,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#855](https://github.com/jabrena/cursor-rules-java/issues/855), comment listing the GenAI Regulatory Stack (EU).
+- Source artifact: GitHub issue [#855](https://github.com/jabrena/plinth/issues/855), comment listing the GenAI Regulatory Stack (EU).
 - Existing implementation models: `801-regulations-eu-ai-act`, `802-regulations-dora`, and `803-regulations-gdpr`.
 - External reference: [Directive (EU) 2022/2555](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022L2555).
 - Recent implementation evidence: commit `9bd50c97` (`feat(skills): add EU NIS2 regulation skill (#862)`), NIS2 Gherkin acceptance scenarios, and the generated example reports under `examples/regulations/nis2`.

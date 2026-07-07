@@ -17,32 +17,32 @@ npx --version
 
 ## 2. 选择你的 agent 并下载 Skills
 
-从本项目的 [Skills.sh registry 条目](https://skills.sh/jabrena/cursor-rules-java) 将所有 skills 安装到你最常用的 agent：
+从本项目的 [Skills.sh registry 条目](https://skills.sh/jabrena/plinth) 将所有 skills 安装到你最常用的 agent：
 
 ```bash
 # Cursor
-npx skills add jabrena/cursor-rules-java --skill '*' --agent cursor -y
+npx skills add jabrena/plinth --skill '*' --agent cursor -y
 
 # Claude Code
-npx skills add jabrena/cursor-rules-java --skill '*' --agent claude-code -y
+npx skills add jabrena/plinth --skill '*' --agent claude-code -y
 
 # Codex
-npx skills add jabrena/cursor-rules-java --skill '*' --agent codex -y
+npx skills add jabrena/plinth --skill '*' --agent codex -y
 
 # GitHub Copilot
-npx skills add jabrena/cursor-rules-java --skill '*' --agent github-copilot -y
+npx skills add jabrena/plinth --skill '*' --agent github-copilot -y
 ```
 
 如果要安装到所有受支持的 agent，请使用 CLI 的全 agent 模式：
 
 ```bash
-npx skills add jabrena/cursor-rules-java --skill '*' --agent '*' -y
+npx skills add jabrena/plinth --skill '*' --agent '*' -y
 ```
 
 如果想先查看可用 skills：
 
 ```bash
-npx skills add jabrena/cursor-rules-java --list
+npx skills add jabrena/plinth --list
 ```
 
 ## 3. 安装项目 commands

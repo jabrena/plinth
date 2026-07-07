@@ -26,7 +26,7 @@ An opinionated AI-native workflow for evolving modern Java Enterprise `SDLC` pra
 
 ## Latest Updates
 
-Explore the latest published content on the [project website](https://jabrena.github.io/cursor-rules-java/) and follow its evolution through new skills, improvements, and fixes in the [CHANGELOG](./CHANGELOG.md).
+Explore the latest published content on [jabrena/plinth](https://github.com/jabrena/plinth) and follow its evolution through new skills, improvements, and fixes in the [CHANGELOG](./CHANGELOG.md).
 
 ## Start in 60 seconds
 
@@ -34,16 +34,16 @@ Install every skill for your preferred agent:
 
 ```bash
 # Cursor
-npx skills add jabrena/cursor-rules-java --skill '*' --agent cursor -y
+npx skills add jabrena/plinth --skill '*' --agent cursor -y
 
 # Claude Code
-npx skills add jabrena/cursor-rules-java --skill '*' --agent claude-code -y
+npx skills add jabrena/plinth --skill '*' --agent claude-code -y
 
 # Codex
-npx skills add jabrena/cursor-rules-java --skill '*' --agent codex -y
+npx skills add jabrena/plinth --skill '*' --agent codex -y
 
 # GitHub Copilot
-npx skills add jabrena/cursor-rules-java --skill '*' --agent github-copilot -y
+npx skills add jabrena/plinth --skill '*' --agent github-copilot -y
 ```
 
 ### See it in action
@@ -189,7 +189,7 @@ The project generates a set of deliverables at the end of any iteration.
 | --------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | 1. [Commands](./documentation/guides/INVENTORY-COMMANDS-JAVA.md) | `@004-commands-installation` Install Commands in project | [`Commands`](./documentation/guides/COMMANDS.md) |
 | 2. [Agents](./documentation/guides/INVENTORY-AGENTS-JAVA.md) | `@005-agents-installation` Install Agents in Cursor/Claude | [`Agents`](./documentation/guides/GETTING-STARTED-AGENTS.md)     |
-| 3. [Skills](./documentation/guides/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/cursor-rules-java --skill '*' --agent cursor -y` | [`Skills`](./documentation/guides/GETTING-STARTED-SKILLS.md)     |
+| 3. [Skills](./documentation/guides/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/plinth --skill '*' --agent cursor -y` | [`Skills`](./documentation/guides/GETTING-STARTED-SKILLS.md)     |
 
 ### Compatibility
 
@@ -233,7 +233,7 @@ Use caution when a problem involves corporate databases or other sensitive organ
 
 - Follow the [5-minute guide](./documentation/guides/GETTING-STARTED-IN-5-MINUTES.md) and tell us where the experience can improve.
 - [Browse the skill inventory](./documentation/guides/INVENTORY-SKILLS-JAVA.md) and propose a missing Java workflow.
-- [Open an issue](https://github.com/jabrena/cursor-rules-java/issues) to report a problem or suggest an enhancement.
+- [Open an issue](https://github.com/jabrena/plinth/issues) to report a problem or suggest an enhancement.
 - Read [CONTRIBUTING.md](./CONTRIBUTING.md) to improve a skill, agent, command, or project guide.
 - Star the repository if these workflows help your Java projects.
 

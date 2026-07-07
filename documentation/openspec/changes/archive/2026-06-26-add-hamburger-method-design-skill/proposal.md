@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#874](https://github.com/jabrena/cursor-rules-java/issues/874) requests a new `052-design-hamburger-method` skill for applying the Hamburger Method to large features, stories, plans, and OpenSpec changes.
+GitHub issue [#874](https://github.com/jabrena/plinth/issues/874) requests a new `052-design-hamburger-method` skill for applying the Hamburger Method to large features, stories, plans, and OpenSpec changes.
 
 Planning work can become too large when teams split by technical layer rather than by user-visible value. The Hamburger Method gives agents a structured way to identify workflow layers, compare quality options per layer, trim overbuilt choices, and compose small vertical slices that still deliver observable value.
 
@@ -25,7 +25,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#874](https://github.com/jabrena/cursor-rules-java/issues/874).
+- Source artifact: GitHub issue [#874](https://github.com/jabrena/plinth/issues/874).
 - External source: [Gojko Adzic, "Splitting user stories -- the hamburger method"](https://gojko.net/2012/01/23/splitting-user-stories-the-hamburger-method/).
 - External reference implementation: [skill-factory hamburger-method skill](https://github.com/eferro/skill-factory/tree/main/output_skills/practices/hamburger-method).
 - Existing implementation model: `051-design-two-steps-methods`.

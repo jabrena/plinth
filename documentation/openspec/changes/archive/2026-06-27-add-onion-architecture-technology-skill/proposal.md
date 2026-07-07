@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#940](https://github.com/jabrena/cursor-rules-java/issues/940) requests a dedicated `707-technologies-onion-architecture` skill. The issue identifies ArchUnit's architecture support as the source reference and frames the outcome as framework-agnostic Onion architecture guidance for Java enterprise developers and architects.
+GitHub issue [#940](https://github.com/jabrena/plinth/issues/940) requests a dedicated `707-technologies-onion-architecture` skill. The issue identifies ArchUnit's architecture support as the source reference and frames the outcome as framework-agnostic Onion architecture guidance for Java enterprise developers and architects.
 
 Java teams need focused guidance for reviewing and improving dependency direction between domain, application/use-case, adapter, and infrastructure concerns. The repository already has technology skills for framework-agnostic topics such as OpenAPI, WireMock, fuzz testing, SQL, MongoDB, and Docker; Onion architecture belongs in that same technology guidance family rather than inside Spring Boot, Quarkus, or Micronaut-specific skills.
 
@@ -25,7 +25,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#940](https://github.com/jabrena/cursor-rules-java/issues/940).
+- Source artifact: GitHub issue [#940](https://github.com/jabrena/plinth/issues/940).
 - External reference from issue: [ArchUnit architectures user guide](https://www.archunit.org/userguide/html/000_Index.html#_architectures).
 - Existing technology skill patterns: `701-technologies-openapi`, `702-technologies-wiremock`, and `706-technologies-containers-docker`.
 - Local command workflow: `.cursor/commands/create-spec.md`.

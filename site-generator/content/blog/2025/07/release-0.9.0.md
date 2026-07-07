@@ -26,7 +26,7 @@ Specific rules for Maven Dependencies & Maven plugins
 
 Profiling improvements
 
-For further information about the full CHANGELOG, visit the following link: https://github.com/jabrena/cursor-rules-java/blob/main/CHANGELOG.md#090-2025-07-22
+For further information about the full CHANGELOG, visit the following link: https://github.com/jabrena/plinth/blob/main/CHANGELOG.md#090-2025-07-22
 
 Added Version Control
 If you are one of the thousands of users who at some point in time cloned the Git repository, maybe you don't remember when the system prompt was added to your workspace. In this version, all prompts include in the Markdown Frontmatter section, metadata about the version to track which version you are using and whether you need to update to the latest version.
@@ -53,10 +53,10 @@ You are a Senior software engineer with extensive experience in Java software de
 
 Exception handling is a core feature in Java, but that feature didn't have a specific system prompt. In this release, a specific rule about exception handling with a functional point of view was added.
 
-![](/plintch/images/2025/7/java-exceptions-goto.png)
+![](/plinth/images/2025/7/java-exceptions-goto.png)
 
 Consultative Interaction Technique
-In the previous release, the project added a way to interact with software engineers. In this release, we externalized the behavior in the following building block: https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/fragments/system-prompt-behaviour-consultative-interaction-template.md
+In the previous release, the project added a way to interact with software engineers. In this release, we externalized the behavior in the following building block: https://github.com/jabrena/plinth/blob/main/generator/src/main/resources/fragments/system-prompt-behaviour-consultative-interaction-template.md
 
 Now that solution has been extended to the majority of the provided system prompts,  adding consultative behavior:
 
@@ -69,13 +69,13 @@ Now that solution has been extended to the majority of the provided system promp
 
     </goal>
 ```
-Example: https://github.com/jabrena/cursor-rules-java/blob/main/generator/src/main/resources/110-java-maven-best-practices.xml
+Example: https://github.com/jabrena/plinth/blob/main/generator/src/main/resources/110-java-maven-best-practices.xml
 
-![](/plintch/images/2025/7/example-rules.png)
+![](/plinth/images/2025/7/example-rules.png)
 
 ### A better Getting Started documentation
 
-The repository has improved the documentation for new users in order to reduce the Onboarding time for new users: https://github.com/jabrena/cursor-rules-java/blob/main/GETTING-STARTED.md
+The repository has improved the documentation for new users in order to reduce the Onboarding time for new users: https://github.com/jabrena/plinth/blob/main/GETTING-STARTED.md
 
 ### Specific rules for Maven Dependencies & Maven plugins
 
@@ -93,4 +93,4 @@ Bounded Collections Active: Memory retention baseline improved by 55% (49MB→22
 GC Pressure Reduced: More efficient garbage collection with stable retention patterns
 ```
 
-Full sample document: https://github.com/jabrena/cursor-rules-java/blob/main/examples/spring-boot-memory-leak-demo/profiler/docs/profiling-comparison-analysis-20250720.md
+Full sample document: https://github.com/jabrena/plinth/blob/main/examples/spring-boot-memory-leak-demo/profiler/docs/profiling-comparison-analysis-20250720.md

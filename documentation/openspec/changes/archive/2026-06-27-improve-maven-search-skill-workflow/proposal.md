@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#881](https://github.com/jabrena/cursor-rules-java/issues/881) identifies that `114-java-maven-search` has an unclear purpose because it currently combines two related but operationally different workflows:
+GitHub issue [#881](https://github.com/jabrena/plinth/issues/881) identifies that `114-java-maven-search` has an unclear purpose because it currently combines two related but operationally different workflows:
 
 - Maven project update analysis using maintainer-provided Versions Maven Plugin output.
 - Maven Central artifact discovery using Search API fields and repository URL construction.
@@ -27,7 +27,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#881](https://github.com/jabrena/cursor-rules-java/issues/881).
+- Source artifact: GitHub issue [#881](https://github.com/jabrena/plinth/issues/881).
 - Source summary: User story and acceptance criteria added to issue #881 by the maintainer workflow.
 - Existing generated skill under review: `.agents/skills/114-java-maven-search/SKILL.md`.
 - Existing XML sources: `skills-generator/src/main/resources/skill-indexes/114-skill.xml` and `skills-generator/src/main/resources/skill-references/114-java-maven-search.xml`.

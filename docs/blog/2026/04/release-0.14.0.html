@@ -103,20 +103,20 @@
 <article role="main" class="blog-post">
 <h2>What are Cursor rules for Java?</h2>
 <p>A curated and opinionated collection of <code>Skills</code> and <code>Agents</code> to be used in modern <code>SDLC</code> workflows for Java Enterprise development with your favorite AI Agent harness.</p>
-<p><img src="/plintch/images/2026/4/scope.png" alt="" /></p>
+<p><img src="/plinth/images/2026/4/scope.png" alt="" /></p>
 <p>Thanks to our community members in <code>Singapore</code>, <code>Chengdu</code>, <code>Hanoi</code>, <code>Copenhagen</code>, and <code>Quito</code>. 👋👋👋</p>
 <h2>What's new in this release?</h2>
 <h3>Rules support dropped in favor of Skills</h3>
-<p>Until this release, the project maintained three very different deliverables: Rules, Skills, and Agents. <code>Rules</code> and <code>Skills</code> both guide model behavior in broadly similar ways, but Rules were Cursor’s approach while <code>Skills</code> have recently become the standard, so consolidating on a single solution makes more sense. <strong>On the other hand</strong>, maintaining a single generator (<code>skills-generator</code>) made it possible to improve how skills are packaged, which was somewhat constrained when both <code>rules-generator</code> and <code>skills-generator</code> existed. If you followed the various <a href="https://github.com/jabrena/cursor-rules-java/tree/main/documentation/adr">ADRs published</a> in the repository, you could see why the project preserves the same guidance while adopting Skills-based packaging. In previous months, users developed or refactored code using <code>System prompts/Rules</code> in this way:</p>
-<p><img src="/plintch/images/2026/4/manual-trigger.png" alt="" /></p>
+<p>Until this release, the project maintained three very different deliverables: Rules, Skills, and Agents. <code>Rules</code> and <code>Skills</code> both guide model behavior in broadly similar ways, but Rules were Cursor’s approach while <code>Skills</code> have recently become the standard, so consolidating on a single solution makes more sense. <strong>On the other hand</strong>, maintaining a single generator (<code>skills-generator</code>) made it possible to improve how skills are packaged, which was somewhat constrained when both <code>rules-generator</code> and <code>skills-generator</code> existed. If you followed the various <a href="https://github.com/jabrena/plinth/tree/main/documentation/adr">ADRs published</a> in the repository, you could see why the project preserves the same guidance while adopting Skills-based packaging. In previous months, users developed or refactored code using <code>System prompts/Rules</code> in this way:</p>
+<p><img src="/plinth/images/2026/4/manual-trigger.png" alt="" /></p>
 <p>But now, you can do the same by adding the Skill to the context of your favorite <code>AI Agent harness</code>. You can add the Skill you want to the context explicitly, or leave it to the AI tool to use or skip depending on the context—so you can achieve the same outcomes with Skills as you could with system prompts in the past.</p>
 <p>On the main branch, a few resources about <code>System-prompts/rules</code> remain temporarily; we still see web traffic for them:</p>
 <ul>
-<li>All rules from v0.13.0: <a href="https://github.com/jabrena/cursor-rules-java/tree/main/.cursor/rules">https://github.com/jabrena/cursor-rules-java/tree/main/.cursor/rules</a></li>
-<li>Getting Started: <a href="https://github.com/jabrena/cursor-rules-java/blob/main/documentation/guides/GETTING-STARTED-SYSTEM-PROMPTS.md">https://github.com/jabrena/cursor-rules-java/blob/main/documentation/guides/GETTING-STARTED-SYSTEM-PROMPTS.md</a></li>
+<li>All rules from v0.13.0: <a href="https://github.com/jabrena/plinth/tree/main/.cursor/rules">https://github.com/jabrena/plinth/tree/main/.cursor/rules</a></li>
+<li>Getting Started: <a href="https://github.com/jabrena/plinth/blob/main/documentation/guides/GETTING-STARTED-SYSTEM-PROMPTS.md">https://github.com/jabrena/plinth/blob/main/documentation/guides/GETTING-STARTED-SYSTEM-PROMPTS.md</a></li>
 </ul>
-<p>That usage is <code>deprecated</code> in favor of <code>Skills</code> and will be removed in the coming months; review <a href="https://github.com/jabrena/cursor-rules-java?tab=readme-ov-file#deliverables">the new documentation</a> and adapt your process or pipelines.</p>
-<p>Separately, you can still download the last generated <code>System prompts/rules</code> from <a href="https://github.com/jabrena/cursor-rules-java/releases/tag/0.13.0">release 0.13.0</a> if you need them, but development is frozen in favor of the <a href="https://agentskills.io/specification">Skill Standard</a>.</p>
+<p>That usage is <code>deprecated</code> in favor of <code>Skills</code> and will be removed in the coming months; review <a href="https://github.com/jabrena/plinth?tab=readme-ov-file#deliverables">the new documentation</a> and adapt your process or pipelines.</p>
+<p>Separately, you can still download the last generated <code>System prompts/rules</code> from <a href="https://github.com/jabrena/plinth/releases/tag/0.13.0">release 0.13.0</a> if you need them, but development is frozen in favor of the <a href="https://agentskills.io/specification">Skill Standard</a>.</p>
 <h3>Improvements in the Agile process</h3>
 <p>When you create a <code>User Story</code>, the flow not only generates the usual structure and acceptance criteria in <code>Gherkin</code> format, but it also reviews the user story as a whole using <code>INVEST</code>. INVEST is an acronym used in Agile to evaluate the quality of a user story, ensuring it is <code>Independent</code>, <code>Negotiable</code>, <code>Valuable</code>, <code>Estimable</code>, <code>Small</code>, and <code>Testable</code>.</p>
 <p><strong>Skills:</strong></p>
@@ -126,7 +126,7 @@
 <h3>Improvements in the planning process</h3>
 <p>It is tedious to copy issue details from your issue tracker into the context of whichever AI tool you use. With that in mind, you can now access assigned issues more easily if you work with <code>GitHub Issues</code> or <code>Jira</code>. Those <code>Skills</code> combine well with <code>@014-agile-user-story</code> to turn the classic <code>Anemic one-line User Story</code> into something richer.</p>
 <p>Once the information is <code>ready for development</code>, you can convert it into a <code>Change</code> or <code>Delta</code> using <code>OpenSpec</code>.</p>
-<p><img src="/plintch/images/2026/4/issue-to-openspec.png" alt="" /></p>
+<p><img src="/plinth/images/2026/4/issue-to-openspec.png" alt="" /></p>
 <h4>How does OpenSpec work?</h4>
 <p>OpenSpec is a spec-driven change workflow: you capture what you want and how you will verify it before (or alongside) changing code and generators.</p>
 <p>The scaffolding for any project using OpenSpec looks like this:</p>
@@ -153,7 +153,7 @@ openspec archive &lt;change-name&gt;
 <p>If you pick up a user story from any issue-tracking tool and it relates to a service you know well, you can use the following workflow directly:</p>
 <pre><code class="language-bash">User story &gt; Create a Change in OpenSpec &gt; Implement with Java Agents
 </code></pre>
-<p><img src="/plintch/images/2026/4/implement-openspec-change.png" alt="" /></p>
+<p><img src="/plinth/images/2026/4/implement-openspec-change.png" alt="" /></p>
 <p>But if you are less sure about the assigned user story, invest more time in the analysis phase:</p>
 <pre><code class="language-bash">User story &gt; Create a Plan &gt; Enhance the plan &gt; Convert into multiple Changes in OpenSpec &gt; Implement with Java Agents
 </code></pre>
@@ -184,7 +184,7 @@ openspec archive &lt;change-name&gt;
 </ul>
 <h4>Reinforced REST API desing and testing</h4>
 <p>Now, you can review and harden <strong>OpenAPI 3.x</strong> contracts with <code>@701-technologies-openapi</code> when the specification still needs work. As you develop integration tests, you can strengthen them with <strong>HTTP stubs</strong> from <strong>WireMock</strong> using <code>@702-technologies-wiremock</code>. Finally, if you want <strong>black-box testing</strong> driven by your OpenAPI specification, <code>@703-technologies-fuzzing-testing</code> based on <strong>CATS</strong> can help surface defects through contract-driven negative testing, malformed and boundary inputs, and related edge cases.</p>
-<p><a href="https://endava.github.io/cats/"><img src="/plintch/images/2026/4/cats.png" alt="" /></a></p>
+<p><a href="https://endava.github.io/cats/"><img src="/plinth/images/2026/4/cats.png" alt="" /></a></p>
 <p>Further information about CATS: <a href="https://github.com/Endava/cats">https://github.com/Endava/cats</a></p>
 <p><strong>Skills</strong></p>
 <ul>
@@ -195,8 +195,8 @@ openspec archive &lt;change-name&gt;
 <h3>Skill inventory</h3>
 <p>In version <code>v0.14.0</code>, the project ships <code>68 Skills</code>.</p>
 <p>You can install the <code>Skills</code> easily with:</p>
-<pre><code class="language-bash">npx skills add jabrena/cursor-rules-java --all --agent cursor
-npx skills add jabrena/cursor-rules-java --all --agent claude-code
+<pre><code class="language-bash">npx skills add jabrena/plinth --all --agent cursor
+npx skills add jabrena/plinth --all --agent claude-code
 </code></pre>
 <p>Once you have the skills installed, you can install the <code>Agents</code> with:</p>
 <pre><code>@005-agents-installation Install Agents in Cursor
@@ -246,7 +246,7 @@ npx skills add jabrena/cursor-rules-java --all --agent claude-code
 <p>Separately, the Skills need a few improvements to increase quality, so we will use notes from <a href="https://tessl.io/registry">Tessl</a>.</p>
 <h2>Do you still have questions about the project?</h2>
 <p>If you feel stuck using this project or have questions, you can attend the following workshop at <code>Codemotion Madrid 2026</code>:</p>
-<p><a href="https://conferences.codemotion.com/madrid/"><img src="/plintch/images/2026/3/codemotion-madrid-2026.jpg" alt="" /></a></p>
+<p><a href="https://conferences.codemotion.com/madrid/"><img src="/plinth/images/2026/3/codemotion-madrid-2026.jpg" alt="" /></a></p>
 <p><a href="https://conferences.codemotion.com/madrid/workshop/">https://conferences.codemotion.com/madrid/workshop/</a></p>
 
 </article>
@@ -268,7 +268,7 @@ npx skills add jabrena/cursor-rules-java --all --agent claude-code
     </a>
   </li>
   <li>
-    <a href="https://github.com/jabrena/cursor-rules-java" title="GitHub">
+    <a href="https://github.com/jabrena/plinth" title="GitHub">
       <span class="fa-stack fa-lg">
         <i class="fa fa-circle fa-stack-2x"></i>
         <i class="fa fa-github fa-stack-1x fa-inverse"></i>

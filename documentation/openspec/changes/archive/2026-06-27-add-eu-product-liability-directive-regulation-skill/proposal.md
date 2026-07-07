@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#876](https://github.com/jabrena/cursor-rules-java/issues/876) scopes the next EU regulation-skill batch to three explicit deliverables. This change covers the third deliverable: `812-regulations-eu-product-liability-directive`.
+GitHub issue [#876](https://github.com/jabrena/plinth/issues/876) scopes the next EU regulation-skill batch to three explicit deliverables. This change covers the third deliverable: `812-regulations-eu-product-liability-directive`.
 
 Java enterprise teams that build AI-enabled software products, SaaS products, embedded software, GenAI assistants, RAG workflows, AI agents, generated instructions, automated updates, or cybersecurity-sensitive product features need Product Liability Directive-aware engineering guidance. The guidance must help teams produce reviewable product-liability evidence for qualified owners without turning the skill into legal advice.
 
@@ -23,7 +23,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#876](https://github.com/jabrena/cursor-rules-java/issues/876).
+- Source artifact: GitHub issue [#876](https://github.com/jabrena/plinth/issues/876).
 - Existing implementation model: `801-regulations-eu-ai-act`, `805-regulations-eu-cyber-resilience-act`, and `804-regulations-eu-nis2`.
 - Official source: [Directive (EU) 2024/2853, EUR-Lex](https://eur-lex.europa.eu/eli/dir/2024/2853/oj/eng).
 - Derivation direction: issue #876 plus official Product Liability Directive reference plus existing regulation skill pattern -> OpenSpec change artifacts -> XML skill source implementation -> local generated skill validation.

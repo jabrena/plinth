@@ -115,7 +115,7 @@ In the version `v0.13.0`, the project releases `58 Skills`:
 - `@522-frameworks-micronaut-testing-integration-tests`
 - `@523-frameworks-micronaut-testing-acceptance-tests`
 
-Let's walk through each feature. You can also review the [CHANGELOG](https://github.com/jabrena/cursor-rules-java/blob/main/CHANGELOG.md#0130-2026-03-30).
+Let's walk through each feature. You can also review the [CHANGELOG](https://github.com/jabrena/plinth/blob/main/CHANGELOG.md#0130-2026-03-30).
 
 ## What workflows were updated in this release?
 
@@ -123,19 +123,19 @@ Let's walk through each feature. You can also review the [CHANGELOG](https://git
 
 Now, `Product Owners` and `Business Analysts` have new tools to improve thin, one-line user stories, and `Architects` can take part in development by adding `ADRs` asynchronously. With that context, you can validate those documents for inconsistencies using the new agent. When the documents are aligned, the `Software Engineer` can draft a plan and refine it with the Plan mode skill (`@040-planning-plan-mode`). After the plan is reviewed, you can hand it off to the new `Coordinator Agent`, which owns end-to-end development.
 
-Take a look at the following [Getting Started](https://github.com/jabrena/cursor-rules-java/blob/main/documentation/guides/GETTING-STARTED-SKILLS.md) guide for further details.
+Take a look at the following [Getting Started](https://github.com/jabrena/plinth/blob/main/documentation/guides/GETTING-STARTED-SKILLS.md) guide for further details.
 
 ### CI/CD Pipeline workflows
 
 With the new improvements for architectural tasks, it is now easier to keep architecture diagrams current—including C4 views, data mapping, business glossary documentation, and database ER diagrams.
 
-Take a look at the following [Getting Started](https://github.com/jabrena/cursor-rules-java/blob/main/documentation/guides/GETTING-STARTED-PIPELINES.md) guide for further details.
+Take a look at the following [Getting Started](https://github.com/jabrena/plinth/blob/main/documentation/guides/GETTING-STARTED-PIPELINES.md) guide for further details.
 
 ---
 
 Drawing on ideas from others, it is impressive to see the new processes that [Juan Macias](https://x.com/juanmacias) is developing:
 
-[![](/plintch/images/2026/3/juan-macias.png)](https://x.com/juanmacias/status/2037973784674611648?s=20)
+[![](/plinth/images/2026/3/juan-macias.png)](https://x.com/juanmacias/status/2037973784674611648?s=20)
 
 I recommend reading [The broken telephone](https://thebrokentelephone.com/) and the associated [GitHub repository](https://github.com/darkspock/thebrokentelephone_sample).
 
@@ -161,8 +161,8 @@ All frameworks have the same skill coverage:
 Currently, there is lively debate about which online Skill registry is best.
 You can find the Skills from this project on several sites.
 
-- https://skills.sh/jabrena/cursor-rules-java
-- https://tessl.io/registry/skills/github/jabrena/cursor-rules-java
+- https://skills.sh/jabrena/plinth
+- https://tessl.io/registry/skills/github/jabrena/plinth
 - https://agent-skills.cc/zh/skills/jabrena-cursor-rules-java
 - https://skillsmp.com/skills/jabrena-cursor-rules-java-skills-014-agile-user-story-skill-md
 
@@ -233,15 +233,15 @@ When the plan is revised and you agree with it, you can invoke the new Agent: `/
 
 This agent will review the plan and repository and, depending on the context, it will delegate the coding tasks to a specific agent. Specialized agents are currently available for Pure Java, Spring Boot, Quarkus, and Micronaut.
 
-![](/plintch/images/2026/3/robot-coordinator-example.jpg)
+![](/plinth/images/2026/3/robot-coordinator-example.jpg)
 
 When you achieve the first milestone, you can review whether the implementation matches the coding standards and continue until the end of all tasks in the task list.
 
-![](/plintch/images/2026/3/robot-quarkus-coder-example.jpg)
+![](/plinth/images/2026/3/robot-quarkus-coder-example.jpg)
 
 Using incremental review, you can minimize potential deviations and commit small parts.
 
-![](/plintch/images/2026/3/robot-coordinator-example2.png)
+![](/plinth/images/2026/3/robot-coordinator-example2.png)
 
 If you have good ADRs and you invested time in a plan, the time spent on refactorings should be minimized. Indeed, I recommend making small commits per milestone.
 
@@ -283,6 +283,6 @@ Some interesting skills to review:
 
 If you feel stuck using this project or have questions, you can attend the following workshop at `Codemotion Madrid 2026`:
 
-[![](/plintch/images/2026/3/codemotion-madrid-2026.jpg)](https://conferences.codemotion.com/madrid/)
+[![](/plinth/images/2026/3/codemotion-madrid-2026.jpg)](https://conferences.codemotion.com/madrid/)
 
 https://conferences.codemotion.com/madrid/workshop/

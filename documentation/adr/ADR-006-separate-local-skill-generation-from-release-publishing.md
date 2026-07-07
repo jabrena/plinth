@@ -84,5 +84,5 @@ The implementation is confirmed when:
 
 ## More Information
 
-* Issue: https://github.com/jabrena/cursor-rules-java/issues/751
+* Issue: https://github.com/jabrena/plinth/issues/751
 * Prior decisions: [ADR-004](./ADR-004-skill-generation.md), [ADR-005](./ADR-005-drop-cursor-rules-support-in-favor-of-agent-skills.md)

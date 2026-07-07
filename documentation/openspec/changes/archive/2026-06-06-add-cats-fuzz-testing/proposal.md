@@ -2,7 +2,7 @@
 
 ## Problem Statement
 
-Issue [#496](https://github.com/jabrena/cursor-rules-java/issues/496) requests fuzz testing support with CATS, but there is no structured OpenSpec change that defines expected behavior, quality gates, and contributor workflow.
+Issue [#496](https://github.com/jabrena/plinth/issues/496) requests fuzz testing support with CATS, but there is no structured OpenSpec change that defines expected behavior, quality gates, and contributor workflow.
 
 Without a formalized change, the implementation can drift across CI, documentation, and API validation expectations.
 

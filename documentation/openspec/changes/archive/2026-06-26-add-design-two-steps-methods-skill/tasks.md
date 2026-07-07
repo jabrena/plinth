@@ -23,5 +23,5 @@
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#877](https://github.com/jabrena/cursor-rules-java/issues/877).
+- Source artifact: GitHub issue [#877](https://github.com/jabrena/plinth/issues/877).
 - Derivation direction: local issue cache -> sanitized maintainer-style planning summary -> OpenSpec task checklist -> XML skill source implementation and validation.

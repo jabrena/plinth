@@ -61,7 +61,7 @@ The existing `111-java-maven-dependencies` acceptance prompt is listed in `skill
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#875](https://github.com/jabrena/cursor-rules-java/issues/875).
+- Source artifact: GitHub issue [#875](https://github.com/jabrena/plinth/issues/875).
 - Derivation direction: GitHub issue #875 -> sanitized planning summary -> this OpenSpec design -> XML generator implementation and validation.
 
 ## Open Questions

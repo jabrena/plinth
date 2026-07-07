@@ -24,7 +24,7 @@ Videos about the talks:
 
 and the associated Slides:
 
-- https://jabrena.github.io/cursor-rules-java/dvbe25/index.html
+- https://jabrena.github.io/plinth/dvbe25/index.html
 - https://jabrena.github.io/101-cursor/
 
 ## Emerging new solutions from the Gemba
@@ -61,7 +61,7 @@ PML project has 2 different schemas, one schema which defines the diferent parts
 </xs:element>
 ```
 
-You can see PML in action [here](https://github.com/jabrena/cursor-rules-java/tree/main/skills-generator/src/main/resources).
+You can see PML in action [here](https://github.com/jabrena/plinth/tree/main/skills-generator/src/main/resources).
 
 Finally, here is a novel Schema dedicated to Workflows:
 
@@ -101,19 +101,19 @@ https://forms.gle/TpNXENjmu45wuXoi6
 
 Recently, this technique was identified in the latest `Thoughtworks Radar #33`: **Curated shared instructions for software teams**
 
-[![](/plintch/images/2025/11/thoughtworks-radar-system-prompts.jpg)](https://www.thoughtworks.com/radar/techniques/curated-shared-instructions-for-software-teams)
+[![](/plinth/images/2025/11/thoughtworks-radar-system-prompts.jpg)](https://www.thoughtworks.com/radar/techniques/curated-shared-instructions-for-software-teams)
 
 **Problem it tries to solve:** Maintain a specialized collection of system prompts for Software development in Java.
 
-This project uses PML under the hood to model all System prompts in homogeneous Markdown syntax. Read the file [CURSOR-RULES-JAVA.md](https://github.com/jabrena/cursor-rules-java/blob/main/CURSOR-RULES-JAVA.md) to understand all possibilities.
+This project uses PML under the hood to model all System prompts in homogeneous Markdown syntax. Read the file [CURSOR-RULES-JAVA.md](https://github.com/jabrena/plinth/blob/main/CURSOR-RULES-JAVA.md) to understand all possibilities.
 
-https://github.com/jabrena/cursor-rules-java
+https://github.com/jabrena/plinth
 
 ### Churrera, tasks like churros!
 
 Churrera is a CLI tool designed to operate with `Cursor Cloud Agents API` easily. The Cloud Agents API (Beta) allows you to programmatically create and manage AI-powered coding agents that work autonomously on your repositories.
 
-![](/plintch/images/2025/11/churrera-2.png)
+![](/plinth/images/2025/11/churrera-2.png)
 
 **Problem it tries to solve:** Enhance your pipelines with `AI Glue`.
 
@@ -125,11 +125,11 @@ https://github.com/jabrena/churrera
 
 ## Observations in Devoxx 2025
 
-![](/plintch/images/2025/11/devoxx-be-room-4.jpg)
+![](/plinth/images/2025/11/devoxx-be-room-4.jpg)
 
 In 2025, the entire JVM industry is moving around AI and if you attended the different sessions in Devoxx, you may feel it. In the conference, I listened to the different proposals from the most used frameworks `Spring` & `Quarkus` in the Java industry and in this year, I observed that there exists a real parity between Spring ecosystem and Quarkus ecosystem in terms of talks. Congratulations to `Mario Fusco`, `Georgios Andrianakis`, `Clement Escoffier`, `Rod Johnson` & `Christian Tzolov` for their hard work. I would not like to forget the nice proposal from `Akka` which shared the new features oriented to `Agents`.
 
-![](/plintch/images/2025/11/devoxx-quarkus-agentic-talk.png)
+![](/plinth/images/2025/11/devoxx-quarkus-agentic-talk.png)
 
 **Can Spring AI or Langchain4j use PML or Cursor rules for Java?**
 
@@ -161,11 +161,11 @@ Yes, for sure. Happy to talk with `Spring AI` team or `Quarkus` team in the futu
 
 ## Observations in W-JAX-2025
 
-![](/plintch/images/2025/11/wjax-atlanta-room.png)
+![](/plinth/images/2025/11/wjax-atlanta-room.png)
 
 In this case, I visited the conference for a shorter time so my observations were limited, but in the conference the talks put focus on AI also. In the another hand, I observed less presence of Quarkus talks, in Germain Speakers continue with more experience in Spring. Gathering feedback from my talk, many `Java Software engineers` in Germany are starting to use this kind of modern tools but in general, the usage is not massive.
 
-![](/plintch/images/2025/11/crossing-the-chasm.png)
+![](/plinth/images/2025/11/crossing-the-chasm.png)
 
 ### What talks I loved in W-JAX 2025?
 

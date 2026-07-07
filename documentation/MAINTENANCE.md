@@ -39,7 +39,7 @@ Can you update the current changelog for 0.17.0 comparing git commits in relatio
 
 - [ ] Update CHANGELOG.md
 - [ ] Remove SNAPSHOT from .xml, .md & pom.xml
-- [ ] Review git changes for hidden issues (Manual) https://github.com/jabrena/cursor-rules-java/compare/0.16.0...feature/release-0170
+- [ ] Review git changes for hidden issues (Manual) https://github.com/jabrena/plinth/compare/0.16.0...feature/release-0170
 - [ ] Verify if all features were tested propertly
 - [ ] Review if Agents need to add more Skills
 - [ ] Review Skill validation output
@@ -60,10 +60,10 @@ Can you update the current changelog for 0.17.0 comparing git commits in relatio
 
 ```bash
 # Review Skill registries
-https://github.com/jabrena/cursor-rules-java
+https://github.com/jabrena/plinth
 https://tessl.io/registry/skills/submit
 npx tessl skill review ./skills/xxx
-cd target && npx skills add jabrena/cursor-rules-java --all --agent cursor && cd ..
+cd target && npx skills add jabrena/plinth --all --agent cursor && cd ..
 ```
 
 ---

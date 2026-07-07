@@ -17,32 +17,32 @@ Si falta alguno de los comandos, instala Node.js con el gestor de paquetes de tu
 
 ## 2. Elige tu agente y descarga los Skills
 
-Instala todos los skills desde la [entrada del registry de Skills.sh](https://skills.sh/jabrena/cursor-rules-java) de este proyecto en el agente que uses con más frecuencia:
+Instala todos los skills desde la [entrada del registry de Skills.sh](https://skills.sh/jabrena/plinth) de este proyecto en el agente que uses con más frecuencia:
 
 ```bash
 # Cursor
-npx skills add jabrena/cursor-rules-java --skill '*' --agent cursor -y
+npx skills add jabrena/plinth --skill '*' --agent cursor -y
 
 # Claude Code
-npx skills add jabrena/cursor-rules-java --skill '*' --agent claude-code -y
+npx skills add jabrena/plinth --skill '*' --agent claude-code -y
 
 # Codex
-npx skills add jabrena/cursor-rules-java --skill '*' --agent codex -y
+npx skills add jabrena/plinth --skill '*' --agent codex -y
 
 # GitHub Copilot
-npx skills add jabrena/cursor-rules-java --skill '*' --agent github-copilot -y
+npx skills add jabrena/plinth --skill '*' --agent github-copilot -y
 ```
 
 Para instalar en todos los agentes soportados, usa el modo multiagente de la CLI:
 
 ```bash
-npx skills add jabrena/cursor-rules-java --skill '*' --agent '*' -y
+npx skills add jabrena/plinth --skill '*' --agent '*' -y
 ```
 
 Para revisar primero los skills disponibles:
 
 ```bash
-npx skills add jabrena/cursor-rules-java --list
+npx skills add jabrena/plinth --list
 ```
 
 ## 3. Instala los commands del proyecto

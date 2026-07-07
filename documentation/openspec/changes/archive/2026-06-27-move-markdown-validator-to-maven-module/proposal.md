@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#941](https://github.com/jabrena/cursor-rules-java/issues/941) requests moving the Markdown validator from `.github/scripts/MarkdownValidator.java` into a dedicated Maven module.
+GitHub issue [#941](https://github.com/jabrena/plinth/issues/941) requests moving the Markdown validator from `.github/scripts/MarkdownValidator.java` into a dedicated Maven module.
 
 The current validator is a CI-oriented JBang script that has grown beyond a small script. It validates generated and maintained Markdown content, checks remote links, and is invoked by the `validate-markdown` GitHub Actions job. The issue records a CI validation run taking around 40 seconds, which is too slow for this feedback loop.
 
@@ -25,7 +25,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#941](https://github.com/jabrena/cursor-rules-java/issues/941).
+- Source artifact: GitHub issue [#941](https://github.com/jabrena/plinth/issues/941).
 - Previous implementation: `.github/scripts/MarkdownValidator.java`.
 - New implementation: `markdown-validator/src/main/java/info/jab/markdownvalidator/MarkdownValidator.java`.
 - Current CI call site: `.github/workflows/maven.yaml`.

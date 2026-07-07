@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#877](https://github.com/jabrena/cursor-rules-java/issues/877) requests a dedicated skill named `051-design-two-steps-methods` for Kent Beck's two-step change method: make the change easy, then make the easy change.
+GitHub issue [#877](https://github.com/jabrena/plinth/issues/877) requests a dedicated skill named `051-design-two-steps-methods` for Kent Beck's two-step change method: make the change easy, then make the easy change.
 
 Java Enterprise practitioners need concise guidance for complex or risky code changes where preparatory refactoring should be separated from the intended behavior change. The skill should help agents and users plan changes in two explicit steps instead of mixing design preparation and behavior modification in one pass.
 
@@ -35,7 +35,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#877](https://github.com/jabrena/cursor-rules-java/issues/877).
+- Source artifact: GitHub issue [#877](https://github.com/jabrena/plinth/issues/877).
 - Local issue cache read for this workflow: `.codex/issue/title.txt`, `.codex/issue/body.md`, and `.codex/issue/url.txt`.
 - Trust basis: the `/create-spec` issue label is treated as maintainer approval to read the full issue body in this non-interactive workflow.
 - Derivation direction: local issue cache -> sanitized maintainer-style planning summary -> OpenSpec change artifacts -> XML skill source implementation -> local generated skill validation.

@@ -237,4 +237,4 @@ Skill validation is not a single gate. It is a layered review process that check
 
 The more capable AI agent workflows become, the more important it is to make those checks explicit, repeatable, and visible in the pipeline.
 
-**Example pipeline:** [maven.yaml](https://github.com/jabrena/cursor-rules-java/blob/main/.github/workflows/maven.yaml)
+**Example pipeline:** [maven.yaml](https://github.com/jabrena/plinth/blob/main/.github/workflows/maven.yaml)

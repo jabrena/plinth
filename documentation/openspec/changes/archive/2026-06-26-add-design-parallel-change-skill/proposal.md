@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#932](https://github.com/jabrena/cursor-rules-java/issues/932) requests a dedicated `055-design-parallel-change` skill for database migration scenarios. The repository already contains framework-specific Flyway parallel-change references for Spring Boot, Quarkus, and Micronaut, and the archived `flyway-migration-skill-guidance` specification requires those Flyway skills to explain Parallel Change as an expand, migrate, contract technique.
+GitHub issue [#932](https://github.com/jabrena/plinth/issues/932) requests a dedicated `055-design-parallel-change` skill for database migration scenarios. The repository already contains framework-specific Flyway parallel-change references for Spring Boot, Quarkus, and Micronaut, and the archived `flyway-migration-skill-guidance` specification requires those Flyway skills to explain Parallel Change as an expand, migrate, contract technique.
 
 Java Enterprise developers need a cross-framework design skill because Parallel Change is a broader database evolution pattern, not only a Flyway framework detail. A dedicated design skill gives agents a reusable place to explain the pattern, identify when it applies, sequence safe database changes, and direct users back to framework-specific Flyway skills when implementation details are needed.
 
@@ -24,7 +24,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#932](https://github.com/jabrena/cursor-rules-java/issues/932).
+- Source artifact: GitHub issue [#932](https://github.com/jabrena/plinth/issues/932).
 - External reference: [Martin Fowler: Parallel Change](https://martinfowler.com/bliki/ParallelChange.html).
 - External reference: [DORA: Database Change Management](https://dora.dev/capabilities/database-change-management/).
 - Existing source reference: `skills-generator/src/main/resources/skill-references/313-frameworks-spring-db-migrations-flyway-parallel-change.xml`.

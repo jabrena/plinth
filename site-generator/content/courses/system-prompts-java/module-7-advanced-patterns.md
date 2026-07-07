@@ -646,10 +646,10 @@ Team: Uses @behaviour-progressive-learning for knowledge sharing
 
 ### 📚 Continued Learning Resources
 
-- **[Cursor Rules Java Repository](https://github.com/jabrena/cursor-rules-java)**
-- **[Community Discussions](https://github.com/jabrena/cursor-rules-java/discussions)**
+- **[Cursor Rules Java Repository](https://github.com/jabrena/plinth)**
+- **[Community Discussions](https://github.com/jabrena/plinth/discussions)**
 - **[Latest Java Features](https://openjdk.java.net/)**
-- **[AI-Powered Development Blog](https://jabrena.github.io/cursor-rules-java/)**
+- **[jabrena/plinth](https://github.com/jabrena/plinth)**
 
 ---
 

@@ -12,11 +12,11 @@ An opinionated, AI-native workflow for evolving modern Java Enterprise `SDLC` pr
 
 It helps you answer the `Five Whys` when your team needs to evolve a Java-based product or service:
 
-![](/plintch/images/2026/6/scope.png)
+![](/plinth/images/2026/6/scope.png)
 
 Once the idea is clear, you can implement it in a structured way:
 
-![](/plintch/images/2026/6/workflow.png)
+![](/plinth/images/2026/6/workflow.png)
 
 Thanks to our community members in `Singapore`, `Hanoi`, `Hong Kong`, `Milan`, and `New York`. 👋👋👋
 
@@ -44,32 +44,32 @@ The main risks that can remain when generated skills are not scanned before publ
 
 The project provides scanners, and when you use `Skills.sh`, a popular skills registry, every entry must pass three validations.
 
-**Example:** https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices
+**Example:** https://www.skills.sh/jabrena/plinth/110-java-maven-best-practices
 
 ### Improvements in Java Enterprise frameworks
 
 In this release, the project continues to add new features to improve support for `Spring Boot`, `Quarkus` & `Micronaut`. The new skills added for all frameworks cover the following aspects:
 
-- **Data Validation:** [`@303-frameworks-spring-boot-validation`](https://www.skills.sh/jabrena/cursor-rules-java/303-frameworks-spring-boot-validation), [`@403-frameworks-quarkus-validation`](https://www.skills.sh/jabrena/cursor-rules-java/403-frameworks-quarkus-validation) & [`@503-frameworks-micronaut-validation`](https://www.skills.sh/jabrena/cursor-rules-java/503-frameworks-micronaut-validation)
-- **Security:** [`@304-frameworks-spring-boot-security`](https://www.skills.sh/jabrena/cursor-rules-java/304-frameworks-spring-boot-security), [`@404-frameworks-quarkus-security`](https://www.skills.sh/jabrena/cursor-rules-java/404-frameworks-quarkus-security) & [`@504-frameworks-micronaut-security`](https://www.skills.sh/jabrena/cursor-rules-java/504-frameworks-micronaut-security)
-- **Kafka:** [`@314-frameworks-spring-kafka`](https://www.skills.sh/jabrena/cursor-rules-java/314-frameworks-spring-kafka), [`@414-frameworks-quarkus-kafka`](https://www.skills.sh/jabrena/cursor-rules-java/414-frameworks-quarkus-kafka) & [`@514-frameworks-micronaut-kafka`](https://www.skills.sh/jabrena/cursor-rules-java/514-frameworks-micronaut-kafka)
-- **MongoDB:** [`@315-frameworks-spring-mongodb`](https://www.skills.sh/jabrena/cursor-rules-java/315-frameworks-spring-mongodb), [`@415-frameworks-quarkus-mongodb`](https://www.skills.sh/jabrena/cursor-rules-java/415-frameworks-quarkus-mongodb) & [`@515-frameworks-micronaut-mongodb`](https://www.skills.sh/jabrena/cursor-rules-java/515-frameworks-micronaut-mongodb)
+- **Data Validation:** [`@303-frameworks-spring-boot-validation`](https://www.skills.sh/jabrena/plinth/303-frameworks-spring-boot-validation), [`@403-frameworks-quarkus-validation`](https://www.skills.sh/jabrena/plinth/403-frameworks-quarkus-validation) & [`@503-frameworks-micronaut-validation`](https://www.skills.sh/jabrena/plinth/503-frameworks-micronaut-validation)
+- **Security:** [`@304-frameworks-spring-boot-security`](https://www.skills.sh/jabrena/plinth/304-frameworks-spring-boot-security), [`@404-frameworks-quarkus-security`](https://www.skills.sh/jabrena/plinth/404-frameworks-quarkus-security) & [`@504-frameworks-micronaut-security`](https://www.skills.sh/jabrena/plinth/504-frameworks-micronaut-security)
+- **Kafka:** [`@314-frameworks-spring-kafka`](https://www.skills.sh/jabrena/plinth/314-frameworks-spring-kafka), [`@414-frameworks-quarkus-kafka`](https://www.skills.sh/jabrena/plinth/414-frameworks-quarkus-kafka) & [`@514-frameworks-micronaut-kafka`](https://www.skills.sh/jabrena/plinth/514-frameworks-micronaut-kafka)
+- **MongoDB:** [`@315-frameworks-spring-mongodb`](https://www.skills.sh/jabrena/plinth/315-frameworks-spring-mongodb), [`@415-frameworks-quarkus-mongodb`](https://www.skills.sh/jabrena/plinth/415-frameworks-quarkus-mongodb) & [`@515-frameworks-micronaut-mongodb`](https://www.skills.sh/jabrena/plinth/515-frameworks-micronaut-mongodb)
 
 ### Improvements in observability
 
 Observability is an essential aspect of any application:
 
-[![](/plintch/images/2026/6/ms-concerns.webp)](https://developers.redhat.com/blog/2016/12/09/spring-cloud-for-microservices-compared-to-kubernetes)
+[![](/plinth/images/2026/6/ms-concerns.webp)](https://developers.redhat.com/blog/2016/12/09/spring-cloud-for-microservices-compared-to-kubernetes)
 
 In this release, we completed support for the main concepts related to observability: `Logging`, `Metrics` & `Tracing`:
 
-- **Logging:** [`@181-java-observability-logging`](https://www.skills.sh/jabrena/cursor-rules-java/181-java-observability-logging)
-- **Metrics:** [`@182-java-observability-metrics-micrometer`](https://www.skills.sh/jabrena/cursor-rules-java/182-java-observability-metrics-micrometer)
-- **Tracing:** [`@183-java-observability-tracing-opentelemetry`](https://www.skills.sh/jabrena/cursor-rules-java/183-java-observability-tracing-opentelemetry)
+- **Logging:** [`@181-java-observability-logging`](https://www.skills.sh/jabrena/plinth/181-java-observability-logging)
+- **Metrics:** [`@182-java-observability-metrics-micrometer`](https://www.skills.sh/jabrena/plinth/182-java-observability-metrics-micrometer)
+- **Tracing:** [`@183-java-observability-tracing-opentelemetry`](https://www.skills.sh/jabrena/plinth/183-java-observability-tracing-opentelemetry)
 
 Now, using any supported framework with OTEL, you can easily send continuous profiling data to Grafana:
 
-![](/plintch/images/2026/6/piroscope-demo.png)
+![](/plinth/images/2026/6/piroscope-demo.png)
 
 https://grafana.com/oss/pyroscope/
 
@@ -77,7 +77,7 @@ https://grafana.com/oss/pyroscope/
 
 In this release, fuzz testing was improved to make it easier to use: `@703-technologies-fuzzing-testing`.
 
-![](/plintch/images/2026/6/cats.png)
+![](/plinth/images/2026/6/cats.png)
 
 https://github.com/Endava/cats
 
@@ -85,9 +85,9 @@ https://github.com/Endava/cats
 
 The project now provides documentation in three languages:
 
-- [`English`](https://github.com/jabrena/cursor-rules-java/blob/main/README.md)
-- [`Chinese`](https://github.com/jabrena/cursor-rules-java/blob/main/README_ZH.md)
-- [`Spanish`](https://github.com/jabrena/cursor-rules-java/blob/main/README_ES.md)
+- [`English`](https://github.com/jabrena/plinth/blob/main/README.md)
+- [`Chinese`](https://github.com/jabrena/plinth/blob/main/README_ZH.md)
+- [`Spanish`](https://github.com/jabrena/plinth/blob/main/README_ES.md)
 
 ## Evolution of this project in Vercel's Skills registry
 
@@ -106,7 +106,7 @@ This project focuses mainly on the following categories, and that scope continue
 
 ### Codex
 
-![](/plintch/images/2026/6/codex.png)
+![](/plinth/images/2026/6/codex.png)
 
 Recently, I tested Codex running in `VS Code`, and the experience was fantastic. Codex understands `AGENTS.md` and skills located in `.agents/skills`.
 
@@ -116,7 +116,7 @@ Using Codex, you can run the `Agents` provided by the project without any change
 
 Recently, Gartner updated the Magic Quadrant.
 
-![](/plintch/images/2026/6/magic-cuadrant-agents.jpg)
+![](/plinth/images/2026/6/magic-cuadrant-agents.jpg)
 
 https://cursor.com/lp/2026-gartner-mq
 
@@ -126,21 +126,21 @@ https://cursor.com/lp/2026-gartner-mq
 
 Last month, the project was presented and used at the tech conference `Codemotion Madrid 2026`. The workshop had sold out a few weeks before, and participants rated the session 4.5/5.
 
-[![](/plintch/images/2026/6/codemotion-madrid-workshop.jpg)](https://conferences.codemotion.com/madrid/)
+[![](/plinth/images/2026/6/codemotion-madrid-workshop.jpg)](https://conferences.codemotion.com/madrid/)
 
-**Slides:** https://jabrena.github.io/cursor-rules-java/codemotion-madrid-2026/index.html
+**Slides:** [jabrena/plinth](https://github.com/jabrena/plinth)
 
 ### The experience in JMad 2026
 
 Every year, `MadridJUG` organizes `JMad`, a Java tech event based on `OpenSpace`.
 
-[![](/plintch/images/2026/6/IMG_8268.jpg)](https://jmad.madridjug.es/)
+[![](/plinth/images/2026/6/IMG_8268.jpg)](https://jmad.madridjug.es/)
 
 `JMad` is a nice opportunity to exchange ideas and have good debates about the topics Java developers want to discuss.
 
 This year's agenda was:
 
-![](/plintch/images/2026/6/IMG_2584.webp)
+![](/plinth/images/2026/6/IMG_2584.webp)
 
 This year, several AI topics were discussed, including `AI Governance` and how to manage `Skills` in your team, unit, or company.
 

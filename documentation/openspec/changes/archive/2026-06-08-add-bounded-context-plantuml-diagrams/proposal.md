@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#817](https://github.com/jabrena/cursor-rules-java/issues/817) requests bounded-context diagrams for `033-architecture-diagrams` based on PlantUML guidance from Context Mapper. The current skill supports UML sequence, UML class, C4 Context/Container/Component, UML state-machine, and ER diagrams, but it does not offer a dedicated Domain-Driven Design bounded-context diagram path.
+GitHub issue [#817](https://github.com/jabrena/plinth/issues/817) requests bounded-context diagrams for `033-architecture-diagrams` based on PlantUML guidance from Context Mapper. The current skill supports UML sequence, UML class, C4 Context/Container/Component, UML state-machine, and ER diagrams, but it does not offer a dedicated Domain-Driven Design bounded-context diagram path.
 
 Users who want context-map style diagrams currently have to approximate them with C4 or class diagrams. That makes bounded contexts, upstream/downstream relationships, shared kernels, partnerships, anticorruption layers, and other DDD relationship concepts less explicit than they should be.
 
@@ -26,7 +26,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#817](https://github.com/jabrena/cursor-rules-java/issues/817), milestone `v0.16.0`.
+- Source artifact: GitHub issue [#817](https://github.com/jabrena/plinth/issues/817), milestone `v0.16.0`.
 - Source clarification: bounded-context diagrams may need multiple repositories as input so the generated context map can represent all bounded contexts in scope.
 - External reference: Context Mapper PlantUML generator documentation, https://contextmapper.org/docs/plant-uml/.
 - Related existing capability: `architecture-diagram-skill-references`.

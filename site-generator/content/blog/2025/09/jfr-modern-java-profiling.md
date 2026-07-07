@@ -361,4 +361,4 @@ The future of Java performance optimization is here, and JFR provides the founda
 
 ---
 
-*Ready to dive deeper into JFR? Check out the [java-cursor-rules](https://github.com/jabrena/cursor-rules-java) project for automated JFR profiling workflows and interactive profiling scripts that implement the techniques described in this article.*
+*Ready to dive deeper into JFR? Check out the [java-cursor-rules](https://github.com/jabrena/plinth) project for automated JFR profiling workflows and interactive profiling scripts that implement the techniques described in this article.*

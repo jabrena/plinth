@@ -1,6 +1,6 @@
 ## Why
 
-Issue [#806](https://github.com/jabrena/cursor-rules-java/issues/806) requires design discovery and planning/OpenSpec workflows that can start independently from the artifacts a team already uses. This behavior belongs in XML skill sources and can be developed independently from command and agent asset changes.
+Issue [#806](https://github.com/jabrena/plinth/issues/806) requires design discovery and planning/OpenSpec workflows that can start independently from the artifacts a team already uses. This behavior belongs in XML skill sources and can be developed independently from command and agent asset changes.
 
 ## What Changes
 

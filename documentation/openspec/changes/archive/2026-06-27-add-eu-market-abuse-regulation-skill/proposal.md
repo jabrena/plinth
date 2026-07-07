@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#876](https://github.com/jabrena/cursor-rules-java/issues/876) scopes the next EU regulation-skill batch to three explicit deliverables. This change covers the second deliverable: `811-regulations-eu-market-abuse-regulation`.
+GitHub issue [#876](https://github.com/jabrena/plinth/issues/876) scopes the next EU regulation-skill batch to three explicit deliverables. This change covers the second deliverable: `811-regulations-eu-market-abuse-regulation`.
 
 Java enterprise teams that build trading systems, surveillance platforms, suspicious order/transaction monitoring, disclosure workflows, insider-list support, or AI-assisted market-abuse detection need MAR-aware engineering guidance. The guidance must help teams produce reviewable evidence for compliance owners without turning the skill into legal advice.
 
@@ -23,7 +23,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#876](https://github.com/jabrena/cursor-rules-java/issues/876).
+- Source artifact: GitHub issue [#876](https://github.com/jabrena/plinth/issues/876).
 - Existing implementation model: `801-regulations-eu-ai-act`, `802-regulations-dora`, and `807-regulations-eu-digital-services-act`.
 - Official source: [Regulation (EU) No 596/2014 (Market Abuse Regulation), EUR-Lex](https://eur-lex.europa.eu/eli/reg/2014/596/oj/eng).
 - Derivation direction: issue #876 plus official MAR reference plus existing regulation skill pattern -> OpenSpec change artifacts -> XML skill source implementation -> local generated skill validation.

@@ -1,6 +1,6 @@
 ## Why
 
-Issue [#806](https://github.com/jabrena/cursor-rules-java/issues/806) requires clear command entry points for the analysis and design phase. Command work can be delivered independently from agent-role and planning-skill changes when ownership remains limited to embedded command assets, their installer, inventory, and focused tests.
+Issue [#806](https://github.com/jabrena/plinth/issues/806) requires clear command entry points for the analysis and design phase. Command work can be delivered independently from agent-role and planning-skill changes when ownership remains limited to embedded command assets, their installer, inventory, and focused tests.
 
 ## What Changes
 

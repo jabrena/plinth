@@ -188,6 +188,6 @@ Breaking-change avoidance makes compatibility surfaces visible:
 
 If you are using these workflows, experimenting with OpenSpec, or trying to introduce design skills into AI-assisted delivery, share your experience with the project.
 
-Use [GitHub Discussions](https://github.com/jabrena/cursor-rules-java/discussions) to post what is working, where the workflow feels unclear, which doubts you have, and what worries you about applying agents to real Java systems.
+Use [GitHub Discussions](https://github.com/jabrena/plinth/discussions) to post what is working, where the workflow feels unclear, which doubts you have, and what worries you about applying agents to real Java systems.
 
 Those conversations help improve the skills, the documentation, and the project workflow itself.

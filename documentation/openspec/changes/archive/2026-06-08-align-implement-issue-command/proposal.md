@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#809](https://github.com/jabrena/cursor-rules-java/issues/809) identifies that `/implement` is a generic TDD prompt rather than a controlled route from an approved plan or OpenSpec task list to delegated implementation. Renaming it to `/implement-issue` makes the issue-driven lifecycle explicit while requiring an executable artifact before code delivery begins.
+GitHub issue [#809](https://github.com/jabrena/plinth/issues/809) identifies that `/implement` is a generic TDD prompt rather than a controlled route from an approved plan or OpenSpec task list to delegated implementation. Renaming it to `/implement-issue` makes the issue-driven lifecycle explicit while requiring an executable artifact before code delivery begins.
 
 ## What Changes
 

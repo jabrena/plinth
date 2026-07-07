@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#890](https://github.com/jabrena/cursor-rules-java/issues/890) reports the trigger inventory for generated skills and shows that many skill trigger sections contain fewer than five trigger phrases. Thin trigger lists make skills harder for agents to discover reliably, especially when users describe the same intent with different verbs, frameworks, or workflow language.
+GitHub issue [#890](https://github.com/jabrena/plinth/issues/890) reports the trigger inventory for generated skills and shows that many skill trigger sections contain fewer than five trigger phrases. Thin trigger lists make skills harder for agents to discover reliably, especially when users describe the same intent with different verbs, frameworks, or workflow language.
 
 Each generated skill should expose enough meaningful trigger phrases to cover common user requests without adding duplicate, vague, or unrelated phrases. The first useful outcome is to bring every existing skill below five triggers up to at least five meaningful triggers in the XML source.
 
@@ -24,7 +24,7 @@ None.
 ## Source and Derivation
 
 - Source artifact: maintainer request in chat to create a spec for adding at least five meaningful triggers to skill trigger sections.
-- Source artifact: GitHub issue [#890](https://github.com/jabrena/cursor-rules-java/issues/890), which lists trigger counts for 106 skills.
+- Source artifact: GitHub issue [#890](https://github.com/jabrena/plinth/issues/890), which lists trigger counts for 106 skills.
 - Local command workflow: `.cursor/commands/create-spec.md`.
 - Local OpenSpec guidance: `042-planning-openspec`.
 - Design sequencing guidance: `051-design-two-steps-methods`.
