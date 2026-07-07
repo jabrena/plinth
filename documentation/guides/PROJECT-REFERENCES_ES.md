@@ -53,9 +53,9 @@ Esta página reúne charlas, artículos, enlaces de referencia, portales de skil
 
 ### Portales de Skills
 
-- [skills.sh cursor-rules-java](https://skills.sh/jabrena/cursor-rules-java)
+- [skills.sh cursor-rules-java](https://skills.sh/jabrena/plinth)
 - [Issues de Vercel Labs skills](https://github.com/vercel-labs/skills/issues)
-- [Registro de skills de Tessl](https://tessl.io/registry/skills/github/jabrena/cursor-rules-java)
+- [Registro de skills de Tessl](https://tessl.io/registry/skills/github/jabrena/plinth)
 - [Página de autor en ClaudSkills](https://claudskills.com/author/jabrena/)
 - [Categoría de skills Java en Claude Marketplaces](https://claudemarketplaces.com/skills/category/java)
 - [Portal chino de Agent Skills](https://agent-skills.cc/zh/skills/jabrena-cursor-rules-java)
@@ -68,7 +68,7 @@ Esta página reúne charlas, artículos, enlaces de referencia, portales de skil
 - [SkillsLLM cursor-rules-java](https://skillsllm.com/skill/cursor-rules-java)
 - [Página de herramienta cursor-rules-java en 911 Fund](https://skills.911fund.io/tools/jabrena-cursor-rules-java)
 - [Comparativa de SkillsLLM entre cursor-rules-java y superpowers](https://skillsllm.com/compare/cursor-rules-java-vs-superpowers)
-- [Página de skill cursor-rules-java en Cross AI Tools](https://crossaitools.com/skills/jabrena/cursor-rules-java)
+- [Página de skill cursor-rules-java en Cross AI Tools](https://crossaitools.com/skills/jabrena/plinth)
 - [Página de skill cursor-rules-java en 77taoletao](https://77taoletao.com/skills/83)
 - [Reglas del directorio Open Claw](https://open-claw.directory/rules)
 
@@ -81,6 +81,6 @@ Esta página reúne charlas, artículos, enlaces de referencia, portales de skil
 ## Otros Desarrollos
 
 - [PML](https://github.com/jabrena/pml)
-- [cursor-rules-java](https://github.com/jabrena/cursor-rules-java)
+- [cursor-rules-java](https://github.com/jabrena/plinth)
 - [AI Agent Harness Monitor CLI](https://github.com/jabrena/ai-agent-harness-monitor-cli)
 - [setup-cli](https://github.com/jabrena/setup-cli)

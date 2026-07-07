@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#855](https://github.com/jabrena/cursor-rules-java/issues/855) identifies the Data Act as a pending part of the GenAI Regulatory Stack (EU). Data Act guidance should be planned separately because data access, portability, sharing, cloud switching, and non-personal data governance have a different engineering focus than AI Act, DORA, GDPR, NIS2, CRA, DSA, or DMA concerns.
+GitHub issue [#855](https://github.com/jabrena/plinth/issues/855) identifies the Data Act as a pending part of the GenAI Regulatory Stack (EU). Data Act guidance should be planned separately because data access, portability, sharing, cloud switching, and non-personal data governance have a different engineering focus than AI Act, DORA, GDPR, NIS2, CRA, DSA, or DMA concerns.
 
 Java enterprise teams building APIs, data platforms, SaaS products, connected-device integrations, AI data pipelines, or cloud services need Data Act-aware engineering guidance for data access controls, portability workflows, interoperability, contract/evidence handoffs, logging, non-personal data safeguards, and cloud-switching support.
 
@@ -23,7 +23,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#855](https://github.com/jabrena/cursor-rules-java/issues/855), comment listing the GenAI Regulatory Stack (EU).
+- Source artifact: GitHub issue [#855](https://github.com/jabrena/plinth/issues/855), comment listing the GenAI Regulatory Stack (EU).
 - Existing implementation models: `801-regulations-eu-ai-act`, `802-regulations-dora`, and `803-regulations-gdpr`.
 - External reference: [Regulation (EU) 2023/2854](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32023R2854).
 - Derivation direction: issue #855 EU regulatory stack plus official EUR-Lex reference plus existing regulation skill pattern -> OpenSpec change artifacts -> XML skill source implementation -> local generated skill validation.

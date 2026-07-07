@@ -2,7 +2,7 @@
 
 ## Problem Statement
 
-Issue [#544](https://github.com/jabrena/cursor-rules-java/issues/544) requests WireMock best-practices support. Today, WireMock guidance is embedded primarily in integration-test–oriented skills (`132`, `322`, `422`, `522`). There is no **framework-agnostic** skill under the **technologies** band (`700`–`799`) for HTTP stubbing, mapping lifecycle, and verification patterns, so agents lack a single trigger for portable WireMock work without choosing Spring Boot, Quarkus, or Micronaut first.
+Issue [#544](https://github.com/jabrena/plinth/issues/544) requests WireMock best-practices support. Today, WireMock guidance is embedded primarily in integration-test–oriented skills (`132`, `322`, `422`, `522`). There is no **framework-agnostic** skill under the **technologies** band (`700`–`799`) for HTTP stubbing, mapping lifecycle, and verification patterns, so agents lack a single trigger for portable WireMock work without choosing Spring Boot, Quarkus, or Micronaut first.
 
 Without a structured OpenSpec change, numbering (`702`), scope boundaries, and verification expectations can drift.
 

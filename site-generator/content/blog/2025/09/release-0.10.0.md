@@ -9,7 +9,7 @@ status=published
 ## What are Cursor rules for Java?
 
 The project provides a collection of System prompts for Java that help software engineers in their daily programming work.
-The [available System prompts for Java](https://github.com/jabrena/cursor-rules-java/blob/main/SYSTEM-PROMPTS-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/JDK tools` & `Documentation`.
+The [available System prompts for Java](https://github.com/jabrena/plinth/blob/main/SYSTEM-PROMPTS-JAVA.md) cover aspects like `Build system based on Maven`, `Design`, `Coding`, `Testing`, `Refactoring & JMH Benchmarking`, `Performance testing with JMeter`, `Profiling with Async profiler/JDK tools` & `Documentation`.
 
 ![](/plintch/images/2025/9/workflow.png)
 
@@ -254,7 +254,7 @@ This project was originally designed for Cursor (SOTA in the niche of AI tools),
 - GitHub Copilot (Free tier)
 - JetBrains IntelliJ IDEA + JetBrains Junie
 
-If you are interested, you can take a look at the [latest review](https://github.com/jabrena/cursor-rules-java/blob/main/docs/reviews/review-20250829.md).
+If you are interested, you can take a look at the [latest review](https://github.com/jabrena/plinth/blob/main/docs/reviews/review-20250829.md).
 
 **Summary:** Currently the best environments to use this repository are: `Cursor`, `Cursor CLI` & `Claude Code CLI`. If you use `JetBrains IntelliJ IDEA`, you could combine it with `Cursor CLI` or `Claude Code`.
 
@@ -282,12 +282,12 @@ Add Maven Enforcer plugin only from the rule @112-java-maven-plugins without any
 Add tests for the following classes with  @131-java-unit-testing
 ```
 
-Additional examples in the [documentation](https://github.com/jabrena/cursor-rules-java/blob/main/SYSTEM-PROMPTS-JAVA.md).
+Additional examples in the [documentation](https://github.com/jabrena/plinth/blob/main/SYSTEM-PROMPTS-JAVA.md).
 
 ### Improve readability in system prompts
 
 The project has renamed all system prompts from the `.mdc` file extension to the classic Markdown extension `.md`. Now, everyone can read the files easily on `GitHub`:
-https://github.com/jabrena/cursor-rules-java/tree/main/.cursor/rules
+https://github.com/jabrena/plinth/tree/main/.cursor/rules
 
 ## Do you still have doubts about the project?
 

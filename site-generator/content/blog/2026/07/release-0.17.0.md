@@ -32,7 +32,7 @@ Once it was explained the repository name change, lets continue with the article
 - [Improving CI and documentation validation](#improving-ci-and-documentation-validation)
 - [Next steps](#next-steps)
 
-If you have questions about the project, how to customize it for your team, how to use the skills in daily work, or how to solve tooling issues, use [`GitHub Discussions`](https://github.com/jabrena/cursor-rules-java/discussions).
+If you have questions about the project, how to customize it for your team, how to use the skills in daily work, or how to solve tooling issues, use [`GitHub Discussions`](https://github.com/jabrena/plinth/discussions).
 
 **Help this project grow:** [If this project helps your team, become a sponsor.](https://github.com/sponsors/jabrena)
 
@@ -44,12 +44,12 @@ AI coding tools are very good at producing code quickly. That is useful, but spe
 
 This release adds a new family of design skills:
 
-- [`@051-design-two-steps-methods`](https://www.skills.sh/jabrena/cursor-rules-java/051-design-two-steps-methods)
-- [`@052-design-hamburger-method`](https://www.skills.sh/jabrena/cursor-rules-java/052-design-hamburger-method)
-- [`@053-design-simple-rules`](https://www.skills.sh/jabrena/cursor-rules-java/053-design-simple-rules)
-- [`@054-design-tdd`](https://www.skills.sh/jabrena/cursor-rules-java/054-design-tdd)
-- [`@055-design-parallel-change`](https://www.skills.sh/jabrena/cursor-rules-java/055-design-parallel-change)
-- [`@056-design-avoid-breaking-changes`](https://www.skills.sh/jabrena/cursor-rules-java/056-design-avoid-breaking-changes)
+- [`@051-design-two-steps-methods`](https://www.skills.sh/jabrena/plinth/051-design-two-steps-methods)
+- [`@052-design-hamburger-method`](https://www.skills.sh/jabrena/plinth/052-design-hamburger-method)
+- [`@053-design-simple-rules`](https://www.skills.sh/jabrena/plinth/053-design-simple-rules)
+- [`@054-design-tdd`](https://www.skills.sh/jabrena/plinth/054-design-tdd)
+- [`@055-design-parallel-change`](https://www.skills.sh/jabrena/plinth/055-design-parallel-change)
+- [`@056-design-avoid-breaking-changes`](https://www.skills.sh/jabrena/plinth/056-design-avoid-breaking-changes)
 
 The goal is to move an agent from "generate the final patch" to "understand the change path". If you are interested in this direction, I recommend reading the following article: [From code generation to software engineering](/cursor-rules-java/blog/2026/06/from-code-generation-to-software-engineering.html)
 
@@ -70,12 +70,12 @@ Database migrations are one of the easiest places for an AI agent to produce a c
 
 This release improves the migration guidance for:
 
-- [`@313-frameworks-spring-db-migrations-flyway`](https://www.skills.sh/jabrena/cursor-rules-java/313-frameworks-spring-db-migrations-flyway)
-- [`@413-frameworks-quarkus-db-migrations-flyway`](https://www.skills.sh/jabrena/cursor-rules-java/413-frameworks-quarkus-db-migrations-flyway)
-- [`@513-frameworks-micronaut-db-migrations-flyway`](https://www.skills.sh/jabrena/cursor-rules-java/513-frameworks-micronaut-db-migrations-flyway)
-- [`@316-frameworks-spring-mongodb-migrations-mongock`](https://www.skills.sh/jabrena/cursor-rules-java/316-frameworks-spring-mongodb-migrations-mongock)
-- [`@416-frameworks-quarkus-mongodb-migrations-mongock`](https://www.skills.sh/jabrena/cursor-rules-java/416-frameworks-quarkus-mongodb-migrations-mongock)
-- [`@516-frameworks-micronaut-mongodb-migrations-mongock`](https://www.skills.sh/jabrena/cursor-rules-java/516-frameworks-micronaut-mongodb-migrations-mongock)
+- [`@313-frameworks-spring-db-migrations-flyway`](https://www.skills.sh/jabrena/plinth/313-frameworks-spring-db-migrations-flyway)
+- [`@413-frameworks-quarkus-db-migrations-flyway`](https://www.skills.sh/jabrena/plinth/413-frameworks-quarkus-db-migrations-flyway)
+- [`@513-frameworks-micronaut-db-migrations-flyway`](https://www.skills.sh/jabrena/plinth/513-frameworks-micronaut-db-migrations-flyway)
+- [`@316-frameworks-spring-mongodb-migrations-mongock`](https://www.skills.sh/jabrena/plinth/316-frameworks-spring-mongodb-migrations-mongock)
+- [`@416-frameworks-quarkus-mongodb-migrations-mongock`](https://www.skills.sh/jabrena/plinth/416-frameworks-quarkus-mongodb-migrations-mongock)
+- [`@516-frameworks-micronaut-mongodb-migrations-mongock`](https://www.skills.sh/jabrena/plinth/516-frameworks-micronaut-mongodb-migrations-mongock)
 
 The new guidance emphasizes migration safety, antipatterns, and `Parallel Change`.
 
@@ -103,7 +103,7 @@ If you want to go deeper into this topic, I recommend reading: [Why Do I Need to
 
 ## Making architecture boundaries visible with Onion Architecture
 
-This release adds [`@707-technologies-onion-architecture`](https://www.skills.sh/jabrena/cursor-rules-java/707-technologies-onion-architecture), a framework-agnostic skill for reviewing Java application boundaries.
+This release adds [`@707-technologies-onion-architecture`](https://www.skills.sh/jabrena/plinth/707-technologies-onion-architecture), a framework-agnostic skill for reviewing Java application boundaries.
 
 The skill helps engineers and agents inspect whether dependency direction and responsibility placement are consistent with Onion Architecture:
 
@@ -135,7 +135,7 @@ For framework agents, the skill is useful before making changes in `Spring Boot`
 
 Maven support continues to be one of the most used parts of the project, and `0.17.0` improves it in two directions.
 
-First, [`@111-java-maven-dependencies`](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) now includes `JavaMoney` guidance. This helps agents recognize when a Java project needs Money and Currency API support, including `JSR 354` and `Moneta` context.
+First, [`@111-java-maven-dependencies`](https://www.skills.sh/jabrena/plinth/111-java-maven-dependencies) now includes `JavaMoney` guidance. This helps agents recognize when a Java project needs Money and Currency API support, including `JSR 354` and `Moneta` context.
 
 Use this path when a project needs to model money, currencies, amounts, exchange-rate concerns, pricing, billing, financial calculations, or domain values where `BigDecimal` alone is not enough to describe the business meaning.
 
@@ -145,10 +145,10 @@ Use this path when a project needs to model money, currencies, amounts, exchange
 
 `0.16.0` introduced the first family of EU regulation engineering review skills. `0.17.0` extends that family with financial-market, market-integrity, product-liability, and AI management-system review support:
 
-- [`@810-regulations-eu-mifid-ii`](https://www.skills.sh/jabrena/cursor-rules-java/810-regulations-eu-mifid-ii)
-- [`@811-regulations-eu-market-abuse-regulation`](https://www.skills.sh/jabrena/cursor-rules-java/811-regulations-eu-market-abuse-regulation)
-- [`@812-regulations-eu-product-liability-directive`](https://www.skills.sh/jabrena/cursor-rules-java/812-regulations-eu-product-liability-directive)
-- [`@813-regulations-iso-42001`](https://www.skills.sh/jabrena/cursor-rules-java/813-regulations-iso-42001)
+- [`@810-regulations-eu-mifid-ii`](https://www.skills.sh/jabrena/plinth/810-regulations-eu-mifid-ii)
+- [`@811-regulations-eu-market-abuse-regulation`](https://www.skills.sh/jabrena/plinth/811-regulations-eu-market-abuse-regulation)
+- [`@812-regulations-eu-product-liability-directive`](https://www.skills.sh/jabrena/plinth/812-regulations-eu-product-liability-directive)
+- [`@813-regulations-iso-42001`](https://www.skills.sh/jabrena/plinth/813-regulations-iso-42001)
 
 These skills include questionnaires, report templates, examples, and acceptance prompts.
 

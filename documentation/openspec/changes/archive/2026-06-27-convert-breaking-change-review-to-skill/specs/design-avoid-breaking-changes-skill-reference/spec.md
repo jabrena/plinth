@@ -116,6 +116,6 @@ The avoid-breaking-changes skill MUST include Gherkin acceptance coverage and a 
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#954](https://github.com/jabrena/cursor-rules-java/issues/954).
-- Related source artifact: GitHub issue [#886](https://github.com/jabrena/cursor-rules-java/issues/886).
+- Source artifact: GitHub issue [#954](https://github.com/jabrena/plinth/issues/954).
+- Related source artifact: GitHub issue [#886](https://github.com/jabrena/plinth/issues/886).
 - Derivation direction: issue story and acceptance criteria -> OpenSpec requirement delta -> XML skill source implementation and validation.

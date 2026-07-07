@@ -24,7 +24,7 @@ Videos about the talks:
 
 and the associated Slides:
 
-- https://jabrena.github.io/cursor-rules-java/dvbe25/index.html
+- [jabrena/plinth](https://github.com/jabrena/plinth)
 - https://jabrena.github.io/101-cursor/
 
 ## Emerging new solutions from the Gemba
@@ -61,7 +61,7 @@ PML project has 2 different schemas, one schema which defines the diferent parts
 </xs:element>
 ```
 
-You can see PML in action [here](https://github.com/jabrena/cursor-rules-java/tree/main/skills-generator/src/main/resources).
+You can see PML in action [here](https://github.com/jabrena/plinth/tree/main/skills-generator/src/main/resources).
 
 Finally, here is a novel Schema dedicated to Workflows:
 
@@ -105,9 +105,9 @@ Recently, this technique was identified in the latest `Thoughtworks Radar #33`: 
 
 **Problem it tries to solve:** Maintain a specialized collection of system prompts for Software development in Java.
 
-This project uses PML under the hood to model all System prompts in homogeneous Markdown syntax. Read the file [CURSOR-RULES-JAVA.md](https://github.com/jabrena/cursor-rules-java/blob/main/CURSOR-RULES-JAVA.md) to understand all possibilities.
+This project uses PML under the hood to model all System prompts in homogeneous Markdown syntax. Read the file [CURSOR-RULES-JAVA.md](https://github.com/jabrena/plinth/blob/main/CURSOR-RULES-JAVA.md) to understand all possibilities.
 
-https://github.com/jabrena/cursor-rules-java
+https://github.com/jabrena/plinth
 
 ### Churrera, tasks like churros!
 

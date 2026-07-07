@@ -11,7 +11,7 @@ The repository SHALL define the framework-agnostic OpenAPI guidance skill identi
 - **Given** maintainers implement OpenAPI best-practices guidance in generator sources
 - **When** they create or reference the skill in XML, inventories, or documentation
 - **Then** the identifier used is `701-technologies-openapi`
-- **And** references are consistent across OpenSpec artifacts and GitHub issue [#537](https://github.com/jabrena/cursor-rules-java/issues/537)
+- **And** references are consistent across OpenSpec artifacts and GitHub issue [#537](https://github.com/jabrena/plinth/issues/537)
 
 ### Requirement: Framework-Agnostic Scope
 

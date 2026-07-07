@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#931](https://github.com/jabrena/cursor-rules-java/issues/931) requests a new `054-design-tdd` skill for Test-Driven Development.
+GitHub issue [#931](https://github.com/jabrena/plinth/issues/931) requests a new `054-design-tdd` skill for Test-Driven Development.
 
 Java enterprise teams and agents need focused TDD guidance that starts from the next behavior, writes a failing test first, implements only enough production code to pass, and then refactors new and existing code while preserving the verification signal. A dedicated skill gives agents a consistent way to apply TDD without folding it into generic testing or design guidance.
 
@@ -30,7 +30,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#931](https://github.com/jabrena/cursor-rules-java/issues/931).
+- Source artifact: GitHub issue [#931](https://github.com/jabrena/plinth/issues/931).
 - Issue source status: maintainer-authored user story and Gherkin acceptance criteria in the issue body.
 - External reference:
   - [Martin Fowler, "Test Driven Development"](https://www.martinfowler.com/bliki/TestDrivenDevelopment.html)

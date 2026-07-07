@@ -26,7 +26,7 @@
 
 ## 最新动态
 
-访问[项目网站](https://jabrena.github.io/cursor-rules-java/)探索最新发布的内容，并通过 [CHANGELOG](./CHANGELOG.md) 了解新 skills、改进和修复如何推动项目持续演进。
+访问 [jabrena/plinth](https://github.com/jabrena/plinth) 探索最新发布的内容，并通过 [CHANGELOG](./CHANGELOG.md) 了解新 skills、改进和修复如何推动项目持续演进。
 
 ## 60 秒开始使用
 
@@ -34,16 +34,16 @@
 
 ```bash
 # Cursor
-npx skills add jabrena/cursor-rules-java --skill '*' --agent cursor -y
+npx skills add jabrena/plinth --skill '*' --agent cursor -y
 
 # Claude Code
-npx skills add jabrena/cursor-rules-java --skill '*' --agent claude-code -y
+npx skills add jabrena/plinth --skill '*' --agent claude-code -y
 
 # Codex
-npx skills add jabrena/cursor-rules-java --skill '*' --agent codex -y
+npx skills add jabrena/plinth --skill '*' --agent codex -y
 
 # GitHub Copilot
-npx skills add jabrena/cursor-rules-java --skill '*' --agent github-copilot -y
+npx skills add jabrena/plinth --skill '*' --agent github-copilot -y
 ```
 
 ### 查看实际效果
@@ -148,7 +148,7 @@ MCP Servers
 | --- | --- |
 | **Commands** | [`/update-issue`](./.cursor/commands/update-issue.md) · `/explore-design` · `/create-adr` · `/create-diagram` · `/create-spec` · `/review-alignment` |
 | **Agents** | `@robot-business-analyst` · `@robot-architect` · `@robot-tech-lead` |
-| **Skills** | [014-agile-user-story](https://www.skills.sh/jabrena/cursor-rules-java/014-agile-user-story) · [030-architecture-adr-general](https://www.skills.sh/jabrena/cursor-rules-java/030-architecture-adr-general) · [031-architecture-adr-functional-requirements](https://www.skills.sh/jabrena/cursor-rules-java/031-architecture-adr-functional-requirements) · [032-architecture-adr-non-functional-requirements](https://www.skills.sh/jabrena/cursor-rules-java/032-architecture-adr-non-functional-requirements) · [033-architecture-diagrams](https://www.skills.sh/jabrena/cursor-rules-java/033-architecture-diagrams) · [034-architecture-design-exploration](https://www.skills.sh/jabrena/cursor-rules-java/034-architecture-design-exploration) · [041-planning-plan-mode](https://www.skills.sh/jabrena/cursor-rules-java/041-planning-plan-mode) · [042-planning-openspec](https://www.skills.sh/jabrena/cursor-rules-java/042-planning-openspec) · [043-planning-github-issues](https://www.skills.sh/jabrena/cursor-rules-java/043-planning-github-issues) · [044-planning-jira](https://www.skills.sh/jabrena/cursor-rules-java/044-planning-jira) · [051-design-two-steps-methods](https://www.skills.sh/jabrena/cursor-rules-java/051-design-two-steps-methods) · [052-design-hamburger-method](https://www.skills.sh/jabrena/cursor-rules-java/052-design-hamburger-method) · [053-design-simple-rules](https://www.skills.sh/jabrena/cursor-rules-java/053-design-simple-rules) · [056-design-avoid-breaking-changes](https://www.skills.sh/jabrena/cursor-rules-java/056-design-avoid-breaking-changes) · [200-agents-md](https://www.skills.sh/jabrena/cursor-rules-java/200-agents-md) |
+| **Skills** | [014-agile-user-story](https://www.skills.sh/jabrena/plinth/014-agile-user-story) · [030-architecture-adr-general](https://www.skills.sh/jabrena/plinth/030-architecture-adr-general) · [031-architecture-adr-functional-requirements](https://www.skills.sh/jabrena/plinth/031-architecture-adr-functional-requirements) · [032-architecture-adr-non-functional-requirements](https://www.skills.sh/jabrena/plinth/032-architecture-adr-non-functional-requirements) · [033-architecture-diagrams](https://www.skills.sh/jabrena/plinth/033-architecture-diagrams) · [034-architecture-design-exploration](https://www.skills.sh/jabrena/plinth/034-architecture-design-exploration) · [041-planning-plan-mode](https://www.skills.sh/jabrena/plinth/041-planning-plan-mode) · [042-planning-openspec](https://www.skills.sh/jabrena/plinth/042-planning-openspec) · [043-planning-github-issues](https://www.skills.sh/jabrena/plinth/043-planning-github-issues) · [044-planning-jira](https://www.skills.sh/jabrena/plinth/044-planning-jira) · [051-design-two-steps-methods](https://www.skills.sh/jabrena/plinth/051-design-two-steps-methods) · [052-design-hamburger-method](https://www.skills.sh/jabrena/plinth/052-design-hamburger-method) · [053-design-simple-rules](https://www.skills.sh/jabrena/plinth/053-design-simple-rules) · [056-design-avoid-breaking-changes](https://www.skills.sh/jabrena/plinth/056-design-avoid-breaking-changes) · [200-agents-md](https://www.skills.sh/jabrena/plinth/200-agents-md) |
 | **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) |
 
 ### 构建
@@ -159,7 +159,7 @@ MCP Servers
 | --- | --- |
 | **Commands** | [`/create-feature-branch`](./.cursor/commands/create-feature-branch.md) · [`/create-worktree`](./.cursor/commands/create-worktree.md) · [`/implement-issue`](./.cursor/commands/implement-issue.md) |
 | **Agents** | `@robot-tech-lead` · `@robot-no-java` · `@robot-java-coder` · `@robot-java-spring-boot-coder` · `@robot-java-quarkus-coder` · `@robot-java-micronaut-coder` |
-| **Skills** | [110-java-maven-best-practices](https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices) · [111-java-maven-dependencies](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) · [121-java-object-oriented-design](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) · [124-java-secure-coding](https://www.skills.sh/jabrena/cursor-rules-java/124-java-secure-coding) · [143-java-functional-exception-handling](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) |
+| **Skills** | [110-java-maven-best-practices](https://www.skills.sh/jabrena/plinth/110-java-maven-best-practices) · [111-java-maven-dependencies](https://www.skills.sh/jabrena/plinth/111-java-maven-dependencies) · [121-java-object-oriented-design](https://www.skills.sh/jabrena/plinth/121-java-object-oriented-design) · [124-java-secure-coding](https://www.skills.sh/jabrena/plinth/124-java-secure-coding) · [143-java-functional-exception-handling](https://www.skills.sh/jabrena/plinth/143-java-functional-exception-handling) |
 | **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [JavaDocs](https://www.javadocs.dev/mcp) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) |
 
 ### 运维
@@ -170,7 +170,7 @@ MCP Servers
 | --- | --- |
 | **Commands** | [`/profile`](./.cursor/commands/profile.md) · [`/benchmark`](./.cursor/commands/benchmark.md) |
 | **Agents** | `@robot-java-performance` |
-| **Skills** | [151-java-performance-jmeter](https://www.skills.sh/jabrena/cursor-rules-java/151-java-performance-jmeter) · [161-java-profiling-detect](https://www.skills.sh/jabrena/cursor-rules-java/161-java-profiling-detect) · [162-java-profiling-analyze](https://www.skills.sh/jabrena/cursor-rules-java/162-java-profiling-analyze) · [163-java-profiling-refactor](https://www.skills.sh/jabrena/cursor-rules-java/163-java-profiling-refactor) · [164-java-profiling-verify](https://www.skills.sh/jabrena/cursor-rules-java/164-java-profiling-verify) |
+| **Skills** | [151-java-performance-jmeter](https://www.skills.sh/jabrena/plinth/151-java-performance-jmeter) · [161-java-profiling-detect](https://www.skills.sh/jabrena/plinth/161-java-profiling-detect) · [162-java-profiling-analyze](https://www.skills.sh/jabrena/plinth/162-java-profiling-analyze) · [163-java-profiling-refactor](https://www.skills.sh/jabrena/plinth/163-java-profiling-refactor) · [164-java-profiling-verify](https://www.skills.sh/jabrena/plinth/164-java-profiling-verify) |
 | **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) · [Grafana](https://grafana.com/docs/grafana/latest/developer-resources/mcp/) |
 
 ### 合规 (Alpha)
@@ -203,7 +203,7 @@ MCP Servers
 | --------------- | -------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- |
 | 1. [Commands](./documentation/guides/INVENTORY-COMMANDS-JAVA.md) | `@004-commands-installation` 在项目中安装 Commands | [`Commands`](./documentation/guides/COMMANDS.md) |
 | 2. [Agents](./documentation/guides/INVENTORY-AGENTS-JAVA.md) | `@005-agents-installation` 在 Cursor/Claude 中安装 Agents | [`Agents`](./documentation/guides/GETTING-STARTED-AGENTS_ZH.md)     |
-| 3. [Skills](./documentation/guides/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/cursor-rules-java --skill '*' --agent cursor -y` | [`Skills`](./documentation/guides/GETTING-STARTED-SKILLS_ZH.md)     |
+| 3. [Skills](./documentation/guides/INVENTORY-SKILLS-JAVA.md) | `npx skills add jabrena/plinth --skill '*' --agent cursor -y` | [`Skills`](./documentation/guides/GETTING-STARTED-SKILLS_ZH.md)     |
 
 ### 兼容性
 
@@ -247,7 +247,7 @@ MCP Servers
 
 - 按照 [5 分钟快速入门](./documentation/guides/GETTING-STARTED-IN-5-MINUTES_ZH.md) 操作，并告诉我们哪些体验可以改进。
 - [浏览 skill 清单](./documentation/guides/INVENTORY-SKILLS-JAVA.md)，并提出尚未覆盖的 Java 工作流。
-- [创建 issue](https://github.com/jabrena/cursor-rules-java/issues)，报告问题或提出改进建议。
+- [创建 issue](https://github.com/jabrena/plinth/issues)，报告问题或提出改进建议。
 - 阅读 [CONTRIBUTING.md](./CONTRIBUTING.md)，改进 skill、agent、command 或项目指南。
 - 如果这些工作流对你的 Java 项目有所帮助，请为本仓库加星。
 

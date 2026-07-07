@@ -172,4 +172,4 @@ That tiny pause can prevent a clean-looking patch from becoming a production inc
 
 If you are using AI agents for migrations, refactoring, API evolution, or compatibility-sensitive Java work, share what you are learning with the project.
 
-Use [GitHub Discussions](https://github.com/jabrena/cursor-rules-java/discussions) to post where parallel change helps, where the workflow feels heavy, and which compatibility risks agents still miss.
+Use [GitHub Discussions](https://github.com/jabrena/plinth/discussions) to post where parallel change helps, where the workflow feels heavy, and which compatibility risks agents still miss.

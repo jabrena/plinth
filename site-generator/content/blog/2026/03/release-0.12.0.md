@@ -31,7 +31,7 @@ In this release, the project introduces several updates and improvements:
 - Added a new generator to manage `SKILL` generation
 - Added a validator to ensure good quality in `SKILL` validation against the [Skill Specification](https://agentskills.io/specification)
 
-Let's walk through each feature. You can also review the [CHANGELOG.md](https://github.com/jabrena/cursor-rules-java/blob/main/CHANGELOG.md#0120-2026-03-08)
+Let's walk through each feature. You can also review the [CHANGELOG.md](https://github.com/jabrena/plinth/blob/main/CHANGELOG.md#0120-2026-03-08)
 
 ## Why Skills?
 
@@ -108,13 +108,13 @@ Planned for the next release:
 - `@164-java-profiling-compare`
 - `@164-java-profiling-verify`
 
-Plus others tracked in the [`Backlog`](https://github.com/jabrena/cursor-rules-java/issues).
+Plus others tracked in the [`Backlog`](https://github.com/jabrena/plinth/issues).
 
 Previously, the project offered a CLI to install System prompts from this repo or any repo with `.cursor/rules` (or a symlink to it):
 
 ```bash
 jbang setup@jabrena init \
---cursor https://github.com/jabrena/cursor-rules-java
+--cursor https://github.com/jabrena/plinth
 ```
 
 With Skills, [`Vercel`](https://vercel.com/) offers a better option at https://skills.sh/, where you can find and install Skills easily.
@@ -123,17 +123,17 @@ Browse this project's Skills [here](https://skills.sh/?q=jabrena) and install th
 
 ```bash
 brew install node
-npx skills add jabrena/cursor-rules-java --list
-npx skills add https://github.com/jabrena/cursor-rules-java \
+npx skills add jabrena/plinth --list
+npx skills add https://github.com/jabrena/plinth \
 --skill 110-java-maven-best-practices
-npx skills install jabrena/cursor-rules-java --all --agent cursor
+npx skills install jabrena/plinth --all --agent cursor
 ```
 
 One feature I like: Security pipelines that audit Skills for safety.
 
-[![](/plintch/images/2026/3/skill-security-audit.png)](https://skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices)
+[![](/plintch/images/2026/3/skill-security-audit.png)](https://skills.sh/jabrena/plinth/110-java-maven-best-practices)
 
-**Source:** https://skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices
+**Source:** https://skills.sh/jabrena/plinth/110-java-maven-best-practices
 
 **Note:** I recommend skills.sh and similar sites—Skills there have passed security audits. Be aware that Skills can include scripts, which may be an attack vector.
 
@@ -153,15 +153,15 @@ A Skill packaged as a JAR has this layout:
 META-INF/
 META-INF/skills/
 META-INF/skills/jabrena/
-META-INF/skills/jabrena/cursor-rules-java/
+META-INF/skills/jabrena/plinth/
 META-INF/maven/
 META-INF/maven/com.skillsjars/
 META-INF/MANIFEST.MF
 META-INF/maven/com.skillsjars/jabrena__cursor-rules-java__111-java-maven-dependencies/pom.xml
 META-INF/maven/com.skillsjars/jabrena__cursor-rules-java__111-java-maven-dependencies/pom.properties
-META-INF/skills/jabrena/cursor-rules-java/111-java-maven-dependencies/SKILL.md
-META-INF/skills/jabrena/cursor-rules-java/111-java-maven-dependencies/references/
-META-INF/skills/jabrena/cursor-rules-java/111-java-maven-dependencies/references/111-java-maven-dependencies.md
+META-INF/skills/jabrena/plinth/111-java-maven-dependencies/SKILL.md
+META-INF/skills/jabrena/plinth/111-java-maven-dependencies/references/
+META-INF/skills/jabrena/plinth/111-java-maven-dependencies/references/111-java-maven-dependencies.md
 ```
 
 **Source:** https://central.sonatype.com/artifact/com.skillsjars/jabrena__cursor-rules-java__111-java-maven-dependencies
@@ -576,7 +576,7 @@ Since the previous version, the project has invested time improving the current 
 
 ## Conclusions
 
-If you followed the article, the project is evolving from `System prompts` to `Skills`—and continues to advance practices such as curated shared instructions for software teams and `AGENTS.md`, both recognized in the [Thoughtworks Technology Radar](https://www.thoughtworks.com/radar/techniques). During the time between [`v0.11.0`](https://github.com/jabrena/cursor-rules-java/releases/tag/0.11.0) to [`v0.12.0`](https://github.com/jabrena/cursor-rules-java/releases/tag/0.12.0), new elements have appeared in the market, such as: `Subagents`, `Commands`, `Hooks`, `Plugins`, `Spec-driven`. In the next release, the project will review how to use `Skills` with **Subagents**.
+If you followed the article, the project is evolving from `System prompts` to `Skills`—and continues to advance practices such as curated shared instructions for software teams and `AGENTS.md`, both recognized in the [Thoughtworks Technology Radar](https://www.thoughtworks.com/radar/techniques). During the time between [`v0.11.0`](https://github.com/jabrena/plinth/releases/tag/0.11.0) to [`v0.12.0`](https://github.com/jabrena/plinth/releases/tag/0.12.0), new elements have appeared in the market, such as: `Subagents`, `Commands`, `Hooks`, `Plugins`, `Spec-driven`. In the next release, the project will review how to use `Skills` with **Subagents**.
 
 ![](/plintch/images/2026/3/subagents.png)
 

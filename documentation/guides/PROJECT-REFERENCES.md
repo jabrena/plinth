@@ -53,9 +53,9 @@ This page collects talks, articles, reference links, skill portals, and related 
 
 ### Skill Portals
 
-- [skills.sh cursor-rules-java](https://skills.sh/jabrena/cursor-rules-java)
+- [skills.sh cursor-rules-java](https://skills.sh/jabrena/plinth)
 - [Vercel Labs skills issues](https://github.com/vercel-labs/skills/issues)
-- [Tessl skill registry](https://tessl.io/registry/skills/github/jabrena/cursor-rules-java)
+- [Tessl skill registry](https://tessl.io/registry/skills/github/jabrena/plinth)
 - [ClaudSkills author page](https://claudskills.com/author/jabrena/)
 - [Claude Marketplaces Java skills category](https://claudemarketplaces.com/skills/category/java)
 - [Agent Skills Chinese portal](https://agent-skills.cc/zh/skills/jabrena-cursor-rules-java)
@@ -68,7 +68,7 @@ This page collects talks, articles, reference links, skill portals, and related 
 - [SkillsLLM cursor-rules-java](https://skillsllm.com/skill/cursor-rules-java)
 - [911 Fund cursor-rules-java tool page](https://skills.911fund.io/tools/jabrena-cursor-rules-java)
 - [SkillsLLM cursor-rules-java vs superpowers comparison](https://skillsllm.com/compare/cursor-rules-java-vs-superpowers)
-- [Cross AI Tools cursor-rules-java skill page](https://crossaitools.com/skills/jabrena/cursor-rules-java)
+- [Cross AI Tools cursor-rules-java skill page](https://crossaitools.com/skills/jabrena/plinth)
 - [77taoletao cursor-rules-java skill page](https://77taoletao.com/skills/83)
 - [Open Claw directory rules](https://open-claw.directory/rules)
 
@@ -81,6 +81,6 @@ This page collects talks, articles, reference links, skill portals, and related 
 ## Other Developments
 
 - [PML](https://github.com/jabrena/pml)
-- [cursor-rules-java](https://github.com/jabrena/cursor-rules-java)
+- [cursor-rules-java](https://github.com/jabrena/plinth)
 - [AI Agent Harness Monitor CLI](https://github.com/jabrena/ai-agent-harness-monitor-cli)
 - [setup-cli](https://github.com/jabrena/setup-cli)

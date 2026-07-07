@@ -28,6 +28,6 @@
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#954](https://github.com/jabrena/cursor-rules-java/issues/954).
-- Related source artifact: GitHub issue [#886](https://github.com/jabrena/cursor-rules-java/issues/886).
+- Source artifact: GitHub issue [#954](https://github.com/jabrena/plinth/issues/954).
+- Related source artifact: GitHub issue [#886](https://github.com/jabrena/plinth/issues/886).
 - Derivation direction: issue story and acceptance criteria -> OpenSpec task checklist -> XML skill source implementation, command retirement, README update, and validation.

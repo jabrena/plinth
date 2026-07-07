@@ -72,6 +72,6 @@ The implementation MUST edit XML sources and validate generated local skill outp
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#877](https://github.com/jabrena/cursor-rules-java/issues/877).
+- Source artifact: GitHub issue [#877](https://github.com/jabrena/plinth/issues/877).
 - Local issue cache read for this workflow: `.codex/issue/title.txt`, `.codex/issue/body.md`, and `.codex/issue/url.txt`.
 - Derivation direction: local issue cache -> sanitized maintainer-style planning summary -> OpenSpec requirement delta -> XML skill source implementation -> local generated skill and acceptance validation.

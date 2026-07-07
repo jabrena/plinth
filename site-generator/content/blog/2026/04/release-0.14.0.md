@@ -18,7 +18,7 @@ Thanks to our community members in `Singapore`, `Chengdu`, `Hanoi`, `Copenhagen`
 
 ### Rules support dropped in favor of Skills
 
-Until this release, the project maintained three very different deliverables: Rules, Skills, and Agents. `Rules` and `Skills` both guide model behavior in broadly similar ways, but Rules were Cursor’s approach while `Skills` have recently become the standard, so consolidating on a single solution makes more sense. **On the other hand**, maintaining a single generator (`skills-generator`) made it possible to improve how skills are packaged, which was somewhat constrained when both `rules-generator` and `skills-generator` existed. If you followed the various [ADRs published](https://github.com/jabrena/cursor-rules-java/tree/main/documentation/adr) in the repository, you could see why the project preserves the same guidance while adopting Skills-based packaging. In previous months, users developed or refactored code using `System prompts/Rules` in this way:
+Until this release, the project maintained three very different deliverables: Rules, Skills, and Agents. `Rules` and `Skills` both guide model behavior in broadly similar ways, but Rules were Cursor’s approach while `Skills` have recently become the standard, so consolidating on a single solution makes more sense. **On the other hand**, maintaining a single generator (`skills-generator`) made it possible to improve how skills are packaged, which was somewhat constrained when both `rules-generator` and `skills-generator` existed. If you followed the various [ADRs published](https://github.com/jabrena/plinth/tree/main/documentation/adr) in the repository, you could see why the project preserves the same guidance while adopting Skills-based packaging. In previous months, users developed or refactored code using `System prompts/Rules` in this way:
 
 ![](/plintch/images/2026/4/manual-trigger.png)
 
@@ -26,12 +26,12 @@ But now, you can do the same by adding the Skill to the context of your favorite
 
 On the main branch, a few resources about `System-prompts/rules` remain temporarily; we still see web traffic for them:
 
-- All rules from v0.13.0: https://github.com/jabrena/cursor-rules-java/tree/main/.cursor/rules
-- Getting Started: https://github.com/jabrena/cursor-rules-java/blob/main/documentation/guides/GETTING-STARTED-SYSTEM-PROMPTS.md
+- All rules from v0.13.0: https://github.com/jabrena/plinth/tree/main/.cursor/rules
+- Getting Started: https://github.com/jabrena/plinth/blob/main/documentation/guides/GETTING-STARTED-SYSTEM-PROMPTS.md
 
-That usage is `deprecated` in favor of `Skills` and will be removed in the coming months; review [the new documentation](https://github.com/jabrena/cursor-rules-java?tab=readme-ov-file#deliverables) and adapt your process or pipelines.
+That usage is `deprecated` in favor of `Skills` and will be removed in the coming months; review [the new documentation](https://github.com/jabrena/plinth?tab=readme-ov-file#deliverables) and adapt your process or pipelines.
 
-Separately, you can still download the last generated `System prompts/rules` from [release 0.13.0](https://github.com/jabrena/cursor-rules-java/releases/tag/0.13.0) if you need them, but development is frozen in favor of the [Skill Standard](https://agentskills.io/specification).
+Separately, you can still download the last generated `System prompts/rules` from [release 0.13.0](https://github.com/jabrena/plinth/releases/tag/0.13.0) if you need them, but development is frozen in favor of the [Skill Standard](https://agentskills.io/specification).
 
 ### Improvements in the Agile process
 
@@ -147,8 +147,8 @@ In version `v0.14.0`, the project ships `68 Skills`.
 You can install the `Skills` easily with:
 
 ```bash
-npx skills add jabrena/cursor-rules-java --all --agent cursor
-npx skills add jabrena/cursor-rules-java --all --agent claude-code
+npx skills add jabrena/plinth --all --agent cursor
+npx skills add jabrena/plinth --all --agent claude-code
 ```
 
 Once you have the skills installed, you can install the `Agents` with:

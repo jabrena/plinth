@@ -163,15 +163,15 @@ tags=java, profiling
 
 This course demonstrates practical usage of three key system prompts:
 
-### **[@161-java-profiling-detect](https://github.com/jabrena/cursor-rules-java/tree/main/.cursor/rules/161-java-profiling-detect.md)**
+### **[@161-java-profiling-detect](https://github.com/jabrena/plinth/tree/main/.cursor/rules/161-java-profiling-detect.md)**
 **Purpose:** Data collection and problem identification
 **Usage:** My Java application has performance issues - help me set up comprehensive profiling process using @161-java-profiling-detect and use the location examples/spring-boot-memory-leak-demo/profiler
 
-### **[@162-java-profiling-analyze](https://github.com/jabrena/cursor-rules-java/tree/main/.cursor/rules/162-java-profiling-analyze.md)**
+### **[@162-java-profiling-analyze](https://github.com/jabrena/plinth/tree/main/.cursor/rules/162-java-profiling-analyze.md)**
 **Purpose:** Systematic analysis and solution development
 **Usage:** Analyze the results located in examples/spring-boot-memory-leak-demo/profiler and use the cursor rule @162-java-profiling-analyze
 
-### **[@164-java-profiling-compare](https://github.com/jabrena/cursor-rules-java/tree/main/.cursor/rules/164-java-profiling-compare.md)**
+### **[@164-java-profiling-compare](https://github.com/jabrena/plinth/tree/main/.cursor/rules/164-java-profiling-compare.md)**
 **Purpose:** Before/after validation and improvement measurement
 **Usage:** Review if the problems was solved with last refactoring using the reports located in @/results with the cursor rule @164-java-profiling-compare
 

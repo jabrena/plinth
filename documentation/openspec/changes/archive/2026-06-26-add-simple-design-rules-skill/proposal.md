@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#903](https://github.com/jabrena/cursor-rules-java/issues/903) requests a new `053-design-simple-rules` skill for applying Kent Beck's simple design rules to Java design and refactoring decisions.
+GitHub issue [#903](https://github.com/jabrena/plinth/issues/903) requests a new `053-design-simple-rules` skill for applying Kent Beck's simple design rules to Java design and refactoring decisions.
 
 Java enterprise teams and agents need a compact design heuristic that keeps implementation work anchored in observable correctness before optimizing for clarity, duplication reduction, or minimal structure. A dedicated skill gives agents a consistent way to evaluate design tradeoffs without turning the rules into broad, speculative refactoring.
 
@@ -29,7 +29,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#903](https://github.com/jabrena/cursor-rules-java/issues/903).
+- Source artifact: GitHub issue [#903](https://github.com/jabrena/plinth/issues/903).
 - Issue source status: maintainer-authored user story and Gherkin acceptance criteria in the issue body.
 - External references:
   - [Why do the 4 rules of simple design have that order?](https://medium.com/dan-the-dev/why-do-the-4-rules-of-simple-design-have-that-order-b5f62bfe96fc)

@@ -41,8 +41,8 @@ This course is organized into **7 progressive modules** with **25+ hands-on exer
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/jabrena/cursor-rules-java.git
-   cd cursor-rules-java
+   git clone https://github.com/jabrena/plinth.git
+   cd plinth
    ```
 
 2. **Setup Development Environment**:
@@ -73,4 +73,4 @@ Each module includes:
 
 ---
 
-*This course is part of the [Cursor Rules Java](https://github.com/jabrena/cursor-rules-java) project - a comprehensive collection of AI-powered system prompts for Java enterprise development.*
+*This course is part of the [Cursor Rules Java](https://github.com/jabrena/plinth) project - a comprehensive collection of AI-powered system prompts for Java enterprise development.*

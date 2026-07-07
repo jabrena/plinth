@@ -2,7 +2,7 @@
 
 ## Problem Statement
 
-Issue [#540](https://github.com/jabrena/cursor-rules-java/issues/540) identifies a quality gap in the `014-agile-user-story` skill: the guidance does not explicitly require validating stories with the INVEST criteria.
+Issue [#540](https://github.com/jabrena/plinth/issues/540) identifies a quality gap in the `014-agile-user-story` skill: the guidance does not explicitly require validating stories with the INVEST criteria.
 
 Without an explicit INVEST checkpoint, generated stories can be incomplete or weak in quality dimensions such as independence, estimability, and testability.
 

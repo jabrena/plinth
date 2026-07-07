@@ -1,6 +1,6 @@
 ## Why
 
-Issue [#801](https://github.com/jabrena/cursor-rules-java/issues/801) identifies five runtime resources that are currently expanded into generated reference Markdown instead of being packaged as standalone Agent Skills files. Packaging them in `scripts/` and `assets/` keeps references concise and lets agents inspect, copy, or execute the original resources directly.
+Issue [#801](https://github.com/jabrena/plinth/issues/801) identifies five runtime resources that are currently expanded into generated reference Markdown instead of being packaged as standalone Agent Skills files. Packaging them in `scripts/` and `assets/` keeps references concise and lets agents inspect, copy, or execute the original resources directly.
 
 ## What Changes
 

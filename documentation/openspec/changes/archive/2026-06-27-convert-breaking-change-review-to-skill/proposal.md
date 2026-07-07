@@ -1,8 +1,8 @@
 ## Why
 
-GitHub issue [#954](https://github.com/jabrena/cursor-rules-java/issues/954) requests converting the `/review-breaking-changes` command concept into a generated skill named `056-design-avoid-breaking-changes`.
+GitHub issue [#954](https://github.com/jabrena/plinth/issues/954) requests converting the `/review-breaking-changes` command concept into a generated skill named `056-design-avoid-breaking-changes`.
 
-The original command request in issue [#886](https://github.com/jabrena/cursor-rules-java/issues/886) asked for a way to review OpenSpec plans or specs for compatibility risks before implementation or release work proceeds. That value still matters, but the workflow should live in the skill system so breaking-change review guidance can evolve without creating another command-level contract to maintain.
+The original command request in issue [#886](https://github.com/jabrena/plinth/issues/886) asked for a way to review OpenSpec plans or specs for compatibility risks before implementation or release work proceeds. That value still matters, but the workflow should live in the skill system so breaking-change review guidance can evolve without creating another command-level contract to maintain.
 
 ## What Changes
 
@@ -24,8 +24,8 @@ The original command request in issue [#886](https://github.com/jabrena/cursor-r
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#954](https://github.com/jabrena/cursor-rules-java/issues/954).
-- Related source artifact: GitHub issue [#886](https://github.com/jabrena/cursor-rules-java/issues/886).
+- Source artifact: GitHub issue [#954](https://github.com/jabrena/plinth/issues/954).
+- Related source artifact: GitHub issue [#886](https://github.com/jabrena/plinth/issues/886).
 - Local command workflow: `.cursor/commands/create-spec.md`.
 - Local OpenSpec guidance: `042-planning-openspec`.
 - Design sequencing guidance: `051-design-two-steps-methods`.

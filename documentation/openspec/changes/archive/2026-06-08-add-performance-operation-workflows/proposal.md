@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#808](https://github.com/jabrena/cursor-rules-java/issues/808) identifies profiling and performance testing as the next operation lifecycle workflow after the analysis/design work delivered by issues #806 and #807. The repository already has performance and profiling skills, but users need concise commands and a coordinating agent that keep baselines, measurements, optimization delegation, and result evidence traceable.
+GitHub issue [#808](https://github.com/jabrena/plinth/issues/808) identifies profiling and performance testing as the next operation lifecycle workflow after the analysis/design work delivered by issues #806 and #807. The repository already has performance and profiling skills, but users need concise commands and a coordinating agent that keep baselines, measurements, optimization delegation, and result evidence traceable.
 
 ## What Changes
 
@@ -22,7 +22,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#808](https://github.com/jabrena/cursor-rules-java/issues/808), milestone `v0.16.0`.
+- Source artifact: GitHub issue [#808](https://github.com/jabrena/plinth/issues/808), milestone `v0.16.0`.
 - Related context: parent lifecycle gap issue #794 and completed analysis/design issues #806 and #807.
 - Derivation direction: issue #808 -> OpenSpec change artifacts -> implementation tasks. The issue remains the source for problem, scope, acceptance criteria, and out-of-scope boundaries.
 

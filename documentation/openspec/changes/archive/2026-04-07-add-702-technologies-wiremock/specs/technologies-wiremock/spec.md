@@ -11,7 +11,7 @@ The repository SHALL define the framework-agnostic WireMock guidance skill ident
 - **Given** maintainers implement WireMock best-practices guidance in generator sources
 - **When** they create or reference the skill in XML, inventories, or documentation
 - **Then** the identifier used is `702-technologies-wiremock`
-- **And** references are consistent across OpenSpec artifacts and GitHub issue [#544](https://github.com/jabrena/cursor-rules-java/issues/544)
+- **And** references are consistent across OpenSpec artifacts and GitHub issue [#544](https://github.com/jabrena/plinth/issues/544)
 
 ### Requirement: Framework-Agnostic Scope
 

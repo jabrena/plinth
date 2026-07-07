@@ -2,7 +2,7 @@
 
 ## Problem Statement
 
-Issue [#537](https://github.com/jabrena/cursor-rules-java/issues/537) requests OpenAPI best-practices support. Today, OpenAPI guidance is embedded primarily in framework REST skills (`302`, `402`, `502`). There is no **framework-agnostic** skill under a dedicated **technologies** band for API contracts, so agents lack a single trigger for spec quality, validation, lifecycle, and codegen handoffs without choosing Spring, Quarkus, or Micronaut first.
+Issue [#537](https://github.com/jabrena/plinth/issues/537) requests OpenAPI best-practices support. Today, OpenAPI guidance is embedded primarily in framework REST skills (`302`, `402`, `502`). There is no **framework-agnostic** skill under a dedicated **technologies** band for API contracts, so agents lack a single trigger for spec quality, validation, lifecycle, and codegen handoffs without choosing Spring, Quarkus, or Micronaut first.
 
 Without a structured OpenSpec change, numbering (`701`), scope boundaries, and verification expectations can drift.
 

@@ -1,6 +1,6 @@
 ## Why
 
-Issue [#806](https://github.com/jabrena/cursor-rules-java/issues/806) requires clear ownership for analysis, architecture, planning, and delivery. Agent work can proceed independently when it owns only canonical agent assets, the agent installer/inventory, migration behavior, and focused tests.
+Issue [#806](https://github.com/jabrena/plinth/issues/806) requires clear ownership for analysis, architecture, planning, and delivery. Agent work can proceed independently when it owns only canonical agent assets, the agent installer/inventory, migration behavior, and focused tests.
 
 ## What Changes
 

@@ -1,6 +1,6 @@
 ## Why
 
-The command, agent, and planning-skill changes for issue [#806](https://github.com/jabrena/cursor-rules-java/issues/806) need one integration change to synchronize English, Spanish, and Chinese documentation, explain migration, and run final repository-wide validation after the parallel source changes are integrated.
+The command, agent, and planning-skill changes for issue [#806](https://github.com/jabrena/plinth/issues/806) need one integration change to synchronize English, Spanish, and Chinese documentation, explain migration, and run final repository-wide validation after the parallel source changes are integrated.
 
 ## What Changes
 

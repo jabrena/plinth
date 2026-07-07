@@ -40,7 +40,7 @@ We will go into more detail later, but first, let's review the most interesting 
 
 Thanks to our community members in `Singapore`, `Hong Kong`, `Hanoi`, `London`, and `New York`. 👋👋👋
 
-If you have questions about the project, how to customize it for your team, how to use the skills in daily work, or how to solve tooling issues, use [`GitHub Discussions`](https://github.com/jabrena/cursor-rules-java/discussions).
+If you have questions about the project, how to customize it for your team, how to use the skills in daily work, or how to solve tooling issues, use [`GitHub Discussions`](https://github.com/jabrena/plinth/discussions).
 
 **Help this project grow:** [If this project helps your team, become a sponsor.](https://github.com/sponsors/jabrena)
 
@@ -48,7 +48,7 @@ If you have questions about the project, how to customize it for your team, how 
 
 <a id="enriching-the-workflow-with-commands-and-agents-not-only-skills"></a>
 
-The project started more than a year ago with a set of reusable `rules / system prompts`. That approach worked well after removing the restriction that associated rules with particular files, as described in [`ADR-002`](https://github.com/jabrena/cursor-rules-java/blob/main/documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md). With the rise of `Skills`, it was a good decision to convert that material into skills and use the new capabilities provided by `Skill registries` like [https://www.skills.sh/](https://www.skills.sh/) and other registries.
+The project started more than a year ago with a set of reusable `rules / system prompts`. That approach worked well after removing the restriction that associated rules with particular files, as described in [`ADR-002`](https://github.com/jabrena/plinth/blob/main/documentation/adr/ADR-002-configure-cursor-rules-manual-scope.md). With the rise of `Skills`, it was a good decision to convert that material into skills and use the new capabilities provided by `Skill registries` like [https://www.skills.sh/](https://www.skills.sh/) and other registries.
 
 In this release, we go further by adding new semantics for expressing the actions a software engineer performs while solving a problem.
 
@@ -124,20 +124,20 @@ In other projects, you can find useful `Skills`, `Agents`, or `Commands`, but no
 
 <a id="what-are-the-top-10-skills-from-this-project-in-skillssh"></a>
 
-The project has `106 skills` and uses [Skills.sh](https://www.skills.sh/jabrena/cursor-rules-java) as its main skill registry. It has served `11.0K` installs in total. These are the current top 10 skills used by users there:
+The project has `106 skills` and uses [Skills.sh](https://www.skills.sh/jabrena/plinth) as its main skill registry. It has served `11.0K` installs in total. These are the current top 10 skills used by users there:
 
-1. [`110-java-maven-best-practices`](https://www.skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices) - search query: [maven](https://www.skills.sh/search?q=maven)
-2. [`121-java-object-oriented-design`](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) - search query: [java object oriented](https://www.skills.sh/search?q=java%20object%20oriented)
-3. [`124-java-secure-coding`](https://www.skills.sh/jabrena/cursor-rules-java/124-java-secure-coding) - search query: [java security](https://www.skills.sh/search?q=java%20security)
-4. [`131-java-testing-unit-testing`](https://www.skills.sh/jabrena/cursor-rules-java/131-java-testing-unit-testing) - search query: [java unit testing](https://www.skills.sh/search?q=java%20unit%20testing)
-5. [`142-java-functional-programming`](https://www.skills.sh/jabrena/cursor-rules-java/142-java-functional-programming) - search query: [java functional programming](https://www.skills.sh/search?q=java%20functional%20programming)
-6. [`128-java-generics`](https://www.skills.sh/jabrena/cursor-rules-java/128-java-generics) - search query: [java generics](https://www.skills.sh/search?q=java%20generics)
-7. [`111-java-maven-dependencies`](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) - search query: [maven](https://www.skills.sh/search?q=maven)
-8. [`141-java-refactoring-with-modern-features`](https://www.skills.sh/jabrena/cursor-rules-java/141-java-refactoring-with-modern-features)
-9. [`125-java-concurrency`](https://www.skills.sh/jabrena/cursor-rules-java/125-java-concurrency) - search query: [java concurrency](https://www.skills.sh/search?q=java%20concurrency)
-10. [`143-java-functional-exception-handling`](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) - search query: [java functional programming](https://www.skills.sh/search?q=java%20functional%20programming)
+1. [`110-java-maven-best-practices`](https://www.skills.sh/jabrena/plinth/110-java-maven-best-practices) - search query: [maven](https://www.skills.sh/search?q=maven)
+2. [`121-java-object-oriented-design`](https://www.skills.sh/jabrena/plinth/121-java-object-oriented-design) - search query: [java object oriented](https://www.skills.sh/search?q=java%20object%20oriented)
+3. [`124-java-secure-coding`](https://www.skills.sh/jabrena/plinth/124-java-secure-coding) - search query: [java security](https://www.skills.sh/search?q=java%20security)
+4. [`131-java-testing-unit-testing`](https://www.skills.sh/jabrena/plinth/131-java-testing-unit-testing) - search query: [java unit testing](https://www.skills.sh/search?q=java%20unit%20testing)
+5. [`142-java-functional-programming`](https://www.skills.sh/jabrena/plinth/142-java-functional-programming) - search query: [java functional programming](https://www.skills.sh/search?q=java%20functional%20programming)
+6. [`128-java-generics`](https://www.skills.sh/jabrena/plinth/128-java-generics) - search query: [java generics](https://www.skills.sh/search?q=java%20generics)
+7. [`111-java-maven-dependencies`](https://www.skills.sh/jabrena/plinth/111-java-maven-dependencies) - search query: [maven](https://www.skills.sh/search?q=maven)
+8. [`141-java-refactoring-with-modern-features`](https://www.skills.sh/jabrena/plinth/141-java-refactoring-with-modern-features)
+9. [`125-java-concurrency`](https://www.skills.sh/jabrena/plinth/125-java-concurrency) - search query: [java concurrency](https://www.skills.sh/search?q=java%20concurrency)
+10. [`143-java-functional-exception-handling`](https://www.skills.sh/jabrena/plinth/143-java-functional-exception-handling) - search query: [java functional programming](https://www.skills.sh/search?q=java%20functional%20programming)
 
-**What is your favorite `Skill` from this project?** You can share it here: https://github.com/jabrena/cursor-rules-java/discussions/804
+**What is your favorite `Skill` from this project?** You can share it here: https://github.com/jabrena/plinth/discussions/804
 
 ## Applying Zero Trust with your Agent skills
 
@@ -169,7 +169,7 @@ Common skill risks include:
 - Untrusted content and indirect prompt injection
 - Tool poisoning and tool shadowing
 
-**Note:** The project runs an analysis for all skills on every commit using the tools described above. https://github.com/jabrena/cursor-rules-java/blob/main/.github/workflows/maven.yaml
+**Note:** The project runs an analysis for all skills on every commit using the tools described above. https://github.com/jabrena/plinth/blob/main/.github/workflows/maven.yaml
 
 If you are interested in this kind of validation, I recommend reading the following article: [How to validate skills?](/cursor-rules-java/blog/2026/06/skill-validators-pipeline.html)
 
@@ -257,7 +257,7 @@ To demonstrate the new capabilities, let's try to solve the first problem from t
   - Nordic API: https://my-json-server.typicode.com/jabrena/latency-problems/nordic
 ```
 
-Given this `User story` and the `OpenSpec` change defined here: https://github.com/jabrena/cursor-rules-java/tree/main/examples/openspec, you can implement it using the new `/implement-issue` command. Let's see how to do it and how to validate it.
+Given this `User story` and the `OpenSpec` change defined here: https://github.com/jabrena/plinth/tree/main/examples/openspec, you can implement it using the new `/implement-issue` command. Let's see how to do it and how to validate it.
 
 **/implement-issue:**
 
@@ -370,11 +370,11 @@ With the rise of `Skills`, there is a need for public registries for them. But w
 
 To take advantage of the public registry and the process for generating skills from `XML` sources, it is relatively easy to embed commands and agents in a `Meta Skill`. Once you have installed the skills, you can use the following inventory and installation workflows:
 
-- [`@001-commands-inventory`](https://www.skills.sh/jabrena/cursor-rules-java/001-commands-inventory)
-- [`@002-agents-inventory`](https://www.skills.sh/jabrena/cursor-rules-java/002-agents-inventory)
-- [`@003-skills-inventory`](https://www.skills.sh/jabrena/cursor-rules-java/003-skills-inventory)
-- [`@004-commands-installation`](https://www.skills.sh/jabrena/cursor-rules-java/004-commands-installation)
-- [`@005-agents-installation`](https://www.skills.sh/jabrena/cursor-rules-java/005-agents-installation)
+- [`@001-commands-inventory`](https://www.skills.sh/jabrena/plinth/001-commands-inventory)
+- [`@002-agents-inventory`](https://www.skills.sh/jabrena/plinth/002-agents-inventory)
+- [`@003-skills-inventory`](https://www.skills.sh/jabrena/plinth/003-skills-inventory)
+- [`@004-commands-installation`](https://www.skills.sh/jabrena/plinth/004-commands-installation)
+- [`@005-agents-installation`](https://www.skills.sh/jabrena/plinth/005-agents-installation)
 
 Then you can use them to install assets or generate the inventory files.
 
@@ -403,55 +403,55 @@ The value is that teams can pick the framework lane first, then apply the matchi
 
 **Spring Boot skills:**
 
-- [`@300-frameworks-spring-boot-create-project`](https://www.skills.sh/jabrena/cursor-rules-java/300-frameworks-spring-boot-create-project)
-- [`@301-frameworks-spring-boot-core`](https://www.skills.sh/jabrena/cursor-rules-java/301-frameworks-spring-boot-core)
-- [`@302-frameworks-spring-boot-rest`](https://www.skills.sh/jabrena/cursor-rules-java/302-frameworks-spring-boot-rest)
-- [`@303-frameworks-spring-boot-validation`](https://www.skills.sh/jabrena/cursor-rules-java/303-frameworks-spring-boot-validation)
-- [`@304-frameworks-spring-boot-security`](https://www.skills.sh/jabrena/cursor-rules-java/304-frameworks-spring-boot-security)
-- [`@305-frameworks-spring-boot-modulith`](https://www.skills.sh/jabrena/cursor-rules-java/305-frameworks-spring-boot-modulith)
-- [`@311-frameworks-spring-jdbc`](https://www.skills.sh/jabrena/cursor-rules-java/311-frameworks-spring-jdbc)
-- [`@312-frameworks-spring-data-jdbc`](https://www.skills.sh/jabrena/cursor-rules-java/312-frameworks-spring-data-jdbc)
-- [`@313-frameworks-spring-db-migrations-flyway`](https://www.skills.sh/jabrena/cursor-rules-java/313-frameworks-spring-db-migrations-flyway)
-- [`@314-frameworks-spring-kafka`](https://www.skills.sh/jabrena/cursor-rules-java/314-frameworks-spring-kafka)
-- [`@315-frameworks-spring-mongodb`](https://www.skills.sh/jabrena/cursor-rules-java/315-frameworks-spring-mongodb)
-- [`@316-frameworks-spring-mongodb-migrations-mongock`](https://www.skills.sh/jabrena/cursor-rules-java/316-frameworks-spring-mongodb-migrations-mongock)
-- [`@321-frameworks-spring-boot-testing-unit-tests`](https://www.skills.sh/jabrena/cursor-rules-java/321-frameworks-spring-boot-testing-unit-tests)
-- [`@322-frameworks-spring-boot-testing-integration-tests`](https://www.skills.sh/jabrena/cursor-rules-java/322-frameworks-spring-boot-testing-integration-tests)
-- [`@323-frameworks-spring-boot-testing-acceptance-tests`](https://www.skills.sh/jabrena/cursor-rules-java/323-frameworks-spring-boot-testing-acceptance-tests)
+- [`@300-frameworks-spring-boot-create-project`](https://www.skills.sh/jabrena/plinth/300-frameworks-spring-boot-create-project)
+- [`@301-frameworks-spring-boot-core`](https://www.skills.sh/jabrena/plinth/301-frameworks-spring-boot-core)
+- [`@302-frameworks-spring-boot-rest`](https://www.skills.sh/jabrena/plinth/302-frameworks-spring-boot-rest)
+- [`@303-frameworks-spring-boot-validation`](https://www.skills.sh/jabrena/plinth/303-frameworks-spring-boot-validation)
+- [`@304-frameworks-spring-boot-security`](https://www.skills.sh/jabrena/plinth/304-frameworks-spring-boot-security)
+- [`@305-frameworks-spring-boot-modulith`](https://www.skills.sh/jabrena/plinth/305-frameworks-spring-boot-modulith)
+- [`@311-frameworks-spring-jdbc`](https://www.skills.sh/jabrena/plinth/311-frameworks-spring-jdbc)
+- [`@312-frameworks-spring-data-jdbc`](https://www.skills.sh/jabrena/plinth/312-frameworks-spring-data-jdbc)
+- [`@313-frameworks-spring-db-migrations-flyway`](https://www.skills.sh/jabrena/plinth/313-frameworks-spring-db-migrations-flyway)
+- [`@314-frameworks-spring-kafka`](https://www.skills.sh/jabrena/plinth/314-frameworks-spring-kafka)
+- [`@315-frameworks-spring-mongodb`](https://www.skills.sh/jabrena/plinth/315-frameworks-spring-mongodb)
+- [`@316-frameworks-spring-mongodb-migrations-mongock`](https://www.skills.sh/jabrena/plinth/316-frameworks-spring-mongodb-migrations-mongock)
+- [`@321-frameworks-spring-boot-testing-unit-tests`](https://www.skills.sh/jabrena/plinth/321-frameworks-spring-boot-testing-unit-tests)
+- [`@322-frameworks-spring-boot-testing-integration-tests`](https://www.skills.sh/jabrena/plinth/322-frameworks-spring-boot-testing-integration-tests)
+- [`@323-frameworks-spring-boot-testing-acceptance-tests`](https://www.skills.sh/jabrena/plinth/323-frameworks-spring-boot-testing-acceptance-tests)
 
 **Quarkus skills:**
 
-- [`@400-frameworks-quarkus-create-project`](https://www.skills.sh/jabrena/cursor-rules-java/400-frameworks-quarkus-create-project)
-- [`@401-frameworks-quarkus-core`](https://www.skills.sh/jabrena/cursor-rules-java/401-frameworks-quarkus-core)
-- [`@402-frameworks-quarkus-rest`](https://www.skills.sh/jabrena/cursor-rules-java/402-frameworks-quarkus-rest)
-- [`@403-frameworks-quarkus-validation`](https://www.skills.sh/jabrena/cursor-rules-java/403-frameworks-quarkus-validation)
-- [`@404-frameworks-quarkus-security`](https://www.skills.sh/jabrena/cursor-rules-java/404-frameworks-quarkus-security)
-- [`@411-frameworks-quarkus-jdbc`](https://www.skills.sh/jabrena/cursor-rules-java/411-frameworks-quarkus-jdbc)
-- [`@412-frameworks-quarkus-panache`](https://www.skills.sh/jabrena/cursor-rules-java/412-frameworks-quarkus-panache)
-- [`@413-frameworks-quarkus-db-migrations-flyway`](https://www.skills.sh/jabrena/cursor-rules-java/413-frameworks-quarkus-db-migrations-flyway)
-- [`@414-frameworks-quarkus-kafka`](https://www.skills.sh/jabrena/cursor-rules-java/414-frameworks-quarkus-kafka)
-- [`@415-frameworks-quarkus-mongodb`](https://www.skills.sh/jabrena/cursor-rules-java/415-frameworks-quarkus-mongodb)
-- [`@416-frameworks-quarkus-mongodb-migrations-mongock`](https://www.skills.sh/jabrena/cursor-rules-java/416-frameworks-quarkus-mongodb-migrations-mongock)
-- [`@421-frameworks-quarkus-testing-unit-tests`](https://www.skills.sh/jabrena/cursor-rules-java/421-frameworks-quarkus-testing-unit-tests)
-- [`@422-frameworks-quarkus-testing-integration-tests`](https://www.skills.sh/jabrena/cursor-rules-java/422-frameworks-quarkus-testing-integration-tests)
-- [`@423-frameworks-quarkus-testing-acceptance-tests`](https://www.skills.sh/jabrena/cursor-rules-java/423-frameworks-quarkus-testing-acceptance-tests)
+- [`@400-frameworks-quarkus-create-project`](https://www.skills.sh/jabrena/plinth/400-frameworks-quarkus-create-project)
+- [`@401-frameworks-quarkus-core`](https://www.skills.sh/jabrena/plinth/401-frameworks-quarkus-core)
+- [`@402-frameworks-quarkus-rest`](https://www.skills.sh/jabrena/plinth/402-frameworks-quarkus-rest)
+- [`@403-frameworks-quarkus-validation`](https://www.skills.sh/jabrena/plinth/403-frameworks-quarkus-validation)
+- [`@404-frameworks-quarkus-security`](https://www.skills.sh/jabrena/plinth/404-frameworks-quarkus-security)
+- [`@411-frameworks-quarkus-jdbc`](https://www.skills.sh/jabrena/plinth/411-frameworks-quarkus-jdbc)
+- [`@412-frameworks-quarkus-panache`](https://www.skills.sh/jabrena/plinth/412-frameworks-quarkus-panache)
+- [`@413-frameworks-quarkus-db-migrations-flyway`](https://www.skills.sh/jabrena/plinth/413-frameworks-quarkus-db-migrations-flyway)
+- [`@414-frameworks-quarkus-kafka`](https://www.skills.sh/jabrena/plinth/414-frameworks-quarkus-kafka)
+- [`@415-frameworks-quarkus-mongodb`](https://www.skills.sh/jabrena/plinth/415-frameworks-quarkus-mongodb)
+- [`@416-frameworks-quarkus-mongodb-migrations-mongock`](https://www.skills.sh/jabrena/plinth/416-frameworks-quarkus-mongodb-migrations-mongock)
+- [`@421-frameworks-quarkus-testing-unit-tests`](https://www.skills.sh/jabrena/plinth/421-frameworks-quarkus-testing-unit-tests)
+- [`@422-frameworks-quarkus-testing-integration-tests`](https://www.skills.sh/jabrena/plinth/422-frameworks-quarkus-testing-integration-tests)
+- [`@423-frameworks-quarkus-testing-acceptance-tests`](https://www.skills.sh/jabrena/plinth/423-frameworks-quarkus-testing-acceptance-tests)
 
 **Micronaut skills:**
 
-- [`@500-frameworks-micronaut-create-project`](https://www.skills.sh/jabrena/cursor-rules-java/500-frameworks-micronaut-create-project)
-- [`@501-frameworks-micronaut-core`](https://www.skills.sh/jabrena/cursor-rules-java/501-frameworks-micronaut-core)
-- [`@502-frameworks-micronaut-rest`](https://www.skills.sh/jabrena/cursor-rules-java/502-frameworks-micronaut-rest)
-- [`@503-frameworks-micronaut-validation`](https://www.skills.sh/jabrena/cursor-rules-java/503-frameworks-micronaut-validation)
-- [`@504-frameworks-micronaut-security`](https://www.skills.sh/jabrena/cursor-rules-java/504-frameworks-micronaut-security)
-- [`@511-frameworks-micronaut-jdbc`](https://www.skills.sh/jabrena/cursor-rules-java/511-frameworks-micronaut-jdbc)
-- [`@512-frameworks-micronaut-data`](https://www.skills.sh/jabrena/cursor-rules-java/512-frameworks-micronaut-data)
-- [`@513-frameworks-micronaut-db-migrations-flyway`](https://www.skills.sh/jabrena/cursor-rules-java/513-frameworks-micronaut-db-migrations-flyway)
-- [`@514-frameworks-micronaut-kafka`](https://www.skills.sh/jabrena/cursor-rules-java/514-frameworks-micronaut-kafka)
-- [`@515-frameworks-micronaut-mongodb`](https://www.skills.sh/jabrena/cursor-rules-java/515-frameworks-micronaut-mongodb)
-- [`@516-frameworks-micronaut-mongodb-migrations-mongock`](https://www.skills.sh/jabrena/cursor-rules-java/516-frameworks-micronaut-mongodb-migrations-mongock)
-- [`@521-frameworks-micronaut-testing-unit-tests`](https://www.skills.sh/jabrena/cursor-rules-java/521-frameworks-micronaut-testing-unit-tests)
-- [`@522-frameworks-micronaut-testing-integration-tests`](https://www.skills.sh/jabrena/cursor-rules-java/522-frameworks-micronaut-testing-integration-tests)
-- [`@523-frameworks-micronaut-testing-acceptance-tests`](https://www.skills.sh/jabrena/cursor-rules-java/523-frameworks-micronaut-testing-acceptance-tests)
+- [`@500-frameworks-micronaut-create-project`](https://www.skills.sh/jabrena/plinth/500-frameworks-micronaut-create-project)
+- [`@501-frameworks-micronaut-core`](https://www.skills.sh/jabrena/plinth/501-frameworks-micronaut-core)
+- [`@502-frameworks-micronaut-rest`](https://www.skills.sh/jabrena/plinth/502-frameworks-micronaut-rest)
+- [`@503-frameworks-micronaut-validation`](https://www.skills.sh/jabrena/plinth/503-frameworks-micronaut-validation)
+- [`@504-frameworks-micronaut-security`](https://www.skills.sh/jabrena/plinth/504-frameworks-micronaut-security)
+- [`@511-frameworks-micronaut-jdbc`](https://www.skills.sh/jabrena/plinth/511-frameworks-micronaut-jdbc)
+- [`@512-frameworks-micronaut-data`](https://www.skills.sh/jabrena/plinth/512-frameworks-micronaut-data)
+- [`@513-frameworks-micronaut-db-migrations-flyway`](https://www.skills.sh/jabrena/plinth/513-frameworks-micronaut-db-migrations-flyway)
+- [`@514-frameworks-micronaut-kafka`](https://www.skills.sh/jabrena/plinth/514-frameworks-micronaut-kafka)
+- [`@515-frameworks-micronaut-mongodb`](https://www.skills.sh/jabrena/plinth/515-frameworks-micronaut-mongodb)
+- [`@516-frameworks-micronaut-mongodb-migrations-mongock`](https://www.skills.sh/jabrena/plinth/516-frameworks-micronaut-mongodb-migrations-mongock)
+- [`@521-frameworks-micronaut-testing-unit-tests`](https://www.skills.sh/jabrena/plinth/521-frameworks-micronaut-testing-unit-tests)
+- [`@522-frameworks-micronaut-testing-integration-tests`](https://www.skills.sh/jabrena/plinth/522-frameworks-micronaut-testing-integration-tests)
+- [`@523-frameworks-micronaut-testing-acceptance-tests`](https://www.skills.sh/jabrena/plinth/523-frameworks-micronaut-testing-acceptance-tests)
 
 ## Increasing engineering awareness with EU regulations
 
@@ -465,14 +465,14 @@ This becomes even more important with GenAI tooling. When prompts, embeddings, g
 
 `0.16.0` introduces a new alpha family of regulation engineering review skills:
 
-- [`@801-regulations-eu-ai-act`](https://www.skills.sh/jabrena/cursor-rules-java/801-regulations-eu-ai-act)
-- [`@802-regulations-dora`](https://www.skills.sh/jabrena/cursor-rules-java/802-regulations-dora)
-- [`@803-regulations-gdpr`](https://www.skills.sh/jabrena/cursor-rules-java/803-regulations-gdpr)
-- [`@804-regulations-eu-nis2`](https://www.skills.sh/jabrena/cursor-rules-java/804-regulations-eu-nis2)
-- [`@805-regulations-eu-cyber-resilience-act`](https://www.skills.sh/jabrena/cursor-rules-java/805-regulations-eu-cyber-resilience-act)
-- [`@806-regulations-eu-data-act`](https://www.skills.sh/jabrena/cursor-rules-java/806-regulations-eu-data-act)
-- [`@807-regulations-eu-digital-services-act`](https://www.skills.sh/jabrena/cursor-rules-java/807-regulations-eu-digital-services-act)
-- [`@808-regulations-eu-digital-markets-act`](https://www.skills.sh/jabrena/cursor-rules-java/808-regulations-eu-digital-markets-act)
+- [`@801-regulations-eu-ai-act`](https://www.skills.sh/jabrena/plinth/801-regulations-eu-ai-act)
+- [`@802-regulations-dora`](https://www.skills.sh/jabrena/plinth/802-regulations-dora)
+- [`@803-regulations-gdpr`](https://www.skills.sh/jabrena/plinth/803-regulations-gdpr)
+- [`@804-regulations-eu-nis2`](https://www.skills.sh/jabrena/plinth/804-regulations-eu-nis2)
+- [`@805-regulations-eu-cyber-resilience-act`](https://www.skills.sh/jabrena/plinth/805-regulations-eu-cyber-resilience-act)
+- [`@806-regulations-eu-data-act`](https://www.skills.sh/jabrena/plinth/806-regulations-eu-data-act)
+- [`@807-regulations-eu-digital-services-act`](https://www.skills.sh/jabrena/plinth/807-regulations-eu-digital-services-act)
+- [`@808-regulations-eu-digital-markets-act`](https://www.skills.sh/jabrena/plinth/808-regulations-eu-digital-markets-act)
 
 These skills are engineering review aids. **_They do not provide legal advice and they do not replace qualified legal, compliance, privacy, security, risk, product, or governance owners._**
 
@@ -497,21 +497,21 @@ The [Thoughtworks Technology Radar Vol. 34](https://www.thoughtworks.com/radar) 
 
 **Adopt**
 
-- **Curated shared instructions for software teams** — The Radar explicitly calls out `AGENTS.md` as a distribution mechanism for AI guidance, anchored into service templates so every new repository inherits the latest agent workflows. This project has been doing exactly that from the start. See [`@200-agents-md`](https://www.skills.sh/jabrena/cursor-rules-java/200-agents-md).
+- **Curated shared instructions for software teams** — The Radar explicitly calls out `AGENTS.md` as a distribution mechanism for AI guidance, anchored into service templates so every new repository inherits the latest agent workflows. This project has been doing exactly that from the start. See [`@200-agents-md`](https://www.skills.sh/jabrena/plinth/200-agents-md).
 - **Context engineering** — Treating the context window as a design surface rather than a static text box is now a foundational concern. The skill system in this project is a practical application of that principle: skills are loaded on demand, not front-loaded into a monolithic prompt.
 - **Zero trust architecture** — The Radar recommends ZTA as a non-negotiable default for agent deployments: never trust, always verify, least-privilege access. The [Applying Zero Trust with Agent Skills](#applying-zero-trust-with-your-agent-skills) section in this release directly addresses this applied to skill-based agent workflows.
 
 **Trial**
 
-- **Agent Skills** — The Radar places Agent Skills in Trial, noting they are an open standard for modularizing context, reducing token consumption and providing a controlled alternative to MCP. This project is one of the early skill registries on [skills.sh](https://www.skills.sh/jabrena/cursor-rules-java), shipping skills for Java Enterprise workflows.
+- **Agent Skills** — The Radar places Agent Skills in Trial, noting they are an open standard for modularizing context, reducing token consumption and providing a controlled alternative to MCP. This project is one of the early skill registries on [skills.sh](https://www.skills.sh/jabrena/plinth), shipping skills for Java Enterprise workflows.
 - **Feedback sensors for coding agents** — Deterministic quality gates wired into agent workflows so failures trigger self-correction. This project uses `skill-check` and `skill-scanner` as post-generation feedback sensors, and is now expanding coverage with `Gherkin` acceptance tests for Skills, Agents and Commands.
 - **Progressive context disclosure** — Agents should load only what is needed for the current task. The `001-commands-inventory`, `002-agents-inventory`, and `003-skills-inventory` skills serve as lightweight discovery indexes before detailed skill content is loaded.
-- **Mutation testing** — The Radar highlights `Pitest` for Java as a way to verify that a passing test suite genuinely validates behavior. The Java testing skills in this project include guidance on mutation testing as a quality signal. Use [`@112-java-maven-plugins`](https://www.skills.sh/jabrena/cursor-rules-java/112-java-maven-plugins) to add and configure the Pitest Maven plugin.
-- **Mapping code smells to refactoring techniques** — The Radar recommends Agent Skills and slash commands for mapping legacy patterns to specific refactoring approaches. This project covers this for Java across multiple dimensions: [`@141-java-refactoring-with-modern-features`](https://www.skills.sh/jabrena/cursor-rules-java/141-java-refactoring-with-modern-features) for modernising existing code, [`@121-java-object-oriented-design`](https://www.skills.sh/jabrena/cursor-rules-java/121-java-object-oriented-design) for OOP principles and code smells, [`@122-java-type-design`](https://www.skills.sh/jabrena/cursor-rules-java/122-java-type-design) for type-level design decisions, [`@142-java-functional-programming`](https://www.skills.sh/jabrena/cursor-rules-java/142-java-functional-programming) for functional style, and [`@143-java-functional-exception-handling`](https://www.skills.sh/jabrena/cursor-rules-java/143-java-functional-exception-handling) for functional error handling patterns.
+- **Mutation testing** — The Radar highlights `Pitest` for Java as a way to verify that a passing test suite genuinely validates behavior. The Java testing skills in this project include guidance on mutation testing as a quality signal. Use [`@112-java-maven-plugins`](https://www.skills.sh/jabrena/plinth/112-java-maven-plugins) to add and configure the Pitest Maven plugin.
+- **Mapping code smells to refactoring techniques** — The Radar recommends Agent Skills and slash commands for mapping legacy patterns to specific refactoring approaches. This project covers this for Java across multiple dimensions: [`@141-java-refactoring-with-modern-features`](https://www.skills.sh/jabrena/plinth/141-java-refactoring-with-modern-features) for modernising existing code, [`@121-java-object-oriented-design`](https://www.skills.sh/jabrena/plinth/121-java-object-oriented-design) for OOP principles and code smells, [`@122-java-type-design`](https://www.skills.sh/jabrena/plinth/122-java-type-design) for type-level design decisions, [`@142-java-functional-programming`](https://www.skills.sh/jabrena/plinth/142-java-functional-programming) for functional style, and [`@143-java-functional-exception-handling`](https://www.skills.sh/jabrena/plinth/143-java-functional-exception-handling) for functional error handling patterns.
 
 **Assess**
 
-- **Architecture drift reduction with LLMs** — The Radar mentions `ArchUnit` as a deterministic structural tool to combine with LLM-powered evaluation. Use [`@111-java-maven-dependencies`](https://www.skills.sh/jabrena/cursor-rules-java/111-java-maven-dependencies) to add ArchUnit to a Java project.
+- **Architecture drift reduction with LLMs** — The Radar mentions `ArchUnit` as a deterministic structural tool to combine with LLM-powered evaluation. Use [`@111-java-maven-dependencies`](https://www.skills.sh/jabrena/plinth/111-java-maven-dependencies) to add ArchUnit to a Java project.
 - **Code intelligence as agentic tooling** — The Radar calls out the Serena MCP server for semantic code retrieval. This project already enables `serena` as one of its configured MCP servers, giving agents structured access to the codebase rather than relying on text search.
 
 **Cross-cutting theme: Putting coding agents on a leash**
@@ -522,7 +522,7 @@ The Radar's editorial theme explicitly names `OpenSpec` alongside `GitHub Spec-K
 
 <a id="next-steps"></a>
 
-The next phase is already visible in the [`v0.17.0` milestone](https://github.com/jabrena/cursor-rules-java/milestone/11). The backlog continues the same direction as `0.16.0`: make agent workflows more useful, more deterministic, and easier to adopt in real teams.
+The next phase is already visible in the [`v0.17.0` milestone](https://github.com/jabrena/plinth/milestone/11). The backlog continues the same direction as `0.16.0`: make agent workflows more useful, more deterministic, and easier to adopt in real teams.
 
 Functionally, the next workstreams are:
 

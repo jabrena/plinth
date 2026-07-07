@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#855](https://github.com/jabrena/cursor-rules-java/issues/855) identifies the Digital Markets Act (DMA) as a pending part of the GenAI Regulatory Stack (EU). DMA guidance should be planned separately because gatekeeper obligations, interoperability, data access, self-preferencing, consent, and business-user controls have a different engineering focus than AI Act, DORA, GDPR, NIS2, CRA, Data Act, or DSA concerns.
+GitHub issue [#855](https://github.com/jabrena/plinth/issues/855) identifies the Digital Markets Act (DMA) as a pending part of the GenAI Regulatory Stack (EU). DMA guidance should be planned separately because gatekeeper obligations, interoperability, data access, self-preferencing, consent, and business-user controls have a different engineering focus than AI Act, DORA, GDPR, NIS2, CRA, Data Act, or DSA concerns.
 
 Java enterprise teams building platform services, marketplaces, app stores, advertising systems, identity services, ranking systems, or data access APIs need DMA-aware engineering guidance for gatekeeper-scope handoff, interoperability, data portability, audit evidence, business-user controls, and compliance-owner escalation.
 
@@ -23,7 +23,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#855](https://github.com/jabrena/cursor-rules-java/issues/855), comment listing the GenAI Regulatory Stack (EU).
+- Source artifact: GitHub issue [#855](https://github.com/jabrena/plinth/issues/855), comment listing the GenAI Regulatory Stack (EU).
 - Existing implementation models: `801-regulations-eu-ai-act`, `802-regulations-dora`, and `803-regulations-gdpr`.
 - External reference: [Regulation (EU) 2022/1925](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R1925).
 - Derivation direction: issue #855 EU regulatory stack plus official EUR-Lex reference plus existing regulation skill pattern -> OpenSpec change artifacts -> XML skill source implementation -> local generated skill validation.

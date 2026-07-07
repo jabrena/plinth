@@ -226,10 +226,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Added tone support for interactive prompts.
 
 - **Website**:
-  - Added a website covering system prompts for Java: https://jabrena.github.io/cursor-rules-java/
+  - Added a website covering system prompts for Java: [jabrena/plinth](https://github.com/jabrena/plinth)
 
 - **Educational content**:
-  - New "System Prompts for Java" course (#335). https://jabrena.github.io/cursor-rules-java/courses/system-prompts-java/index.html
+  - New "System Prompts for Java" course (#335). [jabrena/plinth](https://github.com/jabrena/plinth)
 
 - **Documentation & Diagrams**:
   - ADR-003 documenting JBake website generation strategy (#326).
@@ -267,7 +267,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - JMH (Java Microbenchmark Harness) support for Maven projects without modules
   - Enhanced Maven plugins cursor rule with comprehensive JMH integration
 
-- Tested the project for Cursor, Cursor CLI, Claude Code, GitHub Copilot, and JetBrains Junie. Further information: https://github.com/jabrena/cursor-rules-java/blob/main/docs/reviews/review-20250829.md
+- Tested the project for Cursor, Cursor CLI, Claude Code, GitHub Copilot, and JetBrains Junie. Further information: https://github.com/jabrena/plinth/blob/main/docs/reviews/review-20250829.md
 
 ### Changed
 
@@ -474,18 +474,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Added initial cursor rules (Java, Effective Java, Concurrency, Functional programming, Data-Oriented programming & Spring Boot)
 
-[0.15.0]: https://github.com/jabrena/cursor-rules-java/compare/0.14.0...0.15.0
-[0.14.0]: https://github.com/jabrena/cursor-rules-java/compare/0.13.0...0.14.0
-[0.13.0]: https://github.com/jabrena/cursor-rules-java/compare/0.12.0...0.13.0
-[0.12.0]: https://github.com/jabrena/cursor-rules-java/compare/0.11.0...0.12.0
-[0.11.0]: https://github.com/jabrena/cursor-rules-java/compare/0.10.0...0.11.0
-[0.10.0]: https://github.com/jabrena/cursor-rules-java/compare/0.9.0...0.10.0
-[0.9.0]: https://github.com/jabrena/cursor-rules-java/compare/0.8.0...0.9.0
-[0.8.0]: https://github.com/jabrena/cursor-rules-java/compare/0.7.0...0.8.0
-[0.7.0]: https://github.com/jabrena/cursor-rules-java/compare/0.6.0...0.7.0
-[0.6.0]: https://github.com/jabrena/cursor-rules-java/compare/0.5.0...0.6.0
-[0.5.0]: https://github.com/jabrena/cursor-rules-java/compare/0.4.0...0.5.0
-[0.4.0]: https://github.com/jabrena/cursor-rules-java/compare/0.3.0...0.4.0
-[0.3.0]: https://github.com/jabrena/cursor-rules-java/compare/0.2.0...0.3.0
-[0.2.0]: https://github.com/jabrena/cursor-rules-java/compare/0.1.0...0.2.0
-[0.1.0]: https://github.com/jabrena/cursor-rules-java/releases/tag/0.1.0
+[0.15.0]: https://github.com/jabrena/plinth/compare/0.14.0...0.15.0
+[0.14.0]: https://github.com/jabrena/plinth/compare/0.13.0...0.14.0
+[0.13.0]: https://github.com/jabrena/plinth/compare/0.12.0...0.13.0
+[0.12.0]: https://github.com/jabrena/plinth/compare/0.11.0...0.12.0
+[0.11.0]: https://github.com/jabrena/plinth/compare/0.10.0...0.11.0
+[0.10.0]: https://github.com/jabrena/plinth/compare/0.9.0...0.10.0
+[0.9.0]: https://github.com/jabrena/plinth/compare/0.8.0...0.9.0
+[0.8.0]: https://github.com/jabrena/plinth/compare/0.7.0...0.8.0
+[0.7.0]: https://github.com/jabrena/plinth/compare/0.6.0...0.7.0
+[0.6.0]: https://github.com/jabrena/plinth/compare/0.5.0...0.6.0
+[0.5.0]: https://github.com/jabrena/plinth/compare/0.4.0...0.5.0
+[0.4.0]: https://github.com/jabrena/plinth/compare/0.3.0...0.4.0
+[0.3.0]: https://github.com/jabrena/plinth/compare/0.2.0...0.3.0
+[0.2.0]: https://github.com/jabrena/plinth/compare/0.1.0...0.2.0
+[0.1.0]: https://github.com/jabrena/plinth/releases/tag/0.1.0

@@ -50,7 +50,7 @@ The skill should discourage mixing broad refactoring and behavior changes in the
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#877](https://github.com/jabrena/cursor-rules-java/issues/877).
+- Source artifact: GitHub issue [#877](https://github.com/jabrena/plinth/issues/877).
 - Local issue cache read for this workflow: `.codex/issue/title.txt`, `.codex/issue/body.md`, and `.codex/issue/url.txt`.
 - Derivation direction: local issue cache -> sanitized maintainer-style planning summary -> this OpenSpec design -> XML generator implementation and validation.
 

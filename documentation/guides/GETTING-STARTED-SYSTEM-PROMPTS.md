@@ -36,7 +36,7 @@ Once you have downloaded it, go to the `Downloads` folder in your system and you
 
 ### Using the latest tagged zipped rules
 
-Downloading the zipped release is the safest approach if you are interested in using the latest well-tested release. Go to [the latest release](https://github.com/jabrena/cursor-rules-java/releases) and download the zip assets included in the latest release. As in the previous case, download the zip, unzip it and copy the folder `.cursor` into the Java repository where you want to use these Cursor rules.
+Downloading the zipped release is the safest approach if you are interested in using the latest well-tested release. Go to [the latest release](https://github.com/jabrena/plinth/releases) and download the zip assets included in the latest release. As in the previous case, download the zip, unzip it and copy the folder `.cursor` into the Java repository where you want to use these Cursor rules.
 
 ### Using a JBang CLI program specialized in this task
 
@@ -49,7 +49,7 @@ Execute the following commands to use it:
 ```bash
 sdk install jbang
 # Add System Prompts for Java in .cursor/rules
-jbang --fresh setup@jabrena init --cursor https://github.com/jabrena/cursor-rules-java
+jbang --fresh setup@jabrena init --cursor https://github.com/jabrena/plinth
 ```
 
 ## Using your first System prompt in your Java repository
@@ -70,4 +70,4 @@ Create a document with all System prompts for Java using @000-system-prompt-list
 
 ## Do you want to learn more?
 
-For a full understanding of this project, follow the course [Mastering System Prompts for Java](https://jabrena.github.io/cursor-rules-java/courses/system-prompts-java/index.html).
+For a full understanding of this project, follow [jabrena/plinth](https://github.com/jabrena/plinth).

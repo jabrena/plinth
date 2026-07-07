@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#818](https://github.com/jabrena/cursor-rules-java/issues/818) identifies that `033-architecture-diagrams` still relies on one large reference source for question flow, diagram-family implementation guidance, examples, constraints, and output organization rules. This makes the skill harder to maintain and easier to drift from its entry-point constraints, including the current C4 mismatch where the skill forbids Code/Level 4 diagrams while the generated reference still offers them.
+GitHub issue [#818](https://github.com/jabrena/plinth/issues/818) identifies that `033-architecture-diagrams` still relies on one large reference source for question flow, diagram-family implementation guidance, examples, constraints, and output organization rules. This makes the skill harder to maintain and easier to drift from its entry-point constraints, including the current C4 mismatch where the skill forbids Code/Level 4 diagrams while the generated reference still offers them.
 
 ## What Changes
 
@@ -23,7 +23,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#818](https://github.com/jabrena/cursor-rules-java/issues/818), milestone `v0.16.0`.
+- Source artifact: GitHub issue [#818](https://github.com/jabrena/plinth/issues/818), milestone `v0.16.0`.
 - Related source pattern: `111-java-maven-dependencies` and `112-java-maven-plugins` source-level split of question assets, skill orchestration, `skills.xml` reference registration, and focused references.
 - Derivation direction: issue #818 -> OpenSpec change artifacts -> implementation tasks. The issue remains the source for problem, scope, acceptance criteria, and implementation constraints.
 

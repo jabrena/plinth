@@ -1,6 +1,6 @@
 ## Why
 
-Issue [#806](https://github.com/jabrena/cursor-rules-java/issues/806) spans commands, agents, planning skills, migration documentation, and validation. This parent change coordinates four smaller changes so source work can proceed in parallel without duplicating ownership or creating conflicting task lists.
+Issue [#806](https://github.com/jabrena/plinth/issues/806) spans commands, agents, planning skills, migration documentation, and validation. This parent change coordinates four smaller changes so source work can proceed in parallel without duplicating ownership or creating conflicting task lists.
 
 ## What Changes
 

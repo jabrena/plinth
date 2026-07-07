@@ -1,6 +1,6 @@
 ## Why
 
-GitHub issue [#848](https://github.com/jabrena/cursor-rules-java/issues/848) requests regulation support for AI-related Java enterprise work. The first regulation skill in this area, `801-regulations-eu-ai-act`, already translates EU AI Act concerns into engineering controls for Java AI systems and agents, but the EU regulation set is incomplete without operational resilience and personal-data protection guidance.
+GitHub issue [#848](https://github.com/jabrena/plinth/issues/848) requests regulation support for AI-related Java enterprise work. The first regulation skill in this area, `801-regulations-eu-ai-act`, already translates EU AI Act concerns into engineering controls for Java AI systems and agents, but the EU regulation set is incomplete without operational resilience and personal-data protection guidance.
 
 Java enterprise teams building AI systems, AI agents, RAG workflows, integrations, and regulated business applications need separate guidance for DORA and GDPR because those regulations create different engineering review questions: ICT risk and operational resilience for DORA, and lawful personal-data processing and data-subject rights for GDPR.
 
@@ -26,7 +26,7 @@ None.
 
 ## Source and Derivation
 
-- Source artifact: GitHub issue [#848](https://github.com/jabrena/cursor-rules-java/issues/848), milestone `v0.16.0`.
+- Source artifact: GitHub issue [#848](https://github.com/jabrena/plinth/issues/848), milestone `v0.16.0`.
 - Existing implementation model and structural baseline: `801-regulations-eu-ai-act`.
 - External reference: [DORA Regulation (EU) 2022/2554](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32022R2554).
 - External reference: [GDPR Regulation (EU) 2016/679](https://eur-lex.europa.eu/legal-content/EN/TXT/HTML/?uri=CELEX:32016R0679).

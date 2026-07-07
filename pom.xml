@@ -12,7 +12,7 @@
     <name>cursor-rules-java</name>
     <description>A curated collection of Skills and Agents to be used in modern SDLC workflows for Java Enterprise development.</description>
 
-    <url>https://github.com/jabrena/cursor-rules-java</url>
+    <url>https://github.com/jabrena/plinth</url>
 
     <licenses>
         <license>
@@ -23,9 +23,9 @@
     </licenses>
 
     <scm>
-        <connection>scm:git:https://github.com/jabrena/cursor-rules-java.git</connection>
-        <developerConnection>scm:git:git@github.com:jabrena/cursor-rules-java.git</developerConnection>
-        <url>https://github.com/jabrena/cursor-rules-java</url>
+        <connection>scm:git:https://github.com/jabrena/plinth.git</connection>
+        <developerConnection>scm:git:git@github.com:jabrena/plinth.git</developerConnection>
+        <url>https://github.com/jabrena/plinth</url>
         <tag>HEAD</tag>
     </scm>
 
@@ -38,11 +38,11 @@
     </developers>
     <inceptionYear>2025</inceptionYear>
     <issueManagement>
-        <url>https://github.com/jabrena/cursor-rules-java/issues</url>
+        <url>https://github.com/jabrena/plinth/issues</url>
         <system>GitHub</system>
     </issueManagement>
     <ciManagement>
-        <url>https://github.com/jabrena/cursor-rules-java/actions</url>
+        <url>https://github.com/jabrena/plinth/actions</url>
         <system>GitHub Actions</system>
     </ciManagement>
 

@@ -122,7 +122,7 @@
 <li>Added a new generator to manage <code>SKILL</code> generation</li>
 <li>Added a validator to ensure good quality in <code>SKILL</code> validation against the <a href="https://agentskills.io/specification">Skill Specification</a></li>
 </ul>
-<p>Let's walk through each feature. You can also review the <a href="https://github.com/jabrena/cursor-rules-java/blob/main/CHANGELOG.md#0120-2026-03-08">CHANGELOG.md</a></p>
+<p>Let's walk through each feature. You can also review the <a href="https://github.com/jabrena/plinth/blob/main/CHANGELOG.md#0120-2026-03-08">CHANGELOG.md</a></p>
 <h2>Why Skills?</h2>
 <p><img src="/plintch/images/2026/3/skills-everywhere.png" alt="" /></p>
 <p>The <a href="https://aws.amazon.com/en/blogs/devops/aws-named-as-a-leader-in-the-2025-gartner-magic-quadrant-for-ai-code-assistants/">AI Assistants</a> market is reshaping how we build software. A growing number of tools offer similar capabilities, yet until recently there was no standard way to extend them across vendors. <code>Cursor</code> pioneered <code>System prompts</code>, but that approach lacked a shared specification for others to adopt. A <code>Skill</code> fills that gap: it extends AI agents with specialized knowledge and workflows that work across different products.</p>
@@ -185,22 +185,22 @@ metadata:
 <li><code>@164-java-profiling-compare</code></li>
 <li><code>@164-java-profiling-verify</code></li>
 </ul>
-<p>Plus others tracked in the <a href="https://github.com/jabrena/cursor-rules-java/issues"><code>Backlog</code></a>.</p>
+<p>Plus others tracked in the <a href="https://github.com/jabrena/plinth/issues"><code>Backlog</code></a>.</p>
 <p>Previously, the project offered a CLI to install System prompts from this repo or any repo with <code>.cursor/rules</code> (or a symlink to it):</p>
 <pre><code class="language-bash">jbang setup@jabrena init \
---cursor https://github.com/jabrena/cursor-rules-java
+--cursor https://github.com/jabrena/plinth
 </code></pre>
 <p>With Skills, <a href="https://vercel.com/"><code>Vercel</code></a> offers a better option at <a href="https://skills.sh/">https://skills.sh/</a>, where you can find and install Skills easily.</p>
 <p>Browse this project's Skills <a href="https://skills.sh/?q=jabrena">here</a> and install them with:</p>
 <pre><code class="language-bash">brew install node
-npx skills add jabrena/cursor-rules-java --list
-npx skills add https://github.com/jabrena/cursor-rules-java \
+npx skills add jabrena/plinth --list
+npx skills add https://github.com/jabrena/plinth \
 --skill 110-java-maven-best-practices
-npx skills install jabrena/cursor-rules-java --all --agent cursor
+npx skills install jabrena/plinth --all --agent cursor
 </code></pre>
 <p>One feature I like: Security pipelines that audit Skills for safety.</p>
-<p><a href="https://skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices"><img src="/plintch/images/2026/3/skill-security-audit.png" alt="" /></a></p>
-<p><strong>Source:</strong> <a href="https://skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices">https://skills.sh/jabrena/cursor-rules-java/110-java-maven-best-practices</a></p>
+<p><a href="https://skills.sh/jabrena/plinth/110-java-maven-best-practices"><img src="/plintch/images/2026/3/skill-security-audit.png" alt="" /></a></p>
+<p><strong>Source:</strong> <a href="https://skills.sh/jabrena/plinth/110-java-maven-best-practices">https://skills.sh/jabrena/plinth/110-java-maven-best-practices</a></p>
 <p><strong>Note:</strong> I recommend skills.sh and similar sites—Skills there have passed security audits. Be aware that Skills can include scripts, which may be an attack vector.</p>
 <h3>What are SkillsJars?</h3>
 <p><a href="https://www.webjars.org/">WebJars</a> package popular web libraries for the JVM. <a href="https://www.skillsjars.com/">SkillsJars</a> applies the same idea to Skills: JVM agents can consume Skills as Maven artifacts. It was created by <a href="https://x.com/JamesWard">James Ward</a>.</p>
@@ -211,15 +211,15 @@ npx skills install jabrena/cursor-rules-java --all --agent cursor
 <pre><code class="language-bash">META-INF/
 META-INF/skills/
 META-INF/skills/jabrena/
-META-INF/skills/jabrena/cursor-rules-java/
+META-INF/skills/jabrena/plinth/
 META-INF/maven/
 META-INF/maven/com.skillsjars/
 META-INF/MANIFEST.MF
 META-INF/maven/com.skillsjars/jabrena__cursor-rules-java__111-java-maven-dependencies/pom.xml
 META-INF/maven/com.skillsjars/jabrena__cursor-rules-java__111-java-maven-dependencies/pom.properties
-META-INF/skills/jabrena/cursor-rules-java/111-java-maven-dependencies/SKILL.md
-META-INF/skills/jabrena/cursor-rules-java/111-java-maven-dependencies/references/
-META-INF/skills/jabrena/cursor-rules-java/111-java-maven-dependencies/references/111-java-maven-dependencies.md
+META-INF/skills/jabrena/plinth/111-java-maven-dependencies/SKILL.md
+META-INF/skills/jabrena/plinth/111-java-maven-dependencies/references/
+META-INF/skills/jabrena/plinth/111-java-maven-dependencies/references/111-java-maven-dependencies.md
 </code></pre>
 <p><strong>Source:</strong> <a href="https://central.sonatype.com/artifact/com.skillsjars/jabrena__cursor-rules-java__111-java-maven-dependencies">https://central.sonatype.com/artifact/com.skillsjars/jabrena__cursor-rules-java__111-java-maven-dependencies</a><br />
 <strong>Skill:</strong> <code>@111-java-maven-dependencies</code></p>
@@ -546,7 +546,7 @@ So that I can perform cross-pantheon analysis and aggregate mythology data for r
 <li>Added support to generate <code>AGENTS.md</code> with <code>@173-java-agents</code>: Added this specific missing feature.</li>
 </ul>
 <h2>Conclusions</h2>
-<p>If you followed the article, the project is evolving from <code>System prompts</code> to <code>Skills</code>—and continues to advance practices such as curated shared instructions for software teams and <code>AGENTS.md</code>, both recognized in the <a href="https://www.thoughtworks.com/radar/techniques">Thoughtworks Technology Radar</a>. During the time between <a href="https://github.com/jabrena/cursor-rules-java/releases/tag/0.11.0"><code>v0.11.0</code></a> to <a href="https://github.com/jabrena/cursor-rules-java/releases/tag/0.12.0"><code>v0.12.0</code></a>, new elements have appeared in the market, such as: <code>Subagents</code>, <code>Commands</code>, <code>Hooks</code>, <code>Plugins</code>, <code>Spec-driven</code>. In the next release, the project will review how to use <code>Skills</code> with <strong>Subagents</strong>.</p>
+<p>If you followed the article, the project is evolving from <code>System prompts</code> to <code>Skills</code>—and continues to advance practices such as curated shared instructions for software teams and <code>AGENTS.md</code>, both recognized in the <a href="https://www.thoughtworks.com/radar/techniques">Thoughtworks Technology Radar</a>. During the time between <a href="https://github.com/jabrena/plinth/releases/tag/0.11.0"><code>v0.11.0</code></a> to <a href="https://github.com/jabrena/plinth/releases/tag/0.12.0"><code>v0.12.0</code></a>, new elements have appeared in the market, such as: <code>Subagents</code>, <code>Commands</code>, <code>Hooks</code>, <code>Plugins</code>, <code>Spec-driven</code>. In the next release, the project will review how to use <code>Skills</code> with <strong>Subagents</strong>.</p>
 <p><img src="/plintch/images/2026/3/subagents.png" alt="" /></p>
 <p><strong>Source:</strong> <a href="https://code.claude.com/docs/en/agent-teams">https://code.claude.com/docs/en/agent-teams</a></p>
 <p>When you talk with people using these technologies, you notice that software delivery has increased—but design and requirements gathering must keep pace on quality too. If you accelerate delivery without investing in requirements, you end up with fast products that conceal potential design flaws.</p>
@@ -581,7 +581,7 @@ Jira / Github / Azure Devops / RedMine &gt; Plan Mode &gt; Agent Mode to deliver
     </a>
   </li>
   <li>
-    <a href="https://github.com/jabrena/cursor-rules-java" title="GitHub">
+    <a href="https://github.com/jabrena/plinth" title="GitHub">
       <span class="fa-stack fa-lg">
         <i class="fa fa-circle fa-stack-2x"></i>
         <i class="fa fa-github fa-stack-1x fa-inverse"></i>
