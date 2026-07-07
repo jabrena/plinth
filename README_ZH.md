@@ -26,7 +26,7 @@
 
 ## 最新动态
 
-访问 [jabrena/plinth](https://github.com/jabrena/plinth) 探索最新发布的内容，并通过 [CHANGELOG](./CHANGELOG.md) 了解新 skills、改进和修复如何推动项目持续演进。
+访问 https://jabrena.github.io/plinth/ 探索最新发布的内容，并通过 [CHANGELOG](./CHANGELOG.md) 了解新 skills、改进和修复如何推动项目持续演进。
 
 ## 60 秒开始使用
 
