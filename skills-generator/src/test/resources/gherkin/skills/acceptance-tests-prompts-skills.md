@@ -176,6 +176,13 @@ execute @skills-generator/src/test/resources/gherkin/skills/056-design-avoid-bre
 and verify that acceptance-tests passes.
 ```
 
+## 057-design-feature-toggles
+
+```bash
+execute @skills-generator/src/test/resources/gherkin/skills/057-design-feature-toggles.feature
+and verify that acceptance-tests passes.
+```
+
 ## 110-java-maven-best-practices
 
 ```bash
