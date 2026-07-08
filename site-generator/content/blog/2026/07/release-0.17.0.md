@@ -117,11 +117,11 @@ The skill also includes `ArchUnit`-aware verification guidance without forcing e
 ```java
 @ArchTest
 static final ArchRule onion_architecture_boundaries = onionArchitecture()
-        .domainModels("info.jab.markdownvalidator.domain..")
-        .applicationServices("info.jab.markdownvalidator.application..")
-        .adapter("cli", "info.jab.markdownvalidator.adapter.in.cli..")
-        .adapter("filesystem", "info.jab.markdownvalidator.adapter.out.filesystem..")
-        .adapter("http", "info.jab.markdownvalidator.adapter.out.http..")
+        .domainModels("info.jab.mv.domain..")
+        .applicationServices("info.jab.mv.application..")
+        .adapter("cli", "info.jab.mv.adapter.in.cli..")
+        .adapter("filesystem", "info.jab.mv.adapter.out.filesystem..")
+        .adapter("http", "info.jab.mv.adapter.out.http..")
         .withOptionalLayers(true);
 ```
 

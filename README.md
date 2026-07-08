@@ -201,7 +201,7 @@ Every push runs the following validation checks in [CI Builds](./.github/workflo
 
 | Name | Purpose |
 | --- | --- |
-| 1. [MarkdownValidator](./markdown-validator/src/main/java/info/jab/markdownvalidator/MarkdownValidator.java) | Protects the documentation layer by catching Markdown parsing drift and remote link failures before skill-specific checks run. |
+| 1. [MarkdownValidator](./markdown-validator/src/main/java/info/jab/mv/MarkdownValidator.java) | Protects the documentation layer by catching Markdown parsing drift and remote link failures before skill-specific checks run. |
 | 2. [skill-check](https://github.com/thedaviddias/skill-check) | Confirms every generated skill follows the expected packaging contract, complementing scanners that focus on behavior or security risk. |
 | 3. [cisco-ai-skill-scanner](https://github.com/cisco-ai-defense/skill-scanner) by Cisco | Adds behavior-oriented security coverage by looking for risky skill flows that structural validation cannot see. |
 | 4. [SkillSpector](https://github.com/NVIDIA/SkillSpector) by NVIDIA | Provides an independent static quality and security review, useful for comparing findings against the other scanners. |

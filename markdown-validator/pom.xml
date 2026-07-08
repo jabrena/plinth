@@ -93,7 +93,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>info.jab.markdownvalidator.MarkdownValidator</mainClass>
+                            <mainClass>info.jab.mv.MarkdownValidator</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
