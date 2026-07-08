@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.8.0/pml.xsd"
       id="521-frameworks-micronaut-testing-unit-tests">
   <metadata>
     <author>Juan Antonio Breña Moral</author>

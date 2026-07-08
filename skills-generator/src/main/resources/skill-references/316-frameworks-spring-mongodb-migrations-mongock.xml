@@ -5,7 +5,7 @@
         <version>0.17.0</version>
         <license>Apache-2.0</license>
         <title>Spring - MongoDB migrations (Mongock)</title>
-        <description>Use when you need to add or review Mongock MongoDB data migrations in a Spring Boot application - including runner/driver selection per Spring Boot version, standalone runner wiring, migration scan packages, `@ChangeUnit` classes, lock and transaction behavior, and Testcontainers validation. For general Spring Data MongoDB persistence use `@315-frameworks-spring-mongodb`.</description>
+        <description>Use when you need to add or review Mongock MongoDB data migrations in a Spring Boot application - including runner/driver selection per Spring Boot version, standalone runner wiring, migration scan packages, `@ChangeUnit` classes, lock and transaction behavior, and optional policy-approved MongoDB integration verification. For general Spring Data MongoDB persistence use `@315-frameworks-spring-mongodb`.</description>
     </metadata>
 
     <role>You are a Senior software engineer with extensive experience in Spring Boot, Spring Data MongoDB, and code-first MongoDB migrations with Mongock</role>
@@ -193,10 +193,10 @@ class OrdersAddStatusChange {
         <example number="4" id="spring-mongock-testcontainers">
             <example-header>
                 <example-title>Testing migrations</example-title>
-                <example-subtitle>Use @ServiceConnection to wire the Testcontainers MongoDB URL; verify changelog records and side effects</example-subtitle>
+                <example-subtitle>Use a project-approved MongoDB test runtime; verify changelog records and side effects</example-subtitle>
             </example-header>
             <example-description><![CDATA[
-                Use `@ServiceConnection` (Spring Boot 3.1+) on the static `MongoDBContainer` field. This automatically registers the container's connection URI before the application context starts, replacing the unreliable `@DynamicPropertySource` + `mongo::getReplicaSetUrl` pattern which fails with Testcontainers 1.19+. Verify that the `mongockChangeLog` collection has EXECUTED records for every expected change unit, and check at least one physical side effect (index or document shape) to confirm the migration ran against real MongoDB. Add `spring-boot-testcontainers`, `org.testcontainers:mongodb`, and `org.testcontainers:junit-jupiter` in test scope; if Maven reports missing Testcontainers versions, import `org.testcontainers:testcontainers-bom` with the project's existing `testcontainers.version` property or add one central property instead of hard-coding inline versions.
+                Use `@ServiceConnection` (Spring Boot 3.1+) on a static `MongoDBContainer` field only when the project already defines a pinned, policy-approved MongoDB test image or the user explicitly approves one. Do not introduce an unpinned external image pull inside the skill workflow. `@ServiceConnection` automatically registers the container's connection URI before the application context starts, replacing the unreliable `@DynamicPropertySource` + `getReplicaSetUrl` pattern which fails with Testcontainers 1.19+. Verify that the `mongockChangeLog` collection has EXECUTED records for every expected change unit, and check at least one physical side effect (index or document shape) to confirm the migration ran against real MongoDB. Add `spring-boot-testcontainers`, `org.testcontainers:mongodb`, and `org.testcontainers:junit-jupiter` in test scope; if Maven reports missing Testcontainers versions, import `org.testcontainers:testcontainers-bom` with the project's existing `testcontainers.version` property or add one central property instead of hard-coding inline versions.
             ]]></example-description>
             <code-examples>
                 <good-example>
@@ -221,7 +221,7 @@ class MongockMigrationTest {
 
     @Container
     @ServiceConnection
-    static MongoDBContainer mongo = new MongoDBContainer("mongo:7.0");
+    static MongoDBContainer mongo = ProjectMongoContainers.approvedMongoDb();
 
     @Autowired
     MongoTemplate mongoTemplate;
@@ -264,7 +264,7 @@ static void props(DynamicPropertyRegistry r) {
                 <example-subtitle>Disable Mongock only in generic smoke tests; keep a dedicated MongoDB-backed migration test</example-subtitle>
             </example-header>
             <example-description><![CDATA[
-                Adding Spring Data MongoDB plus a startup Mongock runner changes every full `@SpringBootTest` context. Generic `contextLoads` tests that do not provide a MongoDB container will otherwise try `localhost:27017` and fail or hang while Mongock attempts to acquire locks. Keep the real migration proof in a dedicated Testcontainers-backed test, and explicitly disable Mongock only for unrelated smoke tests.
+                Adding Spring Data MongoDB plus a startup Mongock runner changes every full `@SpringBootTest` context. Generic `contextLoads` tests that do not provide a MongoDB test runtime will otherwise try `localhost:27017` and fail or hang while Mongock attempts to acquire locks. Keep the real migration proof in a dedicated MongoDB-backed test when a project-approved runtime is available, and explicitly disable Mongock only for unrelated smoke tests.
             ]]></example-description>
             <code-examples>
                 <good-example>
@@ -297,10 +297,10 @@ class ApplicationTests {
         <output-format-list>
             <output-format-item>**ANALYZE** Spring Boot version first: confirm whether the POM parent is 3.x or 4.x — this determines the runner choice before any other step</output-format-item>
             <output-format-item>**ANALYZE** MongoDB setup: Spring Data MongoDB generation, Mongock BOM version, runner type, driver, scan package, and startup policy</output-format-item>
-            <output-format-item>**ANALYZE** Maven dependency management for Testcontainers before adding MongoDB-backed migration tests; import `testcontainers-bom` when module versions are not already managed</output-format-item>
-            <output-format-item>**ANALYZE** existing full-context tests after enabling startup Mongock; disable Mongock only in unrelated smoke tests and keep dedicated migration tests MongoDB-backed</output-format-item>
+            <output-format-item>**ANALYZE** Maven dependency management for MongoDB-backed integration tests before adding them; import `testcontainers-bom` when Testcontainers is already approved and module versions are not already managed</output-format-item>
+            <output-format-item>**ANALYZE** existing full-context tests after enabling startup Mongock; disable Mongock only in unrelated smoke tests and keep dedicated migration tests MongoDB-backed only when an approved runtime is available</output-format-item>
             <output-format-item>**CATEGORIZE** migration risks (RUNNER COMPATIBILITY, LOCKING, IDEMPOTENCY, DOMAIN COUPLING, TEST GAP) by impact</output-format-item>
-            <output-format-item>**APPLY** version-appropriate runner: standalone runner + sync driver for Spring Boot 4.x; `@ServiceConnection` for Testcontainers wiring</output-format-item>
+            <output-format-item>**APPLY** version-appropriate runner: standalone runner + sync driver for Spring Boot 4.x; `@ServiceConnection` only for approved MongoDB test-runtime wiring</output-format-item>
             <output-format-item>**ALIGN** with `@315-frameworks-spring-mongodb` for normal document/repository design while keeping migrations independent</output-format-item>
             <output-format-item>**VALIDATE** with `./mvnw compile` before changes and `./mvnw clean verify` after changes</output-format-item>
         </output-format-list>
@@ -314,6 +314,7 @@ class ApplicationTests {
             <safeguards-item>**LOCKING**: Do not hide lock acquisition failures in clustered deployments unless there is a documented external migration coordinator</safeguards-item>
             <safeguards-item>**DOMAIN MODEL DRIFT**: Avoid repositories and mutable domain models inside old migrations; use stable raw collection/field operations via `MongoDatabase`</safeguards-item>
             <safeguards-item>**TEST ISOLATION**: Generic `@SpringBootTest` smoke tests must either provide MongoDB or set `mongock.enabled=false`; do not let unrelated tests prove migrations by accident</safeguards-item>
+            <safeguards-item>**EXTERNAL RUNTIME GATE**: Do not pull or execute Docker images for verification unless the user explicitly approves and the image is pinned, policy-approved, or already configured in the project</safeguards-item>
             <safeguards-item>**VERSION MANAGEMENT**: Keep Testcontainers versions centralized through an existing project BOM/property or `testcontainers-bom`; do not add inline test dependency versions</safeguards-item>
             <safeguards-item>**BLOCKING SAFETY CHECK**: Run `./mvnw compile` before recommending dependency or migration changes</safeguards-item>
         </safeguards-list>

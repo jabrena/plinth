@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <prompt xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd"
+      xsi:noNamespaceSchemaLocation="https://jabrena.github.io/pml/schemas/0.8.0/pml.xsd"
       id="316-frameworks-spring-mongodb-migrations-mongock">
   <metadata>
     <author>Juan Antonio Breña Moral</author>
     <version>0.17.0</version>
     <license>Apache-2.0</license>
-    <description>Use when you need to add or review Mongock MongoDB data migrations in a Spring Boot application — including Maven coordinates, Spring Data MongoDB drivers, migration scan packages, @ChangeUnit classes, lock/transaction settings, and Testcontainers verification. This should trigger for requests such as Add Mongock migrations in Spring Boot; Review Spring MongoDB data migrations; Configure Mongock change units for Spring Data MongoDB; Create Mongock change units for Spring Boot MongoDB; Review Mongock migration ordering in a Spring service.</description>
+    <description>Use when you need to add or review Mongock MongoDB data migrations in a Spring Boot application — including Maven coordinates, Spring Data MongoDB drivers, migration scan packages, @ChangeUnit classes, lock/transaction settings, and optional policy-approved MongoDB integration verification. This should trigger for requests such as Add Mongock migrations in Spring Boot; Review Spring MongoDB data migrations; Configure Mongock change units for Spring Data MongoDB; Create Mongock change units for Spring Boot MongoDB; Review Mongock migration ordering in a Spring service.</description>
   </metadata>
 
   <title>Spring - MongoDB migrations (Mongock)</title>
@@ -19,7 +19,7 @@ Apply Mongock migration guidelines for Spring Boot and Spring Data MongoDB.
 - `mongock.migration-scan-package` configuration and startup execution
 - Code-first `@ChangeUnit` migrations with `@Execution` and rollback hooks
 - Locking, idempotency, transaction limits, and forward-only rollout discipline
-- Integration tests with Testcontainers MongoDB
+- Optional MongoDB-backed integration tests using only project-approved, pinned, or already-available container images when the user permits external runtime dependencies
 - Coordination with `@315-frameworks-spring-mongodb`
 
 **Scope:** Apply recommendations based on the reference rules and good/bad examples.
@@ -33,6 +33,7 @@ Apply Mongock migration guidelines for Spring Boot and Spring Data MongoDB.
       <constraint>**VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements</constraint>
       <constraint>**BEFORE APPLYING**: Read the reference for detailed rules and good/bad patterns</constraint>
       <constraint>**EDGE CASE**: If the project Spring Data MongoDB version is not compatible with the selected Mongock driver, stop and ask whether to pin/upgrade Mongock or use a lower driver generation</constraint>
+      <constraint>**EXTERNAL RUNTIME GATE**: Do not pull or execute Docker images for MongoDB verification unless the user explicitly approves and the image is pinned, policy-approved, or already present in the project configuration</constraint>
     </constraint-list>
   </constraints>
 
@@ -50,6 +51,6 @@ Apply Mongock migration guidelines for Spring Boot and Spring Data MongoDB.
     <step number="1"><step-title>Read references and inspect MongoDB setup</step-title><step-content>Read `references/316-frameworks-spring-mongodb-migrations-mongock.md`, `references/316-frameworks-spring-mongodb-migrations-mongock-antipatterns.md`, and `references/316-frameworks-spring-mongodb-migrations-mongock-parallel-change.md`, then inspect `pom.xml`, Spring Boot version, dependency management, MongoDB configuration, existing full-context tests, and existing `@315-frameworks-spring-mongodb` persistence patterns.</step-content></step>
     <step number="2"><step-title>Choose runner, driver, and execution policy</step-title><step-content>Select Mongock coordinates compatible with the active Spring Data MongoDB generation, configure migration scan packages, and decide startup vs controlled-job execution.</step-content></step>
     <step number="3"><step-title>Apply framework-aligned migrations</step-title><step-content>Implement/refactor `@ChangeUnit` classes with idempotent operations, explicit ordering, rollback hooks, and safe lock/transaction settings.</step-content></step>
-    <step number="4"><step-title>Run verification and report results</step-title><step-content>Execute build/tests, including Testcontainers-backed MongoDB migration checks where feasible. If generic `@SpringBootTest` smoke tests do not provide MongoDB, disable Mongock only for those tests with `mongock.enabled=false`. Summarize outcomes and follow-up risks.</step-content></step>
+    <step number="4"><step-title>Run verification and report results</step-title><step-content>Execute build/tests. Run MongoDB-backed migration checks only when the project already defines an approved MongoDB test runtime or the user explicitly approves a pinned container image. If generic `@SpringBootTest` smoke tests do not provide MongoDB, disable Mongock only for those tests with `mongock.enabled=false`. Summarize outcomes and follow-up risks.</step-content></step>
   </steps>
 </prompt>

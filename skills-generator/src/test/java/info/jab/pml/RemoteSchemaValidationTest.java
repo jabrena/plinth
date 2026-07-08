@@ -18,7 +18,7 @@ import static org.assertj.core.api.Assertions.assertThatCode;
 class RemoteSchemaValidationTest {
 
     //Use maven-central soon
-    private static final String REMOTE_XSD = "https://jabrena.github.io/pml/schemas/0.7.0/pml.xsd";
+    private static final String REMOTE_XSD = "https://jabrena.github.io/pml/schemas/0.8.0/pml.xsd";
 
     private static Stream<String> provideXmlFileNames() {
         return SkillReferences.xmlFilenames();

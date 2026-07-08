@@ -36,7 +36,7 @@ license: </xsl:text>
     <xsl:text>
 metadata:
   author: </xsl:text>
-    <xsl:value-of select="metadata/author"/>
+    <xsl:call-template name="authors"/>
     <xsl:text>
   version: </xsl:text>
     <xsl:value-of select="metadata/version"/>
@@ -53,6 +53,22 @@ metadata:
     <xsl:call-template name="references">
       <xsl:with-param name="reference-paths" select="$reference-paths"/>
     </xsl:call-template>
+  </xsl:template>
+
+  <xsl:template name="authors">
+    <xsl:choose>
+      <xsl:when test="metadata/authors/author[normalize-space(.) != '']">
+        <xsl:for-each select="metadata/authors/author[normalize-space(.) != '']">
+          <xsl:if test="position() &gt; 1">
+            <xsl:text>, </xsl:text>
+          </xsl:if>
+          <xsl:value-of select="normalize-space(.)"/>
+        </xsl:for-each>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="normalize-space(metadata/author)"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <!-- Preserve line breaks: do not use normalize-space() which collapses newlines -->
