@@ -48,7 +48,7 @@ If you have questions about the project, how to customize it for your team, how 
 
 In the journey to evolve a tecnical repository into a OSS Product, I am trying to put more enphasis in the community. Many thanks [Leandro](https://github.com/lealoureiro) for your contribution.
 
-[![](/plinth/images/2026/7/the-first-pr.png)](https://github.com/jabrena/plinth/pull/966)
+[![](/plinth/images/2026/7/the-first-pr-new.png)](https://github.com/jabrena/plinth/pull/966)
 
 If you use the project, you could participate as [IC](https://github.com/jabrena/plinth/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22) or sharing your experience in [`Github Discussions`](https://github.com/jabrena/plinth/discussions).
 
@@ -74,7 +74,7 @@ The goal is to move an agent from "generate the final patch" to "understand the 
 
 If you are interested to improve your LEAN skills, [Eduardo Ferro](https://www.eferro.net/) has published an excellent book.
 
-[![](/plinth/images/2026/7/menos-software-mas-impacto.jpg)](https://menos-software.eferro.net/)
+[![](/plinth/images/2026/7/menos-software-mas-impacto-new.jpg)](https://menos-software.eferro.net/)
 
 ---
 
@@ -185,7 +185,7 @@ For framework agents, the skill is useful before making changes in `Spring Boot`
 
 If you are interested in this approach, I recommend the [Alistair Cockburn](https://alistair.cockburn.us/hexagonal-architecture)`s book:
 
-[![](/plinth/images/2026/7/hexagonal-architecture-explained.jpg)](https://www.amazon.com/Hexagonal-Architecture-Explained-Alistair-Cockburn/dp/173751978X)
+[![](/plinth/images/2026/7/hexagonal-architecture-explained-new.jpg)](https://www.amazon.com/Hexagonal-Architecture-Explained-Alistair-Cockburn/dp/173751978X)
 
 <a id="improving-maven-guidance"></a>
 
