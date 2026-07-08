@@ -19,7 +19,7 @@ The repository MUST provide a dedicated Maven module for the Markdown validator 
 - **GIVEN** the current validator implementation lives in `.github/scripts/MarkdownValidator.java`
 - **WHEN** the validator module is implemented
 - **THEN** the validator behavior is owned by the Maven module
-- **AND** `markdown-validator/src/main/java/info/jab/markdownvalidator/MarkdownValidator.java` is the module main class
+- **AND** `markdown-validator/src/main/java/info/jab/mv/MarkdownValidator.java` is the module main class
 - **AND** `.github/scripts/MarkdownValidator.java` is no longer required
 
 ### Requirement: Compatibility with existing validator behavior
@@ -50,7 +50,7 @@ The repository MUST keep a JBang-compatible way to run Markdown validation after
 
 - **GIVEN** contributors and CI need a JBang-compatible Markdown validation command
 - **WHEN** the validator implementation is moved into the Maven module
-- **THEN** they can run `jbang markdown-validator/src/main/java/info/jab/markdownvalidator/MarkdownValidator.java .`
+- **THEN** they can run `jbang markdown-validator/src/main/java/info/jab/mv/MarkdownValidator.java .`
 - **AND** that entry point is the Maven module main class
 
 ### Requirement: CI Markdown validation integration
@@ -133,8 +133,8 @@ The Markdown validator architecture test MUST enforce the `adapter`, `applicatio
 #### Scenario: Application layer remains adapter independent
 
 - **GIVEN** the Markdown validator application package contains validation services and ports
-- **WHEN** architecture tests inspect dependencies from `info.jab.markdownvalidator.application..`
-- **THEN** application classes do not depend on `info.jab.markdownvalidator.adapter..`
+- **WHEN** architecture tests inspect dependencies from `info.jab.mv.application..`
+- **THEN** application classes do not depend on `info.jab.mv.adapter..`
 - **AND** this constraint remains enforced after the composition boundary is introduced
 
 ### Requirement: CLI behavior remains compatible
