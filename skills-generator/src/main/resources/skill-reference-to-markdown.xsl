@@ -22,12 +22,12 @@ description: </xsl:text><xsl:value-of select="normalize-space(metadata/descripti
             <xsl:text>
 license: </xsl:text><xsl:value-of select="normalize-space(metadata/license)"/>
         </xsl:if>
-        <xsl:if test="normalize-space(metadata/author) or normalize-space(metadata/version)">
+        <xsl:if test="metadata/authors/author[normalize-space(.) != ''] or normalize-space(metadata/author) or normalize-space(metadata/version)">
             <xsl:text>
 metadata:</xsl:text>
-            <xsl:if test="normalize-space(metadata/author)">
+            <xsl:if test="metadata/authors/author[normalize-space(.) != ''] or normalize-space(metadata/author)">
                 <xsl:text>
-  author: </xsl:text><xsl:value-of select="normalize-space(metadata/author)"/>
+  author: </xsl:text><xsl:call-template name="authors"/>
             </xsl:if>
             <xsl:if test="normalize-space(metadata/version)">
                 <xsl:text>
@@ -68,6 +68,22 @@ metadata:</xsl:text>
 
         <!-- Process all content sections (goal already processed above) -->
         <xsl:apply-templates select="examples | output-format | safeguards"/>
+    </xsl:template>
+
+    <xsl:template name="authors">
+        <xsl:choose>
+            <xsl:when test="metadata/authors/author[normalize-space(.) != '']">
+                <xsl:for-each select="metadata/authors/author[normalize-space(.) != '']">
+                    <xsl:if test="position() &gt; 1">
+                        <xsl:text>, </xsl:text>
+                    </xsl:if>
+                    <xsl:value-of select="normalize-space(.)"/>
+                </xsl:for-each>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:value-of select="normalize-space(metadata/author)"/>
+            </xsl:otherwise>
+        </xsl:choose>
     </xsl:template>
 
     <!-- Examples container template -->
