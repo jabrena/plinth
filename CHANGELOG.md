@@ -27,6 +27,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Changed
 
+- **PML & generators**:
+  - Updated skill index XML schema references to PML 0.8.0 and rendered the new plural `<authors>` metadata block as comma-separated author frontmatter in generated skill and reference Markdown (#938)
+
 - **Skills**:
   - Expanded Flyway and Mongock migration guidance for Spring Boot, Quarkus, and Micronaut with migration safety, antipattern, and parallel-change coverage (#901, #908, #909)
   - Improved design pattern, Java testing strategy, acceptance testing, OpenAPI, and WireMock guidance with richer examples and reference structure (#943)
