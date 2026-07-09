@@ -75,7 +75,9 @@ This release adds a new family of design skills to be used in the workflow:
 > Repeat with me:
 > “SDD is not Aladdin’s lamp—it won’t grant every software wish”.
 
-Let's compare the different `Plinth commands` with `OpenSpec` and `Spec Kit`:
+Once the OpenSpec change is created, the next step is to refine it with design skills before implementation begins. The spec describes the intent, but the design skills help shape the change into a safer engineering path: smaller slices, clearer compatibility decisions, stronger test strategy, and explicit review points.
+
+That is why the `Plinth commands` are designed around the same delivery phases used by `OpenSpec` and `Spec Kit`. The commands are not isolated shortcuts; they map to a workflow that moves from intake to specification, design refinement, task planning, implementation, and closure:
 
 <table>
   <thead>
@@ -119,7 +121,16 @@ Let's compare the different `Plinth commands` with `OpenSpec` and `Spec Kit`:
   </tbody>
 </table>
 
-This mapping is useful because it makes the change path explicit. The agent is not only asked to generate the final patch; it is guided through issue intake, proposal, specification, planning, implementation, and closure. If you are interested in this direction, I recommend reading [From code generation to software engineering](/cursor-rules-java/blog/2026/06/from-code-generation-to-software-engineering.html).
+This mapping is useful because it makes the change path explicit. The agent is not only asked to generate the final patch; it is guided through issue intake, proposal, specification, planning, implementation, and closure. 
+
+[![](/plinth/images/2026/7/kitchen-timer-new.png)](https://www.amazon.es/dp/B0893242P4?ref=nb_sb_ss_w_as-reorder_k2_1_13&amp=&crid=3MILANAXX5K8P&sprefix=kitchen%2Bclock&th=1)
+
+Remember to invest quality time to gather and refine requirements to be included in your Spec. This Design phase need to go in `1x` and later, when the Spec is clear you can increase your Speed in implementation phase once, everything is clear.
+
+> "There is no favorable wind for the sailor who doesn’t know where to go”
+> ― Seneca
+
+If you are interested in this direction, I recommend reading [From code generation to software engineering](/cursor-rules-java/blog/2026/06/from-code-generation-to-software-engineering.html).
 
 <a id="improving-migration-safety-with-flyway-mongock-and-parallel-change"></a>
 
