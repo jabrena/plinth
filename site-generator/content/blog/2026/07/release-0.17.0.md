@@ -336,6 +336,11 @@ The scan included the following applications and engines: `ALYac`, `APEX`, `AVG`
 
 ## Recommended Books and Talks
 
+**Specifications:**
+
+[Specification by Example](https://www.manning.com/books/specification-by-example), by [Gojko Adzic](https://gojko.net/), is a fantastic book for learning how to turn real examples into clear, testable specifications that business and engineering teams can share.
+
+[![](/plinth/images/2026/7/specification-by-example-new.png)](https://www.manning.com/books/specification-by-example)
 
 **Spec Driven Development:**
 
