@@ -522,16 +522,16 @@ Review available analysis and design artifacts for consistency, traceability, co
 
 ```
 ```markdown
-# implement-issue
+# implement-spec
 
 ## Purpose
 
-Deliver a GitHub issue through an approved implementation plan or a validated OpenSpec task list.
+Deliver an approved implementation plan or validated OpenSpec task list through controlled implementation.
 
 ## Usage
 
 ```text
-/implement-issue <approved-plan|openspec-change> [task-or-group] [constraints]
+/implement-spec <approved-plan|openspec-change> [task-or-group] [constraints]
 ```
 
 ## Accepted inputs
@@ -552,7 +552,7 @@ A bare issue is context, not an execution contract. When repository policy requi
 
 - If the command runner is not `@robot-tech-lead`, immediately delegate the whole command execution to `@robot-tech-lead` and wait for its result.
 - `@robot-tech-lead` MUST invoke the selected implementation agent for implementation, test, and verification work; naming an agent in the response is not delegation.
-- If agent invocation is unavailable in the current environment, stop and report that `/implement-issue` cannot proceed instead of implementing directly.
+- If agent invocation is unavailable in the current environment, stop and report that `/implement-spec` cannot proceed instead of implementing directly.
 - Before any implementation agent starts, pass the branch/worktree gate below and report the selected isolation strategy.
 
 ## Branch/worktree gate

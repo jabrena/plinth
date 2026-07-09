@@ -72,7 +72,7 @@
                 <xi:include href="assets/commands/review-alignment.md" parse="text"/>
                 ```
                 ```markdown
-                <xi:include href="assets/commands/implement-issue.md" parse="text"/>
+                <xi:include href="assets/commands/implement-spec.md" parse="text"/>
                 ```
                 ```markdown
                 <xi:include href="assets/commands/profile.md" parse="text"/>
