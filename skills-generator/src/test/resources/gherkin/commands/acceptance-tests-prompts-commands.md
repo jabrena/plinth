@@ -49,25 +49,25 @@ execute @skills-generator/src/test/resources/gherkin/commands/explore-design.fea
 and verify that acceptance-tests passes.
 ```
 
-## /implement-issue (Spring-boot)
+## /implement-spec (Spring-boot)
 
 ```bash
-execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
+execute @skills-generator/src/test/resources/gherkin/commands/implement-spec.feature
 and verify that acceptance-tests passes.
 ```
 
-## /implement-issue (Quarkus)
+## /implement-spec (Quarkus)
 
 ```bash
-execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
+execute @skills-generator/src/test/resources/gherkin/commands/implement-spec.feature
 and verify that acceptance-tests passes. 
 Implement it but using Quarkus, not Spring boot as the default requirement.
 ```
 
-## /implement-issue (Micronaut)
+## /implement-spec (Micronaut)
 
 ```bash
-execute @skills-generator/src/test/resources/gherkin/commands/implement-issue.feature
+execute @skills-generator/src/test/resources/gherkin/commands/implement-spec.feature
 and verify that acceptance-tests passes. 
 Implement it but using Micronaut, not Spring boot as the default requirement.
 ```
