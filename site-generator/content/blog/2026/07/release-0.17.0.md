@@ -1,10 +1,12 @@
 title=What's new in Plinth 0.17.0?
-date=2026-07-06
+date=2026-07-13
 type=post
 tags=blog,skills,java,agents,design,regulations,validation
 author=Juan Antonio Breña Moral
 status=published
 ~~~~~~
+
+`Plinth` is an AI-native engineering toolkit for modern Java enterprise development, powered by `Commands`, `Agents`, `Skills`, and `MCP Servers`.
 
 This release brings several improvements to the development workflow, but the most visible change is the new project identity: the repository moves from `cursor-rules-java` to `plinth`.
 
@@ -12,13 +14,13 @@ Thanks to our community members in [`Urumqi`](https://www.google.com/maps/search
 
 ## Why Plinth?
 
-In civil architecture, a `plinth` is the base that supports what people actually see. It is not the column, the arch, the road, or the aqueduct, but without a good plinth the visible structure loses alignment, load-bearing capacity, and long-term stability. That image fits the project better than the original name. 
+In civil architecture, a `plinth` is the base that supports what people actually see. It is not the column, the arch, the road, or the aqueduct, but without a good plinth, the visible structure loses alignment, load-bearing capacity, and long-term stability. That image fits the project better than the original name.
 
-The project is no longer only a collection of `Cursor rules for Java`, today the project includes `Commands`, `Agents`, `Skills`, generated inventories, OpenSpec workflows, validation pipelines, regulation review aids, framework-specific guidance, and release assets. The new name, `Plinth`, gives the project a broader identity without losing its Java roots.
+The project is no longer only a collection of `Cursor rules for Java`. Today, it includes `Commands`, `Agents`, `Skills`, generated inventories, OpenSpec workflows, validation pipelines, regulation review aids, framework-specific guidance, and release assets. The new name, `Plinth`, gives the project a broader identity without losing its Java roots.
 
-The metaphor comes from classical Roman architecture. In the old Roman empire, durable engineering depended on foundations, proportions, materials, load paths, maintenance, and repeatable methods. [Marcus Vitruvius Pollio](https://en.wikipedia.org/wiki/Vitruvius), described architecture around the enduring qualities often summarized as `firmitas`, `utilitas`, and `venustas`: [strength, usefulness, and beauty](https://en.wikipedia.org/wiki/Firmness,_commodity,_and_delight).
+The metaphor comes from classical Roman architecture. In the Roman Empire, durable engineering depended on foundations, proportions, materials, load paths, maintenance, and repeatable methods. [Marcus Vitruvius Pollio](https://en.wikipedia.org/wiki/Vitruvius) described architecture around the enduring qualities often summarized as `firmitas`, `utilitas`, and `venustas`.
 
-![](/plinth/images/2026/7/firmitas-utilitas-venustas.png)
+[![](/plinth/images/2026/7/firmitas-utilitas-venustas.png)](https://en.wikipedia.org/wiki/Firmness,_commodity,_and_delight)
 
 That is a useful analogy for modern software engineering with AI.
 
@@ -26,16 +28,16 @@ An AI agent can generate code quickly, but speed is not enough. A team still nee
 
 ---
 
-Once it was explained the repository name change, lets continue with the article reviewing the new features included in the release:
+Now that the repository name change has been explained, let's continue by reviewing the new features included in this release:
 
 - [Community first!](#community-first)
-- [Enhancing OpenSpec Changes](#enhancing-openspec-changes)
+- [Enhancing OpenSpec operations](#enhancing-openspec-operations)
 - [Improving migration safety with Flyway, Mongock, and Parallel Change](#improving-migration-safety-with-flyway-mongock-and-parallel-change)
 - [Making architecture boundaries visible with Hexagonal Architecture](#making-architecture-boundaries-visible-with-hexagonal-architecture)
-- [Adding more Types possibilities](#adding-more-types-possibilities)
+- [Modeling the domain with stronger Java types](#adding-more-types-possibilities)
 - [Extending EU regulations and ISO engineering review skills](#extending-eu-regulations-and-iso-engineering-review-skills)
 - [Improving security gates in the pipeline with VirusTotal](#improving-security-gates-in-the-pipeline-with-virustotal)
-- [Recommended Books & Talks](#recommended-books-talks)
+- [Recommended Books and Talks](#recommended-books-talks)
 - [Next steps](#next-steps)
 - [Do you still have questions about the project?](#doubts)
 
@@ -47,19 +49,21 @@ If you have questions about the project, how to customize it for your team, how 
 
 ## Community first!
 
-In the journey to evolve this tecnical repository into a OSS Product to help Software Engineers to adopt AI Agent technologies in the daily work, I am trying to put more enphasis in the community. Many thanks [Leandro Loureiro](https://github.com/lealoureiro) for your contribution for this release and your effort and time to understand the project.
+As `Plinth` grows from a technical repository into an OSS product for software engineers, the community becomes part of the product itself. Feedback, issue reports, pull requests, and real project stories help keep the guidance practical, reviewable, and useful beyond my own context. This release is a good reminder of that. Many thanks to [Leandro Loureiro](https://github.com/lealoureiro) for your contribution, for taking the time to understand the project, and for helping improve it from the perspective of someone using it outside the maintainer's day-to-day work.
 
 [![](/plinth/images/2026/7/the-first-pr-new.png)](https://github.com/jabrena/plinth/pull/966)
 
-If you use the project, you could participate as [Individual Contributor](https://github.com/jabrena/plinth/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22) or sharing your experience in [`Github Discussions`](https://github.com/jabrena/plinth/discussions).
+Now, it is possible to receive from Business roles, `What` is temptative to be built from [`Azure Devops`](https://learn.microsoft.com/en-us/azure/devops/boards/boards/kanban-overview?view=azure-devops) with the new Skill `@045-planning-azure-devops`.
 
-<a id="enhancing-openspec-changes"></a>
+If you use the project, you can participate as an [individual contributor](https://github.com/jabrena/plinth/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22) or by sharing your experience in [`GitHub Discussions`](https://github.com/jabrena/plinth/discussions).
 
-## Enhancing OpenSpec changes
+<a id="enhancing-openspec-operations"></a>
+
+## Enhancing OpenSpec operations
 
 AI coding tools are very good at producing code quickly. That is useful, but speed alone is not the same as engineering discipline. Real delivery work also needs design sequencing, compatibility analysis, test strategy, small slices, and reviewable evidence.
 
-This release adds a new family of design skills to be used in the Workflow:
+This release adds a new family of design skills to be used in the workflow:
 
 - [`@051-design-two-steps-methods`](https://www.skills.sh/jabrena/plinth/051-design-two-steps-methods)
 - [`@052-design-hamburger-method`](https://www.skills.sh/jabrena/plinth/052-design-hamburger-method)
@@ -68,7 +72,7 @@ This release adds a new family of design skills to be used in the Workflow:
 - [`@055-design-parallel-change`](https://www.skills.sh/jabrena/plinth/055-design-parallel-change)
 - [`@056-design-avoid-breaking-changes`](https://www.skills.sh/jabrena/plinth/056-design-avoid-breaking-changes)
 
-> Repeat with me: 
+> Repeat with me:
 > “SDD is not Aladdin’s lamp—it won’t grant every software wish”.
 
 Let's compare the different `Plinth commands` with `OpenSpec` and `Spec Kit`:
@@ -103,7 +107,7 @@ Let's compare the different `Plinth commands` with `OpenSpec` and `Spec Kit`:
       <td><code>/speckit.plan</code> and <code>/speckit.tasks</code></td>
     </tr>
     <tr>
-      <td><code>/implement-issue</code></td>
+      <td><code>/implement-spec</code></td>
       <td>Implementation<br><code>openspec show &lt;change-name&gt;</code></td>
       <td><code>/speckit.implement</code></td>
     </tr>
@@ -156,14 +160,9 @@ This is why `@055-design-parallel-change` belongs in the design workflow before 
 > **⚠️ AVOID RUNNING DATABASE MIGRATION TASKS WITHOUT HITL.**
 Human-in-the-loop review is necessary because migrations can destroy or reinterpret production data, block critical tables, break rollback paths, and affect systems that are not visible in the local codebase. An agent can draft the plan, checks, and scripts, but a qualified human owner should review the migration intent, data impact, rollback strategy, monitoring evidence, and execution window before it reaches production.
 
-**Note:** If you Domain/Subdomain has Microservices associated with Databases, and you are adopting GenAI tools maybe you should review the current architecture to mitigate potential database production issues. 
+**Note:** If your domain or subdomain has microservices associated with databases and you are adopting GenAI tools, you should review the current architecture to mitigate potential database production issues.
 
 If you want to go deeper into this topic, I recommend reading: [Why Do I Need to Use the Parallel Change Pattern?](/cursor-rules-java/blog/2026/07/why-do-i-need-to-use-the-parallel-change-pattern.html)
-
-Other interesting readings:
-
-- https://machinelearning.apple.com/research/illusion-of-thinking
-- https://genai.owasp.org/
 
 <a id="making-architecture-boundaries-visible-with-hexagonal-architecture"></a>
 
@@ -222,17 +221,21 @@ For framework agents, the skill is useful before making changes in `Spring Boot`
 
 <a id="adding-more-types-possibilities"></a>
 
-## Adding more Types possibilities
+## Modeling the domain with stronger Java types
 
-Maven support continues to be one of the most used parts of the project, and `0.17.0` improves it in two directions.
+Java is a strongly typed programming language, and that is not only a compiler detail. It is one of the main design tools available to a Java team. Good types make business rules visible, prevent accidental misuse, improve method signatures, and help agents reason about the code before they change it.
 
-First, [`@111-java-maven-dependencies`](https://www.skills.sh/jabrena/plinth/111-java-maven-dependencies) now includes `JavaMoney` guidance. This helps agents recognize when a Java project needs Money and Currency API support, including `JSR 354` and `Moneta` context.
+This matters especially when a domain concept has more meaning than its storage representation. A `String` can hold an email, an order id, a country code, or a currency code, but those values are not interchangeable. A `BigDecimal` can hold a numeric amount, but it does not explain whether the amount is euros, dollars, tax, discount, revenue, balance, or an exchange rate. When everything is modeled with generic types, invalid combinations become easier to write and harder to review.
 
-Use this path when a project needs to model money, currencies, amounts, exchange-rate concerns, pricing, billing, financial calculations, or domain values where `BigDecimal` alone is not enough to describe the business meaning.
+For that reason, [`@111-java-maven-dependencies`](https://www.skills.sh/jabrena/plinth/111-java-maven-dependencies) now includes `JavaMoney` guidance. The skill helps agents recognize when a project should use Money and Currency API support, including [`JSR 354`](https://jcp.org/en/jsr/detail?id=354) and [`Moneta`](https://javamoney.github.io/api.html), instead of treating monetary values as isolated numbers.
+
+This update combines well with [`@122-java-type-design`](https://www.skills.sh/jabrena/plinth/122-java-type-design), which focuses on type-safe wrappers, domain-specific value objects, and reducing primitive obsession in Java code.
+
+Use this guidance when a project needs to model money, currencies, amounts, exchange-rate concerns, pricing, billing, financial calculations, or financial domain values where `BigDecimal` alone is too weak to describe the business meaning. The goal is not to add dependencies by default. The goal is to choose types that make the model harder to misuse and easier to evolve.
 
 <a id="extending-eu-regulations-and-iso-engineering-review-skills"></a>
 
-## Extending EU regulations and ISO Standard engineering review skills
+## Extending EU regulations and ISO standard engineering review skills
 
 `0.16.0` introduced the first family of EU regulation engineering review skills. `0.17.0` extends that family with financial-market, market-integrity, product-liability, and AI management-system review support:
 
@@ -260,70 +263,44 @@ The current regulation and standard review coverage is:
   <thead>
     <tr>
       <th>Review skill</th>
-      <th>Reviews</th>
-      <th>Use it for</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><code>EU AI Act</code></td>
-      <td>AI-system scope, risk classification, transparency, human oversight, evidence, and owner handoff.</td>
-      <td>LLMs, RAG systems, AI agents, model-driven decisions, generated artifacts, and AI-assisted workflows.</td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/801-regulations-eu-ai-act"><code>@801-regulations-eu-ai-act</code></a><br>Reviews AI-system scope, risk classification, transparency, human oversight, evidence, and owner handoff.</td>
     </tr>
     <tr>
-      <td><code>DORA</code></td>
-      <td>Digital operational resilience for financial entities and ICT-dependent business services.</td>
-      <td>Incident evidence, continuity, operational resilience testing, third-party ICT risk, and critical-service controls.</td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/802-regulations-dora"><code>@802-regulations-dora</code></a><br>Reviews digital operational resilience for financial entities and ICT-dependent business services.</td>
     </tr>
     <tr>
-      <td><code>GDPR</code></td>
-      <td>Privacy engineering concerns around personal data collection, processing, logging, sharing, and deletion.</td>
-      <td>Lawful-basis evidence, minimization, retention, data-subject rights, exports, and privacy-safe observability.</td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/803-regulations-gdpr"><code>@803-regulations-gdpr</code></a><br>Reviews privacy engineering concerns around personal data collection, processing, logging, sharing, and deletion.</td>
     </tr>
     <tr>
-      <td><code>NIS2</code></td>
-      <td>Cybersecurity and resilience evidence for essential, important, and critical-sector services.</td>
-      <td>Asset inventory, incident escalation, vulnerability handling, continuity, supply-chain risk, and secure release gates.</td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/804-regulations-eu-nis2"><code>@804-regulations-eu-nis2</code></a><br>Reviews cybersecurity and resilience evidence for essential, important, and critical-sector services.</td>
     </tr>
     <tr>
-      <td><code>Cyber Resilience Act</code></td>
-      <td>Product-security evidence for software and products with digital elements.</td>
-      <td>Secure-by-design controls, vulnerability handling, SBOM evidence, security updates, documentation, and support periods.</td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/805-regulations-eu-cyber-resilience-act"><code>@805-regulations-eu-cyber-resilience-act</code></a><br>Reviews product-security evidence for software and products with digital elements.</td>
     </tr>
     <tr>
-      <td><code>EU Data Act</code></td>
-      <td>Connected-product, related-service, data-sharing, portability, and cloud-switching concerns.</td>
-      <td>Data access APIs, request workflows, data recipients, smart-contract-like automation, and portability evidence.</td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/806-regulations-eu-data-act"><code>@806-regulations-eu-data-act</code></a><br>Reviews connected-product, related-service, data-sharing, portability, and cloud-switching concerns.</td>
     </tr>
     <tr>
-      <td><code>Digital Services Act</code></td>
-      <td>Due-diligence and transparency evidence for intermediaries, hosting services, and platforms.</td>
-      <td>Notice-and-action flows, moderation logs, appeals, recommender explanations, ad transparency, and marketplace controls.</td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/807-regulations-eu-digital-services-act"><code>@807-regulations-eu-digital-services-act</code></a><br>Reviews due-diligence and transparency evidence for intermediaries, hosting services, and platforms.</td>
     </tr>
     <tr>
-      <td><code>Digital Markets Act</code></td>
-      <td>Gatekeeper-platform concerns around core platform services, interoperability, and fair access.</td>
-      <td>Business-user data access, consent evidence, ranking signals, export workflows, anti-circumvention, and compliance handoff.</td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/808-regulations-eu-digital-markets-act"><code>@808-regulations-eu-digital-markets-act</code></a><br>Reviews gatekeeper-platform concerns around core platform services, interoperability, and fair access.</td>
     </tr>
     <tr>
-      <td><code>MiFID II</code></td>
-      <td>Investment-services, trading, investor-protection, transparency, and record-keeping evidence.</td>
-      <td>Client classification, suitability, appropriateness, order handling, best execution, algorithmic trading, and audit trails.</td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/810-regulations-eu-mifid-ii"><code>@810-regulations-eu-mifid-ii</code></a><br>Reviews investment-services, trading, investor-protection, transparency, and record-keeping evidence.</td>
     </tr>
     <tr>
-      <td><code>Market Abuse Regulation</code></td>
-      <td>Market-integrity evidence for issuer disclosures, insider information, surveillance, and alerts.</td>
-      <td>Insider lists, market soundings, suspicious order reporting, employee dealing controls, watchlists, and restricted lists.</td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/811-regulations-eu-market-abuse-regulation"><code>@811-regulations-eu-market-abuse-regulation</code></a><br>Reviews market-integrity evidence for issuer disclosures, insider information, surveillance, and alerts.</td>
     </tr>
     <tr>
-      <td><code>Product Liability Directive</code></td>
-      <td>Software, AI-enabled product, component, update, and post-release safety evidence.</td>
-      <td>Defect analysis, product documentation, maintenance evidence, monitoring, update provenance, and owner review.</td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/812-regulations-eu-product-liability-directive"><code>@812-regulations-eu-product-liability-directive</code></a><br>Reviews software, AI-enabled product, component, update, and post-release safety evidence.</td>
     </tr>
     <tr>
-      <td><code>ISO/IEC 42001</code></td>
-      <td>AI management-system evidence for organizational AI governance and lifecycle controls.</td>
-      <td>AI inventories, risk treatment, roles, policies, RAG governance, agent controls, monitoring, incidents, and improvement.</td>
+      <td><a href="https://www.skills.sh/jabrena/plinth/813-regulations-iso-42001"><code>@813-regulations-iso-42001</code></a><br>Reviews AI management-system evidence for organizational AI governance and lifecycle controls.</td>
     </tr>
   </tbody>
 </table>
@@ -336,9 +313,9 @@ If you are interested in this topic, I recommend reading both articles: [Introdu
 
 This release also strengthens the validation path around generated content, release artifacts, and documentation.
 
-The Pipeline now includes `VirusTotal` checks before generated artifacts are promoted. In the latest scan, `VirusTotal` evaluated the artifact with `75` security applications/engines. This is not a replacement for the build, tests, or human review, but it gives maintainers one more piece of evidence when deciding whether a generated artifact is ready to publish.
+The pipeline now includes `VirusTotal` checks before generated artifacts are promoted. In the latest scan, `VirusTotal` evaluated the artifact with `75` security applications and engines. This is not a replacement for the build, tests, or human review, but it gives maintainers one more piece of evidence when deciding whether a generated artifact is ready to publish.
 
-The scan included the following applications/engines: `ALYac`, `APEX`, `AVG`, `Acronis`, `AhnLab-V3`, `Alibaba`, `Antiy-AVL`, `Arcabit`, `Avast`, `Avast-Mobile`, `Avira`, `BitDefender`, `BitDefenderFalx`, `Bkav`, `CAT-QuickHeal`, `CMC`, `CTX`, `ClamAV`, `CrowdStrike`, `Cylance`, `Cynet`, `DeepInstinct`, `DrWeb`, `ESET-NOD32`, `Elastic`, `Emsisoft`, `F-Secure`, `Fortinet`, `GData`, `Google`, `Gridinsoft`, `Ikarus`, `Jiangmin`, `K7AntiVirus`, `K7GW`, `Kaspersky`, `Kingsoft`, `Lionic`, `Malwarebytes`, `MaxSecure`, `McAfeeD`, `MicroWorld-eScan`, `Microsoft`, `NANO-Antivirus`, `Paloalto`, `Panda`, `Rising`, `SUPERAntiSpyware`, `Sangfor`, `SentinelOne`, `Skyhigh`, `Sophos`, `Symantec`, `SymantecMobileInsight`, `TACHYON`, `Tencent`, `Trapmine`, `TrellixENS`, `TrendMicro`, `TrendMicro-HouseCall`, `Trustlook`, `VBA32`, `VIPRE`, `Varist`, `ViRobot`, `VirIT`, `Webroot`, `Xcitium`, `Yandex`, `Zillya`, `ZoneAlarm`, `Zoner`, `alibabacloud`, `huorong`, `tehtris`.
+The scan included the following applications and engines: `ALYac`, `APEX`, `AVG`, `Acronis`, `AhnLab-V3`, `Alibaba`, `Antiy-AVL`, `Arcabit`, `Avast`, `Avast-Mobile`, `Avira`, `BitDefender`, `BitDefenderFalx`, `Bkav`, `CAT-QuickHeal`, `CMC`, `CTX`, `ClamAV`, `CrowdStrike`, `Cylance`, `Cynet`, `DeepInstinct`, `DrWeb`, `ESET-NOD32`, `Elastic`, `Emsisoft`, `F-Secure`, `Fortinet`, `GData`, `Google`, `Gridinsoft`, `Ikarus`, `Jiangmin`, `K7AntiVirus`, `K7GW`, `Kaspersky`, `Kingsoft`, `Lionic`, `Malwarebytes`, `MaxSecure`, `McAfeeD`, `MicroWorld-eScan`, `Microsoft`, `NANO-Antivirus`, `Paloalto`, `Panda`, `Rising`, `SUPERAntiSpyware`, `Sangfor`, `SentinelOne`, `Skyhigh`, `Sophos`, `Symantec`, `SymantecMobileInsight`, `TACHYON`, `Tencent`, `Trapmine`, `TrellixENS`, `TrendMicro`, `TrendMicro-HouseCall`, `Trustlook`, `VBA32`, `VIPRE`, `Varist`, `ViRobot`, `VirIT`, `Webroot`, `Xcitium`, `Yandex`, `Zillya`, `ZoneAlarm`, `Zoner`, `alibabacloud`, `huorong`, `tehtris`.
 
 ---
 
@@ -346,7 +323,7 @@ The scan included the following applications/engines: `ALYac`, `APEX`, `AVG`, `A
 
 <a id="recommended-books-talks"></a>
 
-## Recommended Books & Talks
+## Recommended Books and Talks
 
 
 **Spec Driven Development:**
@@ -371,15 +348,17 @@ If you are interested in Hexagonal Architecture, I recommend [Alistair Cockburn'
 
 For the next release, we plan to work on a few topics:
 
-- Improve the behavior of `/create-spec` and compare with the different actions from `Spec-kit` and others. **Quality first!**
+- Add `Katas` to improve your knowledge about `Plinth` in an incremental way.
+- Improve the different behaviors to improve the `Design phase`.
+- Add support for `Spec Kit`.
 - Update the `Spring Boot` support for `4.1.0`.
-- Going down the rabbit hole in the EU Regulation ecosystem for GenAI.
-- Add a Skill about `JVM Flags`.
+- Add a skill about `JVM Flags`.
+- Going down the rabbit hole about EU regulation ecosystem for `GenAI`.
 
 <a id="doubts"></a>
 
 ## Do you still have questions about the project?
 
-If you feel stuck using this project or have questions, you can attend the following workshop at `JCConf 2026`:
+If you feel stuck using this project or have questions, you can attend the following workshop at [`JCConf 2026`](https://jcconf.tw/2026/):
 
 [![](/plinth/images/2026/7/jcconf-2026.png)](https://jcconf.tw/2026/)
