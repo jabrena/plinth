@@ -32,9 +32,10 @@ Once it was explained the repository name change, lets continue with the article
 - [Enhancing OpenSpec Changes](#enhancing-openspec-changes)
 - [Improving migration safety with Flyway, Mongock, and Parallel Change](#improving-migration-safety-with-flyway-mongock-and-parallel-change)
 - [Making architecture boundaries visible with Hexagonal Architecture](#making-architecture-boundaries-visible-with-hexagonal-architecture)
-- [Improving Maven guidance](#improving-maven-guidance)
+- [Adding more Types possibilities](#adding-more-types-possibilities)
 - [Extending EU regulations and ISO engineering review skills](#extending-eu-regulations-and-iso-engineering-review-skills)
 - [Improving security gates in the pipeline with VirusTotal](#improving-security-gates-in-the-pipeline-with-virustotal)
+- [Recommended Books & Talks](#recommended-books-talks)
 - [Next steps](#next-steps)
 - [Do you still have questions about the project?](#doubts)
 
@@ -46,11 +47,11 @@ If you have questions about the project, how to customize it for your team, how 
 
 ## Community first!
 
-In the journey to evolve a tecnical repository into a OSS Product, I am trying to put more enphasis in the community. Many thanks [Leandro](https://github.com/lealoureiro) for your contribution.
+In the journey to evolve this tecnical repository into a OSS Product to help Software Engineers to adopt AI Agent technologies in the daily work, I am trying to put more enphasis in the community. Many thanks [Leandro Loureiro](https://github.com/lealoureiro) for your contribution for this release and your effort and time to understand the project.
 
 [![](/plinth/images/2026/7/the-first-pr-new.png)](https://github.com/jabrena/plinth/pull/966)
 
-If you use the project, you could participate as [IC](https://github.com/jabrena/plinth/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22) or sharing your experience in [`Github Discussions`](https://github.com/jabrena/plinth/discussions).
+If you use the project, you could participate as [Individual Contributor](https://github.com/jabrena/plinth/issues?q=is%3Aissue%20state%3Aopen%20label%3A%22good%20first%20issue%22) or sharing your experience in [`Github Discussions`](https://github.com/jabrena/plinth/discussions).
 
 <a id="enhancing-openspec-changes"></a>
 
@@ -58,7 +59,7 @@ If you use the project, you could participate as [IC](https://github.com/jabrena
 
 AI coding tools are very good at producing code quickly. That is useful, but speed alone is not the same as engineering discipline. Real delivery work also needs design sequencing, compatibility analysis, test strategy, small slices, and reviewable evidence.
 
-This release adds a new family of design skills:
+This release adds a new family of design skills to be used in the Workflow:
 
 - [`@051-design-two-steps-methods`](https://www.skills.sh/jabrena/plinth/051-design-two-steps-methods)
 - [`@052-design-hamburger-method`](https://www.skills.sh/jabrena/plinth/052-design-hamburger-method)
@@ -70,15 +71,51 @@ This release adds a new family of design skills:
 > Repeat with me: 
 > “SDD is not Aladdin’s lamp—it won’t grant every software wish”.
 
-The goal is to move an agent from "generate the final patch" to "understand the change path". If you are interested in this direction, I recommend reading the following article: [From code generation to software engineering](/cursor-rules-java/blog/2026/06/from-code-generation-to-software-engineering.html)
+Let's compare the different `Plinth commands` with `OpenSpec` and `Spec Kit`:
 
-If you are interested to improve your LEAN skills, [Eduardo Ferro](https://www.eferro.net/) has published an excellent book.
+<table>
+  <thead>
+    <tr>
+      <th>Plinth Commands</th>
+      <th>OpenSpec phase</th>
+      <th>Spec Kit phase</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>/update-issue</code></td>
+      <td>Issue intake<br><code>openspec list</code></td>
+      <td><code>/speckit.specify</code> input</td>
+    </tr>
+    <tr>
+      <td><code>/create-spec</code><br><code>/review-alignment</code></td>
+      <td>Proposal<br><code>openspec new change &lt;change-name&gt;</code></td>
+      <td><code>/speckit.specify</code> and <code>/speckit.clarify</code></td>
+    </tr>
+    <tr>
+      <td><code>/create-spec</code></td>
+      <td>Specification<br><code>openspec show &lt;change-name&gt;</code></td>
+      <td><code>/speckit.specify</code> plus <code>/speckit.checklist</code></td>
+    </tr>
+    <tr>
+      <td><code>/create-spec</code><br><code>/explore-design</code></td>
+      <td>Task planning<br><code>openspec validate --all</code></td>
+      <td><code>/speckit.plan</code> and <code>/speckit.tasks</code></td>
+    </tr>
+    <tr>
+      <td><code>/implement-issue</code></td>
+      <td>Implementation<br><code>openspec show &lt;change-name&gt;</code></td>
+      <td><code>/speckit.implement</code></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>Review and closure<br><code>openspec archive &lt;change-name&gt;</code></td>
+      <td><code>/speckit.analyze</code> and <code>/speckit.converge</code></td>
+    </tr>
+  </tbody>
+</table>
 
-[![](/plinth/images/2026/7/menos-software-mas-impacto-new.jpg)](https://menos-software.eferro.net/)
-
----
-
-In the another hand, I recommend to watch one of the latest [Talk](https://www.youtube.com/watch?v=35dH6q18UtI) from [Simon Martinelli](https://martinelli.ch/) about `Spec Driven development`, personally I like the common sense in the ideas from him.
+This mapping is useful because it makes the change path explicit. The agent is not only asked to generate the final patch; it is guided through issue intake, proposal, specification, planning, implementation, and closure. If you are interested in this direction, I recommend reading [From code generation to software engineering](/cursor-rules-java/blog/2026/06/from-code-generation-to-software-engineering.html).
 
 <a id="improving-migration-safety-with-flyway-mongock-and-parallel-change"></a>
 
@@ -134,7 +171,7 @@ Other interesting readings:
 
 This release adds [`@707-technologies-hexagonal-architecture`](https://www.skills.sh/jabrena/plinth/707-technologies-hexagonal-architecture), a framework-agnostic skill for reviewing Java application boundaries.
 
-The hexagonal architecture, or ports and adapters architecture, is an architectural style used in software design. It aims at creating loosely coupled application components that can be easily connected to their software environment by means of ports and adapters. 
+> The hexagonal architecture, or ports and adapters architecture, is an architectural style used in software design. It aims at creating loosely coupled application components that can be easily connected to their software environment by means of ports and adapters.
 
 The skill helps engineers and agents inspect whether dependency direction and responsibility placement are consistent with Hexagonal Architecture:
 
@@ -183,13 +220,9 @@ https://www.archunit.org/userguide/html/000_Index.html
 
 For framework agents, the skill is useful before making changes in `Spring Boot`, `Quarkus`, or `Micronaut` applications. It gives the agent a boundary review language before it starts moving packages, introducing adapters, or changing service responsibilities.
 
-If you are interested in this approach, I recommend the [Alistair Cockburn](https://alistair.cockburn.us/hexagonal-architecture)`s book:
+<a id="adding-more-types-possibilities"></a>
 
-[![](/plinth/images/2026/7/hexagonal-architecture-explained-new.jpg)](https://www.amazon.com/Hexagonal-Architecture-Explained-Alistair-Cockburn/dp/173751978X)
-
-<a id="improving-maven-guidance"></a>
-
-## Improving Maven guidance
+## Adding more Types possibilities
 
 Maven support continues to be one of the most used parts of the project, and `0.17.0` improves it in two directions.
 
@@ -223,30 +256,77 @@ For fintech and enterprise teams, the practical value is early evidence. An AI a
 
 The current regulation and standard review coverage is:
 
-- `EU AI Act`: Reviews AI-system scope, risk classification, transparency, human oversight, evidence, and owner handoff.
-  Use it for LLMs, RAG systems, AI agents, model-driven decisions, generated artifacts, and AI-assisted workflows.
-- `DORA`: Reviews digital operational resilience for financial entities and ICT-dependent business services.
-  Use it for incident evidence, continuity, operational resilience testing, third-party ICT risk, and critical-service controls.
-- `GDPR`: Reviews privacy engineering concerns around personal data collection, processing, logging, sharing, and deletion.
-  Use it for lawful-basis evidence, minimization, retention, data-subject rights, exports, and privacy-safe observability.
-- `NIS2`: Reviews cybersecurity and resilience evidence for essential, important, and critical-sector services.
-  Use it for asset inventory, incident escalation, vulnerability handling, continuity, supply-chain risk, and secure release gates.
-- `Cyber Resilience Act`: Reviews product-security evidence for software and products with digital elements.
-  Use it for secure-by-design controls, vulnerability handling, SBOM evidence, security updates, documentation, and support periods.
-- `EU Data Act`: Reviews connected-product, related-service, data-sharing, portability, and cloud-switching concerns.
-  Use it for data access APIs, request workflows, data recipients, smart-contract-like automation, and portability evidence.
-- `Digital Services Act`: Reviews due-diligence and transparency evidence for intermediaries, hosting services, and platforms.
-  Use it for notice-and-action flows, moderation logs, appeals, recommender explanations, ad transparency, and marketplace controls.
-- `Digital Markets Act`: Reviews gatekeeper-platform concerns around core platform services, interoperability, and fair access.
-  Use it for business-user data access, consent evidence, ranking signals, export workflows, anti-circumvention, and compliance handoff.
-- `MiFID II`: Reviews investment-services, trading, investor-protection, transparency, and record-keeping evidence.
-  Use it for client classification, suitability, appropriateness, order handling, best execution, algorithmic trading, and audit trails.
-- `Market Abuse Regulation`: Reviews market-integrity evidence for issuer disclosures, insider information, surveillance, and alerts.
-  Use it for insider lists, market soundings, suspicious order reporting, employee dealing controls, watchlists, and restricted lists.
-- `Product Liability Directive`: Reviews software, AI-enabled product, component, update, and post-release safety evidence.
-  Use it for defect analysis, product documentation, maintenance evidence, monitoring, update provenance, and owner review.
-- `ISO/IEC 42001`: Reviews AI management-system evidence for organizational AI governance and lifecycle controls.
-  Use it for AI inventories, risk treatment, roles, policies, RAG governance, agent controls, monitoring, incidents, and improvement.
+<table>
+  <thead>
+    <tr>
+      <th>Review skill</th>
+      <th>Reviews</th>
+      <th>Use it for</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>EU AI Act</code></td>
+      <td>AI-system scope, risk classification, transparency, human oversight, evidence, and owner handoff.</td>
+      <td>LLMs, RAG systems, AI agents, model-driven decisions, generated artifacts, and AI-assisted workflows.</td>
+    </tr>
+    <tr>
+      <td><code>DORA</code></td>
+      <td>Digital operational resilience for financial entities and ICT-dependent business services.</td>
+      <td>Incident evidence, continuity, operational resilience testing, third-party ICT risk, and critical-service controls.</td>
+    </tr>
+    <tr>
+      <td><code>GDPR</code></td>
+      <td>Privacy engineering concerns around personal data collection, processing, logging, sharing, and deletion.</td>
+      <td>Lawful-basis evidence, minimization, retention, data-subject rights, exports, and privacy-safe observability.</td>
+    </tr>
+    <tr>
+      <td><code>NIS2</code></td>
+      <td>Cybersecurity and resilience evidence for essential, important, and critical-sector services.</td>
+      <td>Asset inventory, incident escalation, vulnerability handling, continuity, supply-chain risk, and secure release gates.</td>
+    </tr>
+    <tr>
+      <td><code>Cyber Resilience Act</code></td>
+      <td>Product-security evidence for software and products with digital elements.</td>
+      <td>Secure-by-design controls, vulnerability handling, SBOM evidence, security updates, documentation, and support periods.</td>
+    </tr>
+    <tr>
+      <td><code>EU Data Act</code></td>
+      <td>Connected-product, related-service, data-sharing, portability, and cloud-switching concerns.</td>
+      <td>Data access APIs, request workflows, data recipients, smart-contract-like automation, and portability evidence.</td>
+    </tr>
+    <tr>
+      <td><code>Digital Services Act</code></td>
+      <td>Due-diligence and transparency evidence for intermediaries, hosting services, and platforms.</td>
+      <td>Notice-and-action flows, moderation logs, appeals, recommender explanations, ad transparency, and marketplace controls.</td>
+    </tr>
+    <tr>
+      <td><code>Digital Markets Act</code></td>
+      <td>Gatekeeper-platform concerns around core platform services, interoperability, and fair access.</td>
+      <td>Business-user data access, consent evidence, ranking signals, export workflows, anti-circumvention, and compliance handoff.</td>
+    </tr>
+    <tr>
+      <td><code>MiFID II</code></td>
+      <td>Investment-services, trading, investor-protection, transparency, and record-keeping evidence.</td>
+      <td>Client classification, suitability, appropriateness, order handling, best execution, algorithmic trading, and audit trails.</td>
+    </tr>
+    <tr>
+      <td><code>Market Abuse Regulation</code></td>
+      <td>Market-integrity evidence for issuer disclosures, insider information, surveillance, and alerts.</td>
+      <td>Insider lists, market soundings, suspicious order reporting, employee dealing controls, watchlists, and restricted lists.</td>
+    </tr>
+    <tr>
+      <td><code>Product Liability Directive</code></td>
+      <td>Software, AI-enabled product, component, update, and post-release safety evidence.</td>
+      <td>Defect analysis, product documentation, maintenance evidence, monitoring, update provenance, and owner review.</td>
+    </tr>
+    <tr>
+      <td><code>ISO/IEC 42001</code></td>
+      <td>AI management-system evidence for organizational AI governance and lifecycle controls.</td>
+      <td>AI inventories, risk treatment, roles, policies, RAG governance, agent controls, monitoring, incidents, and improvement.</td>
+    </tr>
+  </tbody>
+</table>
 
 If you are interested in this topic, I recommend reading both articles: [Introduction to EU regulations Part I](/cursor-rules-java/blog/2026/06/introduction-to-eu-regulations-part-i.html) and [Introduction to EU regulations Part II](/cursor-rules-java/blog/2026/07/introduction-to-eu-regulations-part-ii.html)
 
@@ -263,6 +343,27 @@ The scan included the following applications/engines: `ALYac`, `APEX`, `AVG`, `A
 ---
 
 [Secur0](https://secur0.com/en) is a security platform that helps organizations find vulnerabilities through ethical hackers, bug bounty programs, and pentesting conducted by verified experts. Recently, `Plinth` drew attention from `Secur0`, which plans to review the project for potential vulnerabilities in the coming months. This adds another external security signal to the release process.
+
+<a id="recommended-books-talks"></a>
+
+## Recommended Books & Talks
+
+
+**Spec Driven Development:**
+
+I recommend watching one of the latest [talks](https://www.youtube.com/watch?v=35dH6q18UtI) from [Simon Martinelli](https://martinelli.ch/) about Spec Driven Development. I like the common sense in his ideas.
+
+**LEAN Development:**
+
+If you are interested in improving your LEAN skills, [Eduardo Ferro](https://www.eferro.net/) has published an excellent book:
+
+[![](/plinth/images/2026/7/menos-software-mas-impacto-new.jpg)](https://menos-software.eferro.net/)
+
+**Hexagonal Architecture:**
+
+If you are interested in Hexagonal Architecture, I recommend [Alistair Cockburn's book](https://alistair.cockburn.us/hexagonal-architecture):
+
+[![](/plinth/images/2026/7/hexagonal-architecture-explained-new.jpg)](https://www.amazon.com/Hexagonal-Architecture-Explained-Alistair-Cockburn/dp/173751978X)
 
 <a id="next-steps"></a>
 
