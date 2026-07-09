@@ -215,7 +215,7 @@ MCP Servers
 
 | 名称 | 用途 |
 | --- | --- |
-| 1. [MarkdownValidator](./markdown-validator/src/main/java/info/jab/markdownvalidator/MarkdownValidator.java) | 保护文档层，在运行 skill 专项检查之前发现 Markdown 解析漂移和远程链接故障。 |
+| 1. [MarkdownValidator](./markdown-validator/src/main/java/info/jab/mv/MarkdownValidator.java) | 保护文档层，在运行 skill 专项检查之前发现 Markdown 解析漂移和远程链接故障。 |
 | 2. [skill-check](https://github.com/thedaviddias/skill-check) | 确认每个生成的 skill 符合预期的打包约定，补充更关注行为或安全风险的扫描器。 |
 | 3. [cisco-ai-skill-scanner](https://github.com/cisco-ai-defense/skill-scanner) by Cisco | 提供面向行为的安全覆盖，发现结构校验无法识别的高风险 skill 流程。 |
 | 4. [SkillSpector](https://github.com/NVIDIA/SkillSpector) by NVIDIA | 提供独立的静态质量和安全审查，便于与其他扫描器的发现进行对照。 |
