@@ -105,7 +105,7 @@ Plan
     @robot-business-analyst
 
 Build
-  /implement-issue
+  /implement-spec
       @robot-tech-lead
       /create-feature-branch
       /create-worktree
@@ -157,7 +157,7 @@ Implementa y mejora aplicaciones Java con orientación sobre Maven, diseño, pro
 
 | Recurso | Opciones disponibles |
 | --- | --- |
-| **Commands** | [`/create-feature-branch`](./.cursor/commands/create-feature-branch.md) · [`/create-worktree`](./.cursor/commands/create-worktree.md) · [`/implement-issue`](./.cursor/commands/implement-issue.md) |
+| **Commands** | [`/create-feature-branch`](./.cursor/commands/create-feature-branch.md) · [`/create-worktree`](./.cursor/commands/create-worktree.md) · [`/implement-spec`](./.cursor/commands/implement-spec.md) |
 | **Agents** | `@robot-tech-lead` · `@robot-no-java` · `@robot-java-coder` · `@robot-java-spring-boot-coder` · `@robot-java-quarkus-coder` · `@robot-java-micronaut-coder` |
 | **Skills** | [110-java-maven-best-practices](https://www.skills.sh/jabrena/plinth/110-java-maven-best-practices) · [111-java-maven-dependencies](https://www.skills.sh/jabrena/plinth/111-java-maven-dependencies) · [121-java-object-oriented-design](https://www.skills.sh/jabrena/plinth/121-java-object-oriented-design) · [124-java-secure-coding](https://www.skills.sh/jabrena/plinth/124-java-secure-coding) · [143-java-functional-exception-handling](https://www.skills.sh/jabrena/plinth/143-java-functional-exception-handling) |
 | **MCP Servers** | [Jbang-Quarkus-JDBC](https://github.com/quarkiverse/quarkus-mcp-servers/blob/main/jdbc/README.md) · [MongoDB](https://github.com/mongodb-js/mongodb-mcp-server) · [JavaDocs](https://www.javadocs.dev/mcp) · [Serena-LSP](https://oraios.github.io/serena/01-about/000_intro.html) |

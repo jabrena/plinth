@@ -1,35 +1,35 @@
-# implement-issue-command Specification
+# implement-spec-command Specification
 
 ## Purpose
-TBD - created by archiving change align-implement-issue-command. Update Purpose after archive.
+Define the controlled implementation command for approved plans and validated OpenSpec task lists.
 ## Requirements
-### Requirement: Issue implementation command
+### Requirement: Spec implementation command
 
-The command bundle SHALL provide `/implement-issue` in place of `/implement`, and the command MUST use `@robot-tech-lead` to coordinate delivery through the existing Java, Spring Boot, Quarkus, or Micronaut coder agent.
+The command bundle SHALL provide `/implement-spec`, and the command MUST use `@robot-tech-lead` to coordinate delivery through the existing Java, Spring Boot, Quarkus, Micronaut, or non-Java coder agent.
 
 #### Scenario: Install the implementation command
 
 - **WHEN** a user installs the embedded command bundle
-- **THEN** the bundle contains `implement-issue.md`
+- **THEN** the bundle contains `implement-spec.md`
 - **AND** it does not contain `implement.md`
-- **AND** the inventory identifies `/implement-issue` as an implementation command
+- **AND** the inventory identifies `/implement-spec` as an implementation command
 
 ### Requirement: Executable artifact inputs
 
-`/implement-issue` MUST accept an approved implementation plan or an OpenSpec change containing a validated `tasks.md` as its execution contract.
+`/implement-spec` MUST accept an approved implementation plan or an OpenSpec change containing a validated `tasks.md` as its execution contract.
 
 #### Scenario: Implement from an approved plan
 
-- **WHEN** a user invokes `/implement-issue` with an approved implementation plan
+- **WHEN** a user invokes `/implement-spec` with an approved implementation plan
 - **THEN** `@robot-tech-lead` delegates implementation against the plan milestones and verification steps
 
 #### Scenario: Implement from an OpenSpec change
 
-- **WHEN** a user invokes `/implement-issue` with an OpenSpec change containing validated incomplete tasks
+- **WHEN** a user invokes `/implement-spec` with an OpenSpec change containing validated incomplete tasks
 - **THEN** `@robot-tech-lead` delegates implementation against those tasks
 - **AND** marks tasks complete only after acceptance criteria and focused checks pass
 
-#### Scenario: Issue has no executable artifact
+#### Scenario: Referenced issue has no executable artifact
 
 - **WHEN** a user supplies only an issue and repository policy requires structured planning
 - **THEN** the command stops implementation
@@ -37,7 +37,7 @@ The command bundle SHALL provide `/implement-issue` in place of `/implement`, an
 
 ### Requirement: Controlled delegation and verification
 
-`/implement-issue` MUST require framework-aware coder routing, dependency and file-ownership controls, evidence-based completion, and focused validation reporting within the selected execution artifact.
+`/implement-spec` MUST require framework-aware coder routing, dependency and file-ownership controls, evidence-based completion, and focused validation reporting within the selected execution artifact.
 
 #### Scenario: Delegate independent task groups
 
@@ -54,11 +54,11 @@ The command bundle SHALL provide `/implement-issue` in place of `/implement`, an
 #### Scenario: Complete implementation workflow
 
 - **WHEN** delegated tasks pass their acceptance criteria and focused checks
-- **THEN** `/implement-issue` reports changed files, test and build evidence, task status, blockers, and risks
+- **THEN** `/implement-spec` reports changed files, test and build evidence, task status, blockers, and risks
 
 #### Scenario: Select branch or worktree execution
 
-- **WHEN** `/implement-issue` reviews the approved plan or OpenSpec task list
+- **WHEN** `/implement-spec` reviews the approved plan or OpenSpec task list
 - **THEN** it decides whether the work should run on a feature branch or in one or more linked worktrees
 - **AND** it uses `/create-feature-branch` for serial current-checkout work
 - **AND** it uses `/create-worktree` when independent groups can run safely in parallel

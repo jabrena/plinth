@@ -27,7 +27,7 @@ Scenario: Generate embedded commands inventory with every command asset
     | create-diagram.md        | /create-diagram          |
     | create-spec.md           | /create-spec             |
     | review-alignment.md      | /review-alignment        |
-    | implement-issue.md       | /implement-issue         |
+    | implement-spec.md       | /implement-spec         |
     | profile.md               | /profile                 |
     | benchmark.md             | /benchmark               |
   And every command row in the generated file corresponds to a same-named source file in "skills-generator/src/main/resources/skill-references/assets/commands"

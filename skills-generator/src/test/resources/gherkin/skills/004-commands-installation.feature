@@ -29,7 +29,7 @@ Scenario: Install embedded commands into the GitHub commands destination
     | create-diagram.md        |
     | create-spec.md           |
     | review-alignment.md      |
-    | implement-issue.md       |
+    | implement-spec.md       |
     | profile.md               |
     | benchmark.md             |
   And each installed command file matches its same-named embedded asset content

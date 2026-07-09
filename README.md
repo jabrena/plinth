@@ -120,7 +120,7 @@ MCP Servers
 Implement and improve Java applications with Maven, design, coding, testing, security, documentation, Spring Boot, Quarkus, Micronaut, OpenAPI, and WireMock guidance.
 
 ```text
-/implement-issue
+/implement-spec
 @robot-tech-lead
     /create-feature-branch
     /create-worktree

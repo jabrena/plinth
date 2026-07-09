@@ -113,12 +113,12 @@ class CommandIndexesTest {
     }
 
     @Test
-    @DisplayName("Implement issue command must route executable artifacts through the tech lead")
-    void should_routeExecutableArtifact_when_implementIssueCommandIsInstalled() {
-        String command = loadClasspathResource("skill-references/assets/commands/implement-issue.md");
+    @DisplayName("Implement spec command must route executable artifacts through the tech lead")
+    void should_routeExecutableArtifact_when_implementSpecCommandIsInstalled() {
+        String command = loadClasspathResource("skill-references/assets/commands/implement-spec.md");
 
         assertThat(command)
-            .contains("/implement-issue <approved-plan|openspec-change>")
+            .contains("/implement-spec <approved-plan|openspec-change>")
             .contains("approved implementation plan")
             .contains("validated `tasks.md`")
             .contains("Owner: `@robot-tech-lead`")
