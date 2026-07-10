@@ -1,10 +1,20 @@
 <?xml version="1.0"?>
 <feed xmlns='http://www.w3.org/2005/Atom' xml:lang='en'>
   <id>https://jabrena.github.io/cursor-rules-java/</id>
-  <title>Skills & Agents for Java</title>
-  <updated>2026-07-08T18:43:39+0200</updated>
+  <title>Plinth</title>
+  <updated>2026-07-10T15:50:16+0200</updated>
   <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java/" />
   <link rel='self' type='application/atom+xml' href='https://jabrena.github.io/cursor-rules-java//feed.xml' />
+  <entry>
+    <id>https://jabrena.github.io/cursor-rules-java//blog/2026/07/release-0.17.0.html</id>
+    <title>What&apos;s new in Plinth 0.17.0?</title>
+    <link></link>
+    <link rel="alternate" type="text/html" href="https://jabrena.github.io/cursor-rules-java//blog/2026/07/release-0.17.0.html" />
+    <updated>2026-07-13T00:00:00+0200</updated>
+    <summary>Plinth is an AI-native engineering toolkit for modern Java enterprise SDLC, built around reusable Commands, Agents, Skills, and MCP Servers.
+This release brings several improvements to the development workflow, but the most visible change is the new project identity: the repository moves from cursor-rules-java to plinth.
+Thanks to our community members in Urumqi, Singapore, Des Moines, Bengaluru, a...</summary>
+  </entry>
   <entry>
     <id>https://jabrena.github.io/cursor-rules-java//blog/2026/07/why-do-i-need-to-use-the-parallel-change-pattern.html</id>
     <title>Why Do I Need to Use the Parallel Change Pattern?</title>

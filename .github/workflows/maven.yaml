@@ -191,7 +191,7 @@ jobs:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Scan generated skills with Snyk Agent Scan
         run: |
-          set -o pipefail
+          set +e
           uvx snyk-agent-scan@latest scan .agents/skills \
             --ci \
             --no-bootstrap \
@@ -200,7 +200,20 @@ jobs:
             --verbose \
             --print-errors \
             --print-full-descriptions \
-            | tee snyk-agent-scan-report.txt
+            2>&1 | tee snyk-agent-scan-report.txt
+          scan_status=${PIPESTATUS[0]}
+          set -e
+
+          if [ "${scan_status}" -eq 0 ]; then
+            exit 0
+          fi
+
+          if grep -Eq "X007|Could not reach analysis server|API timeout while scanning discovered servers" snyk-agent-scan-report.txt; then
+            echo "::warning title=Snyk Agent Scan unavailable::Snyk Agent Scan could not reach the analysis server. Treating this infrastructure timeout as non-blocking; review the uploaded report."
+            exit 0
+          fi
+
+          exit "${scan_status}"
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
       - name: Upload Snyk Agent Scan report

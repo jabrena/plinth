@@ -1,0 +1,138 @@
+openapi: 3.1.0
+info:
+  title: Skills.sh Search API
+  version: "0.1.0"
+  description: >
+    Third-party API contract for the Skills.sh search endpoint used to review
+    skill search results and calculate category positions for release notes.
+    This contract is based on observed responses from Skills.sh on 2026-07-10.
+servers:
+  - url: https://www.skills.sh
+    description: Skills.sh production service
+externalDocs:
+  description: Skills.sh search page
+  url: https://www.skills.sh/search?q=maven
+paths:
+  /api/search:
+    get:
+      operationId: searchSkills
+      summary: Search skills
+      description: >
+        Searches the Skills.sh registry and returns matching skills. The release
+        article workflow used this endpoint with a large limit, then sorted the
+        returned skills by install count to calculate category rank.
+      parameters:
+        - name: q
+          in: query
+          required: true
+          description: Search query text.
+          schema:
+            type: string
+          examples:
+            maven:
+              value: maven
+            javaUnitTesting:
+              value: java unit testing
+        - name: limit
+          in: query
+          required: false
+          description: >
+            Requested maximum number of results. Observed calls used values such
+            as 3 for inspection and 100 for ranking.
+          schema:
+            type: integer
+            minimum: 1
+          examples:
+            small:
+              value: 3
+            ranking:
+              value: 100
+      responses:
+        "200":
+          description: Search results.
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SkillSearchResponse"
+              examples:
+                maven:
+                  summary: Maven search result sample
+                  value:
+                    query: maven
+                    searchType: fuzzy
+                    skills:
+                      - id: api/git/maven-conflict-resolver
+                        skillId: maven-conflict-resolver
+                        name: maven-conflict-resolver
+                        installs: 265
+                        source: api/git
+                      - id: pluginagentmarketplace/custom-plugin-java/java-maven
+                        skillId: java-maven
+                        name: java-maven
+                        installs: 756
+                        source: pluginagentmarketplace/custom-plugin-java
+                      - id: decebals/claude-code-java/maven-dependency-audit
+                        skillId: maven-dependency-audit
+                        name: maven-dependency-audit
+                        installs: 97
+                        source: decebals/claude-code-java
+                    count: 3
+                    duration_ms: 264
+components:
+  schemas:
+    SkillSearchResponse:
+      type: object
+      additionalProperties: false
+      required:
+        - query
+        - searchType
+        - skills
+        - count
+        - duration_ms
+      properties:
+        query:
+          type: string
+          description: Echoed search query.
+        searchType:
+          type: string
+          description: Search strategy reported by the service.
+          examples:
+            - fuzzy
+        skills:
+          type: array
+          items:
+            $ref: "#/components/schemas/SkillSearchResult"
+        count:
+          type: integer
+          minimum: 0
+          description: Number of skills returned in this response.
+        duration_ms:
+          type: integer
+          minimum: 0
+          description: Server-reported search duration in milliseconds.
+    SkillSearchResult:
+      type: object
+      additionalProperties: false
+      required:
+        - id
+        - skillId
+        - name
+        - installs
+        - source
+      properties:
+        id:
+          type: string
+          description: Registry-scoped skill identifier.
+        skillId:
+          type: string
+          description: Short skill identifier.
+        name:
+          type: string
+          description: Display name for the skill.
+        installs:
+          type: integer
+          minimum: 0
+          description: Install count reported by Skills.sh.
+        source:
+          type: string
+          description: Publisher or repository source.
