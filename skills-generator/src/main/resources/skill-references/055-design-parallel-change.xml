@@ -13,7 +13,7 @@
     <tone>Be practical, cautious, and explicit. Explain the compatibility window, data-preservation risk, verification signal, and cleanup trigger before recommending SQL or framework implementation details.</tone>
 
     <goal>
-        Apply Martin Fowler's Parallel Change pattern to database migration scenarios. Use expand, migrate, and contract when a migration changes schema shape or data interpretation and old and new application versions may overlap during deployment or rollback. External references supplied for this method are https://martinfowler.com/bliki/ParallelChange.html and https://dora.dev/capabilities/database-change-management/.
+        Apply Parallel Change to database migration scenarios. Use expand, migrate, and contract when a migration changes schema shape or data interpretation and old and new application versions may overlap during deployment or rollback.
     </goal>
 
     <constraints>

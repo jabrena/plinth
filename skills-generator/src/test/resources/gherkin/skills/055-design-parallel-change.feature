@@ -9,8 +9,6 @@ Scenario: Choose Parallel Change before framework-specific Flyway implementation
   And the local generated skill path ".agents/skills/055-design-parallel-change"
   When the skill ".agents/skills/055-design-parallel-change" is applied to the database migration request
   Then the skill reads "references/055-design-parallel-change.md"
-  And the guidance references Martin Fowler's Parallel Change guidance
-  And the guidance references DORA database change management guidance
   And the analysis decides whether the migration needs Parallel Change before recommending framework-specific Flyway implementation details
   And the recommendation explains Expand as adding the new database shape while the old shape still works
   And the recommendation explains Migrate as backfilling or dual-writing data and verifying old and new paths during rollout
