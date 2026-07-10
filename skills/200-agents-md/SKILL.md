@@ -1,10 +1,10 @@
 ---
 name: 200-agents-md
-description: Use when you need to generate an AGENTS.md file for a Java repository — covering project conventions, tech stack, file structure, commands, Git workflow, and contributor boundaries — through a modular, step-based interactive process that adapts to your specific project needs. This should trigger for requests such as Create AGENTS.md; Update AGENTS.md file; Add agent instructions. Part of cursor-rules-java project
+description: Use when you need to generate an AGENTS.md file for a Java repository — covering project conventions, tech stack, file structure, commands, Git workflow, and contributor boundaries — through a modular, step-based interactive process that adapts to your specific project needs. This should trigger for requests such as Create AGENTS.md; Update AGENTS.md file; Add agent instructions; Generate contributor instructions for Java agents; Document repository conventions in AGENTS.md. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # AGENTS.md Generator for Java repositories
 
@@ -35,6 +35,8 @@ No Maven validation is required before generating AGENTS.md. Review the project 
 - Create AGENTS.md
 - Update AGENTS.md file
 - Add agent instructions
+- Generate contributor instructions for Java agents
+- Document repository conventions in AGENTS.md
 
 ## Workflow
 

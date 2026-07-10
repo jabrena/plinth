@@ -1,10 +1,10 @@
 ---
 name: 516-frameworks-micronaut-mongodb-migrations-mongock
-description: Use when you need to add or review Mongock MongoDB data migrations in a Micronaut application — including Mongock runner/driver selection, Micronaut bean wiring, migration scan packages, @ChangeUnit classes, lock/transaction settings, and Testcontainers verification. This should trigger for requests such as Add Mongock migrations in Micronaut; Review Micronaut MongoDB data migrations; Configure Mongock change units with Micronaut Data MongoDB. Part of cursor-rules-java project
+description: Use when you need to add or review Mongock MongoDB data migrations in a Micronaut application — including Mongock runner/driver selection, Micronaut bean wiring, migration scan packages, @ChangeUnit classes, lock/transaction settings, and Testcontainers verification. This should trigger for requests such as Add Mongock migrations in Micronaut; Review Micronaut MongoDB data migrations; Configure Mongock change units with Micronaut Data MongoDB; Create Mongock change units for Micronaut MongoDB; Review Mongock migration ordering in a Micronaut service. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Micronaut - MongoDB migrations (Mongock)
 
@@ -36,12 +36,14 @@ Compile before Mongock or MongoDB migration changes; verify after changes.
 - Add Mongock migrations in Micronaut
 - Review Micronaut MongoDB data migrations
 - Configure Mongock change units with Micronaut Data MongoDB
+- Create Mongock change units for Micronaut MongoDB
+- Review Mongock migration ordering in a Micronaut service
 
 ## Workflow
 
-1. **Read reference and inspect MongoDB setup**
+1. **Read references and inspect MongoDB setup**
 
-Read `references/516-frameworks-micronaut-mongodb-migrations-mongock.md` and inspect `pom.xml`, Micronaut MongoDB configuration, and existing `@515-frameworks-micronaut-mongodb` persistence patterns.
+Read `references/516-frameworks-micronaut-mongodb-migrations-mongock.md`, `references/516-frameworks-micronaut-mongodb-migrations-mongock-antipatterns.md`, and `references/516-frameworks-micronaut-mongodb-migrations-mongock-parallel-change.md`, then inspect `pom.xml`, Micronaut MongoDB configuration, and existing `@515-frameworks-micronaut-mongodb` persistence patterns.
 
 2. **Choose runner, driver, and execution policy**
 
@@ -57,4 +59,8 @@ Execute build/tests, including `@MicronautTest` with Testcontainers MongoDB wher
 
 ## Reference
 
-For detailed guidance, examples, and constraints, see [references/516-frameworks-micronaut-mongodb-migrations-mongock.md](references/516-frameworks-micronaut-mongodb-migrations-mongock.md).
+For detailed guidance, examples, and constraints, see:
+
+- [references/516-frameworks-micronaut-mongodb-migrations-mongock.md](references/516-frameworks-micronaut-mongodb-migrations-mongock.md)
+- [references/516-frameworks-micronaut-mongodb-migrations-mongock-antipatterns.md](references/516-frameworks-micronaut-mongodb-migrations-mongock-antipatterns.md)
+- [references/516-frameworks-micronaut-mongodb-migrations-mongock-parallel-change.md](references/516-frameworks-micronaut-mongodb-migrations-mongock-parallel-change.md)

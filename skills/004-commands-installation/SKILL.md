@@ -1,10 +1,10 @@
 ---
 name: 004-commands-installation
-description: Use when you need to install the embedded project commands into command directories (.github/commands, .claude/commands, .cursor/command, .codex/commands), selecting the destination interactively and copying the embedded command definitions from project assets. This should trigger for requests such as Install embedded commands; Bootstrap .cursor/command; Bootstrap .claude/commands; Copy project commands; Install project command suite. Part of cursor-rules-java project
+description: Use when you need to install the embedded project commands into command directories (.github/commands, .claude/commands, .cursor/command, .codex/commands), selecting the destination interactively and copying the embedded command definitions from project assets. This should trigger for requests such as Install embedded commands; Bootstrap .cursor/command; Bootstrap .claude/commands; Copy project commands; Install project command suite. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Embedded commands installer
 
@@ -25,6 +25,14 @@ This skill installs only the embedded project commands bundle and must ask for d
 - **MUST** copy all embedded command files defined in `references/004-commands-installation.md`
 - **MUST** preserve file names from the reference content and report overwrite actions
 - **MUST** create the destination directory if it does not exist
+
+## When to use this skill
+
+- Install embedded commands
+- Bootstrap .cursor/command from project assets
+- Bootstrap .claude/commands from embedded commands
+- Copy project commands into .codex/commands
+- Install command suite into .github/commands
 
 ## Reference
 

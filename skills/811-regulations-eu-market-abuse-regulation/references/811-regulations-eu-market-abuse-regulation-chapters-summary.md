@@ -1,0 +1,160 @@
+---
+name: 811-regulations-eu-market-abuse-regulation-chapters-summary
+description: Use as a chapter-by-chapter and article-by-article summary of Regulation (EU) No 596/2014 to enrich Java enterprise trading, surveillance, disclosure, and investigation reviews with Market Abuse Regulation context.
+license: Apache-2.0
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.17.0
+---
+# EU Market Abuse Regulation for Java Enterprise Market Surveillance Controls
+
+## Role
+
+You are a senior Java enterprise architect and market-surveillance compliance reviewer using the Market Abuse Regulation article structure to map market-integrity regulatory themes to engineering controls and owner handoffs
+
+## Goal
+
+Summarize the official chapter and article structure of Regulation (EU) No 596/2014 (Market Abuse Regulation) for engineering review of Java enterprise systems, order-management services, transaction-monitoring pipelines, market-data platforms, surveillance services, disclosure workflows, insider-list tooling, alert triage, CI/CD pipelines, and operational workflows.
+
+Source reviewed: [EUR-Lex Regulation (EU) No 596/2014](https://eur-lex.europa.eu/eli/reg/2014/596/oj/eng).
+
+This reference is not legal advice. Use it to orient engineering discovery, architecture review, compliance evidence collection, release gates, and escalation conversations with legal, compliance, market-surveillance, product, risk, operations, data, security, audit, executive accountability, and business owners.
+
+Use `811-regulations-eu-market-abuse-regulation-engineering-examples.md` for Java examples and implementation control patterns. Keep this chapters summary focused on MAR Regulation structure and article-level obligations.
+
+Questionnaire asset: [MAR engineering review questionnaire](../assets/questions/811-market-abuse-regulation-engineering-review-questionnaire.md).
+
+Report template asset: [MAR engineering review report template](../assets/reports/811-market-abuse-regulation-engineering-review-report-template.md).
+
+## [Chapter 1: General provisions (Articles 1-6)](https://eur-lex.europa.eu/eli/reg/2014/596/oj/eng)
+
+Sets the market-integrity purpose, scope, definitions, exemptions, accepted market practices, and delegated powers. For Java teams, this chapter is the starting point for identifying whether a system handles financial instruments, orders, transactions, market-data feeds, benchmarks, spot commodity contracts, emission allowances, issuer disclosures, or surveillance evidence that may require MAR-aware controls.
+
+Article map:
+- Article 1, Subject matter: establishes the common regulatory framework on insider dealing, unlawful disclosure of inside information, and market manipulation, plus measures to prevent those behaviors.
+- Article 2, Scope: identifies financial instruments, trading venues, related instruments, benchmarks, spot commodity contracts, emission allowances, and conduct that can affect covered instruments.
+- Article 3, Definitions: defines inside information, issuer, market operator, trading venue, person discharging managerial responsibilities, investment recommendations, algorithmic trading, and other terms relevant to engineering scope.
+- Article 4, Notifications and list of financial instruments: requires trading venue operators to notify competent authorities and ESMA about admitted, requested, or traded instruments.
+- Article 5, Exemption for buy-back programmes and stabilisation: sets transparency and condition-based exemptions for specific programs.
+- Article 6, Exemption for monetary, public debt, climate, and other public policy activities: identifies exempt public-sector activities.
+
+Engineering impact:
+- Record instrument scope, trading venue, order and transaction flow, market-data source, issuer, client, benchmark, commodity, emission allowance, and jurisdiction signals before making control recommendations.
+- Keep instrument reference data, venue notification dependencies, accepted market practice evidence, and exemption assumptions traceable for qualified owner review.
+- Treat scope, exemption, and accepted market practice applicability as legal or compliance decisions; engineering should collect evidence, not make legal determinations.
+
+## [Chapter 2: Inside information, insider dealing, unlawful disclosure, and market manipulation (Articles 7-16)](https://eur-lex.europa.eu/eli/reg/2014/596/oj/eng)
+
+Defines inside information and the core prohibitions, then requires arrangements to detect and report suspicious orders and transactions. This chapter is the main engineering control surface for trading surveillance systems.
+
+Article map:
+- Article 7, Inside information: defines precise, non-public information that would be likely to have a significant price effect, including derivatives, spot commodity contracts, emission allowances, and intermediate steps in a protracted process.
+- Article 8, Insider dealing: covers using inside information to acquire or dispose of financial instruments, cancelling or amending orders, and recommending or inducing another person to deal.
+- Article 9, Legitimate behaviour: describes situations that are not deemed insider dealing only because a person had inside information, subject to context and purpose.
+- Article 10, Unlawful disclosure of inside information: covers disclosure outside the normal exercise of employment, profession, or duties, including onwards disclosure of recommendations or inducements.
+- Article 11, Market soundings: sets a framework for communicating information before a transaction to gauge investor interest, including recordkeeping and recipient assessment.
+- Article 12, Market manipulation: covers false or misleading signals, price securing, fictitious devices, dissemination of false or misleading information, benchmark manipulation, and related examples.
+- Article 13, Accepted market practices: allows competent authorities to establish accepted practices under conditions and ESMA coordination.
+- Article 14, Prohibition of insider dealing and of unlawful disclosure of inside information: prohibits insider dealing, recommending or inducing insider dealing, and unlawful disclosure.
+- Article 15, Prohibition of market manipulation: prohibits market manipulation and attempted market manipulation.
+- Article 16, Prevention and detection of market abuse: requires market operators, investment firms operating trading venues, and persons professionally arranging or executing transactions to establish and maintain effective arrangements, systems, and procedures to detect and report suspicious orders and transactions.
+
+Engineering impact:
+- Treat suspicious order and transaction monitoring, market manipulation scenarios, insider dealing signals, unlawful disclosure signals, market-sounding records, and STOR workflows as audit-relevant engineering surfaces.
+- Require evidence for scenario definitions, data coverage, market-data lineage, rule and model versions, alert explanations, reviewer decisions, false-positive reasons, escalation paths, retention, and STOR handoff.
+- Escalate inside-information classification, suspicious order or transaction reportability, market manipulation conclusions, legitimate-behaviour assessment, market-sounding interpretation, and accepted market practices to qualified owners.
+
+## [Chapter 3: Disclosure requirements (Articles 17-21)](https://eur-lex.europa.eu/eli/reg/2014/596/oj/eng)
+
+Covers public disclosure of inside information, insider lists, managers' transactions, investment recommendations and statistics, and disclosure or dissemination through media. For Java systems, this chapter drives disclosure workflow evidence, list integrity, notifications, acknowledgement capture, and publication controls.
+
+Article map:
+- Article 17, Public disclosure of inside information: requires issuers and emission allowance market participants to inform the public as soon as possible of inside information, with conditions for delayed disclosure and related recordkeeping.
+- Article 18, Insider lists: requires issuers and persons acting on their behalf to draw up, update, provide, and retain insider lists, including identity, reason, access time, creation date, update timing, acknowledgements, and retention.
+- Article 19, Managers' transactions: covers notification and public disclosure of transactions by persons discharging managerial responsibilities and closely associated persons.
+- Article 20, Investment recommendations and statistics: requires fair presentation and disclosure of interests or conflicts by persons producing or disseminating recommendations or statistics.
+- Article 21, Disclosure or dissemination in the media: addresses journalistic and media-related disclosure or dissemination rules.
+
+Engineering impact:
+- Design disclosure workflows with time-stamped decision records, publication evidence, delay rationale records, owner approvals, retention, and regulator-facing exports.
+- Design insider-list systems with identity controls, reason-for-access records, access start and end timestamps, update timestamps, acknowledgement capture, immutable audit events, and five-year retention signals.
+- Keep PDMR transaction workflows, recommendation disclosures, and conflict evidence separate from generic logs so they can be reviewed safely.
+
+## [Chapter 4: ESMA and competent authorities (Articles 22-29)](https://eur-lex.europa.eu/eli/reg/2014/596/oj/eng)
+
+Defines competent authorities, powers, cooperation, professional secrecy, data protection, third-country cooperation, and ESMA dispute handling.
+
+Article map:
+- Article 22, Competent authorities: requires Member States to designate competent administrative authorities.
+- Article 23, Powers of competent authorities: includes access to documents, data records, recordings, information requests, investigations, inspections, asset freezes, trading suspensions, and corrective powers.
+- Article 24, Cooperation with ESMA: requires competent authorities to cooperate with ESMA.
+- Article 25, Obligation to cooperate: covers cooperation among competent authorities, including investigations, inspections, and enforcement.
+- Article 26, Cooperation with third countries: covers cooperation arrangements with authorities outside the Union.
+- Article 27, Professional secrecy: covers confidentiality of information exchanged under the Regulation.
+- Article 28, Data protection: requires personal-data processing under applicable EU data protection rules.
+- Article 29, Disclosure of personal data to third countries: addresses transfer safeguards for personal data.
+
+Engineering impact:
+- Preserve controlled, exportable evidence for competent-authority requests without exposing secrets, personal data, business secrets, inside information, or unrelated confidential information.
+- Apply need-to-know access, encryption, retention, audit trails, and redaction workflows to investigation data, recordings, message traces, and surveillance records.
+- Coordinate with GDPR and operational-resilience owners when surveillance systems process personal data, cross-border data, recordings, or regulator-facing evidence.
+
+## [Chapter 5: Administrative measures and sanctions (Articles 30-39)](https://eur-lex.europa.eu/eli/reg/2014/596/oj/eng)
+
+Defines administrative sanctions, measures, supervisory cooperation, reporting of infringements, exchange of information, publication of decisions, rights of appeal, committee procedure, delegated acts, and reporting.
+
+Article map:
+- Article 30, Administrative sanctions and other administrative measures: identifies minimum powers and measures for infringements, including orders, disgorgement, public warnings, bans, withdrawals or suspensions, and administrative pecuniary sanctions.
+- Article 31, Exercise of supervisory powers and imposition of sanctions: sets factors to consider when sanctions or measures are imposed.
+- Article 32, Reporting of infringements: requires effective mechanisms for reporting infringements and internal procedures for employees of regulated financial-services employers.
+- Article 33, Exchange of information with ESMA: covers aggregated reporting of sanctions, measures, and investigations.
+- Article 34, Publication of decisions: addresses public disclosure of sanctions and measures.
+- Article 35, Appeals: requires right of appeal.
+- Article 36, Committee procedure: defines committee procedure.
+- Article 37, Exercise of the delegation: covers delegated powers.
+- Article 38, Report: requires Commission reporting on penalties, thresholds, cross-border enforcement, and other topics.
+- Article 39, Entry into force and application: sets application timing.
+
+Engineering impact:
+- Treat missing audit evidence, unreviewed production changes, alert suppression, weak investigation records, and ownerless STOR handoff as high-governance risks even when engineering cannot determine legal infringement.
+- Preserve escalation, remediation, release decision, and whistleblowing-intake evidence in systems designed for confidentiality, integrity, retention, and controlled disclosure.
+- Make governance reporting reproducible from reviewed data instead of manually reconstructing it after an incident or inquiry.
+
+## Engineering review focus
+
+When reviewing a Java enterprise system for MAR-aware controls, connect article themes to evidence:
+- Scope, definitions, exemptions, and accepted market practices: Articles 1-6
+- Inside information and insider dealing controls: Articles 7-10 and Article 14
+- Market soundings: Article 11
+- Market manipulation controls: Articles 12 and 15
+- Suspicious order and transaction detection and reporting: Article 16
+- Disclosure workflows and delayed disclosure evidence: Article 17
+- Insider-list workflows and retention: Article 18
+- Managers' transactions, recommendations, media dissemination: Articles 19-21
+- Competent-authority powers, cooperation, secrecy, and data protection: Articles 22-29
+- Sanctions, infringement reporting, publication, and reporting: Articles 30-39
+
+## Constraints
+
+Use this reference as Market Abuse Regulation context for Java engineering review. Do not provide legal advice or replace review by legal, compliance, market-surveillance, product, risk, operations, data, security, audit, executive accountability, or business owners.
+
+- **NOT LEGAL ADVICE**: State when an article mapping requires legal, compliance, market-surveillance, product, risk, operations, data, security, audit, or executive accountability review instead of giving legal conclusions
+- **SUMMARY ONLY**: Keep this reference focused on MAR Regulation chapters, articles, and engineering implications; use the engineering examples reference for Java patterns
+- **ARTICLE MAPPING**: Map findings to MAR topic areas such as scope, inside information, insider dealing, unlawful disclosure, market manipulation, market soundings, accepted market practices, STOR monitoring, disclosure, insider lists, competent-authority evidence, sanctions, or infringement reporting
+- **OWNER ESCALATION**: Escalate insider dealing classification, unlawful disclosure classification, market manipulation classification, STOR reportability, disclosure-delay decisions, market-sounding interpretation, accepted market practices, sanctions, jurisdiction, and regulatory interpretation to qualified owners
+- **EVIDENCE ORIENTATION**: Use article summaries to identify what engineering evidence is missing or weak, not to certify compliance
+
+
+## Output Format
+
+- **READ** this MAR chapters summary before applying Java examples or generating the review report
+- **MAP** reviewed findings to MAR topic areas and article groups using only reviewed evidence
+- **ESCALATE** legal applicability, insider dealing, market manipulation, unlawful disclosure, STOR reportability, disclosure-delay decisions, accepted market practices, sanctions, jurisdiction, and regulatory interpretation to qualified owners
+- **HAND OFF** implementation control patterns to `811-regulations-eu-market-abuse-regulation-engineering-examples.md`
+
+
+## Safeguards
+
+- **DO NOT CERTIFY COMPLIANCE**: This reference supports engineering review and owner handoff only
+- **CHECK CURRENT GUIDANCE**: ESMA guidance, technical standards, delegated acts, competent-authority guidance, and national enforcement practice may add or clarify technical expectations beyond this summary
+- **KEEP FACTS GROUNDED**: Do not infer insider dealing, market manipulation, unlawful disclosure, reportability, or accepted market practice applicability without reviewed evidence and qualified owner input

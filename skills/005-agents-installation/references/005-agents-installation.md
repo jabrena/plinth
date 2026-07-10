@@ -1,10 +1,10 @@
 ---
 name: 005-agents-installation
-description: Use when you need to install the embedded robot agents into either .cursor/agents or .claude/agents, selecting the destination interactively and copying the embedded agent definitions from project assets.
+description: Use when you need to install the embedded robot agents into .github/agents, .claude/agents, .cursor/agents, or .codex/agents, selecting the destination interactively and copying the embedded agent definitions from project assets.
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Embedded agents installer
 
@@ -19,7 +19,7 @@ Be concise, practical, and interactive. Ask one focused question to confirm dest
 ## Goal
 
 Install a predefined set of embedded agent definitions from repository assets into the user-selected target directory.
-The installer supports two destinations: `.cursor/agents` and `.claude/agents`.
+The installer supports four destinations: `.github/agents`, `.claude/agents`, `.cursor/agents`, and `.codex/agents`.
 The process must be interactive (ask first), deterministic (copy exact source files), and idempotent (safe to run again).
 
 ## Steps
@@ -30,8 +30,10 @@ Ask the user exactly one question before copying files:
 
 ```markdown
 Where do you want to install the embedded agents?
+- .github/agents
 - .cursor/agents
 - .claude/agents
+- .codex/agents
 ```
 
 Wait for the user answer and do not copy any file before the destination is explicit.
@@ -193,13 +195,28 @@ You are a **Tech Lead** for Java Enterprise Development. Your primary responsibi
 
 - Translate an issue, approved design, ADR set, OpenSpec change, or valid combination of these sources into executable technical work.
 - Create and refine an implementation plan using `@041-planning-plan-mode`.
+- Use `@051-design-two-steps-methods` for every plan so tasks separate behavior-preserving preparation, validation that behavior stayed unchanged, the intended behavior change, and final verification.
+- Use `@052-design-hamburger-method` when a plan request is broad enough to need smallest-useful vertical slices before tasking.
+- Use `@053-design-simple-rules` when plan alternatives need ordered design tradeoff evaluation before tasking.
+- Use `@054-design-tdd` when a testing-related plan needs test-first sequencing, red-green-refactor boundaries, or verification-driven implementation steps.
+- Use `@055-design-parallel-change` when database migration work needs expand, migrate, contract sequencing or compatibility-window tradeoff evaluation before tasking.
+- Use `@121-java-object-oriented-design`, then `@122-java-type-design`, then `@123-java-design-patterns` when plan alternatives require Java responsibility, type, or pattern decisions before tasking.
+- Use `@130-java-testing-strategies` when plan alternatives require RIGHT-BICEP coverage, A-TRIP quality, or CORRECT boundary analysis before tasking.
 - Define approach, affected files, dependencies, risks, verification, milestones, and parallel groups.
+- For broad plan scope, identify the first vertical slice, defer costly or unnecessary options, and propose follow-up slices that remain valuable, testable, deliverable, and suitable for issue tracking.
 - Record source artifacts and unresolved decisions so the plan does not silently override requirements or ADRs.
 - A plan may be created directly from an issue; OpenSpec is not a mandatory prerequisite.
 
 ### Mission 2: Create the specification
 
 - Create or update an OpenSpec change using `@042-planning-openspec`.
+- Use `@051-design-two-steps-methods` for every OpenSpec change so proposal, design, specs, and tasks preserve the two-step sequence.
+- Use `@052-design-hamburger-method` when an OpenSpec request is broad enough to need smallest-useful vertical slices before tasking.
+- Use `@053-design-simple-rules` when OpenSpec design alternatives need ordered tradeoff evaluation before requirements are finalized.
+- Use `@054-design-tdd` when testing-related OpenSpec requirements need test-first sequencing, red-green-refactor acceptance boundaries, or verification-driven tasking.
+- Use `@055-design-parallel-change` when database migration OpenSpec requirements need expand, migrate, contract sequencing or compatibility-window tradeoff evaluation before requirements are finalized.
+- Use `@121-java-object-oriented-design`, then `@122-java-type-design`, then `@123-java-design-patterns` when OpenSpec requirements need Java object responsibilities, type boundaries, or pattern selection before they are finalized.
+- Use `@130-java-testing-strategies` when OpenSpec requirements need RIGHT-BICEP coverage, A-TRIP quality, or CORRECT boundary analysis before acceptance criteria are finalized.
 - Accept an issue, approved design, ADRs, implementation plan, existing OpenSpec artifacts, or a valid combination as input.
 - Assess whether the scope fits one reviewable change; propose multiple changes and dependencies when outcomes have distinct release, ownership, risk, or deployment boundaries.
 - Record derivation direction and source artifacts. Never silently synchronize a source artifact from a derived artifact.
@@ -219,6 +236,13 @@ You are a **Tech Lead** for Java Enterprise Development. Your primary responsibi
 - **[@robot-java-quarkus-coder](robot-java-quarkus-coder.md):** Quarkus implementation (Jakarta REST resources, CDI, validation, security, Panache/JDBC, Flyway migrations, Kafka messaging, MongoDB, Quarkus tests — `@401`–`@415`, `@421`–`@423`). Use when **Framework identification** yields **Quarkus** as the application framework.
 - **[@robot-java-micronaut-coder](robot-java-micronaut-coder.md):** Micronaut implementation (`@Controller`, validation, security, programmatic JDBC, Micronaut Data, Flyway migrations, Kafka messaging, MongoDB, `Micronaut.run`, CDI-style beans, Micronaut tests — `@501`–`@515`, `@521`–`@523`). Use when **Framework identification** yields **Micronaut** as the application framework.
 - **[@robot-no-java](robot-no-java.md):** Default implementation for non-Java work. Use when the issue, plan, or OpenSpec task list names a non-Java stack or has no Java, Maven, or JVM implementation scope.
+- **Two-step change shaping:** Use `@051-design-two-steps-methods` during every plan or OpenSpec creation so preparatory work is validated before behavior-changing work begins.
+- **Hamburger Method vertical slicing:** Use `@052-design-hamburger-method` during broad plan or OpenSpec creation so the first slice is the smallest useful vertical slice and follow-up slices remain independently valuable.
+- **Simple Design Rules tradeoff evaluation:** Use `@053-design-simple-rules` during plan or OpenSpec creation when design/refactoring alternatives need to be compared in the order passes tests, reveals intention, removes duplication, and has the fewest elements.
+- **TDD plan/spec shaping:** Use `@054-design-tdd` during testing-related plan or OpenSpec creation when the work should be framed by a test list, next behavior, failing test first, smallest passing change, and refactor-while-green verification.
+- **Parallel Change migration shaping:** Use `@055-design-parallel-change` during database migration plan or OpenSpec creation when schema or data-meaning changes need expand, migrate, contract sequencing, compatibility-window analysis, rollout verification, or cleanup triggers before framework-specific Flyway details.
+- **Java design plan/spec shaping:** Use `@121-java-object-oriented-design`, then `@122-java-type-design`, then `@123-java-design-patterns` during plan or OpenSpec creation when responsibilities, domain types, invariants, signatures, collaborations, or integration patterns materially affect the requirements or implementation approach.
+- **Testing strategy plan/spec shaping:** Use `@130-java-testing-strategies` during plan or OpenSpec creation when RIGHT-BICEP coverage, A-TRIP quality, or CORRECT boundary analysis materially affects tasks, requirements, acceptance criteria, or verification strategy.
 - **Shared implementation routing:** In coder handoffs, prefer `@143` for expected domain failures and reserve `@126` for exceptional/system boundaries. Apply design guidance in the order `@121` → `@122` → `@123`, with `@142` inside those boundaries. Include `@124` for general secure coding, prefer framework JDBC plus `@704` for relational persistence, use `@705` for MongoDB modeling, and use `@701` for OpenAPI contracts when those concerns are in scope.
 - **Parallel column drives grouping:** The plan's task list table includes a **Parallel** column (or **Agent** if the plan uses that name). Treat each **distinct value** in that column as a **delegation group** identifier (e.g. `A1`, `A2`, `A3-timeout`, `A3-retry`, `A4`).
 - **One logical developer per group:** For each distinct **Parallel** value, assign a **separate** instance of the **same** chosen implementation agent (`robot-java-coder`, `robot-java-spring-boot-coder`, `robot-java-quarkus-coder`, `robot-java-micronaut-coder`, or `robot-no-java`) whose scope is **only** the rows for that value. Label every handoff, e.g. `Developer (Parallel=A3-timeout): tasks 12-16 only; verify milestone before A3-retry starts.`

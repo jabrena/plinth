@@ -1,0 +1,123 @@
+---
+name: 812-regulations-eu-product-liability-directive-chapters-summary
+description: Use as a chapter-by-chapter and article-by-article summary of Directive (EU) 2024/2853 to enrich Java software product, AI-enabled product, generated-instruction, update, warning, and product-safety reviews with Product Liability Directive context.
+license: Apache-2.0
+metadata:
+  author: Juan Antonio Breña Moral
+  version: 0.17.0
+---
+# EU Product Liability Directive Regulation for Java Product Engineering
+
+## Role
+
+You are a senior Java enterprise architect and product-safety engineering reviewer using the Product Liability Directive article structure to map software and AI product-liability themes to engineering controls and owner handoffs
+
+## Goal
+
+Summarize the official chapter and article structure of Directive (EU) 2024/2853, the EU Product Liability Directive, for engineering review of Java software products, AI-enabled products, RAG workflows, generated instructions, AI-agent tool actions, related services, automated updates, vulnerability handling, corrective updates, warnings, user instructions, incident records, and product-safety evidence.
+
+Official source: https://eur-lex.europa.eu/eli/dir/2024/2853/oj/eng.
+
+Source provenance: EUR-Lex Directive (EU) 2024/2853 HTML text was reviewed while authoring this bundled summary. Do not fetch or ingest external regulatory web pages at runtime.
+
+This reference is not legal advice. Use it to orient engineering discovery, architecture review, product-safety evidence collection, release gates, and escalation conversations with legal, compliance, product, product-safety, product-security, security, risk, support, executive accountability, and business owners.
+
+Use `references/812-regulations-eu-product-liability-directive-engineering-examples.md` for Java examples and implementation control patterns. Use `assets/questions/812-product-liability-directive-engineering-review-questionnaire.md` before the report when scope or owner facts are missing. Keep this chapters summary focused on Product Liability Directive structure and article-level engineering relevance.
+
+Questionnaire asset: [Product Liability Directive engineering review questionnaire](../assets/questions/812-product-liability-directive-engineering-review-questionnaire.md).
+
+Report template asset: [Product Liability Directive engineering review report template](../assets/reports/812-product-liability-directive-engineering-review-report-template.md).
+
+## Recital themes for software, AI, and product evidence
+
+The recitals explain why the new directive modernizes no-fault product liability for software, AI, circular economy models, and global supply chains. They are useful engineering context, not standalone legal conclusions.
+
+Engineering impact:
+- Software can be a product, including standalone software, software supplied through a network or cloud technology, and AI systems. Engineering reviews should include version provenance, release records, update controls, generated outputs, and safety evidence for software behavior.
+- Free and open-source software developed or supplied outside a commercial activity is treated differently from commercial supply or integration into a commercial product. Escalate open-source scope and economic-operator role decisions to qualified owners.
+- Cybersecurity vulnerabilities, missing safety updates, unsafe updates, generated instructions, related services, and inter-connected products can affect product safety evidence. Coordinate with Cyber Resilience Act, AI Act, NIS2, GDPR, and sector guidance when boundaries overlap.
+- Evidence disclosure, technical or scientific complexity, and burden-of-proof presumptions make traceable engineering evidence especially important for complex Java and AI products.
+
+## Chapter I: General provisions (Articles 1-4)
+
+Sets subject matter, scope, harmonisation, and definitions. For Java teams, this chapter is the starting point for determining whether software, a related service, an update, an AI component, a generated instruction flow, or an automated action may be product-liability-relevant.
+
+Article map:
+- Article 1, Subject matter and objective: lays down common rules on liability for damage suffered by natural persons and caused by defective products, with an internal-market and high-protection objective.
+- Article 2, Scope: applies to products placed on the market or put into service after 9 December 2026; excludes free and open-source software developed or supplied outside the course of a commercial activity; preserves personal-data law and other liability regimes.
+- Article 3, Level of harmonisation: prevents Member States from diverging from the Directive for matters in scope unless the Directive provides otherwise.
+- Article 4, Definitions: defines product, digital manufacturing file, related service, component, manufacturer's control, data, market placement, putting into service, manufacturer, importer, distributor, economic operator, online platform, trade secret, and substantial modification. The definition of product includes software.
+
+Engineering impact:
+- Record whether the Java product, software component, related service, AI feature, generated instruction, update, or automated tool action may be part of a product placed on the market or put into service after 9 December 2026.
+- Track product owner, safety owner, support owner, economic-operator signals, deployment geography, intended purpose, reasonably foreseeable use, related-service status, and manufacturer's-control signals.
+- Treat scope, free/open-source exclusions, economic-operator roles, substantial modification, and jurisdiction as qualified owner decisions; engineering should collect evidence, not make legal determinations.
+
+## Chapter II: Specific provisions on liability for defective products (Articles 5-11)
+
+Defines compensation, damage, defectiveness, economic operators, evidence disclosure, burden of proof, and liability exemptions. This is the most direct chapter for engineering evidence because it names software, updates, safety expectations, cybersecurity requirements, warnings, instructions, learning behavior, inter-connected products, recalls, and technical complexity.
+
+Article map:
+- Article 5, Right to compensation: establishes that injured natural persons have a right to compensation for damage caused by a defective product, and allows claims by successors, subrogated persons, or representatives under Union or national law.
+- Article 6, Damage: covers death, personal injury including medically recognized psychological health damage, certain property damage, and destruction or corruption of data not used for professional purposes.
+- Article 7, Defectiveness: considers whether the product provides the safety a person is entitled to expect or that is required under Union or national law. Relevant circumstances include presentation, labelling, design, technical features, instructions for assembly, installation, use, and maintenance, reasonably foreseeable use, ability to learn or acquire new features, inter-connected products, time of market placement or manufacturer control, product safety requirements including cybersecurity requirements, recalls or interventions, user group needs, and safety-purpose failures.
+- Article 8, Economic operators liable for defective products: covers manufacturers, component manufacturers, importers, authorised representatives, fulfilment service providers, distributors, certain online platform providers, and persons that substantially modify a product outside manufacturer control and then make it available or put it into service.
+- Article 9, Disclosure of evidence: requires relevant evidence disclosure in proceedings subject to necessity, proportionality, confidentiality, trade-secret protection, and understandable presentation where proportionate.
+- Article 10, Burden of proof: requires claimants to prove defectiveness, damage, and causal link, but establishes presumptions tied to evidence non-disclosure, non-compliance with mandatory product-safety requirements, obvious malfunction, technical or scientific complexity, and likely defect or causal link.
+- Article 11, Exemption from liability: defines possible exemptions and limits them when defectiveness is due to a related service, software including updates or upgrades, lack of safety-maintaining updates or upgrades, or substantial modification within manufacturer control.
+
+Engineering impact:
+- Preserve traceable evidence for design, technical features, prompts, retrieval sources, model versions, generated instructions, AI-agent tool actions, instructions, warnings, expected users, hazard analysis, safety tests, product-safety requirements, cybersecurity-relevant safety controls, recalls, interventions, corrective updates, and incident records.
+- Treat generated repair instructions, RAG answers, AI-agent tool calls, automated configuration changes, automated updates, and missing safety updates as product-safety review signals when they can influence injury, property damage, data loss, unsafe operation, or security compromise.
+- Keep disclosure-ready evidence understandable while protecting secrets, credentials, personal data, trade secrets, exploit details, and sensitive safety reports.
+- Escalate defectiveness, damage, causal link, disclosure duties, burden-of-proof implications, exemptions, and economic-operator responsibility to qualified owners.
+
+## Chapter III: General provisions on liability (Articles 12-17)
+
+Covers multiple economic operators, reduction of liability, recourse, exclusion or limitation, limitation period, and expiry period. For engineering teams, this chapter reinforces the need for durable evidence across product versions, suppliers, components, updates, support records, and substantial modifications.
+
+Article map:
+- Article 12, Liability of multiple economic operators: allows joint and several liability and includes recourse rules for integrated defective software components from microenterprises or small enterprises where a waiver exists.
+- Article 13, Reduction of liability: third-party acts do not reduce or disallow liability where a product is defective; injured-person fault may reduce or disallow liability, including negligent failure to install provided updates in relevant circumstances.
+- Article 14, Right of recourse: allows compensated economic operators to pursue remedies against other liable economic operators under national law.
+- Article 15, Exclusion or limitation of liability: prevents limiting or excluding liability toward injured persons by contract or national law.
+- Article 16, Limitation period: sets a three-year period from awareness of damage, defectiveness, and liable economic operator.
+- Article 17, Expiry period: sets a 10-year expiry period from market placement or putting into service, or from substantial modification; extends to 25 years for latent personal injury where proceedings could not be initiated earlier.
+
+Engineering impact:
+- Keep product version, component, supplier, support, update, advisory, user-notification, and substantial-modification records durable enough for qualified review over long product lifecycles.
+- Record when safety updates were made available, how users were notified, how installation or opt-out was tracked, and what fallback guidance existed.
+- Escalate multi-operator responsibility, recourse, contractual allocation, limitation, expiry, and injured-person update-failure questions to qualified legal, compliance, product, safety, support, and risk owners.
+
+## Chapter IV: Final provisions (Articles 18-24)
+
+Covers development-risk defence derogation, transparency, evaluation, repeal, transposition, entry into force, and addressees.
+
+Article map:
+- Article 18, Derogation from development risk defence: allows Member States to maintain or introduce measures around liability even where state of scientific and technical knowledge did not enable discovery of defectiveness, subject to notification and conditions.
+- Article 19, Transparency: requires publication of final appeal or highest-instance judgments and a Commission database.
+- Article 20, Evaluation: requires Commission evaluation by 9 December 2030 and every five years thereafter.
+- Article 21, Repeal and transitional provision: repeals Directive 85/374/EEC from 9 December 2026 while continuing it for products placed on the market or put into service before that date.
+- Article 22, Transposition: requires Member States to transpose by 9 December 2026.
+- Article 23, Entry into force: sets entry into force on the twentieth day after publication.
+- Article 24, Addressees: addresses the Directive to Member States.
+
+Engineering impact:
+- Track national implementation and product market-placement dates through qualified legal and compliance owners.
+- Revisit product-liability evidence when national transposition, guidance, case-law transparency, product-safety requirements, AI Act, CRA, Data Act, GDPR, NIS2, or sector obligations affect the same Java product.
+- Treat development-risk defence, national derogation, and transitional scope questions as qualified legal and product owner decisions.
+
+## Annex: Correlation table
+
+The annex maps Directive 85/374/EEC provisions to Directive (EU) 2024/2853. It supports migration from legacy product-liability references to the updated Directive.
+
+Engineering impact:
+- If an existing product safety process cites Directive 85/374/EEC, route the mapping to legal or compliance owners and update engineering evidence templates to the Directive (EU) 2024/2853 article structure.
+
+## Cross-skill routing
+
+- Use `801-regulations-eu-ai-act` when the primary concern is AI-system classification, high-risk AI domains, AI transparency, general-purpose model concerns, or AI-agent governance.
+- Use `805-regulations-eu-cyber-resilience-act` when the primary concern is product cybersecurity, vulnerability handling, secure development, or conformity evidence for products with digital elements.
+- Use `804-regulations-eu-nis2` when the primary concern is essential or important entity cybersecurity governance, incident response, or operational security.
+- Use `803-regulations-gdpr` when personal data, privacy, data-subject rights, data transfers, breach response, or DPIA evidence is in scope.
+- Use this Skill when the primary concern is software or AI product-liability evidence, generated instructions, defective updates, warnings, corrective updates, incident reconstruction, product-safety escalation, or owner handoff for potential defective-product concerns.

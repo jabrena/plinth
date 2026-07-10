@@ -1,10 +1,10 @@
 ---
 name: 125-java-concurrency
-description: Use when you need to apply Java concurrency best practices — including thread safety fundamentals, ExecutorService thread pool management, concurrent design patterns like Producer-Consumer, asynchronous programming with CompletableFuture, immutability and safe publication, deadlock avoidance, virtual threads, structured concurrency, scoped values, backpressure, cancellation discipline, and observability for concurrent systems. This should trigger for requests such as Review Java code for concurrency. Part of cursor-rules-java project
+description: Use when you need to apply Java concurrency best practices — including thread safety fundamentals, ExecutorService thread pool management, concurrent design patterns like Producer-Consumer, asynchronous programming with CompletableFuture, immutability and safe publication, deadlock avoidance, virtual threads, structured concurrency, scoped values, backpressure, cancellation discipline, and observability for concurrent systems. This should trigger for requests such as Review Java code for concurrency; Review Java code for thread safety; Fix race conditions in Java concurrency code; Choose ExecutorService or virtual threads in Java; Improve synchronization and shared mutable state handling; Apply structured concurrency for related Java subtasks. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java rules for Concurrency objects
 
@@ -43,6 +43,11 @@ Before applying any concurrency changes, ensure the project compiles. If compila
 ## When to use this skill
 
 - Review Java code for concurrency
+- Review Java code for thread safety
+- Fix race conditions in Java concurrency code
+- Choose ExecutorService or virtual threads in Java
+- Improve synchronization and shared mutable state handling
+- Apply structured concurrency for related Java subtasks
 
 ## Workflow
 

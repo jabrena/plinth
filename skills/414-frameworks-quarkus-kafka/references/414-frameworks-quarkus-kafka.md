@@ -4,7 +4,7 @@ description: Use when you need Kafka in Quarkus with SmallRye Reactive Messaging
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Quarkus — Kafka messaging
 
@@ -328,7 +328,7 @@ public Uni<Void> onOrderCreated(OrderCreatedEvent event) {
 ### Example 8: Integration test with Testcontainers
 
 Title: @QuarkusTestResource wires Kafka bootstrap servers before startup
-Description: Use Dev Services for zero-config `@QuarkusTest` runs when no `kafka.bootstrap.servers` is set. When the spec or CI requires an explicit broker, start a `KafkaContainer` via `QuarkusTestResourceLifecycleManager` and return `kafka.bootstrap.servers` (and per-channel bootstrap overrides if needed) from `start()` before Quarkus boots. Assert async delivery with Awaitility against an in-memory store populated by the consumer. Do not use Spring Boot patterns (`@ServiceConnection`, `@DynamicPropertySource`) — see `@422-frameworks-quarkus-testing-integration-tests`.
+Description: Use Dev Services for zero-config `@QuarkusTest` runs when no `kafka.bootstrap.servers` is set. When the spec or CI requires an explicit broker, start a `KafkaContainer` via `QuarkusTestResourceLifecycleManager` and return `kafka.bootstrap.servers` (and per-channel bootstrap overrides if needed) from `start()` before Quarkus boots. Assert async delivery with Awaitility against an in-memory store populated by the consumer. Do not use Spring Boot patterns (`@ServiceConnection`, `@DynamicPropertySource`) — see `@422-frameworks-quarkus-testing-integration-tests`. Resolve the Kafka container image from trusted project or CI configuration instead of hard-coding a public registry image in reusable guidance. Prefer organization-approved images pinned by digest.
 
 **Good example:**
 
@@ -356,13 +356,17 @@ public class KafkaTestResource implements QuarkusTestResourceLifecycleManager {
 
     @Override
     public Map<String, String> start() {
-        kafka = new KafkaContainer(DockerImageName.parse("apache/kafka-native:3.8.0"));
+        kafka = new KafkaContainer(approvedKafkaImage());
         kafka.start();
         String bootstrapServers = kafka.getBootstrapServers();
         return Map.of(
             "kafka.bootstrap.servers", bootstrapServers,
             "mp.messaging.outgoing.sum-calculated-out.bootstrap.servers", bootstrapServers,
             "mp.messaging.incoming.sum-calculated-in.bootstrap.servers", bootstrapServers);
+    }
+
+    private static DockerImageName approvedKafkaImage() {
+        return DockerImageName.parse(System.getProperty("test.kafka.image"));
     }
 
     @Override
@@ -413,7 +417,11 @@ class SumControllerMessagingIT {
 @QuarkusTest
 class SumControllerMessagingIT {
 
-    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("apache/kafka-native:3.8.0"));
+    static KafkaContainer kafka = new KafkaContainer(approvedKafkaImage());
+
+    private static DockerImageName approvedKafkaImage() {
+        return DockerImageName.parse(System.getProperty("test.kafka.image"));
+    }
 
     @BeforeAll
     static void startContainer() {

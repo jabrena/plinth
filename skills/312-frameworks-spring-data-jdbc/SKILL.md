@@ -1,10 +1,10 @@
 ---
 name: 312-frameworks-spring-data-jdbc
-description: Use when you need to use Spring Data JDBC with Java records — including entity design with records, repository pattern, immutable updates, aggregate relationships, custom queries, transaction management, and avoiding N+1 problems. This should trigger for requests such as Review Java code for Spring Data JDBC; Apply best practices for Spring Data JDBC in Java code. Part of cursor-rules-java project
+description: Use when you need to use Spring Data JDBC with Java records — including entity design with records, repository pattern, immutable updates, aggregate relationships, custom queries, transaction management, and avoiding N+1 problems. This should trigger for requests such as Review Java code for Spring Data JDBC; Apply best practices for Spring Data JDBC in Java code; Model Spring Data JDBC aggregates with Java records; Review Spring Data JDBC repositories and aggregate boundaries; Improve optimistic locking or domain events in Spring Data JDBC. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Spring Data JDBC with Records
 
@@ -40,6 +40,9 @@ Before applying any Spring Data JDBC changes, ensure the project compiles. If co
 
 - Review Java code for Spring Data JDBC
 - Apply best practices for Spring Data JDBC in Java code
+- Model Spring Data JDBC aggregates with Java records
+- Review Spring Data JDBC repositories and aggregate boundaries
+- Improve optimistic locking or domain events in Spring Data JDBC
 
 ## Workflow
 

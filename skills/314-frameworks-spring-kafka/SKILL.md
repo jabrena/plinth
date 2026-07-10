@@ -1,10 +1,10 @@
 ---
 name: 314-frameworks-spring-kafka
-description: Use when you need to design or implement Kafka messaging in Spring Boot — including topic design, producer/consumer implementation, JSON serialization with Boot factory customizers, Testcontainers `@ServiceConnection` integration tests, retries and dead-letter topics, idempotency, and error handling. This should trigger for requests such as Add Kafka in Spring Boot; Review Spring Kafka consumers; Improve retries and DLT in Spring Kafka. Part of cursor-rules-java project
+description: Use when you need to design or implement Kafka messaging in Spring Boot — including topic design, producer/consumer implementation, JSON serialization with Boot factory customizers, Testcontainers `@ServiceConnection` integration tests, retries and dead-letter topics, idempotency, and error handling. This should trigger for requests such as Add Kafka in Spring Boot; Review Spring Kafka consumers; Improve retries and DLT in Spring Kafka; Configure Spring Kafka topics serializers or listener containers; Add Spring Kafka dead-letter topic handling. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Spring Boot — Kafka messaging
 
@@ -24,6 +24,8 @@ Compile before messaging refactors; verify after changes.
 - Add Kafka in Spring Boot
 - Review Spring Kafka consumers/producers
 - Improve retries, dead-letter topics, or idempotency in Spring Kafka
+- Configure Spring Kafka topics serializers or listener containers
+- Add Spring Kafka dead-letter topic handling
 
 ## Workflow
 

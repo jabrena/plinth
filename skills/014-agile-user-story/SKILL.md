@@ -1,10 +1,10 @@
 ---
 name: 014-agile-user-story
-description: Guides the creation of agile user stories and Gherkin feature files. Use when the user wants to create a user story, write acceptance criteria, define Gherkin scenarios, or author BDD feature files. This should trigger for requests such as Create a user story; Write a user story; I need to write a user story. Part of cursor-rules-java project
+description: Guides the creation of agile user stories and Gherkin feature files. Use when the user wants to create a user story, write acceptance criteria, define Gherkin scenarios, or author BDD feature files. This should trigger for requests such as Create a user story; Write a user story; I need to write a user story; Create Gherkin scenarios for a user story; Split feature requirements into user stories. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Create Agile User Stories and Gherkin Feature Files
 
@@ -34,6 +34,8 @@ Before generating artifacts, gather all required information through structured 
 - Create a user story
 - Write a user story
 - I need to write a user story
+- Create Gherkin scenarios for a user story
+- Split feature requirements into user stories
 
 ## Workflow
 

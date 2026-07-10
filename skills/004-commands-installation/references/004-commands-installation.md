@@ -4,7 +4,7 @@ description: Use when you need to install the embedded project commands into com
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Embedded commands installer
 
@@ -74,6 +74,7 @@ Update an existing project issue description with structured, evidence-backed co
 
 - `043-planning-github-issues`
 - `044-planning-jira`
+- `045-planning-azure-devops`
 - `014-agile-user-story` when user-story refinement is required
 
 ## Workflow
@@ -155,57 +156,6 @@ Create and switch the current checkout to a conventionally named local branch fo
 - Allow analysis and design artifacts to be committed before application-code implementation.
 - The command does not create a commit automatically.
 - Do not push or open a pull request automatically.
-
-```
-```markdown
-# create-issue
-
-## Purpose
-
-Create or refine a structured project issue before analysis and design work begins.
-
-## Usage
-
-```text
-/create-issue [<source>] [<tracker>]
-```
-
-## Accepted Inputs
-
-- A problem statement, feature request, or existing draft issue
-- Optional supporting discussion, user story, or acceptance criteria
-- Optional tracker selection: GitHub or Jira
-
-## Owning Agent
-
-`@robot-business-analyst`
-
-## Associated Skills
-
-- `043-planning-github-issues`
-- `044-planning-jira`
-- `014-agile-user-story` when user-story refinement is required
-
-## Workflow
-
-1. Confirm the problem, project user, desired outcome, and business value.
-2. Use `014-agile-user-story` when the issue needs user-story, acceptance-criteria, or Gherkin-style refinement.
-3. Convert the available information into a concise, testable issue.
-4. Present the proposed title and body for approval.
-5. Create or update the issue in the selected tracker.
-6. Report the issue identifier and URL.
-
-## Output
-
-- Structured issue title and description
-- Acceptance criteria or user-story scenario when applicable
-- Created or updated GitHub/Jira issue reference
-
-## Safeguards
-
-- Do not invent requirements or acceptance criteria.
-- Do not expose tracker credentials or tokens.
-- Do not overwrite an existing issue body without showing the proposed change.
 
 ```
 ```markdown
@@ -390,48 +340,6 @@ Create an architecture or design diagram that explains a selected system view.
 
 ```
 ```markdown
-# create-plan
-
-## Purpose
-Create or refine an executable technical implementation plan from the available project artifacts.
-
-## Usage
-```text
-/create-plan <issue|design|adr|spec|existing-plan>
-```
-
-## Accepted Inputs
-- Issue or user story
-- Approved design and ADRs
-- OpenSpec change
-- Existing implementation plan
-- Any valid combination of these artifacts
-
-## Owning Agent
-`@robot-tech-lead`
-
-## Associated Skill
-`041-planning-plan-mode`
-
-## Workflow
-1. Identify the available source artifacts and their authority.
-2. Resolve material implementation questions without inventing requirements.
-3. Define the technical approach, affected areas, ordered tasks, risks, and verification.
-4. Record source links and any assumptions or unresolved blockers.
-5. Present the plan for approval.
-
-## Output
-- Executable implementation plan
-- Ordered work, dependencies, risks, and verification steps
-- Traceability to source artifacts
-
-## Safeguards
-- Do not require an OpenSpec change when a plan-only workflow is selected.
-- Do not duplicate a complete OpenSpec task list without adding technical value.
-- Do not start implementation or create commits automatically.
-
-```
-```markdown
 # create-spec
 
 ## Purpose
@@ -452,16 +360,34 @@ Create or update one or more OpenSpec changes from the available issue, design, 
 ## Owning Agent
 `@robot-tech-lead`
 
-## Associated Skill
-`042-planning-openspec`
+## Associated Skills
+- `042-planning-openspec`
+- `051-design-two-steps-methods` for every OpenSpec change so preparatory work, behavior change, and verification remain explicitly sequenced
+- `052-design-hamburger-method` when the requested spec is broad enough to need smallest-useful vertical slices before tasking
+- `053-design-simple-rules` when spec alternatives need ordered design tradeoff evaluation before requirements are finalized
+- `054-design-tdd` when testing-related requirements need test-first sequencing, red-green-refactor acceptance boundaries, or verification-driven tasking
+- `055-design-parallel-change` when database migration requirements need expand, migrate, contract sequencing or compatibility-window tradeoff evaluation before requirements are finalized
+- `056-design-avoid-breaking-changes` when the spec changes user-facing commands, skills, generated outputs, public documentation, APIs, schemas, configuration, data, release behavior, or other compatibility surfaces
+- `121-java-object-oriented-design` when object responsibilities, boundaries, or collaboration design affect the specification
+- `122-java-type-design` when domain types, value objects, invariants, signatures, or invalid-state modeling affect the specification
+- `123-java-design-patterns` when a demonstrated collaboration or integration problem requires pattern selection before requirements are finalized
+- `130-java-testing-strategies` when testing strategy, boundary coverage, flakiness, or verification quality affect requirements or acceptance criteria
 
 ## Workflow
 1. Identify the available source artifacts and their authority.
 2. Assess whether the scope fits one reviewable change.
-3. For broad scope, propose independently valuable changes and dependencies for approval.
-4. Create or update the approved OpenSpec proposal, design, specifications, and tasks.
-5. Record derivation direction, source links, and unresolved questions.
-6. Validate the resulting OpenSpec changes.
+3. Apply the two-step method so OpenSpec separates behavior-preserving preparation from behavior-changing work and validates each step.
+4. For broad scope, apply the Hamburger Method to identify the smallest useful vertical slice, defer costly or unnecessary options, and propose follow-up slices.
+5. Propose independently valuable changes and dependencies for approval when slicing reveals separate review, release, ownership, risk, or deployment boundaries.
+6. Apply Simple Design Rules when comparing design or refactoring alternatives so requirements do not prefer abstraction or fewer elements before correctness and clarity.
+7. Apply TDD guidance when testing-related requirements need test-first acceptance boundaries, next-behavior sequencing, or verification-driven tasking.
+8. Apply Parallel Change guidance when database migration requirements need expand, migrate, contract sequencing before framework-specific implementation detail.
+9. Apply breaking-change avoidance guidance when the proposed spec could affect command contracts, skill routing, generated output ownership, README/docs, tests/CI, external contracts, runtime behavior, data/configuration, or release/migration expectations.
+10. Apply Java design skills in order when the spec needs design detail: object-oriented responsibilities, type design, then design-pattern selection only for a demonstrated problem.
+11. Apply testing-strategy guidance when requirements or acceptance criteria need RIGHT-BICEP coverage, A-TRIP quality, or CORRECT boundary analysis.
+12. Create or update the approved OpenSpec proposal, design, specifications, and tasks.
+13. Record derivation direction, source links, unresolved questions, and compatibility-review assumptions.
+14. Validate the resulting OpenSpec changes.
 
 ## Output
 - One OpenSpec change, or an approved map of multiple changes
@@ -540,7 +466,7 @@ Deliver an approved implementation plan or validated OpenSpec task list through 
 - An OpenSpec change containing a validated `tasks.md`
 - Optional task or group selection, branch/worktree context, and implementation constraints
 
-A bare issue is context, not an execution contract. When repository policy requires structured planning and neither executable artifact exists, stop and direct the user to `/create-plan` or `/create-spec`.
+A bare issue is context, not an execution contract. When repository policy requires structured planning and neither executable artifact exists, stop and direct the user to provide an approved implementation plan or run `/create-spec`.
 
 ## Owner and delegation
 
@@ -557,10 +483,13 @@ A bare issue is context, not an execution contract. When repository policy requi
 
 ## Branch/worktree gate
 
+- Before choosing a branch or worktree strategy, inspect the workspace with `git status --short`.
+- If the workspace is dirty, stop immediately and report the changed/untracked paths. Do not create a feature branch, create a worktree, delegate implementation, or ask for approval to continue in the dirty checkout.
+- Continue only after the user cleans, commits, or stashes the workspace and reruns `/implement-spec`.
 - Determine whether the selected artifact should run in the current checkout, a new feature branch, or one or more linked worktrees.
 - If the work is serial and the current checkout is not already a safe, suitable feature branch, execute `/create-feature-branch` before delegating implementation.
 - If independent groups can run in parallel or need isolation, execute `/create-worktree` for each independent branch/worktree before delegating implementation.
-- Do not start implementation on `main`, the repository default branch, or a dirty checkout unless the user explicitly approves that exception after being warned.
+- Do not start implementation on `main` or the repository default branch unless the user explicitly approves that exception after being warned.
 - If branch or worktree creation is blocked by unsafe git state, existing branches, existing worktrees, or ambiguous base references, stop and ask the user how to proceed.
 
 ## Workflow
@@ -593,6 +522,7 @@ A bare issue is context, not an execution contract. When repository policy requi
 - Do not implement from a stale, unapproved, missing, or conflicting execution artifact.
 - Do not continue in the original command runner when `@robot-tech-lead` has not accepted the orchestration handoff.
 - Do not start implementation before the feature-branch or worktree gate has passed.
+- Do not bypass a dirty workspace by asking for approval to continue; stop and resume only after the workspace is clean.
 - Do not treat a written plan to delegate as delegation; invoke the selected implementation agent.
 - Do not silently change issue scope, requirements, ADR decisions, or plan approach.
 - Do not run dependent groups before prerequisite verification gates pass.
@@ -711,41 +641,6 @@ Select and coordinate an appropriate Java performance test with reproducible wor
 - Keep workload, environment, and threshold assumptions explicit.
 
 ```
-```markdown
-# kill-port
-
-## Purpose
-Free a localhost port by stopping the process listening on it.
-
-## Usage
-```
-/kill-port <port-number>
-```
-
-## Parameters
-- `<port-number>`: TCP port number to free (required, e.g., 8080, 8820, 5432)
-
-## Description
-Identifies and terminates any process listening on the specified port, freeing it for reuse. Commonly used to release ports held by development servers, databases, or other services that may have hung or weren't properly shut down.
-
-## Example Usage
-```bash
-# Free port 8820 (JBake local-preview)
-/kill-port 8820
-
-# Free port 8080 (common HTTP server port)
-/kill-port 8080
-
-# Free port 5432 (PostgreSQL default)
-/kill-port 5432
-```
-
-## Output
-- Confirmation message if process was killed
-- Notification if port was already free
-- Optional verification command suggestion
-
-```
 
 Create the destination directory if it does not exist.
 
@@ -754,7 +649,7 @@ When a target file already exists, overwrite it only after clearly notifying the
 #### Step Constraints
 
 - **MUST** copy from embedded assets, not from external URLs
-- **MUST** install all fourteen commands as one set
+- **MUST** install all eleven commands as one set
 - **MUST** preserve original file names
 
 ### Step 3: Report installation result

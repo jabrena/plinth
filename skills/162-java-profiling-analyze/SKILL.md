@@ -1,10 +1,10 @@
 ---
 name: 162-java-profiling-analyze
-description: Use when you need to analyze Java profiling data collected during the detection phase — including interpreting flamegraphs, memory allocation patterns, CPU hotspots, threading issues, systematic problem categorization, evidence documentation with profiling-problem-analysis and profiling-solutions markdown files, or prioritizing fixes using Impact/Effort scoring. This should trigger for requests such as Analyze JFR profile; Analyze the profile; Analyze the performance; Analyze the memory. Part of cursor-rules-java project
+description: Use when you need to analyze Java profiling data collected during the detection phase — including interpreting flamegraphs, memory allocation patterns, CPU hotspots, threading issues, systematic problem categorization, evidence documentation with profiling-problem-analysis and profiling-solutions markdown files, or prioritizing fixes using Impact/Effort scoring. This should trigger for requests such as Analyze JFR profile; Analyze the profile; Analyze the performance; Analyze the memory; Analyze the threading; Analyze GC logs from profiling; Prioritize Java profiling bottlenecks by impact. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Profiling Workflow / Step 2 / Analyze profiling data
 
@@ -40,7 +40,7 @@ Validate profiling results represent realistic load before analysis. Document as
 - Analyze the threading
 - Analyze the GC
 - Analyze the profiling
-- Analyze the profiling
+- Prioritize Java profiling bottlenecks by impact
 - Performance analysis
 
 ## Workflow

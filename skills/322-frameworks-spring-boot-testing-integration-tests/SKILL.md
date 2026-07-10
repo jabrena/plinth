@@ -1,10 +1,10 @@
 ---
 name: 322-frameworks-spring-boot-testing-integration-tests
-description: Use when you need to write or improve integration tests — including Testcontainers with @ServiceConnection, @DataJdbcTest persistence slices, TestRestTemplate or MockMvcTester for HTTP, data isolation, and container lifecycle management for Spring Boot 4.0.x. This should trigger for requests such as Review Java code for Spring Boot integration tests; Apply best practices for Spring Boot integration tests in Java code. Part of cursor-rules-java project
+description: Use when you need to write or improve integration tests — including Testcontainers with @ServiceConnection, @DataJdbcTest persistence slices, TestRestTemplate or MockMvcTester for HTTP, data isolation, and container lifecycle management for Spring Boot 4.0.x. This should trigger for requests such as Review Java code for Spring Boot integration tests; Apply best practices for Spring Boot integration tests in Java code; Write @SpringBootTest integration tests with Testcontainers; Configure dynamic properties for Spring integration tests; Review Spring Boot integration test profiles. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Spring Boot Integration Testing
 
@@ -40,6 +40,9 @@ Before applying any integration test changes, ensure the project compiles. If co
 
 - Review Java code for Spring Boot integration tests
 - Apply best practices for Spring Boot integration tests in Java code
+- Write @SpringBootTest integration tests with Testcontainers
+- Configure dynamic properties for Spring integration tests
+- Review Spring Boot integration test profiles
 
 ## Workflow
 

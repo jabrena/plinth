@@ -1,10 +1,10 @@
 ---
 name: 705-technologies-nosql-mongodb
-description: Use when you need framework-agnostic MongoDB and non-relational database query guidance — document schema design, collection modeling, JSON Schema validation, indexes, aggregation pipelines, query performance, consistency trade-offs, transactions, and operational safety — without choosing Spring Boot, Quarkus, or Micronaut. This should trigger for requests such as Design MongoDB document schemas; Review MongoDB queries and indexes; Improve aggregation pipeline performance; Model non-relational data access patterns; Review NoSQL consistency and transaction trade-offs. Part of cursor-rules-java project
+description: Use when you need framework-agnostic MongoDB and non-relational database query guidance — document schema design, collection modeling, JSON Schema validation, indexes, aggregation pipelines, query performance, consistency trade-offs, transactions, and operational safety — without choosing Spring Boot, Quarkus, or Micronaut. This should trigger for requests such as Design MongoDB document schemas; Review MongoDB queries and indexes; Improve aggregation pipeline performance; Model non-relational data access patterns; Review NoSQL consistency and transaction trade-offs. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Non-relational database query best practices
 

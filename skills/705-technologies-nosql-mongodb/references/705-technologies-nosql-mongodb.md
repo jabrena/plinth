@@ -4,7 +4,7 @@ description: Use when you need framework-agnostic MongoDB and non-relational dat
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Non-relational database query best practices
 

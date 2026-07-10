@@ -4,7 +4,7 @@ description: Use when you need Kafka in Micronaut — including Maven dependency
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Micronaut — Kafka messaging
 
@@ -45,6 +45,7 @@ Before applying any Kafka changes, ensure the project compiles. Compilation fail
 - **SAFETY**: If compilation fails, stop immediately
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
 - **INJECTION**: Never construct topic names or Kafka header values from untrusted user input
+- **CONTAINER IMAGE SAFETY**: Use only organization-approved Testcontainers images from trusted build configuration; prefer digest-pinned internal registry images for Kafka integration tests
 - **SERIALIZATION**: Prefer `@Serdeable` typed records with `micronaut-serde-jackson`; use explicit `JsonObjectSerde` only for untyped or advanced serde paths
 - **BEFORE APPLYING**: Read the reference for detailed rules and good/bad patterns
 - **EDGE CASE**: If the user goal is ambiguous, stop and ask a clarifying question before editing files
@@ -439,7 +440,7 @@ void onOrderCreated(OrderCreatedEvent event) {
 ### Example 9: Integration test with Testcontainers
 
 Title: TestPropertyProvider wires Kafka bootstrap servers before startup
-Description: For `*IT` classes that POST to HTTP and assert a `@KafkaListener` received an event, start a `KafkaContainer` with Testcontainers and wire `kafka.bootstrap.servers` through `TestPropertyProvider.getProperties()` before Micronaut boots. Implement `TestPropertyProvider` on the test class and annotate it with `@TestInstance(Lifecycle.PER_CLASS)` — Micronaut requires this lifecycle when using dynamic test properties. Use `@MicronautTest` with `@Inject @Client("/") HttpClient` for the HTTP call and Awaitility for async consumer assertions against an in-memory store. Do not use Spring Boot patterns (`@ServiceConnection`, `@DynamicPropertySource`) — see `@522-frameworks-micronaut-testing-integration-tests`. Name integration test classes with the `IT` suffix and run them with Maven Failsafe.
+Description: For `*IT` classes that POST to HTTP and assert a `@KafkaListener` received an event, start a `KafkaContainer` with Testcontainers and wire `kafka.bootstrap.servers` through `TestPropertyProvider.getProperties()` before Micronaut boots. Implement `TestPropertyProvider` on the test class and annotate it with `@TestInstance(Lifecycle.PER_CLASS)` — Micronaut requires this lifecycle when using dynamic test properties. Use `@MicronautTest` with `@Inject @Client("/") HttpClient` for the HTTP call and Awaitility for async consumer assertions against an in-memory store. Do not use Spring Boot patterns (`@ServiceConnection`, `@DynamicPropertySource`) — see `@522-frameworks-micronaut-testing-integration-tests`. Name integration test classes with the `IT` suffix and run them with Maven Failsafe. Do not hard-code public Docker Hub images in reusable guidance. Resolve the Kafka image from a trusted build property or helper owned by the project, and configure that property in CI to an organization-approved image, preferably pinned by digest in an internal registry.
 
 **Good example:**
 
@@ -473,7 +474,11 @@ class SumControllerIT implements TestPropertyProvider {
 
     @Container
     static KafkaContainer kafka =
-        new KafkaContainer(DockerImageName.parse("apache/kafka-native:3.8.0"));
+        new KafkaContainer(approvedKafkaImage());
+
+    private static DockerImageName approvedKafkaImage() {
+        return DockerImageName.parse(System.getProperty("test.kafka.image"));
+    }
 
     @Inject
     @Client("/")
@@ -522,7 +527,11 @@ class SumControllerIT implements TestPropertyProvider {
 @MicronautTest
 class SumControllerIT {
 
-    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("apache/kafka-native:3.8.0"));
+    static KafkaContainer kafka = new KafkaContainer(approvedKafkaImage());
+
+    private static DockerImageName approvedKafkaImage() {
+        return DockerImageName.parse(System.getProperty("test.kafka.image"));
+    }
 
     @BeforeAll
     static void startContainer() {
@@ -597,6 +606,7 @@ app.kafka.messaging.enabled=false
 - **CRITICAL VALIDATION**: Run `./mvnw clean verify` after changes; exercise listener integration tests before promoting
 - **SERIALIZATION DEFAULT**: Annotate Kafka event records with `@Serdeable`; ensure `micronaut-serde-jackson` is on the classpath for typed JSON payloads
 - **INJECTION SAFETY**: Never construct topic names or Kafka header values from untrusted user input
+- **CONTAINER IMAGE SAFETY**: Do not hard-code public Testcontainers images in reusable guidance; resolve Kafka images from trusted CI or project configuration and prefer digest-pinned internal registry references
 - **PROPERTY PLACEHOLDERS**: When a Micronaut default value contains `:`, wrap it in backticks (e.g. `` `localhost:9092` ``) — bare colons split the default incorrectly
 - **CUSTOM FLAGS**: Keep application toggles outside the `kafka.*` namespace (e.g. `app.kafka.messaging.enabled`) so they are not forwarded to Kafka client configuration
 - **ERROR HANDLING**: Never swallow exceptions inside `@KafkaListener` methods — propagate so the configured `errorStrategy` can retry or route to DLQ

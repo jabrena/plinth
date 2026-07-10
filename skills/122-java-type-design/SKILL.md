@@ -1,10 +1,10 @@
 ---
 name: 122-java-type-design
-description: Use when you need to review, improve, or refactor Java code for type design quality — including establishing clear type hierarchies, applying consistent naming conventions, eliminating primitive obsession with domain-specific value objects, leveraging generic type parameters, creating type-safe wrappers, designing fluent interfaces, ensuring precision-appropriate numeric types (BigDecimal for financial calculations), and improving type contrast through interfaces and method signature alignment. This should trigger for requests such as Review Java code for type design; Improve type design in Java code; Fix primitive obsession in Java code; Create value objects in Java code. Part of cursor-rules-java project
+description: Use when you need to review, improve, or refactor Java code for type design quality — including establishing clear type hierarchies, applying consistent naming conventions, eliminating primitive obsession with domain-specific value objects, leveraging generic type parameters, creating type-safe wrappers, designing fluent interfaces, ensuring precision-appropriate numeric types (BigDecimal for financial calculations), and improving type contrast through interfaces and method signature alignment. This should trigger for requests such as Review Java code for type design; Improve type design in Java code; Fix primitive obsession in Java code; Create value objects in Java code. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Type Design Thinking in Java
 

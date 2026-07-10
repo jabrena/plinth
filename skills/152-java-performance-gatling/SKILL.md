@@ -1,10 +1,10 @@
 ---
 name: 152-java-performance-gatling
-description: Use when you need to set up Gatling performance testing for a Java Maven project — including adding Gatling dependencies and the Gatling Maven plugin, creating Java simulations, running gatling:test, configuring a simulation class, and reviewing generated reports. This should trigger for requests such as Add Gatling performance testing; Apply Gatling performance testing; Create a Gatling simulation; Add Gatling support. Part of cursor-rules-java project
+description: Use when you need to set up Gatling performance testing for a Java Maven project — including adding Gatling dependencies and the Gatling Maven plugin, creating Java simulations, running gatling:test, configuring a simulation class, and reviewing generated reports. This should trigger for requests such as Add Gatling performance testing; Apply Gatling performance testing; Create a Gatling simulation; Add Gatling support; Review Gatling performance test assertions and feeders. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Run performance tests based on Gatling
 
@@ -40,6 +40,7 @@ Gatling setup must be Maven-based, reproducible, and compatible with Java projec
 - Apply Gatling performance testing
 - Create a Gatling simulation
 - Add Gatling support
+- Review Gatling performance test assertions and feeders
 
 ## Workflow
 

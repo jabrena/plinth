@@ -1,10 +1,10 @@
 ---
 name: 181-java-observability-logging
-description: Use when you need to implement or improve Java logging and observability — including selecting SLF4J with Logback/Log4j2, applying proper log levels (ERROR, WARN, INFO, DEBUG, TRACE), parameterized logging, correlation context, secure logging without sensitive data exposure, environment-specific configuration, log aggregation, monitoring, and alerting. This should trigger for requests such as Improve logging; Apply logging; Refactor logging; Add logging support. Part of cursor-rules-java project
+description: Use when you need to implement or improve Java logging and observability — including selecting SLF4J with Logback/Log4j2, applying proper log levels (ERROR, WARN, INFO, DEBUG, TRACE), parameterized logging, correlation context, secure logging without sensitive data exposure, environment-specific configuration, log aggregation, monitoring, and alerting. This should trigger for requests such as Improve logging; Apply logging; Refactor logging; Add logging support; Review SLF4J structured logging in Java code. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Logging Best Practices
 
@@ -36,6 +36,7 @@ Before applying any logging recommendations, ensure the project compiles. Compil
 - Apply logging
 - Refactor logging
 - Add logging support
+- Review SLF4J structured logging in Java code
 
 ## Workflow
 

@@ -1,10 +1,10 @@
 ---
 name: 164-java-profiling-verify
-description: Use when you need to verify Java performance optimizations by comparing profiling results before and after refactoring — including baseline validation, post-refactoring report generation, quantitative before/after metrics comparison, side-by-side flamegraph analysis, regression detection, or creating profiling-comparison-analysis and profiling-final-results documentation. This should trigger for requests such as Verify performance fix; Verify the performance; Verify the memory; Verify the threading. Part of cursor-rules-java project
+description: Use when you need to verify Java performance optimizations by comparing profiling results before and after refactoring — including baseline validation, post-refactoring report generation, quantitative before/after metrics comparison, side-by-side flamegraph analysis, regression detection, or creating profiling-comparison-analysis and profiling-final-results documentation. This should trigger for requests such as Verify performance fix; Verify the performance; Verify the memory; Verify the threading; Compare before and after profiling results; Check for performance regressions after refactoring. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Profiling Workflow / Step 4 / Verify results
 
@@ -40,8 +40,9 @@ Use identical test conditions between baseline and post-refactoring. Verify both
 - Verify the threading
 - Verify the GC
 - Verify the profiling
-- Verify the profiling
+- Compare before and after profiling results
 - Performance benchmark
+- Check for performance regressions after refactoring
 
 ## Workflow
 

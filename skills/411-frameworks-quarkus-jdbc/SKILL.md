@@ -1,10 +1,10 @@
 ---
 name: 411-frameworks-quarkus-jdbc
-description: Use when you need programmatic JDBC in Quarkus — Agroal DataSource, parameterized SQL, transactions, batching, and Dev Services. This should trigger for requests such as Review JDBC or SQL data access in a Quarkus project; Improve transactions and parameter binding for Quarkus JDBC; Translate SQLException to domain exceptions or stream large result sets; Fix CDI self-invocation bypassing @Transactional in Quarkus. Part of cursor-rules-java project
+description: Use when you need programmatic JDBC in Quarkus — Agroal DataSource, parameterized SQL, transactions, batching, and Dev Services. This should trigger for requests such as Review JDBC or SQL data access in a Quarkus project; Improve transactions and parameter binding for Quarkus JDBC; Translate SQLException to domain exceptions or stream large result sets; Fix CDI self-invocation bypassing @Transactional in Quarkus; Review Agroal DataSource usage in Quarkus JDBC. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Quarkus JDBC — programmatic SQL
 
@@ -43,6 +43,7 @@ Compile before JDBC refactors; verify after changes.
 - Improve transactions and parameter binding for Quarkus JDBC
 - Translate SQLException to domain exceptions or stream large result sets
 - Fix CDI self-invocation bypassing @Transactional in Quarkus
+- Review Agroal DataSource usage in Quarkus JDBC
 
 ## Workflow
 

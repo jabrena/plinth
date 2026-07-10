@@ -1,10 +1,10 @@
 ---
 name: 302-frameworks-spring-boot-rest
-description: Use when you need to design, review, or improve REST APIs with Spring Boot — including HTTP methods, resource URIs, status codes, DTOs, versioning, deprecation and sunset headers, content negotiation (JSON and vendor media types), ISO-8601 instants in DTOs, pagination/sorting/filtering, Bean Validation at the boundary, idempotency, ETag concurrency, HTTP caching, error handling, security, contract-first OpenAPI (OpenAPI Generator), controller advice, and problem details for errors. This should trigger for requests such as Review Java code for Spring Boot REST API; Apply best practices for Spring Boot REST API in Java code. Part of cursor-rules-java project
+description: Use when you need to design, review, or improve REST APIs with Spring Boot — including HTTP methods, resource URIs, status codes, DTOs, versioning, deprecation and sunset headers, content negotiation (JSON and vendor media types), ISO-8601 instants in DTOs, pagination/sorting/filtering, Bean Validation at the boundary, idempotency, ETag concurrency, HTTP caching, error handling, security, contract-first OpenAPI (OpenAPI Generator), controller advice, and problem details for errors. This should trigger for requests such as Review Java code for Spring Boot REST API; Apply best practices for Spring Boot REST API in Java code; Design Spring Boot REST controllers and DTOs; Add Problem Details error responses in Spring Boot REST; Improve pagination validation or idempotency in Spring APIs. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java REST API Design Principles
 
@@ -47,6 +47,9 @@ Before applying any REST API changes, ensure the project compiles. If compilatio
 
 - Review Java code for Spring Boot REST API
 - Apply best practices for Spring Boot REST API in Java code
+- Design Spring Boot REST controllers and DTOs
+- Add Problem Details error responses in Spring Boot REST
+- Improve pagination validation or idempotency in Spring APIs
 
 ## Workflow
 

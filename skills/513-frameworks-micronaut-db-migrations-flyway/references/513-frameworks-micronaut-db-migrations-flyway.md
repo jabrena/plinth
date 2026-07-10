@@ -4,7 +4,7 @@ description: Use when you need to add or review Flyway database migrations in a 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Micronaut — Database migrations (Flyway)
 
@@ -24,6 +24,7 @@ Before applying any recommendations, ensure the project is in a valid state by r
 - **PREREQUISITE**: Project must compile successfully before Flyway or SQL edits
 - **CRITICAL SAFETY**: If compilation fails, IMMEDIATELY STOP and DO NOT CONTINUE
 - **VERIFY**: Run `./mvnw clean verify` or `mvn clean verify` after applying improvements
+- **TESTCONTAINERS REQUIRED**: Verify Flyway migration chains with `@MicronautTest` and Testcontainers for the target production database dialect; do not substitute H2 or hand-written test DDL for migration safety checks
 
 ## Examples
 
@@ -128,20 +129,22 @@ flyway:
 ### Example 4: Tests
 
 Title: Run migrations against Testcontainers-backed datasources in integration tests
-Description: Prefer `@MicronautTest` with a Testcontainers-managed database and the same migration scripts as production. Avoid duplicating schema in hand-written `schema.sql` unless you have a deliberate, documented reason.
+Description: Always use `@MicronautTest` with a Testcontainers-managed database for the target production database dialect and the same migration scripts as production. Do not substitute H2 or duplicate schema in hand-written `schema.sql` for migration safety checks.
 
 **Good example:**
 
 ```java
-// TestPropertyProvider or test resources: point default datasource to Testcontainers JDBC URL
-// Flyway runs on context start when enabled — exercises real migration chain
+// TestPropertyProvider or test resources: point default datasource to a Testcontainers JDBC URL
+// matching the production dialect, for example PostgreSQL:
+// jdbc:tc:postgresql:16:///app
+// Flyway runs on context start when enabled — exercises the real migration chain.
 ```
 
 **Bad example:**
 
 ```java
-// Bad: @MicronautTest with in-memory H2 and hand-written DDL while production uses PostgreSQL + Flyway
-// — drifts and hides migration failures
+// Bad: @MicronautTest with in-memory H2 or hand-written DDL while production uses PostgreSQL + Flyway
+// — drifts and hides migration failures.
 ```
 
 
@@ -151,7 +154,9 @@ Description: Prefer `@MicronautTest` with a Testcontainers-managed database and 
 - **CATEGORIZE** gaps (DEPENDENCY, CONFIG, SCRIPT, TEST DRIFT) by severity
 - **APPLY** Micronaut-aligned fixes: coordinates, YAML/properties, and versioned SQL
 - **ALIGN** with `@512-frameworks-micronaut-data` or `@511-frameworks-micronaut-jdbc` access patterns
-- **TEST** with `@MicronautTest` and a containerized database mirroring production dialect
+- **SAFEGUARD DATA** by checking renames, type changes, defaults, enum/status changes, timezone changes, repeatable migrations, broad updates, and unique/index changes for preservation risks
+- **TEST** with `@MicronautTest` and Testcontainers mirroring the target production database dialect
+- **CHECK ORDERING** for duplicate versions, branch-dependent migrations, and unsafe `outOfOrder=true` assumptions
 - **VALIDATE** with `./mvnw compile` before and `./mvnw clean verify` after changes
 
 
@@ -159,4 +164,7 @@ Description: Prefer `@MicronautTest` with a Testcontainers-managed database and 
 
 - **IMMUTABLE APPLIED MIGRATIONS**: Do not modify files after they have run in shared environments
 - **DATASOURCE SCOPE**: Configure Flyway for each datasource that needs independent schema
+- **TESTCONTAINERS ONLY**: Migration verification must run against a Testcontainers-managed database matching the target production dialect; H2 and hand-written test DDL are not acceptable substitutes
+- **PARALLEL CHANGE**: Expand, migrate, and contract across separate deployable steps for renames, type changes, backfills, and relationship-table changes
+- **BRANCH ORDERING**: Detect duplicate versions and branch-only dependencies in CI; treat `outOfOrder=true` as an exceptional operational choice
 - **BLOCKING SAFETY CHECK**: Run `./mvnw compile` before recommending schema or build changes

@@ -1,10 +1,10 @@
 ---
 name: 124-java-secure-coding
-description: Use when you need to apply Java secure coding best practices — including validating untrusted inputs, defending against injection attacks with parameterized queries, minimizing attack surface via least privilege, applying strong cryptographic algorithms, handling exceptions securely without exposing sensitive data, managing secrets at runtime, avoiding unsafe deserialization, and encoding output to prevent XSS. This should trigger for requests such as Review Java code for secure coding. Part of cursor-rules-java project
+description: Use when you need to apply Java secure coding best practices — including validating untrusted inputs, defending against injection attacks with parameterized queries, minimizing attack surface via least privilege, applying strong cryptographic algorithms, handling exceptions securely without exposing sensitive data, managing secrets at runtime, avoiding unsafe deserialization, and encoding output to prevent XSS. This should trigger for requests such as Review Java code for secure coding; Find input validation risks in Java code; Review Java code for injection vulnerabilities; Improve secure error handling in Java services; Harden Java code against common security flaws. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Secure coding guidelines
 
@@ -35,6 +35,10 @@ Before applying any secure coding changes, ensure the project compiles. If compi
 ## When to use this skill
 
 - Review Java code for secure coding
+- Find input validation risks in Java code
+- Review Java code for injection vulnerabilities
+- Improve secure error handling in Java services
+- Harden Java code against common security flaws
 
 ## Workflow
 

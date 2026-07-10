@@ -1,10 +1,10 @@
 ---
 name: 301-frameworks-spring-boot-core
-description: Use when you need to review, improve, or build Spring Boot 4.0.x applications — including proper usage of @SpringBootApplication, component annotations (@Controller, @Service, @Repository), bean definition and scoping, configuration classes and @ConfigurationProperties (with @Validated), component scanning, conditional configuration and profiles, constructor injection, @Primary and @Qualifier for multiple beans of the same type, bean minimization, graceful shutdown, virtual threads, Jakarta EE namespace consistency, and scheduled tasks. This should trigger for requests such as Review Java code for Spring Boot application; Apply best practices for Spring Boot application in Java code. Part of cursor-rules-java project
+description: Use when you need to review, improve, or build Spring Boot 4.0.x applications — including proper usage of @SpringBootApplication, component annotations (@Controller, @Service, @Repository), bean definition and scoping, configuration classes and @ConfigurationProperties (with @Validated), component scanning, conditional configuration and profiles, constructor injection, @Primary and @Qualifier for multiple beans of the same type, bean minimization, graceful shutdown, virtual threads, Jakarta EE namespace consistency, and scheduled tasks. This should trigger for requests such as Review Java code for Spring Boot application; Apply best practices for Spring Boot application in Java code; Improve Spring Boot configuration properties and beans; Review Spring Boot component scanning and profiles; Tune Spring Boot graceful shutdown or virtual threads. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Spring Boot Core Guidelines
 
@@ -43,6 +43,9 @@ Before applying any Spring Boot changes, ensure the project compiles. If compila
 
 - Review Java code for Spring Boot application
 - Apply best practices for Spring Boot application in Java code
+- Improve Spring Boot configuration properties and beans
+- Review Spring Boot component scanning and profiles
+- Tune Spring Boot graceful shutdown or virtual threads
 
 ## Workflow
 

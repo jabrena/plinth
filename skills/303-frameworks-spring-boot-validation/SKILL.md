@@ -1,10 +1,10 @@
 ---
 name: 303-frameworks-spring-boot-validation
-description: Use when you need to design, review, or improve validation in Spring Boot applications — including Bean Validation on request DTOs, @Valid/@Validated at API boundaries, constraint groups, custom constraints, @ConfigurationProperties validation, nested DTO validation, and consistent validation error handling. This should trigger for requests such as Add validation support in Spring Boot; Review Spring Boot validation rules; Improve request validation in Spring Boot REST APIs; Add custom Bean Validation constraints in Spring Boot; Validate configuration properties in Spring Boot. Part of cursor-rules-java project
+description: Use when you need to design, review, or improve validation in Spring Boot applications — including Bean Validation on request DTOs, @Valid/@Validated at API boundaries, constraint groups, custom constraints, @ConfigurationProperties validation, nested DTO validation, and consistent validation error handling. This should trigger for requests such as Add validation support in Spring Boot; Review Spring Boot validation rules; Improve request validation in Spring Boot REST APIs; Add custom Bean Validation constraints in Spring Boot; Validate configuration properties in Spring Boot. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Spring Boot Validation Guidelines
 

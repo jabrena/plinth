@@ -1,10 +1,10 @@
 ---
 name: 033-architecture-diagrams
-description: Use when you need to generate Java project diagrams — including UML sequence diagrams, UML class diagrams, C4 model diagrams, UML state machine diagrams, UML Deployment Diagrams, ER (Entity Relationship) diagrams, and bounded-context diagrams — through a modular, step-based interactive process that adapts to your specific visualization needs. This should trigger for requests such as Generate UML diagram; Create sequence diagram; Create class diagram; Create state machine diagram; Create deployment diagram; Create C4 diagram; Create bounded-context diagram; Create context-map diagram. Part of cursor-rules-java project
+description: Use when you need to generate Java project diagrams — including UML sequence diagrams, UML class diagrams, C4 model diagrams, UML state machine diagrams, UML Deployment Diagrams, ER (Entity Relationship) diagrams, and bounded-context diagrams — through a modular, step-based interactive process that adapts to your specific visualization needs. This should trigger for requests such as Generate UML diagram; Create sequence diagram; Create class diagram; Create state machine diagram; Create deployment diagram; Create C4 diagram; Create bounded-context diagram; Create context-map diagram. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Diagrams Generator with modular step-based configuration
 
@@ -22,7 +22,7 @@ Generate comprehensive Java project diagrams through a modular, step-based inter
 - PlantUML syntax for all diagram types
 - File organization strategies: single-file, separate-files, or integrated with existing documentation
 - Final diagram validation with PlantUML syntax checking
-- Docker-based PlantUML validation and PNG/SVG rendering with the official `plantuml/plantuml` image
+- PlantUML validation and PNG/SVG rendering with a trusted local PlantUML installation or repository-approved wrapper
 
 ## Constraints
 
@@ -33,6 +33,7 @@ Before applying any diagram generation, ensure the project validates. If validat
 - **BEFORE READING DIAGRAM REFERENCES**: Run the question flow embedded in this SKILL.md first. Ask the diagram preference questions one by one, collect selected diagram families and output preferences, then read only the implementation references selected by the user's answers
 - **C4 SCOPE**: C4 diagrams are restricted to Context, Container, and Component diagrams
 - **SUPPLY CHAIN**: Generated PlantUML diagrams must use trusted local includes only; do not use remote `!include` URLs for C4 or icon libraries
+- **TOOLING SAFETY**: Use only trusted local PlantUML tooling or a repository-approved wrapper; do not pull or run remote container images as part of this skill
 
 ## When to use this skill
 
@@ -238,27 +239,27 @@ Create requested diagrams in PlantUML syntax using only the selected focused ref
 
 Check generated diagrams for syntax correctness and consistency with selected scope before final delivery.
 
-When Docker is available, use the official `plantuml/plantuml` image to validate and render generated `.puml` files without requiring a local PlantUML, Java, or Graphviz installation.
+Use an already installed PlantUML CLI or a repository-approved wrapper to validate and render generated `.puml` files. If PlantUML is not available, report the missing trusted tool and provide setup guidance instead of downloading or running remote execution artifacts.
 
 Validate PlantUML syntax without generating images:
 
 ```bash
-docker run --rm -v "$PWD:/data" plantuml/plantuml --check-syntax /data/diagrams
+plantuml -checkonly diagrams
 ```
 
 Render PNG images:
 
 ```bash
-docker run --rm -v "$PWD:/data" plantuml/plantuml --png /data/diagrams
+plantuml -tpng diagrams
 ```
 
 Render SVG images:
 
 ```bash
-docker run --rm -v "$PWD:/data" plantuml/plantuml --svg /data/diagrams
+plantuml -tsvg diagrams
 ```
 
-Use the path mounted under `/data` to point at the directory or `.puml` file containing generated diagrams. This workflow uses the CLI-oriented PlantUML image, not the PlantUML server image.
+Point the command at the directory or `.puml` file containing generated diagrams. Do not pull or run external container images during validation.
 
 ## Reference
 

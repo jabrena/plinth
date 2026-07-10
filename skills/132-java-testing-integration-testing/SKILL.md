@@ -1,10 +1,10 @@
 ---
 name: 132-java-testing-integration-testing
-description: Use when you need to set up, review, or improve Java integration tests — including generating a BaseIntegrationTest.java with WireMock for HTTP stubs, detecting HTTP client infrastructure from import signals, injecting service coordinates dynamically via System.setProperty(), creating WireMock JSON mapping files with bodyFileName, isolating stubs per test method, verifying HTTP interactions, or eliminating anti-patterns such as Mockito-mocked HTTP clients or globally registered WireMock stubs. This should trigger for requests such as Review Java code for integration tests; Apply best practices for integration tests in Java code. Part of cursor-rules-java project
+description: Use when you need to set up, review, or improve Java integration tests — including generating a BaseIntegrationTest.java with WireMock for HTTP stubs, detecting HTTP client infrastructure from import signals, injecting service coordinates dynamically via System.setProperty(), creating WireMock JSON mapping files with bodyFileName, isolating stubs per test method, verifying HTTP interactions, or eliminating anti-patterns such as Mockito-mocked HTTP clients or globally registered WireMock stubs. This should trigger for requests such as Review Java code for integration tests; Apply best practices for integration tests in Java code; Write Java integration tests with real infrastructure boundaries; Improve Testcontainers integration tests for Java code; Review integration test setup and teardown in Java projects. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Integration testing guidelines
 
@@ -39,6 +39,9 @@ Before applying any integration test changes, ensure the project compiles. If co
 
 - Review Java code for integration tests
 - Apply best practices for integration tests in Java code
+- Write Java integration tests with real infrastructure boundaries
+- Improve Testcontainers integration tests for Java code
+- Review integration test setup and teardown in Java projects
 
 ## Workflow
 

@@ -1,10 +1,10 @@
 ---
 name: 806-regulations-eu-data-act
-description: Use when reviewing, designing, or modifying Java enterprise systems that expose, exchange, store, process, export, or port data across users, businesses, connected products, cloud providers, APIs, event streams, AI data pipelines, data spaces, or SaaS platforms and need EU Data Act engineering controls. This should trigger for requests such as Review a Java platform for EU Data Act controls; Design data access and portability evidence; Add data-sharing request workflows, export formats, interoperability, metadata, audit logs, cloud-switching support, non-personal data safeguards, or trade-secret handoffs; Assess Data Act engineering readiness before production release. Part of cursor-rules-java project
+description: Use when reviewing, designing, or modifying Java enterprise systems that expose, exchange, store, process, export, or port data across users, businesses, connected products, cloud providers, APIs, event streams, AI data pipelines, data spaces, or SaaS platforms and need EU Data Act engineering controls. This should trigger for requests such as Review a Java platform for EU Data Act controls; Design data access and portability evidence; Add data-sharing request workflows, export formats, interoperability, metadata, audit logs, cloud-switching support, non-personal data safeguards, or trade-secret handoffs; Assess Data Act engineering readiness before production release. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # EU Data Act Regulation for Java Enterprise Data Access and Portability Engineering
 

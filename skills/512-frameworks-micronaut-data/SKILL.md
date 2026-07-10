@@ -1,10 +1,10 @@
 ---
 name: 512-frameworks-micronaut-data
-description: Use when you need data access with Micronaut Data — @MappedEntity, CrudRepository/PageableRepository, @Query with parameters, @Transactional services, projections, @Version, and @MicronautTest with TestPropertyProvider and Testcontainers. For raw java.sql access without generated repositories, use @511-frameworks-micronaut-jdbc. This should trigger for requests such as Review or implement Micronaut Data repositories and entities; Add transactions, pagination, or projections in Micronaut persistence layer. Part of cursor-rules-java project
+description: Use when you need data access with Micronaut Data — @MappedEntity, CrudRepository/PageableRepository, @Query with parameters, @Transactional services, projections, @Version, and @MicronautTest with TestPropertyProvider and Testcontainers. For raw java.sql access without generated repositories, use @511-frameworks-micronaut-jdbc. This should trigger for requests such as Review or implement Micronaut Data repositories and entities; Add transactions, pagination, or projections in Micronaut persistence layer; Model Micronaut Data entities and repositories; Review Micronaut Data transactions and pageable queries; Improve projections or optimistic locking with Micronaut Data. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Micronaut Data Guidelines
 
@@ -39,6 +39,9 @@ Compile before persistence changes; verify the full build after.
 
 - Review or implement Micronaut Data repositories and entities
 - Add transactions, pagination, or projections in Micronaut persistence layer
+- Model Micronaut Data entities and repositories
+- Review Micronaut Data transactions and pageable queries
+- Improve projections or optimistic locking with Micronaut Data
 
 ## Workflow
 

@@ -1,10 +1,10 @@
 ---
 name: 003-skills-inventory
-description: Use when you need to generate a checklist document with Java system prompts from skills.xml, following the embedded section template and producing INVENTORY-SKILLS-JAVA.md. This should trigger for requests such as Create Java system prompts checklist; Generate INVENTORY-SKILLS-JAVA.md; Use @003-skills-inventory. Part of cursor-rules-java project
+description: Use when you need to generate a checklist document with Java system prompts from skills.xml, following the embedded section template and producing INVENTORY-SKILLS-JAVA.md. This should trigger for requests such as Create Java system prompts checklist; Generate INVENTORY-SKILLS-JAVA.md; Use @003-skills-inventory; Inventory Java cursor rule skills; List available Java system prompt skills. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Create a Checklist with all Java steps to use with system prompts for Java
 
@@ -34,6 +34,8 @@ Follow the template sections exactly and use `skills.xml` as the single source o
 - Create Java system prompts checklist
 - Generate INVENTORY-SKILLS-JAVA.md
 - Use @003-skills-inventory
+- Inventory Java cursor rule skills
+- List available Java system prompt skills
 
 ## Workflow
 

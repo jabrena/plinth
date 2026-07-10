@@ -4,7 +4,7 @@ description: Use when applying classic Java design patterns in application code 
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Design and Integration Patterns
 
@@ -24,6 +24,18 @@ Apply classic Java design patterns only when they solve a visible design pressur
 4. **Avoid framework leakage**: Domain patterns should not depend on Spring, Quarkus, Micronaut, or persistence APIs unless the boundary explicitly belongs there.
 5. **Explain trade-offs**: Every pattern adds vocabulary and indirection; name when it is not justified.
 
+### Pattern selection matrix
+
+| Design pressure | Candidate pattern | Use when | Avoid when | Validation signal |
+|---|---|---|---|---|
+| Simple value creation | No new pattern, constructor, static factory | Construction is obvious and stable | Callers repeat validation or mapping rules | Constructor/factory tests cover invariants |
+| Named creation rules | Static factory or factory method | Object variants need names, validation, or hidden implementation types | There is only one public constructor with no repeated rules | Tests cover each creation branch and invalid input |
+| Many optional immutable values | Builder | Required values must stay explicit and optional values harm readability | A compact record constructor or static factory is enough | Build tests cover defaults and validation |
+| Replaceable business behavior | Strategy | Algorithms vary independently by policy | One or two branches are stable and clearer inline | Contract tests cover each strategy |
+| External shape mismatch | Adapter | A boundary translates incompatible APIs or models | The caller can use the dependency directly without leaking concepts | Adapter tests cover translation and failure mapping |
+| Additive wrapper behavior | Decorator | Metrics, logging, retries, or authorization wrap a stable interface | The wrapper hides business rules or ordering is unclear | Tests prove wrapper order and delegated behavior |
+| Lifecycle/state-specific behavior | State or command | Allowed behavior depends on explicit state or queued actions | State transitions are trivial and local | Transition tests cover allowed and rejected operations |
+
 ## Constraints
 
 Classic patterns must improve clarity, substitution, or change safety in Java code.
@@ -40,11 +52,14 @@ Classic patterns must improve clarity, substitution, or change safety in Java co
 - Example 1: Use Strategy for Replaceable Policies
 - Example 2: Use Builder for Complex Immutable Construction
 - Example 3: Use Decorator for Additive Behavior
+- Example 4: Use Static Factory for Named Creation Rules
+- Example 5: Use Adapter for External Contract Mismatch
+- Example 6: Use State for Lifecycle-Specific Behavior
 
 ### Example 1: Use Strategy for Replaceable Policies
 
 Title: Replace growing conditionals with named behavior
-Description: Use Strategy when multiple algorithms are selected by business policy and each policy changes independently. Avoid it when there are only one or two stable branches.
+Description: Use Strategy when multiple algorithms are selected by business policy and each policy changes independently. Benefit: behavior is named, substituted, and tested independently. Cost: more types and dispatch indirection. Avoid it when there are only one or two stable branches or a simple enum switch is clearer. Validate with contract tests for every strategy and caller tests for selection rules.
 
 **Good example:**
 
@@ -95,7 +110,7 @@ final class CheckoutService {
 ### Example 2: Use Builder for Complex Immutable Construction
 
 Title: Keep required fields explicit and optional fields readable
-Description: Use Builder when construction has several optional values, validation rules, or readability problems. Prefer a record constructor or static factory for small value objects.
+Description: Use Builder when construction has several optional values, validation rules, or readability problems. Benefit: required fields stay explicit while optional fields remain readable. Cost: extra ceremony and another construction API to maintain. Prefer a record constructor or static factory for small value objects. Validate defaults, required fields, and invalid combinations.
 
 **Good example:**
 
@@ -149,7 +164,7 @@ final class InvoiceController {
 ### Example 3: Use Decorator for Additive Behavior
 
 Title: Add metrics, retries, or logging without changing the core implementation
-Description: Use Decorator when behavior must be layered around a stable interface. Keep ordering explicit and avoid hiding business rules inside infrastructure wrappers.
+Description: Use Decorator when behavior must be layered around a stable interface. Benefit: cross-cutting behavior stays outside the core implementation. Cost: call flow and ordering can become harder to inspect. Keep ordering explicit and avoid hiding business rules inside infrastructure wrappers. Validate delegation, wrapper order, and failure behavior.
 
 **Good example:**
 
@@ -189,6 +204,153 @@ final class NotificationClient {
         if (metricsEnabled) {
             // metrics branch
         }
+    }
+}
+```
+
+### Example 4: Use Static Factory for Named Creation Rules
+
+Title: Name validated construction paths instead of scattering setup code
+Description: Use a static factory when callers need a clear creation vocabulary, validation, or hidden implementation choices. Benefit: duplicated construction rules move to one place. Cost: the type gains another API surface. Avoid it when a public constructor already communicates the invariant. Validate every named factory path and rejected input.
+
+**Good example:**
+
+```java
+import java.math.BigDecimal;
+import java.util.Currency;
+import java.util.Objects;
+
+record Money(BigDecimal amount, Currency currency) {
+    static Money euros(String amount) {
+        return of(new BigDecimal(amount), Currency.getInstance("EUR"));
+    }
+
+    static Money of(BigDecimal amount, Currency currency) {
+        Objects.requireNonNull(amount);
+        Objects.requireNonNull(currency);
+        if (amount.signum() < 0) {
+            throw new IllegalArgumentException("amount must be positive");
+        }
+        return new Money(amount, currency);
+    }
+}
+```
+
+**Bad example:**
+
+```java
+import java.math.BigDecimal;
+import java.util.Currency;
+
+record Money(BigDecimal amount, Currency currency) {}
+
+final class InvoiceService {
+    Money fee() {
+        return new Money(new BigDecimal("-10.00"), Currency.getInstance("EUR"));
+    }
+}
+```
+
+### Example 5: Use Adapter for External Contract Mismatch
+
+Title: Translate dependency concepts before they enter the domain
+Description: Use Adapter when a library, legacy API, or provider model is incompatible with your domain language. Benefit: external naming, errors, and lifecycle rules stay at the boundary. Cost: translation code must be maintained as the dependency changes. Avoid it when the external API is already the local abstraction. Validate mapping, null/error handling, and provider-version changes.
+
+**Good example:**
+
+```java
+record ProviderPayment(String ref, String status_code) {}
+record PaymentStatus(String value) {}
+
+interface PaymentGateway {
+    PaymentStatus statusFor(String paymentId);
+}
+
+record ProviderPaymentAdapter(ProviderClient client) implements PaymentGateway {
+    public PaymentStatus statusFor(String paymentId) {
+        ProviderPayment payment = client.fetch(paymentId);
+        return new PaymentStatus(switch (payment.status_code()) {
+            case "S" -> "SETTLED";
+            case "P" -> "PENDING";
+            default -> "UNKNOWN";
+        });
+    }
+}
+
+interface ProviderClient {
+    ProviderPayment fetch(String paymentId);
+}
+```
+
+**Bad example:**
+
+```java
+final class SettlementService {
+    boolean canSettle(ProviderPayment payment) {
+        return "S".equals(payment.status_code());
+    }
+}
+```
+
+### Example 6: Use State for Lifecycle-Specific Behavior
+
+Title: Keep allowed transitions close to the state that owns them
+Description: Use State when behavior and allowed transitions depend on a meaningful lifecycle. Benefit: invalid operations become explicit and testable. Cost: more types and transition wiring. Avoid it when the lifecycle has only a couple of obvious transitions. Validate allowed transitions, rejected transitions, and persisted state names.
+
+**Good example:**
+
+```java
+sealed interface OrderState permits Draft, Confirmed, Cancelled {
+    OrderState confirm();
+    OrderState cancel();
+}
+
+record Draft() implements OrderState {
+    public OrderState confirm() {
+        return new Confirmed();
+    }
+
+    public OrderState cancel() {
+        return new Cancelled();
+    }
+}
+
+record Confirmed() implements OrderState {
+    public OrderState confirm() {
+        return this;
+    }
+
+    public OrderState cancel() {
+        throw new IllegalStateException("confirmed orders cannot be cancelled here");
+    }
+}
+
+record Cancelled() implements OrderState {
+    public OrderState confirm() {
+        throw new IllegalStateException("cancelled orders cannot be confirmed");
+    }
+
+    public OrderState cancel() {
+        return this;
+    }
+}
+```
+
+**Bad example:**
+
+```java
+final class OrderWorkflow {
+    String transition(String status, String action) {
+        if ("DRAFT".equals(status) && "CONFIRM".equals(action)) {
+            return "CONFIRMED";
+        }
+        if ("DRAFT".equals(status) && "CANCEL".equals(action)) {
+            return "CANCELLED";
+        }
+        if ("CONFIRMED".equals(status) && "CANCEL".equals(action)) {
+            throw new IllegalStateException();
+        }
+        return status;
     }
 }
 ```

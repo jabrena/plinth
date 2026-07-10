@@ -1,10 +1,10 @@
 ---
 name: 421-frameworks-quarkus-testing-unit-tests
-description: Use when you need to write fast unit tests for Quarkus applications — including pure tests with @ExtendWith(MockitoExtension.class), @QuarkusTest with @InjectMock for full CDI mock replacement, @InjectSpy for partial CDI bean mocking, REST Assured for resource-focused tests, @ParameterizedTest with @CsvSource / @MethodSource, QuarkusTestProfile for test-specific configuration overrides, and naming conventions (*Test → Surefire, *IT → Failsafe). For framework-agnostic Java use @131-java-testing-unit-testing. This should trigger for requests such as Add or improve unit tests in a Quarkus project; Reduce slow @QuarkusTest usage with Mockito-first tests; Add @InjectSpy partial mocking or QuarkusTestProfile configuration in Quarkus tests; Convert repeated test methods to @ParameterizedTest with @CsvSource or @MethodSource. Part of cursor-rules-java project
+description: Use when you need to write fast unit tests for Quarkus applications — including pure tests with @ExtendWith(MockitoExtension.class), @QuarkusTest with @InjectMock for full CDI mock replacement, @InjectSpy for partial CDI bean mocking, REST Assured for resource-focused tests, @ParameterizedTest with @CsvSource / @MethodSource, QuarkusTestProfile for test-specific configuration overrides, and naming conventions (*Test → Surefire, *IT → Failsafe). For framework-agnostic Java use @131-java-testing-unit-testing. This should trigger for requests such as Add or improve unit tests in a Quarkus project; Reduce slow @QuarkusTest usage with Mockito-first tests; Add @InjectSpy partial mocking or QuarkusTestProfile configuration in Quarkus tests; Convert repeated test methods to @ParameterizedTest with @CsvSource or @MethodSource; Write fast pure unit tests for Quarkus services. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Quarkus Unit Testing
 
@@ -40,6 +40,7 @@ Compile before test refactors; verify the full suite after.
 - Reduce slow @QuarkusTest usage with Mockito-first tests
 - Add @InjectSpy partial mocking or QuarkusTestProfile configuration in Quarkus tests
 - Convert repeated test methods to @ParameterizedTest with @CsvSource or @MethodSource
+- Write fast pure unit tests for Quarkus services
 
 ## Workflow
 

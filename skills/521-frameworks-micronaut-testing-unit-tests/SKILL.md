@@ -1,10 +1,10 @@
 ---
 name: 521-frameworks-micronaut-testing-unit-tests
-description: Use when you need to write unit tests for Micronaut applications — Mockito-first with @ExtendWith(MockitoExtension.class), @MicronautTest with @MockBean, HttpClient @Client(/) assertions, @Property overrides, @ParameterizedTest, and *Test vs *IT naming. For framework-agnostic Java use @131-java-testing-unit-testing. This should trigger for requests such as Add or improve unit tests in a Micronaut project; Reduce unnecessary @MicronautTest usage with Mockito-first tests. Part of cursor-rules-java project
+description: Use when you need to write unit tests for Micronaut applications — Mockito-first with @ExtendWith(MockitoExtension.class), @MicronautTest with @MockBean, HttpClient @Client(/) assertions, @Property overrides, @ParameterizedTest, and *Test vs *IT naming. For framework-agnostic Java use @131-java-testing-unit-testing. This should trigger for requests such as Add or improve unit tests in a Micronaut project; Reduce unnecessary @MicronautTest usage with Mockito-first tests; Write Mockito-first unit tests for Micronaut services; Mock Micronaut bean collaborators in unit tests; Review fast Micronaut tests without application context. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Micronaut Unit Testing
 
@@ -37,6 +37,9 @@ Compile before test refactors; verify the full suite after.
 
 - Add or improve unit tests in a Micronaut project
 - Reduce unnecessary @MicronautTest usage with Mockito-first tests
+- Write Mockito-first unit tests for Micronaut services
+- Mock Micronaut bean collaborators in unit tests
+- Review fast Micronaut tests without application context
 
 ## Workflow
 

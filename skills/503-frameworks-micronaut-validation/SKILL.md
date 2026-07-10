@@ -1,10 +1,10 @@
 ---
 name: 503-frameworks-micronaut-validation
-description: Use when you need to design, review, or improve validation in Micronaut applications — including Bean Validation on @Controller methods, @Body @Valid, query/path parameter validation, @ConfigurationProperties validation, custom constraints, nested DTO validation, and ExceptionHandler mapping for constraint violations. This should trigger for requests such as Add validation support in Micronaut; Review Micronaut validation rules; Improve request validation in Micronaut REST APIs; Add custom validation constraints in Micronaut; Validate Micronaut configuration properties. Part of cursor-rules-java project
+description: Use when you need to design, review, or improve validation in Micronaut applications — including Bean Validation on @Controller methods, @Body @Valid, query/path parameter validation, @ConfigurationProperties validation, custom constraints, nested DTO validation, and ExceptionHandler mapping for constraint violations. This should trigger for requests such as Add validation support in Micronaut; Review Micronaut validation rules; Improve request validation in Micronaut REST APIs; Add custom validation constraints in Micronaut; Validate Micronaut configuration properties. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Micronaut Validation Guidelines
 

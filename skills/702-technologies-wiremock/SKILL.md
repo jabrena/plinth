@@ -1,10 +1,10 @@
 ---
 name: 702-technologies-wiremock
-description: Use when you need framework-agnostic WireMock guidance — stub design, JSON or programmatic mappings, precise request matching, response bodies and faults, classpath fixtures, isolation and reset between tests, verification of calls, dynamic ports and base URLs, and avoiding flaky stubs — without choosing Spring Boot, Quarkus, or Micronaut. This should trigger for requests such as Design or review WireMock stubs (JSON mappings or Java DSL); Improve request matching, isolation, or reset strategy for HTTP mocks; Add or fix verification of outbound HTTP calls to a WireMock server; Debug flaky tests involving WireMock or unmatched request journals. Part of cursor-rules-java project
+description: Use when you need framework-agnostic WireMock guidance — stub design, JSON or programmatic mappings, precise request matching, response bodies and faults, classpath fixtures, isolation and reset between tests, verification of calls, dynamic ports and base URLs, and avoiding flaky stubs — without choosing Spring Boot, Quarkus, or Micronaut. This should trigger for requests such as Design or review WireMock stubs (JSON mappings or Java DSL); Improve request matching, isolation, or reset strategy for HTTP mocks; Add or fix verification of outbound HTTP calls to a WireMock server; Debug flaky tests involving WireMock or unmatched request journals. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # WireMock best practices
 

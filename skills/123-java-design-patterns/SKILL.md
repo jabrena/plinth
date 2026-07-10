@@ -1,10 +1,10 @@
 ---
 name: 123-java-design-patterns
-description: Use when you need to select, review, or implement Java design and integration patterns — including classic Java design patterns, REST API patterns, Kafka and event-driven patterns, database and persistence patterns, and cross-cutting integration patterns. This should trigger for requests such as Apply Java design patterns; Review REST API patterns; Design Kafka event-driven patterns; Improve database persistence patterns; Add resilient integration patterns. Part of cursor-rules-java project
+description: Use when you need to select, review, or implement Java design and integration patterns — including classic Java design patterns, REST API patterns, Kafka and event-driven patterns, database and persistence patterns, and cross-cutting integration patterns. This should trigger for requests such as Apply Java design patterns; Review REST API patterns; Design Kafka event-driven patterns; Improve database persistence patterns; Add resilient integration patterns. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Design and Integration Patterns
 

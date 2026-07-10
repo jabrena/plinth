@@ -1,10 +1,10 @@
 ---
 name: 142-java-functional-programming
-description: Use when you need to apply functional programming principles in Java — including writing immutable objects and Records, pure functions, functional interfaces, lambda expressions, Stream API pipelines, Optional for null safety, function composition, higher-order functions, pattern matching for instanceof and switch, sealed classes/interfaces for controlled hierarchies, Stream Gatherers for custom operations, currying/partial application, effect boundary separation, and concurrent-safe functional patterns. This should trigger for requests such as Improve the code with Functional Programming; Apply Functional Programming; Refactor the code with Functional Programming. Part of cursor-rules-java project
+description: Use when you need to apply functional programming principles in Java — including writing immutable objects and Records, pure functions, functional interfaces, lambda expressions, Stream API pipelines, Optional for null safety, function composition, higher-order functions, pattern matching for instanceof and switch, sealed classes/interfaces for controlled hierarchies, Stream Gatherers for custom operations, currying/partial application, effect boundary separation, and concurrent-safe functional patterns. This should trigger for requests such as Improve the code with Functional Programming; Apply Functional Programming; Refactor the code with Functional Programming; Refactor Java code to use streams or Optionals safely; Improve immutability and pure functions in Java. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Functional Programming rules
 
@@ -45,6 +45,8 @@ Before applying any functional programming changes, ensure the project compiles.
 - Improve the code with Functional Programming
 - Apply Functional Programming
 - Refactor the code with Functional Programming
+- Refactor Java code to use streams or Optionals safely
+- Improve immutability and pure functions in Java
 
 ## Workflow
 

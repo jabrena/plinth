@@ -4,7 +4,7 @@ description: Use when you need framework-agnostic WireMock guidance — stub des
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # WireMock best practices
 
@@ -40,33 +40,46 @@ Before recommending structural or build changes, ensure the workspace builds. Co
 
 - Example 1: Per-test stubs and reset
 - Example 2: Precise matching and verify
+- Example 3: Programmatic Java DSL stub
+- Example 4: bodyFileName fixtures
+- Example 5: Dynamic port and base URL propagation
+- Example 6: Request journal debugging
+- Example 7: Fault and delay scenarios
+- Example 8: Query, header, and body matching
 
 ### Example 1: Per-test stubs and reset
 
 Title: avoid leaked state across examples
-Description: Register stubs in the narrowest scope (per test method or a fresh rule set) or reset WireMock between tests. Leaked stubs cause **order-dependent** failures and masked assertions.
+Description: Register stubs in the narrowest scope (per test method or a fresh rule set) and reset WireMock state between tests. `resetAll()` removes stubs and clears the request journal; use it before each scenario when a server instance is reused. Leaked stubs cause **order-dependent** failures and masked assertions.
 
 **Good example:**
 
-```text
-                // Conceptual: register stubs inside each test OR reset before each test
-                // - Before each test: reset all stubs and request journal
-                // - Register only what this scenario needs
+```java
+@BeforeEach
+void resetWireMock() {
+    wireMockServer.resetAll();
+}
 
+@Test
+void returnsCurrentOrder() {
+    wireMockServer.stubFor(get(urlPathEqualTo("/api/v1/orders/123"))
+            .willReturn(okJson("{\"id\":\"123\",\"status\":\"OPEN\"}")));
+
+    // Exercise the system under test and verify only this scenario's traffic.
+}
 ```
 
 **Bad example:**
 
 ```text
-                // Anti-pattern: @BeforeAll registers many stubs shared by all tests
-                // without reset — later tests depend on accidental overlap
-
+// Anti-pattern: @BeforeAll registers many stubs shared by all tests
+// without reset. Later tests depend on accidental overlap and journal state.
 ```
 
 ### Example 2: Precise matching and verify
 
 Title: catch missing or wrong outbound calls
-Description: Pair **specific** `urlPath`, HTTP method, and required headers with **verify** (or journal checks) so the test proves the collaboration you care about. Overly broad `urlMatching` can let tests pass when the client never called the dependency correctly.
+Description: Pair **specific** `urlPath`, HTTP method, and required headers with **verify** or request journal checks so the test proves the collaboration you care about. Overly broad `urlMatching` can let tests pass when the client never called the dependency correctly.
 
 **Good example:**
 
@@ -92,6 +105,207 @@ Description: Pair **specific** `urlPath`, HTTP method, and required headers with
   "request": {
     "method": "GET",
     "urlPattern": ".*"
+  },
+  "response": { "status": 200, "body": "{}" }
+}
+```
+
+
+### Example 3: Programmatic Java DSL stub
+
+Title: prefer readable executable stubs for scenario-specific behavior
+Description: Use the Java DSL when the test needs dynamic values, local readability, or verification next to the scenario. Match method, path, headers, query parameters, and body shape explicitly enough to catch regressions.
+
+**Good example:**
+
+```java
+wireMockServer.stubFor(post(urlPathEqualTo("/api/v1/payments"))
+        .withHeader("Content-Type", containing("application/json"))
+        .withHeader("Idempotency-Key", matching("[a-zA-Z0-9-]{20,}"))
+        .withQueryParam("tenant", equalTo("acme"))
+        .withRequestBody(matchingJsonPath("$.amount", equalTo("42.50")))
+        .withRequestBody(matchingJsonPath("$.currency", equalTo("EUR")))
+        .willReturn(created()
+                .withHeader("Content-Type", "application/json")
+                .withBody("{\"paymentId\":\"pay-123\",\"status\":\"ACCEPTED\"}")));
+
+// After exercising the system under test:
+wireMockServer.verify(postRequestedFor(urlPathEqualTo("/api/v1/payments"))
+        .withHeader("Idempotency-Key", matching(".+"))
+        .withRequestBody(matchingJsonPath("$.currency", equalTo("EUR"))));
+```
+
+**Bad example:**
+
+```java
+wireMockServer.stubFor(any(anyUrl())
+        .willReturn(okJson("{}")));
+
+// This hides wrong methods, paths, missing headers, and malformed payloads.
+```
+
+### Example 4: bodyFileName fixtures
+
+Title: keep large or reusable payloads out of inline mappings
+Description: Use `bodyFileName` for large, shared, or contract-like responses. Keep mappings under `wiremock/mappings` and response bodies under `wiremock/__files` (or the equivalent test classpath root used by the project) so fixtures are easy to review and version.
+
+**Good example:**
+
+```text
+src/test/resources/wiremock/
+  mappings/
+    get-order-123.json
+  __files/
+    orders/
+      order-123-response.json
+
+// mappings/get-order-123.json
+{
+  "request": {
+    "method": "GET",
+    "urlPath": "/api/v1/orders/123"
+  },
+  "response": {
+    "status": 200,
+    "headers": { "Content-Type": "application/json" },
+    "bodyFileName": "orders/order-123-response.json"
+  }
+}
+```
+
+**Bad example:**
+
+```json
+{
+  "request": { "method": "GET", "urlPath": "/api/v1/orders/123" },
+  "response": {
+    "status": 200,
+    "body": "{ \"large\": \"payload copied into many mapping files\" }"
+  }
+}
+```
+
+### Example 5: Dynamic port and base URL propagation
+
+Title: avoid fixed localhost ports in parallel test runs
+Description: Start WireMock on a dynamic port and propagate the runtime base URL into the system under test through the project's normal configuration mechanism. Keep this guidance framework-agnostic; delegate `@SpringBootTest`, `@QuarkusTest`, `@MicronautTest`, extension lifecycle, and `BaseIntegrationTest` wiring to the integration-test skills.
+
+**Good example:**
+
+```java
+WireMockServer wireMockServer = new WireMockServer(options().dynamicPort());
+wireMockServer.start();
+
+String dependencyBaseUrl = wireMockServer.baseUrl();
+// Pass dependencyBaseUrl to the client or application configuration at runtime.
+// Examples: constructor argument, test configuration property, environment value,
+// or system property owned by the test harness.
+```
+
+**Bad example:**
+
+```text
+external.orders.base-url=http://localhost:8089
+
+// Fixed shared ports collide with other processes and parallel test runs.
+```
+
+### Example 6: Request journal debugging
+
+Title: diagnose unmatched requests and near misses
+Description: Use the request journal when a test fails because no stub matched or because an expected call never arrived. Inspect unmatched requests and near misses to identify wrong paths, missing headers, broad matchers, or body shape mismatches; clear the journal with reset behavior between tests.
+
+**Good example:**
+
+```java
+List<LoggedRequest> unmatched = wireMockServer.findAllUnmatchedRequests();
+assertThat(unmatched).as("unexpected outbound HTTP calls").isEmpty();
+
+wireMockServer.findNearMissesForAllUnmatchedRequests()
+        .forEach(nearMiss -> {
+            LoggedRequest request = nearMiss.getRequest();
+            RequestPattern pattern = nearMiss.getStubMapping().getRequest();
+            // Log request URL, method, headers, body, and the closest stub pattern.
+        });
+```
+
+**Bad example:**
+
+```text
+// Anti-pattern: make the stub broader until the test passes.
+// Fix the client call or the intended matcher after inspecting journal evidence.
+```
+
+### Example 7: Fault and delay scenarios
+
+Title: test resilience deliberately, not accidentally
+Description: Use WireMock faults, delays, and error statuses in resilience-specific tests. Keep happy-path stubs fast and deterministic; do not add random delays or broad failure behavior to default stubs.
+
+**Good example:**
+
+```java
+wireMockServer.stubFor(get(urlPathEqualTo("/api/v1/recommendations"))
+        .willReturn(aResponse()
+                .withStatus(503)
+                .withHeader("Content-Type", "application/json")
+                .withFixedDelay(750)
+                .withBody("{\"error\":\"dependency temporarily unavailable\"}")));
+
+wireMockServer.stubFor(get(urlPathEqualTo("/api/v1/stream"))
+        .willReturn(aResponse()
+                .withFault(Fault.CONNECTION_RESET_BY_PEER)));
+```
+
+**Bad example:**
+
+```java
+wireMockServer.stubFor(any(anyUrl())
+        .willReturn(aResponse()
+                .withRandomDelay(new LogNormalRandomDelayDistribution(90, 0.1))
+                .withFault(Fault.MALFORMED_RESPONSE_CHUNK)));
+
+// This makes unrelated happy-path tests flaky and hard to diagnose.
+```
+
+### Example 8: Query, header, and body matching
+
+Title: match the contract detail that matters
+Description: Prefer `urlPathEqualTo` plus explicit query, header, and body matchers over one broad URL regex. Match required contract fields and avoid matching volatile fields unless the test is about them.
+
+**Good example:**
+
+```json
+{
+  "request": {
+    "method": "POST",
+    "urlPath": "/api/v1/search",
+    "queryParameters": {
+      "page": { "equalTo": "1" },
+      "size": { "equalTo": "25" }
+    },
+    "headers": {
+      "Accept": { "contains": "application/json" },
+      "X-Correlation-Id": { "matches": "[a-f0-9-]{36}" }
+    },
+    "bodyPatterns": [
+      { "matchesJsonPath": "$.filters[?(@.field == 'status' && @.value == 'ACTIVE')]" }
+    ]
+  },
+  "response": {
+    "status": 200,
+    "headers": { "Content-Type": "application/json" },
+    "jsonBody": { "items": [], "total": 0 }
+  }
+}
+```
+
+**Bad example:**
+
+```json
+{
+  "request": {
+    "method": "POST",
+    "urlPattern": "/api/v1/.*"
   },
   "response": { "status": 200, "body": "{}" }
 }

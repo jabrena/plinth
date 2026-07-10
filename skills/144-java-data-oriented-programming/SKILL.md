@@ -1,10 +1,10 @@
 ---
 name: 144-java-data-oriented-programming
-description: Use when you need to apply data-oriented programming best practices in Java — including separating code (behavior) from data structures using records, designing immutable data with pure transformation functions, keeping data flat and denormalized with ID-based references, starting with generic data structures converting to specific types when needed, ensuring data integrity through pure validation functions, and creating flexible generic data access layers. This should trigger for requests such as Improve the code with Data-Oriented Programming; Apply Data-Oriented Programming; Refactor the code with Data-Oriented Programming; Apply Data-Oriented Programming; Refactor the code with Data-Oriented Programming. Part of cursor-rules-java project
+description: Use when you need to apply data-oriented programming best practices in Java — including separating code (behavior) from data structures using records, designing immutable data with pure transformation functions, keeping data flat and denormalized with ID-based references, starting with generic data structures converting to specific types when needed, ensuring data integrity through pure validation functions, and creating flexible generic data access layers. This should trigger for requests such as Improve the code with Data-Oriented Programming; Apply Data-Oriented Programming; Refactor the code with Data-Oriented Programming; Model Java data with records and pure functions; Separate Java behavior from immutable data structures; Validate data integrity with pure Java functions. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Data-Oriented Programming Best Practices
 
@@ -36,9 +36,9 @@ Before applying any data-oriented programming recommendations, ensure the projec
 - Improve the code with Data-Oriented Programming
 - Apply Data-Oriented Programming
 - Refactor the code with Data-Oriented Programming
-- Apply Data-Oriented Programming
-- Refactor the code with Data-Oriented Programming
-- Apply Data-Oriented Programming
+- Model Java data with records and pure functions
+- Separate Java behavior from immutable data structures
+- Validate data integrity with pure Java functions
 
 ## Workflow
 

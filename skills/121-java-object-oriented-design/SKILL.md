@@ -1,10 +1,10 @@
 ---
 name: 121-java-object-oriented-design
-description: Use when reviewing, improving, or refactoring Java object-oriented design, including applying SOLID, DRY, or YAGNI; improving classes and interfaces; correcting encapsulation, inheritance, or polymorphism; resolving God Class, Feature Envy, or Data Clumps; and improving object creation, methods, or exception contracts. Triggers include review Java OOD, refactor Java OOD, improve Java OOD, fix OOP misuse, and identify Java code smells. Part of cursor-rules-java project
+description: Use when reviewing, improving, or refactoring Java object-oriented design, including applying SOLID, DRY, or YAGNI; improving classes and interfaces; correcting encapsulation, inheritance, or polymorphism; resolving God Class, Feature Envy, or Data Clumps; and improving object creation, methods, or exception contracts. Triggers include review Java OOD, refactor Java OOD, improve Java OOD, fix OOP misuse, and identify Java code smells. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Object-Oriented Design Guidelines
 

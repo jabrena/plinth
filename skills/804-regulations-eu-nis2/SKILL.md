@@ -1,10 +1,10 @@
 ---
 name: 804-regulations-eu-nis2
-description: Use when reviewing, designing, or modifying Java enterprise systems that may support essential or important entities, critical-sector services, managed service providers, supply-chain dependencies, or cybersecurity incident escalation obligations under NIS2. This should trigger for requests such as Review a Java platform for NIS2 cybersecurity controls; Design operational evidence for critical-sector services; Add incident detection, escalation, continuity, or supply-chain security controls; Assess cybersecurity risk management before production release. Part of cursor-rules-java project
+description: Use when reviewing, designing, or modifying Java enterprise systems that may support essential or important entities, critical-sector services, managed service providers, supply-chain dependencies, or cybersecurity incident escalation obligations under NIS2. This should trigger for requests such as Review a Java platform for NIS2 cybersecurity controls; Design operational evidence for critical-sector services; Add incident detection, escalation, continuity, or supply-chain security controls; Assess cybersecurity risk management before production release. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # NIS2 Regulation for Java Enterprise Cybersecurity Risk Management
 

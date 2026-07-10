@@ -1,10 +1,10 @@
 ---
 name: 514-frameworks-micronaut-kafka
-description: Use when you need Kafka messaging in Micronaut — including @KafkaClient and @KafkaListener design, @Serdeable serialization, topic/partition strategy, TestPropertyProvider integration tests, retries and dead-letter processing, and error handling. This should trigger for requests such as Add Kafka in Micronaut; Review Micronaut Kafka listeners; Improve retry and failure handling for Micronaut Kafka. Part of cursor-rules-java project
+description: Use when you need Kafka messaging in Micronaut — including @KafkaClient and @KafkaListener design, @Serdeable serialization, topic/partition strategy, TestPropertyProvider integration tests, retries and dead-letter processing, and error handling. This should trigger for requests such as Add Kafka in Micronaut; Review Micronaut Kafka listeners; Improve retry and failure handling for Micronaut Kafka; Configure Micronaut Kafka clients listeners or SerDes; Add Micronaut Kafka retry or dead-letter handling. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Micronaut — Kafka messaging
 
@@ -24,6 +24,8 @@ Compile before messaging refactors; verify after changes.
 - Add Kafka in Micronaut
 - Review Micronaut Kafka consumers/producers
 - Improve retries, dead-letter handling, or idempotency in Micronaut Kafka
+- Configure Micronaut Kafka clients listeners or SerDes
+- Add Micronaut Kafka retry or dead-letter handling
 
 ## Workflow
 

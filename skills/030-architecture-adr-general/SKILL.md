@@ -1,10 +1,10 @@
 ---
 name: 030-architecture-adr-general
-description: Use when you need to generate Architecture Decision Records (ADRs) for a Java project through an interactive, conversational process that systematically gathers context, stakeholders, options, and outcomes to produce well-structured ADR documents. This should trigger for requests such as Generate ADR; Create Architecture Decision Record; Document architecture decision; Architecture Decision Record for Java. Part of cursor-rules-java project
+description: Use when you need to generate Architecture Decision Records (ADRs) for a Java project through an interactive, conversational process that systematically gathers context, stakeholders, options, and outcomes to produce well-structured ADR documents. This should trigger for requests such as Generate ADR; Create Architecture Decision Record; Document architecture decision; Architecture Decision Record for Java. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java ADR Generator with interactive conversational approach
 

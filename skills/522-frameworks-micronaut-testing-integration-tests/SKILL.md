@@ -1,10 +1,10 @@
 ---
 name: 522-frameworks-micronaut-testing-integration-tests
-description: Use when you need to write or improve integration tests for Micronaut — @MicronautTest, HttpClient, TestPropertyProvider with Testcontainers, transactional test mode where appropriate, and Maven Surefire/Failsafe splits for *Test, *Tests, *IT, and *AT. This should trigger for requests such as Add Micronaut integration tests with Testcontainers; Wire dynamic datasource or broker URLs for @MicronautTest. Part of cursor-rules-java project
+description: Use when you need to write or improve integration tests for Micronaut — @MicronautTest, HttpClient, TestPropertyProvider with Testcontainers, transactional test mode where appropriate, and Maven Surefire/Failsafe splits for *Test, *Tests, *IT, and *AT. This should trigger for requests such as Add Micronaut integration tests with Testcontainers; Wire dynamic datasource or broker URLs for @MicronautTest; Write @MicronautTest integration tests with Testcontainers; Configure replacement beans for Micronaut integration tests; Review Micronaut integration test lifecycle and resources. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Micronaut Integration Testing
 
@@ -37,6 +37,9 @@ Before applying any integration test changes, ensure the project compiles. If co
 
 - Add Micronaut integration tests with Testcontainers
 - Wire dynamic datasource or broker URLs for @MicronautTest
+- Write @MicronautTest integration tests with Testcontainers
+- Configure replacement beans for Micronaut integration tests
+- Review Micronaut integration test lifecycle and resources
 
 ## Workflow
 

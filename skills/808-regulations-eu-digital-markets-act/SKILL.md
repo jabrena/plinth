@@ -1,10 +1,10 @@
 ---
 name: 808-regulations-eu-digital-markets-act
-description: Use when reviewing, designing, or modifying Java enterprise systems that may support EU Digital Markets Act gatekeeper-platform concerns, core platform services, interoperability, business-user data access, consent-dependent data combination, ranking, self-preferencing, advertising transparency, or anti-circumvention controls. This should trigger for requests such as Review a Java platform for DMA controls; Design interoperability and business-user data access evidence; Add ranking, consent, preference, or anti-circumvention audit controls; Assess gatekeeper-platform engineering evidence before production release. Part of cursor-rules-java project
+description: Use when reviewing, designing, or modifying Java enterprise systems that may support EU Digital Markets Act gatekeeper-platform concerns, core platform services, interoperability, business-user data access, consent-dependent data combination, ranking, self-preferencing, advertising transparency, or anti-circumvention controls. This should trigger for requests such as Review a Java platform for DMA controls; Design interoperability and business-user data access evidence; Add ranking, consent, preference, or anti-circumvention audit controls; Assess gatekeeper-platform engineering evidence before production release. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # EU Digital Markets Act Regulation for Java Enterprise Gatekeeper Platform Controls
 

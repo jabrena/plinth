@@ -1,10 +1,10 @@
 ---
 name: 031-architecture-adr-functional-requirements
-description: Facilitates conversational discovery to create Architectural Decision Records (ADRs) for functional requirements covering CLI, REST/HTTP APIs, or both. Use when the user wants to document command-line or HTTP service architecture, capture functional requirements, create ADRs for CLI or API projects, or design interfaces with documented decisions. This should trigger for requests such as Create ADR for functional requirements; Document functional requirements; Capture functional requirements; Generate functional requirements in an ADR. Part of cursor-rules-java project
+description: Facilitates conversational discovery to create Architectural Decision Records (ADRs) for functional requirements covering CLI, REST/HTTP APIs, or both. Use when the user wants to document command-line or HTTP service architecture, capture functional requirements, create ADRs for CLI or API projects, or design interfaces with documented decisions. This should trigger for requests such as Create ADR for functional requirements; Document functional requirements; Capture functional requirements; Generate functional requirements in an ADR; Decide CLI versus REST functional requirements for an ADR. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Create ADRs for Functional Requirements (CLI and/or REST API)
 
@@ -35,6 +35,7 @@ Use conversational discovery in small batches, build on answers, validate before
 - Document functional requirements
 - Capture functional requirements
 - Generate functional requirements in an ADR
+- Decide CLI versus REST functional requirements for an ADR
 
 ## Workflow
 

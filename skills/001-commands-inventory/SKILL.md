@@ -1,10 +1,10 @@
 ---
 name: 001-commands-inventory
-description: Use when you need to generate a checklist document with embedded commands inventory, following the embedded template exactly and producing INVENTORY-COMMANDS-JAVA.md in the project root. This should trigger for requests such as Create embedded commands inventory checklist; Generate INVENTORY-COMMANDS-JAVA.md; Use @001-commands-inventory. Part of cursor-rules-java project
+description: Use when you need to generate a checklist document with embedded commands inventory, following the embedded template exactly and producing INVENTORY-COMMANDS-JAVA.md in the project root. This should trigger for requests such as Create embedded commands inventory checklist; Generate INVENTORY-COMMANDS-JAVA.md; Use @001-commands-inventory; Inventory embedded Java project commands; List command files bundled for Java agents. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Create a Checklist with embedded commands inventory for Java
 
@@ -32,6 +32,8 @@ Follow the template exactly without adding or removing sections, rows, or comman
 - Create embedded commands inventory checklist
 - Generate INVENTORY-COMMANDS-JAVA.md
 - Use @001-commands-inventory
+- Inventory embedded Java project commands
+- List command files bundled for Java agents
 
 ## Workflow
 

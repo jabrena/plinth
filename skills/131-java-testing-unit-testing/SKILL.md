@@ -1,10 +1,10 @@
 ---
 name: 131-java-testing-unit-testing
-description: Use when you need to review, improve, or write Java unit tests — including migrating from JUnit 4 to JUnit 5, adopting AssertJ for fluent assertions, structuring tests with Given-When-Then, ensuring test independence, applying parameterized tests, mocking dependencies with Mockito, verifying boundary conditions (RIGHT-BICEP, CORRECT, A-TRIP), leveraging JSpecify null-safety annotations, or eliminating testing anti-patterns such as reflection-based tests or shared mutable state. This should trigger for requests such as Review Java code for unit tests; Apply best practices for unit tests in Java code. Part of cursor-rules-java project
+description: Use when you need to review, improve, or write Java unit tests — including migrating from JUnit 4 to JUnit 5, adopting AssertJ for fluent assertions, structuring tests with Given-When-Then, ensuring test independence, applying parameterized tests, mocking dependencies with Mockito, verifying boundary conditions (RIGHT-BICEP, CORRECT, A-TRIP), leveraging JSpecify null-safety annotations, or eliminating testing anti-patterns such as reflection-based tests or shared mutable state. This should trigger for requests such as Review Java code for unit tests; Apply best practices for unit tests in Java code; Write fast JUnit unit tests for Java code; Improve Mockito-based Java unit tests; Refactor Java tests to isolate collaborators. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Unit testing guidelines
 
@@ -39,6 +39,9 @@ Before applying any unit test changes, ensure the project compiles. If compilati
 
 - Review Java code for unit tests
 - Apply best practices for unit tests in Java code
+- Write fast JUnit unit tests for Java code
+- Improve Mockito-based Java unit tests
+- Refactor Java tests to isolate collaborators
 
 ## Workflow
 

@@ -1,10 +1,10 @@
 ---
 name: 002-agents-inventory
-description: Use when you need to generate a checklist document with embedded agents inventory, following the embedded template exactly and producing INVENTORY-AGENTS-JAVA.md in the project root. This should trigger for requests such as Create embedded agents inventory checklist; Generate INVENTORY-AGENTS-JAVA.md; Use @002-agents-inventory. Part of cursor-rules-java project
+description: Use when you need to generate a checklist document with embedded agents inventory, following the embedded template exactly and producing INVENTORY-AGENTS-JAVA.md in the project root. This should trigger for requests such as Create embedded agents inventory checklist; Generate INVENTORY-AGENTS-JAVA.md; Use @002-agents-inventory; Inventory embedded Java agent definitions; List generated agent roles for Java development. Part of Plinth Toolkit
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Create a Checklist with embedded agents inventory for Java
 
@@ -32,6 +32,8 @@ Follow the template exactly without adding or removing sections, rows, or detail
 - Create embedded agents inventory checklist
 - Generate INVENTORY-AGENTS-JAVA.md
 - Use @002-agents-inventory
+- Inventory embedded Java agent definitions
+- List generated agent roles for Java development
 
 ## Workflow
 

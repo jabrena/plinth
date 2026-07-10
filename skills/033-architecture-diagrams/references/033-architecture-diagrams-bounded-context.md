@@ -4,7 +4,7 @@ description: Focused bounded-context PlantUML guidance for the interactive archi
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Java Diagrams Generator with modular step-based configuration
 
@@ -155,5 +155,5 @@ Before final delivery:
 3. Confirm relationship direction is explicit when known, and unknown relationship semantics are labeled as unknown rather than inferred.
 4. Confirm the diagram remains a DDD context map and does not drift into C4 Container, Component, or UML class modeling.
 5. Confirm file names, links, and documentation references match the selected organization.
-6. Use the existing Docker-based PlantUML validation workflow from the main skill when Docker is available.
+6. Use the trusted local PlantUML validation workflow from the main skill when PlantUML is available.
 7. Summarize generated bounded-context diagrams, repositories inspected, and any repository or relationship details that could not be verified.

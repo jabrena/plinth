@@ -4,7 +4,7 @@ description: Use when you need Kafka with Spring Boot — including Maven depend
 license: Apache-2.0
 metadata:
   author: Juan Antonio Breña Moral
-  version: 0.16.0
+  version: 0.17.0
 ---
 # Spring Boot — Kafka messaging
 
@@ -449,7 +449,7 @@ class KafkaConfig {
 ### Example 9: Full-stack integration test with Testcontainers
 
 Title: @ServiceConnection on KafkaContainer; NewTopic in @TestConfiguration
-Description: For `*IT` classes that POST to HTTP and assert a `@KafkaListener` received an event, start a `KafkaContainer` with Testcontainers and wire it via `@ServiceConnection` (Spring Boot 4.x). Do not set `spring.kafka.bootstrap-servers=localhost:9092` in shared `src/test/resources/application.properties` — that overrides the container port. Declare `NewTopic` in a `@TestConfiguration` imported only by the IT class. Enable listeners in the IT (`spring.kafka.listener.auto-startup=true`) while keeping them disabled in unit tests. Use Maven Failsafe for `*IT` classes. Testcontainers 2.x Maven artifacts are `testcontainers-kafka` and `testcontainers-junit-jupiter`. Cross-reference `@322-frameworks-spring-boot-testing-integration-tests` for HTTP client and container lifecycle details.
+Description: For `*IT` classes that POST to HTTP and assert a `@KafkaListener` received an event, start a `KafkaContainer` with Testcontainers and wire it via `@ServiceConnection` (Spring Boot 4.x). Do not set `spring.kafka.bootstrap-servers=localhost:9092` in shared `src/test/resources/application.properties` — that overrides the container port. Declare `NewTopic` in a `@TestConfiguration` imported only by the IT class. Enable listeners in the IT (`spring.kafka.listener.auto-startup=true`) while keeping them disabled in unit tests. Use Maven Failsafe for `*IT` classes. Testcontainers 2.x Maven artifacts are `testcontainers-kafka` and `testcontainers-junit-jupiter`. Cross-reference `@322-frameworks-spring-boot-testing-integration-tests` for HTTP client and container lifecycle details. Resolve the Kafka container image from trusted project or CI configuration instead of hard-coding a public registry image in reusable guidance. Prefer organization-approved images pinned by digest.
 
 **Good example:**
 
@@ -475,7 +475,11 @@ class OrderCreatedIT {
 
     @Container
     @ServiceConnection
-    static KafkaContainer kafka = new KafkaContainer(DockerImageName.parse("apache/kafka-native:3.8.0"));
+    static KafkaContainer kafka = new KafkaContainer(approvedKafkaImage());
+
+    private static DockerImageName approvedKafkaImage() {
+        return DockerImageName.parse(System.getProperty("test.kafka.image"));
+    }
 
     @Test
     void createOrder_publishesOrderCreatedEvent() {
